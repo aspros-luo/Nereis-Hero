@@ -105,11 +105,27 @@ func _payload_for(interaction_id: String) -> Dictionary:
 func _draw() -> void:
     var sway := sin(elapsed * 1.7) * 2.0
     var glow := 0.12 + sin(elapsed * 1.4) * 0.035
+    var control_stage: int = WorldState.mite_control_stage
 
-    draw_circle(Vector2(0, -34), 16.0, Color("#b38d82"))
+    var skin := Color("#b38d82")
+    var dress := Color("#61505d")
+    var shadow := Color("#211a20")
+
+    if control_stage == 1:
+        skin = Color("#ad8882")
+        dress = Color("#5d4f5e")
+    elif control_stage == 2:
+        skin = Color("#a47e7f")
+        dress = Color("#5b4a5c")
+    elif control_stage >= 3:
+        skin = Color("#9d777d")
+        dress = Color("#56455a")
+        shadow = Color("#261d28")
+
+    draw_circle(Vector2(0, -34), 16.0, skin)
     draw_circle(Vector2(-5, -39), 3.0, Color("#211a20"))
     draw_circle(Vector2(5, -39), 3.0, Color("#211a20"))
-    draw_rect(Rect2(-19, -18 + sway, 38, 52), Color("#61505d"))
+    draw_rect(Rect2(-19, -18 + sway, 38, 52), dress)
     draw_colored_polygon(
         PackedVector2Array([
             Vector2(-22, -18 + sway),
@@ -119,6 +135,11 @@ func _draw() -> void:
         Color("#493d49")
     )
     draw_circle(Vector2(0, 6 + sway), 10.0, Color(0.72, 0.56, 0.52, glow))
+
+    if control_stage >= 2:
+        draw_arc(Vector2(0, -34), 19.0, 0.45, 2.7, 16, Color(0.56, 0.34, 0.58, 0.22), 2.0)
+    if control_stage >= 3:
+        draw_circle(Vector2(0, -39 + sway), 2.5, Color("#b96b75", 0.75))
     draw_string(ThemeDB.fallback_font, Vector2(-38, -64), "MITE", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#d6c7b2"))
 
     if hero_nearby and not WorldState.input_locked:
