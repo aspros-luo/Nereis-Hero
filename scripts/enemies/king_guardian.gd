@@ -115,4 +115,12 @@ func _draw() -> void:
     draw_line(Vector2(facing * 24, -28), Vector2(facing * 86, 18), metal, 9.0)
     draw_arc(Vector2(0, -72), 32.0, PI, TAU, 22, metal, 4.0)
     draw_circle(Vector2(0, -101), 5.0, Color("#cfaa66"))
+
+    if phase == 2:
+        for i in range(6):
+            var x := -30.0 + float(i) * 12.0
+            draw_line(Vector2(x, -108), Vector2(x + sin(animation_time + i) * 6.0, -155.0), Color("#6e3d48"), 7.0)
+        draw_circle(Vector2(0, -70), 58.0, Color("#7a3d49", 0.08))
+        draw_circle(Vector2(facing * 4.0, -105), 4.0, Color("#c87876"))
+
     draw_string(ThemeDB.fallback_font, Vector2(-64, -114), "THE KING  //  PHASE %d" % phase, HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#d6c7b2"))
