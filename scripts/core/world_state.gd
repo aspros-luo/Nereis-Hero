@@ -10,6 +10,7 @@ var boss_gate_open := false
 var church_alignment := 0
 var lullaby_resonance := 0
 var first_choice_made := false
+var slice_complete := false
 var church_alignment := 0
 var lullaby_resonance := 0
 var first_choice_made := false
@@ -73,6 +74,7 @@ func reset() -> void:
     church_alignment = 0
     lullaby_resonance = 0
     first_choice_made = false
+    slice_complete = false
     church_alignment = 0
     lullaby_resonance = 0
     first_choice_made = false
