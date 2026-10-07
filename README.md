@@ -32,6 +32,26 @@ Awakening → Cultist A → Pale Hound → Cultist B → Ash Gate → Ashen Knig
 
 The Boss appears only after all three small enemies are defeated.
 
+## Narrative Canon
+
+The authoritative developer-facing story memory is:
+
+docs/DEVELOPER_STORY_MEMORY.md
+
+It records:
+
+- the Kingdom / Church / ancient-god world history
+- Mite/Nereis as the Outer God's proxy
+- the Hero's confirmed chronological background
+- the three canonical endings: 凡人之墓 / 永恒乐园 / 烈火天罚
+- the intended Hero × Mite emotional relationship
+- Soulslike narrative delivery rules
+- explicit boundaries where story design must be discussed before coding
+
+docs/STORY.md is the shorter story foundation.
+
+docs/ROUTES.md describes the current Church/Lullaby implementation foundation. Those are interpretation layers, not the final three endings.
+
 ## Combat Direction
 
 The current combat direction takes broad inspiration from the responsive 2D action feel of **Hollow Knight** and the heavier, ritualistic presentation of **Blasphemous 2**.
@@ -52,7 +72,7 @@ The current combat demo is deliberately small so these fundamentals can be tuned
 
 The repository also contains the next-stage foundations for:
 
-- Church / Lullaby routes
+- Church / Lullaby interpretation layers
 - Village Hub
 - Tavern / Church interiors
 - Graveyard
@@ -60,6 +80,7 @@ The repository also contains the next-stage foundations for:
 - Memory / Clue systems
 - Save / load
 - Shared-world NPCs
+- Future branching ending logic based on narrative state rather than simple route selection
 
 Those systems are retained, but they are not required for the current Core Combat Demo acceptance.
 
@@ -74,3 +95,7 @@ The maintainer environment currently has no Godot Runtime executable, so final r
 ## Branch
 
 Development happens on development. Main remains the stable branch until the Core Combat Demo passes local acceptance.
+
+## Development Rule
+
+If a task reaches a major unresolved story question — especially Hero/Mite history, the hidden side story for 烈火天罚, ending conditions, the Outer God's identity/desire, or major faction motivations — story design must be settled before narrative code is hard-coded.
