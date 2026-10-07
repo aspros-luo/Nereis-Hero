@@ -26,6 +26,7 @@ func activate(new_damage: int, duration: float) -> void:
 func _physics_process(delta: float) -> void:
     if not active:
         return
+
     active_time -= delta
     if active_time <= 0.0:
         active = false
@@ -34,12 +35,16 @@ func _physics_process(delta: float) -> void:
     for area in get_overlapping_areas():
         if area == self or area in hit_targets:
             continue
+
         var target_host = area.get("host")
-        if target_host == host:
+        if target_host == host or not target_host:
             continue
+
         if area.has_method("receive_hit"):
             area.receive_hit(damage, host)
             hit_targets.append(area)
+            if host and host.has_method("_on_attack_hit"):
+                host._on_attack_hit(damage, target_host)
 
 func is_active() -> bool:
     return active
