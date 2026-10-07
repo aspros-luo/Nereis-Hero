@@ -36,6 +36,7 @@ var mite_last_interaction_location := ""
 var mite_connection_missed := false
 var ancient_residue_awakened := false
 var outer_god_resonance := false
+var mite_control_stage := 0
 var physical_union_complete := false
 var hidden_artifact_pieces := 0
 var hidden_artifact_sources: Array[String] = []
@@ -152,6 +153,14 @@ func mark_outer_god_resonance() -> void:
     print("[NEREIS][STORY] Outer-God resonance established")
     save_game()
 
+func advance_mite_control_stage() -> int:
+    if not outer_god_resonance:
+        return mite_control_stage
+    mite_control_stage = clampi(mite_control_stage + 1, 0, 3)
+    print("[NEREIS][STORY] Mite control stage=%d/3" % mite_control_stage)
+    save_game()
+    return mite_control_stage
+
 func mark_physical_union_complete() -> void:
     if physical_union_complete:
         return
@@ -236,6 +245,7 @@ func save_game() -> void:
         "mite_connection_missed": mite_connection_missed,
         "ancient_residue_awakened": ancient_residue_awakened,
         "outer_god_resonance": outer_god_resonance,
+        "mite_control_stage": mite_control_stage,
         "physical_union_complete": physical_union_complete,
         "hidden_artifact_pieces": hidden_artifact_pieces,
         "hidden_artifact_sources": hidden_artifact_sources,
@@ -319,6 +329,7 @@ func load_game() -> void:
     mite_connection_missed = bool(parsed.get("mite_connection_missed", false))
     ancient_residue_awakened = bool(parsed.get("ancient_residue_awakened", false))
     outer_god_resonance = bool(parsed.get("outer_god_resonance", false))
+    mite_control_stage = clampi(int(parsed.get("mite_control_stage", 0)), 0, 3)
     physical_union_complete = bool(parsed.get("physical_union_complete", false))
     hidden_artifact_pieces = clampi(int(parsed.get("hidden_artifact_pieces", 0)), 0, 4)
     hidden_artifact_sources.clear()
@@ -374,6 +385,7 @@ func reset() -> void:
     mite_connection_missed = false
     ancient_residue_awakened = false
     outer_god_resonance = false
+    mite_control_stage = 0
     physical_union_complete = false
     hidden_artifact_pieces = 0
     hidden_artifact_sources.clear()
