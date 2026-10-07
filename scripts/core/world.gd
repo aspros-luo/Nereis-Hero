@@ -76,6 +76,8 @@ func _ready() -> void:
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
     hud.bind_hero(hero)
+    if is_instance_valid(boss):
+        hud.bind_boss(boss)
 
     level_exit = Area2D.new()
     level_exit.set_script(LEVEL_EXIT_SCRIPT)
@@ -137,6 +139,8 @@ func _spawn_boss() -> void:
     _add_character_collision(boss, 24.0, 56.0)
     add_child(boss)
     boss.defeated.connect(_on_boss_defeated)
+    if hud:
+        hud.bind_boss(boss)
     _log("WORLD", "Ashen Knight spawned")
 
 func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
