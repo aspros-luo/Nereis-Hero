@@ -62,6 +62,18 @@ func _spawn_checkpoint() -> void:
     add_child(checkpoint)
 
 func _spawn_mite() -> void:
+    if WorldState.mite_connection_missed:
+        var absence := Node2D.new()
+        absence.position = Vector2(520, 520)
+        absence.name = "MiteAbsence"
+        absence.set_script(ROUTE_NPC_SCRIPT)
+        absence.npc_id = "mite_absence"
+        absence.display_name = "AN EMPTY CHAIR"
+        absence.dialogue = "The chair beside the fire is empty.\n\nA cup has been left on the table. It is still warm.\n\nNo one is home."
+        add_child(absence)
+        print("[NEREIS][RELATIONSHIP] Mite connection was missed; absence scene spawned")
+        return
+
     mite = Node2D.new()
     mite.set_script(MITE_SCRIPT)
     mite.position = Vector2(520, 520)
@@ -153,6 +165,8 @@ func _enter_village_location(location_id: String) -> void:
         print("[NEREIS][VILLAGE] Entering Tavern Interior")
         SceneTransition.fade_to_scene("res://scenes/locations/tavern_interior.tscn")
     elif location_id == "church":
+        if not WorldState.has_mite_interaction("mite_stay_a_while"):
+            WorldState.mark_mite_connection_missed()
         WorldState.set_location("church")
         print("[NEREIS][VILLAGE] Entering Church Interior")
         SceneTransition.fade_to_scene("res://scenes/locations/church_interior.tscn")
