@@ -251,6 +251,13 @@ func record_world_clue(clue_id: String, humanity_delta: int = 0) -> bool:
     save_game()
     return true
 
+func get_humanity_state() -> String:
+    if hero_humanity < 25:
+        return "hollow"
+    if hero_humanity < 60:
+        return "frayed"
+    return "stable"
+
 func set_location(location_id: String) -> void:
     current_location = location_id
     print("[NEREIS][WORLD] Current location=%s" % current_location)
