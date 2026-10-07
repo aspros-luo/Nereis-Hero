@@ -82,9 +82,9 @@ func _log(category: String, message: String) -> void:
 func _draw() -> void:
     var c := Color("#c44e5a") if hit_flash > 0.0 else Color("#332d34")
     draw_circle(Vector2(0, -60), 21, c)
-    draw_rect(Rect2(-25, -40, 50, 68), c)
-    draw_line(Vector2(-18, -4), Vector2(-62, 24), c, 11.0)
-    draw_line(Vector2(18, -4), Vector2(62, 24), c, 11.0)
+    draw_rect(Rect2(-25, -40, 50, 40), c)
+    draw_line(Vector2(-18, -4), Vector2(-62, 10), c, 11.0)
+    draw_line(Vector2(18, -4), Vector2(62, 10), c, 11.0)
     draw_line(Vector2(facing * 8.0, -18), Vector2(facing * 84.0, -42), Color("#b7a48c"), 9.0)
     if windup > 0.0:
         draw_arc(Vector2(0, -34), 54, 0, TAU, 28, Color("#9e5961"), 4.0)
