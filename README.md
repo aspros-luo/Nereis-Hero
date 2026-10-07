@@ -1,101 +1,150 @@
 # Nereis Hero
 
-A 2D Soulslike action RPG set in the Nereis universe.
+A 2D Soulslike action RPG in the Nereis / 蜜忒之歌 universe.
 
-## Current Goal
+## Current playable direction
 
-The project is currently being developed around the smallest playable combat loop:
+Development has moved beyond the original Core Combat Demo into the first narrative production pass.
 
-controllable protagonist → simple level → small enemies → Boss
+The current default flow is:
 
-The default startup scene is res://scenes/combat_demo.tscn.
+**Church surgical ward → escape → remote village → Mite → Church / village investigation**
 
-### Core Combat Demo
+Default startup:
 
-- Hero movement / jump with coyote time and jump buffering
-- Three-step light-attack rhythm with deliberate windup and recovery
-- Dodge / short invulnerability window
-- Stamina and combat resource pacing
-- Enemy hit-stagger / knockback
-- Readable enemy attack telegraphs
-- 3 small enemies with different pressure patterns
-- Checkpoint and death respawn
-- Dedicated Boss approach checkpoint
-- Boss gate and compact boss arena
-- Two-phase Ashen Knight with faster Phase 2 tempo
-- Boss health HUD
-- F3 debug / F9 clean reset
+`res://scenes/escape_prologue.tscn`
 
-## Current Demo Route
+The original combat demo remains available at:
 
-Awakening → Cultist A → Pale Hound → Cultist B → Ash Gate → Ashen Knight
+`res://scenes/combat_demo.tscn`
 
-The Boss appears only after all three small enemies are defeated.
+## Current narrative foundation
 
-## Narrative Canon
+Canonical story memory:
 
-The authoritative developer-facing story memory is:
+`docs/DEVELOPER_STORY_MEMORY.md`
 
-docs/DEVELOPER_STORY_MEMORY.md
+Director plan:
 
-It records:
+`docs/DIRECTOR_NARRATIVE_PLAN.md`
 
-- the Kingdom / Church / ancient-god world history
-- Mite/Nereis as the Outer God's proxy
-- the Hero's confirmed chronological background
-- the three canonical endings: 凡人之墓 / 永恒乐园 / 烈火天罚
-- the intended Hero × Mite emotional relationship
-- Soulslike narrative delivery rules
-- explicit boundaries where story design must be discussed before coding
+Short story foundation:
 
-docs/STORY.md is the shorter story foundation.
+`docs/STORY.md`
 
-docs/ROUTES.md describes the current Church/Lullaby implementation foundation. Those are interpretation layers, not the final three endings.
+The three canonical endings are:
 
-## Combat Direction
+- **凡人之墓**
+- **永恒乐园**
+- **烈火天罚**
 
-The current combat direction takes broad inspiration from the responsive 2D action feel of **Hollow Knight** and the heavier, ritualistic presentation of **Blasphemous 2**.
+The Hero / Mite relationship is a central emotional axis.
 
-The implementation goal is not to reproduce either game. For this project, the reference points are:
+Mite is genuinely pure and initially unaware of the Outer God's larger reality.
 
-- immediate movement and readable spacing
-- attacks with a clear windup, contact window and recovery
-- strong enemy telegraphs before damage
-- noticeable hit reaction and knockback
-- a small number of enemy patterns that are easy to read but punish careless timing
-- bosses that change tempo rather than simply gaining more HP
-- a dark, sacred, oppressive visual language
+Hero never knowingly learns her true identity during the main story.
 
-The current combat demo is deliberately small so these fundamentals can be tuned before more areas, routes and narrative systems are expanded.
+The Church's ancient-god experimentation leaves residue inside Hero.
 
-## Future Content
+Much later, Hero and Mite's physical relationship becomes the bridge between the ancient-god residue and the Outer-God influence.
 
-The repository also contains the next-stage foundations for:
+## Current implemented production work
 
-- Church / Lullaby interpretation layers
-- Village Hub
-- Tavern / Church interiors
-- Graveyard
-- Humanity
-- Memory / Clue systems
-- Save / load
-- Shared-world NPCs
-- Future branching ending logic based on narrative state rather than simple route selection
+### Opening
 
-Those systems are retained, but they are not required for the current Core Combat Demo acceptance.
+- Playable Church surgical ward escape
+- Three Experiment Wardens
+- Surgical residue clue
+- Prologue checkpoint
+- Transition into the village
+
+### Village / Mite
+
+- Playable Village Hub
+- First Mite meeting
+- Mite interaction progression
+- Hidden relationship facts instead of a visible romance meter
+- Rushed mainline progression can cause the Mite connection to be missed
+- Missed connection returns as a quiet empty-chair scene
+- Procedural lullaby motif tied to the village
+
+### Hidden investigation
+
+- Persistent hidden artifact evidence state
+- Existing tavern, church, graveyard and route clues can contribute hidden resistance evidence
+- Evidence is not exposed as a "true ending checklist"
+
+### Combat
+
+- Weighty 2D action foundation
+- Three-step attack rhythm
+- Dodge / invulnerability
+- Stamina
+- Hit-stagger
+- Hitstop feedback
+- Cultist / Pale Hound pressure patterns
+- Two-phase Ashen Knight
+- Procedural combat audio
+
+### Director test theaters
+
+**F7 — Church Final Boss Theater**
+
+High Priest human phase → ancient-god phase → King.
+
+**F8 — 烈火天罚 Theater**
+
+100 cultists → Mite → waiting / self-sacrifice → city detonation.
+
+The 100 cultist count is intentionally a spectacle. Future crowdfunding can optionally turn the crowd into supporter cameos.
+
+### Debug
+
+- F3 — debug overlay
+- F7 — Church Final Boss Theater
+- F8 — 烈火天罚 Theater
+- F9 — clean reset
+
+## Narrative style
+
+The game favors discovery rather than exposition.
+
+The main references are:
+
+- Dark Souls
+- Bloodborne
+- Blasphemous 2
+- The Song of Saya
+- Neon Genesis Evangelion
+- Biblical Eden imagery
+- Lovecraftian cosmic horror
+
+These are reference influences, not content to copy.
+
+The intended narrative language is:
+
+**items as evidence + environment as narrative + NPCs as biased witnesses + contradictory memories + recurring symbols + emotional subtext**
 
 ## Engine
 
 Godot 4.6.x / GDScript / GL Compatibility.
 
-## Runtime Verification
+## Runtime verification
 
-The maintainer environment currently has no Godot Runtime executable, so final runtime acceptance must be performed locally with Godot 4.6.x. Repository code is continuously checked for structural consistency before each iteration.
+The maintainer environment does not contain a Godot executable, so interactive frame-level runtime acceptance must still be performed locally with Godot 4.6.x.
+
+Repository structure and source changes are continuously checked.
 
 ## Branch
 
-Development happens on development. Main remains the stable branch until the Core Combat Demo passes local acceptance.
+Development happens on:
 
-## Development Rule
+`development`
 
-If a task reaches a major unresolved story question — especially Hero/Mite history, the hidden side story for 烈火天罚, ending conditions, the Outer God's identity/desire, or major faction motivations — story design must be settled before narrative code is hard-coded.
+Do not add or trigger GitHub Actions for this project.
+
+## Production rule
+
+When implementation reaches a major unresolved story decision — especially Hero/Mite history, the four hidden resistance side stories, the final antagonist's political motive, the Outer God's identity, or the exact ending condition — stop coding that story layer and return to story design.
+
+For ordinary gameplay, combat, UI, effects, technical systems and presentation, development can proceed autonomously.
