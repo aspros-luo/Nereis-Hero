@@ -242,6 +242,13 @@ func _spawn_ui() -> void:
     get_tree().create_timer(0.6).timeout.connect(_show_intro)
 
 func _show_intro() -> void:
+    if location_id == "tavern" and WorldState.mite_connection_missed:
+        narrative.show_message(
+            "THE EMPTY TABLE",
+            "The chair near the window is empty.\n\nSomeone has left a cup there anyway.",
+            4.5
+        )
+        return
     if location_id == "tavern":
         narrative.show_message("THE TAVERN", "The room is warmer than the road.\n\nSomewhere behind the bar, a glass is placed down by a hand you cannot see.", 6.0)
     else:
