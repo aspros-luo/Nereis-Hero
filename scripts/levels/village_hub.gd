@@ -175,6 +175,15 @@ func _spawn_village_pois() -> void:
     add_child(rebel_camp)
     rebel_camp.interacted.connect(_on_village_poi_interacted.bind(rebel_camp))
 
+    var north_gate := Node2D.new()
+    north_gate.set_script(VILLAGE_POI_SCRIPT)
+    north_gate.position = Vector2(2440, 520)
+    north_gate.poi_id = "north_gate"
+    north_gate.display_name = "NORTH GATE"
+    north_gate.dialogue = "Fresh axe marks scar the gate.\n\nBeyond it, the road is too quiet.\n\nYou hear distant metal."
+    add_child(north_gate)
+    north_gate.interacted.connect(_on_village_poi_interacted.bind(north_gate))
+
     var church := Node2D.new()
     church.set_script(VILLAGE_POI_SCRIPT)
     church.position = Vector2(2220, 520)
@@ -203,6 +212,10 @@ func _enter_village_location(location_id: String) -> void:
         WorldState.set_location("rebel_camp")
         print("[NEREIS][VILLAGE] Entering Restoration Camp")
         SceneTransition.fade_to_scene("res://scenes/rebel_camp.tscn")
+    elif location_id == "north_gate":
+        WorldState.current_location = "village"
+        print("[NEREIS][VILLAGE] Triggering village defense chapter")
+        SceneTransition.fade_to_scene("res://scenes/village_defense_demo.tscn")
     elif location_id == "graveyard":
         WorldState.set_location("graveyard")
         print("[NEREIS][VILLAGE] Entering Village Graveyard")
@@ -269,7 +282,11 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode == KEY_F8:
+        if event.keycode == KEY_F5:
+            print("[NEREIS][DEBUG] Opening village defense theater")
+            get_tree().change_scene_to_file("res://scenes/village_defense_demo.tscn")
+            get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_F8:
             print("[NEREIS][DEBUG] Opening director ending theater")
             get_tree().change_scene_to_file("res://scenes/ending_fire_demo.tscn")
             get_viewport().set_input_as_handled()
@@ -348,6 +365,11 @@ func _draw() -> void:
     )
     draw_circle(Vector2(2015, 455), 34.0, Color("#63322f"))
     draw_string(ThemeDB.fallback_font, Vector2(1900, 335), "RESTORATION CAMP", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
+
+    draw_rect(Rect2(2380, 330, 120, 190), Color("#241e27"))
+    draw_rect(Rect2(2410, 350, 18, 170), Color("#4a3439"))
+    draw_rect(Rect2(2460, 350, 18, 170), Color("#4a3439"))
+    draw_string(ThemeDB.fallback_font, Vector2(2370, 310), "NORTH GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
 
     draw_rect(Rect2(2180, 320, 80, 200), Color("#26202a"))
     draw_colored_polygon(
