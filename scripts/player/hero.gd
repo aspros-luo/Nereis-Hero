@@ -20,6 +20,7 @@ var invulnerable := false
 var state := CombatState.IDLE
 var previous_state := CombatState.IDLE
 var attack_hitbox: Area2D
+signal defeated
 
 func _ready() -> void:
     _setup_combat_components()
@@ -132,14 +133,21 @@ func receive_damage(amount: int, source: Node = null) -> void:
     if health == 0:
         _set_state(CombatState.DEAD)
         _log("HERO", "Hero defeated; resetting vertical slice")
+        defeated.emit()
         health = 100
-        global_position = Vector2(320, 480)
+        global_position = WorldState.checkpoint_position
         velocity = Vector2.ZERO
-        invulnerable = false
+        invulnerable = true
+        _log("WORLD", "Hero respawned at checkpoint=%s" % WorldState.checkpoint_position)
+        get_tree().create_timer(0.75).timeout.connect(_clear_respawn_invulnerability)
         _set_state(CombatState.IDLE)
 
 func take_damage(amount: int) -> void:
     receive_damage(amount, null)
+
+func _clear_respawn_invulnerability() -> void:
+    invulnerable = false
+    _log("HERO", "Respawn invulnerability ended")
 
 func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
