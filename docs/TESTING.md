@@ -13,3 +13,33 @@ Expected log:
 ```
 
 The Hero should be able to damage the Ashen Knight through the same Hitbox/Hurtbox system used by the Cultist.
+
+
+## Vertical Slice 001 completion
+
+The full acceptance route is:
+
+```text
+Awakening
+  -> Old Hunter
+  -> First Memory
+  -> Checkpoint
+  -> Cultist
+  -> Ash Gate
+  -> Ashen Knight
+  -> First Choice
+  -> Exit
+```
+
+After the exit is reached:
+
+```text
+[NEREIS][WORLD] Vertical Slice 001 complete
+```
+
+The debug overlay should show:
+
+```text
+Boss Defeated: true
+Slice Complete: true
+```
