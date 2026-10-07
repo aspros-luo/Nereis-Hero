@@ -18,6 +18,9 @@ func setup(hero_target: Node2D, variant_seed: float) -> void:
     speed += fmod(absf(variant_seed * 37.0), 40.0)
 
 func _ready() -> void:
+    collision_layer = 0
+    collision_mask = 0
+
     var hurtbox := Area2D.new()
     hurtbox.name = "Hurtbox"
     hurtbox.set_script(HURTBOX_SCRIPT)
