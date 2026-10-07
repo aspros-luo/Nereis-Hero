@@ -11,20 +11,25 @@ var cooldown := 0.0
 func _ready() -> void:
     queue_redraw()
 
-func _physics_process(delta: float) -> void:
+func _process(delta: float) -> void:
     cooldown = max(0.0, cooldown - delta)
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 110.0
-
-    if hero_nearby and Input.is_key_pressed(KEY_E) and cooldown <= 0.0:
-        cooldown = 1.0
-        hero.restore_full()
-        WorldState.set_checkpoint(hero.global_position)
-        WorldState.save_game()
-        rested.emit()
-        print("[NEREIS][WORLD] Rest point used id=%s" % rest_id)
-
     queue_redraw()
+
+func _unhandled_input(event: InputEvent) -> void:
+    if WorldState.input_locked or not hero_nearby or cooldown > 0.0:
+        return
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
+        cooldown = 1.0
+        var hero: Node2D = get_node_or_null("../Hero") as Node2D
+        if hero and hero.has_method("restore_full"):
+            hero.restore_full()
+            WorldState.set_checkpoint(hero.global_position)
+            WorldState.save_game()
+            rested.emit()
+            print("[NEREIS][WORLD] Rest point used id=%s" % rest_id)
+        get_viewport().set_input_as_handled()
 
 func _draw() -> void:
     draw_rect(Rect2(-36, -16, 72, 16), Color("#352d38"))
