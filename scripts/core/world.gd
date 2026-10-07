@@ -2,6 +2,7 @@ extends Node2D
 
 const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const ENEMY_SCRIPT = preload("res://scripts/enemies/cultist.gd")
+const HOUND_SCRIPT = preload("res://scripts/enemies/pale_hound.gd")
 const NPC_SCRIPT = preload("res://scripts/npc/old_hunter.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
@@ -12,6 +13,7 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 
 var hero: CharacterBody2D
 var enemy: CharacterBody2D
+var hound: CharacterBody2D
 var boss: CharacterBody2D
 var checkpoint: Area2D
 var boss_gate: StaticBody2D
@@ -41,6 +43,7 @@ func _ready() -> void:
     old_hunter.interacted.connect(_on_old_hunter_interacted)
 
     _spawn_cultist()
+    _spawn_hound()
     _spawn_boss()
 
     checkpoint = Area2D.new()
@@ -100,6 +103,17 @@ func _ready() -> void:
 
     _log("BOOT", "Hero, OldHunter, Cultist, AshenKnight, Narrative and Camera initialized")
     queue_redraw()
+
+func _spawn_hound() -> void:
+    if is_instance_valid(hound) and not hound.is_queued_for_deletion():
+        return
+    hound = CharacterBody2D.new()
+    hound.set_script(HOUND_SCRIPT)
+    hound.position = Vector2(1180, 520)
+    hound.name = "PaleHound"
+    _add_character_collision(hound, 25.0, 42.0)
+    add_child(hound)
+    _log("WORLD", "Pale Hound spawned")
 
 func _spawn_cultist() -> void:
     if is_instance_valid(enemy) and not enemy.is_queued_for_deletion():
@@ -172,6 +186,8 @@ func _on_hero_defeated() -> void:
         _spawn_cultist()
     if not WorldState.boss_defeated and (not is_instance_valid(boss) or boss.is_queued_for_deletion()):
         _spawn_boss()
+    if not is_instance_valid(hound) or hound.is_queued_for_deletion():
+        _spawn_hound()
 
 func _on_cultist_defeated() -> void:
     WorldState.open_boss_gate()
