@@ -8,7 +8,7 @@ The sections below are the authoritative acceptance path for the current develop
 
 ### Runtime
 
-Use Godot 4.6.x. Godot 4.6.1 is a stable maintenance release; later 4.6.x patches should also be suitable for this GDScript project. citeturn974525search0turn974525search1
+Use Godot 4.6.x. Godot 4.6.1 is a stable maintenance release; later 4.6.x patches should also be suitable for this GDScript project.
 
 Default startup:
 
