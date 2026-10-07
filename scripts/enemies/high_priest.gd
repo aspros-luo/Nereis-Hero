@@ -10,6 +10,8 @@ signal attack_telegraphed
 signal phase_changed(phase: int)
 
 const MAX_HEALTH := 320
+var max_health := MAX_HEALTH
+var boss_display_name := "HIGH PRIEST"
 const PHASE_TWO_THRESHOLD := 160
 const MOVE_SPEED := 72.0
 
