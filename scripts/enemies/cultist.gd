@@ -66,7 +66,7 @@ func _log(category: String, message: String) -> void:
 func _draw() -> void:
     var c := Color("#b44b52") if hit_flash > 0.0 else Color("#55404a")
     draw_circle(Vector2(0, -45), 17, c)
-    draw_rect(Rect2(-20, -28, 40, 52), c)
-    draw_line(Vector2(-14, -4), Vector2(-46, 18), c, 8.0)
-    draw_line(Vector2(14, -4), Vector2(46, 18), c, 8.0)
+    draw_rect(Rect2(-20, -28, 40, 28), c)
+    draw_line(Vector2(-14, -4), Vector2(-46, 8), c, 8.0)
+    draw_line(Vector2(14, -4), Vector2(46, 8), c, 8.0)
     draw_string(ThemeDB.fallback_font, Vector2(-48, -72), "CULTIST %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#b7a09b"))
