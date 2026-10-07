@@ -127,3 +127,25 @@ Phase 2 changes:
 - attack cooldown becomes shorter
 - heavy attack damage increases from 24 to 32
 - boss visual tint changes
+## Village / Interior acceptance
+
+After a route is completed, the game enters Village Hub.
+
+Village Hub:
+- current location becomes `village`
+- the village checkpoint is active
+- E on THE TAVERN opens the Tavern Interior
+- E on THE CHURCH opens the Church Interior
+
+Interior:
+- current location becomes `tavern` or `church`
+- an interior checkpoint becomes active
+- route-dependent NPC dialogue remains available
+- EXIT returns to Village Hub
+- quitting and relaunching should resume in the same interior
+
+Expected location log markers:
+
+[NEREIS][WORLD] Current location=village
+[NEREIS][WORLD] Current location=tavern
+[NEREIS][WORLD] Current location=church
