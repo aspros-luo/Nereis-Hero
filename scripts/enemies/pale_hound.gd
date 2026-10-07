@@ -3,6 +3,7 @@ extends CharacterBody2D
 const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
 const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
+const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
 
 const SPEED := 155.0
 const ATTACK_RANGE := 118.0
@@ -116,8 +117,7 @@ func take_damage(amount: int) -> void:
     receive_damage(amount, null)
 
 func _spawn_death_burst() -> void:
-    var effect := Node2D.new()
-    effect.set_script("res://scripts/effects/death_burst.gd")
+    var effect: Node2D = DEATH_BURST_SCRIPT.new()
     effect.global_position = global_position + Vector2(0, -18)
     get_parent().add_child(effect)
     effect.setup(16.0)
