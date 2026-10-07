@@ -9,6 +9,13 @@ const GRAVITY := 1400.0
 const DODGE_SPEED := 620.0
 const ATTACK_DURATION := 0.28
 const DODGE_DURATION := 0.18
+const MAX_STAMINA := 100.0
+const ATTACK_STAMINA_COST := 12.0
+const DODGE_STAMINA_COST := 28.0
+const STAMINA_REGEN_DELAY := 0.65
+const STAMINA_REGEN_RATE := 42.0
+const HURT_DURATION := 0.18
+const HURT_KNOCKBACK := 180.0
 
 enum CombatState { IDLE, MOVE, JUMP, FALL, ATTACK, DODGE, HURT, DEAD }
 
@@ -17,6 +24,9 @@ var facing := 1.0
 var attack_time := 0.0
 var dodge_time := 0.0
 var invulnerable := false
+var stamina := MAX_STAMINA
+var stamina_regen_delay := 0.0
+var hurt_time := 0.0
 var state := CombatState.IDLE
 var previous_state := CombatState.IDLE
 var attack_hitbox: Area2D
@@ -43,6 +53,21 @@ func _setup_combat_components() -> void:
 func _physics_process(delta: float) -> void:
     if state == CombatState.DEAD:
         return
+
+    if hurt_time > 0.0:
+        hurt_time = max(0.0, hurt_time - delta)
+        if not is_on_floor():
+            velocity.y += GRAVITY * delta
+        move_and_slide()
+        if hurt_time <= 0.0:
+            _set_state(CombatState.IDLE)
+        queue_redraw()
+        return
+
+    if stamina_regen_delay > 0.0:
+        stamina_regen_delay = max(0.0, stamina_regen_delay - delta)
+    elif stamina < MAX_STAMINA:
+        stamina = min(MAX_STAMINA, stamina + STAMINA_REGEN_RATE * delta)
 
     if attack_time > 0.0:
         attack_time = max(0.0, attack_time - delta)
@@ -97,6 +122,10 @@ func _physics_process(delta: float) -> void:
     queue_redraw()
 
 func _perform_attack() -> void:
+    if stamina < ATTACK_STAMINA_COST:
+        return
+    stamina -= ATTACK_STAMINA_COST
+    stamina_regen_delay = STAMINA_REGEN_DELAY
     attack_time = ATTACK_DURATION
     attack_hitbox.position.x = facing * 54.0
     attack_hitbox.activate(34, 0.12)
@@ -104,6 +133,10 @@ func _perform_attack() -> void:
     _log("COMBAT", "Hero attack started; hitbox active")
 
 func _start_dodge() -> void:
+    if stamina < DODGE_STAMINA_COST:
+        return
+    stamina -= DODGE_STAMINA_COST
+    stamina_regen_delay = STAMINA_REGEN_DELAY
     dodge_time = DODGE_DURATION
     invulnerable = true
     _set_state(CombatState.DODGE)
@@ -127,6 +160,12 @@ func receive_damage(amount: int, source: Node = null) -> void:
         _log("COMBAT", "Hero damage ignored (invulnerable=%s)" % invulnerable)
         return
     health = max(0, health - amount)
+    hurt_time = HURT_DURATION
+    velocity.y = -120.0
+    if source and source is Node2D:
+        velocity.x = sign(global_position.x - source.global_position.x) * HURT_KNOCKBACK
+    else:
+        velocity.x = -facing * HURT_KNOCKBACK
     _set_state(CombatState.HURT)
     var source_name := source.name if source else "Unknown"
     _log("COMBAT", "%s -> Hero damage=%d hp=%d" % [source_name, amount, health])
@@ -161,3 +200,5 @@ func _draw() -> void:
     if attack_time > 0.0:
         draw_arc(Vector2(facing * 26, -24), 64, -1.2 if facing > 0 else 1.2, 1.2 if facing > 0 else 5.2, 20, Color("#d9d0bf"), 5.0)
     draw_string(ThemeDB.fallback_font, Vector2(-52, -82), "HERO %d" % health, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
+    draw_rect(Rect2(-32, -96, 64, 5), Color("#27212a"))
+    draw_rect(Rect2(-32, -96, 64.0 * (stamina / MAX_STAMINA), 5), Color("#9e8b72"))
