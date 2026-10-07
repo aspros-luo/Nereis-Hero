@@ -5,16 +5,20 @@ const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 
 const SPEED := 155.0
-const ATTACK_RANGE := 105.0
-const ATTACK_COOLDOWN := 1.35
+const ATTACK_RANGE := 118.0
+const ATTACK_COOLDOWN := 1.45
+const ATTACK_WINDUP := 0.30
 const POUNCE_DURATION := 0.24
 const POUNCE_SPEED := 320.0
 
 var health := 70
 var attack_timer := 0.0
+var attack_windup := 0.0
 var pounce_timer := 0.0
+var attack_released := false
 var facing := 1.0
 var hit_flash := 0.0
+var stun_time := 0.0
 var attack_hitbox: Area2D
 signal defeated
 
@@ -38,8 +42,18 @@ func _setup_combat_components() -> void:
 
 func _physics_process(delta: float) -> void:
     attack_timer = max(0.0, attack_timer - delta)
+    attack_windup = max(0.0, attack_windup - delta)
     pounce_timer = max(0.0, pounce_timer - delta)
     hit_flash = max(0.0, hit_flash - delta)
+    stun_time = max(0.0, stun_time - delta)
+
+    if stun_time > 0.0:
+        velocity.x = move_toward(velocity.x, 0.0, 1000.0 * delta)
+        if not is_on_floor():
+            velocity.y += 1400.0 * delta
+        move_and_slide()
+        queue_redraw()
+        return
 
     var hero := get_node_or_null("../Hero")
     if hero:
@@ -47,7 +61,16 @@ func _physics_process(delta: float) -> void:
         if dx != 0.0:
             facing = sign(dx)
 
-        if pounce_timer > 0.0:
+        if attack_windup > 0.0:
+            velocity.x = 0.0
+            if attack_windup <= 0.05 and not attack_released:
+                attack_released = true
+                pounce_timer = POUNCE_DURATION
+                attack_hitbox.position.x = facing * 46.0
+                attack_hitbox.activate(18, 0.18)
+                velocity.y = -190.0
+                _log("COMBAT", "Pale Hound pounce released; damage=18")
+        elif pounce_timer > 0.0:
             velocity.x = facing * POUNCE_SPEED
         else:
             var distance := abs(dx)
@@ -56,12 +79,10 @@ func _physics_process(delta: float) -> void:
             else:
                 velocity.x = 0.0
                 if attack_timer <= 0.0:
-                    pounce_timer = POUNCE_DURATION
+                    attack_windup = ATTACK_WINDUP
                     attack_timer = ATTACK_COOLDOWN
-                    attack_hitbox.position.x = facing * 46.0
-                    attack_hitbox.activate(18, 0.18)
-                    velocity.y = -190.0
-                    _log("COMBAT", "Pale Hound pounce; damage=18")
+                    attack_released = false
+                    _log("COMBAT", "Pale Hound pounce telegraph")
 
     if not is_on_floor():
         velocity.y += 1400.0 * delta
@@ -73,6 +94,9 @@ func receive_damage(amount: int, source: Node = null) -> void:
     health = max(0, health - amount)
     _spawn_hit_spark()
     hit_flash = 0.12
+    stun_time = 0.10
+    if source and source is Node2D:
+        velocity.x = sign(global_position.x - source.global_position.x) * 150.0
     var source_name := source.name if source else "Unknown"
     _log("COMBAT", "%s -> Pale Hound damage=%d hp=%d" % [source_name, amount, health])
     if health <= 0:
@@ -100,6 +124,13 @@ func _draw() -> void:
     draw_line(Vector2(18, -10), Vector2(34, 14), c, 6.0)
     draw_line(Vector2(-8, -6), Vector2(-18, 18), c, 6.0)
     draw_line(Vector2(8, -6), Vector2(18, 18), c, 6.0)
+    if attack_windup > 0.0:
+        draw_line(
+            Vector2(facing * 24.0, -32),
+            Vector2(facing * 72.0, -44),
+            Color("#c44e5a"),
+            5.0
+        )
     draw_string(ThemeDB.fallback_font, Vector2(-55, -52), "PALE HOUND %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
 
 func draw_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
