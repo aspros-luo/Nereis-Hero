@@ -282,7 +282,18 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode == KEY_F2:
+        if event.keycode == KEY_F1:
+            var endgame_scene := NereisEndingEvaluator.get_candidate()
+            print("[NEREIS][DEBUG] Candidate endgame=%s" % endgame_scene)
+            match endgame_scene:
+                "烈火天罚":
+                    get_tree().change_scene_to_file("res://scenes/ending_fire_demo.tscn")
+                "永恒乐园":
+                    get_tree().change_scene_to_file("res://scenes/ending_paradise_demo.tscn")
+                _:
+                    get_tree().change_scene_to_file("res://scenes/church_final_demo.tscn")
+            get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_F2:
             print("[NEREIS][DEBUG] Opening Eternal Paradise theater")
             get_tree().change_scene_to_file("res://scenes/ending_paradise_demo.tscn")
             get_viewport().set_input_as_handled()
