@@ -42,6 +42,8 @@ Build a complete 10–20 minute playable sequence.
 - [x] Persistent location resume
 - [x] Unified scene transition
 - [x] Tavern / Church clue foundation
+- [x] Village Graveyard foundation
+- [x] Third enemy archetype foundation
 
 - [x] First route branching foundation
 - [x] Shared-world route NPC foundation
