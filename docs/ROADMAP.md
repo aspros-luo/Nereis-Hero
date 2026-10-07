@@ -82,3 +82,32 @@ Build a complete 10–20 minute playable sequence.
 - [ ] Optimization
 - [ ] Content pipeline hardening
 - [ ] Release build validation
+
+## Phase 002B — Combat Presentation
+
+Current active development phase. Do not expand game systems until the core combat route has the intended presentation quality.
+
+- [x] Three-step Hero attack rhythm
+- [x] Enemy attack telegraphs
+- [x] Enemy hit-stagger / knockback
+- [x] Boss Phase II tempo change
+- [x] Dedicated Boss approach checkpoint
+- [x] Hero slash trail effect
+- [x] Hit spark enhancement
+- [x] Enemy death burst feedback
+- [x] Procedural Hero / enemy silhouette pass
+- [x] Ashen Knight visual pass
+- [x] Minimal combat HUD hierarchy
+- [x] Procedural combat sound feedback
+- [x] Ambient ash particle field
+- [x] Boss entrance presentation
+- [ ] Local runtime re-validation of the visual/audio pass
+- [ ] Final 5–10 minute feel test
+
+### Current priority after 002B
+
+1. Tune animation timing and hitstop-like feedback based on runtime feel.
+2. Tune Boss Phase II readability and arena presentation.
+3. Add authored audio/music assets only after the interaction sound baseline is stable.
+4. Replace the strongest remaining procedural placeholders with authored visual assets.
+5. Re-run the full acceptance route before moving to larger world content.
