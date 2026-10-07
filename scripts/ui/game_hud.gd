@@ -166,6 +166,12 @@ func _ready() -> void:
 func bind_hero(target: Node) -> void:
     hero = target
 
+func set_story_mode(region: String, objective: String) -> void:
+    title_label.text = "NEREIS HERO"
+    region_label.text = region
+    objective_label.text = objective
+    _set_humanity_visible(true)
+
 func set_combat_demo_mode() -> void:
     title_label.text = "NEREIS HERO  /  CORE COMBAT"
     region_label.text = "ASHEN ROAD"
