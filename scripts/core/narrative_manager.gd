@@ -58,11 +58,11 @@ func play_first_memory() -> void:
     timer = 8.0
     print("[NEREIS][STORY] First memory event displayed")
 
-func show_message(title: String, message: String) -> void:
+func show_message(title: String, message: String, duration: float = 4.0) -> void:
     title_label.text = title
     body_label.text = message
     panel.visible = true
-    timer = 4.0
+    timer = duration
 
     
 func begin_first_choice() -> void:
