@@ -40,6 +40,7 @@ Build a complete 10–20 minute playable sequence.
 - [x] Village Hub foundation
 - [x] Tavern / Church interior foundation
 - [x] Persistent location resume
+- [x] Unified scene transition
 - [x] Tavern / Church clue foundation
 
 - [x] First route branching foundation
