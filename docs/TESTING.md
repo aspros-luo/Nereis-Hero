@@ -43,3 +43,29 @@ The debug overlay should show:
 Boss Defeated: true
 Slice Complete: true
 ```
+
+## Save / load acceptance
+
+Save is automatic when a meaningful world-state change occurs:
+
+- first memory unlocked
+- checkpoint activated
+- Ash Gate opened
+- Ashen Knight defeated
+- first choice resolved
+- Vertical Slice completed
+
+On the next launch the state should be restored from user://nereis_hero_save.json.
+
+For clean repeated testing:
+
+F9 = delete save + reset world + reload current scene
+F3 = toggle debug overlay
+
+Expected startup log with a saved run:
+
+[NEREIS][SAVE] Game loaded; ...
+
+Expected startup log for a clean run:
+
+[NEREIS][SAVE] No save file; starting new run
