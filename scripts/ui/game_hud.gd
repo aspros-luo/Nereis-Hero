@@ -142,7 +142,8 @@ func _process(_delta: float) -> void:
         + "Lullaby Resonance: %d\n" % WorldState.lullaby_resonance
         + "Location: %s\n" % WorldState.current_location
         + "Route: %s\n" % WorldState.selected_route
-        + "Clues: %d\n" % WorldState.interior_clues_seen.size()
+        + "Interior Clues: %d\n" % WorldState.interior_clues_seen.size()
+        + "World Clues: %d\n" % WorldState.world_clues_seen.size()
         + "Boss Defeated: %s\n" % WorldState.boss_defeated
         + "Route Complete: %s\n" % WorldState.route_complete
         + "Slice Complete: %s" % WorldState.slice_complete
