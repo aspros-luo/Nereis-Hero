@@ -71,6 +71,7 @@ func _spawn_high_priest() -> void:
     _add_character_collision(boss, 24.0, 58.0)
     add_child(boss)
     boss.phase = 2
+    boss.max_health = 190
     boss.health = 190
     boss.defeated.connect(_on_high_priest_defeated)
     hud.bind_boss(boss)
@@ -92,6 +93,7 @@ func _spawn_paradise_king() -> void:
     _add_character_collision(boss, 26.0, 62.0)
     add_child(boss)
     boss.phase = 2
+    boss.max_health = 210
     boss.health = 210
     boss.defeated.connect(_on_paradise_king_defeated)
     hud.bind_boss(boss)
