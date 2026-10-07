@@ -59,8 +59,12 @@ func _physics_process(delta: float) -> void:
             velocity.x = 0.0
             if windup <= 0.08 and not released:
                 var hitbox: Area2D = get_meta("attack_hitbox")
-                hitbox.position.x = facing * (70.0 if phase == 1 else 92.0)
-                hitbox.activate(28 if phase == 1 else 40, 0.15)
+                var heavy := phase == 2 and int(animation_time * 10.0) % 3 == 0
+                hitbox.position.x = facing * (70.0 if not heavy else 100.0)
+                hitbox.scale = Vector2(1.0, 1.0)
+                hitbox.activate(28 if phase == 1 else (48 if heavy else 40), 0.17 if heavy else 0.15)
+                if heavy:
+                    velocity.x = facing * 260.0
                 released = true
         elif absf(dx) > (150.0 if phase == 1 else 170.0):
             velocity.x = facing * (54.0 if phase == 1 else 84.0)
