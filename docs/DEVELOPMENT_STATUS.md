@@ -30,12 +30,14 @@ Boot resolves to:
 - Village Hub
 - Mite first meeting
 - place-based relationship rhythm
+- Mite House chapter
+- private-house union trigger after relationship progression
 - Tavern Mite interactions
 - missed-connection empty-chair scene
 - Restoration Camp
 - North Gate / Village Defense
 - Church / Tavern investigation routes
-- Graveyard + Bell Keeper
+- Graveyard + Bell Keeper side story
 - Ancient Research Ward
 
 ### Hidden resistance
@@ -121,8 +123,9 @@ Isolated relationship/resonance prototype.
 Prototype includes:
 
 - High Priest human phase
-- High Priest ancient-god phase
+- High Priest ancient-god phase with area-burst attack
 - King intervention
+- King phase-two heavy charge
 - post-victory epilogue showing the next corrupt order beginning
 
 ### F8 — 烈火天罚
@@ -130,6 +133,7 @@ Prototype includes:
 Prototype includes:
 
 - 100 nonblocking one-hit cultists
+- 60-second true no-input waiting window for Mite
 - corrupted lullaby
 - Mite final encounter
 - true 60-second no-input waiting condition
@@ -176,3 +180,12 @@ Do not trigger GitHub Actions.
 Do not replace the narrative canon with temporary prototype assumptions.
 
 When a future implementation reaches a truly unresolved core story decision, stop that specific story layer and ask the director. Otherwise keep developing autonomously.
+
+
+## Latest polish
+
+- Shared Boss HUD now reads per-Boss max health, display name and phase.
+- Village has subtle procedural firefly ambience.
+- After Outer-God resonance, a subset of fireflies becomes synchronized and colder in tone.
+- The final Mite waiting scene has 15s / 35s / 50s micro-movements before the 60s decision.
+- The final Mite lunge has restrained camera impact; city detonation uses a much heavier impact.
