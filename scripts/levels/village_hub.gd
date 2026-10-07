@@ -129,6 +129,9 @@ func _on_mite_house_entered(body: Node) -> void:
     if WorldState.mite_connection_missed:
         narrative.show_message("THE LOCKED DOOR", "There is no reason to go inside.", 3.0)
         return
+    if not WorldState.mite_first_meeting:
+        narrative.show_message("THE CLOSED DOOR", "You do not know who lives here yet.", 3.0)
+        return
     WorldState.set_location("mite_house")
     SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")
 
