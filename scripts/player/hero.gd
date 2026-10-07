@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
+const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
+
 const SPEED := 260.0
 const JUMP_VELOCITY := -520.0
 const GRAVITY := 1400.0
@@ -16,10 +19,25 @@ var dodge_time := 0.0
 var invulnerable := false
 var state := CombatState.IDLE
 var previous_state := CombatState.IDLE
+var attack_hitbox: Area2D
 
 func _ready() -> void:
+    _setup_combat_components()
     _log("BOOT", "Hero initialized")
     queue_redraw()
+
+func _setup_combat_components() -> void:
+    attack_hitbox = Area2D.new()
+    attack_hitbox.name = "AttackHitbox"
+    attack_hitbox.set_script(HITBOX_SCRIPT)
+    add_child(attack_hitbox)
+    attack_hitbox.setup(self, Vector2(105, 64), Vector2(facing * 54.0, -28.0))
+
+    var hurtbox := Area2D.new()
+    hurtbox.name = "Hurtbox"
+    hurtbox.set_script(HURTBOX_SCRIPT)
+    add_child(hurtbox)
+    hurtbox.setup(self, Vector2(34, 78), Vector2(0, -34))
 
 func _physics_process(delta: float) -> void:
     if state == CombatState.DEAD:
@@ -79,12 +97,10 @@ func _physics_process(delta: float) -> void:
 
 func _perform_attack() -> void:
     attack_time = ATTACK_DURATION
+    attack_hitbox.position.x = facing * 54.0
+    attack_hitbox.activate(34, 0.12)
     _set_state(CombatState.ATTACK)
-    _log("COMBAT", "Hero attack started")
-    var cultist := get_node_or_null("../Cultist")
-    if cultist and global_position.distance_to(cultist.global_position) < 125.0:
-        cultist.take_damage(34)
-        _log("COMBAT", "Hero -> Cultist damage=34")
+    _log("COMBAT", "Hero attack started; hitbox active")
 
 func _start_dodge() -> void:
     dodge_time = DODGE_DURATION
@@ -105,13 +121,14 @@ func _state_name(value: CombatState) -> String:
 func get_debug_state() -> String:
     return _state_name(state)
 
-func take_damage(amount: int) -> void:
+func receive_damage(amount: int, source: Node = null) -> void:
     if invulnerable or state == CombatState.DEAD:
         _log("COMBAT", "Hero damage ignored (invulnerable=%s)" % invulnerable)
         return
     health = max(0, health - amount)
     _set_state(CombatState.HURT)
-    _log("COMBAT", "Cultist -> Hero damage=%d hp=%d" % [amount, health])
+    var source_name := source.name if source else "Unknown"
+    _log("COMBAT", "%s -> Hero damage=%d hp=%d" % [source_name, amount, health])
     if health == 0:
         _set_state(CombatState.DEAD)
         _log("HERO", "Hero defeated; resetting vertical slice")
@@ -120,6 +137,9 @@ func take_damage(amount: int) -> void:
         velocity = Vector2.ZERO
         invulnerable = false
         _set_state(CombatState.IDLE)
+
+func take_damage(amount: int) -> void:
+    receive_damage(amount, null)
 
 func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
