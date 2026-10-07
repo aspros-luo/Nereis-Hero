@@ -21,32 +21,43 @@ var hp_label: Label
 var stamina_label: Label
 var humanity_label: Label
 var humanity_bar: ColorRect
+var objective_rule: ColorRect
 
 func _ready() -> void:
     layer = 10
 
     title_label = Label.new()
-    title_label.position = Vector2(36, 26)
-    title_label.text = "NEREIS HERO // VERTICAL SLICE 001"
-    title_label.add_theme_font_size_override("font_size", 22)
+    title_label.position = Vector2(36, 24)
+    title_label.text = "NEREIS HERO"
+    title_label.add_theme_font_size_override("font_size", 24)
+    title_label.add_theme_color_override("font_color", Color("#d6c7b2"))
     add_child(title_label)
 
     controls_label = Label.new()
-    controls_label.position = Vector2(36, 62)
-    controls_label.text = "A/D Move   Space Jump   J / LMB Attack   K / Shift Dodge   E Speak   F3 Debug   F9 Reset"
-    controls_label.add_theme_font_size_override("font_size", 16)
+    controls_label.position = Vector2(38, 62)
+    controls_label.text = "A/D  MOVE     SPACE  JUMP     J  ATTACK     K  DODGE"
+    controls_label.add_theme_font_size_override("font_size", 13)
+    controls_label.add_theme_color_override("font_color", Color("#8f8586"))
     add_child(controls_label)
 
     region_label = Label.new()
-    region_label.position = Vector2(36, 94)
-    region_label.text = "The village remembers what the hero has forgotten."
-    region_label.add_theme_font_size_override("font_size", 18)
+    region_label.position = Vector2(38, 91)
+    region_label.text = "ASHEN ROAD"
+    region_label.add_theme_font_size_override("font_size", 13)
+    region_label.add_theme_color_override("font_color", Color("#665b5d"))
     add_child(region_label)
 
     objective_label = Label.new()
-    objective_label.position = Vector2(36, 124)
-    objective_label.add_theme_font_size_override("font_size", 18)
+    objective_label.position = Vector2(38, 118)
+    objective_label.add_theme_font_size_override("font_size", 16)
+    objective_label.add_theme_color_override("font_color", Color("#b7a48c"))
     add_child(objective_label)
+
+    objective_rule = ColorRect.new()
+    objective_rule.position = Vector2(38, 145)
+    objective_rule.size = Vector2(280, 2)
+    objective_rule.color = Color("#5d5050", 0.55)
+    add_child(objective_rule)
 
     combat_banner = Label.new()
     combat_banner.position = Vector2(410, 116)
@@ -58,7 +69,7 @@ func _ready() -> void:
 
     status_panel = ColorRect.new()
     status_panel.position = Vector2(36, 630)
-    status_panel.size = Vector2(330, 98)
+    status_panel.size = Vector2(300, 98)
     status_panel.color = Color("#0a090d", 0.78)
     add_child(status_panel)
 
@@ -148,17 +159,23 @@ func bind_hero(target: Node) -> void:
     hero = target
 
 func set_combat_demo_mode() -> void:
-    title_label.text = "NEREIS HERO // CORE COMBAT DEMO"
-    controls_label.text = "A/D Move   Space Jump   J / LMB Attack   K / Shift Dodge   F3 Debug   F9 Reset"
-    region_label.text = "Defeat the small enemies. Break the Ash Gate. Survive the Ashen Knight."
+    title_label.text = "NEREIS HERO  /  CORE COMBAT"
+    region_label.text = "ASHEN ROAD"
+    _set_humanity_visible(false)
+
+func _set_humanity_visible(value: bool) -> void:
+    humanity_label.visible = value
+    humanity_bar.visible = value
+
 
 func set_combat_demo_progress(defeated: int, boss_active: bool, complete: bool) -> void:
     if complete:
-        objective_label.text = "OBJECTIVE: CORE COMBAT DEMO COMPLETE"
+        objective_label.text = "CORE COMBAT DEMO COMPLETE"
+
     elif boss_active:
-        objective_label.text = "OBJECTIVE: DEFEAT THE ASHEN KNIGHT"
+        objective_label.text = "DEFEAT THE ASHEN KNIGHT"
     else:
-        objective_label.text = "OBJECTIVE: DEFEAT SMALL ENEMIES  %d / 3" % defeated
+        objective_label.text = "DEFEAT SMALL ENEMIES    %d / 3" % defeated
 
 func show_hit_confirm(damage: int) -> void:
     _show_banner("HIT  %d" % damage, 0.18)
