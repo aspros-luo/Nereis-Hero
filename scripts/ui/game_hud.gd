@@ -273,6 +273,8 @@ func _process(delta: float) -> void:
 " % WorldState.hidden_artifact_pieces
         + "Ending: %s
 " % WorldState.ending_route
+        + "Candidate: %s
+" % NereisEndingEvaluator.get_candidate()
         + "Location: %s
 " % WorldState.current_location
         + "Route: %s
