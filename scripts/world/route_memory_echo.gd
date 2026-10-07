@@ -16,22 +16,26 @@ func _ready() -> void:
     print("[NEREIS][STORY] Route echo initialized id=%s consumed=%s" % [echo_id, consumed])
     queue_redraw()
 
-func _physics_process(delta: float) -> void:
-    cooldown = max(0.0, cooldown - delta)
+func _process(delta: float) -> void:
+    cooldown = maxf(0.0, cooldown - delta)
     if consumed:
         return
 
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 120.0
+    queue_redraw()
 
-    if hero_nearby and Input.is_key_pressed(KEY_E) and cooldown <= 0.0:
+func _unhandled_input(event: InputEvent) -> void:
+    if WorldState.input_locked or consumed or not hero_nearby or cooldown > 0.0:
+        return
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 0.5
         consumed = true
         interacted.emit()
+        WorldState.record_hidden_artifact_source("route_echo_" + echo_id)
         print("[NEREIS][STORY] Route echo interacted id=%s" % echo_id)
+        get_viewport().set_input_as_handled()
         queue_redraw()
-
-    queue_redraw()
 
 func _draw() -> void:
     var glow := Color("#9e5961") if not consumed else Color("#4d454d")
