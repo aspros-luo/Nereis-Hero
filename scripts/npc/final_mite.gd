@@ -74,6 +74,8 @@ func sacrifice_to_weapon() -> void:
     tween.set_ease(Tween.EASE_IN)
     tween.tween_property(self, "global_position", weapon_target, 0.62)
     tween.tween_callback(func() -> void:
+        if hero and hero.has_method("_shake_camera"):
+            hero._shake_camera(3.5, 0.18)
         _die(true)
     )
 
