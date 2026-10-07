@@ -20,6 +20,7 @@ var route_complete := false
 var current_location := "slice"
 var interior_clues_seen: Array[String] = []
 var world_clues_seen: Array[String] = []
+var graveyard_cleared := false
 var weapon_level := 1
 var hero_attack_damage := 34
 var input_locked := false
@@ -109,6 +110,7 @@ func save_game() -> void:
         "current_location": current_location,
         "interior_clues_seen": interior_clues_seen,
         "world_clues_seen": world_clues_seen,
+        "graveyard_cleared": graveyard_cleared,
         "weapon_level": weapon_level,
         "hero_attack_damage": hero_attack_damage
     }
@@ -163,6 +165,7 @@ func load_game() -> void:
     current_location = str(parsed.get("current_location", "slice"))
 
     world_clues_seen.clear()
+    graveyard_cleared = bool(parsed.get("graveyard_cleared", false))
     var saved_world_clues = parsed.get("world_clues_seen", [])
     if saved_world_clues is Array:
         for clue_id in saved_world_clues:
@@ -204,6 +207,7 @@ func reset() -> void:
     current_location = "slice"
     interior_clues_seen.clear()
     world_clues_seen.clear()
+    graveyard_cleared = false
     weapon_level = 1
     hero_attack_damage = 34
     input_locked = false
@@ -227,6 +231,13 @@ func record_interior_clue(clue_id: String) -> bool:
     print("[NEREIS][STORY] Interior clue recorded id=%s hero_memory=%d" % [clue_id, hero_memory])
     save_game()
     return true
+
+func mark_graveyard_cleared() -> void:
+    if graveyard_cleared:
+        return
+    graveyard_cleared = true
+    print("[NEREIS][WORLD] Village Graveyard encounter cleared")
+    save_game()
 
 func record_world_clue(clue_id: String) -> bool:
     if clue_id in world_clues_seen:
