@@ -95,7 +95,7 @@ func _spawn_death_burst() -> void:
     var effect: Node2D = DEATH_BURST_SCRIPT.new()
     effect.global_position = global_position + Vector2(0, -44)
     get_parent().add_child(effect)
-    effect.setup(26.0)
+    effect.call("setup", 26.0)
 
 func _spawn_hit_spark() -> void:
     var effect := Node2D.new()
