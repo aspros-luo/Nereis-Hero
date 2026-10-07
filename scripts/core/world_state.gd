@@ -23,6 +23,7 @@ var current_location := "slice"
 var interior_clues_seen: Array[String] = []
 var world_clues_seen: Array[String] = []
 var graveyard_cleared := false
+var graveyard_keeper_heard := false
 var weapon_level := 1
 var hero_attack_damage := 34
 var input_locked := false
@@ -226,6 +227,7 @@ func save_game() -> void:
         "interior_clues_seen": interior_clues_seen,
         "world_clues_seen": world_clues_seen,
         "graveyard_cleared": graveyard_cleared,
+        "graveyard_keeper_heard": graveyard_keeper_heard,
         "weapon_level": weapon_level,
         "hero_attack_damage": hero_attack_damage,
         "mite_first_meeting": mite_first_meeting,
@@ -293,6 +295,7 @@ func load_game() -> void:
 
     world_clues_seen.clear()
     graveyard_cleared = bool(parsed.get("graveyard_cleared", false))
+    graveyard_keeper_heard = bool(parsed.get("graveyard_keeper_heard", false))
     var saved_world_clues = parsed.get("world_clues_seen", [])
     if saved_world_clues is Array:
         for clue_id in saved_world_clues:
@@ -362,6 +365,7 @@ func reset() -> void:
     interior_clues_seen.clear()
     world_clues_seen.clear()
     graveyard_cleared = false
+    graveyard_keeper_heard = false
     weapon_level = 1
     hero_attack_damage = 34
     mite_first_meeting = false
@@ -400,6 +404,12 @@ func record_interior_clue(clue_id: String, humanity_delta: int = 0) -> bool:
     print("[NEREIS][STORY] Interior clue recorded id=%s hero_memory=%d humanity=%d" % [clue_id, hero_memory, hero_humanity])
     save_game()
     return true
+
+func mark_graveyard_keeper_heard() -> void:
+    if graveyard_keeper_heard:
+        return
+    graveyard_keeper_heard = true
+    save_game()
 
 func mark_graveyard_cleared() -> void:
     if graveyard_cleared:
