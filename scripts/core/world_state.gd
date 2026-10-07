@@ -14,6 +14,8 @@ var lullaby_resonance := 0
 var first_choice_made := false
 var slice_complete := false
 var selected_route := ""
+var route_memory_seen := false
+var route_memory_id := ""
 var weapon_level := 1
 var hero_attack_damage := 34
 var input_locked := false
@@ -97,6 +99,8 @@ func save_game() -> void:
         "first_choice_made": first_choice_made,
         "slice_complete": slice_complete,
         "selected_route": selected_route,
+        "route_memory_seen": route_memory_seen,
+        "route_memory_id": route_memory_id,
         "weapon_level": weapon_level,
         "hero_attack_damage": hero_attack_damage
     }
@@ -141,6 +145,8 @@ func load_game() -> void:
     first_choice_made = bool(parsed.get("first_choice_made", false))
     slice_complete = bool(parsed.get("slice_complete", false))
     selected_route = str(parsed.get("selected_route", ""))
+    route_memory_seen = bool(parsed.get("route_memory_seen", false))
+    route_memory_id = str(parsed.get("route_memory_id", ""))
     weapon_level = int(parsed.get("weapon_level", 1))
     hero_attack_damage = int(parsed.get("hero_attack_damage", 34))
 
@@ -165,11 +171,23 @@ func reset() -> void:
     first_choice_made = false
     slice_complete = false
     selected_route = ""
+    route_memory_seen = false
+    route_memory_id = ""
     weapon_level = 1
     hero_attack_damage = 34
     input_locked = false
 
   
+func record_route_memory(memory_id: String) -> bool:
+    if route_memory_seen and route_memory_id == memory_id:
+        return false
+    route_memory_seen = true
+    route_memory_id = memory_id
+    hero_memory += 1
+    print("[NEREIS][STORY] Route memory recorded id=%s hero_memory=%d" % [memory_id, hero_memory])
+    save_game()
+    return true
+
 func get_route_scene_path() -> String:
     if selected_route == "lullaby":
         return "res://scenes/routes/lullaby_path.tscn"
