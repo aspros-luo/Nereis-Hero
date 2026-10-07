@@ -89,7 +89,18 @@ func _spawn_village_pois() -> void:
     church.interacted.connect(_on_village_poi_interacted.bind(church))
 
 func _on_village_poi_interacted(poi: Node) -> void:
-    narrative.show_message(poi.display_name, poi.dialogue, 6.0)
+    narrative.show_message(poi.display_name, poi.dialogue, 2.5)
+    get_tree().create_timer(2.7).timeout.connect(_enter_village_location.bind(poi.poi_id))
+
+func _enter_village_location(location_id: String) -> void:
+    if location_id == "tavern":
+        WorldState.set_location("tavern")
+        print("[NEREIS][VILLAGE] Entering Tavern Interior")
+        get_tree().change_scene_to_file("res://scenes/locations/tavern_interior.tscn")
+    elif location_id == "church":
+        WorldState.set_location("church")
+        print("[NEREIS][VILLAGE] Entering Church Interior")
+        get_tree().change_scene_to_file("res://scenes/locations/church_interior.tscn")
 
 func _spawn_ui() -> void:
     narrative = CanvasLayer.new()
