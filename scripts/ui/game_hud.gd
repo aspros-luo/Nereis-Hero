@@ -271,6 +271,8 @@ func _process(delta: float) -> void:
 " % WorldState.physical_union_complete
         + "Artifact: %d/4
 " % WorldState.hidden_artifact_pieces
+        + "Anchor Awake: %s
+" % WorldState.hidden_resistance_awakened
         + "Ending: %s
 " % WorldState.ending_route
         + "Candidate: %s
