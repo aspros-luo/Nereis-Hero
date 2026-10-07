@@ -146,7 +146,7 @@ func _on_exit_reached() -> void:
     get_tree().create_timer(3.2).timeout.connect(_return_to_village)
 
 func _return_to_village() -> void:
-    get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
+    SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
 
 func _create_floor() -> void:
     var floor := StaticBody2D.new()
