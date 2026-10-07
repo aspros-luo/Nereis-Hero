@@ -7,6 +7,7 @@ var health := 100
 var attack_cooldown := 0.0
 var hit_flash := 0.0
 var attack_hitbox: Area2D
+signal defeated
 
 func _ready() -> void:
     _setup_combat_components()
@@ -55,6 +56,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
     _log("COMBAT", "%s -> Cultist damage=%d hp=%d" % [source_name, amount, health])
     if health <= 0:
         _log("COMBAT", "Cultist defeated")
+        defeated.emit()
         queue_free()
 
 func take_damage(amount: int) -> void:
