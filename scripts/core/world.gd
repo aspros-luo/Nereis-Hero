@@ -8,6 +8,7 @@ const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const BOSS_GATE_SCRIPT = preload("res://scripts/world/boss_gate.gd")
 const LEVEL_EXIT_SCRIPT = preload("res://scripts/world/level_exit.gd")
+const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 
 var hero: CharacterBody2D
 var enemy: CharacterBody2D
@@ -18,7 +19,7 @@ var level_exit: Area2D
 var old_hunter: Node2D
 var camera: Camera2D
 var narrative: CanvasLayer
-var debug_enabled := true
+var hud: CanvasLayer
 
 func _ready() -> void:
     _log("BOOT", "World initialization started")
@@ -64,6 +65,11 @@ func _ready() -> void:
     narrative = CanvasLayer.new()
     narrative.set_script(NARRATIVE_SCRIPT)
     add_child(narrative)
+
+    hud = CanvasLayer.new()
+    hud.set_script(HUD_SCRIPT)
+    add_child(hud)
+    hud.bind_hero(hero)
 
     level_exit = Area2D.new()
     level_exit.set_script(LEVEL_EXIT_SCRIPT)
@@ -180,9 +186,8 @@ func _process(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
         if event.keycode == KEY_F3:
-            debug_enabled = not debug_enabled
-            _log("DEBUG", "Debug overlay=%s" % debug_enabled)
-            queue_redraw()
+            hud.set_debug_visible(not hud.debug_enabled)
+            _log("DEBUG", "Debug overlay=%s" % hud.debug_enabled)
             get_viewport().set_input_as_handled()
         elif event.keycode == KEY_F9:
             WorldState.delete_save()
@@ -252,27 +257,9 @@ func _draw() -> void:
     draw_rect(Rect2(1730, 350, 140, 170), Color("#241d25"))
     draw_string(ThemeDB.fallback_font, Vector2(1750, 365), "ASH GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
     draw_string(ThemeDB.fallback_font, Vector2(900, 490), "SAFE GROUND", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
-    draw_string(ThemeDB.fallback_font, Vector2(1045, 438), "BOSS GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
     draw_string(ThemeDB.fallback_font, Vector2(605, 458), "OLD HUNTER", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
-
-    draw_string(ThemeDB.fallback_font, Vector2(40, 55), "NEREIS HERO // VERTICAL SLICE 001", HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color("#d6c7b2"))
-    draw_string(ThemeDB.fallback_font, Vector2(40, 88), "A/D Move   Space Jump   J / LMB Attack   K / Shift Dodge   E Speak", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#9b9189"))
-    draw_string(ThemeDB.fallback_font, Vector2(40, 125), "The village remembers what the hero has forgotten.", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#8e7777"))
 
     draw_string(ThemeDB.fallback_font, Vector2(40, 235), "VILLAGE OUTSKIRTS", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
     draw_string(ThemeDB.fallback_font, Vector2(1240, 235), "THE ASHEN ROAD", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
 
-    if debug_enabled and hero:
-        var state_name: String = hero.get_debug_state()
-        var invuln = hero.get("invulnerable")
-        var hp = hero.get("health")
-        draw_rect(Rect2(930, 32, 310, 158), Color("#0a090d", 0.88))
-        draw_string(ThemeDB.fallback_font, Vector2(950, 60), "DEBUG [F3]", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
-        draw_string(ThemeDB.fallback_font, Vector2(950, 88), "Hero HP: %s" % hp, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
-        draw_string(ThemeDB.fallback_font, Vector2(950, 112), "State: %s" % state_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
-        draw_string(ThemeDB.fallback_font, Vector2(950, 136), "Invulnerable: %s" % invuln, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
-        draw_string(ThemeDB.fallback_font, Vector2(950, 160), "Memory: %d" % WorldState.hero_memory, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
-        draw_string(ThemeDB.fallback_font, Vector2(950, 184), "Humanity: %d" % WorldState.hero_humanity, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
-        draw_string(ThemeDB.fallback_font, Vector2(950, 208), "Boss Defeated: %s" % WorldState.boss_defeated, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
-        draw_string(ThemeDB.fallback_font, Vector2(950, 232), "Slice Complete: %s" % WorldState.slice_complete, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
-        draw_string(ThemeDB.fallback_font, Vector2(950, 256), "Stamina: %d" % int(hero.get("stamina")), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
+
