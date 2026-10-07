@@ -11,7 +11,7 @@ var hero_nearby := false
 var cooldown := 0.0
 
 func _ready() -> void:
-    consumed = WorldState.interior_clue_seen and WorldState.interior_clue_id == clue_id
+    consumed = clue_id in WorldState.interior_clues_seen
     print("[NEREIS][STORY] Interior clue initialized id=%s consumed=%s" % [clue_id, consumed])
     queue_redraw()
 
