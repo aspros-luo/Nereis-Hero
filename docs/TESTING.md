@@ -192,3 +192,11 @@ Expected:
 - examining the gravestone increases World Clues and Hero Memory by 1
 - EXIT returns to Village Hub
 - quitting and relaunching from the graveyard resumes there
+## Tavern rest acceptance
+
+Inside the Tavern, E at the rest point should:
+- restore Hero HP to 100
+- restore stamina to 100
+- preserve Humanity and all narrative state
+- save the current location
+- show the rest message
