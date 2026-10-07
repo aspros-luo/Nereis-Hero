@@ -34,6 +34,7 @@ var ancient_residue_awakened := false
 var outer_god_resonance := false
 var physical_union_complete := false
 var hidden_artifact_pieces := 0
+var hidden_artifact_sources: Array[String] = []
 var ending_route := ""
 
 func _ready() -> void:
@@ -151,6 +152,15 @@ func mark_physical_union_complete() -> void:
     print("[NEREIS][STORY] Physical union state recorded")
     save_game()
 
+func record_hidden_artifact_source(source_id: String) -> bool:
+    if source_id in hidden_artifact_sources:
+        return false
+    hidden_artifact_sources.append(source_id)
+    hidden_artifact_pieces = mini(hidden_artifact_sources.size(), 4)
+    print("[NEREIS][SECRET] Hidden artifact source=%s pieces=%d/4" % [source_id, hidden_artifact_pieces])
+    save_game()
+    return true
+
 func add_hidden_artifact_piece() -> int:
     hidden_artifact_pieces = mini(hidden_artifact_pieces + 1, 4)
     print("[NEREIS][SECRET] Hidden artifact pieces=%d/4" % hidden_artifact_pieces)
@@ -195,6 +205,7 @@ func save_game() -> void:
         "outer_god_resonance": outer_god_resonance,
         "physical_union_complete": physical_union_complete,
         "hidden_artifact_pieces": hidden_artifact_pieces,
+        "hidden_artifact_sources": hidden_artifact_sources,
         "ending_route": ending_route
     }
 
@@ -273,6 +284,11 @@ func load_game() -> void:
     outer_god_resonance = bool(parsed.get("outer_god_resonance", false))
     physical_union_complete = bool(parsed.get("physical_union_complete", false))
     hidden_artifact_pieces = clampi(int(parsed.get("hidden_artifact_pieces", 0)), 0, 4)
+    hidden_artifact_sources.clear()
+    var saved_artifact_sources = parsed.get("hidden_artifact_sources", [])
+    if saved_artifact_sources is Array:
+        for source_id in saved_artifact_sources:
+            hidden_artifact_sources.append(str(source_id))
     ending_route = str(parsed.get("ending_route", ""))
 
     print("[NEREIS][SAVE] Game loaded; memory=%d boss_defeated=%s choice=%s" % [hero_memory, boss_defeated, first_choice_made])
@@ -312,6 +328,7 @@ func reset() -> void:
     outer_god_resonance = false
     physical_union_complete = false
     hidden_artifact_pieces = 0
+    hidden_artifact_sources.clear()
     ending_route = ""
     input_locked = false
     hitstop_serial += 1
