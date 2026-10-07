@@ -27,6 +27,7 @@ var enemies_defeated := 0
 var combat_started := false
 var boss_active := false
 var demo_complete := false
+var boss_phase_two_visual := false
 
 func _ready() -> void:
     WorldState.reset()
@@ -222,6 +223,8 @@ func _on_hero_attack_landed(damage: int, _target: Node) -> void:
 
 func _on_boss_phase_changed(phase: int) -> void:
     if phase == 2:
+        boss_phase_two_visual = true
+        queue_redraw()
         _play_sfx("phase")
         if hud:
             hud.show_phase_two()
@@ -347,12 +350,17 @@ func _draw_backdrop() -> void:
         draw_rect(Rect2(0, y, LEVEL_WIDTH, 28), Color(0.08, 0.07, 0.10, 0.34))
 
 func _draw_arena_details() -> void:
-    draw_rect(Rect2(1760, FLOOR_Y - 170, 18, 170), Color("#2e2830"))
-    draw_rect(Rect2(1802, FLOOR_Y - 205, 18, 205), Color("#3b3036"))
-    draw_rect(Rect2(2270, FLOOR_Y - 205, 18, 205), Color("#3b3036"))
-    draw_circle(Vector2(2040, FLOOR_Y - 20), 180.0, Color("#17141b"))
-    draw_arc(Vector2(2040, FLOOR_Y - 20), 176.0, PI, TAU, 40, Color("#2c2430"), 6.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1930, 350), "ASHEN ARENA", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#514650"))
+    var arena_core := Color("#21151c") if boss_phase_two_visual else Color("#17141b")
+    var arena_edge := Color("#6b3039") if boss_phase_two_visual else Color("#2c2430")
+    var arena_label := Color("#8f4852") if boss_phase_two_visual else Color("#514650")
+    draw_rect(Rect2(1760, FLOOR_Y - 170, 18, 170), Color("#392731"))
+    draw_rect(Rect2(1802, FLOOR_Y - 205, 18, 205), Color("#4a3439"))
+    draw_rect(Rect2(2270, FLOOR_Y - 205, 18, 205), Color("#4a3439"))
+    draw_circle(Vector2(2040, FLOOR_Y - 20), 180.0, arena_core)
+    draw_arc(Vector2(2040, FLOOR_Y - 20), 176.0, PI, TAU, 40, arena_edge, 6.0)
+    if boss_phase_two_visual:
+        draw_arc(Vector2(2040, FLOOR_Y - 20), 128.0, PI * 1.08, PI * 1.92, 24, Color("#9b3d49", 0.65), 3.0)
+    draw_string(ThemeDB.fallback_font, Vector2(1930, 350), "ASHEN ARENA", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, arena_label)
 
 func _draw_phase_markers() -> void:
     draw_string(ThemeDB.fallback_font, Vector2(80, 180), "AWAKENING", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#4d454d"))
