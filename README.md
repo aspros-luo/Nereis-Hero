@@ -71,7 +71,11 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 ### Hidden investigation
 
 - Persistent hidden artifact evidence state
-- Existing tavern, church, graveyard and route clues can contribute hidden resistance evidence
+- Four independent hidden story sources can assemble the resistance anchor
+- Ancient research ward
+- Graveyard bell story
+- Restoration order
+- Route memory echo
 - Evidence is not exposed as a "true ending checklist"
 
 ### Combat
@@ -100,7 +104,11 @@ The 100 cultist count is intentionally a spectacle. Future crowdfunding can opti
 
 ### Debug
 
+- F1 — candidate-driven endgame theater
+- F2 — Eternal Paradise Theater
 - F3 — debug overlay
+- F4 — Ancient Research Ward
+- F5 — Village Defense Theater
 - F6 — Mite Resonance Theater
 - F7 — Church Final Boss Theater
 - F8 — 烈火天罚 Theater
@@ -125,6 +133,14 @@ These are reference influences, not content to copy.
 The intended narrative language is:
 
 **items as evidence + environment as narrative + NPCs as biased witnesses + contradictory memories + recurring symbols + emotional subtext**
+
+## Save / Resume
+
+The default startup goes through:
+
+`res://scenes/boot.tscn`
+
+A completed prologue resumes from the last persisted story location. F9 clears the run and starts the prologue again.
 
 ## Engine
 
