@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
 const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
+const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 
 const SPEED := 260.0
 const JUMP_VELOCITY := -520.0
@@ -163,11 +164,18 @@ func _state_name(value: CombatState) -> String:
 func get_debug_state() -> String:
     return _state_name(state)
 
+func _spawn_hit_spark() -> void:
+    var effect := Node2D.new()
+    effect.set_script(HIT_SPARK_SCRIPT)
+    effect.global_position = global_position + Vector2(0, -34)
+    get_parent().add_child(effect)
+
 func receive_damage(amount: int, source: Node = null) -> void:
     if invulnerable or state == CombatState.DEAD:
         _log("COMBAT", "Hero damage ignored (invulnerable=%s)" % invulnerable)
         return
     health = max(0, health - amount)
+    _spawn_hit_spark()
     hurt_time = HURT_DURATION
     velocity.y = -120.0
     if source and source is Node2D:
