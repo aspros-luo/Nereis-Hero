@@ -26,8 +26,8 @@ Default startup:
 4. Dodge with K / Shift while an enemy attacks. Verify the short invulnerability window works.
 5. Take enough damage to die. Verify the Hero returns to the checkpoint with full HP and stamina and the wave resets when Boss combat has not started.
 6. Defeat Cultist A, Pale Hound and Cultist B. The HUD must advance from 0/3 to 3/3.
-7. Confirm the Ash Gate opens and the Ashen Knight spawns only after 3/3.
-8. Fight the Boss. Verify the heavy-attack telegraph is readable before damage is applied.
+7. Confirm the Ash Gate opens and the Boss approach checkpoint is activated. The Ashen Knight must spawn only after 3/3.
+8. Fight the Boss. If the Hero dies during Boss combat, the next respawn should be at the Boss approach checkpoint rather than the start of the road. Verify the heavy-attack telegraph is readable before damage is applied.
 9. Reduce the Boss to 120 HP or less. Verify Phase II is announced once, the Boss becomes faster and the attack damage rises.
 10. Defeat the Ashen Knight. Verify the HUD reports `CORE COMBAT DEMO COMPLETE`.
 11. Press F9. Verify save state is cleared and the exact core demo starts again.
