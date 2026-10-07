@@ -4,37 +4,85 @@ A 2D Soulslike action RPG set in the Nereis universe.
 
 ## Vision
 
-A dark fantasy / cosmic horror action RPG told from the hero's perspective. The game explores the conflict between survival, faith, memory, and humanity.
+A dark fantasy / cosmic horror action RPG told from the Hero's perspective. The game explores survival, faith, memory, selfhood, and the cost of knowing the truth.
 
-The game is designed as a shared-universe counterpart to **Nereis Lullaby**: that project follows Mite/Nereis and the village, while **Nereis Hero** follows the amnesiac Hero through the church, ruined roads, settlements, and the forces behind the disappearances.
+**Nereis Hero** is the shared-world counterpart to **Nereis Lullaby**:
 
-## Current Phase
+- Nereis Lullaby follows Mite/Nereis and the village/tavern.
+- Nereis Hero follows the amnesiac Hero through roads, the church, the village, ruins, and the forces behind the disappearances.
+- Shared events can have different interpretations depending on whose perspective is being followed.
 
-**Vertical Slice 001 — playable systems foundation**
+## Current Development
 
-Current slice route:
+The `development` branch now contains a playable systems-first chapter foundation:
 
-Awakening → Old Hunter → First Memory → Checkpoint → Cultist → Ash Gate → Ashen Knight → First Choice → Exit
+### Combat
 
-The slice now includes:
-
-- Hero movement, jump, attack and dodge
-- Combat state machine foundation
+- Hero combat state machine foundation
+- Movement, jump, attack and dodge
+- Stamina and recovery rhythm
+- Hurt stun and knockback
 - Reusable Hitbox / Hurtbox system
-- Enemy AI and Mini Boss
+- Hit sparks
+- Two-phase Ashen Knight Mini Boss
+- Pale Hound encounter
+- Bell Wraith aerial/ranged encounter
+- Boss health HUD
+
+### Progression
+
+- Checkpoints
+- Death respawn
+- Persistent save/load
+- Weapon level 2 upgrade
+- Humanity as a selfhood axis
+- Memory progression
+- Church alignment / Lullaby resonance
+- Route selection
+
+### Story
+
+- Old Hunter
+- First memory event
+- First meaningful choice
+- Church Route
+- Lullaby Route
+- Shared-world Amnesiac Youth
+- Shared-world Traveling Merchant
+- Route-specific memory echoes
+- Humanity-sensitive dialogue
+- Tavern / Church clues
+- Village Graveyard clue + Bell event
+
+### World
+
 - Horizontal camera-driven level
-- NPC interaction and narrative event
-- Checkpoint + death respawn
-- Boss gate progression
-- Post-boss narrative choice
-- Automatic save/load
-- Runtime diagnostic logging and F3 debug overlay
-- F9 clean-run reset for local testing
+- Village Hub
+- Tavern Interior
+- Church Interior
+- Village Graveyard
+- Scene fade transitions
+- Tavern rest point
+- Persistent location resume
+- Fixed HUD + F3 debug overlay
+- F9 clean test reset
+
+## Current chapter route
+
+`Awakening → Old Hunter → First Memory → Checkpoint → Pale Hound → Cultist → Ash Gate → Ashen Knight → First Choice → Church/Lullaby Route → Village Hub → Tavern/Church/Graveyard`
 
 ## Engine
 
 Godot 4.6.x / GDScript / GL Compatibility.
 
-## Repository
+The project deliberately avoids unnecessary dependencies while the gameplay foundation is being validated.
 
-Development happens on the `development` branch in small, reviewable commits. `main` is kept as the stable branch while the vertical slice is being built.
+## Runtime Verification
+
+The maintainer environment currently cannot execute Godot Runtime or reach the official Godot download host. The project therefore includes detailed `[NEREIS][...]` runtime logging and `docs/TESTING.md` acceptance procedures.
+
+Run locally with Godot 4.6.x and send the complete Output log from the first `[NEREIS][BOOT]` marker through any error for debugging.
+
+## Branching
+
+Development happens on `development`. `main` remains the stable branch until the first local runtime acceptance pass is completed.
