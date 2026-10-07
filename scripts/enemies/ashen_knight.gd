@@ -8,6 +8,7 @@ var attack_cooldown := 0.0
 var windup := 0.0
 var hit_flash := 0.0
 var facing := -1.0
+var attack_released := false
 var attack_hitbox: Area2D
 
 func _ready() -> void:
@@ -46,12 +47,16 @@ func _physics_process(delta: float) -> void:
             if attack_cooldown <= 0.0 and windup <= 0.0:
                 windup = 0.42
                 attack_cooldown = 1.55
+                attack_released = false
                 _log("BOSS", "Ashen Knight attack telegraph")
 
-            if windup > 0.0 and windup <= 0.06:
+            if windup > 0.0 and windup <= 0.06 and not attack_released:
                 attack_hitbox.position.x = facing * 64.0
                 attack_hitbox.activate(24, 0.16)
+                attack_released = true
                 _log("COMBAT", "Ashen Knight heavy attack released; damage=24")
+            if windup == 0.0:
+                attack_released = false
 
     move_and_slide()
     queue_redraw()
