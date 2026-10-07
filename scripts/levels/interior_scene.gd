@@ -153,7 +153,34 @@ func _spawn_rest_point() -> void:
     rest_point.rested.connect(_on_rest_point_used)
 
 func _on_rest_point_used() -> void:
+    if location_id == "tavern" and not WorldState.physical_union_complete and not WorldState.mite_connection_missed and WorldState.mite_interactions_seen.size() >= 4:
+        _begin_mite_union_scene()
+        return
     narrative.show_message("A MOMENT OF QUIET", "For once, nothing asks you to remember.", 4.0)
+
+func _begin_mite_union_scene() -> void:
+    WorldState.input_locked = true
+    narrative.show_message(
+        "AFTER THE LULLABY",
+        "The tavern is empty.\n\nThe fire burns low.\n\nNeither of you remembers deciding to stay.",
+        4.5
+    )
+    get_tree().create_timer(4.7).timeout.connect(_complete_mite_union)
+
+func _complete_mite_union() -> void:
+    WorldState.mark_physical_union_complete()
+    WorldState.mark_ancient_residue_awakened()
+    WorldState.mark_outer_god_resonance()
+    if narrative_audio and narrative_audio.has_method("play_corrupted_lullaby"):
+        narrative_audio.play_corrupted_lullaby()
+    narrative.show_message(
+        "SOMETHING ANSWERS",
+        "There is no thunder.\n\nOnly warmth beneath Hero's skin.\n\nMite opens her eyes.\n\n"Did you hear that?"",
+        6.0
+    )
+    get_tree().create_timer(6.2).timeout.connect(func() -> void:
+        WorldState.input_locked = false
+    )
 
 func _spawn_exit() -> void:
     exit = Area2D.new()
