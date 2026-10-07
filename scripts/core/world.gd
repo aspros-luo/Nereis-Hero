@@ -178,10 +178,17 @@ func _process(_delta: float) -> void:
     queue_redraw()
 
 func _unhandled_input(event: InputEvent) -> void:
-    if event is InputEventKey and event.pressed and event.keycode == KEY_F3:
-        debug_enabled = not debug_enabled
-        _log("DEBUG", "Debug overlay=%s" % debug_enabled)
-        queue_redraw()
+    if event is InputEventKey and event.pressed and not event.echo:
+        if event.keycode == KEY_F3:
+            debug_enabled = not debug_enabled
+            _log("DEBUG", "Debug overlay=%s" % debug_enabled)
+            queue_redraw()
+            get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_F9:
+            WorldState.delete_save()
+            _log("DEBUG", "Run state reset; reloading scene")
+            get_tree().reload_current_scene()
+            get_viewport().set_input_as_handled()
 
 func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
