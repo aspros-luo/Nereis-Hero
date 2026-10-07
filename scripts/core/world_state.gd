@@ -17,6 +17,7 @@ var selected_route := ""
 var route_memory_seen := false
 var route_memory_id := ""
 var route_complete := false
+var current_location := "slice"
 var weapon_level := 1
 var hero_attack_damage := 34
 var input_locked := false
@@ -103,6 +104,7 @@ func save_game() -> void:
         "route_memory_seen": route_memory_seen,
         "route_memory_id": route_memory_id,
         "route_complete": route_complete,
+        "current_location": current_location,
         "weapon_level": weapon_level,
         "hero_attack_damage": hero_attack_damage
     }
@@ -150,6 +152,7 @@ func load_game() -> void:
     route_memory_seen = bool(parsed.get("route_memory_seen", false))
     route_memory_id = str(parsed.get("route_memory_id", ""))
     route_complete = bool(parsed.get("route_complete", false))
+    current_location = str(parsed.get("current_location", "slice"))
     weapon_level = int(parsed.get("weapon_level", 1))
     hero_attack_damage = int(parsed.get("hero_attack_damage", 34))
 
@@ -177,6 +180,7 @@ func reset() -> void:
     route_memory_seen = false
     route_memory_id = ""
     route_complete = false
+    current_location = "slice"
     weapon_level = 1
     hero_attack_damage = 34
     input_locked = false
@@ -192,6 +196,11 @@ func record_route_memory(memory_id: String) -> bool:
     save_game()
     return true
 
+func set_location(location_id: String) -> void:
+    current_location = location_id
+    print("[NEREIS][WORLD] Current location=%s" % current_location)
+    save_game()
+
 func mark_route_complete() -> void:
     if route_complete:
         return
@@ -200,11 +209,23 @@ func mark_route_complete() -> void:
     save_game()
 
 func get_resume_scene_path() -> String:
-    if route_complete:
-        return "res://scenes/village_hub.tscn"
-    if slice_complete and selected_route != "":
-        return get_route_scene_path()
-    return "res://scenes/main.tscn"
+    match current_location:
+        "village":
+            return "res://scenes/village_hub.tscn"
+        "tavern":
+            return "res://scenes/locations/tavern_interior.tscn"
+        "church":
+            return "res://scenes/locations/church_interior.tscn"
+        "route_church":
+            return "res://scenes/routes/church_path.tscn"
+        "route_lullaby":
+            return "res://scenes/routes/lullaby_path.tscn"
+        _:
+            if route_complete:
+                return "res://scenes/village_hub.tscn"
+            if slice_complete and selected_route != "":
+                return get_route_scene_path()
+            return "res://scenes/main.tscn"
 
 func get_route_scene_path() -> String:
     if selected_route == "lullaby":
