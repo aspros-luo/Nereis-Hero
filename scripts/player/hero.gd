@@ -51,6 +51,8 @@ var previous_state := CombatState.IDLE
 var animation_time := 0.0
 var attack_hitbox: Area2D
 signal defeated
+signal attack_started(combo_step: int)
+signal dodge_started
 signal attack_landed(damage: int, target: Node)
 
 func _ready() -> void:
@@ -210,6 +212,7 @@ func _perform_attack() -> void:
     attack_hitbox.position.x = facing * float(COMBO_REACH[combo_step - 1])
 
     _set_state(CombatState.ATTACK)
+    attack_started.emit(combo_step)
     _log("COMBAT", "Hero attack %d started; windup=%.2f" % [combo_step, ATTACK_WINDUP])
 
 func _start_dodge() -> void:
@@ -220,6 +223,7 @@ func _start_dodge() -> void:
     dodge_time = DODGE_DURATION
     invulnerable = true
     _set_state(CombatState.DODGE)
+    dodge_started.emit()
     _log("HERO", "Dodge started; invulnerable=true")
 
 func _set_state(next_state: CombatState) -> void:
