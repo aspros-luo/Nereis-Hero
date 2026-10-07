@@ -199,6 +199,7 @@ func _spawn_ui() -> void:
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
     hud.bind_hero(hero)
+    hud.set_story_mode("THE REMOTE VILLAGE", "LEARN WHY THE VILLAGE SAVED YOU")
 
     get_tree().create_timer(0.7).timeout.connect(_show_village_intro)
 
