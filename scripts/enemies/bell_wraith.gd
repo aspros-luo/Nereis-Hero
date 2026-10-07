@@ -13,6 +13,7 @@ var health := MAX_HEALTH
 var attack_timer := 0.0
 var hover_time := 0.0
 var hit_flash := 0.0
+var pulse_flash := 0.0
 var facing := 1.0
 var attack_hitbox: Area2D
 signal defeated
@@ -39,6 +40,7 @@ func _setup_combat_components() -> void:
 func _physics_process(delta: float) -> void:
     attack_timer = max(0.0, attack_timer - delta)
     hit_flash = max(0.0, hit_flash - delta)
+    pulse_flash = max(0.0, pulse_flash - delta)
     hover_time += delta
 
     var hero := get_node_or_null("../Hero")
@@ -55,6 +57,7 @@ func _physics_process(delta: float) -> void:
 
         if abs(delta_to_hero.x) <= ATTACK_RANGE and attack_timer <= 0.0:
             attack_timer = ATTACK_COOLDOWN
+            pulse_flash = 0.18
             attack_hitbox.position = Vector2(facing * min(abs(delta_to_hero.x), 190.0), clamp(delta_to_hero.y, -70.0, 70.0))
             attack_hitbox.activate(15, 0.12)
             _log("COMBAT", "Bell Wraith sonic pulse; damage=15")
@@ -91,6 +94,10 @@ func _draw() -> void:
     draw_circle(Vector2(0, hover - 12), 18.0, c)
     draw_rect(Rect2(-20, hover + 0, 40, 30), c)
     draw_circle(Vector2(0, hover + 30), 11.0, Color("#28222a"))
+    if pulse_flash > 0.0:
+        var pulse_alpha := pulse_flash / 0.18
+        draw_arc(Vector2(0, hover), 34.0, 0.0, TAU, 24, Color(0.62, 0.45, 0.48, pulse_alpha), 3.0)
+        draw_arc(Vector2(0, hover), 52.0, 0.0, TAU, 24, Color(0.62, 0.45, 0.48, pulse_alpha * 0.65), 2.0)
     draw_line(Vector2(-15, hover + 6), Vector2(-28, hover + 34), c, 5.0)
     draw_line(Vector2(15, hover + 6), Vector2(28, hover + 34), c, 5.0)
     draw_string(ThemeDB.fallback_font, Vector2(-62, hover - 42), "BELL WRAITH %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
