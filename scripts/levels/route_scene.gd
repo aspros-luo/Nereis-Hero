@@ -9,6 +9,7 @@ const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const ROUTE_ECHO_SCRIPT = preload("res://scripts/world/route_memory_echo.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const HOUND_SCRIPT = preload("res://scripts/enemies/pale_hound.gd")
+const CULTIST_SCRIPT = preload("res://scripts/enemies/cultist.gd")
 const ROUTE_EXIT_SCRIPT = preload("res://scripts/world/route_exit.gd")
 
 var hero: CharacterBody2D
@@ -16,7 +17,8 @@ var camera: Camera2D
 var narrative: CanvasLayer
 var hud: CanvasLayer
 var checkpoint: Area2D
-var hound: CharacterBody2D
+var route_enemy: CharacterBody2D
+var route_enemy_defeated := false
 var route_exit: Area2D
 
 func _ready() -> void:
@@ -35,7 +37,7 @@ func _ready() -> void:
     _create_boundaries()
     _spawn_hero()
     _spawn_checkpoint()
-    _spawn_hound()
+    _spawn_route_enemy()
     _spawn_route_npc()
     _spawn_route_exit()
     _spawn_route_memory_echo()
@@ -75,14 +77,32 @@ func _spawn_checkpoint() -> void:
     checkpoint.add_child(shape)
     add_child(checkpoint)
 
-func _spawn_hound() -> void:
-    hound = CharacterBody2D.new()
-    hound.set_script(HOUND_SCRIPT)
-    hound.position = Vector2(1220, 520)
-    hound.name = "RoutePaleHound"
-    _add_character_collision(hound, 25.0, 42.0)
-    add_child(hound)
-    print("[NEREIS][ROUTE] Pale Hound encounter spawned")
+func _spawn_route_enemy() -> void:
+    if is_instance_valid(route_enemy) and not route_enemy.is_queued_for_deletion():
+        return
+
+    route_enemy_defeated = false
+    route_enemy = CharacterBody2D.new()
+
+    if route_id == "church":
+        route_enemy.set_script(CULTIST_SCRIPT)
+        route_enemy.position = Vector2(1220, 520)
+        route_enemy.name = "RouteCultist"
+        _add_character_collision(route_enemy, 20.0, 44.0)
+        print("[NEREIS][ROUTE] Church Route Cultist encounter spawned")
+    else:
+        route_enemy.set_script(HOUND_SCRIPT)
+        route_enemy.position = Vector2(1220, 520)
+        route_enemy.name = "RoutePaleHound"
+        _add_character_collision(route_enemy, 25.0, 42.0)
+        print("[NEREIS][ROUTE] Lullaby Route Pale Hound encounter spawned")
+
+    add_child(route_enemy)
+    route_enemy.defeated.connect(_on_route_enemy_defeated.bind(route_enemy))
+
+func _on_route_enemy_defeated(enemy: Node) -> void:
+    route_enemy_defeated = true
+    print("[NEREIS][ROUTE] Route encounter defeated=%s" % enemy.name)
 
 func _spawn_route_npc() -> void:
     var npc := Node2D.new()
@@ -149,8 +169,10 @@ func _spawn_route_memory_echo() -> void:
     echo.interacted.connect(_on_route_memory_interacted.bind(echo))
 
 func _on_hero_defeated() -> void:
-    if not is_instance_valid(hound) or hound.is_queued_for_deletion():
-        _spawn_hound()
+    if is_instance_valid(route_enemy) and not route_enemy.is_queued_for_deletion():
+        route_enemy.queue_free()
+    route_enemy = null
+    call_deferred("_spawn_route_enemy")
     print("[NEREIS][ROUTE] Hero defeated; route encounter reset")
 
 func _spawn_ui() -> void:
