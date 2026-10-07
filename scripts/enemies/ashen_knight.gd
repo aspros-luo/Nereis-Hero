@@ -14,6 +14,7 @@ var attack_released := false
 var phase_two := false
 var attack_hitbox: Area2D
 signal defeated
+signal phase_changed(phase: int)
 
 func _ready() -> void:
     _setup_combat_components()
@@ -44,6 +45,7 @@ func _physics_process(delta: float) -> void:
         attack_cooldown = 0.2
         windup = 0.0
         _log("BOSS", "Ashen Knight entered Phase 2")
+        phase_changed.emit(2)
         queue_redraw()
 
     if stun_time > 0.0:
