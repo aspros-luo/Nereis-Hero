@@ -5,6 +5,8 @@ const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
+const HIGH_PRIEST_SCRIPT = preload("res://scripts/enemies/high_priest.gd")
+const KING_SCRIPT = preload("res://scripts/enemies/king_guardian.gd")
 
 const FLOOR_Y := 540.0
 const WIDTH := 2600.0
@@ -19,6 +21,8 @@ var paradise := 0.0
 var merged := false
 var elapsed := 0.0
 var fade: ColorRect
+var boss: CharacterBody2D
+var boss_stage := 0
 
 func _ready() -> void:
     WorldState.current_location = "ending_paradise_demo"
@@ -30,6 +34,7 @@ func _ready() -> void:
     _spawn_hero()
     _spawn_mite()
     _spawn_ui()
+    _spawn_high_priest()
     _spawn_audio()
 
     get_tree().create_timer(0.8).timeout.connect(_begin_union)
@@ -56,6 +61,52 @@ func _spawn_hero() -> void:
     camera.limit_right = WIDTH
     camera.limit_bottom = 720
     hero.add_child(camera)
+
+func _spawn_high_priest() -> void:
+    boss_stage = 1
+    boss = CharacterBody2D.new()
+    boss.set_script(HIGH_PRIEST_SCRIPT)
+    boss.position = Vector2(1500, FLOOR_Y)
+    boss.name = "ParadiseHighPriest"
+    _add_character_collision(boss, 24.0, 58.0)
+    add_child(boss)
+    boss.phase = 2
+    boss.health = 190
+    boss.defeated.connect(_on_high_priest_defeated)
+    narrative.show_message(
+        "THE LAST PRAYER",
+        "The High Priest is no longer human.\n\nHe still bows.",
+        3.5
+    )
+
+func _on_high_priest_defeated() -> void:
+    boss_stage = 2
+    _spawn_paradise_king()
+
+func _spawn_paradise_king() -> void:
+    boss = CharacterBody2D.new()
+    boss.set_script(KING_SCRIPT)
+    boss.position = Vector2(2050, FLOOR_Y)
+    boss.name = "ParadiseKing"
+    _add_character_collision(boss, 26.0, 62.0)
+    add_child(boss)
+    boss.phase = 2
+    boss.health = 210
+    boss.defeated.connect(_on_paradise_king_defeated)
+    narrative.show_message(
+        "THE LAST CROWN",
+        "The King arrives already transformed.\n\nHe does not recognize the throne.",
+        3.8
+    )
+
+func _on_paradise_king_defeated() -> void:
+    boss_stage = 3
+    narrative.show_message(
+        "NO MORE KINGDOMS",
+        "The Church falls.\n\nThe crown falls.\n\nNeither matters anymore.",
+        3.8
+    )
+    get_tree().create_timer(4.0).timeout.connect(_begin_union)
 
 func _spawn_mite() -> void:
     mite = Node2D.new()
