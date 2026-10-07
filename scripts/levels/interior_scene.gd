@@ -10,6 +10,8 @@ const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const INTERIOR_CLUE_SCRIPT = preload("res://scripts/world/interior_clue.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
+const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
+const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -19,6 +21,8 @@ var exit: Area2D
 var checkpoint: Area2D
 var clue: Node2D
 var rest_point: Node2D
+var mite: Node2D
+var narrative_audio: Node
 
 func _ready() -> void:
     WorldState.set_location(location_id)
@@ -28,6 +32,7 @@ func _ready() -> void:
     _spawn_hero()
     _spawn_checkpoint()
     _spawn_npc()
+    _spawn_mite_if_present()
     _spawn_clue()
     _spawn_rest_point()
     _spawn_exit()
@@ -94,6 +99,21 @@ func _spawn_npc() -> void:
     add_child(npc)
     npc.interacted.connect(_on_npc_interacted.bind(npc))
 
+func _spawn_mite_if_present() -> void:
+    if location_id != "tavern" or WorldState.mite_connection_missed:
+        return
+    mite = Node2D.new()
+    mite.set_script(MITE_SCRIPT)
+    mite.position = Vector2(650, 520)
+    mite.name = "Mite"
+    add_child(mite)
+    mite.interacted.connect(_on_mite_interacted)
+
+func _on_mite_interacted(_interaction_id: String, title: String, message: String) -> void:
+    narrative.show_message(title, message, 7.0)
+    if narrative_audio and narrative_audio.has_method("play_lullaby"):
+        narrative_audio.play_lullaby()
+
 func _spawn_clue() -> void:
     clue = Node2D.new()
     clue.set_script(INTERIOR_CLUE_SCRIPT)
@@ -154,6 +174,10 @@ func _spawn_ui() -> void:
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
     hud.bind_hero(hero)
+
+    narrative_audio = Node.new()
+    narrative_audio.set_script(NARRATIVE_AUDIO_SCRIPT)
+    add_child(narrative_audio)
 
     get_tree().create_timer(0.6).timeout.connect(_show_intro)
 
