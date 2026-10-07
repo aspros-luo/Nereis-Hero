@@ -50,10 +50,26 @@ var state := CombatState.IDLE
 var previous_state := CombatState.IDLE
 var animation_time := 0.0
 var attack_hitbox: Area2D
+var attack_requested := false
+var dodge_requested := false
+var jump_requested := false
 signal defeated
 signal attack_started(combo_step: int)
 signal dodge_started
 signal attack_landed(damage: int, target: Node)
+
+func _input(event: InputEvent) -> void:
+    if WorldState.input_locked:
+        return
+    if event is InputEventKey and event.pressed and not event.echo:
+        if event.keycode == KEY_J:
+            attack_requested = true
+        elif event.keycode == KEY_K or event.keycode == KEY_SHIFT:
+            dodge_requested = true
+        elif event.keycode == KEY_SPACE or event.keycode == KEY_UP:
+            jump_requested = true
+    elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+        attack_requested = true
 
 func _ready() -> void:
     _setup_combat_components()
@@ -92,6 +108,9 @@ func _physics_process(delta: float) -> void:
         coyote_time = max(0.0, coyote_time - delta)
 
     if WorldState.input_locked:
+        attack_requested = false
+        dodge_requested = false
+        jump_requested = false
         velocity.x = move_toward(velocity.x, 0.0, 2200.0 * delta)
         if not is_on_floor():
             velocity.y += GRAVITY * delta
@@ -163,10 +182,12 @@ func _physics_process(delta: float) -> void:
         velocity.y = JUMP_VELOCITY
         _set_state(CombatState.JUMP)
 
-    if (Input.is_key_pressed(KEY_J) or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)) and attack_time <= 0.0 and dodge_time <= 0.0:
+    if attack_requested and attack_time <= 0.0 and dodge_time <= 0.0:
+        attack_requested = false
         _perform_attack()
 
-    if (Input.is_key_pressed(KEY_K) or Input.is_key_pressed(KEY_SHIFT)) and dodge_time <= 0.0 and attack_time <= 0.0:
+    if dodge_requested and dodge_time <= 0.0 and attack_time <= 0.0:
+        dodge_requested = false
         _start_dodge()
 
     move_and_slide()
@@ -183,7 +204,8 @@ func _physics_process(delta: float) -> void:
     queue_redraw()
 
 func _update_jump_buffer(delta: float) -> void:
-    if Input.is_key_pressed(KEY_SPACE) or Input.is_action_just_pressed("ui_accept"):
+    if jump_requested or Input.is_action_just_pressed("ui_accept"):
+        jump_requested = false
         jump_buffer = JUMP_BUFFER_TIME
     elif jump_buffer > 0.0:
         jump_buffer = max(0.0, jump_buffer - delta)
@@ -316,6 +338,9 @@ func receive_damage(amount: int, source: Node = null) -> void:
         stamina = MAX_STAMINA
         combo_step = 0
         combo_window = 0.0
+        attack_requested = false
+        dodge_requested = false
+        jump_requested = false
         _log("WORLD", "Hero respawned at checkpoint=%s" % WorldState.checkpoint_position)
         get_tree().create_timer(0.75).timeout.connect(_clear_respawn_invulnerability)
         _set_state(CombatState.IDLE)
@@ -328,6 +353,9 @@ func restore_full() -> void:
     invulnerable = false
     combo_step = 0
     combo_window = 0.0
+    attack_requested = false
+    dodge_requested = false
+    jump_requested = false
     _log("HERO", "Hero fully restored at rest point")
 
 func take_damage(amount: int) -> void:
