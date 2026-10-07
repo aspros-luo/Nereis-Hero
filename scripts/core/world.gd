@@ -25,8 +25,8 @@ var hud: CanvasLayer
 
 func _ready() -> void:
     if WorldState.slice_complete and WorldState.selected_route != "":
-        print("[NEREIS][ROUTE] Restoring saved route=%s" % WorldState.selected_route)
-        get_tree().change_scene_to_file(WorldState.get_route_scene_path())
+        print("[NEREIS][ROUTE] Restoring saved progress route=%s complete=%s" % [WorldState.selected_route, WorldState.route_complete])
+        get_tree().change_scene_to_file(WorldState.get_resume_scene_path())
         return
 
     _log("BOOT", "World initialization started")
