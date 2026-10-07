@@ -453,3 +453,30 @@ This confirms the pre-002B implementation gate:
 - engine/runtime compatibility
 
 The current 002B presentation changes (visual effects, procedural silhouettes, ambient ash, HUD polish and procedural combat audio) are now the next runtime re-validation target.
+
+
+## 15. Vertical Slice 002B presentation pass
+
+Implemented after the successful Godot 4.6.1 runtime baseline:
+
+- Hero procedural silhouette and idle/movement motion pass
+- dedicated three-step slash trail
+- enhanced hit spark
+- enemy death burst
+- Cultist silhouette pass
+- Pale Hound silhouette / motion pass
+- Ashen Knight silhouette / Phase II visual pass
+- minimalist combat HUD hierarchy
+- Boss entrance banner
+- Boss Phase I / Phase II HUD state
+- animated Ash Gate opening
+- pulsing Checkpoint
+- layered environment silhouettes
+- ambient ash particles
+- procedural combat audio
+- enemy/Boss attack telegraph audio
+- Boss Phase II arena presentation change
+
+Static verification after this pass is clean for the modified files: balanced syntax structure, no duplicate function definitions, and no previously identified strict-typing patterns.
+
+The next runtime acceptance should focus on whether the new visual and audio feedback improves feel without becoming distracting or noisy.
