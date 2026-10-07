@@ -28,10 +28,10 @@ func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         interaction_cooldown = 0.55
         var interaction_id := _select_interaction()
-        var payload := _payload_for(interaction_id)
         if interaction_id.is_empty():
             return
 
+        var payload := _payload_for(interaction_id)
         if not WorldState.record_mite_interaction(interaction_id):
             return
         interacted.emit(interaction_id, str(payload.get("title", "MITE")), str(payload.get("message", "")))
@@ -49,6 +49,7 @@ func _select_interaction() -> String:
             return "mite_resonance_2"
         if not WorldState.has_mite_interaction("mite_resonance_3"):
             return "mite_resonance_3"
+
     if not WorldState.mite_first_meeting:
         return "mite_first_meeting"
     if not WorldState.has_mite_interaction("mite_meal"):
@@ -64,37 +65,37 @@ func _payload_for(interaction_id: String) -> Dictionary:
         "mite_first_meeting":
             return {
                 "title": "MITE",
-                "message": "The girl kneels beside the old wooden table.\n\n"You're awake. Good."\n\nShe studies your bandaged hands, then looks at the sword.\n\n"Were you always this quiet?"\n\nThere is no fear in her voice. Only curiosity."
+                "message": "The girl kneels beside the old wooden table.\n\n\"You're awake. Good.\"\n\nShe studies your bandaged hands, then looks at the sword.\n\n\"Were you always this quiet?\"\n\nThere is no fear in her voice. Only curiosity."
             }
         "mite_meal":
             return {
                 "title": "MITE",
-                "message": "She pushes a warm bowl toward you.\n\n"Eat before you leave."\n\nA small pause.\n\n"You can tell me later where you are going."\n\nShe says it as though there is no reason you should refuse."
+                "message": "She pushes a warm bowl toward you.\n\n\"Eat before you leave.\"\n\nA small pause.\n\n\"You can tell me later where you are going.\"\n\nShe says it as though there is no reason you should refuse."
             }
         "mite_stay_a_while":
             return {
                 "title": "MITE",
-                "message": "Mite sits beside the doorway instead of looking at the road.\n\n"You keep staring at the church path."\n\nShe looks at you.\n\n"You don't have to go yet."\n\nShe pats the empty space beside her."
+                "message": "Mite sits beside the doorway instead of looking at the road.\n\n\"You keep staring at the church path.\"\n\nShe looks at you.\n\n\"You don't have to go yet.\"\n\nShe pats the empty space beside her."
             }
         "mite_return":
             return {
                 "title": "MITE",
-                "message": "The light is fading from the village.\n\n"You came back."\n\nMite smiles, almost relieved.\n\n"I thought you might forget the way."\n\nShe does not explain why that thought bothered her."
+                "message": "The light is fading from the village.\n\n\"You came back.\"\n\nMite smiles, almost relieved.\n\n\"I thought you might forget the way.\"\n\nShe does not explain why that thought bothered her."
             }
         "mite_resonance_1":
             return {
                 "title": "MITE",
-                "message": "Mite pauses beside the window.\n\n"Did you hear something in your sleep?"\n\nShe smiles when you shake your head.\n\n"I did.""
+                "message": "Mite pauses beside the window.\n\n\"Did you hear something in your sleep?\"\n\nShe smiles when you shake your head.\n\n\"I did.\""
             }
         "mite_resonance_2":
             return {
                 "title": "MITE",
-                "message": "She watches the fire for a long time.\n\n"Do you think two people can have the same dream?"\n\nShe asks as if the answer should be obvious."
+                "message": "She watches the fire for a long time.\n\n\"Do you think two people can have the same dream?\"\n\nShe asks as if the answer should be obvious."
             }
         "mite_resonance_3":
             return {
                 "title": "MITE",
-                "message": "Mite takes your hand.\n\n"Don't go to the Church tonight."\n\nHer fingers tighten.\n\n"I don't want you to leave me alone.""
+                "message": "Mite takes your hand.\n\n\"Don't go to the Church tonight.\"\n\nHer fingers tighten.\n\n\"I don't want you to leave me alone.\""
             }
         _:
             return {
