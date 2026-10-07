@@ -322,9 +322,14 @@ func _update_boss_bar() -> void:
         return
 
     var hp: int = int(boss.get("health"))
-    var ratio: float = clampf(float(hp) / 240.0, 0.0, 1.0)
-    var phase_two: bool = bool(boss.get("phase_two"))
-    boss_title.text = "ASHEN KNIGHT  //  PHASE II" if phase_two else "ASHEN KNIGHT  //  PHASE I"
-    boss_bar.color = Color("#c34f5b") if phase_two else Color("#9e5961")
+    var max_health_variant = boss.get("max_health")
+    var max_health: float = float(max_health_variant) if max_health_variant != null else 240.0
+    var phase_variant = boss.get("phase")
+    var phase: int = int(phase_variant) if phase_variant != null else 1
+    var name_variant = boss.get("boss_display_name")
+    var display_name: String = str(name_variant) if name_variant != null else "ASHEN KNIGHT"
+    var ratio: float = clampf(float(hp) / max_health, 0.0, 1.0)
+    boss_title.text = "%s  //  PHASE %d" % [display_name, phase]
+    boss_bar.color = Color("#c34f5b") if phase >= 2 else Color("#9e5961")
     boss_panel.visible = true
     boss_bar.size.x = 468.0 * ratio
