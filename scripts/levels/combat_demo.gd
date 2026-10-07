@@ -16,6 +16,7 @@ var enemies: Array[CharacterBody2D] = []
 var boss: CharacterBody2D
 var boss_gate: StaticBody2D
 var checkpoint: Area2D
+var boss_checkpoint: Area2D
 var camera: Camera2D
 var hud: CanvasLayer
 
@@ -126,6 +127,26 @@ func _spawn_boss() -> void:
 
     print("[NEREIS][DEMO] Boss encounter started")
 
+func _spawn_boss_checkpoint() -> void:
+    if is_instance_valid(boss_checkpoint):
+        return
+
+    WorldState.set_checkpoint(Vector2(1880, FLOOR_Y))
+    boss_checkpoint = Area2D.new()
+    boss_checkpoint.set_script(CHECKPOINT_SCRIPT)
+    boss_checkpoint.position = Vector2(1880, FLOOR_Y)
+    boss_checkpoint.name = "BossCheckpoint"
+
+    var shape := CollisionShape2D.new()
+    var rectangle := RectangleShape2D.new()
+    rectangle.size = Vector2(120, 110)
+    shape.shape = rectangle
+    shape.position = Vector2(0, -55)
+    boss_checkpoint.add_child(shape)
+
+    add_child(boss_checkpoint)
+    print("[NEREIS][DEMO] Boss checkpoint activated at x=1880")
+
 func _spawn_hud() -> void:
     hud = CanvasLayer.new()
     hud.set_script(HUD_SCRIPT)
@@ -149,6 +170,7 @@ func _open_boss_gate() -> void:
         return
 
     boss_gate.open()
+    _spawn_boss_checkpoint()
     print("[NEREIS][DEMO] All small enemies defeated; Boss gate opened")
     if hud:
         hud.set_combat_demo_progress(enemies_defeated, true, false)
