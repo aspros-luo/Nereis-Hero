@@ -183,6 +183,9 @@ func show_hit_confirm(damage: int) -> void:
 func show_death_feedback() -> void:
     _show_banner("DEFEATED  //  RETURNING TO CHECKPOINT", 0.75)
 
+func show_boss_intro() -> void:
+    _show_banner("THE ASHEN KNIGHT", 1.40)
+
 func show_phase_two() -> void:
     _show_banner("THE ASHEN KNIGHT  //  PHASE II", 1.10)
 
