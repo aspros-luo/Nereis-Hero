@@ -39,6 +39,9 @@ func _unhandled_input(event: InputEvent) -> void:
         print("[NEREIS][NPC] Mite interaction id=%s" % interaction_id)
 
 func _select_interaction() -> String:
+    if WorldState.mite_last_interaction_location == WorldState.current_location:
+        return ""
+
     if WorldState.outer_god_resonance:
         if not WorldState.has_mite_interaction("mite_resonance_1"):
             return "mite_resonance_1"
