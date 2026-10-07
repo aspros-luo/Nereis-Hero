@@ -23,6 +23,7 @@ var clue: Node2D
 var rest_point: Node2D
 var mite: Node2D
 var narrative_audio: Node
+var route_door: Area2D
 
 func _ready() -> void:
     WorldState.set_location(location_id)
@@ -36,6 +37,7 @@ func _ready() -> void:
     _spawn_clue()
     _spawn_rest_point()
     _spawn_exit()
+    _spawn_route_door()
     _spawn_ui()
     queue_redraw()
 
@@ -164,6 +166,38 @@ func _spawn_exit() -> void:
     exit.add_child(shape)
     add_child(exit)
     exit.reached.connect(_on_exit_reached)
+
+func _spawn_route_door() -> void:
+    route_door = Area2D.new()
+    route_door.position = Vector2(1350, 520)
+    route_door.name = "InvestigationDoor"
+
+    var shape := CollisionShape2D.new()
+    var rectangle := RectangleShape2D.new()
+    rectangle.size = Vector2(100, 130)
+    shape.shape = rectangle
+    shape.position = Vector2(0, -65)
+    route_door.add_child(shape)
+    add_child(route_door)
+    route_door.body_entered.connect(_on_route_door_entered)
+
+func _on_route_door_entered(body: Node) -> void:
+    if body != hero:
+        return
+    if location_id == "church":
+        WorldState.selected_route = "church"
+        WorldState.set_location("route_church")
+        narrative.show_message("THE ARCHIVES", "The door was never meant for the faithful.\n\nYour name is scratched into the stone beside the lock.", 4.0)
+        get_tree().create_timer(4.2).timeout.connect(func() -> void:
+            SceneTransition.fade_to_scene("res://scenes/routes/church_path.tscn")
+        )
+    elif location_id == "tavern":
+        WorldState.selected_route = "lullaby"
+        WorldState.set_location("route_lullaby")
+        narrative.show_message("THE BACK ROAD", "Behind the tavern is a path no map remembers.\n\nYou can hear the song again.", 4.0)
+        get_tree().create_timer(4.2).timeout.connect(func() -> void:
+            SceneTransition.fade_to_scene("res://scenes/routes/lullaby_path.tscn")
+        )
 
 func _spawn_ui() -> void:
     narrative = CanvasLayer.new()
