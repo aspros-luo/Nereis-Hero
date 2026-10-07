@@ -430,3 +430,12 @@ Or start the project directly:
     /Applications/Godot.app/Contents/MacOS/Godot --path "$PWD"
 
 The previous errors involving Resource file not found for the project name, the 4.6/GL Compatibility array being treated as an autoload, Variant inference, and the Pale Hound draw_ellipse override should no longer appear after the updated branch is pulled.
+
+
+## 13. Second local launch finding
+
+After the project configuration and gameplay scripts were corrected, Godot 4.6.1 surfaced one additional strict Variant-inference error in scripts/effects/hit_spark.gd.
+
+The affected values are now explicitly typed, including the alpha calculation, and the code uses maxf() for the floating-point clamp.
+
+The remaining core gameplay scripts were re-scanned for the same high-risk inferred-Variant patterns; no matching untyped get_node_or_null(), Object.get(), Object.name, global-position, numeric clamp, or native draw_ellipse override patterns were found in the checked development files.
