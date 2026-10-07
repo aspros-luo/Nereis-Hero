@@ -194,10 +194,10 @@ func _process(delta: float) -> void:
     if not debug_enabled or not hero:
         return
 
-    var state_name := hero.get_debug_state()
-    var hp := int(hero.get("health"))
-    var stamina := int(hero.get("stamina"))
-    var invulnerable := bool(hero.get("invulnerable"))
+    var state_name: String = hero.get_debug_state()
+    var hp: int = int(hero.get("health"))
+    var stamina: int = int(hero.get("stamina"))
+    var invulnerable: bool = bool(hero.get("invulnerable"))
 
     debug_label.text = (
         "DEBUG [F3]
@@ -236,9 +236,9 @@ func _process(delta: float) -> void:
 func _update_status_bars() -> void:
     if not hero or not is_instance_valid(hero):
         return
-    var hp := clamp(int(hero.get("health")), 0, 100)
-    var stamina := clamp(float(hero.get("stamina")), 0.0, 100.0)
-    var humanity := clamp(int(WorldState.hero_humanity), 0, 100)
+    var hp: int = clampi(int(hero.get("health")), 0, 100)
+    var stamina: float = clampf(float(hero.get("stamina")), 0.0, 100.0)
+    var humanity: int = clampi(int(WorldState.hero_humanity), 0, 100)
     hp_bar.size.x = 235.0 * float(hp) / 100.0
     stamina_bar.size.x = 235.0 * stamina / 100.0
     humanity_bar.size.x = 235.0 * float(humanity) / 100.0
@@ -255,7 +255,7 @@ func _update_boss_bar() -> void:
         boss_panel.visible = false
         return
 
-    var hp := int(boss.get("health"))
-    var ratio := clamp(float(hp) / 240.0, 0.0, 1.0)
+    var hp: int = int(boss.get("health"))
+    var ratio: float = clampf(float(hp) / 240.0, 0.0, 1.0)
     boss_panel.visible = true
     boss_bar.size.x = 468.0 * ratio
