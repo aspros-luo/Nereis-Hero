@@ -16,10 +16,10 @@ func _process(delta: float) -> void:
         queue_free()
 
 func _draw() -> void:
-    var alpha := max(0.0, lifetime / 0.16)
+    var alpha: float = maxf(0.0, lifetime / 0.16)
     var c := Color(0.86, 0.78, 0.62, alpha)
     for i in range(6):
-        var angle := TAU * float(i) / 6.0
+        var angle: float = TAU * float(i) / 6.0
         var start := Vector2.from_angle(angle) * (radius * 0.35)
         var end := Vector2.from_angle(angle) * radius
         draw_line(start, end, c, 3.0)
