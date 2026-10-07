@@ -2,6 +2,47 @@
 
 # Core Combat Demo — First Acceptance
 
+## Current Core Demo Acceptance Gate
+
+The sections below are the authoritative acceptance path for the current development milestone. Older Vertical Slice / route sections remain as regression notes for retained systems.
+
+### Runtime
+
+Use Godot 4.6.x. Godot 4.6.1 is a stable maintenance release; later 4.6.x patches should also be suitable for this GDScript project. citeturn974525search0turn974525search1
+
+Default startup:
+
+`res://scenes/combat_demo.tscn`
+
+### Core route
+
+`Hero → Cultist A → Pale Hound → Cultist B → Ash Gate → Ashen Knight`
+
+### Manual acceptance
+
+1. Move left/right and jump. Verify coyote-time / jump-buffer behavior feels forgiving without making jumps floaty.
+2. Attack with J or left mouse. Verify attack windup, contact window, recovery, and the three-step combo rhythm.
+3. Strike an enemy. Verify hit spark, hit confirmation, small recoil and enemy hit-stagger are visible.
+4. Dodge with K / Shift while an enemy attacks. Verify the short invulnerability window works.
+5. Take enough damage to die. Verify the Hero returns to the checkpoint with full HP and stamina and the wave resets when Boss combat has not started.
+6. Defeat Cultist A, Pale Hound and Cultist B. The HUD must advance from 0/3 to 3/3.
+7. Confirm the Ash Gate opens and the Ashen Knight spawns only after 3/3.
+8. Fight the Boss. Verify the heavy-attack telegraph is readable before damage is applied.
+9. Reduce the Boss to 120 HP or less. Verify Phase II is announced once, the Boss becomes faster and the attack damage rises.
+10. Defeat the Ashen Knight. Verify the HUD reports `CORE COMBAT DEMO COMPLETE`.
+11. Press F9. Verify save state is cleared and the exact core demo starts again.
+
+### Expected feedback markers
+
+- `HIT <damage>` after a successful Hero strike.
+- `DEFEATED // RETURNING TO CHECKPOINT` after Hero death.
+- `THE ASHEN KNIGHT // PHASE II` when the Boss reaches Phase II.
+- `CORE COMBAT DEMO COMPLETE` after Boss defeat.
+
+### Runtime limitation
+
+The maintainer container does not currently contain a Godot executable, and outbound DNS/network access is unavailable for downloading the Linux runtime. Therefore the final interactive acceptance still needs to be run in Godot 4.6.x locally. Static repository checks are performed after each development iteration.
+
 The default startup scene is res://scenes/combat_demo.tscn.
 
 Expected first run:
