@@ -81,7 +81,7 @@ func _spawn_clue() -> void:
     clue.position = Vector2(1740, 520)
     clue.clue_id = "graveyard_hero_gravestone"
     clue.display_name = "THE WEATHERED STONE"
-    clue.description = "The stone carries your name, but the date is wrong.\n\nSomeone carved a second line beneath it: \\"He came back after the bell stopped.\\""
+    clue.description = "The stone carries your name, but the date is wrong.\n\nSomeone carved a second line beneath it: \"He came back after the bell stopped.\""
     add_child(clue)
     clue.examined.connect(_on_clue_examined.bind(clue))
 
