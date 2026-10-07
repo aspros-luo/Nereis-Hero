@@ -39,6 +39,7 @@ func _ready() -> void:
     combat_started = true
     print("[NEREIS][DEMO] Core Combat Demo started")
     print("[NEREIS][DEMO] Goal: defeat 3 small enemies, then defeat the Ashen Knight")
+    print("[NEREIS][DEMO] Combat direction: responsive 2D action; readable windups; deliberate spacing")
     queue_redraw()
 
 func _spawn_hero() -> void:
@@ -228,6 +229,14 @@ func _draw_backdrop() -> void:
         draw_line(Vector2(x, FLOOR_Y), Vector2(x + 70, 390), Color("#2c2530"), 8.0)
         draw_line(Vector2(x + 40, 440), Vector2(x + 110, 360), Color("#302832"), 5.0)
 
+func _draw_arena_details() -> void:
+    draw_rect(Rect2(1760, FLOOR_Y - 170, 18, 170), Color("#2e2830"))
+    draw_rect(Rect2(1802, FLOOR_Y - 205, 18, 205), Color("#3b3036"))
+    draw_rect(Rect2(2270, FLOOR_Y - 205, 18, 205), Color("#3b3036"))
+    draw_circle(Vector2(2040, FLOOR_Y - 20), 180.0, Color("#17141b"))
+    draw_arc(Vector2(2040, FLOOR_Y - 20), 176.0, PI, TAU, 40, Color("#2c2430"), 6.0)
+    draw_string(ThemeDB.fallback_font, Vector2(1930, 350), "ASHEN ARENA", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#514650"))
+
 func _draw_phase_markers() -> void:
     draw_string(ThemeDB.fallback_font, Vector2(80, 180), "AWAKENING", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#4d454d"))
     draw_string(ThemeDB.fallback_font, Vector2(780, 180), "THE ROAD", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#4d454d"))
@@ -243,6 +252,8 @@ func _draw_phase_markers() -> void:
         14,
         Color("#66545c")
     )
+
+    _draw_arena_details()
 
     if demo_complete:
         draw_string(
