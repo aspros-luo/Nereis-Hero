@@ -14,7 +14,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
     cooldown = max(0.0, cooldown - delta)
-    var hero := get_node_or_null("../Hero")
+    var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 140.0
 
     if hero_nearby and Input.is_key_pressed(KEY_E) and cooldown <= 0.0:
