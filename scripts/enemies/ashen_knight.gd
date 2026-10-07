@@ -54,9 +54,9 @@ func _physics_process(delta: float) -> void:
         queue_redraw()
         return
 
-    var hero := get_node_or_null("../Hero")
+    var hero: Node2D = get_node_or_null("../Hero") as Node2D
     if hero:
-        var delta_x := hero.global_position.x - global_position.x
+        var delta_x: float = hero.global_position.x - global_position.x
         if abs(delta_x) > 165.0 and windup <= 0.0:
             facing = sign(delta_x)
             velocity.x = facing * (98.0 if phase_two else 64.0)
@@ -96,7 +96,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
     stun_time = 0.08 if phase_two else 0.12
     if source and source is Node2D:
         velocity.x = sign(global_position.x - source.global_position.x) * (95.0 if phase_two else 75.0)
-    var source_name := source.name if source else "Unknown"
+    var source_name: String = source.name if source else "Unknown"
     _log("BOSS", "%s -> Ashen Knight damage=%d hp=%d" % [source_name, amount, health])
     if health <= 0:
         _log("BOSS", "Ashen Knight defeated")
