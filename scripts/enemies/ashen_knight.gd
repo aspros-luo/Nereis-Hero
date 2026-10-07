@@ -3,6 +3,7 @@ extends CharacterBody2D
 const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
 const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
+const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
 
 var health := 240
 var attack_cooldown := 0.0
@@ -91,8 +92,7 @@ func _physics_process(delta: float) -> void:
     queue_redraw()
 
 func _spawn_death_burst() -> void:
-    var effect := Node2D.new()
-    effect.set_script("res://scripts/effects/death_burst.gd")
+    var effect: Node2D = DEATH_BURST_SCRIPT.new()
     effect.global_position = global_position + Vector2(0, -44)
     get_parent().add_child(effect)
     effect.setup(26.0)
