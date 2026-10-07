@@ -67,6 +67,7 @@ func _spawn_priest() -> void:
     _add_character_collision(boss, 24.0, 58.0)
     add_child(boss)
     boss.defeated.connect(_on_priest_defeated)
+    hud.bind_boss(boss)
     boss.phase_changed.connect(_on_priest_phase_changed)
 
 func _spawn_king() -> void:
@@ -78,6 +79,7 @@ func _spawn_king() -> void:
     _add_character_collision(boss, 26.0, 62.0)
     add_child(boss)
     boss.defeated.connect(_on_king_defeated)
+    hud.bind_boss(boss)
     boss.phase_changed.connect(_on_king_phase_changed)
     narrative.show_message(
         "THE KING",
