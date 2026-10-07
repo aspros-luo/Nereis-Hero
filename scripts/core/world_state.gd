@@ -13,6 +13,7 @@ var church_alignment := 0
 var lullaby_resonance := 0
 var first_choice_made := false
 var slice_complete := false
+var selected_route := ""
 var weapon_level := 1
 var hero_attack_damage := 34
 var input_locked := false
@@ -47,9 +48,11 @@ func make_first_choice(choice: int) -> void:
     first_choice_made = true
     if choice == 1:
         church_alignment += 1
+        selected_route = "church"
         print("[NEREIS][STORY] First choice: follow_church; church_alignment=%d" % church_alignment)
     else:
         lullaby_resonance += 1
+        selected_route = "lullaby"
         hero_memory += 1
         print("[NEREIS][STORY] First choice: follow_lullaby; lullaby_resonance=%d hero_memory=%d" % [lullaby_resonance, hero_memory])
     save_game()
@@ -93,6 +96,7 @@ func save_game() -> void:
         "lullaby_resonance": lullaby_resonance,
         "first_choice_made": first_choice_made,
         "slice_complete": slice_complete,
+        "selected_route": selected_route,
         "weapon_level": weapon_level,
         "hero_attack_damage": hero_attack_damage
     }
@@ -136,6 +140,7 @@ func load_game() -> void:
     lullaby_resonance = int(parsed.get("lullaby_resonance", 0))
     first_choice_made = bool(parsed.get("first_choice_made", false))
     slice_complete = bool(parsed.get("slice_complete", false))
+    selected_route = str(parsed.get("selected_route", ""))
     weapon_level = int(parsed.get("weapon_level", 1))
     hero_attack_damage = int(parsed.get("hero_attack_damage", 34))
 
@@ -159,6 +164,13 @@ func reset() -> void:
     lullaby_resonance = 0
     first_choice_made = false
     slice_complete = false
+    selected_route = ""
     weapon_level = 1
     hero_attack_damage = 34
     input_locked = false
+
+  
+func get_route_scene_path() -> String:
+    if selected_route == "lullaby":
+        return "res://scenes/routes/lullaby_path.tscn"
+    return "res://scenes/routes/church_path.tscn"
