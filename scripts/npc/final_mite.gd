@@ -11,6 +11,7 @@ var hit_flash := 0.0
 var dying := false
 var idle_time := 0.0
 var can_wait := true
+var lunging := false
 
 func setup(hero_target: Node2D, ending_controller: Node) -> void:
     hero = hero_target
@@ -42,7 +43,7 @@ func _process(delta: float) -> void:
     queue_redraw()
 
 func receive_damage(_amount: int, _source: Node = null) -> void:
-    if dying:
+    if dying or lunging:
         return
     _die(false)
 
@@ -50,9 +51,26 @@ func take_damage(amount: int) -> void:
     receive_damage(amount, null)
 
 func sacrifice_to_weapon() -> void:
-    if dying or not hero:
+    if dying or lunging or not hero:
         return
-    _die(true)
+
+    lunging = true
+    can_wait = false
+    var facing_value = hero.get("facing")
+    var facing := 1.0
+    if facing_value != null:
+        var numeric_facing := float(facing_value)
+        if not is_zero_approx(numeric_facing):
+            facing = sign(numeric_facing)
+
+    var weapon_target := hero.global_position + Vector2(42.0 * facing, -34.0)
+    var tween := create_tween()
+    tween.set_trans(Tween.TRANS_QUAD)
+    tween.set_ease(Tween.EASE_IN)
+    tween.tween_property(self, "global_position", weapon_target, 0.62)
+    tween.tween_callback(func() -> void:
+        _die(true)
+    )
 
 func _die(waited_for: bool) -> void:
     dying = true
