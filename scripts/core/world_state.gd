@@ -475,6 +475,8 @@ func get_resume_scene_path() -> String:
             return "res://scenes/rebel_camp.tscn"
         "ancient_lab":
             return "res://scenes/ancient_research_lab.tscn"
+        "mite_house":
+            return "res://scenes/mite_house.tscn"
         "route_church":
             return "res://scenes/routes/church_path.tscn"
         "route_lullaby":
