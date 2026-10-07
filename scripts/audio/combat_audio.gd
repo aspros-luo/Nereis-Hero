@@ -14,6 +14,7 @@ func _ready() -> void:
 
 func _build_sounds() -> void:
     streams["attack"] = _make_tone(240.0, 0.10, -14.0, 1.7, 0.18)
+    streams["telegraph"] = _make_tone(330.0, 0.07, -15.0, 0.15, 0.04)
     streams["hit"] = _make_tone(110.0, 0.08, -9.0, 2.2, 0.10)
     streams["dodge"] = _make_tone(520.0, 0.12, -12.0, 0.65, 0.20)
     streams["hurt"] = _make_tone(82.0, 0.13, -10.0, 1.3, 0.16)
