@@ -404,6 +404,8 @@ func mark_route_complete() -> void:
 
 func get_resume_scene_path() -> String:
     match current_location:
+        "church_escape":
+            return "res://scenes/escape_prologue.tscn"
         "village":
             return "res://scenes/village_hub.tscn"
         "tavern":
@@ -421,7 +423,7 @@ func get_resume_scene_path() -> String:
                 return "res://scenes/village_hub.tscn"
             if slice_complete and selected_route != "":
                 return get_route_scene_path()
-            return "res://scenes/main.tscn"
+            return "res://scenes/escape_prologue.tscn"
 
 func get_route_scene_path() -> String:
     if selected_route == "lullaby":
