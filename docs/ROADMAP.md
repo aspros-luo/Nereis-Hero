@@ -38,6 +38,8 @@ Build a complete 10–20 minute playable sequence.
 ## Phase 003 — Content Expansion
 
 - [x] Second enemy archetype foundation
+- [x] First weapon upgrade foundation
+- [x] Boss encounter HUD
 
 - [ ] First full village region
 - [ ] Two additional enemy archetypes
