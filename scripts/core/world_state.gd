@@ -36,6 +36,7 @@ var physical_union_complete := false
 var hidden_artifact_pieces := 0
 var hidden_artifact_sources: Array[String] = []
 var ending_route := ""
+var prologue_complete := false
 
 func _ready() -> void:
     load_game()
@@ -206,7 +207,8 @@ func save_game() -> void:
         "physical_union_complete": physical_union_complete,
         "hidden_artifact_pieces": hidden_artifact_pieces,
         "hidden_artifact_sources": hidden_artifact_sources,
-        "ending_route": ending_route
+        "ending_route": ending_route,
+        "prologue_complete": prologue_complete
     }
 
     var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -290,8 +292,16 @@ func load_game() -> void:
         for source_id in saved_artifact_sources:
             hidden_artifact_sources.append(str(source_id))
     ending_route = str(parsed.get("ending_route", ""))
+    prologue_complete = bool(parsed.get("prologue_complete", false))
 
     print("[NEREIS][SAVE] Game loaded; memory=%d boss_defeated=%s choice=%s" % [hero_memory, boss_defeated, first_choice_made])
+
+func mark_prologue_complete() -> void:
+    if prologue_complete:
+        return
+    prologue_complete = true
+    print("[NEREIS][STORY] Prologue complete; Hero reached the village")
+    save_game()
 
 func delete_save() -> void:
     if FileAccess.file_exists(SAVE_PATH):
@@ -330,6 +340,7 @@ func reset() -> void:
     hidden_artifact_pieces = 0
     hidden_artifact_sources.clear()
     ending_route = ""
+    prologue_complete = false
     input_locked = false
     hitstop_serial += 1
     Engine.time_scale = 1.0
