@@ -8,6 +8,7 @@ const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const VILLAGE_POI_SCRIPT = preload("res://scripts/world/village_poi.gd")
 const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
+const FIREFLY_SCRIPT = preload("res://scripts/effects/village_fireflies.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -17,6 +18,7 @@ var checkpoint: Area2D
 var mite: Node2D
 var narrative_audio: Node
 var mite_house_door: Area2D
+var fireflies: Node2D
 
 func _ready() -> void:
     WorldState.current_location = "village"
@@ -33,6 +35,7 @@ func _ready() -> void:
     _spawn_village_pois()
     _spawn_ui()
     _spawn_narrative_audio()
+    _spawn_fireflies()
     queue_redraw()
 
 func _spawn_hero() -> void:
@@ -134,6 +137,12 @@ func _on_mite_house_entered(body: Node) -> void:
         return
     WorldState.set_location("mite_house")
     SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")
+
+func _spawn_fireflies() -> void:
+    fireflies = Node2D.new()
+    fireflies.set_script(FIREFLY_SCRIPT)
+    fireflies.name = "VillageFireflies"
+    add_child(fireflies)
 
 func _spawn_gatekeeper() -> void:
     var npc := Node2D.new()
