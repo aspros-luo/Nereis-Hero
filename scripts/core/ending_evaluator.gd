@@ -7,7 +7,7 @@ const REQUIRED_ARTIFACT_PIECES := 3
 
 static func get_candidate() -> String:
     if WorldState.physical_union_complete:
-        if WorldState.hidden_artifact_pieces >= REQUIRED_ARTIFACT_PIECES:
+        if WorldState.has_hidden_resistance():
             return "烈火天罚"
         return "永恒乐园"
 
@@ -16,7 +16,7 @@ static func get_candidate() -> String:
 static func get_candidate_reason() -> String:
     if WorldState.physical_union_complete:
         if WorldState.hidden_artifact_pieces >= REQUIRED_ARTIFACT_PIECES:
-            return "Union occurred, but enough hidden resistance knowledge remains."
+            return "Union occurred, but the hidden resistance anchor remains intact."
         return "Union occurred without enough hidden resistance knowledge."
 
     if WorldState.mite_connection_missed or WorldState.mite_interactions_seen.size() < 3:
