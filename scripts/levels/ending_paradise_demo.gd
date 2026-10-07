@@ -37,7 +37,7 @@ func _ready() -> void:
     _spawn_high_priest()
     _spawn_audio()
 
-    get_tree().create_timer(0.8).timeout.connect(_begin_union)
+    # Union begins only after both monstrous institutional bosses are defeated.
     queue_redraw()
 
 func _process(delta: float) -> void:
@@ -135,7 +135,7 @@ func _begin_union() -> void:
     WorldState.mark_physical_union_complete()
     narrative.show_message(
         "永恒乐园",
-        "The world has become quiet.\n\nMite reaches for Hero's hand.\n\n"We can stay."",
+        "The world has become quiet.\n\nMite reaches for Hero's hand.\n\n\"We can stay.\"",
         4.5
     )
     get_tree().create_timer(4.8).timeout.connect(_begin_merge)
