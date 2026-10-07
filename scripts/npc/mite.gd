@@ -32,7 +32,8 @@ func _unhandled_input(event: InputEvent) -> void:
         if interaction_id.is_empty():
             return
 
-        WorldState.record_mite_interaction(interaction_id)
+        if not WorldState.record_mite_interaction(interaction_id):
+            return
         interacted.emit(interaction_id, str(payload.get("title", "MITE")), str(payload.get("message", "")))
         get_viewport().set_input_as_handled()
         print("[NEREIS][NPC] Mite interaction id=%s" % interaction_id)
