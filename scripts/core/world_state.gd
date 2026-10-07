@@ -213,22 +213,24 @@ func reset() -> void:
     input_locked = false
 
   
-func record_route_memory(memory_id: String) -> bool:
+func record_route_memory(memory_id: String, humanity_delta: int = 0) -> bool:
     if route_memory_seen and route_memory_id == memory_id:
         return false
     route_memory_seen = true
     route_memory_id = memory_id
     hero_memory += 1
-    print("[NEREIS][STORY] Route memory recorded id=%s hero_memory=%d" % [memory_id, hero_memory])
+    hero_humanity = clamp(hero_humanity + humanity_delta, 0, 100)
+    print("[NEREIS][STORY] Route memory recorded id=%s hero_memory=%d humanity=%d" % [memory_id, hero_memory, hero_humanity])
     save_game()
     return true
 
-func record_interior_clue(clue_id: String) -> bool:
+func record_interior_clue(clue_id: String, humanity_delta: int = 0) -> bool:
     if clue_id in interior_clues_seen:
         return false
     interior_clues_seen.append(clue_id)
     hero_memory += 1
-    print("[NEREIS][STORY] Interior clue recorded id=%s hero_memory=%d" % [clue_id, hero_memory])
+    hero_humanity = clamp(hero_humanity + humanity_delta, 0, 100)
+    print("[NEREIS][STORY] Interior clue recorded id=%s hero_memory=%d humanity=%d" % [clue_id, hero_memory, hero_humanity])
     save_game()
     return true
 
@@ -239,12 +241,13 @@ func mark_graveyard_cleared() -> void:
     print("[NEREIS][WORLD] Village Graveyard encounter cleared")
     save_game()
 
-func record_world_clue(clue_id: String) -> bool:
+func record_world_clue(clue_id: String, humanity_delta: int = 0) -> bool:
     if clue_id in world_clues_seen:
         return false
     world_clues_seen.append(clue_id)
     hero_memory += 1
-    print("[NEREIS][STORY] World clue recorded id=%s hero_memory=%d" % [clue_id, hero_memory])
+    hero_humanity = clamp(hero_humanity + humanity_delta, 0, 100)
+    print("[NEREIS][STORY] World clue recorded id=%s hero_memory=%d humanity=%d" % [clue_id, hero_memory, hero_humanity])
     save_game()
     return true
 
