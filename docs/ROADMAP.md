@@ -37,6 +37,9 @@ Build a complete 10–20 minute playable sequence.
 
 ## Phase 003 — Content Expansion
 
+- [x] Village Hub foundation
+- [x] Tavern / Church interior foundation
+
 - [x] First route branching foundation
 - [x] Shared-world route NPC foundation
 - [x] Route-specific memory echo foundation
