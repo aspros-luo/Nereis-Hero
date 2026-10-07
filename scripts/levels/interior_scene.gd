@@ -24,6 +24,7 @@ var rest_point: Node2D
 var mite: Node2D
 var narrative_audio: Node
 var route_door: Area2D
+var research_door: Area2D
 
 func _ready() -> void:
     WorldState.set_location(location_id)
@@ -38,6 +39,7 @@ func _ready() -> void:
     _spawn_rest_point()
     _spawn_exit()
     _spawn_route_door()
+    _spawn_research_door()
     _spawn_ui()
     queue_redraw()
 
@@ -198,6 +200,29 @@ func _on_route_door_entered(body: Node) -> void:
         get_tree().create_timer(4.2).timeout.connect(func() -> void:
             SceneTransition.fade_to_scene("res://scenes/routes/lullaby_path.tscn")
         )
+
+func _spawn_research_door() -> void:
+    if location_id != "church":
+        return
+    research_door = Area2D.new()
+    research_door.position = Vector2(1020, 520)
+    research_door.name = "ResearchDoor"
+    var shape := CollisionShape2D.new()
+    var rectangle := RectangleShape2D.new()
+    rectangle.size = Vector2(80, 130)
+    shape.shape = rectangle
+    shape.position = Vector2(0, -65)
+    research_door.add_child(shape)
+    add_child(research_door)
+    research_door.body_entered.connect(func(body: Node) -> void:
+        if body != hero:
+            return
+        WorldState.set_location("ancient_lab")
+        narrative.show_message("THE LOCKED STAIR", "The stone gives way beneath your hand.\n\nThere should not be a room underneath a village church.", 4.2)
+        get_tree().create_timer(4.4).timeout.connect(func() -> void:
+            SceneTransition.fade_to_scene("res://scenes/ancient_research_lab.tscn")
+        )
+    )
 
 func _spawn_ui() -> void:
     narrative = CanvasLayer.new()
