@@ -282,7 +282,11 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode == KEY_F5:
+        if event.keycode == KEY_F4:
+            print("[NEREIS][DEBUG] Opening ancient research theater")
+            get_tree().change_scene_to_file("res://scenes/ancient_research_lab.tscn")
+            get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_F5:
             print("[NEREIS][DEBUG] Opening village defense theater")
             get_tree().change_scene_to_file("res://scenes/village_defense_demo.tscn")
             get_viewport().set_input_as_handled()
