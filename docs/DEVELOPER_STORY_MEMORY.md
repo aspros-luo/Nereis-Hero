@@ -1,3 +1,239 @@
+# Current Canon Override — 2026-10-07 Story Direction
+
+> This section has higher priority than older speculative passages elsewhere in this file.
+
+## A. Mite's knowledge
+
+**Mite initially knows nothing about the Outer God in the human, conscious sense.**
+
+She is selected as the earthly proxy because of her genuine purity, but she does not begin the story consciously understanding that she is an Outer-God agent.
+
+The turning point occurs only in the middle / late game:
+
+1. Hero and Mite become genuinely close.
+2. They eventually enter a physical relationship.
+3. Hero's body carries **ancient-god residue** left by the Church's experimentation.
+4. During the physical union, the ancient-god residue and the Outer-God influence associated with Mite come into contact.
+5. This creates a resonance / bridge.
+6. The Outer God notices, reaches through that resonance, and gradually begins to influence Mite.
+7. Mite's later attempts to guide Hero toward 永恒乐园 are therefore increasingly **not fully under her control**.
+
+This is important:
+
+> Mite does not secretly spend the entire game plotting the apocalypse.
+
+The tragedy is that the girl Hero fell in love with becomes the medium through which the apocalypse begins.
+
+Her later loss of control should preserve the feeling that the earlier Mite was real.
+
+## B. Hero's ancient-god residue
+
+The Church's experiments did not simply damage Hero psychologically.
+
+They left a trace of ancient-god material / power inside him.
+
+This residue is initially dormant and invisible to Hero.
+
+It is a major reason the physical union with Mite can become the bridge between the ancient-god and Outer-God layers of the story.
+
+This also makes the Church's earlier experimentation directly relevant to the final relationship instead of being a disconnected backstory.
+
+## C. Relationship / romance state
+
+The Hero-Mite relationship is **not a conventional numeric romance meter**.
+
+Do not reduce it to "affection +10".
+
+It is built from concrete opportunities:
+
+- time spent together
+- optional conversations
+- small favors
+- remembered habits
+- shared locations
+- village events
+- missed meetings
+- decisions that make Hero leave Mite behind
+
+The player's treatment of Mite determines whether the relationship grows naturally.
+
+### 凡人之墓
+
+The player who rushes the visible mainline can miss the important Mite-centered side interactions.
+
+Eventually Hero and Mite **lose contact before the physical relationship ever occurs**.
+
+There is:
+
+- no physical union
+- no Outer-God vessel event
+- no activated ancient-god / Outer-God resonance
+
+The player can therefore finish the political conflict without ever entering the cosmic relationship tragedy.
+
+The player should not feel as if they "failed a romance quest."
+
+It should feel like:
+
+> I was so focused on saving the Kingdom that I never noticed the girl I had been leaving behind.
+
+The absence itself is the tragedy.
+
+### 永恒乐园
+
+The relationship progresses naturally.
+
+Hero and Mite eventually become physically intimate.
+
+The ancient-god residue in Hero contacts the Outer-God influence attached to Mite.
+
+Mite begins to be influenced and guided from outside herself.
+
+Hero, without understanding what is happening, follows her toward the eternal dream.
+
+The relationship is therefore not "Mite planned this from the start."
+
+It becomes a tragedy that **grows out of genuine intimacy**.
+
+### 烈火天罚
+
+The relationship also reaches physical union.
+
+By this point Mite is largely unable to control the influence acting through her.
+
+Her behavior becomes a warped mixture of:
+
+- genuine love
+- dependency
+- fear of losing Hero
+- Outer-God guidance
+- loss of agency
+
+Hero retains enough individuality to understand that something is terribly wrong, thanks to the hidden multi-part artifact.
+
+The result is **a malformed love with no clean resolution**, not a heroic romance.
+
+## D. Three ending emotional identities
+
+### 凡人之墓
+**They never become one.**
+
+Human love is interrupted by ordinary human priorities.
+
+The Kingdom survives.
+
+Humanity remains trapped in its cycle.
+
+### 永恒乐园
+**They become one too completely.**
+
+Love becomes indistinguishable from loss of individuality.
+
+The world becomes paradise by ending separation.
+
+### 烈火天罚
+**They become one, but the union becomes a prison.**
+
+Mite is losing control.
+
+Hero realizes that the person he loves is disappearing inside the thing using her.
+
+He cannot save the relationship.
+
+He can only end it.
+
+That is why the final act should feel like tragedy rather than victory.
+
+## E. Final confrontation structure
+
+The ending fights should be treated as **three different versions of the same political/cosmic climax**.
+
+### 凡人之墓
+
+1. Hero confronts the Church.
+2. **Pope / High Priest** — human form.
+3. **Phase II:** the Pope transforms through ancient-god power.
+4. **Phase III:** when the Church is about to fall, the **King personally enters the battlefield**.
+5. The King is not simply "the secret final villain"; he believes he must prevent the Kingdom from collapsing.
+6. Hero defeats the King.
+7. The rebels take control.
+8. Epilogue: the new order slowly begins reproducing the old corruption.
+
+The important emotion is:
+
+> Hero defeats the people who destroyed the old Kingdom — and still cannot create a lasting human utopia.
+
+### 永恒乐园
+
+The political climax becomes corrupted by the cosmic union.
+
+The Hero is already being used as the Outer God's vessel.
+
+The Church leadership and the Kingdom's sovereign are both transformed.
+
+Recommended staging:
+
+1. Pope becomes an ancient-god-derived monster.
+2. King enters as a second monstrous sovereign.
+3. They fight as separate embodiments of institutional survival.
+4. Hero defeats them while increasingly losing his own human identity.
+5. Mite's influence draws him toward the final union.
+6. The world enters the eternal dream.
+
+The two bosses should not feel like two random monster upgrades.
+
+They should represent:
+
+- **Church:** "humanity must control the divine."
+- **King:** "humanity must survive at any cost."
+
+Both positions collapse when the Outer God makes the argument irrelevant.
+
+### 烈火天罚
+
+This should feel less like a conventional boss rush and more like the final collapse of a city.
+
+1. **Pope / Church final authority** is defeated.
+2. Hero is surrounded by a huge number of Outer-God-influenced cultists.
+3. In this special late-game state, ordinary cultists can be killed with a single decisive strike.
+4. Target scale: roughly one hundred enemies across the set-piece; exact count is not important.
+5. Hero reaches **Mite**.
+6. Mite is already almost completely controlled and reduced to **effectively 1 HP** as a dramatic representation, not necessarily a literal UI value.
+7. The game gives Hero no conventional victory over her.
+8. The narrative forces the killing blow.
+9. Her death triggers a new wave of cultists and mutated Church personnel.
+10. The remaining city becomes unsalvageable.
+11. Hero chooses / is forced into the final act: detonate the city and destroy the vessel site.
+
+The important rule is:
+
+> **The player does not "win" by killing Mite.**
+>
+> The killing is the moment the player loses her.
+
+The explosion is not a celebration.
+
+It is the grave of the relationship.
+
+## F. One important gameplay modification
+
+Do not make the one-hit cultist section feel like another ordinary combat room.
+
+It should feel like a **powerful but horrifying set-piece**:
+
+- continuous forward pressure
+- large enemy numbers
+- little downtime
+- music that stops behaving like a normal boss theme
+- attacks that feel like execution rather than ordinary dueling
+- visual degradation as the city collapses
+
+The player should briefly feel overwhelmingly powerful.
+
+Then the Mite scene should remove that feeling completely.
+
+---
+
 # Director's Reference Translation — What We Borrow, What We Make Our Own
 
 The following works are reference material, not source material to reproduce.
