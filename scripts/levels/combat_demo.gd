@@ -196,6 +196,7 @@ func _open_boss_gate() -> void:
         return
 
     boss_gate.open()
+    WorldState.open_boss_gate()
     _spawn_boss_checkpoint()
     _play_sfx("gate")
     print("[NEREIS][DEMO] All small enemies defeated; Boss gate opened")
@@ -248,6 +249,7 @@ func _on_hero_defeated() -> void:
 
 func _on_boss_defeated() -> void:
     _play_sfx("boss_death")
+    WorldState.mark_slice_complete()
     demo_complete = true
     if hud:
         hud.set_combat_demo_progress(enemies_defeated, true, true)
