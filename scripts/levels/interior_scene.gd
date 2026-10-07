@@ -92,7 +92,7 @@ func _spawn_clue() -> void:
     clue.set_script(INTERIOR_CLUE_SCRIPT)
 
     if location_id == "tavern":
-        clue.position = Vector2(1240, 520)
+        clue.position = Vector2(1120, 520)
         clue.clue_id = "tavern_silver_bell"
         clue.display_name = "SILVER BELL"
         clue.description = "The bell is cold to the touch.\n\nWhen you lift it, you remember a hand placing a cup in front of you. The hand is yours."
@@ -114,7 +114,7 @@ func _spawn_rest_point() -> void:
 
     rest_point = Node2D.new()
     rest_point.set_script(REST_POINT_SCRIPT)
-    rest_point.position = Vector2(1380, 520)
+    rest_point.position = Vector2(1460, 520)
     rest_point.rest_id = "tavern_bench"
     add_child(rest_point)
     rest_point.rested.connect(_on_rest_point_used)
