@@ -46,6 +46,7 @@ Build a complete 10–20 minute playable sequence.
 - [x] Tavern rest point
 - [x] Humanity selfhood mechanic
 - [x] Humanity-sensitive dialogue
+- [x] Route-specific combat differentiation
 - [x] Third enemy archetype foundation
 
 - [x] First route branching foundation
