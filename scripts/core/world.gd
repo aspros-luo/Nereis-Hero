@@ -6,11 +6,13 @@ const NPC_SCRIPT = preload("res://scripts/npc/old_hunter.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
+const BOSS_GATE_SCRIPT = preload("res://scripts/world/boss_gate.gd")
 
 var hero: CharacterBody2D
 var enemy: CharacterBody2D
 var boss: CharacterBody2D
 var checkpoint: Area2D
+var boss_gate: StaticBody2D
 var old_hunter: Node2D
 var camera: Camera2D
 var narrative: CanvasLayer
@@ -29,7 +31,7 @@ func _ready() -> void:
 
     old_hunter = Node2D.new()
     old_hunter.set_script(NPC_SCRIPT)
-    old_hunter.position = Vector2(560, 520)
+    old_hunter.position = Vector2(680, 520)
     old_hunter.name = "OldHunter"
     add_child(old_hunter)
     old_hunter.interacted.connect(_on_old_hunter_interacted)
@@ -39,7 +41,7 @@ func _ready() -> void:
 
     checkpoint = Area2D.new()
     checkpoint.set_script(CHECKPOINT_SCRIPT)
-    checkpoint.position = Vector2(720, 520)
+    checkpoint.position = Vector2(980, 520)
     checkpoint.name = "Checkpoint_01"
     var checkpoint_shape := CollisionShape2D.new()
     var checkpoint_rect := RectangleShape2D.new()
@@ -50,6 +52,13 @@ func _ready() -> void:
     add_child(checkpoint)
 
     hero.defeated.connect(_on_hero_defeated)
+    if not WorldState.boss_gate_open:
+        boss_gate = StaticBody2D.new()
+        boss_gate.set_script(BOSS_GATE_SCRIPT)
+        boss_gate.position = Vector2(1800, 520)
+        boss_gate.name = "AshGate"
+        add_child(boss_gate)
+
     narrative = CanvasLayer.new()
     narrative.set_script(NARRATIVE_SCRIPT)
     add_child(narrative)
@@ -60,7 +69,7 @@ func _ready() -> void:
     camera.position_smoothing_speed = 6.0
     camera.limit_left = 0
     camera.limit_top = 0
-    camera.limit_right = 1280
+    camera.limit_right = 2400
     camera.limit_bottom = 720
     camera.position = hero.position
     hero.add_child(camera)
@@ -73,10 +82,11 @@ func _spawn_cultist() -> void:
         return
     enemy = CharacterBody2D.new()
     enemy.set_script(ENEMY_SCRIPT)
-    enemy.position = Vector2(900, 520)
+    enemy.position = Vector2(1400, 520)
     enemy.name = "Cultist"
     _add_character_collision(enemy, 20.0, 44.0)
     add_child(enemy)
+    enemy.defeated.connect(_on_cultist_defeated)
     _log("WORLD", "Cultist spawned")
 
 func _spawn_boss() -> void:
@@ -84,7 +94,7 @@ func _spawn_boss() -> void:
         return
     boss = CharacterBody2D.new()
     boss.set_script(BOSS_SCRIPT)
-    boss.position = Vector2(1130, 520)
+    boss.position = Vector2(2080, 520)
     boss.name = "AshenKnight"
     _add_character_collision(boss, 24.0, 56.0)
     add_child(boss)
@@ -105,9 +115,9 @@ func _create_floor() -> void:
     floor.name = "Ground"
     var collision := CollisionShape2D.new()
     var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(1400, 40)
+    rectangle.size = Vector2(2600, 40)
     collision.shape = rectangle
-    collision.position = Vector2(640, 540)
+    collision.position = Vector2(1200, 540)
     floor.add_child(collision)
     add_child(floor)
 
@@ -117,6 +127,15 @@ func _on_hero_defeated() -> void:
         _spawn_cultist()
     if not WorldState.boss_defeated and (not is_instance_valid(boss) or boss.is_queued_for_deletion()):
         _spawn_boss()
+
+func _on_cultist_defeated() -> void:
+    WorldState.open_boss_gate()
+    _log("WORLD", "Cultist encounter cleared; Ash Gate unlocked")
+    if is_instance_valid(boss_gate):
+        boss_gate.open()
+    if narrative:
+        narrative.show_message("THE PATH OPENS", "The cultist falls. Somewhere beyond the iron gate, something hears the silence.")
+    queue_redraw()
 
 func _on_boss_defeated() -> void:
     _log("BOSS", "Ashen Knight encounter cleared")
@@ -142,20 +161,24 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    draw_rect(Rect2(0, 0, 1280, 720), Color("#111018"))
-    draw_rect(Rect2(0, 520, 1280, 200), Color("#201c22"))
-    for x in range(0, 1280, 64):
+    draw_rect(Rect2(0, 0, 2400, 720), Color("#111018"))
+    draw_rect(Rect2(0, 520, 2400, 200), Color("#201c22"))
+    for x in range(0, 2400, 64):
         draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
 
-    draw_rect(Rect2(480, 445, 160, 75), Color("#27212a"))
-    draw_rect(Rect2(1040, 420, 160, 100), Color("#241d25"))
-    draw_string(ThemeDB.fallback_font, Vector2(650, 438), "SAFE GROUND", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
+    draw_rect(Rect2(600, 445, 160, 75), Color("#27212a"))
+    draw_rect(Rect2(1730, 350, 140, 170), Color("#241d25"))
+    draw_string(ThemeDB.fallback_font, Vector2(1750, 365), "ASH GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(900, 490), "SAFE GROUND", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
     draw_string(ThemeDB.fallback_font, Vector2(1045, 438), "BOSS GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
-    draw_string(ThemeDB.fallback_font, Vector2(485, 458), "OLD HUNTER", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(605, 458), "OLD HUNTER", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
 
     draw_string(ThemeDB.fallback_font, Vector2(40, 55), "NEREIS HERO // VERTICAL SLICE 001", HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color("#d6c7b2"))
     draw_string(ThemeDB.fallback_font, Vector2(40, 88), "A/D Move   Space Jump   J / LMB Attack   K / Shift Dodge   E Speak", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#9b9189"))
     draw_string(ThemeDB.fallback_font, Vector2(40, 125), "The village remembers what the hero has forgotten.", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#8e7777"))
+
+    draw_string(ThemeDB.fallback_font, Vector2(40, 235), "VILLAGE OUTSKIRTS", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
+    draw_string(ThemeDB.fallback_font, Vector2(1240, 235), "THE ASHEN ROAD", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
 
     if debug_enabled and hero:
         var state_name: String = hero.get_debug_state()
