@@ -217,7 +217,10 @@ func _on_boss_defeated() -> void:
 
 func _on_old_hunter_interacted() -> void:
     _log("STORY", "Old Hunter interaction accepted")
-    narrative.play_first_memory()
+    if WorldState.first_memory_unlocked:
+        narrative.play_weapon_upgrade()
+    else:
+        narrative.play_first_memory()
     queue_redraw()
 
 func _process(_delta: float) -> void:
