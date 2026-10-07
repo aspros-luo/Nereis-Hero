@@ -11,9 +11,6 @@ var church_alignment := 0
 var lullaby_resonance := 0
 var first_choice_made := false
 var slice_complete := false
-var church_alignment := 0
-var lullaby_resonance := 0
-var first_choice_made := false
 
 func unlock_first_memory() -> void:
     if first_memory_unlocked:
@@ -45,18 +42,6 @@ func make_first_choice(choice: int) -> void:
         hero_memory += 1
         print("[NEREIS][STORY] First choice: follow_lullaby; lullaby_resonance=%d hero_memory=%d" % [lullaby_resonance, hero_memory])
 
-func make_first_choice(choice: int) -> void:
-    if first_choice_made:
-        return
-    first_choice_made = true
-    if choice == 1:
-        church_alignment += 1
-        print("[NEREIS][STORY] First choice: follow_church; church_alignment=%d" % church_alignment)
-    else:
-        lullaby_resonance += 1
-        hero_memory += 1
-        print("[NEREIS][STORY] First choice: follow_lullaby; lullaby_resonance=%d hero_memory=%d" % [lullaby_resonance, hero_memory])
-
 func mark_boss_defeated() -> void:
     if boss_defeated:
         return
@@ -75,6 +60,3 @@ func reset() -> void:
     lullaby_resonance = 0
     first_choice_made = false
     slice_complete = false
-    church_alignment = 0
-    lullaby_resonance = 0
-    first_choice_made = false
