@@ -11,6 +11,7 @@ var hit_flash := 0.0
 var facing := -1.0
 var attack_released := false
 var attack_hitbox: Area2D
+var phase_two := false
 signal defeated
 
 func _ready() -> void:
@@ -42,21 +43,22 @@ func _physics_process(delta: float) -> void:
         var delta_x := hero.global_position.x - global_position.x
         if abs(delta_x) > 150.0:
             facing = sign(delta_x)
-            velocity.x = facing * 55.0
+            velocity.x = facing * (82.0 if phase_two else 55.0)
         else:
             velocity.x = 0.0
             facing = sign(delta_x) if delta_x != 0.0 else facing
             if attack_cooldown <= 0.0 and windup <= 0.0:
                 windup = 0.42
-                attack_cooldown = 1.55
+                attack_cooldown = 0.95 if phase_two else 1.55
                 attack_released = false
                 _log("BOSS", "Ashen Knight attack telegraph")
 
             if windup > 0.0 and windup <= 0.06 and not attack_released:
                 attack_hitbox.position.x = facing * 64.0
-                attack_hitbox.activate(24, 0.16)
+                var attack_damage := 32 if phase_two else 24
+                attack_hitbox.activate(attack_damage, 0.16)
                 attack_released = true
-                _log("COMBAT", "Ashen Knight heavy attack released; damage=24")
+                _log("COMBAT", "Ashen Knight heavy attack released; damage=%d" % attack_damage)
             if windup == 0.0:
                 attack_released = false
 
@@ -88,12 +90,13 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    var c := Color("#c44e5a") if hit_flash > 0.0 else Color("#332d34")
+    var base := Color("#6f3941") if phase_two else Color("#332d34")
+    var c := Color("#c44e5a") if hit_flash > 0.0 else base
     draw_circle(Vector2(0, -60), 21, c)
     draw_rect(Rect2(-25, -40, 50, 40), c)
     draw_line(Vector2(-18, -4), Vector2(-62, 10), c, 11.0)
     draw_line(Vector2(18, -4), Vector2(62, 10), c, 11.0)
     draw_line(Vector2(facing * 8.0, -18), Vector2(facing * 84.0, -42), Color("#b7a48c"), 9.0)
     if windup > 0.0:
-        draw_arc(Vector2(0, -34), 54, 0, TAU, 28, Color("#9e5961"), 4.0)
+        draw_arc(Vector2(0, -34), 58 if phase_two else 54, 0, TAU, 28, Color("#c44e5a") if phase_two else Color("#9e5961"), 4.0)
     draw_string(ThemeDB.fallback_font, Vector2(-72, -94), "ASHEN KNIGHT %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
