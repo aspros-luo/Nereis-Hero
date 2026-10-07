@@ -114,3 +114,16 @@ Lullaby choice:
 - Broken Bell route memory can be examined
 
 Route memory is saved and should remain consumed after restarting the game.
+## Ashen Knight Phase 2
+
+At 120 HP or lower, the Ashen Knight enters Phase 2 exactly once.
+
+Expected log:
+
+[NEREIS][BOSS] Ashen Knight entered Phase 2
+
+Phase 2 changes:
+- movement pressure increases
+- attack cooldown becomes shorter
+- heavy attack damage increases from 24 to 32
+- boss visual tint changes
