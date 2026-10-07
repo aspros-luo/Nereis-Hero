@@ -7,6 +7,10 @@ var debug_label: Label
 var title_label: Label
 var controls_label: Label
 var region_label: Label
+var boss: Node
+var boss_panel: ColorRect
+var boss_bar: ColorRect
+var boss_title: Label
 
 func _ready() -> void:
     layer = 10
@@ -29,6 +33,25 @@ func _ready() -> void:
     region_label.add_theme_font_size_override("font_size", 18)
     add_child(region_label)
 
+    boss_panel = ColorRect.new()
+    boss_panel.position = Vector2(390, 24)
+    boss_panel.size = Vector2(500, 54)
+    boss_panel.color = Color("#0a090d", 0.88)
+    boss_panel.visible = false
+    add_child(boss_panel)
+
+    boss_title = Label.new()
+    boss_title.position = Vector2(16, 7)
+    boss_title.text = "ASHEN KNIGHT"
+    boss_title.add_theme_font_size_override("font_size", 15)
+    boss_panel.add_child(boss_title)
+
+    boss_bar = ColorRect.new()
+    boss_bar.position = Vector2(16, 31)
+    boss_bar.size = Vector2(468, 10)
+    boss_bar.color = Color("#9e5961")
+    boss_panel.add_child(boss_bar)
+
     debug_panel = ColorRect.new()
     debug_panel.position = Vector2(930, 24)
     debug_panel.size = Vector2(326, 260)
@@ -44,11 +67,15 @@ func _ready() -> void:
 func bind_hero(target: Node) -> void:
     hero = target
 
+func bind_boss(target: Node) -> void:
+    boss = target
+
 func set_debug_visible(value: bool) -> void:
     debug_enabled = value
     debug_panel.visible = value
 
 func _process(_delta: float) -> void:
+    _update_boss_bar()
     if not debug_enabled or not hero:
         return
 
@@ -70,3 +97,18 @@ func _process(_delta: float) -> void:
         + "Boss Defeated: %s\n" % WorldState.boss_defeated
         + "Slice Complete: %s" % WorldState.slice_complete
     )
+
+    
+func _update_boss_bar() -> void:
+    if not boss or not is_instance_valid(boss) or boss.is_queued_for_deletion() or WorldState.boss_defeated:
+        boss_panel.visible = false
+        return
+
+    if not hero or hero.global_position.distance_to(boss.global_position) > 720.0:
+        boss_panel.visible = false
+        return
+
+    var hp := int(boss.get("health"))
+    var ratio := clamp(float(hp) / 240.0, 0.0, 1.0)
+    boss_panel.visible = true
+    boss_bar.size.x = 468.0 * ratio
