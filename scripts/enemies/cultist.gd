@@ -5,16 +5,13 @@ var attack_cooldown := 0.0
 var hit_flash := 0.0
 
 func _ready() -> void:
-    name = "Cultist"
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
     attack_cooldown = max(0.0, attack_cooldown - delta)
     hit_flash = max(0.0, hit_flash - delta)
 
-    var hero := get_node_or_null("../CharacterBody2D")
-    if hero == null:
-        hero = get_parent().get_child(0)
+    var hero := get_node_or_null("../Hero")
 
     if hero:
         var distance := global_position.distance_to(hero.global_position)
@@ -27,7 +24,6 @@ func _physics_process(delta: float) -> void:
                 attack_cooldown = 1.1
 
     move_and_slide()
-    position.y = min(position.y, 520.0)
     queue_redraw()
 
 func take_damage(amount: int) -> void:
