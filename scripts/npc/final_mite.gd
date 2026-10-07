@@ -12,6 +12,7 @@ var dying := false
 var idle_time := 0.0
 var can_wait := true
 var lunging := false
+var waiting_phase := 0
 
 func setup(hero_target: Node2D, ending_controller: Node) -> void:
     hero = hero_target
@@ -39,6 +40,13 @@ func _process(delta: float) -> void:
         return
 
     idle_time += delta
+
+    if idle_time >= 15.0 and waiting_phase < 1:
+        waiting_phase = 1
+    if idle_time >= 35.0 and waiting_phase < 2:
+        waiting_phase = 2
+    if idle_time >= 50.0 and waiting_phase < 3:
+        waiting_phase = 3
 
     if can_wait and idle_time >= 60.0:
         can_wait = false
@@ -90,21 +98,28 @@ func _die(waited_for: bool) -> void:
 
 func _draw() -> void:
     var breath := sin(elapsed * 1.15) * 1.4
+    var waiting_offset := 0.0
+    if waiting_phase == 1:
+        waiting_offset = sin(elapsed * 0.7) * 1.0
+    elif waiting_phase == 2:
+        waiting_offset = -2.0
+    elif waiting_phase >= 3:
+        waiting_offset = -4.0
     var body := Color("#6a5260")
     var skin := Color("#b58f87")
     var shadow := Color("#27202a")
     if hit_flash > 0.0:
         body = Color("#d5b8b0")
 
-    draw_circle(Vector2(0, -34 + breath), 16.0, skin)
+    draw_circle(Vector2(waiting_phase >= 2 ? 2.0 : 0.0, -34 + breath + waiting_offset), 16.0, skin)
     draw_circle(Vector2(-5, -39 + breath), 3.0, shadow)
     draw_circle(Vector2(5, -39 + breath), 3.0, shadow)
-    draw_rect(Rect2(-19, -18 + breath, 38, 52), body)
+    draw_rect(Rect2(-19, -18 + breath + waiting_offset, 38, 52), body)
     draw_colored_polygon(
         PackedVector2Array([
-            Vector2(-22, -18 + breath),
-            Vector2(0, 18 + breath),
-            Vector2(22, -18 + breath)
+            Vector2(-22, -18 + breath + waiting_offset),
+            Vector2(0, 18 + breath + waiting_offset),
+            Vector2(22, -18 + breath + waiting_offset)
         ]),
         Color("#4a3b4a")
     )
