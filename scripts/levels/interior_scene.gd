@@ -104,7 +104,7 @@ func _spawn_npc() -> void:
     npc.interacted.connect(_on_npc_interacted.bind(npc))
 
 func _spawn_mite_if_present() -> void:
-    if location_id != "tavern" or WorldState.mite_connection_missed:
+    if location_id != "tavern" or WorldState.mite_connection_missed or not WorldState.mite_first_meeting:
         return
     mite = Node2D.new()
     mite.set_script(MITE_SCRIPT)
