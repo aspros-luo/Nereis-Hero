@@ -19,6 +19,7 @@ var facing := 1.0
 var attack_hitbox: Area2D
 var animation_time := 0.0
 signal defeated
+signal attack_telegraphed
 
 func _ready() -> void:
     _setup_combat_components()
@@ -78,6 +79,7 @@ func _physics_process(delta: float) -> void:
                     windup = ATTACK_WINDUP
                     attack_cooldown = ATTACK_COOLDOWN
                     attack_released = false
+                    attack_telegraphed.emit()
                     _log("COMBAT", "Cultist attack telegraph")
 
     move_and_slide()
