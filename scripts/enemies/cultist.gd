@@ -5,6 +5,7 @@ var attack_cooldown := 0.0
 var hit_flash := 0.0
 
 func _ready() -> void:
+    _log("BOOT", "Cultist initialized")
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
@@ -22,15 +23,21 @@ func _physics_process(delta: float) -> void:
             if attack_cooldown <= 0.0:
                 hero.take_damage(12)
                 attack_cooldown = 1.1
+                _log("COMBAT", "Cultist -> Hero damage=12")
 
     move_and_slide()
     queue_redraw()
 
 func take_damage(amount: int) -> void:
-    health -= amount
+    health = max(0, health - amount)
     hit_flash = 0.12
+    _log("COMBAT", "Cultist took damage=%d hp=%d" % [amount, health])
     if health <= 0:
+        _log("COMBAT", "Cultist defeated")
         queue_free()
+
+func _log(category: String, message: String) -> void:
+    print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
     var c := Color("#b44b52") if hit_flash > 0.0 else Color("#55404a")
@@ -38,4 +45,4 @@ func _draw() -> void:
     draw_rect(Rect2(-20, -28, 40, 52), c)
     draw_line(Vector2(-14, -4), Vector2(-46, 18), c, 8.0)
     draw_line(Vector2(14, -4), Vector2(46, 18), c, 8.0)
-    draw_string(ThemeDB.fallback_font, Vector2(-48, -72), "CULTIST  %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#b7a09b"))
+    draw_string(ThemeDB.fallback_font, Vector2(-48, -72), "CULTIST %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#b7a09b"))
