@@ -35,6 +35,7 @@ var outer_god_resonance := false
 var physical_union_complete := false
 var hidden_artifact_pieces := 0
 var hidden_artifact_sources: Array[String] = []
+var hidden_resistance_awakened := false
 var ending_route := ""
 var prologue_complete := false
 
@@ -159,6 +160,9 @@ func record_hidden_artifact_source(source_id: String) -> bool:
         return false
     hidden_artifact_sources.append(canonical_id)
     hidden_artifact_pieces = mini(hidden_artifact_sources.size(), 4)
+    if hidden_artifact_pieces >= 3 and not hidden_resistance_awakened:
+        hidden_resistance_awakened = true
+        print("[NEREIS][SECRET] The hidden resistance anchor has awakened")
     print("[NEREIS][SECRET] Hidden artifact source=%s pieces=%d/4" % [canonical_id, hidden_artifact_pieces])
     save_game()
     return true
@@ -173,6 +177,14 @@ func _canonical_artifact_source(source_id: String) -> String:
     if source_id.begins_with("route_echo_"):
         return "memory_echo"
     return ""
+
+func has_hidden_resistance() -> bool:
+    return hidden_resistance_awakened and hidden_artifact_pieces >= 3
+
+func get_hidden_resistance_description() -> String:
+    if not has_hidden_resistance():
+        return ""
+    return "Something assembled from four unrelated stories rests against the Hero's skin. It is not a weapon. It simply refuses to let the self disappear."
 
 func add_hidden_artifact_piece() -> int:
     hidden_artifact_pieces = mini(hidden_artifact_pieces + 1, 4)
@@ -219,6 +231,7 @@ func save_game() -> void:
         "physical_union_complete": physical_union_complete,
         "hidden_artifact_pieces": hidden_artifact_pieces,
         "hidden_artifact_sources": hidden_artifact_sources,
+        "hidden_resistance_awakened": hidden_resistance_awakened,
         "ending_route": ending_route,
         "prologue_complete": prologue_complete
     }
@@ -299,6 +312,7 @@ func load_game() -> void:
     physical_union_complete = bool(parsed.get("physical_union_complete", false))
     hidden_artifact_pieces = clampi(int(parsed.get("hidden_artifact_pieces", 0)), 0, 4)
     hidden_artifact_sources.clear()
+    hidden_resistance_awakened = bool(parsed.get("hidden_resistance_awakened", false))
     var saved_artifact_sources = parsed.get("hidden_artifact_sources", [])
     if saved_artifact_sources is Array:
         for source_id in saved_artifact_sources:
@@ -351,6 +365,7 @@ func reset() -> void:
     physical_union_complete = false
     hidden_artifact_pieces = 0
     hidden_artifact_sources.clear()
+    hidden_resistance_awakened = false
     ending_route = ""
     prologue_complete = false
     input_locked = false
