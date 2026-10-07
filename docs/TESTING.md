@@ -212,3 +212,9 @@ Current first-pass encounter effects:
 - Graveyard weathered stone: -8 Humanity
 
 Humanity is clamped to 0–100, saved, restored on load, and shown as a permanent HUD bar.
+## Route combat differentiation
+
+Church Route spawns a Cultist at the route combat encounter.
+Lullaby Route spawns a Pale Hound at the route combat encounter.
+
+Both use the shared combat components and reset when the Hero dies.
