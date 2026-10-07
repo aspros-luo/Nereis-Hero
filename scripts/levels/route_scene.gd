@@ -20,6 +20,11 @@ var hound: CharacterBody2D
 var route_exit: Area2D
 
 func _ready() -> void:
+    if WorldState.route_complete:
+        print("[NEREIS][VILLAGE] Route complete; entering Village Hub")
+        get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
+        return
+
     if WorldState.selected_route == "":
         WorldState.selected_route = route_id
 
@@ -112,10 +117,15 @@ func _spawn_route_exit() -> void:
 
 func _on_route_exit_reached() -> void:
     if route_id == "lullaby":
-        narrative.show_message("THE VILLAGE LIGHTS", "The road ends at a cluster of warm windows.\n\nYou recognize the tavern before you recognize why.", 8.0)
+        narrative.show_message("THE VILLAGE LIGHTS", "The road ends at a cluster of warm windows.\n\nYou recognize the tavern before you recognize why.", 6.0)
     else:
-        narrative.show_message("THE OLD CHURCH", "The bell is silent. Your name is not.\n\nSomewhere beyond the doors, someone has been waiting for you.", 8.0)
+        narrative.show_message("THE OLD CHURCH", "The bell is silent. Your name is not.\n\nSomewhere beyond the doors, someone has been waiting for you.", 6.0)
+    get_tree().create_timer(6.2).timeout.connect(_enter_village_hub)
     queue_redraw()
+
+func _enter_village_hub() -> void:
+    print("[NEREIS][VILLAGE] Leaving route=%s -> Village Hub" % WorldState.selected_route)
+    get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
 
 func _spawn_route_memory_echo() -> void:
     var echo := Node2D.new()
