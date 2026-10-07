@@ -16,6 +16,8 @@ var hp_bar: ColorRect
 var stamina_bar: ColorRect
 var hp_label: Label
 var stamina_label: Label
+var humanity_label: Label
+var humanity_bar: ColorRect
 
 func _ready() -> void:
     layer = 10
@@ -40,7 +42,7 @@ func _ready() -> void:
 
     status_panel = ColorRect.new()
     status_panel.position = Vector2(36, 630)
-    status_panel.size = Vector2(330, 70)
+    status_panel.size = Vector2(330, 98)
     status_panel.color = Color("#0a090d", 0.78)
     add_child(status_panel)
 
@@ -77,6 +79,23 @@ func _ready() -> void:
     stamina_bar.size = Vector2(235, 10)
     stamina_bar.color = Color("#9e8b72")
     status_panel.add_child(stamina_bar)
+
+    humanity_label = Label.new()
+    humanity_label.position = Vector2(12, 67)
+    humanity_label.add_theme_font_size_override("font_size", 13)
+    status_panel.add_child(humanity_label)
+
+    var humanity_bg := ColorRect.new()
+    humanity_bg.position = Vector2(72, 70)
+    humanity_bg.size = Vector2(235, 10)
+    humanity_bg.color = Color("#2a2026")
+    status_panel.add_child(humanity_bg)
+
+    humanity_bar = ColorRect.new()
+    humanity_bar.position = Vector2(72, 70)
+    humanity_bar.size = Vector2(235, 10)
+    humanity_bar.color = Color("#8e7777")
+    status_panel.add_child(humanity_bar)
 
     boss_panel = ColorRect.new()
     boss_panel.position = Vector2(390, 24)
@@ -155,10 +174,13 @@ func _update_status_bars() -> void:
         return
     var hp := clamp(int(hero.get("health")), 0, 100)
     var stamina := clamp(float(hero.get("stamina")), 0.0, 100.0)
+    var humanity := clamp(int(WorldState.hero_humanity), 0, 100)
     hp_bar.size.x = 235.0 * float(hp) / 100.0
     stamina_bar.size.x = 235.0 * stamina / 100.0
+    humanity_bar.size.x = 235.0 * float(humanity) / 100.0
     hp_label.text = "HP %d" % hp
     stamina_label.text = "STA %d" % int(stamina)
+    humanity_label.text = "HUM %d" % humanity
 
 func _update_boss_bar() -> void:
     if not boss or not is_instance_valid(boss) or boss.is_queued_for_deletion() or WorldState.boss_defeated:
