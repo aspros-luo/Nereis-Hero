@@ -52,10 +52,11 @@ The goal is to make every successful hit feel intentional before the project gro
 4. Receive damage and die.
 5. Respawn from the checkpoint.
 6. Defeat three small enemies.
-7. See the Ash Gate open.
-8. Fight the Ashen Knight.
-9. Defeat the Boss.
-10. See CORE COMBAT DEMO COMPLETE.
+7. See the Ash Gate open and activate the Boss approach checkpoint.
+8. If the Hero dies during Boss combat, verify the next respawn starts at the Boss approach checkpoint.
+9. Fight the Ashen Knight.
+10. Defeat the Boss.
+11. See CORE COMBAT DEMO COMPLETE.
 
 ## Runtime limitation
 
