@@ -30,7 +30,7 @@ The Ashen Knight must not spawn before all three small enemies are defeated.
 2. Move left/right, jump, and pass the first checkpoint.
 3. Attack with J / Left Mouse. Verify the three-step attack rhythm, clear windup, contact window and recovery.
 4. Hit an enemy. Verify hit spark, HIT <damage>, small hero recoil and enemy hit-stagger.
-5. Dodge with K / Shift while an enemy attacks. Verify the short invulnerability window prevents damage.
+5. Press K / Shift while an enemy attacks. Verify each press triggers one dodge and the short invulnerability window prevents damage.
 6. Take enough damage to die. Verify the Hero returns with full HP and stamina. Before the Boss has spawned, the small-enemy wave must reset.
 7. Defeat Cultist A, Pale Hound and Cultist B. The HUD must advance from 0 / 3 to 3 / 3.
 8. Confirm the Ash Gate opens and a Boss approach checkpoint is activated. The Ashen Knight must spawn only after 3 / 3.
