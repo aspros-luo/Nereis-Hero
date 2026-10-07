@@ -57,7 +57,7 @@ func play_first_memory() -> void:
 
     WorldState.unlock_first_memory()
     title_label.text = "A MEMORY THAT DOES NOT FEEL LIKE YOURS"
-    body_label.text = "The old hunter looks at your face and goes pale.\n\n"You used to come here before the church took you. You always asked whether the song was still playing."\n\nSomewhere beyond the village, a lullaby answers."
+    body_label.text = "The old hunter looks at your face and goes pale.\n\n\\"You used to come here before the church took you. You always asked whether the song was still playing.\\"\n\nSomewhere beyond the village, a lullaby answers."
     panel.visible = true
     WorldState.input_locked = true
     timer = 8.0
@@ -96,5 +96,5 @@ func play_weapon_upgrade() -> void:
         show_message("OLD HUNTER", "The blade is as sharp as it needs to be. For now.")
         return
     WorldState.upgrade_weapon()
-    show_message("A BETTER GRIP", "The old hunter corrects your stance.\n\n"You keep fighting like you remember dying."\n\nYour sword cuts deeper now.")
+    show_message("A BETTER GRIP", "The old hunter corrects your stance.\n\n\\"You keep fighting like you remember dying.\\"\n\nYour sword cuts deeper now.")
     print("[NEREIS][STORY] First weapon upgrade delivered")
