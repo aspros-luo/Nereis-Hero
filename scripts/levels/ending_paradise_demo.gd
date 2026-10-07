@@ -73,6 +73,7 @@ func _spawn_high_priest() -> void:
     boss.phase = 2
     boss.health = 190
     boss.defeated.connect(_on_high_priest_defeated)
+    hud.bind_boss(boss)
     narrative.show_message(
         "THE LAST PRAYER",
         "The High Priest is no longer human.\n\nHe still bows.",
@@ -93,6 +94,7 @@ func _spawn_paradise_king() -> void:
     boss.phase = 2
     boss.health = 210
     boss.defeated.connect(_on_paradise_king_defeated)
+    hud.bind_boss(boss)
     narrative.show_message(
         "THE LAST CROWN",
         "The King arrives already transformed.\n\nHe does not recognize the throne.",
