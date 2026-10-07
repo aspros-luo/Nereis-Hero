@@ -55,9 +55,9 @@ func _physics_process(delta: float) -> void:
         queue_redraw()
         return
 
-    var hero := get_node_or_null("../Hero")
+    var hero: Node2D = get_node_or_null("../Hero") as Node2D
     if hero:
-        var dx := hero.global_position.x - global_position.x
+        var dx: float = hero.global_position.x - global_position.x
         if dx != 0.0:
             facing = sign(dx)
 
@@ -73,7 +73,7 @@ func _physics_process(delta: float) -> void:
         elif pounce_timer > 0.0:
             velocity.x = facing * POUNCE_SPEED
         else:
-            var distance := abs(dx)
+            var distance: float = absf(dx)
             if distance > ATTACK_RANGE:
                 velocity.x = facing * SPEED
             else:
@@ -97,7 +97,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
     stun_time = 0.10
     if source and source is Node2D:
         velocity.x = sign(global_position.x - source.global_position.x) * 150.0
-    var source_name := source.name if source else "Unknown"
+    var source_name: String = source.name if source else "Unknown"
     _log("COMBAT", "%s -> Pale Hound damage=%d hp=%d" % [source_name, amount, health])
     if health <= 0:
         _log("ENEMY", "Pale Hound defeated")
@@ -118,7 +118,7 @@ func _log(category: String, message: String) -> void:
 
 func _draw() -> void:
     var c := Color("#bd8e86") if hit_flash > 0.0 else Color("#41383f")
-    draw_ellipse(Vector2.ZERO, Vector2(32, 18), c)
+    _draw_body_ellipse(Vector2.ZERO, Vector2(32, 18), c)
     draw_circle(Vector2(facing * 26.0, -24), 11.0, c)
     draw_line(Vector2(-18, -10), Vector2(-34, 14), c, 6.0)
     draw_line(Vector2(18, -10), Vector2(34, 14), c, 6.0)
@@ -133,7 +133,7 @@ func _draw() -> void:
         )
     draw_string(ThemeDB.fallback_font, Vector2(-55, -52), "PALE HOUND %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
 
-func draw_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
+func _draw_body_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
     var points := PackedVector2Array()
     for i in range(24):
         var angle := TAU * float(i) / 24.0
