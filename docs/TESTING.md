@@ -83,6 +83,8 @@ The debug HUD shows the internal artifact count.
 
 From the Village Hub:
 
+- **F1** → Candidate-driven endgame theater
+- **F2** → Eternal Paradise Theater
 - **F4** → Ancient Research Ward
 - **F5** → Village Defense Theater
 - **F6** → Mite Resonance Theater
@@ -91,6 +93,16 @@ From the Village Hub:
 - **F9** → clean reset to the opening prologue
 
 The test theaters do not require normal story progression.
+
+### F1 — Candidate-driven Endgame Theater
+
+Reads the current hidden state through the ending evaluator:
+
+- no physical union → Church / political ending theater
+- physical union without hidden resistance → Eternal Paradise
+- physical union with hidden resistance → 烈火天罚
+
+This is a development shortcut. The final game will reach the evaluator through normal progression.
 
 ### F7 — Church Final Boss Theater
 
