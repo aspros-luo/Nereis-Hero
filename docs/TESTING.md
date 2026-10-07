@@ -161,3 +161,20 @@ Quit and relaunch from each persisted location:
 
 F3 debug should show the same `Location` value after relaunch.
 F9 must still erase all state and restart from the main Vertical Slice.
+## Scene transition acceptance
+
+Main -> Route -> Village -> Tavern/Church should use a short fade transition.
+
+Expected runtime marker:
+
+[NEREIS][SCENE] Transition complete scene=...
+
+F9 remains an immediate test reset and intentionally bypasses the transition.
+
+## Interior clue acceptance
+
+- Tavern clue id: `tavern_silver_bell`
+- Church clue id: `church_confession_book`
+- Each clue can be examined once.
+- Visiting both locations must allow both clue IDs to be recorded.
+- Each recorded clue increases Hero Memory by 1.
