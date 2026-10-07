@@ -20,6 +20,7 @@ The default startup scene is res://scenes/combat_demo.tscn.
 - Readable enemy attack telegraphs
 - 3 small enemies with different pressure patterns
 - Checkpoint and death respawn
+- Dedicated Boss approach checkpoint
 - Boss gate and compact boss arena
 - Two-phase Ashen Knight with faster Phase 2 tempo
 - Boss health HUD
