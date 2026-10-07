@@ -277,5 +277,7 @@ func _update_boss_bar() -> void:
 
     var hp: int = int(boss.get("health"))
     var ratio: float = clampf(float(hp) / 240.0, 0.0, 1.0)
+    var phase_two: bool = bool(boss.get("phase_two"))
+    boss_title.text = "ASHEN KNIGHT  //  PHASE II" if phase_two else "ASHEN KNIGHT  //  PHASE I"
     boss_panel.visible = true
     boss_bar.size.x = 468.0 * ratio
