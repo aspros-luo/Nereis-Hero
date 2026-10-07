@@ -10,6 +10,7 @@ var hit_flash := 0.0
 var facing := -1.0
 var attack_released := false
 var attack_hitbox: Area2D
+signal defeated
 
 func _ready() -> void:
     _setup_combat_components()
@@ -68,6 +69,8 @@ func receive_damage(amount: int, source: Node = null) -> void:
     _log("BOSS", "%s -> Ashen Knight damage=%d hp=%d" % [source_name, amount, health])
     if health <= 0:
         _log("BOSS", "Ashen Knight defeated")
+        WorldState.mark_boss_defeated()
+        defeated.emit()
         queue_free()
 
 func take_damage(amount: int) -> void:
