@@ -92,12 +92,12 @@ func _spawn_clue() -> void:
         clue.position = Vector2(1240, 520)
         clue.clue_id = "tavern_silver_bell"
         clue.display_name = "SILVER BELL"
-        clue.description = "The bell is cold to the touch.\\n\\nWhen you lift it, you remember a hand placing a cup in front of you. The hand is yours."
+        clue.description = "The bell is cold to the touch.\n\nWhen you lift it, you remember a hand placing a cup in front of you. The hand is yours."
     else:
         clue.position = Vector2(1260, 520)
         clue.clue_id = "church_confession_book"
         clue.display_name = "CONFESSION BOOK"
-        clue.description = "The book contains your handwriting.\\n\\nThe last entry ends with one sentence: \\"I agreed because they promised she would live.\\""
+        clue.description = "The book contains your handwriting.\n\nThe last entry ends with one sentence: \"I agreed because they promised she would live.\""
 
     add_child(clue)
     clue.examined.connect(_on_clue_examined.bind(clue))
