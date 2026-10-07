@@ -95,7 +95,7 @@ func _ready() -> void:
     camera.limit_top = 0
     camera.limit_right = 2400
     camera.limit_bottom = 720
-    camera.position = hero.position
+    camera.position = Vector2.ZERO
     hero.add_child(camera)
 
     _log("BOOT", "Hero, OldHunter, Cultist, AshenKnight, Narrative and Camera initialized")
