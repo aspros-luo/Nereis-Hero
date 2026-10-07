@@ -9,6 +9,7 @@ const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const ROUTE_ECHO_SCRIPT = preload("res://scripts/world/route_memory_echo.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const HOUND_SCRIPT = preload("res://scripts/enemies/pale_hound.gd")
+const ROUTE_EXIT_SCRIPT = preload("res://scripts/world/route_exit.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -16,6 +17,7 @@ var narrative: CanvasLayer
 var hud: CanvasLayer
 var checkpoint: Area2D
 var hound: CharacterBody2D
+var route_exit: Area2D
 
 func _ready() -> void:
     if WorldState.selected_route == "":
@@ -29,6 +31,7 @@ func _ready() -> void:
     _spawn_checkpoint()
     _spawn_hound()
     _spawn_route_npc()
+    _spawn_route_exit()
     _spawn_route_memory_echo()
     hero.defeated.connect(_on_hero_defeated)
     _spawn_ui()
@@ -92,6 +95,27 @@ func _spawn_route_npc() -> void:
 
     add_child(npc)
     npc.interacted.connect(_on_route_npc_interacted.bind(npc))
+
+func _spawn_route_exit() -> void:
+    route_exit = Area2D.new()
+    route_exit.set_script(ROUTE_EXIT_SCRIPT)
+    route_exit.position = Vector2(2070, 520)
+    route_exit.name = "RouteExit"
+    var shape := CollisionShape2D.new()
+    var rectangle := RectangleShape2D.new()
+    rectangle.size = Vector2(100, 130)
+    shape.shape = rectangle
+    shape.position = Vector2(0, -65)
+    route_exit.add_child(shape)
+    add_child(route_exit)
+    route_exit.reached.connect(_on_route_exit_reached)
+
+func _on_route_exit_reached() -> void:
+    if route_id == "lullaby":
+        narrative.show_message("THE VILLAGE LIGHTS", "The road ends at a cluster of warm windows.\n\nYou recognize the tavern before you recognize why.", 8.0)
+    else:
+        narrative.show_message("THE OLD CHURCH", "The bell is silent. Your name is not.\n\nSomewhere beyond the doors, someone has been waiting for you.", 8.0)
+    queue_redraw()
 
 func _spawn_route_memory_echo() -> void:
     var echo := Node2D.new()
