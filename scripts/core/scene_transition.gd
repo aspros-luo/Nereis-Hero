@@ -17,6 +17,7 @@ func fade_to_scene(scene_path: String) -> void:
         return
     transitioning = true
 
+    WorldState.input_locked = false
     var fade_out := create_tween()
     fade_out.tween_property(overlay, "modulate:a", 1.0, 0.22)
     await fade_out.finished
