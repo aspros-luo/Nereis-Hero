@@ -15,20 +15,26 @@ func _ready() -> void:
     consumed = clue_id in WorldState.world_clues_seen
     queue_redraw()
 
-func _physics_process(delta: float) -> void:
-    cooldown = max(0.0, cooldown - delta)
+func _process(delta: float) -> void:
+    cooldown = maxf(0.0, cooldown - delta)
     if consumed:
         return
 
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 120.0
+    queue_redraw()
 
-    if hero_nearby and Input.is_key_pressed(KEY_E) and cooldown <= 0.0:
+func _unhandled_input(event: InputEvent) -> void:
+    if WorldState.input_locked or consumed or not hero_nearby or cooldown > 0.0:
+        return
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 0.5
         consumed = WorldState.record_world_clue(clue_id, humanity_delta)
+        if consumed and clue_id == "graveyard_hero_gravestone":
+            WorldState.record_hidden_artifact_source(clue_id)
         examined.emit()
         print("[NEREIS][STORY] World clue examined id=%s" % clue_id)
-        queue_redraw()
+        get_viewport().set_input_as_handled()
 
 func _draw() -> void:
     var glow := Color("#d6c7b2") if not consumed else Color("#4d454d")
