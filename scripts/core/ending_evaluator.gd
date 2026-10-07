@@ -3,8 +3,6 @@ class_name NereisEndingEvaluator
 
 # This evaluator intentionally reads facts, not hidden romance points.
 # The final threshold for the multi-part artifact remains easy to change during narrative implementation.
-const REQUIRED_ARTIFACT_PIECES := 3
-
 static func get_candidate() -> String:
     if WorldState.physical_union_complete:
         if WorldState.has_hidden_resistance():
