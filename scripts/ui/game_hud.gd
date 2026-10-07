@@ -131,6 +131,12 @@ func _ready() -> void:
 func bind_hero(target: Node) -> void:
     hero = target
 
+func set_combat_demo_mode() -> void:
+    title_label.text = "NEREIS HERO // CORE COMBAT DEMO"
+    controls_label.text = "A/D Move   Space Jump   J / LMB Attack   K / Shift Dodge   F3 Debug   F9 Reset"
+    region_label.text = "Defeat the small enemies. Break the Ash Gate. Survive the Ashen Knight."
+
+
 func bind_boss(target: Node) -> void:
     boss = target
 
