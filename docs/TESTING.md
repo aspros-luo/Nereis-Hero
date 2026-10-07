@@ -97,3 +97,20 @@ The F3 overlay exposes current stamina for local balancing.
 - The Ashen Knight health bar appears when the Hero is within range.
 - It disappears after the Boss is defeated.
 - F3 debug also reports weapon level and current attack damage.
+## Branch route acceptance
+
+After completing Vertical Slice 001, the selected route is persisted.
+
+Church choice:
+- `WorldState.selected_route = church`
+- game loads `scenes/routes/church_path.tscn`
+- Amnesiac Youth can be interacted with using E
+- Church Ledger route memory can be examined
+
+Lullaby choice:
+- `WorldState.selected_route = lullaby`
+- game loads `scenes/routes/lullaby_path.tscn`
+- Traveling Merchant can be interacted with using E
+- Broken Bell route memory can be examined
+
+Route memory is saved and should remain consumed after restarting the game.
