@@ -62,7 +62,7 @@ func _spawn_husk() -> void:
 
 func _on_husk_defeated() -> void:
     cleared = true
-    WorldState.record_hidden_artifact_source("ancient_lab_husk")
+    WorldState.record_hidden_artifact_source("ancient_lab")
     narrative.show_message(
         "THE VESSEL",
         "The thing collapses.
@@ -108,7 +108,7 @@ func _spawn_clues() -> void:
 
 func _on_clue_examined(clue: Node) -> void:
     if clue.clue_id in ["ancient_fluid_vial", "ancient_hair_bundle", "ancient_vessel_ledger"]:
-        WorldState.record_hidden_artifact_source("lab_" + clue.clue_id)
+        WorldState.record_hidden_artifact_source("ancient_lab")
     narrative.show_message(clue.display_name, clue.description, 7.0)
 
 func _spawn_rest() -> void:
