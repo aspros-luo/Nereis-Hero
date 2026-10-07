@@ -103,6 +103,15 @@ func _spawn_village_pois() -> void:
     add_child(tavern)
     tavern.interacted.connect(_on_village_poi_interacted.bind(tavern))
 
+    var graveyard := Node2D.new()
+    graveyard.set_script(VILLAGE_POI_SCRIPT)
+    graveyard.position = Vector2(950, 520)
+    graveyard.poi_id = "graveyard"
+    graveyard.display_name = "VILLAGE GRAVEYARD"
+    graveyard.dialogue = "The cemetery gate is open.\n\nThe bell tower has not rung in years. Something inside still answers when you call."
+    add_child(graveyard)
+    graveyard.interacted.connect(_on_village_poi_interacted.bind(graveyard))
+
     var church := Node2D.new()
     church.set_script(VILLAGE_POI_SCRIPT)
     church.position = Vector2(2220, 520)
@@ -125,6 +134,10 @@ func _enter_village_location(location_id: String) -> void:
         WorldState.set_location("church")
         print("[NEREIS][VILLAGE] Entering Church Interior")
         SceneTransition.fade_to_scene("res://scenes/locations/church_interior.tscn")
+    elif location_id == "graveyard":
+        WorldState.set_location("graveyard")
+        print("[NEREIS][VILLAGE] Entering Village Graveyard")
+        SceneTransition.fade_to_scene("res://scenes/village_graveyard.tscn")
 
 func _spawn_ui() -> void:
     narrative = CanvasLayer.new()
@@ -224,6 +237,9 @@ func _draw() -> void:
     )
     draw_rect(Rect2(1690, 400, 80, 120), Color("#17141b"))
     draw_string(ThemeDB.fallback_font, Vector2(1630, 275), "THE TAVERN", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
+
+    draw_rect(Rect2(900, 390, 120, 130), Color("#28212a"))
+    draw_string(ThemeDB.fallback_font, Vector2(885, 365), "GRAVEYARD", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
 
     draw_rect(Rect2(2180, 320, 80, 200), Color("#26202a"))
     draw_colored_polygon(
