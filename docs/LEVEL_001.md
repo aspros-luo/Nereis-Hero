@@ -13,6 +13,7 @@ The level is intentionally linear for the first vertical slice. Its purpose is t
 - 320: Hero awakening
 - 680: Old Hunter
 - 980: Checkpoint
+- 1180: Pale Hound encounter
 - 1400: Cultist encounter
 - 1800: Ash Gate
 - 2080: Ashen Knight
