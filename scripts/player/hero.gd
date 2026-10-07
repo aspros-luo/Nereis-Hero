@@ -156,7 +156,7 @@ func _draw() -> void:
     var body := Color("#c8b59b")
     var cloak := Color("#433a42")
     draw_circle(Vector2(0, -52), 18, body)
-    draw_rect(Rect2(-18, -34, 36, 60), cloak)
+    draw_rect(Rect2(-18, -34, 36, 34), cloak)
     draw_line(Vector2(0, -8), Vector2(facing * 58, -22), Color("#b7a48c"), 7.0)
     if attack_time > 0.0:
         draw_arc(Vector2(facing * 26, -24), 64, -1.2 if facing > 0 else 1.2, 1.2 if facing > 0 else 5.2, 20, Color("#d9d0bf"), 5.0)
