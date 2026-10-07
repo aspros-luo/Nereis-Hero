@@ -81,7 +81,7 @@ func _spawn_clue() -> void:
     clue.position = Vector2(1740, 520)
     clue.clue_id = "graveyard_hero_gravestone"
     clue.display_name = "THE WEATHERED STONE"
-    clue.description = "The stone carries your name, but the date is wrong.\n\nSomeone carved a second line beneath it: \\\"He came back after the bell stopped.\\\""
+    clue.description = "The stone carries your name, but the date is wrong.\n\nSomeone carved a second line beneath it: \\"He came back after the bell stopped.\\""
     add_child(clue)
     clue.examined.connect(_on_clue_examined.bind(clue))
 
@@ -125,11 +125,11 @@ func _on_wraith_defeated(wraith: Node) -> void:
 
 func _on_hero_defeated() -> void:
     for wraith in wraiths:
-        if is_instance_valid(wraith) and wraith.is_queued_for_deletion():
-            continue
-    if wraiths.is_empty():
-        _spawn_wraith(Vector2(1100, 430), "BellWraith_A")
-        _spawn_wraith(Vector2(1480, 390), "BellWraith_B")
+        if is_instance_valid(wraith) and not wraith.is_queued_for_deletion():
+            wraith.queue_free()
+    wraiths.clear()
+    _spawn_wraith(Vector2(1100, 430), "BellWraith_A")
+    _spawn_wraith(Vector2(1480, 390), "BellWraith_B")
     print("[NEREIS][GRAVEYARD] Hero defeated; wraith encounter state reset")
 
 func _on_clue_examined(target: Node) -> void:
