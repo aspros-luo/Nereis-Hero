@@ -34,19 +34,8 @@ func _ready() -> void:
     add_child(old_hunter)
     old_hunter.interacted.connect(_on_old_hunter_interacted)
 
-    enemy = CharacterBody2D.new()
-    enemy.set_script(ENEMY_SCRIPT)
-    enemy.position = Vector2(900, 520)
-    enemy.name = "Cultist"
-    _add_character_collision(enemy, 20.0, 44.0)
-    add_child(enemy)
-
-    boss = CharacterBody2D.new()
-    boss.set_script(BOSS_SCRIPT)
-    boss.position = Vector2(1130, 520)
-    boss.name = "AshenKnight"
-    _add_character_collision(boss, 24.0, 56.0)
-    add_child(boss)
+    _spawn_cultist()
+    _spawn_boss()
 
     checkpoint = Area2D.new()
     checkpoint.set_script(CHECKPOINT_SCRIPT)
@@ -61,8 +50,6 @@ func _ready() -> void:
     add_child(checkpoint)
 
     hero.defeated.connect(_on_hero_defeated)
-    boss.defeated.connect(_on_boss_defeated)
-
     narrative = CanvasLayer.new()
     narrative.set_script(NARRATIVE_SCRIPT)
     add_child(narrative)
@@ -80,6 +67,29 @@ func _ready() -> void:
 
     _log("BOOT", "Hero, OldHunter, Cultist, AshenKnight, Narrative and Camera initialized")
     queue_redraw()
+
+func _spawn_cultist() -> void:
+    if is_instance_valid(enemy):
+        return
+    enemy = CharacterBody2D.new()
+    enemy.set_script(ENEMY_SCRIPT)
+    enemy.position = Vector2(900, 520)
+    enemy.name = "Cultist"
+    _add_character_collision(enemy, 20.0, 44.0)
+    add_child(enemy)
+    _log("WORLD", "Cultist spawned")
+
+func _spawn_boss() -> void:
+    if WorldState.boss_defeated or is_instance_valid(boss):
+        return
+    boss = CharacterBody2D.new()
+    boss.set_script(BOSS_SCRIPT)
+    boss.position = Vector2(1130, 520)
+    boss.name = "AshenKnight"
+    _add_character_collision(boss, 24.0, 56.0)
+    add_child(boss)
+    boss.defeated.connect(_on_boss_defeated)
+    _log("WORLD", "Ashen Knight spawned")
 
 func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
     var shape := CollisionShape2D.new()
@@ -103,6 +113,10 @@ func _create_floor() -> void:
 
 func _on_hero_defeated() -> void:
     _log("WORLD", "Hero death handled; checkpoint respawn complete")
+    if not is_instance_valid(enemy):
+        _spawn_cultist()
+    if not WorldState.boss_defeated and not is_instance_valid(boss):
+        _spawn_boss()
 
 func _on_boss_defeated() -> void:
     _log("BOSS", "Ashen Knight encounter cleared")
