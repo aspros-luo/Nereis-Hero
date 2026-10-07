@@ -83,7 +83,7 @@ func _draw() -> void:
     draw_string(ThemeDB.fallback_font, Vector2(40, 125), "The village remembers what the hero has forgotten.", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#8e7777"))
 
     if debug_enabled and hero:
-        var state_name := hero.get("state")
+        var state_name: String = hero.get_debug_state()
         var invuln := hero.get("invulnerable")
         var hp := hero.get("health")
         draw_rect(Rect2(930, 32, 310, 135), Color("#0a090d", 0.88))
