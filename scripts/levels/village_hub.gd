@@ -220,11 +220,16 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
     character.add_child(collision)
 
 func _unhandled_input(event: InputEvent) -> void:
-    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
-        WorldState.delete_save()
-        print("[NEREIS][DEBUG] Village run reset; returning to Vertical Slice")
-        get_tree().change_scene_to_file("res://scenes/main.tscn")
-        get_viewport().set_input_as_handled()
+    if event is InputEventKey and event.pressed and not event.echo:
+        if event.keycode == KEY_F8:
+            print("[NEREIS][DEBUG] Opening director ending theater")
+            get_tree().change_scene_to_file("res://scenes/ending_fire_demo.tscn")
+            get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_F9:
+            WorldState.delete_save()
+            print("[NEREIS][DEBUG] Village run reset")
+            get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
+            get_viewport().set_input_as_handled()
 
 func _draw() -> void:
     draw_rect(Rect2(0, 0, 2600, 720), Color("#111018"))
