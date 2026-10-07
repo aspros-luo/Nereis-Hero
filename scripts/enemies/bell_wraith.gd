@@ -43,9 +43,9 @@ func _physics_process(delta: float) -> void:
     pulse_flash = max(0.0, pulse_flash - delta)
     hover_time += delta
 
-    var hero := get_node_or_null("../Hero")
+    var hero: Node2D = get_node_or_null("../Hero") as Node2D
     if hero:
-        var delta_to_hero := hero.global_position - global_position
+        var delta_to_hero: Vector2 = hero.global_position - global_position
         if delta_to_hero.x != 0.0:
             facing = sign(delta_to_hero.x)
 
@@ -69,7 +69,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
     health = max(0, health - amount)
     _spawn_hit_spark()
     hit_flash = 0.12
-    var source_name := source.name if source else "Unknown"
+    var source_name: String = source.name if source else "Unknown"
     _log("COMBAT", "%s -> Bell Wraith damage=%d hp=%d" % [source_name, amount, health])
     if health <= 0:
         _log("ENEMY", "Bell Wraith defeated")
