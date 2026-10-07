@@ -358,7 +358,7 @@ func reset() -> void:
     route_memory_seen = false
     route_memory_id = ""
     route_complete = false
-    current_location = "slice"
+    current_location = "church_escape"
     interior_clues_seen.clear()
     world_clues_seen.clear()
     graveyard_cleared = false
