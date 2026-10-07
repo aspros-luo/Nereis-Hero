@@ -279,5 +279,6 @@ func _update_boss_bar() -> void:
     var ratio: float = clampf(float(hp) / 240.0, 0.0, 1.0)
     var phase_two: bool = bool(boss.get("phase_two"))
     boss_title.text = "ASHEN KNIGHT  //  PHASE II" if phase_two else "ASHEN KNIGHT  //  PHASE I"
+    boss_bar.color = Color("#c34f5b") if phase_two else Color("#9e5961")
     boss_panel.visible = true
     boss_bar.size.x = 468.0 * ratio
