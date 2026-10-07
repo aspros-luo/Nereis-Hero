@@ -178,3 +178,17 @@ F9 remains an immediate test reset and intentionally bypasses the transition.
 - Each clue can be examined once.
 - Visiting both locations must allow both clue IDs to be recorded.
 - Each recorded clue increases Hero Memory by 1.
+## Village Graveyard acceptance
+
+From Village Hub, press E at VILLAGE GRAVEYARD.
+
+Expected:
+- `Location: graveyard` in F3 debug
+- a graveyard checkpoint at the entrance
+- two Bell Wraith encounters
+- Hero death respawns the complete encounter group
+- Bell Wraith attacks use sonic pulse logs
+- `graveyard_hero_gravestone` can be examined once
+- examining the gravestone increases World Clues and Hero Memory by 1
+- EXIT returns to Village Hub
+- quitting and relaunching from the graveyard resumes there
