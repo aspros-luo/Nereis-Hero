@@ -439,3 +439,17 @@ After the project configuration and gameplay scripts were corrected, Godot 4.6.1
 The affected values are now explicitly typed, including the alpha calculation, and the code uses maxf() for the floating-point clamp.
 
 The remaining core gameplay scripts were re-scanned for the same high-risk inferred-Variant patterns; no matching untyped get_node_or_null(), Object.get(), Object.name, global-position, numeric clamp, or native draw_ellipse override patterns were found in the checked development files.
+
+
+## 14. Runtime baseline confirmation
+
+The first complete Core Combat Demo startup has now been confirmed in Godot 4.6.1 on the local development machine. The project starts successfully and the user reported the runtime as smooth.
+
+This confirms the pre-002B implementation gate:
+
+- project startup
+- core scene loading
+- Hero movement/combat loop
+- engine/runtime compatibility
+
+The current 002B presentation changes (visual effects, procedural silhouettes, ambient ash, HUD polish and procedural combat audio) are now the next runtime re-validation target.
