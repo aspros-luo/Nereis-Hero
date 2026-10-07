@@ -27,26 +27,32 @@ func _physics_process(delta: float) -> void:
     if not is_on_floor():
         velocity.y += GRAVITY * delta
 
-    var direction := Input.get_axis("move_left", "move_right")
+    var direction := Input.get_axis("ui_left", "ui_right")
+    if Input.is_key_pressed(KEY_A):
+        direction = -1.0
+    elif Input.is_key_pressed(KEY_D):
+        direction = 1.0
+
     if direction != 0.0:
         facing = sign(direction)
         velocity.x = move_toward(velocity.x, direction * SPEED, 1800.0 * delta)
     else:
         velocity.x = move_toward(velocity.x, 0.0, 2200.0 * delta)
 
-    if Input.is_action_just_pressed("jump") and is_on_floor():
+    if (Input.is_key_pressed(KEY_SPACE) or Input.is_action_just_pressed("ui_accept")) and is_on_floor():
         velocity.y = JUMP_VELOCITY
 
-    if Input.is_action_just_pressed("attack") and attack_time <= 0.0:
+    if (Input.is_key_pressed(KEY_J) or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)) and attack_time <= 0.0:
         attack_time = 0.28
-        var hitbox := get_node_or_null("../Cultist")
-        if hitbox and global_position.distance_to(hitbox.global_position) < 125.0:
-            hitbox.take_damage(34)
+        var cultist := get_node_or_null("../Cultist")
+        if cultist and global_position.distance_to(cultist.global_position) < 125.0:
+            cultist.take_damage(34)
 
-    if Input.is_action_just_pressed("dodge") and dodge_time <= 0.0:
-        dodge_time = 0.18
-        invulnerable = true
-        get_tree().create_timer(0.18).timeout.connect(_end_dodge)
+    if Input.is_key_pressed(KEY_K) or Input.is_key_pressed(KEY_SHIFT):
+        if dodge_time <= 0.0:
+            dodge_time = 0.18
+            invulnerable = true
+            get_tree().create_timer(0.18).timeout.connect(_end_dodge)
 
     move_and_slide()
     position.y = min(position.y, 520.0)
