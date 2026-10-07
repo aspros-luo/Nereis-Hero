@@ -91,7 +91,7 @@ func _begin_union() -> void:
 
 func _begin_merge() -> void:
     merged = true
-    WorldState.set_ending_route("永恒乐园")
+    WorldState.ending_route = "永恒乐园"
     if audio_director and audio_director.has_method("play_lullaby"):
         audio_director.play_lullaby()
 
