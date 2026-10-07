@@ -81,6 +81,7 @@ func _spawn_clue() -> void:
     clue.set_script(WORLD_CLUE_SCRIPT)
     clue.position = Vector2(1740, 520)
     clue.clue_id = "graveyard_hero_gravestone"
+    clue.humanity_delta = -8
     clue.display_name = "THE WEATHERED STONE"
     clue.description = "The stone carries your name, but the date is wrong.\n\nSomeone carved a second line beneath it: \"He came back after the bell stopped.\""
     add_child(clue)
