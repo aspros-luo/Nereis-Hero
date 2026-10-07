@@ -15,6 +15,8 @@ var hud: CanvasLayer
 var narrative: CanvasLayer
 var boss: CharacterBody2D
 var phase := 0
+var epilogue_started := false
+var epilogue_elapsed := 0.0
 
 func _ready() -> void:
     WorldState.current_location = "church_final_demo"
@@ -208,3 +210,27 @@ func _draw() -> void:
     draw_rect(Rect2(2930, 270, 980, 250), Color("#27212a"))
     draw_string(ThemeDB.fallback_font, Vector2(1660, 250), "THE LAST CHURCH", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#7f6e72"))
     draw_string(ThemeDB.fallback_font, Vector2(3210, 230), "THE THRONE", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#7f6e72"))
+
+    if epilogue_started:
+        draw_rect(Rect2(0, 0, LEVEL_WIDTH, 720), Color(0.07, 0.055, 0.08, clampf(0.25 + epilogue_elapsed * 0.02, 0.25, 0.62)))
+        draw_colored_polygon(
+            PackedVector2Array([
+                Vector2(650, 480),
+                Vector2(670, 285),
+                Vector2(690, 480)
+            ]),
+            Color("#473640")
+        )
+        draw_rect(Rect2(650, 330, 40, 150), Color("#2a222d"))
+        draw_circle(Vector2(670, 312), 10.0, Color("#a27a68"))
+
+        draw_line(Vector2(1840, 420), Vector2(1840, 190), Color("#56424a"), 8.0)
+        draw_colored_polygon(
+            PackedVector2Array([
+                Vector2(1842, 215),
+                Vector2(1960, 245),
+                Vector2(1842, 280)
+            ]),
+            Color("#5d3e49")
+        )
+        draw_string(ThemeDB.fallback_font, Vector2(1640, 150), "THE FIRST NEW CEREMONY", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#78666c"))
