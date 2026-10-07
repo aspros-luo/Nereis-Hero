@@ -24,6 +24,7 @@ var hud: CanvasLayer
 func _ready() -> void:
     _log("BOOT", "World initialization started")
     _create_floor()
+    _create_boundaries()
 
     hero = CharacterBody2D.new()
     hero.set_script(HERO_SCRIPT)
@@ -130,6 +131,27 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
     shape.shape = capsule
     shape.position = Vector2(0, -height * 0.5)
     character.add_child(shape)
+
+func _create_boundaries() -> void:
+    var left_wall := StaticBody2D.new()
+    left_wall.name = "LeftBoundary"
+    var left_shape := CollisionShape2D.new()
+    var left_rect := RectangleShape2D.new()
+    left_rect.size = Vector2(40, 720)
+    left_shape.shape = left_rect
+    left_shape.position = Vector2(-20, 360)
+    left_wall.add_child(left_shape)
+    add_child(left_wall)
+
+    var right_wall := StaticBody2D.new()
+    right_wall.name = "RightBoundary"
+    var right_shape := CollisionShape2D.new()
+    var right_rect := RectangleShape2D.new()
+    right_rect.size = Vector2(40, 720)
+    right_shape.shape = right_rect
+    right_shape.position = Vector2(2420, 360)
+    right_wall.add_child(right_shape)
+    add_child(right_wall)
 
 func _create_floor() -> void:
     var floor := StaticBody2D.new()
@@ -254,8 +276,9 @@ func _draw() -> void:
         draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
 
     draw_rect(Rect2(600, 445, 160, 75), Color("#27212a"))
-    draw_rect(Rect2(1730, 350, 140, 170), Color("#241d25"))
-    draw_string(ThemeDB.fallback_font, Vector2(1750, 365), "ASH GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
+    if not WorldState.boss_gate_open:
+        draw_rect(Rect2(1730, 350, 140, 170), Color("#241d25"))
+        draw_string(ThemeDB.fallback_font, Vector2(1750, 365), "ASH GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
     draw_string(ThemeDB.fallback_font, Vector2(900, 490), "SAFE GROUND", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
     draw_string(ThemeDB.fallback_font, Vector2(605, 458), "OLD HUNTER", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
 
