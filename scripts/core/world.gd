@@ -5,10 +5,12 @@ const ENEMY_SCRIPT = preload("res://scripts/enemies/cultist.gd")
 const NPC_SCRIPT = preload("res://scripts/npc/old_hunter.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
+const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 
 var hero: CharacterBody2D
 var enemy: CharacterBody2D
 var boss: CharacterBody2D
+var checkpoint: Area2D
 var old_hunter: Node2D
 var camera: Camera2D
 var narrative: CanvasLayer
@@ -20,31 +22,46 @@ func _ready() -> void:
 
     hero = CharacterBody2D.new()
     hero.set_script(HERO_SCRIPT)
-    hero.position = Vector2(320, 480)
+    hero.position = Vector2(320, 520)
     hero.name = "Hero"
     _add_character_collision(hero, 18.0, 48.0)
     add_child(hero)
 
     old_hunter = Node2D.new()
     old_hunter.set_script(NPC_SCRIPT)
-    old_hunter.position = Vector2(560, 480)
+    old_hunter.position = Vector2(560, 520)
     old_hunter.name = "OldHunter"
     add_child(old_hunter)
     old_hunter.interacted.connect(_on_old_hunter_interacted)
 
     enemy = CharacterBody2D.new()
     enemy.set_script(ENEMY_SCRIPT)
-    enemy.position = Vector2(900, 480)
+    enemy.position = Vector2(900, 520)
     enemy.name = "Cultist"
     _add_character_collision(enemy, 20.0, 44.0)
     add_child(enemy)
 
     boss = CharacterBody2D.new()
     boss.set_script(BOSS_SCRIPT)
-    boss.position = Vector2(1130, 480)
+    boss.position = Vector2(1130, 520)
     boss.name = "AshenKnight"
     _add_character_collision(boss, 24.0, 56.0)
     add_child(boss)
+
+    checkpoint = Area2D.new()
+    checkpoint.set_script(CHECKPOINT_SCRIPT)
+    checkpoint.position = Vector2(720, 520)
+    checkpoint.name = "Checkpoint_01"
+    var checkpoint_shape := CollisionShape2D.new()
+    var checkpoint_rect := RectangleShape2D.new()
+    checkpoint_rect.size = Vector2(150, 110)
+    checkpoint_shape.shape = checkpoint_rect
+    checkpoint_shape.position = Vector2(0, -55)
+    checkpoint.add_child(checkpoint_shape)
+    add_child(checkpoint)
+
+    hero.defeated.connect(_on_hero_defeated)
+    boss.defeated.connect(_on_boss_defeated)
 
     narrative = CanvasLayer.new()
     narrative.set_script(NARRATIVE_SCRIPT)
@@ -84,6 +101,15 @@ func _create_floor() -> void:
     floor.add_child(collision)
     add_child(floor)
 
+func _on_hero_defeated() -> void:
+    _log("WORLD", "Hero death handled; checkpoint respawn complete")
+
+func _on_boss_defeated() -> void:
+    _log("BOSS", "Ashen Knight encounter cleared")
+    if narrative:
+        narrative.show_message("THE ASHEN KNIGHT", "The armor falls without a body inside.\n\nFor a moment, the Hero remembers kneeling before the church. Then the memory tears itself away.")
+    queue_redraw()
+
 func _on_old_hunter_interacted() -> void:
     _log("STORY", "Old Hunter interaction accepted")
     narrative.play_first_memory()
@@ -109,6 +135,7 @@ func _draw() -> void:
 
     draw_rect(Rect2(480, 445, 160, 75), Color("#27212a"))
     draw_rect(Rect2(1040, 420, 160, 100), Color("#241d25"))
+    draw_string(ThemeDB.fallback_font, Vector2(650, 438), "SAFE GROUND", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
     draw_string(ThemeDB.fallback_font, Vector2(1045, 438), "BOSS GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
     draw_string(ThemeDB.fallback_font, Vector2(485, 458), "OLD HUNTER", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
 
@@ -127,3 +154,4 @@ func _draw() -> void:
         draw_string(ThemeDB.fallback_font, Vector2(950, 136), "Invulnerable: %s" % invuln, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
         draw_string(ThemeDB.fallback_font, Vector2(950, 160), "Memory: %d" % WorldState.hero_memory, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
         draw_string(ThemeDB.fallback_font, Vector2(950, 184), "Humanity: %d" % WorldState.hero_humanity, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
+        draw_string(ThemeDB.fallback_font, Vector2(950, 208), "Boss Defeated: %s" % WorldState.boss_defeated, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
