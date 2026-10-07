@@ -1,11 +1,11 @@
 [application]
+config/name="Nereis Hero"
+run/main_scene="res://scenes/combat_demo.tscn"
+config/features=PackedStringArray("4.6", "GL Compatibility")
 
 [autoload]
 WorldState="*res://scripts/core/world_state.gd"
 SceneTransition="*res://scripts/core/scene_transition.gd"
-config/name="Nereis Hero"
-run/main_scene="res://scenes/combat_demo.tscn"
-config/features=PackedStringArray("4.6", "GL Compatibility")
 
 [display]
 window/size/viewport_width=1280
