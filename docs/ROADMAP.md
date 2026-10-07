@@ -1,3 +1,11 @@
+## Current Acceptance Gate
+
+- [ ] Local runtime: Hero can move, jump, attack and dodge
+- [ ] Local runtime: 3 small enemies can be defeated
+- [ ] Local runtime: Ash Gate opens after the 3 enemies die
+- [ ] Local runtime: Ashen Knight can be defeated
+- [ ] Local runtime: Core Combat Demo complete state is reached
+
 # Roadmap
 
 ## Phase 001 — Vertical Slice Foundation
