@@ -4,9 +4,18 @@ const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
 const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 
+const MOVE_SPEED := 82.0
+const ATTACK_RANGE := 108.0
+const ATTACK_COOLDOWN := 1.15
+const ATTACK_WINDUP := 0.34
+
 var health := 100
 var attack_cooldown := 0.0
+var windup := 0.0
+var attack_released := false
 var hit_flash := 0.0
+var stun_time := 0.0
+var facing := 1.0
 var attack_hitbox: Area2D
 signal defeated
 
@@ -30,22 +39,41 @@ func _setup_combat_components() -> void:
 
 func _physics_process(delta: float) -> void:
     attack_cooldown = max(0.0, attack_cooldown - delta)
+    windup = max(0.0, windup - delta)
     hit_flash = max(0.0, hit_flash - delta)
+    stun_time = max(0.0, stun_time - delta)
+
+    if stun_time > 0.0:
+        velocity.x = move_toward(velocity.x, 0.0, 900.0 * delta)
+        move_and_slide()
+        queue_redraw()
+        return
 
     var hero := get_node_or_null("../Hero")
 
     if hero:
-        var distance := global_position.distance_to(hero.global_position)
-        if distance > 90.0:
-            velocity.x = sign(hero.global_position.x - global_position.x) * 95.0
-            attack_hitbox.position.x = sign(hero.global_position.x - global_position.x) * 40.0
-        else:
+        var dx := hero.global_position.x - global_position.x
+        if dx != 0.0:
+            facing = sign(dx)
+
+        if windup > 0.0:
             velocity.x = 0.0
-            attack_hitbox.position.x = sign(hero.global_position.x - global_position.x) * 40.0
-            if attack_cooldown <= 0.0:
+            if windup <= 0.06 and not attack_released:
+                attack_hitbox.position.x = facing * 40.0
                 attack_hitbox.activate(12, 0.12)
-                attack_cooldown = 1.1
-                _log("COMBAT", "Cultist attack started; hitbox active")
+                attack_released = true
+                _log("COMBAT", "Cultist attack released")
+        else:
+            var distance := abs(dx)
+            if distance > ATTACK_RANGE:
+                velocity.x = facing * MOVE_SPEED
+            else:
+                velocity.x = 0.0
+                if attack_cooldown <= 0.0:
+                    windup = ATTACK_WINDUP
+                    attack_cooldown = ATTACK_COOLDOWN
+                    attack_released = false
+                    _log("COMBAT", "Cultist attack telegraph")
 
     move_and_slide()
     queue_redraw()
@@ -60,6 +88,9 @@ func receive_damage(amount: int, source: Node = null) -> void:
     health = max(0, health - amount)
     _spawn_hit_spark()
     hit_flash = 0.12
+    stun_time = 0.11
+    if source and source is Node2D:
+        velocity.x = sign(global_position.x - source.global_position.x) * 125.0
     var source_name := source.name if source else "Unknown"
     _log("COMBAT", "%s -> Cultist damage=%d hp=%d" % [source_name, amount, health])
     if health <= 0:
@@ -79,4 +110,6 @@ func _draw() -> void:
     draw_rect(Rect2(-20, -28, 40, 28), c)
     draw_line(Vector2(-14, -4), Vector2(-46, 8), c, 8.0)
     draw_line(Vector2(14, -4), Vector2(46, 8), c, 8.0)
+    if windup > 0.0:
+        draw_arc(Vector2(facing * 22.0, -24), 34.0, -0.85 if facing > 0 else 3.99, 0.85 if facing > 0 else 5.42, 14, Color("#c44e5a"), 4.0)
     draw_string(ThemeDB.fallback_font, Vector2(-48, -72), "CULTIST %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#b7a09b"))
