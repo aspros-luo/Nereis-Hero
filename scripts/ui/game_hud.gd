@@ -11,6 +11,11 @@ var boss: Node
 var boss_panel: ColorRect
 var boss_bar: ColorRect
 var boss_title: Label
+var status_panel: ColorRect
+var hp_bar: ColorRect
+var stamina_bar: ColorRect
+var hp_label: Label
+var stamina_label: Label
 
 func _ready() -> void:
     layer = 10
@@ -32,6 +37,46 @@ func _ready() -> void:
     region_label.text = "The village remembers what the hero has forgotten."
     region_label.add_theme_font_size_override("font_size", 18)
     add_child(region_label)
+
+    status_panel = ColorRect.new()
+    status_panel.position = Vector2(36, 630)
+    status_panel.size = Vector2(330, 70)
+    status_panel.color = Color("#0a090d", 0.78)
+    add_child(status_panel)
+
+    hp_label = Label.new()
+    hp_label.position = Vector2(12, 7)
+    hp_label.add_theme_font_size_override("font_size", 13)
+    status_panel.add_child(hp_label)
+
+    var hp_bg := ColorRect.new()
+    hp_bg.position = Vector2(72, 10)
+    hp_bg.size = Vector2(235, 10)
+    hp_bg.color = Color("#2a2026")
+    status_panel.add_child(hp_bg)
+
+    hp_bar = ColorRect.new()
+    hp_bar.position = Vector2(72, 10)
+    hp_bar.size = Vector2(235, 10)
+    hp_bar.color = Color("#a4505a")
+    status_panel.add_child(hp_bar)
+
+    stamina_label = Label.new()
+    stamina_label.position = Vector2(12, 37)
+    stamina_label.add_theme_font_size_override("font_size", 13)
+    status_panel.add_child(stamina_label)
+
+    var stamina_bg := ColorRect.new()
+    stamina_bg.position = Vector2(72, 40)
+    stamina_bg.size = Vector2(235, 10)
+    stamina_bg.color = Color("#2a2026")
+    status_panel.add_child(stamina_bg)
+
+    stamina_bar = ColorRect.new()
+    stamina_bar.position = Vector2(72, 40)
+    stamina_bar.size = Vector2(235, 10)
+    stamina_bar.color = Color("#9e8b72")
+    status_panel.add_child(stamina_bar)
 
     boss_panel = ColorRect.new()
     boss_panel.position = Vector2(390, 24)
@@ -75,6 +120,7 @@ func set_debug_visible(value: bool) -> void:
     debug_panel.visible = value
 
 func _process(_delta: float) -> void:
+    _update_status_bars()
     _update_boss_bar()
     if not debug_enabled or not hero:
         return
@@ -103,6 +149,16 @@ func _process(_delta: float) -> void:
     )
 
     
+func _update_status_bars() -> void:
+    if not hero or not is_instance_valid(hero):
+        return
+    var hp := clamp(int(hero.get("health")), 0, 100)
+    var stamina := clamp(float(hero.get("stamina")), 0.0, 100.0)
+    hp_bar.size.x = 235.0 * float(hp) / 100.0
+    stamina_bar.size.x = 235.0 * stamina / 100.0
+    hp_label.text = "HP %d" % hp
+    stamina_label.text = "STA %d" % int(stamina)
+
 func _update_boss_bar() -> void:
     if not boss or not is_instance_valid(boss) or boss.is_queued_for_deletion() or WorldState.boss_defeated:
         boss_panel.visible = false
