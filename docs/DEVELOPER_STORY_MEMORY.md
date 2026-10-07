@@ -1,3 +1,85 @@
+# Director's Reference Translation — What We Borrow, What We Make Our Own
+
+The following works are reference material, not source material to reproduce.
+
+### The Song of Saya
+
+Useful principle:
+
+- horror and affection can occupy the same relationship
+- a character can be emotionally sincere while being fundamentally incompatible with normal human existence
+- the strongest horror is often not "the monster is pretending", but "the monster's love is real"
+
+Nereis adaptation:
+
+**Mite's purity is genuine.** She is not a monster wearing an innocent mask. Her innocence itself is the dangerous thing.
+
+### Bloodborne
+
+Useful principle:
+
+- hidden truth can be distributed across apparently unrelated side stories
+- multiple partial relics can form one late-game revelation
+- the player can discover a secret ending only after understanding enough of the hidden cosmology
+
+Nereis adaptation:
+
+**烈火天罚 requires several independent side stories and a multi-part artifact.**
+
+Do not present it as a checklist.
+
+### Neon Genesis Evangelion
+
+Useful principle:
+
+- apocalypse can be the attempted solution to loneliness and human incompleteness
+- merging humanity can look like salvation while destroying individuality
+- the final conflict can be about whether people choose painful individuality over painless unity
+
+Nereis adaptation:
+
+**永恒乐园 is the temptation to end loneliness, death and separation by ending individuality.**
+
+### Genesis / Eden imagery
+
+Useful principle:
+
+- creation
+- man and woman becoming one flesh
+- forbidden knowledge
+- mortality
+- the Tree of Life
+- exile from paradise
+- the flaming sword guarding the way back
+
+Nereis adaptation:
+
+The physical union of Hero and Mite can become a literal cosmic gateway.
+
+The "paradise" ending can be an inversion of Eden: the door to eternal life opens, but what returns through it is not human paradise.
+
+The flaming sword becomes a visual ancestor for **烈火天罚**: fire is no longer merely punishment from above; it becomes humanity's final answer to the false paradise.
+
+### Lovecraftian cosmic horror
+
+Useful principle:
+
+- the universe does not need to hate humanity
+- incomprehensible beings do not need human motives
+- an encounter can be terrifying precisely because humanity is not important
+
+Nereis adaptation:
+
+The Outer God does not need to conquer the Kingdom for a grand purpose.
+
+A stronger horror is that the world is merely interesting.
+
+Human suffering, love, war and civilization can be observed the way a person watches ants change direction after a stone is dropped beside them.
+
+This should remain mostly implicit. The Outer God must not deliver a lecture explaining itself.
+
+---
+
 # Nereis Hero — Developer Story Memory / Canonical Lore
 
 > This is a developer-facing story memory, not a player-facing codex.
@@ -394,11 +476,11 @@ But there is also no meaningful individual freedom.
 
 永恒乐园 = escape from mortality by abandoning separateness.
 
-This draws inspiration from the idea of collective human merging represented by Evangelion's Human Instrumentality, but the Nereis version must be its own mythology. Evangelion's themes strongly involve individuality, consciousness, freedom, choice and responsibility, while the Instrumentality concept involves merging human consciousness into a single existence. citeturn507472search49turn507472search4
+This draws inspiration from the idea of collective human merging represented by Evangelion's Human Instrumentality, but the Nereis version must be its own mythology. Evangelion's themes strongly involve individuality, consciousness, freedom, choice and responsibility, while the Instrumentality concept involves merging human consciousness into a single existence. 
 
 ### Eden inversion
 
-Genesis presents humanity in Eden, describes man and woman becoming "one flesh", and presents the Tree of Life as the means by which humanity could live forever; after the Fall, access to that tree is guarded by a flaming sword. citeturn507472search0turn507472search2
+Genesis presents humanity in Eden, describes man and woman becoming "one flesh", and presents the Tree of Life as the means by which humanity could live forever; after the Fall, access to that tree is guarded by a flaming sword. 
 
 Nereis can invert that structure:
 
@@ -451,7 +533,7 @@ The exact pieces and side stories are not fixed yet.
 
 ### Design inspiration
 
-The structural inspiration is Bloodborne's Third Umbilical Cord system: the important lesson is not the specific item, but that multiple seemingly independent discoveries can converge into a hidden endgame state. Bloodborne contains four versions of the relevant relic, while three are sufficient to unlock the alternate endgame; the associated "Insight" also changes how much of the hidden world the player can perceive. citeturn379672search0turn379672search1turn379672search6
+The structural inspiration is Bloodborne's Third Umbilical Cord system: the important lesson is not the specific item, but that multiple seemingly independent discoveries can converge into a hidden endgame state. Bloodborne contains four versions of the relevant relic, while three are sufficient to unlock the alternate endgame; the associated "Insight" also changes how much of the hidden world the player can perceive. 
 
 Nereis should use **multiple independent side stories**, not one hidden quest.
 
@@ -568,7 +650,7 @@ The final emotional choice should feel like:
 
 The Outer God should be closer to Lovecraftian cosmic indifference than to a conventional Satan figure.
 
-Cosmicism is useful here because humanity's terror comes from discovering that the universe does not revolve around human meaning, and that cosmic entities may have no human moral category such as good or evil. citeturn379672search72turn379672search10
+Cosmicism is useful here because humanity's terror comes from discovering that the universe does not revolve around human meaning, and that cosmic entities may have no human moral category such as good or evil. 
 
 The current preferred direction is:
 
@@ -614,7 +696,7 @@ No one has to suffer.
 
 But no one can remain fully separate either.
 
-This combines the thematic direction of Instrumentality with the indifference of cosmicism while remaining a distinct Nereis idea. citeturn507472search49turn379672search72
+This combines the thematic direction of Instrumentality with the indifference of cosmicism while remaining a distinct Nereis idea. 
 
 ### Important rule
 
@@ -642,9 +724,9 @@ The confirmed direction is:
 
 It is an actual bodily union between Hero and Mite and it functions as the vessel-opening mechanism.
 
-This gives the story a strong mythic basis: in Genesis, the union of man and woman is described as becoming "one flesh." Nereis can transform that familiar phrase into literal cosmic-horror mechanics. citeturn507472search0turn507472search3
+This gives the story a strong mythic basis: in Genesis, the union of man and woman is described as becoming "one flesh." Nereis can transform that familiar phrase into literal cosmic-horror mechanics. 
 
-The broader mythological idea of sacred union also exists in the concept of *hieros gamos*, where divine-human or divine-divine union can symbolically or ritually connect earthly and divine power. citeturn384156search0turn384156search2
+The broader mythological idea of sacred union also exists in the concept of *hieros gamos*, where divine-human or divine-divine union can symbolically or ritually connect earthly and divine power. 
 
 **Nereis should not copy those myths.**
 
