@@ -137,9 +137,9 @@ func _perform_attack() -> void:
     stamina_regen_delay = STAMINA_REGEN_DELAY
     attack_time = ATTACK_DURATION
     attack_hitbox.position.x = facing * 54.0
-    attack_hitbox.activate(34, 0.12)
+    attack_hitbox.activate(WorldState.hero_attack_damage, 0.12)
     _set_state(CombatState.ATTACK)
-    _log("COMBAT", "Hero attack started; hitbox active")
+    _log("COMBAT", "Hero attack started; damage=%d hitbox active" % WorldState.hero_attack_damage")
 
 func _start_dodge() -> void:
     if stamina < DODGE_STAMINA_COST:
