@@ -7,6 +7,7 @@ const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const BOSS_GATE_SCRIPT = preload("res://scripts/world/boss_gate.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
+const COMBAT_AUDIO_SCRIPT = preload("res://scripts/audio/combat_audio.gd")
 
 const LEVEL_WIDTH := 2400.0
 const FLOOR_Y := 540.0
@@ -19,6 +20,7 @@ var checkpoint: Area2D
 var boss_checkpoint: Area2D
 var camera: Camera2D
 var hud: CanvasLayer
+var combat_audio: Node
 
 var enemies_defeated := 0
 var combat_started := false
@@ -36,6 +38,7 @@ func _ready() -> void:
     _spawn_small_enemies()
     _spawn_boss_gate()
     _spawn_hud()
+    _spawn_audio()
 
     combat_started = true
     print("[NEREIS][DEMO] Core Combat Demo started")
@@ -51,6 +54,8 @@ func _spawn_hero() -> void:
     _add_character_collision(hero, 18.0, 48.0)
     add_child(hero)
     hero.defeated.connect(_on_hero_defeated)
+    hero.attack_started.connect(_on_hero_attack_started)
+    hero.dodge_started.connect(_on_hero_dodge_started)
     hero.attack_landed.connect(_on_hero_attack_landed)
 
     camera = Camera2D.new()
@@ -147,6 +152,12 @@ func _spawn_boss_checkpoint() -> void:
     add_child(boss_checkpoint)
     print("[NEREIS][DEMO] Boss checkpoint activated at x=1880")
 
+func _spawn_audio() -> void:
+    combat_audio = Node.new()
+    combat_audio.name = "CombatAudio"
+    combat_audio.set_script(COMBAT_AUDIO_SCRIPT)
+    add_child(combat_audio)
+
 func _spawn_hud() -> void:
     hud = CanvasLayer.new()
     hud.set_script(HUD_SCRIPT)
@@ -171,20 +182,35 @@ func _open_boss_gate() -> void:
 
     boss_gate.open()
     _spawn_boss_checkpoint()
+    _play_sfx("gate")
     print("[NEREIS][DEMO] All small enemies defeated; Boss gate opened")
     if hud:
         hud.set_combat_demo_progress(enemies_defeated, true, false)
     _spawn_boss()
 
+func _play_sfx(id: String) -> void:
+    if combat_audio and combat_audio.has_method("play_sfx"):
+        combat_audio.play_sfx(id)
+
+func _on_hero_attack_started(_combo: int) -> void:
+    _play_sfx("attack")
+
+func _on_hero_dodge_started() -> void:
+    _play_sfx("dodge")
+
 func _on_hero_attack_landed(damage: int, _target: Node) -> void:
+    _play_sfx("hit")
     if hud:
         hud.show_hit_confirm(damage)
 
 func _on_boss_phase_changed(phase: int) -> void:
-    if hud and phase == 2:
-        hud.show_phase_two()
+    if phase == 2:
+        _play_sfx("phase")
+        if hud:
+            hud.show_phase_two()
 
 func _on_hero_defeated() -> void:
+    _play_sfx("death")
     if hud:
         hud.show_death_feedback()
         hud.set_combat_demo_progress(0, boss_active, false)
@@ -201,6 +227,7 @@ func _on_hero_defeated() -> void:
         call_deferred("_spawn_small_enemies")
 
 func _on_boss_defeated() -> void:
+    _play_sfx("boss_death")
     demo_complete = true
     if hud:
         hud.set_combat_demo_progress(enemies_defeated, true, true)
@@ -269,7 +296,7 @@ func _draw() -> void:
 func _draw_backdrop() -> void:
     # Far silhouette layer.
     for x in range(90, int(LEVEL_WIDTH), 300):
-        var h: float = 120.0 + float((x / 300) as int % 3) * 45.0
+        var h: float = 120.0 + float((int(x / 300.0)) % 3) * 45.0
         draw_colored_polygon(PackedVector2Array([
             Vector2(x - 110, FLOOR_Y - 10),
             Vector2(x - 80, FLOOR_Y - h),
