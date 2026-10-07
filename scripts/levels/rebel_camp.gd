@@ -125,6 +125,8 @@ func _on_npc_interacted(npc: Node) -> void:
     narrative.show_message(npc.display_name, npc.dialogue, 7.0)
 
 func _on_clue_examined(clue: Node) -> void:
+    if clue.clue_id == "rebel_dead_letter":
+        WorldState.record_hidden_artifact_source("rebel_dead_letter")
     narrative.show_message(clue.display_name, clue.description, 7.0)
 
 func _on_exit_reached() -> void:
