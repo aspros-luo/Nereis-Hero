@@ -83,6 +83,8 @@ The debug HUD shows the internal artifact count.
 
 From the Village Hub:
 
+- **F4** → Ancient Research Ward
+- **F5** → Village Defense Theater
 - **F6** → Mite Resonance Theater
 - **F7** → Church Final Boss Theater
 - **F8** → 烈火天罚 / Ending Fire Theater
