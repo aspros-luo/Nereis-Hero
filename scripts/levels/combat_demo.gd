@@ -221,7 +221,7 @@ func _draw() -> void:
 
 func _draw_backdrop() -> void:
     for x in range(100, int(LEVEL_WIDTH), 260):
-        draw_circle(Vector2(x, 250 + ((x / 260) as int % 2) * 40), 120, Color("#18151d"))
+        draw_circle(Vector2(x, 250 + (int(x / 260.0) % 2) * 40), 120, Color("#18151d"))
 
     for x in range(120, int(LEVEL_WIDTH), 360):
         draw_line(Vector2(x, FLOOR_Y), Vector2(x + 70, 390), Color("#2c2530"), 8.0)
