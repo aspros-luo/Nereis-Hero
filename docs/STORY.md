@@ -170,3 +170,36 @@ Still to be designed deliberately:
 - exact way Mite begins hearing / feeling the Outer God's influence
 - final city destruction sequence
 - exact true-faith vs ancient-god power relationship
+
+
+## Production clarification — 烈火天罚 final set-piece
+
+The 100-cultist section is intentionally a spectacle rather than a lore quest.
+
+- Target scale: 100 cultists for now.
+- They can later be used for an opt-in supporter cameo system if the project is crowdfunded.
+- Supporter display names should be used with consent; the game should not be designed as a real-person harassment feature.
+
+The contrast is deliberate:
+
+**a hundred disposable enemies vs. one irreplaceable Mite.**
+
+After the cultist section, Mite is not a conventional boss.
+
+The intended final beat is:
+
+1. Hero reaches Mite.
+2. The normal boss presentation drops away.
+3. Mite is effectively one decisive action from death.
+4. The player may wait.
+5. A roughly 60-second idle performance window gives the scene room to breathe.
+6. If the player refuses to act long enough, Mite eventually moves on her own and throws herself toward Hero's weapon.
+7. The final death can also resolve through the player's earlier attack, without a repetitive three-hit sequence.
+8. Her last action should read as both the consequence of Outer-God control and a final act that helps Hero end what she has become.
+9. Only after Mite's death does the city-destruction sequence begin.
+
+The scene should favor silence, ash, fire, damaged lullaby motifs, and minimal dialogue.
+
+The player should feel:
+
+**I did not defeat Mite. I witnessed the end of Mite.**
