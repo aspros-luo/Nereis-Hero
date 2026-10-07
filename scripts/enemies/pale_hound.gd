@@ -20,6 +20,7 @@ var facing := 1.0
 var hit_flash := 0.0
 var stun_time := 0.0
 var attack_hitbox: Area2D
+var animation_time := 0.0
 signal defeated
 
 func _ready() -> void:
@@ -39,6 +40,10 @@ func _setup_combat_components() -> void:
     hurtbox.set_script(HURTBOX_SCRIPT)
     add_child(hurtbox)
     hurtbox.setup(self, Vector2(52, 48), Vector2(0, -24))
+
+func _process(delta: float) -> void:
+    animation_time += delta
+    queue_redraw()
 
 func _physics_process(delta: float) -> void:
     attack_timer = max(0.0, attack_timer - delta)
@@ -100,12 +105,20 @@ func receive_damage(amount: int, source: Node = null) -> void:
     var source_name: String = source.name if source else "Unknown"
     _log("COMBAT", "%s -> Pale Hound damage=%d hp=%d" % [source_name, amount, health])
     if health <= 0:
+        _spawn_death_burst()
         _log("ENEMY", "Pale Hound defeated")
         defeated.emit()
         queue_free()
 
 func take_damage(amount: int) -> void:
     receive_damage(amount, null)
+
+func _spawn_death_burst() -> void:
+    var effect := Node2D.new()
+    effect.set_script("res://scripts/effects/death_burst.gd")
+    effect.global_position = global_position + Vector2(0, -18)
+    get_parent().add_child(effect)
+    effect.setup(16.0)
 
 func _spawn_hit_spark() -> void:
     var effect := Node2D.new()
@@ -117,13 +130,17 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    var c := Color("#bd8e86") if hit_flash > 0.0 else Color("#41383f")
-    _draw_body_ellipse(Vector2.ZERO, Vector2(32, 18), c)
-    draw_circle(Vector2(facing * 26.0, -24), 11.0, c)
-    draw_line(Vector2(-18, -10), Vector2(-34, 14), c, 6.0)
-    draw_line(Vector2(18, -10), Vector2(34, 14), c, 6.0)
-    draw_line(Vector2(-8, -6), Vector2(-18, 18), c, 6.0)
-    draw_line(Vector2(8, -6), Vector2(18, 18), c, 6.0)
+    var crouch: float = 3.0 if pounce_timer > 0.0 else 0.0
+    var run: float = sin(animation_time * 15.0) * 3.0 if abs(velocity.x) > 20.0 else 0.0
+    var c := Color("#d0a09b") if hit_flash > 0.0 else Color("#343039")
+    var mane := Color("#201c24")
+    _draw_body_ellipse(Vector2(run * 0.3, crouch), Vector2(32, 18 + crouch), c)
+    draw_circle(Vector2(facing * 27.0 + run, -25 - crouch), 11.0, mane)
+    draw_circle(Vector2(facing * 30.0 + run, -27 - crouch), 4.0, Color("#d36a67"))
+    draw_line(Vector2(-18, -9 + crouch), Vector2(-34, 14 + run), c, 6.0)
+    draw_line(Vector2(18, -9 + crouch), Vector2(34, 14 - run), c, 6.0)
+    draw_line(Vector2(-8, -7 + crouch), Vector2(-18, 18 - run), c, 6.0)
+    draw_line(Vector2(8, -7 + crouch), Vector2(18, 18 + run), c, 6.0)
     if attack_windup > 0.0:
         draw_line(
             Vector2(facing * 24.0, -32),
