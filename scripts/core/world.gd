@@ -137,10 +137,15 @@ func _on_cultist_defeated() -> void:
         narrative.show_message("THE PATH OPENS", "The cultist falls. Somewhere beyond the iron gate, something hears the silence.")
     queue_redraw()
 
+func _open_first_choice() -> void:
+    if narrative and WorldState.boss_defeated and not WorldState.first_choice_made:
+        narrative.begin_first_choice()
+
 func _on_boss_defeated() -> void:
     _log("BOSS", "Ashen Knight encounter cleared")
     if narrative:
         narrative.show_message("THE ASHEN KNIGHT", "The armor falls without a body inside.\n\nFor a moment, the Hero remembers kneeling before the church. Then the memory tears itself away.")
+        get_tree().create_timer(2.0).timeout.connect(_open_first_choice)
     queue_redraw()
 
 func _on_old_hunter_interacted() -> void:
