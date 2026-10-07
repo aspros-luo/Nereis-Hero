@@ -225,6 +225,10 @@ func _unhandled_input(event: InputEvent) -> void:
             print("[NEREIS][DEBUG] Opening director ending theater")
             get_tree().change_scene_to_file("res://scenes/ending_fire_demo.tscn")
             get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_F7:
+            print("[NEREIS][DEBUG] Opening church final boss theater")
+            get_tree().change_scene_to_file("res://scenes/church_final_demo.tscn")
+            get_viewport().set_input_as_handled()
         elif event.keycode == KEY_F9:
             WorldState.delete_save()
             print("[NEREIS][DEBUG] Village run reset")
