@@ -395,3 +395,38 @@ The project is ready for interactive acceptance in Godot.
 The only remaining gate is real runtime execution; no runtime pass is claimed until the project has actually been launched and the acceptance sequence above has been performed.
 
 Once the local runtime checklist passes, this milestone can be considered fully accepted and the next development stage can begin.
+
+## 11. First real Godot 4.6.1 launch findings
+
+The first local launch exposed issues that static repository checks did not catch:
+
+1. project.godot had the [application] and [autoload] sections ordered incorrectly. Godot therefore interpreted application settings such as the project name and feature array as autoload entries.
+2. Godot 4.6.1 treated several Variant-inference warnings as errors because warnings are configured to be treated as errors in this project/editor context.
+3. The Pale Hound used a custom draw_ellipse() method that conflicts with CanvasItem's native method signature.
+4. Several retained scripts used untyped get_node_or_null() results.
+
+These issues have now been fixed on the development branch. The corrected project.godot uses a proper [application] section followed by [autoload], all currently exposed Variant inference sites use explicit types / clampf / clampi, the Pale Hound helper has been renamed, and retained NPC/world scripts have explicit Node2D typing.
+
+The repository has been rechecked after these fixes. Core and retained scripts checked in this pass have balanced syntax structure, no duplicate function definitions, and no remaining untyped get_node_or_null patterns or native draw_ellipse override.
+
+## 12. Updated local verification command
+
+After pulling the latest development branch, close and reopen Godot so the project configuration is reloaded:
+
+    cd Nereis-Hero
+    git checkout development
+    git pull --ff-only origin development
+
+Optional clean editor cache reset if Godot still displays errors from the old project configuration:
+
+    rm -rf .godot
+
+Then start the editor again:
+
+    /Applications/Godot.app/Contents/MacOS/Godot --editor --path "$PWD"
+
+Or start the project directly:
+
+    /Applications/Godot.app/Contents/MacOS/Godot --path "$PWD"
+
+The previous errors involving Resource file not found for the project name, the 4.6/GL Compatibility array being treated as an autoload, Variant inference, and the Pale Hound draw_ellipse override should no longer appear after the updated branch is pulled.
