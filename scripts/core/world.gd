@@ -26,7 +26,7 @@ var hud: CanvasLayer
 func _ready() -> void:
     if WorldState.current_location != "slice" or (WorldState.slice_complete and WorldState.selected_route != ""):
         print("[NEREIS][ROUTE] Restoring saved progress route=%s complete=%s" % [WorldState.selected_route, WorldState.route_complete])
-        get_tree().change_scene_to_file(WorldState.get_resume_scene_path())
+        SceneTransition.fade_to_scene(WorldState.get_resume_scene_path())
         return
 
     _log("BOOT", "World initialization started")
@@ -218,7 +218,7 @@ func _enter_selected_route() -> void:
     if WorldState.selected_route == "":
         return
     print("[NEREIS][ROUTE] Leaving Vertical Slice 001 -> %s" % WorldState.selected_route)
-    get_tree().change_scene_to_file(WorldState.get_route_scene_path())
+    SceneTransition.fade_to_scene(WorldState.get_route_scene_path())
 
 func _open_first_choice() -> void:
     if narrative and WorldState.boss_defeated and not WorldState.first_choice_made:
