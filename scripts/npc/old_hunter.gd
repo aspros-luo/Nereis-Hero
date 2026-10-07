@@ -26,8 +26,8 @@ func _log(category: String, message: String) -> void:
 
 func _draw() -> void:
     draw_circle(Vector2(0, -48), 17, Color("#8d7566"))
-    draw_rect(Rect2(-19, -30, 38, 52), Color("#4b4640"))
-    draw_line(Vector2(-12, -4), Vector2(30, 22), Color("#74695f"), 5.0)
+    draw_rect(Rect2(-19, -30, 38, 30), Color("#4b4640"))
+    draw_line(Vector2(-12, -4), Vector2(30, 8), Color("#74695f"), 5.0)
     draw_string(ThemeDB.fallback_font, Vector2(-58, -76), "OLD HUNTER", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color("#b7a09b"))
     if hero_nearby:
         draw_string(ThemeDB.fallback_font, Vector2(-72, 38), "E  Speak", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
