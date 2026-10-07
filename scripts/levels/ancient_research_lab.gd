@@ -65,11 +65,7 @@ func _on_husk_defeated() -> void:
     WorldState.record_hidden_artifact_source("ancient_lab")
     narrative.show_message(
         "THE VESSEL",
-        "The thing collapses.
-
-Beneath its ribs, a metal hook remains embedded in bone.
-
-The hook is shaped for something much larger than the body it came from.",
+        "The thing collapses.\n\nBeneath its ribs, a metal hook remains embedded in bone.\n\nThe hook is shaped for something much larger than the body it came from.",
         6.0
     )
 
@@ -80,9 +76,7 @@ func _spawn_clues() -> void:
     fluid.clue_id = "ancient_fluid_vial"
     fluid.humanity_delta = -2
     fluid.display_name = "BLACK VIAL"
-    fluid.description = "The liquid is not quite black.
-\nWhen light crosses it, the color inside becomes red.
-\nThe label contains only one word: 'SAINT.'"
+    fluid.description = "The liquid is not quite black.\n\nWhen light crosses it, the color inside becomes red.\n\nThe label contains only one word: 'SAINT.'"
     add_child(fluid)
     fluid.examined.connect(_on_clue_examined.bind(fluid))
 
