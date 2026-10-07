@@ -13,6 +13,8 @@ var church_alignment := 0
 var lullaby_resonance := 0
 var first_choice_made := false
 var slice_complete := false
+var weapon_level := 1
+var hero_attack_damage := 34
 var input_locked := false
 
 func _ready() -> void:
@@ -59,6 +61,15 @@ func mark_boss_defeated() -> void:
     print("[NEREIS][BOSS] Ashen Knight victory recorded in WorldState")
     save_game()
 
+func upgrade_weapon() -> bool:
+    if weapon_level >= 2:
+        return false
+    weapon_level = 2
+    hero_attack_damage = 44
+    print("[NEREIS][COMBAT] Weapon upgraded; level=%d damage=%d" % [weapon_level, hero_attack_damage])
+    save_game()
+    return true
+
 func mark_slice_complete() -> void:
     if slice_complete:
         return
@@ -81,7 +92,9 @@ func save_game() -> void:
         "church_alignment": church_alignment,
         "lullaby_resonance": lullaby_resonance,
         "first_choice_made": first_choice_made,
-        "slice_complete": slice_complete
+        "slice_complete": slice_complete,
+        "weapon_level": weapon_level,
+        "hero_attack_damage": hero_attack_damage
     }
 
     var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -123,6 +136,8 @@ func load_game() -> void:
     lullaby_resonance = int(parsed.get("lullaby_resonance", 0))
     first_choice_made = bool(parsed.get("first_choice_made", false))
     slice_complete = bool(parsed.get("slice_complete", false))
+    weapon_level = int(parsed.get("weapon_level", 1))
+    hero_attack_damage = int(parsed.get("hero_attack_damage", 34))
 
     print("[NEREIS][SAVE] Game loaded; memory=%d boss_defeated=%s choice=%s" % [hero_memory, boss_defeated, first_choice_made])
 
@@ -144,4 +159,6 @@ func reset() -> void:
     lullaby_resonance = 0
     first_choice_made = false
     slice_complete = false
+    weapon_level = 1
+    hero_attack_damage = 34
     input_locked = false
