@@ -53,13 +53,13 @@ func _spawn_npc() -> void:
         npc.npc_id = "tavern_keeper"
         npc.display_name = "TAVERN KEEPER"
         if WorldState.selected_route == "lullaby":
-            npc.dialogue = "The keeper watches you enter.\\n\\n\"You heard the song too. Don't pretend you didn't.\\""
+            npc.dialogue = "The keeper watches you enter.\n\n\"You heard the song too. Don't pretend you didn't.\""
         else:
-            npc.dialogue = "The keeper notices the church seal and stops polishing the glass.\\n\\n\"We don't serve church messengers here. Not after what happened last winter.\\""
+            npc.dialogue = "The keeper notices the church seal and stops polishing the glass.\n\n\"We don't serve church messengers here. Not after what happened last winter.\""
     else:
         npc.npc_id = "church_confessor"
         npc.display_name = "CHURCH CONFESSOR"
-        npc.dialogue = "The confessor recognizes the Hero before the Hero recognizes him.\\n\\n\"Your confession was never finished.\\""
+        npc.dialogue = "The confessor recognizes the Hero before the Hero recognizes him.\n\n\"Your confession was never finished.\""
 
     add_child(npc)
     npc.interacted.connect(_on_npc_interacted.bind(npc))
@@ -92,9 +92,9 @@ func _spawn_ui() -> void:
 
 func _show_intro() -> void:
     if location_id == "tavern":
-        narrative.show_message("THE TAVERN", "The room is warmer than the road.\\n\\nSomewhere behind the bar, a glass is placed down by a hand you cannot see.", 6.0)
+        narrative.show_message("THE TAVERN", "The room is warmer than the road.\n\nSomewhere behind the bar, a glass is placed down by a hand you cannot see.", 6.0)
     else:
-        narrative.show_message("THE CHURCH", "Incense clings to the stone.\\n\\nThe Hero's footsteps are familiar to the room.", 6.0)
+        narrative.show_message("THE CHURCH", "Incense clings to the stone.\n\nThe Hero's footsteps are familiar to the room.", 6.0)
 
 func _on_npc_interacted(npc: Node) -> void:
     narrative.show_message(npc.display_name, npc.dialogue, 6.0)
