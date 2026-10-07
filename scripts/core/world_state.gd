@@ -26,6 +26,16 @@ var hero_attack_damage := 34
 var input_locked := false
 var hitstop_serial := 0
 
+# Narrative state is stored as facts/flags, not as a visible romance meter.
+var mite_first_meeting := false
+var mite_interactions_seen: Array[String] = []
+var mite_connection_missed := false
+var ancient_residue_awakened := false
+var outer_god_resonance := false
+var physical_union_complete := false
+var hidden_artifact_pieces := 0
+var ending_route := ""
+
 func _ready() -> void:
     load_game()
 
@@ -100,6 +110,58 @@ func trigger_hitstop(duration: float = 0.045, slow_scale: float = 0.08) -> void:
             Engine.time_scale = 1.0
     )
 
+func record_mite_interaction(interaction_id: String) -> bool:
+    if interaction_id in mite_interactions_seen:
+        return false
+    mite_interactions_seen.append(interaction_id)
+    if interaction_id == "mite_first_meeting":
+        mite_first_meeting = true
+    print("[NEREIS][RELATIONSHIP] Mite interaction recorded id=%s total=%d" % [interaction_id, mite_interactions_seen.size()])
+    save_game()
+    return true
+
+func has_mite_interaction(interaction_id: String) -> bool:
+    return interaction_id in mite_interactions_seen
+
+func mark_mite_connection_missed() -> void:
+    if mite_connection_missed:
+        return
+    mite_connection_missed = true
+    print("[NEREIS][RELATIONSHIP] Mite connection window marked missed")
+    save_game()
+
+func mark_ancient_residue_awakened() -> void:
+    if ancient_residue_awakened:
+        return
+    ancient_residue_awakened = true
+    print("[NEREIS][STORY] Ancient-god residue awakened")
+    save_game()
+
+func mark_outer_god_resonance() -> void:
+    if outer_god_resonance:
+        return
+    outer_god_resonance = true
+    print("[NEREIS][STORY] Outer-God resonance established")
+    save_game()
+
+func mark_physical_union_complete() -> void:
+    if physical_union_complete:
+        return
+    physical_union_complete = true
+    print("[NEREIS][STORY] Physical union state recorded")
+    save_game()
+
+func add_hidden_artifact_piece() -> int:
+    hidden_artifact_pieces = mini(hidden_artifact_pieces + 1, 4)
+    print("[NEREIS][SECRET] Hidden artifact pieces=%d/4" % hidden_artifact_pieces)
+    save_game()
+    return hidden_artifact_pieces
+
+func set_ending_route(route_id: String) -> void:
+    ending_route = route_id
+    print("[NEREIS][ENDING] Route=%s" % ending_route)
+    save_game()
+
 func save_game() -> void:
     var data := {
         "hero_memory": hero_memory,
@@ -125,7 +187,15 @@ func save_game() -> void:
         "world_clues_seen": world_clues_seen,
         "graveyard_cleared": graveyard_cleared,
         "weapon_level": weapon_level,
-        "hero_attack_damage": hero_attack_damage
+        "hero_attack_damage": hero_attack_damage,
+        "mite_first_meeting": mite_first_meeting,
+        "mite_interactions_seen": mite_interactions_seen,
+        "mite_connection_missed": mite_connection_missed,
+        "ancient_residue_awakened": ancient_residue_awakened,
+        "outer_god_resonance": outer_god_resonance,
+        "physical_union_complete": physical_union_complete,
+        "hidden_artifact_pieces": hidden_artifact_pieces,
+        "ending_route": ending_route
     }
 
     var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -192,6 +262,18 @@ func load_game() -> void:
 
     weapon_level = int(parsed.get("weapon_level", 1))
     hero_attack_damage = int(parsed.get("hero_attack_damage", 34))
+    mite_first_meeting = bool(parsed.get("mite_first_meeting", false))
+    mite_interactions_seen.clear()
+    var saved_mite_interactions = parsed.get("mite_interactions_seen", [])
+    if saved_mite_interactions is Array:
+        for interaction_id in saved_mite_interactions:
+            mite_interactions_seen.append(str(interaction_id))
+    mite_connection_missed = bool(parsed.get("mite_connection_missed", false))
+    ancient_residue_awakened = bool(parsed.get("ancient_residue_awakened", false))
+    outer_god_resonance = bool(parsed.get("outer_god_resonance", false))
+    physical_union_complete = bool(parsed.get("physical_union_complete", false))
+    hidden_artifact_pieces = clampi(int(parsed.get("hidden_artifact_pieces", 0)), 0, 4)
+    ending_route = str(parsed.get("ending_route", ""))
 
     print("[NEREIS][SAVE] Game loaded; memory=%d boss_defeated=%s choice=%s" % [hero_memory, boss_defeated, first_choice_made])
 
@@ -223,6 +305,14 @@ func reset() -> void:
     graveyard_cleared = false
     weapon_level = 1
     hero_attack_damage = 34
+    mite_first_meeting = false
+    mite_interactions_seen.clear()
+    mite_connection_missed = false
+    ancient_residue_awakened = false
+    outer_god_resonance = false
+    physical_union_complete = false
+    hidden_artifact_pieces = 0
+    ending_route = ""
     input_locked = false
     hitstop_serial += 1
     Engine.time_scale = 1.0
