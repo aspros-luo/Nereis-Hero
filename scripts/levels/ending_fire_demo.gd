@@ -5,6 +5,7 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const FINAL_CULTIST_SCRIPT = preload("res://scripts/enemies/final_cultist.gd")
 const FINAL_MITE_SCRIPT = preload("res://scripts/npc/final_mite.gd")
+const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 
 const CULTIST_COUNT := 100
 const FLOOR_Y := 540.0
@@ -22,6 +23,7 @@ var ending_started := false
 var detonation_started := false
 var elapsed := 0.0
 var fire_intensity := 0.0
+var narrative_audio: Node
 
 func _ready() -> void:
     # Director test scene only. Do not save these forced ending facts.
@@ -36,6 +38,7 @@ func _ready() -> void:
     _spawn_hero()
     _spawn_hud()
     _spawn_narrative()
+    _spawn_narrative_audio()
     _spawn_cultist_swarm()
     get_tree().create_timer(0.8).timeout.connect(_show_intro)
     queue_redraw()
@@ -80,6 +83,11 @@ func _spawn_narrative() -> void:
     narrative.set_script(NARRATIVE_SCRIPT)
     add_child(narrative)
 
+func _spawn_narrative_audio() -> void:
+    narrative_audio = Node.new()
+    narrative_audio.set_script(NARRATIVE_AUDIO_SCRIPT)
+    add_child(narrative_audio)
+
 func _spawn_cultist_swarm() -> void:
     for i in range(CULTIST_COUNT):
         var cultist := CharacterBody2D.new()
@@ -114,6 +122,8 @@ func _start_mite_phase() -> void:
     mite.name = "Mite"
     add_child(mite)
     mite.setup(hero, self)
+    if narrative_audio and narrative_audio.has_method("play_corrupted_lullaby"):
+        narrative_audio.play_corrupted_lullaby()
 
     hero.global_position = Vector2(4100, FLOOR_Y)
     narrative.show_message(
@@ -158,6 +168,8 @@ func _begin_detonation() -> void:
     if detonation_started:
         return
     detonation_started = true
+    if narrative_audio and narrative_audio.has_method("play_corrupted_lullaby"):
+        narrative_audio.play_corrupted_lullaby()
     WorldState.input_locked = true
 
     var flash := ColorRect.new()
