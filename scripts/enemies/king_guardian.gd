@@ -1,0 +1,118 @@
+extends CharacterBody2D
+
+const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
+const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
+const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
+const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
+
+signal defeated
+signal attack_telegraphed
+signal phase_changed(phase: int)
+
+const MAX_HEALTH := 360
+const PHASE_TWO_THRESHOLD := 180
+
+var health := MAX_HEALTH
+var phase := 1
+var cooldown := 0.0
+var windup := 0.0
+var released := false
+var facing := -1.0
+var hit_flash := 0.0
+var stun_time := 0.0
+var animation_time := 0.0
+
+func _ready() -> void:
+    var hitbox := Area2D.new()
+    hitbox.set_script(HITBOX_SCRIPT)
+    add_child(hitbox)
+    hitbox.setup(self, Vector2(128, 76), Vector2(-70, -36))
+    set_meta("attack_hitbox", hitbox)
+
+    var hurtbox := Area2D.new()
+    hurtbox.set_script(HURTBOX_SCRIPT)
+    add_child(hurtbox)
+    hurtbox.setup(self, Vector2(50, 96), Vector2(0, -46))
+    queue_redraw()
+
+func _process(delta: float) -> void:
+    animation_time += delta
+    cooldown = maxf(0.0, cooldown - delta)
+    windup = maxf(0.0, windup - delta)
+    hit_flash = maxf(0.0, hit_flash - delta)
+    stun_time = maxf(0.0, stun_time - delta)
+    queue_redraw()
+
+func _physics_process(delta: float) -> void:
+    if stun_time > 0.0:
+        velocity.x = move_toward(velocity.x, 0.0, 1200.0 * delta)
+        move_and_slide()
+        return
+
+    var hero := get_node_or_null("../Hero") as Node2D
+    if hero:
+        var dx := hero.global_position.x - global_position.x
+        if not is_zero_approx(dx):
+            facing = sign(dx)
+
+        if windup > 0.0:
+            velocity.x = 0.0
+            if windup <= 0.08 and not released:
+                var hitbox: Area2D = get_meta("attack_hitbox")
+                hitbox.position.x = facing * (70.0 if phase == 1 else 92.0)
+                hitbox.activate(28 if phase == 1 else 40, 0.15)
+                released = true
+        elif absf(dx) > (150.0 if phase == 1 else 170.0):
+            velocity.x = facing * (54.0 if phase == 1 else 84.0)
+        elif cooldown <= 0.0:
+            velocity.x = 0.0
+            windup = 0.48 if phase == 1 else 0.34
+            cooldown = 1.7 if phase == 1 else 1.08
+            released = false
+            attack_telegraphed.emit()
+
+    move_and_slide()
+
+func receive_damage(amount: int, _source: Node = null) -> void:
+    health = max(0, health - amount)
+    hit_flash = 0.12
+    stun_time = 0.10
+
+    var spark: Node2D = HIT_SPARK_SCRIPT.new()
+    spark.global_position = global_position + Vector2(0, -42)
+    get_parent().add_child(spark)
+
+    if health <= PHASE_TWO_THRESHOLD and phase == 1:
+        phase = 2
+        phase_changed.emit(2)
+
+    if health <= 0:
+        var burst: Node2D = DEATH_BURST_SCRIPT.new()
+        burst.global_position = global_position + Vector2(0, -44)
+        get_parent().add_child(burst)
+        burst.call("setup", 24.0)
+        defeated.emit()
+        queue_free()
+
+func take_damage(amount: int) -> void:
+    receive_damage(amount, null)
+
+func _draw() -> void:
+    var metal := Color("#b4a49b") if hit_flash <= 0.0 else Color("#e3cdc1")
+    var cloth := Color("#29242d") if phase == 1 else Color("#442f37")
+    var pulse := 1.0 + sin(animation_time * 1.5) * 0.04
+    draw_circle(Vector2(0, -72), 24.0 * pulse, Color("#211c24"))
+    draw_rect(Rect2(-31, -48, 62, 60), cloth)
+    draw_colored_polygon(
+        PackedVector2Array([
+            Vector2(-40, 10),
+            Vector2(40, 10),
+            Vector2(54, 18),
+            Vector2(-54, 18)
+        ]),
+        Color("#201b23")
+    )
+    draw_line(Vector2(facing * 24, -28), Vector2(facing * 86, 18), metal, 9.0)
+    draw_arc(Vector2(0, -72), 32.0, PI, TAU, 22, metal, 4.0)
+    draw_circle(Vector2(0, -101), 5.0, Color("#cfaa66"))
+    draw_string(ThemeDB.fallback_font, Vector2(-64, -114), "THE KING  //  PHASE %d" % phase, HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#d6c7b2"))
