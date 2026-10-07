@@ -226,3 +226,4 @@ func _draw() -> void:
         draw_string(ThemeDB.fallback_font, Vector2(950, 184), "Humanity: %d" % WorldState.hero_humanity, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
         draw_string(ThemeDB.fallback_font, Vector2(950, 208), "Boss Defeated: %s" % WorldState.boss_defeated, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
         draw_string(ThemeDB.fallback_font, Vector2(950, 232), "Slice Complete: %s" % WorldState.slice_complete, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
+        draw_string(ThemeDB.fallback_font, Vector2(950, 256), "Stamina: %d" % int(hero.get("stamina")), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
