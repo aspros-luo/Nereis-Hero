@@ -27,6 +27,8 @@ var impact_flash_time := 0.0
 
 func _ready() -> void:
     layer = 10
+    if not WorldState.hidden_resistance_awakened_event.is_connected(_on_hidden_resistance_awakened):
+        WorldState.hidden_resistance_awakened_event.connect(_on_hidden_resistance_awakened)
 
     impact_flash = ColorRect.new()
     impact_flash.position = Vector2.ZERO
@@ -176,6 +178,9 @@ func set_combat_demo_mode() -> void:
     title_label.text = "NEREIS HERO  /  CORE COMBAT"
     region_label.text = "ASHEN ROAD"
     _set_humanity_visible(false)
+
+func _on_hidden_resistance_awakened() -> void:
+    _show_banner("A WARMTH UNDER THE SKIN", 1.9)
 
 func _set_humanity_visible(value: bool) -> void:
     humanity_label.visible = value
