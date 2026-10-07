@@ -1,151 +1,156 @@
 # Nereis Hero — Story Foundation
 
-> **Canonical developer memory:** see [DEVELOPER_STORY_MEMORY.md](./DEVELOPER_STORY_MEMORY.md).
+> The detailed canonical memory is [DEVELOPER_STORY_MEMORY.md](./DEVELOPER_STORY_MEMORY.md).
 >
-> This document is the shorter story foundation. The developer memory is authoritative when details conflict.
+> This file is the shorter narrative foundation used while designing the game.
 
 ## Shared universe
 
 This game shares the world of **Nereis Lullaby / 蜜忒之歌**.
 
-The two games reveal the same world from different human perspectives:
+- **Nereis Lullaby** follows Mite/Nereis and the village from her side of the world.
+- **Nereis Hero** follows the amnesiac Kingdom knight through the Church, village, rebels and the hidden cosmic conflict.
 
-- **Nereis Lullaby** follows Mite/Nereis and the village/tavern life surrounding her.
-- **Nereis Hero** follows a Kingdom knight who escapes Church experimentation, is rescued by the village, reconstructs his lost history, and becomes emotionally attached to Mite.
+The two games overlap in songs, objects, people, memories and locations, but the player should often receive different interpretations of the same event.
 
-The two games can share songs, objects, symbols, people and events while revealing different interpretations.
+## Hero
 
-## Hero chronology
+The Hero is a Kingdom knight sent to investigate a remote village and its abnormalities.
 
 The intended chronological history is:
 
-1. The Kingdom sends the Hero to investigate a remote village and local abnormalities.
-2. The Hero is defeated by Outer-God power and cultists / influenced villagers.
-3. He accidentally discovers part of the Church's secret ancient-god research.
-4. The Church captures him because he has seen what must remain hidden.
-5. The Church experiments on / modifies him.
-6. He escapes and loses his memory.
-7. He wanders back into the village.
-8. **His first true personal meeting with Mite happens here.** Mite participates in saving him.
-9. Their relationship begins with simple curiosity and ordinary human interaction.
-10. The Church and bandits later surround / attack the village.
-11. The Hero protects the village and begins pursuing the truth.
+1. He investigates the village.
+2. He is defeated by Outer-God power and cultists / influenced villagers.
+3. He accidentally discovers part of the Church's secret research into a sleeping ancient god.
+4. The Church captures him and experiments on / modifies him.
+5. He escapes during the process and loses his memories.
+6. He wanders back to the village and is rescued.
+7. **This is his first true personal meeting with Mite.**
+8. Mite initially approaches him out of simple curiosity.
+9. Their relationship gradually becomes emotionally real.
+10. The Church and bandits later attack the village.
+11. Hero protects the village and continues toward the hidden truth.
 
-"First investigation of the village" and "first personal meeting with Mite" are different events.
-
-The player should discover this chronology out of order.
+The player should not experience this chronology directly. The story should be reconstructed through fragments.
 
 ## Mite / Nereis
 
-Mite is an **agent / proxy of an Outer God**.
+Mite is the earthly proxy / agent of an Outer God.
 
-She is intended to be a clearly adult young woman whose defining quality is genuine, uncorrupted purity.
+She is **genuinely pure and innocent** rather than pretending to be innocent.
 
-She is not pretending to be innocent.
+Her purity is not ordinary goodness. She is emotionally sincere but has not been shaped by normal human ideas of morality, shame, responsibility, death or sin.
 
-She has not been shaped by ordinary human social morality in the way the other characters have.
+This is one reason the Outer God chose her.
 
-That purity is part of why the Outer God chose her as its earthly proxy.
+She can love Hero sincerely.
 
-She can be curious, affectionate, playful, jealous or possessive without being a conventional seductress.
+She can also manipulate the village sincerely.
 
-She influences the village through desires, hope, fear, greed, dreams, treasures and spiritual / mental influence, encouraging villagers to seek a vessel and perform a summoning ritual while believing they are making their own choices.
+Those two things are not contradictions from her perspective.
 
-### Hero / Mite information asymmetry
+Hero does **not** learn her true identity during the main story.
 
-**Hero never knowingly learns Mite's true identity during the main story.**
+The player gradually learns more than Hero does.
 
-The player gradually discovers more than Hero does.
+## Church
 
-Mite's feelings for Hero are genuine.
+The ancient Kingdom originally used genuine faith power.
 
-The tragedy is that her genuine affection, her role as Outer-God proxy, and the coming apocalypse can all be true simultaneously.
+The Church became corrupted by its pursuit of power and discovered a sleeping ancient god inside the Kingdom's territory.
 
-## Church and ancient-god research
+Through secret research and substances taken from the ancient god, the Church developed a counterfeit faith-like power and became the hidden ruler of the Kingdom.
 
-The ancient Kingdom originally expanded using **true faith power**.
+The Church also performed experiments on captured people and sought compatible vessels.
 
-The Church later discovered a sleeping ancient god and secretly researched its body and power.
+Ordinary believers are not automatically evil. Many believe they are protecting civilization.
 
-The Church created a counterfeit faith-like power from this research and became the hidden ruler behind the Kingdom.
+## Village
 
-It also captured people for experiments involving ancient-god power, vessels and human compatibility.
+Mite influences villagers through desires, hope, fear, greed, dreams, wealth and spiritual / mental influence.
 
-The Church is not a one-note evil faction. Many believers sincerely believe they are protecting the Kingdom.
+Villagers gradually search for a vessel and perform a summoning ritual.
 
-## The three endings
+Many believe they are choosing for themselves.
 
-There is no clean happy ending.
-
-### 凡人之墓
-
-The natural ending for roughly 70% of normal players.
-
-A player who follows the visible conflict without deeply investigating hidden lore, optional content, obscure items and the Church / Outer-God truth helps the rebel/restoration forces defeat the Church.
-
-The Kingdom is restored.
-
-But the new rulers gradually become another corrupt version of the same system.
-
-The cycle continues.
-
-Theme: **human beings remain mortal and repeat the same failures.**
-
-### 永恒乐园
-
-The Hero is seduced by Mite and **physically joins with her**.
-
-The union is not merely romantic. It is the vessel-opening mechanism.
-
-Hero becomes the Outer God's vessel.
-
-The world enters an eternal dream / paradise in which individual separation and ordinary human suffering disappear.
-
-The paradise should look beautiful.
-
-The horror is that humanity's individuality and freedom are also being surrendered.
-
-### 烈火天罚
-
-The Hero also physically joins with Mite.
-
-However, the player has investigated several unrelated hidden side stories and assembled a multi-part artifact that preserves enough of Hero's individuality to resist complete submission.
-
-The final conflict reaches the Church's highest human authority.
-
-Hero chooses annihilation rather than surrender.
-
-The ending is fire, explosion and mutual destruction.
-
-He does not save the world in a conventional heroic sense.
-
-He destroys the path that would allow the Outer God to complete its descent.
+The village is therefore neither completely innocent nor simply evil.
 
 ## Hero × Mite
 
-The relationship is a central emotional engine.
+The relationship is one of the central emotional engines of the game.
 
-The intended combination is:
+It should combine:
 
-**love + innocence + manipulation + memory + dependency + cosmic horror**
+**love + innocence + memory + manipulation + dependency + cosmic horror**
 
-The player should eventually be forced to reconcile two facts:
+The romance should never become a conventional dating route.
+
+The player should eventually have to face the contradiction:
 
 > The girl who saved Hero genuinely loves him.
+>
+> The same girl is connected to the world's apocalypse.
 
-and
+## Physical union
 
-> The same girl is the earthly proxy of the force that can destroy the human world.
+The final union of Hero and Mite is **physical**.
 
-The final emotional conflict is not "good versus evil".
+It is not merely a romantic metaphor.
 
-It is closer to:
+Their bodily union is the mechanism by which Hero becomes a viable vessel through which the Outer God can enter / manifest.
 
-**love versus humanity.**
+This supports two different outcomes:
+
+- **永恒乐园:** Hero is completely absorbed / overwritten and the Outer God completes its descent.
+- **烈火天罚:** Hero retains enough of his individuality to reject surrender and destroy the path to descent.
+
+## Three endings
+
+### 凡人之墓
+
+The expected ending for roughly 70% of normal players.
+
+The player follows the visible conflict, joins the restoration / rebel effort, and helps defeat the Church without discovering most of the hidden cosmic truth.
+
+The rebels restore the Kingdom.
+
+Then the same political and religious corruption gradually returns.
+
+The victory is real but temporary.
+
+**Theme:** humanity remains mortal and repeats itself.
+
+### 永恒乐园
+
+Hero completely accepts Mite and physically joins with her.
+
+He becomes the Outer God's vessel.
+
+The world is transformed into an eternal dream / paradise.
+
+There is no ordinary death or loneliness, but individuality and human freedom disappear.
+
+**Theme:** escape from suffering by surrendering the self.
+
+### 烈火天罚
+
+Hero also joins with Mite, but the player has explored several hidden side stories and assembled a multi-part artifact.
+
+The artifact preserves enough of Hero's individuality for him to resist total submission.
+
+The exact four pieces are not designed yet.
+
+Hero confronts the final human power of the Church / Kingdom.
+
+The ending is fire, explosion and annihilation.
+
+Hero and Mite may die together rather than allow the Outer God to complete its descent.
+
+**Theme:** knowledge does not guarantee salvation; it only gives a human being enough freedom to choose the final act.
 
 ## Narrative style
 
-The target feeling is inspired by:
+References:
 
 - Dark Souls
 - Bloodborne
@@ -155,36 +160,35 @@ The target feeling is inspired by:
 - Biblical Eden imagery
 - Lovecraftian cosmic horror
 
-These are reference materials, not canon to be copied.
+These are references, not canon to copy.
 
-Use:
+The game must favor:
 
 - item descriptions as evidence
-- NPCs as biased interpreters
-- environmental storytelling
-- contradictory testimony
-- incomplete memories
-- recurring songs and symbols
-- hidden side stories
-- dramatic irony between player knowledge and Hero knowledge
+- environment as narrative
+- NPCs as biased witnesses
+- contradictory records
+- incomplete / manipulated memories
+- recurring symbols
+- player-built theories
+- emotional subtext
 
-Avoid:
+Avoid encyclopedia dialogue.
 
-- encyclopedia-style exposition
-- "good route / evil route" morality
-- explicit early reveal of Mite's identity
-- turning the Hero/Mite relationship into a conventional dating system
+Do not make the Hero suddenly understand Mite's identity just because the player does.
 
-## Narrative boundary
+## Current unresolved story decisions
 
-The following still require story design before hard-coding:
+These still require deliberate design before implementation:
 
-- exact Hero/Mite relationship history after the rescue
-- exact physical-union sequence and consequences
-- exact four side stories and four artifact pieces for 烈火天罚
-- final Church/Kingdom antagonist
-- exact Outer God identity and curiosity
-- exact eternal-dream mechanics
-- exact relationship between true faith power and ancient-god power
+- exact Hero / Mite relationship history after the rescue
+- exact physical-union sequence
+- the four side stories and four artifact pieces for 烈火天罚
+- final Church / Kingdom antagonist
+- the rebel corruption cycle
+- true vs manipulated memories
+- exact true-faith vs ancient-god power relationship
+- Outer God's exact identity and degree of awareness / curiosity
+- how much Mite herself understands about the final consequence
 
-When implementation reaches one of these questions, stop coding and return to story design first.
+When one of these decisions becomes necessary for code, stop and discuss story design first.
