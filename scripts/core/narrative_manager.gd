@@ -89,3 +89,12 @@ func _select_choice(choice: int) -> void:
         show_message("THE LULLABY", "You turn toward the song.\n\nFor one heartbeat, you remember the village before the church found you.")
     print("[NEREIS][STORY] First choice resolved=%d" % choice)
     get_viewport().set_input_as_handled()
+
+ 
+func play_weapon_upgrade() -> void:
+    if WorldState.weapon_level >= 2:
+        show_message("OLD HUNTER", "The blade is as sharp as it needs to be. For now.")
+        return
+    WorldState.upgrade_weapon()
+    show_message("A BETTER GRIP", "The old hunter corrects your stance.\n\n"You keep fighting like you remember dying."\n\nYour sword cuts deeper now.")
+    print("[NEREIS][STORY] First weapon upgrade delivered")
