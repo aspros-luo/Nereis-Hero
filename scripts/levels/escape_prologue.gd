@@ -78,13 +78,7 @@ func _spawn_clue() -> void:
     clue.clue_id = "escape_surgical_mark"
     clue.humanity_delta = -1
     clue.display_name = "SURGICAL TRAY"
-    clue.description = "A metal tray holds dried black residue beneath a layer of blood.
-
-The Hero touches it.
-
-Something inside his arm answers.
-
-The sensation stops before it becomes a memory."
+    clue.description = "A metal tray holds dried black residue beneath a layer of blood.\n\nThe Hero touches it.\n\nSomething inside his arm answers.\n\nThe sensation stops before it becomes a memory."
     add_child(clue)
     clue.examined.connect(_on_clue_examined.bind(clue))
 
@@ -126,11 +120,7 @@ func _open_exit() -> void:
     exit_open = true
     narrative.show_message(
         "THE ROAD OUT",
-        "The final lock gives way.
-
-You do not remember how you arrived here.
-
-You only remember that staying means dying.",
+        "The final lock gives way.\n\nYou do not remember how you arrived here.\n\nYou only remember that staying means dying.",
         5.0
     )
     print("[NEREIS][PROLOGUE] Escape route opened")
