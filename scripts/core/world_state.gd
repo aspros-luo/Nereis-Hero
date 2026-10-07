@@ -6,6 +6,7 @@ var first_memory_unlocked := false
 var checkpoint_position := Vector2(320, 520)
 var checkpoint_active := false
 var boss_defeated := false
+var boss_gate_open := false
 
 func unlock_first_memory() -> void:
     if first_memory_unlocked:
@@ -18,6 +19,12 @@ func set_checkpoint(position: Vector2) -> void:
     checkpoint_position = position
     checkpoint_active = true
     print("[NEREIS][WORLD] Checkpoint activated at %s" % checkpoint_position)
+
+func open_boss_gate() -> void:
+    if boss_gate_open:
+        return
+    boss_gate_open = true
+    print("[NEREIS][WORLD] Boss gate state recorded as open")
 
 func mark_boss_defeated() -> void:
     if boss_defeated:
@@ -32,3 +39,4 @@ func reset() -> void:
     checkpoint_position = Vector2(320, 520)
     checkpoint_active = false
     boss_defeated = false
+    boss_gate_open = false
