@@ -102,6 +102,9 @@ func _set_state(next_state: CombatState) -> void:
 func _state_name(value: CombatState) -> String:
     return CombatState.keys()[value]
 
+func get_debug_state() -> String:
+    return _state_name(state)
+
 func take_damage(amount: int) -> void:
     if invulnerable or state == CombatState.DEAD:
         _log("COMBAT", "Hero damage ignored (invulnerable=%s)" % invulnerable)
