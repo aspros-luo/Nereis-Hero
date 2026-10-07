@@ -27,7 +27,7 @@ func _ready() -> void:
 
     hero = CharacterBody2D.new()
     hero.set_script(HERO_SCRIPT)
-    hero.position = Vector2(320, 520)
+    hero.position = WorldState.checkpoint_position if WorldState.checkpoint_active else Vector2(320, 520)
     hero.name = "Hero"
     _add_character_collision(hero, 18.0, 48.0)
     add_child(hero)
