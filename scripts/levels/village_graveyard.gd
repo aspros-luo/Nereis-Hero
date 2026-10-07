@@ -7,6 +7,7 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const WORLD_CLUE_SCRIPT = preload("res://scripts/world/world_clue.gd")
 const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
+const BELL_KEEPER_SCRIPT = preload("res://scripts/npc/bell_keeper.gd")
 
 var hero: CharacterBody2D
 var wraiths: Array[CharacterBody2D] = []
@@ -16,6 +17,7 @@ var narrative: CanvasLayer
 var hud: CanvasLayer
 var exit: Area2D
 var clue: Node2D
+var bell_keeper: Node2D
 
 func _ready() -> void:
     WorldState.set_location("graveyard")
@@ -29,6 +31,7 @@ func _ready() -> void:
         _spawn_wraith(Vector2(1100, 430), "BellWraith_A")
         _spawn_wraith(Vector2(1480, 390), "BellWraith_B")
     _spawn_clue()
+    _spawn_bell_keeper()
     _spawn_exit()
     _spawn_ui()
     queue_redraw()
@@ -86,6 +89,17 @@ func _spawn_clue() -> void:
     clue.description = "The stone carries your name, but the date is wrong.\n\nSomeone carved a second line beneath it: \"He came back after the bell stopped.\""
     add_child(clue)
     clue.examined.connect(_on_clue_examined.bind(clue))
+
+func _spawn_bell_keeper() -> void:
+    bell_keeper = Node2D.new()
+    bell_keeper.set_script(BELL_KEEPER_SCRIPT)
+    bell_keeper.position = Vector2(760, 520)
+    bell_keeper.name = "BellKeeper"
+    add_child(bell_keeper)
+    bell_keeper.interacted.connect(_on_bell_keeper_interacted)
+
+func _on_bell_keeper_interacted(title: String, message: String) -> void:
+    narrative.show_message(title, message, 7.0)
 
 func _spawn_exit() -> void:
     exit = Area2D.new()
