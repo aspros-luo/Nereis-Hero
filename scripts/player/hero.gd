@@ -139,7 +139,7 @@ func _perform_attack() -> void:
     attack_hitbox.position.x = facing * 54.0
     attack_hitbox.activate(WorldState.hero_attack_damage, 0.12)
     _set_state(CombatState.ATTACK)
-    _log("COMBAT", "Hero attack started; damage=%d hitbox active" % WorldState.hero_attack_damage")
+    _log("COMBAT", "Hero attack started; damage=%d hitbox active" % WorldState.hero_attack_damage)
 
 func _start_dodge() -> void:
     if stamina < DODGE_STAMINA_COST:
