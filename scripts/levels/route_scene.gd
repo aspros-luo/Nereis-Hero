@@ -51,12 +51,12 @@ func _spawn_route_npc() -> void:
         npc.position = Vector2(900, 520)
         npc.npc_id = "traveling_merchant"
         npc.display_name = "TRAVELING MERCHANT"
-        npc.dialogue = "The merchant studies your face for a long moment.\\n\\n\\"You walked this road before. You were carrying someone then. Not a sword.\\""
+        npc.dialogue = "The merchant studies your face for a long moment.\n\n\"You walked this road before. You were carrying someone then. Not a sword.\""
     else:
         npc.position = Vector2(900, 520)
         npc.npc_id = "amnesiac_youth"
         npc.display_name = "AMNESIAC YOUTH"
-        npc.dialogue = "The young man touches the church seal and recoils.\\n\\n\\"They told me you died inside the church. I remember hearing your name after the screaming stopped.\\""
+        npc.dialogue = "The young man touches the church seal and recoils.\n\n\"They told me you died inside the church. I remember hearing your name after the screaming stopped.\""
 
     add_child(npc)
     npc.interacted.connect(_on_route_npc_interacted.bind(npc))
