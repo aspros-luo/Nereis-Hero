@@ -38,6 +38,8 @@ Build a complete 10–20 minute playable sequence.
 ## Phase 003 — Content Expansion
 
 - [x] First route branching foundation
+- [x] Shared-world route NPC foundation
+- [x] Route-specific memory echo foundation
 
 - [x] Second enemy archetype foundation
 - [x] First weapon upgrade foundation
