@@ -7,12 +7,14 @@ const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
+const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
 var narrative: CanvasLayer
 var hud: CanvasLayer
 var exit: Area2D
+var checkpoint: Area2D
 
 func _ready() -> void:
     WorldState.set_location(location_id)
@@ -20,6 +22,7 @@ func _ready() -> void:
     _create_floor()
     _create_boundaries()
     _spawn_hero()
+    _spawn_checkpoint()
     _spawn_npc()
     _spawn_exit()
     _spawn_ui()
@@ -43,6 +46,20 @@ func _spawn_hero() -> void:
     camera.limit_bottom = 720
     camera.position = Vector2.ZERO
     hero.add_child(camera)
+
+func _spawn_checkpoint() -> void:
+    WorldState.set_checkpoint(Vector2(260, 520))
+    checkpoint = Area2D.new()
+    checkpoint.set_script(CHECKPOINT_SCRIPT)
+    checkpoint.position = Vector2(260, 520)
+    checkpoint.name = "InteriorCheckpoint"
+    var shape := CollisionShape2D.new()
+    var rectangle := RectangleShape2D.new()
+    rectangle.size = Vector2(120, 110)
+    shape.shape = rectangle
+    shape.position = Vector2(0, -55)
+    checkpoint.add_child(shape)
+    add_child(checkpoint)
 
 func _spawn_npc() -> void:
     var npc := Node2D.new()
