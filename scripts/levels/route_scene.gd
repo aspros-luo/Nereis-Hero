@@ -6,6 +6,7 @@ const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
+const ROUTE_ECHO_SCRIPT = preload("res://scripts/world/route_memory_echo.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -21,6 +22,7 @@ func _ready() -> void:
     _create_boundaries()
     _spawn_hero()
     _spawn_route_npc()
+    _spawn_route_memory_echo()
     _spawn_ui()
     queue_redraw()
 
@@ -61,6 +63,24 @@ func _spawn_route_npc() -> void:
     add_child(npc)
     npc.interacted.connect(_on_route_npc_interacted.bind(npc))
 
+func _spawn_route_memory_echo() -> void:
+    var echo := Node2D.new()
+    echo.set_script(ROUTE_ECHO_SCRIPT)
+
+    if route_id == "lullaby":
+        echo.position = Vector2(1450, 520)
+        echo.echo_id = "lullaby_broken_bell"
+        echo.display_name = "BROKEN BELL"
+        echo.dialogue = "The bell rings without moving.\\n\\nA child hums a melody you remember from before you were born."
+    else:
+        echo.position = Vector2(1450, 520)
+        echo.echo_id = "church_ledger"
+        echo.display_name = "CHURCH LEDGER"
+        echo.dialogue = "Your name is written in the margin three times.\\n\\nThe first is dated seven years ago. The second is yesterday. The third has no date."
+
+    add_child(echo)
+    echo.interacted.connect(_on_route_memory_interacted.bind(echo))
+
 func _spawn_ui() -> void:
     narrative = CanvasLayer.new()
     narrative.set_script(NARRATIVE_SCRIPT)
@@ -82,6 +102,11 @@ func _show_route_intro() -> void:
 func _on_route_npc_interacted(npc: Node) -> void:
     print("[NEREIS][STORY] Route NPC interaction id=%s" % npc.npc_id)
     narrative.show_message(npc.display_name, npc.dialogue, 7.0)
+
+func _on_route_memory_interacted(echo: Node) -> void:
+    WorldState.record_route_memory(echo.echo_id)
+    print("[NEREIS][STORY] Route memory displayed id=%s" % echo.echo_id)
+    narrative.show_message(echo.display_name, echo.dialogue, 7.0)
 
 func _create_floor() -> void:
     var floor := StaticBody2D.new()
