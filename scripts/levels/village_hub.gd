@@ -69,11 +69,12 @@ func _spawn_mite() -> void:
         var absence := Node2D.new()
         absence.position = Vector2(520, 520)
         absence.name = "MiteAbsence"
-        absence.set_script(ROUTE_NPC_SCRIPT)
-        absence.npc_id = "mite_absence"
+        absence.set_script(VILLAGE_POI_SCRIPT)
+        absence.poi_id = "mite_absence"
         absence.display_name = "AN EMPTY CHAIR"
         absence.dialogue = "The chair beside the fire is empty.\n\nA cup has been left on the table. It is still warm.\n\nNo one is home."
         add_child(absence)
+        absence.interacted.connect(_on_mite_absence_interacted)
         print("[NEREIS][RELATIONSHIP] Mite connection was missed; absence scene spawned")
         return
 
@@ -84,6 +85,9 @@ func _spawn_mite() -> void:
     add_child(mite)
     mite.interacted.connect(_on_mite_interacted)
     print("[NEREIS][VILLAGE] Mite present; relationship facts=%d" % WorldState.mite_interactions_seen.size())
+
+func _on_mite_absence_interacted() -> void:
+    narrative.show_message("AN EMPTY CHAIR", "The cup is still warm.\n\nYou are certain you did not leave it here.", 5.0)
 
 func _on_mite_interacted(_interaction_id: String, title: String, message: String) -> void:
     narrative.show_message(title, message, 7.0)
