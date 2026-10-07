@@ -110,6 +110,8 @@ func _spawn_enemy(enemy_script: Script, position: Vector2, enemy_name: String) -
 
     add_child(enemy)
     enemy.defeated.connect(_on_small_enemy_defeated)
+    if enemy.has_signal("attack_telegraphed"):
+        enemy.attack_telegraphed.connect(_on_enemy_attack_telegraphed)
     enemies.append(enemy)
 
 func _spawn_boss_gate() -> void:
@@ -131,6 +133,8 @@ func _spawn_boss() -> void:
     _add_character_collision(boss, 24.0, 56.0)
     add_child(boss)
     boss.defeated.connect(_on_boss_defeated)
+    if boss.has_signal("attack_telegraphed"):
+        boss.attack_telegraphed.connect(_on_enemy_attack_telegraphed)
     if boss.has_signal("phase_changed"):
         boss.phase_changed.connect(_on_boss_phase_changed)
 
@@ -204,6 +208,9 @@ func _play_sfx(id: String) -> void:
 
 func _on_hero_attack_started(_combo: int) -> void:
     _play_sfx("attack")
+
+func _on_enemy_attack_telegraphed() -> void:
+    _play_sfx("telegraph")
 
 func _on_hero_dodge_started() -> void:
     _play_sfx("dodge")
