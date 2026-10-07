@@ -250,7 +250,7 @@ func _update_camera_shake(delta: float) -> void:
         return
     if camera_shake_time > 0.0:
         camera_shake_time = max(0.0, camera_shake_time - delta)
-        var fade := clamp(camera_shake_time / 0.10, 0.0, 1.0)
+        var fade: float = clampf(camera_shake_time / 0.10, 0.0, 1.0)
         camera.offset = Vector2(
             randf_range(-camera_shake_strength, camera_shake_strength) * fade,
             randf_range(-camera_shake_strength, camera_shake_strength) * fade * 0.65
@@ -273,7 +273,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
     else:
         velocity.x = -facing * HURT_KNOCKBACK
     _set_state(CombatState.HURT)
-    var source_name := source.name if source else "Unknown"
+    var source_name: String = source.name if source else "Unknown"
     _log("COMBAT", "%s -> Hero damage=%d hp=%d" % [source_name, amount, health])
     if health == 0:
         _set_state(CombatState.DEAD)
