@@ -29,11 +29,11 @@ Build a complete 10–20 minute playable sequence.
 - [x] Checkpoint loop
 - [x] Cultist encounter
 - [x] Ashen Knight encounter
-- [ ] Replace prototype geometry with first authored level layout
+- [x] Expand to authored horizontal level layout
 - [ ] Add first real environment art pass
 - [ ] Add combat feedback pass
-- [ ] Add post-boss transition
-- [ ] Add first meaningful player choice
+- [x] Add post-boss transition
+- [x] Add first meaningful player choice
 
 ## Phase 003 — Content Expansion
 
@@ -44,7 +44,7 @@ Build a complete 10–20 minute playable sequence.
 - [ ] Memory system expansion
 - [ ] Humanity consequences
 - [ ] First branch that affects Nereis Lullaby
-- [ ] Save/load
+- [x] Save/load foundation
 
 ## Phase 004 — Production
 
