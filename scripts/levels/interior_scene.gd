@@ -75,14 +75,21 @@ func _spawn_npc() -> void:
     if location_id == "tavern":
         npc.npc_id = "tavern_keeper"
         npc.display_name = "TAVERN KEEPER"
-        if WorldState.selected_route == "lullaby":
+        if WorldState.get_humanity_state() == "hollow":
+            npc.dialogue = "The keeper studies your eyes.\n\n\"You look like someone who has forgotten what warmth feels like.\""
+        elif WorldState.selected_route == "lullaby":
             npc.dialogue = "The keeper watches you enter.\n\n\"You heard the song too. Don't pretend you didn't.\""
         else:
             npc.dialogue = "The keeper notices the church seal and stops polishing the glass.\n\n\"We don't serve church messengers here. Not after what happened last winter.\""
     else:
         npc.npc_id = "church_confessor"
         npc.display_name = "CHURCH CONFESSOR"
-        npc.dialogue = "The confessor recognizes the Hero before the Hero recognizes him.\n\n\"Your confession was never finished.\""
+        if WorldState.get_humanity_state() == "hollow":
+            npc.dialogue = "The confessor looks at you for a long time.\n\n\"There is very little left to confess.\""
+        elif WorldState.get_humanity_state() == "frayed":
+            npc.dialogue = "The confessor recognizes the Hero before the Hero recognizes him.\n\n\"Your confession was never finished. Neither were you.\""
+        else:
+            npc.dialogue = "The confessor recognizes the Hero before the Hero recognizes him.\n\n\"Your confession was never finished.\""
 
     add_child(npc)
     npc.interacted.connect(_on_npc_interacted.bind(npc))
