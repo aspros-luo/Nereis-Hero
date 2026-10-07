@@ -125,5 +125,16 @@ func _draw() -> void:
     draw_circle(Vector2(0, -96 + sway), 34.0, Color(glow, 0.12))
     draw_arc(Vector2(0, -70), 28.0, PI, TAU, 22, glow, 3.0)
 
+    if phase == 2:
+        for i in range(5):
+            var angle := -2.5 + float(i) * 1.25
+            var root := Vector2(cos(angle) * 24.0, -32.0 + sin(angle) * 18.0)
+            var tip := root + Vector2(cos(angle) * 75.0, sin(angle) * 75.0 - 30.0)
+            draw_line(root, tip, Color("#6f3948"), 9.0)
+            draw_circle(tip, 4.0, Color("#c36a72"))
+        draw_circle(Vector2(0, -100), 43.0, Color("#742f3b", 0.10))
+        for i in range(3):
+            draw_circle(Vector2(-12.0 + float(i) * 12.0, -102), 3.5, Color("#cf7f78"))
+
     var label := "HIGH PRIEST  //  PHASE II" if phase == 2 else "HIGH PRIEST"
     draw_string(ThemeDB.fallback_font, Vector2(-72, -112), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#d6c7b2"))
