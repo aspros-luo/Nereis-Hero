@@ -75,7 +75,7 @@ func _spawn_village_pois() -> void:
     tavern.position = Vector2(1730, 520)
     tavern.poi_id = "tavern"
     tavern.display_name = "THE TAVERN"
-    tavern.dialogue = "The tavern door is warm beneath your hand.\\n\\nFor a moment you hear a lullaby from inside. The voice stops when you touch the handle."
+    tavern.dialogue = "The tavern door is warm beneath your hand.\n\nFor a moment you hear a lullaby from inside. The voice stops when you touch the handle."
     add_child(tavern)
     tavern.interacted.connect(_on_village_poi_interacted.bind(tavern))
 
@@ -84,7 +84,7 @@ func _spawn_village_pois() -> void:
     church.position = Vector2(2220, 520)
     church.poi_id = "church"
     church.display_name = "THE CHURCH"
-    church.dialogue = "The church door bears your name beneath layers of newer paint.\\n\\nSomeone has tried to erase it many times."
+    church.dialogue = "The church door bears your name beneath layers of newer paint.\n\nSomeone has tried to erase it many times."
     add_child(church)
     church.interacted.connect(_on_village_poi_interacted.bind(church))
 
