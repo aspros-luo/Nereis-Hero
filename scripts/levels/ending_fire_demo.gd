@@ -143,7 +143,7 @@ func _on_mite_dying(waited_for: bool) -> void:
     else:
         print("[NEREIS][ENDING] Player delivered the final blow")
 
-    WorldState.set_ending_route("烈火天罚")
+    WorldState.ending_route = "烈火天罚"
     WorldState.input_locked = true
     if narrative:
         narrative.show_message(
