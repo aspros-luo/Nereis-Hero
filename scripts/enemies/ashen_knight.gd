@@ -37,6 +37,11 @@ func _physics_process(delta: float) -> void:
     hit_flash = max(0.0, hit_flash - delta)
     windup = max(0.0, windup - delta)
 
+    if not phase_two and health <= 120:
+        phase_two = true
+        attack_cooldown = 0.2
+        _log("BOSS", "Ashen Knight entered Phase 2")
+
     var hero := get_node_or_null("../Hero")
     if hero:
         var distance := global_position.distance_to(hero.global_position)
