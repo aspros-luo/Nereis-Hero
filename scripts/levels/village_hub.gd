@@ -7,6 +7,7 @@ const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const VILLAGE_POI_SCRIPT = preload("res://scripts/world/village_poi.gd")
 const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
+const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -14,6 +15,7 @@ var narrative: CanvasLayer
 var hud: CanvasLayer
 var checkpoint: Area2D
 var mite: Node2D
+var narrative_audio: Node
 
 func _ready() -> void:
     print("[NEREIS][VILLAGE] Entered Village Hub route=%s" % WorldState.selected_route)
@@ -27,6 +29,7 @@ func _ready() -> void:
     _spawn_shared_world_npcs()
     _spawn_village_pois()
     _spawn_ui()
+    _spawn_narrative_audio()
     queue_redraw()
 
 func _spawn_hero() -> void:
@@ -84,9 +87,21 @@ func _spawn_mite() -> void:
 
 func _on_mite_interacted(_interaction_id: String, title: String, message: String) -> void:
     narrative.show_message(title, message, 7.0)
+    if narrative_audio and narrative_audio.has_method("play_lullaby"):
+        narrative_audio.play_lullaby()
     if WorldState.mite_interactions_seen.size() >= 2:
         WorldState.current_location = "village_with_mite"
         WorldState.save_game()
+
+func _spawn_narrative_audio() -> void:
+    narrative_audio = Node.new()
+    narrative_audio.set_script(NARRATIVE_AUDIO_SCRIPT)
+    narrative_audio.name = "NarrativeAudio"
+    add_child(narrative_audio)
+    get_tree().create_timer(1.0).timeout.connect(func() -> void:
+        if narrative_audio and narrative_audio.has_method("play_lullaby"):
+            narrative_audio.play_lullaby()
+    )
 
 func _spawn_gatekeeper() -> void:
     var npc := Node2D.new()
