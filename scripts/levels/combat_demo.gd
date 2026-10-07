@@ -30,7 +30,7 @@ var demo_complete := false
 var boss_phase_two_visual := false
 
 func _ready() -> void:
-    WorldState.reset()
+    # Combat can be entered from the narrative hub without wiping story state.
     WorldState.current_location = "combat_demo"
 
     _create_floor()
