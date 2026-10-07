@@ -267,12 +267,40 @@ func _draw() -> void:
     _draw_phase_markers()
 
 func _draw_backdrop() -> void:
-    for x in range(100, int(LEVEL_WIDTH), 260):
-        draw_circle(Vector2(x, 250 + (int(x / 260.0) % 2) * 40), 120, Color("#18151d"))
+    # Far silhouette layer.
+    for x in range(90, int(LEVEL_WIDTH), 300):
+        var h: float = 120.0 + float((x / 300) as int % 3) * 45.0
+        draw_colored_polygon(PackedVector2Array([
+            Vector2(x - 110, FLOOR_Y - 10),
+            Vector2(x - 80, FLOOR_Y - h),
+            Vector2(x - 20, FLOOR_Y - h - 26),
+            Vector2(x + 25, FLOOR_Y - h + 8),
+            Vector2(x + 95, FLOOR_Y - 10)
+        ]), Color("#16141b"))
 
-    for x in range(120, int(LEVEL_WIDTH), 360):
+    # Distant dead trees / shrine silhouettes.
+    for x in range(150, int(LEVEL_WIDTH), 360):
         draw_line(Vector2(x, FLOOR_Y), Vector2(x + 70, 390), Color("#2c2530"), 8.0)
-        draw_line(Vector2(x + 40, 440), Vector2(x + 110, 360), Color("#302832"), 5.0)
+        draw_line(Vector2(x + 36, 440), Vector2(x + 110, 360), Color("#302832"), 5.0)
+        draw_line(Vector2(x + 58, 418), Vector2(x + 38, 350), Color("#2f2832"), 4.0)
+
+    # Broken church spires along the horizon.
+    for x in [520.0, 980.0, 1460.0, 1920.0]:
+        draw_colored_polygon(
+            PackedVector2Array([
+                Vector2(x - 34, FLOOR_Y - 16),
+                Vector2(x - 18, 290),
+                Vector2(x, 248),
+                Vector2(x + 22, 292),
+                Vector2(x + 38, FLOOR_Y - 16)
+            ]),
+            Color("#211c25")
+        )
+        draw_rect(Rect2(x - 6, 310, 12, 180), Color("#2b232d"))
+
+    # Low fog bands.
+    for y in [390.0, 455.0, 515.0]:
+        draw_rect(Rect2(0, y, LEVEL_WIDTH, 28), Color(0.08, 0.07, 0.10, 0.34))
 
 func _draw_arena_details() -> void:
     draw_rect(Rect2(1760, FLOOR_Y - 170, 18, 170), Color("#2e2830"))
