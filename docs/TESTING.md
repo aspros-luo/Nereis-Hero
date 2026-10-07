@@ -83,6 +83,7 @@ The debug HUD shows the internal artifact count.
 
 From the Village Hub:
 
+- **F6** → Mite Resonance Theater
 - **F7** → Church Final Boss Theater
 - **F8** → 烈火天罚 / Ending Fire Theater
 - **F9** → clean reset to the opening prologue
