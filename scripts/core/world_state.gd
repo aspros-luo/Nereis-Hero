@@ -16,6 +16,7 @@ var slice_complete := false
 var selected_route := ""
 var route_memory_seen := false
 var route_memory_id := ""
+var route_complete := false
 var weapon_level := 1
 var hero_attack_damage := 34
 var input_locked := false
@@ -101,6 +102,7 @@ func save_game() -> void:
         "selected_route": selected_route,
         "route_memory_seen": route_memory_seen,
         "route_memory_id": route_memory_id,
+        "route_complete": route_complete,
         "weapon_level": weapon_level,
         "hero_attack_damage": hero_attack_damage
     }
@@ -147,6 +149,7 @@ func load_game() -> void:
     selected_route = str(parsed.get("selected_route", ""))
     route_memory_seen = bool(parsed.get("route_memory_seen", false))
     route_memory_id = str(parsed.get("route_memory_id", ""))
+    route_complete = bool(parsed.get("route_complete", false))
     weapon_level = int(parsed.get("weapon_level", 1))
     hero_attack_damage = int(parsed.get("hero_attack_damage", 34))
 
@@ -173,6 +176,7 @@ func reset() -> void:
     selected_route = ""
     route_memory_seen = false
     route_memory_id = ""
+    route_complete = false
     weapon_level = 1
     hero_attack_damage = 34
     input_locked = false
@@ -187,6 +191,13 @@ func record_route_memory(memory_id: String) -> bool:
     print("[NEREIS][STORY] Route memory recorded id=%s hero_memory=%d" % [memory_id, hero_memory])
     save_game()
     return true
+
+func mark_route_complete() -> void:
+    if route_complete:
+        return
+    route_complete = true
+    print("[NEREIS][ROUTE] Route completion saved for %s" % selected_route)
+    save_game()
 
 func get_route_scene_path() -> String:
     if selected_route == "lullaby":
