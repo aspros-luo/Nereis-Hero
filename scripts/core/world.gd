@@ -193,8 +193,57 @@ func _unhandled_input(event: InputEvent) -> void:
 func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
+func _draw_environment_backdrop() -> void:
+    draw_circle(Vector2(420, 250), 260, Color("#18151d"))
+    draw_circle(Vector2(1280, 280), 340, Color("#17141b"))
+    draw_circle(Vector2(2140, 230), 300, Color("#151319"))
+
+    _draw_house(Vector2(150, 430), 150, 110)
+    _draw_house(Vector2(420, 440), 120, 95)
+    _draw_house(Vector2(760, 438), 140, 100)
+
+    _draw_dead_tree(Vector2(1030, 520), 150)
+    _draw_dead_tree(Vector2(1220, 520), 110)
+    _draw_dead_tree(Vector2(1550, 520), 170)
+    _draw_dead_tree(Vector2(1690, 520), 120)
+
+    draw_colored_polygon(
+        PackedVector2Array([
+            Vector2(1860, 420),
+            Vector2(1960, 250),
+            Vector2(2050, 420)
+        ]),
+        Color("#211b24")
+    )
+    draw_rect(Rect2(1940, 300, 28, 120), Color("#2c2530"))
+    draw_circle(Vector2(1954, 290), 16, Color("#5d4c55"))
+
+    draw_line(Vector2(2320, 520), Vector2(2320, 370), Color("#66545c"), 5.0)
+    draw_circle(Vector2(2320, 350), 14.0, Color("#8e7777"))
+
+func _draw_house(origin: Vector2, width: float, height: float) -> void:
+    draw_rect(Rect2(origin.x - width * 0.5, origin.y - height, width, height), Color("#29232b"))
+    draw_colored_polygon(
+        PackedVector2Array([
+            Vector2(origin.x - width * 0.62, origin.y - height),
+            Vector2(origin.x, origin.y - height - 72),
+            Vector2(origin.x + width * 0.62, origin.y - height)
+        ]),
+        Color("#352d38")
+    )
+    draw_rect(Rect2(origin.x - 13, origin.y - 55, 26, 55), Color("#17141b"))
+    draw_circle(Vector2(origin.x - 36, origin.y - 62), 7, Color("#796d67"))
+    draw_circle(Vector2(origin.x + 36, origin.y - 62), 7, Color("#796d67"))
+
+func _draw_dead_tree(origin: Vector2, height: float) -> void:
+    draw_line(origin, origin + Vector2(-10, -height), Color("#2e272e"), 10.0)
+    draw_line(origin + Vector2(0, -height * 0.62), origin + Vector2(-48, -height * 0.88), Color("#2e272e"), 6.0)
+    draw_line(origin + Vector2(-10, -height * 0.45), origin + Vector2(44, -height * 0.7), Color("#2e272e"), 6.0)
+    draw_line(origin + Vector2(-8, -height * 0.78), origin + Vector2(18, -height), Color("#2e272e"), 5.0)
+
 func _draw() -> void:
     draw_rect(Rect2(0, 0, 2400, 720), Color("#111018"))
+    _draw_environment_backdrop()
     draw_rect(Rect2(0, 520, 2400, 200), Color("#201c22"))
     for x in range(0, 2400, 64):
         draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
