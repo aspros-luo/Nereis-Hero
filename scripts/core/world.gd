@@ -7,12 +7,14 @@ const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const BOSS_GATE_SCRIPT = preload("res://scripts/world/boss_gate.gd")
+const LEVEL_EXIT_SCRIPT = preload("res://scripts/world/level_exit.gd")
 
 var hero: CharacterBody2D
 var enemy: CharacterBody2D
 var boss: CharacterBody2D
 var checkpoint: Area2D
 var boss_gate: StaticBody2D
+var level_exit: Area2D
 var old_hunter: Node2D
 var camera: Camera2D
 var narrative: CanvasLayer
@@ -62,6 +64,19 @@ func _ready() -> void:
     narrative = CanvasLayer.new()
     narrative.set_script(NARRATIVE_SCRIPT)
     add_child(narrative)
+
+    level_exit = Area2D.new()
+    level_exit.set_script(LEVEL_EXIT_SCRIPT)
+    level_exit.position = Vector2(2320, 520)
+    level_exit.name = "LevelExit"
+    var exit_shape := CollisionShape2D.new()
+    var exit_rect := RectangleShape2D.new()
+    exit_rect.size = Vector2(100, 130)
+    exit_shape.shape = exit_rect
+    exit_shape.position = Vector2(0, -65)
+    level_exit.add_child(exit_shape)
+    add_child(level_exit)
+    level_exit.reached.connect(_on_level_exit_reached)
 
     camera = Camera2D.new()
     camera.name = "HeroCamera"
@@ -137,6 +152,12 @@ func _on_cultist_defeated() -> void:
         narrative.show_message("THE PATH OPENS", "The cultist falls. Somewhere beyond the iron gate, something hears the silence.")
     queue_redraw()
 
+func _on_level_exit_reached() -> void:
+    _log("WORLD", "Vertical Slice 001 acceptance boundary reached")
+    if narrative:
+        narrative.show_message("THE ROAD AWAITS", "The first road is behind you.\n\nThe church seal is warm in one hand. The lullaby is still somewhere behind the hills.\n\nVERTICAL SLICE 001 COMPLETE", 8.0)
+    queue_redraw()
+
 func _open_first_choice() -> void:
     if narrative and WorldState.boss_defeated and not WorldState.first_choice_made:
         narrative.begin_first_choice()
@@ -197,3 +218,4 @@ func _draw() -> void:
         draw_string(ThemeDB.fallback_font, Vector2(950, 160), "Memory: %d" % WorldState.hero_memory, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
         draw_string(ThemeDB.fallback_font, Vector2(950, 184), "Humanity: %d" % WorldState.hero_humanity, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
         draw_string(ThemeDB.fallback_font, Vector2(950, 208), "Boss Defeated: %s" % WorldState.boss_defeated, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
+        draw_string(ThemeDB.fallback_font, Vector2(950, 232), "Slice Complete: %s" % WorldState.slice_complete, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#b7a09b"))
