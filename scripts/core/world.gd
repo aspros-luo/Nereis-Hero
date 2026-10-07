@@ -69,7 +69,7 @@ func _ready() -> void:
     queue_redraw()
 
 func _spawn_cultist() -> void:
-    if is_instance_valid(enemy):
+    if is_instance_valid(enemy) and not enemy.is_queued_for_deletion():
         return
     enemy = CharacterBody2D.new()
     enemy.set_script(ENEMY_SCRIPT)
@@ -80,7 +80,7 @@ func _spawn_cultist() -> void:
     _log("WORLD", "Cultist spawned")
 
 func _spawn_boss() -> void:
-    if WorldState.boss_defeated or is_instance_valid(boss):
+    if WorldState.boss_defeated or (is_instance_valid(boss) and not boss.is_queued_for_deletion()):
         return
     boss = CharacterBody2D.new()
     boss.set_script(BOSS_SCRIPT)
@@ -113,9 +113,9 @@ func _create_floor() -> void:
 
 func _on_hero_defeated() -> void:
     _log("WORLD", "Hero death handled; checkpoint respawn complete")
-    if not is_instance_valid(enemy):
+    if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
         _spawn_cultist()
-    if not WorldState.boss_defeated and not is_instance_valid(boss):
+    if not WorldState.boss_defeated and (not is_instance_valid(boss) or boss.is_queued_for_deletion()):
         _spawn_boss()
 
 func _on_boss_defeated() -> void:
