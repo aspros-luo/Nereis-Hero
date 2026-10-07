@@ -25,6 +25,11 @@ func _ready() -> void:
     hurtbox.setup(self, Vector2(34, 72), Vector2(0, -36))
     queue_redraw()
 
+func register_player_input() -> void:
+    if dying:
+        return
+    idle_time = 0.0
+
 func _process(delta: float) -> void:
     elapsed += delta
     hit_flash = maxf(0.0, hit_flash - delta)
