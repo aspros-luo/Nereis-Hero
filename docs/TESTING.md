@@ -1,108 +1,158 @@
 # Testing
 
-## Current Acceptance Gate
+## Current Development Acceptance
 
-The authoritative acceptance target for the current development milestone is the **Core Combat Demo**.
+The project has moved beyond the original Core Combat Demo into the first narrative production pass.
 
-The default startup scene is:
+### Default startup
 
-res://scenes/combat_demo.tscn
+`res://scenes/escape_prologue.tscn`
 
-The active branch is:
+The intended playable flow is now:
 
-development
+**Church surgical ward → escape → village → first Mite interactions → Church / village investigation**
 
-## Runtime
+### Development branch
 
-Use Godot 4.6.x with the standard GDScript build. The project does not require the .NET build.
+`development`
 
-Godot 4.6.1 is an official stable maintenance release for the 4.6 series. Later 4.6.x maintenance releases are also intended to remain compatible with this project.
+Do not run or add GitHub Actions for this project.
 
-## Core Route
+---
 
-Hero → Cultist A → Pale Hound → Cultist B → Ash Gate → Ashen Knight
+## Fresh-run acceptance
 
-The Ashen Knight must not spawn before all three small enemies are defeated.
+Press **F9** at any time to clear the save and return to the Church escape prologue.
 
-## Manual Acceptance
+### A. Church Escape
 
-1. Start the project. The Core Combat Demo must open directly.
-2. Move left/right, jump, and pass the first checkpoint.
-3. Attack with J / Left Mouse. Verify the three-step attack rhythm, clear windup, contact window and recovery.
-4. Hit an enemy. Verify hit spark, HIT <damage>, small hero recoil and enemy hit-stagger.
-5. Press K / Shift while an enemy attacks. Verify each press triggers one dodge and the short invulnerability window prevents damage.
-6. Take enough damage to die. Verify the Hero returns with full HP and stamina. Before the Boss has spawned, the small-enemy wave must reset.
-7. Defeat Cultist A, Pale Hound and Cultist B. The HUD must advance from 0 / 3 to 3 / 3.
-8. Confirm the Ash Gate opens and a Boss approach checkpoint is activated. The Ashen Knight must spawn only after 3 / 3.
-9. Fight the Ashen Knight. Verify its heavy-attack telegraph is clearly visible before damage is applied.
-10. Reduce the Boss to 120 HP or lower. Verify THE ASHEN KNIGHT // PHASE II appears once, movement pressure increases, attack cooldown shortens, and Phase II damage rises to 36.
-11. Defeat the Ashen Knight. Verify CORE COMBAT DEMO COMPLETE appears and the Boss HUD disappears.
-12. Die during Boss combat once. Verify the next respawn occurs at the Boss approach checkpoint instead of the beginning of the road.
-13. Press F9. Verify the save is deleted and the Core Combat Demo starts cleanly again.
-14. Press F3. Verify the debug panel can be toggled without affecting combat.
+Expected:
 
-## Expected Feedback
+- Hero begins in the surgical ward.
+- Three Experiment Wardens block the road.
+- Hero can move, jump, attack and dodge using the existing combat controls.
+- The surgical tray can be examined.
+- Examining it records the hidden ancient-god residue clue.
+- After all three Wardens are defeated, the road opens.
+- Exiting the ward records prologue completion.
 
-Successful Hero hit:
+### B. Village Opening
 
-HIT <damage>
+After the exit sequence:
 
-Hero defeat:
+- Player enters the Village Hub.
+- Mite is present near the small recovery house.
+- Mite should appear as an ordinary young woman, not a supernatural boss or obvious villain.
+- The first interaction is optional.
+- Interactions progress through ordinary companionship rather than an exposed romance meter.
 
-DEFEATED // RETURNING TO CHECKPOINT
+Mite interaction order:
 
-Boss Phase II:
+1. First meeting
+2. Warm meal
+3. Stay a while
+4. Return
+5. Quiet repeat
 
-THE ASHEN KNIGHT // PHASE II
+The internal state is stored as interaction facts.
 
-Demo completion:
+### C. Rushed progression / missed connection
 
-CORE COMBAT DEMO COMPLETE
+If the player enters the Church before reaching the **Stay a while** Mite interaction:
 
-## Combat Tuning Baseline
+- `WorldState.mite_connection_missed` becomes true.
+- Returning to the village no longer produces Mite herself.
+- The player instead sees an **empty chair** with a warm cup.
 
-Hero:
+This is deliberately quiet. There is no "romance failed" notification.
 
-- HP: 100
-- Stamina: 100
-- Attack cost: 12
-- Dodge cost: 28
-- Base attack damage: 34
-- Three-step combo multipliers: 1.00 / 1.18 / 1.50
-- Dodge duration: 0.18s
-- Dodge invulnerability: active for the dodge window
+### D. Hidden evidence
 
-Small enemies:
+The following existing clues now contribute hidden resistance evidence:
 
-- Cultist HP: 100
-- Pale Hound HP: 70
-- Both have readable attack windups and brief hit-stagger
+- tavern silver bell
+- church confession book
+- graveyard weathered stone
+- route memory echo
 
-Boss:
+The UI does not present these as "true ending items".
 
-- Ashen Knight HP: 240
-- Phase II threshold: 120 HP
-- Phase I heavy attack: 24 damage
-- Phase II heavy attack: 36 damage
+The debug HUD shows the internal artifact count.
 
-## Retained Regression Systems
+### E. Director test scenes
 
-The repository still contains the later Vertical Slice foundations for:
+From the Village Hub:
 
-- Old Hunter / memory
-- Church and Lullaby routes
-- Village Hub
-- Tavern / Church interiors
-- Graveyard
-- Humanity
-- Memory / clue persistence
-- Save / load
-- Scene transitions
+- **F7** → Church Final Boss Theater
+- **F8** → 烈火天罚 / Ending Fire Theater
+- **F9** → clean reset to the opening prologue
 
-Those systems are not part of the current startup acceptance gate, but should remain structurally intact while the Core Combat Demo is developed.
+The test theaters do not require normal story progression.
 
-## Runtime Limitation
+### F7 — Church Final Boss Theater
 
-The maintainer container currently has no Godot executable and cannot reach the official download host, so interactive execution cannot be performed here.
+Sequence:
 
-Static repository checks are performed after each iteration. Final acceptance still requires running the project with Godot 4.6.x in a local runtime environment.
+**High Priest human phase → High Priest ancient-god phase → King**
+
+The King uses a different combat rhythm from the High Priest.
+
+The scene is a combat prototype and not yet the final canonical level.
+
+### F8 — 烈火天罚 Theater
+
+Sequence:
+
+**100 cultists → Mite → waiting / self-sacrifice → city detonation**
+
+The 100-cultist segment is a spectacle.
+
+The Mite segment is the important emotional scene:
+
+- no conventional boss loop
+- effectively one decisive action from death
+- player may wait
+- after approximately 60 seconds, Mite moves toward Hero's weapon
+- her death begins the detonation sequence
+
+### F3 debug
+
+F3 toggles the debug overlay.
+
+It exposes internal development state including:
+
+- Hero memory
+- humanity
+- Mite interaction count
+- Mite connection missed flag
+- ancient-god residue
+- Outer-God resonance
+- physical union
+- hidden artifact count
+- current ending state
+- current location
+
+---
+
+## Original combat regression
+
+The previous Core Combat Demo remains in:
+
+`res://scenes/combat_demo.tscn`
+
+It still covers:
+
+**Hero → Cultist A → Pale Hound → Cultist B → Ash Gate → Ashen Knight**
+
+It can be opened directly from the Godot editor.
+
+---
+
+## Runtime limitation
+
+The maintainer environment does not contain a Godot runtime, so interactive frame-level execution cannot be claimed here.
+
+Repository changes are checked structurally after each implementation pass.
+
+Final acceptance should be performed on Godot 4.6.x.
+
