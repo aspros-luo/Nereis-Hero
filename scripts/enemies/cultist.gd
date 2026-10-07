@@ -49,10 +49,10 @@ func _physics_process(delta: float) -> void:
         queue_redraw()
         return
 
-    var hero := get_node_or_null("../Hero")
+    var hero: Node2D = get_node_or_null("../Hero") as Node2D
 
     if hero:
-        var dx := hero.global_position.x - global_position.x
+        var dx: float = hero.global_position.x - global_position.x
         if dx != 0.0:
             facing = sign(dx)
 
@@ -64,7 +64,7 @@ func _physics_process(delta: float) -> void:
                 attack_released = true
                 _log("COMBAT", "Cultist attack released")
         else:
-            var distance := abs(dx)
+            var distance: float = absf(dx)
             if distance > ATTACK_RANGE:
                 velocity.x = facing * MOVE_SPEED
             else:
@@ -91,7 +91,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
     stun_time = 0.11
     if source and source is Node2D:
         velocity.x = sign(global_position.x - source.global_position.x) * 125.0
-    var source_name := source.name if source else "Unknown"
+    var source_name: String = source.name if source else "Unknown"
     _log("COMBAT", "%s -> Cultist damage=%d hp=%d" % [source_name, amount, health])
     if health <= 0:
         _log("COMBAT", "Cultist defeated")
