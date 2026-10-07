@@ -81,9 +81,7 @@ func _spawn_king() -> void:
     boss.phase_changed.connect(_on_king_phase_changed)
     narrative.show_message(
         "THE KING",
-        "The doors open.
-
-"You think I did not know?"\n\n"I knew what they were doing. I knew what the Church had become.\nI only knew the alternative: the Kingdom falls."",
+        "The doors open.\n\n\"You think I did not know?\"\n\n\"I knew what they were doing. I knew what the Church had become.\nI only knew the alternative: the Kingdom falls.\"" ,
         7.0
     )
 
@@ -91,37 +89,25 @@ func _on_priest_defeated() -> void:
     phase = 2
     narrative.show_message(
         "THE CHURCH BREAKS",
-        "The High Priest falls.
-
-The flesh beneath the robes still twitches.
-
-Then the royal seal appears at the far end of the nave.",
+        "The High Priest falls.\n\nThe flesh beneath the robes still twitches.\n\nThen the royal seal appears at the far end of the nave.",
         4.5
     )
     get_tree().create_timer(4.7).timeout.connect(_spawn_king)
 
 func _on_priest_phase_changed(value: int) -> void:
     if value == 2:
-        narrative.show_message("FALSE FAITH", "The relics in the sanctuary begin to pulse.
-
-The High Priest's prayers continue after his mouth has stopped moving.", 3.5)
+        narrative.show_message("FALSE FAITH", "The relics in the sanctuary begin to pulse.\n\nThe High Priest's prayers continue after his mouth has stopped moving.", 3.5)
 
 func _on_king_phase_changed(value: int) -> void:
     if value == 2:
-        narrative.show_message("THE KING'S BURDEN", "The crown cracks.
-
-He does not kneel.", 2.8)
+        narrative.show_message("THE KING'S BURDEN", "The crown cracks.\n\nHe does not kneel.", 2.8)
 
 func _on_king_defeated() -> void:
     phase = 4
     WorldState.boss_defeated = true
     narrative.show_message(
         "NO KINGDOM",
-        "The King falls.
-
-The Church is defeated.
-
-The Kingdom is not saved.",
+        "The King falls.\n\nThe Church is defeated.\n\nThe Kingdom is not saved.",
         5.0
     )
     get_tree().create_timer(5.3).timeout.connect(_finish_demo)
@@ -133,9 +119,7 @@ func _finish_demo() -> void:
 func _show_intro() -> void:
     narrative.show_message(
         "THE LAST CHURCH",
-        "The High Priest is waiting.
-
-He does not look surprised to see you.",
+        "The High Priest is waiting.\n\nHe does not look surprised to see you.",
         4.5
     )
 
