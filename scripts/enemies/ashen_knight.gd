@@ -13,6 +13,7 @@ var facing := -1.0
 var attack_released := false
 var phase_two := false
 var attack_hitbox: Area2D
+var animation_time := 0.0
 signal defeated
 signal phase_changed(phase: int)
 
@@ -33,6 +34,10 @@ func _setup_combat_components() -> void:
     hurtbox.set_script(HURTBOX_SCRIPT)
     add_child(hurtbox)
     hurtbox.setup(self, Vector2(48, 94), Vector2(0, -38))
+
+func _process(delta: float) -> void:
+    animation_time += delta
+    queue_redraw()
 
 func _physics_process(delta: float) -> void:
     attack_cooldown = max(0.0, attack_cooldown - delta)
@@ -83,6 +88,13 @@ func _physics_process(delta: float) -> void:
     move_and_slide()
     queue_redraw()
 
+func _spawn_death_burst() -> void:
+    var effect := Node2D.new()
+    effect.set_script("res://scripts/effects/death_burst.gd")
+    effect.global_position = global_position + Vector2(0, -44)
+    get_parent().add_child(effect)
+    effect.setup(26.0)
+
 func _spawn_hit_spark() -> void:
     var effect := Node2D.new()
     effect.set_script(HIT_SPARK_SCRIPT)
@@ -99,6 +111,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
     var source_name: String = source.name if source else "Unknown"
     _log("BOSS", "%s -> Ashen Knight damage=%d hp=%d" % [source_name, amount, health])
     if health <= 0:
+        _spawn_death_burst()
         _log("BOSS", "Ashen Knight defeated")
         WorldState.mark_boss_defeated()
         defeated.emit()
@@ -111,13 +124,19 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    var base := Color("#6f3941") if phase_two else Color("#332d34")
-    var c := Color("#c44e5a") if hit_flash > 0.0 else base
-    draw_circle(Vector2(0, -60), 21, c)
-    draw_rect(Rect2(-25, -40, 50, 40), c)
-    draw_line(Vector2(-18, -4), Vector2(-62, 10), c, 11.0)
-    draw_line(Vector2(18, -4), Vector2(62, 10), c, 11.0)
-    draw_line(Vector2(facing * 8.0, -18), Vector2(facing * 84.0, -42), Color("#b7a48c"), 9.0)
+    var base := Color("#7b3944") if phase_two else Color("#2c2932")
+    var c := Color("#d35a62") if hit_flash > 0.0 else base
+    var pulse: float = sin(animation_time * 4.0) * 2.0
+    draw_circle(Vector2(0, -61 + pulse), 22, Color("#141218"))
+    draw_circle(Vector2(0, -61 + pulse), 19, c)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-26, -40 + pulse), Vector2(26, -40 + pulse),
+        Vector2(32, 8), Vector2(-32, 8)
+    ]), c)
+    draw_arc(Vector2(0, -55 + pulse), 30.0 if phase_two else 26.0, PI * 0.1, PI * 0.9, 20, Color("#9f806f"), 4.0)
+    draw_line(Vector2(-18, -4 + pulse), Vector2(-62, 10), c, 12.0)
+    draw_line(Vector2(18, -4 + pulse), Vector2(62, 10), c, 12.0)
+    draw_line(Vector2(facing * 8.0, -18 + pulse), Vector2(facing * 92.0, -44 + pulse), Color("#c9baa0"), 10.0)
     if windup > 0.0:
         var telegraph_color := Color("#c44e5a") if phase_two else Color("#9e5961")
         draw_arc(Vector2(0, -34), 68.0 if phase_two else 58.0, 0, TAU, 28, telegraph_color, 5.0)
