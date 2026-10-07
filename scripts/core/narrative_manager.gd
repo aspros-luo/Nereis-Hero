@@ -4,6 +4,7 @@ var panel: ColorRect
 var title_label: Label
 var body_label: Label
 var timer := 0.0
+var choice_active := false
 
 func _ready() -> void:
     layer = 20
@@ -29,12 +30,21 @@ func _ready() -> void:
     panel.add_child(body_label)
 
 func _process(delta: float) -> void:
-    if not panel.visible:
+    if not panel.visible or choice_active:
         return
     timer -= delta
     if timer <= 0.0:
         panel.visible = false
-        print("[NEREIS][STORY] Memory display ended")
+        print("[NEREIS][STORY] Narrative display ended")
+
+func _unhandled_input(event: InputEvent) -> void:
+    if not choice_active:
+        return
+    if event is InputEventKey and event.pressed and not event.echo:
+        if event.keycode == KEY_1:
+            _select_choice(1)
+        elif event.keycode == KEY_2:
+            _select_choice(2)
 
 func play_first_memory() -> void:
     if WorldState.first_memory_unlocked:
@@ -53,3 +63,22 @@ func show_message(title: String, message: String) -> void:
     body_label.text = message
     panel.visible = true
     timer = 4.0
+
+    
+func begin_first_choice() -> void:
+    choice_active = true
+    title_label.text = "THE ROAD REMEMBERS YOU"
+    body_label.text = "Inside the fallen armor you find a church seal.\n\nFrom the village, the lullaby begins again. You can follow the seal, or follow the song.\n\n[1] Follow the church seal\n[2] Follow the lullaby"
+    panel.visible = true
+    timer = 0.0
+    print("[NEREIS][STORY] First choice opened")
+
+func _select_choice(choice: int) -> void:
+    choice_active = false
+    WorldState.make_first_choice(choice)
+    if choice == 1:
+        show_message("THE CHURCH SEAL", "You close your hand around the seal.\n\nThe metal is warm. Someone, somewhere, expected you to come back.")
+    else:
+        show_message("THE LULLABY", "You turn toward the song.\n\nFor one heartbeat, you remember the village before the church found you.")
+    print("[NEREIS][STORY] First choice resolved=%d" % choice)
+    get_viewport().set_input_as_handled()
