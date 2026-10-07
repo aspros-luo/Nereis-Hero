@@ -480,3 +480,19 @@ Implemented after the successful Godot 4.6.1 runtime baseline:
 Static verification after this pass is clean for the modified files: balanced syntax structure, no duplicate function definitions, and no previously identified strict-typing patterns.
 
 The next runtime acceptance should focus on whether the new visual and audio feedback improves feel without becoming distracting or noisy.
+
+
+## 16. Runtime regression fix — death burst
+
+The first 002B runtime pass exposed a real gameplay error when a small enemy died: the death-burst effect was attached through a string path and then invoked via setup() on a generic Node2D.
+
+The fix now:
+
+- preloads the death-burst script in Hero, Cultist, Pale Hound and Ashen Knight
+- creates the effect with Script.new()
+- invokes its setup method through Node.call()
+- removes the raw string-path set_script() pattern from these death paths
+
+The same instantiation pattern is used for the new Hero slash effect.
+
+Static regression after the fix is clean on all affected files.
