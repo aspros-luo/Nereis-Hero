@@ -31,8 +31,6 @@ func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 0.5
         consumed = WorldState.record_interior_clue(clue_id, humanity_delta)
-        if consumed and clue_id in ["tavern_silver_bell", "church_confession_book"]:
-            WorldState.record_hidden_artifact_source(clue_id)
         examined.emit()
         print("[NEREIS][STORY] Interior clue examined id=%s" % clue_id)
         get_viewport().set_input_as_handled()
