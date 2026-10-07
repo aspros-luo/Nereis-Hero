@@ -64,9 +64,9 @@ func _spawn_gatekeeper() -> void:
     npc.npc_id = "village_gatekeeper"
     npc.display_name = "VILLAGE GATEKEEPER"
     if WorldState.selected_route == "church":
-        npc.dialogue = "The gatekeeper studies the church seal.\n\n"They told us you would never return. Why did they send the same man back?""
+        npc.dialogue = "The gatekeeper studies the church seal.\n\n\"They told us you would never return. Why did they send the same man back?\""
     else:
-        npc.dialogue = "The gatekeeper hears the lullaby on the wind and shuts the tavern door halfway.\n\n"Don't sing that here. Not unless you want the village to remember.""
+        npc.dialogue = "The gatekeeper hears the lullaby on the wind and shuts the tavern door halfway.\n\n\"Don't sing that here. Not unless you want the village to remember.\""
     add_child(npc)
 
 func _spawn_village_pois() -> void:
