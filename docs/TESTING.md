@@ -6,7 +6,7 @@ The project has moved beyond the original Core Combat Demo into the first narrat
 
 ### Default startup
 
-`res://scenes/escape_prologue.tscn`
+`res://scenes/boot.tscn`
 
 The intended playable flow is now:
 
@@ -70,9 +70,9 @@ This is deliberately quiet. There is no "romance failed" notification.
 
 The following existing clues now contribute hidden resistance evidence:
 
-- tavern silver bell
-- church confession book
-- graveyard weathered stone
+- ancient research ward
+- graveyard bell / gravestone story
+- restoration order
 - route memory echo
 
 The UI does not present these as "true ending items".
@@ -103,6 +103,17 @@ Reads the current hidden state through the ending evaluator:
 - physical union with hidden resistance → 烈火天罚
 
 This is a development shortcut. The final game will reach the evaluator through normal progression.
+
+### F6 — Mite Resonance Theater
+
+Tests the relationship-to-resonance turning point in isolation:
+
+- relationship already established
+- physical union state
+- ancient-god residue awakened
+- Outer-God resonance
+- corrupted lullaby
+- first behavioral drift in Mite
 
 ### F7 — Church Final Boss Theater
 
