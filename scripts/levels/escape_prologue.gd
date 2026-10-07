@@ -171,6 +171,7 @@ func _spawn_ui() -> void:
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
     hud.bind_hero(hero)
+    hud.set_story_mode("THE SURGICAL WARD", "ESCAPE THE CHURCH")
 
 func _show_intro() -> void:
     narrative.show_message(
