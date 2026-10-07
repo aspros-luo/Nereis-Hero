@@ -34,6 +34,9 @@ func _physics_process(delta: float) -> void:
     for area in get_overlapping_areas():
         if area == self or area in hit_targets:
             continue
+        var target_host = area.get("host")
+        if target_host == host:
+            continue
         if area.has_method("receive_hit"):
             area.receive_hit(damage, host)
             hit_targets.append(area)
