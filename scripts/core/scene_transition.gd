@@ -9,8 +9,14 @@ func _ready() -> void:
     overlay.color = Color("#08070a")
     overlay.modulate.a = 0.0
     overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    overlay.position = Vector2.ZERO
+    overlay.size = get_viewport().get_visible_rect().size
     add_child(overlay)
+    get_viewport().size_changed.connect(_resize_overlay)
+
+func _resize_overlay() -> void:
+    if overlay:
+        overlay.size = get_viewport().get_visible_rect().size
 
 func fade_to_scene(scene_path: String) -> void:
     if transitioning:
