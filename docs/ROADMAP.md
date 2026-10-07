@@ -30,8 +30,8 @@ Build a complete 10–20 minute playable sequence.
 - [x] Cultist encounter
 - [x] Ashen Knight encounter
 - [x] Expand to authored horizontal level layout
-- [ ] Add first real environment art pass
-- [ ] Add combat feedback pass
+- [x] Add first procedural environment art pass
+- [x] Add combat feedback pass
 - [x] Add post-boss transition
 - [x] Add first meaningful player choice
 
