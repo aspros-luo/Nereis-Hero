@@ -126,7 +126,7 @@ func _on_route_exit_reached() -> void:
 
 func _enter_village_hub() -> void:
     print("[NEREIS][VILLAGE] Leaving route=%s -> Village Hub" % WorldState.selected_route)
-    get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
+    SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
 
 func _spawn_route_memory_echo() -> void:
     var echo := Node2D.new()
