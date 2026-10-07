@@ -6,12 +6,14 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const VILLAGE_POI_SCRIPT = preload("res://scripts/world/village_poi.gd")
+const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
 var narrative: CanvasLayer
 var hud: CanvasLayer
 var checkpoint: Area2D
+var mite: Node2D
 
 func _ready() -> void:
     print("[NEREIS][VILLAGE] Entered Village Hub route=%s" % WorldState.selected_route)
@@ -20,6 +22,7 @@ func _ready() -> void:
     _create_boundaries()
     _spawn_hero()
     _spawn_checkpoint()
+    _spawn_mite()
     _spawn_gatekeeper()
     _spawn_shared_world_npcs()
     _spawn_village_pois()
@@ -57,6 +60,21 @@ func _spawn_checkpoint() -> void:
     shape.position = Vector2(0, -55)
     checkpoint.add_child(shape)
     add_child(checkpoint)
+
+func _spawn_mite() -> void:
+    mite = Node2D.new()
+    mite.set_script(MITE_SCRIPT)
+    mite.position = Vector2(520, 520)
+    mite.name = "Mite"
+    add_child(mite)
+    mite.interacted.connect(_on_mite_interacted)
+    print("[NEREIS][VILLAGE] Mite present; relationship facts=%d" % WorldState.mite_interactions_seen.size())
+
+func _on_mite_interacted(_interaction_id: String, title: String, message: String) -> void:
+    narrative.show_message(title, message, 7.0)
+    if WorldState.mite_interactions_seen.size() >= 2:
+        WorldState.current_location = "village_with_mite"
+        WorldState.save_game()
 
 func _spawn_gatekeeper() -> void:
     var npc := Node2D.new()
@@ -158,7 +176,7 @@ func _spawn_ui() -> void:
 func _show_village_intro() -> void:
     narrative.show_message(
         "THE VILLAGE",
-        "The road ends where the village begins.\n\nThe Hero recognizes none of it. The village recognizes him.",
+        "The road ends where the village begins.\n\nThe Hero recognizes none of it. The village recognizes him.\n\nSomeone has left a place for him by the fire.",
         6.0
     )
 
@@ -215,6 +233,19 @@ func _draw() -> void:
         draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
 
     draw_string(ThemeDB.fallback_font, Vector2(100, 230), "THE VILLAGE", HORIZONTAL_ALIGNMENT_LEFT, -1, 30, Color("#4d454d"))
+
+    # Small house where the Hero first recovers.
+    draw_rect(Rect2(350, 360, 210, 160), Color("#27222b"))
+    draw_colored_polygon(
+        PackedVector2Array([
+            Vector2(325, 360),
+            Vector2(455, 245),
+            Vector2(585, 360)
+        ]),
+        Color("#302832")
+    )
+    draw_rect(Rect2(430, 430, 50, 90), Color("#17141b"))
+    draw_string(ThemeDB.fallback_font, Vector2(388, 332), "MITE'S HOUSE", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
 
     for x in range(120, 2300, 480):
         draw_rect(Rect2(x - 90, 360, 180, 160), Color("#29232b"))
