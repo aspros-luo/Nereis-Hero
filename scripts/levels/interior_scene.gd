@@ -8,6 +8,7 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
+const INTERIOR_CLUE_SCRIPT = preload("res://scripts/world/interior_clue.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -15,6 +16,7 @@ var narrative: CanvasLayer
 var hud: CanvasLayer
 var exit: Area2D
 var checkpoint: Area2D
+var clue: Node2D
 
 func _ready() -> void:
     WorldState.set_location(location_id)
@@ -24,6 +26,7 @@ func _ready() -> void:
     _spawn_hero()
     _spawn_checkpoint()
     _spawn_npc()
+    _spawn_clue()
     _spawn_exit()
     _spawn_ui()
     queue_redraw()
@@ -80,6 +83,27 @@ func _spawn_npc() -> void:
 
     add_child(npc)
     npc.interacted.connect(_on_npc_interacted.bind(npc))
+
+func _spawn_clue() -> void:
+    clue = Node2D.new()
+    clue.set_script(INTERIOR_CLUE_SCRIPT)
+
+    if location_id == "tavern":
+        clue.position = Vector2(1240, 520)
+        clue.clue_id = "tavern_silver_bell"
+        clue.display_name = "SILVER BELL"
+        clue.description = "The bell is cold to the touch.\\n\\nWhen you lift it, you remember a hand placing a cup in front of you. The hand is yours."
+    else:
+        clue.position = Vector2(1260, 520)
+        clue.clue_id = "church_confession_book"
+        clue.display_name = "CONFESSION BOOK"
+        clue.description = "The book contains your handwriting.\\n\\nThe last entry ends with one sentence: \\"I agreed because they promised she would live.\\""
+
+    add_child(clue)
+    clue.examined.connect(_on_clue_examined.bind(clue))
+
+func _on_clue_examined(target: Node) -> void:
+    narrative.show_message(target.display_name, target.description, 7.0)
 
 func _spawn_exit() -> void:
     exit = Area2D.new()
