@@ -135,11 +135,13 @@ func _spawn_route_memory_echo() -> void:
     if route_id == "lullaby":
         echo.position = Vector2(1450, 520)
         echo.echo_id = "lullaby_broken_bell"
+        echo.humanity_delta = 1
         echo.display_name = "BROKEN BELL"
         echo.dialogue = "The bell rings without moving.\n\nA child hums a melody you remember from before you were born."
     else:
         echo.position = Vector2(1450, 520)
         echo.echo_id = "church_ledger"
+        echo.humanity_delta = -4
         echo.display_name = "CHURCH LEDGER"
         echo.dialogue = "Your name is written in the margin three times.\n\nThe first is dated seven years ago. The second is yesterday. The third has no date."
 
@@ -174,7 +176,7 @@ func _on_route_npc_interacted(npc: Node) -> void:
     narrative.show_message(npc.display_name, npc.dialogue, 7.0)
 
 func _on_route_memory_interacted(echo: Node) -> void:
-    WorldState.record_route_memory(echo.echo_id)
+    WorldState.record_route_memory(echo.echo_id, echo.humanity_delta)
     print("[NEREIS][STORY] Route memory displayed id=%s" % echo.echo_id)
     narrative.show_message(echo.display_name, echo.dialogue, 7.0)
 
