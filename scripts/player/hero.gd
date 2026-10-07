@@ -43,10 +43,12 @@ var coyote_time := 0.0
 var jump_buffer := 0.0
 var camera_shake_time := 0.0
 var camera_shake_strength := 0.0
+var hit_confirm_time := 0.0
 var state := CombatState.IDLE
 var previous_state := CombatState.IDLE
 var attack_hitbox: Area2D
 signal defeated
+signal attack_landed(damage: int, target: Node)
 
 func _ready() -> void:
     _setup_combat_components()
@@ -71,6 +73,7 @@ func _physics_process(delta: float) -> void:
         return
 
     _update_camera_shake(delta)
+    hit_confirm_time = max(0.0, hit_confirm_time - delta)
     _update_jump_buffer(delta)
     _update_combo_window(delta)
 
@@ -230,6 +233,13 @@ func _spawn_hit_spark() -> void:
     effect.global_position = global_position + Vector2(0, -34)
     get_parent().add_child(effect)
 
+func _on_attack_hit(damage: int, target: Node) -> void:
+    hit_confirm_time = 0.05
+    _shake_camera(4.0, 0.07)
+    velocity.x = facing * 145.0
+    attack_landed.emit(damage, target)
+    _log("COMBAT", "Attack confirmed; damage=%d target=%s" % [damage, target.name if target else "Unknown"])
+
 func _shake_camera(strength: float, duration: float) -> void:
     camera_shake_strength = max(camera_shake_strength, strength)
     camera_shake_time = max(camera_shake_time, duration)
@@ -306,7 +316,9 @@ func _draw() -> void:
     draw_circle(Vector2(0, -52), 18, body)
     draw_rect(Rect2(-18, -34, 36, 34), cloak)
     draw_line(Vector2(0, -8), Vector2(facing * 58, -22), Color("#b7a48c"), 7.0)
-    if attack_time > 0.0 and attack_windup <= 0.0:
+    if hit_confirm_time > 0.0:
+        draw_arc(Vector2(facing * 28, -24), 70.0, 0.0, TAU, 24, Color("#efe1c8"), 6.0)
+    elif attack_time > 0.0 and attack_windup <= 0.0:
         var arc_start := -1.20 if facing > 0 else 1.20
         var arc_end := 1.20 if facing > 0 else 5.08
         var arc_radius := 64.0 + combo_step * 3.0
