@@ -272,6 +272,8 @@ func _process(delta: float) -> void:
 " % WorldState.ancient_residue_awakened
         + "Outer Resonance: %s
 " % WorldState.outer_god_resonance
+        + "Mite Control: %d/3
+" % WorldState.mite_control_stage
         + "Union: %s
 " % WorldState.physical_union_complete
         + "Artifact: %d/4
