@@ -13,6 +13,7 @@ var church_alignment := 0
 var lullaby_resonance := 0
 var first_choice_made := false
 var slice_complete := false
+var input_locked := false
 
 func _ready() -> void:
     load_game()
@@ -143,3 +144,4 @@ func reset() -> void:
     lullaby_resonance = 0
     first_choice_made = false
     slice_complete = false
+    input_locked = false
