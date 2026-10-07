@@ -18,8 +18,7 @@ var route_memory_seen := false
 var route_memory_id := ""
 var route_complete := false
 var current_location := "slice"
-var interior_clue_seen := false
-var interior_clue_id := ""
+var interior_clues_seen: Array[String] = []
 var weapon_level := 1
 var hero_attack_damage := 34
 var input_locked := false
@@ -107,8 +106,7 @@ func save_game() -> void:
         "route_memory_id": route_memory_id,
         "route_complete": route_complete,
         "current_location": current_location,
-        "interior_clue_seen": interior_clue_seen,
-        "interior_clue_id": interior_clue_id,
+        "interior_clues_seen": interior_clues_seen,
         "weapon_level": weapon_level,
         "hero_attack_damage": hero_attack_damage
     }
@@ -160,8 +158,11 @@ func load_game() -> void:
     route_memory_id = str(parsed.get("route_memory_id", ""))
     route_complete = bool(parsed.get("route_complete", false))
     current_location = str(parsed.get("current_location", "slice"))
-    interior_clue_seen = bool(parsed.get("interior_clue_seen", false))
-    interior_clue_id = str(parsed.get("interior_clue_id", ""))
+    var saved_interior_clues = parsed.get("interior_clues_seen", [])
+    if saved_interior_clues is Array:
+        interior_clues_seen.clear()
+        for clue_id in saved_interior_clues:
+            interior_clues_seen.append(str(clue_id))
     weapon_level = int(parsed.get("weapon_level", 1))
     hero_attack_damage = int(parsed.get("hero_attack_damage", 34))
 
@@ -190,8 +191,7 @@ func reset() -> void:
     route_memory_id = ""
     route_complete = false
     current_location = "slice"
-    interior_clue_seen = false
-    interior_clue_id = ""
+    interior_clues_seen.clear()
     weapon_level = 1
     hero_attack_damage = 34
     input_locked = false
@@ -208,10 +208,9 @@ func record_route_memory(memory_id: String) -> bool:
     return true
 
 func record_interior_clue(clue_id: String) -> bool:
-    if interior_clue_seen and interior_clue_id == clue_id:
+    if clue_id in interior_clues_seen:
         return false
-    interior_clue_seen = true
-    interior_clue_id = clue_id
+    interior_clues_seen.append(clue_id)
     hero_memory += 1
     print("[NEREIS][STORY] Interior clue recorded id=%s hero_memory=%d" % [clue_id, hero_memory])
     save_game()
