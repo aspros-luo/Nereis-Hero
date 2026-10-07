@@ -200,3 +200,15 @@ Inside the Tavern, E at the rest point should:
 - preserve Humanity and all narrative state
 - save the current location
 - show the rest message
+## Humanity acceptance
+
+Humanity is a resilience / selfhood axis, not a morality score.
+
+Current first-pass encounter effects:
+- Lullaby broken bell: +1 Humanity
+- Church ledger: -4 Humanity
+- Tavern silver bell: +2 Humanity
+- Church confession book: -5 Humanity
+- Graveyard weathered stone: -8 Humanity
+
+Humanity is clamped to 0–100, saved, restored on load, and shown as a permanent HUD bar.
