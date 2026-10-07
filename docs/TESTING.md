@@ -149,3 +149,15 @@ Expected location log markers:
 [NEREIS][WORLD] Current location=village
 [NEREIS][WORLD] Current location=tavern
 [NEREIS][WORLD] Current location=church
+## Location resume acceptance
+
+Quit and relaunch from each persisted location:
+
+- `route_church` -> Church route scene
+- `route_lullaby` -> Lullaby route scene
+- `village` -> Village Hub
+- `tavern` -> Tavern Interior
+- `church` -> Church Interior
+
+F3 debug should show the same `Location` value after relaunch.
+F9 must still erase all state and restart from the main Vertical Slice.
