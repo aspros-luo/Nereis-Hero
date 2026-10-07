@@ -5,6 +5,7 @@ const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
+const VILLAGE_POI_SCRIPT = preload("res://scripts/world/village_poi.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -20,6 +21,7 @@ func _ready() -> void:
     _spawn_hero()
     _spawn_checkpoint()
     _spawn_gatekeeper()
+    _spawn_village_pois()
     _spawn_ui()
     queue_redraw()
 
@@ -66,6 +68,28 @@ func _spawn_gatekeeper() -> void:
     else:
         npc.dialogue = "The gatekeeper hears the lullaby on the wind and shuts the tavern door halfway.\n\n"Don't sing that here. Not unless you want the village to remember.""
     add_child(npc)
+
+func _spawn_village_pois() -> void:
+    var tavern := Node2D.new()
+    tavern.set_script(VILLAGE_POI_SCRIPT)
+    tavern.position = Vector2(1730, 520)
+    tavern.poi_id = "tavern"
+    tavern.display_name = "THE TAVERN"
+    tavern.dialogue = "The tavern door is warm beneath your hand.\\n\\nFor a moment you hear a lullaby from inside. The voice stops when you touch the handle."
+    add_child(tavern)
+    tavern.interacted.connect(_on_village_poi_interacted.bind(tavern))
+
+    var church := Node2D.new()
+    church.set_script(VILLAGE_POI_SCRIPT)
+    church.position = Vector2(2220, 520)
+    church.poi_id = "church"
+    church.display_name = "THE CHURCH"
+    church.dialogue = "The church door bears your name beneath layers of newer paint.\\n\\nSomeone has tried to erase it many times."
+    add_child(church)
+    church.interacted.connect(_on_village_poi_interacted.bind(church))
+
+func _on_village_poi_interacted(poi: Node) -> void:
+    narrative.show_message(poi.display_name, poi.dialogue, 6.0)
 
 func _spawn_ui() -> void:
     narrative = CanvasLayer.new()
