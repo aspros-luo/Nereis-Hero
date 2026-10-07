@@ -8,6 +8,7 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const BOSS_GATE_SCRIPT = preload("res://scripts/world/boss_gate.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const COMBAT_AUDIO_SCRIPT = preload("res://scripts/audio/combat_audio.gd")
+const ASH_PARTICLES_SCRIPT = preload("res://scripts/effects/ash_particles.gd")
 
 const LEVEL_WIDTH := 2400.0
 const FLOOR_Y := 540.0
@@ -33,6 +34,7 @@ func _ready() -> void:
 
     _create_floor()
     _create_boundaries()
+    _spawn_ambient_particles()
     _spawn_hero()
     _spawn_checkpoint()
     _spawn_small_enemies()
@@ -68,6 +70,12 @@ func _spawn_hero() -> void:
     camera.limit_bottom = 720
     camera.position = Vector2.ZERO
     hero.add_child(camera)
+
+func _spawn_ambient_particles() -> void:
+    var particles := Node2D.new()
+    particles.name = "AshParticles"
+    particles.set_script(ASH_PARTICLES_SCRIPT)
+    add_child(particles)
 
 func _spawn_checkpoint() -> void:
     checkpoint = Area2D.new()
@@ -130,6 +138,8 @@ func _spawn_boss() -> void:
         hud.bind_boss(boss)
         hud.set_combat_demo_progress(enemies_defeated, true, demo_complete)
 
+    if hud:
+        hud.show_boss_intro()
     print("[NEREIS][DEMO] Boss encounter started")
 
 func _spawn_boss_checkpoint() -> void:
