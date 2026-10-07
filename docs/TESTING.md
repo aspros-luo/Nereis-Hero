@@ -78,3 +78,22 @@ The Hero has a 100-point stamina pool. Attacks consume 12 stamina; dodges consum
 Taking damage causes a brief HURT state with knockback. During this state movement and attacks are temporarily disabled.
 
 The F3 overlay exposes current stamina for local balancing.
+
+## Content expansion acceptance
+
+### Pale Hound
+- Appears around x=1180 before the Cultist.
+- Uses the shared Hitbox/Hurtbox system.
+- Its pounce deals 18 damage.
+- It respawns after Hero death.
+
+### Weapon upgrade
+- After the first memory is unlocked, talk to the Old Hunter again.
+- The first upgrade changes weapon level from 1 to 2.
+- Hero attack damage changes from 34 to 44.
+- The upgrade is saved automatically.
+
+### Boss HUD
+- The Ashen Knight health bar appears when the Hero is within range.
+- It disappears after the Boss is defeated.
+- F3 debug also reports weapon level and current attack damage.
