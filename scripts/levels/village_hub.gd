@@ -232,7 +232,7 @@ func _unhandled_input(event: InputEvent) -> void:
         elif event.keycode == KEY_F9:
             WorldState.delete_save()
             print("[NEREIS][DEBUG] Village run reset")
-            get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
+            get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
             get_viewport().set_input_as_handled()
 
 func _draw() -> void:
