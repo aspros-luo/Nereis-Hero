@@ -96,11 +96,11 @@ func _enter_village_location(location_id: String) -> void:
     if location_id == "tavern":
         WorldState.set_location("tavern")
         print("[NEREIS][VILLAGE] Entering Tavern Interior")
-        get_tree().change_scene_to_file("res://scenes/locations/tavern_interior.tscn")
+        SceneTransition.fade_to_scene("res://scenes/locations/tavern_interior.tscn")
     elif location_id == "church":
         WorldState.set_location("church")
         print("[NEREIS][VILLAGE] Entering Church Interior")
-        get_tree().change_scene_to_file("res://scenes/locations/church_interior.tscn")
+        SceneTransition.fade_to_scene("res://scenes/locations/church_interior.tscn")
 
 func _spawn_ui() -> void:
     narrative = CanvasLayer.new()
