@@ -4,9 +4,11 @@ const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const ENEMY_SCRIPT = preload("res://scripts/enemies/cultist.gd")
 const NPC_SCRIPT = preload("res://scripts/npc/old_hunter.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
+const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
 
 var hero: CharacterBody2D
 var enemy: CharacterBody2D
+var boss: CharacterBody2D
 var old_hunter: Node2D
 var camera: Camera2D
 var narrative: CanvasLayer
@@ -37,6 +39,13 @@ func _ready() -> void:
     _add_character_collision(enemy, 20.0, 44.0)
     add_child(enemy)
 
+    boss = CharacterBody2D.new()
+    boss.set_script(BOSS_SCRIPT)
+    boss.position = Vector2(1130, 480)
+    boss.name = "AshenKnight"
+    _add_character_collision(boss, 24.0, 56.0)
+    add_child(boss)
+
     narrative = CanvasLayer.new()
     narrative.set_script(NARRATIVE_SCRIPT)
     add_child(narrative)
@@ -52,7 +61,7 @@ func _ready() -> void:
     camera.position = hero.position
     hero.add_child(camera)
 
-    _log("BOOT", "Hero, OldHunter, Cultist, Narrative and Camera initialized")
+    _log("BOOT", "Hero, OldHunter, Cultist, AshenKnight, Narrative and Camera initialized")
     queue_redraw()
 
 func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
@@ -99,6 +108,8 @@ func _draw() -> void:
         draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
 
     draw_rect(Rect2(480, 445, 160, 75), Color("#27212a"))
+    draw_rect(Rect2(1040, 420, 160, 100), Color("#241d25"))
+    draw_string(ThemeDB.fallback_font, Vector2(1045, 438), "BOSS GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
     draw_string(ThemeDB.fallback_font, Vector2(485, 458), "OLD HUNTER", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
 
     draw_string(ThemeDB.fallback_font, Vector2(40, 55), "NEREIS HERO // VERTICAL SLICE 001", HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color("#d6c7b2"))
