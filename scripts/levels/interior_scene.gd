@@ -9,6 +9,7 @@ const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const INTERIOR_CLUE_SCRIPT = preload("res://scripts/world/interior_clue.gd")
+const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -17,6 +18,7 @@ var hud: CanvasLayer
 var exit: Area2D
 var checkpoint: Area2D
 var clue: Node2D
+var rest_point: Node2D
 
 func _ready() -> void:
     WorldState.set_location(location_id)
@@ -27,6 +29,7 @@ func _ready() -> void:
     _spawn_checkpoint()
     _spawn_npc()
     _spawn_clue()
+    _spawn_rest_point()
     _spawn_exit()
     _spawn_ui()
     queue_redraw()
@@ -104,6 +107,20 @@ func _spawn_clue() -> void:
 
 func _on_clue_examined(target: Node) -> void:
     narrative.show_message(target.display_name, target.description, 7.0)
+
+func _spawn_rest_point() -> void:
+    if location_id != "tavern":
+        return
+
+    rest_point = Node2D.new()
+    rest_point.set_script(REST_POINT_SCRIPT)
+    rest_point.position = Vector2(1380, 520)
+    rest_point.rest_id = "tavern_bench"
+    add_child(rest_point)
+    rest_point.rested.connect(_on_rest_point_used)
+
+func _on_rest_point_used() -> void:
+    narrative.show_message("A MOMENT OF QUIET", "For once, nothing asks you to remember.", 4.0)
 
 func _spawn_exit() -> void:
     exit = Area2D.new()
