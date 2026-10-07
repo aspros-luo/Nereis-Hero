@@ -3,6 +3,8 @@ extends CharacterBody2D
 const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
 const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
+const SLASH_ARC_SCRIPT = preload("res://scripts/effects/slash_arc.gd")
+const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
 
 const SPEED := 260.0
 const ATTACK_MOVE_SPEED := 92.0
@@ -46,6 +48,7 @@ var camera_shake_strength := 0.0
 var hit_confirm_time := 0.0
 var state := CombatState.IDLE
 var previous_state := CombatState.IDLE
+var animation_time := 0.0
 var attack_hitbox: Area2D
 signal defeated
 signal attack_landed(damage: int, target: Node)
@@ -67,6 +70,10 @@ func _setup_combat_components() -> void:
     hurtbox.set_script(HURTBOX_SCRIPT)
     add_child(hurtbox)
     hurtbox.setup(self, Vector2(34, 78), Vector2(0, -34))
+
+func _process(delta: float) -> void:
+    animation_time += delta
+    queue_redraw()
 
 func _physics_process(delta: float) -> void:
     if state == CombatState.DEAD:
@@ -114,6 +121,7 @@ func _physics_process(delta: float) -> void:
             var damage := int(round(base_damage * multiplier))
             attack_hitbox.position.x = facing * float(COMBO_REACH[combo_step - 1])
             attack_hitbox.activate(damage, 0.11 if combo_step < 3 else 0.14)
+            _spawn_slash_arc()
             attack_hit_registered = true
             _log("COMBAT", "Hero combo %d hit window; damage=%d" % [combo_step, damage])
         if attack_time <= 0.0:
@@ -227,11 +235,25 @@ func _state_name(value: CombatState) -> String:
 func get_debug_state() -> String:
     return _state_name(state)
 
+func _spawn_slash_arc() -> void:
+    var effect := Node2D.new()
+    effect.set_script(SLASH_ARC_SCRIPT)
+    effect.global_position = global_position
+    get_parent().add_child(effect)
+    effect.setup(facing, combo_step)
+
 func _spawn_hit_spark() -> void:
     var effect := Node2D.new()
     effect.set_script(HIT_SPARK_SCRIPT)
     effect.global_position = global_position + Vector2(0, -34)
     get_parent().add_child(effect)
+
+func _spawn_death_burst() -> void:
+    var effect := Node2D.new()
+    effect.set_script(DEATH_BURST_SCRIPT)
+    effect.global_position = global_position + Vector2(0, -38)
+    get_parent().add_child(effect)
+    effect.setup(18.0)
 
 func _on_attack_hit(damage: int, target: Node) -> void:
     hit_confirm_time = 0.05
@@ -277,6 +299,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
     _log("COMBAT", "%s -> Hero damage=%d hp=%d" % [source_name, amount, health])
     if health == 0:
         _set_state(CombatState.DEAD)
+        _spawn_death_burst()
         _log("HERO", "Hero defeated; resetting vertical slice")
         defeated.emit()
         health = 100
@@ -311,11 +334,24 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    var body := Color("#c8b59b")
-    var cloak := Color("#433a42")
-    draw_circle(Vector2(0, -52), 18, body)
-    draw_rect(Rect2(-18, -34, 36, 34), cloak)
-    draw_line(Vector2(0, -8), Vector2(facing * 58, -22), Color("#b7a48c"), 7.0)
+    var bob: float = sin(animation_time * 7.0) * 1.5 if state == CombatState.IDLE else 0.0
+    var step: float = sin(animation_time * 11.0) * 2.0 if state == CombatState.MOVE else 0.0
+    var body := Color("#d0bea4")
+    var armor := Color("#3d3740")
+    var cloak := Color("#252129")
+    var metal := Color("#b7a48c")
+
+    draw_circle(Vector2(0, -52 + bob), 18, body)
+    draw_circle(Vector2(facing * 5.0, -54 + bob), 6, Color("#19171c"))
+    draw_rect(Rect2(-18, -35 + bob, 36, 35), armor)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-19, -32 + bob), Vector2(19, -32 + bob),
+        Vector2(27, 10 + step), Vector2(-30, 10 - step)
+    ]), cloak)
+    draw_line(Vector2(-12, -3 + bob), Vector2(-22, 18 + step), armor, 7.0)
+    draw_line(Vector2(12, -3 + bob), Vector2(22, 18 - step), armor, 7.0)
+    draw_line(Vector2(0, -8 + bob), Vector2(facing * 58, -22 + bob), metal, 7.0)
+    draw_line(Vector2(facing * 28, -23 + bob), Vector2(facing * 47, -30 + bob), Color("#e0d6c3"), 3.0)
     if hit_confirm_time > 0.0:
         draw_arc(Vector2(facing * 28, -24), 70.0, 0.0, TAU, 24, Color("#efe1c8"), 6.0)
     elif attack_time > 0.0 and attack_windup <= 0.0:
