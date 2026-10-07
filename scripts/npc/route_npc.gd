@@ -13,17 +13,20 @@ func _ready() -> void:
     print("[NEREIS][NPC] %s initialized id=%s" % [display_name, npc_id])
     queue_redraw()
 
-func _physics_process(delta: float) -> void:
+func _process(delta: float) -> void:
     cooldown = max(0.0, cooldown - delta)
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 120.0
+    queue_redraw()
 
-    if hero_nearby and Input.is_key_pressed(KEY_E) and cooldown <= 0.0:
+func _unhandled_input(event: InputEvent) -> void:
+    if WorldState.input_locked or not hero_nearby or cooldown > 0.0:
+        return
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 0.5
         interacted.emit()
         print("[NEREIS][NPC] Interaction id=%s" % npc_id)
-
-    queue_redraw()
+        get_viewport().set_input_as_handled()
 
 func _draw() -> void:
     draw_circle(Vector2(0, -50), 17.0, Color("#8d7566"))
