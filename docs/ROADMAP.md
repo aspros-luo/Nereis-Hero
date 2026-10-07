@@ -101,6 +101,8 @@ Current active development phase. Do not expand game systems until the core comb
 - [x] Procedural combat sound feedback
 - [x] Ambient ash particle field
 - [x] Boss entrance presentation
+- [x] Hitstop-like impact feedback
+- [x] Impact flash feedback
 - [ ] Local runtime re-validation of the visual/audio pass
 - [ ] Final 5–10 minute feel test
 

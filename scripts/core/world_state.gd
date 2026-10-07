@@ -24,6 +24,7 @@ var graveyard_cleared := false
 var weapon_level := 1
 var hero_attack_damage := 34
 var input_locked := false
+var hitstop_serial := 0
 
 func _ready() -> void:
     load_game()
@@ -86,6 +87,18 @@ func mark_slice_complete() -> void:
     slice_complete = true
     print("[NEREIS][WORLD] Vertical Slice completion saved")
     save_game()
+
+func trigger_hitstop(duration: float = 0.045, slow_scale: float = 0.08) -> void:
+    if duration <= 0.0:
+        return
+
+    hitstop_serial += 1
+    var serial: int = hitstop_serial
+    Engine.time_scale = minf(Engine.time_scale, slow_scale)
+    get_tree().create_timer(duration, true, false, true).timeout.connect(func() -> void:
+        if serial == hitstop_serial:
+            Engine.time_scale = 1.0
+    )
 
 func save_game() -> void:
     var data := {
@@ -211,8 +224,9 @@ func reset() -> void:
     weapon_level = 1
     hero_attack_damage = 34
     input_locked = false
+    hitstop_serial += 1
+    Engine.time_scale = 1.0
 
-  
 func record_route_memory(memory_id: String, humanity_delta: int = 0) -> bool:
     if route_memory_seen and route_memory_id == memory_id:
         return false

@@ -496,3 +496,18 @@ The fix now:
 The same instantiation pattern is used for the new Hero slash effect.
 
 Static regression after the fix is clean on all affected files.
+
+
+## 17. Combat feel pass — hitstop and impact flash
+
+Implemented after the death-burst regression fix:
+
+- short global hitstop-like slowdown on successful Hero hits
+- stronger hitstop on the third combo strike
+- short hitstop on Hero damage intake
+- stronger camera impact on later combo strikes
+- stronger forward recoil on the third combo strike
+- subtle full-screen impact flash tied to successful hits
+- hitstop state is reset safely by WorldState.reset()
+
+This is an implementation pass, not a runtime acceptance claim. Local feel testing is still required to confirm the freeze duration and flash strength are readable without becoming distracting.

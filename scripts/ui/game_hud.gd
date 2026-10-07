@@ -22,9 +22,17 @@ var stamina_label: Label
 var humanity_label: Label
 var humanity_bar: ColorRect
 var objective_rule: ColorRect
+var impact_flash: ColorRect
+var impact_flash_time := 0.0
 
 func _ready() -> void:
     layer = 10
+
+    impact_flash = ColorRect.new()
+    impact_flash.position = Vector2.ZERO
+    impact_flash.color = Color(0.95, 0.86, 0.72, 0.0)
+    impact_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    add_child(impact_flash)
 
     title_label = Label.new()
     title_label.position = Vector2(36, 24)
@@ -178,6 +186,7 @@ func set_combat_demo_progress(defeated: int, boss_active: bool, complete: bool) 
         objective_label.text = "DEFEAT SMALL ENEMIES    %d / 3" % defeated
 
 func show_hit_confirm(damage: int) -> void:
+    impact_flash_time = 0.07 if damage < 50 else 0.10
     _show_banner("HIT  %d" % damage, 0.18)
 
 func show_death_feedback() -> void:
@@ -205,6 +214,12 @@ func set_debug_visible(value: bool) -> void:
     debug_panel.visible = value
 
 func _process(delta: float) -> void:
+    impact_flash_time = max(0.0, impact_flash_time - delta)
+    var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+    impact_flash.size = viewport_size
+    var flash_ratio: float = clampf(impact_flash_time / 0.07, 0.0, 1.0)
+    impact_flash.color.a = flash_ratio * 0.12
+
     combat_banner_time = max(0.0, combat_banner_time - delta)
     if combat_banner_time <= 0.0:
         combat_banner.visible = false

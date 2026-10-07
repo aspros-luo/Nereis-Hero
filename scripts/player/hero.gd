@@ -258,9 +258,13 @@ func _spawn_death_burst() -> void:
     effect.call("setup", 18.0)
 
 func _on_attack_hit(damage: int, target: Node) -> void:
-    hit_confirm_time = 0.05
-    _shake_camera(4.0, 0.07)
-    velocity.x = facing * 145.0
+    hit_confirm_time = 0.07
+    var impact_strength: float = 4.0 + float(combo_step) * 1.4
+    var hitstop_duration: float = 0.055 if combo_step >= 3 else 0.038
+    var hitstop_scale: float = 0.06 if combo_step >= 3 else 0.08
+    WorldState.trigger_hitstop(hitstop_duration, hitstop_scale)
+    _shake_camera(impact_strength, 0.08)
+    velocity.x = facing * (170.0 if combo_step >= 3 else 145.0)
     attack_landed.emit(damage, target)
     _log("COMBAT", "Attack confirmed; damage=%d target=%s" % [damage, target.name if target else "Unknown"])
 
@@ -289,6 +293,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
         return
     health = max(0, health - amount)
     _spawn_hit_spark()
+    WorldState.trigger_hitstop(0.032, 0.10)
     _shake_camera(9.0, 0.12)
     hurt_time = HURT_DURATION
     velocity.y = -120.0
