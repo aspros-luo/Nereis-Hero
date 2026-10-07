@@ -16,6 +16,7 @@ var attack_hitbox: Area2D
 var animation_time := 0.0
 signal defeated
 signal phase_changed(phase: int)
+signal attack_telegraphed
 
 func _ready() -> void:
     _setup_combat_components()
@@ -83,6 +84,7 @@ func _physics_process(delta: float) -> void:
                 windup = 0.30 if phase_two else 0.42
                 attack_cooldown = 0.82 if phase_two else 1.55
                 attack_released = false
+                attack_telegraphed.emit()
                 _log("BOSS", "Ashen Knight attack telegraph phase=%d" % (2 if phase_two else 1))
 
     move_and_slide()
