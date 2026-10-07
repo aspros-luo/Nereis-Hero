@@ -127,7 +127,7 @@ func load_game() -> void:
 
 func delete_save() -> void:
     if FileAccess.file_exists(SAVE_PATH):
-        DirAccess.remove_absolute(SAVE_PATH)
+        DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
         print("[NEREIS][SAVE] Save file deleted")
     reset()
 
