@@ -1,0 +1,33 @@
+extends Node2D
+
+signal rested
+
+@export var rest_id: String = ""
+@export var display_name: String = "REST"
+
+var hero_nearby := false
+var cooldown := 0.0
+
+func _ready() -> void:
+    queue_redraw()
+
+func _physics_process(delta: float) -> void:
+    cooldown = max(0.0, cooldown - delta)
+    var hero := get_node_or_null("../Hero")
+    hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 110.0
+
+    if hero_nearby and Input.is_key_pressed(KEY_E) and cooldown <= 0.0:
+        cooldown = 1.0
+        hero.restore_full()
+        WorldState.save_game()
+        rested.emit()
+        print("[NEREIS][WORLD] Rest point used id=%s" % rest_id)
+
+    queue_redraw()
+
+func _draw() -> void:
+    draw_rect(Rect2(-36, -16, 72, 16), Color("#352d38"))
+    draw_circle(Vector2(-24, -22), 8.0, Color("#796d67"))
+    draw_circle(Vector2(24, -22), 8.0, Color("#796d67"))
+    if hero_nearby:
+        draw_string(ThemeDB.fallback_font, Vector2(-34, 28), "E  Rest", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
