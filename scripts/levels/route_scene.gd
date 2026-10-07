@@ -30,6 +30,7 @@ func _ready() -> void:
     _spawn_hound()
     _spawn_route_npc()
     _spawn_route_memory_echo()
+    hero.defeated.connect(_on_hero_defeated)
     _spawn_ui()
     queue_redraw()
 
