@@ -199,6 +199,13 @@ func mark_route_complete() -> void:
     print("[NEREIS][ROUTE] Route completion saved for %s" % selected_route)
     save_game()
 
+func get_resume_scene_path() -> String:
+    if route_complete:
+        return "res://scenes/village_hub.tscn"
+    if slice_complete and selected_route != "":
+        return get_route_scene_path()
+    return "res://scenes/main.tscn"
+
 func get_route_scene_path() -> String:
     if selected_route == "lullaby":
         return "res://scenes/routes/lullaby_path.tscn"
