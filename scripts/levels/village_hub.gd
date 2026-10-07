@@ -76,7 +76,9 @@ func _spawn_shared_world_npcs() -> void:
     youth.position = Vector2(1120, 520)
     youth.npc_id = "amnesiac_youth"
     youth.display_name = "AMNESIAC YOUTH"
-    if WorldState.selected_route == "church":
+    if WorldState.get_humanity_state() == "hollow":
+        youth.dialogue = "The young man takes one step back.\n\n\"I know that look. Something in you already left.\""
+    elif WorldState.selected_route == "church":
         youth.dialogue = "The young man touches your church seal and goes pale.\n\n\"I remember you kneeling there. They told me not to remember.\""
     else:
         youth.dialogue = "The young man stares toward the tavern.\n\n\"You came back carrying someone once. I don't know who it was. I only remember the singing.\""
@@ -87,7 +89,9 @@ func _spawn_shared_world_npcs() -> void:
     merchant.position = Vector2(1380, 520)
     merchant.npc_id = "traveling_merchant"
     merchant.display_name = "TRAVELING MERCHANT"
-    if WorldState.selected_route == "church":
+    if WorldState.get_humanity_state() == "hollow":
+        merchant.dialogue = "The merchant stops smiling.\n\n\"You should not be able to hear the song anymore.\""
+    elif WorldState.selected_route == "church":
         merchant.dialogue = "The merchant turns a silver token between two fingers.\n\n\"Church roads are safe only until the bells start. Then even the stones lie.\""
     else:
         merchant.dialogue = "The merchant smiles without humor.\n\n\"I saw the village seven years ago. Your face was already on the church door.\""
