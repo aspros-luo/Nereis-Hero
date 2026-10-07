@@ -31,4 +31,11 @@ func _draw() -> void:
             cos(elapsed * speeds[i] * 0.7 + phases[i]) * 16.0
         )
         var pulse := 0.5 + 0.5 * sin(elapsed * 1.8 + phases[i])
-        draw_circle(points[i] + drift, 2.2 + pulse * 1.4, Color(0.78, 0.70, 0.55, 0.10 + pulse * 0.15))
+        var resonance := WorldState.outer_god_resonance
+        var control_stage: int = WorldState.mite_control_stage
+        if resonance and i % 5 == 0:
+            var sync := sin(elapsed * (1.8 if control_stage < 2 else 0.9) + phases[i])
+            var sync_pos := points[i] + Vector2(sin(elapsed * 0.8 + phases[i]) * 30.0, sync * 26.0)
+            draw_circle(sync_pos, 2.4 + pulse * 1.7, Color(0.48, 0.34, 0.58, 0.12 + pulse * 0.16))
+        else:
+            draw_circle(points[i] + drift, 2.2 + pulse * 1.4, Color(0.78, 0.70, 0.55, 0.10 + pulse * 0.15))
