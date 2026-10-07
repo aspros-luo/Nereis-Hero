@@ -5,6 +5,7 @@ signal examined
 @export var clue_id: String = ""
 @export var display_name: String = ""
 @export_multiline var description: String = ""
+@export var humanity_delta: int = 0
 
 var consumed := false
 var hero_nearby := false
@@ -24,7 +25,7 @@ func _physics_process(delta: float) -> void:
 
     if hero_nearby and Input.is_key_pressed(KEY_E) and cooldown <= 0.0:
         cooldown = 0.5
-        consumed = WorldState.record_world_clue(clue_id)
+        consumed = WorldState.record_world_clue(clue_id, humanity_delta)
         examined.emit()
         print("[NEREIS][STORY] World clue examined id=%s" % clue_id)
         queue_redraw()
