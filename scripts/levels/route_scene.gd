@@ -5,6 +5,7 @@ extends Node2D
 const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
+const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -19,6 +20,7 @@ func _ready() -> void:
     _create_floor()
     _create_boundaries()
     _spawn_hero()
+    _spawn_route_npc()
     _spawn_ui()
     queue_redraw()
 
@@ -41,6 +43,24 @@ func _spawn_hero() -> void:
     camera.position = Vector2.ZERO
     hero.add_child(camera)
 
+func _spawn_route_npc() -> void:
+    var npc := Node2D.new()
+    npc.set_script(ROUTE_NPC_SCRIPT)
+    add_child(npc)
+
+    if route_id == "lullaby":
+        npc.position = Vector2(900, 520)
+        npc.npc_id = "traveling_merchant"
+        npc.display_name = "TRAVELING MERCHANT"
+        npc.dialogue = "The merchant studies your face for a long moment.\\n\\n"You walked this road before. You were carrying someone then. Not a sword.""
+    else:
+        npc.position = Vector2(900, 520)
+        npc.npc_id = "amnesiac_youth"
+        npc.display_name = "AMNESIAC YOUTH"
+        npc.dialogue = "The young man touches the church seal and recoils.\\n\\n"They told me you died inside the church. I remember hearing your name after the screaming stopped.""
+
+    npc.interacted.connect(_on_route_npc_interacted.bind(npc))
+
 func _spawn_ui() -> void:
     narrative = CanvasLayer.new()
     narrative.set_script(NARRATIVE_SCRIPT)
@@ -58,6 +78,10 @@ func _show_route_intro() -> void:
         narrative.show_message("THE LULLABY PATH", "The road bends toward the village lights.\n\nYou are certain you have never been here. Your hands disagree.", 6.0)
     else:
         narrative.show_message("THE CHURCH ROAD", "Stone markers line the road toward the old church.\n\nEach one bears your name.", 6.0)
+
+func _on_route_npc_interacted(npc: Node) -> void:
+    print("[NEREIS][STORY] Route NPC interaction id=%s" % npc.npc_id)
+    narrative.show_message(npc.display_name, npc.dialogue, 7.0)
 
 func _create_floor() -> void:
     var floor := StaticBody2D.new()
