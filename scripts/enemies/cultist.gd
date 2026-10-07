@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
 const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
+const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 
 var health := 100
 var attack_cooldown := 0.0
@@ -49,8 +50,15 @@ func _physics_process(delta: float) -> void:
     move_and_slide()
     queue_redraw()
 
+func _spawn_hit_spark() -> void:
+    var effect := Node2D.new()
+    effect.set_script(HIT_SPARK_SCRIPT)
+    effect.global_position = global_position + Vector2(0, -34)
+    get_parent().add_child(effect)
+
 func receive_damage(amount: int, source: Node = null) -> void:
     health = max(0, health - amount)
+    _spawn_hit_spark()
     hit_flash = 0.12
     var source_name := source.name if source else "Unknown"
     _log("COMBAT", "%s -> Cultist damage=%d hp=%d" % [source_name, amount, health])
