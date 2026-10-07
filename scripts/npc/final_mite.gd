@@ -111,7 +111,7 @@ func _draw() -> void:
     if hit_flash > 0.0:
         body = Color("#d5b8b0")
 
-    draw_circle(Vector2(waiting_phase >= 2 ? 2.0 : 0.0, -34 + breath + waiting_offset), 16.0, skin)
+    draw_circle(Vector2(2.0 if waiting_phase >= 2 else 0.0, -34 + breath + waiting_offset), 16.0, skin)
     draw_circle(Vector2(-5, -39 + breath), 3.0, shadow)
     draw_circle(Vector2(5, -39 + breath), 3.0, shadow)
     draw_rect(Rect2(-19, -18 + breath + waiting_offset, 38, 52), body)
