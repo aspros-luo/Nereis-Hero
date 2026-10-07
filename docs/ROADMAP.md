@@ -44,6 +44,8 @@ Build a complete 10–20 minute playable sequence.
 - [x] Tavern / Church clue foundation
 - [x] Village Graveyard foundation
 - [x] Tavern rest point
+- [x] Humanity selfhood mechanic
+- [x] Humanity-sensitive dialogue
 - [x] Third enemy archetype foundation
 
 - [x] First route branching foundation
