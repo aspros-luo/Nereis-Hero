@@ -243,7 +243,7 @@ func _spawn_slash_arc() -> void:
     var effect: Node2D = SLASH_ARC_SCRIPT.new()
     effect.global_position = global_position
     get_parent().add_child(effect)
-    effect.setup(facing, combo_step)
+    effect.call("setup", facing, combo_step)
 
 func _spawn_hit_spark() -> void:
     var effect := Node2D.new()
@@ -255,7 +255,7 @@ func _spawn_death_burst() -> void:
     var effect: Node2D = DEATH_BURST_SCRIPT.new()
     effect.global_position = global_position + Vector2(0, -38)
     get_parent().add_child(effect)
-    effect.setup(18.0)
+    effect.call("setup", 18.0)
 
 func _on_attack_hit(damage: int, target: Node) -> void:
     hit_confirm_time = 0.05
