@@ -7,6 +7,9 @@ var debug_label: Label
 var title_label: Label
 var controls_label: Label
 var region_label: Label
+var objective_label: Label
+var combat_banner: Label
+var combat_banner_time := 0.0
 var boss: Node
 var boss_panel: ColorRect
 var boss_bar: ColorRect
@@ -39,6 +42,19 @@ func _ready() -> void:
     region_label.text = "The village remembers what the hero has forgotten."
     region_label.add_theme_font_size_override("font_size", 18)
     add_child(region_label)
+
+    objective_label = Label.new()
+    objective_label.position = Vector2(36, 124)
+    objective_label.add_theme_font_size_override("font_size", 18)
+    add_child(objective_label)
+
+    combat_banner = Label.new()
+    combat_banner.position = Vector2(410, 116)
+    combat_banner.size = Vector2(460, 46)
+    combat_banner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    combat_banner.add_theme_font_size_override("font_size", 28)
+    combat_banner.visible = false
+    add_child(combat_banner)
 
     status_panel = ColorRect.new()
     status_panel.position = Vector2(36, 630)
@@ -136,6 +152,30 @@ func set_combat_demo_mode() -> void:
     controls_label.text = "A/D Move   Space Jump   J / LMB Attack   K / Shift Dodge   F3 Debug   F9 Reset"
     region_label.text = "Defeat the small enemies. Break the Ash Gate. Survive the Ashen Knight."
 
+func set_combat_demo_progress(defeated: int, boss_active: bool, complete: bool) -> void:
+    if complete:
+        objective_label.text = "OBJECTIVE: CORE COMBAT DEMO COMPLETE"
+    elif boss_active:
+        objective_label.text = "OBJECTIVE: DEFEAT THE ASHEN KNIGHT"
+    else:
+        objective_label.text = "OBJECTIVE: DEFEAT SMALL ENEMIES  %d / 3" % defeated
+
+func show_hit_confirm(damage: int) -> void:
+    _show_banner("HIT  %d" % damage, 0.18)
+
+func show_death_feedback() -> void:
+    _show_banner("DEFEATED  //  RETURNING TO CHECKPOINT", 0.75)
+
+func show_phase_two() -> void:
+    _show_banner("THE ASHEN KNIGHT  //  PHASE II", 1.10)
+
+func show_complete() -> void:
+    _show_banner("CORE COMBAT DEMO COMPLETE", 2.40)
+
+func _show_banner(message: String, duration: float) -> void:
+    combat_banner.text = message
+    combat_banner_time = duration
+    combat_banner.visible = true
 
 func bind_boss(target: Node) -> void:
     boss = target
@@ -144,7 +184,11 @@ func set_debug_visible(value: bool) -> void:
     debug_enabled = value
     debug_panel.visible = value
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+    combat_banner_time = max(0.0, combat_banner_time - delta)
+    if combat_banner_time <= 0.0:
+        combat_banner.visible = false
+
     _update_status_bars()
     _update_boss_bar()
     if not debug_enabled or not hero:
@@ -156,25 +200,39 @@ func _process(_delta: float) -> void:
     var invulnerable := bool(hero.get("invulnerable"))
 
     debug_label.text = (
-        "DEBUG [F3]\n"
-        + "Hero HP: %d\n" % hp
-        + "Stamina: %d\n" % stamina
-        + "State: %s\n" % state_name
-        + "Invulnerable: %s\n" % invulnerable
-        + "Memory: %d\n" % WorldState.hero_memory
-        + "Humanity: %d\n" % WorldState.hero_humanity
-        + "Church Alignment: %d\n" % WorldState.church_alignment
-        + "Lullaby Resonance: %d\n" % WorldState.lullaby_resonance
-        + "Location: %s\n" % WorldState.current_location
-        + "Route: %s\n" % WorldState.selected_route
-        + "Interior Clues: %d\n" % WorldState.interior_clues_seen.size()
-        + "World Clues: %d\n" % WorldState.world_clues_seen.size()
-        + "Boss Defeated: %s\n" % WorldState.boss_defeated
-        + "Route Complete: %s\n" % WorldState.route_complete
+        "DEBUG [F3]
+"
+        + "Hero HP: %d
+" % hp
+        + "Stamina: %d
+" % stamina
+        + "State: %s
+" % state_name
+        + "Invulnerable: %s
+" % invulnerable
+        + "Memory: %d
+" % WorldState.hero_memory
+        + "Humanity: %d
+" % WorldState.hero_humanity
+        + "Church Alignment: %d
+" % WorldState.church_alignment
+        + "Lullaby Resonance: %d
+" % WorldState.lullaby_resonance
+        + "Location: %s
+" % WorldState.current_location
+        + "Route: %s
+" % WorldState.selected_route
+        + "Interior Clues: %d
+" % WorldState.interior_clues_seen.size()
+        + "World Clues: %d
+" % WorldState.world_clues_seen.size()
+        + "Boss Defeated: %s
+" % WorldState.boss_defeated
+        + "Route Complete: %s
+" % WorldState.route_complete
         + "Slice Complete: %s" % WorldState.slice_complete
     )
 
-    
 func _update_status_bars() -> void:
     if not hero or not is_instance_valid(hero):
         return
