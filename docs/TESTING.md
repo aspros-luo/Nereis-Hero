@@ -69,3 +69,12 @@ Expected startup log with a saved run:
 Expected startup log for a clean run:
 
 [NEREIS][SAVE] No save file; starting new run
+
+
+## Combat feel acceptance
+
+The Hero has a 100-point stamina pool. Attacks consume 12 stamina; dodges consume 28. Stamina regenerates after a short recovery delay.
+
+Taking damage causes a brief HURT state with knockback. During this state movement and attacks are temporarily disabled.
+
+The F3 overlay exposes current stamina for local balancing.
