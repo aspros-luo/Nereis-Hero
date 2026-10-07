@@ -31,6 +31,7 @@ var hitstop_serial := 0
 # Narrative state is stored as facts/flags, not as a visible romance meter.
 var mite_first_meeting := false
 var mite_interactions_seen: Array[String] = []
+var mite_last_interaction_location := ""
 var mite_connection_missed := false
 var ancient_residue_awakened := false
 var outer_god_resonance := false
@@ -119,6 +120,7 @@ func record_mite_interaction(interaction_id: String) -> bool:
     if interaction_id in mite_interactions_seen:
         return false
     mite_interactions_seen.append(interaction_id)
+    mite_last_interaction_location = current_location
     if interaction_id == "mite_first_meeting":
         mite_first_meeting = true
     print("[NEREIS][RELATIONSHIP] Mite interaction recorded id=%s total=%d" % [interaction_id, mite_interactions_seen.size()])
@@ -228,6 +230,7 @@ func save_game() -> void:
         "hero_attack_damage": hero_attack_damage,
         "mite_first_meeting": mite_first_meeting,
         "mite_interactions_seen": mite_interactions_seen,
+        "mite_last_interaction_location": mite_last_interaction_location,
         "mite_connection_missed": mite_connection_missed,
         "ancient_residue_awakened": ancient_residue_awakened,
         "outer_god_resonance": outer_god_resonance,
@@ -309,6 +312,7 @@ func load_game() -> void:
     if saved_mite_interactions is Array:
         for interaction_id in saved_mite_interactions:
             mite_interactions_seen.append(str(interaction_id))
+    mite_last_interaction_location = str(parsed.get("mite_last_interaction_location", ""))
     mite_connection_missed = bool(parsed.get("mite_connection_missed", false))
     ancient_residue_awakened = bool(parsed.get("ancient_residue_awakened", false))
     outer_god_resonance = bool(parsed.get("outer_god_resonance", false))
@@ -362,6 +366,7 @@ func reset() -> void:
     hero_attack_damage = 34
     mite_first_meeting = false
     mite_interactions_seen.clear()
+    mite_last_interaction_location = ""
     mite_connection_missed = false
     ancient_residue_awakened = false
     outer_god_resonance = false
