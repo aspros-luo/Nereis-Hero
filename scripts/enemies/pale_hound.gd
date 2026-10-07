@@ -22,6 +22,7 @@ var stun_time := 0.0
 var attack_hitbox: Area2D
 var animation_time := 0.0
 signal defeated
+signal attack_telegraphed
 
 func _ready() -> void:
     _setup_combat_components()
@@ -87,6 +88,7 @@ func _physics_process(delta: float) -> void:
                     attack_windup = ATTACK_WINDUP
                     attack_timer = ATTACK_COOLDOWN
                     attack_released = false
+                    attack_telegraphed.emit()
                     _log("COMBAT", "Pale Hound pounce telegraph")
 
     if not is_on_floor():
