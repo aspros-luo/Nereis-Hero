@@ -25,8 +25,9 @@ func _ready() -> void:
     _create_boundaries()
     _spawn_hero()
     _spawn_checkpoint()
-    _spawn_wraith(Vector2(1100, 430), "BellWraith_A")
-    _spawn_wraith(Vector2(1480, 390), "BellWraith_B")
+    if not WorldState.graveyard_cleared:
+        _spawn_wraith(Vector2(1100, 430), "BellWraith_A")
+        _spawn_wraith(Vector2(1480, 390), "BellWraith_B")
     _spawn_clue()
     _spawn_exit()
     _spawn_ui()
@@ -112,18 +113,34 @@ func _spawn_ui() -> void:
     get_tree().create_timer(0.6).timeout.connect(_show_intro)
 
 func _show_intro() -> void:
-    narrative.show_message(
-        "THE VILLAGE GRAVEYARD",
-        "The graves are too old for the names carved into them.\n\nThe bell tower is silent. Something beneath it is not.",
-        6.0
-    )
+    if WorldState.graveyard_cleared:
+        narrative.show_message(
+            "THE SILENT BELL",
+            "The bell tower is quiet now.\n\nYou are certain it rang after you left.",
+            5.0
+        )
+    else:
+        narrative.show_message(
+            "THE VILLAGE GRAVEYARD",
+            "The graves are too old for the names carved into them.\n\nThe bell tower is silent. Something beneath it is not.",
+            6.0
+        )
 
 func _on_wraith_defeated(wraith: Node) -> void:
     _log("COMBAT", "Graveyard encounter defeated: %s" % wraith.name)
     if is_instance_valid(wraith):
         wraiths.erase(wraith)
+    if wraiths.is_empty() and not WorldState.graveyard_cleared:
+        WorldState.mark_graveyard_cleared()
+        narrative.show_message(
+            "THE BELL",
+            "Both wraiths collapse.\n\nThe silent tower rings once. No bell moves.",
+            6.0
+        )
 
 func _on_hero_defeated() -> void:
+    if WorldState.graveyard_cleared:
+        return
     for wraith in wraiths:
         if is_instance_valid(wraith) and not wraith.is_queued_for_deletion():
             wraith.queue_free()
