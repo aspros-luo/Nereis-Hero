@@ -9,6 +9,7 @@ const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
 
 var hero: CharacterBody2D
+var camera: Camera2D
 var mite: Node2D
 var narrative: CanvasLayer
 var hud: CanvasLayer
