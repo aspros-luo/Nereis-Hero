@@ -22,7 +22,7 @@ var route_exit: Area2D
 func _ready() -> void:
     if WorldState.route_complete:
         print("[NEREIS][VILLAGE] Route complete; entering Village Hub")
-        get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
+        SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
         return
 
     if WorldState.selected_route == "":
