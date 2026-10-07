@@ -93,8 +93,8 @@ func _on_mite_interacted(_interaction_id: String, title: String, message: String
     narrative.show_message(title, message, 7.0)
     if narrative_audio and narrative_audio.has_method("play_lullaby"):
         narrative_audio.play_lullaby()
-    if WorldState.mite_interactions_seen.size() >= 2:
-        WorldState.current_location = "village_with_mite"
+    if WorldState.current_location != "village":
+        WorldState.current_location = "village"
         WorldState.save_game()
 
 func _spawn_narrative_audio() -> void:
