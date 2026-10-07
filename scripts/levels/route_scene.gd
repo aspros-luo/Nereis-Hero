@@ -71,12 +71,12 @@ func _spawn_route_memory_echo() -> void:
         echo.position = Vector2(1450, 520)
         echo.echo_id = "lullaby_broken_bell"
         echo.display_name = "BROKEN BELL"
-        echo.dialogue = "The bell rings without moving.\\n\\nA child hums a melody you remember from before you were born."
+        echo.dialogue = "The bell rings without moving.\n\nA child hums a melody you remember from before you were born."
     else:
         echo.position = Vector2(1450, 520)
         echo.echo_id = "church_ledger"
         echo.display_name = "CHURCH LEDGER"
-        echo.dialogue = "Your name is written in the margin three times.\\n\\nThe first is dated seven years ago. The second is yesterday. The third has no date."
+        echo.dialogue = "Your name is written in the margin three times.\n\nThe first is dated seven years ago. The second is yesterday. The third has no date."
 
     add_child(echo)
     echo.interacted.connect(_on_route_memory_interacted.bind(echo))
