@@ -137,10 +137,13 @@ func load_game() -> void:
     first_memory_unlocked = bool(parsed.get("first_memory_unlocked", false))
 
     var saved_checkpoint = parsed.get("checkpoint_position", {})
-    checkpoint_position = Vector2(
-        float(saved_checkpoint.get("x", 320.0)),
-        float(saved_checkpoint.get("y", 520.0))
-    )
+    if saved_checkpoint is Dictionary:
+        checkpoint_position = Vector2(
+            float(saved_checkpoint.get("x", 320.0)),
+            float(saved_checkpoint.get("y", 520.0))
+        )
+    else:
+        checkpoint_position = Vector2(320, 520)
     checkpoint_active = bool(parsed.get("checkpoint_active", false))
     boss_defeated = bool(parsed.get("boss_defeated", false))
     boss_gate_open = bool(parsed.get("boss_gate_open", false))
