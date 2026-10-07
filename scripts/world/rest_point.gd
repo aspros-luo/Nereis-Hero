@@ -19,6 +19,7 @@ func _physics_process(delta: float) -> void:
     if hero_nearby and Input.is_key_pressed(KEY_E) and cooldown <= 0.0:
         cooldown = 1.0
         hero.restore_full()
+        WorldState.set_checkpoint(hero.global_position)
         WorldState.save_game()
         rested.emit()
         print("[NEREIS][WORLD] Rest point used id=%s" % rest_id)
