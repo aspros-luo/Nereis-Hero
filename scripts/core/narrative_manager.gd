@@ -30,11 +30,15 @@ func _ready() -> void:
     panel.add_child(body_label)
 
 func _process(delta: float) -> void:
-    if not panel.visible or choice_active:
+    if not panel.visible:
+        WorldState.input_locked = false
+        return
+    if choice_active:
         return
     timer -= delta
     if timer <= 0.0:
         panel.visible = false
+        WorldState.input_locked = false
         print("[NEREIS][STORY] Narrative display ended")
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -55,6 +59,7 @@ func play_first_memory() -> void:
     title_label.text = "A MEMORY THAT DOES NOT FEEL LIKE YOURS"
     body_label.text = "The old hunter looks at your face and goes pale.\n\n"You used to come here before the church took you. You always asked whether the song was still playing."\n\nSomewhere beyond the village, a lullaby answers."
     panel.visible = true
+    WorldState.input_locked = true
     timer = 8.0
     print("[NEREIS][STORY] First memory event displayed")
 
@@ -62,6 +67,7 @@ func show_message(title: String, message: String, duration: float = 4.0) -> void
     title_label.text = title
     body_label.text = message
     panel.visible = true
+    WorldState.input_locked = true
     timer = duration
 
     
@@ -70,6 +76,7 @@ func begin_first_choice() -> void:
     title_label.text = "THE ROAD REMEMBERS YOU"
     body_label.text = "Inside the fallen armor you find a church seal.\n\nFrom the village, the lullaby begins again. You can follow the seal, or follow the song.\n\n[1] Follow the church seal\n[2] Follow the lullaby"
     panel.visible = true
+    WorldState.input_locked = true
     timer = 0.0
     print("[NEREIS][STORY] First choice opened")
 
