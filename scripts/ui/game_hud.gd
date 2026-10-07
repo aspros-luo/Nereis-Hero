@@ -253,6 +253,20 @@ func _process(delta: float) -> void:
 " % WorldState.church_alignment
         + "Lullaby Resonance: %d
 " % WorldState.lullaby_resonance
+        + "Mite Interactions: %d
+" % WorldState.mite_interactions_seen.size()
+        + "Mite Missed: %s
+" % WorldState.mite_connection_missed
+        + "Ancient Residue: %s
+" % WorldState.ancient_residue_awakened
+        + "Outer Resonance: %s
+" % WorldState.outer_god_resonance
+        + "Union: %s
+" % WorldState.physical_union_complete
+        + "Artifact: %d/4
+" % WorldState.hidden_artifact_pieces
+        + "Ending: %s
+" % WorldState.ending_route
         + "Location: %s
 " % WorldState.current_location
         + "Route: %s
