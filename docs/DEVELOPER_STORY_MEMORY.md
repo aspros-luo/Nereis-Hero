@@ -1,3 +1,95 @@
+# Latest Production Clarifications — 2026-10-07
+
+## 烈火天罚：100 人海战术
+
+The roughly 100 cultists are deliberately a **production spectacle / bonus program**, not a required lore delivery mechanism.
+
+They exist so the final act can temporarily become absurdly violent and cathartic after the emotional collapse of the Mite scene.
+
+Rules:
+
+- Keep the target scale at **100 cultists** for now.
+- They do not need unique identities or lore.
+- They should not be treated as 100 separate story quests.
+- They can become a future crowdfunding / supporter cameo feature.
+- Supporter cameo names should be used only with consent and preferably with fictionalized or chosen display names.
+- Do not build a feature for targeting identifiable real people the creator dislikes.
+
+The important contrast is:
+
+> 100 disposable enemies = spectacle.
+>
+> Mite = one irreplaceable person.
+
+That contrast is intentional.
+
+## 烈火天罚：Mite final encounter
+
+The Mite encounter should **not** use a repetitive "three hits to kill her" sequence.
+
+Mite is effectively defeated before the player's final action.
+
+She is already under overwhelming Outer-God control.
+
+The game should create a quiet, uncomfortable pause before her death.
+
+### Proposed director sequence
+
+1. Hero reaches Mite after the cultist set-piece.
+2. Normal combat presentation falls away.
+3. Mite is effectively at 1 HP / one decisive action from death.
+4. She does not fight like a conventional boss.
+5. The player can wait.
+6. A hidden **~60-second idle performance window** begins.
+7. If the player remains inactive long enough, Mite eventually moves by herself and **throws herself toward Hero's weapon**, turning the weapon into the instrument of her death.
+8. If the player attacks earlier, the same final state can resolve without forcing a long three-hit sequence.
+9. The key emotional point is that Mite is both victim and participant: the Outer God controls her, but her remaining love can still produce a last act that helps Hero end her suffering.
+10. After her death, the city-collapse sequence begins.
+
+The idle performance should be inspired by the dramatic patience of late Evangelion rather than copied shot-for-shot.
+
+The player must have enough time to realize:
+
+> "She is not going to attack me."
+>
+> "She is waiting."
+>
+> "She wants me to understand."
+
+The silence itself is the scene.
+
+## Why this works
+
+The sequence creates three layers of agency:
+
+- **Outer God:** controls Mite's body and makes her dangerous.
+- **Mite:** retains enough selfhood to choose one last action.
+- **Player:** decides whether to strike or wait.
+
+No one gets a clean victory.
+
+## Performance direction
+
+The final Mite scene should prefer:
+
+- long silence
+- environmental fire / ash
+- small facial or body-language changes
+- fragmented breathing
+- very little dialogue
+- the original village / lullaby motif returning in a damaged form
+
+Avoid:
+
+- long exposition
+- melodramatic monologues
+- repeated attack animations
+- a conventional boss health-bar finale
+
+The desired feeling is:
+
+> **The player does not defeat Mite. The player witnesses the end of Mite.**
+
 # Current Canon Override — 2026-10-07 Story Direction
 
 > This section has higher priority than older speculative passages elsewhere in this file.
