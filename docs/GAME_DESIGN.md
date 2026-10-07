@@ -19,3 +19,8 @@ The player controls the Hero. Mite/Nereis is not the player avatar. Her presence
 ## First vertical slice
 
 Village outskirts -> combat tutorial -> first NPC -> hidden event -> mini-boss -> first meaningful choice.
+
+
+## Humanity
+
+Humanity is treated as a measure of the Hero's remaining connection to selfhood and ordinary human meaning, not a simple good/evil meter. Memory can increase knowledge while simultaneously reducing or restoring humanity depending on what the memory reveals.
