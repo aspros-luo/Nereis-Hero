@@ -5,6 +5,7 @@ signal examined
 @export var clue_id: String = ""
 @export var display_name: String = ""
 @export_multiline var description: String = ""
+@export var humanity_delta: int = 0
 
 var consumed := false
 var hero_nearby := false
