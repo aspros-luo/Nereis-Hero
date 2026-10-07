@@ -1,0 +1,178 @@
+# Nereis Hero — Development Status
+
+Date: 2026-10-07
+
+## Current direction
+
+The project is now in the first **narrative production pass**, not merely a combat prototype.
+
+Default startup:
+
+`res://scenes/boot.tscn`
+
+Boot resolves to:
+
+- Church escape on a fresh run
+- persisted narrative location after the prologue is complete
+
+## Implemented production content
+
+### Opening
+
+- Church surgical ward
+- 3 Experiment Wardens
+- surgical residue clue
+- checkpoint / death reset
+- playable escape to village
+
+### Village
+
+- Village Hub
+- Mite first meeting
+- place-based relationship rhythm
+- Tavern Mite interactions
+- missed-connection empty-chair scene
+- Restoration Camp
+- North Gate / Village Defense
+- Church / Tavern investigation routes
+- Graveyard + Bell Keeper
+- Ancient Research Ward
+
+### Hidden resistance
+
+Four canonical source arcs currently exist as implementation placeholders:
+
+1. Ancient Research Ward
+2. Graveyard Bell story
+3. Restoration Order
+4. Route Memory Echo
+
+Three of four awaken the hidden resistance anchor.
+
+The UI never tells the player that this is a true-ending requirement.
+
+## Mite progression
+
+Relationship facts:
+
+- first meeting
+- meal
+- stay a while
+- return
+- post-resonance dialogue stages
+
+After physical union:
+
+- ancient-god residue awakens
+- Outer-God resonance begins
+- Mite control stage progresses 0 → 3
+- subtle visual changes appear before any explicit monster transformation
+
+Physical union in normal flow is triggered after the relationship has developed and the player rests at the Tavern.
+
+The presentation is non-explicit and relies on fade-to-black and aftermath.
+
+## Three ending theaters
+
+### F1 — Candidate-driven
+
+Uses the ending evaluator.
+
+- no union → 凡人之墓 theater
+- union + no resistance → 永恒乐园 theater
+- union + hidden resistance → 烈火天罚 theater
+
+### F2 — 永恒乐园
+
+Prototype now includes:
+
+- transformed High Priest
+- transformed King
+- union with Mite
+- dream/paradise visual transition
+- final state where no one is lonely / separate
+
+### F4 — Ancient Research Ward
+
+Prototype includes:
+
+- research husk
+- black vial
+- sealed hair
+- vessel ledger
+- hidden ancient-god evidence
+
+### F5 — Village Defense
+
+Prototype includes:
+
+- Bandits
+- Church Inquisitors
+- two attack waves
+- Hero protecting the village
+- defeat retry loop
+
+### F6 — Mite Resonance
+
+Isolated relationship/resonance prototype.
+
+### F7 — Church Final Boss
+
+Prototype includes:
+
+- High Priest human phase
+- High Priest ancient-god phase
+- King intervention
+- post-victory epilogue showing the next corrupt order beginning
+
+### F8 — 烈火天罚
+
+Prototype includes:
+
+- 100 nonblocking one-hit cultists
+- corrupted lullaby
+- Mite final encounter
+- true 60-second no-input waiting condition
+- Mite throws herself onto Hero's weapon
+- restrained camera impact at the self-sacrifice
+- city-scale detonation
+- heavy camera impact
+
+### F9
+
+Deletes save data and starts the playable prologue.
+
+## Debug shortcut matrix
+
+From Village Hub:
+
+- F1 — Candidate endgame
+- F2 — Eternal Paradise
+- F3 — Debug HUD
+- F4 — Ancient Research Ward
+- F5 — Village Defense
+- F6 — Mite Resonance
+- F7 — Church Final Boss
+- F8 — 烈火天罚
+- F9 — Reset
+
+## Runtime limitation
+
+The current maintainer environment has no Godot 4.6 executable.
+
+Therefore:
+
+- source structure is checked
+- GitHub state is checked
+- quote/string boundaries are checked
+- major script structures are checked
+
+But actual frame-level Godot runtime acceptance is still pending local execution.
+
+## Important rule
+
+Do not trigger GitHub Actions.
+
+Do not replace the narrative canon with temporary prototype assumptions.
+
+When a future implementation reaches a truly unresolved core story decision, stop that specific story layer and ask the director. Otherwise keep developing autonomously.
