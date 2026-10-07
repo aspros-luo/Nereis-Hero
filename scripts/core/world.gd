@@ -24,7 +24,7 @@ var narrative: CanvasLayer
 var hud: CanvasLayer
 
 func _ready() -> void:
-    if WorldState.slice_complete and WorldState.selected_route != "":
+    if WorldState.current_location != "slice" or (WorldState.slice_complete and WorldState.selected_route != ""):
         print("[NEREIS][ROUTE] Restoring saved progress route=%s complete=%s" % [WorldState.selected_route, WorldState.route_complete])
         get_tree().change_scene_to_file(WorldState.get_resume_scene_path())
         return
