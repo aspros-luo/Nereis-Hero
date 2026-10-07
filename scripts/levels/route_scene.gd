@@ -7,20 +7,27 @@ const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const ROUTE_ECHO_SCRIPT = preload("res://scripts/world/route_memory_echo.gd")
+const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
+const HOUND_SCRIPT = preload("res://scripts/enemies/pale_hound.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
 var narrative: CanvasLayer
 var hud: CanvasLayer
+var checkpoint: Area2D
+var hound: CharacterBody2D
 
 func _ready() -> void:
     if WorldState.selected_route == "":
         WorldState.selected_route = route_id
 
     print("[NEREIS][ROUTE] Entered route=%s" % route_id)
+    WorldState.set_checkpoint(Vector2(420, 520))
     _create_floor()
     _create_boundaries()
     _spawn_hero()
+    _spawn_checkpoint()
+    _spawn_hound()
     _spawn_route_npc()
     _spawn_route_memory_echo()
     _spawn_ui()
@@ -44,6 +51,28 @@ func _spawn_hero() -> void:
     camera.limit_bottom = 720
     camera.position = Vector2.ZERO
     hero.add_child(camera)
+
+func _spawn_checkpoint() -> void:
+    checkpoint = Area2D.new()
+    checkpoint.set_script(CHECKPOINT_SCRIPT)
+    checkpoint.position = Vector2(420, 520)
+    checkpoint.name = "RouteCheckpoint"
+    var shape := CollisionShape2D.new()
+    var rectangle := RectangleShape2D.new()
+    rectangle.size = Vector2(130, 110)
+    shape.shape = rectangle
+    shape.position = Vector2(0, -55)
+    checkpoint.add_child(shape)
+    add_child(checkpoint)
+
+func _spawn_hound() -> void:
+    hound = CharacterBody2D.new()
+    hound.set_script(HOUND_SCRIPT)
+    hound.position = Vector2(1220, 520)
+    hound.name = "RoutePaleHound"
+    _add_character_collision(hound, 25.0, 42.0)
+    add_child(hound)
+    print("[NEREIS][ROUTE] Pale Hound encounter spawned")
 
 func _spawn_route_npc() -> void:
     var npc := Node2D.new()
@@ -80,6 +109,11 @@ func _spawn_route_memory_echo() -> void:
 
     add_child(echo)
     echo.interacted.connect(_on_route_memory_interacted.bind(echo))
+
+func _on_hero_defeated() -> void:
+    if not is_instance_valid(hound) or hound.is_queued_for_deletion():
+        _spawn_hound()
+    print("[NEREIS][ROUTE] Hero defeated; route encounter reset")
 
 func _spawn_ui() -> void:
     narrative = CanvasLayer.new()
