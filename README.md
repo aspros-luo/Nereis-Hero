@@ -101,6 +101,7 @@ The 100 cultist count is intentionally a spectacle. Future crowdfunding can opti
 ### Debug
 
 - F3 — debug overlay
+- F6 — Mite Resonance Theater
 - F7 — Church Final Boss Theater
 - F8 — 烈火天罚 Theater
 - F9 — clean reset
