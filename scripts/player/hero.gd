@@ -240,8 +240,7 @@ func get_debug_state() -> String:
     return _state_name(state)
 
 func _spawn_slash_arc() -> void:
-    var effect := Node2D.new()
-    effect.set_script(SLASH_ARC_SCRIPT)
+    var effect: Node2D = SLASH_ARC_SCRIPT.new()
     effect.global_position = global_position
     get_parent().add_child(effect)
     effect.setup(facing, combo_step)
@@ -253,8 +252,7 @@ func _spawn_hit_spark() -> void:
     get_parent().add_child(effect)
 
 func _spawn_death_burst() -> void:
-    var effect := Node2D.new()
-    effect.set_script(DEATH_BURST_SCRIPT)
+    var effect: Node2D = DEATH_BURST_SCRIPT.new()
     effect.global_position = global_position + Vector2(0, -38)
     get_parent().add_child(effect)
     effect.setup(18.0)
