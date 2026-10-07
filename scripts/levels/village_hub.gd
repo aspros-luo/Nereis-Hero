@@ -18,6 +18,7 @@ var mite: Node2D
 var narrative_audio: Node
 
 func _ready() -> void:
+    WorldState.current_location = "village"
     print("[NEREIS][VILLAGE] Entered Village Hub route=%s" % WorldState.selected_route)
     WorldState.set_checkpoint(Vector2(360, 520))
     _create_floor()
