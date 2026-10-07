@@ -63,8 +63,10 @@ func _physics_process(delta: float) -> void:
         if windup > 0.0:
             velocity.x = 0.0
             if windup <= 0.08 and not released:
-                attack_hitbox.position.x = facing * (60.0 if phase == 1 else 76.0)
-                attack_hitbox.activate(22 if phase == 1 else 34, 0.14)
+                var special := phase == 2 and attack_index % 3 == 0
+                attack_hitbox.position.x = facing * (60.0 if not special else 82.0)
+                attack_hitbox.scale = Vector2(1.65, 1.15) if special else Vector2.ONE
+                attack_hitbox.activate(22 if phase == 1 else (46 if special else 34), 0.16 if special else 0.14)
                 released = true
         else:
             if absf(dx) > (135.0 if phase == 1 else 155.0):
