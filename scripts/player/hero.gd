@@ -54,6 +54,14 @@ func _physics_process(delta: float) -> void:
     if state == CombatState.DEAD:
         return
 
+    if WorldState.input_locked:
+        velocity.x = move_toward(velocity.x, 0.0, 2200.0 * delta)
+        if not is_on_floor():
+            velocity.y += GRAVITY * delta
+        move_and_slide()
+        queue_redraw()
+        return
+
     if hurt_time > 0.0:
         hurt_time = max(0.0, hurt_time - delta)
         if not is_on_floor():
