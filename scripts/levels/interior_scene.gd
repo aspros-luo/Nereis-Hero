@@ -94,11 +94,13 @@ func _spawn_clue() -> void:
     if location_id == "tavern":
         clue.position = Vector2(1120, 520)
         clue.clue_id = "tavern_silver_bell"
+        clue.humanity_delta = 2
         clue.display_name = "SILVER BELL"
         clue.description = "The bell is cold to the touch.\n\nWhen you lift it, you remember a hand placing a cup in front of you. The hand is yours."
     else:
         clue.position = Vector2(1260, 520)
         clue.clue_id = "church_confession_book"
+        clue.humanity_delta = -5
         clue.display_name = "CONFESSION BOOK"
         clue.description = "The book contains your handwriting.\n\nThe last entry ends with one sentence: \"I agreed because they promised she would live.\""
 
