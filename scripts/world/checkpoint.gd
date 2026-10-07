@@ -3,6 +3,7 @@ extends Area2D
 var active := false
 
 func _ready() -> void:
+    active = WorldState.checkpoint_active
     collision_layer = 4
     collision_mask = 1
     monitoring = true
