@@ -154,13 +154,25 @@ func mark_physical_union_complete() -> void:
     save_game()
 
 func record_hidden_artifact_source(source_id: String) -> bool:
-    if source_id in hidden_artifact_sources:
+    var canonical_id := _canonical_artifact_source(source_id)
+    if canonical_id.is_empty() or canonical_id in hidden_artifact_sources:
         return false
-    hidden_artifact_sources.append(source_id)
+    hidden_artifact_sources.append(canonical_id)
     hidden_artifact_pieces = mini(hidden_artifact_sources.size(), 4)
-    print("[NEREIS][SECRET] Hidden artifact source=%s pieces=%d/4" % [source_id, hidden_artifact_pieces])
+    print("[NEREIS][SECRET] Hidden artifact source=%s pieces=%d/4" % [canonical_id, hidden_artifact_pieces])
     save_game()
     return true
+
+func _canonical_artifact_source(source_id: String) -> String:
+    if source_id.begins_with("lab_") or source_id == "ancient_lab_husk":
+        return "ancient_lab"
+    if source_id == "graveyard_hero_gravestone":
+        return "graveyard_bell"
+    if source_id == "rebel_dead_letter":
+        return "rebel_order"
+    if source_id.begins_with("route_echo_"):
+        return "memory_echo"
+    return ""
 
 func add_hidden_artifact_piece() -> int:
     hidden_artifact_pieces = mini(hidden_artifact_pieces + 1, 4)
