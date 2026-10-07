@@ -16,6 +16,7 @@ var hud: CanvasLayer
 var checkpoint: Area2D
 var mite: Node2D
 var narrative_audio: Node
+var mite_house_door: Area2D
 
 func _ready() -> void:
     WorldState.current_location = "village"
@@ -26,6 +27,7 @@ func _ready() -> void:
     _spawn_hero()
     _spawn_checkpoint()
     _spawn_mite()
+    _spawn_mite_house_door()
     _spawn_gatekeeper()
     _spawn_shared_world_npcs()
     _spawn_village_pois()
@@ -107,6 +109,28 @@ func _spawn_narrative_audio() -> void:
         if narrative_audio and narrative_audio.has_method("play_lullaby"):
             narrative_audio.play_lullaby()
     )
+
+func _spawn_mite_house_door() -> void:
+    mite_house_door = Area2D.new()
+    mite_house_door.position = Vector2(455, 520)
+    mite_house_door.name = "MiteHouseDoor"
+    var shape := CollisionShape2D.new()
+    var rectangle := RectangleShape2D.new()
+    rectangle.size = Vector2(70, 120)
+    shape.shape = rectangle
+    shape.position = Vector2(0, -60)
+    mite_house_door.add_child(shape)
+    add_child(mite_house_door)
+    mite_house_door.body_entered.connect(_on_mite_house_entered)
+
+func _on_mite_house_entered(body: Node) -> void:
+    if body != get_node_or_null("Hero"):
+        return
+    if WorldState.mite_connection_missed:
+        narrative.show_message("THE LOCKED DOOR", "There is no reason to go inside.", 3.0)
+        return
+    WorldState.set_location("mite_house")
+    SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")
 
 func _spawn_gatekeeper() -> void:
     var npc := Node2D.new()
