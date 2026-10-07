@@ -24,6 +24,11 @@ var narrative: CanvasLayer
 var hud: CanvasLayer
 
 func _ready() -> void:
+    if WorldState.slice_complete and WorldState.selected_route != "":
+        print("[NEREIS][ROUTE] Restoring saved route=%s" % WorldState.selected_route)
+        get_tree().change_scene_to_file(WorldState.get_route_scene_path())
+        return
+
     _log("BOOT", "World initialization started")
     _create_floor()
     _create_boundaries()
@@ -205,8 +210,15 @@ func _on_cultist_defeated() -> void:
 func _on_level_exit_reached() -> void:
     _log("WORLD", "Vertical Slice 001 acceptance boundary reached")
     if narrative:
-        narrative.show_message("THE ROAD AWAITS", "The first road is behind you.\n\nThe church seal is warm in one hand. The lullaby is still somewhere behind the hills.\n\nVERTICAL SLICE 001 COMPLETE", 8.0)
+        narrative.show_message("THE ROAD AWAITS", "The first road is behind you.\n\nThe church seal is warm in one hand. The lullaby is still somewhere behind the hills.\n\nVERTICAL SLICE 001 COMPLETE", 5.0)
+    get_tree().create_timer(5.2).timeout.connect(_enter_selected_route)
     queue_redraw()
+
+func _enter_selected_route() -> void:
+    if WorldState.selected_route == "":
+        return
+    print("[NEREIS][ROUTE] Leaving Vertical Slice 001 -> %s" % WorldState.selected_route)
+    get_tree().change_scene_to_file(WorldState.get_route_scene_path())
 
 func _open_first_choice() -> void:
     if narrative and WorldState.boss_defeated and not WorldState.first_choice_made:
