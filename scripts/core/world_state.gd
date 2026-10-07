@@ -1,5 +1,7 @@
 extends Node
 
+signal hidden_resistance_awakened_event
+
 const SAVE_PATH := "user://nereis_hero_save.json"
 
 var hero_memory := 0
@@ -162,6 +164,7 @@ func record_hidden_artifact_source(source_id: String) -> bool:
     hidden_artifact_pieces = mini(hidden_artifact_sources.size(), 4)
     if hidden_artifact_pieces >= 3 and not hidden_resistance_awakened:
         hidden_resistance_awakened = true
+        hidden_resistance_awakened_event.emit()
         print("[NEREIS][SECRET] The hidden resistance anchor has awakened")
     print("[NEREIS][SECRET] Hidden artifact source=%s pieces=%d/4" % [canonical_id, hidden_artifact_pieces])
     save_game()
