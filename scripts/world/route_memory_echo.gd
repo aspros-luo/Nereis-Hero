@@ -5,6 +5,7 @@ signal interacted
 @export var echo_id: String = ""
 @export var display_name: String = ""
 @export_multiline var dialogue: String = ""
+@export var humanity_delta: int = 0
 
 var cooldown := 0.0
 var hero_nearby := false
