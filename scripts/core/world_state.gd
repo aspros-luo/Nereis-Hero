@@ -148,6 +148,7 @@ func load_game() -> void:
         )
     else:
         checkpoint_position = Vector2(320, 520)
+
     checkpoint_active = bool(parsed.get("checkpoint_active", false))
     boss_defeated = bool(parsed.get("boss_defeated", false))
     boss_gate_open = bool(parsed.get("boss_gate_open", false))
@@ -160,18 +161,19 @@ func load_game() -> void:
     route_memory_id = str(parsed.get("route_memory_id", ""))
     route_complete = bool(parsed.get("route_complete", false))
     current_location = str(parsed.get("current_location", "slice"))
+
+    world_clues_seen.clear()
     var saved_world_clues = parsed.get("world_clues_seen", [])
     if saved_world_clues is Array:
-        world_clues_seen.clear()
         for clue_id in saved_world_clues:
             world_clues_seen.append(str(clue_id))
 
+    interior_clues_seen.clear()
     var saved_interior_clues = parsed.get("interior_clues_seen", [])
     if saved_interior_clues is Array:
-        interior_clues_seen.clear()
-    world_clues_seen.clear()
         for clue_id in saved_interior_clues:
             interior_clues_seen.append(str(clue_id))
+
     weapon_level = int(parsed.get("weapon_level", 1))
     hero_attack_damage = int(parsed.get("hero_attack_damage", 34))
 
@@ -201,6 +203,7 @@ func reset() -> void:
     route_complete = false
     current_location = "slice"
     interior_clues_seen.clear()
+    world_clues_seen.clear()
     weapon_level = 1
     hero_attack_damage = 34
     input_locked = false
