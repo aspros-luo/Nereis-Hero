@@ -165,6 +165,15 @@ func _spawn_village_pois() -> void:
     add_child(graveyard)
     graveyard.interacted.connect(_on_village_poi_interacted.bind(graveyard))
 
+    var rebel_camp := Node2D.new()
+    rebel_camp.set_script(VILLAGE_POI_SCRIPT)
+    rebel_camp.position = Vector2(1990, 520)
+    rebel_camp.poi_id = "rebel_camp"
+    rebel_camp.display_name = "RESTORATION CAMP"
+    rebel_camp.dialogue = "A small fire burns behind the hill.\n\nSomeone has pitched a camp without a flag.\n\nYou hear soldiers arguing about the throne."
+    add_child(rebel_camp)
+    rebel_camp.interacted.connect(_on_village_poi_interacted.bind(rebel_camp))
+
     var church := Node2D.new()
     church.set_script(VILLAGE_POI_SCRIPT)
     church.position = Vector2(2220, 520)
@@ -189,6 +198,10 @@ func _enter_village_location(location_id: String) -> void:
         WorldState.set_location("church")
         print("[NEREIS][VILLAGE] Entering Church Interior")
         SceneTransition.fade_to_scene("res://scenes/locations/church_interior.tscn")
+    elif location_id == "rebel_camp":
+        WorldState.set_location("rebel_camp")
+        print("[NEREIS][VILLAGE] Entering Restoration Camp")
+        SceneTransition.fade_to_scene("res://scenes/rebel_camp.tscn")
     elif location_id == "graveyard":
         WorldState.set_location("graveyard")
         print("[NEREIS][VILLAGE] Entering Village Graveyard")
@@ -318,6 +331,18 @@ func _draw() -> void:
 
     draw_rect(Rect2(900, 390, 120, 130), Color("#28212a"))
     draw_string(ThemeDB.fallback_font, Vector2(885, 365), "GRAVEYARD", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
+
+    draw_rect(Rect2(1940, 360, 150, 160), Color("#27212a"))
+    draw_colored_polygon(
+        PackedVector2Array([
+            Vector2(1915, 360),
+            Vector2(2015, 270),
+            Vector2(2115, 360)
+        ]),
+        Color("#312934")
+    )
+    draw_circle(Vector2(2015, 455), 34.0, Color("#63322f"))
+    draw_string(ThemeDB.fallback_font, Vector2(1900, 335), "RESTORATION CAMP", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
 
     draw_rect(Rect2(2180, 320, 80, 200), Color("#26202a"))
     draw_colored_polygon(
