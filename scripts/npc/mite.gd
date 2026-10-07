@@ -38,6 +38,13 @@ func _unhandled_input(event: InputEvent) -> void:
         print("[NEREIS][NPC] Mite interaction id=%s" % interaction_id)
 
 func _select_interaction() -> String:
+    if WorldState.outer_god_resonance:
+        if not WorldState.has_mite_interaction("mite_resonance_1"):
+            return "mite_resonance_1"
+        if not WorldState.has_mite_interaction("mite_resonance_2"):
+            return "mite_resonance_2"
+        if not WorldState.has_mite_interaction("mite_resonance_3"):
+            return "mite_resonance_3"
     if not WorldState.mite_first_meeting:
         return "mite_first_meeting"
     if not WorldState.has_mite_interaction("mite_meal"):
@@ -69,6 +76,21 @@ func _payload_for(interaction_id: String) -> Dictionary:
             return {
                 "title": "MITE",
                 "message": "The light is fading from the village.\n\n"You came back."\n\nMite smiles, almost relieved.\n\n"I thought you might forget the way."\n\nShe does not explain why that thought bothered her."
+            }
+        "mite_resonance_1":
+            return {
+                "title": "MITE",
+                "message": "Mite pauses beside the window.\n\n"Did you hear something in your sleep?"\n\nShe smiles when you shake your head.\n\n"I did.""
+            }
+        "mite_resonance_2":
+            return {
+                "title": "MITE",
+                "message": "She watches the fire for a long time.\n\n"Do you think two people can have the same dream?"\n\nShe asks as if the answer should be obvious."
+            }
+        "mite_resonance_3":
+            return {
+                "title": "MITE",
+                "message": "Mite takes your hand.\n\n"Don't go to the Church tonight."\n\nHer fingers tighten.\n\n"I don't want you to leave me alone.""
             }
         _:
             return {
