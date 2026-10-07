@@ -126,6 +126,7 @@ func _spawn_hud() -> void:
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
     hud.bind_hero(hero)
+    hud.set_combat_demo_mode()
     hud.set_debug_visible(false)
 
 func _on_small_enemy_defeated() -> void:
