@@ -10,6 +10,8 @@ signal attack_telegraphed
 signal phase_changed(phase: int)
 
 const MAX_HEALTH := 360
+var max_health := MAX_HEALTH
+var boss_display_name := "THE KING"
 const PHASE_TWO_THRESHOLD := 180
 
 var health := MAX_HEALTH
