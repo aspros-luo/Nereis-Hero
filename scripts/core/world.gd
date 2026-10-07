@@ -66,6 +66,8 @@ func _ready() -> void:
     narrative = CanvasLayer.new()
     narrative.set_script(NARRATIVE_SCRIPT)
     add_child(narrative)
+    if WorldState.boss_defeated and not WorldState.first_choice_made:
+        get_tree().create_timer(0.8).timeout.connect(_open_first_choice)
 
     hud = CanvasLayer.new()
     hud.set_script(HUD_SCRIPT)
