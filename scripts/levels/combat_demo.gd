@@ -50,6 +50,7 @@ func _spawn_hero() -> void:
     _add_character_collision(hero, 18.0, 48.0)
     add_child(hero)
     hero.defeated.connect(_on_hero_defeated)
+    hero.attack_landed.connect(_on_hero_attack_landed)
 
     camera = Camera2D.new()
     camera.name = "HeroCamera"
@@ -116,9 +117,12 @@ func _spawn_boss() -> void:
     _add_character_collision(boss, 24.0, 56.0)
     add_child(boss)
     boss.defeated.connect(_on_boss_defeated)
+    if boss.has_signal("phase_changed"):
+        boss.phase_changed.connect(_on_boss_phase_changed)
 
     if hud:
         hud.bind_boss(boss)
+        hud.set_combat_demo_progress(enemies_defeated, true, demo_complete)
 
     print("[NEREIS][DEMO] Boss encounter started")
 
@@ -128,11 +132,14 @@ func _spawn_hud() -> void:
     add_child(hud)
     hud.bind_hero(hero)
     hud.set_combat_demo_mode()
+    hud.set_combat_demo_progress(0, false, false)
     hud.set_debug_visible(false)
 
 func _on_small_enemy_defeated() -> void:
     enemies_defeated += 1
     print("[NEREIS][DEMO] Small enemy defeated %d/3" % enemies_defeated)
+    if hud:
+        hud.set_combat_demo_progress(enemies_defeated, false, false)
 
     if enemies_defeated >= 3:
         _open_boss_gate()
@@ -143,9 +150,22 @@ func _open_boss_gate() -> void:
 
     boss_gate.open()
     print("[NEREIS][DEMO] All small enemies defeated; Boss gate opened")
+    if hud:
+        hud.set_combat_demo_progress(enemies_defeated, true, false)
     _spawn_boss()
 
+func _on_hero_attack_landed(damage: int, _target: Node) -> void:
+    if hud:
+        hud.show_hit_confirm(damage)
+
+func _on_boss_phase_changed(phase: int) -> void:
+    if hud and phase == 2:
+        hud.show_phase_two()
+
 func _on_hero_defeated() -> void:
+    if hud:
+        hud.show_death_feedback()
+        hud.set_combat_demo_progress(0, boss_active, false)
     print("[NEREIS][DEMO] Hero defeated; resetting small-enemy wave")
 
     for enemy in enemies:
@@ -160,6 +180,9 @@ func _on_hero_defeated() -> void:
 
 func _on_boss_defeated() -> void:
     demo_complete = true
+    if hud:
+        hud.set_combat_demo_progress(enemies_defeated, true, true)
+        hud.show_complete()
     print("[NEREIS][DEMO] CORE COMBAT DEMO COMPLETE")
     queue_redraw()
 
