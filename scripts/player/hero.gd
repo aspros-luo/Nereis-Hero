@@ -5,11 +5,16 @@ const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 
 const SPEED := 260.0
+const ATTACK_MOVE_SPEED := 92.0
 const JUMP_VELOCITY := -520.0
 const GRAVITY := 1400.0
 const DODGE_SPEED := 620.0
-const ATTACK_DURATION := 0.28
+const ATTACK_DURATION := 0.34
+const ATTACK_WINDUP := 0.07
 const DODGE_DURATION := 0.18
+const COYOTE_TIME := 0.10
+const JUMP_BUFFER_TIME := 0.12
+const COMBO_RESET_TIME := 0.42
 const MAX_STAMINA := 100.0
 const ATTACK_STAMINA_COST := 12.0
 const DODGE_STAMINA_COST := 28.0
@@ -17,17 +22,27 @@ const STAMINA_REGEN_DELAY := 0.65
 const STAMINA_REGEN_RATE := 42.0
 const HURT_DURATION := 0.18
 const HURT_KNOCKBACK := 180.0
+const COMBO_DAMAGE_MULTIPLIERS := [1.0, 1.18, 1.5]
+const COMBO_REACH := [54.0, 58.0, 64.0]
 
 enum CombatState { IDLE, MOVE, JUMP, FALL, ATTACK, DODGE, HURT, DEAD }
 
 var health := 100
 var facing := 1.0
 var attack_time := 0.0
+var attack_windup := 0.0
+var attack_hit_registered := false
+var combo_step := 0
+var combo_window := 0.0
 var dodge_time := 0.0
 var invulnerable := false
 var stamina := MAX_STAMINA
 var stamina_regen_delay := 0.0
 var hurt_time := 0.0
+var coyote_time := 0.0
+var jump_buffer := 0.0
+var camera_shake_time := 0.0
+var camera_shake_strength := 0.0
 var state := CombatState.IDLE
 var previous_state := CombatState.IDLE
 var attack_hitbox: Area2D
@@ -55,6 +70,15 @@ func _physics_process(delta: float) -> void:
     if state == CombatState.DEAD:
         return
 
+    _update_camera_shake(delta)
+    _update_jump_buffer(delta)
+    _update_combo_window(delta)
+
+    if is_on_floor():
+        coyote_time = COYOTE_TIME
+    else:
+        coyote_time = max(0.0, coyote_time - delta)
+
     if WorldState.input_locked:
         velocity.x = move_toward(velocity.x, 0.0, 2200.0 * delta)
         if not is_on_floor():
@@ -80,6 +104,17 @@ func _physics_process(delta: float) -> void:
 
     if attack_time > 0.0:
         attack_time = max(0.0, attack_time - delta)
+        attack_windup = max(0.0, attack_windup - delta)
+        if attack_windup <= 0.0 and not attack_hit_registered:
+            var base_damage := float(WorldState.hero_attack_damage)
+            var multiplier: float = COMBO_DAMAGE_MULTIPLIERS[combo_step - 1]
+            var damage := int(round(base_damage * multiplier))
+            attack_hitbox.position.x = facing * float(COMBO_REACH[combo_step - 1])
+            attack_hitbox.activate(damage, 0.11 if combo_step < 3 else 0.14)
+            attack_hit_registered = true
+            _log("COMBAT", "Hero combo %d hit window; damage=%d" % [combo_step, damage])
+        if attack_time <= 0.0:
+            attack_hit_registered = false
 
     if dodge_time > 0.0:
         dodge_time = max(0.0, dodge_time - delta)
@@ -103,18 +138,22 @@ func _physics_process(delta: float) -> void:
 
     if direction != 0.0:
         facing = sign(direction)
-        velocity.x = move_toward(velocity.x, direction * SPEED, 1800.0 * delta)
+        var move_speed := ATTACK_MOVE_SPEED if attack_time > 0.0 else SPEED
+        velocity.x = move_toward(velocity.x, direction * move_speed, 2200.0 * delta)
     else:
-        velocity.x = move_toward(velocity.x, 0.0, 2200.0 * delta)
+        var friction := 1250.0 if attack_time > 0.0 else 2200.0
+        velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 
-    if (Input.is_key_pressed(KEY_SPACE) or Input.is_action_just_pressed("ui_accept")) and is_on_floor():
+    if jump_buffer > 0.0 and coyote_time > 0.0 and attack_time <= 0.0 and dodge_time <= 0.0:
+        jump_buffer = 0.0
+        coyote_time = 0.0
         velocity.y = JUMP_VELOCITY
         _set_state(CombatState.JUMP)
 
-    if (Input.is_key_pressed(KEY_J) or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)) and attack_time <= 0.0:
+    if (Input.is_key_pressed(KEY_J) or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)) and attack_time <= 0.0 and dodge_time <= 0.0:
         _perform_attack()
 
-    if (Input.is_key_pressed(KEY_K) or Input.is_key_pressed(KEY_SHIFT)) and dodge_time <= 0.0:
+    if (Input.is_key_pressed(KEY_K) or Input.is_key_pressed(KEY_SHIFT)) and dodge_time <= 0.0 and attack_time <= 0.0:
         _start_dodge()
 
     move_and_slide()
@@ -130,16 +169,37 @@ func _physics_process(delta: float) -> void:
 
     queue_redraw()
 
+func _update_jump_buffer(delta: float) -> void:
+    if Input.is_key_pressed(KEY_SPACE) or Input.is_action_just_pressed("ui_accept"):
+        jump_buffer = JUMP_BUFFER_TIME
+    elif jump_buffer > 0.0:
+        jump_buffer = max(0.0, jump_buffer - delta)
+
+func _update_combo_window(delta: float) -> void:
+    if combo_window > 0.0:
+        combo_window = max(0.0, combo_window - delta)
+    elif combo_step != 0:
+        combo_step = 0
+
 func _perform_attack() -> void:
     if stamina < ATTACK_STAMINA_COST:
         return
     stamina -= ATTACK_STAMINA_COST
     stamina_regen_delay = STAMINA_REGEN_DELAY
+
+    if combo_window > 0.0:
+        combo_step = min(3, combo_step + 1)
+    else:
+        combo_step = 1
+    combo_window = COMBO_RESET_TIME
+
     attack_time = ATTACK_DURATION
-    attack_hitbox.position.x = facing * 54.0
-    attack_hitbox.activate(WorldState.hero_attack_damage, 0.12)
+    attack_windup = ATTACK_WINDUP
+    attack_hit_registered = false
+    attack_hitbox.position.x = facing * float(COMBO_REACH[combo_step - 1])
+
     _set_state(CombatState.ATTACK)
-    _log("COMBAT", "Hero attack started; damage=%d hitbox active" % WorldState.hero_attack_damage)
+    _log("COMBAT", "Hero attack %d started; windup=%.2f" % [combo_step, ATTACK_WINDUP])
 
 func _start_dodge() -> void:
     if stamina < DODGE_STAMINA_COST:
@@ -170,12 +230,32 @@ func _spawn_hit_spark() -> void:
     effect.global_position = global_position + Vector2(0, -34)
     get_parent().add_child(effect)
 
+func _shake_camera(strength: float, duration: float) -> void:
+    camera_shake_strength = max(camera_shake_strength, strength)
+    camera_shake_time = max(camera_shake_time, duration)
+
+func _update_camera_shake(delta: float) -> void:
+    var camera := get_viewport().get_camera_2d()
+    if not camera:
+        return
+    if camera_shake_time > 0.0:
+        camera_shake_time = max(0.0, camera_shake_time - delta)
+        var fade := clamp(camera_shake_time / 0.10, 0.0, 1.0)
+        camera.offset = Vector2(
+            randf_range(-camera_shake_strength, camera_shake_strength) * fade,
+            randf_range(-camera_shake_strength, camera_shake_strength) * fade * 0.65
+        )
+    else:
+        camera.offset = Vector2.ZERO
+        camera_shake_strength = 0.0
+
 func receive_damage(amount: int, source: Node = null) -> void:
     if invulnerable or state == CombatState.DEAD:
         _log("COMBAT", "Hero damage ignored (invulnerable=%s)" % invulnerable)
         return
     health = max(0, health - amount)
     _spawn_hit_spark()
+    _shake_camera(9.0, 0.12)
     hurt_time = HURT_DURATION
     velocity.y = -120.0
     if source and source is Node2D:
@@ -193,6 +273,9 @@ func receive_damage(amount: int, source: Node = null) -> void:
         global_position = WorldState.checkpoint_position
         velocity = Vector2.ZERO
         invulnerable = true
+        stamina = MAX_STAMINA
+        combo_step = 0
+        combo_window = 0.0
         _log("WORLD", "Hero respawned at checkpoint=%s" % WorldState.checkpoint_position)
         get_tree().create_timer(0.75).timeout.connect(_clear_respawn_invulnerability)
         _set_state(CombatState.IDLE)
@@ -203,6 +286,8 @@ func restore_full() -> void:
     hurt_time = 0.0
     velocity = Vector2.ZERO
     invulnerable = false
+    combo_step = 0
+    combo_window = 0.0
     _log("HERO", "Hero fully restored at rest point")
 
 func take_damage(amount: int) -> void:
@@ -221,8 +306,15 @@ func _draw() -> void:
     draw_circle(Vector2(0, -52), 18, body)
     draw_rect(Rect2(-18, -34, 36, 34), cloak)
     draw_line(Vector2(0, -8), Vector2(facing * 58, -22), Color("#b7a48c"), 7.0)
-    if attack_time > 0.0:
-        draw_arc(Vector2(facing * 26, -24), 64, -1.2 if facing > 0 else 1.2, 1.2 if facing > 0 else 5.2, 20, Color("#d9d0bf"), 5.0)
+    if attack_time > 0.0 and attack_windup <= 0.0:
+        var arc_start := -1.20 if facing > 0 else 1.20
+        var arc_end := 1.20 if facing > 0 else 5.08
+        var arc_radius := 64.0 + combo_step * 3.0
+        draw_arc(Vector2(facing * 26, -24), arc_radius, arc_start, arc_end, 20, Color("#d9d0bf"), 5.0)
+    elif attack_time > 0.0:
+        draw_arc(Vector2(facing * 25, -24), 42.0, -0.45 if facing > 0 else 3.59, 0.45 if facing > 0 else 4.49, 12, Color("#9e8b72"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(-52, -82), "HERO %d" % health, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
     draw_rect(Rect2(-32, -96, 64, 5), Color("#27212a"))
     draw_rect(Rect2(-32, -96, 64.0 * (stamina / MAX_STAMINA), 5), Color("#9e8b72"))
+    if combo_step > 0 and attack_time > 0.0:
+        draw_string(ThemeDB.fallback_font, Vector2(-8, -108), "%d" % combo_step, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#d6c7b2"))
