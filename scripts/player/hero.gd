@@ -197,6 +197,14 @@ func receive_damage(amount: int, source: Node = null) -> void:
         get_tree().create_timer(0.75).timeout.connect(_clear_respawn_invulnerability)
         _set_state(CombatState.IDLE)
 
+func restore_full() -> void:
+    health = 100
+    stamina = MAX_STAMINA
+    hurt_time = 0.0
+    velocity = Vector2.ZERO
+    invulnerable = false
+    _log("HERO", "Hero fully restored at rest point")
+
 func take_damage(amount: int) -> void:
     receive_damage(amount, null)
 
