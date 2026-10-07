@@ -21,6 +21,7 @@ func _ready() -> void:
     _spawn_hero()
     _spawn_checkpoint()
     _spawn_gatekeeper()
+    _spawn_shared_world_npcs()
     _spawn_village_pois()
     _spawn_ui()
     queue_redraw()
@@ -68,6 +69,29 @@ func _spawn_gatekeeper() -> void:
     else:
         npc.dialogue = "The gatekeeper hears the lullaby on the wind and shuts the tavern door halfway.\n\n\"Don't sing that here. Not unless you want the village to remember.\""
     add_child(npc)
+
+func _spawn_shared_world_npcs() -> void:
+    var youth := Node2D.new()
+    youth.set_script(ROUTE_NPC_SCRIPT)
+    youth.position = Vector2(1120, 520)
+    youth.npc_id = "amnesiac_youth"
+    youth.display_name = "AMNESIAC YOUTH"
+    if WorldState.selected_route == "church":
+        youth.dialogue = "The young man touches your church seal and goes pale.\n\n\"I remember you kneeling there. They told me not to remember.\""
+    else:
+        youth.dialogue = "The young man stares toward the tavern.\n\n\"You came back carrying someone once. I don't know who it was. I only remember the singing.\""
+    add_child(youth)
+
+    var merchant := Node2D.new()
+    merchant.set_script(ROUTE_NPC_SCRIPT)
+    merchant.position = Vector2(1380, 520)
+    merchant.npc_id = "traveling_merchant"
+    merchant.display_name = "TRAVELING MERCHANT"
+    if WorldState.selected_route == "church":
+        merchant.dialogue = "The merchant turns a silver token between two fingers.\n\n\"Church roads are safe only until the bells start. Then even the stones lie.\""
+    else:
+        merchant.dialogue = "The merchant smiles without humor.\n\n\"I saw the village seven years ago. Your face was already on the church door.\""
+    add_child(merchant)
 
 func _spawn_village_pois() -> void:
     var tavern := Node2D.new()
