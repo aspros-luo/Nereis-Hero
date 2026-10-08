@@ -24,8 +24,19 @@ var detonation_started := false
 var elapsed := 0.0
 var fire_intensity := 0.0
 var narrative_audio: Node
+var ending_layer: CanvasLayer
+var ending_backdrop: ColorRect
+var ending_card: ColorRect
+var ending_title: Label
+var ending_body: Label
+var ending_prompt: Label
+var ending_active := false
+var ending_stage := -1
+var ending_stage_elapsed := 0.0
+var ending_can_exit := false
 
 func _ready() -> void:
+    process_mode = Node.PROCESS_MODE_ALWAYS
     # Director test scene only. Do not save these forced ending facts.
     WorldState.current_location = "ending_fire_demo"
     WorldState.physical_union_complete = true
@@ -49,6 +60,12 @@ func _process(delta: float) -> void:
         fire_intensity = minf(1.0, fire_intensity + delta * 0.045)
     else:
         fire_intensity = maxf(0.0, fire_intensity - delta * 0.5)
+
+    if ending_active:
+        ending_stage_elapsed += delta
+        if ending_stage < 3 and ending_stage_elapsed >= 5.5:
+            _advance_ending_stage()
+
     queue_redraw()
 
 func _spawn_hero() -> void:
@@ -172,6 +189,8 @@ func _begin_detonation() -> void:
     if narrative_audio and narrative_audio.has_method("play_corrupted_lullaby"):
         narrative_audio.play_corrupted_lullaby()
     WorldState.input_locked = true
+    WorldState.ending_route = "烈火天罚"
+    WorldState.save_game()
 
     var flash := ColorRect.new()
     flash.color = Color("#f2d0a8")
@@ -183,12 +202,132 @@ func _begin_detonation() -> void:
     tween.tween_property(flash, "modulate:a", 1.0, 0.12)
     tween.tween_interval(0.35)
     tween.tween_property(flash, "modulate:a", 0.0, 1.1)
+    tween.tween_callback(_start_final_ending)
 
     narrative.show_message(
         "烈火天罚",
         "The city disappears beneath the fire.\n\nThere is no victory.",
         5.0
     )
+
+func _start_final_ending() -> void:
+    ending_active = true
+    if hud:
+        hud.visible = false
+    if narrative:
+        narrative.visible = false
+    _create_ending_overlay()
+    _show_ending_stage(0)
+
+func _create_ending_overlay() -> void:
+    ending_layer = CanvasLayer.new()
+    ending_layer.layer = 50
+    ending_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+    add_child(ending_layer)
+
+    ending_backdrop = ColorRect.new()
+    ending_backdrop.color = Color("#09070a")
+    ending_backdrop.modulate.a = 0.0
+    ending_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    ending_layer.add_child(ending_backdrop)
+
+    ending_card = ColorRect.new()
+    ending_card.color = Color("#1b1518")
+    ending_card.modulate.a = 0.0
+    ending_card.position = Vector2(170, 105)
+    ending_card.size = Vector2(1060, 510)
+    ending_layer.add_child(ending_card)
+
+    var top_rule := ColorRect.new()
+    top_rule.color = Color("#9b4c42")
+    top_rule.position = Vector2(70, 76)
+    top_rule.size = Vector2(920, 2)
+    ending_card.add_child(top_rule)
+
+    var bottom_rule := ColorRect.new()
+    bottom_rule.color = Color("#9b4c42")
+    bottom_rule.position = Vector2(70, 426)
+    bottom_rule.size = Vector2(920, 2)
+    ending_card.add_child(bottom_rule)
+
+    ending_title = Label.new()
+    ending_title.position = Vector2(70, 105)
+    ending_title.size = Vector2(920, 70)
+    ending_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    ending_title.add_theme_font_size_override("font_size", 38)
+    ending_title.add_theme_color_override("font_color", Color("#ead3c7"))
+    ending_card.add_child(ending_title)
+
+    ending_body = Label.new()
+    ending_body.position = Vector2(110, 205)
+    ending_body.size = Vector2(840, 180)
+    ending_body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    ending_body.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+    ending_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    ending_body.add_theme_font_size_override("font_size", 24)
+    ending_body.add_theme_color_override("font_color", Color("#c7b1a8"))
+    ending_card.add_child(ending_body)
+
+    ending_prompt = Label.new()
+    ending_prompt.position = Vector2(70, 446)
+    ending_prompt.size = Vector2(920, 34)
+    ending_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    ending_prompt.add_theme_font_size_override("font_size", 15)
+    ending_prompt.add_theme_color_override("font_color", Color("#9b8078"))
+    ending_card.add_child(ending_prompt)
+
+func _show_ending_stage(stage: int) -> void:
+    ending_stage = stage
+    ending_stage_elapsed = 0.0
+    ending_can_exit = false
+
+    match stage:
+        0:
+            ending_title.text = "烈火天罚"
+            ending_body.text = "The city burns beneath the sky.\n\nMite is gone.\nThe Church is gone.\nThe kingdom is gone."
+            ending_prompt.text = "There is no victory."
+            _tween_ending_in()
+        1:
+            ending_title.text = "THE LAST SONG"
+            ending_body.text = "For one breath, Mite was only herself again.\n\nThen the fire answered the thing sleeping inside her."
+            ending_prompt.text = "No one remains to tell the story correctly."
+            _tween_ending_card()
+        2:
+            ending_title.text = "ASHES WITHOUT A GOD"
+            ending_body.text = "Hero survives.\n\nNot because the world was saved.\nNot because the gods were defeated.\nOnly because someone chose, for one last moment, to resist."
+            ending_prompt.text = "The road ahead is buried in ash."
+            _tween_ending_card()
+        3:
+            ending_title.text = "烈火天罚"
+            ending_body.text = "The city is dead.\n\nMite is dead.\n\nAnd the fire keeps burning long after the Hero leaves."
+            ending_prompt.text = "ENDING COMPLETE    E / ENTER  Return to Title    F9  Restart"
+            ending_can_exit = true
+            _tween_ending_card()
+
+func _tween_ending_in() -> void:
+    ending_backdrop.modulate.a = 0.0
+    ending_card.modulate.a = 0.0
+    var tween := create_tween()
+    tween.set_parallel(true)
+    tween.tween_property(ending_backdrop, "modulate:a", 0.94, 2.0)
+    tween.tween_property(ending_card, "modulate:a", 1.0, 1.8)
+    tween.set_parallel(false)
+
+func _tween_ending_card() -> void:
+    var tween := create_tween()
+    ending_card.modulate.a = 0.0
+    tween.tween_property(ending_card, "modulate:a", 1.0, 0.9)
+
+func _advance_ending_stage() -> void:
+    if not ending_active or ending_stage >= 3:
+        return
+    _show_ending_stage(ending_stage + 1)
+
+func _return_from_ending() -> void:
+    WorldState.input_locked = false
+    ending_active = false
+    get_tree().paused = false
+    get_tree().change_scene_to_file("res://scenes/boot.tscn")
 
 func _show_intro() -> void:
     narrative.show_message(
@@ -236,7 +375,19 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
     character.add_child(collision)
 
 func _unhandled_input(event: InputEvent) -> void:
-    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
+    if not (event is InputEventKey and event.pressed and not event.echo):
+        return
+
+    if ending_active:
+        if event.keycode in [KEY_E, KEY_ENTER, KEY_SPACE]:
+            _mark_input_handled()
+            if ending_can_exit:
+                _return_from_ending()
+            else:
+                _show_ending_stage(ending_stage + 1)
+            return
+
+    if event.keycode == KEY_F9:
         _mark_input_handled()
         WorldState.delete_save()
         get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
