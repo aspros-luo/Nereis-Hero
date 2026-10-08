@@ -25,8 +25,11 @@ func _process(delta: float) -> void:
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 120.0
     queue_redraw()
 
+func can_interact() -> bool:
+    return not WorldState.input_locked and not consumed and hero_nearby and cooldown <= 0.0
+
 func _unhandled_input(event: InputEvent) -> void:
-    if WorldState.input_locked or consumed or not hero_nearby or cooldown > 0.0:
+    if not can_interact():
         return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 0.5
@@ -42,5 +45,5 @@ func _draw() -> void:
     draw_circle(Vector2(0, -22), 14.0, Color("#302833"))
     draw_circle(Vector2(0, -22), 6.0, glow)
     draw_line(Vector2(0, -8), Vector2(0, 20), glow, 3.0)
-    if hero_nearby and not consumed:
+    if can_interact():
         draw_string(ThemeDB.fallback_font, Vector2(-45, 44), "E  Examine", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
