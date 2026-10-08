@@ -5,6 +5,7 @@ const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 const SLASH_ARC_SCRIPT = preload("res://scripts/effects/slash_arc.gd")
 const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
+const HERO_SYSTEM_SCRIPT = preload("res://scripts/player/hero_system.gd")
 
 const SPEED := 260.0
 const ATTACK_MOVE_SPEED := 92.0
@@ -53,6 +54,7 @@ var attack_hitbox: Area2D
 var attack_requested := false
 var dodge_requested := false
 var jump_requested := false
+var hero_system: Node
 signal defeated
 signal attack_started(combo_step: int)
 signal dodge_started
@@ -68,10 +70,17 @@ func _input(event: InputEvent) -> void:
             dodge_requested = true
         elif event.keycode == KEY_SPACE or event.keycode == KEY_UP:
             jump_requested = true
+        elif event.keycode == KEY_Q:
+            if hero_system and state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.HURT]:
+                hero_system.switch_weapon()
+                queue_redraw()
     elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
         attack_requested = true
 
 func _ready() -> void:
+    hero_system = HERO_SYSTEM_SCRIPT.new()
+    hero_system.name = "HeroSystem"
+    add_child(hero_system)
     _setup_combat_components()
     _log("BOOT", "Hero initialized")
     queue_redraw()
@@ -139,8 +148,13 @@ func _physics_process(delta: float) -> void:
         if attack_windup <= 0.0 and not attack_hit_registered:
             var base_damage := float(WorldState.hero_attack_damage)
             var multiplier: float = COMBO_DAMAGE_MULTIPLIERS[combo_step - 1]
+            if hero_system:
+                multiplier *= hero_system.get_weapon_damage_multiplier()
             var damage := int(round(base_damage * multiplier))
-            attack_hitbox.position.x = facing * float(COMBO_REACH[combo_step - 1])
+            var reach: float = COMBO_REACH[combo_step - 1]
+            if hero_system:
+                reach = hero_system.get_weapon_reach()
+            attack_hitbox.position.x = facing * reach
             attack_hitbox.activate(damage, 0.11 if combo_step < 3 else 0.14)
             _spawn_slash_arc()
             attack_hit_registered = true
@@ -217,9 +231,12 @@ func _update_combo_window(delta: float) -> void:
         combo_step = 0
 
 func _perform_attack() -> void:
-    if stamina < ATTACK_STAMINA_COST:
+    var stamina_cost := ATTACK_STAMINA_COST
+    if hero_system:
+        stamina_cost *= hero_system.get_weapon_stamina_modifier()
+    if stamina < stamina_cost:
         return
-    stamina -= ATTACK_STAMINA_COST
+    stamina -= stamina_cost
     stamina_regen_delay = STAMINA_REGEN_DELAY
 
     if combo_window > 0.0:
@@ -231,7 +248,10 @@ func _perform_attack() -> void:
     attack_time = ATTACK_DURATION
     attack_windup = ATTACK_WINDUP
     attack_hit_registered = false
-    attack_hitbox.position.x = facing * float(COMBO_REACH[combo_step - 1])
+    if hero_system:
+        attack_hitbox.position.x = facing * hero_system.get_weapon_reach()
+    else:
+        attack_hitbox.position.x = facing * float(COMBO_REACH[combo_step - 1])
 
     _set_state(CombatState.ATTACK)
     attack_started.emit(combo_step)
@@ -385,7 +405,12 @@ func _draw() -> void:
     ]), cloak)
     draw_line(Vector2(-12, -3 + bob), Vector2(-22, 18 + step), armor, 7.0)
     draw_line(Vector2(12, -3 + bob), Vector2(22, 18 - step), armor, 7.0)
-    draw_line(Vector2(0, -8 + bob), Vector2(facing * 58, -22 + bob), metal, 7.0)
+    var weapon_reach: float = 58.0
+    var weapon_width: float = 7.0
+    if hero_system and hero_system.is_short_blade():
+        weapon_reach = 38.0
+        weapon_width = 5.0
+    draw_line(Vector2(0, -8 + bob), Vector2(facing * weapon_reach, -22 + bob), metal, weapon_width)
 
     if WorldState.hidden_resistance_awakened:
         var anchor_color := Color("#aa8d72") if WorldState.mite_control_stage < 2 else Color("#8d6c98")
