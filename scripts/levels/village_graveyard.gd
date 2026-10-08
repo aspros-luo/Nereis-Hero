@@ -229,7 +229,7 @@ func _draw() -> void:
 
     for x in range(140, 2120, 260):
         draw_rect(Rect2(x - 28, 430, 56, 90), Color("#302a32"))
-        draw_string(ThemeDB.fallback_font, Vector2(x - 24, 455), "†", HORIZONTAL_ALIGNMENT_LEFT, -1, 40, Color("#66545c"))
+        draw_string(ThemeDB.fallback_font, Vector2(x - 24, 455), NereisLocalization.translate_text("†"), HORIZONTAL_ALIGNMENT_LEFT, -1, 40, Color("#66545c"))
 
     draw_rect(Rect2(1840, 300, 90, 220), Color("#28212a"))
     draw_colored_polygon(
@@ -240,4 +240,4 @@ func _draw() -> void:
         ]),
         Color("#352d38")
     )
-    draw_string(ThemeDB.fallback_font, Vector2(1805, 170), "BELL TOWER", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(1805, 170), NereisLocalization.translate_text("BELL TOWER"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
