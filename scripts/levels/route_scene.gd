@@ -22,6 +22,7 @@ var route_enemy_defeated := false
 var route_exit: Area2D
 
 func _ready() -> void:
+    WorldState.prepare_scene_runtime()
     if WorldState.route_complete:
         print("[NEREIS][VILLAGE] Route complete; entering Village Hub")
         SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
