@@ -86,8 +86,8 @@ func play_first_memory() -> void:
         return
 
     WorldState.unlock_first_memory()
-    title_label.text = "A MEMORY THAT DOES NOT FEEL LIKE YOURS"
-    body_label.text = "The old hunter looks at your face and goes pale.\n\n\"You used to come here before the church took you. You always asked whether the song was still playing.\"\n\nSomewhere beyond the village, a lullaby answers."
+    title_label.text = NereisLocalization.translate_text("A MEMORY THAT DOES NOT FEEL LIKE YOURS")
+    body_label.text = NereisLocalization.translate_text("The old hunter looks at your face and goes pale.\n\n\"You used to come here before the church took you. You always asked whether the song was still playing.\"\n\nSomewhere beyond the village, a lullaby answers.")
     panel.visible = true
     WorldState.input_locked = true
     timer = 8.0
@@ -96,8 +96,8 @@ func play_first_memory() -> void:
 func show_message(title: String, message: String, duration: float = 4.0) -> void:
     if panel.visible:
         _finish_message()
-    title_label.text = title
-    body_label.text = message
+    title_label.text = NereisLocalization.translate_text(title)
+    body_label.text = NereisLocalization.translate_text(message)
     skip_label.text = NereisLocalization.t("narrative.skip")
     panel.visible = true
     WorldState.input_locked = true
@@ -112,8 +112,8 @@ func begin_first_choice() -> void:
     if not get_tree().paused:
         get_tree().paused = true
         paused_for_narrative = true
-    title_label.text = "THE ROAD REMEMBERS YOU"
-    body_label.text = "Inside the fallen armor you find a church seal.\n\nFrom the village, the lullaby begins again. You can follow the seal, or follow the song.\n\n[1] Follow the church seal\n[2] Follow the lullaby"
+    title_label.text = NereisLocalization.translate_text("THE ROAD REMEMBERS YOU")
+    body_label.text = NereisLocalization.translate_text("Inside the fallen armor you find a church seal.\n\nFrom the village, the lullaby begins again. You can follow the seal, or follow the song.\n\n[1] Follow the church seal\n[2] Follow the lullaby")
     panel.visible = true
     WorldState.input_locked = true
     timer = 0.0
