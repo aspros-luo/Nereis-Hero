@@ -38,7 +38,7 @@ func _ready() -> void:
     skip_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
     skip_label.add_theme_font_size_override("font_size", 12)
     skip_label.add_theme_color_override("font_color", Color("#756d72"))
-    skip_label.text = NereisLocalization.t("narrative.skip")
+    skip_label.text = NereisLocalization.translate_text(NereisLocalization.t("narrative.skip"))
     panel.add_child(skip_label)
 
 func _process(delta: float) -> void:
@@ -65,11 +65,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
     if not choice_active:
         if event is InputEventKey and event.pressed and not event.echo:
-            if event.keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_ESCAPE]:
+            if event.keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_ESCAPE, KEY_J]:
                 _finish_message()
                 get_viewport().set_input_as_handled()
                 return
-        if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+        if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
             _finish_message()
             get_viewport().set_input_as_handled()
             return
