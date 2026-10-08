@@ -183,9 +183,7 @@ func _draw() -> void:
 
     draw_string(
         ThemeDB.fallback_font,
-        Vector2(470, 250),
-        "THE ROOM REMEMBERS",
-        HORIZONTAL_ALIGNMENT_LEFT,
+        Vector2(470, 250), NereisLocalization.translate_text("THE ROOM REMEMBERS"), HORIZONTAL_ALIGNMENT_LEFT,
         -1,
         24,
         Color("#76656d")
