@@ -8,6 +8,7 @@ var choice_active := false
 var skip_label: Label
 var continue_button: Button
 var paused_for_narrative := false
+var blocks_input := true
 
 func _ready() -> void:
     layer = 20
@@ -60,9 +61,11 @@ func _process(delta: float) -> void:
         _finish_message()
 
 func _finish_message() -> void:
+    timer = 0.0
     panel.visible = false
     continue_button.visible = false
     choice_active = false
+    blocks_input = true
     WorldState.input_locked = false
     if paused_for_narrative:
         get_tree().paused = false
@@ -70,7 +73,7 @@ func _finish_message() -> void:
     print("[NEREIS][STORY] Narrative display ended")
 
 func _unhandled_input(event: InputEvent) -> void:
-    if not panel.visible:
+    if not panel.visible or not blocks_input:
         return
 
     if not choice_active:
@@ -112,6 +115,7 @@ func show_message(title: String, message: String, duration: float = 4.0) -> void
     continue_button.text = NereisLocalization.t("narrative.continue")
     continue_button.visible = true
     panel.visible = true
+    blocks_input = true
     WorldState.input_locked = true
     timer = duration
     if not get_tree().paused:
@@ -119,6 +123,19 @@ func show_message(title: String, message: String, duration: float = 4.0) -> void
         paused_for_narrative = true
 
     
+func show_caption(title: String, message: String, duration: float = 2.5) -> void:
+    if panel.visible:
+        _finish_message()
+    title_label.text = NereisLocalization.translate_text(title)
+    body_label.text = NereisLocalization.translate_text(message)
+    skip_label.text = ""
+    continue_button.visible = false
+    panel.visible = true
+    blocks_input = false
+    choice_active = false
+    WorldState.input_locked = false
+    timer = duration
+
 func begin_first_choice() -> void:
     choice_active = true
     if not get_tree().paused:
