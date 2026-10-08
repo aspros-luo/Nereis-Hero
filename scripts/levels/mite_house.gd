@@ -18,6 +18,7 @@ var rest_point: Node2D
 var exit: Area2D
 
 func _ready() -> void:
+    WorldState.prepare_scene_runtime()
     WorldState.set_location("mite_house")
     _create_floor()
     _create_boundaries()
