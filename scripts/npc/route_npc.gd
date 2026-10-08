@@ -31,6 +31,6 @@ func _unhandled_input(event: InputEvent) -> void:
 func _draw() -> void:
     draw_circle(Vector2(0, -50), 17.0, Color("#8d7566"))
     draw_rect(Rect2(-18, -32, 36, 32), Color("#49424a"))
-    draw_string(ThemeDB.fallback_font, Vector2(-58, -76), display_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color("#b7a09b"))
+    draw_string(ThemeDB.fallback_font, Vector2(-58, -76), NereisLocalization.translate_text(display_name), HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color("#b7a09b"))
     if hero_nearby:
-        draw_string(ThemeDB.fallback_font, Vector2(-50, 28), "E  Speak", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
+        draw_string(ThemeDB.fallback_font, Vector2(-50, 28), NereisLocalization.translate_text("E  Speak"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
