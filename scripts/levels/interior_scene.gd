@@ -317,7 +317,7 @@ func _draw() -> void:
     if location_id == "tavern":
         draw_rect(Rect2(480, 290, 840, 230), Color("#2e252e"))
         draw_rect(Rect2(700, 400, 420, 120), Color("#211a21"))
-        draw_string(ThemeDB.fallback_font, Vector2(820, 380), "TAVERN HALL", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#d6c7b2"))
+        draw_string(ThemeDB.fallback_font, Vector2(820, 380), NereisLocalization.translate_text("TAVERN HALL"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#d6c7b2"))
         for x in range(560, 1320, 120):
             draw_circle(Vector2(x, 350), 10, Color("#8e7777"))
     else:
@@ -331,7 +331,7 @@ func _draw() -> void:
             Color("#352d38")
         )
         draw_rect(Rect2(850, 350, 100, 170), Color("#17141b"))
-        draw_string(ThemeDB.fallback_font, Vector2(800, 190), "CHURCH NAVE", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#d6c7b2"))
+        draw_string(ThemeDB.fallback_font, Vector2(800, 190), NereisLocalization.translate_text("CHURCH NAVE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#d6c7b2"))
 
     draw_rect(Rect2(1550, 370, 120, 150), Color("#241d25"))
-    draw_string(ThemeDB.fallback_font, Vector2(1560, 350), "VILLAGE EXIT", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(1560, 350), NereisLocalization.translate_text("VILLAGE EXIT"), HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color("#796d67"))
