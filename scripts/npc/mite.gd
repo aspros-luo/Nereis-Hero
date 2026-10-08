@@ -141,7 +141,7 @@ func _draw() -> void:
         draw_arc(Vector2(0, -34), 19.0, 0.45, 2.7, 16, Color(0.56, 0.34, 0.58, 0.22), 2.0)
     if control_stage >= 3:
         draw_circle(Vector2(0, -39 + sway), 2.5, Color("#b96b75", 0.75))
-    draw_string(ThemeDB.fallback_font, Vector2(-38, -64), "MITE", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#d6c7b2"))
+    draw_string(ThemeDB.fallback_font, Vector2(-38, -64), NereisLocalization.translate_text("MITE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#d6c7b2"))
 
     if hero_nearby and not WorldState.input_locked:
-        draw_string(ThemeDB.fallback_font, Vector2(-54, 42), "E  Talk", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
+        draw_string(ThemeDB.fallback_font, Vector2(-54, 42), NereisLocalization.translate_text("E  Talk"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
