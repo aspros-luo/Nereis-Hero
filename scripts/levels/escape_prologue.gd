@@ -5,6 +5,7 @@ const WARDEN_SCRIPT = preload("res://scripts/enemies/experiment_warden.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
+const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
 
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 2200.0
