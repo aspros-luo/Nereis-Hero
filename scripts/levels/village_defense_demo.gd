@@ -190,4 +190,4 @@ func _draw() -> void:
             ]),
             Color("#352d38")
         )
-    draw_string(ThemeDB.fallback_font, Vector2(120, 230), "THE VILLAGE BURNS AT THE EDGES", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#6f5e63"))
+    draw_string(ThemeDB.fallback_font, Vector2(120, 230), NereisLocalization.translate_text("THE VILLAGE BURNS AT THE EDGES"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#6f5e63"))
