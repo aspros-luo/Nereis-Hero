@@ -35,6 +35,8 @@ var language_option: OptionButton
 var language_label: Label
 var save_status_label: Label
 var new_game_dialog: ConfirmationDialog
+var story_region_source := ""
+var story_objective_source := ""
 var pause_open := false
 
 func _ready() -> void:
@@ -185,6 +187,8 @@ func bind_hero(target: Node) -> void:
     hero = target
 
 func set_story_mode(region: String, objective: String) -> void:
+    story_region_source = region
+    story_objective_source = objective
     title_label.text = NereisLocalization.t("hud.title")
     region_label.text = _localize_region(region)
     objective_label.text = _localize_objective(objective)
@@ -403,6 +407,10 @@ func _refresh_localized_ui() -> void:
         return
     title_label.text = NereisLocalization.t("hud.title")
     controls_label.text = NereisLocalization.t("hud.controls")
+    if not story_region_source.is_empty():
+        region_label.text = _localize_region(story_region_source)
+    if not story_objective_source.is_empty():
+        objective_label.text = _localize_objective(story_objective_source)
     hp_label.text = NereisLocalization.t("hud.hp")
     stamina_label.text = NereisLocalization.t("hud.sta")
     humanity_label.text = NereisLocalization.t("hud.hum")
