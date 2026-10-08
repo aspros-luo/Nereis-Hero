@@ -6,6 +6,7 @@ const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const FINAL_CULTIST_SCRIPT = preload("res://scripts/enemies/final_cultist.gd")
 const FINAL_MITE_SCRIPT = preload("res://scripts/npc/final_mite.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
+const ENDING_CG_SCRIPT = preload("res://scripts/ui/ending_cg_overlay.gd")
 
 const CULTIST_COUNT := 100
 const FLOOR_Y := 540.0
@@ -34,6 +35,7 @@ var ending_active := false
 var ending_stage := -1
 var ending_stage_elapsed := 0.0
 var ending_can_exit := false
+var ending_cg: Control
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
@@ -231,8 +233,14 @@ func _create_ending_overlay() -> void:
     ending_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     ending_layer.add_child(ending_backdrop)
 
+    ending_cg = Control.new()
+    ending_cg.set_script(ENDING_CG_SCRIPT)
+    ending_layer.add_child(ending_cg)
+    ending_cg.setup("fire")
+    ending_cg.play()
+
     ending_card = ColorRect.new()
-    ending_card.color = Color("#1b1518")
+    ending_card.color = Color("#1b1518", 0.58)
     ending_card.modulate.a = 0.0
     ending_card.position = Vector2(170, 105)
     ending_card.size = Vector2(1060, 510)
@@ -299,6 +307,8 @@ func _show_ending_stage(stage: int) -> void:
             _tween_ending_card()
         3:
             ending_title.text = "烈火天罚"
+            if ending_cg and ending_cg.has_method("pulse"):
+                ending_cg.pulse()
             ending_body.text = "The city is dead.\n\nMite is dead.\n\nAnd the fire keeps burning long after the Hero leaves."
             ending_prompt.text = "ENDING COMPLETE    E / ENTER  Return to Title    F9  Restart"
             ending_can_exit = true
