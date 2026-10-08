@@ -5,6 +5,7 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HIGH_PRIEST_SCRIPT = preload("res://scripts/enemies/high_priest.gd")
 const KING_SCRIPT = preload("res://scripts/enemies/king_guardian.gd")
+const ENDING_CG_SCRIPT = preload("res://scripts/ui/ending_cg_overlay.gd")
 
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 4400.0
@@ -26,6 +27,7 @@ var ending_prompt: Label
 var ending_stage := -1
 var ending_stage_elapsed := 0.0
 var ending_can_exit := false
+var ending_cg: Control
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
@@ -152,10 +154,16 @@ func _create_human_ending_overlay() -> void:
     ending_backdrop.color = Color("#08070b")
     ending_layer.add_child(ending_backdrop)
 
+    ending_cg = Control.new()
+    ending_cg.set_script(ENDING_CG_SCRIPT)
+    ending_layer.add_child(ending_cg)
+    ending_cg.setup("human")
+    ending_cg.play()
+
     ending_card = ColorRect.new()
     ending_card.position = Vector2(110, 90)
     ending_card.size = Vector2(1060, 540)
-    ending_card.color = Color("#111018", 0.92)
+    ending_card.color = Color("#111018", 0.48)
     ending_layer.add_child(ending_card)
 
     var upper_rule := ColorRect.new()
@@ -222,6 +230,8 @@ func _show_human_ending_stage(stage: int) -> void:
     ]
 
     ending_title.text = NereisLocalization.translate_text(stage_titles[ending_stage])
+    if ending_cg and ending_stage == 3 and ending_cg.has_method("pulse"):
+        ending_cg.pulse()
     ending_body.text = NereisLocalization.translate_text(stage_bodies[ending_stage])
 
     if ending_stage < 3:
