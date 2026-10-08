@@ -315,11 +315,11 @@ func _draw() -> void:
     draw_rect(Rect2(600, 445, 160, 75), Color("#27212a"))
     if not WorldState.boss_gate_open:
         draw_rect(Rect2(1730, 350, 140, 170), Color("#241d25"))
-        draw_string(ThemeDB.fallback_font, Vector2(1750, 365), "ASH GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
-    draw_string(ThemeDB.fallback_font, Vector2(900, 490), "SAFE GROUND", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
-    draw_string(ThemeDB.fallback_font, Vector2(605, 458), "OLD HUNTER", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
+        draw_string(ThemeDB.fallback_font, Vector2(1750, 365), NereisLocalization.translate_text("ASH GATE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(900, 490), NereisLocalization.translate_text("SAFE GROUND"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(605, 458), NereisLocalization.translate_text("OLD HUNTER"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#796d67"))
 
-    draw_string(ThemeDB.fallback_font, Vector2(40, 235), "VILLAGE OUTSKIRTS", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
-    draw_string(ThemeDB.fallback_font, Vector2(1240, 235), "THE ASHEN ROAD", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
+    draw_string(ThemeDB.fallback_font, Vector2(40, 235), NereisLocalization.translate_text("VILLAGE OUTSKIRTS"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
+    draw_string(ThemeDB.fallback_font, Vector2(1240, 235), NereisLocalization.translate_text("THE ASHEN ROAD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
 
 
