@@ -2,6 +2,8 @@ extends Node2D
 
 signal rested
 
+const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
+
 @export var rest_id: String = ""
 @export var display_name: String = "REST"
 
@@ -15,10 +17,12 @@ func _process(delta: float) -> void:
     cooldown = max(0.0, cooldown - delta)
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 110.0
+    var available := not WorldState.input_locked and hero_nearby and cooldown <= 0.0
+    INTERACTION_FOCUS_SCRIPT.sync(self, available)
     queue_redraw()
 
 func _unhandled_input(event: InputEvent) -> void:
-    if WorldState.input_locked or not hero_nearby or cooldown > 0.0:
+    if WorldState.input_locked or not hero_nearby or cooldown > 0.0 or not INTERACTION_FOCUS_SCRIPT.is_focused(self):
         return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 1.0
@@ -35,5 +39,5 @@ func _draw() -> void:
     draw_rect(Rect2(-36, -16, 72, 16), Color("#352d38"))
     draw_circle(Vector2(-24, -22), 8.0, Color("#796d67"))
     draw_circle(Vector2(24, -22), 8.0, Color("#796d67"))
-    if hero_nearby:
+    if hero_nearby and not WorldState.input_locked and INTERACTION_FOCUS_SCRIPT.is_focused(self):
         draw_string(ThemeDB.fallback_font, Vector2(-34, 28), "E  Rest", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
