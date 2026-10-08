@@ -3,6 +3,7 @@ extends Node2D
 signal interacted(interaction_id: String, title: String, message: String)
 
 const INTERACTION_RANGE := 125.0
+const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
 
 var hero_nearby := false
 var interaction_cooldown := 0.0
@@ -18,13 +19,17 @@ func _process(delta: float) -> void:
 
     var hero := get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= INTERACTION_RANGE
+    var available := not WorldState.input_locked and hero_nearby and interaction_cooldown <= 0.0 and not _select_interaction().is_empty()
+    INTERACTION_FOCUS_SCRIPT.sync(self, available)
 
     queue_redraw()
 
 func can_interact() -> bool:
     if WorldState.input_locked or not hero_nearby or interaction_cooldown > 0.0:
         return false
-    return not _select_interaction().is_empty()
+    if _select_interaction().is_empty():
+        return false
+    return INTERACTION_FOCUS_SCRIPT.is_focused(self)
 
 func _unhandled_input(event: InputEvent) -> void:
     if not can_interact():
