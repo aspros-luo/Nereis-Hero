@@ -27,6 +27,16 @@ var graveyard_cleared := false
 var graveyard_keeper_heard := false
 var weapon_level := 1
 var hero_attack_damage := 34
+
+# Hidden protagonist progression. Never expose these values in normal HUD.
+var hero_resonance := 0
+var ancient_exposure := 0
+var outer_exposure := 0
+var abnormal_load := 0.0
+var current_weapon_style := "long_sword"
+var learned_techniques: Array[String] = []
+var technique_variants: Dictionary = {}
+var resonance_sources: Array[String] = []
 var input_locked := false
 var hitstop_serial := 0
 
@@ -254,6 +264,14 @@ func save_game() -> void:
         "graveyard_keeper_heard": graveyard_keeper_heard,
         "weapon_level": weapon_level,
         "hero_attack_damage": hero_attack_damage,
+        "hero_resonance": hero_resonance,
+        "ancient_exposure": ancient_exposure,
+        "outer_exposure": outer_exposure,
+        "abnormal_load": abnormal_load,
+        "current_weapon_style": current_weapon_style,
+        "learned_techniques": learned_techniques,
+        "technique_variants": technique_variants,
+        "resonance_sources": resonance_sources,
         "mite_first_meeting": mite_first_meeting,
         "mite_interactions_seen": mite_interactions_seen,
         "mite_last_interaction_location": mite_last_interaction_location,
@@ -337,6 +355,27 @@ func load_game() -> void:
 
     weapon_level = int(parsed.get("weapon_level", 1))
     hero_attack_damage = int(parsed.get("hero_attack_damage", 34))
+    hero_resonance = clampi(int(parsed.get("hero_resonance", 0)), 0, 100)
+    ancient_exposure = clampi(int(parsed.get("ancient_exposure", 0)), 0, 100)
+    outer_exposure = clampi(int(parsed.get("outer_exposure", 0)), 0, 100)
+    abnormal_load = clampf(float(parsed.get("abnormal_load", 0.0)), 0.0, 100.0)
+    current_weapon_style = str(parsed.get("current_weapon_style", "long_sword"))
+    if current_weapon_style not in ["long_sword", "short_blade"]:
+        current_weapon_style = "long_sword"
+    learned_techniques.clear()
+    var saved_techniques = parsed.get("learned_techniques", [])
+    if saved_techniques is Array:
+        for technique_id in saved_techniques:
+            learned_techniques.append(str(technique_id))
+    technique_variants = {}
+    var saved_variants = parsed.get("technique_variants", {})
+    if saved_variants is Dictionary:
+        technique_variants = saved_variants.duplicate(true)
+    resonance_sources.clear()
+    var saved_resonance_sources = parsed.get("resonance_sources", [])
+    if saved_resonance_sources is Array:
+        for source_id in saved_resonance_sources:
+            resonance_sources.append(str(source_id))
     mite_first_meeting = bool(parsed.get("mite_first_meeting", false))
     mite_interactions_seen.clear()
     var saved_mite_interactions = parsed.get("mite_interactions_seen", [])
@@ -360,6 +399,13 @@ func load_game() -> void:
     prologue_complete = bool(parsed.get("prologue_complete", false))
 
     print("[NEREIS][SAVE] Game loaded; memory=%d boss_defeated=%s choice=%s" % [hero_memory, boss_defeated, first_choice_made])
+
+func record_resonance_source(source_id: String) -> bool:
+    if source_id.is_empty() or source_id in resonance_sources:
+        return false
+    resonance_sources.append(source_id)
+    save_game()
+    return true
 
 func mark_prologue_complete() -> void:
     if prologue_complete:
@@ -400,6 +446,14 @@ func reset() -> void:
     graveyard_keeper_heard = false
     weapon_level = 1
     hero_attack_damage = 34
+    hero_resonance = 0
+    ancient_exposure = 0
+    outer_exposure = 0
+    abnormal_load = 0.0
+    current_weapon_style = "long_sword"
+    learned_techniques.clear()
+    technique_variants.clear()
+    resonance_sources.clear()
     mite_first_meeting = false
     mite_interactions_seen.clear()
     mite_last_interaction_location = ""
