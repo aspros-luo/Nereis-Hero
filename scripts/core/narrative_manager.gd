@@ -138,6 +138,7 @@ func show_caption(title: String, message: String, duration: float = 2.5) -> void
 
 func begin_first_choice() -> void:
     choice_active = true
+    blocks_input = true
     if not get_tree().paused:
         get_tree().paused = true
         paused_for_narrative = true
