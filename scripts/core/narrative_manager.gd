@@ -96,11 +96,11 @@ func play_first_memory() -> void:
         return
 
     WorldState.unlock_first_memory()
-    title_label.text = NereisLocalization.translate_text("A MEMORY THAT DOES NOT FEEL LIKE YOURS")
-    body_label.text = NereisLocalization.translate_text("The old hunter looks at your face and goes pale.\n\n\"You used to come here before the church took you. You always asked whether the song was still playing.\"\n\nSomewhere beyond the village, a lullaby answers.")
-    panel.visible = true
-    WorldState.input_locked = true
-    timer = 8.0
+    show_message(
+        "A MEMORY THAT DOES NOT FEEL LIKE YOURS",
+        "The old hunter looks at your face and goes pale.\n\n\"You used to come here before the church took you. You always asked whether the song was still playing.\"\n\nSomewhere beyond the village, a lullaby answers.",
+        8.0
+    )
     print("[NEREIS][STORY] First memory event displayed")
 
 func show_message(title: String, message: String, duration: float = 4.0) -> void:
