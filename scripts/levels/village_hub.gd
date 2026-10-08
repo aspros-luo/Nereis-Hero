@@ -18,6 +18,8 @@ var checkpoint: Area2D
 var mite: Node2D
 var narrative_audio: Node
 var mite_house_door: Area2D
+var mite_house_nearby := false
+var mite_house_transitioning := false
 var fireflies: Node2D
 
 func _ready() -> void:
@@ -125,9 +127,22 @@ func _spawn_mite_house_door() -> void:
     mite_house_door.add_child(shape)
     add_child(mite_house_door)
     mite_house_door.body_entered.connect(_on_mite_house_entered)
+    mite_house_door.body_exited.connect(_on_mite_house_exited)
 
 func _on_mite_house_entered(body: Node) -> void:
     if body != get_node_or_null("Hero"):
+        return
+    mite_house_nearby = true
+    queue_redraw()
+
+func _on_mite_house_exited(body: Node) -> void:
+    if body != get_node_or_null("Hero"):
+        return
+    mite_house_nearby = false
+    queue_redraw()
+
+func _enter_mite_house() -> void:
+    if mite_house_transitioning or WorldState.input_locked:
         return
     if WorldState.mite_connection_missed:
         narrative.show_message("THE LOCKED DOOR", "There is no reason to go inside.", 3.0)
@@ -135,6 +150,8 @@ func _on_mite_house_entered(body: Node) -> void:
     if not WorldState.mite_first_meeting:
         narrative.show_message("THE CLOSED DOOR", "You do not know who lives here yet.", 3.0)
         return
+
+    mite_house_transitioning = true
     WorldState.set_location("mite_house")
     SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")
 
@@ -318,6 +335,10 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
+        if event.keycode == KEY_E and mite_house_nearby:
+            _enter_mite_house()
+            get_viewport().set_input_as_handled()
+            return
         if event.keycode == KEY_F1:
             var endgame_scene := NereisEndingEvaluator.get_candidate()
             print("[NEREIS][DEBUG] Candidate endgame=%s" % endgame_scene)
@@ -379,6 +400,8 @@ func _draw() -> void:
     )
     draw_rect(Rect2(430, 430, 50, 90), Color("#17141b"))
     draw_string(ThemeDB.fallback_font, Vector2(388, 332), "MITE'S HOUSE", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
+    if mite_house_nearby and not WorldState.input_locked:
+        draw_string(ThemeDB.fallback_font, Vector2(420, 555), "E  Enter", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
 
     for x in range(120, 2300, 480):
         draw_rect(Rect2(x - 90, 360, 180, 160), Color("#29232b"))
