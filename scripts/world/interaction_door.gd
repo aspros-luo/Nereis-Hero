@@ -5,6 +5,7 @@ signal interacted
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
 
 @export var prompt_text: String = "E  Enter"
+@export var enabled := true
 
 var hero_nearby := false
 var cooldown := 0.0
@@ -21,7 +22,7 @@ func _process(delta: float) -> void:
     cooldown = maxf(0.0, cooldown - delta)
     if hero_nearby and WorldState.input_locked:
         hero_nearby = false
-    var available := not WorldState.input_locked and hero_nearby and cooldown <= 0.0
+    var available := enabled and not WorldState.input_locked and hero_nearby and cooldown <= 0.0
     INTERACTION_FOCUS_SCRIPT.sync(self, available)
     queue_redraw()
 
