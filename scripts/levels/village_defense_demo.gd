@@ -128,7 +128,6 @@ func _finish_defense() -> void:
     )
     await narrative.message_finished
     SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
-    )
 
 func _on_hero_defeated() -> void:
     for attacker in attackers:
