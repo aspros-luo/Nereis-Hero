@@ -6,6 +6,15 @@ const SAVE_PATH := "user://nereis_hero_save.json"
 
 var hero_memory := 0
 var hero_humanity := 100
+# Hidden protagonist progression. Never rendered in the normal HUD.
+var hero_resonance := 0
+var ancient_exposure := 0
+var outer_exposure := 0
+var abnormal_load := 0.0
+var current_weapon_style := "long_sword"
+var learned_techniques: Array[String] = []
+var technique_variants: Dictionary = {}
+var resonance_sources: Array[String] = []
 var first_memory_unlocked := false
 var checkpoint_position := Vector2(320, 520)
 var checkpoint_active := false
@@ -226,10 +235,25 @@ func set_language(language_id: String) -> void:
     print("[NEREIS][SYSTEM] Language=%s" % language)
     save_game()
 
+func record_resonance_source(source_id: String) -> bool:
+    if source_id.is_empty() or source_id in resonance_sources:
+        return false
+    resonance_sources.append(source_id)
+    save_game()
+    return true
+
 func save_game() -> void:
     var data := {
         "hero_memory": hero_memory,
         "hero_humanity": hero_humanity,
+        "hero_resonance": hero_resonance,
+        "ancient_exposure": ancient_exposure,
+        "outer_exposure": outer_exposure,
+        "abnormal_load": abnormal_load,
+        "current_weapon_style": current_weapon_style,
+        "learned_techniques": learned_techniques,
+        "technique_variants": technique_variants,
+        "resonance_sources": resonance_sources,
         "first_memory_unlocked": first_memory_unlocked,
         "checkpoint_position": {
             "x": checkpoint_position.x,
@@ -294,6 +318,27 @@ func load_game() -> void:
 
     hero_memory = int(parsed.get("hero_memory", 0))
     hero_humanity = int(parsed.get("hero_humanity", 100))
+    hero_resonance = clampi(int(parsed.get("hero_resonance", 0)), 0, 100)
+    ancient_exposure = clampi(int(parsed.get("ancient_exposure", 0)), 0, 100)
+    outer_exposure = clampi(int(parsed.get("outer_exposure", 0)), 0, 100)
+    abnormal_load = clampf(float(parsed.get("abnormal_load", 0.0)), 0.0, 100.0)
+    current_weapon_style = str(parsed.get("current_weapon_style", "long_sword"))
+    if current_weapon_style not in ["long_sword", "short_blade"]:
+        current_weapon_style = "long_sword"
+    learned_techniques.clear()
+    var saved_techniques = parsed.get("learned_techniques", [])
+    if saved_techniques is Array:
+        for technique_id in saved_techniques:
+            learned_techniques.append(str(technique_id))
+    technique_variants = {}
+    var saved_variants = parsed.get("technique_variants", {})
+    if saved_variants is Dictionary:
+        technique_variants = saved_variants.duplicate(true)
+    resonance_sources.clear()
+    var saved_resonance_sources = parsed.get("resonance_sources", [])
+    if saved_resonance_sources is Array:
+        for source_id in saved_resonance_sources:
+            resonance_sources.append(str(source_id))
     first_memory_unlocked = bool(parsed.get("first_memory_unlocked", false))
 
     var saved_checkpoint = parsed.get("checkpoint_position", {})
@@ -379,6 +424,14 @@ func reset() -> void:
     var preserved_language := language
     hero_memory = 0
     hero_humanity = 100
+    hero_resonance = 0
+    ancient_exposure = 0
+    outer_exposure = 0
+    abnormal_load = 0.0
+    current_weapon_style = "long_sword"
+    learned_techniques.clear()
+    technique_variants.clear()
+    resonance_sources.clear()
     first_memory_unlocked = false
     checkpoint_position = Vector2(320, 520)
     checkpoint_active = false
