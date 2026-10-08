@@ -10,6 +10,7 @@ const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const INTERIOR_CLUE_SCRIPT = preload("res://scripts/world/interior_clue.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
+const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
 const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 
@@ -173,9 +174,10 @@ func _spawn_exit() -> void:
 
 func _spawn_route_door() -> void:
     route_door = Area2D.new()
+    route_door.set_script(INTERACTION_DOOR_SCRIPT)
     route_door.position = Vector2(1350, 520)
     route_door.name = "InvestigationDoor"
-
+    route_door.prompt_text = "E  Enter"
     var shape := CollisionShape2D.new()
     var rectangle := RectangleShape2D.new()
     rectangle.size = Vector2(100, 130)
@@ -183,32 +185,32 @@ func _spawn_route_door() -> void:
     shape.position = Vector2(0, -65)
     route_door.add_child(shape)
     add_child(route_door)
-    route_door.body_entered.connect(_on_route_door_entered)
+    route_door.interacted.connect(_on_route_door_interacted)
 
-func _on_route_door_entered(body: Node) -> void:
-    if body != hero:
+func _on_route_door_interacted() -> void:
+    if WorldState.input_locked:
         return
     if location_id == "church":
         WorldState.selected_route = "church"
         WorldState.set_location("route_church")
         narrative.show_message("THE ARCHIVES", "The door was never meant for the faithful.\n\nYour name is scratched into the stone beside the lock.", 4.0)
-        get_tree().create_timer(4.2).timeout.connect(func() -> void:
-            SceneTransition.fade_to_scene("res://scenes/routes/church_path.tscn")
-        )
+        await narrative.message_finished
+        SceneTransition.fade_to_scene("res://scenes/routes/church_path.tscn")
     elif location_id == "tavern":
         WorldState.selected_route = "lullaby"
         WorldState.set_location("route_lullaby")
         narrative.show_message("THE BACK ROAD", "Behind the tavern is a path no map remembers.\n\nYou can hear the song again.", 4.0)
-        get_tree().create_timer(4.2).timeout.connect(func() -> void:
-            SceneTransition.fade_to_scene("res://scenes/routes/lullaby_path.tscn")
-        )
+        await narrative.message_finished
+        SceneTransition.fade_to_scene("res://scenes/routes/lullaby_path.tscn")
 
 func _spawn_research_door() -> void:
     if location_id != "church":
         return
     research_door = Area2D.new()
+    research_door.set_script(INTERACTION_DOOR_SCRIPT)
     research_door.position = Vector2(1020, 520)
     research_door.name = "ResearchDoor"
+    research_door.prompt_text = "E  Enter"
     var shape := CollisionShape2D.new()
     var rectangle := RectangleShape2D.new()
     rectangle.size = Vector2(80, 130)
@@ -216,15 +218,15 @@ func _spawn_research_door() -> void:
     shape.position = Vector2(0, -65)
     research_door.add_child(shape)
     add_child(research_door)
-    research_door.body_entered.connect(func(body: Node) -> void:
-        if body != hero:
-            return
-        WorldState.set_location("ancient_lab")
-        narrative.show_message("THE LOCKED STAIR", "The stone gives way beneath your hand.\n\nThere should not be a room underneath a village church.", 4.2)
-        get_tree().create_timer(4.4).timeout.connect(func() -> void:
-            SceneTransition.fade_to_scene("res://scenes/ancient_research_lab.tscn")
-        )
-    )
+    research_door.interacted.connect(_on_research_door_interacted)
+
+func _on_research_door_interacted() -> void:
+    if WorldState.input_locked:
+        return
+    WorldState.set_location("ancient_lab")
+    narrative.show_message("THE LOCKED STAIR", "The stone gives way beneath your hand.\n\nThere should not be a room underneath a village church.", 4.2)
+    await narrative.message_finished
+    SceneTransition.fade_to_scene("res://scenes/ancient_research_lab.tscn")
 
 func _spawn_ui() -> void:
     narrative = CanvasLayer.new()
@@ -261,7 +263,8 @@ func _on_npc_interacted(npc: Node) -> void:
 func _on_exit_reached() -> void:
     WorldState.set_location("village")
     narrative.show_message("BACK TO THE VILLAGE", "The village waits outside.", 3.0)
-    get_tree().create_timer(3.2).timeout.connect(_return_to_village)
+    await narrative.message_finished
+    _return_to_village()
 
 func _return_to_village() -> void:
     SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
