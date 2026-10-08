@@ -90,7 +90,8 @@ func _begin_scene() -> void:
         "The village is asleep.\n\nHero and Mite are alone in the room.\n\nNothing outside asks either of them to be a knight, a vessel or a god.",
         5.0
     )
-    get_tree().create_timer(5.2).timeout.connect(_begin_union)
+    await narrative.message_finished
+    _begin_union()
 
 func _begin_union() -> void:
     WorldState.mark_physical_union_complete()
@@ -107,7 +108,8 @@ func _begin_union() -> void:
         5.5
     )
 
-    get_tree().create_timer(5.8).timeout.connect(_show_influence)
+    await narrative.message_finished
+    _show_influence()
 
 func _show_influence() -> void:
     narrative.show_message(
