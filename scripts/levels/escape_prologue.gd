@@ -140,8 +140,7 @@ func _on_exit_body_entered(body: Node) -> void:
     )
     await narrative.message_finished
     WorldState.input_locked = false
-        SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
-    )
+    SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
 
 func _on_hero_defeated() -> void:
     for warden in wardens:
