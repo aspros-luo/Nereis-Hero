@@ -6,6 +6,7 @@ var body_label: Label
 var timer := 0.0
 var choice_active := false
 var skip_label: Label
+var continue_button: Button
 var paused_for_narrative := false
 
 func _ready() -> void:
@@ -38,8 +39,16 @@ func _ready() -> void:
     skip_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
     skip_label.add_theme_font_size_override("font_size", 12)
     skip_label.add_theme_color_override("font_color", Color("#756d72"))
-    skip_label.text = NereisLocalization.translate_text(NereisLocalization.t("narrative.skip"))
+    skip_label.text = NereisLocalization.t("narrative.skip")
     panel.add_child(skip_label)
+
+    continue_button = Button.new()
+    continue_button.position = Vector2(730, 116)
+    continue_button.size = Vector2(170, 28)
+    continue_button.add_theme_font_size_override("font_size", 13)
+    continue_button.text = NereisLocalization.t("narrative.continue")
+    continue_button.pressed.connect(_finish_message)
+    panel.add_child(continue_button)
 
 func _process(delta: float) -> void:
     if not panel.visible:
@@ -52,6 +61,7 @@ func _process(delta: float) -> void:
 
 func _finish_message() -> void:
     panel.visible = false
+    continue_button.visible = false
     choice_active = false
     WorldState.input_locked = false
     if paused_for_narrative:
@@ -99,6 +109,8 @@ func show_message(title: String, message: String, duration: float = 4.0) -> void
     title_label.text = NereisLocalization.translate_text(title)
     body_label.text = NereisLocalization.translate_text(message)
     skip_label.text = NereisLocalization.t("narrative.skip")
+    continue_button.text = NereisLocalization.t("narrative.continue")
+    continue_button.visible = true
     panel.visible = true
     WorldState.input_locked = true
     timer = duration
@@ -114,6 +126,7 @@ func begin_first_choice() -> void:
         paused_for_narrative = true
     title_label.text = NereisLocalization.translate_text("THE ROAD REMEMBERS YOU")
     body_label.text = NereisLocalization.translate_text("Inside the fallen armor you find a church seal.\n\nFrom the village, the lullaby begins again. You can follow the seal, or follow the song.\n\n[1] Follow the church seal\n[2] Follow the lullaby")
+    continue_button.visible = false
     panel.visible = true
     WorldState.input_locked = true
     timer = 0.0
