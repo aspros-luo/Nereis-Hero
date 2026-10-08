@@ -46,7 +46,9 @@ func _unhandled_input(event: InputEvent) -> void:
             WorldState.mark_route_complete()
         print("[NEREIS][ROUTE] Route milestone complete: %s" % WorldState.selected_route)
         reached.emit()
-        get_viewport().set_input_as_handled()
+        var viewport := get_viewport()
+        if viewport:
+            viewport.set_input_as_handled()
 
 func _draw() -> void:
     var c := Color("#d6c7b2") if WorldState.route_complete else Color("#4d454d")
