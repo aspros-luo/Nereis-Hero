@@ -45,7 +45,9 @@ func _unhandled_input(event: InputEvent) -> void:
         interacted.emit()
         WorldState.record_hidden_artifact_source("route_echo_" + echo_id)
         print("[NEREIS][STORY] Route echo interacted id=%s" % echo_id)
-        get_viewport().set_input_as_handled()
+        var viewport := get_viewport()
+        if viewport:
+            viewport.set_input_as_handled()
         queue_redraw()
 
 func _draw() -> void:
