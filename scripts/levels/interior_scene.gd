@@ -27,6 +27,7 @@ var route_door: Area2D
 var research_door: Area2D
 
 func _ready() -> void:
+    WorldState.prepare_scene_runtime()
     WorldState.set_location(location_id)
     print("[NEREIS][INTERIOR] Entered %s route=%s" % [location_id, WorldState.selected_route])
     _create_floor()
