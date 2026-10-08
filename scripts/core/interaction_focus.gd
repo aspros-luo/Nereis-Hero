@@ -5,17 +5,37 @@ const GROUP := "nereis_interaction"
 const TIE_DISTANCE := 28.0
 
 static func sync(node: Node2D, available: bool, priority: int = 0) -> void:
-    node.set_meta("interaction_available", available)
+    var actionable := (
+        available
+        and not WorldState.input_locked
+        and not node.get_tree().paused
+    )
+    node.set_meta("interaction_available", actionable)
     node.set_meta("interaction_priority", priority)
 
-    if available:
+    if actionable:
         if not node.is_in_group(GROUP):
             node.add_to_group(GROUP)
     elif node.is_in_group(GROUP):
         node.remove_from_group(GROUP)
 
+static func clear_all(tree: SceneTree) -> void:
+    if tree == null:
+        return
+    for candidate in tree.get_nodes_in_group(GROUP):
+        if candidate == null or not is_instance_valid(candidate):
+            continue
+        candidate.set_meta("interaction_available", false)
+        candidate.remove_from_group(GROUP)
+        if candidate is CanvasItem:
+            candidate.queue_redraw()
+
 static func is_focused(node: Node2D) -> bool:
-    if not bool(node.get_meta("interaction_available", false)):
+    if (
+        not bool(node.get_meta("interaction_available", false))
+        or WorldState.input_locked
+        or node.get_tree().paused
+    ):
         return false
 
     var hero := node.get_node_or_null("../Hero") as Node2D
