@@ -137,6 +137,304 @@ const TEXT := {
     }
 }
 
+
+const SOURCE_TRANSLATIONS_EXTRA := {
+    "The old hunter looks at your face and goes pale.\n\n\"You used to come here before the church took you. You always asked whether the song was still playing.\"\n\nSomewhere beyond the village, a lullaby answers.": {
+        "zh_cn": "老猎人看着你的脸，脸色骤然变白。\n\n“在教会带走你之前，你以前常来这里。你总会问，那首歌是不是还在响。”\n\n村庄之外，摇篮曲回应了。",
+        "zh_tw": "老獵人看著你的臉，臉色驟然變白。\n\n「在教會帶走你之前，你以前常來這裡。你總會問，那首歌是不是還在響。」\n\n村莊之外，搖籃曲回應了。",
+        "ja": "老狩人はあなたの顔を見て青ざめる。\n\n「教会に連れていかれる前、お前はよくここへ来た。いつもあの歌はまだ聞こえるのかと聞いていた。」\n\n村の向こうで、子守歌が答える。"
+    },
+    "You have already heard this memory.": {
+        "zh_cn": "你已经听过这段记忆了。",
+        "zh_tw": "你已經聽過這段記憶了。",
+        "ja": "この記憶はもう聞いた。"
+    },
+    "You close your hand around the seal.\n\nThe metal is warm. Someone, somewhere, expected you to come back.": {
+        "zh_cn": "你握紧手中的印记。\n\n金属是温热的。某个地方的某个人，早就料到你会回来。",
+        "zh_tw": "你握緊手中的印記。\n\n金屬是溫熱的。某個地方的某個人，早就料到你會回來。",
+        "ja": "印を手の中で握りしめる。\n\n金属は温かい。どこかの誰かが、あなたの帰還を待っていた。"
+    },
+    "You turn toward the song.\n\nFor one heartbeat, you remember the village before the church found you.": {
+        "zh_cn": "你转向那首歌。\n\n在一瞬间，你想起教会找到你之前的村庄。",
+        "zh_tw": "你轉向那首歌。\n\n在一瞬間，你想起教會找到你之前的村莊。",
+        "ja": "歌の方へ振り向く。\n\nほんの一瞬、教会に見つかる前の村を思い出す。"
+    },
+    "The old hunter corrects your stance.\n\n\"You keep fighting like you remember dying.\"\n\nYour sword cuts deeper now.": {
+        "zh_cn": "老猎人纠正了你的姿势。\n\n“你战斗的样子，就像你记得自己曾经死过。”\n\n你的剑锋因此更加锋利。",
+        "zh_tw": "老獵人糾正了你的姿勢。\n\n「你戰鬥的樣子，就像你記得自己曾經死過。」\n\n你的劍鋒因此更加鋒利。",
+        "ja": "老狩人が構えを直す。\n\n「まるで、自分が死んだことを覚えているような戦い方だ。」\n\n剣の切れ味が増している。"
+    },
+    "The blade is as sharp as it needs to be. For now.": {
+        "zh_cn": "这把剑现在已经足够锋利了。暂时如此。",
+        "zh_tw": "這把劍現在已經足夠鋒利了。暫時如此。",
+        "ja": "この剣は、今は十分に鋭い。今のところは。"
+    },
+    "The cultist falls. Somewhere beyond the iron gate, something hears the silence.": {
+        "zh_cn": "教徒倒下了。铁门之外，某个东西听见了这片寂静。",
+        "zh_tw": "教徒倒下了。鐵門之外，某個東西聽見了這片寂靜。",
+        "ja": "信徒が倒れる。鉄門の向こうで、何かがこの静寂を聞いている。"
+    },
+    "The first road is behind you.\n\nThe church seal is warm in one hand. The lullaby is still somewhere behind the hills.\n\nVERTICAL SLICE 001 COMPLETE": {
+        "zh_cn": "第一条道路已经留在身后。\n\n一只手中的教会印记仍然温热。山丘背后，摇篮曲还在响。\n\n核心试玩章节 001 完成",
+        "zh_tw": "第一條道路已經留在身後。\n\n一隻手中的教會印記仍然溫熱。山丘背後，搖籃曲還在響。\n\n核心試玩章節 001 完成",
+        "ja": "最初の道は背後にある。\n\n片手の教会印はまだ温かい。丘の向こうでは子守歌が続いている。\n\nバーティカルスライス001 完了"
+    },
+    "The armor falls without a body inside.\n\nFor a moment, the Hero remembers kneeling before the church. Then the memory tears itself away.": {
+        "zh_cn": "铠甲倒下，里面却没有尸体。\n\n有那么一瞬间，英雄记起自己曾跪在教会面前。随后，这段记忆再次撕裂。",
+        "zh_tw": "鎧甲倒下，裡面卻沒有屍體。\n\n有那麼一瞬間，英雄記起自己曾跪在教會面前。隨後，這段記憶再次撕裂。",
+        "ja": "鎧が倒れる。中には死体がない。\n\n一瞬だけ、英雄は教会の前で跪いていたことを思い出す。そして記憶は再び引き裂かれる。"
+    },
+    "Inside the fallen armor you find a church seal.\n\nFrom the village, the lullaby begins again. You can follow the seal, or follow the song.\n\n[1] Follow the church seal\n[2] Follow the lullaby": {
+        "zh_cn": "倒下的铠甲里藏着一枚教会印记。\n\n村庄方向再次传来摇篮曲。你可以跟随印记，也可以跟随歌声。\n\n[1] 跟随教会印记\n[2] 跟随摇篮曲",
+        "zh_tw": "倒下的鎧甲裡藏著一枚教會印記。\n\n村莊方向再次傳來搖籃曲。你可以跟隨印記，也可以跟隨歌聲。\n\n[1] 跟隨教會印記\n[2] 跟隨搖籃曲",
+        "ja": "倒れた鎧の中から教会の印を見つける。\n\n村の方から、また子守歌が聞こえる。印を追うか、歌を追うか。\n\n[1] 教会の印を追う\n[2] 子守歌を追う"
+    },
+    "The straps are broken. The room smells of iron and incense.\n\nSomewhere behind the walls, a bell keeps ringing.": {
+        "zh_cn": "束缚带已经断裂。房间里弥漫着铁锈和熏香的气味。\n\n墙壁后方，有一口钟一直在响。",
+        "zh_tw": "束縛帶已經斷裂。房間裡瀰漫著鐵鏽和薰香的氣味。\n\n牆壁後方，有一口鐘一直在響。",
+        "ja": "拘束具は壊れている。部屋には鉄と香の匂いが満ちている。\n\n壁の向こうでは、鐘が鳴り続けている。"
+    },
+    "A metal tray holds dried black residue beneath a layer of blood.\n\nThe Hero touches it.\n\nSomething inside his arm answers.\n\nThe sensation stops before it becomes a memory.": {
+        "zh_cn": "金属托盘里，血迹下面残留着干涸的黑色物质。\n\n英雄伸手触碰。\n\n手臂深处有什么东西回应了。\n\n感觉在成为记忆之前便消失。",
+        "zh_tw": "金屬托盤裡，血跡下面殘留著乾涸的黑色物質。\n\n英雄伸手觸碰。\n\n手臂深處有什麼東西回應了。\n\n感覺在成為記憶之前便消失。",
+        "ja": "金属のトレイには、血の下に乾いた黒い残留物がある。\n\n英雄が触れる。\n\n腕の奥の何かが応える。\n\n感覚は記憶になる前に消えた。"
+    },
+    "There are no prayers here.\n\nOnly instruments polished often enough to look sacred.": {
+        "zh_cn": "这里没有祷告。\n\n只有被擦拭得足够干净、以至于看起来像圣物的器械。",
+        "zh_tw": "這裡沒有禱告。\n\n只有被擦拭得足夠乾淨，以至於看起來像聖物的器械。",
+        "ja": "ここに祈りはない。\n\nあるのは、聖なる物に見えるほど磨かれた器具だけ。"
+    },
+    "The liquid is not quite black.\n\nWhen light crosses it, the color inside becomes red.\n\nThe label contains only one word: 'SAINT.'": {
+        "zh_cn": "液体并非纯黑。\n\n当光线穿过它时，里面的颜色变成红色。\n\n标签上只有一个词：“圣者”。",
+        "zh_tw": "液體並非純黑。\n\n當光線穿過它時，裡面的顏色變成紅色。\n\n標籤上只有一個詞：「聖者」。",
+        "ja": "液体は完全な黒ではない。\n\n光が通ると、中の色が赤く変わる。\n\nラベルには一語だけある。「聖人」。"
+    },
+    "A bundle of pale hair floats inside a glass cylinder.\n\nThere is no body attached to it.\n\nThe wax seal bears an older Kingdom crest.": {
+        "zh_cn": "一束苍白的头发漂浮在玻璃筒中。\n\n它没有连接任何尸体。\n\n蜡封上印着更古老的王国徽章。",
+        "zh_tw": "一束蒼白的頭髮漂浮在玻璃筒中。\n\n它沒有連接任何屍體。\n\n蠟封上印著更古老的王國徽章。",
+        "ja": "淡い髪の束がガラス筒の中に浮かんでいる。\n\nそこには身体がない。\n\n封蝋には、より古い王国の紋章が刻まれている。"
+    },
+    "The thing collapses.\n\nBeneath its ribs, a metal hook remains embedded in bone.\n\nThe hook is shaped for something much larger than the body it came from.": {
+        "zh_cn": "那东西倒下。\n\n肋骨下面，一枚金属钩仍嵌在骨头里。\n\n那枚钩子原本属于远比这具身体庞大的东西。",
+        "zh_tw": "那東西倒下。\n\n肋骨下面，一枚金屬鉤仍嵌在骨頭裡。\n\n那枚鉤子原本屬於遠比這具身體龐大的東西。",
+        "ja": "それは崩れ落ちる。\n\n肋骨の下に、金属の鉤が骨へ食い込んでいる。\n\nその鉤は、この身体よりはるかに大きな何かのものだ。"
+    },
+    "The captain studies your church-marked blade.\n\n\"We are not here because we are righteous.\"\n\n\"We are here because the throne is ours.\"\n\nThere is no pride in the last sentence.": {
+        "zh_cn": "队长打量着你那把带有教会印记的剑。\n\n“我们来到这里，不是因为我们正义。”\n\n“只是因为王座本来就属于我们。”\n\n最后一句里没有任何骄傲。",
+        "zh_tw": "隊長打量著你那把帶有教會印記的劍。\n\n「我們來到這裡，不是因為我們正義。」\n\n「只是因為王座本來就屬於我們。」\n\n最後一句裡沒有任何驕傲。",
+        "ja": "隊長は教会の印が刻まれた剣を見る。\n\n「俺たちは正しいからここにいるんじゃない。」\n\n「王座が俺たちのものだからだ。」\n\n最後の言葉に、誇りはなかった。"
+    },
+    "The quartermaster counts bandages twice.\n\n\"If the Kingdom returns, food still has to be bought.\"\n\n\"People forget that when they start talking about crowns.\"": {
+        "zh_cn": "军需官把绷带数了两遍。\n\n“王国就算回来，食物还是要花钱买。”\n\n“人们一谈起王冠，就会忘记这一点。”",
+        "zh_tw": "軍需官把繃帶數了兩遍。\n\n「王國就算回來，食物還是要花錢買。」\n\n「人們一談起王冠，就會忘記這一點。」",
+        "ja": "補給係は包帯を二度数える。\n\n「王国が戻ってきても、食料は買わなきゃならない。」\n\n「王冠の話を始めると、人はそれを忘れる。」"
+    },
+    "The old soldier never looks toward the campfire.\n\n\"The Church taught us obedience.\"\n\n\"The rebels will teach us loyalty.\"\n\nHe spits into the dirt.": {
+        "zh_cn": "老兵从不看向篝火。\n\n“教会教我们服从。”\n\n“复国军会教我们忠诚。”\n\n他朝泥土里吐了一口唾沫。",
+        "zh_tw": "老兵從不看向篝火。\n\n「教會教我們服從。」\n\n「復國軍會教我們忠誠。」\n\n他朝泥土裡吐了一口唾沫。",
+        "ja": "老兵は焚き火を見ようとしない。\n\n「教会は服従を教えた。」\n\n「反乱軍は忠誠を教えるだろう。」\n\n彼は土に唾を吐いた。"
+    },
+    "There is no banner over the fire.\n\nOnly stolen weapons, borrowed horses and people waiting for a kingdom that no longer exists.": {
+        "zh_cn": "篝火上没有旗帜。\n\n只有偷来的武器、借来的马，以及等待一个已经不存在的王国归来的人们。",
+        "zh_tw": "篝火上沒有旗幟。\n\n只有偷來的武器、借來的馬，以及等待一個已經不存在的王國歸來的人們。",
+        "ja": "焚き火の上に旗はない。\n\nあるのは盗んだ武器、借りた馬、そしてもう存在しない王国を待ち続ける人々だけ。"
+    },
+    "The camp keeps breathing behind you.": {
+        "zh_cn": "营地在你身后继续呼吸。",
+        "zh_tw": "營地在你身後繼續呼吸。",
+        "ja": "背後で野営地は息づき続けている。"
+    },
+    "The merchant studies your face for a long moment.\n\n\"You walked this road before. You were carrying someone then. Not a sword.\"": {
+        "zh_cn": "商人久久端详着你的脸。\n\n“你以前走过这条路。那时候你抱着的是某个人，而不是一把剑。”",
+        "zh_tw": "商人久久端詳著你的臉。\n\n「你以前走過這條路。那時候你抱著的是某個人，而不是一把劍。」",
+        "ja": "商人は長い間あなたの顔を見る。\n\n「お前は以前この道を歩いた。その時、お前が抱えていたのは剣じゃない。誰かだった。」"
+    },
+    "The young man touches the church seal and recoils.\n\n\"They told me you died inside the church. I remember hearing your name after the screaming stopped.\"": {
+        "zh_cn": "年轻人碰到教会印记，猛地缩回手。\n\n“他们告诉我，你死在了教会里。我记得尖叫停止之后，还听见过你的名字。”",
+        "zh_tw": "年輕人碰到教會印記，猛地縮回手。\n\n「他們告訴我，你死在了教會裡。我記得尖叫停止之後，還聽見過你的名字。」",
+        "ja": "青年は教会の印に触れ、身を引く。\n\n「教会の中で死んだと聞いた。叫び声が止んだあと、お前の名前を聞いたのを覚えている。」"
+    },
+    "The road ends at a cluster of warm windows.\n\nYou recognize the tavern before you recognize why.": {
+        "zh_cn": "道路尽头是一片温暖的窗灯。\n\n你先认出了酒馆，随后才想起自己为什么认得。",
+        "zh_tw": "道路盡頭是一片溫暖的窗燈。\n\n你先認出了酒館，隨後才想起自己為什麼認得。",
+        "ja": "道の先に、温かな窓明かりが集まっている。\n\nなぜ知っているのか思い出す前に、酒場だと分かった。"
+    },
+    "The bell is silent. Your name is not.\n\nSomewhere beyond the doors, someone has been waiting for you.": {
+        "zh_cn": "钟是寂静的，但你的名字不是。\n\n门后某处，有人在等你。",
+        "zh_tw": "鐘是寂靜的，但你的名字不是。\n\n門後某處，有人在等你。",
+        "ja": "鐘は沈黙している。だが、あなたの名は違う。\n\n扉の向こうで、誰かがあなたを待っている。"
+    },
+    "The bell rings without moving.\n\nA child hums a melody you remember from before you were born.": {
+        "zh_cn": "钟没有移动，却响了起来。\n\n一个孩子哼着你出生之前就已经记得的旋律。",
+        "zh_tw": "鐘沒有移動，卻響了起來。\n\n一個孩子哼著你出生之前就已經記得的旋律。",
+        "ja": "鐘は動いていないのに鳴っている。\n\n子供が、生まれる前から知っているような旋律を口ずさむ。"
+    },
+    "Your name is written in the margin three times.\n\nThe first is dated seven years ago. The second is yesterday. The third has no date.": {
+        "zh_cn": "页边写着你的名字，一共三次。\n\n第一次是七年前，第二次是昨天，第三次没有日期。",
+        "zh_tw": "頁邊寫著你的名字，一共三次。\n\n第一次是七年前，第二次是昨天，第三次沒有日期。",
+        "ja": "余白には、あなたの名が三度書かれている。\n\n最初は七年前。次は昨日。最後には日付がない。"
+    },
+    "Torches appear beyond the fields.\n\nThe Church came with the bandits.\n\nNo one asks the Hero to fight. He simply draws his sword.": {
+        "zh_cn": "田野之外出现火把。\n\n教会和强盗一起来了。\n\n没人要求英雄战斗，他只是拔出了剑。",
+        "zh_tw": "田野之外出現火把。\n\n教會和強盜一起來了。\n\n沒人要求英雄戰鬥，他只是拔出了劍。",
+        "ja": "野の向こうに松明が現れる。\n\n教会は盗賊を連れてきた。\n\n誰も英雄に戦えとは言わない。彼はただ剣を抜く。"
+    },
+    "They are coming for the houses behind you.": {
+        "zh_cn": "他们正朝着你身后的房屋而来。",
+        "zh_tw": "他們正朝著你身後的房屋而來。",
+        "ja": "奴らは、君の背後の家々を狙っている。"
+    },
+    "The first line breaks.\n\nThere are more behind it.": {
+        "zh_cn": "第一道防线被突破。\n\n后面还有更多。",
+        "zh_tw": "第一道防線被突破。\n\n後面還有更多。",
+        "ja": "第一線が崩れる。\n\nその後ろには、まだいる。"
+    },
+    "The attackers retreat.\n\nThe village is still standing.\n\nFor tonight, that is enough.": {
+        "zh_cn": "袭击者撤退了。\n\n村庄还站着。\n\n至少今晚，这就够了。",
+        "zh_tw": "襲擊者撤退了。\n\n村莊還站著。\n\n至少今晚，這就夠了。",
+        "ja": "襲撃者は退いていく。\n\n村はまだ立っている。\n\n今夜は、それで十分だ。"
+    },
+    "The Hero rises again.\n\nThe attack has not ended.": {
+        "zh_cn": "英雄再次站起。\n\n袭击还没有结束。",
+        "zh_tw": "英雄再次站起。\n\n襲擊還沒有結束。",
+        "ja": "英雄は再び立ち上がる。\n\n襲撃はまだ終わっていない。"
+    },
+    "The stone carries your name, but the date is wrong.\n\nSomeone carved a second line beneath it: \"He came back after the bell stopped.\"": {
+        "zh_cn": "石碑刻着你的名字，但日期不对。\n\n有人在下面又刻了一行：“钟停止之后，他回来了。”",
+        "zh_tw": "石碑刻著你的名字，但日期不對。\n\n有人在下面又刻了一行：「鐘停止之後，他回來了。」",
+        "ja": "石碑にはあなたの名がある。だが日付が違う。\n\nその下に、誰かが一行彫っていた。「鐘が止まったあと、彼は帰ってきた。」"
+    },
+    "The bell tower is quiet now.\n\nYou are certain it rang after you left.": {
+        "zh_cn": "钟楼现在很安静。\n\n但你确定，在你离开之后它曾经响过。",
+        "zh_tw": "鐘樓現在很安靜。\n\n但你確定，在你離開之後它曾經響過。",
+        "ja": "鐘楼は今、静まり返っている。\n\nだが、君が去ったあとに鳴ったはずだ。"
+    },
+    "The graves are too old for the names carved into them.\n\nThe bell tower is silent. Something beneath it is not.": {
+        "zh_cn": "这些墓碑太古老，不该刻着这些人的名字。\n\n钟楼寂静无声，但它下面有什么东西并不安静。",
+        "zh_tw": "這些墓碑太古老，不該刻著這些人的名字。\n\n鐘樓寂靜無聲，但它下面有什麼東西並不安靜。",
+        "ja": "墓は古すぎて、刻まれた名に合わない。\n\n鐘楼は沈黙している。その下にある何かだけが違う。"
+    },
+    "Both wraiths collapse.\n\nThe silent tower rings once. No bell moves.": {
+        "zh_cn": "两只怨灵同时倒下。\n\n寂静的钟楼响了一声，却没有一口钟移动。",
+        "zh_tw": "兩隻怨靈同時倒下。\n\n寂靜的鐘樓響了一聲，卻沒有一口鐘移動。",
+        "ja": "二体の亡霊が崩れる。\n\n静かな鐘楼が一度だけ鳴る。鐘はどれも動かない。"
+    },
+    "The cemetery gate closes behind you.": {
+        "zh_cn": "墓地大门在你身后合上。",
+        "zh_tw": "墓地大門在你身後合上。",
+        "ja": "墓地の門が背後で閉じる。"
+    },
+    "The gatekeeper studies the church seal.\n\n\"They told us you would never return. Why did they send the same man back?\"": {
+        "zh_cn": "守门人盯着教会印记。\n\n“他们告诉我们你永远不会回来。为什么他们又把同一个人送回来？”",
+        "zh_tw": "守門人盯著教會印記。\n\n「他們告訴我們你永遠不會回來。為什麼他們又把同一個人送回來？」",
+        "ja": "門番は教会の印を見つめる。\n\n「二度と戻らないと聞いていた。同じ男を、なぜまた送り返した？」"
+    },
+    "The gatekeeper hears the lullaby on the wind and shuts the tavern door halfway.\n\n\"Don't sing that here. Not unless you want the village to remember.\"": {
+        "zh_cn": "守门人听见风中的摇篮曲，只把酒馆门关上一半。\n\n“别在这里唱。除非你想让整个村庄想起来。”",
+        "zh_tw": "守門人聽見風中的搖籃曲，只把酒館門關上一半。\n\n「別在這裡唱。除非你想讓整個村莊想起來。」",
+        "ja": "門番は風の子守歌を聞き、酒場の扉を半分だけ閉じる。\n\n「ここでは歌うな。村に思い出させたくないなら。」"
+    },
+    "The young man takes one step back.\n\n\"I know that look. Something in you already left.\"": {
+        "zh_cn": "年轻人后退一步。\n\n“我知道那种眼神。你身体里已经有什么东西离开了。”",
+        "zh_tw": "年輕人後退一步。\n\n「我知道那種眼神。你身體裡已經有什麼東西離開了。」",
+        "ja": "青年は一歩下がる。\n\n「その目を知っている。お前の中の何かは、もう去っている。」"
+    },
+    "The young man touches your church seal and goes pale.\n\n\"I remember you kneeling there. They told me not to remember.\"": {
+        "zh_cn": "年轻人碰到你的教会印记，脸色变白。\n\n“我记得你曾跪在那里。他们告诉我不要记住。”",
+        "zh_tw": "年輕人碰到你的教會印記，臉色變白。\n\n「我記得你曾跪在那裡。他們告訴我不要記住。」",
+        "ja": "青年は教会の印に触れ、青ざめる。\n\n「お前がそこで跪いていたのを覚えている。忘れろと言われた。」"
+    },
+    "The young man stares toward the tavern.\n\n\"You came back carrying someone once. I don't know who it was. I only remember the singing.\"": {
+        "zh_cn": "年轻人望向酒馆。\n\n“你以前回来过一次，怀里抱着某个人。我不知道是谁，只记得那歌声。”",
+        "zh_tw": "年輕人望向酒館。\n\n「你以前回來過一次，懷裡抱著某個人。我不知道是誰，只記得那歌聲。」",
+        "ja": "青年は酒場を見る。\n\n「昔、お前は誰かを抱えて戻ってきた。誰だったかは分からない。ただ歌声だけを覚えている。」"
+    },
+    "The merchant stops smiling.\n\n\"You should not be able to hear the song anymore.\"": {
+        "zh_cn": "商人不再微笑。\n\n“你现在本不该还能听见那首歌。”",
+        "zh_tw": "商人不再微笑。\n\n「你現在本不該還能聽見那首歌。」",
+        "ja": "商人の笑みが消える。\n\n「もう、その歌が聞こえるはずはない。」"
+    },
+    "The merchant turns a silver token between two fingers.\n\n\"Church roads are safe only until the bells start. Then even the stones lie.\"": {
+        "zh_cn": "商人在两指之间转动一枚银币。\n\n“教会的路只有在钟声响起之前才安全。那以后，连石头都会撒谎。”",
+        "zh_tw": "商人在兩指之間轉動一枚銀幣。\n\n「教會的路只有在鐘聲響起之前才安全。那之後，連石頭都會撒謊。」",
+        "ja": "商人は銀の札を指で回す。\n\n「教会の道が安全なのは、鐘が鳴るまでだ。それからは石まで嘘をつく。」"
+    },
+    "The merchant smiles without humor.\n\n\"I saw the village seven years ago. Your face was already on the church door.\"": {
+        "zh_cn": "商人毫无笑意地笑了。\n\n“七年前我就见过这个村庄。那时，教会门上已经有你的脸。”",
+        "zh_tw": "商人毫無笑意地笑了。\n\n「七年前我就見過這個村莊。那時，教會門上已經有你的臉。」",
+        "ja": "商人は笑みだけを浮かべる。\n\n「七年前にもこの村を見た。その時には、教会の扉にもうお前の顔があった。」"
+    },
+    "The tavern door is warm beneath your hand.\n\nFor a moment you hear a lullaby from inside. The voice stops when you touch the handle.": {
+        "zh_cn": "酒馆门在你的掌心下是温热的。\n\n有那么一刻，你听见里面传来摇篮曲。手碰到门把手时，歌声却停了。",
+        "zh_tw": "酒館門在你的掌心下是溫熱的。\n\n有那麼一刻，你聽見裡面傳來搖籃曲。手碰到門把手時，歌聲卻停了。",
+        "ja": "酒場の扉は手のひらに温かい。\n\n一瞬、内側から子守歌が聞こえる。取っ手に触れた途端、声が止まった。"
+    },
+    "The cemetery gate is open.\n\nThe bell tower has not rung in years. Something inside still answers when you call.": {
+        "zh_cn": "墓地大门敞开着。\n\n钟楼已经多年没有响过，但你呼唤时，里面仍有东西回应。",
+        "zh_tw": "墓地大門敞開著。\n\n鐘樓已經多年沒有響過，但你呼喚時，裡面仍有東西回應。",
+        "ja": "墓地の門は開いている。\n\n鐘楼は何年も鳴っていない。それでも呼びかければ、中の何かが応える。"
+    },
+    "A small fire burns behind the hill.\n\nSomeone has pitched a camp without a flag.\n\nYou hear soldiers arguing about the throne.": {
+        "zh_cn": "山丘后燃着一小堆火。\n\n有人扎起了一个没有旗帜的营地。\n\n你听见士兵正在争论王座。",
+        "zh_tw": "山丘後燃著一小堆火。\n\n有人紮起了一個沒有旗幟的營地。\n\n你聽見士兵正在爭論王座。",
+        "ja": "丘の向こうで小さな火が燃えている。\n\n旗のない野営地がある。\n\n兵士たちが王座について言い争っている。"
+    },
+    "Fresh axe marks scar the gate.\n\nBeyond it, the road is too quiet.\n\nYou hear distant metal.": {
+        "zh_cn": "新留下的斧痕割裂了大门。\n\n门外的道路安静得反常。\n\n远处传来金属碰撞声。",
+        "zh_tw": "新留下的斧痕割裂了大門。\n\n門外的道路安靜得反常。\n\n遠處傳來金屬碰撞聲。",
+        "ja": "新しい斧跡が門を傷つけている。\n\nその向こうの道は、静かすぎる。\n\n遠くで金属の音がした。"
+    },
+    "The church door bears your name beneath layers of newer paint.\n\nSomeone has tried to erase it many times.": {
+        "zh_cn": "教会门上，新漆覆盖的下面仍有你的名字。\n\n有人试过很多次想把它抹掉。",
+        "zh_tw": "教會門上，新漆覆蓋的下面仍有你的名字。\n\n有人試過很多次想把它抹掉。",
+        "ja": "教会の扉には、新しい塗料の下にあなたの名が残っている。\n\n何度も消そうとした跡がある。"
+    },
+    "The door was never meant for the faithful.\n\nYour name is scratched into the stone beside the lock.": {
+        "zh_cn": "这扇门从来不是为信徒准备的。\n\n锁旁的石头上刻着你的名字。",
+        "zh_tw": "這扇門從來不是為信徒準備的。\n\n鎖旁的石頭上刻著你的名字。",
+        "ja": "この扉は信徒のためのものではなかった。\n\n鍵の横の石には、あなたの名が刻まれている。"
+    },
+    "Behind the tavern is a path no map remembers.\n\nYou can hear the song again.": {
+        "zh_cn": "酒馆后面有一条没有地图记载的路。\n\n你又听见了那首歌。",
+        "zh_tw": "酒館後面有一條沒有地圖記載的路。\n\n你又聽見了那首歌。",
+        "ja": "酒場の裏には、どの地図にも記されていない道がある。\n\nまた、あの歌が聞こえる。"
+    },
+    "The stone gives way beneath your hand.\n\nThere should not be a room underneath a village church.": {
+        "zh_cn": "石墙在你的手下裂开。\n\n村庄教会下面，本不该存在一个房间。",
+        "zh_tw": "石牆在你的手下裂開。\n\n村莊教會下面，本不該存在一個房間。",
+        "ja": "手を触れた石が崩れる。\n\n村の教会の地下に部屋など、あるはずがない。"
+    },
+    "The room is warmer than the road.\n\nSomewhere behind the bar, a glass is placed down by a hand you cannot see.": {
+        "zh_cn": "房间比道路温暖。\n\n吧台后方，有只看不见的手放下了一只玻璃杯。",
+        "zh_tw": "房間比道路溫暖。\n\n吧檯後方，有隻看不見的手放下了一只玻璃杯。",
+        "ja": "部屋は道より暖かい。\n\nカウンターの奥で、見えない手がグラスを置いた。"
+    },
+    "For once, nothing asks you to remember.": {
+        "zh_cn": "这一次，没有任何东西要求你记起什么。",
+        "zh_tw": "這一次，沒有任何東西要求你記起什麼。",
+        "ja": "今だけは、何も思い出せと迫ってこない。"
+    },
+    "The room has gone quiet.\n\nThere are two places at the table.\n\nOne bed.": {
+        "zh_cn": "房间很小。\n\n桌边有两个位置。\n\n只有一张床。",
+        "zh_tw": "房間很小。\n\n桌邊有兩個位置。\n\n只有一張床。",
+        "ja": "部屋は小さい。\n\nテーブルには二つの席。\n\nベッドは一つ。"
+    },
+    "The keeper touches the bell rope.\n\nIt stopped years ago.\n\nBut sometimes I hear it when someone who should be dead walks past.\n\nHis eyes settle on you.": {
+        "zh_cn": "守钟人碰了碰钟绳。\n\n它已经停止多年。\n\n但有时，本该死去的人经过时，我仍会听见它响。\n\n他的目光落在你身上。",
+        "zh_tw": "守鐘人碰了碰鐘繩。\n\n它已經停止多年。\n\n但有時，本該死去的人經過時，我仍會聽見它響。\n\n他的目光落在你身上。",
+        "ja": "鐘守が鐘縄に触れる。\n\n何年も前に止まった。\n\nだが、本来死んでいる者が通る時だけ、聞こえることがある。\n\n彼の目があなたを見る。"
+    },
+    "The keeper looks toward the tower.\n\nIt rang after you left.\n\nNot because of the dead.\n\nBecause something came back.": {
+        "zh_cn": "守钟人望向钟楼。\n\n你离开后，它确实响过。\n\n不是为了死者。\n\n因为有什么东西回来了。",
+        "zh_tw": "守鐘人望向鐘樓。\n\n你離開後，它確實響過。\n\n不是為了死者。\n\n因為有什麼東西回來了。",
+        "ja": "鐘守は鐘楼を見る。\n\n君が去ったあと、確かに鳴った。\n\n死者のためではない。\n\n何かが戻ってきたからだ。"
+    },
+    "The keeper has no more answers.\n\nHe only watches the silent bell.": {
+        "zh_cn": "守钟人已经没有更多答案。\n\n他只是望着那口寂静的钟。",
+        "zh_tw": "守鐘人已經沒有更多答案。\n\n他只是望著那口寂靜的鐘。",
+        "ja": "鐘守にはもう答えがない。\n\nただ、沈黙する鐘を見つめている。"
+    }
+}
 const SOURCE_TRANSLATIONS := {
     "MITE": {
         "zh_cn": "蜜忒",
@@ -780,6 +1078,8 @@ static func translate_text(value: String) -> String:
         return value
     var language_id := str(WorldState.language)
     var entry: Variant = SOURCE_TRANSLATIONS.get(value, null)
+    if not (entry is Dictionary):
+        entry = SOURCE_TRANSLATIONS_EXTRA.get(value, null)
     if entry is Dictionary:
         return str(entry.get(language_id, value))
     if value.begins_with("HIT  "):
