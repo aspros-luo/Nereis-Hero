@@ -220,7 +220,7 @@ func _draw() -> void:
 
     draw_rect(Rect2(120, 280, 420, 240), Color("#29222c"))
     draw_rect(Rect2(180, 240, 300, 40), Color("#352d38"))
-    draw_string(ThemeDB.fallback_font, Vector2(210, 215), "SURGICAL WARD", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
+    draw_string(ThemeDB.fallback_font, Vector2(210, 215), NereisLocalization.translate_text("SURGICAL WARD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
 
     for x in [700.0, 1120.0, 1500.0]:
         draw_rect(Rect2(x - 55, 310, 110, 210), Color("#1f1a22"))
@@ -235,7 +235,7 @@ func _draw() -> void:
         ]),
         Color("#241e27")
     )
-    draw_string(ThemeDB.fallback_font, Vector2(1810, 250), "THE ROAD", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#6d5c64"))
+    draw_string(ThemeDB.fallback_font, Vector2(1810, 250), NereisLocalization.translate_text("THE ROAD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#6d5c64"))
 
     if not exit_open:
         draw_rect(Rect2(2000, 300, 90, 220), Color("#18151b"))
@@ -243,4 +243,4 @@ func _draw() -> void:
         draw_line(Vector2(2080, 320), Vector2(2080, 500), Color("#5d4c55"), 5.0)
     else:
         draw_rect(Rect2(2000, 300, 90, 220), Color("#33232a"))
-        draw_string(ThemeDB.fallback_font, Vector2(1995, 275), "OPEN", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
+        draw_string(ThemeDB.fallback_font, Vector2(1995, 275), NereisLocalization.translate_text("OPEN"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
