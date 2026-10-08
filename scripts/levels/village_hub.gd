@@ -385,7 +385,7 @@ func _draw() -> void:
         draw_string(
             ThemeDB.fallback_font,
             Vector2(390, 400),
-            "F  Enter Mite's House",
+            "F  Open Door",
             HORIZONTAL_ALIGNMENT_LEFT,
             -1,
             16,
