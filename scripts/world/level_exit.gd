@@ -29,4 +29,4 @@ func _draw() -> void:
     draw_line(Vector2(-20, -112), Vector2(-20, -8), c, 4.0)
     draw_line(Vector2(20, -112), Vector2(20, -8), c, 4.0)
     draw_circle(Vector2(0, -78), 12.0, c)
-    draw_string(ThemeDB.fallback_font, Vector2(-45, 28), "EXIT", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, c)
+    draw_string(ThemeDB.fallback_font, Vector2(-45, 28), NereisLocalization.translate_text("EXIT"), HORIZONTAL_ALIGNMENT_LEFT, -1, 12, c)
