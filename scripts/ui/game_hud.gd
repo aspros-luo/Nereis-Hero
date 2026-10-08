@@ -265,57 +265,31 @@ func _process(delta: float) -> void:
     var stamina: int = int(hero.get("stamina"))
     var invulnerable: bool = bool(hero.get("invulnerable"))
 
-    debug_label.text = (
-        "DEBUG [F3]
-"
-        + "Hero HP: %d
-" % hp
-        + "Stamina: %d
-" % stamina
-        + "State: %s
-" % state_name
-        + "Invulnerable: %s
-" % invulnerable
-        + "Memory: %d
-" % WorldState.hero_memory
-        + "Humanity: %d
-" % WorldState.hero_humanity
-        + "Church Alignment: %d
-" % WorldState.church_alignment
-        + "Lullaby Resonance: %d
-" % WorldState.lullaby_resonance
-        + "Mite Interactions: %d
-" % WorldState.mite_interactions_seen.size()
-        + "Mite Missed: %s
-" % WorldState.mite_connection_missed
-        + "Ancient Residue: %s
-" % WorldState.ancient_residue_awakened
-        + "Outer Resonance: %s
-" % WorldState.outer_god_resonance
-        + "Mite Control: %d/3
-" % WorldState.mite_control_stage
-        + "Union: %s
-" % WorldState.physical_union_complete
-        + "Artifact: %d/4
-" % WorldState.hidden_artifact_pieces
-        + "Anchor Awake: %s
-" % WorldState.hidden_resistance_awakened
-        + "Ending: %s
-" % WorldState.ending_route
-        + "Candidate: %s
-" % NereisEndingEvaluator.get_candidate()
-        + "Location: %s
-" % WorldState.current_location
-        + "Route: %s
-" % WorldState.selected_route
-        + "Interior Clues: %d
-" % WorldState.interior_clues_seen.size()
-        + "World Clues: %d
-" % WorldState.world_clues_seen.size()
-        + "Boss Defeated: %s
-" % WorldState.boss_defeated
-        + "Route Complete: %s
-" % WorldState.route_complete
+        "DEBUG [F3]\n"
+        + "Hero HP: %d\n" % hp
+        + "Stamina: %d\n" % stamina
+        + "State: %s\n" % state_name
+        + "Invulnerable: %s\n" % invulnerable
+        + "Memory: %d\n" % WorldState.hero_memory
+        + "Humanity: %d\n" % WorldState.hero_humanity
+        + "Church Alignment: %d\n" % WorldState.church_alignment
+        + "Lullaby Resonance: %d\n" % WorldState.lullaby_resonance
+        + "Mite Interactions: %d\n" % WorldState.mite_interactions_seen.size()
+        + "Mite Missed: %s\n" % WorldState.mite_connection_missed
+        + "Ancient Residue: %s\n" % WorldState.ancient_residue_awakened
+        + "Outer Resonance: %s\n" % WorldState.outer_god_resonance
+        + "Mite Control: %d/3\n" % WorldState.mite_control_stage
+        + "Union: %s\n" % WorldState.physical_union_complete
+        + "Artifact: %d/4\n" % WorldState.hidden_artifact_pieces
+        + "Anchor Awake: %s\n" % WorldState.hidden_resistance_awakened
+        + "Ending: %s\n" % WorldState.ending_route
+        + "Candidate: %s\n" % NereisEndingEvaluator.get_candidate()
+        + "Location: %s\n" % WorldState.current_location
+        + "Route: %s\n" % WorldState.selected_route
+        + "Interior Clues: %d\n" % WorldState.interior_clues_seen.size()
+        + "World Clues: %d\n" % WorldState.world_clues_seen.size()
+        + "Boss Defeated: %s\n" % WorldState.boss_defeated
+        + "Route Complete: %s\n" % WorldState.route_complete
         + "Slice Complete: %s" % WorldState.slice_complete
     )
 
