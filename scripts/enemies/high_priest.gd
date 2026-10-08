@@ -43,6 +43,8 @@ func _setup_combat() -> void:
     hurtbox.setup(self, Vector2(44, 86), Vector2(0, -42))
 
 func _process(delta: float) -> void:
+    if WorldState.input_locked:
+        return
     animation_time += delta
     cooldown = maxf(0.0, cooldown - delta)
     windup = maxf(0.0, windup - delta)
@@ -51,6 +53,8 @@ func _process(delta: float) -> void:
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
+    if WorldState.input_locked:
+        return
     if stun_time > 0.0:
         velocity.x = move_toward(velocity.x, 0.0, 1100.0 * delta)
         move_and_slide()
