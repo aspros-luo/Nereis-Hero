@@ -38,6 +38,8 @@ func _setup_combat_components() -> void:
     hurtbox.setup(self, Vector2(48, 70), Vector2(0, -8))
 
 func _physics_process(delta: float) -> void:
+    if WorldState.input_locked:
+        return
     attack_timer = max(0.0, attack_timer - delta)
     hit_flash = max(0.0, hit_flash - delta)
     pulse_flash = max(0.0, pulse_flash - delta)
