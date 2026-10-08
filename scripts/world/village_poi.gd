@@ -12,6 +12,7 @@ var cooldown := 0.0
 var hero_nearby := false
 
 func _ready() -> void:
+    set_meta("interaction_priority", 40)
     queue_redraw()
 
 func _process(delta: float) -> void:
@@ -19,7 +20,7 @@ func _process(delta: float) -> void:
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 140.0
     var available := not WorldState.input_locked and hero_nearby and cooldown <= 0.0 and not display_name.is_empty() and not dialogue.is_empty()
-    INTERACTION_FOCUS_SCRIPT.sync(self, available)
+    INTERACTION_FOCUS_SCRIPT.sync(self, available, 40)
     queue_redraw()
 
 func can_interact() -> bool:
