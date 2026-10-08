@@ -338,6 +338,7 @@ func _unhandled_input(event: InputEvent) -> void:
         if event.keycode == KEY_F1:
             var endgame_scene := NereisEndingEvaluator.get_candidate()
             print("[NEREIS][DEBUG] Candidate endgame=%s" % endgame_scene)
+            _mark_input_handled()
             match endgame_scene:
                 "烈火天罚":
                     get_tree().change_scene_to_file("res://scenes/ending_fire_demo.tscn")
@@ -345,36 +346,40 @@ func _unhandled_input(event: InputEvent) -> void:
                     get_tree().change_scene_to_file("res://scenes/ending_paradise_demo.tscn")
                 _:
                     get_tree().change_scene_to_file("res://scenes/church_final_demo.tscn")
-            get_viewport().set_input_as_handled()
         elif event.keycode == KEY_F2:
+            _mark_input_handled()
             print("[NEREIS][DEBUG] Opening Eternal Paradise theater")
             get_tree().change_scene_to_file("res://scenes/ending_paradise_demo.tscn")
-            get_viewport().set_input_as_handled()
         elif event.keycode == KEY_F4:
+            _mark_input_handled()
             print("[NEREIS][DEBUG] Opening ancient research theater")
             get_tree().change_scene_to_file("res://scenes/ancient_research_lab.tscn")
-            get_viewport().set_input_as_handled()
         elif event.keycode == KEY_F5:
+            _mark_input_handled()
             print("[NEREIS][DEBUG] Opening village defense theater")
             get_tree().change_scene_to_file("res://scenes/village_defense_demo.tscn")
-            get_viewport().set_input_as_handled()
         elif event.keycode == KEY_F8:
+            _mark_input_handled()
             print("[NEREIS][DEBUG] Opening director ending theater")
             get_tree().change_scene_to_file("res://scenes/ending_fire_demo.tscn")
-            get_viewport().set_input_as_handled()
         elif event.keycode == KEY_F7:
+            _mark_input_handled()
             print("[NEREIS][DEBUG] Opening church final boss theater")
             get_tree().change_scene_to_file("res://scenes/church_final_demo.tscn")
-            get_viewport().set_input_as_handled()
         elif event.keycode == KEY_F6:
+            _mark_input_handled()
             print("[NEREIS][DEBUG] Opening Mite resonance theater")
             get_tree().change_scene_to_file("res://scenes/mite_resonance_demo.tscn")
-            get_viewport().set_input_as_handled()
         elif event.keycode == KEY_F9:
+            _mark_input_handled()
             WorldState.delete_save()
             print("[NEREIS][DEBUG] Village run reset")
             get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
-            get_viewport().set_input_as_handled()
+
+func _mark_input_handled() -> void:
+    var viewport := get_viewport()
+    if viewport != null:
+        viewport.set_input_as_handled()
 
 func _draw() -> void:
     draw_rect(Rect2(0, 0, 2600, 720), Color("#111018"))
