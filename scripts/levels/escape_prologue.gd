@@ -214,9 +214,14 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
+        _mark_input_handled()
         WorldState.delete_save()
         get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
-        get_viewport().set_input_as_handled()
+
+func _mark_input_handled() -> void:
+    var viewport := get_viewport()
+    if viewport != null:
+        viewport.set_input_as_handled()
 
 func _draw() -> void:
     draw_rect(Rect2(0, 0, LEVEL_WIDTH, 720), Color("#100d12"))
