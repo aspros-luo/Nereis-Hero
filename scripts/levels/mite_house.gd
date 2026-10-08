@@ -82,7 +82,8 @@ func _on_rest() -> void:
         "The village has gone quiet.\n\nThere is nowhere either of you needs to be tonight.",
         4.5
     )
-    get_tree().create_timer(4.7).timeout.connect(_complete_union)
+    await narrative.message_finished
+    _complete_union()
 
 func _complete_union() -> void:
     WorldState.mark_physical_union_complete()
@@ -95,9 +96,8 @@ func _complete_union() -> void:
         "No voice speaks.\n\nOnly warmth beneath Hero's skin.\n\nMite opens her eyes.\n\n\"Did you hear that?\"",
         6.0
     )
-    get_tree().create_timer(6.2).timeout.connect(func() -> void:
-        WorldState.input_locked = false
-    )
+    await narrative.message_finished
+    WorldState.input_locked = false
 
 func _on_mite_interacted(_interaction_id: String, title: String, message: String) -> void:
     narrative.show_message(title, message, 7.0)
