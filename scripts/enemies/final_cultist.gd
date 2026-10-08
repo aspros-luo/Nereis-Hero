@@ -29,6 +29,8 @@ func _ready() -> void:
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
+    if WorldState.input_locked:
+        return
     animation_time += delta
 
     if dying or not target or not is_instance_valid(target):
