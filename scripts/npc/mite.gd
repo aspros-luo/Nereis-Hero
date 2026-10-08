@@ -12,6 +12,7 @@ var interaction_cooldown := 0.0
 var elapsed := 0.0
 
 func _ready() -> void:
+    set_meta("interaction_priority", 80)
     print("[NEREIS][NPC] Mite initialized")
     queue_redraw()
 
@@ -22,7 +23,7 @@ func _process(delta: float) -> void:
     var hero := get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= INTERACTION_RANGE
     var available := not WorldState.input_locked and hero_nearby and not _blocked_by_village_house_door(hero) and interaction_cooldown <= 0.0 and not _select_interaction().is_empty()
-    INTERACTION_FOCUS_SCRIPT.sync(self, available)
+    INTERACTION_FOCUS_SCRIPT.sync(self, available, 80)
 
     queue_redraw()
 
