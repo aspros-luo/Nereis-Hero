@@ -265,6 +265,7 @@ func _process(delta: float) -> void:
     var stamina: int = int(hero.get("stamina"))
     var invulnerable: bool = bool(hero.get("invulnerable"))
 
+    debug_label.text = (
         "DEBUG [F3]\n"
         + "Hero HP: %d\n" % hp
         + "Stamina: %d\n" % stamina
