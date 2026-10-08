@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+signal message_finished
+
 var panel: ColorRect
 var title_label: Label
 var body_label: Label
@@ -71,6 +73,7 @@ func _finish_message() -> void:
         get_tree().paused = false
         paused_for_narrative = false
     print("[NEREIS][STORY] Narrative display ended")
+    message_finished.emit()
 
 func _unhandled_input(event: InputEvent) -> void:
     if not panel.visible or not blocks_input:
