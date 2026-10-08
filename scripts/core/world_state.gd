@@ -367,8 +367,10 @@ func delete_save() -> void:
         DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
         print("[NEREIS][SAVE] Save file deleted")
     reset()
+    save_game()
 
 func reset() -> void:
+    var preserved_language := language
     hero_memory = 0
     hero_humanity = 100
     first_memory_unlocked = false
@@ -385,7 +387,7 @@ func reset() -> void:
     route_memory_id = ""
     route_complete = false
     current_location = "church_escape"
-    language = "zh_cn"
+    language = preserved_language
     interior_clues_seen.clear()
     world_clues_seen.clear()
     graveyard_cleared = false
