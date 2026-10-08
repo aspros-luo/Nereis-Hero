@@ -30,4 +30,4 @@ func _draw() -> void:
     draw_line(Vector2(0, 0), Vector2(0, -92), glow, 5.0)
     draw_circle(Vector2(0, -98), radius + 8.0, Color(glow.r, glow.g, glow.b, 0.10))
     draw_circle(Vector2(0, -98), radius, glow)
-    draw_string(ThemeDB.fallback_font, Vector2(-50, 30), "CHECKPOINT", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, glow)
+    draw_string(ThemeDB.fallback_font, Vector2(-50, 30), NereisLocalization.translate_text("CHECKPOINT"), HORIZONTAL_ALIGNMENT_LEFT, -1, 12, glow)
