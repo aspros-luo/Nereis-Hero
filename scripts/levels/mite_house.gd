@@ -70,7 +70,7 @@ func _on_rest() -> void:
     if WorldState.mite_interactions_seen.size() < 4:
         narrative.show_message(
             "NOT YET",
-            "Mite looks toward the empty half of the room.\n\n\"You should get some rest.\""
+            "Mite looks toward the empty half of the room.\n\n\"You should get some rest.\"",
             4.0
         )
         return
@@ -91,7 +91,7 @@ func _complete_union() -> void:
         narrative_audio.play_corrupted_lullaby()
     narrative.show_message(
         "SOMETHING ANSWERS",
-        "No voice speaks.\n\nOnly warmth beneath Hero's skin.\n\nMite opens her eyes.\n\n\"Did you hear that?\""
+        "No voice speaks.\n\nOnly warmth beneath Hero's skin.\n\nMite opens her eyes.\n\n\"Did you hear that?\"",
         6.0
     )
     get_tree().create_timer(6.2).timeout.connect(func() -> void:
