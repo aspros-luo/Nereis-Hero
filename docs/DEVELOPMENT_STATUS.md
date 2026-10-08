@@ -1,6 +1,6 @@
 # Nereis Hero — Development Status
 
-Date: 2026-10-07
+Date: 2026-10-08
 
 ## Current direction
 
@@ -181,6 +181,15 @@ Do not replace the narrative canon with temporary prototype assumptions.
 
 When a future implementation reaches a truly unresolved core story decision, stop that specific story layer and ask the director. Otherwise keep developing autonomously.
 
+
+## Interaction / flow stabilization
+
+- Unified nearest-interaction focus across Mite, NPCs, clues, doors, exits and rest points.
+- Village house entry is now explicit **E** interaction; touching the door no longer transitions scenes.
+- Route and interior doors are explicit **E** interactions.
+- Completed routes can be replayed instead of auto-returning to the Village Hub.
+- Narrative-to-scene transitions now wait on the narrative completion signal instead of a paused SceneTree timer.
+- Route exits validate the memory echo belonging to the active route.
 
 ## Latest polish
 
