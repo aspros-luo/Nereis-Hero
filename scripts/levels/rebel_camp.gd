@@ -131,9 +131,8 @@ func _on_clue_examined(clue: Node) -> void:
 
 func _on_exit_reached() -> void:
     narrative.show_message("BACK TO THE ROAD", "The camp keeps breathing behind you.", 3.0)
-    get_tree().create_timer(3.2).timeout.connect(func() -> void:
-        SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
-    )
+    await narrative.message_finished
+    SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
 
 func _create_floor() -> void:
     var floor := StaticBody2D.new()
