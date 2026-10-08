@@ -24,9 +24,22 @@ var humanity_bar: ColorRect
 var objective_rule: ColorRect
 var impact_flash: ColorRect
 var impact_flash_time := 0.0
+var pause_overlay: ColorRect
+var pause_panel: ColorRect
+var pause_title: Label
+var resume_button: Button
+var save_button: Button
+var new_game_button: Button
+var title_button: Button
+var language_option: OptionButton
+var language_label: Label
+var save_status_label: Label
+var new_game_dialog: ConfirmationDialog
+var pause_open := false
 
 func _ready() -> void:
     layer = 10
+    process_mode = Node.PROCESS_MODE_ALWAYS
     if not WorldState.hidden_resistance_awakened_event.is_connected(_on_hidden_resistance_awakened):
         WorldState.hidden_resistance_awakened_event.connect(_on_hidden_resistance_awakened)
 
@@ -165,17 +178,20 @@ func _ready() -> void:
     debug_label.add_theme_font_size_override("font_size", 15)
     debug_panel.add_child(debug_label)
 
+    _build_pause_menu()
+    _refresh_localized_ui()
+
 func bind_hero(target: Node) -> void:
     hero = target
 
 func set_story_mode(region: String, objective: String) -> void:
-    title_label.text = "NEREIS HERO"
-    region_label.text = region
-    objective_label.text = objective
+    title_label.text = NereisLocalization.t("hud.title")
+    region_label.text = _localize_region(region)
+    objective_label.text = _localize_objective(objective)
     _set_humanity_visible(true)
 
 func set_combat_demo_mode() -> void:
-    title_label.text = "NEREIS HERO  /  CORE COMBAT"
+    title_label.text = NereisLocalization.t("hud.title") + "  /  CORE COMBAT"
     region_label.text = "ASHEN ROAD"
     _set_humanity_visible(false)
 
@@ -299,6 +315,166 @@ func _process(delta: float) -> void:
         + "Slice Complete: %s" % WorldState.slice_complete
     )
 
+func _localize_region(value: String) -> String:
+    var key := NereisLocalization.key_for_region(value)
+    return NereisLocalization.t(key) if not key.is_empty() else value
+
+func _localize_objective(value: String) -> String:
+    var key := NereisLocalization.key_for_objective(value)
+    return NereisLocalization.t(key) if not key.is_empty() else value
+
+func _build_pause_menu() -> void:
+    pause_overlay = ColorRect.new()
+    pause_overlay.position = Vector2.ZERO
+    pause_overlay.color = Color("#07060b", 0.82)
+    pause_overlay.visible = false
+    pause_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+    add_child(pause_overlay)
+
+    pause_panel = ColorRect.new()
+    pause_panel.position = Vector2(390, 135)
+    pause_panel.size = Vector2(500, 450)
+    pause_panel.color = Color("#111018", 0.97)
+    pause_overlay.add_child(pause_panel)
+
+    pause_title = Label.new()
+    pause_title.position = Vector2(44, 28)
+    pause_title.size = Vector2(412, 40)
+    pause_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    pause_title.add_theme_font_size_override("font_size", 28)
+    pause_title.add_theme_color_override("font_color", Color("#d6c7b2"))
+    pause_panel.add_child(pause_title)
+
+    resume_button = _make_menu_button()
+    resume_button.position = Vector2(90, 88)
+    pause_panel.add_child(resume_button)
+    resume_button.pressed.connect(_close_pause_menu)
+
+    save_button = _make_menu_button()
+    save_button.position = Vector2(90, 148)
+    pause_panel.add_child(save_button)
+    save_button.pressed.connect(_save_from_menu)
+
+    new_game_button = _make_menu_button()
+    new_game_button.position = Vector2(90, 208)
+    pause_panel.add_child(new_game_button)
+    new_game_button.pressed.connect(_confirm_new_game)
+
+    title_button = _make_menu_button()
+    title_button.position = Vector2(90, 268)
+    pause_panel.add_child(title_button)
+    title_button.pressed.connect(_return_to_title)
+
+    language_label = Label.new()
+    language_label.position = Vector2(90, 337)
+    language_label.add_theme_font_size_override("font_size", 14)
+    language_label.add_theme_color_override("font_color", Color("#8f8586"))
+    pause_panel.add_child(language_label)
+
+    language_option = OptionButton.new()
+    language_option.position = Vector2(90, 360)
+    language_option.size = Vector2(320, 42)
+    for language in NereisLocalization.LANGUAGES:
+        language_option.add_item(NereisLocalization.language_name(language))
+    language_option.item_selected.connect(_on_language_selected)
+    pause_panel.add_child(language_option)
+
+    save_status_label = Label.new()
+    save_status_label.position = Vector2(90, 405)
+    save_status_label.size = Vector2(320, 28)
+    save_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    save_status_label.add_theme_font_size_override("font_size", 13)
+    save_status_label.add_theme_color_override("font_color", Color("#9e8b72"))
+    pause_panel.add_child(save_status_label)
+
+    new_game_dialog = ConfirmationDialog.new()
+    new_game_dialog.process_mode = Node.PROCESS_MODE_ALWAYS
+    new_game_dialog.confirmed.connect(_start_new_game)
+    add_child(new_game_dialog)
+
+func _make_menu_button() -> Button:
+    var button := Button.new()
+    button.size = Vector2(320, 46)
+    button.add_theme_font_size_override("font_size", 17)
+    return button
+
+func _refresh_localized_ui() -> void:
+    if not is_instance_valid(title_label):
+        return
+    title_label.text = NereisLocalization.t("hud.title")
+    controls_label.text = NereisLocalization.t("hud.controls")
+    hp_label.text = NereisLocalization.t("hud.hp")
+    stamina_label.text = NereisLocalization.t("hud.sta")
+    humanity_label.text = NereisLocalization.t("hud.hum")
+    pause_title.text = NereisLocalization.t("menu.paused")
+    resume_button.text = NereisLocalization.t("menu.resume")
+    save_button.text = NereisLocalization.t("menu.save")
+    new_game_button.text = NereisLocalization.t("menu.new_game")
+    title_button.text = NereisLocalization.t("menu.return_title")
+    language_label.text = NereisLocalization.t("menu.select_language")
+    if language_option:
+        language_option.select(NereisLocalization.language_index(str(WorldState.language)))
+    new_game_dialog.title = NereisLocalization.t("menu.new_game")
+    new_game_dialog.dialog_text = NereisLocalization.t("menu.confirm_new_game")
+    new_game_dialog.ok_button_text = NereisLocalization.t("menu.confirm")
+    new_game_dialog.cancel_button_text = NereisLocalization.t("menu.cancel")
+
+func _on_language_selected(index: int) -> void:
+    var language: String = NereisLocalization.LANGUAGES[clampi(index, 0, NereisLocalization.LANGUAGES.size() - 1)]
+    WorldState.set_language(language)
+    _refresh_localized_ui()
+    save_status_label.text = NereisLocalization.language_name(language)
+
+func _save_from_menu() -> void:
+    WorldState.save_game()
+    save_status_label.text = NereisLocalization.t("menu.saved")
+    print("[NEREIS][MENU] Manual save")
+
+func _confirm_new_game() -> void:
+    new_game_dialog.popup_centered()
+    get_viewport().set_input_as_handled()
+
+func _start_new_game() -> void:
+    WorldState.delete_save()
+    pause_open = false
+    pause_overlay.visible = false
+    get_tree().paused = false
+    print("[NEREIS][MENU] New game started")
+    get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
+
+func _return_to_title() -> void:
+    pause_open = false
+    pause_overlay.visible = false
+    get_tree().paused = false
+    get_tree().change_scene_to_file("res://scenes/boot.tscn")
+
+func _open_pause_menu() -> void:
+    pause_open = true
+    pause_overlay.visible = true
+    save_status_label.text = ""
+    language_option.select(NereisLocalization.language_index(str(WorldState.language)))
+    get_tree().paused = true
+    print("[NEREIS][MENU] Pause menu opened")
+
+func _close_pause_menu() -> void:
+    pause_open = false
+    pause_overlay.visible = false
+    get_tree().paused = false
+    print("[NEREIS][MENU] Pause menu closed")
+
+func _toggle_pause_menu() -> void:
+    if pause_open:
+        _close_pause_menu()
+    else:
+        _open_pause_menu()
+
+func _unhandled_input(event: InputEvent) -> void:
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+        if WorldState.input_locked:
+            return
+        _toggle_pause_menu()
+        get_viewport().set_input_as_handled()
+
 func _update_status_bars() -> void:
     if not hero or not is_instance_valid(hero):
         return
@@ -308,9 +484,9 @@ func _update_status_bars() -> void:
     hp_bar.size.x = 235.0 * float(hp) / 100.0
     stamina_bar.size.x = 235.0 * stamina / 100.0
     humanity_bar.size.x = 235.0 * float(humanity) / 100.0
-    hp_label.text = "HP %d" % hp
-    stamina_label.text = "STA %d" % int(stamina)
-    humanity_label.text = "HUM %d" % humanity
+    hp_label.text = "%s %d" % [NereisLocalization.t("hud.hp"), hp]
+    stamina_label.text = "%s %d" % [NereisLocalization.t("hud.sta"), int(stamina)]
+    humanity_label.text = "%s %d" % [NereisLocalization.t("hud.hum"), humanity]
 
 func _update_boss_bar() -> void:
     if not boss or not is_instance_valid(boss) or boss.is_queued_for_deletion() or WorldState.boss_defeated:
