@@ -14,6 +14,7 @@ func _ready() -> void:
     collision_layer = 8
     collision_mask = 1
     monitoring = true
+    set_meta("interaction_priority", 100)
     body_entered.connect(_on_body_entered)
     body_exited.connect(_on_body_exited)
     queue_redraw()
@@ -23,7 +24,7 @@ func _process(delta: float) -> void:
     if hero_nearby and WorldState.input_locked:
         hero_nearby = false
     var available := enabled and not WorldState.input_locked and hero_nearby and cooldown <= 0.0
-    INTERACTION_FOCUS_SCRIPT.sync(self, available)
+    INTERACTION_FOCUS_SCRIPT.sync(self, available, 100)
     queue_redraw()
 
 func _on_body_entered(body: Node) -> void:
