@@ -82,7 +82,9 @@ func _unhandled_input(event: InputEvent) -> void:
         if event is InputEventKey and event.pressed and not event.echo:
             if event.keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_ESCAPE, KEY_J]:
                 _finish_message()
-                get_viewport().set_input_as_handled()
+                var viewport := get_viewport()
+                if viewport:
+                    viewport.set_input_as_handled()
                 return
         if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
             _finish_message()
@@ -109,6 +111,7 @@ func play_first_memory() -> void:
     print("[NEREIS][STORY] First memory event displayed")
 
 func show_message(title: String, message: String, duration: float = 4.0) -> void:
+    NereisInteractionFocus.clear_all(get_tree())
     if panel.visible:
         _finish_message()
     title_label.text = NereisLocalization.translate_text(title)
@@ -126,6 +129,7 @@ func show_message(title: String, message: String, duration: float = 4.0) -> void
 
     
 func show_caption(title: String, message: String, duration: float = 2.5) -> void:
+    NereisInteractionFocus.clear_all(get_tree())
     if panel.visible:
         _finish_message()
     title_label.text = NereisLocalization.translate_text(title)
