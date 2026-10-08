@@ -182,3 +182,15 @@ Repository changes are checked structurally after each implementation pass.
 
 Final acceptance should be performed on Godot 4.6.x.
 
+
+
+## Menu / narrative acceptance pass
+
+The development build now includes:
+
+- Bottom narrative panels pause the SceneTree, so Hero and enemies stop together.
+- While a narrative panel is visible, E, Space, Enter, Escape, or left mouse click immediately closes it.
+- Esc opens the in-game pause menu when no narrative is active.
+- The pause menu provides Resume, Save, New Game, Return to Title, and four-language selection.
+- The title screen provides Continue, New Game, and four-language selection.
+- Supported languages: Simplified Chinese, Traditional Chinese, English, Japanese.
