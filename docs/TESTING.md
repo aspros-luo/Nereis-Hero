@@ -184,6 +184,16 @@ Final acceptance should be performed on Godot 4.6.x.
 
 
 
+## Ending CG acceptance
+
+Each of the three endings must finish with a dedicated full-screen cinematic CG, not only a text card.
+
+- **凡人之墓**: lone Hero / surviving kingdom / the world continuing without divine salvation.
+- **永恒乐园**: Hero and Mite together inside the dream-like eternal paradise.
+- **烈火天罚**: the ruined city, the final separation of Hero and Mite, and the fire that remains.
+
+The current development build uses replaceable SVG key art with animated fade / camera-push treatment. Final production art can replace these assets without changing ending state logic.
+
 ## Menu / narrative acceptance pass
 
 The development build now includes:
