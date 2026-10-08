@@ -23,6 +23,7 @@ var route_exit: Area2D
 
 func _ready() -> void:
     WorldState.prepare_scene_runtime()
+    get_tree().process_frame.connect(_ensure_route_runtime, CONNECT_ONE_SHOT)
     if WorldState.route_complete:
         print("[NEREIS][ROUTE] Replaying completed route=%s" % route_id)
 
@@ -190,7 +191,13 @@ func _spawn_ui() -> void:
 
     get_tree().create_timer(0.6).timeout.connect(_show_route_intro)
 
+func _ensure_route_runtime() -> void:
+    WorldState.prepare_scene_runtime()
+    if hero != null:
+        hero.set_physics_process(true)
+
 func _show_route_intro() -> void:
+    WorldState.prepare_scene_runtime()
     if route_id == "lullaby":
         narrative.show_caption("THE LULLABY PATH", "The road bends toward the village lights.\n\nYou are certain you have never been here. Your hands disagree.", 2.8)
     else:
