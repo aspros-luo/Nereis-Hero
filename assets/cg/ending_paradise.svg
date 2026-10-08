@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+<defs>
+  <radialGradient id="dream" cx=".5" cy=".35" r=".75"><stop offset="0" stop-color="#d8cadc"/><stop offset=".42" stop-color="#8d7995"/><stop offset="1" stop-color="#17131d"/></radialGradient>
+  <filter id="soft"><feGaussianBlur stdDeviation="25"/></filter>
+</defs>
+<rect width="1280" height="720" fill="url(#dream)"/>
+<ellipse cx="640" cy="190" rx="320" ry="145" fill="#e8deea" opacity=".12" filter="url(#soft)"/>
+<circle cx="640" cy="190" r="118" fill="#eee8f2" opacity=".42"/>
+<circle cx="640" cy="190" r="88" fill="#cfc2d8" opacity=".38"/>
+<!-- fading village -->
+<path d="M0 520 L160 440 300 510 420 430 540 510 680 435 820 520 970 400 1110 520 1280 450 1280 720 0 720Z" fill="#241c29" opacity=".86"/>
+<!-- central figures -->
+<ellipse cx="566" cy="566" rx="46" ry="13" fill="#0e0b12" opacity=".7"/>
+<ellipse cx="714" cy="566" rx="46" ry="13" fill="#0e0b12" opacity=".7"/>
+<circle cx="568" cy="415" r="19" fill="#15101a"/>
+<circle cx="712" cy="415" r="19" fill="#15101a"/>
+<path d="M550 442 L568 528 586 442Z" fill="#15101a"/>
+<path d="M694 442 L712 528 730 442Z" fill="#15101a"/>
+<!-- joined hands -->
+<path d="M583 468 C620 452 660 452 697 468" fill="none" stroke="#e4d6e6" stroke-opacity=".58" stroke-width="7" stroke-linecap="round"/>
+<circle cx="640" cy="463" r="14" fill="#f1e6f0" opacity=".42"/>
+<!-- dream petals -->
+<g fill="#f1e7f1" opacity=".45">
+<circle cx="280" cy="230" r="5"/><circle cx="1000" cy="255" r="4"/><circle cx="360" cy="330" r="3"/><circle cx="920" cy="360" r="5"/>
+<circle cx="470" cy="180" r="4"/><circle cx="800" cy="265" r="3"/>
+</g>
+<text x="80" y="110" fill="#f0e8f2" opacity=".38" font-family="serif" font-size="34" letter-spacing="8">NO ONE WAKES</text>
+</svg>
