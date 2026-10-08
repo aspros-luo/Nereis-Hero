@@ -171,7 +171,8 @@ func _on_clue_examined(target: Node) -> void:
 func _on_exit_reached() -> void:
     WorldState.set_location("village")
     narrative.show_message("BACK TO THE VILLAGE", "The cemetery gate closes behind you.", 3.0)
-    get_tree().create_timer(3.2).timeout.connect(_return_to_village)
+    await narrative.message_finished
+    _return_to_village()
 
 func _return_to_village() -> void:
     SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
