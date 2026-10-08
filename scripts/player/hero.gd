@@ -402,13 +402,19 @@ func _draw() -> void:
     ]), cloak)
     draw_line(Vector2(-12, -3 + bob), Vector2(-22, 18 + step), armor, 7.0)
     draw_line(Vector2(12, -3 + bob), Vector2(22, 18 - step), armor, 7.0)
-    draw_line(Vector2(0, -8 + bob), Vector2(facing * 58, -22 + bob), metal, 7.0)
+    var blade_length := 58.0
+    var blade_width := 7.0
+    if hero_system and hero_system.is_short_blade():
+        blade_length = 38.0
+        blade_width = 5.0
+    draw_line(Vector2(0, -8 + bob), Vector2(facing * blade_length, -22 + bob), metal, blade_width)
 
     if WorldState.hidden_resistance_awakened:
         var anchor_color := Color("#aa8d72") if WorldState.mite_control_stage < 2 else Color("#8d6c98")
         draw_circle(Vector2(-13, -1 + bob), 4.0, Color(0.75, 0.66, 0.55, 0.32))
         draw_arc(Vector2(-13, -1 + bob), 7.0, 0.0, TAU, 16, anchor_color, 2.0)
-    draw_line(Vector2(facing * 28, -23 + bob), Vector2(facing * 47, -30 + bob), Color("#e0d6c3"), 3.0)
+    var edge_length := 47.0 if not hero_system or hero_system.is_long_sword() else 33.0
+    draw_line(Vector2(facing * 28, -23 + bob), Vector2(facing * edge_length, -30 + bob), Color("#e0d6c3"), 3.0)
     if hit_confirm_time > 0.0:
         draw_arc(Vector2(facing * 28, -24), 70.0, 0.0, TAU, 24, Color("#efe1c8"), 6.0)
     elif attack_time > 0.0 and attack_windup <= 0.0:
