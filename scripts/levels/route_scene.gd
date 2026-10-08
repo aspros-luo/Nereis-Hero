@@ -24,9 +24,7 @@ var route_exit: Area2D
 func _ready() -> void:
     WorldState.prepare_scene_runtime()
     if WorldState.route_complete:
-        print("[NEREIS][VILLAGE] Route complete; entering Village Hub")
-        SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
-        return
+        print("[NEREIS][ROUTE] Replaying completed route=%s" % route_id)
 
     if WorldState.selected_route == "":
         WorldState.selected_route = route_id
@@ -80,6 +78,10 @@ func _spawn_checkpoint() -> void:
 
 func _spawn_route_enemy() -> void:
     if is_instance_valid(route_enemy) and not route_enemy.is_queued_for_deletion():
+        return
+
+    if WorldState.route_complete:
+        route_enemy = null
         return
 
     route_enemy_defeated = false
@@ -142,7 +144,8 @@ func _on_route_exit_reached() -> void:
         narrative.show_message("THE VILLAGE LIGHTS", "The road ends at a cluster of warm windows.\n\nYou recognize the tavern before you recognize why.", 6.0)
     else:
         narrative.show_message("THE OLD CHURCH", "The bell is silent. Your name is not.\n\nSomewhere beyond the doors, someone has been waiting for you.", 6.0)
-    get_tree().create_timer(6.2).timeout.connect(_enter_village_hub)
+    await narrative.message_finished
+    _enter_village_hub()
     queue_redraw()
 
 func _enter_village_hub() -> void:
