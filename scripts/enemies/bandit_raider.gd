@@ -112,4 +112,4 @@ func _draw() -> void:
     draw_line(Vector2(12, -1 + sway), Vector2(48, 12 + sway), cloth, 7.0)
     if windup > 0.0:
         draw_arc(Vector2(facing * 20.0, -22), 34.0, -0.85 if facing > 0 else 3.99, 0.85 if facing > 0 else 5.42, 14, Color("#d17b72"), 4.0)
-    draw_string(ThemeDB.fallback_font, Vector2(-50, -72), "BANDIT", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
+    draw_string(ThemeDB.fallback_font, Vector2(-50, -72), NereisLocalization.translate_text("BANDIT"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
