@@ -47,21 +47,21 @@ func _spawn_npcs() -> void:
         Vector2(780, 520),
         "restoration_captain",
         "RESTORATION CAPTAIN",
-        "The captain studies your church-marked blade.\n\n"We are not here because we are righteous."\n\n"We are here because the throne is ours."\n\nThere is no pride in the last sentence."
+        "The captain studies your church-marked blade.\n\n\"We are not here because we are righteous.\"\n\n\"We are here because the throne is ours.\"\n\nThere is no pride in the last sentence."
     )
 
     _spawn_npc(
         Vector2(1120, 520),
         "rebel_quartermaster",
         "QUARTERMASTER",
-        "The quartermaster counts bandages twice.\n\n"If the Kingdom returns, food still has to be bought."\n\n"People forget that when they start talking about crowns.""
+        "The quartermaster counts bandages twice.\n\n\"If the Kingdom returns, food still has to be bought.\"\n\n\"People forget that when they start talking about crowns.\""
     )
 
     _spawn_npc(
         Vector2(1450, 520),
         "royal_survivor",
         "ROYAL SURVIVOR",
-        "The old soldier never looks toward the campfire.\n\n"The Church taught us obedience."\n\n"The rebels will teach us loyalty."\n\nHe spits into the dirt."
+        "The old soldier never looks toward the campfire.\n\n\"The Church taught us obedience.\"\n\n\"The rebels will teach us loyalty.\"\n\nHe spits into the dirt."
     )
 
 func _spawn_npc(position: Vector2, npc_id: String, display_name: String, dialogue: String) -> void:
