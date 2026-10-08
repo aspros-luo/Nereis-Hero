@@ -1084,7 +1084,7 @@ static func translate_text(value: String) -> String:
         return str(entry.get(language_id, value))
     if value.begins_with("HIT  "):
         var damage_text := value.trim_prefix("HIT  ")
-        var hit_label := {"zh_cn": "命中  ", "zh_tw": "命中  ", "ja": "命中  "}.get(language_id, "HIT  ")
+        var hit_label: String = str({"zh_cn": "命中  ", "zh_tw": "命中  ", "ja": "命中  "}.get(language_id, "HIT  "))
         return "%s%s" % [hit_label, damage_text]
     if value == "DEFEATED  //  RETURNING TO CHECKPOINT":
         return {"zh_cn": "击败 // 返回检查点", "zh_tw": "擊敗 // 返回檢查點", "ja": "撃破 // チェックポイントへ戻る"}.get(language_id, value)
