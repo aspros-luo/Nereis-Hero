@@ -26,8 +26,7 @@ func _ready() -> void:
     if WorldState.route_complete:
         print("[NEREIS][ROUTE] Replaying completed route=%s" % route_id)
 
-    if WorldState.selected_route == "":
-        WorldState.selected_route = route_id
+    WorldState.selected_route = route_id
     WorldState.set_location("route_%s" % route_id)
 
     print("[NEREIS][ROUTE] Entered route=%s" % route_id)
