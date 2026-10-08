@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#111019"/><stop offset=".62" stop-color="#29222b"/><stop offset="1" stop-color="#6a5a55"/></linearGradient>
+  <linearGradient id="sun" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0d2a7" stop-opacity=".9"/><stop offset="1" stop-color="#ad8d7f" stop-opacity="0"/></linearGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="1280" height="720" fill="url(#sky)"/>
+<circle cx="1010" cy="250" r="150" fill="url(#sun)" filter="url(#glow)"/>
+<circle cx="1010" cy="250" r="72" fill="#e3c49f" opacity=".48"/>
+<!-- ruined capital -->
+<path d="M0 500 L130 430 250 500 370 390 500 500 610 420 760 500 900 360 1050 500 1180 410 1280 480 1280 720 0 720Z" fill="#17141c"/>
+<path d="M160 360 L250 220 340 360 L320 500 180 500Z" fill="#211c25"/>
+<path d="M200 355 L250 260 300 355Z" fill="#3d3038"/>
+<path d="M875 332 L935 245 995 332 L985 500 885 500Z" fill="#211c25"/>
+<path d="M905 330 L935 278 965 330Z" fill="#4b3940"/>
+<!-- lone hero -->
+<ellipse cx="620" cy="556" rx="26" ry="10" fill="#09080c"/>
+<path d="M614 520 L620 436 632 520Z" fill="#0a090d"/>
+<circle cx="622" cy="420" r="13" fill="#0a090d"/>
+<path d="M616 448 L586 500 600 503 622 470 644 503 657 500 628 448Z" fill="#0a090d"/>
+<path d="M648 488 L712 425" stroke="#bda18d" stroke-width="5" stroke-linecap="round"/>
+<!-- road -->
+<path d="M580 720 L610 520 650 520 770 720Z" fill="#2b252b"/>
+<path d="M604 720 L625 540 640 540 690 720Z" fill="#40343b" opacity=".55"/>
+<text x="80" y="110" fill="#d0bcae" opacity=".35" font-family="serif" font-size="34" letter-spacing="8">A WORLD THAT REMAINS</text>
+</svg>
