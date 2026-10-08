@@ -260,7 +260,7 @@ func _draw() -> void:
         _draw_church_path()
 
 func _draw_church_path() -> void:
-    draw_string(ThemeDB.fallback_font, Vector2(100, 230), "THE CHURCH ROAD", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
+    draw_string(ThemeDB.fallback_font, Vector2(100, 230), NereisLocalization.translate_text("THE CHURCH ROAD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
     for x in range(260, 2000, 420):
         draw_circle(Vector2(x, 450), 54, Color("#28222a"))
         draw_rect(Rect2(x - 10, 400, 20, 70), Color("#352d38"))
@@ -274,10 +274,10 @@ func _draw_church_path() -> void:
     )
     draw_rect(Rect2(1650, 330, 60, 100), Color("#312934"))
     draw_circle(Vector2(1680, 310), 18, Color("#66545c"))
-    draw_string(ThemeDB.fallback_font, Vector2(1500, 470), "THE OLD CHURCH", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(1500, 470), NereisLocalization.translate_text("THE OLD CHURCH"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
 
 func _draw_lullaby_path() -> void:
-    draw_string(ThemeDB.fallback_font, Vector2(100, 230), "THE LULLABY PATH", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
+    draw_string(ThemeDB.fallback_font, Vector2(100, 230), NereisLocalization.translate_text("THE LULLABY PATH"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
     for x in range(180, 2100, 300):
         draw_line(Vector2(x, 520), Vector2(x + 40, 390), Color("#312a31"), 10.0)
         draw_line(Vector2(x + 30, 450), Vector2(x - 30, 370), Color("#312a31"), 6.0)
@@ -293,4 +293,4 @@ func _draw_lullaby_path() -> void:
         ]),
         Color("#352d38")
     )
-    draw_string(ThemeDB.fallback_font, Vector2(1660, 330), "THE VILLAGE LIGHTS", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(1660, 330), NereisLocalization.translate_text("THE VILLAGE LIGHTS"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
