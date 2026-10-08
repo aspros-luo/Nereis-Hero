@@ -2,16 +2,17 @@ extends RefCounted
 class_name NereisInteractionFocus
 
 const GROUP := "nereis_interaction"
+const TIE_DISTANCE := 28.0
 
-static func sync(node: Node2D, available: bool) -> void:
+static func sync(node: Node2D, available: bool, priority: int = 0) -> void:
+    node.set_meta("interaction_available", available)
+    node.set_meta("interaction_priority", priority)
+
     if available:
         if not node.is_in_group(GROUP):
             node.add_to_group(GROUP)
-        node.set_meta("interaction_available", true)
-    else:
-        node.set_meta("interaction_available", false)
-        if node.is_in_group(GROUP):
-            node.remove_from_group(GROUP)
+    elif node.is_in_group(GROUP):
+        node.remove_from_group(GROUP)
 
 static func is_focused(node: Node2D) -> bool:
     if not bool(node.get_meta("interaction_available", false)):
@@ -21,9 +22,9 @@ static func is_focused(node: Node2D) -> bool:
     if hero == null:
         return false
 
-    var candidate_distance := node.global_position.distance_to(hero.global_position)
     var best_node: Node2D = node
-    var best_distance := candidate_distance
+    var best_distance := node.global_position.distance_to(hero.global_position)
+    var best_priority := int(node.get_meta("interaction_priority", 0))
 
     for candidate in node.get_tree().get_nodes_in_group(GROUP):
         if candidate == null or not is_instance_valid(candidate):
@@ -36,8 +37,17 @@ static func is_focused(node: Node2D) -> bool:
             continue
 
         var distance := other.global_position.distance_to(hero.global_position)
-        if distance + 1.0 < best_distance:
+        var priority := int(other.get_meta("interaction_priority", 0))
+        var distance_gap := distance - best_distance
+
+        if distance_gap < -TIE_DISTANCE:
             best_node = other
             best_distance = distance
+            best_priority = priority
+        elif absf(distance_gap) <= TIE_DISTANCE:
+            if priority > best_priority or (priority == best_priority and distance < best_distance):
+                best_node = other
+                best_distance = distance
+                best_priority = priority
 
     return best_node == node
