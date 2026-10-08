@@ -151,10 +151,10 @@ func _physics_process(delta: float) -> void:
             if hero_system and hero_system.is_short_blade():
                 multiplier *= hero_system.get_weapon_damage_multiplier()
             var damage := int(round(base_damage * multiplier))
-            var reach := COMBO_REACH[combo_step - 1]
-    if hero_system:
-        reach = hero_system.get_weapon_reach()
-    attack_hitbox.position.x = facing * reach
+            var reach: float = COMBO_REACH[combo_step - 1]
+            if hero_system:
+                reach = hero_system.get_weapon_reach()
+            attack_hitbox.position.x = facing * reach
             attack_hitbox.activate(damage, 0.11 if combo_step < 3 else 0.14)
             _spawn_slash_arc()
             attack_hit_registered = true
