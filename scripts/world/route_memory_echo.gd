@@ -2,6 +2,8 @@ extends Node2D
 
 signal interacted
 
+const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
+
 @export var echo_id: String = ""
 @export var display_name: String = ""
 @export_multiline var dialogue: String = ""
@@ -19,14 +21,19 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     cooldown = maxf(0.0, cooldown - delta)
     if consumed:
+        hero_nearby = false
+        INTERACTION_FOCUS_SCRIPT.sync(self, false)
+        queue_redraw()
         return
 
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 120.0
+    var available := not WorldState.input_locked and not consumed and hero_nearby and cooldown <= 0.0
+    INTERACTION_FOCUS_SCRIPT.sync(self, available)
     queue_redraw()
 
 func can_interact() -> bool:
-    return not WorldState.input_locked and not consumed and hero_nearby and cooldown <= 0.0
+    return not WorldState.input_locked and not consumed and hero_nearby and cooldown <= 0.0 and INTERACTION_FOCUS_SCRIPT.is_focused(self)
 
 func _unhandled_input(event: InputEvent) -> void:
     if not can_interact():
