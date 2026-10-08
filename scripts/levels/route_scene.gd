@@ -22,6 +22,7 @@ var route_enemy_defeated := false
 var route_exit: Area2D
 
 func _ready() -> void:
+    process_mode = Node.PROCESS_MODE_ALWAYS
     WorldState.prepare_scene_runtime()
     get_tree().process_frame.connect(_ensure_route_runtime, CONNECT_ONE_SHOT)
     if WorldState.route_complete:
@@ -190,6 +191,15 @@ func _spawn_ui() -> void:
     hud.bind_hero(hero)
 
     get_tree().create_timer(0.6).timeout.connect(_show_route_intro)
+
+func _process(_delta: float) -> void:
+    if not WorldState.input_locked and get_tree().paused:
+        get_tree().paused = false
+        WorldState.input_locked = false
+        print("[NEREIS][ROUTE] Cleared latent pause state")
+
+    if hero != null and not WorldState.input_locked and not hero.is_physics_processing():
+        hero.set_physics_process(true)
 
 func _ensure_route_runtime() -> void:
     WorldState.prepare_scene_runtime()
