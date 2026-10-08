@@ -69,9 +69,8 @@ func _finish_message() -> void:
     choice_active = false
     blocks_input = true
     WorldState.input_locked = false
-    if paused_for_narrative:
-        get_tree().paused = false
-        paused_for_narrative = false
+    get_tree().paused = false
+    paused_for_narrative = false
     print("[NEREIS][STORY] Narrative display ended")
     message_finished.emit()
 
