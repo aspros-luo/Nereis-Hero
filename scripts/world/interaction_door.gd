@@ -2,6 +2,8 @@ extends Area2D
 
 signal interacted
 
+const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
+
 @export var prompt_text: String = "E  Enter"
 
 var hero_nearby := false
@@ -19,6 +21,8 @@ func _process(delta: float) -> void:
     cooldown = maxf(0.0, cooldown - delta)
     if hero_nearby and WorldState.input_locked:
         hero_nearby = false
+    var available := not WorldState.input_locked and hero_nearby and cooldown <= 0.0
+    INTERACTION_FOCUS_SCRIPT.sync(self, available)
     queue_redraw()
 
 func _on_body_entered(body: Node) -> void:
@@ -32,7 +36,7 @@ func _on_body_exited(body: Node) -> void:
         queue_redraw()
 
 func _unhandled_input(event: InputEvent) -> void:
-    if WorldState.input_locked or not hero_nearby or cooldown > 0.0:
+    if WorldState.input_locked or not hero_nearby or cooldown > 0.0 or not INTERACTION_FOCUS_SCRIPT.is_focused(self):
         return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 0.6
@@ -40,7 +44,7 @@ func _unhandled_input(event: InputEvent) -> void:
         get_viewport().set_input_as_handled()
 
 func _draw() -> void:
-    if hero_nearby and not WorldState.input_locked:
+    if hero_nearby and not WorldState.input_locked and INTERACTION_FOCUS_SCRIPT.is_focused(self):
         draw_string(
             ThemeDB.fallback_font,
             Vector2(-54, 30),
