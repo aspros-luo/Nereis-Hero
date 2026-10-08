@@ -20,6 +20,7 @@ var clue: Node2D
 var bell_keeper: Node2D
 
 func _ready() -> void:
+    WorldState.prepare_scene_runtime()
     WorldState.set_location("graveyard")
     WorldState.set_checkpoint(Vector2(360, 520))
     print("[NEREIS][GRAVEYARD] Entered Village Graveyard route=%s" % WorldState.selected_route)
