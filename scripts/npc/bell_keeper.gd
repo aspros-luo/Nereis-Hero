@@ -42,7 +42,7 @@ func _draw() -> void:
     draw_circle(Vector2(0, -42 + sway), 6.0, Color("#9a7773"))
     draw_rect(Rect2(-18, -30 + sway, 36, 44), Color("#564651"))
     draw_line(Vector2(18, -2 + sway), Vector2(38, -22 + sway), Color("#8c756d"), 4.0)
-    draw_string(ThemeDB.fallback_font, Vector2(-48, -70), "BELL KEEPER", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#9b8a86"))
+    draw_string(ThemeDB.fallback_font, Vector2(-48, -70), NereisLocalization.translate_text("BELL KEEPER"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#9b8a86"))
 
     if hero_nearby and not WorldState.input_locked:
-        draw_string(ThemeDB.fallback_font, Vector2(-42, 26), "E  Talk", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
+        draw_string(ThemeDB.fallback_font, Vector2(-42, 26), NereisLocalization.translate_text("E  Talk"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
