@@ -339,7 +339,7 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode == KEY_F and _can_enter_mite_house():
+        if event.keycode == KEY_E and _can_enter_mite_house():
             _enter_mite_house()
             get_viewport().set_input_as_handled()
             return
