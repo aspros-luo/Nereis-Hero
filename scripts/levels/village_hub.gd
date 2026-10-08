@@ -89,7 +89,7 @@ func _spawn_mite() -> void:
 
     mite = Node2D.new()
     mite.set_script(MITE_SCRIPT)
-    mite.position = Vector2(700, 520)
+    mite.position = Vector2(800, 520)
     mite.name = "Mite"
     add_child(mite)
     mite.interacted.connect(_on_mite_interacted)
@@ -163,6 +163,7 @@ func _spawn_gatekeeper() -> void:
     else:
         npc.dialogue = "The gatekeeper hears the lullaby on the wind and shuts the tavern door halfway.\n\n\"Don't sing that here. Not unless you want the village to remember.\""
     add_child(npc)
+    npc.interacted.connect(_on_village_npc_interacted.bind(npc))
 
 func _spawn_shared_world_npcs() -> void:
     var youth := Node2D.new()
@@ -177,6 +178,7 @@ func _spawn_shared_world_npcs() -> void:
     else:
         youth.dialogue = "The young man stares toward the tavern.\n\n\"You came back carrying someone once. I don't know who it was. I only remember the singing.\""
     add_child(youth)
+    youth.interacted.connect(_on_village_npc_interacted.bind(youth))
 
     var merchant := Node2D.new()
     merchant.set_script(ROUTE_NPC_SCRIPT)
@@ -190,6 +192,12 @@ func _spawn_shared_world_npcs() -> void:
     else:
         merchant.dialogue = "The merchant smiles without humor.\n\n\"I saw the village seven years ago. Your face was already on the church door.\""
     add_child(merchant)
+    merchant.interacted.connect(_on_village_npc_interacted.bind(merchant))
+
+func _on_village_npc_interacted(npc: Node) -> void:
+    if narrative == null or not is_instance_valid(npc):
+        return
+    narrative.show_message(npc.display_name, npc.dialogue, 6.0)
 
 func _spawn_village_pois() -> void:
     var tavern := Node2D.new()
