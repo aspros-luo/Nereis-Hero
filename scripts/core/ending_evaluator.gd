@@ -1,6 +1,8 @@
 extends RefCounted
 class_name NereisEndingEvaluator
 
+const REQUIRED_ARTIFACT_PIECES: int = 3
+
 # This evaluator intentionally reads facts, not hidden romance points.
 # The final threshold for the multi-part artifact remains easy to change during narrative implementation.
 static func get_candidate() -> String:
