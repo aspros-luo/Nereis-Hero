@@ -6,6 +6,7 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const VILLAGE_POI_SCRIPT = preload("res://scripts/world/village_poi.gd")
+const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
 const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 const FIREFLY_SCRIPT = preload("res://scripts/effects/village_fireflies.gd")
@@ -18,7 +19,6 @@ var checkpoint: Area2D
 var mite: Node2D
 var narrative_audio: Node
 var mite_house_door: Area2D
-var mite_house_nearby := false
 var mite_house_transitioning := false
 var fireflies: Node2D
 
@@ -89,7 +89,7 @@ func _spawn_mite() -> void:
 
     mite = Node2D.new()
     mite.set_script(MITE_SCRIPT)
-    mite.position = Vector2(640, 520)
+    mite.position = Vector2(700, 520)
     mite.name = "Mite"
     add_child(mite)
     mite.interacted.connect(_on_mite_interacted)
@@ -118,8 +118,10 @@ func _spawn_narrative_audio() -> void:
 
 func _spawn_mite_house_door() -> void:
     mite_house_door = Area2D.new()
+    mite_house_door.set_script(INTERACTION_DOOR_SCRIPT)
     mite_house_door.position = Vector2(455, 520)
     mite_house_door.name = "MiteHouseDoor"
+    mite_house_door.prompt_text = "E  Enter"
     var shape := CollisionShape2D.new()
     var rectangle := RectangleShape2D.new()
     rectangle.size = Vector2(70, 120)
@@ -127,25 +129,11 @@ func _spawn_mite_house_door() -> void:
     shape.position = Vector2(0, -60)
     mite_house_door.add_child(shape)
     add_child(mite_house_door)
-    mite_house_door.body_entered.connect(_on_mite_house_entered)
-    mite_house_door.body_exited.connect(_on_mite_house_exited)
-
-func _on_mite_house_entered(body: Node) -> void:
-    if body != get_node_or_null("Hero"):
-        return
-    mite_house_nearby = true
-    queue_redraw()
-
-func _on_mite_house_exited(body: Node) -> void:
-    if body != get_node_or_null("Hero"):
-        return
-    mite_house_nearby = false
-    queue_redraw()
+    mite_house_door.interacted.connect(_enter_mite_house)
 
 func _can_enter_mite_house() -> bool:
     return (
-        mite_house_nearby
-        and not mite_house_transitioning
+        not mite_house_transitioning
         and not WorldState.input_locked
         and not WorldState.mite_connection_missed
         and WorldState.mite_first_meeting
@@ -154,7 +142,6 @@ func _can_enter_mite_house() -> bool:
 func _enter_mite_house() -> void:
     if not _can_enter_mite_house():
         return
-
     mite_house_transitioning = true
     WorldState.set_location("mite_house")
     SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")
@@ -252,7 +239,8 @@ func _spawn_village_pois() -> void:
 
 func _on_village_poi_interacted(poi: Node) -> void:
     narrative.show_message(poi.display_name, poi.dialogue, 2.5)
-    get_tree().create_timer(2.7).timeout.connect(_enter_village_location.bind(poi.poi_id))
+    await narrative.message_finished
+    _enter_village_location(poi.poi_id)
 
 func _enter_village_location(location_id: String) -> void:
     if location_id == "tavern":
@@ -339,10 +327,6 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode == KEY_E and _can_enter_mite_house():
-            _enter_mite_house()
-            get_viewport().set_input_as_handled()
-            return
         if event.keycode == KEY_F1:
             var endgame_scene := NereisEndingEvaluator.get_candidate()
             print("[NEREIS][DEBUG] Candidate endgame=%s" % endgame_scene)
@@ -385,14 +369,6 @@ func _unhandled_input(event: InputEvent) -> void:
             get_viewport().set_input_as_handled()
 
 func _draw() -> void:
-    if _can_enter_mite_house():
-        draw_string(
-            ThemeDB.fallback_font,
-            Vector2(390, 400), NereisLocalization.translate_text("F  Open Door"), HORIZONTAL_ALIGNMENT_LEFT,
-            -1,
-            16,
-            Color("#e0d1bd")
-        )
     draw_rect(Rect2(0, 0, 2600, 720), Color("#111018"))
     draw_rect(Rect2(0, 520, 2600, 200), Color("#201c22"))
     for x in range(0, 2600, 64):
@@ -412,8 +388,6 @@ func _draw() -> void:
     )
     draw_rect(Rect2(430, 430, 50, 90), Color("#17141b"))
     draw_string(ThemeDB.fallback_font, Vector2(388, 332), NereisLocalization.translate_text("MITE'S HOUSE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
-    if _can_enter_mite_house():
-        draw_string(ThemeDB.fallback_font, Vector2(420, 555), NereisLocalization.translate_text("F  Enter"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
 
     for x in range(120, 2300, 480):
         draw_rect(Rect2(x - 90, 360, 180, 160), Color("#29232b"))
