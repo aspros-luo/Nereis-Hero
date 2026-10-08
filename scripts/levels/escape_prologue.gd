@@ -138,8 +138,8 @@ func _on_exit_body_entered(body: Node) -> void:
         "Cold air. A road. A cluster of lights in the distance.\n\nThe Hero keeps walking.",
         4.5
     )
-    get_tree().create_timer(4.7).timeout.connect(func() -> void:
-        WorldState.input_locked = false
+    await narrative.message_finished
+    WorldState.input_locked = false
         SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
     )
 
