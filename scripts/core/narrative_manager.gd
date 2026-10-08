@@ -5,9 +5,12 @@ var title_label: Label
 var body_label: Label
 var timer := 0.0
 var choice_active := false
+var skip_label: Label
+var paused_for_narrative := false
 
 func _ready() -> void:
     layer = 20
+    process_mode = Node.PROCESS_MODE_ALWAYS
 
     panel = ColorRect.new()
     panel.color = Color("#0a090d", 0.94)
@@ -29,20 +32,47 @@ func _ready() -> void:
     body_label.add_theme_font_size_override("font_size", 19)
     panel.add_child(body_label)
 
+    skip_label = Label.new()
+    skip_label.position = Vector2(28, 126)
+    skip_label.size = Vector2(880, 20)
+    skip_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+    skip_label.add_theme_font_size_override("font_size", 12)
+    skip_label.add_theme_color_override("font_color", Color("#756d72"))
+    skip_label.text = NereisLocalization.t("narrative.skip")
+    panel.add_child(skip_label)
+
 func _process(delta: float) -> void:
     if not panel.visible:
-        WorldState.input_locked = false
         return
     if choice_active:
         return
     timer -= delta
     if timer <= 0.0:
-        panel.visible = false
-        WorldState.input_locked = false
-        print("[NEREIS][STORY] Narrative display ended")
+        _finish_message()
+
+func _finish_message() -> void:
+    panel.visible = false
+    choice_active = false
+    WorldState.input_locked = false
+    if paused_for_narrative:
+        get_tree().paused = false
+        paused_for_narrative = false
+    print("[NEREIS][STORY] Narrative display ended")
 
 func _unhandled_input(event: InputEvent) -> void:
+    if not panel.visible:
+        return
+
     if not choice_active:
+        if event is InputEventKey and event.pressed and not event.echo:
+            if event.keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_ESCAPE]:
+                _finish_message()
+                get_viewport().set_input_as_handled()
+                return
+        if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+            _finish_message()
+            get_viewport().set_input_as_handled()
+            return
         return
     if event is InputEventKey and event.pressed and not event.echo:
         if event.keycode == KEY_1:
@@ -64,15 +94,24 @@ func play_first_memory() -> void:
     print("[NEREIS][STORY] First memory event displayed")
 
 func show_message(title: String, message: String, duration: float = 4.0) -> void:
+    if panel.visible:
+        _finish_message()
     title_label.text = title
     body_label.text = message
+    skip_label.text = NereisLocalization.t("narrative.skip")
     panel.visible = true
     WorldState.input_locked = true
     timer = duration
+    if not get_tree().paused:
+        get_tree().paused = true
+        paused_for_narrative = true
 
     
 func begin_first_choice() -> void:
     choice_active = true
+    if not get_tree().paused:
+        get_tree().paused = true
+        paused_for_narrative = true
     title_label.text = "THE ROAD REMEMBERS YOU"
     body_label.text = "Inside the fallen armor you find a church seal.\n\nFrom the village, the lullaby begins again. You can follow the seal, or follow the song.\n\n[1] Follow the church seal\n[2] Follow the lullaby"
     panel.visible = true
@@ -82,6 +121,9 @@ func begin_first_choice() -> void:
 
 func _select_choice(choice: int) -> void:
     choice_active = false
+    if paused_for_narrative:
+        get_tree().paused = false
+        paused_for_narrative = false
     WorldState.make_first_choice(choice)
     if choice == 1:
         show_message("THE CHURCH SEAL", "You close your hand around the seal.\n\nThe metal is warm. Someone, somewhere, expected you to come back.")
