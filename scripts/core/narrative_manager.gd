@@ -86,11 +86,14 @@ func _unhandled_input(event: InputEvent) -> void:
     if not choice_active:
         if event is InputEventKey and event.pressed and not event.echo:
             if event.keycode in [KEY_E, KEY_SPACE, KEY_ENTER, KEY_ESCAPE, KEY_J]:
-_finish_message()
-            _mark_input_handled()
+                _finish_message()
+                var viewport := get_viewport()
+                if viewport:
+                    viewport.set_input_as_handled()
                 return
         if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
-            _finish_message()        _mark_input_handled()
+            _finish_message()
+            _mark_input_handled()
             return
         return
     if event is InputEventKey and event.pressed and not event.echo:
@@ -170,9 +173,9 @@ func _select_choice(choice: int) -> void:
     if choice == 1:
         show_message("THE CHURCH SEAL", "You close your hand around the seal.\n\nThe metal is warm. Someone, somewhere, expected you to come back.")
     else:
+        show_message("THE LULLABY", "You turn toward the song.\n\nFor one heartbeat, you remember the village before the church found you.")
     print("[NEREIS][STORY] First choice resolved=%d" % choice)
     _mark_input_handled()
-    print("[NEREIS][STORY] First choice resolved=%d" % choice)        _mark_input_handled()
 
  
 func play_weapon_upgrade() -> void:
