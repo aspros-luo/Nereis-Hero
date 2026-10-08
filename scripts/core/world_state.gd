@@ -48,6 +48,12 @@ var prologue_complete := false
 func _ready() -> void:
     load_game()
 
+func prepare_scene_runtime() -> void:
+    get_tree().paused = false
+    input_locked = false
+    hitstop_serial += 1
+    Engine.time_scale = 1.0
+
 func unlock_first_memory() -> void:
     if first_memory_unlocked:
         return
