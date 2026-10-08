@@ -94,7 +94,8 @@ func _on_priest_defeated() -> void:
         "The High Priest falls.\n\nThe flesh beneath the robes still twitches.\n\nThen the royal seal appears at the far end of the nave.",
         4.5
     )
-    get_tree().create_timer(4.7).timeout.connect(_spawn_king)
+    await narrative.message_finished
+    _spawn_king()
 
 func _on_priest_phase_changed(value: int) -> void:
     if value == 2:
@@ -112,7 +113,8 @@ func _on_king_defeated() -> void:
         "The King falls.\n\nThe Church is defeated.\n\nThe Kingdom is not saved.",
         5.0
     )
-    get_tree().create_timer(5.3).timeout.connect(_finish_demo)
+    await narrative.message_finished
+    _finish_demo()
 
 func _finish_demo() -> void:
     WorldState.input_locked = false
