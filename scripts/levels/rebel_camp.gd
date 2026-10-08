@@ -193,5 +193,5 @@ func _draw() -> void:
             Color("#302832")
         )
 
-    draw_string(ThemeDB.fallback_font, Vector2(100, 230), "THE RESTORATION CAMP", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#6c5d64"))
-    draw_string(ThemeDB.fallback_font, Vector2(480, 450), "NO KING / NO CHURCH", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
+    draw_string(ThemeDB.fallback_font, Vector2(100, 230), NereisLocalization.translate_text("THE RESTORATION CAMP"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#6c5d64"))
+    draw_string(ThemeDB.fallback_font, Vector2(480, 450), NereisLocalization.translate_text("NO KING / NO CHURCH"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
