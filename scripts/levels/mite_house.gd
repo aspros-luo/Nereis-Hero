@@ -192,4 +192,4 @@ func _draw() -> void:
     )
     draw_rect(Rect2(960, 370, 180, 150), Color("#211a22"))
     draw_rect(Rect2(995, 420, 110, 12), Color("#4b3940"))
-    draw_string(ThemeDB.fallback_font, Vector2(360, 245), "A ROOM WITH TWO PLACES", HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color("#72646b"))
+    draw_string(ThemeDB.fallback_font, Vector2(360, 245), NereisLocalization.translate_text("A ROOM WITH TWO PLACES"), HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color("#72646b"))
