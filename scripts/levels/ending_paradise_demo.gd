@@ -7,6 +7,7 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 const HIGH_PRIEST_SCRIPT = preload("res://scripts/enemies/high_priest.gd")
 const KING_SCRIPT = preload("res://scripts/enemies/king_guardian.gd")
+const ENDING_CG_SCRIPT = preload("res://scripts/ui/ending_cg_overlay.gd")
 
 const FLOOR_Y := 540.0
 const WIDTH := 2600.0
@@ -33,6 +34,7 @@ var ending_active := false
 var ending_stage := -1
 var ending_stage_elapsed := 0.0
 var ending_can_exit := false
+var ending_cg: Control
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
@@ -184,8 +186,14 @@ func _create_ending_overlay() -> void:
     ending_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     ending_layer.add_child(ending_backdrop)
 
+    ending_cg = Control.new()
+    ending_cg.set_script(ENDING_CG_SCRIPT)
+    ending_layer.add_child(ending_cg)
+    ending_cg.setup("paradise")
+    ending_cg.play()
+
     ending_card = ColorRect.new()
-    ending_card.color = Color("#e6d9df")
+    ending_card.color = Color("#e6d9df", 0.42)
     ending_card.modulate.a = 0.0
     ending_card.position = Vector2(170, 105)
     ending_card.size = Vector2(1060, 510)
@@ -252,6 +260,8 @@ func _show_ending_stage(stage: int) -> void:
             _tween_ending_card()
         3:
             ending_title.text = "ETERNAL PARADISE"
+            if ending_cg and ending_cg.has_method("pulse"):
+                ending_cg.pulse()
             ending_body.text = "No one is lonely.\n\nNo one is separate.\n\nNo one wakes."
             ending_prompt.text = "ENDING COMPLETE    E / ENTER  Return to Title    F9  Restart"
             ending_can_exit = true
