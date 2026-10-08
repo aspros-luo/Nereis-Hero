@@ -19,8 +19,6 @@ var hp_bar: ColorRect
 var stamina_bar: ColorRect
 var hp_label: Label
 var stamina_label: Label
-var humanity_label: Label
-var humanity_bar: ColorRect
 var objective_rule: ColorRect
 var impact_flash: ColorRect
 var impact_flash_time := 0.0
@@ -94,7 +92,7 @@ func _ready() -> void:
 
     status_panel = ColorRect.new()
     status_panel.position = Vector2(36, 630)
-    status_panel.size = Vector2(300, 98)
+    status_panel.size = Vector2(300, 70)
     status_panel.color = Color("#0a090d", 0.78)
     add_child(status_panel)
 
@@ -131,23 +129,6 @@ func _ready() -> void:
     stamina_bar.size = Vector2(235, 10)
     stamina_bar.color = Color("#9e8b72")
     status_panel.add_child(stamina_bar)
-
-    humanity_label = Label.new()
-    humanity_label.position = Vector2(12, 67)
-    humanity_label.add_theme_font_size_override("font_size", 13)
-    status_panel.add_child(humanity_label)
-
-    var humanity_bg := ColorRect.new()
-    humanity_bg.position = Vector2(72, 70)
-    humanity_bg.size = Vector2(235, 10)
-    humanity_bg.color = Color("#2a2026")
-    status_panel.add_child(humanity_bg)
-
-    humanity_bar = ColorRect.new()
-    humanity_bar.position = Vector2(72, 70)
-    humanity_bar.size = Vector2(235, 10)
-    humanity_bar.color = Color("#8e7777")
-    status_panel.add_child(humanity_bar)
 
     boss_panel = ColorRect.new()
     boss_panel.position = Vector2(390, 24)
@@ -192,20 +173,13 @@ func set_story_mode(region: String, objective: String) -> void:
     title_label.text = NereisLocalization.t("hud.title")
     region_label.text = _localize_region(region)
     objective_label.text = _localize_objective(objective)
-    _set_humanity_visible(true)
 
 func set_combat_demo_mode() -> void:
     title_label.text = NereisLocalization.t("hud.title") + "  /  " + NereisLocalization.translate_text("CORE COMBAT")
     region_label.text = "ASHEN ROAD"
-    _set_humanity_visible(false)
 
 func _on_hidden_resistance_awakened() -> void:
     _show_banner("A WARMTH UNDER THE SKIN", 1.9)
-
-func _set_humanity_visible(value: bool) -> void:
-    humanity_label.visible = value
-    humanity_bar.visible = value
-
 
 func set_combat_demo_progress(defeated: int, boss_active: bool, complete: bool) -> void:
     if complete:
@@ -388,7 +362,6 @@ func _refresh_localized_ui() -> void:
         objective_label.text = _localize_objective(story_objective_source)
     hp_label.text = NereisLocalization.t("hud.hp")
     stamina_label.text = NereisLocalization.t("hud.sta")
-    humanity_label.text = NereisLocalization.t("hud.hum")
     pause_title.text = NereisLocalization.t("menu.paused")
     resume_button.text = NereisLocalization.t("menu.resume")
     save_button.text = NereisLocalization.t("menu.save")
@@ -463,12 +436,10 @@ func _update_status_bars() -> void:
         return
     var hp: int = clampi(int(hero.get("health")), 0, 100)
     var stamina: float = clampf(float(hero.get("stamina")), 0.0, 100.0)
-    var humanity: int = clampi(int(WorldState.hero_humanity), 0, 100)
     hp_bar.size.x = 235.0 * float(hp) / 100.0
     stamina_bar.size.x = 235.0 * stamina / 100.0
-    humanity_bar.size.x = 235.0 * float(humanity) / 100.0
-    hp_label.text = "%s %d" % [NereisLocalization.t("hud.hp"), hp]
-    stamina_label.text = "%s %d" % [NereisLocalization.t("hud.sta"), int(stamina)]
+    hp_label.text = NereisLocalization.t("hud.hp")
+    stamina_label.text = NereisLocalization.t("hud.sta")
     humanity_label.text = "%s %d" % [NereisLocalization.t("hud.hum"), humanity]
 
 func _update_boss_bar() -> void:
