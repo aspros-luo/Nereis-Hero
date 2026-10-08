@@ -362,19 +362,17 @@ func _draw_arena_details() -> void:
     draw_arc(Vector2(2040, FLOOR_Y - 20), 176.0, PI, TAU, 40, arena_edge, 6.0)
     if boss_phase_two_visual:
         draw_arc(Vector2(2040, FLOOR_Y - 20), 128.0, PI * 1.08, PI * 1.92, 24, Color("#9b3d49", 0.65), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1930, 350), "ASHEN ARENA", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, arena_label)
+    draw_string(ThemeDB.fallback_font, Vector2(1930, 350), NereisLocalization.translate_text("ASHEN ARENA"), HORIZONTAL_ALIGNMENT_LEFT, -1, 20, arena_label)
 
 func _draw_phase_markers() -> void:
-    draw_string(ThemeDB.fallback_font, Vector2(80, 180), "AWAKENING", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#4d454d"))
-    draw_string(ThemeDB.fallback_font, Vector2(780, 180), "THE ROAD", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#4d454d"))
-    draw_string(ThemeDB.fallback_font, Vector2(1680, 180), "ASH GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#4d454d"))
-    draw_string(ThemeDB.fallback_font, Vector2(2020, 180), "THE ASHEN KNIGHT", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(80, 180), NereisLocalization.translate_text("AWAKENING"), HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#4d454d"))
+    draw_string(ThemeDB.fallback_font, Vector2(780, 180), NereisLocalization.translate_text("THE ROAD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#4d454d"))
+    draw_string(ThemeDB.fallback_font, Vector2(1680, 180), NereisLocalization.translate_text("ASH GATE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#4d454d"))
+    draw_string(ThemeDB.fallback_font, Vector2(2020, 180), NereisLocalization.translate_text("THE ASHEN KNIGHT"), HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color("#796d67"))
 
     draw_string(
         ThemeDB.fallback_font,
-        Vector2(740, 610),
-        "3 SMALL ENEMIES",
-        HORIZONTAL_ALIGNMENT_LEFT,
+        Vector2(740, 610), NereisLocalization.translate_text("3 SMALL ENEMIES"), HORIZONTAL_ALIGNMENT_LEFT,
         -1,
         14,
         Color("#66545c")
@@ -385,9 +383,7 @@ func _draw_phase_markers() -> void:
     if demo_complete:
         draw_string(
             ThemeDB.fallback_font,
-            Vector2(820, 310),
-            "CORE COMBAT DEMO COMPLETE",
-            HORIZONTAL_ALIGNMENT_LEFT,
+            Vector2(820, 310), NereisLocalization.translate_text("CORE COMBAT DEMO COMPLETE"), HORIZONTAL_ALIGNMENT_LEFT,
             -1,
             28,
             Color("#d6c7b2")
