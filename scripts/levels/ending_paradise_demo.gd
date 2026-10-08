@@ -231,4 +231,4 @@ func _draw() -> void:
     if merged:
         draw_circle((hero.global_position + mite.global_position) * 0.5 + Vector2(0, -70), 90.0 + paradise * 80.0, Color(0.78, 0.72, 0.82, 0.08))
 
-    draw_string(ThemeDB.fallback_font, Vector2(120, 220), "THE WORLD FORGETS HOW TO HURT", HORIZONTAL_ALIGNMENT_LEFT, -1, 27, Color("#766a74"))
+    draw_string(ThemeDB.fallback_font, Vector2(120, 220), NereisLocalization.translate_text("THE WORLD FORGETS HOW TO HURT"), HORIZONTAL_ALIGNMENT_LEFT, -1, 27, Color("#766a74"))
