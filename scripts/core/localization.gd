@@ -778,9 +778,24 @@ const SOURCE_TRANSLATIONS := {
 static func translate_text(value: String) -> String:
     if value.is_empty() or str(WorldState.language) == "en":
         return value
+    var language_id := str(WorldState.language)
     var entry: Variant = SOURCE_TRANSLATIONS.get(value, null)
     if entry is Dictionary:
-        return str(entry.get(str(WorldState.language), value))
+        return str(entry.get(language_id, value))
+    if value.begins_with("HIT  "):
+        var damage_text := value.trim_prefix("HIT  ")
+        var hit_label := {"zh_cn": "命中  ", "zh_tw": "命中  ", "ja": "命中  "}.get(language_id, "HIT  ")
+        return "%s%s" % [hit_label, damage_text]
+    if value == "DEFEATED  //  RETURNING TO CHECKPOINT":
+        return {"zh_cn": "击败 // 返回检查点", "zh_tw": "擊敗 // 返回檢查點", "ja": "撃破 // チェックポイントへ戻る"}.get(language_id, value)
+    if value == "A WARMTH UNDER THE SKIN":
+        return {"zh_cn": "皮肤之下的温热", "zh_tw": "皮膚之下的溫熱", "ja": "皮膚の下の温もり"}.get(language_id, value)
+    if value == "CORE COMBAT":
+        return {"zh_cn": "核心战斗", "zh_tw": "核心戰鬥", "ja": "コア戦闘"}.get(language_id, value)
+    if value == "ASHEN ROAD":
+        return {"zh_cn": "灰烬之路", "zh_tw": "灰燼之路", "ja": "灰の道"}.get(language_id, value)
+    if value == "DEFEAT SMALL ENEMIES    %d / 3":
+        return {"zh_cn": "击败小型敌人    %d / 3", "zh_tw": "擊敗小型敵人    %d / 3", "ja": "小型の敵を倒す    %d / 3"}.get(language_id, value)
     return value
 
 static func t(key: String) -> String:
