@@ -202,13 +202,13 @@ func _begin_detonation() -> void:
     tween.tween_property(flash, "modulate:a", 1.0, 0.12)
     tween.tween_interval(0.35)
     tween.tween_property(flash, "modulate:a", 0.0, 1.1)
-    tween.tween_callback(_start_final_ending)
-
     narrative.show_message(
         "烈火天罚",
         "The city disappears beneath the fire.\n\nThere is no victory.",
         5.0
     )
+    await narrative.message_finished
+    _start_final_ending()
 
 func _start_final_ending() -> void:
     ending_active = true
