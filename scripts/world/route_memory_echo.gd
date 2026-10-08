@@ -15,6 +15,7 @@ var consumed := false
 
 func _ready() -> void:
     consumed = WorldState.route_memory_seen and WorldState.route_memory_id == echo_id
+    set_meta("interaction_priority", 30)
     print("[NEREIS][STORY] Route echo initialized id=%s consumed=%s" % [echo_id, consumed])
     queue_redraw()
 
@@ -22,14 +23,14 @@ func _process(delta: float) -> void:
     cooldown = maxf(0.0, cooldown - delta)
     if consumed:
         hero_nearby = false
-        INTERACTION_FOCUS_SCRIPT.sync(self, false)
+        INTERACTION_FOCUS_SCRIPT.sync(self, false, 30)
         queue_redraw()
         return
 
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 120.0
     var available := not WorldState.input_locked and not consumed and hero_nearby and cooldown <= 0.0
-    INTERACTION_FOCUS_SCRIPT.sync(self, available)
+    INTERACTION_FOCUS_SCRIPT.sync(self, available, 30)
     queue_redraw()
 
 func can_interact() -> bool:
