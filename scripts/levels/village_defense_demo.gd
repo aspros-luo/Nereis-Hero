@@ -72,7 +72,8 @@ func _begin_attack() -> void:
         "Torches appear beyond the fields.\n\nThe Church came with the bandits.\n\nNo one asks the Hero to fight. He simply draws his sword.",
         5.0
     )
-    get_tree().create_timer(5.2).timeout.connect(_spawn_wave)
+    await narrative.message_finished
+    _spawn_wave()
 
 func _spawn_wave() -> void:
     stage = 1
@@ -125,8 +126,8 @@ func _finish_defense() -> void:
         "The attackers retreat.\n\nThe village is still standing.\n\nFor tonight, that is enough.",
         4.5
     )
-    get_tree().create_timer(4.7).timeout.connect(func() -> void:
-        SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+    await narrative.message_finished
+    SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
     )
 
 func _on_hero_defeated() -> void:
@@ -138,7 +139,8 @@ func _on_hero_defeated() -> void:
     stage = 0
     wave_started = false
     narrative.show_message("THE VILLAGE FALLS QUIET", "The Hero rises again.\n\nThe attack has not ended.", 3.0)
-    get_tree().create_timer(3.2).timeout.connect(_begin_attack)
+    await narrative.message_finished
+    _begin_attack()
 
 func _create_floor() -> void:
     var floor := StaticBody2D.new()
