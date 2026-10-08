@@ -89,7 +89,7 @@ func _spawn_mite() -> void:
 
     mite = Node2D.new()
     mite.set_script(MITE_SCRIPT)
-    mite.position = Vector2(520, 520)
+    mite.position = Vector2(640, 520)
     mite.name = "Mite"
     add_child(mite)
     mite.interacted.connect(_on_mite_interacted)
@@ -142,14 +142,17 @@ func _on_mite_house_exited(body: Node) -> void:
     mite_house_nearby = false
     queue_redraw()
 
+func _can_enter_mite_house() -> bool:
+    return (
+        mite_house_nearby
+        and not mite_house_transitioning
+        and not WorldState.input_locked
+        and not WorldState.mite_connection_missed
+        and WorldState.mite_first_meeting
+    )
+
 func _enter_mite_house() -> void:
-    if mite_house_transitioning or WorldState.input_locked:
-        return
-    if WorldState.mite_connection_missed:
-        narrative.show_message("THE LOCKED DOOR", "There is no reason to go inside.", 3.0)
-        return
-    if not WorldState.mite_first_meeting:
-        narrative.show_message("THE CLOSED DOOR", "You do not know who lives here yet.", 3.0)
+    if not _can_enter_mite_house():
         return
 
     mite_house_transitioning = true
@@ -336,7 +339,7 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode == KEY_F and mite_house_nearby:
+        if event.keycode == KEY_F and _can_enter_mite_house():
             _enter_mite_house()
             get_viewport().set_input_as_handled()
             return
@@ -382,7 +385,7 @@ func _unhandled_input(event: InputEvent) -> void:
             get_viewport().set_input_as_handled()
 
 func _draw() -> void:
-    if mite_house_nearby and not WorldState.input_locked and not mite_house_transitioning:
+    if _can_enter_mite_house():
         draw_string(
             ThemeDB.fallback_font,
             Vector2(390, 400), NereisLocalization.translate_text("F  Open Door"), HORIZONTAL_ALIGNMENT_LEFT,
@@ -409,7 +412,7 @@ func _draw() -> void:
     )
     draw_rect(Rect2(430, 430, 50, 90), Color("#17141b"))
     draw_string(ThemeDB.fallback_font, Vector2(388, 332), NereisLocalization.translate_text("MITE'S HOUSE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
-    if mite_house_nearby and not WorldState.input_locked:
+    if _can_enter_mite_house():
         draw_string(ThemeDB.fallback_font, Vector2(420, 555), NereisLocalization.translate_text("F  Enter"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
 
     for x in range(120, 2300, 480):
