@@ -26,11 +26,11 @@ func _unhandled_input(event: InputEvent) -> void:
         var title := "BELL KEEPER"
         var message := ""
         if not WorldState.graveyard_cleared:
-            message = "The old keeper touches the bell rope.\n\n"It stopped years ago."\n\n"But sometimes I hear it when someone who should be dead walks past."\n\nHis eyes settle on you."
+            message = "The old keeper touches the bell rope.\n\nIt stopped years ago.\n\nBut sometimes I hear it when someone who should be dead walks past.\n\nHis eyes settle on you."
         elif not WorldState.graveyard_keeper_heard:
             WorldState.record_hidden_artifact_source("graveyard_hero_gravestone")
             WorldState.mark_graveyard_keeper_heard()
-            message = "The keeper looks toward the tower.\n\n"It rang after you left."\n\n"Not because of the dead."\n\n"Because something came back.""
+            message = "The keeper looks toward the tower.\n\nIt rang after you left.\n\nNot because of the dead.\n\nBecause something came back."
         else:
             message = "The keeper has no more answers.\n\nHe only watches the silent bell."
         interacted.emit(title, message)
