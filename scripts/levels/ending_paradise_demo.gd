@@ -110,7 +110,8 @@ func _on_paradise_king_defeated() -> void:
         "The Church falls.\n\nThe crown falls.\n\nNeither matters anymore.",
         3.8
     )
-    get_tree().create_timer(4.0).timeout.connect(_begin_union)
+    await narrative.message_finished
+    _begin_union()
 
 func _spawn_mite() -> void:
     mite = Node2D.new()
@@ -142,7 +143,8 @@ func _begin_union() -> void:
         "The world has become quiet.\n\nMite reaches for Hero's hand.\n\n\"We can stay.\"",
         4.5
     )
-    get_tree().create_timer(4.8).timeout.connect(_begin_merge)
+    await narrative.message_finished
+    _begin_merge()
 
 func _begin_merge() -> void:
     merged = true
@@ -156,7 +158,8 @@ func _begin_merge() -> void:
         4.5
     )
 
-    get_tree().create_timer(4.8).timeout.connect(_finish)
+    await narrative.message_finished
+    _finish()
 
 func _finish() -> void:
     fade = ColorRect.new()
