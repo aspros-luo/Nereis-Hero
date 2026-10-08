@@ -96,8 +96,11 @@ func _spawn_rest() -> void:
 
 func _spawn_exit() -> void:
     exit_area = Area2D.new()
+    exit_area.set_script(INTERACTION_DOOR_SCRIPT)
     exit_area.position = Vector2(2040, FLOOR_Y)
     exit_area.name = "VillageRoadExit"
+    exit_area.prompt_text = "E  Escape"
+    exit_area.enabled = false
 
     var shape := CollisionShape2D.new()
     var rectangle := RectangleShape2D.new()
@@ -106,7 +109,7 @@ func _spawn_exit() -> void:
     shape.position = Vector2(0, -70)
     exit_area.add_child(shape)
     add_child(exit_area)
-    exit_area.body_entered.connect(_on_exit_body_entered)
+    exit_area.interacted.connect(_on_exit_interacted)
     queue_redraw()
 
 func _on_warden_defeated() -> void:
@@ -118,6 +121,7 @@ func _open_exit() -> void:
     if exit_open:
         return
     exit_open = true
+    exit_area.enabled = true
     narrative.show_message(
         "THE ROAD OUT",
         "The final lock gives way.\n\nYou do not remember how you arrived here.\n\nYou only remember that staying means dying.",
@@ -126,8 +130,8 @@ func _open_exit() -> void:
     print("[NEREIS][PROLOGUE] Escape route opened")
     queue_redraw()
 
-func _on_exit_body_entered(body: Node) -> void:
-    if body != hero or not exit_open:
+func _on_exit_interacted() -> void:
+    if not exit_open or WorldState.input_locked:
         return
 
     WorldState.mark_prologue_complete()
