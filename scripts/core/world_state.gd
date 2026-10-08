@@ -20,6 +20,7 @@ var route_memory_seen := false
 var route_memory_id := ""
 var route_complete := false
 var current_location := "slice"
+var language := "zh_cn"
 var interior_clues_seen: Array[String] = []
 var world_clues_seen: Array[String] = []
 var graveyard_cleared := false
@@ -212,6 +213,13 @@ func set_ending_route(route_id: String) -> void:
     print("[NEREIS][ENDING] Route=%s" % ending_route)
     save_game()
 
+func set_language(language_id: String) -> void:
+    if language_id not in ["zh_cn", "zh_tw", "en", "ja"]:
+        return
+    language = language_id
+    print("[NEREIS][SYSTEM] Language=%s" % language)
+    save_game()
+
 func save_game() -> void:
     var data := {
         "hero_memory": hero_memory,
@@ -233,6 +241,7 @@ func save_game() -> void:
         "route_memory_id": route_memory_id,
         "route_complete": route_complete,
         "current_location": current_location,
+        "language": language,
         "interior_clues_seen": interior_clues_seen,
         "world_clues_seen": world_clues_seen,
         "graveyard_cleared": graveyard_cleared,
@@ -302,6 +311,9 @@ func load_game() -> void:
     route_memory_id = str(parsed.get("route_memory_id", ""))
     route_complete = bool(parsed.get("route_complete", false))
     current_location = str(parsed.get("current_location", "slice"))
+    language = str(parsed.get("language", "zh_cn"))
+    if language not in ["zh_cn", "zh_tw", "en", "ja"]:
+        language = "zh_cn"
 
     world_clues_seen.clear()
     graveyard_cleared = bool(parsed.get("graveyard_cleared", false))
@@ -373,6 +385,7 @@ func reset() -> void:
     route_memory_id = ""
     route_complete = false
     current_location = "church_escape"
+    language = "zh_cn"
     interior_clues_seen.clear()
     world_clues_seen.clear()
     graveyard_cleared = false
