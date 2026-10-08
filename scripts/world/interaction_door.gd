@@ -43,7 +43,9 @@ func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 0.6
         interacted.emit()
-        get_viewport().set_input_as_handled()
+        var viewport := get_viewport()
+        if viewport:
+            viewport.set_input_as_handled()
 
 func _draw() -> void:
     if hero_nearby and not WorldState.input_locked and INTERACTION_FOCUS_SCRIPT.is_focused(self):
