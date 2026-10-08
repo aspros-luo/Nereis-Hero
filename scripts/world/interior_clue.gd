@@ -41,4 +41,4 @@ func _draw() -> void:
     draw_circle(Vector2.ZERO, 14.0, Color("#28222a"))
     draw_circle(Vector2.ZERO, 6.0, glow)
     if hero_nearby and not consumed:
-        draw_string(ThemeDB.fallback_font, Vector2(-45, 34), "E  Examine", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, glow)
+        draw_string(ThemeDB.fallback_font, Vector2(-45, 34), NereisLocalization.translate_text("E  Examine"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, glow)
