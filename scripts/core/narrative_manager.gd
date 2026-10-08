@@ -88,7 +88,9 @@ func _unhandled_input(event: InputEvent) -> void:
                 return
         if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
             _finish_message()
-            get_viewport().set_input_as_handled()
+            var viewport := get_viewport()
+            if viewport:
+                viewport.set_input_as_handled()
             return
         return
     if event is InputEventKey and event.pressed and not event.echo:
@@ -130,6 +132,9 @@ func show_message(title: String, message: String, duration: float = 4.0) -> void
     
 func show_caption(title: String, message: String, duration: float = 2.5) -> void:
     NereisInteractionFocus.clear_all(get_tree())
+    get_tree().paused = false
+    WorldState.input_locked = false
+    paused_for_narrative = false
     if panel.visible:
         _finish_message()
     title_label.text = NereisLocalization.translate_text(title)
@@ -167,7 +172,9 @@ func _select_choice(choice: int) -> void:
     else:
         show_message("THE LULLABY", "You turn toward the song.\n\nFor one heartbeat, you remember the village before the church found you.")
     print("[NEREIS][STORY] First choice resolved=%d" % choice)
-    get_viewport().set_input_as_handled()
+    var viewport := get_viewport()
+        if viewport:
+            viewport.set_input_as_handled()
 
  
 func play_weapon_upgrade() -> void:
