@@ -190,9 +190,9 @@ func _spawn_ui() -> void:
 
 func _show_route_intro() -> void:
     if route_id == "lullaby":
-        narrative.show_message("THE LULLABY PATH", "The road bends toward the village lights.\n\nYou are certain you have never been here. Your hands disagree.", 6.0)
+        narrative.show_caption("THE LULLABY PATH", "The road bends toward the village lights.\n\nYou are certain you have never been here. Your hands disagree.", 2.8)
     else:
-        narrative.show_message("THE CHURCH ROAD", "Stone markers line the road toward the old church.\n\nEach one bears your name.", 6.0)
+        narrative.show_caption("THE CHURCH ROAD", "Stone markers line the road toward the old church.\n\nEach one bears your name.", 2.8)
 
 func _on_route_npc_interacted(npc: Node) -> void:
     print("[NEREIS][STORY] Route NPC interaction id=%s" % npc.npc_id)
