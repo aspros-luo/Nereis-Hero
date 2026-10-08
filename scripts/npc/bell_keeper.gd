@@ -3,6 +3,7 @@ extends Node2D
 signal interacted(title: String, message: String)
 
 const RANGE := 135.0
+const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
 
 var hero_nearby := false
 var cooldown := 0.0
@@ -16,10 +17,12 @@ func _process(delta: float) -> void:
     cooldown = maxf(0.0, cooldown - delta)
     var hero := get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= RANGE
+    var available := not WorldState.input_locked and hero_nearby and cooldown <= 0.0
+    INTERACTION_FOCUS_SCRIPT.sync(self, available)
     queue_redraw()
 
 func _unhandled_input(event: InputEvent) -> void:
-    if WorldState.input_locked or not hero_nearby or cooldown > 0.0:
+    if WorldState.input_locked or not hero_nearby or cooldown > 0.0 or not INTERACTION_FOCUS_SCRIPT.is_focused(self):
         return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 0.7
@@ -44,5 +47,5 @@ func _draw() -> void:
     draw_line(Vector2(18, -2 + sway), Vector2(38, -22 + sway), Color("#8c756d"), 4.0)
     draw_string(ThemeDB.fallback_font, Vector2(-48, -70), NereisLocalization.translate_text("BELL KEEPER"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#9b8a86"))
 
-    if hero_nearby and not WorldState.input_locked:
+    if hero_nearby and not WorldState.input_locked and INTERACTION_FOCUS_SCRIPT.is_focused(self):
         draw_string(ThemeDB.fallback_font, Vector2(-42, 26), NereisLocalization.translate_text("E  Talk"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
