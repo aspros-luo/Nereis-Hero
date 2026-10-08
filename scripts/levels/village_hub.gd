@@ -23,6 +23,7 @@ var mite_house_transitioning := false
 var fireflies: Node2D
 
 func _ready() -> void:
+    WorldState.prepare_scene_runtime()
     WorldState.current_location = "village"
     print("[NEREIS][VILLAGE] Entered Village Hub route=%s" % WorldState.selected_route)
     WorldState.set_checkpoint(Vector2(360, 520))
@@ -409,7 +410,7 @@ func _draw() -> void:
     draw_rect(Rect2(430, 430, 50, 90), Color("#17141b"))
     draw_string(ThemeDB.fallback_font, Vector2(388, 332), NereisLocalization.translate_text("MITE'S HOUSE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
     if mite_house_nearby and not WorldState.input_locked:
-        draw_string(ThemeDB.fallback_font, Vector2(420, 555), NereisLocalization.translate_text("E  Enter"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
+        draw_string(ThemeDB.fallback_font, Vector2(420, 555), NereisLocalization.translate_text("F  Enter"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
 
     for x in range(120, 2300, 480):
         draw_rect(Rect2(x - 90, 360, 180, 160), Color("#29232b"))
