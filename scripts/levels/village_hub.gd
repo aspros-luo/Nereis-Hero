@@ -384,9 +384,7 @@ func _draw() -> void:
     if mite_house_nearby and not WorldState.input_locked and not mite_house_transitioning:
         draw_string(
             ThemeDB.fallback_font,
-            Vector2(390, 400),
-            "F  Open Door",
-            HORIZONTAL_ALIGNMENT_LEFT,
+            Vector2(390, 400), NereisLocalization.translate_text("F  Open Door"), HORIZONTAL_ALIGNMENT_LEFT,
             -1,
             16,
             Color("#e0d1bd")
@@ -396,7 +394,7 @@ func _draw() -> void:
     for x in range(0, 2600, 64):
         draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
 
-    draw_string(ThemeDB.fallback_font, Vector2(100, 230), "THE VILLAGE", HORIZONTAL_ALIGNMENT_LEFT, -1, 30, Color("#4d454d"))
+    draw_string(ThemeDB.fallback_font, Vector2(100, 230), NereisLocalization.translate_text("THE VILLAGE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 30, Color("#4d454d"))
 
     # Small house where the Hero first recovers.
     draw_rect(Rect2(350, 360, 210, 160), Color("#27222b"))
@@ -409,9 +407,9 @@ func _draw() -> void:
         Color("#302832")
     )
     draw_rect(Rect2(430, 430, 50, 90), Color("#17141b"))
-    draw_string(ThemeDB.fallback_font, Vector2(388, 332), "MITE'S HOUSE", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
+    draw_string(ThemeDB.fallback_font, Vector2(388, 332), NereisLocalization.translate_text("MITE'S HOUSE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
     if mite_house_nearby and not WorldState.input_locked:
-        draw_string(ThemeDB.fallback_font, Vector2(420, 555), "E  Enter", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
+        draw_string(ThemeDB.fallback_font, Vector2(420, 555), NereisLocalization.translate_text("E  Enter"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
 
     for x in range(120, 2300, 480):
         draw_rect(Rect2(x - 90, 360, 180, 160), Color("#29232b"))
@@ -437,10 +435,10 @@ func _draw() -> void:
         Color("#3a303a")
     )
     draw_rect(Rect2(1690, 400, 80, 120), Color("#17141b"))
-    draw_string(ThemeDB.fallback_font, Vector2(1630, 275), "THE TAVERN", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
+    draw_string(ThemeDB.fallback_font, Vector2(1630, 275), NereisLocalization.translate_text("THE TAVERN"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
 
     draw_rect(Rect2(900, 390, 120, 130), Color("#28212a"))
-    draw_string(ThemeDB.fallback_font, Vector2(885, 365), "GRAVEYARD", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(885, 365), NereisLocalization.translate_text("GRAVEYARD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
 
     draw_rect(Rect2(1940, 360, 150, 160), Color("#27212a"))
     draw_colored_polygon(
@@ -452,12 +450,12 @@ func _draw() -> void:
         Color("#312934")
     )
     draw_circle(Vector2(2015, 455), 34.0, Color("#63322f"))
-    draw_string(ThemeDB.fallback_font, Vector2(1900, 335), "RESTORATION CAMP", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
+    draw_string(ThemeDB.fallback_font, Vector2(1900, 335), NereisLocalization.translate_text("RESTORATION CAMP"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
 
     draw_rect(Rect2(2380, 330, 120, 190), Color("#241e27"))
     draw_rect(Rect2(2410, 350, 18, 170), Color("#4a3439"))
     draw_rect(Rect2(2460, 350, 18, 170), Color("#4a3439"))
-    draw_string(ThemeDB.fallback_font, Vector2(2370, 310), "NORTH GATE", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(2370, 310), NereisLocalization.translate_text("NORTH GATE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
 
     draw_rect(Rect2(2180, 320, 80, 200), Color("#26202a"))
     draw_colored_polygon(
@@ -468,4 +466,4 @@ func _draw() -> void:
         ]),
         Color("#312934")
     )
-    draw_string(ThemeDB.fallback_font, Vector2(2135, 200), "CHURCH", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(2135, 200), NereisLocalization.translate_text("CHURCH"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#796d67"))
