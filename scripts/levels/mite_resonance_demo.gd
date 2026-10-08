@@ -118,7 +118,8 @@ func _show_influence() -> void:
         5.5
     )
 
-    get_tree().create_timer(5.8).timeout.connect(_show_second_influence)
+    await narrative.message_finished
+    _show_second_influence()
 
 func _show_second_influence() -> void:
     narrative.show_message(
