@@ -114,7 +114,7 @@ func _begin_union() -> void:
 func _show_influence() -> void:
     narrative.show_message(
         "MITE",
-        ""I dreamed you were still here."\n\nA pause.\n\n"We don't have to leave anymore, do we?"",
+        "\"I dreamed you were still here.\"\n\nA pause.\n\n\"We don't have to leave anymore, do we?\"",
         5.5
     )
 
@@ -124,7 +124,7 @@ func _show_influence() -> void:
 func _show_second_influence() -> void:
     narrative.show_message(
         "MITE",
-        ""Outside feels very far away."\n\nShe looks toward Hero.\n\n"I don't want to be alone again."",
+        "\"Outside feels very far away.\"\n\nShe looks toward Hero.\n\n\"I don't want to be alone again.\"",
         5.0
     )
 
