@@ -11,19 +11,24 @@ func _ready() -> void:
     _log("BOOT", "Old Hunter initialized")
     queue_redraw()
 
-func _physics_process(delta: float) -> void:
+func _process(delta: float) -> void:
     interaction_cooldown = max(0.0, interaction_cooldown - delta)
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 115.0
     var available := not WorldState.input_locked and hero_nearby and interaction_cooldown <= 0.0
     INTERACTION_FOCUS_SCRIPT.sync(self, available)
+    queue_redraw()
 
-    if hero_nearby and (Input.is_key_pressed(KEY_E) or Input.is_action_just_pressed("ui_accept")) and interaction_cooldown <= 0.0 and INTERACTION_FOCUS_SCRIPT.is_focused(self):
+func _unhandled_input(event: InputEvent) -> void:
+    if WorldState.input_locked or not hero_nearby or interaction_cooldown > 0.0:
+        return
+    if not INTERACTION_FOCUS_SCRIPT.is_focused(self):
+        return
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         interaction_cooldown = 0.5
         interacted.emit()
         _log("NPC", "Old Hunter interaction requested")
-
-    queue_redraw()
+        get_viewport().set_input_as_handled()
 
 func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
