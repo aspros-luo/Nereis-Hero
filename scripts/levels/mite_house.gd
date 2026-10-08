@@ -19,6 +19,8 @@ var exit: Area2D
 
 func _ready() -> void:
     WorldState.prepare_scene_runtime()
+    get_tree().paused = false
+    WorldState.input_locked = false
     WorldState.set_location("mite_house")
     _create_floor()
     _create_boundaries()
@@ -177,7 +179,9 @@ func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
         WorldState.delete_save()
         get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
-        get_viewport().set_input_as_handled()
+        var viewport := get_viewport()
+        if viewport:
+            viewport.set_input_as_handled()
 
 func _draw() -> void:
     draw_rect(Rect2(0, 0, 1400, 720), Color("#151117"))
