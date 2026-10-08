@@ -60,7 +60,7 @@ func _ready() -> void:
 
     controls_label = Label.new()
     controls_label.position = Vector2(38, 62)
-    controls_label.text = "A/D  MOVE     SPACE  JUMP     J  ATTACK     K  DODGE"
+    controls_label.text = "A/D  MOVE     SPACE  JUMP     J  ATTACK     K  DODGE     Q  WEAPON"
     controls_label.add_theme_font_size_override("font_size", 13)
     controls_label.add_theme_color_override("font_color", Color("#8f8586"))
     add_child(controls_label)
@@ -192,7 +192,7 @@ func set_story_mode(region: String, objective: String) -> void:
     title_label.text = NereisLocalization.t("hud.title")
     region_label.text = _localize_region(region)
     objective_label.text = _localize_objective(objective)
-    _set_humanity_visible(true)
+    _set_humanity_visible(false)
 
 func set_combat_demo_mode() -> void:
     title_label.text = NereisLocalization.t("hud.title") + "  /  " + NereisLocalization.translate_text("CORE COMBAT")
@@ -203,8 +203,8 @@ func _on_hidden_resistance_awakened() -> void:
     _show_banner("A WARMTH UNDER THE SKIN", 1.9)
 
 func _set_humanity_visible(value: bool) -> void:
-    humanity_label.visible = value
-    humanity_bar.visible = value
+    humanity_label.visible = false
+    humanity_bar.visible = false
 
 
 func set_combat_demo_progress(defeated: int, boss_active: bool, complete: bool) -> void:
@@ -388,7 +388,6 @@ func _refresh_localized_ui() -> void:
         objective_label.text = _localize_objective(story_objective_source)
     hp_label.text = NereisLocalization.t("hud.hp")
     stamina_label.text = NereisLocalization.t("hud.sta")
-    humanity_label.text = NereisLocalization.t("hud.hum")
     pause_title.text = NereisLocalization.t("menu.paused")
     resume_button.text = NereisLocalization.t("menu.resume")
     save_button.text = NereisLocalization.t("menu.save")
@@ -463,13 +462,10 @@ func _update_status_bars() -> void:
         return
     var hp: int = clampi(int(hero.get("health")), 0, 100)
     var stamina: float = clampf(float(hero.get("stamina")), 0.0, 100.0)
-    var humanity: int = clampi(int(WorldState.hero_humanity), 0, 100)
     hp_bar.size.x = 235.0 * float(hp) / 100.0
     stamina_bar.size.x = 235.0 * stamina / 100.0
-    humanity_bar.size.x = 235.0 * float(humanity) / 100.0
     hp_label.text = "%s %d" % [NereisLocalization.t("hud.hp"), hp]
     stamina_label.text = "%s %d" % [NereisLocalization.t("hud.sta"), int(stamina)]
-    humanity_label.text = "%s %d" % [NereisLocalization.t("hud.hum"), humanity]
 
 func _update_boss_bar() -> void:
     if not boss or not is_instance_valid(boss) or boss.is_queued_for_deletion() or WorldState.boss_defeated:
