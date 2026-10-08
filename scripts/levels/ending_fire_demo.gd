@@ -138,7 +138,7 @@ func _mite_chooses_the_blade() -> void:
         return
 
     narrative.show_message("MITE", "Hero...", 1.2)
-    await get_tree().create_timer(1.35).timeout
+    await get_tree().create_timer(1.35, true).timeout
 
     if mite and is_instance_valid(mite):
         mite.sacrifice_to_weapon()
@@ -162,7 +162,8 @@ func _on_mite_dying(waited_for: bool) -> void:
             3.2
         )
 
-    get_tree().create_timer(3.4).timeout.connect(_begin_detonation)
+        await narrative.message_finished
+        _begin_detonation()
 
 func _begin_detonation() -> void:
     if detonation_started:
