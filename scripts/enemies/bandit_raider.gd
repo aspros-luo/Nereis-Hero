@@ -36,6 +36,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     if WorldState.input_locked:
         return
+    if WorldState.input_locked:
+        return
     animation_time += delta
     attack_cooldown = maxf(0.0, attack_cooldown - delta)
     windup = maxf(0.0, windup - delta)
@@ -44,6 +46,8 @@ func _process(delta: float) -> void:
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
+    if WorldState.input_locked:
+        return
     if WorldState.input_locked:
         return
     if stun_time > 0.0:
