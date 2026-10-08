@@ -21,8 +21,13 @@ func _process(delta: float) -> void:
 
     queue_redraw()
 
-func _unhandled_input(event: InputEvent) -> void:
+func can_interact() -> bool:
     if WorldState.input_locked or not hero_nearby or interaction_cooldown > 0.0:
+        return false
+    return not _select_interaction().is_empty()
+
+func _unhandled_input(event: InputEvent) -> void:
+    if not can_interact():
         return
 
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
@@ -143,5 +148,5 @@ func _draw() -> void:
         draw_circle(Vector2(0, -39 + sway), 2.5, Color("#b96b75", 0.75))
     draw_string(ThemeDB.fallback_font, Vector2(-38, -64), NereisLocalization.translate_text("MITE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#d6c7b2"))
 
-    if hero_nearby and not WorldState.input_locked:
+    if can_interact():
         draw_string(ThemeDB.fallback_font, Vector2(-54, 42), NereisLocalization.translate_text("E  Talk"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
