@@ -2,7 +2,7 @@ extends Node2D
 
 signal interacted(interaction_id: String, title: String, message: String)
 
-const INTERACTION_RANGE := 110.0
+const INTERACTION_RANGE := 95.0
 const VILLAGE_HOUSE_DOOR_POSITION := Vector2(455, 520)
 const VILLAGE_HOUSE_DOOR_EXCLUSION_RANGE := 105.0
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
@@ -50,7 +50,9 @@ func _unhandled_input(event: InputEvent) -> void:
         if not WorldState.record_mite_interaction(interaction_id):
             return
         interacted.emit(interaction_id, str(payload.get("title", "MITE")), str(payload.get("message", "")))
-        get_viewport().set_input_as_handled()
+        var viewport := get_viewport()
+        if viewport:
+            viewport.set_input_as_handled()
         print("[NEREIS][NPC] Mite interaction id=%s" % interaction_id)
 
 func _blocked_by_village_house_door(hero: Node2D) -> bool:
