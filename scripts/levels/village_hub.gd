@@ -335,7 +335,7 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode == KEY_E and mite_house_nearby:
+        if event.keycode == KEY_F and mite_house_nearby:
             _enter_mite_house()
             get_viewport().set_input_as_handled()
             return
@@ -381,6 +381,16 @@ func _unhandled_input(event: InputEvent) -> void:
             get_viewport().set_input_as_handled()
 
 func _draw() -> void:
+    if mite_house_nearby and not WorldState.input_locked and not mite_house_transitioning:
+        draw_string(
+            ThemeDB.fallback_font,
+            Vector2(390, 400),
+            "F  Enter Mite's House",
+            HORIZONTAL_ALIGNMENT_LEFT,
+            -1,
+            16,
+            Color("#e0d1bd")
+        )
     draw_rect(Rect2(0, 0, 2600, 720), Color("#111018"))
     draw_rect(Rect2(0, 520, 2600, 200), Color("#201c22"))
     for x in range(0, 2600, 64):
