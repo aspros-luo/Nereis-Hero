@@ -194,3 +194,13 @@ The development build now includes:
 - The pause menu provides Resume, Save, New Game, Return to Title, and four-language selection.
 - The title screen provides Continue, New Game, and four-language selection.
 - Supported languages: Simplified Chinese, Traditional Chinese, English, Japanese.
+
+## Interaction acceptance pass
+
+- Only one nearby interaction prompt may be visible at a time.
+- Interaction focus is resolved by distance; when two targets are nearly tied, the target priority breaks the tie deterministically.
+- An NPC remains visible even when it currently has no usable interaction, but its **E / Speak** prompt is hidden.
+- Mite, doors, POIs, and route memory objects follow the same focus arbitration.
+- The Village Hub should never show two competing E prompts that both appear actionable.
+- The Lullaby Path / Church Road must restore Hero input immediately after scene transition, including when the previous scene ended during narrative presentation.
+- A stale SceneTree pause state must not leave the Hero frozen after entering a route scene.
