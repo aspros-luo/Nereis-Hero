@@ -26,4 +26,4 @@ func _draw() -> void:
     draw_line(Vector2(-20, -112), Vector2(-20, -8), c, 4.0)
     draw_line(Vector2(20, -112), Vector2(20, -8), c, 4.0)
     draw_circle(Vector2(0, -78), 11.0, c)
-    draw_string(ThemeDB.fallback_font, Vector2(-42, 28), "ROUTE END", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, c)
+    draw_string(ThemeDB.fallback_font, Vector2(-42, 28), NereisLocalization.translate_text("ROUTE END"), HORIZONTAL_ALIGNMENT_LEFT, -1, 12, c)
