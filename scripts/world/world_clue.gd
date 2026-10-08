@@ -41,4 +41,4 @@ func _draw() -> void:
     draw_rect(Rect2(-14, -18, 28, 18), Color("#332c34"))
     draw_line(Vector2(-10, 0), Vector2(10, 0), glow, 3.0)
     if hero_nearby and not consumed:
-        draw_string(ThemeDB.fallback_font, Vector2(-45, 30), "E  Examine", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, glow)
+        draw_string(ThemeDB.fallback_font, Vector2(-45, 30), NereisLocalization.translate_text("E  Examine"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, glow)
