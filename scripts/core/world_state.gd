@@ -390,6 +390,10 @@ func load_game() -> void:
     mite_last_interaction_location = str(parsed.get("mite_last_interaction_location", ""))
     mite_connection_missed = bool(parsed.get("mite_connection_missed", false))
     ancient_residue_awakened = bool(parsed.get("ancient_residue_awakened", false))
+    # Migrate older saves where this story flag existed before protagonist progression was wired in.
+    if ancient_residue_awakened:
+        ancient_exposure = maxi(ancient_exposure, 1)
+        hero_resonance = maxi(hero_resonance, 12)
     outer_god_resonance = bool(parsed.get("outer_god_resonance", false))
     mite_control_stage = clampi(int(parsed.get("mite_control_stage", 0)), 0, 3)
     physical_union_complete = bool(parsed.get("physical_union_complete", false))
