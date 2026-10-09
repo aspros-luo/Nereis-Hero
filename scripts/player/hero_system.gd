@@ -95,7 +95,12 @@ func add_outer_exposure(amount: int) -> void:
 func can_understand(technique_id: String) -> bool:
     match technique_id:
         "blood_iaijutsu":
-            return resonance >= 12 and ancient_exposure >= 1
+            # The first mutation requires a learned human form plus a specific sewer discovery.
+            # 第一阶段异变必须先学会人类拔刀斩，再完成下水道异形调查。
+            var has_basic_form := WorldState.is_ability_unlocked("iaijutsu_basic")
+            var defeated_sewer_aberrant := "sewer_aberrant_defeated" in WorldState.achievement_flags
+            var carries_aberrant_gland := int(WorldState.upgrade_materials.get("aberrant_gland", 0)) > 0
+            return has_basic_form and defeated_sewer_aberrant and carries_aberrant_gland and resonance >= 12 and ancient_exposure >= 1
         "abyss_iaijutsu":
             return resonance >= 42 and outer_exposure >= 12
         "black_horizon":
