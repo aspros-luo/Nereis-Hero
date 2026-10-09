@@ -1,5 +1,7 @@
 extends Node2D
 
+const MITE_ART: Texture2D = preload("res://assets/art/characters/mite.svg")
+
 signal interacted(interaction_id: String, title: String, message: String)
 
 const INTERACTION_RANGE := 95.0
@@ -126,44 +128,29 @@ func _payload_for(interaction_id: String) -> Dictionary:
             }
 
 func _draw() -> void:
-    var sway := sin(elapsed * 1.7) * 2.0
-    var glow := 0.12 + sin(elapsed * 1.4) * 0.035
+    var sway: float = sin(elapsed * 1.7) * 1.5
+    var glow: float = 0.12 + sin(elapsed * 1.4) * 0.035
     var control_stage: int = WorldState.mite_control_stage
-
-    var skin := Color("#b38d82")
-    var dress := Color("#61505d")
-    var shadow := Color("#211a20")
-
+    var tint := Color.WHITE
     if control_stage == 1:
-        skin = Color("#ad8882")
-        dress = Color("#5d4f5e")
+        tint = Color("#f1e4df")
     elif control_stage == 2:
-        skin = Color("#a47e7f")
-        dress = Color("#5b4a5c")
+        tint = Color("#e5d2e5")
     elif control_stage >= 3:
-        skin = Color("#9d777d")
-        dress = Color("#56455a")
-        shadow = Color("#261d28")
+        tint = Color("#dfc3d9")
 
-    draw_circle(Vector2(0, -34), 16.0, skin)
-    draw_circle(Vector2(-5, -39), 3.0, Color("#211a20"))
-    draw_circle(Vector2(5, -39), 3.0, Color("#211a20"))
-    draw_rect(Rect2(-19, -18 + sway, 38, 52), dress)
-    draw_colored_polygon(
-        PackedVector2Array([
-            Vector2(-22, -18 + sway),
-            Vector2(0, 18 + sway),
-            Vector2(22, -18 + sway)
-        ]),
-        Color("#493d49")
-    )
-    draw_circle(Vector2(0, 6 + sway), 10.0, Color(0.72, 0.56, 0.52, glow))
+    draw_set_transform(Vector2(0.0, sway), 0.0, Vector2.ONE)
+    draw_texture_rect(MITE_ART, Rect2(-40.0, -88.0, 80.0, 104.0), false, tint)
+    draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
+    # Her first stages remain gentle; resonance changes only the light around her.
+    draw_circle(Vector2(0.0, 7.0 + sway), 10.0, Color(0.72, 0.56, 0.68, glow))
     if control_stage >= 2:
-        draw_arc(Vector2(0, -34), 19.0, 0.45, 2.7, 16, Color(0.56, 0.34, 0.58, 0.22), 2.0)
+        draw_arc(Vector2(0.0, -48.0 + sway), 23.0, 0.35, 2.8, 24, Color(0.56, 0.34, 0.68, 0.38), 1.6)
     if control_stage >= 3:
-        draw_circle(Vector2(0, -39 + sway), 2.5, Color("#b96b75", 0.75))
-    draw_string(ThemeDB.fallback_font, Vector2(-38, -64), NereisLocalization.translate_text("MITE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#d6c7b2"))
+        draw_circle(Vector2(4.0, -58.0 + sway), 2.0, Color("#bb7188", 0.9))
+        draw_line(Vector2(-14.0, -28.0 + sway), Vector2(-20.0, -5.0 + sway), Color("#8f719a", 0.45), 1.4)
 
+    draw_string(ThemeDB.fallback_font, Vector2(-38.0, -94.0), NereisLocalization.translate_text("MITE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#d6c7b2"))
     if can_interact():
-        draw_string(ThemeDB.fallback_font, Vector2(-54, 42), NereisLocalization.translate_text("E  Talk"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
+        draw_string(ThemeDB.fallback_font, Vector2(-54.0, 42.0), NereisLocalization.translate_text("E  Talk"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
