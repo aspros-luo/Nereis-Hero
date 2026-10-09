@@ -339,3 +339,12 @@ The protagonist's complete ability/technique set must be designed and validated 
 ### Test integrity
 
 The design document was committed to the feature branch. This was a documentation-only change; Godot runtime tests were not run and no GitHub Actions workflow was intentionally triggered.
+
+
+## 2026-10-09 — Combat VFX art pass
+
+- Replaced thin generic-looking technique strokes with layered, tapered silhouettes and restrained edge highlights.
+- Judgment Slash now reads as a heavy warm-steel cut; Crescent Combo has low / rising / crossing-finisher silhouettes; Eldritch Echo uses broken ritual rings and rune-like radial fragments.
+- Hit sparks now have a dark impact core, bright diamond flash and tapered splinters.
+- These effects are drawn procedurally in GDScript, so no image-generation quota or external asset import is required.
+- Static source review only; Godot rendering, scale, and frame-timing still need in-game verification.
