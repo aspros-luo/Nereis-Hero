@@ -245,7 +245,7 @@ func _process(_delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode == KEY_F3:
+        if event.keycode == KEY_F4:
             hud.set_debug_visible(not hud.debug_enabled)
             _log("DEBUG", "Debug overlay=%s" % hud.debug_enabled)
             get_viewport().set_input_as_handled()
