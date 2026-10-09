@@ -56,6 +56,7 @@ var witch_time_remaining := 0.0
 var witch_time_enemy_scale := 0.22
 var resonance_sight_active := false
 var _last_runtime_scene_path := ""
+var _last_resonance_signature := Vector3i(-1, -1, -1)
 
 # Narrative state is stored as facts/flags, not as a visible romance meter.
 var mite_first_meeting := false
@@ -92,6 +93,14 @@ func _process(delta: float) -> void:
         set_resonance_sight_active(false)
         return
 
+    if resonance_sight_active:
+        var signature := Vector3i(hero_resonance, ancient_exposure, outer_exposure)
+        if signature != _last_resonance_signature:
+            _last_resonance_signature = signature
+            refresh_resonance_reveals()
+    else:
+        _last_resonance_signature = Vector3i(-1, -1, -1)
+
     if witch_time_remaining > 0.0:
         witch_time_remaining = maxf(0.0, witch_time_remaining - delta)
         if witch_time_remaining <= 0.0:
@@ -125,6 +134,7 @@ func get_combat_enemy_time_scale() -> float:
 
 func set_resonance_sight_active(active: bool) -> void:
     resonance_sight_active = active
+    _last_resonance_signature = Vector3i(-1, -1, -1)
     refresh_resonance_reveals()
 
 func refresh_resonance_reveals(debug_override: bool = false) -> void:

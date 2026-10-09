@@ -177,7 +177,7 @@ func _input(event: InputEvent) -> void:
         elif event.keycode == KEY_G:
             if is_instance_valid(grapple_target):
                 _cancel_grapple("manual cancel")
-            else:
+            elif state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD]:
                 grapple_requested = true
         elif event.keycode == KEY_V:
             resonance_sight_requested = true
@@ -750,6 +750,9 @@ func _update_debug_fixture_positions() -> void:
             target.global_position = global_position + DEBUG_REVEAL_OFFSETS[index]
 
 func _start_grapple() -> void:
+    if state in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD] or attack_time > 0.0 or dodge_time > 0.0 or quick_dash_time > 0.0 or hurt_time > 0.0:
+        _log("MOVEMENT", "Grapple cannot start during the current action")
+        return
     if not (debug_ability_override or WorldState.is_ability_unlocked("grapple")):
         _log("MOVEMENT", "Grapple locked")
         return
