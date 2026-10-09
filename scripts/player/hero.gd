@@ -514,8 +514,8 @@ func _draw() -> void:
         draw_arc(Vector2(facing * 28, -24), 70.0, 0.0, TAU, 24, Color("#efe1c8"), 6.0)
     elif attack_time > 0.0 and attack_windup <= 0.0:
         if iaijutsu_active:
-            var technique_color: Color = Color("#17151f") if hero_system and hero_system.resolve_iaijutsu_variant() == "black_horizon" else Color("#7951a1") if hero_system and hero_system.resolve_iaijutsu_variant() == "abyssal" else Color("#c94a58")
-            var technique_radius: float = 142.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "black_horizon" else 116.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "abyssal" else 92.0
+            var technique_color: Color = Color("#17151f") if hero_system and hero_system.resolve_iaijutsu_variant() == "black_horizon" else Color("#7951a1") if hero_system and hero_system.resolve_iaijutsu_variant() == "abyssal" else Color("#d0dce8") if hero_system and hero_system.resolve_iaijutsu_variant() == "human_iaijutsu" else Color("#c94a58")
+            var technique_radius: float = 142.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "black_horizon" else 116.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "abyssal" else 104.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "human_iaijutsu" else 92.0
             draw_arc(Vector2(facing * 30, -24), technique_radius, -0.72 if facing > 0 else 2.42, 0.72 if facing > 0 else 3.86, 24, technique_color, 9.0)
         elif hero_system and hero_system.is_short_blade():
             var short_radius := 35.0 + combo_step * 2.5
