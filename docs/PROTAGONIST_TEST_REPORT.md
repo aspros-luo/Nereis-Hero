@@ -50,3 +50,15 @@
 - [x] Cue text is localized in all four supported languages and does not expose hidden numerical conditions.
 - [ ] In Godot, trigger ancient-residue awakening and verify the cue appears once when Blood Iaijutsu is first learned.
 - [ ] Verify loading a save with an already learned technique does not replay the discovery cue.
+
+
+## Interaction focus and menu input isolation / 交互焦点与菜单输入隔离
+
+- [x] Shared interaction focus rejects targets while the menu input lock is active.
+- [x] Clue prompt appears only when the clue is the focused interaction target.
+- [x] Character details now include Black Horizon and its localized name.
+- [ ] In the village, overlap the interaction ranges of Mite, the house door, and an NPC; confirm only one actionable E prompt appears.
+- [ ] Open the menu and press E; confirm no NPC, door, clue, or rest-point interaction fires. Close the menu and confirm interaction resumes.
+- [ ] With Black Horizon learned, open character details and verify the name is displayed without exposing hidden values.
+
+Source-level checks only; Godot runtime regression remains pending.
