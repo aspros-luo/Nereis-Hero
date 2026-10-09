@@ -30,6 +30,29 @@ const IAIJUTSU_HEALTH_COST := 8
 const IAIJUTSU_DAMAGE_MULTIPLIER := 2.2
 const IAIJUTSU_REACH := 124.0
 
+# Weapon-bound special techniques. These are initial tuning values, not final balance.
+# 武器绑定战技：以下数值是首轮调试基准，不是最终平衡结果。
+const JUDGMENT_STAMINA_COST := 20.0
+const JUDGMENT_DAMAGE_MULTIPLIER := 1.6
+const JUDGMENT_WINDUP := 0.35
+const JUDGMENT_DURATION := 0.70
+const JUDGMENT_REACH := 66.0
+const JUDGMENT_HITBOX_SIZE := Vector2(86.0, 54.0)
+const JUDGMENT_HIT_DURATION := 0.14
+const CRESCENT_STAMINA_COST := 16.0
+const CRESCENT_DAMAGE_MULTIPLIER := 0.65
+const CRESCENT_DURATION := 0.56
+const CRESCENT_HIT_TIMES := [0.08, 0.23, 0.38]
+const CRESCENT_REACH := [35.0, 38.0, 42.0]
+const CRESCENT_HITBOX_WIDTHS := [54.0, 58.0, 62.0]
+const CRESCENT_HIT_DURATION := 0.065
+const ECHO_STAMINA_COST := 28.0
+const ECHO_COOLDOWN := 8.0
+const ECHO_WINDUP := 0.16
+const ECHO_DURATION := 0.42
+const ECHO_RANGE := 185.0
+const ECHO_STAGGER_DURATION := 0.32
+
 enum CombatState { IDLE, MOVE, JUMP, FALL, ATTACK, DODGE, HURT, DEAD }
 
 var health := 100
@@ -58,8 +81,15 @@ var previous_state := CombatState.IDLE
 var animation_time := 0.0
 var attack_hitbox: Area2D
 var attack_requested := false
-var technique_requested := false
+var technique_requested := false # Legacy iaijutsu prototype input; retained during migration.
+var weapon_technique_requested := false
+var eldritch_requested := false
 var iaijutsu_active := false
+var active_action_kind := "none"
+var action_elapsed := 0.0
+var technique_hit_index := 0
+var eldritch_cooldown_remaining := 0.0
+var debug_ability_override := false
 var dodge_requested := false
 var jump_requested := false
 var hero_system: Node
@@ -76,6 +106,10 @@ func _input(event: InputEvent) -> void:
             attack_requested = true
         elif event.keycode == KEY_L:
             technique_requested = true
+        elif event.keycode == KEY_F:
+            weapon_technique_requested = true
+        elif event.keycode == KEY_R:
+            eldritch_requested = true
         elif event.keycode == KEY_K or event.keycode == KEY_SHIFT:
             dodge_requested = true
         elif event.keycode == KEY_SPACE or event.keycode == KEY_UP:
@@ -118,6 +152,7 @@ func _physics_process(delta: float) -> void:
 
     _update_camera_shake(delta)
     hit_confirm_time = max(0.0, hit_confirm_time - delta)
+    eldritch_cooldown_remaining = maxf(0.0, eldritch_cooldown_remaining - delta)
     _update_jump_buffer(delta)
     _update_combo_window(delta)
 
@@ -130,6 +165,8 @@ func _physics_process(delta: float) -> void:
     if WorldState.input_locked:
         attack_requested = false
         technique_requested = false
+        weapon_technique_requested = false
+        eldritch_requested = false
         dodge_requested = false
         jump_requested = false
         _cancel_attack_action()
@@ -156,6 +193,8 @@ func _physics_process(delta: float) -> void:
         # Ignore any action queued before the menu opened; ongoing attacks and enemy actions still resolve.
         attack_requested = false
         technique_requested = false
+        weapon_technique_requested = false
+        eldritch_requested = false
         dodge_requested = false
         jump_requested = false
         jump_buffer = 0.0
@@ -168,25 +207,41 @@ func _physics_process(delta: float) -> void:
     if attack_time > 0.0:
         attack_time = max(0.0, attack_time - delta)
         attack_windup = max(0.0, attack_windup - delta)
-        if attack_windup <= 0.0 and not attack_hit_registered:
-            var base_damage := float(WorldState.hero_attack_damage)
-            var multiplier: float = hero_system.get_combo_damage_multiplier(combo_step) if hero_system else 1.0
-            var iaijutsu_profile: Dictionary = hero_system.get_iaijutsu_profile() if hero_system and iaijutsu_active else {}
-            if iaijutsu_active:
-                multiplier = float(iaijutsu_profile.get("damage_multiplier", IAIJUTSU_DAMAGE_MULTIPLIER))
-            var damage := int(round(base_damage * multiplier))
-            var reach: float = hero_system.get_weapon_reach(combo_step) if hero_system and not iaijutsu_active else float(iaijutsu_profile.get("reach", IAIJUTSU_REACH))
-            var shape_size: Vector2 = hero_system.get_weapon_hitbox_size(combo_step) if hero_system and not iaijutsu_active else iaijutsu_profile.get("hitbox_size", Vector2(152, 58))
-            attack_hitbox.position.x = facing * reach
-            attack_hitbox.set_shape_size(shape_size)
-            var hit_duration: float = hero_system.get_hit_window_duration(combo_step) if hero_system and not iaijutsu_active else float(iaijutsu_profile.get("hit_duration", 0.16))
-            attack_hitbox.activate(damage, hit_duration)
-            _spawn_slash_arc()
-            attack_hit_registered = true
-            _log("COMBAT", "Hero attack hit window; damage=%d" % damage)
+        action_elapsed += delta
+        match active_action_kind:
+            "judgment_slash":
+                if attack_windup <= 0.0 and not attack_hit_registered:
+                    _release_judgment_slash()
+                    attack_hit_registered = true
+            "crescent_combo":
+                _update_crescent_combo()
+            "eldritch_echo":
+                if attack_windup <= 0.0 and not attack_hit_registered:
+                    _release_eldritch_echo()
+                    attack_hit_registered = true
+            _:
+                if attack_windup <= 0.0 and not attack_hit_registered:
+                    var base_damage := float(WorldState.hero_attack_damage)
+                    var multiplier: float = hero_system.get_combo_damage_multiplier(combo_step) if hero_system else 1.0
+                    var iaijutsu_profile: Dictionary = hero_system.get_iaijutsu_profile() if hero_system and iaijutsu_active else {}
+                    if iaijutsu_active:
+                        multiplier = float(iaijutsu_profile.get("damage_multiplier", IAIJUTSU_DAMAGE_MULTIPLIER))
+                    var damage := int(round(base_damage * multiplier))
+                    var reach: float = hero_system.get_weapon_reach(combo_step) if hero_system and not iaijutsu_active else float(iaijutsu_profile.get("reach", IAIJUTSU_REACH))
+                    var shape_size: Vector2 = hero_system.get_weapon_hitbox_size(combo_step) if hero_system and not iaijutsu_active else iaijutsu_profile.get("hitbox_size", Vector2(152, 58))
+                    attack_hitbox.position.x = facing * reach
+                    attack_hitbox.set_shape_size(shape_size)
+                    var hit_duration: float = hero_system.get_hit_window_duration(combo_step) if hero_system and not iaijutsu_active else float(iaijutsu_profile.get("hit_duration", 0.16))
+                    attack_hitbox.activate(damage, hit_duration)
+                    _spawn_slash_arc()
+                    attack_hit_registered = true
+                    _log("COMBAT", "Hero attack hit window; damage=%d" % damage)
         if attack_time <= 0.0:
             attack_hit_registered = false
             iaijutsu_active = false
+            active_action_kind = "none"
+            action_elapsed = 0.0
+            technique_hit_index = 0
 
     if dodge_time > 0.0:
         dodge_time = max(0.0, dodge_time - delta)
@@ -228,6 +283,12 @@ func _physics_process(delta: float) -> void:
         velocity.y = JUMP_VELOCITY
         _set_state(CombatState.JUMP)
 
+    if weapon_technique_requested and attack_time <= 0.0 and dodge_time <= 0.0:
+        weapon_technique_requested = false
+        _perform_weapon_technique()
+    if eldritch_requested and attack_time <= 0.0 and dodge_time <= 0.0:
+        eldritch_requested = false
+        _perform_eldritch_echo()
     if technique_requested and attack_time <= 0.0 and dodge_time <= 0.0:
         technique_requested = false
         _perform_iaijutsu()
@@ -283,6 +344,9 @@ func _perform_attack() -> void:
         combo_step = mini(combo_step, hero_system.get_combo_limit())
 
     iaijutsu_active = false
+    active_action_kind = "basic"
+    action_elapsed = 0.0
+    technique_hit_index = 0
     attack_time = hero_system.get_attack_duration() if hero_system else 0.34
     attack_windup = hero_system.get_attack_windup() if hero_system else 0.07
     attack_hit_registered = false
@@ -293,6 +357,126 @@ func _perform_attack() -> void:
     _set_state(CombatState.ATTACK)
     attack_started.emit(combo_step)
     _log("COMBAT", "Hero attack %d started; windup=%.2f" % [combo_step, attack_windup])
+
+func _perform_weapon_technique() -> void:
+    if not hero_system:
+        return
+    var technique_id: String = hero_system.get_weapon_technique_id()
+    if not hero_system.can_use_technique(technique_id, debug_ability_override):
+        _log("TECHNIQUE", "Weapon technique locked: %s" % technique_id)
+        return
+
+    var stamina_cost := CRESCENT_STAMINA_COST if technique_id == "technique_crescent_combo" else JUDGMENT_STAMINA_COST
+    if stamina < stamina_cost:
+        _log("TECHNIQUE", "Insufficient stamina for %s" % technique_id)
+        return
+
+    stamina -= stamina_cost
+    stamina_regen_delay = STAMINA_REGEN_DELAY
+    combo_step = 1
+    combo_window = 0.0
+    iaijutsu_active = false
+    active_action_kind = "crescent_combo" if technique_id == "technique_crescent_combo" else "judgment_slash"
+    action_elapsed = 0.0
+    technique_hit_index = 0
+    attack_hit_registered = false
+    attack_time = CRESCENT_DURATION if active_action_kind == "crescent_combo" else JUDGMENT_DURATION
+    attack_windup = 0.0 if active_action_kind == "crescent_combo" else JUDGMENT_WINDUP
+    _set_state(CombatState.ATTACK)
+    _log("TECHNIQUE", "Started %s; stamina=%.0f" % [technique_id, stamina_cost])
+
+func _release_judgment_slash() -> void:
+    var damage := int(round(float(WorldState.hero_attack_damage) * JUDGMENT_DAMAGE_MULTIPLIER))
+    attack_hitbox.position.x = facing * JUDGMENT_REACH
+    attack_hitbox.set_shape_size(JUDGMENT_HITBOX_SIZE)
+    attack_hitbox.activate(damage, JUDGMENT_HIT_DURATION)
+    _spawn_combat_slash_arc(3, false)
+    _log("TECHNIQUE", "Judgment Slash released; damage=%d" % damage)
+
+func _update_crescent_combo() -> void:
+    while technique_hit_index < CRESCENT_HIT_TIMES.size() and action_elapsed >= float(CRESCENT_HIT_TIMES[technique_hit_index]):
+        _release_crescent_hit(technique_hit_index)
+        technique_hit_index += 1
+
+func _release_crescent_hit(stage_index: int) -> void:
+    var stage := clampi(stage_index, 0, 2)
+    combo_step = stage + 1
+    var damage := int(round(float(WorldState.hero_attack_damage) * CRESCENT_DAMAGE_MULTIPLIER))
+    attack_hitbox.position.x = facing * float(CRESCENT_REACH[stage])
+    attack_hitbox.set_shape_size(Vector2(float(CRESCENT_HITBOX_WIDTHS[stage]), 36.0))
+    attack_hitbox.activate(damage, CRESCENT_HIT_DURATION)
+    _spawn_combat_slash_arc(combo_step, true)
+    _log("TECHNIQUE", "Crescent Combo hit %d/3; damage=%d" % [stage + 1, damage])
+
+func _perform_eldritch_echo() -> void:
+    if not hero_system or not hero_system.can_use_technique("eldritch_echo", debug_ability_override):
+        _log("TECHNIQUE", "Eldritch Echo locked")
+        return
+    if eldritch_cooldown_remaining > 0.0:
+        _log("TECHNIQUE", "Eldritch Echo cooling down; remaining=%.1f" % eldritch_cooldown_remaining)
+        return
+    if stamina < ECHO_STAMINA_COST:
+        _log("TECHNIQUE", "Insufficient stamina for Eldritch Echo")
+        return
+
+    stamina -= ECHO_STAMINA_COST
+    stamina_regen_delay = STAMINA_REGEN_DELAY
+    eldritch_cooldown_remaining = ECHO_COOLDOWN
+    active_action_kind = "eldritch_echo"
+    action_elapsed = 0.0
+    technique_hit_index = 0
+    attack_hit_registered = false
+    iaijutsu_active = false
+    attack_time = ECHO_DURATION
+    attack_windup = ECHO_WINDUP
+    combo_step = 1
+    combo_window = 0.0
+    _set_state(CombatState.ATTACK)
+    _log("TECHNIQUE", "Eldritch Echo invoked; cooldown=%.1f" % ECHO_COOLDOWN)
+
+func _release_eldritch_echo() -> void:
+    var pulse: Node2D = preload("res://scripts/effects/echo_pulse.gd").new()
+    pulse.global_position = global_position + Vector2(0.0, -30.0)
+    get_parent().add_child(pulse)
+    var affected := 0
+    for target in get_tree().get_nodes_in_group("combat_enemies"):
+        if not is_instance_valid(target) or not target is Node2D:
+            continue
+        if global_position.distance_to((target as Node2D).global_position) > ECHO_RANGE:
+            continue
+        if target.has_method("apply_echo_stagger") and bool(target.call("apply_echo_stagger", ECHO_STAGGER_DURATION)):
+            affected += 1
+    _log("TECHNIQUE", "Eldritch Echo resolved; affected_enemies=%d" % affected)
+
+func _spawn_combat_slash_arc(step: int, short_blade: bool) -> void:
+    var effect: Node2D = SLASH_ARC_SCRIPT.new()
+    effect.global_position = global_position
+    get_parent().add_child(effect)
+    effect.call("setup", facing, step, short_blade, false, "")
+
+func set_debug_ability_override(enabled: bool) -> void:
+    debug_ability_override = enabled
+    _log("DEBUG", "Ability override %s (session only; not saved)" % ("ON" if enabled else "OFF"))
+
+func toggle_debug_ability_override() -> void:
+    set_debug_ability_override(not debug_ability_override)
+
+func debug_refill_combat_resources() -> void:
+    health = 100
+    stamina = MAX_STAMINA
+    stamina_regen_delay = 0.0
+    eldritch_cooldown_remaining = 0.0
+    invulnerable = false
+    if state == CombatState.HURT:
+        hurt_time = 0.0
+        _set_state(CombatState.IDLE)
+    _log("DEBUG", "HP/stamina/cooldown restored (session only)")
+
+func get_debug_action_kind() -> String:
+    return active_action_kind
+
+func get_debug_eldritch_cooldown() -> float:
+    return eldritch_cooldown_remaining
 
 func _perform_iaijutsu() -> void:
     if not hero_system or not hero_system.can_use_blood_iaijutsu():
@@ -309,6 +493,9 @@ func _perform_iaijutsu() -> void:
     stamina -= stamina_cost
     health -= health_cost
     stamina_regen_delay = STAMINA_REGEN_DELAY
+    active_action_kind = "iaijutsu"
+    action_elapsed = 0.0
+    technique_hit_index = 0
     hero_system.add_abnormal_load(float(profile.get("abnormal_load", 10.0)))
     combo_step = 3
     combo_window = 0.0
@@ -364,8 +551,9 @@ func _spawn_death_burst() -> void:
 
 func _on_attack_hit(damage: int, target: Node) -> void:
     hit_confirm_time = 0.07
-    var finisher: bool = combo_step >= (hero_system.get_combo_limit() if hero_system else 3)
-    var impact_strength: float = 9.0 if iaijutsu_active else 4.0 + float(combo_step) * 1.0
+    var technique_finisher := active_action_kind == "judgment_slash" or (active_action_kind == "crescent_combo" and technique_hit_index >= 3)
+    var finisher: bool = combo_step >= (hero_system.get_combo_limit() if hero_system else 3) or technique_finisher
+    var impact_strength: float = 10.0 if technique_finisher else 9.0 if iaijutsu_active else 4.0 + float(combo_step) * 1.0
     var hitstop_duration: float = 0.055 if finisher or iaijutsu_active else 0.038
     var hitstop_scale: float = 0.06 if finisher or iaijutsu_active else 0.08
     WorldState.trigger_hitstop(hitstop_duration, hitstop_scale)
@@ -405,6 +593,8 @@ func receive_damage(amount: int, source: Node = null) -> void:
     _cancel_attack_action()
     attack_requested = false
     technique_requested = false
+    weapon_technique_requested = false
+    eldritch_requested = false
     dodge_requested = false
     jump_requested = false
     combo_step = 0
@@ -438,6 +628,10 @@ func receive_damage(amount: int, source: Node = null) -> void:
         attack_windup = 0.0
         attack_hit_registered = false
         iaijutsu_active = false
+        active_action_kind = "none"
+        action_elapsed = 0.0
+        technique_hit_index = 0
+        eldritch_cooldown_remaining = 0.0
         dodge_time = 0.0
         stamina_regen_delay = 0.0
         combo_step = 0
@@ -471,6 +665,8 @@ func restore_full() -> void:
     _cancel_attack_action()
     attack_requested = false
     technique_requested = false
+    weapon_technique_requested = false
+    eldritch_requested = false
     dodge_requested = false
     jump_requested = false
     _set_state(CombatState.IDLE)
@@ -484,6 +680,9 @@ func _cancel_attack_action() -> void:
     attack_windup = 0.0
     attack_hit_registered = false
     iaijutsu_active = false
+    active_action_kind = "none"
+    action_elapsed = 0.0
+    technique_hit_index = 0
     _deactivate_attack_hitbox()
 
 func _deactivate_attack_hitbox() -> void:
