@@ -95,7 +95,7 @@ func _ready() -> void:
 
     status_panel = ColorRect.new()
     status_panel.position = Vector2(36, 630)
-    status_panel.size = Vector2(300, 98)
+    status_panel.size = Vector2(300, 70)
     status_panel.color = Color("#0a090d", 0.78)
     add_child(status_panel)
 
