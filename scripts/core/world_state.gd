@@ -37,6 +37,14 @@ var current_weapon_style := "long_sword"
 var learned_techniques: Array[String] = []
 var technique_variants: Dictionary = {}
 var resonance_sources: Array[String] = []
+
+# Data-driven ability progression. Unlock records store their origin for debugging and save migration.
+# 数据驱动的能力成长：保存解锁来源，便于排查和兼容旧存档。
+const ABILITY_IDS := ["iaijutsu_basic", "witch_time", "grapple", "wall_climb"]
+const ABILITY_SOURCE_TYPES := ["story", "exploration", "achievement", "resonance", "material"]
+var unlocked_abilities: Dictionary = {}
+var achievement_flags: Array[String] = []
+var upgrade_materials: Dictionary = {}
 var input_locked := false
 # Menu lock disables Hero input while the world and all gameplay timers keep running.
 var menu_input_locked := false
@@ -280,6 +288,9 @@ func save_game() -> void:
         "learned_techniques": learned_techniques,
         "technique_variants": technique_variants,
         "resonance_sources": resonance_sources,
+        "unlocked_abilities": unlocked_abilities,
+        "achievement_flags": achievement_flags,
+        "upgrade_materials": upgrade_materials,
         "mite_first_meeting": mite_first_meeting,
         "mite_interactions_seen": mite_interactions_seen,
         "mite_last_interaction_location": mite_last_interaction_location,
@@ -379,6 +390,24 @@ func load_game() -> void:
     var saved_variants = parsed.get("technique_variants", {})
     if saved_variants is Dictionary:
         technique_variants = saved_variants.duplicate(true)
+    unlocked_abilities = {}
+    var saved_abilities = parsed.get("unlocked_abilities", {})
+    if saved_abilities is Dictionary:
+        for ability_id in saved_abilities.keys():
+            if str(ability_id) in ABILITY_IDS and saved_abilities[ability_id] is Dictionary:
+                unlocked_abilities[str(ability_id)] = saved_abilities[ability_id].duplicate(true)
+    achievement_flags.clear()
+    var saved_achievements = parsed.get("achievement_flags", [])
+    if saved_achievements is Array:
+        for achievement_id in saved_achievements:
+            var normalized_achievement := str(achievement_id)
+            if not normalized_achievement.is_empty() and normalized_achievement not in achievement_flags:
+                achievement_flags.append(normalized_achievement)
+    upgrade_materials = {}
+    var saved_materials = parsed.get("upgrade_materials", {})
+    if saved_materials is Dictionary:
+        for material_id in saved_materials.keys():
+            upgrade_materials[str(material_id)] = maxi(0, int(saved_materials[material_id]))
     resonance_sources.clear()
     var saved_resonance_sources = parsed.get("resonance_sources", [])
     if saved_resonance_sources is Array:
@@ -411,6 +440,50 @@ func load_game() -> void:
     prologue_complete = bool(parsed.get("prologue_complete", false))
 
     print("[NEREIS][SAVE] Game loaded; memory=%d boss_defeated=%s choice=%s" % [hero_memory, boss_defeated, first_choice_made])
+
+func is_ability_unlocked(ability_id: String) -> bool:
+    return ability_id in ABILITY_IDS and unlocked_abilities.has(ability_id)
+
+func unlock_ability(ability_id: String, source_type: String, source_id: String) -> bool:
+    # Call only after the relevant story/exploration/achievement/resonance/material requirement is fulfilled.
+    # 仅在对应剧情、探索、成就、共鸣或材料条件满足后调用。
+    if ability_id not in ABILITY_IDS or source_type not in ABILITY_SOURCE_TYPES or source_id.strip_edges().is_empty():
+        return false
+    if ability_id == "iaijutsu_basic" and source_type != "story":
+        return false
+    if unlocked_abilities.has(ability_id):
+        return false
+    unlocked_abilities[ability_id] = {"source_type": source_type, "source_id": source_id}
+    print("[NEREIS][PROGRESSION] Ability unlocked id=%s source=%s:%s" % [ability_id, source_type, source_id])
+    save_game()
+    return true
+
+func record_achievement(achievement_id: String) -> bool:
+    var normalized_id := achievement_id.strip_edges()
+    if normalized_id.is_empty() or normalized_id in achievement_flags:
+        return false
+    achievement_flags.append(normalized_id)
+    save_game()
+    return true
+
+func add_upgrade_material(material_id: String, amount: int = 1) -> int:
+    var normalized_id := material_id.strip_edges()
+    if normalized_id.is_empty() or amount <= 0:
+        return int(upgrade_materials.get(normalized_id, 0))
+    upgrade_materials[normalized_id] = maxi(0, int(upgrade_materials.get(normalized_id, 0))) + amount
+    save_game()
+    return int(upgrade_materials[normalized_id])
+
+func spend_upgrade_material(material_id: String, amount: int = 1) -> bool:
+    var normalized_id := material_id.strip_edges()
+    if normalized_id.is_empty() or amount <= 0:
+        return false
+    var owned := maxi(0, int(upgrade_materials.get(normalized_id, 0)))
+    if owned < amount:
+        return false
+    upgrade_materials[normalized_id] = owned - amount
+    save_game()
+    return true
 
 func record_resonance_source(source_id: String) -> bool:
     if source_id.is_empty() or source_id in resonance_sources:
@@ -466,6 +539,9 @@ func reset() -> void:
     learned_techniques.clear()
     technique_variants.clear()
     resonance_sources.clear()
+    unlocked_abilities.clear()
+    achievement_flags.clear()
+    upgrade_materials.clear()
     mite_first_meeting = false
     mite_interactions_seen.clear()
     mite_last_interaction_location = ""
