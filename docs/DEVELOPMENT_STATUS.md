@@ -4,6 +4,14 @@ Date: 2026-10-08
 
 ## Current direction
 
+The current protagonist combat pass adds three prototype special techniques to the existing combat architecture:
+- Long Sword: Judgment Slash (weapon-bound heavy hit)
+- Short Blade: Crescent Combo (three independently timed hit windows)
+- Eldritch ability: Eldritch Echo (stamina cost, cooldown, short enemy stagger with boss resistance)
+
+Debug controls: F3 opens the panel; while it is open, F4 toggles session-only special-technique override and F5 restores HP/stamina and Echo cooldown. Runtime Godot testing is still required before marking the techniques as accepted.
+
+
 The project is now in the first **narrative production pass**, not merely a combat prototype.
 
 Default startup:
