@@ -43,12 +43,14 @@ func _setup_combat_components() -> void:
     hurtbox.setup(self, Vector2(38, 74), Vector2(0, -30))
 
 func _process(delta: float) -> void:
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     animation_time += delta
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     attack_cooldown = max(0.0, attack_cooldown - delta)

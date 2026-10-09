@@ -38,6 +38,7 @@ func _setup_combat_components() -> void:
     hurtbox.setup(self, Vector2(48, 70), Vector2(0, -8))
 
 func _physics_process(delta: float) -> void:
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     attack_timer = max(0.0, attack_timer - delta)
