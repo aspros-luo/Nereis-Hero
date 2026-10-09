@@ -1257,98 +1257,13 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    # Visual-only character animation. Gameplay collision and combat timing stay untouched.
-    # 仅调整视觉表现，不修改碰撞、移动判定与战斗时序。
+    # Character art is a visual-only layer: collision, movement, attacks and hurtboxes remain unchanged.
     var short_blade: bool = hero_system != null and hero_system.is_short_blade()
     var hero_art: Texture2D = HERO_SHORT_ART if short_blade else HERO_LONG_ART
     var art_tint := Color("#f3e6d4") if hit_confirm_time > 0.0 else Color.WHITE
-    var art_offset := Vector2.ZERO
-    var art_scale := Vector2.ONE
-
-    # Give each locomotion state a readable silhouette even while the base illustration is static.
-    # 基础立绘尚未替换成逐帧序列时，也让不同动作拥有可读的轮廓变化。
-    match state:
-        CombatState.IDLE:
-            art_scale.y = 1.0 + sin(animation_time * 2.8) * 0.012
-        CombatState.MOVE:
-            var step_phase := sin(animation_time * 15.0)
-            art_offset.y = -absf(step_phase) * 3.0
-            art_scale.x = 1.0 - step_phase * 0.025
-            art_scale.y = 1.0 + step_phase * 0.035
-            # A readable trailing cape edge adds motion to the silhouette before a frame set exists.
-            # 在逐帧动画完成前，用明显的披风尾部剪影补足移动反馈。
-            if absf(velocity.x) > 40.0:
-                var cape_tail := PackedVector2Array([
-                    Vector2(-facing * 20.0, -55.0),
-                    Vector2(-facing * (38.0 + absf(step_phase) * 6.0), -48.0 + step_phase * 2.5),
-                    Vector2(-facing * (32.0 + absf(step_phase) * 4.0), -29.0 + step_phase * 3.0),
-                    Vector2(-facing * 17.0, -35.0)
-                ])
-                draw_colored_polygon(cape_tail, Color("#4b303f", 0.88))
-                draw_line(cape_tail[0], cape_tail[1], Color("#b08b87", 0.82), 2.0)
-                draw_line(cape_tail[1], cape_tail[2], Color("#7f525f", 0.9), 1.5)
-        CombatState.ATTACK:
-            var attack_progress := clampf(1.0 - attack_time / maxf(ATTACK_DURATION, 0.01), 0.0, 1.0)
-            art_offset.x = facing * sin(attack_progress * PI) * (10.0 if short_blade else 7.0)
-            art_scale.x = 1.0 + sin(attack_progress * PI) * 0.055
-            art_scale.y = 1.0 - sin(attack_progress * PI) * 0.035
-        CombatState.DODGE, CombatState.QUICK_DASH:
-            art_offset.y = 10.0
-            art_offset.x = facing * 3.0
-            art_scale.x = 1.12
-            art_scale.y = 0.78
-            var dash_cape := PackedVector2Array([
-                Vector2(-facing * 18.0, -53.0),
-                Vector2(-facing * 47.0, -48.0),
-                Vector2(-facing * 43.0, -34.0),
-                Vector2(-facing * 16.0, -36.0)
-            ])
-            draw_colored_polygon(dash_cape, Color("#5a3548", 0.92))
-            draw_line(dash_cape[0], dash_cape[1], Color("#d2a7a0", 0.86), 2.0)
-        CombatState.JUMP:
-            art_offset.y = -2.0
-            art_scale.x = 0.94
-            art_scale.y = 1.08
-        CombatState.FALL:
-            art_scale.x = 1.04
-            art_scale.y = 0.94
-        CombatState.HURT:
-            art_offset.x = -facing * 4.0
-            art_scale.x = 0.94
-            art_scale.y = 1.04
-        CombatState.GRAPPLE, CombatState.WALL_CLIMB:
-            art_offset.x = facing * 2.0
-            art_scale.x = 0.92
-            art_scale.y = 1.06
-
-    # Elliptical ground contact shadow anchors the larger silhouette to the floor.
-    var shadow_points := PackedVector2Array()
-    for shadow_index in range(20):
-        var shadow_angle := TAU * float(shadow_index) / 20.0
-        shadow_points.append(Vector2(cos(shadow_angle) * 22.0, 2.0 + sin(shadow_angle) * 4.5))
-    draw_colored_polygon(shadow_points, Color(0.035, 0.025, 0.04, 0.48))
-
-    draw_set_transform(art_offset, 0.0, Vector2(facing * art_scale.x, art_scale.y))
-    # Slightly larger on-screen rendering lets the armor's broad shapes read at gameplay scale.
-    # 轻微放大游戏内角色尺寸，让盔甲的大形在实战视距下更清楚。
-    draw_texture_rect(hero_art, Rect2(-52.0, -104.0, 104.0, 120.0), false, art_tint)
+    draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing, 1.0))
+    draw_texture_rect(hero_art, Rect2(-48.0, -96.0, 96.0, 112.0), false, art_tint)
     draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-
-    # A compact weapon-specific sweep makes the active strike legible at a glance.
-    # 根据武器长度绘制短促的挥砍轨迹，让攻击在实战视距下更易辨认。
-    if state == CombatState.ATTACK and active_action_kind == "basic" and attack_windup <= 0.0:
-        var swing_progress := clampf(action_elapsed / ATTACK_DURATION, 0.0, 1.0)
-        var sweep_start := -1.20 + swing_progress * 1.05
-        var sweep_end := sweep_start + (0.62 if short_blade else 0.78)
-        if facing < 0.0:
-            var mirrored_start := PI - sweep_end
-            sweep_end = PI - sweep_start
-            sweep_start = mirrored_start
-        var sweep_radius := 37.0 if short_blade else 54.0
-        var sweep_center := Vector2(facing * (20.0 if short_blade else 27.0), -43.0)
-        var sweep_color := Color("#d6c9ae") if short_blade else Color("#e5d6b8")
-        draw_arc(sweep_center, sweep_radius, sweep_start, sweep_end, 18, Color("#9f5359", 0.42), 5.0)
-        draw_arc(sweep_center, sweep_radius, sweep_start, sweep_end, 18, Color(sweep_color, 0.88), 2.0)
 
     # Keep readable gameplay feedback above the painted silhouette.
     if hit_confirm_time > 0.0:
