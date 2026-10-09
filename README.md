@@ -165,3 +165,17 @@ Do not add or trigger GitHub Actions for this project.
 When implementation reaches a major unresolved story decision — especially Hero/Mite history, the four hidden resistance side stories, the final antagonist's political motive, the Outer God's identity, or the exact ending condition — stop coding that story layer and return to story design.
 
 For ordinary gameplay, combat, UI, effects, technical systems and presentation, development can proceed autonomously.
+
+
+## Art production / 美术生产
+
+The first original painterly-inspired SVG sample is integrated into the existing rendering scripts:
+- Hero long-sword / short-blade variants
+- Mite
+- Cultist
+- Ashen Knight phases 1 and 2
+- Judgment Slash, three Crescent Combo stages, Eldritch Echo sigil and hit spark
+
+See [Art Asset Pipeline](docs/ART_ASSET_PIPELINE.md) and [Art Asset Provenance & Licenses](assets/art/ART_ASSET_LICENSES.md) for the bilingual workflow and source/license ledger. No third-party environment pack has been imported yet; the environment pack selection remains a separate step to avoid a style mismatch.
+
+本项目已将第一批原创绘画质感 SVG 接入现有绘制脚本：主角长剑/短刃、蜜忒、苦修者、灰烬骑士两阶段，以及断罪斩、残月连斩三段、余响符印和命中火花。美术流程见[美术生产流程](docs/ART_ASSET_PIPELINE.md)，素材来源与许可证见[美术素材来源与许可](assets/art/ART_ASSET_LICENSES.md)。目前尚未导入第三方环境素材包，避免在未核对风格和许可前混搭。
