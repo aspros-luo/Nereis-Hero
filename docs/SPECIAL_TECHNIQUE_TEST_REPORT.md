@@ -54,3 +54,15 @@ Branch: `feature/protagonist-system`
 - Eldritch Echo: 28 stamina, 8s cooldown, 0.16s windup, 185px radius; boss stagger capped to 0.12–0.15s.
 
 These are prototype values and must be adjusted after runtime playtesting.
+
+
+## 2026-10-09 — Visual polish pass (source-level)
+
+- [x] Rebuilt Judgment Slash as a layered silhouette: ink-dark undercut, warm steel body, bright edge, restrained gold sparks.
+- [x] Rebuilt Crescent Combo with three clearly different shapes: low horizontal cut, rising cut, and a broader crossing finisher.
+- [x] Reworked Eldritch Echo into expanding broken rings, irregular rune-like spokes, and a visible dark core.
+- [x] Reworked hit sparks into a bright diamond core and tapered shards, using deterministic per-instance variation.
+- [ ] Runtime art review: verify readability at the actual game camera zoom and on both dark and bright backgrounds.
+- [ ] Runtime combat review: confirm the larger silhouettes do not obscure enemy tells or make hitboxes feel larger than they are.
+
+**Verification note:** these are procedural Godot drawing changes, not imported raster assets. Source-level checks are possible here; Godot rendering/runtime review remains pending.
