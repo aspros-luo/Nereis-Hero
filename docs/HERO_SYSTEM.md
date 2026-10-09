@@ -266,3 +266,10 @@ The menu is not a pause of the simulation. It locks player input only; enemy AI,
 当隐藏条件满足、主角真正理解一项异变战技时，HUD 会显示短暂的叙事式提示，而不是弹出等级、共鸣或解锁条件。提示只传达身体与世界发生了变化；具体隐藏状态仍不对玩家公开。已接入血色拔刀斩、深渊拔刀斩与黑色天际的提示文本，覆盖简体中文、繁体中文、英文和日文。
 
 When hidden conditions are met and a technique is understood, the HUD shows a brief narrative cue rather than a level-up panel or numeric stat change. The cue communicates a change in the Hero's relationship with the world without exposing hidden values or unlock conditions. Blood Iaijutsu, Abyssal Iaijutsu, and Black Horizon have localized cues in Simplified Chinese, Traditional Chinese, English, and Japanese.
+
+
+## 交互焦点与菜单隔离 / Interaction focus and menu isolation
+
+村庄中可能出现角色、房门、线索与休息点的交互范围重叠。交互焦点服务会选出唯一当前目标；非焦点对象不应显示可操作的 E 提示。暂停菜单开启时，全局焦点服务会拒绝交互，即使世界继续运行、玩家仍可能受伤，也不能通过菜单背后的按键触发 NPC、门、线索或休息点。关闭菜单后，交互根据当前位置重新计算。
+
+In the village, interaction ranges for NPCs, doors, clues, and rest points may overlap. The focus service selects one current target; non-focused objects should not show an actionable E prompt. While the menu is open, the shared focus service rejects world interactions. The world still simulates and the Hero may take damage, but keys pressed behind the menu cannot trigger NPCs, doors, clues, or rest points. Focus is recalculated after the menu closes.
