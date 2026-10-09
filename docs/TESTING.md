@@ -162,11 +162,12 @@ It exposes internal development state including:
 
 ## Protagonist debug acceptance / 主角调试验收
 
-On the development branch, the Hero-local debug overlay is enabled by default. It follows the Hero and shows current HP/stamina, weapon, combat state/action, combo index, invulnerability, special-technique cooldown, hidden resonance/exposure/humanity/abnormal-load values, and extra-air-jump count. Hidden values are shown only in this debug overlay, not the normal HUD.
+On the current `feature/protagonist-system` branch, the Hero-local debug overlay is enabled by default. It follows the Hero and shows current HP/stamina, weapon, combat state/action, combo index, invulnerability, special-technique cooldown, hidden resonance/exposure/humanity/abnormal-load values, and extra-air-jump count. Hidden values are shown only in this debug overlay, not the normal HUD.
 
 - **F4**: toggle the Hero-local debug overlay.
 - **F5**: toggle the session-only all-protagonist-ability / technique override. It creates temporary grapple anchors, hidden traces and marked climbing walls; it is not saved and does not grant story progression.
 - **F6**: refill Hero HP/stamina, clear temporary ability effects/cooldowns and cancel the current Hero action/hitbox. This is session-only.
+- **Space twice before landing** with F5 enabled: test the extra air jump. Exactly one additional jump should be available; landing resets the counter.
 - **X**: attempt Quick Dash. It requires the saved `quick_dash` ability record, unless the temporary F5 override is enabled.
 - **G**: grapple to a temporary/test anchor; press G again to cancel.
 - **W**: climb a marked wall; releasing W slides down slowly. Press Space against a marked wall to wall-jump.
@@ -184,6 +185,12 @@ Use the overlay to report the exact combat state and resource values when an iss
 - **F5**：切换本次运行有效的全部主角能力/战技覆盖，并生成临时锚点、隐藏痕迹与攀爬墙；不写入能力解锁或剧情进度。
 - **F6**：恢复主角生命/体力、清除临时能力效果与冷却，并取消当前动作和命中框，仅影响当前运行。
 - **X**：尝试快速冲刺；需要正式的 `quick_dash` 解锁记录，或在本次运行中打开 F5 覆盖。
+- **G**：钩爪；再次按下 G 可以取消。
+- **W**：靠近标记墙时攀爬，松开后缓慢滑落；贴墙按 Space 可蹬墙跳。
+- **V**：共鸣视野，消耗 10 体力，持续 4.5 秒，冷却 6 秒。
+- **PageUp / PageDown**：F5 打开时选择人类、血色、深渊或黑色天际拔刀形态，按 L 测试。
+- 精准闪避（K/Shift）在能力已解锁或 F5 覆盖时触发约 2.4 秒魔女时间，减慢敌人而不减慢主角。
+- F5 下异常负荷仅存在于内存，关闭 F5 或按 F6 会清除。
 - F4/F5/F6 由主角输入层消费；原有古代研究、村庄防守、蜜忒共鸣测试剧场改用 F10/F11/F12。
 
 发现问题时请记录覆盖层中的战斗状态与资源数值。调试覆盖关闭后仍必须重复验收，不能只凭调试模式通过就认为正常流程通过。
@@ -256,7 +263,7 @@ This is a movement-system test only; it adds no level, map, encounter, or story 
 3. Check initial values: 24 stamina, about 0.16 seconds duration, 1.10-second cooldown. X during cooldown or with insufficient stamina must not start a dash.
 4. Turn F5 override OFF. Unless `quick_dash` is formally unlocked, X must not start a dash.
 5. Open the menu during a dash and take damage during a dash. Expected: no stale dash state or delayed action remains.
-6. Press F6. Expected: HP/stamina restored, Echo/Dash cooldowns clear, current Hero action/hitbox cancelled without writing ability/story flags.
+6. Press F6. Expected: HP/stamina restored, temporary ability effects/cooldowns clear, current Hero action/hitbox cancelled without writing ability/story flags.
 7. Die/respawn and use a rest point; confirm dash state/request reset and ordinary K/Shift dodge still works independently.
 
 预期结果：快速冲刺独立于 K/Shift 普通闪避；冲刺本身无无敌帧，有独立体力消耗与冷却；受击、菜单、死亡和休息不会残留动作状态。

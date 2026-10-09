@@ -55,10 +55,13 @@ This is intentionally a story/level design gate, not permission to invent a new 
 - [x] Basic iaijutsu has a distinct combat profile with no HP cost and no abnormal-load increase.
 - [x] The prologue's final Warden encounter grants basic iaijutsu as the first story reward; legacy completed-prologue saves are migrated.
 - [x] Basic iaijutsu appears in the character/technique details in all four supported languages.
-- [x] Added `double_jump` and `quick_dash` to the persistent ability registry alongside Witch Time, grapple and wall climb.\n- [x] Implemented one additional mid-air jump when `double_jump` is unlocked; the ability remains locked by default.
+- [x] Added `double_jump`, `quick_dash`, `witch_time`, `grapple`, `wall_climb` and `resonance_sight` to the persistent ability registry.
+- [x] Implemented one additional mid-air jump when `double_jump` is unlocked; the ability remains locked by default.
 - [x] Blood Iaijutsu now requires the basic form plus the planned sewer-aberrant achievement and aberrant-gland material, preventing an early mutation from hidden values alone.
 - [ ] Implement the Royal City Sewer encounter, achievement/material reward calls and the associated narrative/art clues; Blood Iaijutsu is intentionally unavailable until that content exists.
-- [ ] In Godot, test double jump only works after the unlock record, allows exactly one extra air jump, and resets after landing/death/rest.\n- [ ] Source implementation now exists for Quick Dash, Witch Time, Grapple, Wall Climb/Wall Jump and Resonance Sight, including session-only Debug fixtures; normal story reward placement remains deferred.\n- [ ] Godot runtime test all movement/perception abilities, including enemy time dilation, collision, cancellation and menu/death/scene cleanup.
+- [ ] In Godot, test double jump only works after the unlock record, allows exactly one extra air jump, and resets after landing/death/rest.
+- [x] Source implementation exists for Quick Dash, Witch Time, Grapple, Wall Climb/Wall Jump and Resonance Sight, including session-only Debug fixtures; normal story reward placement remains deferred.
+- [ ] Godot runtime test all movement/perception abilities, including enemy time dilation, collision, cancellation and menu/death/scene cleanup.
 - [ ] Verify old-save migration, save/load persistence and new-game reset for ability records, achievements and materials.
 
 ## 尚未验证 / Not yet verified
@@ -127,7 +130,8 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 - [x] Double jump checks the persistent `double_jump` ability record and allows one additional air jump only.
 - [x] Air-jump count resets on landing, death respawn and full restoration.
 - [ ] Godot runtime test: locked state cannot double-jump; unlocked state allows exactly one extra jump; landing resets it.
-- [ ] Quick Dash has its own X input, state and no-invulnerability rule; ordinary K/Shift dodge remains separate.\n- [ ] Verify in Godot that Quick Dash cannot cross solids and remains independent of ordinary dodge.
+- [x] Quick Dash has its own X input, state and no-invulnerability rule; ordinary K/Shift dodge remains separate.
+- [ ] Verify in Godot that Quick Dash cannot cross solids and remains independent of ordinary dodge.
 
 
 ## Debug acceptance overlay / 验收调试覆盖层

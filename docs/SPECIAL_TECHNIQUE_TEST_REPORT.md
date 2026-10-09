@@ -44,7 +44,7 @@ Branch: `feature/protagonist-system`
 5. Press R near a cultist and verify the pulse, 28 stamina cost, brief enemy interruption and an approximately 8-second cooldown.
 6. Press R near the Ashen Knight and verify the boss is interrupted only briefly rather than being locked down.
 7. Press F6 and verify HP/stamina/cooldown reset; verify Witch Time, Grapple, Resonance Sight, current action and hitbox are cleared.
-8. Turn off F4 and verify locked techniques stop working. Restart the game and verify the override did not persist.
+8. Turn off F5 and verify locked techniques/abilities stop working. Restart the game and verify the override and temporary test fixtures did not persist.
 9. Repeat while receiving damage, opening the menu, dying and changing scenes to ensure no stale hitboxes or queued technique inputs remain.
 
 ## Initial tuning values
