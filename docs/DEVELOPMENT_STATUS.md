@@ -221,3 +221,35 @@ When a future implementation reaches a truly unresolved core story decision, sto
 1. Trace normal-story writes to hidden exposure/resonance values without inventing new story triggers.
 2. Continue technical regression review for combat state cleanup, menu input isolation, and save/load.
 3. Pause only the unresolved narrative trigger decision and bring the Director concrete options before adding any new story/level reward.
+
+
+## 2026-10-09 — Layered progression foundation
+
+### Implemented on `feature/protagonist-system`
+
+- Added persistent, data-driven ability unlock records with allowed source categories: story, exploration, achievement, resonance, and material.
+- Added persistent achievement flags and material inventory helpers, including duplicate-safe achievement recording and checked material spending.
+- Added a basic iaijutsu combat profile: no HP sacrifice, no abnormal-load gain, shorter reach and lower damage than altered forms, with a neutral slash visual.
+- Basic iaijutsu is not auto-unlocked. Its story trigger remains a director-owned narrative/level decision.
+- Reserved ability IDs for Witch Time, grapple, and wall climb; these are not represented as implemented mechanics yet.
+
+### Review decision
+
+- Story unlocks teach core actions.
+- Exploration reveals altered techniques, traversal routes and relics.
+- Achievements can gate selected mastery upgrades.
+- Resonance is an understanding threshold, not a visible XP bar.
+- Materials support upgrades/equipment without charging the player again for a learned basic move.
+- Avoid stacking every requirement on every ability; use multi-condition gates only for deliberate special abilities.
+
+### Verification status
+
+- Source-level checks are required for save/load/reset symmetry, source validation, material underflow protection, and the base iaijutsu profile.
+- Godot parser/runtime validation remains pending; no GitHub Actions workflow was intentionally triggered.
+
+### Next work
+
+1. Re-fetch and verify all changed scripts after the progression edits.
+2. Continue technical work on dodge-state timing and combat interruption without adding unapproved story triggers.
+3. Ask the Director to choose the exact story beat for basic iaijutsu before connecting the unlock call.
+4. Design Witch Time's timing and world-slow implementation separately before enabling it in normal play.
