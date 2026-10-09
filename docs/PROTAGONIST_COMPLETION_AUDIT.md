@@ -62,3 +62,5 @@
 
 - [x] Witch Time follow-up: enemy-owned hitbox lifetime also uses the enemy-local time scale, so active hostile strike windows remain coherent with slowed windups and movement; Hero hitboxes are unaffected.
 - [ ] Godot runtime: validate active hostile hitboxes last longer during Witch Time and restore normal lifetime after effect expiry.
+
+- [x] Added all enemy actor scripts to combat_enemies group so Eldritch Echo targeting and enemy-owned hitbox time dilation use a consistent target registry.

@@ -19,6 +19,7 @@ var attack_hitbox: Area2D
 signal defeated
 
 func _ready() -> void:
+    add_to_group("combat_enemies")
     _setup_combat_components()
     hover_time = randf() * TAU
     _log("ENEMY", "Bell Wraith initialized; hp=%d" % MAX_HEALTH)

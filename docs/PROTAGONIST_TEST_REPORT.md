@@ -203,3 +203,6 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 
 - [x] Enemy-owned attack-hitbox timer now follows Witch Time's enemy-local scale; the Hero's own hitbox timer is not slowed by the enemy-only effect.
 - [ ] Godot runtime check: observe an enemy telegraph, movement, and already-active strike window under Witch Time; verify the three resume normal timing together.
+
+- [x] Static group audit: all current enemy actor scripts register in combat_enemies, aligning the Echo target set with Witch Time enemy-owned hitbox scaling.
+- [ ] Godot runtime: verify Echo still affects every intended enemy type and Witch Time slows their active attack hitboxes as well as movement/windups.

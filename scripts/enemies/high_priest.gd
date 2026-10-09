@@ -28,6 +28,7 @@ var animation_time := 0.0
 var attack_hitbox: Area2D
 
 func _ready() -> void:
+    add_to_group("combat_enemies")
     _setup_combat()
     queue_redraw()
 

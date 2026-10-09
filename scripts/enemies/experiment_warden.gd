@@ -24,6 +24,7 @@ var animation_time := 0.0
 var attack_hitbox: Area2D
 
 func _ready() -> void:
+    add_to_group("combat_enemies")
     attack_hitbox = Area2D.new()
     attack_hitbox.set_script(HITBOX_SCRIPT)
     add_child(attack_hitbox)

@@ -18,6 +18,7 @@ func setup(hero_target: Node2D, variant_seed: float) -> void:
     speed += fmod(absf(variant_seed * 37.0), 40.0)
 
 func _ready() -> void:
+    add_to_group("combat_enemies")
     collision_layer = 0
     collision_mask = 0
 
