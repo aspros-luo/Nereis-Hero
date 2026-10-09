@@ -561,12 +561,22 @@ func debug_refill_combat_resources() -> void:
     invulnerable = false
     hurt_time = 0.0
     dodge_time = 0.0
+    perfect_dodge_window_remaining = 0.0
+    riposte_bonus_active = false
+    attack_requested = false
+    technique_requested = false
+    weapon_technique_requested = false
+    eldritch_requested = false
+    dodge_requested = false
+    jump_requested = false
+    jump_buffer = 0.0
+    velocity.x = 0.0
     combo_step = 0
     combo_window = 0.0
     _cancel_attack_action()
-    if state in [CombatState.HURT, CombatState.DODGE, CombatState.ATTACK]:
+    if state in [CombatState.HURT, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.ATTACK]:
         _set_state(CombatState.IDLE)
-    _log("DEBUG", "HP/stamina/cooldown restored (session only)")
+    _log("DEBUG", "HP/stamina/cooldowns restored; queued actions cleared (session only)")
 
 func get_debug_action_kind() -> String:
     return active_action_kind
