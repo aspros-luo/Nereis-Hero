@@ -195,8 +195,9 @@ func bind_hero(target: Node) -> void:
     hero = target
     var system: Node = target.get_node_or_null("HeroSystem") if is_instance_valid(target) else null
     if system and system.has_signal("technique_understood"):
-        if not system.technique_understood.is_connected(_on_technique_understood):
-            system.technique_understood.connect(_on_technique_understood)
+        var callback := Callable(self, "_on_technique_understood")
+        if not system.is_connected("technique_understood", callback):
+            system.connect("technique_understood", callback)
 
 func _on_technique_understood(technique_id: String) -> void:
     var message_key := ""
