@@ -364,6 +364,7 @@ func _build_pause_menu() -> void:
     pause_panel.add_child(character_button)
     character_button.pressed.connect(_toggle_character_details)
 
+    title_button = _make_menu_button()
     title_button.position = Vector2(90, 352)
     pause_panel.add_child(title_button)
     title_button.pressed.connect(_return_to_title)
