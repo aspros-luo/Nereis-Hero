@@ -17,6 +17,14 @@
 - [x] Q / L 控制提示已覆盖简体中文、繁体中文、英文、日文。
 - [x] 未主动触发 GitHub Actions。
 
+## Prologue encounter reset / 序章遭遇重置
+
+- [x] Source fix: when the Hero dies, the three Wardens are respawned and the escape gate is disabled again.
+- [x] The basic iaijutsu story reward is intentionally persistent; a death does not remove an already-earned ability.
+- [ ] Godot runtime regression: defeat all three Wardens, verify the gate opens; die before exiting, verify the gate closes and Wardens return; defeat them again and verify the gate reopens without duplicate unlock effects.
+
+This check was added after finding that the gate's enabled state could remain open while the encounter reset.
+
 ## Altered Iaijutsu progression / 异变拔刀战技进展
 
 - [x] Source code now checks Blood → Abyssal → Black Horizon in order, preventing later forms from skipping earlier understanding.
