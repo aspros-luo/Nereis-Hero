@@ -17,6 +17,18 @@
 - [x] Q / L 控制提示已覆盖简体中文、繁体中文、英文、日文。
 - [x] 未主动触发 GitHub Actions。
 
+## Altered Iaijutsu progression / 异变拔刀战技进展
+
+- [x] Source code now checks Blood → Abyssal → Black Horizon in order, preventing later forms from skipping earlier understanding.
+- [x] L selects the highest form already understood; each form has a distinct initial damage multiplier, cost, reach, hitbox, hit duration, windup, and visual treatment.
+- [x] Technique discovery messages are queued so multiple unlocks do not overwrite each other in the same frame.
+- [x] The three forms retain hidden-state conditions; no new story triggers or unapproved abnormal-load penalties were introduced.
+- [ ] Verify in Godot that each form unlocks only after its conditions are met and that the discovery messages play in order.
+- [ ] Verify hitbox placement, damage, health/stamina costs, visual readability, and attack interruption for all three forms.
+- [ ] Trace normal story events to confirm whether outer exposure and humanity conditions are reachable in a standard playthrough.
+
+The new combat values are initial tuning values only. Static source inspection does not establish that they are balanced or that the project parses successfully in Godot.
+
 ## 尚未验证 / Not yet verified
 
 - [ ] Godot 4.6.1 脚本解析、场景启动与资源加载。
