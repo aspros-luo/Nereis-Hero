@@ -129,8 +129,8 @@ func trigger_witch_time(duration: float = 2.4, enemy_scale: float = 0.22) -> voi
     witch_time_enemy_scale = clampf(enemy_scale, 0.08, 0.60)
     if not was_active:
         _show_witch_time_visual()
-    elif is_instance_valid(witch_time_visual):
-        witch_time_visual.call("play_activation")
+    # Do not replay the activation sting on every precision dodge while already slowed.
+    # 魔女时间已激活时再次触发，不重复播放入场音，避免连续精准闪避造成音效轰炸。
     print("[NEREIS][ABILITY] Witch Time active for %.2fs; enemy delta scale=%.2f" % [witch_time_remaining, witch_time_enemy_scale])
 
 func clear_witch_time(reason: String = "") -> void:

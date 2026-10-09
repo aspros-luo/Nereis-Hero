@@ -46,7 +46,7 @@ After F5, Space should allow exactly one extra jump before landing. Quick Dash c
 
 ### 2. 精准闪避与魔女时间 / Precision dodge and Witch Time
 
-**先独立验证减速效果：** 开启 F5 后按 **T**。预期控制台出现 `Witch Time test triggered via T`，F4 面板的“魔女”倒计时开始下降，主角周围出现紫色环，敌人的移动、攻击前摇、动画和敌方攻击命中框计时一起变慢；主角不变慢。等待约 2.4 秒，或按 F5 关闭覆盖，预期减速恢复。
+**先独立验证减速与音效：** 开启 F5 后按 **T**。预期控制台出现 `Witch Time test triggered via T`，并听到一次约 0.62 秒的原创入场音：低频脉冲、下滑水晶泛音和渐起的气流尾音；F4 面板的“魔女”倒计时开始下降，主角周围出现紫色环，敌人的移动、攻击前摇、动画和敌方攻击命中框计时一起变慢；主角不变慢。等待约 2.4 秒，或按 F5 关闭覆盖，预期减速与画面效果恢复正常。音效应清晰但不盖住敌人攻击提示，也不应有钟表滴答。
 
 **再验证正常玩法触发：** 靠近敌人，观察敌人起手提示，在敌方命中框即将接触主角时按 K / Shift。成功避开开头 0.075 秒精准窗口内的攻击后，预期控制台出现 `Perfect dodge! Next hit bonus armed` 和 `Witch Time active`，并启动约 2.4 秒魔女时间。只按 T 成功，不能代替这一项正常触发验收。
 
@@ -56,11 +56,11 @@ After F5, Space should allow exactly one extra jump before landing. Quick Dash c
 
 
 
-### 魔女时间视觉反馈 / Witch Time Visual Feedback
+### 魔女时间视觉与音效 / Witch Time Visual and Audio Feedback
 
-魔女时间触发时会出现一阵很短的边缘放射光线与稀疏晶体闪点；持续期间，画面边缘有轻微的紫黑色压暗与细微时间环，HUD 保持清晰。视觉效果只用于状态识别，不用全屏闪白或强烈扭曲遮挡战斗。敌人的速度缩放、主角的正常操控和精准闪避触发条件保持不变。
+魔女时间触发时会出现很短的屏幕边缘放射光线与稀疏晶体闪点，同时播放一段原创程序合成音：低频脉冲、水晶泛音下滑以及倒吸气般渐起的气流尾音。持续期间，画面边缘有轻微紫黑色压暗与细微时间环，HUD 保持清晰。音效不使用钟表滴答、不循环，也不在魔女时间持续期间每次再次触发时重复播放。
 
-On activation, a brief radial streak and sparse crystal glints sweep the screen edges. During Witch Time, a restrained violet-black vignette and fine temporal rings identify the state while keeping the HUD readable. The visual layer does not alter gameplay timing or the precision-dodge trigger.
+On activation, a brief radial streak and sparse crystal glints accompany an original procedural cue: a low pulse, descending crystal-like partials, and a reverse-breath swell. During Witch Time, a restrained violet-black vignette and fine temporal rings identify the state while keeping the HUD readable. The sound uses no clock ticks, does not loop, and does not replay on every re-trigger while the state is already active.
 
 ### 3. 钩爪与攀墙 / Grapple and wall traversal
 
