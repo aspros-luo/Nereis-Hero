@@ -108,9 +108,11 @@ func _input(event: InputEvent) -> void:
         elif event.keycode == KEY_L:
             technique_requested = true
         elif event.keycode == KEY_F:
-            weapon_technique_requested = true
+            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
+                weapon_technique_requested = true
         elif event.keycode == KEY_R:
-            eldritch_requested = true
+            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
+                eldritch_requested = true
         elif event.keycode == KEY_K or event.keycode == KEY_SHIFT:
             dodge_requested = true
         elif event.keycode == KEY_SPACE or event.keycode == KEY_UP:
