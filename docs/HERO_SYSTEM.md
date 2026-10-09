@@ -259,3 +259,10 @@ F3 等开发调试界面可以显示内部状态，但这些信息不是正式�
 暂停菜单不是暂停游戏。打开菜单时只锁定玩家输入；敌人 AI、Boss 行为、攻击判定、受击、场景计时器与世界事件继续运行。玩家在菜单中仍可能受到攻击，因此不要把菜单当作安全区。HUD 与菜单节点使用可在游戏树运行时处理的模式，但不得通过 `SceneTree.paused = true` 冻结整个世界。角色详情只展示当前武器与已理解战技，不显示共鸣、古神接触、外神影响、人性或异常负荷等隐藏数值。
 
 The menu is not a pause of the simulation. It locks player input only; enemy AI, boss behavior, hitboxes, damage, scene timers, and world events continue. The player can still be attacked while browsing it. Do not freeze the SceneTree. Character details show the current weapon and understood techniques, never hidden resonance/exposure/humanity/abnormal-load values.
+
+
+## 战技理解反馈 / Technique discovery feedback
+
+当隐藏条件满足、主角真正理解一项异变战技时，HUD 会显示短暂的叙事式提示，而不是弹出等级、共鸣或解锁条件。提示只传达身体与世界发生了变化；具体隐藏状态仍不对玩家公开。已接入血色拔刀斩、深渊拔刀斩与黑色天际的提示文本，覆盖简体中文、繁体中文、英文和日文。
+
+When hidden conditions are met and a technique is understood, the HUD shows a brief narrative cue rather than a level-up panel or numeric stat change. The cue communicates a change in the Hero's relationship with the world without exposing hidden values or unlock conditions. Blood Iaijutsu, Abyssal Iaijutsu, and Black Horizon have localized cues in Simplified Chinese, Traditional Chinese, English, and Japanese.
