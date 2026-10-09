@@ -132,15 +132,15 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 
 ## Debug acceptance overlay / 验收调试覆盖层
 
-- [x] The Hero-local overlay is enabled by default on the development branch and can be toggled with F3.
-- [x] The overlay exposes combat state/action, HP/stamina, weapon, combo, invulnerability, echo cooldown, hidden progression values, abnormal load and extra-air-jump count for debugging only.
-- [x] Ctrl+F4 toggles the session-only weapon-technique unlock override; Ctrl+F5 refills HP/stamina and clears Echo cooldown. Neither action writes a debug grant to the save.
-- [x] F4/F5 without Ctrl remain available to existing scene/theater shortcuts.
-- [x] Removed the extra `queue_redraw()` from `_process`; the physics update path already requests redraws, avoiding a duplicate render-frame redraw request.
-- [ ] Godot runtime: verify overlay positioning/readability at multiple resolutions, input shortcuts, debug override, refill behavior, and normal progression with override disabled.
+- [x] The Hero-local overlay is enabled by default and toggled with F4; the former Ctrl requirement has been removed.
+- [x] F5 toggles the session-only special-technique / Quick Dash test override; F6 restores HP/stamina and clears Echo/Dash cooldowns.
+- [x] F4/F5/F6 are consumed by the Hero input layer. Existing Village Hub test theaters moved to F10/F11/F12 to prevent shortcut collisions.
+- [x] F5 override remains on the Hero instance only; the code path does not grant persistent ability records or call a save method.
+- [x] Quick Dash has a separate X input, state, stamina cost, cooldown, visual trail, unlock gate, damage interruption and reset paths for input lock, menu, death/rest and debug refill.
+- [x] The extra `queue_redraw()` in `_process` remains removed; the physics update path requests redraws.
+- [ ] Godot runtime: verify overlay readability, shortcut consumption, Quick Dash motion/collision, cooldown/resource values, override isolation and progression with override disabled.
 
-**Status:** source-level change committed; no Godot runtime test was performed in this environment.
-
+**Status:** source-level assertions only; no Godot runtime test was performed in this environment.
 
 ## Precision dodge / 精准闪避反击
 
@@ -151,3 +151,18 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 - [ ] Godot runtime: verify the bonus applies once to long sword, short blade, Judgment Slash, and Crescent Combo; confirm no save persistence.
 
 **Status:** source implementation committed; Godot parser/runtime verification remains pending. No GitHub Actions were triggered.
+
+
+## Quick Dash prototype / 快速冲刺原型 — 2026-10-09
+
+- [x] Locked unless the persistent `quick_dash` ability record or session-only override is active.
+- [x] Distinct `QUICK_DASH` state and X input; ordinary dodge remains K / Shift.
+- [x] Uses 24 stamina, a 0.16-second movement window and a 1.10-second cooldown; it grants no invulnerability frames.
+- [x] Damage interrupts dash; input-lock, menu, death/reset, rest and F6 clear active dash/request; death/rest/F6 also clear its cooldown.
+- [x] Clears buffered attacks/techniques/jump input at dash start so they cannot fire unexpectedly afterward.
+- [x] F4 overlay, F5 temporary override and F6 resource reset require no Ctrl modifier; theater shortcuts moved to F10/F11/F12.
+- [ ] Godot 4.6.1 parser/startup, real movement/collision and frame-timing checks.
+- [ ] Test left/right facing, ground/air, collision boundaries, insufficient stamina, cooldown, damage interruption, menu, death/rest and override ON/OFF.
+- [ ] Confirm no double shortcut handling in the Village Hub and no save-state mutation.
+  
+**Runtime status: NOT RUN.** Static source checks only. No GitHub Actions workflow was triggered.

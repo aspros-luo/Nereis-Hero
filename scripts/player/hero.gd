@@ -15,6 +15,12 @@ const ATTACK_MOVE_SPEED := 92.0
 const JUMP_VELOCITY := -520.0
 const GRAVITY := 1400.0
 const DODGE_SPEED := 620.0
+# Quick Dash is a separate, non-invulnerable mobility action; values await in-game tuning.
+# 快速冲刺是独立位移动作，不提供闪避无敌帧；以下数值仍需实机调校。
+const QUICK_DASH_SPEED := 760.0
+const QUICK_DASH_DURATION := 0.16
+const QUICK_DASH_STAMINA_COST := 24.0
+const QUICK_DASH_COOLDOWN := 1.10
 const ATTACK_DURATION := 0.34
 const ATTACK_WINDUP := 0.07
 const DODGE_DURATION := 0.18
@@ -56,7 +62,7 @@ const ECHO_DURATION := 0.42
 const ECHO_RANGE := 185.0
 const ECHO_STAGGER_DURATION := 0.32
 
-enum CombatState { IDLE, MOVE, JUMP, FALL, ATTACK, DODGE, HURT, DEAD }
+enum CombatState { IDLE, MOVE, JUMP, FALL, ATTACK, DODGE, QUICK_DASH, HURT, DEAD }
 
 var health := 100
 var facing := 1.0
@@ -66,6 +72,8 @@ var attack_hit_registered := false
 var combo_step := 0
 var combo_window := 0.0
 var dodge_time := 0.0
+var quick_dash_time := 0.0
+var quick_dash_cooldown_remaining := 0.0
 # A short opening at dodge start rewards precise timing without adding another resource.
 # 闪避起始的短窗口奖励精准操作，不额外引入资源条。
 const PERFECT_DODGE_WINDOW := 0.075
@@ -100,9 +108,10 @@ var technique_hit_index := 0
 var eldritch_cooldown_remaining := 0.0
 var debug_ability_override := false
 # Debug overlay is enabled by default on this development branch for acceptance testing.
-# 当前开发分支默认开启调试覆盖层，便于验收；F3 可显示/隐藏。
+# 当前开发分支默认开启主角调试覆盖层；F4 可显示/隐藏。
 var debug_mode_enabled := true
 var dodge_requested := false
+var quick_dash_requested := false
 var jump_requested := false
 var hero_system: Node
 signal defeated
@@ -114,34 +123,49 @@ func _input(event: InputEvent) -> void:
     if WorldState.input_locked or WorldState.menu_input_locked:
         return
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode == KEY_F3:
+        # F4-F6 are consumed here so they cannot also trigger a scene-theater shortcut.
+        # F4-F6 在主角输入层消费，避免同时触发场景测试快捷键。
+        if event.keycode == KEY_F4:
             debug_mode_enabled = not debug_mode_enabled
             queue_redraw()
-            _log("DEBUG", "Overlay %s" % ("ON" if debug_mode_enabled else "OFF"))
-        elif event.keycode == KEY_F4 and event.ctrl_pressed:
+            _log("DEBUG", "Hero overlay %s" % ("ON" if debug_mode_enabled else "OFF"))
+            get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_F5:
             toggle_debug_ability_override()
-        elif event.keycode == KEY_F5 and event.ctrl_pressed:
+            queue_redraw()
+            get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_F6:
             debug_refill_combat_resources()
+            queue_redraw()
+            get_viewport().set_input_as_handled()
         elif event.keycode == KEY_J:
-            attack_requested = true
+            if state != CombatState.QUICK_DASH:
+                attack_requested = true
         elif event.keycode == KEY_L:
-            technique_requested = true
+            if state != CombatState.QUICK_DASH:
+                technique_requested = true
         elif event.keycode == KEY_F:
-            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
+            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
                 weapon_technique_requested = true
         elif event.keycode == KEY_R:
-            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
+            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
                 eldritch_requested = true
         elif event.keycode == KEY_K or event.keycode == KEY_SHIFT:
-            dodge_requested = true
+            if state != CombatState.QUICK_DASH:
+                dodge_requested = true
         elif event.keycode == KEY_SPACE or event.keycode == KEY_UP:
-            jump_requested = true
+            if state != CombatState.QUICK_DASH:
+                jump_requested = true
+        elif event.keycode == KEY_X:
+            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
+                quick_dash_requested = true
         elif event.keycode == KEY_Q:
-            if hero_system and state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.HURT]:
+            if hero_system and state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.HURT, CombatState.DEAD]:
                 hero_system.switch_weapon()
                 queue_redraw()
     elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-        attack_requested = true
+        if state != CombatState.QUICK_DASH:
+            attack_requested = true
 
 func _ready() -> void:
     hero_system = HERO_SYSTEM_SCRIPT.new()
@@ -175,6 +199,7 @@ func _physics_process(delta: float) -> void:
     _update_camera_shake(delta)
     hit_confirm_time = max(0.0, hit_confirm_time - delta)
     eldritch_cooldown_remaining = maxf(0.0, eldritch_cooldown_remaining - delta)
+    quick_dash_cooldown_remaining = maxf(0.0, quick_dash_cooldown_remaining - delta)
     _update_jump_buffer(delta)
     _update_combo_window(delta)
 
@@ -190,9 +215,13 @@ func _physics_process(delta: float) -> void:
         weapon_technique_requested = false
         eldritch_requested = false
         dodge_requested = false
+        quick_dash_requested = false
         jump_requested = false
         _cancel_attack_action()
         dodge_time = 0.0
+        quick_dash_time = 0.0
+        if state == CombatState.QUICK_DASH:
+            _set_state(CombatState.IDLE)
         invulnerable = false
         velocity.x = move_toward(velocity.x, 0.0, 2200.0 * delta)
         if not is_on_floor():
@@ -218,8 +247,15 @@ func _physics_process(delta: float) -> void:
         weapon_technique_requested = false
         eldritch_requested = false
         dodge_requested = false
+        quick_dash_requested = false
         jump_requested = false
         jump_buffer = 0.0
+        # A menu must not keep carrying the Hero horizontally during an active dash.
+        if quick_dash_time > 0.0:
+            quick_dash_time = 0.0
+            velocity.x = 0.0
+            if state == CombatState.QUICK_DASH:
+                _set_state(CombatState.IDLE)
 
     if stamina_regen_delay > 0.0:
         stamina_regen_delay = max(0.0, stamina_regen_delay - delta)
@@ -267,6 +303,28 @@ func _physics_process(delta: float) -> void:
 
     if perfect_dodge_window_remaining > 0.0:
         perfect_dodge_window_remaining = maxf(0.0, perfect_dodge_window_remaining - delta)
+
+    if quick_dash_requested:
+        quick_dash_requested = false
+        if attack_time <= 0.0 and dodge_time <= 0.0:
+            _start_quick_dash()
+
+    if quick_dash_time > 0.0:
+        quick_dash_time = maxf(0.0, quick_dash_time - delta)
+        velocity.x = facing * QUICK_DASH_SPEED
+        if not is_on_floor():
+            velocity.y += GRAVITY * delta
+        _set_state(CombatState.QUICK_DASH)
+        move_and_slide()
+        if quick_dash_time <= 0.0:
+            if not is_on_floor():
+                _set_state(CombatState.JUMP if velocity.y < 0.0 else CombatState.FALL)
+            elif abs(velocity.x) > 10.0:
+                _set_state(CombatState.MOVE)
+            else:
+                _set_state(CombatState.IDLE)
+        queue_redraw()
+        return
 
     if dodge_time > 0.0:
         dodge_time = max(0.0, dodge_time - delta)
@@ -497,6 +555,9 @@ func debug_refill_combat_resources() -> void:
     stamina = MAX_STAMINA
     stamina_regen_delay = 0.0
     eldritch_cooldown_remaining = 0.0
+    quick_dash_time = 0.0
+    quick_dash_cooldown_remaining = 0.0
+    quick_dash_requested = false
     invulnerable = false
     hurt_time = 0.0
     dodge_time = 0.0
@@ -552,6 +613,34 @@ func _start_dodge() -> void:
     _set_state(CombatState.DODGE)
     dodge_started.emit()
     _log("HERO", "Dodge started; invulnerable=true")
+
+func _start_quick_dash() -> void:
+    if not debug_ability_override and not WorldState.is_ability_unlocked("quick_dash"):
+        _log("MOVEMENT", "Quick dash locked; ability is not unlocked")
+        return
+    if quick_dash_cooldown_remaining > 0.0:
+        _log("MOVEMENT", "Quick dash cooling down; remaining=%.2f" % quick_dash_cooldown_remaining)
+        return
+    if stamina < QUICK_DASH_STAMINA_COST:
+        _log("MOVEMENT", "Insufficient stamina for Quick Dash")
+        return
+
+    _cancel_attack_action()
+    stamina -= QUICK_DASH_STAMINA_COST
+    stamina_regen_delay = STAMINA_REGEN_DELAY
+    quick_dash_time = QUICK_DASH_DURATION
+    quick_dash_cooldown_remaining = QUICK_DASH_COOLDOWN
+    # Do not carry buffered actions through a dash and fire them after the dash ends.
+    attack_requested = false
+    technique_requested = false
+    weapon_technique_requested = false
+    eldritch_requested = false
+    dodge_requested = false
+    jump_requested = false
+    jump_buffer = 0.0
+    invulnerable = false
+    _set_state(CombatState.QUICK_DASH)
+    _log("MOVEMENT", "Quick Dash started; stamina=%.0f cooldown=%.2f" % [QUICK_DASH_STAMINA_COST, QUICK_DASH_COOLDOWN])
 
 func _set_state(next_state: CombatState) -> void:
     if state == next_state:
@@ -647,6 +736,8 @@ func receive_damage(amount: int, source: Node = null) -> void:
     _shake_camera(9.0, 0.12)
     # A confirmed hit interrupts the Hero's current action; never let a stale hitbox resolve after hitstun.
     _cancel_attack_action()
+    quick_dash_time = 0.0
+    quick_dash_requested = false
     perfect_dodge_window_remaining = 0.0
     riposte_bonus_active = false
     attack_requested = false
@@ -691,6 +782,9 @@ func receive_damage(amount: int, source: Node = null) -> void:
         technique_hit_index = 0
         eldritch_cooldown_remaining = 0.0
         dodge_time = 0.0
+        quick_dash_time = 0.0
+        quick_dash_cooldown_remaining = 0.0
+        quick_dash_requested = false
         stamina_regen_delay = 0.0
         combo_step = 0
         combo_window = 0.0
@@ -721,6 +815,9 @@ func restore_full() -> void:
     iaijutsu_active = false
     eldritch_cooldown_remaining = 0.0
     dodge_time = 0.0
+    quick_dash_time = 0.0
+    quick_dash_cooldown_remaining = 0.0
+    quick_dash_requested = false
     combo_step = 0
     combo_window = 0.0
     _cancel_attack_action()
@@ -780,6 +877,14 @@ func _draw() -> void:
         var technique_radius: float = 72.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "black_horizon" else 61.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "abyssal" else 54.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "human_iaijutsu" else 48.0
         draw_arc(Vector2(facing * 25.0, -40.0), technique_radius, -0.72 if facing > 0.0 else 2.42, 0.72 if facing > 0.0 else 3.86, 24, technique_color, 5.0)
 
+    if quick_dash_time > 0.0:
+        var dash_alpha := clampf(quick_dash_time / QUICK_DASH_DURATION, 0.0, 1.0)
+        for trail_index in range(3):
+            var trail_y := -24.0 - float(trail_index) * 17.0
+            var trail_start := 34.0 + float(trail_index) * 7.0
+            var trail_end := 62.0 + float(trail_index) * 12.0
+            draw_line(Vector2(-facing * trail_start, trail_y), Vector2(-facing * trail_end, trail_y - 2.0), Color("#9ebbaa", 0.68 * dash_alpha), 2.0)
+
     if debug_mode_enabled:
         # World-space debug overlay follows the Hero and intentionally exposes hidden values only in debug mode.
         var debug_font := ThemeDB.fallback_font
@@ -787,10 +892,10 @@ func _draw() -> void:
         var weapon_name := "短刃" if short_blade else "长剑"
         var action_name := active_action_kind if active_action_kind != "none" else get_debug_state().to_lower()
         draw_rect(Rect2(-112.0, -184.0, 224.0, 78.0), Color(0.035, 0.025, 0.04, 0.86), true)
-        draw_string(debug_font, Vector2(-104.0, -166.0), "DEBUG F3 | Ctrl+F4:技能覆盖 | Ctrl+F5:恢复", HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
+        draw_string(debug_font, Vector2(-104.0, -166.0), "DEBUG F4 | F5:技能覆盖 | F6:资源恢复", HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
         draw_string(debug_font, Vector2(-104.0, -150.0), "HP %d | ST %d | %s" % [health, int(round(stamina)), weapon_name], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 12, debug_color)
         draw_string(debug_font, Vector2(-104.0, -134.0), "状态 %s | 动作 %s | 连击 %d" % [get_debug_state(), action_name, combo_step], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
-        draw_string(debug_font, Vector2(-104.0, -118.0), "无敌 %s | 技能覆盖 %s | 冷却 %.1f" % [str(invulnerable), str(debug_ability_override), eldritch_cooldown_remaining], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
+        draw_string(debug_font, Vector2(-104.0, -118.0), "无敌 %s | 覆盖 %s | E %.1f | D %.1f" % [str(invulnerable), str(debug_ability_override), eldritch_cooldown_remaining, quick_dash_cooldown_remaining], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 9, debug_color)
         if hero_system != null:
             draw_string(debug_font, Vector2(-104.0, -102.0), "共鸣 %d 古神 %d 外神 %d 人性 %d" % [hero_system.resonance, hero_system.ancient_exposure, hero_system.outer_exposure, hero_system.humanity], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, Color("#d7a8d9"))
             draw_string(debug_font, Vector2(-104.0, -86.0), "异常负荷 %.1f | 二段跳 %d/%d" % [hero_system.abnormal_load, air_jumps_used, MAX_EXTRA_AIR_JUMPS], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, Color("#d7a8d9"))

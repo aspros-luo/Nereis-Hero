@@ -334,6 +334,8 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
     character.add_child(collision)
 
 func _unhandled_input(event: InputEvent) -> void:
+    if WorldState.input_locked or WorldState.menu_input_locked:
+        return
     if event is InputEventKey and event.pressed and not event.echo:
         if event.keycode == KEY_F1:
             var endgame_scene := NereisEndingEvaluator.get_candidate()
@@ -350,13 +352,13 @@ func _unhandled_input(event: InputEvent) -> void:
             _mark_input_handled()
             print("[NEREIS][DEBUG] Opening Eternal Paradise theater")
             get_tree().change_scene_to_file("res://scenes/ending_paradise_demo.tscn")
-        elif event.keycode == KEY_F4:
+        elif event.keycode == KEY_F10:
             _mark_input_handled()
-            print("[NEREIS][DEBUG] Opening ancient research theater")
+            print("[NEREIS][DEBUG] Opening ancient research theater (F10)")
             get_tree().change_scene_to_file("res://scenes/ancient_research_lab.tscn")
-        elif event.keycode == KEY_F5:
+        elif event.keycode == KEY_F11:
             _mark_input_handled()
-            print("[NEREIS][DEBUG] Opening village defense theater")
+            print("[NEREIS][DEBUG] Opening village defense theater (F11)")
             get_tree().change_scene_to_file("res://scenes/village_defense_demo.tscn")
         elif event.keycode == KEY_F8:
             _mark_input_handled()
@@ -366,9 +368,9 @@ func _unhandled_input(event: InputEvent) -> void:
             _mark_input_handled()
             print("[NEREIS][DEBUG] Opening church final boss theater")
             get_tree().change_scene_to_file("res://scenes/church_final_demo.tscn")
-        elif event.keycode == KEY_F6:
+        elif event.keycode == KEY_F12:
             _mark_input_handled()
-            print("[NEREIS][DEBUG] Opening Mite resonance theater")
+            print("[NEREIS][DEBUG] Opening Mite resonance theater (F12)")
             get_tree().change_scene_to_file("res://scenes/mite_resonance_demo.tscn")
         elif event.keycode == KEY_F9:
             _mark_input_handled()

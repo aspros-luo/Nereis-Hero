@@ -85,9 +85,9 @@ From the Village Hub:
 
 - **F1** → Candidate-driven endgame theater
 - **F2** → Eternal Paradise Theater
-- **F4** → Ancient Research Ward
-- **F5** → Village Defense Theater
-- **F6** → Mite Resonance Theater
+- **F10** → Ancient Research Ward
+- **F11** → Village Defense Theater
+- **F12** → Mite Resonance Theater
 - **F7** → Church Final Boss Theater
 - **F8** → 烈火天罚 / Ending Fire Theater
 - **F9** → clean reset to the opening prologue
@@ -164,19 +164,21 @@ It exposes internal development state including:
 
 On the development branch, the Hero-local debug overlay is enabled by default. It follows the Hero and shows current HP/stamina, weapon, combat state/action, combo index, invulnerability, special-technique cooldown, hidden resonance/exposure/humanity/abnormal-load values, and extra-air-jump count. Hidden values are shown only in this debug overlay, not the normal HUD.
 
-- **F3**: toggle debug overlay visibility.
-- **Ctrl+F4**: toggle session-only weapon-technique unlock override. This is not saved and does not grant narrative progression.
-- **Ctrl+F5**: refill Hero HP/stamina and clear the Eldritch Echo cooldown for repeated combat checks. This is session-only.
-- **F4/F5 without Ctrl** remain available to existing scene/theater shortcuts.
+- **F4**: toggle the Hero-local debug overlay.
+- **F5**: toggle the session-only special-technique / Quick Dash test override. This is not saved and does not grant story progression.
+- **F6**: refill Hero HP/stamina and clear Eldritch Echo / Quick Dash cooldowns; current Hero action and hitbox are cancelled. This is session-only.
+- **X**: attempt Quick Dash. It requires the saved `quick_dash` ability record, unless the temporary F5 override is enabled.
+- F4/F5/F6 are consumed by the Hero input layer. The existing Ancient Research / Village Defense / Mite Resonance test theaters now use F10/F11/F12.
 
 Use the overlay to report the exact combat state and resource values when an issue occurs. The override is only a test convenience; acceptance must also be repeated with it disabled.
 
 主角调试覆盖层在当前开发分支默认开启，跟随主角显示生命/体力、武器、战斗状态与动作、连击段数、无敌状态、战技冷却、隐藏共鸣/接触/人性/异常负荷，以及额外空中跳跃次数。隐藏数值只在调试覆盖层中显示，不进入正式 HUD。
 
-- **F3**：显示/隐藏调试覆盖层。
-- **Ctrl+F4**：切换本次运行有效的武器战技解锁覆盖，不写入存档，也不会授予剧情成长。
-- **Ctrl+F5**：恢复主角生命/体力并清空回声战技冷却，便于重复战斗测试，仅影响当前运行。
-- 不带 Ctrl 的 **F4/F5** 仍保留原有场景/剧场快捷键。
+- **F4**：显示/隐藏主角本地调试覆盖层。
+- **F5**：切换本次运行有效的特殊战技 / 快速冲刺测试覆盖，不写入存档，也不会授予剧情成长。
+- **F6**：恢复主角生命/体力并清空余响与快速冲刺冷却，同时取消主角当前动作和命中框，仅影响当前运行。
+- **X**：尝试快速冲刺；需要正式的 `quick_dash` 解锁记录，或在本次运行中打开 F5 覆盖。
+- F4/F5/F6 由主角输入层消费；原有古代研究、村庄防守、蜜忒共鸣测试剧场改用 F10/F11/F12。
 
 发现问题时请记录覆盖层中的战斗状态与资源数值。调试覆盖关闭后仍必须重复验收，不能只凭调试模式通过就认为正常流程通过。
 
@@ -236,3 +238,19 @@ The development build now includes:
 - The Village Hub should never show two competing E prompts that both appear actionable.
 - The Lullaby Path / Church Road must restore Hero input immediately after scene transition, including when the previous scene ended during narrative presentation.
 - A stale SceneTree pause state must not leave the Hero frozen after entering a route scene.
+
+
+## Quick Dash prototype acceptance / 快速冲刺原型验收
+
+This is a movement-system test only; it adds no level, map, encounter, or story unlock.
+本节仅验收移动机制，不增加任何关卡、地图、遭遇或剧情解锁。
+
+1. Enter combat and press F4 to show the Hero-local overlay.
+2. Press F5 once, then press X while facing right and left. Expected: a fast horizontal dash follows facing direction and does not grant invulnerability.
+3. Check initial values: 24 stamina, about 0.16 seconds duration, 1.10-second cooldown. X during cooldown or with insufficient stamina must not start a dash.
+4. Turn F5 override OFF. Unless `quick_dash` is formally unlocked, X must not start a dash.
+5. Open the menu during a dash and take damage during a dash. Expected: no stale dash state or delayed action remains.
+6. Press F6. Expected: HP/stamina restored, Echo/Dash cooldowns clear, current Hero action/hitbox cancelled without writing ability/story flags.
+7. Die/respawn and use a rest point; confirm dash state/request reset and ordinary K/Shift dodge still works independently.
+
+预期结果：快速冲刺独立于 K/Shift 普通闪避；冲刺本身无无敌帧，有独立体力消耗与冷却；受击、菜单、死亡和休息不会残留动作状态。

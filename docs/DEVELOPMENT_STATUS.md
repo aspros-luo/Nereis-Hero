@@ -9,7 +9,7 @@ The current protagonist combat pass adds three prototype special techniques to t
 - Short Blade: Crescent Combo (three independently timed hit windows)
 - Eldritch ability: Eldritch Echo (stamina cost, cooldown, short enemy stagger with boss resistance)
 
-Debug controls: F3 opens the panel; while it is open, F4 toggles session-only special-technique override and F5 restores HP/stamina and Echo cooldown. A visual pass now gives Judgment Slash a heavier steel/gold arc and each Crescent Combo stage a distinct silhouette; slash effects fade over their full lifetime. F/R inputs are ignored while another locked combat action is active, preventing delayed accidental technique casts. Static structural checks passed; runtime Godot testing is still required before marking the techniques as accepted.
+Debug controls on this protagonist branch: F4 toggles the Hero-local overlay, F5 toggles a session-only special-technique / Quick Dash test override, and F6 restores HP/stamina and Echo/Dash cooldowns. The former Ctrl combinations are no longer required. Village Hub test theaters formerly on F4/F5/F6 now use F10/F11/F12. A visual pass now gives Judgment Slash a heavier steel/gold arc and each Crescent Combo stage a distinct silhouette; slash effects fade over their full lifetime. F/R inputs are ignored while another locked combat action is active, preventing delayed accidental technique casts. Static structural checks passed; runtime Godot testing is still required before marking the techniques as accepted.
 
 
 The project is now in the first **narrative production pass**, not merely a combat prototype.
@@ -161,9 +161,9 @@ From Village Hub:
 - F1 — Candidate endgame
 - F2 — Eternal Paradise
 - F3 — Debug HUD
-- F4 — Ancient Research Ward
-- F5 — Village Defense
-- F6 — Mite Resonance
+- F10 — Ancient Research Ward
+- F11 — Village Defense
+- F12 — Mite Resonance
 - F7 — Church Final Boss
 - F8 — 烈火天罚
 - F9 — Reset
@@ -385,3 +385,14 @@ The design document was committed to the feature branch. This was a documentatio
 - 已将脚本引用路径与当前分支的素材目录进行核对。
 - 这不是 Godot 解析器或运行时测试：维护环境没有 Godot 4.6，SVG 导入和游戏内构图仍需本地实际运行验证。
 - 未触发 GitHub Actions 或任何工作流。
+
+
+## 2026-10-09 — Quick Dash + no-Ctrl acceptance controls
+
+- Added a standalone Quick Dash prototype without introducing story/level content: X input, distinct combat state, 24 stamina cost, 0.16-second duration, 1.10-second cooldown, no invulnerability frames.
+- Quick Dash checks the persistent `quick_dash` unlock record; F5 can enable it in the current run only.
+- Damage interrupts dash. Input-lock, menu, death/respawn, rest and F6 clear active dash state/request to prevent stale movement.
+- Debug controls: F4 Hero-local overlay, F5 session-only technique/mobility override, F6 HP/stamina/cooldown reset. No Ctrl modifier is required.
+- Village Hub test theaters formerly on F4/F5/F6 now use F10/F11/F12 and respect input locks.
+- Added the bilingual protagonist acceptance procedure and refreshed ability/testing/audit reports.
+- Static checks are source-level only. Godot 4.6.1 parser, runtime, collision and actual tuning values remain pending local validation. No GitHub Actions were triggered.
