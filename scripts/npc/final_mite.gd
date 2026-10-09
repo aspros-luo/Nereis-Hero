@@ -97,32 +97,25 @@ func _die(waited_for: bool) -> void:
         queue_redraw()
 
 func _draw() -> void:
-    var breath := sin(elapsed * 1.15) * 1.4
+    var breath: float = sin(elapsed * 1.15) * 1.0
     var waiting_offset := 0.0
     if waiting_phase == 1:
-        waiting_offset = sin(elapsed * 0.7) * 1.0
+        waiting_offset = sin(elapsed * 0.7) * 0.8
     elif waiting_phase == 2:
-        waiting_offset = -2.0
+        waiting_offset = -1.5
     elif waiting_phase >= 3:
-        waiting_offset = -4.0
-    var body := Color("#6a5260")
-    var skin := Color("#b58f87")
-    var shadow := Color("#27202a")
-    if hit_flash > 0.0:
-        body = Color("#d5b8b0")
+        waiting_offset = -3.0
+    var tint := Color("#f3d8d6") if hit_flash > 0.0 else Color.WHITE
+    if dying:
+        tint = Color("#d7c3cf", 0.82)
 
-    draw_circle(Vector2(2.0 if waiting_phase >= 2 else 0.0, -34 + breath + waiting_offset), 16.0, skin)
-    draw_circle(Vector2(-5, -39 + breath), 3.0, shadow)
-    draw_circle(Vector2(5, -39 + breath), 3.0, shadow)
-    draw_rect(Rect2(-19, -18 + breath + waiting_offset, 38, 52), body)
-    draw_colored_polygon(
-        PackedVector2Array([
-            Vector2(-22, -18 + breath + waiting_offset),
-            Vector2(0, 18 + breath + waiting_offset),
-            Vector2(22, -18 + breath + waiting_offset)
-        ]),
-        Color("#4a3b4a")
-    )
+    draw_set_transform(Vector2(0.0, breath + waiting_offset), 0.0, Vector2.ONE)
+    draw_texture_rect(MITE_ART, Rect2(-44.0, -96.0, 88.0, 114.0), false, tint)
+    draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
+    if waiting_phase >= 2 and not dying:
+        draw_arc(Vector2(0.0, -50.0), 27.0, -0.2, 2.9, 28, Color("#9a6d9c", 0.3), 1.4)
+    if waiting_phase >= 3:
+        draw_circle(Vector2(4.0, -61.0), 2.0, Color("#c47b8c", 0.8))
     if not dying:
-        draw_circle(Vector2(0, 7 + breath), 12.0, Color(0.75, 0.58, 0.58, 0.08))
+        draw_circle(Vector2(0.0, 8.0 + breath), 12.0, Color(0.75, 0.58, 0.68, 0.10))
