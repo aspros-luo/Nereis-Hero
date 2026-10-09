@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 var hero: Node
-var debug_enabled := true
+var debug_enabled := false
 var debug_panel: ColorRect
 var debug_label: Label
 var title_label: Label
@@ -21,6 +21,7 @@ var hp_label: Label
 var stamina_label: Label
 var humanity_label: Label
 var humanity_bar: ColorRect
+var humanity_bg: ColorRect
 var objective_rule: ColorRect
 var impact_flash: ColorRect
 var impact_flash_time := 0.0
@@ -137,10 +138,11 @@ func _ready() -> void:
     humanity_label.add_theme_font_size_override("font_size", 13)
     status_panel.add_child(humanity_label)
 
-    var humanity_bg := ColorRect.new()
+    humanity_bg = ColorRect.new()
     humanity_bg.position = Vector2(72, 70)
     humanity_bg.size = Vector2(235, 10)
     humanity_bg.color = Color("#2a2026")
+    humanity_bg.visible = false
     status_panel.add_child(humanity_bg)
 
     humanity_bar = ColorRect.new()
@@ -179,6 +181,7 @@ func _ready() -> void:
     debug_label.size = Vector2(290, 230)
     debug_label.add_theme_font_size_override("font_size", 15)
     debug_panel.add_child(debug_label)
+    debug_panel.visible = debug_enabled
 
     _build_pause_menu()
     _refresh_localized_ui()
@@ -202,8 +205,10 @@ func set_combat_demo_mode() -> void:
 func _on_hidden_resistance_awakened() -> void:
     _show_banner("A WARMTH UNDER THE SKIN", 1.9)
 
-func _set_humanity_visible(value: bool) -> void:
+func _set_humanity_visible(_value: bool) -> void:
+    # Hidden narrative values never appear in the normal HUD.
     humanity_label.visible = false
+    humanity_bg.visible = false
     humanity_bar.visible = false
 
 
@@ -451,6 +456,10 @@ func _toggle_pause_menu() -> void:
         _open_pause_menu()
 
 func _unhandled_input(event: InputEvent) -> void:
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3:
+        set_debug_visible(not debug_enabled)
+        get_viewport().set_input_as_handled()
+        return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
         if WorldState.input_locked:
             return
