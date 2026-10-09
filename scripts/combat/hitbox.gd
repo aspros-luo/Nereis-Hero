@@ -49,10 +49,13 @@ func _physics_process(delta: float) -> void:
             continue
 
         if area.has_method("receive_hit"):
-            area.receive_hit(damage, host)
+            var resolved_damage := damage
+            if host and host.has_method("modify_outgoing_damage"):
+                resolved_damage = int(host.call("modify_outgoing_damage", damage))
+            area.receive_hit(resolved_damage, host)
             hit_targets.append(area)
             if host and host.has_method("_on_attack_hit"):
-                host._on_attack_hit(damage, target_host)
+                host._on_attack_hit(resolved_damage, target_host)
 
 func deactivate() -> void:
     active = false
