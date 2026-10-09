@@ -36,9 +36,14 @@ func _process(_delta: float) -> void:
     humanity = clampi(int(WorldState.hero_humanity), 0, 100)
     abnormal_load = clampf(float(WorldState.abnormal_load), 0.0, 100.0)
 
-    # Discover the first altered technique silently when its world conditions are met.
+    # Learn altered techniques in order so deeper forms cannot bypass earlier understanding.
+    # 按顺序理解异变战技，避免直接跳过前置形态。
     if can_understand("blood_iaijutsu") and not ("blood_iaijutsu" in learned_techniques):
         learn_technique("blood_iaijutsu", "blood")
+    elif "blood_iaijutsu" in learned_techniques and can_understand("abyss_iaijutsu") and not ("abyss_iaijutsu" in learned_techniques):
+        learn_technique("abyss_iaijutsu", "abyssal")
+    elif "abyss_iaijutsu" in learned_techniques and can_understand("black_horizon") and not ("black_horizon" in learned_techniques):
+        learn_technique("black_horizon", "black_horizon")
 
 func _load_from_world_state() -> void:
     resonance = clampi(int(WorldState.hero_resonance), 0, 100)
@@ -114,11 +119,63 @@ func learn_technique(technique_id: String, variant_id: String = "") -> bool:
     return true
 
 func resolve_iaijutsu_variant() -> String:
-    if outer_exposure >= 35 and resonance >= 68 and humanity <= 65:
+    # Combat uses only forms the Hero has actually understood.
+    # 战斗只使用主角已经真正理解的形态。
+    if "black_horizon" in learned_techniques:
+        return "black_horizon"
+    if "abyss_iaijutsu" in learned_techniques:
         return "abyssal"
-    if ancient_exposure >= 1 and resonance >= 12:
+    if "blood_iaijutsu" in learned_techniques:
         return "blood"
     return "human"
+
+func can_use_blood_iaijutsu() -> bool:
+    # Kept for compatibility with existing callers; L now invokes the strongest understood form.
+    return resolve_iaijutsu_variant() != "human"
+
+func get_iaijutsu_profile() -> Dictionary:
+    match resolve_iaijutsu_variant():
+        "black_horizon":
+            return {
+                "variant": "black_horizon",
+                "stamina_cost": 36.0,
+                "health_cost": 14,
+                "abnormal_load": 28.0,
+                "damage_multiplier": 3.4,
+                "reach": 184.0,
+                "hitbox_size": Vector2(216.0, 78.0),
+                "hit_duration": 0.24,
+                "attack_time": 0.56,
+                "windup": 0.19
+            }
+        "abyssal":
+            return {
+                "variant": "abyssal",
+                "stamina_cost": 30.0,
+                "health_cost": 10,
+                "abnormal_load": 18.0,
+                "damage_multiplier": 2.8,
+                "reach": 154.0,
+                "hitbox_size": Vector2(184.0, 70.0),
+                "hit_duration": 0.20,
+                "attack_time": 0.48,
+                "windup": 0.15
+            }
+        "blood":
+            return {
+                "variant": "blood",
+                "stamina_cost": 26.0,
+                "health_cost": 8,
+                "abnormal_load": 10.0,
+                "damage_multiplier": 2.2,
+                "reach": 124.0,
+                "hitbox_size": Vector2(152.0, 58.0),
+                "hit_duration": 0.16,
+                "attack_time": 0.42,
+                "windup": 0.11
+            }
+        _:
+            return {}
 
 func get_combo_limit() -> int:
     return 4 if is_short_blade() else 3
@@ -160,9 +217,6 @@ func get_hit_window_duration(combo_step: int) -> float:
     if is_short_blade():
         return 0.065
     return 0.11 if combo_step < 3 else 0.14
-
-func can_use_blood_iaijutsu() -> bool:
-    return "blood_iaijutsu" in learned_techniques
 
 func add_abnormal_load(amount: float) -> void:
     if amount <= 0.0:
