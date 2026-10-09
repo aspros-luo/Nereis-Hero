@@ -6,6 +6,10 @@ const HOUND_SCRIPT = preload("res://scripts/enemies/pale_hound.gd")
 const NPC_SCRIPT = preload("res://scripts/npc/old_hunter.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
+const ASHEN_ROAD_BACKDROP = preload("res://assets/backgrounds/ashen_road_painterly.svg")
+const ASHEN_ROAD_FAR_MIST = preload("res://assets/backgrounds/ashen_road_far_mist.svg")
+const ASHEN_ROAD_MIDGROUND = preload("res://assets/backgrounds/ashen_road_midground.svg")
+const ASHEN_ROAD_FOREGROUND = preload("res://assets/backgrounds/ashen_road_foreground.svg")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const BOSS_GATE_SCRIPT = preload("res://scripts/world/boss_gate.gd")
 const LEVEL_EXIT_SCRIPT = preload("res://scripts/world/level_exit.gd")
@@ -258,32 +262,15 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw_environment_backdrop() -> void:
-    draw_circle(Vector2(420, 250), 260, Color("#18151d"))
-    draw_circle(Vector2(1280, 280), 340, Color("#17141b"))
-    draw_circle(Vector2(2140, 230), 300, Color("#151319"))
+    # Base illustration stays fixed to the level; transparent art layers add depth over it.
+    draw_texture_rect(ASHEN_ROAD_BACKDROP, Rect2(0, 0, 2400, 720), false)
 
-    _draw_house(Vector2(150, 430), 150, 110)
-    _draw_house(Vector2(420, 440), 120, 95)
-    _draw_house(Vector2(760, 438), 140, 100)
 
-    _draw_dead_tree(Vector2(1030, 520), 150)
-    _draw_dead_tree(Vector2(1220, 520), 110)
-    _draw_dead_tree(Vector2(1550, 520), 170)
-    _draw_dead_tree(Vector2(1690, 520), 120)
+func _draw_parallax_layer(texture: Texture2D, scroll_factor: float, left_padding: float) -> void:
+    var camera_x := camera.get_screen_center_position().x if is_instance_valid(camera) else 0.0
+    var layer_x := camera_x * (1.0 - scroll_factor) - left_padding
+    draw_texture_rect(texture, Rect2(layer_x, 0, 3600, 720), false)
 
-    draw_colored_polygon(
-        PackedVector2Array([
-            Vector2(1860, 420),
-            Vector2(1960, 250),
-            Vector2(2050, 420)
-        ]),
-        Color("#211b24")
-    )
-    draw_rect(Rect2(1940, 300, 28, 120), Color("#2c2530"))
-    draw_circle(Vector2(1954, 290), 16, Color("#5d4c55"))
-
-    draw_line(Vector2(2320, 520), Vector2(2320, 370), Color("#66545c"), 5.0)
-    draw_circle(Vector2(2320, 350), 14.0, Color("#8e7777"))
 
 func _draw_house(origin: Vector2, width: float, height: float) -> void:
     draw_rect(Rect2(origin.x - width * 0.5, origin.y - height, width, height), Color("#29232b"))
@@ -305,12 +292,47 @@ func _draw_dead_tree(origin: Vector2, height: float) -> void:
     draw_line(origin + Vector2(-10, -height * 0.45), origin + Vector2(44, -height * 0.7), Color("#2e272e"), 6.0)
     draw_line(origin + Vector2(-8, -height * 0.78), origin + Vector2(18, -height), Color("#2e272e"), 5.0)
 
+func _draw_ashen_ground() -> void:
+    draw_rect(Rect2(0, 520, 2400, 200), Color("#201c22"))
+    draw_rect(Rect2(0, 520, 2400, 8), Color("#17151c"))
+    draw_line(Vector2(0, 521), Vector2(2400, 521), Color("#57434a", 0.72), 2.0)
+    var slab_xs: Array[int] = [18, 174, 352, 536, 724, 914, 1106, 1290, 1480, 1668, 1852, 2040, 2220]
+    var slab_widths: Array[int] = [136, 154, 160, 164, 166, 168, 160, 166, 164, 158, 162, 156, 150]
+    for i in range(slab_xs.size()):
+        var x: float = float(slab_xs[i])
+        var width: float = float(slab_widths[i])
+        var top: float = 525.0 + float((i * 7) % 9)
+        var bottom: float = 555.0 + float((i * 11) % 18)
+        var stone_color := Color("#30272f") if i % 3 == 0 else (Color("#29232b") if i % 3 == 1 else Color("#342a31"))
+        draw_colored_polygon(PackedVector2Array([
+            Vector2(x, top), Vector2(x + width * 0.22, top + 2.0),
+            Vector2(x + width * 0.58, top - 1.0), Vector2(x + width, top + 3.0),
+            Vector2(x + width - 8.0, bottom), Vector2(x + width * 0.47, bottom + 3.0),
+            Vector2(x + 6.0, bottom - 2.0)
+        ]), stone_color)
+        draw_line(Vector2(x + 8.0, top + 2.0), Vector2(x + width * 0.55, top + 1.0), Color("#79606a", 0.38), 1.5)
+        draw_line(Vector2(x + width * 0.66, top + 5.0), Vector2(x + width * 0.61, top + 13.0), Color("#15141b", 0.9), 2.0)
+        draw_line(Vector2(x + width * 0.61, top + 13.0), Vector2(x + width * 0.68, top + 18.0), Color("#15141b", 0.9), 2.0)
+    for x in range(32, 2400, 96):
+        var offset := float((x * 13) % 23)
+        draw_colored_polygon(PackedVector2Array([
+            Vector2(x, 574.0 + offset), Vector2(x + 11.0, 571.0 + offset),
+            Vector2(x + 23.0, 575.0 + offset), Vector2(x + 8.0, 579.0 + offset)
+        ]), Color("#17151c", 0.85))
+    # Sparse bone-white chips and rust grit break up the otherwise uniform road.
+    for i in range(12):
+        var x := float((i * 193 + 79) % 2360)
+        var y := 568.0 + float((i * 37) % 112)
+        draw_line(Vector2(x, y), Vector2(x + 8.0, y - 2.0), Color("#9a887d", 0.34), 1.5)
+        draw_circle(Vector2(x + 22.0, y + 7.0), 1.5, Color("#a16f5b", 0.48))
+
+
 func _draw() -> void:
     draw_rect(Rect2(0, 0, 2400, 720), Color("#111018"))
     _draw_environment_backdrop()
-    draw_rect(Rect2(0, 520, 2400, 200), Color("#201c22"))
-    for x in range(0, 2400, 64):
-        draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
+    _draw_parallax_layer(ASHEN_ROAD_FAR_MIST, 0.12, 0.0)
+    _draw_parallax_layer(ASHEN_ROAD_MIDGROUND, 0.48, 250.0)
+    _draw_ashen_ground()
 
     draw_rect(Rect2(600, 445, 160, 75), Color("#27212a"))
     if not WorldState.boss_gate_open:
@@ -321,5 +343,6 @@ func _draw() -> void:
 
     draw_string(ThemeDB.fallback_font, Vector2(40, 235), NereisLocalization.translate_text("VILLAGE OUTSKIRTS"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
     draw_string(ThemeDB.fallback_font, Vector2(1240, 235), NereisLocalization.translate_text("THE ASHEN ROAD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
+    _draw_parallax_layer(ASHEN_ROAD_FOREGROUND, 1.08, 420.0)
 
 
