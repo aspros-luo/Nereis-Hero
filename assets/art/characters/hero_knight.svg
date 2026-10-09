@@ -40,4 +40,25 @@
 <path d="M58 124 L67 151 M132 128 L124 151" stroke="#a28a83" stroke-width="2" opacity=".8"/>
 <circle cx="96" cy="88" r="2" fill="#dfcda9"/><circle cx="96" cy="88" r="5" fill="none" stroke="#dfcda9" stroke-width="1" opacity=".7"/>
 <path d="M85 183 L79 196 M113 181 L123 194" stroke="#3a303b" stroke-width="3"/>
+
+<!-- Added high-contrast armor detailing for readability at in-game scale. -->
+<g id="hero-armor-engraving" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M82 27 L91 22 M114 29 L119 38 M84 53 L96 60 L110 54" stroke="#f0dfc0" stroke-width="1.5" opacity=".78"/>
+  <path d="M78 82 L84 96 L80 108 M115 86 L110 100 L113 108" stroke="#292630" stroke-width="2" opacity=".8"/>
+  <path d="M81 87 L85 96 M112 88 L108 98" stroke="#e2d0b4" stroke-width="1" opacity=".75"/>
+  <circle cx="70" cy="82" r="2" fill="#e5d2b1" stroke="none"/>
+  <circle cx="119" cy="82" r="2" fill="#e5d2b1" stroke="none"/>
+  <circle cx="61" cy="104" r="1.8" fill="#c9b89c" stroke="none"/>
+  <circle cx="130" cy="104" r="1.8" fill="#c9b89c" stroke="none"/>
+  <path d="M63 77 L72 70 M120 70 L129 78" stroke="#d8c6a8" stroke-width="1.2" opacity=".8"/>
+  <path d="M96 133 L96 145 M90 137 L102 141 M91 145 L101 133" stroke="#bba78d" stroke-width="1.5" opacity=".9"/>
+  <path d="M96 135 L100 139 L96 143 L92 139 Z" stroke="#bba78d" stroke-width="1.2"/>
+  <path d="M91 139 L95 137" stroke="#9f5359" stroke-width="2.2"/>
+  <path d="M57 177 L68 181 L64 191 M124 174 L130 185 L126 193" stroke="#d4c1a3" stroke-width="1.2" opacity=".72"/>
+  <path d="M58 188 L76 191 M116 190 L132 187" stroke="#b9a58b" stroke-width="2" opacity=".8"/>
+  <path d="M52 210 L61 211 M68 211 L78 210 M124 211 L134 210 M141 211 L151 213" stroke="#bba78d" stroke-width="1" opacity=".9"/>
+  <path d="M56 148 L60 157 L57 165 M128 144 L125 154 L128 160" stroke="#17151d" stroke-width="2.2" opacity=".9"/>
+  <path d="M58 171 L63 177 L59 182 L66 187 M128 168 L124 174 L130 180" stroke="#15141b" stroke-width="2.5"/>
+  <path d="M71 177 L76 181 M119 176 L115 181" stroke="#b09a84" stroke-width="1" opacity=".8"/>
+</g>
 </svg>
