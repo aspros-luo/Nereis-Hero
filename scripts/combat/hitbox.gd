@@ -54,5 +54,10 @@ func _physics_process(delta: float) -> void:
             if host and host.has_method("_on_attack_hit"):
                 host._on_attack_hit(damage, target_host)
 
+func deactivate() -> void:
+    active = false
+    active_time = 0.0
+    hit_targets.clear()
+
 func is_active() -> bool:
     return active
