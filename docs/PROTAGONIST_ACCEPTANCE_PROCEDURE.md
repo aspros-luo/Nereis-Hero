@@ -86,6 +86,12 @@
 5. Start new game/reset and verify abilities, achievements, materials and hidden state reset.
 6. Overlap Mite/door/NPC interaction ranges. Expected: only one actionable E prompt; menu controls do not trigger world interactions.
 
+### G. Abnormal load and progression isolation / 异常负荷与成长隔离
+1. With F5 ON, test the human, blood, abyssal and black-horizon forms. Expected abnormal-load gains: 0 / 10 / 18 / 28.
+2. Check the stamina regeneration multiplier at effective load thresholds 20 / 40 / 65 / 85.
+3. Use a rest point. Normal persisted load should decrease by 35 (minimum zero).
+4. Perform a non-human Debug form, press F6, and restart the game. Expected: the session-only load, selected Debug form, override and temporary fixtures do not persist.
+
 ## 4. 当前静态报告 / Current source-level report
 - [x] Quick Dash has its own state, X input, stamina cost, cooldown, lock gate, trail, damage interruption and reset paths.
 - [x] Quick Dash requires its persistent unlock record or session-only F5 override.
@@ -113,10 +119,3 @@ Console log:
 Pass / Fail / Blocked:
 Screenshot or short clip:
 ```
-
-
-### G. Abnormal load and progression isolation / 异常负荷与成长隔离
-1. With F5 ON, test the human, blood, abyssal and black-horizon forms. Expected abnormal-load gains: 0 / 10 / 18 / 28.
-2. Check the stamina regeneration multiplier at effective load thresholds 20 / 40 / 65 / 85.
-3. Use a rest point. Normal persisted load should decrease by 35 (minimum zero).
-4. Perform a non-human Debug form, press F6, and restart the game. Expected: the session-only load, selected Debug form, override and temporary fixtures do not persist.
