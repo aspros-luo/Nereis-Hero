@@ -193,6 +193,23 @@ func _ready() -> void:
 
 func bind_hero(target: Node) -> void:
     hero = target
+    var system: Node = target.get_node_or_null("HeroSystem") if is_instance_valid(target) else null
+    if system and system.has_signal("technique_understood"):
+        if not system.technique_understood.is_connected(_on_technique_understood):
+            system.technique_understood.connect(_on_technique_understood)
+
+func _on_technique_understood(technique_id: String) -> void:
+    var message_key := ""
+    match technique_id:
+        "blood_iaijutsu":
+            message_key = "technique.blood_unlocked"
+        "abyss_iaijutsu":
+            message_key = "technique.abyss_unlocked"
+        "black_horizon":
+            message_key = "technique.black_horizon_unlocked"
+        _:
+            return
+    _show_banner(NereisLocalization.t(message_key), 2.4)
 
 func set_story_mode(region: String, objective: String) -> void:
     story_region_source = region
