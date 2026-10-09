@@ -128,3 +128,15 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 - [x] Air-jump count resets on landing, death respawn and full restoration.
 - [ ] Godot runtime test: locked state cannot double-jump; unlocked state allows exactly one extra jump; landing resets it.
 - [ ] Define a separate input/state contract for quick dash before implementation; do not silently replace ordinary dodge.
+
+
+## Debug acceptance overlay / 验收调试覆盖层
+
+- [x] The Hero-local overlay is enabled by default on the development branch and can be toggled with F3.
+- [x] The overlay exposes combat state/action, HP/stamina, weapon, combo, invulnerability, echo cooldown, hidden progression values, abnormal load and extra-air-jump count for debugging only.
+- [x] Ctrl+F4 toggles the session-only weapon-technique unlock override; Ctrl+F5 refills HP/stamina and clears Echo cooldown. Neither action writes a debug grant to the save.
+- [x] F4/F5 without Ctrl remain available to existing scene/theater shortcuts.
+- [x] Removed the extra `queue_redraw()` from `_process`; the physics update path already requests redraws, avoiding a duplicate render-frame redraw request.
+- [ ] Godot runtime: verify overlay positioning/readability at multiple resolutions, input shortcuts, debug override, refill behavior, and normal progression with override disabled.
+
+**Status:** source-level change committed; no Godot runtime test was performed in this environment.
