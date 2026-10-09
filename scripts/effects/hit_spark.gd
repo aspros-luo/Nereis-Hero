@@ -4,6 +4,7 @@ var lifetime := 0.19
 var age := 0.0
 var radius := 8.0
 var seed_angle := 0.0
+const HIT_SPARK_ART: Texture2D = preload("res://assets/art/vfx/hit_spark.svg")
 
 func _ready() -> void:
     # Per-instance deterministic variation without relying on global random state.
@@ -21,6 +22,7 @@ func _process(delta: float) -> void:
 func _draw() -> void:
     var progress := clampf(age / 0.19, 0.0, 1.0)
     var alpha := 1.0 - progress
+    draw_texture_rect(HIT_SPARK_ART, Rect2(-radius * 0.9, -radius * 0.9, radius * 1.8, radius * 1.8), false, Color(1.0, 1.0, 1.0, alpha))
     var c := Color("#f4dca4")
     c.a = alpha
     var white := Color("#fff7df")
