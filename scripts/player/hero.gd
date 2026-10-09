@@ -12,7 +12,7 @@ const RESONANCE_TARGET_SCRIPT = preload("res://scripts/systems/resonance_hidden_
 const DEBUG_WALL_SCRIPT = preload("res://scripts/systems/debug_traversal_wall.gd")
 const HERO_LONG_ART: Texture2D = preload("res://assets/art/characters/hero_knight.svg")
 const HERO_SHORT_ART: Texture2D = preload("res://assets/art/characters/hero_short_blade.svg")
-const TEMP_SPRITE_ATLAS_PATH := "res://assets/art/characters/temp_swordfighter_atlas.png.b64"
+const TEMP_SPRITE_ATLAS: Texture2D = preload("res://assets/art/characters/temp_swordfighter_atlas.png")
 const TEMP_SPRITE_CELL_SIZE := 256
 const TEMP_SPRITE_COLUMNS := 10
 
@@ -1265,7 +1265,7 @@ func _draw() -> void:
 	# Animated presentation layer. Gameplay collision and combat timing stay unchanged.
 	var short_blade: bool = hero_system != null and hero_system.is_short_blade()
 	var hero_art: Texture2D = HERO_SHORT_ART if short_blade else HERO_LONG_ART
-	var art_tint := Color("#f3e6d4") if hit_confirm_time > 0.0 else Color.WHITE
+	var art_tint := Color("#d98f99") if state == CombatState.HURT else Color("#f3e6d4") if hit_confirm_time > 0.0 else Color.WHITE
 	var atlas_frame_rect := _get_temporary_sprite_frame_rect()
 	var art_rotation := 0.0
 	var art_bob := 0.0
@@ -1323,7 +1323,7 @@ func _draw() -> void:
 	draw_set_transform(pivot, art_rotation, Vector2(facing, 1.0) * art_scale)
 	if temporary_sprite_atlas != null:
 		# Temporary frame-based animation prototype. Original knight art remains the safe fallback.
-		draw_texture_rect_region(temporary_sprite_atlas, Rect2(-90.0, -162.0, 320.0, 320.0), atlas_frame_rect, art_tint)
+		draw_texture_rect_region(temporary_sprite_atlas, Rect2(-110.0, -162.0, 220.0, 220.0), atlas_frame_rect, art_tint)
 	else:
 		draw_texture_rect(hero_art, Rect2(-48.0, -103.0, 96.0, 112.0), false, art_tint)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
@@ -1395,23 +1395,16 @@ func _draw() -> void:
 # Temporary sprite-sheet loader for animation prototyping.
 # 临时动作图集加载器：后续会用原创骑士分层素材替换这套占位角色。
 func _load_temporary_sprite_atlas() -> void:
-	if not FileAccess.file_exists(TEMP_SPRITE_ATLAS_PATH):
-		push_warning("Temporary sprite atlas data not found; using the original knight SVG.")
+	# Use the imported PNG directly so Godot's normal texture importer handles it.
+	# 直接使用 PNG 资源，由 Godot 的纹理导入器正常处理。
+	if TEMP_SPRITE_ATLAS == null:
+		push_warning("Temporary sprite atlas unavailable; falling back to the original knight SVG.")
 		return
-
-	var encoded_atlas := FileAccess.get_file_as_string(TEMP_SPRITE_ATLAS_PATH).strip_edges()
-	if encoded_atlas.is_empty():
-		push_warning("Temporary sprite atlas data is empty; using the original knight SVG.")
+	if TEMP_SPRITE_ATLAS.get_width() < TEMP_SPRITE_COLUMNS * TEMP_SPRITE_CELL_SIZE or TEMP_SPRITE_ATLAS.get_height() < 9 * TEMP_SPRITE_CELL_SIZE:
+		push_warning("Temporary sprite atlas dimensions do not match the expected 10x9 grid.")
 		return
-
-	var atlas_image := Image.new()
-	var image_error: Error = atlas_image.load_png_from_buffer(Marshalls.base64_to_raw(encoded_atlas))
-	if image_error != OK:
-		push_warning("Temporary sprite atlas could not be decoded; using the original knight SVG.")
-		return
-
-	temporary_sprite_atlas = ImageTexture.create_from_image(atlas_image)
-	_log("ART", "Temporary sprite-sheet animation prototype loaded")
+	temporary_sprite_atlas = TEMP_SPRITE_ATLAS
+	_log("ART", "Temporary swordfighter atlas loaded; 10x9 cells at 256px, gameplay logic unchanged")
 
 func _get_temporary_sprite_frame_rect() -> Rect2:
 	var frame_index := 0

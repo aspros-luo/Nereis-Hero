@@ -399,3 +399,12 @@ The design document was committed to the feature branch. This was a documentatio
 - Village Hub test theaters formerly on F4/F5/F6 now use F10/F11/F12 and respect input locks.
 - Added reusable grapple-anchor, resonance-hidden-target, and marked-wall components; temporary Debug fixtures are session-only. Updated bilingual protagonist acceptance, ability design, testing and audit reports.
 - Static checks are source-level only. Godot 4.6.1 parser, runtime, collision and actual tuning values remain pending local validation. No GitHub Actions were triggered.
+
+
+## 2026-10-09 — Temporary swordfighter animation atlas
+
+- Added `assets/art/characters/temp_swordfighter_atlas.png` from the user-provided `RPG-Udemy` repository as a temporary 10×9 frame atlas (256×256 cells).
+- Connected the existing Hero state-to-frame renderer to a normal imported PNG instead of the missing `.png.b64` text resource. Adjusted on-screen frame bounds and added a brief red hurt tint.
+- The Hero's original SVGs remain as fallback textures if the atlas is unavailable; combat code, collision, hitboxes, and skill timings are unchanged.
+- The image is a frame-based sprite sheet, not a bone rig. A future Skeleton2D pass would require separated body/limb art. License status has been marked for confirmation before public release.
+- Static source/resource checks only; Godot import and runtime rendering still require local verification. No GitHub Actions workflow was triggered.

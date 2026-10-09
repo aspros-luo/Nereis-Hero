@@ -13,6 +13,16 @@
 - 战技：断罪斩、残月连斩三段、余响符印、命中火花。
 - 资源来源和许可记录：`assets/art/ART_ASSET_LICENSES.md`。
 
+### 临时动作图集 / Temporary animation atlas
+
+为尽快验证动作可读性，本分支暂时使用从用户的 `RPG-Udemy/Assets/Graphics/153143.png` 复制而来的整角色序列图：`assets/art/characters/temp_swordfighter_atlas.png`。图集为 2560×2304，按 10 列 × 9 行、每格 256×256 取帧。现有 `hero.gd` 根据主角动作状态选择待机、移动、攻击、闪避、跳跃/坠落、攀墙、受击和死亡的占位帧；绘制脚本只替换视觉层，碰撞体、命中框、伤害、能力输入与时序保持不变。
+
+这张图集是逐帧序列图，不是骨骼绑定文件。现在使用逐帧切图是为了快速获得明显的挥剑动作；真正的 `Skeleton2D/Bone2D` 版本需要将身体、四肢和武器分离成独立部件后再绑定骨骼。该临时人物外观与 Nereis-Hero 最终哥特骑士风格不一致，因此仅用于动画原型，之后应替换为原创骑士动作帧或分层骨骼素材。
+
+The project temporarily copies the full-character sprite sheet from the user's `RPG-Udemy/Assets/Graphics/153143.png` into `assets/art/characters/temp_swordfighter_atlas.png`. It is a 2560×2304 sheet arranged as 10 columns × 9 rows of 256×256 cells. `hero.gd` picks placeholder frames for idle, movement, attack, dodge, jump/fall, wall climb, hurt and death states. This changes rendering only; collision shapes, hitboxes, damage, ability input and timings remain unchanged.
+
+This is a frame-by-frame sprite sheet, not a skeletal rig. Frame slicing is the fastest way to make the existing sword attacks visibly animate. A future `Skeleton2D/Bone2D` version requires separate body, limb and weapon pieces. The temporary character style does not match the final gothic-knight art direction and must be replaced by original knight animation frames or properly separated rig parts before release.
+
 ### 实现约束
 - 只替换绘制层；不修改碰撞体、攻击/受击区域、伤害、敌人 AI、移动、体力消耗或战技触发时序。
 - SVG 作为可缩放纹理使用；现有脚本仍负责命中判定与技能时序。
@@ -40,6 +50,10 @@ Move Nereis Hero away from geometric placeholder characters toward a coherent hi
 - Ashen Knight: phase-one armor and transformed phase-two appearance.
 - VFX: Judgment Slash, three Crescent Combo stages, Eldritch Echo sigil and impact spark.
 - Provenance and license notes: `assets/art/ART_ASSET_LICENSES.md`.
+
+### Temporary animation atlas
+
+A full-character frame sheet from the user's `RPG-Udemy` repository is temporarily integrated at `assets/art/characters/temp_swordfighter_atlas.png`. The atlas is 10×9 cells at 256×256 each and is used by the existing Hero renderer. It is not a skeletal rig; a real `Skeleton2D/Bone2D` setup would require separated body and limb artwork. This placeholder changes only visuals, and it is not cleared as final release art until the source asset's license is confirmed.
 
 ### Constraints
 - Rendering-only changes: no edits to collision shapes, hitboxes/hurtboxes, damage, enemy AI, movement, stamina costs or technique timing.

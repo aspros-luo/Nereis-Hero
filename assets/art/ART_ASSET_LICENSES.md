@@ -10,6 +10,7 @@ These SVGs were authored specifically for Nereis Hero for this art pass. They we
 |---|---|---|
 | `assets/art/characters/hero_knight.svg` | Hero long sword / 主角长剑 | Original project artwork / 项目原创 |
 | `assets/art/characters/hero_short_blade.svg` | Hero short blade / 主角短刃 | Original project variant / 项目原创变体 |
+| `assets/art/characters/temp_swordfighter_atlas.png` | Temporary frame-based Hero animation prototype / 临时主角逐帧动画 | Copied from user-provided `aspros-luo/RPG-Udemy/Assets/Graphics/153143.png`; third-party license not independently verified. Prototype use only; verify rights or replace before public release / 来自用户提供的 RPG-Udemy 仓库；第三方许可尚未独立核实。仅作原型用途，公开发布前需确认授权或替换 |
 | `assets/art/characters/mite.svg` | Mite / 蜜忒 | Original project artwork / 项目原创 |
 | `assets/art/characters/cultist.svg` | Cultist / 苦修者 | Original project artwork / 项目原创 |
 | `assets/art/characters/ashen_knight.svg` | Ashen Knight phase one / 灰烬骑士一阶段 | Original project artwork / 项目原创 |
@@ -37,3 +38,8 @@ No third-party pack has been copied into this repository. Listing a candidate do
 3. Do not mix styles just because an asset is free. 不要只因免费就混搭不一致的画风。
 4. Do not redistribute raw packs; commit only files allowed by the license. 不重新分发原始素材包，只提交许可允许的文件。
 5. Recheck rights before public/commercial release. 公开或商业发行前重新核验权属。
+
+
+## Temporary animation asset note / 临时动作素材说明
+
+The sprite sheet is used solely to validate frame-based movement and sword-attack readability. Its presence does not imply that the original asset is cleared for redistribution. Confirm its source license before a public release or replace it with original artwork. / 该图集仅用于验证逐帧移动和挥剑动作可读性；接入项目不代表原始素材已获公开再分发许可。公开发布前需确认来源许可，或替换为项目原创素材。
