@@ -160,6 +160,28 @@ It exposes internal development state including:
 
 ---
 
+## Protagonist debug acceptance / 主角调试验收
+
+On the development branch, the Hero-local debug overlay is enabled by default. It follows the Hero and shows current HP/stamina, weapon, combat state/action, combo index, invulnerability, special-technique cooldown, hidden resonance/exposure/humanity/abnormal-load values, and extra-air-jump count. Hidden values are shown only in this debug overlay, not the normal HUD.
+
+- **F3**: toggle debug overlay visibility.
+- **Ctrl+F4**: toggle session-only weapon-technique unlock override. This is not saved and does not grant narrative progression.
+- **Ctrl+F5**: refill Hero HP/stamina and clear the Eldritch Echo cooldown for repeated combat checks. This is session-only.
+- **F4/F5 without Ctrl** remain available to existing scene/theater shortcuts.
+
+Use the overlay to report the exact combat state and resource values when an issue occurs. The override is only a test convenience; acceptance must also be repeated with it disabled.
+
+主角调试覆盖层在当前开发分支默认开启，跟随主角显示生命/体力、武器、战斗状态与动作、连击段数、无敌状态、战技冷却、隐藏共鸣/接触/人性/异常负荷，以及额外空中跳跃次数。隐藏数值只在调试覆盖层中显示，不进入正式 HUD。
+
+- **F3**：显示/隐藏调试覆盖层。
+- **Ctrl+F4**：切换本次运行有效的武器战技解锁覆盖，不写入存档，也不会授予剧情成长。
+- **Ctrl+F5**：恢复主角生命/体力并清空回声战技冷却，便于重复战斗测试，仅影响当前运行。
+- 不带 Ctrl 的 **F4/F5** 仍保留原有场景/剧场快捷键。
+
+发现问题时请记录覆盖层中的战斗状态与资源数值。调试覆盖关闭后仍必须重复验收，不能只凭调试模式通过就认为正常流程通过。
+
+---
+
 ## Original combat regression
 
 The previous Core Combat Demo remains in:
