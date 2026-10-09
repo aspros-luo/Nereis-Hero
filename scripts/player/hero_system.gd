@@ -1,5 +1,7 @@
 extends Node
 ## Protagonist runtime rules.
+## 主角运行时规则。
+## Players only see HP and stamina; resonance, exposure, humanity and abnormal load stay hidden.
 ## 玩家只看到 HP / 体力；共鸣、接触、人性、异常负荷等全部是隐藏状态。
 
 enum WeaponStyle {
@@ -129,7 +131,7 @@ func get_attack_windup() -> float:
 
 func get_combo_damage_multiplier(combo_step: int) -> float:
     if is_short_blade():
-        var short_multipliers := [0.62, 0.66, 0.72, 0.88]
+        var short_multipliers := [0.72, 0.78, 0.88, 1.05]
         return float(short_multipliers[clampi(combo_step - 1, 0, short_multipliers.size() - 1)])
     var sword_multipliers := [1.0, 1.18, 1.5]
     return float(sword_multipliers[clampi(combo_step - 1, 0, sword_multipliers.size() - 1)])
