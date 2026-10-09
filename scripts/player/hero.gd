@@ -6,6 +6,7 @@ const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 const SLASH_ARC_SCRIPT = preload("res://scripts/effects/slash_arc.gd")
 const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
 const HERO_SYSTEM_SCRIPT = preload("res://scripts/player/hero_system.gd")
+const ECHO_PULSE_SCRIPT = preload("res://scripts/effects/echo_pulse.gd")
 
 const SPEED := 260.0
 const ATTACK_MOVE_SPEED := 92.0
@@ -435,7 +436,7 @@ func _perform_eldritch_echo() -> void:
     _log("TECHNIQUE", "Eldritch Echo invoked; cooldown=%.1f" % ECHO_COOLDOWN)
 
 func _release_eldritch_echo() -> void:
-    var pulse: Node2D = preload("res://scripts/effects/echo_pulse.gd").new()
+    var pulse: Node2D = ECHO_PULSE_SCRIPT.new()
     pulse.global_position = global_position + Vector2(0.0, -30.0)
     get_parent().add_child(pulse)
     var affected := 0
@@ -467,8 +468,12 @@ func debug_refill_combat_resources() -> void:
     stamina_regen_delay = 0.0
     eldritch_cooldown_remaining = 0.0
     invulnerable = false
-    if state == CombatState.HURT:
-        hurt_time = 0.0
+    hurt_time = 0.0
+    dodge_time = 0.0
+    combo_step = 0
+    combo_window = 0.0
+    _cancel_attack_action()
+    if state in [CombatState.HURT, CombatState.DODGE, CombatState.ATTACK]:
         _set_state(CombatState.IDLE)
     _log("DEBUG", "HP/stamina/cooldown restored (session only)")
 
@@ -639,6 +644,8 @@ func receive_damage(amount: int, source: Node = null) -> void:
         _deactivate_attack_hitbox()
         attack_requested = false
         technique_requested = false
+        weapon_technique_requested = false
+        eldritch_requested = false
         dodge_requested = false
         jump_requested = false
         _log("WORLD", "Hero respawned at checkpoint=%s" % WorldState.checkpoint_position)
