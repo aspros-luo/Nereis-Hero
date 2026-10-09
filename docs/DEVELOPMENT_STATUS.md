@@ -305,3 +305,29 @@ When a future implementation reaches a truly unresolved core story decision, sto
 1. Continue source-level regression review around save/load and scene transitions.
 2. Keep progression rewards idempotent across death, scene re-entry and save migration.
 3. Implement new traversal abilities only after their input and combat-state contracts are explicit; keep sewer mutation content gated until its encounter and reward calls exist.
+
+
+## 2026-10-09 — Ability-first development workflow
+
+### Director decision
+
+The protagonist's complete ability/technique set must be designed and validated before distributing unlocks across story chapters and maps.
+
+### Added
+
+- Added `docs/HERO_ABILITY_DESIGN.md` as the first consolidated ability design baseline.
+- Separated core combat, traversal, iaijutsu mutations, Debug all-capabilities mode, shared validation matrix, and the later story/map distribution phase.
+- Marked each ability honestly as implemented, partially implemented, or design-only; a reserved ability ID is not considered a completed mechanic.
+- Specified that Debug overrides must be session-only and must not mutate formal unlock records, achievements, materials, story flags, or saves.
+
+### Next sequence
+
+1. Review/freeze the ability catalogue and input contracts.
+2. Implement Debug all-capabilities override plus individual iaijutsu-form selection.
+3. Implement missing movement mechanics and validate ability combinations in a dedicated test area.
+4. Balance combat and resource costs.
+5. Only after the ability set passes validation, assign ability rewards to levels, bosses, quests, and story beats.
+
+### Test integrity
+
+The design document was committed to the feature branch. This was a documentation-only change; Godot runtime tests were not run and no GitHub Actions workflow was intentionally triggered.
