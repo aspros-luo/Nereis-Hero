@@ -4,6 +4,7 @@ var damage := 0
 var active := false
 var active_time := 0.0
 var host: Node
+var collision_shape: CollisionShape2D
 var hit_targets: Array[Node] = []
 
 func setup(actor: Node, shape_size: Vector2, offset: Vector2) -> void:
@@ -11,11 +12,18 @@ func setup(actor: Node, shape_size: Vector2, offset: Vector2) -> void:
     position = offset
     collision_layer = 0
     collision_mask = 2
-    var collision := CollisionShape2D.new()
+    collision_shape = CollisionShape2D.new()
     var rectangle := RectangleShape2D.new()
     rectangle.size = shape_size
-    collision.shape = rectangle
-    add_child(collision)
+    collision_shape.shape = rectangle
+    add_child(collision_shape)
+
+func set_shape_size(shape_size: Vector2) -> void:
+    if not collision_shape:
+        return
+    var rectangle := collision_shape.shape as RectangleShape2D
+    if rectangle:
+        rectangle.size = shape_size
 
 func activate(new_damage: int, duration: float) -> void:
     damage = new_damage
