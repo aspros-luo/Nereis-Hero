@@ -126,6 +126,9 @@ func _spawn_death_burst() -> void:
     get_parent().add_child(effect)
     effect.call("setup", 16.0)
 
+func is_attack_telegraphed() -> bool:
+    return attack_windup > 0.0
+
 func _spawn_hit_spark() -> void:
     var effect := Node2D.new()
     effect.set_script(HIT_SPARK_SCRIPT)
