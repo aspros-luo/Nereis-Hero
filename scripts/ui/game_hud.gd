@@ -356,7 +356,6 @@ func _build_pause_menu() -> void:
     pause_panel.add_child(new_game_button)
     new_game_button.pressed.connect(_confirm_new_game)
 
-    title_button = _make_menu_button()
     character_button = _make_menu_button()
     character_button.position = Vector2(90, 297)
     pause_panel.add_child(character_button)
@@ -434,7 +433,7 @@ func _on_language_selected(index: int) -> void:
 func _refresh_character_details() -> void:
     var weapon_key := "menu.weapon_short_blade" if str(WorldState.current_weapon_style) == "short_blade" else "menu.weapon_long_sword"
     var weapon_name := NereisLocalization.t(weapon_key)
-    var technique_names: Array[String] = []
+    var technique_names: PackedStringArray = []
     for technique_id in WorldState.learned_techniques:
         if technique_id == "blood_iaijutsu":
             technique_names.append(NereisLocalization.t("menu.technique_blood_iaijutsu"))
