@@ -31,7 +31,7 @@
 | Space | Wall jump while touching a marked wall |
 | V | Resonance Sight: 10 stamina, 4.5s duration, 6s cooldown |
 | PageUp / PageDown | Select iaijutsu form while F5 is ON; press L to test |
-| F3 | Existing scene/global debug shortcut, where supported |
+| F3 | Global world-state Debug panel |
 | F4 | Toggle Hero-local debug overlay |
 | F5 | Toggle session-only all-protagonist-ability override; creates temporary anchors, hidden traces and marked walls |
 | F6 | Restore HP/stamina; clear temporary ability effects/cooldowns and cancel active action/hitbox |
@@ -61,23 +61,24 @@
 ### C. Traversal and perception / 位移与感知
 1. Turn F5 ON and press G. Expected: the Hero pulls toward a temporary grapple anchor; solid collision blocks travel; reaching or timing out ends the action.
 2. Touch a temporary marked wall. Hold W to climb, release W to slide slowly, then press Space to wall-jump away. Unmarked walls must not enable this action.
-3. Press V to enable Resonance Sight. Temporary hidden traces should be visible while the ability is active, then hide when it expires.
-4. Press PageUp/PageDown to select each iaijutsu form; press L and inspect HP/stamina cost, abnormal-load feedback and matching VFX. Selection and load accumulated under Debug must not be saved.
-5. Trigger a precise dodge against an enemy with F5 ON. Expected: enemies slow for about 2.4 seconds while the Hero stays responsive. Receive damage, open menu and change scene to verify cleanup.
+3. With F5 enabled, press Space twice before landing. Expected: exactly one extra air jump; a third jump is unavailable, and landing resets the counter.
+4. Press V to enable Resonance Sight. Temporary hidden traces should be visible while the ability is active, then hide when it expires.
+5. Press PageUp/PageDown to select each iaijutsu form; press L and inspect HP/stamina cost, abnormal-load feedback, hit range and matching VFX. Selection and load accumulated under Debug must not be saved.
+6. Trigger a precise dodge against an enemy with F5 ON. Expected: enemies slow for about 2.4 seconds while the Hero stays responsive. Receive damage, open menu and change scene to verify cleanup.
 
-### C. Ordinary dodge regression / 普通闪避回归
+### D. Ordinary dodge regression / 普通闪避回归
 1. With F5 override OFF, press K/Shift.
 2. Confirm the ordinary dodge remains separate and still uses its own invulnerability frames.
 3. Confirm only ordinary dodge can trigger precision-dodge riposte; Quick Dash offers no invulnerability.
 
-### D. Weapon and special-technique regression / 武器与战技回归
+### E. Weapon and special-technique regression / 武器与战技回归
 1. Select Long Sword using Q and press F with F5 ON: expect one Judgment Slash hit window.
 2. Switch to Short Blade and press F: expect three independent Crescent Combo hit windows.
 3. Press R near enemies: expect Echo pulse, resource cost/cooldown, brief ordinary-enemy stagger and capped boss control.
 4. With F5 OFF, techniques without formal unlock records remain unavailable.
 5. Perform a precise K/Shift dodge. Only a hit avoided in the opening 0.075-second window should arm a one-hit 1.35x riposte.
 
-### E. State/save/reset regression / 状态、存档和重置回归
+### F. State/save/reset regression / 状态、存档和重置回归
 1. Start an attack and receive damage. Expected: hitbox closes and no buffered action fires after hitstun.
 2. Die/respawn. Expected: attack, dash, dodge, hitbox, combo and air-jump counters reset; formal abilities remain earned.
 3. Use a rest point. Expected: HP/stamina and temporary action/cooldown state reset without duplicate unlocks.
@@ -114,7 +115,7 @@ Screenshot or short clip:
 ```
 
 
-### F. Abnormal load and progression isolation / 异常负荷与成长隔离
+### G. Abnormal load and progression isolation / 异常负荷与成长隔离
 1. With F5 ON, test the human, blood, abyssal and black-horizon forms. Expected abnormal-load gains: 0 / 10 / 18 / 28.
 2. Check the stamina regeneration multiplier at effective load thresholds 20 / 40 / 65 / 85.
 3. Use a rest point. Normal persisted load should decrease by 35 (minimum zero).
