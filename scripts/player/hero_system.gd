@@ -24,6 +24,18 @@ var technique_variants: Dictionary = {}
 func _ready() -> void:
     _load_from_world_state()
 
+func _process(_delta: float) -> void:
+    # Keep runtime values aligned with saved narrative facts without exposing them in HUD.
+    resonance = clampi(int(WorldState.hero_resonance), 0, 100)
+    ancient_exposure = clampi(int(WorldState.ancient_exposure), 0, 100)
+    outer_exposure = clampi(int(WorldState.outer_exposure), 0, 100)
+    humanity = clampi(int(WorldState.hero_humanity), 0, 100)
+    abnormal_load = clampf(float(WorldState.abnormal_load), 0.0, 100.0)
+
+    # Discover the first altered technique silently when its world conditions are met.
+    if can_understand("blood_iaijutsu") and not ("blood_iaijutsu" in learned_techniques):
+        learn_technique("blood_iaijutsu", "blood")
+
 func _load_from_world_state() -> void:
     resonance = clampi(int(WorldState.hero_resonance), 0, 100)
     ancient_exposure = clampi(int(WorldState.ancient_exposure), 0, 100)
