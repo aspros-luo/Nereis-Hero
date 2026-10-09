@@ -23,6 +23,7 @@ signal defeated
 signal attack_telegraphed
 
 func _ready() -> void:
+    add_to_group("combat_enemies")
     _setup_combat_components()
     _log("BOOT", "Cultist initialized")
     queue_redraw()
@@ -119,6 +120,17 @@ func receive_damage(amount: int, source: Node = null) -> void:
 
 func take_damage(amount: int) -> void:
     receive_damage(amount, null)
+
+func apply_echo_stagger(duration: float) -> bool:
+    if health <= 0 or is_queued_for_deletion():
+        return false
+    stun_time = maxf(stun_time, clampf(duration, 0.0, 0.45))
+    windup = 0.0
+    attack_released = true
+    hit_flash = maxf(hit_flash, 0.12)
+    velocity.x *= 0.25
+    _log("COMBAT", "Cultist staggered by Eldritch Echo for %.2fs" % stun_time)
+    return true
 
 func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
