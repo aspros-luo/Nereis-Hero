@@ -3,6 +3,7 @@ extends Node
 signal hidden_resistance_awakened_event
 
 const SAVE_PATH := "user://nereis_hero_save.json"
+const WITCH_TIME_OVERLAY_SCRIPT: Script = preload("res://scripts/effects/witch_time_overlay.gd")
 
 var hero_memory := 0
 var hero_humanity := 100
@@ -54,6 +55,7 @@ var hitstop_serial := 0
 # 魔女时间只缩放敌方 AI 的 delta，不减慢主角输入与物理响应。
 var witch_time_remaining := 0.0
 var witch_time_enemy_scale := 0.22
+var witch_time_visual: CanvasLayer
 var resonance_sight_active := false
 var _last_runtime_scene_path := ""
 var _last_resonance_signature := Vector3i(-1, -1, -1)
@@ -102,9 +104,12 @@ func _process(delta: float) -> void:
         _last_resonance_signature = Vector3i(-1, -1, -1)
 
     if witch_time_remaining > 0.0:
+        if not is_instance_valid(witch_time_visual):
+            _show_witch_time_visual()
         witch_time_remaining = maxf(0.0, witch_time_remaining - delta)
         if witch_time_remaining <= 0.0:
             print("[NEREIS][ABILITY] Witch Time ended")
+            _hide_witch_time_visual()
 
 func prepare_scene_runtime() -> void:
     get_tree().paused = false
@@ -119,8 +124,13 @@ func prepare_scene_runtime() -> void:
 func trigger_witch_time(duration: float = 2.4, enemy_scale: float = 0.22) -> void:
     if input_locked or menu_input_locked or duration <= 0.0:
         return
+    var was_active := witch_time_remaining > 0.0
     witch_time_remaining = maxf(witch_time_remaining, duration)
     witch_time_enemy_scale = clampf(enemy_scale, 0.08, 0.60)
+    if not was_active:
+        _show_witch_time_visual()
+    elif is_instance_valid(witch_time_visual):
+        witch_time_visual.call("play_activation")
     print("[NEREIS][ABILITY] Witch Time active for %.2fs; enemy delta scale=%.2f" % [witch_time_remaining, witch_time_enemy_scale])
 
 func clear_witch_time(reason: String = "") -> void:
@@ -128,6 +138,27 @@ func clear_witch_time(reason: String = "") -> void:
         print("[NEREIS][ABILITY] Witch Time cleared%s" % (": " + reason if not reason.is_empty() else ""))
     witch_time_remaining = 0.0
     witch_time_enemy_scale = 1.0
+    _hide_witch_time_visual()
+
+func _show_witch_time_visual() -> void:
+    var scene := get_tree().current_scene
+    if scene == null:
+        return
+    if is_instance_valid(witch_time_visual) and witch_time_visual.get_parent() != scene:
+        witch_time_visual.queue_free()
+        witch_time_visual = null
+    if not is_instance_valid(witch_time_visual):
+        witch_time_visual = CanvasLayer.new()
+        witch_time_visual.set_script(WITCH_TIME_OVERLAY_SCRIPT)
+        witch_time_visual.name = "WitchTimeVisual"
+        scene.add_child(witch_time_visual)
+    else:
+        witch_time_visual.call("play_activation")
+
+func _hide_witch_time_visual() -> void:
+    if is_instance_valid(witch_time_visual):
+        witch_time_visual.queue_free()
+    witch_time_visual = null
 
 func get_combat_enemy_time_scale() -> float:
     return witch_time_enemy_scale if witch_time_remaining > 0.0 else 1.0

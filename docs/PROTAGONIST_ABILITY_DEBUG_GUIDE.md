@@ -54,6 +54,14 @@ After F5, Space should allow exactly one extra jump before landing. Quick Dash c
 - 魔女时间应同时减慢敌人的实际移动、攻击前摇计时与动画，主角自身移动不减速。
 - 在精准窗口外闪避虽然仍可能无敌，但不触发魔女时间/精准反击。
 
+
+
+### 魔女时间视觉反馈 / Witch Time Visual Feedback
+
+魔女时间触发时会出现一阵很短的边缘放射光线与稀疏晶体闪点；持续期间，画面边缘有轻微的紫黑色压暗与细微时间环，HUD 保持清晰。视觉效果只用于状态识别，不用全屏闪白或强烈扭曲遮挡战斗。敌人的速度缩放、主角的正常操控和精准闪避触发条件保持不变。
+
+On activation, a brief radial streak and sparse crystal glints sweep the screen edges. During Witch Time, a restrained violet-black vignette and fine temporal rings identify the state while keeping the HUD readable. The visual layer does not alter gameplay timing or the precision-dodge trigger.
+
 ### 3. 钩爪与攀墙 / Grapple and wall traversal
 
 - G 连接最近的可见测试锚点；主角应沿碰撞移动前往锚点，不允许瞬移穿墙。飞行中再按 G 可取消，目标被移除或超时应正常结束。
