@@ -139,17 +139,90 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    var tint := Color("#f4d9d6") if hit_flash > 0.0 else Color.WHITE
-    draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing, 1.0))
-    draw_texture_rect(CULTIST_ART, Rect2(-43.0, -86.0, 86.0, 108.0), false, tint)
-    draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+    var sway: float = sin(animation_time * 4.6) * 1.8
+    var hit := hit_flash > 0.0
+    var robe := Color("#a94b55") if hit else Color("#30252f")
+    var robe_light := Color("#d05b61") if hit else Color("#57404b")
+    var robe_shadow := Color("#17151d")
+    var bone := Color("#e0d0b5")
+    var iron := Color("#8e7779")
+    var hood := Color("#17151d")
+
+    # Ground shadow, then a layered, ragged robe silhouette.
+    _draw_shadow_ellipse(Vector2(0, 2), 27.0, 6.0, Color(0.03, 0.02, 0.04, 0.5))
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-13, -43 + sway), Vector2(13, -43 + sway),
+        Vector2(22, -12), Vector2(31, 9), Vector2(15, 7),
+        Vector2(6, 13), Vector2(-5, 8), Vector2(-21, 12),
+        Vector2(-30, 5), Vector2(-22, -15)
+    ]), robe_shadow)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-12, -42 + sway), Vector2(12, -42 + sway),
+        Vector2(18, -14), Vector2(25, 4), Vector2(12, 7),
+        Vector2(4, 3), Vector2(-5, 9), Vector2(-19, 6),
+        Vector2(-24, 1), Vector2(-18, -17)
+    ]), robe)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-9, -38 + sway), Vector2(0, -40 + sway),
+        Vector2(7, -13), Vector2(2, 5), Vector2(-7, 6),
+        Vector2(-14, -11)
+    ]), robe_light)
+    draw_line(Vector2(12, -34 + sway), Vector2(17, -9), Color("#7b5961", 0.8), 2.0)
+    draw_line(Vector2(-15, -13), Vector2(-23, 4), Color("#76505b", 0.75), 2.0)
+
+    # Long sleeves and crooked hands; the weapon arm leads the telegraph.
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-12, -36 + sway), Vector2(-21, -33 + sway),
+        Vector2(-35, -10), Vector2(-29, -5), Vector2(-15, -21)
+    ]), robe_shadow)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(11, -36 + sway), Vector2(20, -31 + sway),
+        Vector2(34, -13), Vector2(29, -7), Vector2(15, -22)
+    ]), robe_light)
+    draw_line(Vector2(-31, -8), Vector2(-35, 0), bone, 3.0)
+    draw_line(Vector2(31, -10), Vector2(36, -2), bone, 3.0)
+
+    # Hood rim and an expressionless bone mask instead of a flat face circle.
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-19, -52 + sway), Vector2(-15, -68 + sway),
+        Vector2(-4, -77 + sway), Vector2(10, -72 + sway),
+        Vector2(20, -56 + sway), Vector2(15, -43 + sway),
+        Vector2(-13, -42 + sway)
+    ]), hood)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-11, -61 + sway), Vector2(-7, -69 + sway),
+        Vector2(5, -70 + sway), Vector2(12, -60 + sway),
+        Vector2(9, -49 + sway), Vector2(-8, -48 + sway)
+    ]), bone if not hit else Color("#f1a0a0"))
+    draw_line(Vector2(-8, -59 + sway), Vector2(-2, -57 + sway), robe_shadow, 3.0)
+    draw_line(Vector2(3, -57 + sway), Vector2(9, -59 + sway), robe_shadow, 3.0)
+    draw_line(Vector2(-2, -54 + sway), Vector2(1, -50 + sway), Color("#88736e"), 1.5)
+    draw_line(Vector2(-15, -48 + sway), Vector2(14, -47 + sway), iron, 2.0)
+
+    # A broken prayer medallion hangs over the chest, faintly rust-red.
+    draw_line(Vector2(0, -43 + sway), Vector2(1, -27 + sway), Color("#8c6b6d"), 2.0)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-5, -30 + sway), Vector2(1, -36 + sway),
+        Vector2(7, -29 + sway), Vector2(1, -21 + sway)
+    ]), Color("#a64c56") if not hit else Color("#e0b8a0"))
+    draw_line(Vector2(1, -32 + sway), Vector2(1, -25 + sway), bone, 1.5)
 
     if windup > 0.0:
-        var telegraph_color := Color("#e77c83") if hit_flash <= 0.0 else Color("#f4c5b6")
-        draw_arc(Vector2(facing * 22.0, -27.0), 38.0, -0.92 if facing > 0.0 else 4.06, 0.92 if facing > 0.0 else 5.36, 20, telegraph_color, 3.0)
-        draw_line(Vector2(facing * 18.0, -27.0), Vector2(facing * 53.0, -34.0), telegraph_color, 2.0)
-    draw_string(ThemeDB.fallback_font, Vector2(-48.0, -94.0), "CULTIST %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#c7afa8"))
+        var pulse: float = 1.0 + sin(animation_time * 18.0) * 0.18
+        draw_arc(Vector2(facing * 22.0, -24), 34.0 * pulse, -0.85 if facing > 0 else 3.99, 0.85 if facing > 0 else 5.42, 16, Color("#c44e5a"), 4.0)
+        draw_line(Vector2(facing * 28.0, -21), Vector2(facing * 54.0, -34), Color("#d36a67"), 3.0)
+        draw_circle(Vector2(facing * 55.0, -35), 3.0, Color("#d36a67"))
 
+    draw_string(ThemeDB.fallback_font, Vector2(-48, -86), "CULTIST %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#b7a09b"))
+
+
+
+func _draw_shadow_ellipse(center: Vector2, radius_x: float, radius_y: float, color: Color) -> void:
+    var points := PackedVector2Array()
+    for i in range(24):
+        var angle := TAU * float(i) / 24.0
+        points.append(center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y))
+    draw_colored_polygon(points, color)
 
 func _move_and_slide_scaled() -> void:
     # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
