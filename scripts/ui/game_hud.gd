@@ -149,6 +149,8 @@ func _ready() -> void:
     humanity_bar.position = Vector2(72, 70)
     humanity_bar.size = Vector2(235, 10)
     humanity_bar.color = Color("#8e7777")
+    humanity_bar.visible = false
+    humanity_label.visible = false
     status_panel.add_child(humanity_bar)
 
     boss_panel = ColorRect.new()
