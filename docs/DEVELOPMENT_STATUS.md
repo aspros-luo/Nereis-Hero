@@ -283,3 +283,11 @@ When a future implementation reaches a truly unresolved core story decision, sto
 1. Verify code paths for base iaijutsu unlock, mutation gates, HUD display, and save migration.
 2. Audit dodge/jump state transitions and design a movement ability interface without enabling unimplemented traversal mechanics.
 3. Keep sewer encounter implementation and other major narrative/level nodes as a future director checkpoint; proceed autonomously on reusable technical foundations.
+
+
+## Movement progression foundation
+
+- Implemented the first dormant traversal mechanic: one additional air jump is available only if the saved `double_jump` ability record exists. It resets on landing, death respawn and full restoration.
+- Ordinary jump and coyote-time jump remain unchanged. The new ability is not granted automatically, so no current level becomes dependent on an unearned move.
+- `quick_dash` remains a registered progression ID only. Before implementation, define whether it is a separate input from dodge and its own stamina/cooldown/invulnerability rules.
+- Runtime verification remains pending; the next review should specifically test air-jump count transitions and input buffering.
