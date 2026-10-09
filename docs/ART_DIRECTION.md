@@ -42,9 +42,9 @@ Hand-painted 2D dark fantasy, moving toward the layered, richly illustrated thea
 
 ## Current implementation / 当前实现
 
-The Ashen Road now uses an original layered SVG backdrop at `assets/backgrounds/ashen_road_painterly.svg`. Foreground gameplay labels, floor details, and several props still use procedural GDScript drawing and remain placeholders. The backdrop is an initial art-direction milestone, not final production art; Godot runtime acceptance is still pending.
+The Ashen Road now combines an original painted-style base illustration with three transparent scenic layers: distant mist, a broken monastery midground, and thorn/gravestone foreground framing. They scroll at different camera-relative speeds in `scripts/core/world.gd`, adding depth without changing collision or encounter placement. Assets: `assets/backgrounds/ashen_road_painterly.svg`, `ashen_road_far_mist.svg`, `ashen_road_midground.svg`, and `ashen_road_foreground.svg`. Foreground labels, ground details, and character art still contain procedural placeholders. Runtime acceptance in Godot 4.6.x remains pending.
 
-灰烬之路现已接入原创分层 SVG 背景 `assets/backgrounds/ashen_road_painterly.svg`。前景交互标识、地面细节和部分道具仍由 GDScript 程序化绘制，属于占位内容。该背景只是美术方向的第一阶段，并非最终成品；仍待 Godot 实机验收。
+灰烬之路现在由原创绘制感底图与三层透明场景素材组成：远景雾层、破败修道院中景，以及带荆棘和墓碑的前景框景。它们在 `scripts/core/world.gd` 中按相机位置以不同速度移动，在不改变碰撞和遭遇位置的前提下增加景深。素材包括 `assets/backgrounds/ashen_road_painterly.svg`、`ashen_road_far_mist.svg`、`ashen_road_midground.svg` 和 `ashen_road_foreground.svg`。前景标识、地面细节和角色美术仍有程序化占位内容；仍需在 Godot 4.6.x 中进行运行时验收。
 
 目前不少角色和场景元素仍由 GDScript 程序化绘制。这些是可运行的占位美术，不是最终目标。不要将现有几何图形视为最终视觉风格。
 
