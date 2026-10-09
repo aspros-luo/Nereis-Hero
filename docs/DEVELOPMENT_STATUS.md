@@ -372,3 +372,16 @@ The design document was committed to the feature branch. This was a documentatio
 - Integrated the assets into existing draw scripts. The rendering layer changed; collision geometry, hitboxes/hurtboxes, damage, AI, movement and technique timing were not intentionally changed.
 - Added bilingual art pipeline documentation and a provenance/license ledger. No third-party asset files were imported. Environment packs remain a follow-up because the current target is high-resolution painterly art and the free candidates found so far include pixel-art packs that would clash.
 - Static source checks are pending final pass below. Actual Godot 4.6 runtime rendering cannot be verified in the maintainer environment because the executable is unavailable.
+
+
+### Art sample verification / 美术样板验证
+
+- Static source consistency checks passed for actor/effect draw functions, retained combat methods, technique IDs, texture cleanup, and bilingual asset documentation.
+- All referenced art paths were checked against the branch's asset directories.
+- Not a Godot parser or runtime test: Godot 4.6 is unavailable in the maintainer environment. SVG import and in-game framing remain **pending local runtime validation**.
+- No GitHub Actions or workflows were triggered.
+
+- 角色与特效绘制函数、战斗方法保留、战技 ID、特效清理及中英文素材文档的静态一致性检查已通过。
+- 已将脚本引用路径与当前分支的素材目录进行核对。
+- 这不是 Godot 解析器或运行时测试：维护环境没有 Godot 4.6，SVG 导入和游戏内构图仍需本地实际运行验证。
+- 未触发 GitHub Actions 或任何工作流。
