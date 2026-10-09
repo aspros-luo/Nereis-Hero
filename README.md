@@ -102,17 +102,22 @@ High Priest human phase → ancient-god phase → King.
 
 The 100 cultist count is intentionally a spectacle. Future crowdfunding can optionally turn the crowd into supporter cameos.
 
-### Debug
+### Debug controls / 调试快捷键
 
-- F1 — candidate-driven endgame theater
-- F2 — Eternal Paradise Theater
-- F3 — debug overlay
-- F4 — Ancient Research Ward
-- F5 — Village Defense Theater
-- F6 — Mite Resonance Theater
-- F7 — Church Final Boss Theater
+- F1 — candidate-driven endgame theater / 按当前条件进入结局剧场
+- F2 — Eternal Paradise Theater / 永恒乐园测试
+- F3 — global world-state Debug panel / 全局世界状态调试面板
+- F4 — toggle Hero-local overlay / 显示或隐藏主角调试面板
+- F5 — session-only all-protagonist-ability override and temporary fixtures / 本次运行全部主角能力覆盖与临时测试设施
+- F6 — refill HP/stamina and clear temporary actions/effects / 恢复生命与体力，清除临时动作和效果
+- F7 — Church Final Boss Theater / 教会最终 Boss 测试
 - F8 — 烈火天罚 Theater
-- F9 — clean reset
+- F9 — clean reset / 清档重置
+- F10 — Ancient Research Ward / 古代研究区测试
+- F11 — Village Defense Theater / 村庄防守测试
+- F12 — Mite Resonance Theater / 蜜忒共鸣测试
+
+F5 does not grant persistent unlocks or story progression. Debug anchors, hidden traces, marked walls and selected iaijutsu form are session-only.
 
 ## Narrative style
 

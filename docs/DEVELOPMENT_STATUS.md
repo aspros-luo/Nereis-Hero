@@ -156,17 +156,20 @@ Deletes save data and starts the playable prologue.
 
 ## Debug shortcut matrix
 
-From Village Hub:
+The shared theater shortcuts work from Village Hub. The protagonist ability controls work in the combat/protagonist scenes.
 
-- F1 — Candidate endgame
-- F2 — Eternal Paradise
-- F3 — Debug HUD
+- F1 — Candidate endgame theater
+- F2 — Eternal Paradise theater
+- F3 — Global world-state Debug panel
+- F4 — Hero-local overlay
+- F5 — Session-only all-protagonist-ability override and temporary fixtures
+- F6 — Restore Hero resources and clear action/effect state
+- F7 — Church Final Boss
+- F8 — 烈火天罚
+- F9 — Reset / clean save
 - F10 — Ancient Research Ward
 - F11 — Village Defense
 - F12 — Mite Resonance
-- F7 — Church Final Boss
-- F8 — 烈火天罚
-- F9 — Reset
 
 ## Runtime limitation
 

@@ -141,11 +141,14 @@ The Mite segment is the important emotional scene:
 - after approximately 60 seconds, Mite moves toward Hero's weapon
 - her death begins the detonation sequence
 
-### F3 debug
+### F3 / F4 Debug panels / 调试面板
 
-F3 toggles the debug overlay.
+- **F3** toggles the global world-state Debug panel.
+- **F4** toggles the Hero-local overlay that follows the protagonist.
+- **F5** enables session-only all-protagonist-ability and technique overrides.
+- **F6** restores HP/stamina and clears temporary actions/effects.
 
-It exposes internal development state including:
+The global panel exposes internal development state including:
 
 - Hero memory
 - humanity
