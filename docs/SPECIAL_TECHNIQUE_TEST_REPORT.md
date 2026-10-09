@@ -12,6 +12,8 @@ Branch: `feature/protagonist-system`
 
 ## Static checks performed
 
+- [x] F/R special-technique inputs are ignored during an active attack, dodge, hurt reaction or death state, preventing stale requests from firing after the action ends.
+
 - [x] Judgment Slash and Crescent Combo use dedicated weapon-technique visual effects rather than the generic basic-attack arc.
 - [x] Crescent Combo stages have different silhouettes while retaining the same weapon identity.
 - [x] Slash effects fade using remaining lifetime, avoiding premature disappearance during the first half of the animation.
