@@ -4,6 +4,8 @@ extends Node
 ## Players only see HP and stamina; resonance, exposure, humanity and abnormal load stay hidden.
 ## 玩家只看到 HP / 体力；共鸣、接触、人性、异常负荷等全部是隐藏状态。
 
+signal technique_understood(technique_id: String)
+
 enum WeaponStyle {
     LONG_SWORD,
     SHORT_BLADE,
@@ -108,6 +110,7 @@ func learn_technique(technique_id: String, variant_id: String = "") -> bool:
     WorldState.learned_techniques = learned_techniques.duplicate()
     WorldState.technique_variants = technique_variants.duplicate(true)
     WorldState.save_game()
+    technique_understood.emit(technique_id)
     return true
 
 func resolve_iaijutsu_variant() -> String:
