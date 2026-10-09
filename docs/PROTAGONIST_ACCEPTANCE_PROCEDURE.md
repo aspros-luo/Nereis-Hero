@@ -2,7 +2,7 @@
 
 日期 / Date: 2026-10-09
 分支 / Branch: `feature/protagonist-system`
-本轮范围 / Scope: 主角输入、快速冲刺、状态清理、调试热键和回归操作。
+本轮范围 / Scope: 主角能力、战斗、Debug 独立测试、状态清理与存档隔离。
 明确不包含 / Explicitly excluded: 新剧情、新关卡、新地图和剧情奖励分配。
 
 ## 1. 开始前 / Before you start
@@ -26,10 +26,15 @@
 | R | Eldritch Echo |
 | L | Legacy iaijutsu prototype |
 | X | Quick Dash; requires unlock or F5 override |
+| G | Grapple to a marked anchor in `grapple_anchors` |
+| W | Climb or slide along marked `wall_climb_surfaces` |
+| Space | Wall jump while touching a marked wall |
+| V | Resonance Sight: 10 stamina, 4.5s duration, 6s cooldown |
+| PageUp / PageDown | Select iaijutsu form while F5 is ON; press L to test |
 | F3 | Existing scene/global debug shortcut, where supported |
 | F4 | Toggle Hero-local debug overlay |
-| F5 | Toggle session-only special-technique / Quick Dash override |
-| F6 | Restore HP/stamina; clear Echo/Dash cooldown and cancel active Hero action |
+| F5 | Toggle session-only all-protagonist-ability override; creates temporary anchors, hidden traces and marked walls |
+| F6 | Restore HP/stamina; clear temporary ability effects/cooldowns and cancel active action/hitbox |
 | F1 / F2 | Existing endgame test theaters |
 | F7 / F8 | Existing Church Final Boss / 烈火天罚 theaters |
 | F9 | Existing clean reset in Village Hub |
@@ -40,7 +45,7 @@
 ### A. Debug controls and input isolation
 1. Press F4. Expected: Hero-local overlay toggles.
 2. Press F5. Expected: temporary override toggles; no persistent ability/achievement/material/story flags are written.
-3. Press F6. Expected: HP/stamina restore, Echo/Dash cooldowns clear and active action/hitbox cancel.
+3. Press F6. Expected: HP/stamina restore, Echo/Dash/Grapple/Sight state resets and the active action/hitbox cancels.
 4. In the Village Hub, press F10, F11 and F12 separately. Expected: only the corresponding existing test theater opens. F4/F5/F6 must not switch scenes.
 5. Open the pause/menu state and press F10-F12. Expected: no theater opens while gameplay input is locked.
 
@@ -52,6 +57,13 @@
 5. Press X during cooldown or with insufficient stamina. Expected: no new dash and no negative stamina.
 6. Disable the F5 override. Unless `quick_dash` is formally unlocked, X must not start the dash.
 7. Receive damage during dash, open the menu, die/respawn and use a rest point. Expected: no stale dash state/request or delayed action remains.
+
+### C. Traversal and perception / 位移与感知
+1. Turn F5 ON and press G. Expected: the Hero pulls toward a temporary grapple anchor; solid collision blocks travel; reaching or timing out ends the action.
+2. Touch a temporary marked wall. Hold W to climb, release W to slide slowly, then press Space to wall-jump away. Unmarked walls must not enable this action.
+3. Press V to enable Resonance Sight. Temporary hidden traces should be visible while the ability is active, then hide when it expires.
+4. Press PageUp/PageDown to select each iaijutsu form; press L and inspect HP/stamina cost, abnormal-load feedback and matching VFX. Selection and load accumulated under Debug must not be saved.
+5. Trigger a precise dodge against an enemy with F5 ON. Expected: enemies slow for about 2.4 seconds while the Hero stays responsive. Receive damage, open menu and change scene to verify cleanup.
 
 ### C. Ordinary dodge regression / 普通闪避回归
 1. With F5 override OFF, press K/Shift.
@@ -100,3 +112,10 @@ Console log:
 Pass / Fail / Blocked:
 Screenshot or short clip:
 ```
+
+
+### F. Abnormal load and progression isolation / 异常负荷与成长隔离
+1. With F5 ON, test the human, blood, abyssal and black-horizon forms. Expected abnormal-load gains: 0 / 10 / 18 / 28.
+2. Check the stamina regeneration multiplier at effective load thresholds 20 / 40 / 65 / 85.
+3. Use a rest point. Normal persisted load should decrease by 35 (minimum zero).
+4. Perform a non-human Debug form, press F6, and restart the game. Expected: the session-only load, selected Debug form, override and temporary fixtures do not persist.

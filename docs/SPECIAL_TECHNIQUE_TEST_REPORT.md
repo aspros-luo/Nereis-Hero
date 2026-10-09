@@ -8,7 +8,7 @@ Branch: `feature/protagonist-system`
 - Long Sword — Judgment Slash / 断罪斩
 - Short Blade — Crescent Combo / 残月连斩
 - Eldritch ability — Eldritch Echo / 余响
-- Debug controls: F3 panel, F4 session-only technique override, F5 resource/cooldown reset
+- Debug controls: F3 world-state panel, F4 Hero-local panel, F5 session-only all-ability override, F6 resource/cooldown reset
 
 ## Static checks performed
 
@@ -38,12 +38,12 @@ Branch: `feature/protagonist-system`
 ## Manual Godot verification checklist
 
 1. Start the project normally and enter a combat scene.
-2. Press F3 to open the debug panel, then F4 to enable the technique override.
+2. Press F4 to show the Hero-local debug panel, then F5 to enable the all-ability session override.
 3. With the Long Sword selected, press F and verify one heavy hit, 20 stamina cost, and the recovery window.
 4. Press Q to switch to the Short Blade; press F and verify three distinct hit windows, 16 stamina cost, and no duplicate hits inside a single window.
 5. Press R near a cultist and verify the pulse, 28 stamina cost, brief enemy interruption and an approximately 8-second cooldown.
 6. Press R near the Ashen Knight and verify the boss is interrupted only briefly rather than being locked down.
-7. Press F5 and verify HP/stamina/cooldown reset; verify the current action and hitbox are cleared.
+7. Press F6 and verify HP/stamina/cooldown reset; verify Witch Time, Grapple, Resonance Sight, current action and hitbox are cleared.
 8. Turn off F4 and verify locked techniques stop working. Restart the game and verify the override did not persist.
 9. Repeat while receiving damage, opening the menu, dying and changing scenes to ensure no stale hitboxes or queued technique inputs remain.
 
@@ -91,3 +91,23 @@ These are prototype values and must be adjusted after runtime playtesting.
 - [ ] Godot 4.6 runtime review: SVG import, texture loading, facing flip, sprite anchors, labels, combat readability and scene transitions.
 
 **Runtime status: NOT RUN.** These assets are committed to the feature branch, but the current maintainer environment has no Godot executable. Local playtesting is required before calling the art sample accepted.
+
+
+## Traversal and perception regression / 位移与感知能力回归
+
+- [x] Quick Dash uses a separate non-invulnerable state and cooldown.
+- [x] Witch Time uses enemy-only delta scaling; it does not scale the Hero's physics delta.
+- [x] Grapple requires an explicit `grapple_anchors` target and times out/cancels when the target disappears or is reached.
+- [x] Wall climb/wall jump require the `wall_climb_surfaces` group.
+- [x] Resonance Sight reveals nodes in `resonance_hidden_targets` according to resonance / ancient exposure / outer exposure thresholds.
+- [x] PageUp/PageDown chooses one of four iaijutsu forms in-session only while F5 override is enabled.
+- [x] Debug iaijutsu abnormal load is session-only; it is never written to the save.
+- [ ] Godot runtime: verify enemy windups/movement actually slow under Witch Time and restore afterward.
+- [ ] Godot runtime: verify Grapple respects solid collision and cancels cleanly against blocked/removed targets.
+- [ ] Godot runtime: verify wall slide/climb/jump does not bypass non-marked walls or scene boundaries.
+- [ ] Godot runtime: verify temporary Sight reveals/hides fixtures at timer expiry and never modifies story/save flags.
+- [ ] Godot runtime: verify selecting each form changes actual costs, hitbox, damage and VFX as intended.
+
+### Quick test controls
+
+`G` grapple; hold `W` to climb a marked wall; `Space` to wall-jump; `V` Resonance Sight; `X` Quick Dash; `K`/`Shift` ordinary dodge. With F5 enabled, `PageUp`/`PageDown` selects `human_iaijutsu`, `blood`, `abyssal`, or `black_horizon`, then press `L` to use the selected profile. All form selection and load accumulation are session-only.

@@ -308,7 +308,7 @@ func _process(delta: float) -> void:
     var echo_cooldown: float = float(hero.call("get_debug_eldritch_cooldown")) if hero.has_method("get_debug_eldritch_cooldown") else 0.0
     var debug_override: bool = bool(hero.get("debug_ability_override"))
     debug_label.text = (
-        "DEBUG [F3]  F4 TECHNIQUES  F5 REFILL\n"
+        "DEBUG [F3] WORLD PANEL\nF4 HERO PANEL  F5 ALL ABILITIES  F6 REFILL\n"
         + "Technique override: %s\n" % debug_override
         + "Action: %s\n" % action_kind
         + "Echo cooldown: %.1fs\n" % echo_cooldown
@@ -543,15 +543,6 @@ func _unhandled_input(event: InputEvent) -> void:
         set_debug_visible(not debug_enabled)
         get_viewport().set_input_as_handled()
         return
-    if event is InputEventKey and event.pressed and not event.echo and debug_enabled and is_instance_valid(hero):
-        if event.keycode == KEY_F4 and hero.has_method("toggle_debug_ability_override"):
-            hero.call("toggle_debug_ability_override")
-            get_viewport().set_input_as_handled()
-            return
-        if event.keycode == KEY_F5 and hero.has_method("debug_refill_combat_resources"):
-            hero.call("debug_refill_combat_resources")
-            get_viewport().set_input_as_handled()
-            return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
         if WorldState.input_locked and not pause_open:
             return
