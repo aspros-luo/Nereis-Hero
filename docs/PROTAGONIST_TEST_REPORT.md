@@ -140,3 +140,14 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 - [ ] Godot runtime: verify overlay positioning/readability at multiple resolutions, input shortcuts, debug override, refill behavior, and normal progression with override disabled.
 
 **Status:** source-level change committed; no Godot runtime test was performed in this environment.
+
+
+## Precision dodge / 精准闪避反击
+
+- [x] Source implementation: ordinary dodge has a 0.075-second precision window at its start.
+- [x] A hit avoided inside that window arms a one-use 1.35x damage bonus for the next confirmed basic attack or weapon-bound technique hit.
+- [x] The bonus is consumed by the first hit window and cleared by confirmed damage, death reset, and full restoration.
+- [ ] Godot runtime: test attacks arriving inside/outside the precision window; verify ordinary invulnerability does not arm the bonus.
+- [ ] Godot runtime: verify the bonus applies once to long sword, short blade, Judgment Slash, and Crescent Combo; confirm no save persistence.
+
+**Status:** source implementation committed; Godot parser/runtime verification remains pending. No GitHub Actions were triggered.
