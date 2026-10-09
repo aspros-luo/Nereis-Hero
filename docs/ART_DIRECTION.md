@@ -97,3 +97,18 @@ The Ashen Road now combines an original painted-style base illustration with thr
 - 场景切换与调试快捷键继续正常。
 - 不存在缺失的纹理、Shader 或脚本资源。
 - 未在 Godot 4.6.x 实际运行前，不得宣称通过运行验收。
+
+
+## Current priority: protagonist art / 当前优先级：主角美术
+
+- Hero readability takes priority over adding more background props or enemy variants.
+- Refine the knight silhouette, layered steel, worn cloth, small engraved marks and weapon-specific silhouette before expanding the art scope.
+- Long-sword and short-blade loadouts must be visually distinct at gameplay scale; attack poses and VFX should remain legible without obscuring the character.
+- Keep the existing Hero combat/state code, collision geometry, input mapping and F4 debug workflow unchanged during visual-only passes.
+- These SVG refinements are an intermediate original-art pass, not a claim of matching Vanillaware production quality. Validate the actual in-game scale and facing/attack poses in Godot 4.6.x before calling the milestone accepted.
+
+- 主角轮廓辨识度优先于继续堆叠背景道具或增加敌人变体。
+- 先完善骑士剪影、钢甲层次、磨损布料、细小刻纹，以及不同武器的视觉轮廓，再扩大美术范围。
+- 长剑与短刃必须在实际游戏缩放下容易区分；攻击姿态与特效应清晰可读，不能遮住主角本体。
+- 纯美术迭代期间保持现有主角战斗/状态代码、碰撞几何、输入映射和 F4 调试流程不变。
+- 当前 SVG 细化只是原创美术的中间版本，并不代表已经达到香草社量产级别。必须在 Godot 4.6.x 中检查实际缩放、朝向和攻击姿态后，才能宣布里程碑验收。
