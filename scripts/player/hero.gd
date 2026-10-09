@@ -248,13 +248,7 @@ func _physics_process(delta: float) -> void:
                     var iaijutsu_profile: Dictionary = hero_system.get_iaijutsu_profile() if hero_system and iaijutsu_active else {}
                     if iaijutsu_active:
                         multiplier = float(iaijutsu_profile.get("damage_multiplier", IAIJUTSU_DAMAGE_MULTIPLIER))
-                    var damage_multiplier := multiplier
-                    if riposte_bonus_active:
-                        damage_multiplier *= RIPOSTE_BONUS_MULTIPLIER
-                    var damage := int(round(base_damage * damage_multiplier))
-                    if riposte_bonus_active:
-                        riposte_bonus_active = false
-                        _log("COMBAT", "Perfect-dodge riposte consumed")
+                    var damage := int(round(base_damage * multiplier))
                     var reach: float = hero_system.get_weapon_reach(combo_step) if hero_system and not iaijutsu_active else float(iaijutsu_profile.get("reach", IAIJUTSU_REACH))
                     var shape_size: Vector2 = hero_system.get_weapon_hitbox_size(combo_step) if hero_system and not iaijutsu_active else iaijutsu_profile.get("hitbox_size", Vector2(152, 58))
                     attack_hitbox.position.x = facing * reach
@@ -417,12 +411,7 @@ func _perform_weapon_technique() -> void:
     _log("TECHNIQUE", "Started %s; stamina=%.0f" % [technique_id, stamina_cost])
 
 func _release_judgment_slash() -> void:
-    var multiplier := JUDGMENT_DAMAGE_MULTIPLIER
-    if riposte_bonus_active:
-        multiplier *= RIPOSTE_BONUS_MULTIPLIER
-        riposte_bonus_active = false
-        _log("COMBAT", "Perfect-dodge riposte consumed by Judgment Slash")
-    var damage := int(round(float(WorldState.hero_attack_damage) * multiplier))
+    var damage := int(round(float(WorldState.hero_attack_damage) * JUDGMENT_DAMAGE_MULTIPLIER))
     attack_hitbox.position.x = facing * JUDGMENT_REACH
     attack_hitbox.set_shape_size(JUDGMENT_HITBOX_SIZE)
     attack_hitbox.activate(damage, JUDGMENT_HIT_DURATION)
@@ -437,12 +426,7 @@ func _update_crescent_combo() -> void:
 func _release_crescent_hit(stage_index: int) -> void:
     var stage := clampi(stage_index, 0, 2)
     combo_step = stage + 1
-    var multiplier := CRESCENT_DAMAGE_MULTIPLIER
-    if riposte_bonus_active:
-        multiplier *= RIPOSTE_BONUS_MULTIPLIER
-        riposte_bonus_active = false
-        _log("COMBAT", "Perfect-dodge riposte consumed by Crescent Combo")
-    var damage := int(round(float(WorldState.hero_attack_damage) * multiplier))
+    var damage := int(round(float(WorldState.hero_attack_damage) * CRESCENT_DAMAGE_MULTIPLIER))
     attack_hitbox.position.x = facing * float(CRESCENT_REACH[stage])
     attack_hitbox.set_shape_size(Vector2(float(CRESCENT_HITBOX_WIDTHS[stage]), 36.0))
     attack_hitbox.activate(damage, CRESCENT_HIT_DURATION)
@@ -600,6 +584,17 @@ func _spawn_death_burst() -> void:
     effect.global_position = global_position + Vector2(0, -38)
     get_parent().add_child(effect)
     effect.call("setup", 18.0)
+
+func modify_outgoing_damage(base_damage: int) -> int:
+    # Consume the riposte only when a hitbox actually connects, not when an attack misses.
+    # 只有攻击判定真正命中时才消耗反击奖励，挥空不会消耗。
+    if not riposte_bonus_active:
+        return base_damage
+    riposte_bonus_active = false
+    var boosted_damage := int(round(float(base_damage) * RIPOSTE_BONUS_MULTIPLIER))
+    _log("COMBAT", "Perfect-dodge riposte confirmed; damage %d -> %d" % [base_damage, boosted_damage])
+    queue_redraw()
+    return boosted_damage
 
 func _on_attack_hit(damage: int, target: Node) -> void:
     hit_confirm_time = 0.07
