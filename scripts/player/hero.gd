@@ -112,9 +112,9 @@ func _input(event: InputEvent) -> void:
             debug_mode_enabled = not debug_mode_enabled
             queue_redraw()
             _log("DEBUG", "Overlay %s" % ("ON" if debug_mode_enabled else "OFF"))
-        elif event.keycode == KEY_F4:
+        elif event.keycode == KEY_F4 and event.ctrl_pressed:
             toggle_debug_ability_override()
-        elif event.keycode == KEY_F5:
+        elif event.keycode == KEY_F5 and event.ctrl_pressed:
             debug_refill_combat_resources()
         elif event.keycode == KEY_J:
             attack_requested = true
@@ -753,7 +753,7 @@ func _draw() -> void:
         var weapon_name := "短刃" if short_blade else "长剑"
         var action_name := active_action_kind if active_action_kind != "none" else get_debug_state().to_lower()
         draw_rect(Rect2(-112.0, -184.0, 224.0, 78.0), Color(0.035, 0.025, 0.04, 0.86), true)
-        draw_string(debug_font, Vector2(-104.0, -166.0), "DEBUG [F3]  F4:技能覆盖  F5:恢复", HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
+        draw_string(debug_font, Vector2(-104.0, -166.0), "DEBUG F3 | Ctrl+F4:技能覆盖 | Ctrl+F5:恢复", HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
         draw_string(debug_font, Vector2(-104.0, -150.0), "HP %d | ST %d | %s" % [health, int(round(stamina)), weapon_name], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 12, debug_color)
         draw_string(debug_font, Vector2(-104.0, -134.0), "状态 %s | 动作 %s | 连击 %d" % [get_debug_state(), action_name, combo_step], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
         draw_string(debug_font, Vector2(-104.0, -118.0), "无敌 %s | 技能覆盖 %s | 冷却 %.1f" % [str(invulnerable), str(debug_ability_override), eldritch_cooldown_remaining], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
