@@ -29,6 +29,17 @@
 
 The new combat values are initial tuning values only. Static source inspection does not establish that they are balanced or that the project parses successfully in Godot.
 
+### Narrative trigger trace / 剧情触发链核查
+
+- [x] The prologue surgical-tray clue calls `WorldState.mark_ancient_residue_awakened()`, which establishes the minimum ancient exposure and resonance for Blood Iaijutsu.
+- [x] The Mite House aftermath calls `mark_physical_union_complete()`, `mark_ancient_residue_awakened()`, and `mark_outer_god_resonance()`.
+- [ ] The current `mark_outer_god_resonance()` implementation records the narrative fact but does not itself increase `outer_exposure` or raise `hero_resonance` to the Abyssal threshold.
+- [ ] Trace every normal-story write to `outer_exposure` and `hero_resonance` before changing values or adding progression triggers.
+- [ ] Director input is required before deciding which later story beat should deepen Outer-God exposure enough to unlock Abyssal Iaijutsu and Black Horizon. Do not attach those gains to a new scene or interaction without approval.
+
+This is intentionally a story/level design gate, not permission to invent a new relationship beat or hidden progression reward.
+
+
 ## 尚未验证 / Not yet verified
 
 - [ ] Godot 4.6.1 脚本解析、场景启动与资源加载。
