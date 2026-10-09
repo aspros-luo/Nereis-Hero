@@ -157,9 +157,9 @@ func _physics_process(delta: float) -> void:
             var base_damage := float(WorldState.hero_attack_damage)
             var multiplier: float = hero_system.get_combo_damage_multiplier(combo_step) if hero_system else 1.0
             if iaijutsu_active:
-                multiplier = IAijutsu_DAMAGE_MULTIPLIER
+                multiplier = IAIJUTSU_DAMAGE_MULTIPLIER
             var damage := int(round(base_damage * multiplier))
-            var reach: float = hero_system.get_weapon_reach(combo_step) if hero_system and not iaijutsu_active else IAijutsu_REACH
+            var reach: float = hero_system.get_weapon_reach(combo_step) if hero_system and not iaijutsu_active else IAIJUTSU_REACH
             var shape_size: Vector2 = hero_system.get_weapon_hitbox_size(combo_step) if hero_system and not iaijutsu_active else Vector2(152, 58)
             attack_hitbox.position.x = facing * reach
             attack_hitbox.set_shape_size(shape_size)
@@ -275,11 +275,11 @@ func _perform_attack() -> void:
 func _perform_iaijutsu() -> void:
     if not hero_system or not hero_system.can_use_blood_iaijutsu():
         return
-    if stamina < IAijutsu_STAMINA_COST or health <= IAijutsu_HEALTH_COST:
+    if stamina < IAIJUTSU_STAMINA_COST or health <= IAIJUTSU_HEALTH_COST:
         return
 
-    stamina -= IAijutsu_STAMINA_COST
-    health -= IAijutsu_HEALTH_COST
+    stamina -= IAIJUTSU_STAMINA_COST
+    health -= IAIJUTSU_HEALTH_COST
     stamina_regen_delay = STAMINA_REGEN_DELAY
     hero_system.add_abnormal_load(10.0)
     combo_step = 3
@@ -335,7 +335,7 @@ func _spawn_death_burst() -> void:
 
 func _on_attack_hit(damage: int, target: Node) -> void:
     hit_confirm_time = 0.07
-    var finisher := combo_step >= (hero_system.get_combo_limit() if hero_system else 3)
+    var finisher: bool = combo_step >= (hero_system.get_combo_limit() if hero_system else 3)
     var impact_strength: float = 9.0 if iaijutsu_active else 4.0 + float(combo_step) * 1.0
     var hitstop_duration: float = 0.055 if finisher or iaijutsu_active else 0.038
     var hitstop_scale: float = 0.06 if finisher or iaijutsu_active else 0.08
