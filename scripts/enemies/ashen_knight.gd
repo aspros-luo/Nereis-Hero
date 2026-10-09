@@ -4,6 +4,8 @@ const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
 const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
+const ASHEN_KNIGHT_ART: Texture2D = preload("res://assets/art/characters/ashen_knight.svg")
+const ASHEN_KNIGHT_PHASE_TWO_ART: Texture2D = preload("res://assets/art/characters/ashen_knight_phase2.svg")
 
 var health := 240
 var attack_cooldown := 0.0
@@ -145,115 +147,15 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    var base := Color("#7b3944") if phase_two else Color("#2c2932")
-    var armor := Color("#d35a62") if hit_flash > 0.0 else base
-    var pulse: float = sin(animation_time * 4.0) * 2.0
-    var steel := Color("#9f806f")
-    var bright_steel := Color("#c9baa0")
-    var shadow := Color("#141218")
-    var chest_y := -43.0 + pulse
-
-    # Heavy greaves and boots establish a much larger silhouette than ordinary enemies.
-    draw_colored_polygon(PackedVector2Array([
-        Vector2(-24, -11 + pulse), Vector2(-5, -10 + pulse),
-        Vector2(-8, 10), Vector2(-25, 14), Vector2(-30, 5)
-    ]), shadow)
-    draw_colored_polygon(PackedVector2Array([
-        Vector2(5, -10 + pulse), Vector2(24, -11 + pulse),
-        Vector2(30, 5), Vector2(25, 14), Vector2(8, 10)
-    ]), shadow)
-    draw_line(Vector2(-25, 5), Vector2(-10, 3), steel, 3.0)
-    draw_line(Vector2(10, 3), Vector2(25, 5), steel, 3.0)
-    draw_line(Vector2(-28, 13), Vector2(-10, 12), bright_steel, 2.0)
-    draw_line(Vector2(10, 12), Vector2(28, 13), bright_steel, 2.0)
-
-    # Split plate skirt and dark under-armor.
-    draw_colored_polygon(PackedVector2Array([
-        Vector2(-25, -42 + pulse), Vector2(25, -42 + pulse),
-        Vector2(34, -9), Vector2(18, 2), Vector2(0, -5),
-        Vector2(-18, 2), Vector2(-34, -9)
-    ]), shadow)
-    draw_colored_polygon(PackedVector2Array([
-        Vector2(-23, -39 + pulse), Vector2(23, -39 + pulse),
-        Vector2(28, -12), Vector2(15, -3), Vector2(0, -9),
-        Vector2(-15, -3), Vector2(-28, -12)
-    ]), armor)
-    draw_line(Vector2(-21, -13), Vector2(-11, -6), steel, 2.0)
-    draw_line(Vector2(21, -13), Vector2(11, -6), steel, 2.0)
-    draw_line(Vector2(0, -8), Vector2(0, 0), bright_steel, 1.5)
-
-    # Breastplate: layered rim, ribbed center and a cracked seal that changes in phase two.
-    draw_colored_polygon(PackedVector2Array([
-        Vector2(-27, -49 + pulse), Vector2(-18, -61 + pulse),
-        Vector2(0, -66 + pulse), Vector2(18, -61 + pulse),
-        Vector2(27, -49 + pulse), Vector2(22, -28 + pulse),
-        Vector2(0, -20 + pulse), Vector2(-22, -28 + pulse)
-    ]), shadow)
-    draw_colored_polygon(PackedVector2Array([
-        Vector2(-22, -48 + pulse), Vector2(-15, -57 + pulse),
-        Vector2(0, -61 + pulse), Vector2(15, -57 + pulse),
-        Vector2(22, -48 + pulse), Vector2(17, -31 + pulse),
-        Vector2(0, -25 + pulse), Vector2(-17, -31 + pulse)
-    ]), armor)
-    draw_line(Vector2(-15, -53 + pulse), Vector2(-10, -34 + pulse), steel, 2.0)
-    draw_line(Vector2(15, -53 + pulse), Vector2(10, -34 + pulse), steel, 2.0)
-    draw_line(Vector2(0, -58 + pulse), Vector2(0, -29 + pulse), Color("#b65b65") if phase_two else steel, 2.0)
-    draw_arc(Vector2(0, -44 + pulse), 8.0 if phase_two else 6.0, 0.0, TAU, 18, Color("#d85e70") if phase_two else bright_steel, 2.0)
-    draw_circle(Vector2(-16, -49 + pulse), 2.0, bright_steel)
-    draw_circle(Vector2(16, -49 + pulse), 2.0, bright_steel)
-
-    # Shoulder pauldrons and layered helmet; phase two exposes an unnatural crown.
-    draw_colored_polygon(PackedVector2Array([
-        Vector2(-31, -46 + pulse), Vector2(-23, -55 + pulse),
-        Vector2(-14, -50 + pulse), Vector2(-17, -37 + pulse),
-        Vector2(-29, -35 + pulse)
-    ]), Color("#51414a"))
-    draw_colored_polygon(PackedVector2Array([
-        Vector2(31, -46 + pulse), Vector2(23, -55 + pulse),
-        Vector2(14, -50 + pulse), Vector2(17, -37 + pulse),
-        Vector2(29, -35 + pulse)
-    ]), Color("#51414a"))
-    draw_line(Vector2(-29, -44 + pulse), Vector2(-19, -47 + pulse), bright_steel, 2.0)
-    draw_line(Vector2(29, -44 + pulse), Vector2(19, -47 + pulse), bright_steel, 2.0)
-    draw_colored_polygon(PackedVector2Array([
-        Vector2(-19, -62 + pulse), Vector2(-15, -77 + pulse),
-        Vector2(-3, -82 + pulse), Vector2(10, -78 + pulse),
-        Vector2(19, -64 + pulse), Vector2(13, -48 + pulse),
-        Vector2(0, -43 + pulse), Vector2(-13, -48 + pulse)
-    ]), shadow)
-    draw_colored_polygon(PackedVector2Array([
-        Vector2(-14, -63 + pulse), Vector2(-10, -73 + pulse),
-        Vector2(0, -76 + pulse), Vector2(10, -70 + pulse),
-        Vector2(14, -62 + pulse), Vector2(10, -51 + pulse),
-        Vector2(0, -47 + pulse), Vector2(-10, -52 + pulse)
-    ]), armor)
-    draw_line(Vector2(-13, -61 + pulse), Vector2(13, -62 + pulse), bright_steel, 2.0)
-    draw_line(Vector2(-8, -57 + pulse), Vector2(8, -58 + pulse), Color("#19151c"), 4.0)
-    draw_line(Vector2(-5, -57 + pulse), Vector2(5, -58 + pulse), Color("#d85e70") if phase_two else Color("#b6a28a"), 1.4)
-    if phase_two:
-        draw_colored_polygon(PackedVector2Array([
-            Vector2(-13, -72 + pulse), Vector2(-25, -86 + pulse),
-            Vector2(-20, -67 + pulse), Vector2(-12, -61 + pulse)
-        ]), Color("#7b3944"))
-        draw_colored_polygon(PackedVector2Array([
-            Vector2(13, -72 + pulse), Vector2(25, -86 + pulse),
-            Vector2(20, -67 + pulse), Vector2(12, -61 + pulse)
-        ]), Color("#7b3944"))
-        draw_line(Vector2(-4, -73 + pulse), Vector2(0, -80 + pulse), Color("#cf687b"), 2.0)
-        draw_line(Vector2(0, -80 + pulse), Vector2(4, -73 + pulse), Color("#cf687b"), 2.0)
-
-    # A long, readable greatsword with a crossguard and a dark, heavy edge.
-    var sword_start := Vector2(facing * 13.0, -22.0 + pulse)
-    var sword_tip := Vector2(facing * 112.0, -48.0 + pulse)
-    draw_line(sword_start, sword_tip, shadow, 14.0)
-    draw_line(sword_start, sword_tip, bright_steel, 8.0)
-    draw_line(sword_start + Vector2(0, -2), sword_tip + Vector2(0, -2), Color("#e2d8c4"), 2.0)
-    draw_line(sword_start + Vector2(-facing * 9.0, -3), sword_start + Vector2(facing * 8.0, 2), shadow, 7.0)
-    draw_line(sword_start + Vector2(-facing * 8.0, -3), sword_start + Vector2(facing * 7.0, 1), steel, 3.0)
+    var boss_art: Texture2D = ASHEN_KNIGHT_PHASE_TWO_ART if phase_two else ASHEN_KNIGHT_ART
+    var tint := Color("#f3d4d7") if hit_flash > 0.0 else Color.WHITE
+    draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing, 1.0))
+    draw_texture_rect(boss_art, Rect2(-60.0, -112.0, 120.0, 138.0), false, tint)
+    draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
     if windup > 0.0:
         var telegraph_color := Color("#e16b7b") if phase_two else Color("#9e5961")
-        draw_arc(Vector2(0, -34), 72.0 if phase_two else 58.0, 0, TAU, 32, telegraph_color, 4.0)
-        draw_arc(Vector2(0, -34), 62.0 if phase_two else 50.0, PI * 0.18, PI * 1.32, 24, Color(0.82, 0.53, 0.57, 0.55), 1.5)
-        draw_line(Vector2(facing * 34.0, -34), Vector2(facing * 108.0, -34), telegraph_color, 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(-72, -100), NereisLocalization.translate_text("ASHEN KNIGHT %d") % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
+        draw_arc(Vector2(0.0, -38.0), 72.0 if phase_two else 58.0, 0.0, TAU, 32, telegraph_color, 4.0)
+        draw_arc(Vector2(0.0, -38.0), 62.0 if phase_two else 50.0, PI * 0.18, PI * 1.32, 24, Color(0.82, 0.53, 0.57, 0.55), 1.5)
+        draw_line(Vector2(facing * 34.0, -38.0), Vector2(facing * 108.0, -38.0), telegraph_color, 3.0)
+    draw_string(ThemeDB.fallback_font, Vector2(-72.0, -132.0), NereisLocalization.translate_text("ASHEN KNIGHT %d") % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
