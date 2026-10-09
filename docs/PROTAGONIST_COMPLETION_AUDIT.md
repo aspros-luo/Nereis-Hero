@@ -64,3 +64,6 @@
 - [ ] Godot runtime: validate active hostile hitboxes last longer during Witch Time and restore normal lifetime after effect expiry.
 
 - [x] Added all enemy actor scripts to combat_enemies group so Eldritch Echo targeting and enemy-owned hitbox time dilation use a consistent target registry.
+
+- [x] Source cleanup pass: world input lock clears jump buffer, precision/riposte windows, camera shake, and stale action states; menu input lock prevents wall climbing; hit/damage, death, rest and F6 clear wall-climb and camera feedback residue.
+- [ ] Godot runtime: verify those interrupt paths visually and confirm the Hero can immediately act after the lock/respawn/rest ends.

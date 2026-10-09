@@ -206,3 +206,11 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 
 - [x] Static group audit: all current enemy actor scripts register in combat_enemies, aligning the Echo target set with Witch Time enemy-owned hitbox scaling.
 - [ ] Godot runtime: verify Echo still affects every intended enemy type and Witch Time slows their active attack hitboxes as well as movement/windups.
+
+
+## 2026-10-09 — Action reset consistency / 动作复位一致性
+
+- [x] World input lock clears stale jump buffers, riposte/perfect-dodge state, camera feedback, and the action states invalidated by the lock.
+- [x] Menu input lock prevents a held W key from continuing wall climbing; normal gravity/world simulation remains active.
+- [x] Damage/death/rest/F6 clear wall traversal flags and transient camera/impact feedback where applicable.
+- [ ] Godot runtime regression for input lock, menu, damage, death respawn, rest and F6 remains pending.

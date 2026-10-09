@@ -78,3 +78,8 @@ After F5, Space should allow exactly one extra jump before landing. Quick Dash c
 ## 当前验证边界 / Verification boundary
 
 源码已完成相应接线与静态修正，但本执行环境没有 Godot 运行时，尚不能确认项目解析、实际动画、碰撞与游戏手感。**请将本指南作为本地验收步骤，不要将未执行项目标记为通过。** 正式奖励点和剧情/地图布置继续留到本阶段全部能力通过验收后。
+
+
+### 中断状态补充 / Action interruption addendum
+
+在剧情输入锁期间，跳跃缓存、精准闪避/反击窗口与无效动作状态会被清理；暂停菜单打开时 W 不会继续触发墙攀。受击、死亡、休息与 F6 会清除墙攀标记和残留镜头反馈。上述中断路径仍须在 Godot 实机逐项复测。

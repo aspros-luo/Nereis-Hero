@@ -271,11 +271,16 @@ func _physics_process(delta: float) -> void:
         dodge_requested = false
         quick_dash_requested = false
         jump_requested = false
+        jump_buffer = 0.0
         _cancel_attack_action()
         dodge_time = 0.0
         quick_dash_time = 0.0
-        if state == CombatState.QUICK_DASH:
+        wall_climb_active = false
+        perfect_dodge_window_remaining = 0.0
+        riposte_bonus_active = false
+        if state in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB]:
             _set_state(CombatState.IDLE)
+        _reset_camera_shake()
         invulnerable = false
         velocity.x = move_toward(velocity.x, 0.0, 2200.0 * delta)
         if not is_on_floor():
@@ -452,7 +457,7 @@ func _physics_process(delta: float) -> void:
     var can_unlocked_double_jump := (debug_ability_override or WorldState.is_ability_unlocked("double_jump")) and air_jumps_used < MAX_EXTRA_AIR_JUMPS and not can_ground_or_coyote_jump
     wall_climb_active = false
     var wall_normal := _get_marked_wall_normal()
-    var can_wall_traverse := debug_ability_override or WorldState.is_ability_unlocked("wall_climb")
+    var can_wall_traverse := (debug_ability_override or WorldState.is_ability_unlocked("wall_climb")) and not WorldState.menu_input_locked
     if can_wall_traverse and wall_normal != Vector2.ZERO and not is_on_floor() and attack_time <= 0.0 and dodge_time <= 0.0:
         var pressing_into_wall := absf(direction) < 0.1 or direction * wall_normal.x < -0.1
         if pressing_into_wall:
@@ -863,6 +868,9 @@ func debug_refill_combat_resources() -> void:
     wall_climb_active = false
     if hero_system:
         hero_system.clear_debug_abnormal_load()
+    _reset_camera_shake()
+    hit_confirm_time = 0.0
+    air_jumps_used = 0
     health = 100
     stamina = MAX_STAMINA
     stamina_regen_delay = 0.0
@@ -1075,6 +1083,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
     _cancel_attack_action()
     quick_dash_time = 0.0
     quick_dash_requested = false
+    wall_climb_active = false
     perfect_dodge_window_remaining = 0.0
     riposte_bonus_active = false
     attack_requested = false
@@ -1143,6 +1152,8 @@ func receive_damage(amount: int, source: Node = null) -> void:
         jump_requested = false
         jump_buffer = 0.0
         _deactivate_attack_hitbox()
+        _reset_camera_shake()
+        hit_confirm_time = 0.0
         _log("WORLD", "Hero respawned at checkpoint=%s" % WorldState.checkpoint_position)
         get_tree().create_timer(0.75).timeout.connect(_clear_respawn_invulnerability)
         _set_state(CombatState.IDLE)
@@ -1180,6 +1191,9 @@ func restore_full() -> void:
     resonance_sight_cooldown_remaining = 0.0
     WorldState.clear_witch_time("rest point")
     WorldState.set_resonance_sight_active(false)
+    wall_climb_active = false
+    _reset_camera_shake()
+    hit_confirm_time = 0.0
     combo_step = 0
     combo_window = 0.0
     _cancel_attack_action()
@@ -1210,6 +1224,13 @@ func _cancel_attack_action() -> void:
 func _deactivate_attack_hitbox() -> void:
     if is_instance_valid(attack_hitbox) and attack_hitbox.has_method("deactivate"):
         attack_hitbox.deactivate()
+
+func _reset_camera_shake() -> void:
+    camera_shake_time = 0.0
+    camera_shake_strength = 0.0
+    var camera := get_viewport().get_camera_2d()
+    if camera:
+        camera.offset = Vector2.ZERO
 
 func _clear_respawn_invulnerability() -> void:
     invulnerable = false
