@@ -7,6 +7,9 @@ const SLASH_ARC_SCRIPT = preload("res://scripts/effects/slash_arc.gd")
 const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
 const HERO_SYSTEM_SCRIPT = preload("res://scripts/player/hero_system.gd")
 const ECHO_PULSE_SCRIPT = preload("res://scripts/effects/echo_pulse.gd")
+const GRAPPLE_ANCHOR_SCRIPT = preload("res://scripts/systems/grapple_anchor.gd")
+const RESONANCE_TARGET_SCRIPT = preload("res://scripts/systems/resonance_hidden_target.gd")
+const DEBUG_WALL_SCRIPT = preload("res://scripts/systems/debug_traversal_wall.gd")
 const HERO_LONG_ART: Texture2D = preload("res://assets/art/characters/hero_knight.svg")
 const HERO_SHORT_ART: Texture2D = preload("res://assets/art/characters/hero_short_blade.svg")
 
@@ -21,6 +24,19 @@ const QUICK_DASH_SPEED := 760.0
 const QUICK_DASH_DURATION := 0.16
 const QUICK_DASH_STAMINA_COST := 24.0
 const QUICK_DASH_COOLDOWN := 1.10
+const GRAPPLE_MAX_RANGE := 440.0
+const GRAPPLE_PULL_SPEED := 860.0
+const GRAPPLE_MAX_DURATION := 1.05
+const GRAPPLE_COOLDOWN := 0.65
+const WALL_CLIMB_SPEED := 160.0
+const WALL_SLIDE_SPEED := 118.0
+const WALL_JUMP_HORIZONTAL_SPEED := 340.0
+const RESONANCE_SIGHT_STAMINA_COST := 10.0
+const RESONANCE_SIGHT_DURATION := 4.5
+const RESONANCE_SIGHT_COOLDOWN := 6.0
+const DEBUG_IAIJUTSU_VARIANTS := ["human_iaijutsu", "blood", "abyssal", "black_horizon"]
+const DEBUG_ANCHOR_OFFSETS := [Vector2(230, -130), Vector2(360, -42), Vector2(-190, -150), Vector2(0, -250)]
+const DEBUG_REVEAL_OFFSETS := [Vector2(180, -185), Vector2(-205, -170), Vector2(0, -290)]
 const ATTACK_DURATION := 0.34
 const ATTACK_WINDUP := 0.07
 const DODGE_DURATION := 0.18
@@ -62,7 +78,7 @@ const ECHO_DURATION := 0.42
 const ECHO_RANGE := 185.0
 const ECHO_STAGGER_DURATION := 0.32
 
-enum CombatState { IDLE, MOVE, JUMP, FALL, ATTACK, DODGE, QUICK_DASH, HURT, DEAD }
+enum CombatState { IDLE, MOVE, JUMP, FALL, ATTACK, DODGE, QUICK_DASH, GRAPPLE, WALL_CLIMB, HURT, DEAD }
 
 var health := 100
 var facing := 1.0
@@ -74,6 +90,18 @@ var combo_window := 0.0
 var dodge_time := 0.0
 var quick_dash_time := 0.0
 var quick_dash_cooldown_remaining := 0.0
+var grapple_requested := false
+var grapple_target: Node2D
+var grapple_time_remaining := 0.0
+var grapple_cooldown_remaining := 0.0
+var resonance_sight_requested := false
+var resonance_sight_time_remaining := 0.0
+var resonance_sight_cooldown_remaining := 0.0
+var wall_climb_active := false
+var debug_iaijutsu_variant := "human_iaijutsu"
+var debug_anchor_fixtures: Array[Node2D] = []
+var debug_reveal_fixtures: Array[Node2D] = []
+var debug_wall_fixtures: Array[Node2D] = []
 # A short opening at dodge start rewards precise timing without adding another resource.
 # 闪避起始的短窗口奖励精准操作，不额外引入资源条。
 const PERFECT_DODGE_WINDOW := 0.075
@@ -138,6 +166,19 @@ func _input(event: InputEvent) -> void:
             debug_refill_combat_resources()
             queue_redraw()
             get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_PAGEUP:
+            if debug_ability_override:
+                _cycle_debug_iaijutsu_variant(1)
+            get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_PAGEDOWN:
+            if debug_ability_override:
+                _cycle_debug_iaijutsu_variant(-1)
+            get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_G:
+            if not is_instance_valid(grapple_target):
+                grapple_requested = true
+        elif event.keycode == KEY_V:
+            resonance_sight_requested = true
         elif event.keycode == KEY_J:
             if state != CombatState.QUICK_DASH:
                 attack_requested = true
@@ -200,6 +241,12 @@ func _physics_process(delta: float) -> void:
     hit_confirm_time = max(0.0, hit_confirm_time - delta)
     eldritch_cooldown_remaining = maxf(0.0, eldritch_cooldown_remaining - delta)
     quick_dash_cooldown_remaining = maxf(0.0, quick_dash_cooldown_remaining - delta)
+    grapple_cooldown_remaining = maxf(0.0, grapple_cooldown_remaining - delta)
+    resonance_sight_cooldown_remaining = maxf(0.0, resonance_sight_cooldown_remaining - delta)
+    if resonance_sight_time_remaining > 0.0:
+        resonance_sight_time_remaining = maxf(0.0, resonance_sight_time_remaining - delta)
+        if resonance_sight_time_remaining <= 0.0:
+            WorldState.set_resonance_sight_active(false)
     _update_jump_buffer(delta)
     _update_combo_window(delta)
 
@@ -210,6 +257,11 @@ func _physics_process(delta: float) -> void:
         coyote_time = max(0.0, coyote_time - delta)
 
     if WorldState.input_locked:
+        grapple_requested = false
+        _cancel_grapple("world input locked")
+        resonance_sight_requested = false
+        resonance_sight_time_remaining = 0.0
+        WorldState.set_resonance_sight_active(false)
         attack_requested = false
         technique_requested = false
         weapon_technique_requested = false
@@ -251,16 +303,37 @@ func _physics_process(delta: float) -> void:
         jump_requested = false
         jump_buffer = 0.0
         # A menu must not keep carrying the Hero horizontally during an active dash.
+        grapple_requested = false
+        _cancel_grapple("menu opened")
+        resonance_sight_requested = false
+        resonance_sight_time_remaining = 0.0
+        WorldState.set_resonance_sight_active(false)
         if quick_dash_time > 0.0:
             quick_dash_time = 0.0
             velocity.x = 0.0
             if state == CombatState.QUICK_DASH:
                 _set_state(CombatState.IDLE)
 
+    if debug_ability_override and not is_instance_valid(grapple_target):
+        _update_debug_fixture_positions()
+
+    if grapple_requested:
+        grapple_requested = false
+        if attack_time <= 0.0 and dodge_time <= 0.0:
+            _start_grapple()
+    if resonance_sight_requested:
+        resonance_sight_requested = false
+        _toggle_resonance_sight()
+    if is_instance_valid(grapple_target):
+        _update_grapple(delta)
+        queue_redraw()
+        return
+
     if stamina_regen_delay > 0.0:
         stamina_regen_delay = max(0.0, stamina_regen_delay - delta)
     elif stamina < MAX_STAMINA:
-        stamina = min(MAX_STAMINA, stamina + STAMINA_REGEN_RATE * delta)
+        var regen_multiplier: float = hero_system.get_stamina_regen_multiplier() if hero_system else 1.0
+        stamina = min(MAX_STAMINA, stamina + STAMINA_REGEN_RATE * regen_multiplier * delta)
 
     if attack_time > 0.0:
         attack_time = max(0.0, attack_time - delta)
@@ -356,7 +429,28 @@ func _physics_process(delta: float) -> void:
         velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 
     var can_ground_or_coyote_jump := coyote_time > 0.0
-    var can_unlocked_double_jump := WorldState.is_ability_unlocked("double_jump") and air_jumps_used < MAX_EXTRA_AIR_JUMPS and not can_ground_or_coyote_jump
+    var can_unlocked_double_jump := (debug_ability_override or WorldState.is_ability_unlocked("double_jump")) and air_jumps_used < MAX_EXTRA_AIR_JUMPS and not can_ground_or_coyote_jump
+    wall_climb_active = false
+    var wall_normal := _get_marked_wall_normal()
+    var can_wall_traverse := debug_ability_override or WorldState.is_ability_unlocked("wall_climb")
+    if can_wall_traverse and wall_normal != Vector2.ZERO and not is_on_floor() and attack_time <= 0.0 and dodge_time <= 0.0:
+        var pressing_into_wall := absf(direction) < 0.1 or direction * wall_normal.x < -0.1
+        if pressing_into_wall:
+            if jump_buffer > 0.0:
+                jump_buffer = 0.0
+                jump_requested = false
+                velocity.x = wall_normal.x * WALL_JUMP_HORIZONTAL_SPEED
+                velocity.y = JUMP_VELOCITY
+                coyote_time = 0.0
+                _set_state(CombatState.JUMP)
+                _log("MOVEMENT", "Wall jump performed")
+            else:
+                wall_climb_active = true
+                if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
+                    velocity.y = -WALL_CLIMB_SPEED
+                else:
+                    velocity.y = minf(velocity.y, WALL_SLIDE_SPEED)
+
     if jump_buffer > 0.0 and (can_ground_or_coyote_jump or can_unlocked_double_jump) and attack_time <= 0.0 and dodge_time <= 0.0:
         jump_buffer = 0.0
         if can_unlocked_double_jump:
@@ -385,7 +479,9 @@ func _physics_process(delta: float) -> void:
 
     move_and_slide()
 
-    if not is_on_floor():
+    if wall_climb_active:
+        _set_state(CombatState.WALL_CLIMB)
+    elif not is_on_floor():
         _set_state(CombatState.JUMP if velocity.y < 0.0 else CombatState.FALL)
     elif attack_time > 0.0:
         _set_state(CombatState.ATTACK)
@@ -544,13 +640,192 @@ func _spawn_technique_arc(technique_id: String, stage: int) -> void:
     effect.call("setup_combat_technique", facing, technique_id, stage)
 
 func set_debug_ability_override(enabled: bool) -> void:
+    if debug_ability_override == enabled:
+        return
     debug_ability_override = enabled
+    if enabled:
+        _refresh_debug_test_fixtures(true)
+    else:
+        _cancel_grapple("debug override disabled")
+        resonance_sight_time_remaining = 0.0
+        WorldState.set_resonance_sight_active(false)
+        _refresh_debug_test_fixtures(false)
+        debug_iaijutsu_variant = "human_iaijutsu"
+    WorldState.refresh_resonance_reveals(debug_ability_override)
+    queue_redraw()
     _log("DEBUG", "Ability override %s (session only; not saved)" % ("ON" if enabled else "OFF"))
 
 func toggle_debug_ability_override() -> void:
     set_debug_ability_override(not debug_ability_override)
 
+func _cycle_debug_iaijutsu_variant(direction: int) -> void:
+    var selected_index := DEBUG_IAIJUTSU_VARIANTS.find(debug_iaijutsu_variant)
+    if selected_index < 0:
+        selected_index = 0
+    selected_index = posmod(selected_index + direction, DEBUG_IAIJUTSU_VARIANTS.size())
+    debug_iaijutsu_variant = str(DEBUG_IAIJUTSU_VARIANTS[selected_index])
+    _cancel_attack_action()
+    _log("DEBUG", "Session-only iaijutsu form selected: %s" % debug_iaijutsu_variant)
+    queue_redraw()
+
+func _refresh_debug_test_fixtures(enabled: bool) -> void:
+    for fixture in debug_anchor_fixtures + debug_reveal_fixtures + debug_wall_fixtures:
+        if is_instance_valid(fixture):
+            fixture.queue_free()
+    debug_anchor_fixtures.clear()
+    debug_reveal_fixtures.clear()
+    debug_wall_fixtures.clear()
+    if not enabled or get_parent() == null:
+        return
+
+    for index in range(DEBUG_ANCHOR_OFFSETS.size()):
+        var anchor := Node2D.new()
+        anchor.set_script(GRAPPLE_ANCHOR_SCRIPT)
+        anchor.name = "DebugGrappleAnchor_%d" % index
+        get_parent().add_child(anchor)
+        anchor.set("debug_fixture", true)
+        anchor.global_position = global_position + DEBUG_ANCHOR_OFFSETS[index]
+        debug_anchor_fixtures.append(anchor)
+
+    for index in range(DEBUG_REVEAL_OFFSETS.size()):
+        var hidden_target := Node2D.new()
+        hidden_target.set_script(RESONANCE_TARGET_SCRIPT)
+        hidden_target.name = "DebugResonanceTarget_%d" % index
+        get_parent().add_child(hidden_target)
+        hidden_target.global_position = global_position + DEBUG_REVEAL_OFFSETS[index]
+        hidden_target.call("configure", [0, 15, 32][index], [0, 1, 1][index], [0, 0, 12][index], "TRACE %d" % (index + 1), true)
+        debug_reveal_fixtures.append(hidden_target)
+
+    for offset in [-210.0, 210.0]:
+        var wall := StaticBody2D.new()
+        wall.set_script(DEBUG_WALL_SCRIPT)
+        wall.name = "DebugWall_%s" % ("Left" if offset < 0.0 else "Right")
+        get_parent().add_child(wall)
+        wall.global_position = global_position + Vector2(offset, -90.0)
+        debug_wall_fixtures.append(wall)
+
+    _log("DEBUG", "Temporary traversal fixtures created: 4 anchors, 3 hidden traces, 2 marked walls")
+
+func _update_debug_fixture_positions() -> void:
+    for index in range(mini(debug_anchor_fixtures.size(), DEBUG_ANCHOR_OFFSETS.size())):
+        var anchor := debug_anchor_fixtures[index]
+        if is_instance_valid(anchor):
+            anchor.global_position = global_position + DEBUG_ANCHOR_OFFSETS[index]
+    for index in range(mini(debug_reveal_fixtures.size(), DEBUG_REVEAL_OFFSETS.size())):
+        var target := debug_reveal_fixtures[index]
+        if is_instance_valid(target):
+            target.global_position = global_position + DEBUG_REVEAL_OFFSETS[index]
+
+func _start_grapple() -> void:
+    if not (debug_ability_override or WorldState.is_ability_unlocked("grapple")):
+        _log("MOVEMENT", "Grapple locked")
+        return
+    if grapple_cooldown_remaining > 0.0:
+        _log("MOVEMENT", "Grapple cooling down; remaining=%.2f" % grapple_cooldown_remaining)
+        return
+    var best_target: Node2D
+    var best_distance := GRAPPLE_MAX_RANGE
+    for candidate in get_tree().get_nodes_in_group("grapple_anchors"):
+        if not is_instance_valid(candidate) or candidate == self or not candidate is Node2D:
+            continue
+        var candidate_node := candidate as Node2D
+        var distance := global_position.distance_to(candidate_node.global_position)
+        if distance <= best_distance:
+            best_distance = distance
+            best_target = candidate_node
+    if not is_instance_valid(best_target):
+        _log("MOVEMENT", "No grapple anchor in range (max %.0f)" % GRAPPLE_MAX_RANGE)
+        return
+
+    _cancel_attack_action()
+    grapple_target = best_target
+    grapple_time_remaining = GRAPPLE_MAX_DURATION
+    grapple_cooldown_remaining = GRAPPLE_COOLDOWN
+    attack_requested = false
+    technique_requested = false
+    weapon_technique_requested = false
+    eldritch_requested = false
+    dodge_requested = false
+    quick_dash_requested = false
+    jump_requested = false
+    jump_buffer = 0.0
+    invulnerable = false
+    velocity = Vector2.ZERO
+    _set_state(CombatState.GRAPPLE)
+    _log("MOVEMENT", "Grapple started; target=%s distance=%.0f" % [best_target.name, best_distance])
+
+func _update_grapple(delta: float) -> void:
+    if not is_instance_valid(grapple_target):
+        _cancel_grapple("target lost")
+        return
+    grapple_time_remaining = maxf(0.0, grapple_time_remaining - delta)
+    if grapple_time_remaining <= 0.0:
+        _cancel_grapple("timeout")
+        return
+    var to_target := grapple_target.global_position - global_position
+    if to_target.length() <= 34.0:
+        _cancel_grapple("target reached")
+        return
+    velocity = to_target.normalized() * GRAPPLE_PULL_SPEED
+    move_and_slide()
+    _set_state(CombatState.GRAPPLE)
+
+func _cancel_grapple(reason: String = "") -> void:
+    if not is_instance_valid(grapple_target):
+        grapple_target = null
+        grapple_time_remaining = 0.0
+        if state == CombatState.GRAPPLE:
+            _set_state(CombatState.IDLE)
+        return
+    grapple_target = null
+    grapple_time_remaining = 0.0
+    velocity = Vector2.ZERO
+    if state == CombatState.GRAPPLE:
+        _set_state(CombatState.IDLE)
+    if not reason.is_empty():
+        _log("MOVEMENT", "Grapple ended: %s" % reason)
+
+func _toggle_resonance_sight() -> void:
+    if resonance_sight_time_remaining > 0.0:
+        resonance_sight_time_remaining = 0.0
+        WorldState.set_resonance_sight_active(false)
+        _log("SENSE", "Resonance Sight disabled")
+        return
+    if not (debug_ability_override or WorldState.is_ability_unlocked("resonance_sight")):
+        _log("SENSE", "Resonance Sight locked")
+        return
+    if resonance_sight_cooldown_remaining > 0.0:
+        _log("SENSE", "Resonance Sight cooling down")
+        return
+    if stamina < RESONANCE_SIGHT_STAMINA_COST:
+        _log("SENSE", "Insufficient stamina for Resonance Sight")
+        return
+    stamina -= RESONANCE_SIGHT_STAMINA_COST
+    stamina_regen_delay = STAMINA_REGEN_DELAY
+    resonance_sight_time_remaining = RESONANCE_SIGHT_DURATION
+    resonance_sight_cooldown_remaining = RESONANCE_SIGHT_COOLDOWN
+    WorldState.set_resonance_sight_active(true)
+    WorldState.refresh_resonance_reveals(debug_ability_override)
+    _log("SENSE", "Resonance Sight active for %.1fs" % RESONANCE_SIGHT_DURATION)
+
+func _get_marked_wall_normal() -> Vector2:
+    if not is_on_wall():
+        return Vector2.ZERO
+    for index in range(get_slide_collision_count()):
+        var collision := get_slide_collision(index)
+        var collider = collision.get_collider()
+        if collider is Node and (collider as Node).is_in_group("wall_climb_surfaces"):
+            var normal := collision.get_normal()
+            if absf(normal.x) >= 0.70:
+                return normal
+    return Vector2.ZERO
+
 func debug_refill_combat_resources() -> void:
+    WorldState.clear_witch_time("Debug refill")
+    WorldState.set_resonance_sight_active(false)
+    resonance_sight_time_remaining = 0.0
+    resonance_sight_cooldown_remaining = 0.0
+    _cancel_grapple("Debug refill")
     health = 100
     stamina = MAX_STAMINA
     stamina_regen_delay = 0.0
@@ -558,6 +833,9 @@ func debug_refill_combat_resources() -> void:
     quick_dash_time = 0.0
     quick_dash_cooldown_remaining = 0.0
     quick_dash_requested = false
+    grapple_requested = false
+    grapple_cooldown_remaining = 0.0
+    resonance_sight_requested = false
     invulnerable = false
     hurt_time = 0.0
     dodge_time = 0.0
@@ -574,7 +852,7 @@ func debug_refill_combat_resources() -> void:
     combo_step = 0
     combo_window = 0.0
     _cancel_attack_action()
-    if state in [CombatState.HURT, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.ATTACK]:
+    if state in [CombatState.HURT, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.ATTACK]:
         _set_state(CombatState.IDLE)
     _log("DEBUG", "HP/stamina/cooldowns restored; queued actions cleared (session only)")
 
@@ -585,9 +863,15 @@ func get_debug_eldritch_cooldown() -> float:
     return eldritch_cooldown_remaining
 
 func _perform_iaijutsu() -> void:
-    if not hero_system or not hero_system.can_use_blood_iaijutsu():
+    if not hero_system:
         return
-    var profile: Dictionary = hero_system.get_iaijutsu_profile()
+    var profile: Dictionary
+    if debug_ability_override:
+        profile = hero_system.get_iaijutsu_profile_for_variant(debug_iaijutsu_variant)
+    else:
+        if not hero_system.can_use_blood_iaijutsu():
+            return
+        profile = hero_system.get_iaijutsu_profile()
     if profile.is_empty():
         return
 
@@ -669,7 +953,7 @@ func _spawn_slash_arc() -> void:
     var effect: Node2D = SLASH_ARC_SCRIPT.new()
     effect.global_position = global_position
     get_parent().add_child(effect)
-    var variant: String = hero_system.resolve_iaijutsu_variant() if hero_system != null and iaijutsu_active else ""
+    var variant: String = (debug_iaijutsu_variant if debug_ability_override else hero_system.resolve_iaijutsu_variant()) if hero_system != null and iaijutsu_active else ""
     effect.call("setup", facing, combo_step, hero_system != null and hero_system.is_short_blade(), iaijutsu_active, variant)
 
 func _spawn_hit_spark() -> void:
@@ -736,10 +1020,16 @@ func receive_damage(amount: int, source: Node = null) -> void:
         if dodge_time > 0.0 and perfect_dodge_window_remaining > 0.0:
             riposte_bonus_active = true
             perfect_dodge_window_remaining = 0.0
+            if debug_ability_override or WorldState.is_ability_unlocked("witch_time"):
+                WorldState.trigger_witch_time(2.4, 0.22)
             _log("COMBAT", "Perfect dodge! Next hit bonus armed")
         else:
             _log("COMBAT", "Hero damage ignored (invulnerable=true)")
         return
+    WorldState.clear_witch_time("Hero received damage")
+    resonance_sight_time_remaining = 0.0
+    WorldState.set_resonance_sight_active(false)
+    _cancel_grapple("damage")
     health = max(0, health - amount)
     _spawn_hit_spark()
     WorldState.trigger_hitstop(0.032, 0.10)
@@ -810,6 +1100,13 @@ func receive_damage(amount: int, source: Node = null) -> void:
         _set_state(CombatState.IDLE)
 
 func restore_full() -> void:
+    WorldState.clear_witch_time("rest point")
+    resonance_sight_time_remaining = 0.0
+    resonance_sight_cooldown_remaining = 0.0
+    WorldState.set_resonance_sight_active(false)
+    _cancel_grapple("rest point")
+    if hero_system:
+        hero_system.recover_abnormal_load(35.0)
     health = 100
     stamina = MAX_STAMINA
     stamina_regen_delay = 0.0
@@ -828,6 +1125,13 @@ func restore_full() -> void:
     quick_dash_time = 0.0
     quick_dash_cooldown_remaining = 0.0
     quick_dash_requested = false
+    grapple_requested = false
+    grapple_cooldown_remaining = 0.0
+    resonance_sight_requested = false
+    resonance_sight_time_remaining = 0.0
+    resonance_sight_cooldown_remaining = 0.0
+    WorldState.clear_witch_time("rest point")
+    WorldState.set_resonance_sight_active(false)
     combo_step = 0
     combo_window = 0.0
     _cancel_attack_action()
@@ -901,14 +1205,19 @@ func _draw() -> void:
         var debug_color := Color("#f0dfc3")
         var weapon_name := "短刃" if short_blade else "长剑"
         var action_name := active_action_kind if active_action_kind != "none" else get_debug_state().to_lower()
-        draw_rect(Rect2(-112.0, -184.0, 224.0, 78.0), Color(0.035, 0.025, 0.04, 0.86), true)
-        draw_string(debug_font, Vector2(-104.0, -166.0), "DEBUG F4 | F5:技能覆盖 | F6:资源恢复", HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
-        draw_string(debug_font, Vector2(-104.0, -150.0), "HP %d | ST %d | %s" % [health, int(round(stamina)), weapon_name], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 12, debug_color)
-        draw_string(debug_font, Vector2(-104.0, -134.0), "状态 %s | 动作 %s | 连击 %d" % [get_debug_state(), action_name, combo_step], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
-        draw_string(debug_font, Vector2(-104.0, -118.0), "无敌 %s | 覆盖 %s | E %.1f | D %.1f" % [str(invulnerable), str(debug_ability_override), eldritch_cooldown_remaining, quick_dash_cooldown_remaining], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 9, debug_color)
+        draw_rect(Rect2(-144.0, -224.0, 288.0, 136.0), Color(0.035, 0.025, 0.04, 0.90), true)
+        draw_string(debug_font, Vector2(-136.0, -207.0), "F4 面板 | F5 全能力覆盖 | F6 恢复", HORIZONTAL_ALIGNMENT_LEFT, 272.0, 10, debug_color)
+        draw_string(debug_font, Vector2(-136.0, -190.0), "HP %d | ST %d | %s" % [health, int(round(stamina)), weapon_name], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 12, debug_color)
+        draw_string(debug_font, Vector2(-136.0, -174.0), "状态 %s | 动作 %s | 连击 %d" % [get_debug_state(), action_name, combo_step], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 10, debug_color)
+        draw_string(debug_font, Vector2(-136.0, -158.0), "无敌 %s | 覆盖 %s | 余响 %.1f 冲刺 %.1f" % [str(invulnerable), str(debug_ability_override), eldritch_cooldown_remaining, quick_dash_cooldown_remaining], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 9, debug_color)
+        draw_string(debug_font, Vector2(-136.0, -142.0), "钩爪 %.1f | 魔女 %.1f | 灵视 %.1f" % [grapple_cooldown_remaining, WorldState.witch_time_remaining, resonance_sight_time_remaining], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 9, Color("#a8d3bd"))
+        draw_string(debug_font, Vector2(-136.0, -126.0), "形态 %s | 墙攀 %s" % [debug_iaijutsu_variant if debug_ability_override else (hero_system.resolve_iaijutsu_variant() if hero_system else "unknown"), str(wall_climb_active)], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 9, Color("#a8d3bd"))
         if hero_system != null:
-            draw_string(debug_font, Vector2(-104.0, -102.0), "共鸣 %d 古神 %d 外神 %d 人性 %d" % [hero_system.resonance, hero_system.ancient_exposure, hero_system.outer_exposure, hero_system.humanity], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, Color("#d7a8d9"))
-            draw_string(debug_font, Vector2(-104.0, -86.0), "异常负荷 %.1f | 二段跳 %d/%d" % [hero_system.abnormal_load, air_jumps_used, MAX_EXTRA_AIR_JUMPS], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, Color("#d7a8d9"))
+            draw_string(debug_font, Vector2(-136.0, -110.0), "共鸣 %d 古神 %d 外神 %d 人性 %d" % [hero_system.resonance, hero_system.ancient_exposure, hero_system.outer_exposure, hero_system.humanity], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 10, Color("#d7a8d9"))
+            draw_string(debug_font, Vector2(-136.0, -94.0), "异常负荷 %.1f (体力恢复 x%.2f)" % [hero_system.abnormal_load, hero_system.get_stamina_regen_multiplier()], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 10, Color("#d7a8d9"))
+        if hero_system != null and hero_system.abnormal_load >= 75.0:
+            var pulse := 0.55 + 0.25 * sin(animation_time * 7.0)
+            draw_arc(Vector2(0.0, -42.0), 62.0, 0.15, TAU - 0.15, 28, Color(0.62, 0.24, 0.70, pulse), 3.0)
         draw_rect(Rect2(-25.0, -72.0, 50.0, 4.0), Color("#27212a"), true)
         draw_rect(Rect2(-25.0, -72.0, 50.0 * (float(health) / 100.0), 4.0), Color("#bd5b61"), true)
         draw_rect(Rect2(-25.0, -65.0, 50.0, 3.0), Color("#27212a"), true)

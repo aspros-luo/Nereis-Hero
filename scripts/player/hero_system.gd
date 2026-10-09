@@ -149,7 +149,10 @@ func can_use_blood_iaijutsu() -> bool:
     return not get_iaijutsu_profile().is_empty()
 
 func get_iaijutsu_profile() -> Dictionary:
-    match resolve_iaijutsu_variant():
+    return get_iaijutsu_profile_for_variant(resolve_iaijutsu_variant())
+
+func get_iaijutsu_profile_for_variant(variant: String) -> Dictionary:
+    match variant:
         "human_iaijutsu":
             return {
                 "variant": "human_iaijutsu",
@@ -246,11 +249,49 @@ func get_hit_window_duration(combo_step: int) -> float:
         return 0.065
     return 0.11 if combo_step < 3 else 0.14
 
+func get_stamina_regen_multiplier() -> float:
+    if abnormal_load >= 85.0:
+        return 0.45
+    if abnormal_load >= 65.0:
+        return 0.60
+    if abnormal_load >= 40.0:
+        return 0.75
+    if abnormal_load >= 20.0:
+        return 0.90
+    return 1.0
+
+func get_abnormal_load_tier(value: float = -1.0) -> int:
+    var load_value := abnormal_load if value < 0.0 else clampf(value, 0.0, 100.0)
+    if load_value >= 85.0:
+        return 4
+    if load_value >= 65.0:
+        return 3
+    if load_value >= 40.0:
+        return 2
+    if load_value >= 20.0:
+        return 1
+    return 0
+
+func recover_abnormal_load(amount: float) -> void:
+    if amount <= 0.0 or abnormal_load <= 0.0:
+        return
+    var old_tier := get_abnormal_load_tier()
+    abnormal_load = maxf(0.0, abnormal_load - amount)
+    WorldState.abnormal_load = abnormal_load
+    var new_tier := get_abnormal_load_tier()
+    if new_tier < old_tier:
+        print("[NEREIS][HERO] Abnormal load tier reduced %d -> %d" % [old_tier, new_tier])
+    WorldState.save_game()
+
 func add_abnormal_load(amount: float) -> void:
     if amount <= 0.0:
         return
+    var old_tier := get_abnormal_load_tier()
     abnormal_load = clampf(abnormal_load + amount, 0.0, 100.0)
     WorldState.abnormal_load = abnormal_load
+    var new_tier := get_abnormal_load_tier()
+    if new_tier > old_tier:
+        print("[NEREIS][HERO] Abnormal load tier increased %d -> %d; stamina regeneration reduced" % [old_tier, new_tier])
     WorldState.save_game()
 
 func clear_abnormal_load() -> void:

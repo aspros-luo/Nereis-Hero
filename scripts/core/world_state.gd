@@ -40,7 +40,7 @@ var resonance_sources: Array[String] = []
 
 # Data-driven ability progression. Unlock records store their origin for debugging and save migration.
 # 数据驱动的能力成长：保存解锁来源，便于排查和兼容旧存档。
-const ABILITY_IDS := ["iaijutsu_basic", "double_jump", "quick_dash", "witch_time", "grapple", "wall_climb", "technique_judgment_slash", "technique_crescent_combo", "eldritch_echo"]
+const ABILITY_IDS := ["iaijutsu_basic", "double_jump", "quick_dash", "witch_time", "grapple", "wall_climb", "resonance_sight", "technique_judgment_slash", "technique_crescent_combo", "eldritch_echo"]
 const ABILITY_SOURCE_TYPES := ["story", "exploration", "achievement", "resonance", "material"]
 var unlocked_abilities: Dictionary = {}
 var achievement_flags: Array[String] = []
@@ -49,6 +49,13 @@ var input_locked := false
 # Menu lock disables Hero input while the world and all gameplay timers keep running.
 var menu_input_locked := false
 var hitstop_serial := 0
+
+# Witch Time scales hostile AI delta only; Hero input and physics stay responsive.
+# 魔女时间只缩放敌方 AI 的 delta，不减慢主角输入与物理响应。
+var witch_time_remaining := 0.0
+var witch_time_enemy_scale := 0.22
+var resonance_sight_active := false
+var _last_runtime_scene_path := ""
 
 # Narrative state is stored as facts/flags, not as a visible romance meter.
 var mite_first_meeting := false
@@ -68,12 +75,63 @@ var prologue_complete := false
 func _ready() -> void:
     load_game()
 
+func _process(delta: float) -> void:
+    var scene := get_tree().current_scene
+    if scene != null:
+        var scene_path := str(scene.scene_file_path)
+        if _last_runtime_scene_path.is_empty():
+            _last_runtime_scene_path = scene_path
+        elif scene_path != _last_runtime_scene_path:
+            clear_witch_time("scene changed")
+            set_resonance_sight_active(false)
+            _last_runtime_scene_path = scene_path
+
+    if input_locked or menu_input_locked or get_tree().paused:
+        clear_witch_time("input/menu lock")
+        set_resonance_sight_active(false)
+        return
+
+    if witch_time_remaining > 0.0:
+        witch_time_remaining = maxf(0.0, witch_time_remaining - delta)
+        if witch_time_remaining <= 0.0:
+            print("[NEREIS][ABILITY] Witch Time ended")
+
 func prepare_scene_runtime() -> void:
     get_tree().paused = false
     input_locked = false
     menu_input_locked = false
+    clear_witch_time("scene runtime reset")
+    set_resonance_sight_active(false)
+    _last_runtime_scene_path = ""
     hitstop_serial += 1
     Engine.time_scale = 1.0
+
+func trigger_witch_time(duration: float = 2.4, enemy_scale: float = 0.22) -> void:
+    if input_locked or menu_input_locked or duration <= 0.0:
+        return
+    witch_time_remaining = maxf(witch_time_remaining, duration)
+    witch_time_enemy_scale = clampf(enemy_scale, 0.08, 0.60)
+    print("[NEREIS][ABILITY] Witch Time active for %.2fs; enemy delta scale=%.2f" % [witch_time_remaining, witch_time_enemy_scale])
+
+func clear_witch_time(reason: String = "") -> void:
+    if witch_time_remaining > 0.0:
+        print("[NEREIS][ABILITY] Witch Time cleared%s" % (": " + reason if not reason.is_empty() else ""))
+    witch_time_remaining = 0.0
+    witch_time_enemy_scale = 1.0
+
+func get_combat_enemy_time_scale() -> float:
+    return witch_time_enemy_scale if witch_time_remaining > 0.0 else 1.0
+
+func set_resonance_sight_active(active: bool) -> void:
+    resonance_sight_active = active
+    refresh_resonance_reveals()
+
+func refresh_resonance_reveals(debug_override: bool = false) -> void:
+    for target in get_tree().get_nodes_in_group("resonance_hidden_targets"):
+        if not is_instance_valid(target) or target.is_queued_for_deletion():
+            continue
+        if target.has_method("update_reveal_state"):
+            target.call("update_reveal_state", resonance_sight_active, hero_resonance, ancient_exposure, outer_exposure, debug_override)
 
 func unlock_first_memory() -> void:
     if first_memory_unlocked:
