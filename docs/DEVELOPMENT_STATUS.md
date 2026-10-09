@@ -348,3 +348,10 @@ The design document was committed to the feature branch. This was a documentatio
 - Hit sparks now have a dark impact core, bright diamond flash and tapered splinters.
 - These effects are drawn procedurally in GDScript, so no image-generation quota or external asset import is required.
 - Static source review only; Godot rendering, scale, and frame-timing still need in-game verification.
+
+
+## 2026-10-09 — Hero silhouette pass
+
+- Replaced the Hero's basic circles/rectangles with layered knight armor, cloak folds, helmet/visor, rivets, gauntlets, boots and a more readable weapon silhouette.
+- Kept the existing CharacterBody2D movement, collision, weapon switching, technique state, and HUD logic unchanged; this is a renderer-only change.
+- Runtime rendering has not been verified in Godot yet. Check normal camera scale, both facing directions, movement bob, and short-blade/long-sword silhouettes.
