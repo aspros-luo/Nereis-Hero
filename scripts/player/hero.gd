@@ -65,7 +65,7 @@ signal dodge_started
 signal attack_landed(damage: int, target: Node)
 
 func _input(event: InputEvent) -> void:
-    if WorldState.input_locked:
+    if WorldState.input_locked or WorldState.menu_input_locked:
         return
     if event is InputEventKey and event.pressed and not event.echo:
         if event.keycode == KEY_J:
@@ -145,6 +145,14 @@ func _physics_process(delta: float) -> void:
         queue_redraw()
         return
 
+    if WorldState.menu_input_locked:
+        # Ignore any action queued before the menu opened; ongoing attacks and enemy actions still resolve.
+        attack_requested = false
+        technique_requested = false
+        dodge_requested = false
+        jump_requested = false
+        jump_buffer = 0.0
+
     if stamina_regen_delay > 0.0:
         stamina_regen_delay = max(0.0, stamina_regen_delay - delta)
     elif stamina < MAX_STAMINA:
@@ -186,11 +194,12 @@ func _physics_process(delta: float) -> void:
     if not is_on_floor():
         velocity.y += GRAVITY * delta
 
-    var direction := Input.get_axis("ui_left", "ui_right")
-    if Input.is_key_pressed(KEY_A):
-        direction = -1.0
-    elif Input.is_key_pressed(KEY_D):
-        direction = 1.0
+    var direction := 0.0 if WorldState.menu_input_locked else Input.get_axis("ui_left", "ui_right")
+    if not WorldState.menu_input_locked:
+        if Input.is_key_pressed(KEY_A):
+            direction = -1.0
+        elif Input.is_key_pressed(KEY_D):
+            direction = 1.0
 
     if direction != 0.0:
         facing = sign(direction)
@@ -372,6 +381,10 @@ func receive_damage(amount: int, source: Node = null) -> void:
     _spawn_hit_spark()
     WorldState.trigger_hitstop(0.032, 0.10)
     _shake_camera(9.0, 0.12)
+    # A confirmed hit interrupts the Hero's current action; never let a stale hitbox resolve after hitstun.
+    _cancel_attack_action()
+    dodge_time = 0.0
+    invulnerable = false
     hurt_time = HURT_DURATION
     velocity.y = -120.0
     if source and source is Node2D:
@@ -391,8 +404,16 @@ func receive_damage(amount: int, source: Node = null) -> void:
         velocity = Vector2.ZERO
         invulnerable = true
         stamina = MAX_STAMINA
+        hurt_time = 0.0
+        attack_time = 0.0
+        attack_windup = 0.0
+        attack_hit_registered = false
+        iaijutsu_active = false
+        dodge_time = 0.0
+        stamina_regen_delay = 0.0
         combo_step = 0
         combo_window = 0.0
+        _deactivate_attack_hitbox()
         attack_requested = false
         dodge_requested = false
         jump_requested = false
@@ -403,18 +424,38 @@ func receive_damage(amount: int, source: Node = null) -> void:
 func restore_full() -> void:
     health = 100
     stamina = MAX_STAMINA
+    stamina_regen_delay = 0.0
     hurt_time = 0.0
     velocity = Vector2.ZERO
     invulnerable = false
+    attack_time = 0.0
+    attack_windup = 0.0
+    attack_hit_registered = false
+    iaijutsu_active = false
+    dodge_time = 0.0
     combo_step = 0
     combo_window = 0.0
+    _cancel_attack_action()
     attack_requested = false
+    technique_requested = false
     dodge_requested = false
     jump_requested = false
+    _set_state(CombatState.IDLE)
     _log("HERO", "Hero fully restored at rest point")
 
 func take_damage(amount: int) -> void:
     receive_damage(amount, null)
+
+func _cancel_attack_action() -> void:
+    attack_time = 0.0
+    attack_windup = 0.0
+    attack_hit_registered = false
+    iaijutsu_active = false
+    _deactivate_attack_hitbox()
+
+func _deactivate_attack_hitbox() -> void:
+    if is_instance_valid(attack_hitbox) and attack_hitbox.has_method("deactivate"):
+        attack_hitbox.deactivate()
 
 func _clear_respawn_invulnerability() -> void:
     invulnerable = false
