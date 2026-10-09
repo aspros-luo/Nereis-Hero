@@ -43,3 +43,10 @@ func _draw() -> void:
             Color(0.95, 0.90, 0.76, alpha * 0.75),
             3.0
         )
+    elif combo_step == 4 and short_blade:
+        draw_line(
+            Vector2(facing * 12.0, -18.0),
+            Vector2(facing * 58.0, -44.0),
+            Color(0.95, 0.90, 0.76, alpha * 0.8),
+            3.0
+        )
