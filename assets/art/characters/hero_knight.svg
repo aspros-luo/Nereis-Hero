@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="224" viewBox="0 0 192 224">
+<defs>
+ <linearGradient id="cloak" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4c3948"/><stop offset=".48" stop-color="#29232f"/><stop offset="1" stop-color="#15151d"/></linearGradient>
+ <linearGradient id="steel" x1="0" y1="0" x2=".9" y2="1"><stop stop-color="#e1d5bc"/><stop offset=".26" stop-color="#9f9a94"/><stop offset=".58" stop-color="#5b5963"/><stop offset=".82" stop-color="#292a35"/><stop offset="1" stop-color="#aaa18e"/></linearGradient>
+ <linearGradient id="cloth" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#796170"/><stop offset="1" stop-color="#302633"/></linearGradient>
+ <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d0b5a0"/><stop offset="1" stop-color="#755e60"/></linearGradient>
+</defs>
+<!-- original hand-painted-inspired knight sprite; transparent background -->
+<path d="M65 70 L39 98 28 164 50 174 69 137 78 103Z" fill="#17151c" stroke="#655260" stroke-width="2"/>
+<path d="M122 71 L147 100 160 159 141 171 119 131 111 102Z" fill="url(#cloak)" stroke="#69505c" stroke-width="2"/>
+<path d="M68 69 Q94 61 121 72 L145 124 133 181 108 195 84 190 54 177 51 119Z" fill="url(#cloak)" stroke="#17151e" stroke-width="5"/>
+<path d="M73 83 L56 127 64 167 79 177 75 133 91 99Z" fill="#6b505f" opacity=".8"/>
+<path d="M116 86 L133 126 124 164 112 177 118 133 104 103Z" fill="#171720" opacity=".8"/>
+<path d="M72 159 L90 165 86 204 66 216 48 215 53 199 65 194Z" fill="url(#steel)" stroke="#17151c" stroke-width="5"/>
+<path d="M102 164 L121 158 137 194 151 203 148 216 120 217 108 203Z" fill="url(#steel)" stroke="#17151c" stroke-width="5"/>
+<path d="M52 205 L83 204 82 216 43 219 37 214Z" fill="#211e27" stroke="#b7a68d" stroke-width="2"/>
+<path d="M119 204 L148 204 160 214 155 219 118 219Z" fill="#211e27" stroke="#b7a68d" stroke-width="2"/>
+<path d="M65 76 L74 59 118 58 130 79 123 123 97 141 67 120Z" fill="#17151d" stroke="#b6a58f" stroke-width="3"/>
+<path d="M72 77 L81 65 112 65 122 80 116 113 97 127 75 112Z" fill="url(#steel)"/>
+<path d="M81 75 L96 69 112 76 108 104 96 113 83 103Z" fill="#514b58"/>
+<path d="M90 73 L97 78 103 73 107 102 97 111 88 102Z" fill="#2b2933"/>
+<path d="M75 84 L83 79 86 109 77 103Z" fill="#e1d2b5" opacity=".8"/>
+<path d="M114 83 L119 89 114 108 108 112Z" fill="#e1d2b5" opacity=".55"/>
+<path d="M62 76 L72 58 87 55 83 72 72 89Z" fill="#4b3a48" stroke="#15141b" stroke-width="3"/>
+<path d="M126 76 L119 57 107 54 111 72 121 88Z" fill="#4b3a48" stroke="#15141b" stroke-width="3"/>
+<path d="M66 80 L79 70 84 83 73 92Z" fill="#b6a58c"/><path d="M126 80 L114 70 109 83 120 92Z" fill="#b6a58c"/>
+<path d="M74 36 L82 17 99 10 118 19 129 39 122 62 103 73 82 63Z" fill="#17151d" stroke="#c3b49b" stroke-width="4"/>
+<path d="M81 36 L88 22 101 17 114 23 122 39 117 57 102 65 87 57Z" fill="url(#steel)"/>
+<path d="M83 39 L96 34 120 38 115 50 102 56 88 50Z" fill="#282630"/>
+<path d="M88 42 L113 42" stroke="#db6d70" stroke-width="3" stroke-linecap="round"/>
+<path d="M87 26 L99 21 113 26" fill="none" stroke="#f0dfc0" stroke-width="2" opacity=".85"/>
+<path d="M99 12 L95 4 102 10 110 8 106 15" fill="#9d8b76" stroke="#24212a" stroke-width="2"/>
+<path d="M66 93 L48 109 55 119 75 108" fill="url(#steel)" stroke="#17151c" stroke-width="3"/>
+<path d="M120 94 L137 108 130 120 112 109" fill="url(#steel)" stroke="#17151c" stroke-width="3"/>
+<path d="M130 109 L157 61" stroke="#17151c" stroke-width="10" stroke-linecap="round"/>
+<path d="M130 109 L157 61" stroke="#bcb8ae" stroke-width="5" stroke-linecap="round"/>
+<path d="M151 72 L164 48" stroke="#f0e4cd" stroke-width="1.5"/>
+<path d="M124 104 L140 113" stroke="#d6c3a0" stroke-width="6" stroke-linecap="round"/>
+<path d="M77 143 L91 152 104 145" fill="none" stroke="#d0bfa2" stroke-width="2" opacity=".75"/>
+<path d="M58 124 L67 151 M132 128 L124 151" stroke="#a28a83" stroke-width="2" opacity=".8"/>
+<circle cx="96" cy="88" r="2" fill="#dfcda9"/><circle cx="96" cy="88" r="5" fill="none" stroke="#dfcda9" stroke-width="1" opacity=".7"/>
+<path d="M85 183 L79 196 M113 181 L123 194" stroke="#3a303b" stroke-width="3"/>
+</svg>
