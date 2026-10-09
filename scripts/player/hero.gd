@@ -12,6 +12,9 @@ const RESONANCE_TARGET_SCRIPT = preload("res://scripts/systems/resonance_hidden_
 const DEBUG_WALL_SCRIPT = preload("res://scripts/systems/debug_traversal_wall.gd")
 const HERO_LONG_ART: Texture2D = preload("res://assets/art/characters/hero_knight.svg")
 const HERO_SHORT_ART: Texture2D = preload("res://assets/art/characters/hero_short_blade.svg")
+const TEMP_SPRITE_ATLAS_PATH := "res://assets/art/characters/temp_swordfighter_atlas.png.b64"
+const TEMP_SPRITE_CELL_SIZE := 256
+const TEMP_SPRITE_COLUMNS := 10
 
 const SPEED := 260.0
 const ATTACK_MOVE_SPEED := 92.0
@@ -124,6 +127,7 @@ var hit_confirm_time := 0.0
 var state := CombatState.IDLE
 var previous_state := CombatState.IDLE
 var animation_time := 0.0
+var temporary_sprite_atlas: Texture2D
 var attack_hitbox: Area2D
 var attack_requested := false
 var technique_requested := false # Legacy iaijutsu prototype input; retained during migration.
@@ -225,6 +229,7 @@ func _ready() -> void:
 	hero_system.name = "HeroSystem"
 	add_child(hero_system)
 	_setup_combat_components()
+	_load_temporary_sprite_atlas()
 	_log("BOOT", "Hero initialized")
 	queue_redraw()
 
@@ -1261,6 +1266,7 @@ func _draw() -> void:
 	var short_blade: bool = hero_system != null and hero_system.is_short_blade()
 	var hero_art: Texture2D = HERO_SHORT_ART if short_blade else HERO_LONG_ART
 	var art_tint := Color("#f3e6d4") if hit_confirm_time > 0.0 else Color.WHITE
+	var atlas_frame_rect := _get_temporary_sprite_frame_rect()
 	var art_rotation := 0.0
 	var art_bob := 0.0
 	var art_scale := Vector2.ONE
@@ -1315,7 +1321,11 @@ func _draw() -> void:
 
 	var pivot := Vector2(0.0, 7.0 + art_bob)
 	draw_set_transform(pivot, art_rotation, Vector2(facing, 1.0) * art_scale)
-	draw_texture_rect(hero_art, Rect2(-48.0, -103.0, 96.0, 112.0), false, art_tint)
+	if temporary_sprite_atlas != null:
+		# Temporary frame-based animation prototype. Original knight art remains the safe fallback.
+		draw_texture_rect_region(temporary_sprite_atlas, Rect2(-90.0, -162.0, 320.0, 320.0), atlas_frame_rect, art_tint)
+	else:
+		draw_texture_rect(hero_art, Rect2(-48.0, -103.0, 96.0, 112.0), false, art_tint)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 	# Keep readable gameplay feedback above the painted silhouette.
@@ -1380,3 +1390,71 @@ func _draw() -> void:
 		draw_rect(Rect2(-25.0, -65.0, 50.0 * (stamina / MAX_STAMINA), 3.0), Color("#b5a184"), true)
 		if combo_step > 0 and attack_time > 0.0:
 			draw_string(debug_font, Vector2(-4.0, -54.0), "%d" % combo_step, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#e4d2b4"))
+
+
+# Temporary sprite-sheet loader for animation prototyping.
+# 临时动作图集加载器：后续会用原创骑士分层素材替换这套占位角色。
+func _load_temporary_sprite_atlas() -> void:
+	if not FileAccess.file_exists(TEMP_SPRITE_ATLAS_PATH):
+		push_warning("Temporary sprite atlas data not found; using the original knight SVG.")
+		return
+
+	var encoded_atlas := FileAccess.get_file_as_string(TEMP_SPRITE_ATLAS_PATH).strip_edges()
+	if encoded_atlas.is_empty():
+		push_warning("Temporary sprite atlas data is empty; using the original knight SVG.")
+		return
+
+	var atlas_image := Image.new()
+	var image_error: Error = atlas_image.load_png_from_buffer(Marshalls.base64_to_raw(encoded_atlas))
+	if image_error != OK:
+		push_warning("Temporary sprite atlas could not be decoded; using the original knight SVG.")
+		return
+
+	temporary_sprite_atlas = ImageTexture.create_from_image(atlas_image)
+	_log("ART", "Temporary sprite-sheet animation prototype loaded")
+
+func _get_temporary_sprite_frame_rect() -> Rect2:
+	var frame_index := 0
+
+	match state:
+		CombatState.IDLE:
+			# A restrained idle loop; neighboring atlas frames have subtle pose differences.
+			frame_index = int(floor(animation_time * 4.0)) % 10
+			frame_index += 0 * TEMP_SPRITE_COLUMNS
+		CombatState.MOVE:
+			# Running poses are grouped at the end of row 4 and start of row 5.
+			var run_frames: Array[int] = [37, 38, 39, 40, 41, 42]
+			frame_index = run_frames[int(floor(animation_time * 12.0)) % run_frames.size()]
+		CombatState.ATTACK:
+			if attack_windup > 0.0:
+				frame_index = 33 + (int(floor(animation_time * 8.0)) % 3)
+			else:
+				# Map the existing attack timer to real atlas poses; combat hitboxes are unchanged.
+				var attack_progress: float = clampf(1.0 - attack_time / maxf(ATTACK_DURATION, 0.01), 0.0, 1.0)
+				var attack_frames: Array[int] = [43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60]
+				frame_index = attack_frames[int(round(attack_progress * float(attack_frames.size() - 1)))]
+		CombatState.DODGE, CombatState.QUICK_DASH:
+			var dash_frames: Array[int] = [37, 38, 39, 40, 41, 42]
+			frame_index = dash_frames[int(floor(animation_time * 18.0)) % dash_frames.size()]
+		CombatState.JUMP:
+			frame_index = 75
+		CombatState.FALL:
+			frame_index = 76
+		CombatState.WALL_CLIMB:
+			frame_index = 71 + (int(floor(animation_time * 8.0)) % 3)
+		CombatState.HURT:
+			frame_index = 64
+		CombatState.DEAD:
+			# The supplied sheet has no clear death pose; retain a guarded standing frame.
+			frame_index = 70
+		_:
+			frame_index = 0
+
+	var row := int(frame_index / TEMP_SPRITE_COLUMNS)
+	var column := frame_index % TEMP_SPRITE_COLUMNS
+	return Rect2(
+		column * TEMP_SPRITE_CELL_SIZE,
+		row * TEMP_SPRITE_CELL_SIZE,
+		TEMP_SPRITE_CELL_SIZE,
+		TEMP_SPRITE_CELL_SIZE
+	)
