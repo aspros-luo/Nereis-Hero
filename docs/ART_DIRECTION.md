@@ -42,7 +42,9 @@ Hand-painted 2D dark fantasy, moving toward the layered, richly illustrated thea
 
 ## Current implementation / 当前实现
 
-Many characters and environment elements are still drawn procedurally in GDScript. These are functional placeholders, not the intended final art quality. Do not treat the existing primitive geometry as the final visual style.
+The Ashen Road now uses an original layered SVG backdrop at `assets/backgrounds/ashen_road_painterly.svg`. Foreground gameplay labels, floor details, and several props still use procedural GDScript drawing and remain placeholders. The backdrop is an initial art-direction milestone, not final production art; Godot runtime acceptance is still pending.
+
+灰烬之路现已接入原创分层 SVG 背景 `assets/backgrounds/ashen_road_painterly.svg`。前景交互标识、地面细节和部分道具仍由 GDScript 程序化绘制，属于占位内容。该背景只是美术方向的第一阶段，并非最终成品；仍待 Godot 实机验收。
 
 目前不少角色和场景元素仍由 GDScript 程序化绘制。这些是可运行的占位美术，不是最终目标。不要将现有几何图形视为最终视觉风格。
 
