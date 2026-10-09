@@ -1,6 +1,7 @@
 extends Node2D
 
 const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
+const MITE_ART: Texture2D = preload("res://assets/art/characters/mite.svg")
 
 signal died
 

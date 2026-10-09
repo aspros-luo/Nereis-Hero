@@ -1263,7 +1263,7 @@ func _draw() -> void:
         var telegraph := Color("#d2c1a4", 0.82)
         draw_arc(Vector2(facing * 24.0, -38.0), windup_radius, -0.55 if facing > 0.0 else 3.69, 0.55 if facing > 0.0 else 4.69, 16, telegraph, 2.5)
     elif attack_time > 0.0 and iaijutsu_active:
-        var displayed_iaijutsu_variant := debug_iaijutsu_variant if debug_ability_override else (hero_system.resolve_iaijutsu_variant() if hero_system else "human")
+        var displayed_iaijutsu_variant: String = debug_iaijutsu_variant if debug_ability_override else (hero_system.resolve_iaijutsu_variant() if hero_system else "human")
         var technique_color: Color = Color("#17151f") if displayed_iaijutsu_variant == "black_horizon" else Color("#7951a1") if displayed_iaijutsu_variant == "abyssal" else Color("#d0dce8") if displayed_iaijutsu_variant == "human_iaijutsu" else Color("#c94a58")
         var technique_radius: float = 72.0 if displayed_iaijutsu_variant == "black_horizon" else 61.0 if displayed_iaijutsu_variant == "abyssal" else 54.0 if displayed_iaijutsu_variant == "human_iaijutsu" else 48.0
         draw_arc(Vector2(facing * 25.0, -40.0), technique_radius, -0.72 if facing > 0.0 else 2.42, 0.72 if facing > 0.0 else 3.86, 24, technique_color, 5.0)
