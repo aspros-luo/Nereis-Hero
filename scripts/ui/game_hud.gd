@@ -10,6 +10,7 @@ var region_label: Label
 var objective_label: Label
 var combat_banner: Label
 var combat_banner_time := 0.0
+var technique_banner_queue: Array[String] = []
 var boss: Node
 var boss_panel: ColorRect
 var boss_bar: ColorRect
@@ -210,7 +211,14 @@ func _on_technique_understood(technique_id: String) -> void:
             message_key = "technique.black_horizon_unlocked"
         _:
             return
-    _show_banner(NereisLocalization.t(message_key), 2.4)
+    technique_banner_queue.append(NereisLocalization.t(message_key))
+    if combat_banner_time <= 0.0:
+        _show_next_technique_banner()
+
+func _show_next_technique_banner() -> void:
+    if technique_banner_queue.is_empty():
+        return
+    _show_banner(technique_banner_queue.pop_front(), 2.4)
 
 func set_story_mode(region: String, objective: String) -> void:
     story_region_source = region
@@ -281,7 +289,10 @@ func _process(delta: float) -> void:
 
     combat_banner_time = max(0.0, combat_banner_time - delta)
     if combat_banner_time <= 0.0:
-        combat_banner.visible = false
+        if not technique_banner_queue.is_empty():
+            _show_next_technique_banner()
+        else:
+            combat_banner.visible = false
 
     _update_status_bars()
     _update_boss_bar()
