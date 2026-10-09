@@ -408,3 +408,10 @@ The design document was committed to the feature branch. This was a documentatio
 - The Hero's original SVGs remain as fallback textures if the atlas is unavailable; combat code, collision, hitboxes, and skill timings are unchanged.
 - The image is a frame-based sprite sheet, not a bone rig. A future Skeleton2D pass would require separated body/limb art. License status has been marked for confirmation before public release.
 - Static source/resource checks only; Godot import and runtime rendering still require local verification. No GitHub Actions workflow was triggered.
+
+## 2026-10-09 主角骨骼原型 / Hero Skeleton2D prototype
+- Replaced the live whole-frame atlas draw with a cutout `Skeleton2D` / `Bone2D` rig using nine source-coordinate SVG layers.
+- Added per-state joint rotations for movement and combat presentation without changing combat logic.
+- Static checks only: resource references/pivots were inspected. Godot editor/import/runtime validation has not been run in this environment; visual verification is still required locally.
+- 本轮将主角实时绘制由整帧图集改为分层 `Skeleton2D` / `Bone2D`，新增九个共享原始坐标的 SVG 部件并加入基础状态动画。
+- 目前只有静态检查；尚未在本环境启动 Godot 导入或运行游戏，仍需本地验证关节衔接、脚底锚点及攻击视觉。

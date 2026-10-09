@@ -69,3 +69,15 @@ A full-character frame sheet from the user's `RPG-Udemy` repository is temporari
 2. Tune sprite scale, foot anchors and floating labels.
 3. Select and legally obtain a matching village/church environment pack.
 4. Expand VFX into multi-frame animation or layered effects, then extend the style to other enemies, bosses and resonance states.
+
+## Skeleton2D cutout rig / 骨骼分层原型（2026-10-09）
+
+- The live hero renderer now uses `Skeleton2D` + `Bone2D` and source-matched SVG layers under `assets/art/characters/rig_parts/`.
+- All layers keep the same 192x224 canvas; the foot anchor is (96, 220), and each `Sprite2D` is offset by the negative of its joint pivot. The previous full-body frame selection is no longer used to draw the hero.
+- Idle, movement, jump/fall, attack, grapple, dodge, quick dash, wall-climb, hurt and death poses rotate visual bones only. Collision and combat code remain in `hero.gd`.
+- The supplied `153143.png` remains in the repository as a reference asset, not the live rig: it is a complete-character atlas rather than layered limbs. The two `tex1_...` images remain unverified and are not claimed to be rig-ready.
+
+- 当前主角渲染已切换到 `Skeleton2D` + `Bone2D`，分层 SVG 放在 `assets/art/characters/rig_parts/`。
+- 所有部件保留同一张 192x224 原始画布，脚底锚点为 (96, 220)，Sprite2D 按关节坐标负偏移，主角不再使用整角色动作图集选帧绘制。
+- 待机、移动、跳跃/下落、攻击、钩爪、闪避、快速冲刺、攀墙、受伤和死亡只驱动视觉骨骼；碰撞与战斗逻辑保持不变。
+- 你提供的 `153143.png` 保留为参考素材，但当前不作为骨骼渲染源：它是完整角色图集，并未拆出四肢。两张 `tex1_...` 图片尚未验证，本轮不宣称它们已经适配骨骼。

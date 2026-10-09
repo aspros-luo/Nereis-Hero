@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="224" viewBox="0 0 192 224">
+<defs>
+ <linearGradient id="cape" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#82606b"/><stop offset=".25" stop-color="#51404f"/><stop offset=".62" stop-color="#292633"/><stop offset="1" stop-color="#11141c"/></linearGradient>
+ <linearGradient id="capeLit" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#a77b7c"/><stop offset=".42" stop-color="#594451"/><stop offset="1" stop-color="#25232f"/></linearGradient>
+ <linearGradient id="iron" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#f0dfc0"/><stop offset=".17" stop-color="#bdb4a6"/><stop offset=".42" stop-color="#777780"/><stop offset=".7" stop-color="#3b3d49"/><stop offset=".88" stop-color="#252733"/><stop offset="1" stop-color="#9c8c7e"/></linearGradient>
+ <linearGradient id="ironDark" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9f9b9b"/><stop offset=".45" stop-color="#484956"/><stop offset="1" stop-color="#1b1d28"/></linearGradient>
+ <linearGradient id="leather" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#79544f"/><stop offset="1" stop-color="#30242b"/></linearGradient>
+ <linearGradient id="blade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff1d0"/><stop offset=".35" stop-color="#b9c3c3"/><stop offset=".7" stop-color="#666d7a"/><stop offset="1" stop-color="#252a37"/></linearGradient>
+ <linearGradient id="blood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e47d76"/><stop offset="1" stop-color="#692b40"/></linearGradient>
+</defs>
+<path d="M70 57 Q49 67 38 91 L24 137 31 157 20 177 39 174 47 193 63 181 76 197 88 180 104 193 119 171 139 176 151 151 158 116 144 82 123 62Z" fill="#12141c" stroke="#11131a" stroke-width="5" stroke-linejoin="round"/>
+<path d="M69 63 Q52 77 44 99 L33 137 42 151 37 168 49 163 54 181 66 169 78 184 87 164 104 180 116 157 135 162 145 143 148 113 135 85 119 68Z" fill="url(#cape)" stroke="#6d515e" stroke-width="1.6"/>
+<path d="M59 82 Q47 111 48 144 L58 160 62 130 78 94Z" fill="url(#capeLit)" opacity=".9"/>
+<path d="M121 78 Q140 103 136 136 L126 151 119 125 106 91Z" fill="#171a24"/>
+<path d="M52 147 L45 164 53 160 57 173 65 166 72 179 78 164 88 174 89 155" fill="none" stroke="#b58a81" stroke-width="1.4" opacity=".8"/>
+<path d="M40 111 L32 137 41 142 M131 101 L141 127 134 139" fill="none" stroke="#d1a4a0" stroke-width="1.5" opacity=".7"/>
+</svg>

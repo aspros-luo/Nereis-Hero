@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="224" viewBox="0 0 192 224">
+<defs>
+ <linearGradient id="cape" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#82606b"/><stop offset=".25" stop-color="#51404f"/><stop offset=".62" stop-color="#292633"/><stop offset="1" stop-color="#11141c"/></linearGradient>
+ <linearGradient id="capeLit" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#a77b7c"/><stop offset=".42" stop-color="#594451"/><stop offset="1" stop-color="#25232f"/></linearGradient>
+ <linearGradient id="iron" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#f0dfc0"/><stop offset=".17" stop-color="#bdb4a6"/><stop offset=".42" stop-color="#777780"/><stop offset=".7" stop-color="#3b3d49"/><stop offset=".88" stop-color="#252733"/><stop offset="1" stop-color="#9c8c7e"/></linearGradient>
+ <linearGradient id="ironDark" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9f9b9b"/><stop offset=".45" stop-color="#484956"/><stop offset="1" stop-color="#1b1d28"/></linearGradient>
+ <linearGradient id="leather" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#79544f"/><stop offset="1" stop-color="#30242b"/></linearGradient>
+ <linearGradient id="blade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff1d0"/><stop offset=".35" stop-color="#b9c3c3"/><stop offset=".7" stop-color="#666d7a"/><stop offset="1" stop-color="#252a37"/></linearGradient>
+ <linearGradient id="blood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e47d76"/><stop offset="1" stop-color="#692b40"/></linearGradient>
+</defs>
+<path d="M71 38 L77 19 94 8 112 14 126 34 124 57 110 73 87 70 72 57Z" fill="#12141c" stroke="#0c0f16" stroke-width="4"/>
+<path d="M77 37 L83 22 95 14 109 18 120 36 117 53 106 64 89 61 78 52Z" fill="url(#iron)" stroke="#c8b59a" stroke-width="1.6"/>
+<path d="M78 38 L91 31 119 36 114 49 103 56 85 51Z" fill="#252632" stroke="#151720" stroke-width="2"/>
+<path d="M84 42 L113 42" stroke="url(#blood)" stroke-width="3.4" stroke-linecap="round"/>
+<path d="M83 26 L95 19 108 23 M82 30 L87 24 M111 27 L116 35" fill="none" stroke="#f4e2c2" stroke-width="1.5" opacity=".9"/>
+<path d="M93 13 L91 3 98 10 108 5 106 16" fill="#8c7768" stroke="#27232c" stroke-width="2"/>
+<path d="M118 18 L130 27 124 29" fill="#35313b" stroke="#c3aa91" stroke-width="1"/>
+<path d="M81 52 L91 58 105 57" fill="none" stroke="#a7a0a0" stroke-width="1.2"/>
+</svg>

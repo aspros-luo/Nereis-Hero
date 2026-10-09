@@ -10,11 +10,7 @@ const ECHO_PULSE_SCRIPT = preload("res://scripts/effects/echo_pulse.gd")
 const GRAPPLE_ANCHOR_SCRIPT = preload("res://scripts/systems/grapple_anchor.gd")
 const RESONANCE_TARGET_SCRIPT = preload("res://scripts/systems/resonance_hidden_target.gd")
 const DEBUG_WALL_SCRIPT = preload("res://scripts/systems/debug_traversal_wall.gd")
-const HERO_LONG_ART: Texture2D = preload("res://assets/art/characters/hero_knight.svg")
-const HERO_SHORT_ART: Texture2D = preload("res://assets/art/characters/hero_short_blade.svg")
-const TEMP_SPRITE_ATLAS: Texture2D = preload("res://assets/art/characters/temp_swordfighter_atlas.png")
-const TEMP_SPRITE_CELL_SIZE := 256
-const TEMP_SPRITE_COLUMNS := 10
+const HERO_SKELETON_VISUAL_SCRIPT = preload("res://scripts/player/hero_skeleton_visual.gd")
 
 const SPEED := 260.0
 const ATTACK_MOVE_SPEED := 92.0
@@ -127,7 +123,6 @@ var hit_confirm_time := 0.0
 var state := CombatState.IDLE
 var previous_state := CombatState.IDLE
 var animation_time := 0.0
-var temporary_sprite_atlas: Texture2D
 var attack_hitbox: Area2D
 var attack_requested := false
 var technique_requested := false # Legacy iaijutsu prototype input; retained during migration.
@@ -146,6 +141,7 @@ var dodge_requested := false
 var quick_dash_requested := false
 var jump_requested := false
 var hero_system: Node
+var hero_visual: Node2D
 signal defeated
 signal attack_started(combo_step: int)
 signal dodge_started
@@ -229,8 +225,12 @@ func _ready() -> void:
 	hero_system.name = "HeroSystem"
 	add_child(hero_system)
 	_setup_combat_components()
-	_load_temporary_sprite_atlas()
-	_log("BOOT", "Hero initialized")
+	hero_visual = HERO_SKELETON_VISUAL_SCRIPT.new() as Node2D
+	hero_visual.name = "HeroSkeletonVisual"
+	hero_visual.show_behind_parent = true
+	add_child(hero_visual)
+	_update_hero_visual()
+	_log("BOOT", "Hero initialized with Skeleton2D cutout rig")
 	queue_redraw()
 
 func _setup_combat_components() -> void:
@@ -248,6 +248,7 @@ func _setup_combat_components() -> void:
 
 func _process(delta: float) -> void:
 	animation_time += delta
+	_update_hero_visual()
 	# Physics updates already request redraws. Avoid issuing a second redraw every rendered frame.
 
 func _physics_process(delta: float) -> void:
@@ -1262,71 +1263,8 @@ func _log(category: String, message: String) -> void:
 	print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-	# Animated presentation layer. Gameplay collision and combat timing stay unchanged.
+	# Character artwork is rendered by HeroSkeletonVisual; keep combat feedback in this overlay.
 	var short_blade: bool = hero_system != null and hero_system.is_short_blade()
-	var hero_art: Texture2D = HERO_SHORT_ART if short_blade else HERO_LONG_ART
-	var art_tint := Color("#d98f99") if state == CombatState.HURT else Color("#f3e6d4") if hit_confirm_time > 0.0 else Color.WHITE
-	var atlas_frame_rect := _get_temporary_sprite_frame_rect()
-	var art_rotation := 0.0
-	var art_bob := 0.0
-	var art_scale := Vector2.ONE
-	var move_ratio: float = clampf(absf(velocity.x) / maxf(SPEED, 1.0), 0.0, 1.35)
-	var grounded: bool = is_on_floor()
-
-	# Idle breathing and a subtle cape-like sway; faster movement exaggerates the silhouette.
-	if state == CombatState.IDLE:
-		art_bob = sin(animation_time * 3.1) * 1.2
-		art_rotation = sin(animation_time * 1.7) * 0.012
-		art_scale = Vector2(1.0 + sin(animation_time * 3.1) * 0.006, 1.0 - sin(animation_time * 3.1) * 0.006)
-	elif state == CombatState.MOVE:
-		art_bob = absf(sin(animation_time * 12.5)) * 3.0 * maxf(move_ratio, 0.45)
-		art_rotation = -facing * 0.045 * move_ratio
-		art_scale = Vector2(1.0 + art_bob * 0.003, 1.0 - art_bob * 0.004)
-	elif state == CombatState.JUMP:
-		art_rotation = facing * -0.055
-		art_scale = Vector2(0.96, 1.035)
-	elif state == CombatState.FALL:
-		art_rotation = facing * 0.075
-		art_scale = Vector2(1.025, 0.975)
-	elif state == CombatState.ATTACK:
-		var attack_phase: float = clampf(attack_time / maxf(ATTACK_DURATION, 0.01), 0.0, 1.0)
-		if attack_windup > 0.0:
-			art_rotation = -facing * 0.105
-			art_scale = Vector2(0.94, 1.045)
-		else:
-			var strike_progress: float = 1.0 - attack_phase
-			art_rotation = facing * (0.10 - strike_progress * 0.20)
-			art_bob = -sin(strike_progress * PI) * 3.0
-			art_scale = Vector2(1.045, 0.965)
-	elif state == CombatState.DODGE:
-		art_rotation = facing * 0.22
-		art_bob = 4.0
-		art_scale = Vector2(1.13, 0.82)
-	elif state == CombatState.QUICK_DASH:
-		art_rotation = facing * 0.30
-		art_scale = Vector2(1.18, 0.78)
-	elif state == CombatState.WALL_CLIMB:
-		art_rotation = -facing * 0.12
-		art_bob = sin(animation_time * 15.0) * 2.0
-	elif state == CombatState.HURT:
-		art_rotation = -facing * 0.18
-		art_scale = Vector2(0.92, 1.06)
-	elif state == CombatState.DEAD:
-		art_rotation = facing * 0.42
-		art_scale = Vector2(1.08, 0.88)
-
-	# Airborne movement adds a small directional lean, while the pivot stays near the feet.
-	if not grounded and state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.HURT, CombatState.DEAD]:
-		art_rotation += clampf(velocity.x / maxf(SPEED, 1.0), -1.0, 1.0) * 0.055
-
-	var pivot := Vector2(0.0, 7.0 + art_bob)
-	draw_set_transform(pivot, art_rotation, Vector2(facing, 1.0) * art_scale)
-	if temporary_sprite_atlas != null:
-		# Temporary frame-based animation prototype. Original knight art remains the safe fallback.
-		draw_texture_rect_region(temporary_sprite_atlas, Rect2(-110.0, -162.0, 220.0, 220.0), atlas_frame_rect, art_tint)
-	else:
-		draw_texture_rect(hero_art, Rect2(-48.0, -103.0, 96.0, 112.0), false, art_tint)
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 	# Keep readable gameplay feedback above the painted silhouette.
 	if hit_confirm_time > 0.0:
@@ -1394,60 +1332,23 @@ func _draw() -> void:
 
 # Temporary sprite-sheet loader for animation prototyping.
 # 临时动作图集加载器：后续会用原创骑士分层素材替换这套占位角色。
-func _load_temporary_sprite_atlas() -> void:
-	# Use the imported PNG directly so Godot's normal texture importer handles it.
-	# 直接使用 PNG 资源，由 Godot 的纹理导入器正常处理。
-	if TEMP_SPRITE_ATLAS == null:
-		push_warning("Temporary sprite atlas unavailable; falling back to the original knight SVG.")
+func _update_hero_visual() -> void:
+	if not is_instance_valid(hero_visual):
 		return
-	if TEMP_SPRITE_ATLAS.get_width() < TEMP_SPRITE_COLUMNS * TEMP_SPRITE_CELL_SIZE or TEMP_SPRITE_ATLAS.get_height() < 9 * TEMP_SPRITE_CELL_SIZE:
-		push_warning("Temporary sprite atlas dimensions do not match the expected 10x9 grid.")
-		return
-	temporary_sprite_atlas = TEMP_SPRITE_ATLAS
-	_log("ART", "Temporary swordfighter atlas loaded; 10x9 cells at 256px, gameplay logic unchanged")
-
-func _get_temporary_sprite_frame_rect() -> Rect2:
-	var frame_index := 0
-
-	match state:
-		CombatState.IDLE:
-			# A restrained idle loop; neighboring atlas frames have subtle pose differences.
-			frame_index = int(floor(animation_time * 4.0)) % 10
-			frame_index += 0 * TEMP_SPRITE_COLUMNS
-		CombatState.MOVE:
-			# Running poses are grouped at the end of row 4 and start of row 5.
-			var run_frames: Array[int] = [37, 38, 39, 40, 41, 42]
-			frame_index = run_frames[int(floor(animation_time * 12.0)) % run_frames.size()]
-		CombatState.ATTACK:
-			if attack_windup > 0.0:
-				frame_index = 33 + (int(floor(animation_time * 8.0)) % 3)
-			else:
-				# Map the existing attack timer to real atlas poses; combat hitboxes are unchanged.
-				var attack_progress: float = clampf(1.0 - attack_time / maxf(ATTACK_DURATION, 0.01), 0.0, 1.0)
-				var attack_frames: Array[int] = [43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60]
-				frame_index = attack_frames[int(round(attack_progress * float(attack_frames.size() - 1)))]
-		CombatState.DODGE, CombatState.QUICK_DASH:
-			var dash_frames: Array[int] = [37, 38, 39, 40, 41, 42]
-			frame_index = dash_frames[int(floor(animation_time * 18.0)) % dash_frames.size()]
-		CombatState.JUMP:
-			frame_index = 75
-		CombatState.FALL:
-			frame_index = 76
-		CombatState.WALL_CLIMB:
-			frame_index = 71 + (int(floor(animation_time * 8.0)) % 3)
-		CombatState.HURT:
-			frame_index = 64
-		CombatState.DEAD:
-			# The supplied sheet has no clear death pose; retain a guarded standing frame.
-			frame_index = 70
-		_:
-			frame_index = 0
-
-	var row := int(frame_index / TEMP_SPRITE_COLUMNS)
-	var column := frame_index % TEMP_SPRITE_COLUMNS
-	return Rect2(
-		column * TEMP_SPRITE_CELL_SIZE,
-		row * TEMP_SPRITE_CELL_SIZE,
-		TEMP_SPRITE_CELL_SIZE,
-		TEMP_SPRITE_CELL_SIZE
+	var state_name := str(CombatState.keys()[int(state)])
+	var move_ratio := clampf(absf(velocity.x) / maxf(SPEED, 1.0), 0.0, 1.35)
+	var attack_progress := clampf(1.0 - attack_time / maxf(ATTACK_DURATION, 0.01), 0.0, 1.0)
+	var short_blade: bool = hero_system != null and hero_system.is_short_blade()
+	hero_visual.call(
+		"update_pose",
+		state_name,
+		animation_time,
+		facing,
+		velocity,
+		move_ratio,
+		attack_windup > 0.0,
+		attack_progress,
+		short_blade,
+		state == CombatState.HURT,
+		hit_confirm_time > 0.0
 	)
