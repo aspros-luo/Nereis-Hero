@@ -1,6 +1,8 @@
 extends Node
 
 signal hidden_resistance_awakened_event
+signal witch_time_started(duration: float)
+signal witch_time_ended
 
 const SAVE_PATH := "user://nereis_hero_save.json"
 
@@ -29,6 +31,11 @@ var weapon_level := 1
 var hero_attack_damage := 34
 var input_locked := false
 var hitstop_serial := 0
+var hitstop_active := false
+var witch_time_serial := 0
+var witch_time_active := false
+var witch_time_scale := 0.24
+var witch_time_cooldown_until_msec := 0
 
 # Narrative state is stored as facts/flags, not as a visible romance meter.
 var mite_first_meeting := false
@@ -52,6 +59,9 @@ func prepare_scene_runtime() -> void:
     get_tree().paused = false
     input_locked = false
     hitstop_serial += 1
+    witch_time_serial += 1
+    hitstop_active = false
+    witch_time_active = false
     Engine.time_scale = 1.0
 
 func unlock_first_memory() -> void:
@@ -119,11 +129,43 @@ func trigger_hitstop(duration: float = 0.045, slow_scale: float = 0.08) -> void:
 
     hitstop_serial += 1
     var serial: int = hitstop_serial
-    Engine.time_scale = minf(Engine.time_scale, slow_scale)
+    hitstop_active = true
+    _refresh_time_scale(slow_scale)
     get_tree().create_timer(duration, true, false, true).timeout.connect(func() -> void:
         if serial == hitstop_serial:
-            Engine.time_scale = 1.0
+            hitstop_active = false
+            _refresh_time_scale()
     )
+
+func trigger_witch_time(duration: float = 0.52, slow_scale: float = 0.24) -> bool:
+    var now_msec := Time.get_ticks_msec()
+    if duration <= 0.0 or now_msec < witch_time_cooldown_until_msec:
+        return false
+
+    witch_time_cooldown_until_msec = now_msec + 1450
+    witch_time_serial += 1
+    var serial: int = witch_time_serial
+    witch_time_active = true
+    witch_time_scale = clampf(slow_scale, 0.12, 0.6)
+    _refresh_time_scale()
+    witch_time_started.emit(duration)
+    print("[NEREIS][COMBAT] WITCH TIME! duration=%.2f scale=%.2f" % [duration, witch_time_scale])
+
+    get_tree().create_timer(duration, true, false, true).timeout.connect(func() -> void:
+        if serial == witch_time_serial:
+            witch_time_active = false
+            _refresh_time_scale()
+            witch_time_ended.emit()
+    )
+    return true
+
+func _refresh_time_scale(hitstop_scale: float = 0.08) -> void:
+    var target_scale := 1.0
+    if witch_time_active:
+        target_scale = minf(target_scale, witch_time_scale)
+    if hitstop_active:
+        target_scale = minf(target_scale, hitstop_scale)
+    Engine.time_scale = target_scale
 
 func record_mite_interaction(interaction_id: String) -> bool:
     if interaction_id in mite_interactions_seen:
@@ -415,6 +457,9 @@ func reset() -> void:
     prologue_complete = false
     input_locked = false
     hitstop_serial += 1
+    witch_time_serial += 1
+    hitstop_active = false
+    witch_time_active = false
     Engine.time_scale = 1.0
 
 func record_route_memory(memory_id: String, humanity_delta: int = 0) -> bool:
