@@ -182,28 +182,28 @@ func _input(event: InputEvent) -> void:
         elif event.keycode == KEY_V:
             resonance_sight_requested = true
         elif event.keycode == KEY_J:
-            if state != CombatState.QUICK_DASH:
+            if state not in [CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD]:
                 attack_requested = true
         elif event.keycode == KEY_L:
-            if state != CombatState.QUICK_DASH:
+            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
                 technique_requested = true
         elif event.keycode == KEY_F:
-            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
+            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
                 weapon_technique_requested = true
         elif event.keycode == KEY_R:
-            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
+            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
                 eldritch_requested = true
         elif event.keycode == KEY_K or event.keycode == KEY_SHIFT:
-            if state != CombatState.QUICK_DASH:
+            if state not in [CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD]:
                 dodge_requested = true
         elif event.keycode == KEY_SPACE or event.keycode == KEY_UP:
-            if state != CombatState.QUICK_DASH:
+            if state not in [CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.HURT, CombatState.DEAD]:
                 jump_requested = true
         elif event.keycode == KEY_X:
-            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
+            if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
                 quick_dash_requested = true
         elif event.keycode == KEY_Q:
-            if hero_system and state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.HURT, CombatState.DEAD]:
+            if hero_system and state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD]:
                 hero_system.switch_weapon()
                 queue_redraw()
     elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -285,6 +285,17 @@ func _physics_process(delta: float) -> void:
         return
 
     if hurt_time > 0.0:
+        # Inputs received during hitstun are discarded instead of firing after recovery.
+        attack_requested = false
+        technique_requested = false
+        weapon_technique_requested = false
+        eldritch_requested = false
+        dodge_requested = false
+        quick_dash_requested = false
+        jump_requested = false
+        jump_buffer = 0.0
+        grapple_requested = false
+        resonance_sight_requested = false
         hurt_time = max(0.0, hurt_time - delta)
         if not is_on_floor():
             velocity.y += GRAVITY * delta
@@ -327,6 +338,16 @@ func _physics_process(delta: float) -> void:
         resonance_sight_requested = false
         _toggle_resonance_sight()
     if is_instance_valid(grapple_target):
+        # Grapple is a traversal commitment; do not buffer combat actions during the pull.
+        attack_requested = false
+        technique_requested = false
+        weapon_technique_requested = false
+        eldritch_requested = false
+        dodge_requested = false
+        quick_dash_requested = false
+        jump_requested = false
+        jump_buffer = 0.0
+        resonance_sight_requested = false
         _update_grapple(delta)
         queue_redraw()
         return
@@ -452,6 +473,14 @@ func _physics_process(delta: float) -> void:
                     velocity.y = -WALL_CLIMB_SPEED
                 else:
                     velocity.y = minf(velocity.y, WALL_SLIDE_SPEED)
+
+    if wall_climb_active:
+        attack_requested = false
+        technique_requested = false
+        weapon_technique_requested = false
+        eldritch_requested = false
+        dodge_requested = false
+        quick_dash_requested = false
 
     if jump_buffer > 0.0 and (can_ground_or_coyote_jump or can_unlocked_double_jump) and attack_time <= 0.0 and dodge_time <= 0.0:
         jump_buffer = 0.0
@@ -1095,6 +1124,15 @@ func receive_damage(amount: int, source: Node = null) -> void:
         quick_dash_time = 0.0
         quick_dash_cooldown_remaining = 0.0
         quick_dash_requested = false
+        grapple_requested = false
+        grapple_time_remaining = 0.0
+        grapple_cooldown_remaining = 0.0
+        resonance_sight_requested = false
+        resonance_sight_time_remaining = 0.0
+        resonance_sight_cooldown_remaining = 0.0
+        wall_climb_active = false
+        WorldState.clear_witch_time("Hero death")
+        WorldState.set_resonance_sight_active(false)
         stamina_regen_delay = 0.0
         combo_step = 0
         combo_window = 0.0
@@ -1105,6 +1143,8 @@ func receive_damage(amount: int, source: Node = null) -> void:
         eldritch_requested = false
         dodge_requested = false
         jump_requested = false
+        jump_buffer = 0.0
+        _deactivate_attack_hitbox()
         _log("WORLD", "Hero respawned at checkpoint=%s" % WorldState.checkpoint_position)
         get_tree().create_timer(0.75).timeout.connect(_clear_respawn_invulnerability)
         _set_state(CombatState.IDLE)
