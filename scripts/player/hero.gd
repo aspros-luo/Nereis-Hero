@@ -1318,6 +1318,22 @@ func _draw() -> void:
     draw_texture_rect(hero_art, Rect2(-52.0, -104.0, 104.0, 120.0), false, art_tint)
     draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
+    # A compact weapon-specific sweep makes the active strike legible at a glance.
+    # 根据武器长度绘制短促的挥砍轨迹，让攻击在实战视距下更易辨认。
+    if state == CombatState.ATTACK and active_action_kind == "basic" and attack_windup <= 0.0:
+        var swing_progress := clampf(action_elapsed / ATTACK_DURATION, 0.0, 1.0)
+        var sweep_start := -1.20 + swing_progress * 1.05
+        var sweep_end := sweep_start + (0.62 if short_blade else 0.78)
+        if facing < 0.0:
+            var mirrored_start := PI - sweep_end
+            sweep_end = PI - sweep_start
+            sweep_start = mirrored_start
+        var sweep_radius := 37.0 if short_blade else 54.0
+        var sweep_center := Vector2(facing * (20.0 if short_blade else 27.0), -43.0)
+        var sweep_color := Color("#d6c9ae") if short_blade else Color("#e5d6b8")
+        draw_arc(sweep_center, sweep_radius, sweep_start, sweep_end, 18, Color("#9f5359", 0.42), 5.0)
+        draw_arc(sweep_center, sweep_radius, sweep_start, sweep_end, 18, Color(sweep_color, 0.88), 2.0)
+
     # Keep readable gameplay feedback above the painted silhouette.
     if hit_confirm_time > 0.0:
         draw_arc(Vector2(facing * 26.0, -42.0), 47.0, -0.75, 0.75, 20, Color("#efe1c8", 0.78), 3.0)
