@@ -13,19 +13,36 @@ This is a curated shortlist, not a claim that the assets have already been downl
 - Palette can be adapted to charcoal, ash, bone, rust-red and cold supernatural accents.
 - Prefer CC0 or clear permission for modification and redistribution.
 - Avoid mixing high-detail painted art and tiny pixel art in the same foreground layer.
-- Prefer modular backgrounds and props first; character animation replacement has higher integration risk.
+- Prefer hand-painted or painterly backgrounds and props first; character animation replacement has higher integration risk.
+- Reference Vanillaware for composition, layering and animation—not for asset extraction. Prefer original/CC0 art with painted texture over pixel-art packs.
+- 优先选择手绘/绘制感背景和道具；替换角色动画的集成风险更高。
+- 香草社只参考构图、层次和动作，不提取其素材。优先原创或 CC0 的绘制感美术，而非像素素材包。
 - 横版 2D 适配；在 1280×720 实际游玩比例下轮廓清晰。
 - 可统一为煤灰、骨白、锈红和冷色超自然点缀。
 - 优先 CC0 或明确允许修改、再发布的授权。
 - 不在同一前景层混用高细节手绘素材与极小像素图。
 - 优先替换可分层背景和场景道具；角色动画替换风险更高。
 
-## Candidate A — Dark Platformer (CC0)
+## Candidate A — Fantasy RPG Background (CC0, painted landscape)
+
+Source: https://opengameart.org/content/fantasy-rpg-background
+Author: AliHamieh. License shown by source: CC0; attribution is optional but should be recorded in our credits.
+Contains: a painted fantasy landscape background (PNG, source reports about 3.4 MB).
+Assessment: **Best new painterly-style candidate to inspect first** because it is a painted landscape rather than a pixel-art tileset. It may work as a distant layer, but composition and aspect ratio must be checked against the 2400×720 side-scrolling level before use.
+Potential use: distant mountains/ruins behind the ashen road, color-graded and cropped only if the license permits derivatives (CC0 does).
+
+来源：https://opengameart.org/content/fantasy-rpg-background
+作者 AliHamieh；页面标注 CC0，署名并非强制，但我们仍会记录来源。
+包含一张绘制感幻想风景背景（PNG，页面标注约 3.4 MB）。
+评估：**新增的优先检查对象**，因为它是绘制感风景而非像素图块。它可能适合作为远景，但必须先对照 2400×720 横版关卡检查构图和比例。
+用途：灰烬之路后方的远山/遗迹；CC0 允许衍生修改，但仍需验证裁切、调色后的效果。
+
+## Candidate B — Dark Platformer (CC0)
 
 Source: https://opengameart.org/content/dark-platformer
 License shown by source: CC0.
 Contains: 14 PNG props and three sample backgrounds.
-Assessment: **Best low-risk first visual experiment** for testing a dark side-scrolling environment. Review actual images before use; source description is not enough to guarantee a perfect fit.
+Assessment: **Useful fallback, but not the primary style target** for testing a dark side-scrolling environment. Review actual images before use; source description is not enough to guarantee a perfect fit.
 Potential use: abandoned outskirts, cave route, distant scenery, small environmental props.
 Adaptation: grayscale/ash grade, restrained rust-red accents, atmospheric fog overlays and separate parallax planes where the source layers allow it.
 
@@ -34,7 +51,7 @@ Adaptation: grayscale/ash grade, restrained rust-red accents, atmospheric fog ov
 用途：荒废村外、洞穴路线、远景和小型环境道具。
 适配：灰烬色调、克制的锈红点缀、雾层，以及在素材允许时拆分视差层。
 
-## Candidate B — Castle Platformer (CC0)
+## Candidate C — Castle Platformer (CC0)
 
 Source: https://opengameart.org/content/castle-platformer
 License shown by source: CC0.
@@ -48,7 +65,7 @@ Rule: use the environment as modular scenery; do not replace the Hero with this 
 用途：教会外部、废墟走廊、月光路线背景。
 规则：优先将环境作为模块化场景；除非比例与战斗可读性通过验收，否则不直接替换主角。
 
-## Candidate C — Misc. Dark Fantasy Scenery Sprites (CC0)
+## Candidate D — Misc. Dark Fantasy Scenery Sprites (CC0)
 
 Source: https://opengameart.org/content/misc-dark-fantasy-scenery-sprites
 License shown by source: CC0.
@@ -63,7 +80,7 @@ Adaptation: selective desaturation and controlled highlights; preserve transpare
 用途：教会手术室、古代研究室、墓园与 Boss 场地。
 适配：选择性降低饱和度、控制高光，同时保留透明边缘与原始比例。
 
-## Candidate D — Odin Sphere (reference only by default)
+## Candidate E — Odin Sphere (reference only by default)
 
 Source: https://www.spriters-resource.com/playstation_2/odinsphere/
 Assessment: Strong reference for hand-painted fantasy composition, animation poses and layered scenes. It is commercial game art; availability on a sprite archive does not grant redistribution rights.
@@ -75,7 +92,7 @@ Direct integration: only after rights/permission are verified for the specific a
 默认用途：仅作视觉参考。
 直接整合：仅在确认具体素材授权后进行。
 
-## Candidate E — Dark World Asset Pack (CC0, pixel art)
+## Candidate F — Dark World Asset Pack (CC0, pixel art)
 
 Source: https://kaishido.itch.io/dark-world
 License shown by source: CC0 1.0.
@@ -90,12 +107,15 @@ Do not mix its character sprites into the current hero/enemy lineup without a un
 
 ## Integration order / 接入顺序
 
-1. Prototype one background/prop set in an isolated scene.
-2. Compare contrast and silhouette readability against the current Hero and enemy placeholders.
-3. Verify scaling, transparency, collision alignment and parallax.
-4. Keep existing procedural art as a fallback.
-5. Only then migrate the chosen art into the actual village/church/route scenes.
-6. Record exact source URL, asset title, author, license and modifications in `ASSET_CREDITS.md`.
+1. Inspect the painterly CC0 landscape first; test it only as a distant background layer and color-grade it toward the charcoal/ash/rust-red palette.
+2. If its rendering style clashes with the game, do not force it in; move to original hand-painted backgrounds or another cohesive painted pack.
+
+3. 先在独立场景中试用一套背景/道具。
+4. 对比现有主角与敌人占位图，检查对比度和轮廓辨识度。
+5. 验证缩放、透明通道、碰撞对齐与视差。
+6. 保留现有程序化美术作为回退。
+7. 通过后才迁移到村庄、教会和路线场景。
+8. 在 `ASSET_CREDITS.md` 中记录准确来源、素材名称、作者、授权和修改内容。
 
 1. 先在独立场景中试用一套背景/道具。
 2. 对比现有主角与敌人占位图，检查对比度和轮廓辨识度。
