@@ -391,7 +391,7 @@ func _release_judgment_slash() -> void:
     attack_hitbox.position.x = facing * JUDGMENT_REACH
     attack_hitbox.set_shape_size(JUDGMENT_HITBOX_SIZE)
     attack_hitbox.activate(damage, JUDGMENT_HIT_DURATION)
-    _spawn_combat_slash_arc(3, false)
+    _spawn_technique_arc("technique_judgment_slash", 0)
     _log("TECHNIQUE", "Judgment Slash released; damage=%d" % damage)
 
 func _update_crescent_combo() -> void:
@@ -406,7 +406,7 @@ func _release_crescent_hit(stage_index: int) -> void:
     attack_hitbox.position.x = facing * float(CRESCENT_REACH[stage])
     attack_hitbox.set_shape_size(Vector2(float(CRESCENT_HITBOX_WIDTHS[stage]), 36.0))
     attack_hitbox.activate(damage, CRESCENT_HIT_DURATION)
-    _spawn_combat_slash_arc(combo_step, true)
+    _spawn_technique_arc("technique_crescent_combo", stage)
     _log("TECHNIQUE", "Crescent Combo hit %d/3; damage=%d" % [stage + 1, damage])
 
 func _perform_eldritch_echo() -> void:
@@ -454,6 +454,12 @@ func _spawn_combat_slash_arc(step: int, short_blade: bool) -> void:
     effect.global_position = global_position
     get_parent().add_child(effect)
     effect.call("setup", facing, step, short_blade, false, "")
+
+func _spawn_technique_arc(technique_id: String, stage: int) -> void:
+    var effect: Node2D = SLASH_ARC_SCRIPT.new()
+    effect.global_position = global_position
+    get_parent().add_child(effect)
+    effect.call("setup_combat_technique", facing, technique_id, stage)
 
 func set_debug_ability_override(enabled: bool) -> void:
     debug_ability_override = enabled
