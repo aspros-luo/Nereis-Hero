@@ -66,3 +66,9 @@ These are prototype values and must be adjusted after runtime playtesting.
 - [ ] Runtime combat review: confirm the larger silhouettes do not obscure enemy tells or make hitboxes feel larger than they are.
 
 **Verification note:** these are procedural Godot drawing changes, not imported raster assets. Source-level checks are possible here; Godot rendering/runtime review remains pending.
+
+
+## Character silhouette pass
+
+- [x] Hero renderer now uses layered armor plates, cloak folds, helmet/visor, rivets, gauntlets, boots, and a clearer blade/guard silhouette.
+- [ ] In-game review: confirm the new drawing reads at normal camera zoom and remains clear during movement and both weapon stances.
