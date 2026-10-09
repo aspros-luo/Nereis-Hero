@@ -68,16 +68,16 @@ The Ashen Road now combines an original painted-style base illustration with thr
 
 ## Production order / 制作顺序
 
-1. Background and environment props — strongest immediate visual gain, low combat risk.
-2. Hero combat animation — high value, requires frame/pivot review.
-3. First common enemy — attack telegraph, hit reaction, death feedback.
+1. Hero readability and combat animation — current priority; validate at gameplay scale first.
+2. First common enemy — attack telegraph, hit reaction, death feedback.
+3. Background and environment props — expand after the Hero reads clearly.
 4. Mite and key NPCs — narrative silhouette and emotional readability.
 5. Bosses and ending sequences — distinctive silhouette and phase language.
 6. Combat VFX, audio-visual sync, UI icons.
 
-1. 背景与环境道具：视觉收益高、战斗风险低。
-2. 主角战斗动画：价值高，但需要仔细检查帧和锚点。
-3. 第一种普通敌人：攻击前摇、受击和死亡反馈。
+1. 主角辨识度与战斗动作：当前最高优先级，先检查实际游戏缩放。
+2. 第一种普通敌人：攻击前摇、受击和死亡反馈。
+3. 背景与环境道具：主角清晰可读后再扩展。
 4. 蜜忒与关键 NPC：叙事剪影和情绪表达。
 5. Boss 与结局演出：独特剪影和阶段语言。
 6. 战斗特效、音画同步与 UI 图标。
@@ -112,3 +112,28 @@ The Ashen Road now combines an original painted-style base illustration with thr
 - 长剑与短刃必须在实际游戏缩放下容易区分；攻击姿态与特效应清晰可读，不能遮住主角本体。
 - 纯美术迭代期间保持现有主角战斗/状态代码、碰撞几何、输入映射和 F4 调试流程不变。
 - 当前 SVG 细化只是原创美术的中间版本，并不代表已经达到香草社量产级别。必须在 Godot 4.6.x 中检查实际缩放、朝向和攻击姿态后，才能宣布里程碑验收。
+
+
+## Hero art pass — in-game acceptance checklist / 主角美术迭代验收清单
+
+- [ ] Confirm the current branch is `feature/protagonist-system` and pull the latest commit before launching.
+- [ ] Start the game and press F4 to hide the development overlay; press F4 again to restore it.
+- [ ] Move left/right: check that the Hero has a subtle step rhythm and remains grounded.
+- [ ] Jump, fall, dodge, and take a hit: check that the silhouette changes are noticeable but do not look like teleporting or rubber deformation.
+- [ ] Press Q to switch long sword / short blade, then use the normal attack: verify the two weapon lengths and their swing trails read differently.
+- [ ] Check both facing directions. Confirm the slash trail stays in front of the Hero and is not mirrored backward.
+- [ ] Check wall climbing, grappling, and scene transitions; verify no visible changes to collision or input response.
+- [ ] Report any parser errors, missing textures, excessive scaling, foot sliding, or attack trails that obscure enemies.
+
+- [ ] 确认当前分支为 `feature/protagonist-system`，启动前先拉取最新提交。
+- [ ] 启动游戏后按 F4 隐藏开发调试面板，再按 F4 可恢复。
+- [ ] 左右移动：观察主角是否有轻微步伐节奏，同时保持贴地感。
+- [ ] 跳跃、下落、闪避、受击：确认轮廓变化清晰但没有瞬移或橡皮人变形感。
+- [ ] 按 Q 切换长剑/短刃并普通攻击：确认两种武器长度与挥砍轨迹有明显区别。
+- [ ] 检查左右两个朝向，确认挥砍轨迹始终位于主角前方，不会镜像到身后。
+- [ ] 检查攀墙、钩爪和场景切换，确认碰撞与输入响应没有变化。
+- [ ] 记录解析器报错、纹理缺失、放大过度、脚底漂移或攻击轨迹遮挡敌人等问题。
+
+This is an intermediate readability pass, not final frame-by-frame animation. Runtime acceptance is pending a launch in Godot 4.6.x.
+
+本轮是动作可读性的过渡优化，并非最终逐帧动画。仍需在 Godot 4.6.x 实际启动后完成运行验收。
