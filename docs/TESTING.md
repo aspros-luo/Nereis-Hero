@@ -165,9 +165,15 @@ It exposes internal development state including:
 On the development branch, the Hero-local debug overlay is enabled by default. It follows the Hero and shows current HP/stamina, weapon, combat state/action, combo index, invulnerability, special-technique cooldown, hidden resonance/exposure/humanity/abnormal-load values, and extra-air-jump count. Hidden values are shown only in this debug overlay, not the normal HUD.
 
 - **F4**: toggle the Hero-local debug overlay.
-- **F5**: toggle the session-only special-technique / Quick Dash test override. This is not saved and does not grant story progression.
-- **F6**: refill Hero HP/stamina and clear Eldritch Echo / Quick Dash cooldowns; current Hero action and hitbox are cancelled. This is session-only.
+- **F5**: toggle the session-only all-protagonist-ability / technique override. It creates temporary grapple anchors, hidden traces and marked climbing walls; it is not saved and does not grant story progression.
+- **F6**: refill Hero HP/stamina, clear temporary ability effects/cooldowns and cancel the current Hero action/hitbox. This is session-only.
 - **X**: attempt Quick Dash. It requires the saved `quick_dash` ability record, unless the temporary F5 override is enabled.
+- **G**: grapple to a temporary/test anchor; press G again to cancel.
+- **W**: climb a marked wall; releasing W slides down slowly. Press Space against a marked wall to wall-jump.
+- **V**: Resonance Sight, 10 stamina / 4.5 seconds / 6-second cooldown; reveals eligible hidden-target components.
+- **PageUp / PageDown** while F5 is enabled: select Human / Blood / Abyssal / Black Horizon iaijutsu; press L to test the selected form.
+- A precise dodge (K/Shift) starts Witch Time while unlocked or F5 is enabled; enemies slow for about 2.4 seconds while Hero control remains responsive.
+- Debug form abnormal load accumulates only in memory; turning F5 off or pressing F6 clears it without writing progression to the save.
 - F4/F5/F6 are consumed by the Hero input layer. The existing Ancient Research / Village Defense / Mite Resonance test theaters now use F10/F11/F12.
 
 Use the overlay to report the exact combat state and resource values when an issue occurs. The override is only a test convenience; acceptance must also be repeated with it disabled.
@@ -175,8 +181,8 @@ Use the overlay to report the exact combat state and resource values when an iss
 主角调试覆盖层在当前开发分支默认开启，跟随主角显示生命/体力、武器、战斗状态与动作、连击段数、无敌状态、战技冷却、隐藏共鸣/接触/人性/异常负荷，以及额外空中跳跃次数。隐藏数值只在调试覆盖层中显示，不进入正式 HUD。
 
 - **F4**：显示/隐藏主角本地调试覆盖层。
-- **F5**：切换本次运行有效的特殊战技 / 快速冲刺测试覆盖，不写入存档，也不会授予剧情成长。
-- **F6**：恢复主角生命/体力并清空余响与快速冲刺冷却，同时取消主角当前动作和命中框，仅影响当前运行。
+- **F5**：切换本次运行有效的全部主角能力/战技覆盖，并生成临时锚点、隐藏痕迹与攀爬墙；不写入能力解锁或剧情进度。
+- **F6**：恢复主角生命/体力、清除临时能力效果与冷却，并取消当前动作和命中框，仅影响当前运行。
 - **X**：尝试快速冲刺；需要正式的 `quick_dash` 解锁记录，或在本次运行中打开 F5 覆盖。
 - F4/F5/F6 由主角输入层消费；原有古代研究、村庄防守、蜜忒共鸣测试剧场改用 F10/F11/F12。
 
@@ -254,3 +260,12 @@ This is a movement-system test only; it adds no level, map, encounter, or story 
 7. Die/respawn and use a rest point; confirm dash state/request reset and ordinary K/Shift dodge still works independently.
 
 预期结果：快速冲刺独立于 K/Shift 普通闪避；冲刺本身无无敌帧，有独立体力消耗与冷却；受击、菜单、死亡和休息不会残留动作状态。
+
+
+## Protagonist ability lab / 主角能力独立测试
+
+This pass implements ability mechanics before story/map reward placement. F5 is a session-only test override, and its grapple anchors, hidden traces, marked walls, selected iaijutsu form and test-only abnormal load do not persist.
+
+In a playable scene, enable F5 and test G (grapple), W (wall climb), Space while touching a marked wall (wall jump), V (Resonance Sight), X (Quick Dash), precise K/Shift dodge (Witch Time), and PageUp/PageDown then L (iaijutsu profile). Q switches between Long Sword and Short Blade; F executes the selected weapon-bound technique; R triggers Eldritch Echo.
+
+The implementation is committed at source level, but Godot 4.6 runtime validation remains **NOT RUN** in the maintainer environment. Do not treat this as a runtime pass until scene startup, collision boundaries, effect cleanup, action interruption and save/reset isolation are verified in Godot.

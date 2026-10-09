@@ -30,7 +30,7 @@ This check was added after finding that the gate's enabled state could remain op
 - [x] Source code now checks Blood → Abyssal → Black Horizon in order, preventing later forms from skipping earlier understanding.
 - [x] L selects the highest form already understood; each form has a distinct initial damage multiplier, cost, reach, hitbox, hit duration, windup, and visual treatment.
 - [x] Technique discovery messages are queued so multiple unlocks do not overwrite each other in the same frame.
-- [x] The three forms retain hidden-state conditions; no new story triggers or unapproved abnormal-load penalties were introduced.
+- [x] The three forms retain hidden-state conditions; story triggers remain unchanged. Abnormal-load stamina-regeneration penalties now have explicit thresholds and recovery behavior; Debug accumulation stays session-only.
 - [ ] Verify in Godot that each form unlocks only after its conditions are met and that the discovery messages play in order.
 - [ ] Verify hitbox placement, damage, health/stamina costs, visual readability, and attack interruption for all three forms.
 - [ ] Trace normal story events to confirm whether outer exposure and humanity conditions are reachable in a standard playthrough.
@@ -58,7 +58,7 @@ This is intentionally a story/level design gate, not permission to invent a new 
 - [x] Added `double_jump` and `quick_dash` to the persistent ability registry alongside Witch Time, grapple and wall climb.\n- [x] Implemented one additional mid-air jump when `double_jump` is unlocked; the ability remains locked by default.
 - [x] Blood Iaijutsu now requires the basic form plus the planned sewer-aberrant achievement and aberrant-gland material, preventing an early mutation from hidden values alone.
 - [ ] Implement the Royal City Sewer encounter, achievement/material reward calls and the associated narrative/art clues; Blood Iaijutsu is intentionally unavailable until that content exists.
-- [ ] In Godot, test double jump only works after the unlock record, allows exactly one extra air jump, and resets after landing/death/rest.\n- [ ] Implement and runtime-test quick dash, Witch Time, grapple and wall climb; these remain progression records/placeholders only.
+- [ ] In Godot, test double jump only works after the unlock record, allows exactly one extra air jump, and resets after landing/death/rest.\n- [ ] Source implementation now exists for Quick Dash, Witch Time, Grapple, Wall Climb/Wall Jump and Resonance Sight, including session-only Debug fixtures; normal story reward placement remains deferred.\n- [ ] Godot runtime test all movement/perception abilities, including enemy time dilation, collision, cancellation and menu/death/scene cleanup.
 - [ ] Verify old-save migration, save/load persistence and new-game reset for ability records, achievements and materials.
 
 ## 尚未验证 / Not yet verified
@@ -70,7 +70,7 @@ This is intentionally a story/level design gate, not permission to invent a new 
 
 ## 风险与后续 / Risks and follow-up
 
-1. 当前异常负荷仅被记录，尚无达到阈值后的战斗后果；不要在未设计可观察反馈前引入突然的数值惩罚。
+1. 异常负荷现在会分段降低体力恢复；阈值/惩罚强度仍需在 Godot 实机调校，且不应进一步引入未经设计的即时伤害或剧情惩罚。
 2. 武器平衡目前按距离、连击节奏与单套输出做了初始配置，仍需通过实战打桩和敌人测试调整。
 3. 代码静态检查不能替代 Godot 运行测试。合并前必须执行 `docs/HERO_SYSTEM.md` 中的验收清单。
 
@@ -127,13 +127,13 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 - [x] Double jump checks the persistent `double_jump` ability record and allows one additional air jump only.
 - [x] Air-jump count resets on landing, death respawn and full restoration.
 - [ ] Godot runtime test: locked state cannot double-jump; unlocked state allows exactly one extra jump; landing resets it.
-- [ ] Define a separate input/state contract for quick dash before implementation; do not silently replace ordinary dodge.
+- [ ] Quick Dash has its own X input, state and no-invulnerability rule; ordinary K/Shift dodge remains separate.\n- [ ] Verify in Godot that Quick Dash cannot cross solids and remains independent of ordinary dodge.
 
 
 ## Debug acceptance overlay / 验收调试覆盖层
 
 - [x] The Hero-local overlay is enabled by default and toggled with F4; the former Ctrl requirement has been removed.
-- [x] F5 toggles the session-only special-technique / Quick Dash test override; F6 restores HP/stamina and clears Echo/Dash cooldowns.
+- [x] F5 toggles all protagonist ability/technique overrides for this run and spawns temporary test fixtures; F6 restores HP/stamina and clears temporary movement/sight/time effects, cooldowns and current hitbox.
 - [x] F4/F5/F6 are consumed by the Hero input layer. Existing Village Hub test theaters moved to F10/F11/F12 to prevent shortcut collisions.
 - [x] F5 override remains on the Hero instance only; the code path does not grant persistent ability records or call a save method.
 - [x] Quick Dash has a separate X input, state, stamina cost, cooldown, visual trail, unlock gate, damage interruption and reset paths for input lock, menu, death/rest and debug refill.
@@ -166,3 +166,19 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 - [ ] Confirm no double shortcut handling in the Village Hub and no save-state mutation.
   
 **Runtime status: NOT RUN.** Static source checks only. No GitHub Actions workflow was triggered.
+
+
+## Debug-first ability delivery / 先完成能力、后安排剧情地图
+
+- [x] Temporary debug anchors, hidden traces and climbing surfaces can be enabled by F5 without adding authored map content.
+- [x] Witch Time is implemented as enemy-specific delta scaling; Hero motion remains on normal delta.
+- [x] Grapple supports G toggle/cancel, range, max duration, target-reached and target-lost termination.
+- [x] Wall climb/slide/jump only responds to explicitly marked wall surfaces.
+- [x] Resonance Sight reveals hidden-target components while active and when thresholds are met (F5 can force-reveal debug fixtures).
+- [x] PageUp/PageDown selects one of four iaijutsu profiles for the current session while F5 is enabled.
+- [x] Session-only iaijutsu abnormal load is never written to WorldState or save files.
+- [ ] Godot parser/project startup test.
+- [ ] Runtime movement/collision, enemy timing, hitbox, VFX and input-lock regression.
+- [ ] Save/load and new-game isolation regression for Debug override and temporary fixtures.
+
+**Status:** source implementation only. Do not accept the protagonist feature set until Godot 4.6.x runtime checks are completed.
