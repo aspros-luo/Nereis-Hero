@@ -400,7 +400,7 @@ func _draw() -> void:
     var bone := Color("#d6c7b2")
 
     # Grounding shadow and the cloak silhouette make the pose readable at a glance.
-    draw_ellipse(Vector2(0, 2), 30.0, 7.0, Color(0.04, 0.03, 0.05, 0.42), true)
+    _draw_shadow_ellipse(Vector2(0, 2), 30.0, 7.0, Color(0.04, 0.03, 0.05, 0.42))
     draw_colored_polygon(PackedVector2Array([
         Vector2(-15, -39 + bob), Vector2(13, -39 + bob),
         Vector2(23 - lean, -5 + run_step), Vector2(36 - lean, 13 + run_step),
@@ -507,3 +507,11 @@ func _draw() -> void:
     draw_rect(Rect2(-32, -100, 64.0 * (stamina / MAX_STAMINA), 5), Color("#b7a48c"))
     if combo_step > 0 and attack_time > 0.0:
         draw_string(ThemeDB.fallback_font, Vector2(-8, -112), "%d" % combo_step, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#e0d6c3"))
+
+
+func _draw_shadow_ellipse(center: Vector2, radius_x: float, radius_y: float, color: Color) -> void:
+    var points := PackedVector2Array()
+    for i in range(24):
+        var angle := TAU * float(i) / 24.0
+        points.append(center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y))
+    draw_colored_polygon(points, color)
