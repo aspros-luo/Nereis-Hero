@@ -12,6 +12,15 @@ const LANGUAGE_NAMES := {
 
 const TEXT := {
     "zh_cn": {
+        "menu.character": "角色与能力",
+        "menu.weapon": "当前武器",
+        "menu.weapon_long_sword": "长剑",
+        "menu.weapon_short_blade": "短刃",
+        "menu.techniques": "已掌握战技",
+        "menu.technique_blood_iaijutsu": "血色拔刀斩",
+        "menu.technique_abyss_iaijutsu": "深渊拔刀斩",
+        "menu.no_techniques": "尚未理解异变战技",
+        "menu.hidden_stats_note": "异常状态不会显示为公开数值；世界不会因菜单而停下。",
         "menu.title": "蜜忒之歌：Nereis Hero",
         "menu.continue": "继续",
         "menu.new_game": "新游戏",
@@ -44,6 +53,15 @@ const TEXT := {
         "menu.new_game_started": "新的旅程开始了。"
     },
     "zh_tw": {
+        "menu.character": "角色與能力",
+        "menu.weapon": "目前武器",
+        "menu.weapon_long_sword": "長劍",
+        "menu.weapon_short_blade": "短刃",
+        "menu.techniques": "已掌握戰技",
+        "menu.technique_blood_iaijutsu": "血色拔刀斬",
+        "menu.technique_abyss_iaijutsu": "深淵拔刀斬",
+        "menu.no_techniques": "尚未理解異變戰技",
+        "menu.hidden_stats_note": "異常狀態不會顯示為公開數值；世界不會因選單而停下。",
         "menu.title": "蜜忒之歌：Nereis Hero",
         "menu.continue": "繼續",
         "menu.new_game": "新遊戲",
@@ -76,6 +94,15 @@ const TEXT := {
         "menu.new_game_started": "新的旅程開始了。"
     },
     "en": {
+        "menu.character": "Character & Techniques",
+        "menu.weapon": "Current weapon",
+        "menu.weapon_long_sword": "Long Sword",
+        "menu.weapon_short_blade": "Short Blade",
+        "menu.techniques": "Known techniques",
+        "menu.technique_blood_iaijutsu": "Blood Iaijutsu",
+        "menu.technique_abyss_iaijutsu": "Abyssal Iaijutsu",
+        "menu.no_techniques": "No altered techniques understood",
+        "menu.hidden_stats_note": "Hidden states stay hidden. The world never stops for this menu.",
         "menu.title": "Nereis Lullaby: Nereis Hero",
         "menu.continue": "Continue",
         "menu.new_game": "New Game",
@@ -108,6 +135,15 @@ const TEXT := {
         "menu.new_game_started": "A new journey begins."
     },
     "ja": {
+        "menu.character": "キャラクターと技",
+        "menu.weapon": "現在の武器",
+        "menu.weapon_long_sword": "長剣",
+        "menu.weapon_short_blade": "短刃",
+        "menu.techniques": "習得した技",
+        "menu.technique_blood_iaijutsu": "血の居合斬り",
+        "menu.technique_abyss_iaijutsu": "深淵の居合斬り",
+        "menu.no_techniques": "異変の技は未習得",
+        "menu.hidden_stats_note": "隠された状態は数値表示されない。メニュー中も世界は止まらない。",
         "menu.title": "ミーテの子守歌：Nereis Hero",
         "menu.continue": "続きから",
         "menu.new_game": "ニューゲーム",
