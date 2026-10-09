@@ -133,6 +133,8 @@ func get_combat_enemy_time_scale() -> float:
     return witch_time_enemy_scale if witch_time_remaining > 0.0 else 1.0
 
 func set_resonance_sight_active(active: bool) -> void:
+    if resonance_sight_active == active:
+        return
     resonance_sight_active = active
     _last_resonance_signature = Vector3i(-1, -1, -1)
     refresh_resonance_reveals()
