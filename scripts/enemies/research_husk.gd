@@ -31,6 +31,7 @@ func _ready() -> void:
     queue_redraw()
 
 func _process(delta: float) -> void:
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     if WorldState.input_locked:
@@ -43,6 +44,7 @@ func _process(delta: float) -> void:
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     if WorldState.input_locked:
