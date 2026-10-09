@@ -40,7 +40,7 @@ var resonance_sources: Array[String] = []
 
 # Data-driven ability progression. Unlock records store their origin for debugging and save migration.
 # 数据驱动的能力成长：保存解锁来源，便于排查和兼容旧存档。
-const ABILITY_IDS := ["iaijutsu_basic", "witch_time", "grapple", "wall_climb"]
+const ABILITY_IDS := ["iaijutsu_basic", "double_jump", "quick_dash", "witch_time", "grapple", "wall_climb"]
 const ABILITY_SOURCE_TYPES := ["story", "exploration", "achievement", "resonance", "material"]
 var unlocked_abilities: Dictionary = {}
 var achievement_flags: Array[String] = []
