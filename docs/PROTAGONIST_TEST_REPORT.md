@@ -220,3 +220,7 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 
 - [x] New-game/reset now clears the Witch Time timer and enemy scale, disables Resonance Sight, refreshes hidden-target visuals, and restores Engine.time_scale.
 - [ ] Godot runtime: repeat F9 while Witch Time and Sight are active; verify no effect survives scene reload.
+
+- [x] Quick Dash now clears all queued action classes (including basic attack, grapple and Resonance Sight) at start; the source-level audit fixed an omission between the comment and actual behavior.
+- [x] Confirmed damage explicitly clears jump buffer and queued dash/grapple/sight requests in the same callback.
+- [ ] Godot runtime regression for simultaneous inputs and damage interruption remains pending.

@@ -88,3 +88,8 @@ After F5, Space should allow exactly one extra jump before landing. Quick Dash c
 ### 新游戏重置 / New-game reset
 
 在共鸣视野或魔女时间激活时按 F9 重置/重载场景。预期：WorldState 清除魔女时间剩余时间与敌方倍率、关闭共鸣视野并刷新隐藏目标显隐，同时恢复全局 hitstop 的时间倍率。Debug 覆盖仍属于 Hero 当前会话状态；重载场景后应重新开启 F5 才能使用。
+
+
+### 冲刺与受击输入缓存 / Dash and damage input-buffer regression
+
+同时按 X 与 J/G/V 应只启动冲刺；冲刺期间不得残留攻击、钩爪或共鸣视野请求并在冲刺结束后突然执行。受击时，跳跃缓存、钩爪、共鸣视野、快速冲刺和战技请求应在受击回调中立即清除。

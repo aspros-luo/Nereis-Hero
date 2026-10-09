@@ -73,3 +73,6 @@
 
 - [x] Source fix: new-game/reset clears Witch Time and Resonance Sight as well as resetting global hitstop time scale; hidden targets are refreshed to hidden.
 - [ ] Godot runtime: activate Sight/Witch Time, use F9/new-game reset, verify enemy timing returns to normal and every hidden visual is hidden.
+
+- [x] Source fix: Quick Dash clears attack, grapple, and Resonance Sight requests along with other buffered actions; damage now immediately clears jump buffer plus queued grapple/sight/dash requests.
+- [ ] Godot runtime: press X with J/G/V input on the same frame and verify no action fires unexpectedly after the dash; press jump/sight/grapple then take damage and verify nothing triggers after hitstun.
