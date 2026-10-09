@@ -124,7 +124,7 @@ const TEXT := {
         "menu.select_language": "言語を選択",
         "menu.no_save": "続きから使えるセーブがありません。序章から始まります。",
         "hud.title": "ミーテの子守歌：NEREIS HERO",
-        "hud.controls": "A/D 移動    SPACE ジャンプ    J 攻撃    K 回避    Q 武器切替    ESC メニュー",
+        "hud.controls": "A/D 移動    SPACE ジャンプ    J 攻撃    K 回避    Q 武器切替    L 抜刀技（習得後）    ESC メニュー",
         "hud.hp": "HP",
         "hud.sta": "ST",
         "hud.hum": "人間性",
