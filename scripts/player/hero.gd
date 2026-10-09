@@ -125,9 +125,11 @@ func _physics_process(delta: float) -> void:
     if WorldState.input_locked:
         attack_requested = false
         technique_requested = false
-        iaijutsu_active = false
         dodge_requested = false
         jump_requested = false
+        _cancel_attack_action()
+        dodge_time = 0.0
+        invulnerable = false
         velocity.x = move_toward(velocity.x, 0.0, 2200.0 * delta)
         if not is_on_floor():
             velocity.y += GRAVITY * delta
@@ -383,6 +385,12 @@ func receive_damage(amount: int, source: Node = null) -> void:
     _shake_camera(9.0, 0.12)
     # A confirmed hit interrupts the Hero's current action; never let a stale hitbox resolve after hitstun.
     _cancel_attack_action()
+    attack_requested = false
+    technique_requested = false
+    dodge_requested = false
+    jump_requested = false
+    combo_step = 0
+    combo_window = 0.0
     dodge_time = 0.0
     invulnerable = false
     hurt_time = HURT_DURATION
@@ -415,6 +423,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
         combo_window = 0.0
         _deactivate_attack_hitbox()
         attack_requested = false
+        technique_requested = false
         dodge_requested = false
         jump_requested = false
         _log("WORLD", "Hero respawned at checkpoint=%s" % WorldState.checkpoint_position)
