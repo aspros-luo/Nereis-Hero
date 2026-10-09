@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3600" height="720" viewBox="0 0 3600 720">
+<defs>
+ <linearGradient id="bark" x2="1" y2="0"><stop stop-color="#100f17"/><stop offset=".55" stop-color="#211820"/><stop offset="1" stop-color="#5a3e47" stop-opacity=".8"/></linearGradient>
+ <linearGradient id="ground" x2="0" y2="1"><stop stop-color="#18151e" stop-opacity="0"/><stop offset=".45" stop-color="#17141b" stop-opacity=".5"/><stop offset="1" stop-color="#100f17" stop-opacity=".92"/></linearGradient>
+</defs>
+<rect y="540" width="3600" height="180" fill="url(#ground)"/>
+<!-- closer, rougher branches frame the combat stage; they remain above the player silhouette -->
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M-30 675Q74 558 61 459Q51 381 104 306M42 500Q-5 453 8 402M61 444Q126 423 155 354M73 382Q42 347 52 309M94 330Q138 300 146 255" stroke="#100f17" stroke-width="34"/>
+ <path d="M-30 675Q74 558 61 459Q51 381 104 306M42 500Q-5 453 8 402M61 444Q126 423 155 354" stroke="url(#bark)" stroke-width="6"/>
+ <path d="M3080 675Q2976 558 2989 459Q2999 381 2946 306M3008 500Q3055 453 3042 402M2989 444Q2924 423 2895 354M2977 382Q3008 347 2998 309M2956 330Q2912 300 2904 255" stroke="#100f17" stroke-width="36"/>
+ <path d="M3080 675Q2976 558 2989 459Q2999 381 2946 306M3008 500Q3055 453 3042 402M2989 444Q2924 423 2895 354" stroke="url(#bark)" stroke-width="6"/>
+</g>
+<!-- bent iron stakes and a ruined low fence -->
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M290 620L278 544L291 510L305 548L298 620M274 572L324 564M282 591L313 587" stroke="#17151c" stroke-width="8"/>
+ <path d="M300 580Q365 548 430 583T560 578" stroke="#211820" stroke-width="9"/>
+ <path d="M300 580Q365 548 430 583T560 578" stroke="#5c4148" stroke-opacity=".45" stroke-width="2"/>
+ <path d="M3070 620L3082 544L3069 510L3055 548L3062 620M3086 572L3036 564M3078 591L3047 587" stroke="#17151c" stroke-width="8"/>
+ <path d="M3060 580Q2995 548 2930 583T2800 578" stroke="#211820" stroke-width="9"/>
+</g>
+<!-- broken gravestones, irregular rather than a repeated tile pattern -->
+<g stroke="#64505a" stroke-opacity=".7" stroke-width="3" stroke-linejoin="round">
+ <path d="M630 641V592L642 575L670 572L686 590V641Z" fill="#24202a"/>
+ <path d="M643 592L657 588L666 600M650 610L668 606" fill="none" stroke="#8b6a70" stroke-opacity=".35" stroke-width="2"/>
+ <path d="M915 651V609L929 592L952 596L963 610V651Z" fill="#211e28"/>
+ <path d="M1740 646V584L1755 563L1783 568L1795 587V646Z" fill="#24202a"/>
+ <path d="M1755 593L1782 590M1760 609L1778 605" fill="none" stroke="#8b6a70" stroke-opacity=".35" stroke-width="2"/>
+ <path d="M2360 652V610L2374 592L2397 597L2408 612V652Z" fill="#211e28"/>
+ <path d="M3260 642V587L3274 567L3301 571L3315 590V642Z" fill="#24202a"/>
+</g>
+<!-- thorn weeds along the edge of the road -->
+<g fill="none" stroke="#30252e" stroke-width="5" stroke-linecap="round">
+ <path d="M480 680Q495 642 480 611M485 649L458 632M487 639L512 615M720 688Q739 650 730 628M733 660L756 644M730 647L710 627"/>
+ <path d="M1430 688Q1447 650 1436 625M1440 660L1462 642M1438 647L1418 626M2600 687Q2620 647 2610 624M2615 659L2637 640M2612 646L2592 626"/>
+</g>
+<!-- a few ember flecks, not a bright particle curtain -->
+<g fill="#bb8065" opacity=".65">
+ <circle cx="522" cy="582" r="2"/><circle cx="1024" cy="614" r="1.5"/><circle cx="1540" cy="566" r="2"/>
+ <circle cx="2150" cy="605" r="1.5"/><circle cx="2780" cy="581" r="2"/><circle cx="3370" cy="610" r="1.5"/>
+</g>
+</svg>
