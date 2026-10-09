@@ -1275,10 +1275,18 @@ func _draw() -> void:
             art_offset.y = -absf(step_phase) * 3.0
             art_scale.x = 1.0 - step_phase * 0.025
             art_scale.y = 1.0 + step_phase * 0.035
-            # A short cloth flick makes horizontal movement visible without a full sprite sheet.
+            # A readable trailing cape edge adds motion to the silhouette before a frame set exists.
+            # 在逐帧动画完成前，用明显的披风尾部剪影补足移动反馈。
             if absf(velocity.x) > 40.0:
-                var cloth_alpha := 0.24 + absf(step_phase) * 0.22
-                draw_line(Vector2(-facing * 29.0, -51.0), Vector2(-facing * (39.0 + absf(step_phase) * 5.0), -47.0 + step_phase * 2.0), Color("#9a7c7d", cloth_alpha), 2.0)
+                var cape_tail := PackedVector2Array([
+                    Vector2(-facing * 20.0, -55.0),
+                    Vector2(-facing * (38.0 + absf(step_phase) * 6.0), -48.0 + step_phase * 2.5),
+                    Vector2(-facing * (32.0 + absf(step_phase) * 4.0), -29.0 + step_phase * 3.0),
+                    Vector2(-facing * 17.0, -35.0)
+                ])
+                draw_colored_polygon(cape_tail, Color("#4b303f", 0.88))
+                draw_line(cape_tail[0], cape_tail[1], Color("#b08b87", 0.82), 2.0)
+                draw_line(cape_tail[1], cape_tail[2], Color("#7f525f", 0.9), 1.5)
         CombatState.ATTACK:
             var attack_progress := clampf(1.0 - attack_time / maxf(ATTACK_DURATION, 0.01), 0.0, 1.0)
             art_offset.x = facing * sin(attack_progress * PI) * (10.0 if short_blade else 7.0)
@@ -1289,6 +1297,14 @@ func _draw() -> void:
             art_offset.x = facing * 3.0
             art_scale.x = 1.12
             art_scale.y = 0.78
+            var dash_cape := PackedVector2Array([
+                Vector2(-facing * 18.0, -53.0),
+                Vector2(-facing * 47.0, -48.0),
+                Vector2(-facing * 43.0, -34.0),
+                Vector2(-facing * 16.0, -36.0)
+            ])
+            draw_colored_polygon(dash_cape, Color("#5a3548", 0.92))
+            draw_line(dash_cape[0], dash_cape[1], Color("#d2a7a0", 0.86), 2.0)
         CombatState.JUMP:
             art_offset.y = -2.0
             art_scale.x = 0.94
