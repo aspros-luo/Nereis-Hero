@@ -10,6 +10,7 @@ const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const BOSS_GATE_SCRIPT = preload("res://scripts/world/boss_gate.gd")
 const LEVEL_EXIT_SCRIPT = preload("res://scripts/world/level_exit.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
+const ASHEN_ROAD_BACKDROP = preload("res://assets/backgrounds/ashen_road_painterly.svg")
 
 var hero: CharacterBody2D
 var enemy: CharacterBody2D
@@ -258,32 +259,8 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw_environment_backdrop() -> void:
-    draw_circle(Vector2(420, 250), 260, Color("#18151d"))
-    draw_circle(Vector2(1280, 280), 340, Color("#17141b"))
-    draw_circle(Vector2(2140, 230), 300, Color("#151319"))
-
-    _draw_house(Vector2(150, 430), 150, 110)
-    _draw_house(Vector2(420, 440), 120, 95)
-    _draw_house(Vector2(760, 438), 140, 100)
-
-    _draw_dead_tree(Vector2(1030, 520), 150)
-    _draw_dead_tree(Vector2(1220, 520), 110)
-    _draw_dead_tree(Vector2(1550, 520), 170)
-    _draw_dead_tree(Vector2(1690, 520), 120)
-
-    draw_colored_polygon(
-        PackedVector2Array([
-            Vector2(1860, 420),
-            Vector2(1960, 250),
-            Vector2(2050, 420)
-        ]),
-        Color("#211b24")
-    )
-    draw_rect(Rect2(1940, 300, 28, 120), Color("#2c2530"))
-    draw_circle(Vector2(1954, 290), 16, Color("#5d4c55"))
-
-    draw_line(Vector2(2320, 520), Vector2(2320, 370), Color("#66545c"), 5.0)
-    draw_circle(Vector2(2320, 350), 14.0, Color("#8e7777"))
+    # Original layered painterly backdrop; gameplay collision and actor positions remain unchanged.
+    draw_texture_rect(ASHEN_ROAD_BACKDROP, Rect2(0, 0, 2400, 720), false)
 
 func _draw_house(origin: Vector2, width: float, height: float) -> void:
     draw_rect(Rect2(origin.x - width * 0.5, origin.y - height, width, height), Color("#29232b"))
