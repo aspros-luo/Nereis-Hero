@@ -127,14 +127,29 @@ func resolve_iaijutsu_variant() -> String:
         return "abyssal"
     if "blood_iaijutsu" in learned_techniques:
         return "blood"
+    if WorldState.is_ability_unlocked("iaijutsu_basic"):
+        return "human_iaijutsu"
     return "human"
 
 func can_use_blood_iaijutsu() -> bool:
-    # Kept for compatibility with existing callers; L now invokes the strongest understood form.
-    return resolve_iaijutsu_variant() != "human"
+    # Compatibility name retained; L invokes the strongest available iaijutsu form.
+    return not get_iaijutsu_profile().is_empty()
 
 func get_iaijutsu_profile() -> Dictionary:
     match resolve_iaijutsu_variant():
+        "human_iaijutsu":
+            return {
+                "variant": "human_iaijutsu",
+                "stamina_cost": 18.0,
+                "health_cost": 0,
+                "abnormal_load": 0.0,
+                "damage_multiplier": 1.6,
+                "reach": 104.0,
+                "hitbox_size": Vector2(132.0, 52.0),
+                "hit_duration": 0.13,
+                "attack_time": 0.38,
+                "windup": 0.10
+            }
         "black_horizon":
             return {
                 "variant": "black_horizon",
