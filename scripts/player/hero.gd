@@ -666,6 +666,7 @@ func restore_full() -> void:
     attack_windup = 0.0
     attack_hit_registered = false
     iaijutsu_active = false
+    eldritch_cooldown_remaining = 0.0
     dodge_time = 0.0
     combo_step = 0
     combo_window = 0.0
