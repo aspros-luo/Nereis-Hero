@@ -35,7 +35,12 @@ func _physics_process(delta: float) -> void:
     if not active:
         return
 
-    active_time -= delta
+    var timer_delta := delta
+    # Enemy attack windows belong to the enemy's local time during Witch Time; Hero hitboxes remain normal.
+    # 魔女时间期间敌方攻击窗口随敌人局部时间变慢；主角自己的命中框不受影响。
+    if is_instance_valid(host) and host.is_in_group("combat_enemies"):
+        timer_delta *= WorldState.get_combat_enemy_time_scale()
+    active_time -= timer_delta
     if active_time <= 0.0:
         active = false
         return

@@ -129,3 +129,5 @@ Screenshot or short clip:
 4. **F5 / F6 lifecycle** — F5 OFF clears Witch Time and cancels an active Quick Dash; F6 restores HP/stamina and clears action/hitbox/cooldowns/sight/grapple/wall state. Restart the game and confirm temporary fixtures, selected iaijutsu form, Debug abnormal-load bonus and override are not saved.
 
 补充说明：当前环境不能启动 Godot。上面是交付给本地的执行清单，不代表已经运行通过。
+
+5. **Enemy hitbox timing / 敌方命中框计时** — During Witch Time, the enemy's windup, movement and active attack hitbox lifetime should all slow together. The Hero's attacks should still use normal timing. Repeat after expiry and after F5 OFF to check immediate restoration.

@@ -190,7 +190,7 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 
 ## 2026-10-09 — Ability Debug pass / 主角能力 Debug 修正
 
-- [x] Fixed Witch Time movement scaling: all 11 enemy CharacterBody scripts temporarily scale velocity around the actual move_and_slide call while retaining scaled AI timers/animation. Hero movement does not use this enemy scale.
+- [x] Fixed Witch Time movement scaling: all 11 enemy CharacterBody scripts temporarily scale velocity around the actual move_and_slide call while retaining scaled AI timers/animation. Enemy-owned hitbox lifetimes use the same local scale; Hero movement and Hero hitboxes remain unaffected.
 - [x] Resonance hidden targets now optionally reveal an assigned CanvasItem via reveal_target_path; the standalone marker still works for temporary Debug fixtures.
 - [x] F5 Debug anchors and reveal traces remain at their creation positions instead of drifting along with the Hero; Debug anchor labels are initialized before node readiness.
 - [x] F5 OFF immediately clears Witch Time and ends an active Quick Dash; F6 remains the full action/resource reset.
@@ -200,3 +200,6 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 - [ ] Godot runtime check: verify fixed Debug fixtures, Grapple range/cancel, wall climb/slide/jump, and save isolation.
 
 **Status:** static source changes only. Do not mark any runtime checks as passed until the project is opened in Godot 4.6.x.
+
+- [x] Enemy-owned attack-hitbox timer now follows Witch Time's enemy-local scale; the Hero's own hitbox timer is not slowed by the enemy-only effect.
+- [ ] Godot runtime check: observe an enemy telegraph, movement, and already-active strike window under Witch Time; verify the three resume normal timing together.

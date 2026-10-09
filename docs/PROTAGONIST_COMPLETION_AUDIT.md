@@ -59,3 +59,6 @@
 - [x] F5 Debug 锚点固定在生成时的位置，不再跟随主角漂移；锚点测试标签会正确显示。
 - [x] 关闭 F5 时清除魔女时间并中止尚在执行的 Debug 冲刺。
 - [ ] 上述变化仍需在 Godot 中运行验证，特别是敌方位移速度、垂直运动、墙面碰撞与隐藏对象显隐。
+
+- [x] Witch Time follow-up: enemy-owned hitbox lifetime also uses the enemy-local time scale, so active hostile strike windows remain coherent with slowed windups and movement; Hero hitboxes are unaffected.
+- [ ] Godot runtime: validate active hostile hitboxes last longer during Witch Time and restore normal lifetime after effect expiry.
