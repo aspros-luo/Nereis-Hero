@@ -439,7 +439,20 @@ func load_game() -> void:
     ending_route = str(parsed.get("ending_route", ""))
     prologue_complete = bool(parsed.get("prologue_complete", false))
 
+    # Legacy saves that already reached the village must retain the first story reward.
+    # 已经完成序章的旧存档，也应保留第一项剧情奖励。
+    var migrated_basic_iaijutsu := false
+    if prologue_complete and not unlocked_abilities.has("iaijutsu_basic"):
+        unlocked_abilities["iaijutsu_basic"] = {
+            "source_type": "story",
+            "source_id": "legacy_prologue_completion"
+        }
+        migrated_basic_iaijutsu = true
+        print("[NEREIS][SAVE] Migrated completed prologue to basic iaijutsu unlock")
+
     print("[NEREIS][SAVE] Game loaded; memory=%d boss_defeated=%s choice=%s" % [hero_memory, boss_defeated, first_choice_made])
+    if migrated_basic_iaijutsu:
+        save_game()
 
 func is_ability_unlocked(ability_id: String) -> bool:
     return ability_id in ABILITY_IDS and unlocked_abilities.has(ability_id)
