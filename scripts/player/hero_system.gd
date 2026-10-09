@@ -69,6 +69,14 @@ func is_long_sword() -> bool:
 func is_short_blade() -> bool:
     return current_weapon == WeaponStyle.SHORT_BLADE
 
+func get_weapon_technique_id() -> String:
+    return "technique_crescent_combo" if is_short_blade() else "technique_judgment_slash"
+
+func can_use_technique(technique_id: String, debug_override: bool = false) -> bool:
+    if debug_override:
+        return technique_id in ["technique_judgment_slash", "technique_crescent_combo", "eldritch_echo"]
+    return WorldState.is_ability_unlocked(technique_id)
+
 func add_resonance(amount: int, source_id: String = "") -> void:
     if amount <= 0:
         return
