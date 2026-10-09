@@ -128,18 +128,78 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    var sway: float = sin(animation_time * 5.0) * 1.5
-    var c := Color("#c8565f") if hit_flash > 0.0 else Color("#4e3a43")
-    var hood := Color("#211c24")
-    draw_circle(Vector2(0, -46 + sway), 18, hood)
-    draw_circle(Vector2(facing * 4.0, -44 + sway), 8, c)
-    draw_rect(Rect2(-19, -28 + sway, 38, 30), c)
+    var sway: float = sin(animation_time * 4.6) * 1.8
+    var hit := hit_flash > 0.0
+    var robe := Color("#a94b55") if hit else Color("#30252f")
+    var robe_light := Color("#d05b61") if hit else Color("#57404b")
+    var robe_shadow := Color("#17151d")
+    var bone := Color("#e0d0b5")
+    var iron := Color("#8e7779")
+    var hood := Color("#17151d")
+
+    # Ground shadow, then a layered, ragged robe silhouette.
+    draw_ellipse(Vector2(0, 2), 27.0, 6.0, Color(0.03, 0.02, 0.04, 0.5), true)
     draw_colored_polygon(PackedVector2Array([
-        Vector2(-20, -27 + sway), Vector2(20, -27 + sway),
-        Vector2(25, 8), Vector2(-25, 8)
-    ]), Color("#362b35"))
-    draw_line(Vector2(-14, -4 + sway), Vector2(-46, 10), c, 7.0)
-    draw_line(Vector2(14, -4 + sway), Vector2(46, 10), c, 7.0)
+        Vector2(-13, -43 + sway), Vector2(13, -43 + sway),
+        Vector2(22, -12), Vector2(31, 9), Vector2(15, 7),
+        Vector2(6, 13), Vector2(-5, 8), Vector2(-21, 12),
+        Vector2(-30, 5), Vector2(-22, -15)
+    ]), robe_shadow)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-12, -42 + sway), Vector2(12, -42 + sway),
+        Vector2(18, -14), Vector2(25, 4), Vector2(12, 7),
+        Vector2(4, 3), Vector2(-5, 9), Vector2(-19, 6),
+        Vector2(-24, 1), Vector2(-18, -17)
+    ]), robe)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-9, -38 + sway), Vector2(0, -40 + sway),
+        Vector2(7, -13), Vector2(2, 5), Vector2(-7, 6),
+        Vector2(-14, -11)
+    ]), robe_light)
+    draw_line(Vector2(12, -34 + sway), Vector2(17, -9), Color("#7b5961", 0.8), 2.0)
+    draw_line(Vector2(-15, -13), Vector2(-23, 4), Color("#76505b", 0.75), 2.0)
+
+    # Long sleeves and crooked hands; the weapon arm leads the telegraph.
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-12, -36 + sway), Vector2(-21, -33 + sway),
+        Vector2(-35, -10), Vector2(-29, -5), Vector2(-15, -21)
+    ]), robe_shadow)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(11, -36 + sway), Vector2(20, -31 + sway),
+        Vector2(34, -13), Vector2(29, -7), Vector2(15, -22)
+    ]), robe_light)
+    draw_line(Vector2(-31, -8), Vector2(-35, 0), bone, 3.0)
+    draw_line(Vector2(31, -10), Vector2(36, -2), bone, 3.0)
+
+    # Hood rim and an expressionless bone mask instead of a flat face circle.
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-19, -52 + sway), Vector2(-15, -68 + sway),
+        Vector2(-4, -77 + sway), Vector2(10, -72 + sway),
+        Vector2(20, -56 + sway), Vector2(15, -43 + sway),
+        Vector2(-13, -42 + sway)
+    ]), hood)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-11, -61 + sway), Vector2(-7, -69 + sway),
+        Vector2(5, -70 + sway), Vector2(12, -60 + sway),
+        Vector2(9, -49 + sway), Vector2(-8, -48 + sway)
+    ]), bone if not hit else Color("#f1a0a0"))
+    draw_line(Vector2(-8, -59 + sway), Vector2(-2, -57 + sway), robe_shadow, 3.0)
+    draw_line(Vector2(3, -57 + sway), Vector2(9, -59 + sway), robe_shadow, 3.0)
+    draw_line(Vector2(-2, -54 + sway), Vector2(1, -50 + sway), Color("#88736e"), 1.5)
+    draw_line(Vector2(-15, -48 + sway), Vector2(14, -47 + sway), iron, 2.0)
+
+    # A broken prayer medallion hangs over the chest, faintly rust-red.
+    draw_line(Vector2(0, -43 + sway), Vector2(1, -27 + sway), Color("#8c6b6d"), 2.0)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-5, -30 + sway), Vector2(1, -36 + sway),
+        Vector2(7, -29 + sway), Vector2(1, -21 + sway)
+    ]), Color("#a64c56") if not hit else Color("#e0b8a0"))
+    draw_line(Vector2(1, -32 + sway), Vector2(1, -25 + sway), bone, 1.5)
+
     if windup > 0.0:
-        draw_arc(Vector2(facing * 22.0, -24), 34.0, -0.85 if facing > 0 else 3.99, 0.85 if facing > 0 else 5.42, 14, Color("#c44e5a"), 4.0)
-    draw_string(ThemeDB.fallback_font, Vector2(-48, -72), "CULTIST %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#b7a09b"))
+        var pulse: float = 1.0 + sin(animation_time * 18.0) * 0.18
+        draw_arc(Vector2(facing * 22.0, -24), 34.0 * pulse, -0.85 if facing > 0 else 3.99, 0.85 if facing > 0 else 5.42, 16, Color("#c44e5a"), 4.0)
+        draw_line(Vector2(facing * 28.0, -21), Vector2(facing * 54.0, -34), Color("#d36a67"), 3.0)
+        draw_circle(Vector2(facing * 55.0, -35), 3.0, Color("#d36a67"))
+
+    draw_string(ThemeDB.fallback_font, Vector2(-48, -86), "CULTIST %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#b7a09b"))
