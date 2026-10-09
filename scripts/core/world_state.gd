@@ -32,6 +32,7 @@ var hero_attack_damage := 34
 var input_locked := false
 var hitstop_serial := 0
 var hitstop_active := false
+var active_hitstop_scale := 0.08
 var witch_time_serial := 0
 var witch_time_active := false
 var witch_time_scale := 0.24
@@ -130,7 +131,8 @@ func trigger_hitstop(duration: float = 0.045, slow_scale: float = 0.08) -> void:
     hitstop_serial += 1
     var serial: int = hitstop_serial
     hitstop_active = true
-    _refresh_time_scale(slow_scale)
+    active_hitstop_scale = clampf(slow_scale, 0.01, 1.0)
+    _refresh_time_scale()
     get_tree().create_timer(duration, true, false, true).timeout.connect(func() -> void:
         if serial == hitstop_serial:
             hitstop_active = false
@@ -159,12 +161,12 @@ func trigger_witch_time(duration: float = 0.52, slow_scale: float = 0.24) -> boo
     )
     return true
 
-func _refresh_time_scale(hitstop_scale: float = 0.08) -> void:
+func _refresh_time_scale() -> void:
     var target_scale := 1.0
     if witch_time_active:
         target_scale = minf(target_scale, witch_time_scale)
     if hitstop_active:
-        target_scale = minf(target_scale, hitstop_scale)
+        target_scale = minf(target_scale, active_hitstop_scale)
     Engine.time_scale = target_scale
 
 func record_mite_interaction(interaction_id: String) -> bool:
