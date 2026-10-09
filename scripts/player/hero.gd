@@ -347,7 +347,7 @@ func _spawn_slash_arc() -> void:
     var effect: Node2D = SLASH_ARC_SCRIPT.new()
     effect.global_position = global_position
     get_parent().add_child(effect)
-    var variant := hero_system.resolve_iaijutsu_variant() if hero_system and iaijutsu_active else ""
+    var variant: String = hero_system.resolve_iaijutsu_variant() if hero_system != null and iaijutsu_active else ""
     effect.call("setup", facing, combo_step, hero_system != null and hero_system.is_short_blade(), iaijutsu_active, variant)
 
 func _spawn_hit_spark() -> void:
