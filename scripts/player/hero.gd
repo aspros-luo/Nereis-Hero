@@ -25,8 +25,10 @@ const STAMINA_REGEN_DELAY := 0.65
 const STAMINA_REGEN_RATE := 42.0
 const HURT_DURATION := 0.18
 const HURT_KNOCKBACK := 180.0
-const COMBO_DAMAGE_MULTIPLIERS := [1.0, 1.18, 1.5]
-const COMBO_REACH := [54.0, 58.0, 64.0]
+const IAijutsu_STAMINA_COST := 26.0
+const IAijutsu_HEALTH_COST := 8
+const IAijutsu_DAMAGE_MULTIPLIER := 2.2
+const IAijutsu_REACH := 124.0
 
 enum CombatState { IDLE, MOVE, JUMP, FALL, ATTACK, DODGE, HURT, DEAD }
 
@@ -52,6 +54,8 @@ var previous_state := CombatState.IDLE
 var animation_time := 0.0
 var attack_hitbox: Area2D
 var attack_requested := false
+var technique_requested := false
+var iaijutsu_active := false
 var dodge_requested := false
 var jump_requested := false
 var hero_system: Node
@@ -66,6 +70,8 @@ func _input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
         if event.keycode == KEY_J:
             attack_requested = true
+        elif event.keycode == KEY_L:
+            technique_requested = true
         elif event.keycode == KEY_K or event.keycode == KEY_SHIFT:
             dodge_requested = true
         elif event.keycode == KEY_SPACE or event.keycode == KEY_UP:
@@ -90,7 +96,7 @@ func _setup_combat_components() -> void:
     attack_hitbox.name = "AttackHitbox"
     attack_hitbox.set_script(HITBOX_SCRIPT)
     add_child(attack_hitbox)
-    attack_hitbox.setup(self, Vector2(105, 64), Vector2(facing * 54.0, -28.0))
+    attack_hitbox.setup(self, Vector2(66, 48), Vector2(facing * 48.0, -28.0))
 
     var hurtbox := Area2D.new()
     hurtbox.name = "Hurtbox"
@@ -118,6 +124,8 @@ func _physics_process(delta: float) -> void:
 
     if WorldState.input_locked:
         attack_requested = false
+        technique_requested = false
+        iaijutsu_active = false
         dodge_requested = false
         jump_requested = false
         velocity.x = move_toward(velocity.x, 0.0, 2200.0 * delta)
@@ -147,20 +155,22 @@ func _physics_process(delta: float) -> void:
         attack_windup = max(0.0, attack_windup - delta)
         if attack_windup <= 0.0 and not attack_hit_registered:
             var base_damage := float(WorldState.hero_attack_damage)
-            var multiplier: float = COMBO_DAMAGE_MULTIPLIERS[combo_step - 1]
-            if hero_system:
-                multiplier *= hero_system.get_weapon_damage_multiplier()
+            var multiplier: float = hero_system.get_combo_damage_multiplier(combo_step) if hero_system else 1.0
+            if iaijutsu_active:
+                multiplier = IAijutsu_DAMAGE_MULTIPLIER
             var damage := int(round(base_damage * multiplier))
-            var reach: float = COMBO_REACH[combo_step - 1]
-            if hero_system:
-                reach = hero_system.get_weapon_reach()
+            var reach: float = hero_system.get_weapon_reach(combo_step) if hero_system and not iaijutsu_active else IAijutsu_REACH
+            var shape_size: Vector2 = hero_system.get_weapon_hitbox_size(combo_step) if hero_system and not iaijutsu_active else Vector2(152, 58)
             attack_hitbox.position.x = facing * reach
-            attack_hitbox.activate(damage, 0.11 if combo_step < 3 else 0.14)
+            attack_hitbox.set_shape_size(shape_size)
+            var hit_duration: float = hero_system.get_hit_window_duration(combo_step) if hero_system and not iaijutsu_active else 0.16
+            attack_hitbox.activate(damage, hit_duration)
             _spawn_slash_arc()
             attack_hit_registered = true
-            _log("COMBAT", "Hero combo %d hit window; damage=%d" % [combo_step, damage])
+            _log("COMBAT", "Hero attack hit window; damage=%d" % damage)
         if attack_time <= 0.0:
             attack_hit_registered = false
+            iaijutsu_active = false
 
     if dodge_time > 0.0:
         dodge_time = max(0.0, dodge_time - delta)
@@ -196,6 +206,9 @@ func _physics_process(delta: float) -> void:
         velocity.y = JUMP_VELOCITY
         _set_state(CombatState.JUMP)
 
+    if technique_requested and attack_time <= 0.0 and dodge_time <= 0.0:
+        technique_requested = false
+        _perform_iaijutsu()
     if attack_requested and attack_time <= 0.0 and dodge_time <= 0.0:
         attack_requested = false
         _perform_attack()
@@ -243,19 +256,40 @@ func _perform_attack() -> void:
         combo_step = min(3, combo_step + 1)
     else:
         combo_step = 1
-    combo_window = COMBO_RESET_TIME
+    combo_window = hero_system.get_combo_reset_time() if hero_system else 0.42
+    if hero_system:
+        combo_step = mini(combo_step, hero_system.get_combo_limit())
 
-    attack_time = ATTACK_DURATION
-    attack_windup = ATTACK_WINDUP
+    iaijutsu_active = false
+    attack_time = hero_system.get_attack_duration() if hero_system else 0.34
+    attack_windup = hero_system.get_attack_windup() if hero_system else 0.07
     attack_hit_registered = false
     if hero_system:
-        attack_hitbox.position.x = facing * hero_system.get_weapon_reach()
-    else:
-        attack_hitbox.position.x = facing * float(COMBO_REACH[combo_step - 1])
+        attack_hitbox.position.x = facing * hero_system.get_weapon_reach(combo_step)
+        attack_hitbox.set_shape_size(hero_system.get_weapon_hitbox_size(combo_step))
 
     _set_state(CombatState.ATTACK)
     attack_started.emit(combo_step)
     _log("COMBAT", "Hero attack %d started; windup=%.2f" % [combo_step, ATTACK_WINDUP])
+
+func _perform_iaijutsu() -> void:
+    if not hero_system or not hero_system.can_use_blood_iaijutsu():
+        return
+    if stamina < IAijutsu_STAMINA_COST or health <= IAijutsu_HEALTH_COST:
+        return
+
+    stamina -= IAijutsu_STAMINA_COST
+    health -= IAijutsu_HEALTH_COST
+    stamina_regen_delay = STAMINA_REGEN_DELAY
+    hero_system.add_abnormal_load(10.0)
+    combo_step = 3
+    combo_window = 0.0
+    attack_time = 0.42
+    attack_windup = 0.11
+    attack_hit_registered = false
+    iaijutsu_active = true
+    _set_state(CombatState.ATTACK)
+    _log("COMBAT", "Blood iaijutsu used; hidden abnormal load increased")
 
 func _start_dodge() -> void:
     if stamina < DODGE_STAMINA_COST:
@@ -285,7 +319,7 @@ func _spawn_slash_arc() -> void:
     var effect: Node2D = SLASH_ARC_SCRIPT.new()
     effect.global_position = global_position
     get_parent().add_child(effect)
-    effect.call("setup", facing, combo_step)
+    effect.call("setup", facing, combo_step, hero_system != null and hero_system.is_short_blade(), iaijutsu_active)
 
 func _spawn_hit_spark() -> void:
     var effect := Node2D.new()
@@ -301,12 +335,13 @@ func _spawn_death_burst() -> void:
 
 func _on_attack_hit(damage: int, target: Node) -> void:
     hit_confirm_time = 0.07
-    var impact_strength: float = 4.0 + float(combo_step) * 1.4
-    var hitstop_duration: float = 0.055 if combo_step >= 3 else 0.038
-    var hitstop_scale: float = 0.06 if combo_step >= 3 else 0.08
+    var finisher := combo_step >= (hero_system.get_combo_limit() if hero_system else 3)
+    var impact_strength: float = 9.0 if iaijutsu_active else 4.0 + float(combo_step) * 1.0
+    var hitstop_duration: float = 0.055 if finisher or iaijutsu_active else 0.038
+    var hitstop_scale: float = 0.06 if finisher or iaijutsu_active else 0.08
     WorldState.trigger_hitstop(hitstop_duration, hitstop_scale)
     _shake_camera(impact_strength, 0.08)
-    velocity.x = facing * (170.0 if combo_step >= 3 else 145.0)
+    velocity.x = facing * (105.0 if hero_system and hero_system.is_short_blade() else 190.0 if finisher else 145.0)
     attack_landed.emit(damage, target)
     _log("COMBAT", "Attack confirmed; damage=%d target=%s" % [damage, target.name if target else "Unknown"])
 
