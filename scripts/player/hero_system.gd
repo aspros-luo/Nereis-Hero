@@ -103,14 +103,49 @@ func resolve_iaijutsu_variant() -> String:
         return "blood"
     return "human"
 
-func get_weapon_damage_multiplier() -> float:
-    return 0.78 if is_short_blade() else 1.0
+func get_combo_limit() -> int:
+    return 4 if is_short_blade() else 3
 
-func get_weapon_reach() -> float:
-    return 42.0 if is_short_blade() else 62.0
+func get_combo_reset_time() -> float:
+    return 0.34 if is_short_blade() else 0.42
+
+func get_attack_duration() -> float:
+    return 0.23 if is_short_blade() else 0.34
+
+func get_attack_windup() -> float:
+    return 0.025 if is_short_blade() else 0.07
+
+func get_combo_damage_multiplier(combo_step: int) -> float:
+    if is_short_blade():
+        var short_multipliers := [0.62, 0.66, 0.72, 0.88]
+        return float(short_multipliers[clampi(combo_step - 1, 0, short_multipliers.size() - 1)])
+    var sword_multipliers := [1.0, 1.18, 1.5]
+    return float(sword_multipliers[clampi(combo_step - 1, 0, sword_multipliers.size() - 1)])
+
+func get_weapon_reach(combo_step: int = 1) -> float:
+    if is_short_blade():
+        var short_reach := [27.0, 29.0, 32.0, 36.0]
+        return float(short_reach[clampi(combo_step - 1, 0, short_reach.size() - 1)])
+    var sword_reach := [48.0, 54.0, 62.0]
+    return float(sword_reach[clampi(combo_step - 1, 0, sword_reach.size() - 1)])
+
+func get_weapon_hitbox_size(combo_step: int = 1) -> Vector2:
+    if is_short_blade():
+        var short_widths := [42.0, 44.0, 48.0, 54.0]
+        return Vector2(float(short_widths[clampi(combo_step - 1, 0, short_widths.size() - 1)]), 34.0)
+    var sword_widths := [66.0, 72.0, 84.0]
+    return Vector2(float(sword_widths[clampi(combo_step - 1, 0, sword_widths.size() - 1)]), 48.0)
 
 func get_weapon_stamina_modifier() -> float:
-    return 0.82 if is_short_blade() else 1.0
+    return 0.72 if is_short_blade() else 1.0
+
+func get_hit_window_duration(combo_step: int) -> float:
+    if is_short_blade():
+        return 0.065
+    return 0.11 if combo_step < 3 else 0.14
+
+func can_use_blood_iaijutsu() -> bool:
+    return "blood_iaijutsu" in learned_techniques
 
 func add_abnormal_load(amount: float) -> void:
     if amount <= 0.0:
