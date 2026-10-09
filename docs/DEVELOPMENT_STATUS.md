@@ -355,3 +355,11 @@ The design document was committed to the feature branch. This was a documentatio
 - Replaced the Hero's basic circles/rectangles with layered knight armor, cloak folds, helmet/visor, rivets, gauntlets, boots and a more readable weapon silhouette.
 - Kept the existing CharacterBody2D movement, collision, weapon switching, technique state, and HUD logic unchanged; this is a renderer-only change.
 - Runtime rendering has not been verified in Godot yet. Check normal camera scale, both facing directions, movement bob, and short-blade/long-sword silhouettes.
+
+
+## 2026-10-09 — Enemy silhouette pass
+
+- Cultist rendering now has a ragged layered robe, hooded ritual mask, red visor slit and chest seal.
+- Ashen Knight rendering now has layered plate armor, a heavier greatsword silhouette and a phase-two crown that visually signals the transformation.
+- Combat logic, hitboxes, damage, AI and collision were left unchanged.
+- Runtime art review remains pending in Godot; check readability of enemy telegraphs and floating health labels.
