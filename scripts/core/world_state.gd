@@ -160,7 +160,12 @@ func mark_ancient_residue_awakened() -> void:
     if ancient_residue_awakened:
         return
     ancient_residue_awakened = true
-    print("[NEREIS][STORY] Ancient-god residue awakened")
+    # The awakening is a real bodily exposure, not a visible character stat.
+    ancient_exposure = maxi(ancient_exposure, 1)
+    hero_resonance = maxi(hero_resonance, 12)
+    if "ancient_residue_awakened" not in resonance_sources:
+        resonance_sources.append("ancient_residue_awakened")
+    print("[NEREIS][STORY] Ancient-god residue awakened; hidden protagonist response recorded")
     save_game()
 
 func mark_outer_god_resonance() -> void:
