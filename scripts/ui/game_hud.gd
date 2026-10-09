@@ -178,14 +178,14 @@ func _ready() -> void:
 
     debug_panel = ColorRect.new()
     debug_panel.position = Vector2(930, 24)
-    debug_panel.size = Vector2(326, 260)
+    debug_panel.size = Vector2(326, 460)
     debug_panel.color = Color("#0a090d", 0.88)
     add_child(debug_panel)
 
     debug_label = Label.new()
     debug_label.position = Vector2(18, 14)
-    debug_label.size = Vector2(290, 230)
-    debug_label.add_theme_font_size_override("font_size", 15)
+    debug_label.size = Vector2(290, 430)
+    debug_label.add_theme_font_size_override("font_size", 12)
     debug_panel.add_child(debug_label)
     debug_panel.visible = debug_enabled
 
@@ -304,8 +304,14 @@ func _process(delta: float) -> void:
     var stamina: int = int(hero.get("stamina"))
     var invulnerable: bool = bool(hero.get("invulnerable"))
 
+    var action_kind: String = str(hero.call("get_debug_action_kind")) if hero.has_method("get_debug_action_kind") else "unknown"
+    var echo_cooldown: float = float(hero.call("get_debug_eldritch_cooldown")) if hero.has_method("get_debug_eldritch_cooldown") else 0.0
+    var debug_override: bool = bool(hero.get("debug_ability_override"))
     debug_label.text = (
-        "DEBUG [F3]\n"
+        "DEBUG [F3]  F4 TECHNIQUES  F5 REFILL\n"
+        + "Technique override: %s\n" % debug_override
+        + "Action: %s\n" % action_kind
+        + "Echo cooldown: %.1fs\n" % echo_cooldown
         + "Hero HP: %d\n" % hp
         + "Stamina: %d\n" % stamina
         + "State: %s\n" % state_name
@@ -537,6 +543,15 @@ func _unhandled_input(event: InputEvent) -> void:
         set_debug_visible(not debug_enabled)
         get_viewport().set_input_as_handled()
         return
+    if event is InputEventKey and event.pressed and not event.echo and debug_enabled and is_instance_valid(hero):
+        if event.keycode == KEY_F4 and hero.has_method("toggle_debug_ability_override"):
+            hero.call("toggle_debug_ability_override")
+            get_viewport().set_input_as_handled()
+            return
+        if event.keycode == KEY_F5 and hero.has_method("debug_refill_combat_resources"):
+            hero.call("debug_refill_combat_resources")
+            get_viewport().set_input_as_handled()
+            return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
         if WorldState.input_locked and not pause_open:
             return
