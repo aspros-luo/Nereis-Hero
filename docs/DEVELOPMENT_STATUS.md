@@ -363,3 +363,12 @@ The design document was committed to the feature branch. This was a documentatio
 - Ashen Knight rendering now has layered plate armor, a heavier greatsword silhouette and a phase-two crown that visually signals the transformation.
 - Combat logic, hitboxes, damage, AI and collision were left unchanged.
 - Runtime art review remains pending in Godot; check readability of enemy telegraphs and floating health labels.
+
+
+## 2026-10-09 — Original art sample integration / 原创美术样板接入
+
+- Added original scalable SVG character assets for Hero (long sword + short blade), Mite, Cultist, and Ashen Knight phase one/two.
+- Added original SVG VFX for Judgment Slash, each of the three Crescent Combo stages, Eldritch Echo's occult sigil, and impact spark.
+- Integrated the assets into existing draw scripts. The rendering layer changed; collision geometry, hitboxes/hurtboxes, damage, AI, movement and technique timing were not intentionally changed.
+- Added bilingual art pipeline documentation and a provenance/license ledger. No third-party asset files were imported. Environment packs remain a follow-up because the current target is high-resolution painterly art and the free candidates found so far include pixel-art packs that would clash.
+- Static source checks are pending final pass below. Actual Godot 4.6 runtime rendering cannot be verified in the maintainer environment because the executable is unavailable.
