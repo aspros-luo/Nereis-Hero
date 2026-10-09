@@ -1257,12 +1257,65 @@ func _log(category: String, message: String) -> void:
 	print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-	# Character art is a visual-only layer: collision, movement, attacks and hurtboxes remain unchanged.
+	# Animated presentation layer. Gameplay collision and combat timing stay unchanged.
 	var short_blade: bool = hero_system != null and hero_system.is_short_blade()
 	var hero_art: Texture2D = HERO_SHORT_ART if short_blade else HERO_LONG_ART
 	var art_tint := Color("#f3e6d4") if hit_confirm_time > 0.0 else Color.WHITE
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing, 1.0))
-	draw_texture_rect(hero_art, Rect2(-48.0, -96.0, 96.0, 112.0), false, art_tint)
+	var art_rotation := 0.0
+	var art_bob := 0.0
+	var art_scale := Vector2.ONE
+	var move_ratio: float = clampf(absf(velocity.x) / maxf(SPEED, 1.0), 0.0, 1.35)
+	var grounded: bool = is_on_floor()
+
+	# Idle breathing and a subtle cape-like sway; faster movement exaggerates the silhouette.
+	if state == CombatState.IDLE:
+		art_bob = sin(animation_time * 3.1) * 1.2
+		art_rotation = sin(animation_time * 1.7) * 0.012
+		art_scale = Vector2(1.0 + sin(animation_time * 3.1) * 0.006, 1.0 - sin(animation_time * 3.1) * 0.006)
+	elif state == CombatState.MOVE:
+		art_bob = absf(sin(animation_time * 12.5)) * 3.0 * maxf(move_ratio, 0.45)
+		art_rotation = -facing * 0.045 * move_ratio
+		art_scale = Vector2(1.0 + art_bob * 0.003, 1.0 - art_bob * 0.004)
+	elif state == CombatState.JUMP:
+		art_rotation = facing * -0.055
+		art_scale = Vector2(0.96, 1.035)
+	elif state == CombatState.FALL:
+		art_rotation = facing * 0.075
+		art_scale = Vector2(1.025, 0.975)
+	elif state == CombatState.ATTACK:
+		var attack_phase: float = clampf(attack_time / maxf(ATTACK_DURATION, 0.01), 0.0, 1.0)
+		if attack_windup > 0.0:
+			art_rotation = -facing * 0.105
+			art_scale = Vector2(0.94, 1.045)
+		else:
+			var strike_progress: float = 1.0 - attack_phase
+			art_rotation = facing * (0.10 - strike_progress * 0.20)
+			art_bob = -sin(strike_progress * PI) * 3.0
+			art_scale = Vector2(1.045, 0.965)
+	elif state == CombatState.DODGE:
+		art_rotation = facing * 0.22
+		art_bob = 4.0
+		art_scale = Vector2(1.13, 0.82)
+	elif state == CombatState.QUICK_DASH:
+		art_rotation = facing * 0.30
+		art_scale = Vector2(1.18, 0.78)
+	elif state == CombatState.WALL_CLIMB:
+		art_rotation = -facing * 0.12
+		art_bob = sin(animation_time * 15.0) * 2.0
+	elif state == CombatState.HURT:
+		art_rotation = -facing * 0.18
+		art_scale = Vector2(0.92, 1.06)
+	elif state == CombatState.DEAD:
+		art_rotation = facing * 0.42
+		art_scale = Vector2(1.08, 0.88)
+
+	# Airborne movement adds a small directional lean, while the pivot stays near the feet.
+	if not grounded and state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.HURT, CombatState.DEAD]:
+		art_rotation += clampf(velocity.x / maxf(SPEED, 1.0), -1.0, 1.0) * 0.055
+
+	var pivot := Vector2(0.0, 7.0 + art_bob)
+	draw_set_transform(pivot, art_rotation, Vector2(facing, 1.0) * art_scale)
+	draw_texture_rect(hero_art, Rect2(-48.0, -103.0, 96.0, 112.0), false, art_tint)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 	# Keep readable gameplay feedback above the painted silhouette.
