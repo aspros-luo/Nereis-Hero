@@ -72,3 +72,10 @@ These are prototype values and must be adjusted after runtime playtesting.
 
 - [x] Hero renderer now uses layered armor plates, cloak folds, helmet/visor, rivets, gauntlets, boots, and a clearer blade/guard silhouette.
 - [ ] In-game review: confirm the new drawing reads at normal camera zoom and remains clear during movement and both weapon stances.
+
+
+## Enemy silhouette pass
+
+- [x] Cultist: ragged layered robe, hooded ritual mask, red visor, chest seal and telegraph arc.
+- [x] Ashen Knight: heavy layered plate armor, helmet visor, greatsword, and a phase-two unnatural crown.
+- [ ] Runtime review: verify both enemies remain readable at gameplay scale, especially health labels and wind-up telegraphs.
