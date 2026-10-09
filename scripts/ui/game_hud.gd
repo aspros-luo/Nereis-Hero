@@ -24,6 +24,10 @@ var humanity_bar: ColorRect
 var objective_rule: ColorRect
 var impact_flash: ColorRect
 var impact_flash_time := 0.0
+var witch_time_overlay: ColorRect
+var witch_time_label: Label
+var witch_time_display_time := 0.0
+var witch_time_display_duration := 0.52
 var pause_overlay: ColorRect
 var pause_panel: ColorRect
 var pause_title: Label
@@ -44,6 +48,31 @@ func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
     if not WorldState.hidden_resistance_awakened_event.is_connected(_on_hidden_resistance_awakened):
         WorldState.hidden_resistance_awakened_event.connect(_on_hidden_resistance_awakened)
+    if not WorldState.witch_time_started.is_connected(_on_witch_time_started):
+        WorldState.witch_time_started.connect(_on_witch_time_started)
+    if not WorldState.witch_time_ended.is_connected(_on_witch_time_ended):
+        WorldState.witch_time_ended.connect(_on_witch_time_ended)
+
+    witch_time_overlay = ColorRect.new()
+    witch_time_overlay.position = Vector2.ZERO
+    witch_time_overlay.color = Color("#5b3d76", 0.0)
+    witch_time_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    witch_time_overlay.visible = false
+    add_child(witch_time_overlay)
+
+    witch_time_label = Label.new()
+    witch_time_label.position = Vector2(400, 278)
+    witch_time_label.size = Vector2(480, 72)
+    witch_time_label.text = "W I T C H   T I M E"
+    witch_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    witch_time_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+    witch_time_label.add_theme_font_size_override("font_size", 34)
+    witch_time_label.add_theme_color_override("font_color", Color("#e4d0ef", 0.0))
+    witch_time_label.add_theme_color_override("font_shadow_color", Color("#1a1023", 0.9))
+    witch_time_label.add_theme_constant_override("shadow_offset_x", 2)
+    witch_time_label.add_theme_constant_override("shadow_offset_y", 3)
+    witch_time_label.visible = false
+    add_child(witch_time_label)
 
     impact_flash = ColorRect.new()
     impact_flash.position = Vector2.ZERO
@@ -216,6 +245,19 @@ func set_combat_demo_progress(defeated: int, boss_active: bool, complete: bool) 
     else:
         objective_label.text = NereisLocalization.translate_text("DEFEAT SMALL ENEMIES    %d / 3") % defeated
 
+func _on_witch_time_started(duration: float) -> void:
+    witch_time_display_duration = maxf(0.1, duration)
+    witch_time_display_time = witch_time_display_duration
+    witch_time_overlay.visible = true
+    witch_time_label.visible = true
+    witch_time_overlay.color.a = 0.0
+    witch_time_label.add_theme_color_override("font_color", Color("#e4d0ef", 0.0))
+
+func _on_witch_time_ended() -> void:
+    witch_time_display_time = 0.0
+    witch_time_overlay.visible = false
+    witch_time_label.visible = false
+
 func show_hit_confirm(damage: int) -> void:
     impact_flash_time = 0.07 if damage < 50 else 0.10
     _show_banner("HIT  %d" % damage, 0.18)
@@ -248,6 +290,17 @@ func _process(delta: float) -> void:
     impact_flash_time = max(0.0, impact_flash_time - delta)
     var viewport_size: Vector2 = get_viewport().get_visible_rect().size
     impact_flash.size = viewport_size
+    witch_time_overlay.size = viewport_size
+    if witch_time_display_time > 0.0:
+        witch_time_display_time = maxf(0.0, witch_time_display_time - delta)
+        var witch_ratio: float = witch_time_display_time / witch_time_display_duration
+        witch_time_overlay.color.a = 0.18 * witch_ratio
+        witch_time_label.add_theme_color_override("font_color", Color(0.89, 0.81, 0.95, clampf(witch_ratio * 1.6, 0.0, 1.0)))
+        witch_time_overlay.visible = true
+        witch_time_label.visible = true
+    else:
+        witch_time_overlay.visible = false
+        witch_time_label.visible = false
     var flash_ratio: float = clampf(impact_flash_time / 0.07, 0.0, 1.0)
     impact_flash.color.a = flash_ratio * 0.12
 
