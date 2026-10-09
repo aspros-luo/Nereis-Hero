@@ -446,7 +446,7 @@ func _physics_process(delta: float) -> void:
                 _log("MOVEMENT", "Wall jump performed")
             else:
                 wall_climb_active = true
-                if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
+                if Input.is_key_pressed(KEY_W):
                     velocity.y = -WALL_CLIMB_SPEED
                 else:
                     velocity.y = minf(velocity.y, WALL_SLIDE_SPEED)
@@ -774,8 +774,11 @@ func _cancel_grapple(reason: String = "") -> void:
     if not is_instance_valid(grapple_target):
         grapple_target = null
         grapple_time_remaining = 0.0
+        velocity = Vector2.ZERO
         if state == CombatState.GRAPPLE:
             _set_state(CombatState.IDLE)
+        if not reason.is_empty():
+            _log("MOVEMENT", "Grapple ended: %s" % reason)
         return
     grapple_target = null
     grapple_time_remaining = 0.0
@@ -826,6 +829,9 @@ func debug_refill_combat_resources() -> void:
     resonance_sight_time_remaining = 0.0
     resonance_sight_cooldown_remaining = 0.0
     _cancel_grapple("Debug refill")
+    wall_climb_active = false
+    if hero_system:
+        hero_system.clear_debug_abnormal_load()
     health = 100
     stamina = MAX_STAMINA
     stamina_regen_delay = 0.0
@@ -886,7 +892,7 @@ func _perform_iaijutsu() -> void:
     active_action_kind = "iaijutsu"
     action_elapsed = 0.0
     technique_hit_index = 0
-    hero_system.add_abnormal_load(float(profile.get("abnormal_load", 10.0)))
+    hero_system.add_abnormal_load(float(profile.get("abnormal_load", 10.0)), debug_ability_override)
     combo_step = 3
     combo_window = 0.0
     attack_time = float(profile.get("attack_time", 0.42))
@@ -1214,8 +1220,8 @@ func _draw() -> void:
         draw_string(debug_font, Vector2(-136.0, -126.0), "形态 %s | 墙攀 %s" % [debug_iaijutsu_variant if debug_ability_override else (hero_system.resolve_iaijutsu_variant() if hero_system else "unknown"), str(wall_climb_active)], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 9, Color("#a8d3bd"))
         if hero_system != null:
             draw_string(debug_font, Vector2(-136.0, -110.0), "共鸣 %d 古神 %d 外神 %d 人性 %d" % [hero_system.resonance, hero_system.ancient_exposure, hero_system.outer_exposure, hero_system.humanity], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 10, Color("#d7a8d9"))
-            draw_string(debug_font, Vector2(-136.0, -94.0), "异常负荷 %.1f (体力恢复 x%.2f)" % [hero_system.abnormal_load, hero_system.get_stamina_regen_multiplier()], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 10, Color("#d7a8d9"))
-        if hero_system != null and hero_system.abnormal_load >= 75.0:
+            draw_string(debug_font, Vector2(-136.0, -94.0), "异常负荷 %.1f (体力恢复 x%.2f)" % [hero_system.get_effective_abnormal_load(), hero_system.get_stamina_regen_multiplier()], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 10, Color("#d7a8d9"))
+        if hero_system != null and hero_system.get_effective_abnormal_load() >= 75.0:
             var pulse := 0.55 + 0.25 * sin(animation_time * 7.0)
             draw_arc(Vector2(0.0, -42.0), 62.0, 0.15, TAU - 0.15, 28, Color(0.62, 0.24, 0.70, pulse), 3.0)
         draw_rect(Rect2(-25.0, -72.0, 50.0, 4.0), Color("#27212a"), true)

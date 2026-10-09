@@ -22,6 +22,9 @@ var ancient_exposure := 0
 var outer_exposure := 0
 var humanity := 100
 var abnormal_load := 0.0
+# Session-only Debug load never writes progression into the save.
+# Debug 临时负荷不会把测试状态写入存档。
+var debug_abnormal_load_bonus := 0.0
 var learned_techniques: Array[String] = []
 var technique_variants: Dictionary = {}
 
@@ -249,19 +252,26 @@ func get_hit_window_duration(combo_step: int) -> float:
         return 0.065
     return 0.11 if combo_step < 3 else 0.14
 
+func get_effective_abnormal_load() -> float:
+    return clampf(abnormal_load + debug_abnormal_load_bonus, 0.0, 100.0)
+
+func clear_debug_abnormal_load() -> void:
+    debug_abnormal_load_bonus = 0.0
+
 func get_stamina_regen_multiplier() -> float:
-    if abnormal_load >= 85.0:
+    var load_value := get_effective_abnormal_load()
+    if load_value >= 85.0:
         return 0.45
-    if abnormal_load >= 65.0:
+    if load_value >= 65.0:
         return 0.60
-    if abnormal_load >= 40.0:
+    if load_value >= 40.0:
         return 0.75
-    if abnormal_load >= 20.0:
+    if load_value >= 20.0:
         return 0.90
     return 1.0
 
 func get_abnormal_load_tier(value: float = -1.0) -> int:
-    var load_value := abnormal_load if value < 0.0 else clampf(value, 0.0, 100.0)
+    var load_value := get_effective_abnormal_load() if value < 0.0 else clampf(value, 0.0, 100.0)
     if load_value >= 85.0:
         return 4
     if load_value >= 65.0:
@@ -283,10 +293,16 @@ func recover_abnormal_load(amount: float) -> void:
         print("[NEREIS][HERO] Abnormal load tier reduced %d -> %d" % [old_tier, new_tier])
     WorldState.save_game()
 
-func add_abnormal_load(amount: float) -> void:
+func add_abnormal_load(amount: float, session_only: bool = false) -> void:
     if amount <= 0.0:
         return
     var old_tier := get_abnormal_load_tier()
+    if session_only:
+        debug_abnormal_load_bonus = clampf(debug_abnormal_load_bonus + amount, 0.0, 100.0)
+        var debug_tier := get_abnormal_load_tier()
+        if debug_tier > old_tier:
+            print("[NEREIS][DEBUG] Session abnormal load tier increased %d -> %d; save untouched" % [old_tier, debug_tier])
+        return
     abnormal_load = clampf(abnormal_load + amount, 0.0, 100.0)
     WorldState.abnormal_load = abnormal_load
     var new_tier := get_abnormal_load_tier()
