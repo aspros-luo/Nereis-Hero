@@ -152,13 +152,20 @@ func _on_exit_interacted() -> void:
     SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
 
 func _on_hero_defeated() -> void:
+    # A death resets the encounter as a whole: the escape door must not remain open
+    # after its three Wardens have been respawned. Story rewards already earned persist.
+    # 死亡会重置整场遭遇：三名守卫重生后，逃生门也必须关闭；已获得的剧情能力仍然保留。
+    exit_open = false
+    if is_instance_valid(exit_area):
+        exit_area.enabled = false
+
     for warden in wardens:
         if is_instance_valid(warden) and not warden.is_queued_for_deletion():
             warden.queue_free()
     wardens.clear()
     wardens_defeated = 0
     call_deferred("_spawn_wardens")
-    print("[NEREIS][PROLOGUE] Hero defeated; wardens reset")
+    print("[NEREIS][PROLOGUE] Hero defeated; wardens and escape gate reset")
 
 func _spawn_ui() -> void:
     narrative = CanvasLayer.new()
