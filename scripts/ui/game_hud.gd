@@ -41,6 +41,7 @@ var new_game_dialog: ConfirmationDialog
 var story_region_source := ""
 var story_objective_source := ""
 var pause_open := false
+var character_details_open := false
 
 func _ready() -> void:
     layer = 10
@@ -314,6 +315,7 @@ func _localize_objective(value: String) -> String:
 func _build_pause_menu() -> void:
     pause_overlay = ColorRect.new()
     pause_overlay.position = Vector2.ZERO
+    pause_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     pause_overlay.color = Color("#07060b", 0.82)
     pause_overlay.visible = false
     pause_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -338,6 +340,7 @@ func _build_pause_menu() -> void:
     character_details_label.position = Vector2(48, 72)
     character_details_label.size = Vector2(404, 52)
     character_details_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    character_details_label.visible = false
     character_details_label.add_theme_font_size_override("font_size", 13)
     character_details_label.add_theme_color_override("font_color", Color("#b7a48c"))
     pause_panel.add_child(character_details_label)
@@ -359,7 +362,7 @@ func _build_pause_menu() -> void:
     character_button = _make_menu_button()
     character_button.position = Vector2(90, 297)
     pause_panel.add_child(character_button)
-    character_button.pressed.connect(_refresh_character_details)
+    character_button.pressed.connect(_toggle_character_details)
 
     title_button.position = Vector2(90, 352)
     pause_panel.add_child(title_button)
@@ -430,6 +433,11 @@ func _on_language_selected(index: int) -> void:
     _refresh_localized_ui()
     save_status_label.text = NereisLocalization.language_name(language)
 
+func _toggle_character_details() -> void:
+    character_details_open = not character_details_open
+    character_details_label.visible = character_details_open
+    _refresh_character_details()
+
 func _refresh_character_details() -> void:
     var weapon_key := "menu.weapon_short_blade" if str(WorldState.current_weapon_style) == "short_blade" else "menu.weapon_long_sword"
     var weapon_name := NereisLocalization.t(weapon_key)
@@ -469,6 +477,8 @@ func _return_to_title() -> void:
 
 func _open_pause_menu() -> void:
     pause_open = true
+    character_details_open = false
+    character_details_label.visible = false
     WorldState.menu_input_locked = true
     pause_overlay.visible = true
     save_status_label.text = ""
