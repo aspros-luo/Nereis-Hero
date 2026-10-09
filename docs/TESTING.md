@@ -104,7 +104,7 @@ Reads the current hidden state through the ending evaluator:
 
 This is a development shortcut. The final game will reach the evaluator through normal progression.
 
-### F6 — Mite Resonance Theater
+### F12 — Mite Resonance Theater
 
 Tests the relationship-to-resonance turning point in isolation:
 

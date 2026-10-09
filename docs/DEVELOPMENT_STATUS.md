@@ -102,7 +102,7 @@ Prototype now includes:
 - dream/paradise visual transition
 - final state where no one is lonely / separate
 
-### F4 — Ancient Research Ward
+### F10 — Ancient Research Ward
 
 Prototype includes:
 
@@ -112,7 +112,7 @@ Prototype includes:
 - vessel ledger
 - hidden ancient-god evidence
 
-### F5 — Village Defense
+### F11 — Village Defense
 
 Prototype includes:
 
@@ -122,7 +122,7 @@ Prototype includes:
 - Hero protecting the village
 - defeat retry loop
 
-### F6 — Mite Resonance
+### F12 — Mite Resonance
 
 Isolated relationship/resonance prototype.
 
