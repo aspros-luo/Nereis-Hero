@@ -35,6 +35,8 @@ var title_button: Button
 var language_option: OptionButton
 var language_label: Label
 var save_status_label: Label
+var character_button: Button
+var character_details_label: Label
 var new_game_dialog: ConfirmationDialog
 var story_region_source := ""
 var story_objective_source := ""
@@ -318,8 +320,8 @@ func _build_pause_menu() -> void:
     add_child(pause_overlay)
 
     pause_panel = ColorRect.new()
-    pause_panel.position = Vector2(390, 135)
-    pause_panel.size = Vector2(500, 450)
+    pause_panel.position = Vector2(390, 90)
+    pause_panel.size = Vector2(500, 540)
     pause_panel.color = Color("#111018", 0.97)
     pause_overlay.add_child(pause_panel)
 
@@ -332,33 +334,46 @@ func _build_pause_menu() -> void:
     pause_panel.add_child(pause_title)
 
     resume_button = _make_menu_button()
-    resume_button.position = Vector2(90, 88)
+    character_details_label = Label.new()
+    character_details_label.position = Vector2(48, 72)
+    character_details_label.size = Vector2(404, 52)
+    character_details_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    character_details_label.add_theme_font_size_override("font_size", 13)
+    character_details_label.add_theme_color_override("font_color", Color("#b7a48c"))
+    pause_panel.add_child(character_details_label)
+
+    resume_button.position = Vector2(90, 132)
     pause_panel.add_child(resume_button)
     resume_button.pressed.connect(_close_pause_menu)
 
     save_button = _make_menu_button()
-    save_button.position = Vector2(90, 148)
+    save_button.position = Vector2(90, 187)
     pause_panel.add_child(save_button)
     save_button.pressed.connect(_save_from_menu)
 
     new_game_button = _make_menu_button()
-    new_game_button.position = Vector2(90, 208)
+    new_game_button.position = Vector2(90, 242)
     pause_panel.add_child(new_game_button)
     new_game_button.pressed.connect(_confirm_new_game)
 
     title_button = _make_menu_button()
-    title_button.position = Vector2(90, 268)
+    character_button = _make_menu_button()
+    character_button.position = Vector2(90, 297)
+    pause_panel.add_child(character_button)
+    character_button.pressed.connect(_refresh_character_details)
+
+    title_button.position = Vector2(90, 352)
     pause_panel.add_child(title_button)
     title_button.pressed.connect(_return_to_title)
 
     language_label = Label.new()
-    language_label.position = Vector2(90, 337)
+    language_label.position = Vector2(90, 408)
     language_label.add_theme_font_size_override("font_size", 14)
     language_label.add_theme_color_override("font_color", Color("#8f8586"))
     pause_panel.add_child(language_label)
 
     language_option = OptionButton.new()
-    language_option.position = Vector2(90, 360)
+    language_option.position = Vector2(90, 430)
     language_option.size = Vector2(320, 42)
     for language in NereisLocalization.LANGUAGES:
         language_option.add_item(NereisLocalization.language_name(language))
@@ -366,7 +381,7 @@ func _build_pause_menu() -> void:
     pause_panel.add_child(language_option)
 
     save_status_label = Label.new()
-    save_status_label.position = Vector2(90, 405)
+    save_status_label.position = Vector2(90, 478)
     save_status_label.size = Vector2(320, 28)
     save_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     save_status_label.add_theme_font_size_override("font_size", 13)
@@ -399,6 +414,7 @@ func _refresh_localized_ui() -> void:
     resume_button.text = NereisLocalization.t("menu.resume")
     save_button.text = NereisLocalization.t("menu.save")
     new_game_button.text = NereisLocalization.t("menu.new_game")
+    character_button.text = NereisLocalization.t("menu.character")
     title_button.text = NereisLocalization.t("menu.return_title")
     language_label.text = NereisLocalization.t("menu.select_language")
     if language_option:
@@ -407,12 +423,25 @@ func _refresh_localized_ui() -> void:
     new_game_dialog.dialog_text = NereisLocalization.t("menu.confirm_new_game")
     new_game_dialog.ok_button_text = NereisLocalization.t("menu.confirm")
     new_game_dialog.cancel_button_text = NereisLocalization.t("menu.cancel")
+    _refresh_character_details()
 
 func _on_language_selected(index: int) -> void:
     var language: String = NereisLocalization.LANGUAGES[clampi(index, 0, NereisLocalization.LANGUAGES.size() - 1)]
     WorldState.set_language(language)
     _refresh_localized_ui()
     save_status_label.text = NereisLocalization.language_name(language)
+
+func _refresh_character_details() -> void:
+    var weapon_key := "menu.weapon_short_blade" if str(WorldState.current_weapon_style) == "short_blade" else "menu.weapon_long_sword"
+    var weapon_name := NereisLocalization.t(weapon_key)
+    var technique_names: Array[String] = []
+    for technique_id in WorldState.learned_techniques:
+        if technique_id == "blood_iaijutsu":
+            technique_names.append(NereisLocalization.t("menu.technique_blood_iaijutsu"))
+        elif technique_id == "abyss_iaijutsu":
+            technique_names.append(NereisLocalization.t("menu.technique_abyss_iaijutsu"))
+    var techniques_text := ", ".join(technique_names) if not technique_names.is_empty() else NereisLocalization.t("menu.no_techniques")
+    character_details_label.text = "%s: %s\n%s: %s\n%s" % [NereisLocalization.t("menu.weapon"), weapon_name, NereisLocalization.t("menu.techniques"), techniques_text, NereisLocalization.t("menu.hidden_stats_note")]
 
 func _save_from_menu() -> void:
     WorldState.save_game()
@@ -425,6 +454,7 @@ func _confirm_new_game() -> void:
 
 func _start_new_game() -> void:
     WorldState.delete_save()
+    WorldState.menu_input_locked = false
     pause_open = false
     pause_overlay.visible = false
     get_tree().paused = false
@@ -432,6 +462,7 @@ func _start_new_game() -> void:
     get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
 
 func _return_to_title() -> void:
+    WorldState.menu_input_locked = false
     pause_open = false
     pause_overlay.visible = false
     get_tree().paused = false
@@ -439,17 +470,18 @@ func _return_to_title() -> void:
 
 func _open_pause_menu() -> void:
     pause_open = true
+    WorldState.menu_input_locked = true
     pause_overlay.visible = true
     save_status_label.text = ""
     language_option.select(NereisLocalization.language_index(str(WorldState.language)))
-    get_tree().paused = true
-    print("[NEREIS][MENU] Pause menu opened")
+    _refresh_character_details()
+    print("[NEREIS][MENU] Menu opened; world simulation continues")
 
 func _close_pause_menu() -> void:
     pause_open = false
+    WorldState.menu_input_locked = false
     pause_overlay.visible = false
-    get_tree().paused = false
-    print("[NEREIS][MENU] Pause menu closed")
+    print("[NEREIS][MENU] Menu closed; world simulation continues")
 
 func _toggle_pause_menu() -> void:
     if pause_open:
@@ -463,7 +495,7 @@ func _unhandled_input(event: InputEvent) -> void:
         get_viewport().set_input_as_handled()
         return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
-        if WorldState.input_locked:
+        if WorldState.input_locked and not pause_open:
             return
         _toggle_pause_menu()
         get_viewport().set_input_as_handled()
