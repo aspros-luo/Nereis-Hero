@@ -70,3 +70,6 @@
 
 - [x] Source fix: routine calls to _cancel_grapple no longer print a message every locked frame or every unrelated hit; the end message is emitted only when a grapple was actually active.
 - [ ] Godot runtime: confirm logs stay quiet during long input-lock sequences and show one cancellation message for an active grapple.
+
+- [x] Source fix: new-game/reset clears Witch Time and Resonance Sight as well as resetting global hitstop time scale; hidden targets are refreshed to hidden.
+- [ ] Godot runtime: activate Sight/Witch Time, use F9/new-game reset, verify enemy timing returns to normal and every hidden visual is hidden.

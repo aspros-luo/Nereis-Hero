@@ -83,3 +83,8 @@ After F5, Space should allow exactly one extra jump before landing. Quick Dash c
 ### 中断状态补充 / Action interruption addendum
 
 在剧情输入锁期间，跳跃缓存、精准闪避/反击窗口与无效动作状态会被清理；暂停菜单打开时 W 不会继续触发墙攀。受击、死亡、休息与 F6 会清除墙攀标记和残留镜头反馈。上述中断路径仍须在 Godot 实机逐项复测。
+
+
+### 新游戏重置 / New-game reset
+
+在共鸣视野或魔女时间激活时按 F9 重置/重载场景。预期：WorldState 清除魔女时间剩余时间与敌方倍率、关闭共鸣视野并刷新隐藏目标显隐，同时恢复全局 hitstop 的时间倍率。Debug 覆盖仍属于 Hero 当前会话状态；重载场景后应重新开启 F5 才能使用。

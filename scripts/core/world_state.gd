@@ -639,6 +639,8 @@ func reset() -> void:
     prologue_complete = false
     input_locked = false
     menu_input_locked = false
+    clear_witch_time("world state reset")
+    set_resonance_sight_active(false)
     hitstop_serial += 1
     Engine.time_scale = 1.0
 

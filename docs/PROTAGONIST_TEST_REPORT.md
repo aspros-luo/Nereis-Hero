@@ -217,3 +217,6 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 
 - [x] Removed grapple-cancel log spam by logging only when an active/recent grapple is actually ended; input-lock and unrelated damage no longer produce repeated cancellation logs.
 - [ ] Godot runtime: confirm console output remains bounded during input locks, repeated damage and grapple cancel.
+
+- [x] New-game/reset now clears the Witch Time timer and enemy scale, disables Resonance Sight, refreshes hidden-target visuals, and restores Engine.time_scale.
+- [ ] Godot runtime: repeat F9 while Witch Time and Sight are active; verify no effect survives scene reload.
