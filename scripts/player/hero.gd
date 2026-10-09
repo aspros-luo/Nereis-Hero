@@ -175,7 +175,9 @@ func _input(event: InputEvent) -> void:
                 _cycle_debug_iaijutsu_variant(-1)
             get_viewport().set_input_as_handled()
         elif event.keycode == KEY_G:
-            if not is_instance_valid(grapple_target):
+            if is_instance_valid(grapple_target):
+                _cancel_grapple("manual cancel")
+            else:
                 grapple_requested = true
         elif event.keycode == KEY_V:
             resonance_sight_requested = true
@@ -649,6 +651,8 @@ func set_debug_ability_override(enabled: bool) -> void:
         _cancel_grapple("debug override disabled")
         resonance_sight_time_remaining = 0.0
         WorldState.set_resonance_sight_active(false)
+        if hero_system:
+            hero_system.clear_debug_abnormal_load()
         _refresh_debug_test_fixtures(false)
         debug_iaijutsu_variant = "human_iaijutsu"
     WorldState.refresh_resonance_reveals(debug_ability_override)

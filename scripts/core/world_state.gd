@@ -73,6 +73,7 @@ var ending_route := ""
 var prologue_complete := false
 
 func _ready() -> void:
+    process_mode = Node.PROCESS_MODE_ALWAYS
     load_game()
 
 func _process(delta: float) -> void:
