@@ -198,3 +198,26 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - After Outer-God resonance, a subset of fireflies becomes synchronized and colder in tone.
 - The final Mite waiting scene has 15s / 35s / 50s micro-movements before the 60s decision.
 - The final Mite lunge has restrained camera impact; city detonation uses a much heavier impact.
+
+
+## 2026-10-09 — Protagonist progression pass
+
+### Implemented on `feature/protagonist-system`
+
+- The Hero can learn the three defined altered iaijutsu forms in order: Blood → Abyssal → Black Horizon.
+- L selects the strongest form actually understood by the Hero.
+- Each form now has its own initial damage, HP/stamina cost, abnormal-load increase, reach, hitbox, hit window, windup and slash presentation.
+- HUD discovery cues queue instead of overwriting each other when several progression conditions become true close together.
+- `HERO_SYSTEM.md` and `PROTAGONIST_TEST_REPORT.md` document the new flow and the remaining runtime checks.
+
+### Current verification status
+
+- GitHub source-level consistency checks passed for progression order, combat profile use, hitbox profile use, visual variants, cue queueing, balanced braces/parentheses, and menu simulation behavior.
+- Godot runtime parsing, scene launch, combat tuning, hitbox placement and save/load behavior remain unverified in this execution environment.
+- No GitHub Actions workflow was intentionally triggered.
+
+### Next work
+
+1. Trace normal-story writes to hidden exposure/resonance values without inventing new story triggers.
+2. Continue technical regression review for combat state cleanup, menu input isolation, and save/load.
+3. Pause only the unresolved narrative trigger decision and bring the Director concrete options before adding any new story/level reward.
