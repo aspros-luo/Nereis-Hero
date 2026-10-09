@@ -214,3 +214,6 @@ Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
 - [x] Menu input lock prevents a held W key from continuing wall climbing; normal gravity/world simulation remains active.
 - [x] Damage/death/rest/F6 clear wall traversal flags and transient camera/impact feedback where applicable.
 - [ ] Godot runtime regression for input lock, menu, damage, death respawn, rest and F6 remains pending.
+
+- [x] Removed grapple-cancel log spam by logging only when an active/recent grapple is actually ended; input-lock and unrelated damage no longer produce repeated cancellation logs.
+- [ ] Godot runtime: confirm console output remains bounded during input locks, repeated damage and grapple cancel.

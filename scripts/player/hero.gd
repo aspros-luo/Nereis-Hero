@@ -807,13 +807,14 @@ func _update_grapple(delta: float) -> void:
     _set_state(CombatState.GRAPPLE)
 
 func _cancel_grapple(reason: String = "") -> void:
+    var grapple_was_active := is_instance_valid(grapple_target) or grapple_time_remaining > 0.0 or state == CombatState.GRAPPLE
     if not is_instance_valid(grapple_target):
         grapple_target = null
         grapple_time_remaining = 0.0
         velocity = Vector2.ZERO
         if state == CombatState.GRAPPLE:
             _set_state(CombatState.IDLE)
-        if not reason.is_empty():
+        if grapple_was_active and not reason.is_empty():
             _log("MOVEMENT", "Grapple ended: %s" % reason)
         return
     grapple_target = null
@@ -821,7 +822,7 @@ func _cancel_grapple(reason: String = "") -> void:
     velocity = Vector2.ZERO
     if state == CombatState.GRAPPLE:
         _set_state(CombatState.IDLE)
-    if not reason.is_empty():
+    if grapple_was_active and not reason.is_empty():
         _log("MOVEMENT", "Grapple ended: %s" % reason)
 
 func _toggle_resonance_sight() -> void:
