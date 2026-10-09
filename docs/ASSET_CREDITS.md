@@ -19,3 +19,16 @@
 ## External candidates not yet integrated / 尚未整合的外部候选
 
 External asset packs listed in `docs/ASSET_SHORTLIST.md` remain candidates until their files are downloaded, reviewed, and integrated. A source appearing in the shortlist does not mean its art is part of the game.
+
+
+## Original Ashen Road scenic layers / 灰烬之路原创场景分层
+
+These SVG assets were created specifically for Nereis-Hero and contain no third-party art:
+- `assets/backgrounds/ashen_road_painterly.svg` — base illustration / 底层场景插画
+- `assets/backgrounds/ashen_road_far_mist.svg` — distant mist and sparse atmospheric flecks / 远景雾气与稀疏氛围颗粒
+- `assets/backgrounds/ashen_road_midground.svg` — broken monastery walls and ruined spires / 破败修道院墙体与尖塔
+- `assets/backgrounds/ashen_road_foreground.svg` — thorn framing, ruined fence, gravestones, and sparse embers / 荆棘框景、残破围栏、墓碑与少量余烬
+
+License / 授权: original project-authored assets, no external asset license required.  
+Integration / 接入位置: `scripts/core/world.gd`, drawn at different camera-relative scroll factors.  
+Status / 状态: source files committed; Godot runtime visual acceptance still pending / 源文件已提交，仍待 Godot 实机视觉验收。
