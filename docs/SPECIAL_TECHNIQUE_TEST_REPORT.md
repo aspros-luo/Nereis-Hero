@@ -79,3 +79,15 @@ These are prototype values and must be adjusted after runtime playtesting.
 - [x] Cultist: ragged layered robe, hooded ritual mask, red visor, chest seal and telegraph arc.
 - [x] Ashen Knight: heavy layered plate armor, helmet visor, greatsword, and a phase-two unnatural crown.
 - [ ] Runtime review: verify both enemies remain readable at gameplay scale, especially health labels and wind-up telegraphs.
+
+
+## 2026-10-09 — Original art integration / 原创美术接入
+
+- [x] Added original scalable SVG sprites for Hero long sword / short blade, Mite, Cultist and both Ashen Knight phases.
+- [x] Added authored SVG VFX for Judgment Slash, all three Crescent Combo stages, Eldritch Echo and hit sparks.
+- [x] Wired textures into the existing render methods without intentionally changing collision, hitboxes, damage, AI, movement or technique timing.
+- [x] Added bilingual art pipeline and provenance/license ledger.
+- [x] Source-level consistency checks: preload paths, draw function uniqueness, key combat methods and effect cleanup checked.
+- [ ] Godot 4.6 runtime review: SVG import, texture loading, facing flip, sprite anchors, labels, combat readability and scene transitions.
+
+**Runtime status: NOT RUN.** These assets are committed to the feature branch, but the current maintainer environment has no Godot executable. Local playtesting is required before calling the art sample accepted.
