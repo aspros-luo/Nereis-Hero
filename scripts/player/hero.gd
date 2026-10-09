@@ -66,6 +66,12 @@ var attack_hit_registered := false
 var combo_step := 0
 var combo_window := 0.0
 var dodge_time := 0.0
+# A short opening at dodge start rewards precise timing without adding another resource.
+# 闪避起始的短窗口奖励精准操作，不额外引入资源条。
+const PERFECT_DODGE_WINDOW := 0.075
+const RIPOSTE_BONUS_MULTIPLIER := 1.35
+var perfect_dodge_window_remaining := 0.0
+var riposte_bonus_active := false
 var invulnerable := false
 var stamina := MAX_STAMINA
 var stamina_regen_delay := 0.0
@@ -242,7 +248,13 @@ func _physics_process(delta: float) -> void:
                     var iaijutsu_profile: Dictionary = hero_system.get_iaijutsu_profile() if hero_system and iaijutsu_active else {}
                     if iaijutsu_active:
                         multiplier = float(iaijutsu_profile.get("damage_multiplier", IAIJUTSU_DAMAGE_MULTIPLIER))
-                    var damage := int(round(base_damage * multiplier))
+                    var damage_multiplier := multiplier
+                    if riposte_bonus_active:
+                        damage_multiplier *= RIPOSTE_BONUS_MULTIPLIER
+                    var damage := int(round(base_damage * damage_multiplier))
+                    if riposte_bonus_active:
+                        riposte_bonus_active = false
+                        _log("COMBAT", "Perfect-dodge riposte consumed")
                     var reach: float = hero_system.get_weapon_reach(combo_step) if hero_system and not iaijutsu_active else float(iaijutsu_profile.get("reach", IAIJUTSU_REACH))
                     var shape_size: Vector2 = hero_system.get_weapon_hitbox_size(combo_step) if hero_system and not iaijutsu_active else iaijutsu_profile.get("hitbox_size", Vector2(152, 58))
                     attack_hitbox.position.x = facing * reach
@@ -258,6 +270,9 @@ func _physics_process(delta: float) -> void:
             active_action_kind = "none"
             action_elapsed = 0.0
             technique_hit_index = 0
+
+    if perfect_dodge_window_remaining > 0.0:
+        perfect_dodge_window_remaining = maxf(0.0, perfect_dodge_window_remaining - delta)
 
     if dodge_time > 0.0:
         dodge_time = max(0.0, dodge_time - delta)
@@ -402,7 +417,12 @@ func _perform_weapon_technique() -> void:
     _log("TECHNIQUE", "Started %s; stamina=%.0f" % [technique_id, stamina_cost])
 
 func _release_judgment_slash() -> void:
-    var damage := int(round(float(WorldState.hero_attack_damage) * JUDGMENT_DAMAGE_MULTIPLIER))
+    var multiplier := JUDGMENT_DAMAGE_MULTIPLIER
+    if riposte_bonus_active:
+        multiplier *= RIPOSTE_BONUS_MULTIPLIER
+        riposte_bonus_active = false
+        _log("COMBAT", "Perfect-dodge riposte consumed by Judgment Slash")
+    var damage := int(round(float(WorldState.hero_attack_damage) * multiplier))
     attack_hitbox.position.x = facing * JUDGMENT_REACH
     attack_hitbox.set_shape_size(JUDGMENT_HITBOX_SIZE)
     attack_hitbox.activate(damage, JUDGMENT_HIT_DURATION)
@@ -417,7 +437,12 @@ func _update_crescent_combo() -> void:
 func _release_crescent_hit(stage_index: int) -> void:
     var stage := clampi(stage_index, 0, 2)
     combo_step = stage + 1
-    var damage := int(round(float(WorldState.hero_attack_damage) * CRESCENT_DAMAGE_MULTIPLIER))
+    var multiplier := CRESCENT_DAMAGE_MULTIPLIER
+    if riposte_bonus_active:
+        multiplier *= RIPOSTE_BONUS_MULTIPLIER
+        riposte_bonus_active = false
+        _log("COMBAT", "Perfect-dodge riposte consumed by Crescent Combo")
+    var damage := int(round(float(WorldState.hero_attack_damage) * multiplier))
     attack_hitbox.position.x = facing * float(CRESCENT_REACH[stage])
     attack_hitbox.set_shape_size(Vector2(float(CRESCENT_HITBOX_WIDTHS[stage]), 36.0))
     attack_hitbox.activate(damage, CRESCENT_HIT_DURATION)
@@ -538,6 +563,7 @@ func _start_dodge() -> void:
     stamina -= DODGE_STAMINA_COST
     stamina_regen_delay = STAMINA_REGEN_DELAY
     dodge_time = DODGE_DURATION
+    perfect_dodge_window_remaining = PERFECT_DODGE_WINDOW
     invulnerable = true
     _set_state(CombatState.DODGE)
     dodge_started.emit()
@@ -608,8 +634,17 @@ func _update_camera_shake(delta: float) -> void:
         camera_shake_strength = 0.0
 
 func receive_damage(amount: int, source: Node = null) -> void:
-    if invulnerable or state == CombatState.DEAD:
-        _log("COMBAT", "Hero damage ignored (invulnerable=%s)" % invulnerable)
+    if state == CombatState.DEAD:
+        return
+    if invulnerable:
+        # Only a hit avoided during the opening dodge window counts as a perfect dodge.
+        # 只有闪避起始窗口内成功避开攻击，才算精准闪避。
+        if dodge_time > 0.0 and perfect_dodge_window_remaining > 0.0:
+            riposte_bonus_active = true
+            perfect_dodge_window_remaining = 0.0
+            _log("COMBAT", "Perfect dodge! Next hit bonus armed")
+        else:
+            _log("COMBAT", "Hero damage ignored (invulnerable=true)")
         return
     health = max(0, health - amount)
     _spawn_hit_spark()
@@ -617,6 +652,8 @@ func receive_damage(amount: int, source: Node = null) -> void:
     _shake_camera(9.0, 0.12)
     # A confirmed hit interrupts the Hero's current action; never let a stale hitbox resolve after hitstun.
     _cancel_attack_action()
+    perfect_dodge_window_remaining = 0.0
+    riposte_bonus_active = false
     attack_requested = false
     technique_requested = false
     weapon_technique_requested = false
@@ -692,6 +729,8 @@ func restore_full() -> void:
     combo_step = 0
     combo_window = 0.0
     _cancel_attack_action()
+    perfect_dodge_window_remaining = 0.0
+    riposte_bonus_active = false
     attack_requested = false
     technique_requested = false
     weapon_technique_requested = false
