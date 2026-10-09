@@ -12,6 +12,10 @@ Branch: `feature/protagonist-system`
 
 ## Static checks performed
 
+- [x] Judgment Slash and Crescent Combo use dedicated weapon-technique visual effects rather than the generic basic-attack arc.
+- [x] Crescent Combo stages have different silhouettes while retaining the same weapon identity.
+- [x] Slash effects fade using remaining lifetime, avoiding premature disappearance during the first half of the animation.
+
 - [x] F input is routed to the weapon-bound technique.
 - [x] R input is routed to Eldritch Echo.
 - [x] Long Sword maps to Judgment Slash; Short Blade maps to Crescent Combo.
