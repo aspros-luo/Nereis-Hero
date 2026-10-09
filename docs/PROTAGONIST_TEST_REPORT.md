@@ -44,12 +44,14 @@ This is intentionally a story/level design gate, not permission to invent a new 
 
 - [x] Save data now supports ability unlock records with source type and source ID.
 - [x] Save data now supports idempotent achievement flags and a material inventory with safe spend checks.
-- [x] Basic iaijutsu has a distinct combat profile with no HP cost and no abnormal-load increase; it requires an explicit story unlock record.
-- [x] Basic iaijutsu visual treatment is neutral and visually distinct from altered forms.
-- [ ] Connect basic iaijutsu to a director-approved story/level event; it is intentionally not granted automatically.
-- [ ] Implement and runtime-test Witch Time, grapple and wall-climb as actual mechanics; current IDs are progression placeholders only.
-- [ ] Add achievement/material reward call sites only after the associated challenge, item, and level route are defined.
-- [ ] Verify old save migration, save/load persistence and new-game reset for ability records, achievements and materials.
+- [x] Basic iaijutsu has a distinct combat profile with no HP cost and no abnormal-load increase.
+- [x] The prologue's final Warden encounter grants basic iaijutsu as the first story reward; legacy completed-prologue saves are migrated.
+- [x] Basic iaijutsu appears in the character/technique details in all four supported languages.
+- [x] Added `double_jump` and `quick_dash` to the persistent ability registry alongside Witch Time, grapple and wall climb.
+- [x] Blood Iaijutsu now requires the basic form plus the planned sewer-aberrant achievement and aberrant-gland material, preventing an early mutation from hidden values alone.
+- [ ] Implement the Royal City Sewer encounter, achievement/material reward calls and the associated narrative/art clues; Blood Iaijutsu is intentionally unavailable until that content exists.
+- [ ] Implement and runtime-test Witch Time, grapple, wall-climb, double jump and quick dash as actual mechanics; current movement IDs are progression records/placeholders only.
+- [ ] Verify old-save migration, save/load persistence and new-game reset for ability records, achievements and materials.
 
 ## 尚未验证 / Not yet verified
 
@@ -96,3 +98,16 @@ This is intentionally a story/level design gate, not permission to invent a new 
 - [ ] With Black Horizon learned, open character details and verify the name is displayed without exposing hidden values.
 
 Source-level checks only; Godot runtime regression remains pending.
+
+
+## Story reward and mutation gate / 剧情奖励与异变门槛
+
+- [x] Defeating all three prologue Wardens unlocks `iaijutsu_basic` with source `story:prologue_warden_clear`.
+- [x] The narrative reward frames it as recovered knightly muscle memory, not an occult power.
+- [x] Completed-prologue legacy saves receive a migration record for the basic move.
+- [x] Blood Iaijutsu's gate now checks basic iaijutsu, hidden resonance/exposure, `sewer_aberrant_defeated`, and at least one `aberrant_gland`.
+- [ ] Verify the unlock appears exactly once, L is enabled afterward, and death/re-entry cannot duplicate or remove the unlock.
+- [ ] Add and verify the future sewer quest's achievement/material award calls when that level is implemented.
+- [ ] The subtle tentacle-like icon evolution is a documented art rule only; a dedicated skill icon system does not yet exist.
+
+Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
