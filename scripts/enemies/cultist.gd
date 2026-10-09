@@ -23,6 +23,7 @@ signal defeated
 signal attack_telegraphed
 
 func _ready() -> void:
+    add_to_group("hostile_actors")
     _setup_combat_components()
     _log("BOOT", "Cultist initialized")
     queue_redraw()
