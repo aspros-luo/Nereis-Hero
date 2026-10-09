@@ -166,14 +166,15 @@ func _physics_process(delta: float) -> void:
         if attack_windup <= 0.0 and not attack_hit_registered:
             var base_damage := float(WorldState.hero_attack_damage)
             var multiplier: float = hero_system.get_combo_damage_multiplier(combo_step) if hero_system else 1.0
+            var iaijutsu_profile: Dictionary = hero_system.get_iaijutsu_profile() if hero_system and iaijutsu_active else {}
             if iaijutsu_active:
-                multiplier = IAIJUTSU_DAMAGE_MULTIPLIER
+                multiplier = float(iaijutsu_profile.get("damage_multiplier", IAIJUTSU_DAMAGE_MULTIPLIER))
             var damage := int(round(base_damage * multiplier))
-            var reach: float = hero_system.get_weapon_reach(combo_step) if hero_system and not iaijutsu_active else IAIJUTSU_REACH
-            var shape_size: Vector2 = hero_system.get_weapon_hitbox_size(combo_step) if hero_system and not iaijutsu_active else Vector2(152, 58)
+            var reach: float = hero_system.get_weapon_reach(combo_step) if hero_system and not iaijutsu_active else float(iaijutsu_profile.get("reach", IAIJUTSU_REACH))
+            var shape_size: Vector2 = hero_system.get_weapon_hitbox_size(combo_step) if hero_system and not iaijutsu_active else iaijutsu_profile.get("hitbox_size", Vector2(152, 58))
             attack_hitbox.position.x = facing * reach
             attack_hitbox.set_shape_size(shape_size)
-            var hit_duration: float = hero_system.get_hit_window_duration(combo_step) if hero_system and not iaijutsu_active else 0.16
+            var hit_duration: float = hero_system.get_hit_window_duration(combo_step) if hero_system and not iaijutsu_active else float(iaijutsu_profile.get("hit_duration", 0.16))
             attack_hitbox.activate(damage, hit_duration)
             _spawn_slash_arc()
             attack_hit_registered = true
@@ -286,21 +287,27 @@ func _perform_attack() -> void:
 func _perform_iaijutsu() -> void:
     if not hero_system or not hero_system.can_use_blood_iaijutsu():
         return
-    if stamina < IAIJUTSU_STAMINA_COST or health <= IAIJUTSU_HEALTH_COST:
+    var profile: Dictionary = hero_system.get_iaijutsu_profile()
+    if profile.is_empty():
         return
 
-    stamina -= IAIJUTSU_STAMINA_COST
-    health -= IAIJUTSU_HEALTH_COST
+    var stamina_cost := float(profile.get("stamina_cost", IAIJUTSU_STAMINA_COST))
+    var health_cost := int(profile.get("health_cost", IAIJUTSU_HEALTH_COST))
+    if stamina < stamina_cost or health <= health_cost:
+        return
+
+    stamina -= stamina_cost
+    health -= health_cost
     stamina_regen_delay = STAMINA_REGEN_DELAY
-    hero_system.add_abnormal_load(10.0)
+    hero_system.add_abnormal_load(float(profile.get("abnormal_load", 10.0)))
     combo_step = 3
     combo_window = 0.0
-    attack_time = 0.42
-    attack_windup = 0.11
+    attack_time = float(profile.get("attack_time", 0.42))
+    attack_windup = float(profile.get("windup", 0.11))
     attack_hit_registered = false
     iaijutsu_active = true
     _set_state(CombatState.ATTACK)
-    _log("COMBAT", "Blood iaijutsu used; hidden abnormal load increased")
+    _log("COMBAT", "%s used; hidden abnormal load increased" % str(profile.get("variant", "blood")))
 
 func _start_dodge() -> void:
     if stamina < DODGE_STAMINA_COST:
@@ -330,7 +337,8 @@ func _spawn_slash_arc() -> void:
     var effect: Node2D = SLASH_ARC_SCRIPT.new()
     effect.global_position = global_position
     get_parent().add_child(effect)
-    effect.call("setup", facing, combo_step, hero_system != null and hero_system.is_short_blade(), iaijutsu_active)
+    var variant := hero_system.resolve_iaijutsu_variant() if hero_system and iaijutsu_active else ""
+    effect.call("setup", facing, combo_step, hero_system != null and hero_system.is_short_blade(), iaijutsu_active, variant)
 
 func _spawn_hit_spark() -> void:
     var effect := Node2D.new()
@@ -506,7 +514,9 @@ func _draw() -> void:
         draw_arc(Vector2(facing * 28, -24), 70.0, 0.0, TAU, 24, Color("#efe1c8"), 6.0)
     elif attack_time > 0.0 and attack_windup <= 0.0:
         if iaijutsu_active:
-            draw_arc(Vector2(facing * 30, -24), 92.0, -0.72 if facing > 0 else 2.42, 0.72 if facing > 0 else 3.86, 24, Color("#c94a58"), 9.0)
+            var technique_color: Color = Color("#17151f") if hero_system and hero_system.resolve_iaijutsu_variant() == "black_horizon" else Color("#7951a1") if hero_system and hero_system.resolve_iaijutsu_variant() == "abyssal" else Color("#c94a58")
+            var technique_radius: float = 142.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "black_horizon" else 116.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "abyssal" else 92.0
+            draw_arc(Vector2(facing * 30, -24), technique_radius, -0.72 if facing > 0 else 2.42, 0.72 if facing > 0 else 3.86, 24, technique_color, 9.0)
         elif hero_system and hero_system.is_short_blade():
             var short_radius := 35.0 + combo_step * 2.5
             draw_arc(Vector2(facing * 16, -24), short_radius, -0.85 if facing > 0 else 0.85, 0.85 if facing > 0 else 5.43, 16, Color("#d9d0bf"), 3.0)
