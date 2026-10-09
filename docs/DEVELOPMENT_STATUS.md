@@ -1,15 +1,15 @@
 # Nereis Hero — Development Status
 
-Date: 2026-10-08
+Date: 2026-10-09
 
 ## Current direction
 
-The current protagonist combat pass adds three prototype special techniques to the existing combat architecture:
+The current pass follows a mechanics-first workflow: implement and Debug-test every protagonist capability before assigning abilities to story beats or maps. Current branch: `feature/protagonist-system`. Godot runtime acceptance remains pending.
 - Long Sword: Judgment Slash (weapon-bound heavy hit)
 - Short Blade: Crescent Combo (three independently timed hit windows)
 - Eldritch ability: Eldritch Echo (stamina cost, cooldown, short enemy stagger with boss resistance)
 
-Debug controls on this protagonist branch: F4 toggles the Hero-local overlay, F5 toggles a session-only special-technique / Quick Dash test override, and F6 restores HP/stamina and Echo/Dash cooldowns. The former Ctrl combinations are no longer required. Village Hub test theaters formerly on F4/F5/F6 now use F10/F11/F12. A visual pass now gives Judgment Slash a heavier steel/gold arc and each Crescent Combo stage a distinct silhouette; slash effects fade over their full lifetime. F/R inputs are ignored while another locked combat action is active, preventing delayed accidental technique casts. Static structural checks passed; runtime Godot testing is still required before marking the techniques as accepted.
+Debug controls on this protagonist branch: F3 opens the world-state panel, F4 toggles the Hero-local overlay, F5 toggles all protagonist ability/technique overrides for this session and creates temporary test fixtures, and F6 restores HP/stamina and clears temporary action/effect states. The former Ctrl combinations are no longer required. Village Hub test theaters formerly on F4/F5/F6 now use F10/F11/F12. A visual pass now gives Judgment Slash a heavier steel/gold arc and each Crescent Combo stage a distinct silhouette; slash effects fade over their full lifetime. F/R inputs are ignored while another locked combat action is active, preventing delayed accidental technique casts. Static structural checks passed; runtime Godot testing is still required before marking the techniques as accepted.
 
 
 The project is now in the first **narrative production pass**, not merely a combat prototype.
@@ -387,12 +387,12 @@ The design document was committed to the feature branch. This was a documentatio
 - 未触发 GitHub Actions 或任何工作流。
 
 
-## 2026-10-09 — Quick Dash + no-Ctrl acceptance controls
+## 2026-10-09 — Debug-first protagonist ability implementation
 
-- Added a standalone Quick Dash prototype without introducing story/level content: X input, distinct combat state, 24 stamina cost, 0.16-second duration, 1.10-second cooldown, no invulnerability frames.
+- Implemented and connected protagonist movement/sense abilities without introducing story/level content: Quick Dash (X), Grapple (G), marked-wall climb/jump (W/Space), precision-dodge Witch Time, and Resonance Sight (V).
 - Quick Dash checks the persistent `quick_dash` unlock record; F5 can enable it in the current run only.
 - Damage interrupts dash. Input-lock, menu, death/respawn, rest and F6 clear active dash state/request to prevent stale movement.
-- Debug controls: F4 Hero-local overlay, F5 session-only technique/mobility override, F6 HP/stamina/cooldown reset. No Ctrl modifier is required.
+- Debug controls: F3 world-state panel, F4 Hero-local overlay, F5 session-only all-ability override, F6 HP/stamina/action reset; PageUp/PageDown selects iaijutsu profile while F5 is on. No Ctrl modifier is required.
 - Village Hub test theaters formerly on F4/F5/F6 now use F10/F11/F12 and respect input locks.
-- Added the bilingual protagonist acceptance procedure and refreshed ability/testing/audit reports.
+- Added reusable grapple-anchor, resonance-hidden-target, and marked-wall components; temporary Debug fixtures are session-only. Updated bilingual protagonist acceptance, ability design, testing and audit reports.
 - Static checks are source-level only. Godot 4.6.1 parser, runtime, collision and actual tuning values remain pending local validation. No GitHub Actions were triggered.
