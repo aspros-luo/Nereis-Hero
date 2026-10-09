@@ -105,6 +105,16 @@ Do not mix its character sprites into the current hero/enemy lineup without a un
 评估：与当前手绘/漫画式方向并非主要风格匹配。仅考虑用于原型、远景小细节，或在项目整体转向像素风时使用。
 未经统一风格处理，不将其角色直接混入当前主角和敌人阵容。
 
+## Current implementation status / 当前接入状态
+
+- Added an original painterly-style SVG backdrop at `assets/backgrounds/ashen_road_painterly.svg` and wired it into `scripts/core/world.gd` behind the existing ground, actors, collision and level logic.
+- Added `docs/ASSET_CREDITS.md` to track its origin and future external assets.
+- This is repository integration only; the project has not yet been launched in Godot during this step. Confirm SVG import, visual scale, foreground contrast and camera behavior in Godot 4.6.x before calling it runtime-accepted.
+
+- 已新增原创绘制感 SVG 背景 `assets/backgrounds/ashen_road_painterly.svg`，并接入 `scripts/core/world.gd`；现有地面、角色、碰撞和关卡逻辑保持不变。
+- 已新增 `docs/ASSET_CREDITS.md` 记录原创来源及后续外部素材。
+- 当前确认的是仓库代码接入，本轮尚未实际启动 Godot。需在 Godot 4.6.x 中确认 SVG 导入、画面比例、前景对比度和摄像机表现后，才能算运行验收通过。
+
 ## Integration order / 接入顺序
 
 1. Inspect the painterly CC0 landscape first; test it only as a distant background layer and color-grade it toward the charcoal/ash/rust-red palette.
