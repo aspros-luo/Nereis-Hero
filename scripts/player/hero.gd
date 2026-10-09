@@ -46,6 +46,10 @@ var stamina_regen_delay := 0.0
 var hurt_time := 0.0
 var coyote_time := 0.0
 var jump_buffer := 0.0
+# Counts only extra mid-air jumps; the ordinary ground/coyote jump is always available.
+# 只记录额外空中跳跃次数；地面跳与土狼时间跳始终可用。
+var air_jumps_used := 0
+const MAX_EXTRA_AIR_JUMPS := 1
 var camera_shake_time := 0.0
 var camera_shake_strength := 0.0
 var hit_confirm_time := 0.0
@@ -119,6 +123,7 @@ func _physics_process(delta: float) -> void:
 
     if is_on_floor():
         coyote_time = COYOTE_TIME
+        air_jumps_used = 0
     else:
         coyote_time = max(0.0, coyote_time - delta)
 
@@ -212,8 +217,13 @@ func _physics_process(delta: float) -> void:
         var friction := 1250.0 if attack_time > 0.0 else 2200.0
         velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 
-    if jump_buffer > 0.0 and coyote_time > 0.0 and attack_time <= 0.0 and dodge_time <= 0.0:
+    var can_ground_or_coyote_jump := coyote_time > 0.0
+    var can_unlocked_double_jump := WorldState.is_ability_unlocked("double_jump") and air_jumps_used < MAX_EXTRA_AIR_JUMPS and not can_ground_or_coyote_jump
+    if jump_buffer > 0.0 and (can_ground_or_coyote_jump or can_unlocked_double_jump) and attack_time <= 0.0 and dodge_time <= 0.0:
         jump_buffer = 0.0
+        if can_unlocked_double_jump:
+            air_jumps_used += 1
+            _log("MOVEMENT", "Double jump used; extra_jumps=%d/%d" % [air_jumps_used, MAX_EXTRA_AIR_JUMPS])
         coyote_time = 0.0
         velocity.y = JUMP_VELOCITY
         _set_state(CombatState.JUMP)
@@ -418,6 +428,9 @@ func receive_damage(amount: int, source: Node = null) -> void:
         health = 100
         global_position = WorldState.checkpoint_position
         velocity = Vector2.ZERO
+        air_jumps_used = 0
+        coyote_time = 0.0
+        jump_buffer = 0.0
         invulnerable = true
         stamina = MAX_STAMINA
         hurt_time = 0.0
@@ -444,6 +457,9 @@ func restore_full() -> void:
     stamina_regen_delay = 0.0
     hurt_time = 0.0
     velocity = Vector2.ZERO
+    air_jumps_used = 0
+    coyote_time = 0.0
+    jump_buffer = 0.0
     invulnerable = false
     attack_time = 0.0
     attack_windup = 0.0
