@@ -386,40 +386,124 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    var bob: float = sin(animation_time * 7.0) * 1.5 if state == CombatState.IDLE else 0.0
-    var step: float = sin(animation_time * 11.0) * 2.0 if state == CombatState.MOVE else 0.0
-    var body := Color("#d0bea4")
-    var armor := Color("#3d3740")
+    var idle_bob: float = sin(animation_time * 7.0) * 1.5 if state == CombatState.IDLE else 0.0
+    var run_step: float = sin(animation_time * 11.0) * 2.5 if state == CombatState.MOVE else 0.0
+    var dodging := state == CombatState.DODGE
+    var crouch: float = 10.0 if dodging else 0.0
+    var lean: float = 8.0 if attack_time > 0.0 and attack_windup <= 0.0 else 0.0
+    var bob := idle_bob - crouch
+    var armor := Color("#3d3740") if hurt_time <= 0.0 else Color("#8d414b")
+    var armor_light := Color("#70616a") if hurt_time <= 0.0 else Color("#d35a62")
+    var armor_shadow := Color("#242129")
     var cloak := Color("#252129")
     var metal := Color("#b7a48c")
+    var bone := Color("#d6c7b2")
 
-    draw_circle(Vector2(0, -52 + bob), 18, body)
-    draw_circle(Vector2(facing * 5.0, -54 + bob), 6, Color("#19171c"))
-    draw_rect(Rect2(-18, -35 + bob, 36, 35), armor)
+    # Grounding shadow and the cloak silhouette make the pose readable at a glance.
+    draw_ellipse(Vector2(0, 2), 30.0, 7.0, Color(0.04, 0.03, 0.05, 0.42), true)
     draw_colored_polygon(PackedVector2Array([
-        Vector2(-19, -32 + bob), Vector2(19, -32 + bob),
-        Vector2(27, 10 + step), Vector2(-30, 10 - step)
+        Vector2(-15, -39 + bob), Vector2(13, -39 + bob),
+        Vector2(23 - lean, -5 + run_step), Vector2(36 - lean, 13 + run_step),
+        Vector2(3, 8 + run_step), Vector2(-29, 15 - run_step),
+        Vector2(-23, -9 - run_step)
+    ]), armor_shadow)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-15, -37 + bob), Vector2(11, -38 + bob),
+        Vector2(20 - lean, -6 + run_step), Vector2(27 - lean, 9 + run_step),
+        Vector2(2, 5 + run_step), Vector2(-23, 11 - run_step),
+        Vector2(-19, -10 - run_step)
     ]), cloak)
-    draw_line(Vector2(-12, -3 + bob), Vector2(-22, 18 + step), armor, 7.0)
-    draw_line(Vector2(12, -3 + bob), Vector2(22, 18 - step), armor, 7.0)
-    draw_line(Vector2(0, -8 + bob), Vector2(facing * 58, -22 + bob), metal, 7.0)
+    draw_line(Vector2(-18, -13 + bob), Vector2(-27, 11 + run_step), armor, 8.0)
+    draw_line(Vector2(-27, 11 + run_step), Vector2(-34, 13 + run_step), armor_shadow, 5.0)
+    draw_line(Vector2(12, -12 + bob), Vector2(19 - lean, 10 - run_step), armor, 8.0)
+    draw_line(Vector2(19 - lean, 10 - run_step), Vector2(27 - lean, 12 - run_step), armor_shadow, 5.0)
+    draw_line(Vector2(-16, -8 + bob), Vector2(-5, -8 + bob), metal, 2.0)
+
+    # Breastplate, layered pauldrons, belt and engraved edge highlights.
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-16, -39 + bob), Vector2(14, -39 + bob),
+        Vector2(18 - lean, -12 + bob), Vector2(8 - lean, -4 + bob),
+        Vector2(-10, -4 + bob), Vector2(-20, -14 + bob)
+    ]), armor)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-11, -34 + bob), Vector2(1, -37 + bob),
+        Vector2(10 - lean, -14 + bob), Vector2(0, -11 + bob),
+        Vector2(-13, -15 + bob)
+    ]), Color("#514852"))
+    draw_line(Vector2(-8, -32 + bob), Vector2(-2, -16 + bob), armor_light, 2.0)
+    draw_line(Vector2(3, -31 + bob), Vector2(8 - lean, -17 + bob), armor_shadow, 2.0)
+    draw_line(Vector2(-14, -12 + bob), Vector2(13 - lean, -12 + bob), metal, 3.0)
+    draw_rect(Rect2(-3 - lean * 0.3, -15 + bob, 7, 6), Color("#241d25"))
+    draw_rect(Rect2(-1 - lean * 0.3, -14 + bob, 3, 4), metal)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-23, -36 + bob), Vector2(-14, -43 + bob),
+        Vector2(-5, -37 + bob), Vector2(-10, -28 + bob),
+        Vector2(-21, -29 + bob)
+    ]), armor_light)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(9 - lean, -38 + bob), Vector2(17 - lean, -42 + bob),
+        Vector2(25 - lean, -35 + bob), Vector2(21 - lean, -27 + bob),
+        Vector2(10 - lean, -29 + bob)
+    ]), armor_light)
+    draw_line(Vector2(-20, -35 + bob), Vector2(-12, -37 + bob), bone, 1.5)
+    draw_line(Vector2(13 - lean, -36 + bob), Vector2(20 - lean, -34 + bob), bone, 1.5)
+
+    # Closed helm: no visible face, only a narrow cold slit.
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-15, -57 + bob), Vector2(-12, -72 + bob),
+        Vector2(-3, -78 + bob), Vector2(10, -73 + bob),
+        Vector2(16, -62 + bob), Vector2(12, -48 + bob),
+        Vector2(-10, -48 + bob)
+    ]), armor_shadow)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-12, -59 + bob), Vector2(-9, -70 + bob),
+        Vector2(-2, -74 + bob), Vector2(8, -70 + bob),
+        Vector2(12, -61 + bob), Vector2(8, -51 + bob),
+        Vector2(-8, -51 + bob)
+    ]), armor)
+    draw_line(Vector2(-10, -63 + bob), Vector2(10, -63 + bob), metal, 2.0)
+    draw_line(Vector2(-8, -60 + bob), Vector2(8, -60 + bob), Color("#17151b"), 2.5)
+    draw_line(Vector2(-2, -72 + bob), Vector2(1, -65 + bob), armor_light, 1.5)
+    draw_line(Vector2(-12, -54 + bob), Vector2(10, -51 + bob), armor_light, 1.5)
+
+    # The blade changes pose between wind-up and active frames, helping attacks read.
+    var hand := Vector2(facing * (12.0 - lean * 0.25), -28.0 + bob)
+    var blade_tip: Vector2
+    if attack_time > 0.0 and attack_windup > 0.0:
+        blade_tip = Vector2(-facing * 36.0, -56.0 + bob)
+    elif attack_time > 0.0:
+        blade_tip = Vector2(facing * (72.0 + combo_step * 4.0), -48.0 - combo_step * 3.0 + bob)
+    elif dodging:
+        blade_tip = Vector2(facing * 42.0, -18.0 + bob)
+    else:
+        blade_tip = Vector2(facing * 56.0, -46.0 + bob)
+    draw_line(hand, blade_tip, armor_shadow, 8.0)
+    draw_line(hand, blade_tip, metal, 4.0)
+    draw_line(hand + Vector2(0, -1), blade_tip + Vector2(-facing * 4.0, -2.0), bone, 1.3)
+    draw_line(hand + Vector2(-facing * 5.0, 5.0), hand + Vector2(facing * 5.0, -5.0), armor_light, 3.0)
+    draw_circle(hand, 4.0, armor_shadow)
+    draw_circle(hand, 2.0, metal)
 
     if WorldState.hidden_resistance_awakened:
         var anchor_color := Color("#aa8d72") if WorldState.mite_control_stage < 2 else Color("#8d6c98")
         draw_circle(Vector2(-13, -1 + bob), 4.0, Color(0.75, 0.66, 0.55, 0.32))
         draw_arc(Vector2(-13, -1 + bob), 7.0, 0.0, TAU, 16, anchor_color, 2.0)
-    draw_line(Vector2(facing * 28, -23 + bob), Vector2(facing * 47, -30 + bob), Color("#e0d6c3"), 3.0)
+
     if hit_confirm_time > 0.0:
-        draw_arc(Vector2(facing * 28, -24), 70.0, 0.0, TAU, 24, Color("#efe1c8"), 6.0)
+        draw_arc(Vector2(facing * 30, -28), 70.0, 0.0, TAU, 24, Color("#efe1c8"), 5.0)
     elif attack_time > 0.0 and attack_windup <= 0.0:
         var arc_start := -1.20 if facing > 0 else 1.20
         var arc_end := 1.20 if facing > 0 else 5.08
         var arc_radius := 64.0 + combo_step * 3.0
-        draw_arc(Vector2(facing * 26, -24), arc_radius, arc_start, arc_end, 20, Color("#d9d0bf"), 5.0)
+        draw_arc(Vector2(facing * 26, -27), arc_radius, arc_start, arc_end, 20, Color(0.88, 0.80, 0.68, 0.92), 5.0)
+        draw_arc(Vector2(facing * 28, -27), arc_radius + 8.0, arc_start + 0.08, arc_end - 0.08, 16, Color(0.42, 0.35, 0.38, 0.62), 2.0)
+        if combo_step == 3:
+            draw_line(Vector2(facing * 18, -24), Vector2(facing * 94, -44), Color("#eee0c8"), 2.0)
     elif attack_time > 0.0:
-        draw_arc(Vector2(facing * 25, -24), 42.0, -0.45 if facing > 0 else 3.59, 0.45 if facing > 0 else 4.49, 12, Color("#9e8b72"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(-52, -82), "HERO %d" % health, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
-    draw_rect(Rect2(-32, -96, 64, 5), Color("#27212a"))
-    draw_rect(Rect2(-32, -96, 64.0 * (stamina / MAX_STAMINA), 5), Color("#9e8b72"))
+        draw_arc(Vector2(facing * 24, -28), 42.0, -0.45 if facing > 0 else 3.59, 0.45 if facing > 0 else 4.49, 12, Color("#c3a98d"), 3.0)
+
+    draw_string(ThemeDB.fallback_font, Vector2(-52, -88), "HERO %d" % health, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
+    draw_rect(Rect2(-32, -100, 64, 5), Color("#27212a"))
+    draw_rect(Rect2(-32, -100, 64.0 * (stamina / MAX_STAMINA), 5), Color("#b7a48c"))
     if combo_step > 0 and attack_time > 0.0:
-        draw_string(ThemeDB.fallback_font, Vector2(-8, -108), "%d" % combo_step, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#d6c7b2"))
+        draw_string(ThemeDB.fallback_font, Vector2(-8, -112), "%d" % combo_step, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#e0d6c3"))
