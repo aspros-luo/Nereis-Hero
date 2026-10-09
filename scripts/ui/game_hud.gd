@@ -254,9 +254,8 @@ func _on_witch_time_started(duration: float) -> void:
     witch_time_label.add_theme_color_override("font_color", Color("#e4d0ef", 0.0))
 
 func _on_witch_time_ended() -> void:
-    witch_time_display_time = 0.0
-    witch_time_overlay.visible = false
-    witch_time_label.visible = false
+    witch_time_display_duration = 0.12
+    witch_time_display_time = 0.12
 
 func show_hit_confirm(damage: int) -> void:
     impact_flash_time = 0.07 if damage < 50 else 0.10
