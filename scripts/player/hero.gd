@@ -93,6 +93,9 @@ var action_elapsed := 0.0
 var technique_hit_index := 0
 var eldritch_cooldown_remaining := 0.0
 var debug_ability_override := false
+# Debug overlay is enabled by default on this development branch for acceptance testing.
+# 当前开发分支默认开启调试覆盖层，便于验收；F3 可显示/隐藏。
+var debug_mode_enabled := true
 var dodge_requested := false
 var jump_requested := false
 var hero_system: Node
@@ -105,7 +108,15 @@ func _input(event: InputEvent) -> void:
     if WorldState.input_locked or WorldState.menu_input_locked:
         return
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode == KEY_J:
+        if event.keycode == KEY_F3:
+            debug_mode_enabled = not debug_mode_enabled
+            queue_redraw()
+            _log("DEBUG", "Overlay %s" % ("ON" if debug_mode_enabled else "OFF"))
+        elif event.keycode == KEY_F4:
+            toggle_debug_ability_override()
+        elif event.keycode == KEY_F5:
+            debug_refill_combat_resources()
+        elif event.keycode == KEY_J:
             attack_requested = true
         elif event.keycode == KEY_L:
             technique_requested = true
@@ -149,7 +160,7 @@ func _setup_combat_components() -> void:
 
 func _process(delta: float) -> void:
     animation_time += delta
-    queue_redraw()
+    # Physics updates already request redraws. Avoid issuing a second redraw every rendered frame.
 
 func _physics_process(delta: float) -> void:
     if state == CombatState.DEAD:
@@ -735,9 +746,23 @@ func _draw() -> void:
         var technique_radius: float = 72.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "black_horizon" else 61.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "abyssal" else 54.0 if hero_system and hero_system.resolve_iaijutsu_variant() == "human_iaijutsu" else 48.0
         draw_arc(Vector2(facing * 25.0, -40.0), technique_radius, -0.72 if facing > 0.0 else 2.42, 0.72 if facing > 0.0 else 3.86, 24, technique_color, 5.0)
 
-    # Compact debug readout retained for combat testing.
-    draw_string(ThemeDB.fallback_font, Vector2(-28.0, -112.0), "%d" % health, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#d6c7b2"))
-    draw_rect(Rect2(-25.0, -106.0, 50.0, 3.0), Color("#27212a"))
-    draw_rect(Rect2(-25.0, -106.0, 50.0 * (stamina / MAX_STAMINA), 3.0), Color("#b5a184"))
-    if combo_step > 0 and attack_time > 0.0:
-        draw_string(ThemeDB.fallback_font, Vector2(-4.0, -120.0), "%d" % combo_step, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#e4d2b4"))
+    if debug_mode_enabled:
+        # World-space debug overlay follows the Hero and intentionally exposes hidden values only in debug mode.
+        var debug_font := ThemeDB.fallback_font
+        var debug_color := Color("#f0dfc3")
+        var weapon_name := "短刃" if short_blade else "长剑"
+        var action_name := active_action_kind if active_action_kind != "none" else get_debug_state().to_lower()
+        draw_rect(Rect2(-112.0, -184.0, 224.0, 78.0), Color(0.035, 0.025, 0.04, 0.86), true)
+        draw_string(debug_font, Vector2(-104.0, -166.0), "DEBUG [F3]  F4:技能覆盖  F5:恢复", HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
+        draw_string(debug_font, Vector2(-104.0, -150.0), "HP %d | ST %d | %s" % [health, int(round(stamina)), weapon_name], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 12, debug_color)
+        draw_string(debug_font, Vector2(-104.0, -134.0), "状态 %s | 动作 %s | 连击 %d" % [get_debug_state(), action_name, combo_step], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
+        draw_string(debug_font, Vector2(-104.0, -118.0), "无敌 %s | 技能覆盖 %s | 冷却 %.1f" % [str(invulnerable), str(debug_ability_override), eldritch_cooldown_remaining], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, debug_color)
+        if hero_system != null:
+            draw_string(debug_font, Vector2(-104.0, -102.0), "共鸣 %d 古神 %d 外神 %d 人性 %d" % [hero_system.resonance, hero_system.ancient_exposure, hero_system.outer_exposure, hero_system.humanity], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, Color("#d7a8d9"))
+            draw_string(debug_font, Vector2(-104.0, -86.0), "异常负荷 %.1f | 二段跳 %d/%d" % [hero_system.abnormal_load, air_jumps_used, MAX_EXTRA_AIR_JUMPS], HORIZONTAL_ALIGNMENT_LEFT, 212.0, 10, Color("#d7a8d9"))
+        draw_rect(Rect2(-25.0, -72.0, 50.0, 4.0), Color("#27212a"), true)
+        draw_rect(Rect2(-25.0, -72.0, 50.0 * (float(health) / 100.0), 4.0), Color("#bd5b61"), true)
+        draw_rect(Rect2(-25.0, -65.0, 50.0, 3.0), Color("#27212a"), true)
+        draw_rect(Rect2(-25.0, -65.0, 50.0 * (stamina / MAX_STAMINA), 3.0), Color("#b5a184"), true)
+        if combo_step > 0 and attack_time > 0.0:
+            draw_string(debug_font, Vector2(-4.0, -54.0), "%d" % combo_step, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#e4d2b4"))
