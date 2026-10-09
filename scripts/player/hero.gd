@@ -253,7 +253,7 @@ func _perform_attack() -> void:
     stamina_regen_delay = STAMINA_REGEN_DELAY
 
     if combo_window > 0.0:
-        combo_step = min(3, combo_step + 1)
+        combo_step = mini(hero_system.get_combo_limit() if hero_system else 3, combo_step + 1)
     else:
         combo_step = 1
     combo_window = hero_system.get_combo_reset_time() if hero_system else 0.42
