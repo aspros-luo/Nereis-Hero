@@ -11,6 +11,9 @@ const BOSS_GATE_SCRIPT = preload("res://scripts/world/boss_gate.gd")
 const LEVEL_EXIT_SCRIPT = preload("res://scripts/world/level_exit.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ASHEN_ROAD_BACKDROP = preload("res://assets/backgrounds/ashen_road_painterly.svg")
+const ASHEN_ROAD_FAR_MIST = preload("res://assets/backgrounds/ashen_road_far_mist.svg")
+const ASHEN_ROAD_MIDGROUND = preload("res://assets/backgrounds/ashen_road_midground.svg")
+const ASHEN_ROAD_FOREGROUND = preload("res://assets/backgrounds/ashen_road_foreground.svg")
 
 var hero: CharacterBody2D
 var enemy: CharacterBody2D
@@ -259,8 +262,13 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw_environment_backdrop() -> void:
-    # Original layered painterly backdrop; gameplay collision and actor positions remain unchanged.
+    # Base illustration stays fixed to the level; transparent art layers add depth over it.
     draw_texture_rect(ASHEN_ROAD_BACKDROP, Rect2(0, 0, 2400, 720), false)
+
+func _draw_parallax_layer(texture: Texture2D, scroll_factor: float, left_padding: float) -> void:
+    var camera_x := camera.global_position.x if is_instance_valid(camera) else 0.0
+    var layer_x := camera_x * scroll_factor - left_padding
+    draw_texture_rect(texture, Rect2(layer_x, 0, 3600, 720), false)
 
 func _draw_house(origin: Vector2, width: float, height: float) -> void:
     draw_rect(Rect2(origin.x - width * 0.5, origin.y - height, width, height), Color("#29232b"))
@@ -285,6 +293,8 @@ func _draw_dead_tree(origin: Vector2, height: float) -> void:
 func _draw() -> void:
     draw_rect(Rect2(0, 0, 2400, 720), Color("#111018"))
     _draw_environment_backdrop()
+    _draw_parallax_layer(ASHEN_ROAD_FAR_MIST, 0.12, 0.0)
+    _draw_parallax_layer(ASHEN_ROAD_MIDGROUND, 0.48, 250.0)
     draw_rect(Rect2(0, 520, 2400, 200), Color("#201c22"))
     for x in range(0, 2400, 64):
         draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
@@ -298,5 +308,6 @@ func _draw() -> void:
 
     draw_string(ThemeDB.fallback_font, Vector2(40, 235), NereisLocalization.translate_text("VILLAGE OUTSKIRTS"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
     draw_string(ThemeDB.fallback_font, Vector2(1240, 235), NereisLocalization.translate_text("THE ASHEN ROAD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#4d454d"))
+    _draw_parallax_layer(ASHEN_ROAD_FOREGROUND, 1.08, 420.0)
 
 
