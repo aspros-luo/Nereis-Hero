@@ -26,6 +26,7 @@ signal defeated
 signal attack_telegraphed
 
 func _ready() -> void:
+    add_to_group("hostile_actors")
     _setup_combat_components()
     _log("ENEMY", "Pale Hound initialized; hp=70")
     queue_redraw()
