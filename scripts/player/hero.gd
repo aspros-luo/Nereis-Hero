@@ -5,6 +5,7 @@ const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 const SLASH_ARC_SCRIPT = preload("res://scripts/effects/slash_arc.gd")
 const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
+const WITCH_TIME_AUDIO_SCRIPT = preload("res://scripts/effects/witch_time_audio.gd")
 
 const SPEED := 260.0
 const ATTACK_MOVE_SPEED := 92.0
@@ -246,7 +247,23 @@ func _start_dodge() -> void:
     invulnerable = true
     _set_state(CombatState.DODGE)
     dodge_started.emit()
+    if _is_dodge_in_telegraph_window() and WorldState.trigger_witch_time():
+        _spawn_witch_time_audio()
     _log("HERO", "Dodge started; invulnerable=true")
+
+func _is_dodge_in_telegraph_window() -> bool:
+    for hostile in get_tree().get_nodes_in_group("hostile_actors"):
+        if not is_instance_valid(hostile) or hostile.is_queued_for_deletion():
+            continue
+        if not hostile.has_method("is_attack_telegraphed") or not hostile.is_attack_telegraphed():
+            continue
+        if hostile is Node2D and global_position.distance_to(hostile.global_position) <= 190.0:
+            return true
+    return false
+
+func _spawn_witch_time_audio() -> void:
+    var sound: Node = WITCH_TIME_AUDIO_SCRIPT.new()
+    get_tree().current_scene.add_child(sound)
 
 func _set_state(next_state: CombatState) -> void:
     if state == next_state:
