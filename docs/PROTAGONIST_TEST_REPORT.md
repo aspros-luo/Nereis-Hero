@@ -41,3 +41,12 @@
 - [ ] 实测受击打断攻击、死亡复位、休息点完全恢复不会遗留旧攻击窗口。
 
 > 仍然是静态修改记录，未执行 Godot 运行时测试；不得把未勾选项目视为通过。
+
+
+## Technique discovery feedback / 战技理解反馈
+
+- [x] `HeroSystem` emits a signal when a new technique is learned successfully.
+- [x] HUD listens for the signal and shows a brief narrative cue for the three defined altered techniques.
+- [x] Cue text is localized in all four supported languages and does not expose hidden numerical conditions.
+- [ ] In Godot, trigger ancient-residue awakening and verify the cue appears once when Blood Iaijutsu is first learned.
+- [ ] Verify loading a save with an already learned technique does not replay the discovery cue.
