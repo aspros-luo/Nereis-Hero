@@ -20,6 +20,7 @@ signal phase_changed(phase: int)
 signal attack_telegraphed
 
 func _ready() -> void:
+    add_to_group("combat_enemies")
     _setup_combat_components()
     _log("BOSS", "Ashen Knight initialized; hp=240")
     queue_redraw()
@@ -125,6 +126,20 @@ func receive_damage(amount: int, source: Node = null) -> void:
 
 func take_damage(amount: int) -> void:
     receive_damage(amount, null)
+
+func apply_echo_stagger(duration: float) -> bool:
+    if health <= 0 or is_queued_for_deletion():
+        return false
+    # Bosses resist the full control effect; Echo can interrupt a tell but never lock the boss down.
+    # Boss 对控制效果有抗性：余响可打断起手，但不能长时间压制。
+    var capped_duration := minf(duration, 0.12 if phase_two else 0.15)
+    stun_time = maxf(stun_time, capped_duration)
+    windup = 0.0
+    attack_released = true
+    hit_flash = maxf(hit_flash, 0.10)
+    velocity.x *= 0.35
+    _log("BOSS", "Eldritch Echo caused brief stagger %.2fs (phase=%d)" % [capped_duration, 2 if phase_two else 1])
+    return true
 
 func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
