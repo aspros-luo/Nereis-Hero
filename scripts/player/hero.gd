@@ -270,7 +270,7 @@ func _perform_attack() -> void:
 
     _set_state(CombatState.ATTACK)
     attack_started.emit(combo_step)
-    _log("COMBAT", "Hero attack %d started; windup=%.2f" % [combo_step, ATTACK_WINDUP])
+    _log("COMBAT", "Hero attack %d started; windup=%.2f" % [combo_step, attack_windup])
 
 func _perform_iaijutsu() -> void:
     if not hero_system or not hero_system.can_use_blood_iaijutsu():
@@ -455,12 +455,19 @@ func _draw() -> void:
     if hit_confirm_time > 0.0:
         draw_arc(Vector2(facing * 28, -24), 70.0, 0.0, TAU, 24, Color("#efe1c8"), 6.0)
     elif attack_time > 0.0 and attack_windup <= 0.0:
-        var arc_start := -1.20 if facing > 0 else 1.20
-        var arc_end := 1.20 if facing > 0 else 5.08
-        var arc_radius := 64.0 + combo_step * 3.0
-        draw_arc(Vector2(facing * 26, -24), arc_radius, arc_start, arc_end, 20, Color("#d9d0bf"), 5.0)
+        if iaijutsu_active:
+            draw_arc(Vector2(facing * 30, -24), 92.0, -0.72 if facing > 0 else 2.42, 0.72 if facing > 0 else 3.86, 24, Color("#c94a58"), 9.0)
+        elif hero_system and hero_system.is_short_blade():
+            var short_radius := 35.0 + combo_step * 2.5
+            draw_arc(Vector2(facing * 16, -24), short_radius, -0.85 if facing > 0 else 0.85, 0.85 if facing > 0 else 5.43, 16, Color("#d9d0bf"), 3.0)
+        else:
+            var arc_start := -1.20 if facing > 0 else 1.20
+            var arc_end := 1.20 if facing > 0 else 5.08
+            var arc_radius := 64.0 + combo_step * 3.0
+            draw_arc(Vector2(facing * 26, -24), arc_radius, arc_start, arc_end, 20, Color("#d9d0bf"), 5.0)
     elif attack_time > 0.0:
-        draw_arc(Vector2(facing * 25, -24), 42.0, -0.45 if facing > 0 else 3.59, 0.45 if facing > 0 else 4.49, 12, Color("#9e8b72"), 3.0)
+        var windup_radius := 30.0 if hero_system and hero_system.is_short_blade() else 42.0
+        draw_arc(Vector2(facing * 25, -24), windup_radius, -0.45 if facing > 0 else 3.59, 0.45 if facing > 0 else 4.49, 12, Color("#9e8b72"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(-52, -82), "HERO %d" % health, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
     draw_rect(Rect2(-32, -96, 64, 5), Color("#27212a"))
     draw_rect(Rect2(-32, -96, 64.0 * (stamina / MAX_STAMINA), 5), Color("#9e8b72"))
