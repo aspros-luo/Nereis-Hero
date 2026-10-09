@@ -5,6 +5,7 @@ extends Node2D
 var age := 0.0
 const LIFETIME := 0.42
 const MAX_RADIUS := 190.0
+const ECHO_ART: Texture2D = preload("res://assets/art/vfx/eldritch_echo.svg")
 
 func _process(delta: float) -> void:
     age += delta
@@ -17,6 +18,9 @@ func _draw() -> void:
     var eased := 1.0 - pow(1.0 - progress, 2.0)
     var radius := lerpf(12.0, MAX_RADIUS, eased)
     var alpha := pow(1.0 - progress, 1.35)
+
+    # The authored occult sigil rides inside the expanding procedural distortion.
+    draw_texture_rect(ECHO_ART, Rect2(-radius, -radius, radius * 2.0, radius * 2.0), false, Color(1.0, 1.0, 1.0, alpha * 0.72))
     var outer := Color("#8b659f")
     outer.a = alpha * 0.72
     var pale := Color("#d7c7e9")
