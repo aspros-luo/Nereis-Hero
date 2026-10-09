@@ -40,6 +40,17 @@ The new combat values are initial tuning values only. Static source inspection d
 This is intentionally a story/level design gate, not permission to invent a new relationship beat or hidden progression reward.
 
 
+## Layered progression foundation / 分层成长基础
+
+- [x] Save data now supports ability unlock records with source type and source ID.
+- [x] Save data now supports idempotent achievement flags and a material inventory with safe spend checks.
+- [x] Basic iaijutsu has a distinct combat profile with no HP cost and no abnormal-load increase; it requires an explicit story unlock record.
+- [x] Basic iaijutsu visual treatment is neutral and visually distinct from altered forms.
+- [ ] Connect basic iaijutsu to a director-approved story/level event; it is intentionally not granted automatically.
+- [ ] Implement and runtime-test Witch Time, grapple and wall-climb as actual mechanics; current IDs are progression placeholders only.
+- [ ] Add achievement/material reward call sites only after the associated challenge, item, and level route are defined.
+- [ ] Verify old save migration, save/load persistence and new-game reset for ability records, achievements and materials.
+
 ## 尚未验证 / Not yet verified
 
 - [ ] Godot 4.6.1 脚本解析、场景启动与资源加载。
