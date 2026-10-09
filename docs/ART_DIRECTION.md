@@ -2,13 +2,16 @@
 
 ## Target / 目标
 
-Hand-painted 2D dark fantasy with graphic-novel readability. The game should feel like a tragic illustrated chronicle rather than generic pixel art.
+Hand-painted 2D dark fantasy, moving toward the layered, richly illustrated theatricality associated with Vanillaware (especially Odin Sphere), while retaining our own Cthulhu/Soulslike identity. The target is painted character art, expressive silhouettes, ornate but readable environments, layered scenic depth, and fluid combat animation—not generic pixel art. Treat Vanillaware as an art-direction reference, never as permission to copy or redistribute its copyrighted sprites, backgrounds, characters, or effects.
 
-手绘感 2D 暗黑幻想，兼顾漫画式可读性。整体应像一部悲剧性的绘本，而不是通用像素风游戏。
+手绘感 2D 暗黑幻想，逐步靠近香草社（尤其《奥丁领域》）那种层次丰富、舞台感强的精绘表现，同时保留我们自己的克苏鲁与类魂气质。目标是绘制感角色、鲜明且易读的剪影、精致但不干扰战斗的环境、多层景深和流畅的战斗动画，而不是通用像素风。香草社作品仅作为美术方向参考，不能因此复制或再发布其受版权保护的精灵图、背景、角色或特效。
 
 ## Principles / 原则
 
 - Strong silhouettes and readable combat poses.
+- Painterly linework and textured color transitions; avoid flat geometric placeholders as final art.
+- Stage-like compositions: foreground framing, midground gameplay plane, distant painted scenery, restrained atmospheric perspective.
+- Character detail should survive gameplay scale; silhouettes and animation readability come before ornamental detail.
 - Restrained palette: charcoal, ash, bone, rust-red, and cold supernatural accents.
 - Heavy environmental shadows, layered backgrounds, selective fog, and restrained lighting.
 - Organic corruption rather than generic gore.
@@ -16,12 +19,26 @@ Hand-painted 2D dark fantasy with graphic-novel readability. The game should fee
 - Horror should often be implied before it is shown.
 - Combat readability outranks decorative detail.
 - 清晰的角色剪影与战斗姿势。
+- 带有绘制笔触与纹理的色彩过渡；不要把扁平几何占位图当作最终美术。
+- 采用舞台式构图：前景框景、可玩中景、手绘远景和克制的空气透视。
+- 角色细节必须适应实际游戏缩放；剪影与动作可读性优先于装饰细节。
 - 克制配色：煤灰、灰烬、骨白、锈红和少量冷色超自然光。
 - 厚重环境阴影、分层背景、选择性雾效和克制照明。
 - 采用有机腐化而非泛化血腥。
 - 即使出现超自然变化，也要保留人物表情和肢体语言的重要性。
 - 恐怖应先暗示，再揭示。
 - 战斗可读性优先于装饰细节。
+
+## Style guardrails / 风格边界
+
+- Do not directly rip sprites or backgrounds from Odin Sphere or other commercial games.
+- Prefer assets with explicit CC0 or compatible licenses; if no coherent licensed pack fits, commission/create original assets rather than mixing incompatible packs.
+- Pixel art is not the target direction. A small pixel-art pack may be used only for prototyping, not merged into the main art set without deliberate approval.
+- Preserve the game's dark palette: charcoal, ash, bone, rust-red, and limited cold supernatural light. Vanillaware-like richness means layered painterly detail, not bright saturated color everywhere.
+- 香草社作品不能直接扒取精灵图或背景。
+- 优先选择明确为 CC0 或兼容授权的素材；如果找不到风格统一的授权素材，应制作原创素材，而不是拼接不兼容的素材包。
+- 像素风不是最终目标。小型像素素材包最多用于原型，不应未经明确决定就混入正式美术。
+- 保留游戏的暗色基调：煤灰、灰烬、骨白、锈红与少量冷色超自然光。靠近香草社意味着丰富的手绘层次，不意味着所有颜色都高饱和。
 
 ## Current implementation / 当前实现
 
