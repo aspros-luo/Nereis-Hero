@@ -719,28 +719,138 @@ func _draw() -> void:
     var armor := Color("#3d3740")
     var cloak := Color("#252129")
     var metal := Color("#b7a48c")
+    var bright_metal := Color("#d8c7a7")
+    var dark_edge := Color("#17151b")
+    var torso_y := bob
 
-    draw_circle(Vector2(0, -52 + bob), 18, body)
-    draw_circle(Vector2(facing * 5.0, -54 + bob), 6, Color("#19171c"))
-    draw_rect(Rect2(-18, -35 + bob, 36, 35), armor)
+    # Legs and boots are split into shapes so the Hero reads as a plated knight,
+    # not a stack of primitive rectangles.
     draw_colored_polygon(PackedVector2Array([
-        Vector2(-19, -32 + bob), Vector2(19, -32 + bob),
-        Vector2(27, 10 + step), Vector2(-30, 10 - step)
+        Vector2(-14, -8 + torso_y), Vector2(-2, -7 + torso_y),
+        Vector2(-5, 11 + step), Vector2(-19, 14 + step),
+        Vector2(-22, 8 + step)
+    ]), armor)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(2, -7 + torso_y), Vector2(14, -8 + torso_y),
+        Vector2(22, 8 - step), Vector2(18, 14 - step),
+        Vector2(5, 11 - step)
+    ]), armor)
+    draw_line(Vector2(-17, 5 + step), Vector2(-7, 4 + step), metal, 2.0)
+    draw_line(Vector2(7, 4 - step), Vector2(17, 5 - step), metal, 2.0)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-23, 11 + step), Vector2(-6, 10 + step),
+        Vector2(-4, 17 + step), Vector2(-26, 17 + step)
+    ]), dark_edge)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(5, 10 - step), Vector2(22, 11 - step),
+        Vector2(26, 17 - step), Vector2(4, 17 - step)
+    ]), dark_edge)
+    draw_line(Vector2(-22, 13 + step), Vector2(-7, 13 + step), bright_metal, 1.4)
+    draw_line(Vector2(7, 13 - step), Vector2(22, 13 - step), bright_metal, 1.4)
+
+    # Split cloak silhouette with a torn hem and two restrained fabric folds.
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-15, -34 + torso_y), Vector2(14, -34 + torso_y),
+        Vector2(22, -10 + torso_y), Vector2(28, 9 + step),
+        Vector2(14, 6 - step), Vector2(5, 12 + step),
+        Vector2(-7, 7 - step), Vector2(-28, 10 + step),
+        Vector2(-23, -10 + torso_y)
     ]), cloak)
-    draw_line(Vector2(-12, -3 + bob), Vector2(-22, 18 + step), armor, 7.0)
-    draw_line(Vector2(12, -3 + bob), Vector2(22, 18 - step), armor, 7.0)
+    draw_line(Vector2(-17, -25 + torso_y), Vector2(-23, 4 + step), Color("#51404a"), 2.0)
+    draw_line(Vector2(10, -24 + torso_y), Vector2(21, 4 - step), Color("#51404a"), 2.0)
+    draw_line(Vector2(-27, 10 + step), Vector2(-15, 8 + step), Color("#8c6a65"), 1.5)
+    draw_line(Vector2(5, 10 + step), Vector2(14, 6 - step), Color("#8c6a65"), 1.5)
+
+    # Breastplate with an inset chest panel, shoulder plates, rivets and a worn rim.
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-16, -34 + torso_y), Vector2(-9, -39 + torso_y),
+        Vector2(10, -39 + torso_y), Vector2(17, -32 + torso_y),
+        Vector2(14, -7 + torso_y), Vector2(0, -2 + torso_y),
+        Vector2(-14, -7 + torso_y)
+    ]), dark_edge)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-13, -32 + torso_y), Vector2(-7, -36 + torso_y),
+        Vector2(8, -36 + torso_y), Vector2(13, -30 + torso_y),
+        Vector2(10, -10 + torso_y), Vector2(0, -6 + torso_y),
+        Vector2(-10, -10 + torso_y)
+    ]), armor)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-8, -32 + torso_y), Vector2(0, -34 + torso_y),
+        Vector2(7, -31 + torso_y), Vector2(5, -13 + torso_y),
+        Vector2(0, -10 + torso_y), Vector2(-5, -13 + torso_y)
+    ]), Color("#514650"))
+    draw_line(Vector2(-9, -31 + torso_y), Vector2(-5, -13 + torso_y), metal, 1.6)
+    draw_line(Vector2(9, -30 + torso_y), Vector2(6, -13 + torso_y), Color("#70616a"), 1.4)
+    draw_circle(Vector2(-7, -27 + torso_y), 1.5, bright_metal)
+    draw_circle(Vector2(7, -27 + torso_y), 1.5, bright_metal)
+    draw_line(Vector2(-12, -9 + torso_y), Vector2(12, -9 + torso_y), Color("#17151b"), 3.0)
+    draw_line(Vector2(-10, -8 + torso_y), Vector2(10, -8 + torso_y), metal, 1.4)
+
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-19, -33 + torso_y), Vector2(-12, -38 + torso_y),
+        Vector2(-5, -34 + torso_y), Vector2(-8, -26 + torso_y),
+        Vector2(-17, -25 + torso_y)
+    ]), Color("#514650"))
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(19, -33 + torso_y), Vector2(12, -38 + torso_y),
+        Vector2(5, -34 + torso_y), Vector2(8, -26 + torso_y),
+        Vector2(17, -25 + torso_y)
+    ]), Color("#514650"))
+    draw_line(Vector2(-17, -32 + torso_y), Vector2(-10, -34 + torso_y), bright_metal, 1.5)
+    draw_line(Vector2(17, -32 + torso_y), Vector2(10, -34 + torso_y), bright_metal, 1.5)
+
+    # Helmet / shadowed face: a readable knight silhouette with a narrow visor.
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-14, -54 + torso_y), Vector2(-11, -66 + torso_y),
+        Vector2(-3, -71 + torso_y), Vector2(8, -68 + torso_y),
+        Vector2(14, -58 + torso_y), Vector2(11, -43 + torso_y),
+        Vector2(2, -38 + torso_y), Vector2(-10, -42 + torso_y)
+    ]), dark_edge)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-11, -55 + torso_y), Vector2(-8, -64 + torso_y),
+        Vector2(-2, -67 + torso_y), Vector2(6, -65 + torso_y),
+        Vector2(10, -57 + torso_y), Vector2(8, -47 + torso_y),
+        Vector2(1, -43 + torso_y), Vector2(-8, -46 + torso_y)
+    ]), body)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-13, -56 + torso_y), Vector2(-10, -66 + torso_y),
+        Vector2(-3, -71 + torso_y), Vector2(8, -68 + torso_y),
+        Vector2(13, -59 + torso_y), Vector2(8, -56 + torso_y),
+        Vector2(-3, -58 + torso_y)
+    ]), Color("#34303a"))
+    draw_line(Vector2(-11, -56 + torso_y), Vector2(10, -57 + torso_y), bright_metal, 2.0)
+    draw_line(Vector2(-7, -50 + torso_y), Vector2(7, -51 + torso_y), Color("#19171d"), 3.0)
+    draw_line(Vector2(-5, -50 + torso_y), Vector2(4, -50 + torso_y), Color("#bca98b"), 1.0)
+    draw_line(Vector2(-2, -68 + torso_y), Vector2(0, -73 + torso_y), metal, 1.5)
+    draw_line(Vector2(0, -73 + torso_y), Vector2(4, -69 + torso_y), metal, 1.5)
+
+    # Gauntlets frame the weapon hand; the blade has a distinct guard and grip.
+    draw_line(Vector2(facing * 12, -26 + torso_y), Vector2(facing * 25, -18 + torso_y), armor, 6.0)
+    draw_circle(Vector2(facing * 25, -18 + torso_y), 4.0, Color("#252129"))
+    draw_line(Vector2(facing * 25, -18 + torso_y), Vector2(facing * 31, -20 + torso_y), metal, 3.0)
+    draw_line(Vector2(-facing * 12, -26 + torso_y), Vector2(-facing * 21, -17 + torso_y), armor, 5.0)
+
     var weapon_reach: float = 58.0
     var weapon_width: float = 7.0
     if hero_system and hero_system.is_short_blade():
         weapon_reach = 38.0
         weapon_width = 5.0
-    draw_line(Vector2(0, -8 + bob), Vector2(facing * weapon_reach, -22 + bob), metal, weapon_width)
+    var hand := Vector2(facing * 25.0, -18.0 + torso_y)
+    var blade_tip := Vector2(facing * weapon_reach, -35.0 + torso_y)
+    draw_line(hand, hand + Vector2(facing * 6.0, 4.0), Color("#29232c"), 4.0)
+    draw_line(hand + Vector2(-facing * 2.0, -3.0), hand + Vector2(facing * 9.0, 2.0), bright_metal, 2.0)
+    draw_colored_polygon(PackedVector2Array([
+        hand + Vector2(-facing * 2.0, -3.0),
+        blade_tip + Vector2(-facing * 3.0, 2.0),
+        blade_tip + Vector2(facing * 1.0, -2.0),
+        hand + Vector2(facing * 3.0, -1.0)
+    ]), Color("#b9b9b2"))
+    draw_line(hand + Vector2(facing * 4.0, -1.0), blade_tip, Color("#f0e6cf"), 1.5)
 
     if WorldState.hidden_resistance_awakened:
         var anchor_color := Color("#aa8d72") if WorldState.mite_control_stage < 2 else Color("#8d6c98")
         draw_circle(Vector2(-13, -1 + bob), 4.0, Color(0.75, 0.66, 0.55, 0.32))
         draw_arc(Vector2(-13, -1 + bob), 7.0, 0.0, TAU, 16, anchor_color, 2.0)
-    draw_line(Vector2(facing * 28, -23 + bob), Vector2(facing * 47, -30 + bob), Color("#e0d6c3"), 3.0)
     if hit_confirm_time > 0.0:
         draw_arc(Vector2(facing * 28, -24), 70.0, 0.0, TAU, 24, Color("#efe1c8"), 6.0)
     elif attack_time > 0.0 and attack_windup <= 0.0:
@@ -759,6 +869,7 @@ func _draw() -> void:
     elif attack_time > 0.0:
         var windup_radius := 30.0 if hero_system and hero_system.is_short_blade() else 42.0
         draw_arc(Vector2(facing * 25, -24), windup_radius, -0.45 if facing > 0 else 3.59, 0.45 if facing > 0 else 4.49, 12, Color("#9e8b72"), 3.0)
+
     draw_string(ThemeDB.fallback_font, Vector2(-52, -82), "HERO %d" % health, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
     draw_rect(Rect2(-32, -96, 64, 5), Color("#27212a"))
     draw_rect(Rect2(-32, -96, 64.0 * (stamina / MAX_STAMINA), 5), Color("#9e8b72"))
