@@ -20,6 +20,7 @@ signal phase_changed(phase: int)
 signal attack_telegraphed
 
 func _ready() -> void:
+    add_to_group("hostile_actors")
     _setup_combat_components()
     _log("BOSS", "Ashen Knight initialized; hp=240")
     queue_redraw()
