@@ -1257,12 +1257,65 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    # Character art is a visual-only layer: collision, movement, attacks and hurtboxes remain unchanged.
+    # Visual-only character animation. Gameplay collision and combat timing stay untouched.
+    # 仅调整视觉表现，不修改碰撞、移动判定与战斗时序。
     var short_blade: bool = hero_system != null and hero_system.is_short_blade()
     var hero_art: Texture2D = HERO_SHORT_ART if short_blade else HERO_LONG_ART
     var art_tint := Color("#f3e6d4") if hit_confirm_time > 0.0 else Color.WHITE
-    draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing, 1.0))
-    draw_texture_rect(hero_art, Rect2(-48.0, -96.0, 96.0, 112.0), false, art_tint)
+    var art_offset := Vector2.ZERO
+    var art_scale := Vector2.ONE
+
+    # Give each locomotion state a readable silhouette even while the base illustration is static.
+    # 基础立绘尚未替换成逐帧序列时，也让不同动作拥有可读的轮廓变化。
+    match state:
+        CombatState.IDLE:
+            art_scale.y = 1.0 + sin(animation_time * 2.8) * 0.012
+        CombatState.MOVE:
+            var step_phase := sin(animation_time * 15.0)
+            art_offset.y = -absf(step_phase) * 3.0
+            art_scale.x = 1.0 - step_phase * 0.025
+            art_scale.y = 1.0 + step_phase * 0.035
+            # A short cloth flick makes horizontal movement visible without a full sprite sheet.
+            if absf(velocity.x) > 40.0:
+                var cloth_alpha := 0.24 + absf(step_phase) * 0.22
+                draw_line(Vector2(-facing * 29.0, -51.0), Vector2(-facing * (39.0 + absf(step_phase) * 5.0), -47.0 + step_phase * 2.0), Color("#9a7c7d", cloth_alpha), 2.0)
+        CombatState.ATTACK:
+            var attack_progress := clampf(1.0 - attack_time / maxf(ATTACK_DURATION, 0.01), 0.0, 1.0)
+            art_offset.x = facing * sin(attack_progress * PI) * (10.0 if short_blade else 7.0)
+            art_scale.x = 1.0 + sin(attack_progress * PI) * 0.055
+            art_scale.y = 1.0 - sin(attack_progress * PI) * 0.035
+        CombatState.DODGE, CombatState.QUICK_DASH:
+            art_offset.y = 10.0
+            art_offset.x = facing * 3.0
+            art_scale.x = 1.12
+            art_scale.y = 0.78
+        CombatState.JUMP:
+            art_offset.y = -2.0
+            art_scale.x = 0.94
+            art_scale.y = 1.08
+        CombatState.FALL:
+            art_scale.x = 1.04
+            art_scale.y = 0.94
+        CombatState.HURT:
+            art_offset.x = -facing * 4.0
+            art_scale.x = 0.94
+            art_scale.y = 1.04
+        CombatState.GRAPPLE, CombatState.WALL_CLIMB:
+            art_offset.x = facing * 2.0
+            art_scale.x = 0.92
+            art_scale.y = 1.06
+
+    # Elliptical ground contact shadow anchors the larger silhouette to the floor.
+    var shadow_points := PackedVector2Array()
+    for shadow_index in range(20):
+        var shadow_angle := TAU * float(shadow_index) / 20.0
+        shadow_points.append(Vector2(cos(shadow_angle) * 22.0, 2.0 + sin(shadow_angle) * 4.5))
+    draw_colored_polygon(shadow_points, Color(0.035, 0.025, 0.04, 0.48))
+
+    draw_set_transform(art_offset, 0.0, Vector2(facing * art_scale.x, art_scale.y))
+    # Slightly larger on-screen rendering lets the armor's broad shapes read at gameplay scale.
+    # 轻微放大游戏内角色尺寸，让盔甲的大形在实战视距下更清楚。
+    draw_texture_rect(hero_art, Rect2(-52.0, -104.0, 104.0, 120.0), false, art_tint)
     draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
     # Keep readable gameplay feedback above the painted silhouette.
