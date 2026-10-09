@@ -66,7 +66,7 @@ func _physics_process(delta: float) -> void:
 
     if stun_time > 0.0:
         velocity.x = move_toward(velocity.x, 0.0, 1200.0 * delta)
-        move_and_slide()
+        _move_and_slide_scaled()
         queue_redraw()
         return
 
@@ -97,7 +97,7 @@ func _physics_process(delta: float) -> void:
                 attack_telegraphed.emit()
                 _log("BOSS", "Ashen Knight attack telegraph phase=%d" % (2 if phase_two else 1))
 
-    move_and_slide()
+    _move_and_slide_scaled()
     queue_redraw()
 
 func _spawn_death_burst() -> void:
@@ -161,3 +161,15 @@ func _draw() -> void:
         draw_arc(Vector2(0.0, -38.0), 62.0 if phase_two else 50.0, PI * 0.18, PI * 1.32, 24, Color(0.82, 0.53, 0.57, 0.55), 1.5)
         draw_line(Vector2(facing * 34.0, -38.0), Vector2(facing * 108.0, -38.0), telegraph_color, 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(-72.0, -132.0), NereisLocalization.translate_text("ASHEN KNIGHT %d") % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
+
+
+func _move_and_slide_scaled() -> void:
+    # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
+    # CharacterBody2D.move_and_slide() 使用引擎物理步长，因此只在位移调用期间缩放速度。
+    var enemy_time_scale: float = WorldState.get_combat_enemy_time_scale()
+    if enemy_time_scale >= 0.999:
+        move_and_slide()
+        return
+    velocity *= enemy_time_scale
+    move_and_slide()
+    velocity /= enemy_time_scale

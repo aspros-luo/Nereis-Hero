@@ -308,7 +308,12 @@ func _process(delta: float) -> void:
     var echo_cooldown: float = float(hero.call("get_debug_eldritch_cooldown")) if hero.has_method("get_debug_eldritch_cooldown") else 0.0
     var debug_override: bool = bool(hero.get("debug_ability_override"))
     debug_label.text = (
-        "DEBUG [F3] WORLD PANEL\nF4 HERO PANEL  F5 ALL ABILITIES  F6 REFILL\n"
+        "DEBUG [F3] WORLD PANEL | F4 HERO\nF5 ALL ABILITIES | F6 RESET\n"
+        + "A/D move  Space jump  J attack\n"
+        + "K dodge  Q weapon  X dash\n"
+        + "G grapple/cancel  W wall climb\n"
+        + "V sight  F weapon art  R Echo\n"
+        + "L iaijutsu  PgUp/PgDn form\n"
         + "Technique override: %s\n" % debug_override
         + "Action: %s\n" % action_kind
         + "Echo cooldown: %.1fs\n" % echo_cooldown

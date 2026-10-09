@@ -64,7 +64,7 @@ func _physics_process(delta: float) -> void:
         velocity.x = move_toward(velocity.x, 0.0, 1000.0 * delta)
         if not is_on_floor():
             velocity.y += 1400.0 * delta
-        move_and_slide()
+        _move_and_slide_scaled()
         queue_redraw()
         return
 
@@ -101,7 +101,7 @@ func _physics_process(delta: float) -> void:
     if not is_on_floor():
         velocity.y += 1400.0 * delta
 
-    move_and_slide()
+    _move_and_slide_scaled()
     queue_redraw()
 
 func receive_damage(amount: int, source: Node = null) -> void:
@@ -164,3 +164,15 @@ func _draw_body_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
         var angle := TAU * float(i) / 24.0
         points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
     draw_colored_polygon(points, color)
+
+
+func _move_and_slide_scaled() -> void:
+    # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
+    # CharacterBody2D.move_and_slide() 使用引擎物理步长，因此只在位移调用期间缩放速度。
+    var enemy_time_scale: float = WorldState.get_combat_enemy_time_scale()
+    if enemy_time_scale >= 0.999:
+        move_and_slide()
+        return
+    velocity *= enemy_time_scale
+    move_and_slide()
+    velocity /= enemy_time_scale

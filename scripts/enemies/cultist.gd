@@ -60,7 +60,7 @@ func _physics_process(delta: float) -> void:
 
     if stun_time > 0.0:
         velocity.x = move_toward(velocity.x, 0.0, 900.0 * delta)
-        move_and_slide()
+        _move_and_slide_scaled()
         queue_redraw()
         return
 
@@ -91,7 +91,7 @@ func _physics_process(delta: float) -> void:
                     attack_telegraphed.emit()
                     _log("COMBAT", "Cultist attack telegraph")
 
-    move_and_slide()
+    _move_and_slide_scaled()
     queue_redraw()
 
 func _spawn_death_burst() -> void:
@@ -149,3 +149,15 @@ func _draw() -> void:
         draw_arc(Vector2(facing * 22.0, -27.0), 38.0, -0.92 if facing > 0.0 else 4.06, 0.92 if facing > 0.0 else 5.36, 20, telegraph_color, 3.0)
         draw_line(Vector2(facing * 18.0, -27.0), Vector2(facing * 53.0, -34.0), telegraph_color, 2.0)
     draw_string(ThemeDB.fallback_font, Vector2(-48.0, -94.0), "CULTIST %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#c7afa8"))
+
+
+func _move_and_slide_scaled() -> void:
+    # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
+    # CharacterBody2D.move_and_slide() 使用引擎物理步长，因此只在位移调用期间缩放速度。
+    var enemy_time_scale: float = WorldState.get_combat_enemy_time_scale()
+    if enemy_time_scale >= 0.999:
+        move_and_slide()
+        return
+    velocity *= enemy_time_scale
+    move_and_slide()
+    velocity /= enemy_time_scale

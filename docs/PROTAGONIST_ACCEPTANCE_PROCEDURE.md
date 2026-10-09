@@ -119,3 +119,13 @@ Console log:
 Pass / Fail / Blocked:
 Screenshot or short clip:
 ```
+
+
+## 6. Additional regression after the 2026-10-09 Debug pass / 本轮 Debug 修正后的补充回归
+
+1. **Witch Time / 魔女时间** — Enable F5, then dodge an enemy attack inside the first 0.075 seconds of K/Shift. Observe the enemy's actual horizontal/vertical movement, attack windup, and animation slow together while the Hero remains responsive. When the 2.4-second effect ends (or F5 is turned off), enemy movement and timers must return to normal immediately.
+2. **Static grapple fixtures / 固定钩爪锚点** — Enable F5 and confirm the four labeled anchors stay at the positions where they spawned; they must not follow the Hero when walking away. G should select the nearest reachable marked anchor; G cancels a pull; no target in range should leave the Hero in place. An intervening solid must block traversal rather than teleporting through it.
+3. **Bound hidden visuals / 绑定隐藏视觉节点** — For any real scene fixture, set reveal_target_path to a visual CanvasItem. The component hides it on ready, shows it only while Resonance Sight is active and conditions (or Debug override) allow it, and hides it again at expiry/cancel. The default empty path must retain current marker-only behavior.
+4. **F5 / F6 lifecycle** — F5 OFF clears Witch Time and cancels an active Quick Dash; F6 restores HP/stamina and clears action/hitbox/cooldowns/sight/grapple/wall state. Restart the game and confirm temporary fixtures, selected iaijutsu form, Debug abnormal-load bonus and override are not saved.
+
+补充说明：当前环境不能启动 Godot。上面是交付给本地的执行清单，不代表已经运行通过。

@@ -327,9 +327,6 @@ func _physics_process(delta: float) -> void:
             if state == CombatState.QUICK_DASH:
                 _set_state(CombatState.IDLE)
 
-    if debug_ability_override and not is_instance_valid(grapple_target):
-        _update_debug_fixture_positions()
-
     if grapple_requested:
         grapple_requested = false
         if attack_time <= 0.0 and dodge_time <= 0.0:
@@ -677,7 +674,14 @@ func set_debug_ability_override(enabled: bool) -> void:
     if enabled:
         _refresh_debug_test_fixtures(true)
     else:
+        WorldState.clear_witch_time("Debug override disabled")
         _cancel_grapple("debug override disabled")
+        if quick_dash_time > 0.0:
+            quick_dash_time = 0.0
+            velocity.x = 0.0
+            if state == CombatState.QUICK_DASH:
+                _set_state(CombatState.IDLE)
+        quick_dash_requested = false
         resonance_sight_time_remaining = 0.0
         WorldState.set_resonance_sight_active(false)
         if hero_system:
@@ -715,8 +719,9 @@ func _refresh_debug_test_fixtures(enabled: bool) -> void:
         var anchor := Node2D.new()
         anchor.set_script(GRAPPLE_ANCHOR_SCRIPT)
         anchor.name = "DebugGrappleAnchor_%d" % index
-        get_parent().add_child(anchor)
         anchor.set("debug_fixture", true)
+        anchor.set("anchor_label", "TEST ANCHOR %d" % (index + 1))
+        get_parent().add_child(anchor)
         anchor.global_position = global_position + DEBUG_ANCHOR_OFFSETS[index]
         debug_anchor_fixtures.append(anchor)
 
@@ -738,16 +743,6 @@ func _refresh_debug_test_fixtures(enabled: bool) -> void:
         debug_wall_fixtures.append(wall)
 
     _log("DEBUG", "Temporary traversal fixtures created: 4 anchors, 3 hidden traces, 2 marked walls")
-
-func _update_debug_fixture_positions() -> void:
-    for index in range(mini(debug_anchor_fixtures.size(), DEBUG_ANCHOR_OFFSETS.size())):
-        var anchor := debug_anchor_fixtures[index]
-        if is_instance_valid(anchor):
-            anchor.global_position = global_position + DEBUG_ANCHOR_OFFSETS[index]
-    for index in range(mini(debug_reveal_fixtures.size(), DEBUG_REVEAL_OFFSETS.size())):
-        var target := debug_reveal_fixtures[index]
-        if is_instance_valid(target):
-            target.global_position = global_position + DEBUG_REVEAL_OFFSETS[index]
 
 func _start_grapple() -> void:
     if state in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD] or attack_time > 0.0 or dodge_time > 0.0 or quick_dash_time > 0.0 or hurt_time > 0.0:

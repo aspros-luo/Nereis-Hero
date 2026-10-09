@@ -111,3 +111,10 @@ These are prototype values and must be adjusted after runtime playtesting.
 ### Quick test controls
 
 `G` grapple; hold `W` to climb a marked wall; `Space` to wall-jump; `V` Resonance Sight; `X` Quick Dash; `K`/`Shift` ordinary dodge. With F5 enabled, `PageUp`/`PageDown` selects `human_iaijutsu`, `blood`, `abyssal`, or `black_horizon`, then press `L` to use the selected profile. All form selection and load accumulation are session-only.
+
+
+## 2026-10-09 — Ability movement integration / 能力位移整合
+
+- [x] Static fix: Witch Time now scales enemy movement during the actual move_and_slide operation, not just AI timers and animation.
+- [x] Static fix: the F3 global Debug panel now lists the ability controls; F4/F5/F6 remain Hero-local panel / temporary override / reset with no Ctrl modifier.
+- [ ] Runtime verification remains pending: compare enemy movement and attack tells under Witch Time; confirm return to normal and confirm no effect on Hero movement.

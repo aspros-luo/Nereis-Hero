@@ -7,10 +7,18 @@ extends Node2D
 @export var required_outer_exposure := 0
 @export var target_label := "HIDDEN TRACE"
 @export var debug_fixture := false
+# Optional CanvasItem to reveal/hide alongside this target marker.
+# 可选的场景视觉节点：随本目标一起显现/隐藏。
+@export var reveal_target_path: NodePath = NodePath("")
 var revealed := false
+var _reveal_target: CanvasItem
 
 func _ready() -> void:
     add_to_group("resonance_hidden_targets")
+    if not reveal_target_path.is_empty():
+        _reveal_target = get_node_or_null(reveal_target_path) as CanvasItem
+        if is_instance_valid(_reveal_target):
+            _reveal_target.visible = false
     queue_redraw()
     if WorldState.resonance_sight_active:
         update_reveal_state(true, WorldState.hero_resonance, WorldState.ancient_exposure, WorldState.outer_exposure)
@@ -29,6 +37,8 @@ func update_reveal_state(active: bool, resonance: int, ancient_exposure: int, ou
     if revealed == next_revealed:
         return
     revealed = next_revealed
+    if is_instance_valid(_reveal_target):
+        _reveal_target.visible = revealed
     queue_redraw()
     if debug_fixture:
         print("[NEREIS][SENSE] %s %s" % [target_label, "revealed" if revealed else "hidden"])
