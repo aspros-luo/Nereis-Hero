@@ -123,11 +123,15 @@ func _open_exit() -> void:
         return
     exit_open = true
     exit_area.enabled = true
-    narrative.show_message(
-        "THE ROAD OUT",
-        "The final lock gives way.\n\nYou do not remember how you arrived here.\n\nYou only remember that staying means dying.",
-        5.0
-    )
+    # The first story reward is recovered martial memory, not a supernatural mutation.
+    # 第一项剧情奖励是恢复人类战技记忆，而不是获得超自然异变。
+    var iaijutsu_unlocked := WorldState.unlock_ability("iaijutsu_basic", "story", "prologue_warden_clear")
+    var escape_memory := "The final lock gives way.\n\nYou do not remember how you arrived here.\n\nWhen the last guard fell, your hand moved before thought: one clean draw, one silent cut. Your body remembers a technique your mind has lost.\n\nYou only remember that staying means dying."
+    if not iaijutsu_unlocked:
+        escape_memory = "The final lock gives way.\n\nYou do not remember how you arrived here.\n\nYou only remember that staying means dying."
+    narrative.show_message("THE ROAD OUT", escape_memory, 6.0)
+    if iaijutsu_unlocked:
+        print("[NEREIS][PROGRESSION] Basic iaijutsu recovered from prologue combat memory")
     print("[NEREIS][PROLOGUE] Escape route opened")
     queue_redraw()
 
