@@ -1253,6 +1253,22 @@ func _draw() -> void:
             var trail_end := 62.0 + float(trail_index) * 12.0
             draw_line(Vector2(-facing * trail_start, trail_y), Vector2(-facing * trail_end, trail_y - 2.0), Color("#9ebbaa", 0.68 * dash_alpha), 2.0)
 
+    if is_instance_valid(grapple_target):
+        var grapple_end := grapple_target.global_position - global_position + Vector2(0.0, -12.0)
+        draw_line(Vector2(0.0, -38.0), grapple_end, Color("#c5d8c8", 0.95), 3.0)
+        draw_line(Vector2(0.0, -38.0), grapple_end, Color("#739b92", 0.55), 6.0)
+
+    if wall_climb_active:
+        draw_arc(Vector2(facing * 21.0, -40.0), 31.0, -0.95, 0.95, 18, Color("#9bd4c3", 0.90), 3.0)
+
+    if resonance_sight_time_remaining > 0.0:
+        var sight_alpha := clampf(resonance_sight_time_remaining / RESONANCE_SIGHT_DURATION, 0.15, 1.0)
+        draw_arc(Vector2(0.0, -40.0), 56.0, 0.0, TAU, 32, Color("#9ce0ce", 0.85 * sight_alpha), 2.0)
+
+    if WorldState.witch_time_remaining > 0.0:
+        var witch_alpha := 0.45 + 0.25 * sin(animation_time * 10.0)
+        draw_arc(Vector2(0.0, -42.0), 67.0, -0.15, TAU - 0.15, 36, Color("#c2b6e8", witch_alpha), 2.0)
+
     if debug_mode_enabled:
         # World-space debug overlay follows the Hero and intentionally exposes hidden values only in debug mode.
         var debug_font := ThemeDB.fallback_font
