@@ -4,9 +4,12 @@ var facing := 1.0
 var combo_step := 1
 var age := 0.0
 var lifetime := 0.16
+var total_lifetime := 0.16
 var short_blade := false
 var blood_iaijutsu := false
 var technique_variant := ""
+var combat_technique := ""
+var technique_stage := 0
 
 func setup(direction: float, combo: int, is_short_blade: bool = false, is_blood_iaijutsu: bool = false, variant: String = "") -> void:
     facing = direction
@@ -15,7 +18,43 @@ func setup(direction: float, combo: int, is_short_blade: bool = false, is_blood_
     blood_iaijutsu = is_blood_iaijutsu
     technique_variant = variant if is_blood_iaijutsu else ""
     lifetime = 0.28 if technique_variant == "black_horizon" else 0.25 if technique_variant == "abyssal" else 0.22 if blood_iaijutsu else 0.12 if short_blade else 0.16
+    total_lifetime = lifetime
     queue_redraw()
+
+func setup_combat_technique(direction: float, technique_id: String, stage: int = 0) -> void:
+    facing = direction
+    combat_technique = technique_id
+    technique_stage = clampi(stage, 0, 2)
+    short_blade = technique_id == "technique_crescent_combo"
+    lifetime = 0.20 if technique_id == "technique_judgment_slash" else 0.15
+    total_lifetime = lifetime
+    age = 0.0
+    queue_redraw()
+
+func _draw_weapon_technique(alpha: float) -> void:
+    if combat_technique == "technique_judgment_slash":
+        var center := Vector2(facing * 20.0, -26.0)
+        var start := -1.28 if facing > 0.0 else PI - 0.42
+        var finish := 0.42 if facing > 0.0 else PI + 1.28
+        draw_arc(center, 102.0, start, finish, 30, Color(0.92, 0.87, 0.73, alpha), 11.0)
+        draw_arc(center, 89.0, start + 0.10, finish - 0.10, 26, Color(0.68, 0.72, 0.76, alpha * 0.78), 3.0)
+        draw_line(Vector2(facing * 14.0, -22.0), Vector2(facing * 112.0, -46.0), Color(0.98, 0.95, 0.86, alpha * 0.88), 4.0)
+        return
+
+    if combat_technique == "technique_crescent_combo":
+        var center := Vector2(facing * (12.0 + float(technique_stage) * 4.0), -25.0)
+        var radius := 43.0 + float(technique_stage) * 8.0
+        var start := -1.50 + float(technique_stage) * 0.18 if facing > 0.0 else PI - 0.18 - float(technique_stage) * 0.18
+        var finish := 0.30 + float(technique_stage) * 0.18 if facing > 0.0 else PI + 1.50 - float(technique_stage) * 0.18
+        var slash_color := Color(0.84, 0.89, 0.94, alpha)
+        draw_arc(center, radius, start, finish, 20, slash_color, 4.0)
+        if technique_stage == 0:
+            draw_line(Vector2(facing * 10.0, -12.0), Vector2(facing * 53.0, -51.0), Color(0.94, 0.96, 1.0, alpha * 0.9), 3.0)
+        elif technique_stage == 1:
+            draw_line(Vector2(facing * 18.0, -48.0), Vector2(facing * 64.0, -12.0), Color(0.94, 0.96, 1.0, alpha * 0.9), 3.0)
+        else:
+            draw_arc(center, radius + 10.0, start + 0.10, finish - 0.10, 18, Color(0.94, 0.96, 1.0, alpha * 0.65), 2.0)
+            draw_line(Vector2(facing * 12.0, -16.0), Vector2(facing * 70.0, -47.0), Color(1.0, 0.94, 0.80, alpha), 4.0)
 
 func _process(delta: float) -> void:
     age += delta
@@ -25,8 +64,10 @@ func _process(delta: float) -> void:
         queue_free()
 
 func _draw() -> void:
-    var progress: float = clampf(age / maxf(lifetime, 0.01), 0.0, 1.0)
-    var alpha: float = 1.0 - progress
+    var alpha: float = clampf(lifetime / maxf(total_lifetime, 0.01), 0.0, 1.0)
+    if not combat_technique.is_empty():
+        _draw_weapon_technique(alpha)
+        return
     var radius: float = 142.0 if technique_variant == "black_horizon" else 116.0 if technique_variant == "abyssal" else 104.0 if technique_variant == "human_iaijutsu" else 92.0 if blood_iaijutsu else (35.0 + combo_step * 2.5 if short_blade else 56.0 + combo_step * 5.0)
     var width: float = 13.0 if technique_variant == "black_horizon" else 11.0 if technique_variant == "abyssal" else 7.0 if technique_variant == "human_iaijutsu" else 10.0 if blood_iaijutsu else (3.0 if short_blade else (7.0 if combo_step == 3 else 5.0))
     var center := Vector2(facing * (30.0 if blood_iaijutsu else 18.0), -24.0)
