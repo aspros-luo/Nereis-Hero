@@ -38,6 +38,8 @@ var learned_techniques: Array[String] = []
 var technique_variants: Dictionary = {}
 var resonance_sources: Array[String] = []
 var input_locked := false
+# Menu lock disables Hero input while the world and all gameplay timers keep running.
+var menu_input_locked := false
 var hitstop_serial := 0
 
 # Narrative state is stored as facts/flags, not as a visible romance meter.
@@ -61,6 +63,7 @@ func _ready() -> void:
 func prepare_scene_runtime() -> void:
     get_tree().paused = false
     input_locked = false
+    menu_input_locked = false
     hitstop_serial += 1
     Engine.time_scale = 1.0
 
@@ -477,6 +480,7 @@ func reset() -> void:
     ending_route = ""
     prologue_complete = false
     input_locked = false
+    menu_input_locked = false
     hitstop_serial += 1
     Engine.time_scale = 1.0
 
