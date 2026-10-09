@@ -166,6 +166,16 @@ func _input(event: InputEvent) -> void:
             debug_refill_combat_resources()
             queue_redraw()
             get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_T:
+            # Debug-only smoke test: isolate enemy time scaling from the precision-dodge trigger.
+            # 仅限 Debug 覆盖：将敌人减速效果与精准闪避触发条件分开测试。
+            if debug_ability_override:
+                WorldState.trigger_witch_time(2.4, 0.22)
+                _log("DEBUG", "Witch Time test triggered via T; enemy time scale=0.22 for 2.4s")
+            else:
+                _log("DEBUG", "Witch Time test requires F5 ability override")
+            queue_redraw()
+            get_viewport().set_input_as_handled()
         elif event.keycode == KEY_PAGEUP:
             if debug_ability_override:
                 _cycle_debug_iaijutsu_variant(1)
@@ -1299,7 +1309,7 @@ func _draw() -> void:
         var weapon_name := "短刃" if short_blade else "长剑"
         var action_name := active_action_kind if active_action_kind != "none" else get_debug_state().to_lower()
         draw_rect(Rect2(-144.0, -224.0, 288.0, 136.0), Color(0.035, 0.025, 0.04, 0.90), true)
-        draw_string(debug_font, Vector2(-136.0, -207.0), "F4 面板 | F5 全能力覆盖 | F6 恢复", HORIZONTAL_ALIGNMENT_LEFT, 272.0, 10, debug_color)
+        draw_string(debug_font, Vector2(-136.0, -207.0), "F4 面板 | F5 全能力 | F6 恢复 | T 魔女测试", HORIZONTAL_ALIGNMENT_LEFT, 272.0, 10, debug_color)
         draw_string(debug_font, Vector2(-136.0, -190.0), "HP %d | ST %d | %s" % [health, int(round(stamina)), weapon_name], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 12, debug_color)
         draw_string(debug_font, Vector2(-136.0, -174.0), "状态 %s | 动作 %s | 连击 %d" % [get_debug_state(), action_name, combo_step], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 10, debug_color)
         draw_string(debug_font, Vector2(-136.0, -158.0), "无敌 %s | 覆盖 %s | 余响 %.1f 冲刺 %.1f" % [str(invulnerable), str(debug_ability_override), eldritch_cooldown_remaining, quick_dash_cooldown_remaining], HORIZONTAL_ALIGNMENT_LEFT, 272.0, 9, debug_color)

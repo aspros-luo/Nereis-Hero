@@ -35,6 +35,7 @@
 | F4 | Toggle Hero-local debug overlay |
 | F5 | Toggle session-only all-protagonist-ability override; creates temporary anchors, hidden traces and marked walls |
 | F6 | Restore HP/stamina; clear temporary ability effects/cooldowns and cancel active action/hitbox |
+| T (F5 override ON only) | Force a 2.4-second Witch Time test without requiring a precision dodge |
 | F1 / F2 | Existing endgame test theaters |
 | F7 / F8 | Existing Church Final Boss / 烈火天罚 theaters |
 | F9 | Existing clean reset in Village Hub |
@@ -123,7 +124,8 @@ Screenshot or short clip:
 
 ## 6. Additional regression after the 2026-10-09 Debug pass / 本轮 Debug 修正后的补充回归
 
-1. **Witch Time / 魔女时间** — Enable F5, then dodge an enemy attack inside the first 0.075 seconds of K/Shift. Observe the enemy's actual horizontal/vertical movement, attack windup, and animation slow together while the Hero remains responsive. When the 2.4-second effect ends (or F5 is turned off), enemy movement and timers must return to normal immediately.
+1. **Witch Time direct smoke test / 魔女时间减速链路独立测试** — Enable F5 and press T. The console must log `Witch Time test triggered via T`; the Hero overlay countdown and purple ring should appear. Enemy horizontal/vertical movement, attack windup, animation, and active enemy hitbox lifetime must all slow while the Hero remains responsive. When the 2.4-second effect ends (or F5 is turned off), enemy movement and timers must return to normal immediately.
+2. **Witch Time gameplay trigger / 正常玩法触发** — Keep F5 ON, approach a cultist or the Ashen Knight, wait for the attack telegraph, and press K/Shift just as its attack hitbox is about to connect. Only a hit avoided within the opening 0.075-second dodge window triggers Witch Time. Confirm the console logs both `Perfect dodge! Next hit bonus armed` and `Witch Time active`. T passing proves the slow-motion chain works; this step separately proves the real trigger works.
 2. **Static grapple fixtures / 固定钩爪锚点** — Enable F5 and confirm the four labeled anchors stay at the positions where they spawned; they must not follow the Hero when walking away. G should select the nearest reachable marked anchor; G cancels a pull; no target in range should leave the Hero in place. An intervening solid must block traversal rather than teleporting through it.
 3. **Bound hidden visuals / 绑定隐藏视觉节点** — For any real scene fixture, set reveal_target_path to a visual CanvasItem. The component hides it on ready, shows it only while Resonance Sight is active and conditions (or Debug override) allow it, and hides it again at expiry/cancel. The default empty path must retain current marker-only behavior.
 4. **F5 / F6 lifecycle** — F5 OFF clears Witch Time and cancels an active Quick Dash; F6 restores HP/stamina and clears action/hitbox/cooldowns/sight/grapple/wall state. Restart the game and confirm temporary fixtures, selected iaijutsu form, Debug abnormal-load bonus and override are not saved.

@@ -32,6 +32,7 @@ Open the project in Godot 4.6.x and run res://scenes/combat_demo.tscn directly. 
 | L | 拔刀斩形态测试 / Iaijutsu form test |
 | PageUp / PageDown | F5 开启时切换拔刀斩形态 / Choose form while F5 is ON |
 | F3 / F4 / F5 / F6 | 世界面板 / 主角面板 / 全能力临时覆盖 / 恢复复位 / Global panel / Hero panel / Override / Reset |
+| T（仅 F5 开启时） | 直接触发 2.4 秒魔女时间，用于单独验证敌人减速 / Force Witch Time for 2.4 seconds to test enemy slowdown independently |
 
 ## 分项测试 / Test cases
 
@@ -44,6 +45,10 @@ Open the project in Godot 4.6.x and run res://scenes/combat_demo.tscn directly. 
 After F5, Space should allow exactly one extra jump before landing. Quick Dash costs 24 stamina, lasts 0.16 seconds, has a 1.10-second cooldown, cannot pass through solids, and does not grant invulnerability.
 
 ### 2. 精准闪避与魔女时间 / Precision dodge and Witch Time
+
+**先独立验证减速效果：** 开启 F5 后按 **T**。预期控制台出现 `Witch Time test triggered via T`，F4 面板的“魔女”倒计时开始下降，主角周围出现紫色环，敌人的移动、攻击前摇、动画和敌方攻击命中框计时一起变慢；主角不变慢。等待约 2.4 秒，或按 F5 关闭覆盖，预期减速恢复。
+
+**再验证正常玩法触发：** 靠近敌人，观察敌人起手提示，在敌方命中框即将接触主角时按 K / Shift。成功避开开头 0.075 秒精准窗口内的攻击后，预期控制台出现 `Perfect dodge! Next hit bonus armed` 和 `Witch Time active`，并启动约 2.4 秒魔女时间。只按 T 成功，不能代替这一项正常触发验收。
 
 - 对着敌方攻击起手按 K / Shift，并在开头 0.075 秒内成功避开：应触发约 2.4 秒魔女时间，下一次真正命中的攻击获得一次 1.35 倍伤害。
 - 魔女时间应同时减慢敌人的实际移动、攻击前摇计时与动画，主角自身移动不减速。
