@@ -291,3 +291,17 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - Ordinary jump and coyote-time jump remain unchanged. The new ability is not granted automatically, so no current level becomes dependent on an unearned move.
 - `quick_dash` remains a registered progression ID only. Before implementation, define whether it is a separate input from dodge and its own stamina/cooldown/invulnerability rules.
 - Runtime verification remains pending; the next review should specifically test air-jump count transitions and input buffering.
+
+
+## 2026-10-09 — Prologue reset regression fix
+
+- Fixed the prologue death handler so the escape gate closes when the three-Warden encounter is reset; previously the gate could remain enabled after the Wardens respawned.
+- Kept earned story progression persistent: dying after unlocking basic iaijutsu does not revoke the ability, but the encounter must be cleared again to reopen the exit.
+- Added the corresponding source-level and pending runtime regression cases to `PROTAGONIST_TEST_REPORT.md`.
+- Static review of the changed handler confirms the gate is disabled before the Wardens are cleared and respawned. Godot startup/runtime was not tested because the current execution environment has no Godot executable and cannot download one; no GitHub Actions workflow was triggered.
+
+### Next
+
+1. Continue source-level regression review around save/load and scene transitions.
+2. Keep progression rewards idempotent across death, scene re-entry and save migration.
+3. Implement new traversal abilities only after their input and combat-state contracts are explicit; keep sewer mutation content gated until its encounter and reward calls exist.
