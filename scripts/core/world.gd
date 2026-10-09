@@ -267,7 +267,7 @@ func _draw_environment_backdrop() -> void:
 
 func _draw_parallax_layer(texture: Texture2D, scroll_factor: float, left_padding: float) -> void:
     var camera_x := camera.get_screen_center_position().x if is_instance_valid(camera) else 0.0
-    var layer_x := camera_x * scroll_factor - left_padding
+    var layer_x := camera_x * (1.0 - scroll_factor) - left_padding
     draw_texture_rect(texture, Rect2(layer_x, 0, 3600, 720), false)
 
 func _draw_house(origin: Vector2, width: float, height: float) -> void:
