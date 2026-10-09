@@ -466,6 +466,8 @@ func _refresh_character_details() -> void:
             technique_names.append(NereisLocalization.t("menu.technique_blood_iaijutsu"))
         elif technique_id == "abyss_iaijutsu":
             technique_names.append(NereisLocalization.t("menu.technique_abyss_iaijutsu"))
+        elif technique_id == "black_horizon":
+            technique_names.append(NereisLocalization.t("menu.technique_black_horizon"))
     var techniques_text := ", ".join(technique_names) if not technique_names.is_empty() else NereisLocalization.t("menu.no_techniques")
     character_details_label.text = "%s: %s\n%s: %s\n%s" % [NereisLocalization.t("menu.weapon"), weapon_name, NereisLocalization.t("menu.techniques"), techniques_text, NereisLocalization.t("menu.hidden_stats_note")]
 
