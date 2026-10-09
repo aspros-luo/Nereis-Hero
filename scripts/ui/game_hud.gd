@@ -472,6 +472,8 @@ func _refresh_character_details() -> void:
     var weapon_key := "menu.weapon_short_blade" if str(WorldState.current_weapon_style) == "short_blade" else "menu.weapon_long_sword"
     var weapon_name := NereisLocalization.t(weapon_key)
     var technique_names: PackedStringArray = []
+    if WorldState.is_ability_unlocked("iaijutsu_basic"):
+        technique_names.append(NereisLocalization.t("menu.technique_basic_iaijutsu"))
     for technique_id in WorldState.learned_techniques:
         if technique_id == "blood_iaijutsu":
             technique_names.append(NereisLocalization.t("menu.technique_blood_iaijutsu"))
