@@ -137,17 +137,55 @@ func _log(category: String, message: String) -> void:
 
 func _draw() -> void:
     var sway: float = sin(animation_time * 5.0) * 1.5
-    var c := Color("#c8565f") if hit_flash > 0.0 else Color("#4e3a43")
-    var hood := Color("#211c24")
-    draw_circle(Vector2(0, -46 + sway), 18, hood)
-    draw_circle(Vector2(facing * 4.0, -44 + sway), 8, c)
-    draw_rect(Rect2(-19, -28 + sway, 38, 30), c)
+    var body_color := Color("#c8565f") if hit_flash > 0.0 else Color("#4e3a43")
+    var robe_shadow := Color("#211c24")
+    var robe_edge := Color("#73505a")
+    var rune_color := Color("#b8877c") if windup <= 0.0 else Color("#f08083")
+
+    # Ragged robe silhouette, layered over narrow limbs.
+    draw_line(Vector2(-12, -5 + sway), Vector2(-23, 9), robe_shadow, 8.0)
+    draw_line(Vector2(12, -5 + sway), Vector2(23, 9), robe_shadow, 8.0)
     draw_colored_polygon(PackedVector2Array([
-        Vector2(-20, -27 + sway), Vector2(20, -27 + sway),
-        Vector2(25, 8), Vector2(-25, 8)
+        Vector2(-13, -31 + sway), Vector2(13, -31 + sway),
+        Vector2(19, -8 + sway), Vector2(24, 8),
+        Vector2(9, 5), Vector2(2, 10), Vector2(-7, 5),
+        Vector2(-23, 9), Vector2(-18, -9 + sway)
+    ]), robe_shadow)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-11, -29 + sway), Vector2(11, -29 + sway),
+        Vector2(15, -8 + sway), Vector2(18, 5),
+        Vector2(8, 3), Vector2(2, 7), Vector2(-5, 3),
+        Vector2(-17, 6), Vector2(-15, -8 + sway)
     ]), Color("#362b35"))
-    draw_line(Vector2(-14, -4 + sway), Vector2(-46, 10), c, 7.0)
-    draw_line(Vector2(14, -4 + sway), Vector2(46, 10), c, 7.0)
+    draw_line(Vector2(-13, -20 + sway), Vector2(-17, 1), robe_edge, 1.8)
+    draw_line(Vector2(7, -18 + sway), Vector2(12, 1), robe_edge, 1.5)
+    draw_line(Vector2(-19, 6), Vector2(-10, 5), Color("#8c6268"), 1.5)
+    draw_line(Vector2(3, 7), Vector2(10, 5), Color("#8c6268"), 1.5)
+
+    # Hood and pale ritual mask, with a narrow red eye-slit.
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-18, -46 + sway), Vector2(-12, -60 + sway),
+        Vector2(0, -65 + sway), Vector2(13, -58 + sway),
+        Vector2(18, -43 + sway), Vector2(11, -34 + sway),
+        Vector2(-11, -34 + sway)
+    ]), robe_shadow)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-10, -49 + sway), Vector2(-7, -56 + sway),
+        Vector2(1, -58 + sway), Vector2(9, -52 + sway),
+        Vector2(7, -40 + sway), Vector2(-5, -39 + sway)
+    ]), Color("#a28b80"))
+    draw_line(Vector2(-7, -48 + sway), Vector2(7, -49 + sway), Color("#2b1a24"), 3.0)
+    draw_line(Vector2(-5, -48 + sway), Vector2(5, -49 + sway), Color("#d76b70"), 1.3)
+    draw_line(Vector2(0, -57 + sway), Vector2(1, -41 + sway), Color("#6d4b54"), 1.0)
+
+    # Chest seal and hanging talisman make the cult identity readable at gameplay scale.
+    draw_arc(Vector2(0, -21 + sway), 7.0, 0.0, TAU, 20, rune_color, 1.6)
+    draw_line(Vector2(0, -27 + sway), Vector2(0, -15 + sway), rune_color, 1.5)
+    draw_line(Vector2(-5, -21 + sway), Vector2(5, -21 + sway), rune_color, 1.5)
+    draw_line(Vector2(0, -14 + sway), Vector2(3, -7 + sway), Color("#b99b82"), 1.4)
+
     if windup > 0.0:
-        draw_arc(Vector2(facing * 22.0, -24), 34.0, -0.85 if facing > 0 else 3.99, 0.85 if facing > 0 else 5.42, 14, Color("#c44e5a"), 4.0)
-    draw_string(ThemeDB.fallback_font, Vector2(-48, -72), "CULTIST %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#b7a09b"))
+        var telegraph_color := Color("#c44e5a") if hit_flash <= 0.0 else Color("#f4c5b6")
+        draw_arc(Vector2(facing * 22.0, -24), 38.0, -0.92 if facing > 0 else 4.06, 0.92 if facing > 0 else 5.36, 20, telegraph_color, 3.0)
+        draw_line(Vector2(facing * 18.0, -24), Vector2(facing * 53.0, -31), telegraph_color, 2.0)
+    draw_string(ThemeDB.fallback_font, Vector2(-48, -75), "CULTIST %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#b7a09b"))
