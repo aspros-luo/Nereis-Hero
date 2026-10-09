@@ -253,3 +253,33 @@ When a future implementation reaches a truly unresolved core story decision, sto
 2. Continue technical work on dodge-state timing and combat interruption without adding unapproved story triggers.
 3. Ask the Director to choose the exact story beat for basic iaijutsu before connecting the unlock call.
 4. Design Witch Time's timing and world-slow implementation separately before enabling it in normal play.
+
+
+## 2026-10-09 — Story reward and mutation gates
+
+### Implemented on `feature/protagonist-system`
+
+- Connected the first human iaijutsu unlock to the prologue's three-Warden clear and escape-road reveal.
+- Added a legacy-save migration so saves that already completed the prologue are not stranded without the basic move.
+- Added the basic iaijutsu name to character details in Simplified Chinese, Traditional Chinese, English and Japanese.
+- Registered `double_jump` and `quick_dash` in the persistent ability ledger; dodge remains a baseline action.
+- Gated Blood Iaijutsu behind the basic move, hidden resonance/exposure, a future sewer-aberrant achievement flag and an aberrant-gland material. This prevents the prologue surgical-tray clue alone from immediately mutating the move.
+
+### Design decision
+
+- Basic iaijutsu is the first story reward: the Hero remembers a human technique after the final prologue encounter.
+- Blood Iaijutsu is the first occult mutation, planned for the Royal City Sewer quest. It must be supported by an actual encounter, item, and narrative clue before becoming reachable.
+- Skills should keep their silhouette and gain only subtle tentacle-like details as they mutate. A dedicated skill-icon asset/UI system does not yet exist, so this remains an art-direction constraint rather than a claimed implementation.
+- Mobility ability IDs are records only; double jump, quick dash, grapple, wall climb and Witch Time still need their actual movement/state implementations and level-boundary tests.
+
+### Verification status
+
+- Source updates were committed to the feature branch. Static consistency review remains necessary after the final edits.
+- Godot parser, scene launch, combat and save migration runtime tests are not available in this execution environment.
+- No GitHub Actions workflow was intentionally triggered.
+
+### Next technical work
+
+1. Verify code paths for base iaijutsu unlock, mutation gates, HUD display, and save migration.
+2. Audit dodge/jump state transitions and design a movement ability interface without enabling unimplemented traversal mechanics.
+3. Keep sewer encounter implementation and other major narrative/level nodes as a future director checkpoint; proceed autonomously on reusable technical foundations.
