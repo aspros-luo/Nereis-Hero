@@ -47,10 +47,10 @@ This is intentionally a story/level design gate, not permission to invent a new 
 - [x] Basic iaijutsu has a distinct combat profile with no HP cost and no abnormal-load increase.
 - [x] The prologue's final Warden encounter grants basic iaijutsu as the first story reward; legacy completed-prologue saves are migrated.
 - [x] Basic iaijutsu appears in the character/technique details in all four supported languages.
-- [x] Added `double_jump` and `quick_dash` to the persistent ability registry alongside Witch Time, grapple and wall climb.
+- [x] Added `double_jump` and `quick_dash` to the persistent ability registry alongside Witch Time, grapple and wall climb.\n- [x] Implemented one additional mid-air jump when `double_jump` is unlocked; the ability remains locked by default.
 - [x] Blood Iaijutsu now requires the basic form plus the planned sewer-aberrant achievement and aberrant-gland material, preventing an early mutation from hidden values alone.
 - [ ] Implement the Royal City Sewer encounter, achievement/material reward calls and the associated narrative/art clues; Blood Iaijutsu is intentionally unavailable until that content exists.
-- [ ] Implement and runtime-test Witch Time, grapple, wall-climb, double jump and quick dash as actual mechanics; current movement IDs are progression records/placeholders only.
+- [ ] In Godot, test double jump only works after the unlock record, allows exactly one extra air jump, and resets after landing/death/rest.\n- [ ] Implement and runtime-test quick dash, Witch Time, grapple and wall climb; these remain progression records/placeholders only.
 - [ ] Verify old-save migration, save/load persistence and new-game reset for ability records, achievements and materials.
 
 ## 尚未验证 / Not yet verified
@@ -111,3 +111,12 @@ Source-level checks only; Godot runtime regression remains pending.
 - [ ] The subtle tentacle-like icon evolution is a documented art rule only; a dedicated skill icon system does not yet exist.
 
 Source-level checks do not replace Godot 4.6.1 parser and runtime tests.
+
+
+## Movement ability foundation / 移动能力基础
+
+- [x] Ordinary jump and coyote-time jump remain available without progression flags.
+- [x] Double jump checks the persistent `double_jump` ability record and allows one additional air jump only.
+- [x] Air-jump count resets on landing, death respawn and full restoration.
+- [ ] Godot runtime test: locked state cannot double-jump; unlocked state allows exactly one extra jump; landing resets it.
+- [ ] Define a separate input/state contract for quick dash before implementation; do not silently replace ordinary dodge.
