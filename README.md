@@ -40,6 +40,10 @@ Complete world map atlas (Chinese draft):
 
 `docs/COMPLETE_WORLD_MAP_ATLAS_CN.md`
 
+World map atlas diagram (SVG):
+
+`docs/assets/COMPLETE_WORLD_MAP_ATLAS.svg`
+
 Director plan:
 
 `docs/DIRECTOR_NARRATIVE_PLAN.md`
