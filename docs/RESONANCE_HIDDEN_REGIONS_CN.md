@@ -212,7 +212,7 @@ flowchart LR
 - **存档：** `discovered_hidden_regions`、`opened_hidden_paths`、`entered_hidden_regions` 已接入存档 / 读取 / reset；旧存档缺少这些字段时默认为空集合。
 - **返回路线：** 只有玩家从 A3 正常抵达 A4 后才会生成 A4 侧井门；无论从村庄还是 A4 首次开启，都必须激活灵视并达到鸣响门槛。两侧共用 H01 通路 ID，永久开启状态保持同步。
 
-`WorldState.mark_outer_god_resonance()` 现在会在外神共鸣剧情事实成立时，把 `outer_exposure` 提升到至少 12；即便旧存档已保存该布尔事实、但缺少接触数值，也会在调用时修正。R08 后续可以再将外神接触提升到 18。它仍不能因玩家单纯抵达 A9 而触发。
+`WorldState.mark_outer_god_resonance()` 会在外神共鸣剧情事实成立时把 `outer_exposure` 提升到至少 12；如果 `anomaly_observer_reaction`（R08）已经记录，则直接补齐到 18。这样 R08 与蜜忒相关外神共鸣无论先后发生，都能达到相同最终门槛；它仍不能因玩家单纯抵达 A9 而触发。
 
 以下工作仍未完成：
 
