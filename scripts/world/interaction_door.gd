@@ -6,6 +6,8 @@ const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.g
 
 @export var prompt_text: String = "E  Enter"
 @export var enabled := true
+@export var unlock_once_flag_id: String = ""
+@export var opened_prompt_text: String = ""
 
 var hero_nearby := false
 var cooldown := 0.0
@@ -15,6 +17,8 @@ func _ready() -> void:
     collision_mask = 1
     monitoring = true
     set_meta("interaction_priority", 100)
+    if not unlock_once_flag_id.is_empty() and unlock_once_flag_id in WorldState.achievement_flags and not opened_prompt_text.is_empty():
+        prompt_text = opened_prompt_text
     body_entered.connect(_on_body_entered)
     body_exited.connect(_on_body_exited)
     queue_redraw()
@@ -42,6 +46,16 @@ func _unhandled_input(event: InputEvent) -> void:
         return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 0.6
+        if not unlock_once_flag_id.is_empty() and unlock_once_flag_id not in WorldState.achievement_flags:
+            WorldState.record_achievement(unlock_once_flag_id)
+            if not opened_prompt_text.is_empty():
+                prompt_text = opened_prompt_text
+            print("[NEREIS][MAP] One-way hatch opened id=%s" % unlock_once_flag_id)
+            queue_redraw()
+            var opened_viewport := get_viewport()
+            if opened_viewport:
+                opened_viewport.set_input_as_handled()
+            return
         interacted.emit()
         var viewport := get_viewport()
         if viewport:
