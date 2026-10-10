@@ -478,7 +478,11 @@
         "opens_from": "A9",
         "requires_target_already_reached": true
       },
-      "min_distinct_anomaly_sources": 2
+      "min_distinct_anomaly_sources": 2,
+      "required_resonance_sources": [
+        "anomaly_bell_retiming",
+        "anomaly_erased_street_sign"
+      ]
     },
     {
       "id": "H07",
@@ -518,7 +522,12 @@
         "requires_target_already_reached": false,
         "requires_ending_state": true
       },
-      "min_distinct_anomaly_sources": 3
+      "min_distinct_anomaly_sources": 3,
+      "required_resonance_sources": [
+        "anomaly_bell_retiming",
+        "anomaly_erased_street_sign",
+        "anomaly_water_reflection"
+      ]
     }
   ],
   "resonance_progression_contract": [
@@ -526,6 +535,7 @@
       "id": "R01",
       "region": "A2",
       "event": "首次确认钟声与钟锤不同步",
+      "source_id": "anomaly_bell_retiming",
       "resonance_delta": 12,
       "unlock_ability": "resonance_sight",
       "required_before": [
@@ -534,12 +544,13 @@
       "enables": [
         "H01"
       ],
-      "note": "H01 设计为回访 A1 的早期秘密，不依赖蜜忒关系线。"
+      "note": "H01是回访A1的早期秘密，不依赖蜜忒关系线。"
     },
     {
       "id": "R02",
       "region": "A2",
-      "event": "沿旧朝圣石阶确认第二处异常",
+      "event": "沿旧朝圣石阶确认第二处回声",
+      "source_id": "anomaly_old_pilgrim_echo",
       "resonance_delta": 6,
       "enables": [
         "H02"
@@ -550,6 +561,7 @@
       "id": "R03",
       "region": "A3",
       "event": "在旧市场发现第三街路牌",
+      "source_id": "anomaly_erased_street_sign",
       "resonance_delta": 10,
       "enables": [
         "H03"
@@ -559,18 +571,21 @@
     {
       "id": "R04",
       "region": "A4",
-      "event": "调查旧水库的古老石层",
+      "event": "调查旧水库的古老石层与倒影",
+      "source_id": "anomaly_water_reflection",
       "resonance_delta": 8,
       "ancient_exposure_delta": 1,
       "enables": [
         "H04"
       ],
-      "cumulative_target": 36
+      "cumulative_target": 36,
+      "note": "事件位于隐藏楼梯入口之前，避免自解锁循环。"
     },
     {
       "id": "R05",
       "region": "A6",
-      "event": "在钟塔内部发现失声窗口",
+      "event": "在钟塔内部发现无声窗口",
+      "source_id": "anomaly_silent_bell_window",
       "resonance_delta": 6,
       "enables": [
         "H05"
@@ -581,36 +596,40 @@
       "id": "R06",
       "region": "A8",
       "event": "确认王墓铭文遭到主动抹除",
+      "source_id": "anomaly_erased_royal_name",
       "resonance_delta": 13,
       "ancient_exposure_delta": 1,
       "enables": [
         "H06"
       ],
-      "cumulative_target": 55
+      "cumulative_target": 55,
+      "note": "进入隐藏廊道前取得第二层古代接触。"
     },
     {
       "id": "R07",
       "region": "A9",
-      "event": "在主线抵达外环后稳定镜街倒影",
+      "event": "在主线经过的外环积水处稳定镜街倒影",
+      "source_id": "anomaly_mirror_street_echo",
       "resonance_delta": 13,
       "outer_exposure_delta": 12,
       "enables": [
         "H07"
       ],
       "cumulative_target": 68,
-      "note": "外神暴露可依剧情关系状态延后；不要求普通主线完成。"
+      "note": "该来源点与隐藏入口分开；外神接触可受关系 / 剧情状态影响。"
     },
     {
       "id": "R08",
       "region": "A11",
-      "event": "深层研究区中观察者反应并拼合证据",
+      "event": "深层研究区的观测记录出现第二个视点",
+      "source_id": "anomaly_observer_reaction",
       "resonance_delta": 10,
-      "ancient_exposure_delta": 0,
       "outer_exposure_delta": 6,
       "enables": [
         "H08"
       ],
-      "cumulative_target": 78
+      "cumulative_target": 78,
+      "note": "该来源点位于隐藏入口之前；终局出口仍检查结局状态。"
     }
   ]
 }
