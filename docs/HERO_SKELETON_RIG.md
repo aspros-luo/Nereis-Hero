@@ -1,25 +1,34 @@
-# Hero Skeleton2D Rig / 主角骨骼原型
+# Hero Polygon2D Skeleton Rig / 主角 UV 骨骼绑定
 
-## Purpose / 目标
-This is a rigid cutout prototype built with Godot `Skeleton2D` and `Bone2D`, not a full mesh-deformation rig. The character is rendered from SVG layers authored at a common 192x224 source canvas.
+## Implementation / 实现
 
-这是基于 Godot `Skeleton2D` 与 `Bone2D` 的分层拼接原型，不是网格变形骨骼。所有角色部件都使用同一张 192x224 原始画布。
+The live prototype uses a compact atlas derived from the user-provided RPG-Udemy texture. Every visible body part is a `Polygon2D` with explicit UV coordinates into the same texture. Each polygon is assigned to a `Skeleton2D` and a `Bone2D` path with four rigid vertex weights. This is a real texture-mapped skeleton deformation setup, not frame selection or independent whole-image sprites.
 
-## Anchors / 锚点
-- Source feet anchor: `(96, 220)`.
-- Root scale: `0.5`; each sprite layer preserves its original source coordinates.
-- Main pivots: pelvis `(96,156)`; torso `(95,128)`; head/neck `(98,70)`; rear arm `(63,90)`; front arm `(120,91)`; rear leg `(70,160)`; front leg `(119,158)`; weapon hand `(128,111)`.
+当前主角原型使用用户提供的 RPG-Udemy 纹理整理出的轻量部件图集。每个身体部件都是带明确 UV 坐标的 `Polygon2D`，共用同一张纹理，并绑定到 `Skeleton2D` 内对应的 `Bone2D`。每个部件的四个顶点都分配给目标骨骼，权重为 1.0，因此部件会绕关节刚性转动，而不是按整个人物帧图偏移。
 
-- 原图脚底锚点：`(96, 220)`。
-- 根节点缩放：`0.5`，各部件保留原图相对位置；Sprite2D 的偏移始终为对应关节坐标的负值，避免每个状态单独调整渲染矩形。
-- 主关节使用原始画布坐标定义；如更换素材，需保持画布尺寸和这些锚点，或同步更新骨骼坐标。
+## Rig hierarchy / 骨骼层级
 
-## Runtime animation / 运行时动作
-The controller drives idle breathing, leg/arm swing, jump/fall poses, attacks, grappling, dodging, quick dash, wall-climbing, hurt and death. It only rotates visual bones; CharacterBody2D movement, hitboxes, hurtboxes, stamina, and combat timing remain in `hero.gd`.
+- `Pelvis → Spine → Head`
+- `Spine → LeftShoulder → LeftElbow → LeftHand`
+- `Spine → RightShoulder → RightElbow → RightHand → Weapon`
+- `Pelvis → LeftHip → LeftKnee → LeftAnkle → LeftFoot`
+- `Pelvis → RightHip → RightKnee → RightAnkle → RightFoot`
+- `Scabbard` is parented to the spine; hair follows the head.
 
-动画控制器驱动待机、跑动、跳跃、下落、攻击、钩爪、闪避、快速冲刺、攀墙、受伤和死亡姿态。它只控制视觉骨骼，不改变角色碰撞体和战斗逻辑。
+## UV / 坐标
 
-## Source-art decision / 素材取舍
-The supplied `153143.png` is a complete-character frame atlas, not separated body pieces, so using it as one Sprite2D would retain the alignment issue and cannot produce useful rigid Bone2D motion. The new rig therefore uses the game's existing dark-knight SVG paths as the first working layered prototype. The two `tex1_...` texture files have not yet been inspected at pixel level; they are not silently treated as bone parts.
+The compact source atlas is 112×73 pixels; its regions were mapped from the packed 320×207 working atlas using a fixed scale factor. All polygons use matching geometry/UV vertex order. The skeleton rest pose is captured after creating bones.
 
-你提供的 `153143.png` 是整角色动作图集，并未按头、躯干、四肢分层。直接把整张图作为 Sprite2D 仍然会有偏移，也无法产生有效的刚性骨骼运动。因此本轮先用游戏已有的哥特骑士 SVG 路径制作可运行的分层骨骼原型。两张 `tex1_...` 纹理尚未完成像素级检查，本轮不会擅自将它们当作骨骼部件。
+图集为 112×73 像素；UV 区域按固定比例从 320×207 工作图集映射而来。多边形几何顶点与 UV 顶点顺序一一对应。所有骨骼创建后都会记录初始 rest pose。
+
+## Animation / 动画
+
+Runtime bone rotations cover idle, move, jump, fall, attack, grapple, dodge, quick dash, wall-climb, hurt and death. The hero movement controller, hitboxes, stamina, damage and combat timings remain in `hero.gd`.
+
+运行时骨骼旋转覆盖待机、移动、跳跃、下落、攻击、钩爪、闪避、快速冲刺、攀墙、受伤和死亡。主角位移、碰撞体、体力、伤害和战斗时序仍由 `hero.gd` 控制。
+
+## Current limitation / 当前限制
+
+This is the first UV/rig binding prototype. It uses rigid per-part weights (not smooth multi-bone skinning) so arms, legs, hair and equipment can pivot without drifting. The compact preview atlas is intentionally lower resolution than the source texture; after verifying the rig in Godot, the atlas can be regenerated at a higher resolution and the UV scale updated.
+
+这是第一版 UV 与骨骼绑定原型。当前每个部件采用单骨骼刚性权重，而不是跨多个骨骼的平滑蒙皮，因此手臂、腿、头发和武器能按关节旋转且避免整体精灵漂移。当前图集分辨率低于原始贴图；待 Godot 实机确认关节位置后，再提升图集分辨率并同步 UV 比例。

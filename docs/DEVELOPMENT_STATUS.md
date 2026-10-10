@@ -415,3 +415,12 @@ The design document was committed to the feature branch. This was a documentatio
 - Static checks only: resource references/pivots were inspected. Godot editor/import/runtime validation has not been run in this environment; visual verification is still required locally.
 - 本轮将主角实时绘制由整帧图集改为分层 `Skeleton2D` / `Bone2D`，新增九个共享原始坐标的 SVG 部件并加入基础状态动画。
 - 目前只有静态检查；尚未在本环境启动 Godot 导入或运行游戏，仍需本地验证关节衔接、脚底锚点及攻击视觉。
+
+## 2026-10-10 UV 骨骼绑定 / Polygon2D UV rig
+- The hero now uses a compact atlas texture with Polygon2D UV mapping and explicit Bone2D weights, replacing the intermediate SVG layer prototype.
+- Static checks cover texture dimensions, UV bounds, bone names, Polygon2D weight counts, supported state names and preserved core combat functions.
+- Godot editor/import/runtime verification has not been run in this environment; first-run visual checks remain required.
+
+- 主角现已改用轻量纹理图集、Polygon2D UV 映射及显式 Bone2D 顶点权重，替换上一版 SVG 图层拼接方案。
+- 静态检查覆盖纹理尺寸、UV 范围、骨骼名称、Polygon2D 权重数量、状态名称以及既有战斗函数。
+- 当前环境未运行 Godot 编辑器或游戏，首次本地运行仍需检查画面和运行错误。

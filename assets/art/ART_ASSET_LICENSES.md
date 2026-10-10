@@ -43,3 +43,7 @@ No third-party pack has been copied into this repository. Listing a candidate do
 ## Temporary animation asset note / 临时动作素材说明
 
 The sprite sheet is used solely to validate frame-based movement and sword-attack readability. Its presence does not imply that the original asset is cleared for redistribution. Confirm its source license before a public release or replace it with original artwork. / 该图集仅用于验证逐帧移动和挥剑动作可读性；接入项目不代表原始素材已获公开再分发许可。公开发布前需确认来源许可，或替换为项目原创素材。
+
+## User-provided character parts atlas / 用户提供的角色部件图集
+
+The in-game compact WebP atlas was derived from selected parts of `RPG-Udemy/Assets/Graphics/tex1_512x512_4d6c36bcbd5d9ddc_423915aa39e773f2_9.png`, supplied by the project owner for prototype use. The original upstream license has not been independently verified. Confirm redistribution/commercial rights before public release, or replace the atlas with original art. / 游戏内轻量 WebP 图集取自项目所有者提供的 `RPG-Udemy/Assets/Graphics/tex1_512x512_4d6c36bcbd5d9ddc_423915aa39e773f2_9.png` 部分区域，仅用于原型验证。原始素材许可证尚未独立核验；公开发行前需确认再分发/商业使用权限，或替换为项目原创素材。

@@ -81,3 +81,13 @@ A full-character frame sheet from the user's `RPG-Udemy` repository is temporari
 - 所有部件保留同一张 192x224 原始画布，脚底锚点为 (96, 220)，Sprite2D 按关节坐标负偏移，主角不再使用整角色动作图集选帧绘制。
 - 待机、移动、跳跃/下落、攻击、钩爪、闪避、快速冲刺、攀墙、受伤和死亡只驱动视觉骨骼；碰撞与战斗逻辑保持不变。
 - 你提供的 `153143.png` 保留为参考素材，但当前不作为骨骼渲染源：它是完整角色图集，并未拆出四肢。两张 `tex1_...` 图片尚未验证，本轮不宣称它们已经适配骨骼。
+
+## Polygon2D + UV skeleton prototype / Polygon2D 与 UV 骨骼原型（2026-10-10）
+
+- Replaced the temporary SVG cutout renderer with a texture-atlas renderer based on `Polygon2D`, explicit UVs, `Skeleton2D`, `Bone2D`, and rigid per-vertex weights.
+- The atlas uses selected components extracted from the supplied PNG texture. It is a compact prototype atlas, not the unmodified 2048×2048 source.
+- The controller drives head, spine, arms, knees, hips, weapon, hair and scabbard in existing gameplay states.
+
+- 本轮将临时 SVG 拼接渲染器替换为基于 `Polygon2D`、明确 UV、`Skeleton2D`、`Bone2D` 和顶点权重的纹理骨骼原型。
+- 图集来自用户提供的 PNG 纹理中提取的局部部件，是轻量原型图集，不是未经修改的 2048×2048 原图。
+- 动画控制器会驱动头部、脊柱、手臂、膝部、髋部、武器、头发与背部刀鞘。
