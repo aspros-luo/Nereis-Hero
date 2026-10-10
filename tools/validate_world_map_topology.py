@@ -308,16 +308,18 @@ def validate(data: dict[str, Any]) -> list[str]:
                 fail(errors, f"{mid}: resonance target does not match {target_id}'s gate.")
 
     known_source_ids = set(nonempty_source_ids)
+    story_effects = data.get("story_state_effects", [])
     story_outer_seed = max(
         (
             int(effect.get("effects", {}).get("outer_exposure_min", 0))
-            for effect in data.get("story_state_effects", [])
+            for effect in story_effects
         ),
         default=0,
     )
+    outer_story_triggers = {str(effect.get("trigger", "")).split(".")[-1] for effect in story_effects}
     for secret in hidden:
         sid = secret.get("id", "<unknown>")
-        required_sources = secret.get("required_resonance_sources", [])
+        required_sources = secret.get("required_source_ids", [])
         if len(required_sources) != len(set(required_sources)):
             fail(errors, f"{sid}: duplicate required resonance source IDs.")
         unknown_sources = sorted(set(required_sources) - known_source_ids)
@@ -326,10 +328,14 @@ def validate(data: dict[str, Any]) -> list[str]:
         min_sources = int(secret.get("min_distinct_anomaly_sources", 0))
         if min_sources < 0 or min_sources > len(required_sources):
             fail(errors, f"{sid}: min_distinct_anomaly_sources exceeds its listed source prerequisites.")
+        if min_sources and len(required_sources) < min_sources:
+            fail(errors, f"{sid}: listed source prerequisites do not satisfy min_distinct_anomaly_sources.")
         if int(secret.get("min_ancient_exposure", 0)) > ancient_growth:
             fail(errors, f"{sid}: ancient exposure gate exceeds all planned source gains.")
         if int(secret.get("min_outer_exposure", 0)) > outer_growth + story_outer_seed:
             fail(errors, f"{sid}: outer exposure gate exceeds all planned source / story gains.")
+        if secret.get("requires_outer_god_resonance") is True and "mark_outer_god_resonance" not in outer_story_triggers:
+            fail(errors, f"{sid}: outer-god gate has no story-state source contract.")
 
     # Ensure the three intended macro loops are recorded, not merely implicit.
     expected_loops = {"L01", "L02", "L03"}
