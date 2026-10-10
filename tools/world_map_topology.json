@@ -616,10 +616,7 @@
         "H07"
       ],
       "cumulative_target": 68,
-      "note": "仅在现有外神共鸣剧情事实成立后，才把高鸣响映射到镜街入口；普通主线无需完成此秘密。",
-      "requires_flags": [
-        "outer_god_resonance"
-      ]
+      "note": "该主线路径事件正常增加鸣响；H07 仍需外神共鸣剧情事实与 outer_exposure ≥ 12，因此不做外神路线的玩家不会看到可用入口。"
     },
     {
       "id": "R08",
