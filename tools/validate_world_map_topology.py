@@ -302,18 +302,26 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "Duplicate resonance progression source IDs.")
 
     hidden_by_id = {item.get("id", ""): item for item in hidden}
-    running_resonance = 0
+    running_resonance = int(data.get("resonance_baseline_at_prologue", 0))
     ancient_growth = 0
     outer_growth = 0
+    progression_by_source = {item.get("source_id", ""): item for item in progression}
     for milestone in progression:
         mid = milestone.get("id", "<unknown>")
         if milestone.get("region") not in region_ids:
             fail(errors, f"{mid}: resonance source references unknown region {milestone.get('region')}.")
 
-        delta = int(milestone.get("resonance_delta", 0))
-        if delta <= 0:
-            fail(errors, f"{mid}: resonance_delta must be positive.")
-        running_resonance += max(0, delta)
+        if "resonance_target" in milestone:
+            target = int(milestone["resonance_target"])
+            if target < running_resonance or not 0 <= target <= 100:
+                fail(errors, f"{mid}: resonance_target must be a reachable value from the previous source.")
+            running_resonance = max(running_resonance, target)
+        else:
+            delta = int(milestone.get("resonance_delta", 0))
+            if delta <= 0:
+                fail(errors, f"{mid}: non-target resonance_delta must be positive.")
+            running_resonance += max(0, delta)
+
         if milestone.get("cumulative_target") != running_resonance:
             fail(errors, f"{mid}: cumulative_target must match the one-time resonance source curve.")
 
@@ -326,6 +334,32 @@ def validate(data: dict[str, Any]) -> list[str]:
                 fail(errors, f"{mid}: unlocks unknown hidden region {target_id}.")
             elif int(secret.get("min_resonance", -1)) != int(milestone.get("cumulative_target", -2)):
                 fail(errors, f"{mid}: resonance target does not match {target_id}'s gate.")
+
+    source_specs = data.get("resonance_sources", [])
+    source_spec_ids = [item.get("id", "") for item in source_specs]
+    if len(source_spec_ids) != len(set(source_spec_ids)):
+        fail(errors, "Duplicate detailed resonance source IDs.")
+    if set(source_spec_ids) != set(milestone_ids):
+        fail(errors, "Detailed resonance sources do not match progression milestones.")
+    source_by_id = {item.get("id", ""): item for item in source_specs}
+    for milestone in progression:
+        spec = source_by_id.get(milestone.get("id", ""))
+        if spec is None:
+            continue
+        comparisons = {
+            "source_id": milestone.get("source_id"),
+            "resonance_delta": milestone.get("resonance_delta", 0),
+            "resonance_after": milestone.get("cumulative_target"),
+            "ancient_exposure_delta": milestone.get("ancient_exposure_delta", 0),
+            "outer_exposure_delta": milestone.get("outer_exposure_delta", 0),
+        }
+        for key, expected in comparisons.items():
+            if spec.get(key, 0 if key != "source_id" else "") != expected:
+                fail(errors, f"{milestone.get('id')}: detailed resonance source disagrees on {key}.")
+        if spec.get("outer_exposure_floor") != milestone.get("outer_exposure_floor"):
+            fail(errors, f"{milestone.get('id')}: outer exposure floor differs between source tables.")
+        if spec.get("outer_exposure_requires") != milestone.get("outer_exposure_requires"):
+            fail(errors, f"{milestone.get('id')}: outer exposure condition differs between source tables.")
 
     known_source_ids = set(nonempty_source_ids)
     story_effects = data.get("story_state_effects", [])
@@ -389,6 +423,7 @@ def main() -> int:
     print(f" - Macro connections: {len(data['connections'])}")
     print(f" - Main-route nodes: {len(data['primary_route'])}")
     print(f" - Hidden subregions: {len(data['hidden_regions'])}")
+    print(f" - Resonance progression milestones: {len(data.get('resonance_progression_contract', []))}")
     print(f" - Resonance source events: {len(data['resonance_sources'])}")
     print(f" - Macro loops: {len(data['loops'])}")
     print(" - Main route reaches A12 without hidden regions or locked shortcuts.")
