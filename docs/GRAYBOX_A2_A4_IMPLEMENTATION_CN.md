@@ -35,7 +35,7 @@
 | A2 / `anomaly_bell_retiming` | 钟锤不动，但钟声已经响起 | 12 | 解锁已有的 `resonance_sight`，用 V 激活 |
 | A2 / `anomaly_old_pilgrim_echo` | 旧朝圣石阶上的第二处回声 | 18 | 无 |
 | A3 / `anomaly_erased_street_sign` | 标牌写着不存在的第三街 | 28 | 记录后期隐藏区可引用的异常来源 |
-| A4 / `anomaly_old_stone_layer` | 新管线覆盖在明显更古老的石构上 | 36 | 不重复增加古神接触度；序章已将其提升至至少 1 |
+| A4 / `anomaly_old_stone_layer` | 新管线覆盖在明显更古老的石构上 | 36 | 确保古神接触度至少为 1；若序章已经记录过，则不重复累加 |
 
 注意：A2–A4 的来源当前已接入新灰盒脚本，但仍需在 Godot 里核实交互焦点、鸣响增长时机以及读档恢复。
 
