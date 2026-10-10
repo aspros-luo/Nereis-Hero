@@ -290,14 +290,19 @@ func mark_ancient_residue_awakened() -> void:
     save_game()
 
 func mark_outer_god_resonance() -> void:
-    var exposure_changed := outer_exposure < 12
-    outer_exposure = maxi(outer_exposure, 12)
+    # Keep deep hidden-region access order-independent. If the Hero examined the
+    # Observer Reaction before the Mite-related story flag, the later story event
+    # must reconcile the already-recorded +6 instead of leaving H08 permanently locked.
+    # 保证深层入口不受调查顺序影响：若先调查观测者，再触发外神共鸣，接触度应补齐到 18。
+    var exposure_target := 18 if "anomaly_observer_reaction" in resonance_sources else 12
+    var exposure_changed := outer_exposure < exposure_target
+    outer_exposure = maxi(outer_exposure, exposure_target)
     if outer_god_resonance:
         if exposure_changed:
             save_game()
         return
     outer_god_resonance = true
-    print("[NEREIS][STORY] Outer-God resonance established")
+    print("[NEREIS][STORY] Outer-God resonance established; exposure=%d" % outer_exposure)
     save_game()
 
 func advance_mite_control_stage() -> int:
