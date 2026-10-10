@@ -140,11 +140,14 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 
 ### World-map graybox — connected main-route slice
 
-- A2–A12 now have programmatic graybox scenes; H01 Well Below the Well and H07 Mirror Street have dedicated hidden-region scenes.
-- R01–R07 are connected as one-time anomaly investigations. R01 unlocks the existing Resonance Sight ability; R04–R06 use minimum exposure floors to avoid permanently locking optional content.
+- A2–A12 have programmatic graybox scenes; H01 Well Below the Well and H07 Mirror Street have dedicated hidden-region scenes.
+- A11 Deep Research Depths and H08 Primordial Hollow have now been added using the shared graybox controller, with distinct environmental landmarks and scene-resume mappings.
+- R01–R08 are connected as one-time anomaly investigations. R01 unlocks the existing Resonance Sight ability; R04–R06 use minimum exposure floors to avoid permanently locking optional content.
 - H01 has persistent discovered / opened / entered states shared by its village and A4 entrances; the A4 return hatch is a one-time unlock.
 - H07 requires Resonance Sight, resonance ≥ 68, outer exposure ≥ 12, the outer-god story flag, and the R07 evidence source. Its A12 shortcut stays locked until the player reaches the Inner City and opens the far-side gate.
-- Current state: code and scene wiring committed; Godot 4.6.x runtime acceptance is still pending.
+- A11 can be reached from A8 through C15 (Royal Tomb maintenance shaft) or A10 through C19 (Silent Chapel). Each path has its own persistent gate ID while both record entry to A11. R08 raises resonance to 78 and adds the planned outer exposure.
+- H08 requires resonance ≥ 78, ancient exposure ≥ 2, outer exposure ≥ 18, the outer-god story flag, and three prior anomaly sources. A12 routes through the shared ending evaluator; H08 offers an optional deep-dream exit only after the physical-union story state.
+- Current state: code and scene wiring committed; Godot 4.6.x runtime acceptance is still pending. A13 remains a topology-level ending layer rather than a dedicated standalone scene.
 
 Implementation notes and acceptance checklists:
 
@@ -153,6 +156,8 @@ Implementation notes and acceptance checklists:
 `docs/GRAYBOX_A5_A8_IMPLEMENTATION_CN.md`
 
 `docs/GRAYBOX_A9_A12_IMPLEMENTATION_CN.md`
+
+`docs/GRAYBOX_A11_H08_IMPLEMENTATION_CN.md`
 
 ### Combat
 
