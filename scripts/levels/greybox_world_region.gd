@@ -44,6 +44,10 @@ func _ready() -> void:
 func _spawn_x_for_side(side: String) -> float:
     if side == "east":
         return map_width - 180.0
+    if region_id == "H01":
+        # The village entrance drops the Hero near the well shaft, not at the far edge.
+        # 从村庄进入井底时，主角应出现在井道附近，而不是场景边缘。
+        return 700.0
     return 180.0
 
 func _spawn_hero(spawn_x: float) -> void:
@@ -54,6 +58,9 @@ func _spawn_hero(spawn_x: float) -> void:
     _add_character_collision(hero, 18.0, 48.0)
     add_child(hero)
     hero.defeated.connect(_on_hero_defeated)
+    # Keep death recovery inside the current region instead of reusing a previous scene's checkpoint.
+    # 每个灰盒区域记录自己的入口检查点，避免死亡后回到上一个场景的坐标。
+    WorldState.set_checkpoint(hero.global_position)
 
     camera = Camera2D.new()
     camera.name = "HeroCamera"
