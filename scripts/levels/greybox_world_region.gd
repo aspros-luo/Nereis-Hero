@@ -401,7 +401,13 @@ func _spawn_region_sources() -> void:
                 "anomaly_mirror_street_echo",
                 "THE STREET IN THE PUDDLE",
                 "The puddle reflects a street with one more lamp.\n\nYou count the lights again. Nothing changes above you.",
-                68
+                68,
+                0,
+                0,
+                "",
+                0,
+                12,
+                true
             )
 
 func _spawn_source(
@@ -414,7 +420,8 @@ func _spawn_source(
     outer_delta: int = 0,
     unlock_ability_id: String = "",
     ancient_floor: int = 0,
-    outer_floor: int = 0
+    outer_floor: int = 0,
+    require_outer_god_resonance: bool = false
 ) -> void:
     var clue := Node2D.new()
     clue.set_script(RESONANCE_SOURCE_SCRIPT)
@@ -428,6 +435,7 @@ func _spawn_source(
     clue.outer_exposure_delta = outer_delta
     clue.ancient_exposure_floor = ancient_floor
     clue.outer_exposure_floor = outer_floor
+    clue.require_outer_god_resonance = require_outer_god_resonance
     clue.unlock_ability_id = unlock_ability_id
     clue.unlock_source_type = "resonance"
     add_child(clue)
