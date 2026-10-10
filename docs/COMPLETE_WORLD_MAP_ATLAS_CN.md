@@ -10,7 +10,7 @@
 
 完整区划示意图：[查看 SVG 全图](./assets/COMPLETE_WORLD_MAP_ATLAS.svg)。图中主路线、后期开启的捷径、可选连接使用不同线型；子区划名称与连接规则以本文为准。
 
-灵视隐藏区域挂接图：[查看隐藏地图网络 SVG](./assets/HIDDEN_MAPS_NETWORK.svg)。地图静态校验和 H01–H07 隐藏区设计见[地图拓扑验证与灵视隐藏区域设计](./MAP_TOPOLOGY_VALIDATION_AND_HIDDEN_AREAS_CN.md)。注意：当前只通过了文档拓扑校验；A2–A13 尚未完成可玩地图的 Godot 实测。
+灵视隐藏区域挂接图：[查看隐藏地图网络 SVG](./assets/RESONANCE_HIDDEN_AREAS.svg)。八处隐藏地图的正式命名、挂接区域与鸣响门槛以[鸣响 / 灵视隐藏地图设计](./RESONANCE_HIDDEN_REGIONS_CN.md)为准；静态连接、源码依赖和运行时缺口以[世界地图静态验证报告](./WORLD_MAP_VALIDATION_REPORT_CN.md)为准。注意：当前只通过了文档拓扑校验；A2–A13 尚未完成可玩地图的 Godot 实测。
 
 ## 1. 目标：先确定完整地图，再逐区制作
 
