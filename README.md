@@ -52,6 +52,14 @@ Detailed static world map validation report (Chinese):
 
 `docs/WORLD_MAP_VALIDATION_REPORT_CN.md`
 
+Machine-readable world map topology:
+
+`tools/world_map_topology.json`
+
+Repeatable static topology validator:
+
+`python3 tools/validate_world_map_topology.py`
+
 Resonance / hidden regions design — 8 optional subareas (Chinese):
 
 `docs/RESONANCE_HIDDEN_REGIONS_CN.md`
