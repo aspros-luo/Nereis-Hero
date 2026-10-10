@@ -19,6 +19,8 @@ var skeleton: Skeleton2D
 var bones: Dictionary = {}
 var part_sprites: Dictionary = {}
 var weapon_sprite: Sprite2D
+var last_state_name := "IDLE"
+var pose_blend := 1.0
 
 func _ready() -> void:
 	_build_rig()
@@ -88,8 +90,14 @@ func update_pose(
 
 	var facing_sign := -1.0 if facing < 0.0 else 1.0
 	var local_motion := clampf((velocity.x * facing_sign) / 260.0, -1.0, 1.0)
+	# Keep the rig anchored to the feet. Compression changes limb posture, not the world anchor.
+	# 骨架始终以脚底为锚点；压缩只影响姿势，不改变世界锚点。
 	skeleton.scale = Vector2(RIG_SCALE * facing_sign, RIG_SCALE)
 	skeleton.rotation = 0.0
+	if state_name != last_state_name:
+		pose_blend = 0.0
+		last_state_name = state_name
+	pose_blend = minf(1.0, pose_blend + 0.16)
 	modulate = Color("#d98f99") if hurt else Color("#f3e6d4") if hit_flash else Color.WHITE
 
 	for bone_value in bones.values():
@@ -130,23 +138,41 @@ func update_pose(
 			_set_rotation("FrontArm", -0.28)
 			_set_rotation("Cape", -0.08)
 		"ATTACK":
+			var strike := clampf(attack_progress, 0.0, 1.0)
 			if attack_windup:
-				_set_rotation("Torso", -0.06)
-				_set_rotation("FrontArm", -0.16)
-				_set_rotation("Weapon", -0.35)
-				_set_rotation("RearArm", -0.08)
+				_set_rotation("Torso", -0.075)
+				_set_rotation("FrontArm", -0.22)
+				_set_rotation("Weapon", -0.48)
+				_set_rotation("RearArm", -0.12)
+				_set_rotation("Cape", 0.08)
 			else:
-				var strike := clampf(attack_progress, 0.0, 1.0)
-				_set_rotation("Torso", lerpf(-0.07, 0.04, strike))
-				_set_rotation("FrontArm", lerpf(-0.15, 0.25, strike))
-				_set_rotation("Weapon", lerpf(-0.45, 1.05, strike))
-				_set_rotation("RearArm", lerpf(-0.10, 0.08, strike))
+				# Three distinct arcs prevent every combo hit from reading as the same swing.
+				# 三段连击采用不同挥动弧线，避免每一击看起来都相同。
+				var combo_phase := int(floor(strike * 3.0))
+				var local_phase := fposmod(strike * 3.0, 1.0)
+				var torso_end := [0.12, -0.10, 0.18][mini(combo_phase, 2)]
+				var arm_start := [-0.20, 0.18, -0.32][mini(combo_phase, 2)]
+				var arm_end := [0.32, -0.24, 0.42][mini(combo_phase, 2)]
+				var weapon_start := [-0.55, 0.62, -0.78][mini(combo_phase, 2)]
+				var weapon_end := [1.18, -0.92, 1.32][mini(combo_phase, 2)]
+				_set_rotation("Torso", lerpf(-0.06, torso_end, strike))
+				_set_rotation("FrontArm", lerpf(arm_start, arm_end, local_phase))
+				_set_rotation("Weapon", lerpf(weapon_start, weapon_end, local_phase))
+				_set_rotation("RearArm", lerpf(-0.12, 0.18, strike))
+				_set_rotation("Cape", sin(strike * PI) * 0.10)
 		"GRAPPLE":
 			_set_rotation("Torso", -0.06)
 			_set_rotation("FrontArm", -0.85)
 			_set_rotation("Weapon", -0.20)
 			_set_rotation("RearArm", 0.22)
 			_set_rotation("Cape", -0.12)
+		"FALL":
+			_set_rotation("Torso", -local_motion * 0.045)
+			_set_rotation("RearLeg", -0.12)
+			_set_rotation("FrontLeg", 0.34)
+			_set_rotation("RearArm", -0.50)
+			_set_rotation("FrontArm", -0.28)
+			_set_rotation("Cape", -0.08)
 		"DODGE":
 			skeleton.scale.y = RIG_SCALE * 0.84
 			_set_rotation("Torso", 0.16)
