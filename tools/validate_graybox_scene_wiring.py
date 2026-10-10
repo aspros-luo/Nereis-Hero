@@ -188,6 +188,18 @@ def main() -> int:
     ]:
         require(region_script, contract, "Graybox region controller", errors)
 
+    # Catch accidental line-join syntax defects in spawn mapping and ensure C04 is wired on both ends.
+    # 检查出生点映射中意外粘连的语法错误，并确保 C04 两端都接线。
+    if 'return 850.0    if region_id' in region_script:
+        fail(errors, "Graybox spawn mapping: C04 A5 spawn branch is concatenated with the next if statement.")
+    for contract in [
+        '"E  OPEN THE OLD PILGRIM HIGHROAD"',
+        '"E  RETURN TO THE BATTLEFIELD"',
+        '"reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags',
+        '"reached_A5_and_opened_old_pilgrim_highroad", "E  RETURN BY THE OLD PILGRIM HIGHROAD"',
+    ]:
+        require(region_script, contract, "C04 old pilgrim highroad", errors)
+
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
     spawn_contracts = [
