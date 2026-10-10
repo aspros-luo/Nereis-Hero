@@ -615,7 +615,9 @@
       "enables": [
         "H05"
       ],
-      "cumulative_target": 42
+      "cumulative_target": 42,
+      "ancient_exposure_floor": 1,
+      "note": "钟塔主路线的异常调查将古神接触度确保到至少 1，避免绕过 A4 可选支路后永久错过 H05；已有接触不重复增加。"
     },
     {
       "id": "R06",
@@ -724,11 +726,12 @@
       "id": "R05",
       "source_id": "anomaly_silent_bell_window",
       "location": "A6",
-      "description": "发现修道院钟塔无声窗口",
+      "description": "发现修道院钟塔无声窗口；确保古神接触度至少为 1，已获得接触不会重复增加",
       "resonance_delta": 6,
       "resonance_after": 42,
       "ancient_exposure_delta": 0,
-      "outer_exposure_delta": 0
+      "outer_exposure_delta": 0,
+      "ancient_exposure_floor": 1
     },
     {
       "id": "R06",
