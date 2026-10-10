@@ -121,6 +121,7 @@ func _spawn_second_wave() -> void:
 func _finish_defense() -> void:
     stage = 3
     WorldState.current_location = "village"
+    WorldState.record_achievement("village_defense_survived")
     narrative.show_message(
         "AFTER THE FIRE",
         "The attackers retreat.\n\nThe village is still standing.\n\nFor tonight, that is enough.",
