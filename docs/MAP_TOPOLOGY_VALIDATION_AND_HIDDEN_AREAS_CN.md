@@ -32,6 +32,8 @@
 
 - [完整世界地图区划（14 个主区域）](./COMPLETE_WORLD_MAP_ATLAS_CN.md)
 - [世界地图静态验证报告](./WORLD_MAP_VALIDATION_REPORT_CN.md)
+- [机器可读的世界地图拓扑清单](../tools/world_map_topology.json)
+- [静态拓扑校验工具](../tools/validate_world_map_topology.py)
 - [鸣响 / 灵视隐藏地图设计（8 处隐藏子区）](./RESONANCE_HIDDEN_REGIONS_CN.md)
 - [主世界完整地图总图（SVG）](./assets/COMPLETE_WORLD_MAP_ATLAS.svg)
 - [灵视隐藏地图网络图（SVG）](./assets/RESONANCE_HIDDEN_AREAS.svg)
