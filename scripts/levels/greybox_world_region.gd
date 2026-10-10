@@ -74,6 +74,14 @@ func _spawn_x_for_side(side: String) -> float:
         return map_width - 360.0
     if region_id == "H06" and side == "royal_transport_entry":
         return map_width - 360.0
+    if region_id == "A2" and side == "old_pilgrim_highroad":
+        # C04 returns to the eastern half of the pilgrim road, clear of the bell gate.
+        # C04 回到朝圣古道东段，并避开钟室入口。
+        return map_width - 650.0
+    if region_id == "A5" and side == "old_pilgrim_highroad":
+        # C04 arrives near the city-facing end of the battlefield shortcut.
+        # C04 从捷径抵达战场时，出生在靠近旧城的一侧。
+        return 520.0
     if region_id == "A2" and side == "bell_gate":
         # Leave the H02 entrance's interaction radius after returning from the hidden chamber.
         # 从倒响钟室返回时，出生点应离入口足够远，避免一落地就抢占 E 交互。
@@ -671,6 +679,13 @@ func _spawn_region_exits() -> void:
                 "res://scenes/forgotten_city.tscn", "west"
             )
             _spawn_h02_gate(map_width - 300.0)
+            # C04 is opened from A5; once opened, keep the reverse entrance persistent on A2.
+            # C04 在 A5 侧开启；开启后，A2 侧永久生成对应回程门。
+            if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
+                _spawn_exit_door(
+                    1880.0, "E  RETURN TO THE BATTLEFIELD", "old_battlefield",
+                    "res://scenes/old_battlefield.tscn", "old_pilgrim_highroad"
+                )
         "A3":
             _spawn_exit_door(
                 72.0, "E  RETURN TO PILGRIM ROAD", "ash_forest",
@@ -744,6 +759,13 @@ func _spawn_region_exits() -> void:
                     "res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
                     true, "opened_old_bell_tower_connection", "E  ENTER THE BELL CHAMBER"
                 )
+            # C04: open the old pilgrim highroad from the battlefield side, then traverse on the next interaction.
+            # C04：从战场侧开启旧朝圣高路；首次互动开路，下一次互动才转场。
+            _spawn_exit_door(
+                520.0, "E  OPEN THE OLD PILGRIM HIGHROAD", "ash_forest",
+                "res://scenes/ash_forest.tscn", "old_pilgrim_highroad",
+                true, "reached_A5_and_opened_old_pilgrim_highroad", "E  RETURN BY THE OLD PILGRIM HIGHROAD"
+            )
         "A6":
             _spawn_exit_door(
                 72.0, "E  RETURN TO THE BATTLEFIELD", "old_battlefield",
