@@ -50,6 +50,18 @@ func _ready() -> void:
 func _spawn_x_for_side(side: String) -> float:
     if region_id == "A9" and side == "mirror":
         return 1680.0
+    # Far-side entrances place the Hero near, but not inside, the return door.
+    # 从远侧捷径进入隐藏地图时，主角会落在出口附近，但不会与门的碰撞区重叠。
+    if region_id == "H02" and side == "bell_tower_entry":
+        return map_width - 360.0
+    if region_id == "H03" and side == "third_street_entry":
+        return map_width - 360.0
+    if region_id == "H04" and side == "royal_tomb_side_entry":
+        return map_width - 360.0
+    if region_id == "H05" and side == "bell_drop_entry":
+        return map_width - 360.0
+    if region_id == "H06" and side == "royal_transport_entry":
+        return map_width - 360.0
     if region_id == "A2" and side == "bell_gate":
         return map_width - 360.0
     if region_id == "A3" and side == "third_street_gate":
@@ -70,12 +82,6 @@ func _spawn_x_for_side(side: String) -> float:
         return 1050.0
     if region_id == "A9" and side == "royal_transport":
         return map_width - 390.0
-    if region_id == "H04" and side == "royal_tomb_side":
-        return map_width - 310.0
-    if region_id == "H05" and side == "bell_drop":
-        return map_width - 330.0
-    if region_id == "H06" and side == "royal_transport":
-        return map_width - 320.0
     if region_id == "A3" and side == "sewer":
         return 1380.0
     if side == "east":
@@ -634,7 +640,7 @@ func _spawn_region_exits() -> void:
             if WorldState.is_hidden_path_opened("H05") and "opened_bell_tower_drop" in WorldState.achievement_flags:
                 _spawn_exit_door(
                     1830.0, "E  RETURN TO THE SILENT BELL WINDOW", "silent_bell_room",
-                    "res://scenes/silent_bell_room.tscn", "east"
+                    "res://scenes/silent_bell_room.tscn", "bell_drop_entry"
                 )
         "A4":
             _spawn_exit_door(
@@ -658,7 +664,7 @@ func _spawn_region_exits() -> void:
             if WorldState.is_hidden_path_opened("H02"):
                 _spawn_exit_door(
                     2060.0, "E  OPEN THE OLD BELL TOWER CONNECTION", "hidden_bell_chamber",
-                    "res://scenes/hidden_bell_chamber.tscn", "east",
+                    "res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
                     true, "opened_old_bell_tower_connection", "E  ENTER THE BELL CHAMBER"
                 )
         "A6":
@@ -699,7 +705,7 @@ func _spawn_region_exits() -> void:
             if WorldState.is_hidden_path_opened("H04"):
                 _spawn_exit_door(
                     930.0, "E  OPEN THE ROYAL TOMB SIDE DOOR", "reflected_stairwell",
-                    "res://scenes/reflected_stairwell.tscn", "east",
+                    "res://scenes/reflected_stairwell.tscn", "royal_tomb_side_entry",
                     true, "opened_royal_tomb_side_door", "E  ENTER THE REFLECTION STAIRS"
                 )
             _spawn_a11_maintenance_gate(2310.0)
@@ -716,13 +722,13 @@ func _spawn_region_exits() -> void:
             if WorldState.is_hidden_path_opened("H03"):
                 _spawn_exit_door(
                     1020.0, "E  OPEN THE OLD SERVICE DOOR", "erased_third_street",
-                    "res://scenes/erased_third_street.tscn", "east",
+                    "res://scenes/erased_third_street.tscn", "third_street_entry",
                     true, "opened_old_service_door", "E  ENTER THE THIRD STREET"
                 )
             if WorldState.is_hidden_path_opened("H06"):
                 _spawn_exit_door(
                     2200.0, "E  OPEN THE ROYAL TRANSPORT SIDE DOOR", "erased_royal_name_corridor",
-                    "res://scenes/erased_royal_name_corridor.tscn", "east",
+                    "res://scenes/erased_royal_name_corridor.tscn", "royal_transport_entry",
                     true, "opened_royal_transport_side_door", "E  ENTER THE ROYAL NAME CORRIDOR"
                 )
             _spawn_a9_mirror_gate(1850.0)
