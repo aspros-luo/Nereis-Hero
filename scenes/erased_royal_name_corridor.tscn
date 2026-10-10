@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+
+[node name="ErasedRoyalNameCorridor" type="Node2D"]
+script = ExtResource("1")
+region_id = "H06"
+location_id = "erased_royal_name_corridor"
+region_title = "THE NAME SCRAPED FROM STONE"
+map_width = 2200.0
