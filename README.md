@@ -24,6 +24,10 @@ Canonical story memory:
 
 `docs/DEVELOPER_STORY_MEMORY.md`
 
+World map master plan (Chinese draft):
+
+`docs/WORLD_MAP_MASTER_PLAN_CN.md`
+
 Director plan:
 
 `docs/DIRECTOR_NARRATIVE_PLAN.md`
