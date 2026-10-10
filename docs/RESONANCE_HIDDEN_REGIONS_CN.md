@@ -181,6 +181,12 @@ flowchart LR
 
 现有 resonance_hidden_target.gd 已能根据阈值显现目标，但完整隐藏地图还需要持久化状态。进入实现阶段时优先扩展既有 WorldState，而不是添加平行系统。
 
+### 正式接入前必须先打通的能力链
+
+当前源码中，`WorldState.mark_ancient_residue_awakened()` 会将鸣响提高到至少 12、古神接触提高到至少 1，正好接近 H01 的初始阈值；但主线 / 场景调用链中尚未找到 `WorldState.unlock_ability("resonance_sight", ...)` 的常规解锁点，`hero.gd` 在能力未解锁时会拒绝 V 输入。与此同时，`HeroSystem.add_resonance()` 已定义，但在本轮核查的主要场景和 NPC / 交互代码中没有找到正常增量调用。
+
+因此，H01 不能只靠数值表就算“可玩”。实现顺序应先确定一处自然的剧情 / 调查事件来解锁灵视，再接好鸣响与接触成长来源；每个来源都要有稳定 source ID，并保存到 WorldState。H01 通过后才校准后续 H02–H08 的门槛。
+
 建议新增两类记录：
 
 - discovered_hidden_regions：玩家已通过调查固定发现的隐藏区域入口。
