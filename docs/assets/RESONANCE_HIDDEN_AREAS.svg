@@ -81,7 +81,7 @@
   <text x="22" y="25" class="id">H04 · ANCHOR A4</text><text x="22" y="49" class="cardhead">水面背后的楼梯</text>
   <rect x="355" y="75" width="120" height="30" rx="15" class="pill"/><text x="375" y="95" class="pilltext">鸣响 ≥ 36</text>
   <text x="22" y="92" class="body">伏笔：水面映出不存在的干燥台阶</text>
-  <text x="22" y="124" class="body">机制：水位与倒影层形成两种路径</text>
+  <text x="22" y="124" class="body">附加门槛：古神接触 ≥ 1；水位 / 倒影双层路径</text>
   <text x="22" y="156" class="body">出口：A8 王墓侧门后期开启</text>
   <text x="22" y="184" class="small">目的：验证机关 / 状态存档，不制造碰撞错觉</text>
 </g>
@@ -91,6 +91,7 @@
   <text x="22" y="25" class="id">H05 · ANCHOR A6</text><text x="22" y="49" class="cardhead">无声钟室</text>
   <rect x="355" y="75" width="120" height="30" rx="15" class="pill"/><text x="375" y="95" class="pilltext">鸣响 ≥ 42</text>
   <text x="22" y="92" class="body">伏笔：钟塔阴影里出现没有钟声的窗口</text>
+  <text x="22" y="116" class="body">附加门槛：古神接触 ≥ 1</text>
   <text x="22" y="124" class="body">空间：旧钟机构、窗洞与垂直维护层</text>
   <text x="22" y="156" class="body">出口：后期开启钟塔回落口，连接 A3 上层</text>
   <text x="22" y="184" class="small">目的：形成中层捷径；不绕过 A5 主线</text>
@@ -103,7 +104,7 @@
   <text x="22" y="92" class="body">伏笔：铭文空白处没有风化，灵视显出被刮去的字形</text>
   <text x="22" y="124" class="body">空间：隐匿铭文层与王室运送道</text>
   <text x="22" y="156" class="body">出口：连接 A9 的侧门捷径</text>
-  <text x="22" y="184" class="small">目的：需要 2 个前置异常；重构王墓 / 王城关系</text>
+  <text x="22" y="184" class="small">门槛：古神接触 ≥ 2 + 2 个不同异常来源</text>
 </g>
 <path d="M565 687 H650" class="route" marker-end="url(#goldarrow)"/>
 <path d="M1165 687 H1250" class="route" marker-end="url(#goldarrow)"/>
