@@ -881,6 +881,14 @@ func get_resume_scene_path() -> String:
             return "res://scenes/prison_depths.tscn"
         "royal_tomb":
             return "res://scenes/royal_tomb.tscn"
+        "royal_outer_ring":
+            return "res://scenes/royal_outer_ring.tscn"
+        "grand_cathedral":
+            return "res://scenes/grand_cathedral.tscn"
+        "inner_city":
+            return "res://scenes/inner_city.tscn"
+        "mirror_street":
+            return "res://scenes/mirror_street.tscn"
         "hidden_well":
             return "res://scenes/hidden_well.tscn"
         "tavern":
