@@ -66,6 +66,7 @@ def main() -> int:
         "func open_hidden_path(",
         "func mark_hidden_region_entered(",
         "func is_hidden_path_opened(",
+        'var exposure_target := 18 if "anomaly_observer_reaction" in resonance_sources else 12',
         '"discovered_hidden_regions": discovered_hidden_regions',
         '"opened_hidden_paths": opened_hidden_paths',
         '"entered_hidden_regions": entered_hidden_regions',
