@@ -8,6 +8,7 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
 const RESONANCE_SOURCE_SCRIPT = preload("res://scripts/world/resonance_source_clue.gd")
 const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")
+const ENDGAME_GATE_SCRIPT = preload("res://scripts/core/endgame_gate.gd")
 
 @export var region_id: String = "A2"
 @export var location_id: String = "ash_forest"
@@ -27,6 +28,10 @@ func _ready() -> void:
     var spawn_side := WorldState.pending_region_spawn_side
     WorldState.pending_region_spawn_side = "west"
     WorldState.set_location(location_id)
+    if region_id == "A10":
+        # Being inside the cathedral proves the main route has reached A10; this also repairs older saves.
+        # 进入大圣堂本身即证明主线已抵达 A10，也可修复旧存档中的进程标记。
+        WorldState.record_achievement("reached_A10_via_A9")
 
     _create_floor()
     _create_boundaries()
@@ -109,6 +114,10 @@ func _get_objective_text() -> String:
             return "CROSS THE OUTER RING. FOLLOW THE RAIN REFLECTIONS."
         "A10":
             return "CLIMB THE PILGRIM STEPS. FIND THE CHURCH INNER COURT."
+        "A11":
+            return "FOLLOW THE OBSERVATION PATH. THE WALLS REMEMBER EACH VISITOR."
+        "H08":
+            return "FOLLOW THE WALL THAT BREATHES WITHOUT WAKING IT."
         "A12":
             return "ENTER THE THRONE DISTRICT. DECIDE WHAT MUST FALL."
         "H07":
@@ -174,6 +183,18 @@ func _show_intro() -> void:
             narrative.show_message(
                 "THE GREAT CATHEDRAL",
                 "The choir stops when you reach the steps.\n\nNo one turns to look at you.",
+                5.0
+            )
+        "A11":
+            narrative.show_message(
+                "THE DEPTHS THAT PRECEDED THE LAB",
+                "The Church built its rooms around something already here.\n\nThe observation notes disagree about who entered first.",
+                5.0
+            )
+        "H08":
+            narrative.show_message(
+                "THE WOMB BELOW THE LAB",
+                "The wall is warm. No device is active.\n\nSomething in the stone exhales just before you do.",
                 5.0
             )
         "A12":
@@ -316,6 +337,21 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(780, 375, 150, 18))
             _add_platform(Rect2(1040, 430, 160, 18))
             _add_platform(Rect2(1320, 475, 140, 18))
+        "A11":
+            _add_platform(Rect2(280, 480, 165, 18))
+            _add_platform(Rect2(565, 438, 140, 18))
+            _add_platform(Rect2(850, 390, 175, 18))
+            _add_platform(Rect2(1150, 440, 155, 18))
+            _add_platform(Rect2(1465, 385, 180, 18))
+            _add_platform(Rect2(1780, 430, 150, 18))
+            _add_platform(Rect2(2080, 475, 175, 18))
+        "H08":
+            _add_platform(Rect2(250, 470, 150, 18))
+            _add_platform(Rect2(505, 425, 135, 18))
+            _add_platform(Rect2(755, 380, 160, 18))
+            _add_platform(Rect2(1030, 430, 145, 18))
+            _add_platform(Rect2(1290, 385, 165, 18))
+            _add_platform(Rect2(1560, 440, 145, 18))
 
 func _add_platform(rect: Rect2) -> void:
     platforms.append(rect)
@@ -408,6 +444,18 @@ func _spawn_region_sources() -> void:
                 0,
                 12,
                 true
+            )
+        "A11":
+            _spawn_source(
+                Vector2(1450, floor_y - 18.0),
+                "anomaly_observer_reaction",
+                "THE SECOND OBSERVER",
+                "The record names an observer who never entered the chamber.\n\nA second line has been added in a different hand. It describes you leaving.",
+                78,
+                0,
+                6,
+                "",
+                2
             )
 
 func _spawn_source(
@@ -733,6 +781,8 @@ func _draw() -> void:
             _draw_prison_landmarks()
         "A8":
             _draw_royal_tomb_landmarks()
+        "A11":
+            _draw_deep_research_landmarks()
 
         "A9":
             _draw_outer_ring_landmarks()
@@ -745,6 +795,8 @@ func _draw() -> void:
 
         "H01":
             _draw_well_landmarks()
+        "H08":
+            _draw_primordial_hollow_landmarks()
 
     for platform in platforms:
         draw_rect(platform, _platform_color())
@@ -788,6 +840,10 @@ func _background_color() -> Color:
 
         "H01":
             return Color("#100f18")
+        "A11":
+            return Color("#16151e")
+        "H08":
+            return Color("#0e1419")
         _:
             return Color("#111018")
 
@@ -819,6 +875,10 @@ func _platform_color() -> Color:
 
         "H01":
             return Color("#39303a")
+        "A11":
+            return Color("#393744")
+        "H08":
+            return Color("#2c3c40")
         _:
             return Color("#302a33")
 
@@ -959,6 +1019,58 @@ func _draw_royal_tomb_landmarks() -> void:
     draw_line(Vector2(1648, floor_y - 244), Vector2(1734, floor_y - 244), Color("#817079"), 5.0)
     draw_string(ThemeDB.fallback_font, Vector2(1500, floor_y - 270), "NAME REMOVED", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#8f8086"))
 
+
+func _draw_deep_research_landmarks() -> void:
+    # The laboratory is built around an older, warmer stone structure.
+    draw_rect(Rect2(160, 280, 420, 240), Color("#211f2a"))
+    draw_rect(Rect2(188, 308, 364, 212), Color("#292631"))
+    draw_line(Vector2(188, 308), Vector2(552, 520), Color("#4d4954"), 3.0)
+    draw_line(Vector2(552, 308), Vector2(188, 520), Color("#4d4954"), 3.0)
+    draw_rect(Rect2(830, 250, 300, 270), Color("#242530"))
+    draw_arc(Vector2(980, 382), 94.0, PI, TAU, 28, Color("#6d5c6a"), 3.0)
+    draw_line(Vector2(980, 288), Vector2(980, 485), Color("#6d5c6a"), 2.0)
+    draw_string(
+        ThemeDB.fallback_font,
+        Vector2(1220, 310),
+        NereisLocalization.translate_text("OBSERVATION CHAMBER"),
+        HORIZONTAL_ALIGNMENT_LEFT, -1.0, 16, Color("#827887")
+    )
+    draw_rect(Rect2(2050, 250, 270, 270), Color("#211f28"))
+    draw_line(Vector2(2070, 310), Vector2(2302, 290), Color("#4e495a"), 3.0)
+    draw_line(Vector2(2060, 398), Vector2(2310, 420), Color("#4e495a"), 3.0)
+    draw_arc(Vector2(2185, 388), 90.0, PI * 0.92, TAU * 0.86, 34, Color("#5c5367"), 2.0)
+
+func _draw_primordial_hollow_landmarks() -> void:
+    # This room is grown from the research wall, rather than constructed as a machine hall.
+    draw_colored_polygon(
+        PackedVector2Array([
+            Vector2(120, 540), Vector2(240, 405), Vector2(375, 380),
+            Vector2(490, 440), Vector2(630, 360), Vector2(780, 405),
+            Vector2(900, 330), Vector2(1035, 400), Vector2(1170, 365),
+            Vector2(1340, 430), Vector2(1510, 382), Vector2(1700, 450),
+            Vector2(1800, 540)
+        ]),
+        Color("#1d2b31")
+    )
+    draw_polyline(
+        PackedVector2Array([
+            Vector2(210, 492), Vector2(325, 432), Vector2(430, 464),
+            Vector2(565, 414), Vector2(705, 455), Vector2(850, 392),
+            Vector2(1000, 451), Vector2(1135, 414), Vector2(1270, 462),
+            Vector2(1420, 420), Vector2(1570, 470), Vector2(1710, 440)
+        ]),
+        Color("#668b8b"), 2.0, true
+    )
+    for i in range(7):
+        var x := 300.0 + float(i) * 210.0
+        draw_line(Vector2(x, 445), Vector2(x + 18.0, 470), Color("#43595f"), 2.0)
+        draw_line(Vector2(x + 18.0, 470), Vector2(x + 4.0, 495), Color("#43595f"), 2.0)
+    draw_string(
+        ThemeDB.fallback_font,
+        Vector2(510, 265),
+        NereisLocalization.translate_text("THE STONE BREATHES"),
+        HORIZONTAL_ALIGNMENT_LEFT, -1.0, 17, Color("#8db8b4")
+    )
 
 func _draw_well_landmarks() -> void:
     draw_rect(Rect2(460, 70, 170, floor_y - 70), Color("#1b1822"))
