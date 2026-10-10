@@ -637,7 +637,9 @@ func record_resonance_milestone(
     ancient_exposure_delta: int = 0,
     outer_exposure_delta: int = 0,
     unlock_ability_id: String = "",
-    unlock_source_type: String = "resonance"
+    unlock_source_type: String = "resonance",
+    ancient_exposure_floor: int = 0,
+    outer_exposure_floor: int = 0
 ) -> bool:
     var normalized_id := source_id.strip_edges()
     if normalized_id.is_empty() or normalized_id in resonance_sources:
@@ -645,8 +647,16 @@ func record_resonance_milestone(
 
     resonance_sources.append(normalized_id)
     hero_resonance = maxi(hero_resonance, clampi(resonance_target, 0, 100))
-    ancient_exposure = clampi(ancient_exposure + maxi(0, ancient_exposure_delta), 0, 100)
-    outer_exposure = clampi(outer_exposure + maxi(0, outer_exposure_delta), 0, 100)
+    ancient_exposure = clampi(
+        maxi(ancient_exposure, clampi(ancient_exposure_floor, 0, 100)) + maxi(0, ancient_exposure_delta),
+        0,
+        100
+    )
+    outer_exposure = clampi(
+        maxi(outer_exposure, clampi(outer_exposure_floor, 0, 100)) + maxi(0, outer_exposure_delta),
+        0,
+        100
+    )
 
     if not unlock_ability_id.strip_edges().is_empty() and not is_ability_unlocked(unlock_ability_id):
         unlock_ability(unlock_ability_id, unlock_source_type, normalized_id)
