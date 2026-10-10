@@ -325,7 +325,9 @@ def validate(data: dict[str, Any]) -> list[str]:
         if milestone.get("cumulative_target") != running_resonance:
             fail(errors, f"{mid}: cumulative_target must match the one-time resonance source curve.")
 
+        ancient_growth = max(ancient_growth, max(0, int(milestone.get("ancient_exposure_floor", 0))))
         ancient_growth += max(0, int(milestone.get("ancient_exposure_delta", 0)))
+        outer_growth = max(outer_growth, max(0, int(milestone.get("outer_exposure_floor", 0))))
         outer_growth += max(0, int(milestone.get("outer_exposure_delta", 0)))
 
         for target_id in milestone.get("enables", []):
@@ -356,6 +358,8 @@ def validate(data: dict[str, Any]) -> list[str]:
         for key, expected in comparisons.items():
             if spec.get(key, 0 if key != "source_id" else "") != expected:
                 fail(errors, f"{milestone.get('id')}: detailed resonance source disagrees on {key}.")
+        if spec.get("ancient_exposure_floor") != milestone.get("ancient_exposure_floor"):
+            fail(errors, f"{milestone.get('id')}: ancient exposure floor differs between source tables.")
         if spec.get("outer_exposure_floor") != milestone.get("outer_exposure_floor"):
             fail(errors, f"{milestone.get('id')}: outer exposure floor differs between source tables.")
         if spec.get("outer_exposure_requires") != milestone.get("outer_exposure_requires"):
