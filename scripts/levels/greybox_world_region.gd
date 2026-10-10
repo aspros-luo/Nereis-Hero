@@ -739,6 +739,13 @@ func _spawn_region_exits() -> void:
                 map_width - 72.0, "E  ENTER THE ROYAL TOMB", "royal_tomb",
                 "res://scenes/royal_tomb.tscn", "west"
             )
+            # C12: unlock the supply tunnel from the prison side; the first E opens it, the second traverses.
+            # C12：从监牢侧开启补给隧道；第一次 E 开门，第二次 E 才转场。
+            _spawn_exit_door(
+                520.0, "E  OPEN THE SUPPLY TUNNEL", "sewer_reservoir",
+                "res://scenes/sewer_reservoir.tscn", "prison_tunnel",
+                true, "reached_A7_then_opened_supply_tunnel", "E  RETURN THROUGH THE SUPPLY TUNNEL"
+            )
         "A8":
             _spawn_exit_door(
                 72.0, "E  RETURN TO THE PRISON", "prison_depths",
@@ -747,6 +754,13 @@ func _spawn_region_exits() -> void:
             _spawn_exit_door(
                 map_width - 72.0, "E  ENTER THE ROYAL OUTER RING", "royal_outer_ring",
                 "res://scenes/royal_outer_ring.tscn", "west"
+            )
+            # C07: the royal-tomb shortcut back to the reservoir is unlocked from A8.
+            # C07：旧王墓返回旧水库的捷径只能在 A8 侧开启。
+            _spawn_exit_door(
+                520.0, "E  OPEN THE ROYAL TOMB WATERWAY", "sewer_reservoir",
+                "res://scenes/sewer_reservoir.tscn", "royal_tomb_waterway",
+                true, "reached_A8_via_A7_then_opened_royal_tomb_gate", "E  RETURN THROUGH THE ROYAL WATERWAY"
             )
             _spawn_h06_gate(1870.0)
             if WorldState.is_hidden_path_opened("H04"):
@@ -779,6 +793,20 @@ func _spawn_region_exits() -> void:
                     true, "opened_royal_transport_side_door", "E  ENTER THE ROYAL NAME CORRIDOR"
                 )
             _spawn_a9_mirror_gate(1850.0)
+            # C16: reconnect A9 to A3 after the old lift is opened from the outer ring.
+            # C16：从王城外环开启旧升降机后，重新连通 A9 与 A3。
+            _spawn_exit_door(
+                520.0, "E  OPEN THE OLD LIFT", "forgotten_city",
+                "res://scenes/forgotten_city.tscn", "old_lift",
+                true, "reached_A9_via_A8_then_opened_old_lift_from_A9", "E  RETURN BY THE OLD LIFT"
+            )
+            # C23: the royal drain is a separate A9-to-A4 shortcut.
+            # C23：王城排水道是另一条 A9 至 A4 的独立捷径。
+            _spawn_exit_door(
+                720.0, "E  OPEN THE ROYAL DRAIN", "sewer_reservoir",
+                "res://scenes/sewer_reservoir.tscn", "royal_drain",
+                true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  RETURN THROUGH THE ROYAL DRAIN"
+            )
         "A10":
             _spawn_exit_door(
                 72.0, "E  RETURN TO THE OUTER RING", "royal_outer_ring",
@@ -793,6 +821,13 @@ func _spawn_region_exits() -> void:
             _spawn_exit_door(
                 72.0, "E  RETURN TO THE CATHEDRAL", "grand_cathedral",
                 "res://scenes/grand_cathedral.tscn", "east"
+            )
+            # C18: the inner-city side gate can only be opened after reaching A12 by the main route.
+            # C18：必须先沿主线抵达 A12，才能从内城侧开启通往 A9 的侧门。
+            _spawn_exit_door(
+                520.0, "E  OPEN THE INNER-CITY SIDE GATE", "royal_outer_ring",
+                "res://scenes/royal_outer_ring.tscn", "inner_city_side_gate",
+                true, "reached_A12_via_A10_then_opened_inner_city_side_gate", "E  RETURN THROUGH THE SIDE GATE"
             )
             if (
                 "reached_A12_via_A10" in WorldState.achievement_flags
