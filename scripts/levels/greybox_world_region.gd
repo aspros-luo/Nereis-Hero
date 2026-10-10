@@ -688,6 +688,13 @@ func _spawn_region_exits() -> void:
                 "res://scenes/forgotten_city.tscn", "sewer",
                 true, "opened_sewer_inspection_hatch_from_A4", "E  RETURN TO THE CITY"
             )
+            # C06 is a one-way return shortcut from the reservoir to the village well.
+            # C06 是从旧水库返回村庄的单向捷径；首次互动开闸，再次互动才转场。
+            _spawn_exit_door(
+                map_width - 250.0, "E  OPEN THE VILLAGE WELL WATERGATE", "village",
+                "res://scenes/village_hub.tscn", "well_exit",
+                true, "opened_watergate_and_village_well_exit", "E  RETURN TO THE VILLAGE"
+            )
             _spawn_h04_gate(1780.0)
             if "reached_A4_via_A3" in WorldState.achievement_flags:
                 _spawn_a4_hidden_well_gate(map_width - 105.0)
