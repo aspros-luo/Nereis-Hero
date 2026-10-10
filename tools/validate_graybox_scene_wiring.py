@@ -180,6 +180,9 @@ def main() -> int:
         "match secret_id:",
         "func _draw_well_marker() -> void:",
         "func _draw_mirror_street_marker() -> void:",
+        "func _draw_erased_royal_name_marker() -> void:",
+        "func _draw_silent_chapel_marker() -> void:",
+        "func _draw_breathing_wall_marker() -> void:",
         "func _draw_generic_anomaly_marker() -> void:",
     ]:
         require(secret_gate, contract, "Resonance hidden gate", errors)
@@ -203,10 +206,10 @@ def main() -> int:
         return 1
 
     print("GRAYBOX SCENE WIRING STATIC CHECK PASSED")
-    print(" - A2-A12 plus H01/H07 scenes have scripts and resume mappings.")
+    print(" - A2-A12 plus H01/H07/H08 scenes have scripts and resume mappings.")
     print(" - The R01-R08 anomaly source chain is present.")
-    print(" - H01, H07, C15, C19, and H08 gates use saved discovery/open/entry state and progression conditions.")
-    print(" - A11 and H08 have resume mappings; ending exits are gated by physical union state.")
+    print(" - H01/H07/H08 plus C15/C19 gates use saved discovery/open/entry state and progression conditions.")
+    print(" - C15 enters A11 from A8; C19 is the alternate A10 entry; H08 ending exit requires physical union.")
     print("NOTE: Godot runtime/collision/input validation is still required.")
     return 0
 
