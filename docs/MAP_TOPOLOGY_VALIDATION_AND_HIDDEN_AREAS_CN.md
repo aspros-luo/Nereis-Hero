@@ -7,7 +7,7 @@
 
 **宏观区域图静态连通，但完整游戏地图尚未通过 Godot 实机验证。**
 
-静态遍历以 A0–A13 为 14 个主要区域节点，按当前连接表可从 A0 到达全部节点；规划连接共 23 条，未发现孤立区域。A2 雾林、A3 废弃城区、A4 下水道 / 沉积大厅及 H01 井底已有程序化灰盒场景和初版代码接线。该结论不代表它们的碰撞、平台跳跃、交互焦点、存档恢复与场景切换已经通过 Godot 实机验收。
+静态遍历以 A0–A13 为 14 个主要区域节点，按当前连接表可从 A0 到达全部节点；规划连接共 23 条，未发现孤立区域。A2–A8 和 H01 已有程序化灰盒场景及初版代码接线。该结论不代表这些场景的碰撞、平台跳跃、交互焦点、存档恢复与场景切换已经通过 Godot 实机验收。
 
 ## 2. 现有灵视系统与缺口
 
@@ -19,7 +19,7 @@
 - scripts/systems/resonance_hidden_target.gd：可依鸣响、接触值及灵视激活状态显现隐藏目标。
 - 当前灵视窗口约 4.5 秒，消耗 10 点体力，冷却 6 秒。
 
-现有 `resonance_hidden_target.gd` 仍负责通用显现目标；新增的 `resonance_secret_gate.gd` 为 H01 提供 E 调查、永久开启记录、进入隐藏场景及存档恢复调用。WorldState 已有发现 / 开启 / 进入三类状态，旧存档缺少字段时默认为空集合。H01 和 A2–A4 已代码接线，但仍待 Godot 实机测试；H02–H08 尚未逐一实例化。
+现有 `resonance_hidden_target.gd` 仍负责通用显现目标；新增的 `resonance_secret_gate.gd` 为 H01 提供 E 调查、永久开启记录、进入隐藏场景及存档恢复调用。WorldState 已有发现 / 开启 / 进入三类状态，旧存档缺少字段时默认为空集合。H01 和 A2–A8 已代码接线，但仍待 Godot 实机测试；H02–H08 尚未逐一实例化。
 
 ## 3. 地图设计的四条硬规则
 
@@ -35,7 +35,8 @@
 - [机器可读的世界地图拓扑清单](../tools/world_map_topology.json)
 - [静态拓扑校验工具](../tools/validate_world_map_topology.py)
 - [鸣响 / 灵视隐藏地图设计（8 处隐藏子区）](./RESONANCE_HIDDEN_REGIONS_CN.md)
-- [A2–A4 / H01 灰盒实现说明与验收清单](./GRAYBOX_A2_A4_IMPLEMENTATION_CN.md)
+- [A2–A4 / H01 首轮灰盒说明与验收清单](./GRAYBOX_A2_A4_IMPLEMENTATION_CN.md)
+- [A5–A8 主线路径灰盒扩展](./GRAYBOX_A5_A8_IMPLEMENTATION_CN.md)
 - [灰盒场景接线静态检查脚本](../tools/validate_graybox_scene_wiring.py)
 - [主世界完整地图总图（SVG）](./assets/COMPLETE_WORLD_MAP_ATLAS.svg)
 - [灵视隐藏地图网络图（SVG）](./assets/RESONANCE_HIDDEN_AREAS.svg)
@@ -44,7 +45,7 @@
 
 - **静态区域连通性：通过。**
 - **入口方向、锁定条件和回程合同：待细化到逐个关卡出口。**
-- **A2–A4 / H01：程序化灰盒及初版代码接线已提交，尚未 Godot 实机验收。**
+- **A2–A8 / H01：程序化灰盒及初版代码接线已提交，尚未 Godot 实机验收。**
 - **H02–H08：设计阶段，尚未逐一实例化。**
 - **隐藏地图发现 → 开启 → 存档 → 回访：H01 代码链已接入，完整可玩闭环仍待引擎验证。**
 
