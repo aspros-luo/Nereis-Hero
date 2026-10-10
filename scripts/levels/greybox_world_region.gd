@@ -92,6 +92,14 @@ func _get_objective_text() -> String:
             return "FIND THE STREET THAT THE CITY FORGOT."
         "A4":
             return "TRACE THE OLD STONE BENEATH THE WATER."
+        "A5":
+            return "CROSS THE TRENCHES. FIND THE FORTRESS ROAD."
+        "A6":
+            return "CLIMB THE MONASTERY TOWER. LISTEN FOR THE SILENT BELL."
+        "A7":
+            return "DESCEND THROUGH THE CELLS. FIND THE ROYAL CRYPT."
+        "A8":
+            return "READ THE NAMES THAT WERE REMOVED."
         "H01":
             return "FIND A WAY BACK TO THE SURFACE."
         _:
@@ -117,6 +125,30 @@ func _show_intro() -> void:
             narrative.show_message(
                 "THE SEDIMENT HALL",
                 "New pipes run through stone that was already old when the pipes were made.\n\nWater moves somewhere below your feet.",
+                5.0
+            )
+        "A5":
+            narrative.show_message(
+                "THE BORDER BATTLEFIELD",
+                "The bodies face the wrong direction.\n\nThe fortress gates were closed from the inside.",
+                5.0
+            )
+        "A6":
+            narrative.show_message(
+                "THE MONASTERY THAT KEPT ITS BELL",
+                "Every bell has a tongue.\n\nOne casts no shadow on the wall.",
+                5.0
+            )
+        "A7":
+            narrative.show_message(
+                "THE PENITENTIAL DEPTHS",
+                "The cell doors open inward.\n\nThe names have been scraped from the hinges.",
+                5.0
+            )
+        "A8":
+            narrative.show_message(
+                "THE ROYAL TOMB",
+                "The inscriptions have not weathered away.\n\nSomeone wanted the names to stop existing.",
                 5.0
             )
         "H01":
@@ -174,6 +206,40 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1260, 455, 190, 18))
             _add_platform(Rect2(1600, 420, 150, 18))
             _add_platform(Rect2(1980, 470, 170, 18))
+        "A5":
+            _add_platform(Rect2(280, 485, 185, 18))
+            _add_platform(Rect2(560, 455, 160, 18))
+            _add_platform(Rect2(850, 485, 210, 18))
+            _add_platform(Rect2(1180, 450, 160, 18))
+            _add_platform(Rect2(1490, 485, 175, 18))
+            _add_platform(Rect2(1800, 445, 185, 18))
+            _add_platform(Rect2(2150, 485, 180, 18))
+        "A6":
+            _add_platform(Rect2(300, 475, 155, 18))
+            _add_platform(Rect2(525, 430, 125, 18))
+            _add_platform(Rect2(720, 385, 125, 18))
+            _add_platform(Rect2(910, 340, 130, 18))
+            _add_platform(Rect2(1110, 295, 130, 18))
+            _add_platform(Rect2(1320, 350, 155, 18))
+            _add_platform(Rect2(1560, 405, 145, 18))
+            _add_platform(Rect2(1840, 460, 160, 18))
+            _add_platform(Rect2(2150, 485, 150, 18))
+        "A7":
+            _add_platform(Rect2(300, 480, 170, 18))
+            _add_platform(Rect2(585, 440, 140, 18))
+            _add_platform(Rect2(850, 480, 185, 18))
+            _add_platform(Rect2(1140, 435, 150, 18))
+            _add_platform(Rect2(1420, 480, 190, 18))
+            _add_platform(Rect2(1740, 440, 150, 18))
+            _add_platform(Rect2(2040, 480, 180, 18))
+        "A8":
+            _add_platform(Rect2(280, 480, 155, 18))
+            _add_platform(Rect2(560, 440, 130, 18))
+            _add_platform(Rect2(820, 395, 160, 18))
+            _add_platform(Rect2(1100, 445, 150, 18))
+            _add_platform(Rect2(1390, 395, 170, 18))
+            _add_platform(Rect2(1670, 445, 150, 18))
+            _add_platform(Rect2(1960, 480, 180, 18))
         "H01":
             _add_platform(Rect2(310, 465, 140, 18))
             _add_platform(Rect2(540, 420, 130, 18))
@@ -232,6 +298,27 @@ func _spawn_region_sources() -> void:
                 0,
                 "",
                 1
+            )
+
+        "A6":
+            _spawn_source(
+                Vector2(1125, 278),
+                "anomaly_silent_bell_window",
+                "THE WINDOW WITHOUT A SOUND",
+                "The bell tower window has no view beyond it.\n\nIts shadow falls across a wall that is not there.",
+                42
+            )
+        "A8":
+            _spawn_source(
+                Vector2(1740, floor_y - 18.0),
+                "anomaly_erased_royal_name",
+                "THE NAME SCRAPED FROM STONE",
+                "The inscription is not worn.\n\nThe chisel marks begin after the stone had already been sealed.",
+                55,
+                0,
+                0,
+                "",
+                2
             )
 
 func _spawn_source(
@@ -293,17 +380,58 @@ func _spawn_region_exits() -> void:
                 72.0, "E  RETURN TO PILGRIM ROAD", "ash_forest",
                 "res://scenes/ash_forest.tscn", "east"
             )
+            # The sewer descent branches off mid-market; the main road continues to A5.
+            # 下水道入口位于市场中段，城区东侧主路继续通往 A5。
             _spawn_exit_door(
-                map_width - 72.0, "E  DESCEND TO THE RESERVOIR", "sewer_reservoir",
+                1480.0, "E  DESCEND TO THE RESERVOIR", "sewer_reservoir",
                 "res://scenes/sewer_reservoir.tscn", "west"
+            )
+            _spawn_exit_door(
+                map_width - 72.0, "E  FOLLOW THE BATTLEFIELD ROAD", "old_battlefield",
+                "res://scenes/old_battlefield.tscn", "west"
             )
         "A4":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE CITY", "forgotten_city",
-                "res://scenes/forgotten_city.tscn", "east"
+                72.0, "E  OPEN THE INSPECTION HATCH", "forgotten_city",
+                "res://scenes/forgotten_city.tscn", "east",
+                true, "opened_sewer_inspection_hatch_from_A4", "E  RETURN TO THE CITY"
             )
             if "reached_A4_via_A3" in WorldState.achievement_flags:
                 _spawn_a4_hidden_well_gate(map_width - 105.0)
+
+        "A5":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE FORGOTTEN CITY", "forgotten_city",
+                "res://scenes/forgotten_city.tscn", "east"
+            )
+            _spawn_exit_door(
+                map_width - 72.0, "E  ENTER THE MONASTERY", "monastery_tower",
+                "res://scenes/monastery_tower.tscn", "west"
+            )
+        "A6":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE BATTLEFIELD", "old_battlefield",
+                "res://scenes/old_battlefield.tscn", "east"
+            )
+            _spawn_exit_door(
+                map_width - 72.0, "E  DESCEND INTO THE PRISON", "prison_depths",
+                "res://scenes/prison_depths.tscn", "west"
+            )
+        "A7":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE MONASTERY", "monastery_tower",
+                "res://scenes/monastery_tower.tscn", "east"
+            )
+            _spawn_exit_door(
+                map_width - 72.0, "E  ENTER THE ROYAL TOMB", "royal_tomb",
+                "res://scenes/royal_tomb.tscn", "west"
+            )
+        "A8":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE PRISON", "prison_depths",
+                "res://scenes/prison_depths.tscn", "east"
+            )
+
         "H01":
             _spawn_exit_door(
                 72.0, "E  RETURN TO VILLAGE", "village",
@@ -354,7 +482,9 @@ func _spawn_exit_door(
     target_location: String,
     target_scene: String,
     spawn_side: String,
-    enabled: bool = true
+    enabled: bool = true,
+    unlock_once_flag_id: String = "",
+    opened_prompt_text: String = ""
 ) -> void:
     var door := Area2D.new()
     door.set_script(INTERACTION_DOOR_SCRIPT)
@@ -362,6 +492,8 @@ func _spawn_exit_door(
     door.position = Vector2(x, floor_y)
     door.prompt_text = prompt_text
     door.enabled = enabled
+    door.unlock_once_flag_id = unlock_once_flag_id
+    door.opened_prompt_text = opened_prompt_text
 
     var shape := CollisionShape2D.new()
     var rectangle := RectangleShape2D.new()
@@ -423,6 +555,15 @@ func _draw() -> void:
             _draw_city_landmarks()
         "A4":
             _draw_reservoir_landmarks()
+        "A5":
+            _draw_battlefield_landmarks()
+        "A6":
+            _draw_monastery_landmarks()
+        "A7":
+            _draw_prison_landmarks()
+        "A8":
+            _draw_royal_tomb_landmarks()
+
         "H01":
             _draw_well_landmarks()
 
@@ -448,6 +589,15 @@ func _background_color() -> Color:
             return Color("#19161d")
         "A4":
             return Color("#11151c")
+        "A5":
+            return Color("#21191a")
+        "A6":
+            return Color("#191b25")
+        "A7":
+            return Color("#111319")
+        "A8":
+            return Color("#1a171d")
+
         "H01":
             return Color("#100f18")
         _:
@@ -461,6 +611,15 @@ func _platform_color() -> Color:
             return Color("#343039")
         "A4":
             return Color("#30353a")
+        "A5":
+            return Color("#463635")
+        "A6":
+            return Color("#393643")
+        "A7":
+            return Color("#35333b")
+        "A8":
+            return Color("#40383e")
+
         "H01":
             return Color("#39303a")
         _:
@@ -509,6 +668,48 @@ func _draw_reservoir_landmarks() -> void:
     draw_rect(Rect2(0, floor_y + 48, map_width, 36), Color("#19272f"))
     draw_line(Vector2(0, floor_y + 48), Vector2(map_width, floor_y + 48), Color("#405660"), 2.0)
     draw_string(ThemeDB.fallback_font, Vector2(960, floor_y + 75), "WATER BELOW THE STONE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#637a83"))
+
+func _draw_battlefield_landmarks() -> void:
+    for x in range(260, int(map_width), 390):
+        draw_rect(Rect2(x, floor_y - 58, 180, 58), Color("#302528"))
+        draw_line(Vector2(x, floor_y - 58), Vector2(x + 180, floor_y - 58), Color("#5a4443"), 3.0)
+    draw_rect(Rect2(2020, floor_y - 230, 280, 230), Color("#30272b"))
+    draw_rect(Rect2(2080, floor_y - 170, 52, 170), Color("#151318"))
+    draw_rect(Rect2(2190, floor_y - 170, 52, 170), Color("#151318"))
+    draw_line(Vector2(2030, floor_y - 235), Vector2(2300, floor_y - 235), Color("#6a5050"), 4.0)
+
+func _draw_monastery_landmarks() -> void:
+    draw_rect(Rect2(930, floor_y - 355, 270, 355), Color("#292833"))
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(900, floor_y - 355),
+        Vector2(1065, floor_y - 505),
+        Vector2(1230, floor_y - 355)
+    ]), Color("#38323c"))
+    draw_rect(Rect2(1080, floor_y - 310, 34, 52), Color("#111018"))
+    draw_arc(Vector2(1097, floor_y - 287), 34.0, 0.0, TAU, 24, Color("#716975"), 2.0)
+    draw_line(Vector2(1097, floor_y - 322), Vector2(1097, floor_y - 250), Color("#716975"), 2.0)
+    draw_rect(Rect2(1760, floor_y - 165, 220, 165), Color("#25242e"))
+    draw_rect(Rect2(1810, floor_y - 125, 42, 125), Color("#121118"))
+
+func _draw_prison_landmarks() -> void:
+    for x in range(330, int(map_width), 330):
+        draw_rect(Rect2(x, floor_y - 200, 7, 200), Color("#4a464e"))
+        draw_rect(Rect2(x + 66, floor_y - 200, 7, 200), Color("#4a464e"))
+        draw_line(Vector2(x, floor_y - 155), Vector2(x + 73, floor_y - 155), Color("#4a464e"), 5.0)
+        draw_line(Vector2(x, floor_y - 82), Vector2(x + 73, floor_y - 82), Color("#4a464e"), 5.0)
+    draw_rect(Rect2(1660, floor_y - 265, 150, 265), Color("#29272f"))
+    draw_rect(Rect2(1713, floor_y - 214, 44, 214), Color("#121117"))
+
+func _draw_royal_tomb_landmarks() -> void:
+    for x in [360, 760, 1160, 1560, 1960]:
+        draw_rect(Rect2(x, floor_y - 82, 180, 54), Color("#373039"))
+        draw_rect(Rect2(x + 14, floor_y - 94, 152, 14), Color("#5a4d55"))
+        draw_line(Vector2(x + 26, floor_y - 68), Vector2(x + 154, floor_y - 68), Color("#78666d"), 2.0)
+    draw_rect(Rect2(1660, floor_y - 244, 28, 170), Color("#51454d"))
+    draw_rect(Rect2(1694, floor_y - 244, 28, 170), Color("#51454d"))
+    draw_line(Vector2(1648, floor_y - 244), Vector2(1734, floor_y - 244), Color("#817079"), 5.0)
+    draw_string(ThemeDB.fallback_font, Vector2(1500, floor_y - 270), "NAME REMOVED", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#8f8086"))
+
 
 func _draw_well_landmarks() -> void:
     draw_rect(Rect2(460, 70, 170, floor_y - 70), Color("#1b1822"))
