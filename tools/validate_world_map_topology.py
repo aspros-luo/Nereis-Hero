@@ -390,7 +390,8 @@ def validate(data: dict[str, Any]) -> list[str]:
             fail(errors, f"{sid}: listed source prerequisites do not satisfy min_distinct_anomaly_sources.")
         if int(secret.get("min_ancient_exposure", 0)) > ancient_growth:
             fail(errors, f"{sid}: ancient exposure gate exceeds all planned source gains.")
-        if int(secret.get("min_outer_exposure", 0)) > outer_growth + story_outer_seed:
+        planned_outer_max = max(outer_growth, story_outer_seed)
+        if int(secret.get("min_outer_exposure", 0)) > planned_outer_max:
             fail(errors, f"{sid}: outer exposure gate exceeds all planned source / story gains.")
         if secret.get("requires_outer_god_resonance") is True and "mark_outer_god_resonance" not in outer_story_triggers:
             fail(errors, f"{sid}: outer-god gate has no story-state source contract.")
