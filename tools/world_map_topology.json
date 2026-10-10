@@ -565,7 +565,7 @@
       "enables": [
         "H01"
       ],
-      "note": "若其他剧情已把鸣响提高到 12，本事件只记录来源并解锁灵视，不重复增加鸣响。",
+      "note": "将鸣响确保至至少 12 并解锁灵视；若序章线索已将鸣响提高到 12，本事件不会重复增加。",
       "cumulative_target": 12,
       "resonance_target": 12,
       "grant_mode": "raise_to_minimum_once"
@@ -670,13 +670,13 @@
       "note": "设计合同：外神共鸣剧情事实首次成立时才增加接触度；当前源码只记录布尔标记，这项数值效果尚未实现。"
     }
   ],
-  "resonance_baseline_at_prologue": 12,
+  "resonance_baseline_at_prologue": 0,
   "resonance_sources": [
     {
       "id": "R01",
       "source_id": "anomaly_bell_retiming",
       "location": "A2",
-      "description": "首次确认钟声先于钟锤动作",
+      "description": "首次确认钟声先于钟锤动作；确保鸣响至少为 12 并解锁灵视，若序章已到 12 则不重复增加",
       "resonance_delta": 0,
       "resonance_after": 12,
       "unlock_ability": "resonance_sight",
@@ -772,6 +772,6 @@
       "outer_exposure_after": 18
     }
   ],
-  "ancient_exposure_baseline_at_prologue": 1,
+  "ancient_exposure_baseline_at_prologue": 0,
   "outer_exposure_baseline_at_prologue": 0
 }
