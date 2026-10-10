@@ -433,7 +433,7 @@ func _platform_color() -> Color:
 
 func _draw_forest_landmarks() -> void:
     for x in range(180, int(map_width), 230):
-        var height := 110 + int((x / 230) % 3) * 28
+        var height := 110 + (int(x / 230) % 3) * 28
         draw_colored_polygon(
             PackedVector2Array([
                 Vector2(x - 46, floor_y),
