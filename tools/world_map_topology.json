@@ -509,7 +509,9 @@
       "min_resonance": 68,
       "min_ancient_exposure": 0,
       "min_outer_exposure": 12,
-      "required_source_ids": [],
+      "required_source_ids": [
+        "anomaly_mirror_street_echo"
+      ],
       "requires_outer_god_resonance": true,
       "requires_sight_active": true,
       "interaction_key": "E",
@@ -521,7 +523,8 @@
         "opens_from": "A12",
         "requires_target_already_reached": true,
         "requires_ending_state": false
-      }
+      },
+      "min_distinct_anomaly_sources": 1
     },
     {
       "id": "H08",
@@ -670,7 +673,7 @@
         "outer_exposure_min": 12
       },
       "source_id": "mite_outer_resonance_awakened",
-      "note": "设计合同：外神共鸣剧情事实首次成立时才增加接触度；当前源码只记录布尔标记，这项数值效果尚未实现。"
+      "note": "运行时代码已在外神共鸣剧情事实成立时将 outer_exposure 提升到至少 12；镜街和胎宫仍需各自的鸣响与证据条件。"
     }
   ],
   "resonance_baseline_at_prologue": 0,
