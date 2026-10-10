@@ -25,13 +25,37 @@ var cooldown := 0.0
 
 func _ready() -> void:
     set_meta("interaction_priority", 25)
-    consumed = source_id in WorldState.resonance_sources
+    _refresh_consumed_state()
     queue_redraw()
+
+# An old save may contain the source ID but lack its intended ability or minimums.
+# 旧存档可能已经记录来源 ID，却没有完整保存能力解锁或最低状态；这种情况仍允许一次修复交互。
+func _milestone_needs_repair() -> bool:
+    var normalized_id := source_id.strip_edges()
+    if normalized_id.is_empty():
+        return false
+    if normalized_id not in WorldState.resonance_sources:
+        return true
+    if WorldState.hero_resonance < resonance_target:
+        return true
+    if WorldState.ancient_exposure < ancient_exposure_floor:
+        return true
+
+    var effective_outer_floor := outer_exposure_floor
+    if require_outer_god_resonance and not WorldState.outer_god_resonance:
+        effective_outer_floor = 0
+    if WorldState.outer_exposure < effective_outer_floor:
+        return true
+    if not unlock_ability_id.strip_edges().is_empty() and not WorldState.is_ability_unlocked(unlock_ability_id):
+        return true
+    return false
+
+func _refresh_consumed_state() -> void:
+    consumed = not _milestone_needs_repair()
 
 func _process(delta: float) -> void:
     cooldown = maxf(0.0, cooldown - delta)
-    if not consumed and source_id in WorldState.resonance_sources:
-        consumed = true
+    _refresh_consumed_state()
 
     var hero := get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= interaction_radius
@@ -65,7 +89,7 @@ func _unhandled_input(event: InputEvent) -> void:
             ancient_exposure_floor,
             effective_outer_floor
         )
-        consumed = source_id in WorldState.resonance_sources
+        _refresh_consumed_state()
         if recorded:
             activated.emit(display_name, description, true)
             print("[NEREIS][SENSE] Anomaly examined id=%s" % source_id)
