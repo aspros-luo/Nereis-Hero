@@ -21,6 +21,8 @@ var route_memory_seen := false
 var route_memory_id := ""
 var route_complete := false
 var current_location := "slice"
+# Transient direction used by graybox region scene transitions; intentionally not saved.
+var pending_region_spawn_side := "west"
 var language := "zh_cn"
 var interior_clues_seen: Array[String] = []
 var world_clues_seen: Array[String] = []
@@ -38,6 +40,12 @@ var current_weapon_style := "long_sword"
 var learned_techniques: Array[String] = []
 var technique_variants: Dictionary = {}
 var resonance_sources: Array[String] = []
+
+# Persistent hidden-world discoveries. Discovery, gate opening and actual entry are distinct facts.
+# 持久化隐藏世界状态：发现入口、开启通路、实际进入分别记录。
+var discovered_hidden_regions: Array[String] = []
+var opened_hidden_paths: Array[String] = []
+var entered_hidden_regions: Array[String] = []
 
 # Data-driven ability progression. Unlock records store their origin for debugging and save migration.
 # 数据驱动的能力成长：保存解锁来源，便于排查和兼容旧存档。
@@ -282,7 +290,11 @@ func mark_ancient_residue_awakened() -> void:
     save_game()
 
 func mark_outer_god_resonance() -> void:
+    var exposure_changed := outer_exposure < 12
+    outer_exposure = maxi(outer_exposure, 12)
     if outer_god_resonance:
+        if exposure_changed:
+            save_game()
         return
     outer_god_resonance = true
     print("[NEREIS][STORY] Outer-God resonance established")
@@ -390,6 +402,9 @@ func save_game() -> void:
         "learned_techniques": learned_techniques,
         "technique_variants": technique_variants,
         "resonance_sources": resonance_sources,
+        "discovered_hidden_regions": discovered_hidden_regions,
+        "opened_hidden_paths": opened_hidden_paths,
+        "entered_hidden_regions": entered_hidden_regions,
         "unlocked_abilities": unlocked_abilities,
         "achievement_flags": achievement_flags,
         "upgrade_materials": upgrade_materials,
@@ -514,7 +529,13 @@ func load_game() -> void:
     var saved_resonance_sources = parsed.get("resonance_sources", [])
     if saved_resonance_sources is Array:
         for source_id in saved_resonance_sources:
-            resonance_sources.append(str(source_id))
+            var normalized_source := str(source_id)
+            if not normalized_source.is_empty() and normalized_source not in resonance_sources:
+                resonance_sources.append(normalized_source)
+
+    _restore_string_ids(discovered_hidden_regions, parsed.get("discovered_hidden_regions", []))
+    _restore_string_ids(opened_hidden_paths, parsed.get("opened_hidden_paths", []))
+    _restore_string_ids(entered_hidden_regions, parsed.get("entered_hidden_regions", []))
     mite_first_meeting = bool(parsed.get("mite_first_meeting", false))
     mite_interactions_seen.clear()
     var saved_mite_interactions = parsed.get("mite_interactions_seen", [])
@@ -601,11 +622,80 @@ func spend_upgrade_material(material_id: String, amount: int = 1) -> bool:
     return true
 
 func record_resonance_source(source_id: String) -> bool:
-    if source_id.is_empty() or source_id in resonance_sources:
+    var normalized_id := source_id.strip_edges()
+    if normalized_id.is_empty() or normalized_id in resonance_sources:
         return false
-    resonance_sources.append(source_id)
+    resonance_sources.append(normalized_id)
     save_game()
     return true
+
+# Record a one-time anomaly milestone and raise resonance to its planned minimum.
+# 记录一次性异常节点：鸣响提升至指定下限，避免玩家改变探索顺序后门槛失效。
+func record_resonance_milestone(
+    source_id: String,
+    resonance_target: int,
+    ancient_exposure_delta: int = 0,
+    outer_exposure_delta: int = 0,
+    unlock_ability_id: String = "",
+    unlock_source_type: String = "resonance"
+) -> bool:
+    var normalized_id := source_id.strip_edges()
+    if normalized_id.is_empty() or normalized_id in resonance_sources:
+        return false
+
+    resonance_sources.append(normalized_id)
+    hero_resonance = maxi(hero_resonance, clampi(resonance_target, 0, 100))
+    ancient_exposure = clampi(ancient_exposure + maxi(0, ancient_exposure_delta), 0, 100)
+    outer_exposure = clampi(outer_exposure + maxi(0, outer_exposure_delta), 0, 100)
+
+    if not unlock_ability_id.strip_edges().is_empty() and not is_ability_unlocked(unlock_ability_id):
+        unlock_ability(unlock_ability_id, unlock_source_type, normalized_id)
+
+    print("[NEREIS][SENSE] Anomaly recorded id=%s resonance=%d ancient=%d outer=%d" % [
+        normalized_id, hero_resonance, ancient_exposure, outer_exposure
+    ])
+    save_game()
+    refresh_resonance_reveals()
+    return true
+
+func discover_hidden_region(region_id: String) -> bool:
+    var normalized_id := region_id.strip_edges()
+    if normalized_id.is_empty() or normalized_id in discovered_hidden_regions:
+        return false
+    discovered_hidden_regions.append(normalized_id)
+    print("[NEREIS][SECRET] Hidden region discovered id=%s" % normalized_id)
+    save_game()
+    return true
+
+func open_hidden_path(path_id: String) -> bool:
+    var normalized_id := path_id.strip_edges()
+    if normalized_id.is_empty() or normalized_id in opened_hidden_paths:
+        return false
+    opened_hidden_paths.append(normalized_id)
+    print("[NEREIS][SECRET] Hidden path permanently opened id=%s" % normalized_id)
+    save_game()
+    return true
+
+func mark_hidden_region_entered(region_id: String) -> bool:
+    var normalized_id := region_id.strip_edges()
+    if normalized_id.is_empty() or normalized_id in entered_hidden_regions:
+        return false
+    entered_hidden_regions.append(normalized_id)
+    print("[NEREIS][SECRET] Hidden region entered id=%s" % normalized_id)
+    save_game()
+    return true
+
+func is_hidden_path_opened(path_id: String) -> bool:
+    return path_id in opened_hidden_paths
+
+func _restore_string_ids(target: Array[String], raw_value: Variant) -> void:
+    target.clear()
+    if not raw_value is Array:
+        return
+    for raw_id in raw_value:
+        var normalized_id := str(raw_id)
+        if not normalized_id.is_empty() and normalized_id not in target:
+            target.append(normalized_id)
 
 func mark_prologue_complete() -> void:
     if prologue_complete:
@@ -654,6 +744,10 @@ func reset() -> void:
     learned_techniques.clear()
     technique_variants.clear()
     resonance_sources.clear()
+    discovered_hidden_regions.clear()
+    opened_hidden_paths.clear()
+    entered_hidden_regions.clear()
+    pending_region_spawn_side = "west"
     unlocked_abilities.clear()
     achievement_flags.clear()
     upgrade_materials.clear()
@@ -746,6 +840,14 @@ func get_resume_scene_path() -> String:
             return "res://scenes/escape_prologue.tscn"
         "village":
             return "res://scenes/village_hub.tscn"
+        "ash_forest":
+            return "res://scenes/ash_forest.tscn"
+        "forgotten_city":
+            return "res://scenes/forgotten_city.tscn"
+        "sewer_reservoir":
+            return "res://scenes/sewer_reservoir.tscn"
+        "hidden_well":
+            return "res://scenes/hidden_well.tscn"
         "tavern":
             return "res://scenes/locations/tavern_interior.tscn"
         "church":
