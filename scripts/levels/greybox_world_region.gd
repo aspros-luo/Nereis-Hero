@@ -43,6 +43,8 @@ func _ready() -> void:
         get_tree().create_timer(0.55).timeout.connect(_show_intro)
 
 func _spawn_x_for_side(side: String) -> float:
+    if region_id == "A3" and side == "sewer":
+        return 1380.0
     if side == "east":
         return map_width - 180.0
     if region_id == "H01":
@@ -393,7 +395,7 @@ func _spawn_region_exits() -> void:
         "A4":
             _spawn_exit_door(
                 72.0, "E  OPEN THE INSPECTION HATCH", "forgotten_city",
-                "res://scenes/forgotten_city.tscn", "east",
+                "res://scenes/forgotten_city.tscn", "sewer",
                 true, "opened_sewer_inspection_hatch_from_A4", "E  RETURN TO THE CITY"
             )
             if "reached_A4_via_A3" in WorldState.achievement_flags:
