@@ -28,6 +28,10 @@ World map master plan (Chinese draft):
 
 `docs/WORLD_MAP_MASTER_PLAN_CN.md`
 
+Phase I level topology (Chinese draft):
+
+`docs/LEVEL_TOPOLOGY_PHASE_1_CN.md`
+
 Director plan:
 
 `docs/DIRECTOR_NARRATIVE_PLAN.md`
