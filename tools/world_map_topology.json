@@ -385,7 +385,10 @@
         "opens_from": "A4",
         "requires_target_already_reached": true,
         "requires_ending_state": false
-      }
+      },
+      "scene_path": "scenes/hidden_well.tscn",
+      "location_id": "hidden_well",
+      "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },
     {
       "id": "H02",
@@ -407,7 +410,10 @@
         "opens_from": "A5",
         "requires_target_already_reached": true,
         "requires_ending_state": false
-      }
+      },
+      "scene_path": "scenes/hidden_bell_chamber.tscn",
+      "location_id": "hidden_bell_chamber",
+      "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },
     {
       "id": "H03",
@@ -429,7 +435,10 @@
         "opens_from": "A9",
         "requires_target_already_reached": true,
         "requires_ending_state": false
-      }
+      },
+      "scene_path": "scenes/erased_third_street.tscn",
+      "location_id": "erased_third_street",
+      "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },
     {
       "id": "H04",
@@ -451,7 +460,10 @@
         "opens_from": "A8",
         "requires_target_already_reached": true,
         "requires_ending_state": false
-      }
+      },
+      "scene_path": "scenes/reflected_stairwell.tscn",
+      "location_id": "reflected_stairwell",
+      "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },
     {
       "id": "H05",
@@ -473,7 +485,10 @@
         "opens_from": "A6",
         "requires_target_already_reached": false,
         "requires_ending_state": false
-      }
+      },
+      "scene_path": "scenes/silent_bell_room.tscn",
+      "location_id": "silent_bell_room",
+      "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },
     {
       "id": "H06",
@@ -499,7 +514,10 @@
         "requires_target_already_reached": true,
         "requires_ending_state": false
       },
-      "min_distinct_anomaly_sources": 2
+      "min_distinct_anomaly_sources": 2,
+      "scene_path": "scenes/erased_royal_name_corridor.tscn",
+      "location_id": "erased_royal_name_corridor",
+      "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },
     {
       "id": "H07",
@@ -524,7 +542,10 @@
         "requires_target_already_reached": true,
         "requires_ending_state": false
       },
-      "min_distinct_anomaly_sources": 1
+      "min_distinct_anomaly_sources": 1,
+      "scene_path": "scenes/mirror_street.tscn",
+      "location_id": "mirror_street",
+      "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },
     {
       "id": "H08",
@@ -551,7 +572,10 @@
         "requires_target_already_reached": false,
         "requires_ending_state": true
       },
-      "min_distinct_anomaly_sources": 3
+      "min_distinct_anomaly_sources": 3,
+      "scene_path": "scenes/primordial_hollow.tscn",
+      "location_id": "primordial_hollow",
+      "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     }
   ],
   "resonance_progression_contract": [
