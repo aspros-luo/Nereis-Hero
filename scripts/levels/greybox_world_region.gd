@@ -110,6 +110,8 @@ func _get_objective_text() -> String:
             return "DESCEND THROUGH THE CELLS. FIND THE ROYAL CRYPT."
         "A8":
             return "READ THE NAMES THAT WERE REMOVED."
+            _spawn_a11_maintenance_gate(2110.0)
+
         "A9":
             return "CROSS THE OUTER RING. FOLLOW THE RAIN REFLECTIONS."
         "A10":
@@ -118,6 +120,8 @@ func _get_objective_text() -> String:
             return "FOLLOW THE OBSERVATION PATH. THE WALLS REMEMBER EACH VISITOR."
         "H08":
             return "FOLLOW THE WALL THAT BREATHES WITHOUT WAKING IT."
+            _spawn_a11_chapel_gate(1900.0)
+
         "A12":
             return "ENTER THE THRONE DISTRICT. DECIDE WHAT MUST FALL."
         "H07":
@@ -636,6 +640,112 @@ func _spawn_region_exits() -> void:
                 "east",
                 can_return_to_a4
             )
+
+        "A11":
+            var can_return_to_tomb := WorldState.is_hidden_path_opened("C15")
+            var can_return_to_cathedral := "reached_A10_via_A9" in WorldState.achievement_flags
+            _spawn_exit_door(
+                72.0, "E  RETURN THROUGH THE ROYAL SHAFT", "royal_tomb",
+                "res://scenes/royal_tomb.tscn", "east", can_return_to_tomb
+            )
+            _spawn_exit_door(
+                map_width - 72.0, "E  RETURN TO THE GREAT CATHEDRAL", "grand_cathedral",
+                "res://scenes/grand_cathedral.tscn", "east", can_return_to_cathedral
+            )
+            _spawn_h08_gate(map_width - 300.0)
+
+        "H08":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE DEPTHS", "deep_research_depths",
+                "res://scenes/deep_research_depths.tscn", "east"
+            )
+            if WorldState.physical_union_complete:
+                var ending_gate = ENDGAME_GATE_SCRIPT.new()
+                var ending_scene_path: String = ending_gate.route_candidate()
+                var ending_location := "ending_paradise_demo" if ending_scene_path.ends_with("ending_paradise_demo.tscn") else "ending_fire_demo"
+                _spawn_exit_door(
+                    map_width - 72.0, "E  FOLLOW THE LAST DREAM", ending_location,
+                    ending_scene_path, "west"
+                )
+
+
+func _spawn_a11_maintenance_gate(x: float) -> void:
+    # The royal shaft requires proof that the Hero investigated the erased royal name.
+    # 王室竖井要求主角已调查被抹去的王室姓名。
+    var gate := Node2D.new()
+    gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+    gate.name = "RoyalTombDeepResearchGate"
+    gate.position = Vector2(x, floor_y)
+    gate.secret_id = "C15"
+    gate.region_record_id = "A11"
+    gate.target_scene_path = "res://scenes/deep_research_depths.tscn"
+    gate.target_location_id = "deep_research_depths"
+    gate.target_spawn_side = "west"
+    gate.required_resonance = 55
+    gate.required_ancient_exposure = 2
+    gate.required_source_ids = ["anomaly_bell_retiming", "anomaly_erased_royal_name"]
+    gate.opened.connect(_on_a11_gate_opened)
+    add_child(gate)
+
+func _spawn_a11_chapel_gate(x: float) -> void:
+    # The cathedral approach is an alternate entrance; it still requires the Mite-related outer-god fact.
+    # 大圣堂是另一条入口，但仍然要求蜜忒相关的外神共鸣事实。
+    var gate := Node2D.new()
+    gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+    gate.name = "SilentChapelDeepResearchGate"
+    gate.position = Vector2(x, floor_y)
+    gate.secret_id = "C19"
+    gate.region_record_id = "A11"
+    gate.target_scene_path = "res://scenes/deep_research_depths.tscn"
+    gate.target_location_id = "deep_research_depths"
+    gate.target_spawn_side = "east"
+    gate.required_resonance = 68
+    gate.required_outer_exposure = 12
+    gate.require_outer_god_resonance = true
+    gate.required_source_ids = ["anomaly_mirror_street_echo"]
+    gate.opened.connect(_on_a11_gate_opened)
+    add_child(gate)
+
+func _on_a11_gate_opened(secret_id: String) -> void:
+    if not is_instance_valid(narrative):
+        return
+    var title := "THE SHAFT BEHIND THE KING'S NAME" if secret_id == "C15" else "THE SILENT CHAPEL"
+    narrative.show_message(
+        title,
+        "The stone opens inward.\n\nThe records say the Church excavated this depth. The dust has settled on the Church's tools, not the stone.",
+        5.0
+    )
+
+func _spawn_h08_gate(x: float) -> void:
+    var gate := Node2D.new()
+    gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+    gate.name = "PrimordialHollowGate"
+    gate.position = Vector2(x, floor_y)
+    gate.secret_id = "H08"
+    gate.target_scene_path = "res://scenes/primordial_hollow.tscn"
+    gate.target_location_id = "primordial_hollow"
+    gate.target_spawn_side = "west"
+    gate.required_resonance = 78
+    gate.required_ancient_exposure = 2
+    gate.required_outer_exposure = 18
+    gate.require_outer_god_resonance = true
+    gate.required_source_ids = [
+        "anomaly_bell_retiming",
+        "anomaly_erased_street_sign",
+        "anomaly_old_stone_layer"
+    ]
+    gate.opened.connect(_on_h08_gate_opened)
+    add_child(gate)
+
+func _on_h08_gate_opened(_secret_id: String) -> void:
+    if not is_instance_valid(narrative):
+        return
+    narrative.show_message(
+        "THE WALL THAT BREATHES",
+        "The wall exhales.\n\nYou cannot tell whether the passage was built for you, or whether it noticed you first.",
+        5.0
+    )
+
 
 func _spawn_a9_mirror_gate(x: float) -> void:
     var gate := Node2D.new()
