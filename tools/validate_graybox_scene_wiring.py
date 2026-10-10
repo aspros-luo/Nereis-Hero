@@ -51,6 +51,8 @@ def main() -> int:
     world_state = read("scripts/core/world_state.gd", errors)
     for method in [
         "func record_resonance_milestone(",
+        "ancient_exposure_floor: int = 0",
+        "outer_exposure_floor: int = 0",
         "func discover_hidden_region(",
         "func open_hidden_path(",
         "func mark_hidden_region_entered(",
@@ -88,11 +90,14 @@ def main() -> int:
         '"anomaly_old_stone_layer"',
         '"reached_A4_via_A3"',
         'SceneTransition.fade_to_scene(target_scene)',
+        "clue.ancient_exposure_floor = ancient_floor",
     ]:
         require(region_script, contract, "Graybox region controller", errors)
 
     source_clue = read("scripts/world/resonance_source_clue.gd", errors)
     require(source_clue, "WorldState.record_resonance_milestone(", "Resonance source clue", errors)
+    require(source_clue, "ancient_exposure_floor,", "Resonance source exposure floor", errors)
+    require(source_clue, "outer_exposure_floor", "Resonance source exposure floor", errors)
     require(source_clue, 'KEY_E', "Resonance source clue", errors)
     require(source_clue, "INTERACTION_FOCUS_SCRIPT.is_focused(self)", "Resonance source clue", errors)
 
