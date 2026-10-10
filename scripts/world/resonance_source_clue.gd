@@ -12,6 +12,8 @@ const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.g
 @export_range(0, 100, 1) var resonance_target: int = 0
 @export_range(0, 100, 1) var ancient_exposure_delta: int = 0
 @export_range(0, 100, 1) var outer_exposure_delta: int = 0
+@export_range(0, 100, 1) var ancient_exposure_floor: int = 0
+@export_range(0, 100, 1) var outer_exposure_floor: int = 0
 @export var unlock_ability_id: String = ""
 @export var unlock_source_type: String = "resonance"
 @export var interaction_radius: float = 105.0
@@ -54,7 +56,9 @@ func _unhandled_input(event: InputEvent) -> void:
             ancient_exposure_delta,
             outer_exposure_delta,
             unlock_ability_id,
-            unlock_source_type
+            unlock_source_type,
+            ancient_exposure_floor,
+            outer_exposure_floor
         )
         consumed = source_id in WorldState.resonance_sources
         if recorded:
