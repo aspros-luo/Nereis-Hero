@@ -108,6 +108,7 @@ def validate(data: dict[str, Any]) -> list[str]:
     regions = data.get("regions", [])
     connections = data.get("connections", [])
     hidden = data.get("hidden_regions", [])
+    sources = data.get("resonance_sources", [])
     primary_route = data.get("primary_route", [])
     loops = data.get("loops", [])
     region_ids_list = [item.get("id", "") for item in regions]
@@ -185,6 +186,41 @@ def validate(data: dict[str, Any]) -> list[str]:
                 fail(errors, f"{loop.get('id')}: no macro edge for {source} <-> {target}.")
         if not loop.get("requires"):
             fail(errors, f"{loop.get('id')}: loop must list its unlock requirements.")
+
+    source_ids = [item.get("source_id", "") for item in sources]
+    if len(sources) != 8:
+        fail(errors, f"Expected 8 resonance progression sources, found {len(sources)}.")
+    if len(source_ids) != len(set(source_ids)):
+        fail(errors, "Duplicate resonance source IDs.")
+    if any(not source_id.strip() for source_id in source_ids):
+        fail(errors, "Every resonance progression event needs a stable source_id.")
+
+    expected_resonance = int(data.get("resonance_baseline_at_prologue", 0))
+    for source in sources:
+        expected_resonance += int(source.get("resonance_delta", 0))
+        actual = int(source.get("resonance_after", -1))
+        if expected_resonance != actual:
+            fail(
+                errors,
+                f"{source.get('id')}: expected cumulative resonance {expected_resonance}, "
+                f"but manifest declares {actual}.",
+            )
+        if int(source.get("resonance_delta", -1)) < 0:
+            fail(errors, f"{source.get('id')}: resonance delta cannot be negative.")
+
+    for secret in hidden:
+        missing_sources = sorted(set(secret.get("required_source_ids", [])) - set(source_ids))
+        if missing_sources:
+            fail(errors, f"{secret.get('id')}: references missing resonance sources {missing_sources}.")
+    h07 = next((item for item in hidden if item.get("id") == "H07"), None)
+    if h07 and (int(h07.get("min_outer_exposure", 0)) < 12 or h07.get("requires_outer_god_resonance") is not True):
+        fail(errors, "H07 must require the outer-god resonance story fact and outer exposure >= 12.")
+    h08 = next((item for item in hidden if item.get("id") == "H08"), None)
+    r08 = next((item for item in sources if item.get("id") == "R08"), None)
+    if h08 and int(h08.get("min_outer_exposure", 0)) < 18:
+        fail(errors, "H08 must require outer exposure >= 18.")
+    if r08 and int(r08.get("outer_exposure_after", 0)) != 18:
+        fail(errors, "R08 must define the planned outer exposure target of 18.")
 
     hidden_ids = [item.get("id", "") for item in hidden]
     if len(hidden_ids) != len(set(hidden_ids)):
@@ -327,6 +363,7 @@ def main() -> int:
     print(f" - Macro connections: {len(data['connections'])}")
     print(f" - Main-route nodes: {len(data['primary_route'])}")
     print(f" - Hidden subregions: {len(data['hidden_regions'])}")
+    print(f" - Resonance source events: {len(data['resonance_sources'])}")
     print(f" - Macro loops: {len(data['loops'])}")
     print(" - Main route reaches A12 without hidden regions or locked shortcuts.")
     print(" - All primary and hidden regions become reachable after intended gates open.")
