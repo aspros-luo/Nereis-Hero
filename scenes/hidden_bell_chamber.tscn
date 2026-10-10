@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+
+[node name="HiddenBellChamber" type="Node2D"]
+script = ExtResource("1")
+region_id = "H02"
+location_id = "hidden_bell_chamber"
+region_title = "THE BELL BEFORE THE SOUND"
+map_width = 1900.0
