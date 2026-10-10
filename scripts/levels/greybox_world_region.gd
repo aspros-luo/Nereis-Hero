@@ -686,6 +686,11 @@ func _spawn_region_exits() -> void:
                 map_width - 72.0, "E  FOLLOW THE BATTLEFIELD ROAD", "old_battlefield",
                 "res://scenes/old_battlefield.tscn", "west"
             )
+            if "reached_A9_via_A8_then_opened_old_lift_from_A9" in WorldState.achievement_flags:
+                _spawn_exit_door(
+                    1150.0, "E  RETURN TO THE ROYAL OUTER RING", "royal_outer_ring",
+                    "res://scenes/royal_outer_ring.tscn", "old_lift"
+                )
             _spawn_h03_gate(map_width - 300.0)
             if WorldState.is_hidden_path_opened("H05") and "opened_bell_tower_drop" in WorldState.achievement_flags:
                 _spawn_exit_door(
@@ -706,6 +711,21 @@ func _spawn_region_exits() -> void:
                 true, "opened_watergate_and_village_well_exit", "E  RETURN TO THE VILLAGE"
             )
             _spawn_h04_gate(1780.0)
+            if "reached_A7_then_opened_supply_tunnel" in WorldState.achievement_flags:
+                _spawn_exit_door(
+                    1050.0, "E  RETURN TO THE PRISON", "prison_depths",
+                    "res://scenes/prison_depths.tscn", "east"
+                )
+            if "reached_A8_via_A7_then_opened_royal_tomb_gate" in WorldState.achievement_flags:
+                _spawn_exit_door(
+                    1250.0, "E  RETURN TO THE ROYAL TOMB", "royal_tomb",
+                    "res://scenes/royal_tomb.tscn", "royal_tomb_waterway"
+                )
+            if "reached_A9_then_opened_royal_drain_from_outer_ring" in WorldState.achievement_flags:
+                _spawn_exit_door(
+                    1450.0, "E  RETURN TO THE ROYAL OUTER RING", "royal_outer_ring",
+                    "res://scenes/royal_outer_ring.tscn", "royal_drain"
+                )
             if "reached_A4_via_A3" in WorldState.achievement_flags:
                 _spawn_a4_hidden_well_gate(map_width - 105.0)
 
