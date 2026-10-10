@@ -81,7 +81,8 @@ func _spawn_x_for_side(side: String) -> float:
     if region_id == "A5" and side == "old_pilgrim_highroad":
         # C04 arrives near the city-facing end of the battlefield shortcut.
         # C04 从捷径抵达战场时，出生在靠近旧城的一侧。
-        return 850.0    if region_id == "A2" and side == "bell_gate":
+        return 850.0
+    if region_id == "A2" and side == "bell_gate":
         # Leave the H02 entrance's interaction radius after returning from the hidden chamber.
         # 从倒响钟室返回时，出生点应离入口足够远，避免一落地就抢占 E 交互。
         return map_width - 450.0
