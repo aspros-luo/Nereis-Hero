@@ -603,7 +603,7 @@
         "H04"
       ],
       "cumulative_target": 36,
-      "note": "该前置调查发生在 H04 隐藏楼梯之前，避免入口自我解锁。"
+      "note": "A0 开场已将古神接触度提升到至少 1；本事件只记录异常来源，不重复增加接触度。"
     },
     {
       "id": "R05",
@@ -669,7 +669,7 @@
       "note": "设计合同：外神共鸣剧情事实首次成立时才增加接触度；当前源码只记录布尔标记，这项数值效果尚未实现。"
     }
   ],
-  "resonance_baseline_at_prologue": 0,
+  "resonance_baseline_at_prologue": 12,
   "resonance_sources": [
     {
       "id": "R01",
@@ -710,7 +710,7 @@
       "id": "R04",
       "source_id": "anomaly_old_stone_layer",
       "location": "A4",
-      "description": "辨认旧石构与后世管线的年代冲突",
+      "description": "辨认旧石构与后世管线的年代冲突；记录异常来源，不重复增加 A0 已建立的古神接触",
       "resonance_delta": 8,
       "resonance_after": 36,
       "record_source": true,
