@@ -130,6 +130,17 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 - Route memory echo
 - Evidence is not exposed as a "true ending checklist"
 
+### World-map graybox — first connected loop
+
+- A2 Old Pilgrim Road, A3 Forgotten City, A4 Sewer / Sediment Hall, and H01 Well Below the Well have programmatic graybox scenes and initial source wiring.
+- R01 unlocks the existing Resonance Sight ability; R02–R04 record one-time anomalies and raise resonance to defined minimums.
+- H01 has persistent discovered / opened / entered states, shared by its village and A4 entrances.
+- Current state: code and scene wiring committed; Godot 4.6.x runtime acceptance is still pending.
+
+Implementation notes and acceptance checklist:
+
+`docs/GRAYBOX_A2_A4_IMPLEMENTATION_CN.md`
+
 ### Combat
 
 - Weighty 2D action foundation
