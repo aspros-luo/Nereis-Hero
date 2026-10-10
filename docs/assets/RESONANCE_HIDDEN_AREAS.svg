@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1410" viewBox="0 0 1800 1410" role="img" aria-labelledby="title desc">
+<title id="title">Nereis Hero 鸣响隐藏地图网络</title>
+<desc id="desc">八个隐藏地图节点，分别附着于村庄、钟墓、废弃城区、旧水库、监牢、旧王墓、大圣堂和深层研究区，通过鸣响与灵视发现。</desc>
+<defs>
+<style>
+ text{font-family:"Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;fill:#24323b}
+ .h1{font-size:32px;font-weight:700;letter-spacing:1px}.sub{font-size:16px;fill:#637079}
+ .layer{font-size:19px;font-weight:700;letter-spacing:2px;fill:#53616a}
+ .card{stroke:#31424d;stroke-width:1.5;rx:16}
+ .cardhead{font-size:20px;font-weight:700;fill:#fffdf7}
+ .id{font-size:14px;font-weight:700;fill:#e1e8ea;letter-spacing:1px}
+ .body{font-size:15px}.small{font-size:13px;fill:#657078}
+ .route{fill:none;stroke:#9b754b;stroke-width:3;stroke-dasharray:9 8;stroke-linecap:round;stroke-linejoin:round}
+ .route2{fill:none;stroke:#587e83;stroke-width:3;stroke-dasharray:4 7;stroke-linecap:round;stroke-linejoin:round}
+ .pill{fill:#f7f2e8;stroke:#c9c2b5;stroke-width:1}
+ .pilltext{font-size:14px;font-weight:700;fill:#65533f}
+</style>
+<marker id="goldarrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#9b754b"/></marker>
+<marker id="tealarrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#587e83"/></marker>
+</defs>
+<rect width="1800" height="1410" fill="#f3f0e8"/>
+<text x="60" y="58" class="h1">NEREIS HERO｜鸣响隐藏地图网络</text>
+<text x="62" y="88" class="sub">八处附属隐藏地图 · 必须主动激活灵视并调查异常 · 显现可短暂，开启必须永久</text>
+<path d="M45 112 H1755" stroke="#cdc7ba" stroke-width="2"/>
+<rect x="45" y="135" width="1710" height="95" rx="14" fill="#e6e8e2" stroke="#cbd0c8"/>
+<text x="70" y="169" font-size="18" font-weight="700">玩家循环</text>
+<text x="70" y="201" class="body">环境伏笔</text>
+<path d="M175 195 H260" class="route" marker-end="url(#goldarrow)"/>
+<text x="284" y="201" class="body">鸣响达标 + 激活灵视</text>
+<path d="M500 195 H585" class="route" marker-end="url(#goldarrow)"/>
+<text x="611" y="201" class="body">异常显现</text>
+<path d="M725 195 H810" class="route" marker-end="url(#goldarrow)"/>
+<text x="836" y="201" class="body">靠近调查 / 共鸣</text>
+<path d="M1015 195 H1100" class="route" marker-end="url(#goldarrow)"/>
+<text x="1126" y="201" class="body">永久开启并保存</text>
+<path d="M1300 195 H1385" class="route" marker-end="url(#goldarrow)"/>
+<text x="1410" y="201" class="body">进入后绘制地图标记</text>
+
+<text x="62" y="273" class="layer">边境与旧城区｜较早可发现，出口受主线状态约束</text>
+
+<!-- Cards and route arrows -->
+<!-- row 1 -->
+<g transform="translate(65 300)">
+  <rect width="500" height="205" rx="16" fill="#8d795e" class="card"/>
+  <path d="M0 16 Q0 0 16 0 H484 Q500 0 500 16 V61 H0Z" fill="#6f5d46"/>
+  <text x="22" y="25" class="id">H01 · ANCHOR A1</text><text x="22" y="49" class="cardhead">井底回声层</text>
+  <rect x="355" y="75" width="120" height="30" rx="15" class="pill"/><text x="375" y="95" class="pilltext">鸣响 ≥ 12</text>
+  <text x="22" y="92" class="body">伏笔：滴水声晚于水滴落下</text>
+  <text x="22" y="124" class="body">空间：窄井、倒挂台阶、封闭铁门</text>
+  <text x="22" y="156" class="body">出口：通往 A4 的门从另一侧开启</text>
+  <text x="22" y="184" class="small">目的：首次发现感；不允许跳过 A2–A3</text>
+</g>
+<g transform="translate(665 300)">
+  <rect width="500" height="205" rx="16" fill="#72866f" class="card"/>
+  <path d="M0 16 Q0 0 16 0 H484 Q500 0 500 16 V61 H0Z" fill="#556c53"/>
+  <text x="22" y="25" class="id">H02 · ANCHOR A2</text><text x="22" y="49" class="cardhead">倒响钟室</text>
+  <rect x="355" y="75" width="120" height="30" rx="15" class="pill"/><text x="375" y="95" class="pilltext">鸣响 ≥ 18</text>
+  <text x="22" y="92" class="body">伏笔：钟锤未动，钟声已经响起</text>
+  <text x="22" y="124" class="body">空间：错年代的墓室与短谜题</text>
+  <text x="22" y="156" class="body">出口：后期才连接 A5 的钟塔路径</text>
+  <text x="22" y="184" class="small">目的：可选调查；不直接发放真结局答案</text>
+</g>
+<g transform="translate(1265 300)">
+  <rect width="470" height="205" rx="16" fill="#8b8581" class="card"/>
+  <path d="M0 16 Q0 0 16 0 H454 Q470 0 470 16 V61 H0Z" fill="#6d6966"/>
+  <text x="22" y="25" class="id">H03 · ANCHOR A3</text><text x="22" y="49" class="cardhead">被删去的第三街</text>
+  <rect x="325" y="75" width="120" height="30" rx="15" class="pill"/><text x="345" y="95" class="pilltext">鸣响 ≥ 28</text>
+  <text x="22" y="92" class="body">伏笔：街牌有第三街，城市中却不存在</text>
+  <text x="22" y="124" class="body">空间：平行的上下层街区</text>
+  <text x="22" y="156" class="body">出口：A9 服务门受主线状态控制</text>
+  <text x="22" y="184" class="small">目的：城市空间谜题；禁止提前跳过章节</text>
+</g>
+
+<path d="M565 402 H650" class="route" marker-end="url(#goldarrow)"/>
+<path d="M1165 402 H1250" class="route" marker-end="url(#goldarrow)"/>
+
+<text x="62" y="557" class="layer">地下与制度设施｜机关、接触条件与后期捷径</text>
+<g transform="translate(65 585)">
+  <rect width="500" height="205" rx="16" fill="#6f8993" class="card"/>
+  <path d="M0 16 Q0 0 16 0 H484 Q500 0 500 16 V61 H0Z" fill="#526e79"/>
+  <text x="22" y="25" class="id">H04 · ANCHOR A4</text><text x="22" y="49" class="cardhead">水面背后的楼梯</text>
+  <rect x="355" y="75" width="120" height="30" rx="15" class="pill"/><text x="375" y="95" class="pilltext">鸣响 ≥ 36</text>
+  <text x="22" y="92" class="body">伏笔：水面映出不存在的干燥台阶</text>
+  <text x="22" y="124" class="body">机制：水位与倒影层形成两种路径</text>
+  <text x="22" y="156" class="body">出口：A8 王墓侧门后期开启</text>
+  <text x="22" y="184" class="small">目的：验证机关 / 状态存档，不制造碰撞错觉</text>
+</g>
+<g transform="translate(665 585)">
+  <rect width="500" height="205" rx="16" fill="#73757d" class="card"/>
+  <path d="M0 16 Q0 0 16 0 H484 Q500 0 500 16 V61 H0Z" fill="#595b63"/>
+  <text x="22" y="25" class="id">H05 · ANCHOR A7</text><text x="22" y="49" class="cardhead">无号牢房</text>
+  <rect x="355" y="75" width="120" height="30" rx="15" class="pill"/><text x="375" y="95" class="pilltext">鸣响 ≥ 42</text>
+  <text x="22" y="92" class="body">伏笔：无光墙面出现牢门影子</text>
+  <text x="22" y="124" class="body">空间：被删改的牢房编号与维护层</text>
+  <text x="22" y="156" class="body">出口：深层研究区通路须先由主线打开</text>
+  <text x="22" y="184" class="small">目的：展示制度盲区；不堆砌重复牢房</text>
+</g>
+<g transform="translate(1265 585)">
+  <rect width="470" height="205" rx="16" fill="#8b7668" class="card"/>
+  <path d="M0 16 Q0 0 16 0 H454 Q470 0 470 16 V61 H0Z" fill="#6d594c"/>
+  <text x="22" y="25" class="id">H06 · ANCHOR A8</text><text x="22" y="49" class="cardhead">墓室背面</text>
+  <rect x="325" y="75" width="120" height="30" rx="15" class="pill"/><text x="345" y="95" class="pilltext">鸣响 ≥ 55</text>
+  <text x="22" y="92" class="body">伏笔：浮雕的反面有相反的布局</text>
+  <text x="22" y="124" class="body">空间：隐藏墓室与王室运送道</text>
+  <text x="22" y="156" class="body">出口：连接 A9 的侧门捷径</text>
+  <text x="22" y="184" class="small">目的：重构王墓 / 王城关系，不跳过主线</text>
+</g>
+<path d="M565 687 H650" class="route" marker-end="url(#goldarrow)"/>
+<path d="M1165 687 H1250" class="route" marker-end="url(#goldarrow)"/>
+
+<text x="62" y="842" class="layer">王权 / 外神深层｜高鸣响与特定接触，不公开提示真相</text>
+<g transform="translate(65 870)">
+  <rect width="800" height="205" rx="16" fill="#765c70" class="card"/>
+  <path d="M0 16 Q0 0 16 0 H784 Q800 0 800 16 V61 H0Z" fill="#5d4658"/>
+  <text x="22" y="25" class="id">H07 · ANCHOR A10</text><text x="22" y="49" class="cardhead">无声侧堂</text>
+  <rect x="620" y="75" width="150" height="30" rx="15" class="pill"/><text x="639" y="95" class="pilltext">鸣响 ≥ 68</text>
+  <text x="22" y="92" class="body">附加条件：外神接触 ≥ 12</text>
+  <text x="22" y="124" class="body">伏笔：合唱消失，唱诗席仍在动作；灵视揭示不在建筑平面上的门。</text>
+  <text x="22" y="156" class="body">路线价值：通向 A11 的替代入口，改变信息顺序，而不是替代主线。</text>
+  <text x="22" y="184" class="small">内容原则：展示仪式空间的裂缝，不设置必做的“真相讲解”任务</text>
+</g>
+<g transform="translate(935 870)">
+  <rect width="800" height="205" rx="16" fill="#76647f" class="card"/>
+  <path d="M0 16 Q0 0 16 0 H784 Q800 0 800 16 V61 H0Z" fill="#5c4b66"/>
+  <text x="22" y="25" class="id">H08 · ANCHOR A11</text><text x="22" y="49" class="cardhead">观察者回廊</text>
+  <rect x="620" y="75" width="150" height="30" rx="15" class="pill"/><text x="639" y="95" class="pilltext">鸣响 ≥ 78</text>
+  <text x="22" y="92" class="body">附加条件：古神接触 ≥ 2；外神接触 ≥ 12</text>
+  <text x="22" y="124" class="body">伏笔：观测铭文会随站位指向不同的观察对象。</text>
+  <text x="22" y="156" class="body">路线价值：汇聚矛盾证据；去 A13 的部分路线还需剧情 / 结局状态。</text>
+  <text x="22" y="184" class="small">内容原则：回廊方向可以不可靠，返回已知区的主路必须清晰</text>
+</g>
+<path d="M865 972 H920" class="route" marker-end="url(#goldarrow)"/>
+
+<rect x="65" y="1110" width="1670" height="230" rx="18" fill="#e5e6e1" stroke="#c8ccc4"/>
+<text x="92" y="1150" font-size="20" font-weight="700">地图验证约束</text>
+<g class="body">
+  <text x="95" y="1190">01 · 灵视的 4.5 秒窗口只用于看见并调查异常，不用于强迫玩家完成长距离平台跳跃。</text>
+  <text x="95" y="1225">02 · 调查成功后，入口和捷径写入存档；死亡、切图、鸣响下降都不能让已开启路径关闭。</text>
+  <text x="95" y="1260">03 · 隐藏区域的远端门可以锁到主线抵达对应区域，防止早期入口绕过关键事件。</text>
+  <text x="95" y="1295">04 · 进入区域后才在地图上添加未知标记；不一次性公开所有秘密，更不公开完整剧情答案。</text>
+  <text x="95" y="1320" class="small">阈值为灰盒测试初值。此图描述设计，不代表八处隐藏地图已在 Godot 实现。</text>
+</g>
+</svg>
