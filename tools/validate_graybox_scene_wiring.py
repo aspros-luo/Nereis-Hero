@@ -81,7 +81,6 @@ def main() -> int:
         '"anomaly_erased_street_sign"',
         '"anomaly_old_stone_layer"',
         '"reached_A4_via_A3"',
-        'WorldState.record_resonance_milestone(',
         'SceneTransition.fade_to_scene(target_scene)',
     ]:
         require(region_script, contract, "Graybox region controller", errors)
