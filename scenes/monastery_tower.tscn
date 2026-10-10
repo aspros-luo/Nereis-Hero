@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+
+[node name="MonasteryTower" type="Node2D"]
+script = ExtResource("1")
+region_id = "A6"
+location_id = "monastery_tower"
+region_title = "THE MONASTERY THAT KEPT ITS BELL"
+map_width = 2600.0
