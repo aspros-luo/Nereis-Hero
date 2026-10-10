@@ -151,6 +151,9 @@ def main() -> int:
         '"anomaly_silent_bell_window"',
         '"anomaly_erased_royal_name"',
         'opened_sewer_inspection_hatch_from_A4',
+        'reached_A5_and_opened_old_pilgrim_highroad',
+        'E  OPEN THE OLD PILGRIM HIGHROAD',
+        'E  RETURN TO THE BATTLEFIELD',
         'opened_old_bell_tower_connection',
         'opened_old_service_door',
         'opened_royal_tomb_side_door',
@@ -179,6 +182,8 @@ def main() -> int:
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
     spawn_contracts = [
         ('if region_id == "A2" and side == "bell_gate":', "return map_width - 450.0"),
+        ('if region_id == "A2" and side == "old_pilgrim_highroad":', "return map_width - 650.0"),
+        ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 520.0"),
         ('if region_id == "A3" and side == "third_street_gate":', "return map_width - 500.0"),
         ('if region_id == "A3" and side == "bell_drop":', "return 1600.0"),
         ('if region_id == "A4" and side == "water_reflection_gate":', "return 1550.0"),
