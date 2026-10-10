@@ -373,25 +373,30 @@
       "min_resonance": 12,
       "min_ancient_exposure": 0,
       "min_outer_exposure": 0,
+      "required_source_ids": [],
+      "requires_outer_god_resonance": false,
       "requires_sight_active": true,
       "interaction_key": "E",
       "persistent_on_open": true,
       "return_to_parent": true,
       "secondary_exit": {
         "to": "A4",
-        "unlock_condition": "reached_A4_via_A3_and_opened_watergate",
+        "unlock_condition": "reached_A4_via_A3_then_opened_well_gate_from_A4",
         "opens_from": "A4",
-        "requires_target_already_reached": true
+        "requires_target_already_reached": false,
+        "requires_ending_state": false
       }
     },
     {
       "id": "H02",
       "name": "倒响钟室",
       "parent": "A2",
-      "anchor": "钟墓 / 旧朝圣石阶",
+      "anchor": "钟墓",
       "min_resonance": 18,
       "min_ancient_exposure": 0,
       "min_outer_exposure": 0,
+      "required_source_ids": [],
+      "requires_outer_god_resonance": false,
       "requires_sight_active": true,
       "interaction_key": "E",
       "persistent_on_open": true,
@@ -400,7 +405,8 @@
         "to": "A5",
         "unlock_condition": "reached_A5_then_opened_old_bell_tower_connection",
         "opens_from": "A5",
-        "requires_target_already_reached": true
+        "requires_target_already_reached": true,
+        "requires_ending_state": false
       }
     },
     {
@@ -411,6 +417,8 @@
       "min_resonance": 28,
       "min_ancient_exposure": 0,
       "min_outer_exposure": 0,
+      "required_source_ids": [],
+      "requires_outer_god_resonance": false,
       "requires_sight_active": true,
       "interaction_key": "E",
       "persistent_on_open": true,
@@ -419,7 +427,8 @@
         "to": "A9",
         "unlock_condition": "reached_A9_then_opened_old_service_door",
         "opens_from": "A9",
-        "requires_target_already_reached": true
+        "requires_target_already_reached": true,
+        "requires_ending_state": false
       }
     },
     {
@@ -430,6 +439,8 @@
       "min_resonance": 36,
       "min_ancient_exposure": 1,
       "min_outer_exposure": 0,
+      "required_source_ids": [],
+      "requires_outer_god_resonance": false,
       "requires_sight_active": true,
       "interaction_key": "E",
       "persistent_on_open": true,
@@ -438,7 +449,8 @@
         "to": "A8",
         "unlock_condition": "reached_A8_via_A7_then_opened_royal_tomb_side_door",
         "opens_from": "A8",
-        "requires_target_already_reached": true
+        "requires_target_already_reached": true,
+        "requires_ending_state": false
       }
     },
     {
@@ -449,25 +461,33 @@
       "min_resonance": 42,
       "min_ancient_exposure": 1,
       "min_outer_exposure": 0,
+      "required_source_ids": [],
+      "requires_outer_god_resonance": false,
       "requires_sight_active": true,
       "interaction_key": "E",
       "persistent_on_open": true,
       "return_to_parent": true,
       "secondary_exit": {
         "to": "A3",
-        "unlock_condition": "reached_A6_then_opened_bell_tower_drop",
+        "unlock_condition": "reached_A6_then_opened_bell_tower_drop_to_A3",
         "opens_from": "A6",
-        "requires_target_already_reached": true
+        "requires_target_already_reached": false,
+        "requires_ending_state": false
       }
     },
     {
       "id": "H06",
       "name": "王名抹除廊",
       "parent": "A8",
-      "anchor": "旧王墓铭文墙",
+      "anchor": "旧王墓铭文",
       "min_resonance": 55,
       "min_ancient_exposure": 2,
       "min_outer_exposure": 0,
+      "required_source_ids": [
+        "anomaly_bell_retiming",
+        "anomaly_erased_street_sign"
+      ],
+      "requires_outer_god_resonance": false,
       "requires_sight_active": true,
       "interaction_key": "E",
       "persistent_on_open": true,
@@ -476,31 +496,30 @@
         "to": "A9",
         "unlock_condition": "reached_A9_via_A8_then_opened_royal_transport_side_door",
         "opens_from": "A9",
-        "requires_target_already_reached": true
-      },
-      "min_distinct_anomaly_sources": 2,
-      "required_resonance_sources": [
-        "anomaly_bell_retiming",
-        "anomaly_erased_street_sign"
-      ]
+        "requires_target_already_reached": true,
+        "requires_ending_state": false
+      }
     },
     {
       "id": "H07",
       "name": "镜街：雨幕背后",
       "parent": "A9",
-      "anchor": "王城外环积水街",
+      "anchor": "王城外环积水倒影",
       "min_resonance": 68,
       "min_ancient_exposure": 0,
       "min_outer_exposure": 12,
+      "required_source_ids": [],
+      "requires_outer_god_resonance": true,
       "requires_sight_active": true,
       "interaction_key": "E",
       "persistent_on_open": true,
       "return_to_parent": true,
       "secondary_exit": {
         "to": "A12",
-        "unlock_condition": "reached_A12_then_opened_mirror_street_side_gate",
+        "unlock_condition": "reached_A12_via_A10_then_opened_mirror_street_side_gate",
         "opens_from": "A12",
-        "requires_target_already_reached": true
+        "requires_target_already_reached": true,
+        "requires_ending_state": false
       }
     },
     {
@@ -511,6 +530,12 @@
       "min_resonance": 78,
       "min_ancient_exposure": 2,
       "min_outer_exposure": 18,
+      "required_source_ids": [
+        "anomaly_bell_retiming",
+        "anomaly_erased_street_sign",
+        "anomaly_old_stone_layer"
+      ],
+      "requires_outer_god_resonance": true,
       "requires_sight_active": true,
       "interaction_key": "E",
       "persistent_on_open": true,
@@ -521,13 +546,7 @@
         "opens_from": "A11",
         "requires_target_already_reached": false,
         "requires_ending_state": true
-      },
-      "min_distinct_anomaly_sources": 3,
-      "required_resonance_sources": [
-        "anomaly_bell_retiming",
-        "anomaly_erased_street_sign",
-        "anomaly_water_reflection"
-      ]
+      }
     }
   ],
   "resonance_progression_contract": [
@@ -641,6 +660,99 @@
       },
       "source_id": "mite_outer_resonance_awakened",
       "note": "设计合同：外神共鸣剧情事实首次成立时才增加接触度；当前源码只记录布尔标记，这项数值效果尚未实现。"
+    }
+  ],
+  "resonance_baseline_at_prologue": 12,
+  "resonance_sources": [
+    {
+      "id": "R01",
+      "source_id": "anomaly_bell_retiming",
+      "location": "A2",
+      "description": "首次确认钟声先于钟锤动作",
+      "resonance_delta": 0,
+      "resonance_after": 12,
+      "unlock_ability": "resonance_sight",
+      "record_source": true,
+      "ancient_exposure_delta": 0,
+      "outer_exposure_delta": 0
+    },
+    {
+      "id": "R02",
+      "source_id": "anomaly_old_pilgrim_echo",
+      "location": "A2",
+      "description": "旧朝圣石阶的第二处回声",
+      "resonance_delta": 6,
+      "resonance_after": 18,
+      "ancient_exposure_delta": 0,
+      "outer_exposure_delta": 0
+    },
+    {
+      "id": "R03",
+      "source_id": "anomaly_erased_street_sign",
+      "location": "A3",
+      "description": "发现第三街路牌",
+      "resonance_delta": 10,
+      "resonance_after": 28,
+      "record_source": true,
+      "ancient_exposure_delta": 0,
+      "outer_exposure_delta": 0
+    },
+    {
+      "id": "R04",
+      "source_id": "anomaly_old_stone_layer",
+      "location": "A4",
+      "description": "辨认旧石构与后世管线的年代冲突",
+      "resonance_delta": 8,
+      "resonance_after": 36,
+      "record_source": true,
+      "ancient_exposure_delta": 0,
+      "outer_exposure_delta": 0
+    },
+    {
+      "id": "R05",
+      "source_id": "anomaly_silent_bell_window",
+      "location": "A6",
+      "description": "发现修道院钟塔无声窗口",
+      "resonance_delta": 6,
+      "resonance_after": 42,
+      "ancient_exposure_delta": 0,
+      "outer_exposure_delta": 0
+    },
+    {
+      "id": "R06",
+      "source_id": "anomaly_erased_royal_name",
+      "location": "A8",
+      "description": "确认王墓铭文被主动抹除",
+      "resonance_delta": 13,
+      "resonance_after": 55,
+      "record_source": true,
+      "ancient_exposure_delta": 1,
+      "outer_exposure_delta": 0
+    },
+    {
+      "id": "R07",
+      "source_id": "anomaly_mirror_street_echo",
+      "location": "A9",
+      "description": "辨认积水中的镜街倒影",
+      "resonance_delta": 13,
+      "resonance_after": 68,
+      "record_source": true,
+      "ancient_exposure_delta": 0,
+      "outer_exposure_floor": 12,
+      "outer_exposure_requires": "outer_god_resonance",
+      "outer_exposure_delta": 0
+    },
+    {
+      "id": "R08",
+      "source_id": "anomaly_observer_reaction",
+      "location": "A11",
+      "description": "发现观测记录的第二个视点",
+      "resonance_delta": 10,
+      "resonance_after": 78,
+      "record_source": true,
+      "ancient_exposure_delta": 0,
+      "outer_exposure_delta": 6,
+      "outer_exposure_after": 18
     }
   ]
 }
