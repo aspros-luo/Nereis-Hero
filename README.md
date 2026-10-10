@@ -68,6 +68,10 @@ A5–A8 main-route graybox extension notes (Chinese):
 
 `docs/GRAYBOX_A5_A8_IMPLEMENTATION_CN.md`
 
+A9–A12 main route and H07 Mirror Street graybox notes (Chinese):
+
+`docs/GRAYBOX_A9_A12_IMPLEMENTATION_CN.md`
+
 Graybox scene wiring static checker:
 
 `tools/validate_graybox_scene_wiring.py`
@@ -134,20 +138,21 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 - Route memory echo
 - Evidence is not exposed as a "true ending checklist"
 
-### World-map graybox — first connected loop
+### World-map graybox — connected main-route slice
 
-- A2–A8 now have programmatic graybox scenes; H01 has a connected hidden-well scene.
-- R01 unlocks the existing Resonance Sight ability; R02–R06 record one-time anomalies and raise resonance to defined minimums.
+- A2–A12 now have programmatic graybox scenes; H01 Well Below the Well and H07 Mirror Street have dedicated hidden-region scenes.
+- R01–R07 are connected as one-time anomaly investigations. R01 unlocks the existing Resonance Sight ability; R04–R06 use minimum exposure floors to avoid permanently locking optional content.
 - H01 has persistent discovered / opened / entered states shared by its village and A4 entrances; the A4 return hatch is a one-time unlock.
+- H07 requires Resonance Sight, resonance ≥ 68, outer exposure ≥ 12, the outer-god story flag, and the R07 evidence source. Its A12 shortcut stays locked until the player reaches the Inner City and opens the far-side gate.
 - Current state: code and scene wiring committed; Godot 4.6.x runtime acceptance is still pending.
 
-Implementation notes and acceptance checklist:
+Implementation notes and acceptance checklists:
 
 `docs/GRAYBOX_A2_A4_IMPLEMENTATION_CN.md`
 
-A5–A8 extension details:
-
 `docs/GRAYBOX_A5_A8_IMPLEMENTATION_CN.md`
+
+`docs/GRAYBOX_A9_A12_IMPLEMENTATION_CN.md`
 
 ### Combat
 
