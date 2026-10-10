@@ -9,6 +9,7 @@ const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.g
 @export var secret_id: String = "H01"
 @export var target_scene_path: String = "res://scenes/hidden_well.tscn"
 @export var target_location_id: String = "hidden_well"
+@export_enum("west", "east") var target_spawn_side: String = "west"
 @export_range(0, 100, 1) var required_resonance: int = 12
 @export_range(0, 100, 1) var required_ancient_exposure: int = 0
 @export_range(0, 100, 1) var required_outer_exposure: int = 0
@@ -96,7 +97,7 @@ func _unhandled_input(event: InputEvent) -> void:
         cooldown = 0.7
         if opened_permanently:
             WorldState.mark_hidden_region_entered(secret_id)
-            WorldState.pending_region_spawn_side = "west"
+            WorldState.pending_region_spawn_side = target_spawn_side
             WorldState.set_location(target_location_id)
             get_viewport().set_input_as_handled()
             SceneTransition.fade_to_scene(target_scene_path)
