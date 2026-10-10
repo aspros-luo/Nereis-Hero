@@ -72,6 +72,11 @@ def main() -> int:
 
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
     for contract in [
+        'const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")',
+        "_spawn_a4_hidden_well_gate(map_width - 105.0)",
+        'gate.secret_id = "H01"',
+        'gate.target_spawn_side = "east"',
+        'if "reached_A4_via_A3" in WorldState.achievement_flags:',
         '"A2"',
         '"A3"',
         '"A4"',
@@ -100,6 +105,8 @@ def main() -> int:
         "WorldState.resonance_sight_active",
         "KEY_E",
         "SceneTransition.fade_to_scene(target_scene_path)",
+        'target_spawn_side: String = "west"',
+        "WorldState.pending_region_spawn_side = target_spawn_side",
     ]:
         require(secret_gate, contract, "Resonance hidden gate", errors)
 
