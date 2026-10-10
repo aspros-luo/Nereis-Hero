@@ -7,6 +7,7 @@ signal opened(secret_id: String)
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
 
 @export var secret_id: String = "H01"
+@export var region_record_id: String = "" # Optional area ID when the secret path ID differs.
 @export var target_scene_path: String = "res://scenes/hidden_well.tscn"
 @export var target_location_id: String = "hidden_well"
 @export_enum("west", "east") var target_spawn_side: String = "west"
@@ -56,6 +57,10 @@ func _process(delta: float) -> void:
     INTERACTION_FOCUS_SCRIPT.sync(self, available, 25)
     queue_redraw()
 
+func _get_region_record_id() -> String:
+    var normalized_id := region_record_id.strip_edges()
+    return secret_id if normalized_id.is_empty() else normalized_id
+
 func _has_required_sources() -> bool:
     for source_id in required_source_ids:
         if source_id not in WorldState.resonance_sources:
@@ -96,7 +101,7 @@ func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 0.7
         if opened_permanently:
-            WorldState.mark_hidden_region_entered(secret_id)
+            WorldState.mark_hidden_region_entered(_get_region_record_id())
             WorldState.pending_region_spawn_side = target_spawn_side
             WorldState.set_location(target_location_id)
             get_viewport().set_input_as_handled()
@@ -105,7 +110,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
         if not revealed:
             return
-        WorldState.discover_hidden_region(secret_id)
+        WorldState.discover_hidden_region(_get_region_record_id())
         WorldState.open_hidden_path(secret_id)
         opened_permanently = true
         revealed = true
