@@ -36,6 +36,10 @@ Full world network topology (Chinese draft):
 
 `docs/WORLD_NETWORK_TOPOLOGY_CN.md`
 
+Complete world map atlas (Chinese draft):
+
+`docs/COMPLETE_WORLD_MAP_ATLAS_CN.md`
+
 Director plan:
 
 `docs/DIRECTOR_NARRATIVE_PLAN.md`
