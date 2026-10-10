@@ -58,6 +58,10 @@ func _ready() -> void:
 func _spawn_x_for_side(side: String) -> float:
     if region_id == "A9" and side == "mirror":
         return 1680.0
+    if region_id == "A11" and side == "chapel_entry":
+        # C19 enters from the cathedral-facing side, but must not overlap A11's return door at the east boundary.
+        # C19 从大圣堂侧进入 A11，但出生点不能与 A11 东侧边界的返回门重叠。
+        return map_width - 700.0
     # Far-side entrances place the Hero near, but not inside, the return door.
     # 从远侧捷径进入隐藏地图时，主角会落在出口附近，但不会与门的碰撞区重叠。
     if region_id == "H02" and side == "bell_tower_entry":
@@ -947,7 +951,7 @@ func _spawn_a11_chapel_gate(x: float) -> void:
     gate.region_record_id = "A11"
     gate.target_scene_path = "res://scenes/deep_research_depths.tscn"
     gate.target_location_id = "deep_research_depths"
-    gate.target_spawn_side = "east"
+    gate.target_spawn_side = "chapel_entry"
     gate.required_resonance = 68
     gate.required_outer_exposure = 12
     gate.require_outer_god_resonance = true
