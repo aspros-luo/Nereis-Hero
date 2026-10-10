@@ -28,10 +28,18 @@ func _ready() -> void:
     var spawn_side := WorldState.pending_region_spawn_side
     WorldState.pending_region_spawn_side = "west"
     WorldState.set_location(location_id)
-    if region_id == "A10":
+    if region_id == "A4":
+        # Reaching the reservoir records the C05 route and enables the return-side well entrance on later visits.
+        # 抵达旧水库即记录 C05 路线；之后再次进入时，才会生成回程侧的水井入口。
+        WorldState.record_achievement("reached_A4_via_A3")
+    elif region_id == "A10":
         # Being inside the cathedral proves the main route has reached A10; this also repairs older saves.
         # 进入大圣堂本身即证明主线已抵达 A10，也可修复旧存档中的进程标记。
         WorldState.record_achievement("reached_A10_via_A9")
+    elif region_id == "A12":
+        # The inner city is only entered from the cathedral on the main route; persist this for H07's side gate.
+        # 主线内城入口来自大圣堂；持久记录该事实，供 H07 的镜街侧门判断是否允许回程。
+        WorldState.record_achievement("reached_A12_via_A10")
 
     _create_floor()
     _create_boundaries()
