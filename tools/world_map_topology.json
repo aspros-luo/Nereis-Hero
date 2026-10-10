@@ -186,7 +186,7 @@
       "kind": "shortcut",
       "initial_access": "blocked",
       "final_direction": "both",
-      "unlock_condition": "reached_A6_then_opened_bell_tower_drop",
+      "unlock_condition": "opened_bell_tower_drop",
       "opens_from": "A6"
     },
     {
@@ -346,7 +346,7 @@
         "A3"
       ],
       "requires": [
-        "reached_A6_then_opened_bell_tower_drop"
+        "opened_bell_tower_drop"
       ]
     },
     {
