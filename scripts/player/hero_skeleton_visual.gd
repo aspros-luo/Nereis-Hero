@@ -166,13 +166,6 @@ func update_pose(
 			_set_rotation("Weapon", -0.20)
 			_set_rotation("RearArm", 0.22)
 			_set_rotation("Cape", -0.12)
-		"FALL":
-			_set_rotation("Torso", -local_motion * 0.045)
-			_set_rotation("RearLeg", -0.12)
-			_set_rotation("FrontLeg", 0.34)
-			_set_rotation("RearArm", -0.50)
-			_set_rotation("FrontArm", -0.28)
-			_set_rotation("Cape", -0.08)
 		"DODGE":
 			skeleton.scale.y = RIG_SCALE * 0.84
 			_set_rotation("Torso", 0.16)
