@@ -207,7 +207,7 @@ flowchart LR
 - **A2 / R02、A3 / R03、A4 / R04：** 一次性调查会分别将鸣响提高到至少 18、28、36。R04 还会确保古神接触度至少为 1，避免玩家错过序章可选线索后无法触发后续古神门槛；已达到该值时不重复增加。
 - **H01：** `scripts/world/resonance_secret_gate.gd` 负责临时显现、E 开启、E 进入；入口和进入状态调用 WorldState 的持久化 API。
 - **存档：** `discovered_hidden_regions`、`opened_hidden_paths`、`entered_hidden_regions` 已接入存档 / 读取 / reset；旧存档缺少这些字段时默认为空集合。
-- **返回路线：** A4 的井门只在玩家从 A3 正常抵达 A4 后开放；从 A4 侧开启 H01 后，村庄旧井的同一通路 ID 也保持开启。
+- **返回路线：** 只有玩家从 A3 正常抵达 A4 后才会生成 A4 侧井门；无论从村庄还是 A4 首次开启，都必须激活灵视并达到鸣响门槛。两侧共用 H01 通路 ID，永久开启状态保持同步。
 
 `WorldState.mark_outer_god_resonance()` 现在会在外神共鸣剧情事实成立时，把 `outer_exposure` 提升到至少 12；即便旧存档已保存该布尔事实、但缺少接触数值，也会在调用时修正。R08 后续可以再将外神接触提升到 18。它仍不能因玩家单纯抵达 A9 而触发。
 
