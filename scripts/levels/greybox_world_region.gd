@@ -167,25 +167,25 @@ func _show_intro() -> void:
         "A9":
             narrative.show_message(
                 "THE ROYAL OUTER RING",
-                "Rainwater pools in the street, though the roofs are dry.\\n\\nThe lamps in the puddles are lit. The lamps above them are not.",
+                "Rainwater pools in the street, though the roofs are dry.\n\nThe lamps in the puddles are lit. The lamps above them are not.",
                 5.0
             )
         "A10":
             narrative.show_message(
                 "THE GREAT CATHEDRAL",
-                "The choir stops when you reach the steps.\\n\\nNo one turns to look at you.",
+                "The choir stops when you reach the steps.\n\nNo one turns to look at you.",
                 5.0
             )
         "A12":
             narrative.show_message(
                 "THE INNER CITY",
-                "The palace doors stand open.\\n\\nThe guards have not been dismissed.",
+                "The palace doors stand open.\n\nThe guards have not been dismissed.",
                 5.0
             )
         "H07":
             narrative.show_message(
                 "MIRROR STREET: BEHIND THE RAIN",
-                "The rain falls upward here.\\n\\nYour reflection arrives one step before you.",
+                "The rain falls upward here.\n\nYour reflection arrives one step before you.",
                 5.0
             )
         "H01":
@@ -376,7 +376,7 @@ func _spawn_region_sources() -> void:
                 "anomaly_silent_bell_window",
                 "THE WINDOW WITHOUT A SOUND",
                 "The bell tower window has no view beyond it.\n\nIts shadow falls across a wall that is not there.",
-                42
+                42,
                 0,
                 0,
                 "",
@@ -400,7 +400,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1380, floor_y - 18.0),
                 "anomaly_mirror_street_echo",
                 "THE STREET IN THE PUDDLE",
-                "The puddle reflects a street with one more lamp.\\n\\nYou count the lights again. Nothing changes above you.",
+                "The puddle reflects a street with one more lamp.\n\nYou count the lights again. Nothing changes above you.",
                 68
             )
 
@@ -603,7 +603,7 @@ func _on_mirror_street_gate_opened(secret_id: String) -> void:
         return
     narrative.show_message(
         "THE STREET THAT WAS REMOVED",
-        "The reflection stops following the rain.\\n\\nFor the first time, the door has a shadow.",
+        "The reflection stops following the rain.\n\nFor the first time, the door has a shadow.",
         4.5
     )
 
