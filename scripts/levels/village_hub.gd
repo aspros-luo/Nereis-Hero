@@ -10,6 +10,7 @@ const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd
 const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 const FIREFLY_SCRIPT = preload("res://scripts/effects/village_fireflies.gd")
+const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -21,6 +22,7 @@ var narrative_audio: Node
 var mite_house_door: Area2D
 var mite_house_transitioning := false
 var fireflies: Node2D
+var resonance_well_gate: Node2D
 
 func _ready() -> void:
     WorldState.prepare_scene_runtime()
@@ -36,6 +38,7 @@ func _ready() -> void:
     _spawn_gatekeeper()
     _spawn_shared_world_npcs()
     _spawn_village_pois()
+    _spawn_resonance_well_gate()
     _spawn_ui()
     _spawn_narrative_audio()
     _spawn_fireflies()
@@ -231,8 +234,12 @@ func _spawn_village_pois() -> void:
     north_gate.set_script(VILLAGE_POI_SCRIPT)
     north_gate.position = Vector2(2440, 520)
     north_gate.poi_id = "north_gate"
-    north_gate.display_name = "NORTH GATE"
-    north_gate.dialogue = "Fresh axe marks scar the gate.\n\nBeyond it, the road is too quiet.\n\nYou hear distant metal."
+    var old_pilgrim_road_open := "village_defense_survived" in WorldState.achievement_flags
+    north_gate.display_name = "OLD PILGRIM ROAD" if old_pilgrim_road_open else "NORTH GATE"
+    if old_pilgrim_road_open:
+        north_gate.dialogue = "The gate has been repaired, but the old road beyond it is still there.\n\nThe stones carry a bell sound from somewhere in the forest."
+    else:
+        north_gate.dialogue = "Fresh axe marks scar the gate.\n\nBeyond it, the road is too quiet.\n\nYou hear distant metal."
     add_child(north_gate)
     north_gate.interacted.connect(_on_village_poi_interacted.bind(north_gate))
 
@@ -250,6 +257,29 @@ func _on_village_poi_interacted(poi: Node) -> void:
     await narrative.message_finished
     _enter_village_location(poi.poi_id)
 
+func _spawn_resonance_well_gate() -> void:
+    resonance_well_gate = Node2D.new()
+    resonance_well_gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+    resonance_well_gate.position = Vector2(1555, 520)
+    resonance_well_gate.name = "ResonanceWellGate"
+    resonance_well_gate.secret_id = "H01"
+    resonance_well_gate.target_scene_path = "res://scenes/hidden_well.tscn"
+    resonance_well_gate.target_location_id = "hidden_well"
+    resonance_well_gate.required_resonance = 12
+    resonance_well_gate.required_ancient_exposure = 0
+    resonance_well_gate.required_outer_exposure = 0
+    resonance_well_gate.opened.connect(_on_resonance_well_opened)
+    add_child(resonance_well_gate)
+
+func _on_resonance_well_opened(secret_id: String) -> void:
+    if narrative == null or not is_instance_valid(narrative):
+        return
+    narrative.show_message(
+        "THE WELL THAT WAS ALREADY THERE",
+        "The stones slide inward without a sound.\n\nA stair descends where the water should be.\n\nThe opening will remain.",
+        4.5
+    )
+
 func _enter_village_location(location_id: String) -> void:
     if location_id == "tavern":
         WorldState.set_location("tavern")
@@ -266,9 +296,15 @@ func _enter_village_location(location_id: String) -> void:
         print("[NEREIS][VILLAGE] Entering Restoration Camp")
         SceneTransition.fade_to_scene("res://scenes/rebel_camp.tscn")
     elif location_id == "north_gate":
-        WorldState.current_location = "village"
-        print("[NEREIS][VILLAGE] Triggering village defense chapter")
-        SceneTransition.fade_to_scene("res://scenes/village_defense_demo.tscn")
+        if "village_defense_survived" in WorldState.achievement_flags:
+            WorldState.pending_region_spawn_side = "west"
+            WorldState.set_location("ash_forest")
+            print("[NEREIS][MAP] Entering A2: Old Pilgrim Road")
+            SceneTransition.fade_to_scene("res://scenes/ash_forest.tscn")
+        else:
+            WorldState.set_location("village")
+            print("[NEREIS][VILLAGE] Triggering village defense chapter")
+            SceneTransition.fade_to_scene("res://scenes/village_defense_demo.tscn")
     elif location_id == "graveyard":
         WorldState.set_location("graveyard")
         print("[NEREIS][VILLAGE] Entering Village Graveyard")
