@@ -78,6 +78,10 @@ func _spawn_x_for_side(side: String) -> float:
         # Move away from H04, whose entrance is at x=1780.
         # 旧水库侧的 H04 入口位于 x=1780，返回点与其保持明显距离。
         return 1550.0
+    if region_id == "A4" and side == "east":
+        # H01's A4-side well gate sits near the east boundary; avoid spawning inside its 80px interaction radius.
+        # A4 东侧井门靠近地图边界；返回时避开其 80px 交互范围，防止落地就重新聚焦。
+        return map_width - 360.0
     if region_id == "A5" and side == "bell_tower":
         # The far-side door is at x=2060; keep the arrival point clear of its trigger.
         # 钟塔远侧门位于 x=2060，抵达战场时避免立即触发返回门。
