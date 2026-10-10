@@ -55,10 +55,10 @@
 
 | 来源 ID | 发生地点 / 事件 | 鸣响变化 | 接触变化 / 解锁 | 支持的门槛 |
 |---|---|---:|---|---|
-| R01 `anomaly_bell_retiming` | A2：首次确认钟声先于钟锤动作 | +12 | 通过现有能力解锁 API 开启 `resonance_sight` | 首次灵视；回访 A1 的 H01 |
+| R01 `anomaly_bell_retiming` | A2：首次确认钟声先于钟锤动作 | +0（保留 A0 已建立的鸣响 12） | 通过现有能力解锁 API 开启 `resonance_sight`，记录 R01 来源 ID | 首次灵视；回访 A1 的 H01 |
 | R02 `anomaly_old_pilgrim_echo` | A2：旧朝圣石阶的第二处回声 | +6（累计 18） | 无 | H02 |
 | R03 `anomaly_erased_street_sign` | A3：入口附近发现“第三街”路牌 | +10（累计 28） | 记录异常 ID | H03；H06 / H08 前置证据 |
-| R04 `anomaly_old_stone_layer` | A4：在沉积大厅辨认旧石构与后世管线的年代冲突，发生在 H04 隐藏楼梯之前 | +8（累计 36） | 古神接触 +1 | H04；H08 前置证据 |
+| R04 `anomaly_old_stone_layer` | A4：在沉积大厅辨认旧石构与后世管线的年代冲突，发生在 H04 隐藏楼梯之前 | +8（累计 36） | 记录异常 ID；单纯观察石构不增加接触度 | H04；H08 前置证据 |
 | R05 `anomaly_silent_bell_window` | A6：在钟塔主路线一侧发现无声窗口 | +6（累计 42） | 无 | H05 |
 | R06 `anomaly_erased_royal_name` | A8：确认王墓铭文被主动抹除 | +13（累计 55） | 古神接触 +1（累计 2） | H06 |
 | R07 `anomaly_mirror_street_echo` | A9：在主路线经过的积水处辨认镜街倒影，调查点与 H07 入口分开 | +13（累计 68） | 仅当外神共鸣剧情事实成立时，已有故事事件将外神接触推进到 12 | H07 |
@@ -197,36 +197,50 @@ flowchart LR
 
 ## 7. 发现与存档的工程合同
 
-现有 resonance_hidden_target.gd 已能根据阈值显现目标，但完整隐藏地图还需要持久化状态。进入实现阶段时优先扩展既有 WorldState，而不是添加平行系统。
+现有 `resonance_hidden_target.gd` 已能根据阈值显现目标，但完整隐藏地图还需要持久化状态。进入实现阶段时优先扩展既有 `WorldState`，而不是添加平行系统。
 
 ### 正式接入前必须先打通的能力链
 
-当前运行时代码需要先补齐三处连接（这意味着门槛表仍是设计数据，而不是当前游戏承诺）：
+本节是设计合同，尚未全部接入运行时。当前源码核查结果如下：
 
-- 在 A2 的 R01 一次性事件中，调用现有能力解锁 API 解锁 `resonance_sight`，并通过现有 `HeroSystem.add_resonance(12, "anomaly_bell_retiming")` 记入首次鸣响；这不是新增技能，而是把现有技能接入正常进程。
-- 将 R02–R08 的增量接到各自的主线路径调查事件，每个 source ID 只能奖励一次。H06 / H08 的前置异常 ID 可从现有 `WorldState.resonance_sources` 读取；未来若把“鸣响来源”和“玩家确实调查过的异常”拆成两类状态，应改为单独的发现记录。
-- `WorldState.mark_outer_god_resonance()` 目前只设置布尔标记。设计合同建议在它首次成功时，将 `outer_exposure` 提升到至少 12；R08 再按研究事件将其提升至 18。这个效果必须等关系 / 剧情条件真实成立时才发生，不能仅因抵达 A9 自动赋予外神接触。
+- A0 的 `WorldState.mark_ancient_residue_awakened()` 已将鸣响提高到至少 12、古神接触提高到至少 1，并记录 `ancient_residue_awakened`。所以 R01 不应再增加 12，否则会与后续“R02 累计 18”的设计冲突。
+- 已核查的 69 个 GDScript 文件中，没有找到正常主线调用 `WorldState.unlock_ability("resonance_sight", ...)`。主角在能力未解锁时会拒绝响应 V，因此 R01 必须正式解锁现有能力。
+- `HeroSystem.add_resonance()` 及接触度增量方法已经存在，但尚未接入 R02–R08 的正常一次性调查事件。每个来源必须使用稳定 source ID，并防止重复奖励。
+- `WorldState.mark_outer_god_resonance()` 当前只设置布尔标记，不会自动增加 `outer_exposure`。只有当蜜忒相关的外神共鸣剧情事实真实发生时，才应把外神接触提升到至少 12；不能因为玩家进入 A9 就自动获得。
+- `resonance_hidden_target.gd` 当前主要负责显现，不是完整地图门。E 调查、持久化开门、捷径出口和读档恢复仍需要实现。
 
-建议新增两类记录：
+#### R01–R08 运行时接入约定
 
-- discovered_hidden_regions：玩家已通过调查固定发现的隐藏区域入口。
-- opened_hidden_paths：已经开启的隐藏通路 / 捷径 ID。
+1. **R01（A2）**：记录 `anomaly_bell_retiming`；通过现有 `WorldState.unlock_ability("resonance_sight", "resonance", "anomaly_bell_retiming")` 解锁灵视。A0 已建立的鸣响 12 保持不变，不重复增加。
+2. **R02–R08**：将表中的鸣响增量接入各自主线路径上的一次性调查事件，通过 `HeroSystem.add_resonance(amount, source_id)` 或相应的现有状态 API 记录 source ID。重访不重复奖励。
+3. **R04**：记录古老石层的异常来源，但不因单纯观察建筑年代就增加接触度。
+4. **R06（A8）**：在主动确认王墓铭文被抹除后，古神接触度再增加 1；与 A0 的既有接触合计达到 2。
+5. **R07（A9）**：只有当外神共鸣剧情事实成立时，外神接触度才可达到 12。具体剧情事件由已存在的蜜忒关系 / 共鸣状态触发，不以地图到达条件替代剧情。
+6. **R08（A11）**：在深层研究调查事件中，外神接触度增加 6，目标值为 18；该事件只在玩家实际进入研究区并调查对应异常后发生。
 
-可选增加 entered_hidden_regions，用于只在玩家实际进入后才绘制地图标记和揭示区域名称。
+### 隐藏地图的持久化状态
 
-每个隐藏入口配置至少包括：
+建议在现有 `WorldState` 中增加三类记录，不另外建立平行世界状态管理器：
 
-- 唯一 target_id / region_id；
-- 所属父区域 ID；
-- required_resonance；
-- required_ancient_exposure / required_outer_exposure；
-- 视觉提示节点与交互位置；
-- 成功后需要开启的门 / 路径 ID；
-- 反向出口的进程条件；
-- 首次发现 / 实际进入时的声音、文本或动画；
-- 已发现状态如何存档、读取和复位。
+- `discovered_hidden_regions`：玩家已经通过调查固定发现的隐藏区域入口；
+- `opened_hidden_paths`：已经打开的隐藏门、通路和捷径 ID；
+- `entered_hidden_regions`：玩家实际进入过的隐藏子区划，用于地图绘制与回访。
 
-实现时复用已有的输入焦点系统来显示 E 交互，不让附近 NPC 与隐藏入口同时抢占交互焦点。灵视期间只负责感知，调查后再固定开启入口。
+这三个状态必须分开：**显现不等于发现，发现不一定意味着已经进入**。每个门使用固定、稳定、可保存的 ID。
+
+每个隐藏入口的配置至少应包含：
+
+- 唯一 gate ID 与 region ID；
+- 所属主区域 ID；
+- 鸣响、古神接触、外神接触门槛；
+- 必需的前置 source ID / 世界状态；
+- 灵视显现节点和 E 交互位置；
+- 成功后需要打开的碰撞 / 门 / 路径 ID；
+- 远端出口进程条件；
+- 首次发现和实际进入时的音效、文本或动画；
+- 存档、读档、死亡回程和 reset 的行为。
+
+实现时复用既有的 `NereisInteractionFocus`，避免附近 NPC 与隐藏入口同时抢占 E 键提示。灵视只负责让异常可见；玩家调查成功后，入口才永久开启。已开启路径不能因灵视结束、鸣响下降、死亡、切场景或读档而重新封闭。
 
 ## 8. 验收用例
 
