@@ -91,8 +91,7 @@
   <text x="22" y="25" class="id">H05 · ANCHOR A6</text><text x="22" y="49" class="cardhead">无声钟室</text>
   <rect x="355" y="75" width="120" height="30" rx="15" class="pill"/><text x="375" y="95" class="pilltext">鸣响 ≥ 42</text>
   <text x="22" y="92" class="body">伏笔：钟塔阴影里出现没有钟声的窗口</text>
-  <text x="22" y="116" class="body">附加门槛：古神接触 ≥ 1</text>
-  <text x="22" y="124" class="body">空间：旧钟机构、窗洞与垂直维护层</text>
+  <text x="22" y="124" class="body">附加门槛：古神接触 ≥ 1；旧钟机构与垂直维护层</text>
   <text x="22" y="156" class="body">出口：后期开启钟塔回落口，连接 A3 上层</text>
   <text x="22" y="184" class="small">目的：形成中层捷径；不绕过 A5 主线</text>
 </g>
