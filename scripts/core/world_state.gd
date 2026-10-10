@@ -690,7 +690,7 @@ func is_hidden_path_opened(path_id: String) -> bool:
 
 func _restore_string_ids(target: Array[String], raw_value: Variant) -> void:
     target.clear()
-    if not raw_value is Array:
+    if not (raw_value is Array):
         return
     for raw_id in raw_value:
         var normalized_id := str(raw_id)
