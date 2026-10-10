@@ -50,7 +50,32 @@ func _ready() -> void:
 func _spawn_x_for_side(side: String) -> float:
     if region_id == "A9" and side == "mirror":
         return 1680.0
-
+    if region_id == "A2" and side == "bell_gate":
+        return map_width - 360.0
+    if region_id == "A3" and side == "third_street_gate":
+        return map_width - 390.0
+    if region_id == "A3" and side == "bell_drop":
+        return 1820.0
+    if region_id == "A4" and side == "water_reflection_gate":
+        return 1710.0
+    if region_id == "A5" and side == "bell_tower":
+        return map_width - 480.0
+    if region_id == "A6" and side == "silent_window":
+        return 1620.0
+    if region_id == "A8" and side == "royal_name_gate":
+        return 1850.0
+    if region_id == "A8" and side == "royal_tomb_side":
+        return 920.0
+    if region_id == "A9" and side == "third_street_service":
+        return 1050.0
+    if region_id == "A9" and side == "royal_transport":
+        return map_width - 390.0
+    if region_id == "H04" and side == "royal_tomb_side":
+        return map_width - 310.0
+    if region_id == "H05" and side == "bell_drop":
+        return map_width - 330.0
+    if region_id == "H06" and side == "royal_transport":
+        return map_width - 320.0
     if region_id == "A3" and side == "sewer":
         return 1380.0
     if side == "east":
@@ -110,6 +135,16 @@ func _get_objective_text() -> String:
             return "DESCEND THROUGH THE CELLS. FIND THE ROYAL CRYPT."
         "A8":
             return "READ THE NAMES THAT WERE REMOVED."
+        "H02":
+            return "LISTEN FOR THE BELL THAT ARRIVES BEFORE ITS SOUND."
+        "H03":
+            return "FOLLOW THE STREET THAT THE CITY ERASED."
+        "H04":
+            return "FOLLOW THE DRY STAIRS INSIDE THE WATER."
+        "H05":
+            return "CLIMB THE WINDOW THAT CASTS NO SHADOW."
+        "H06":
+            return "READ THE NAME SCRAPED FROM THE ROYAL STONE."
 
         "A9":
             return "CROSS THE OUTER RING. FOLLOW THE RAIN REFLECTIONS."
@@ -215,6 +250,36 @@ func _show_intro() -> void:
             narrative.show_message(
                 "THE WELL BELOW THE WELL",
                 "The shaft is deeper than the village well could contain.\n\nYour footsteps return from above.",
+                5.0
+            )
+        "H02":
+            narrative.show_message(
+                "THE BELL BEFORE THE SOUND",
+                "The bell's tongue remains still.\n\nThe echo answers from a place you have not reached.",
+                5.0
+            )
+        "H03":
+            narrative.show_message(
+                "THE STREET THE CITY REMOVED",
+                "The houses have doors on both sides.\n\nOnly one side appears on the city plan.",
+                5.0
+            )
+        "H04":
+            narrative.show_message(
+                "THE STAIRS BEHIND THE WATER",
+                "The reflection has dry steps.\n\nYour boots leave no mark on the water above them.",
+                5.0
+            )
+        "H05":
+            narrative.show_message(
+                "THE WINDOW THAT CASTS NO SHADOW",
+                "The bell tower window has no view beyond it.\n\nSomeone has been using it from the inside.",
+                5.0
+            )
+        "H06":
+            narrative.show_message(
+                "THE NAME SCRAPED FROM STONE",
+                "The inscription is not weathered.\n\nThe chisel marks begin after the tomb was sealed.",
                 5.0
             )
 
@@ -354,6 +419,39 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1030, 430, 145, 18))
             _add_platform(Rect2(1290, 385, 165, 18))
             _add_platform(Rect2(1560, 440, 145, 18))
+        "H02":
+            _add_platform(Rect2(260, 475, 145, 18))
+            _add_platform(Rect2(515, 430, 135, 18))
+            _add_platform(Rect2(790, 385, 160, 18))
+            _add_platform(Rect2(1070, 435, 145, 18))
+            _add_platform(Rect2(1340, 390, 155, 18))
+        "H03":
+            _add_platform(Rect2(250, 475, 150, 18))
+            _add_platform(Rect2(515, 430, 140, 18))
+            _add_platform(Rect2(780, 385, 175, 18))
+            _add_platform(Rect2(1080, 445, 155, 18))
+            _add_platform(Rect2(1420, 400, 170, 18))
+            _add_platform(Rect2(1760, 455, 160, 18))
+        "H04":
+            _add_platform(Rect2(250, 475, 160, 18))
+            _add_platform(Rect2(530, 425, 140, 18))
+            _add_platform(Rect2(810, 380, 165, 18))
+            _add_platform(Rect2(1100, 435, 150, 18))
+            _add_platform(Rect2(1390, 390, 170, 18))
+        "H05":
+            _add_platform(Rect2(280, 480, 155, 18))
+            _add_platform(Rect2(560, 430, 135, 18))
+            _add_platform(Rect2(840, 385, 150, 18))
+            _add_platform(Rect2(1120, 340, 140, 18))
+            _add_platform(Rect2(1400, 395, 155, 18))
+            _add_platform(Rect2(1700, 450, 160, 18))
+        "H06":
+            _add_platform(Rect2(260, 480, 160, 18))
+            _add_platform(Rect2(540, 440, 140, 18))
+            _add_platform(Rect2(820, 395, 165, 18))
+            _add_platform(Rect2(1110, 445, 155, 18))
+            _add_platform(Rect2(1420, 395, 165, 18))
+            _add_platform(Rect2(1730, 450, 160, 18))
 
 func _add_platform(rect: Rect2) -> void:
     platforms.append(rect)
@@ -516,6 +614,7 @@ func _spawn_region_exits() -> void:
                 map_width - 72.0, "E  ENTER THE FORGOTTEN CITY", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "west"
             )
+            _spawn_h02_gate(map_width - 300.0)
         "A3":
             _spawn_exit_door(
                 72.0, "E  RETURN TO PILGRIM ROAD", "ash_forest",
@@ -531,12 +630,19 @@ func _spawn_region_exits() -> void:
                 map_width - 72.0, "E  FOLLOW THE BATTLEFIELD ROAD", "old_battlefield",
                 "res://scenes/old_battlefield.tscn", "west"
             )
+            _spawn_h03_gate(map_width - 300.0)
+            if WorldState.is_hidden_path_opened("H05") and "opened_bell_tower_drop" in WorldState.achievement_flags:
+                _spawn_exit_door(
+                    1830.0, "E  RETURN TO THE SILENT BELL WINDOW", "silent_bell_room",
+                    "res://scenes/silent_bell_room.tscn", "east"
+                )
         "A4":
             _spawn_exit_door(
                 72.0, "E  OPEN THE INSPECTION HATCH", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "sewer",
                 true, "opened_sewer_inspection_hatch_from_A4", "E  RETURN TO THE CITY"
             )
+            _spawn_h04_gate(1780.0)
             if "reached_A4_via_A3" in WorldState.achievement_flags:
                 _spawn_a4_hidden_well_gate(map_width - 105.0)
 
@@ -549,6 +655,12 @@ func _spawn_region_exits() -> void:
                 map_width - 72.0, "E  ENTER THE MONASTERY", "monastery_tower",
                 "res://scenes/monastery_tower.tscn", "west"
             )
+            if WorldState.is_hidden_path_opened("H02"):
+                _spawn_exit_door(
+                    2060.0, "E  OPEN THE OLD BELL TOWER CONNECTION", "hidden_bell_chamber",
+                    "res://scenes/hidden_bell_chamber.tscn", "east",
+                    true, "opened_old_bell_tower_connection", "E  ENTER THE BELL CHAMBER"
+                )
         "A6":
             _spawn_exit_door(
                 72.0, "E  RETURN TO THE BATTLEFIELD", "old_battlefield",
@@ -558,6 +670,13 @@ func _spawn_region_exits() -> void:
                 map_width - 72.0, "E  DESCEND INTO THE PRISON", "prison_depths",
                 "res://scenes/prison_depths.tscn", "west"
             )
+            _spawn_h05_gate(1660.0)
+            if WorldState.is_hidden_path_opened("H05"):
+                _spawn_exit_door(
+                    2110.0, "E  OPEN THE BELL TOWER DROP", "forgotten_city",
+                    "res://scenes/forgotten_city.tscn", "bell_drop",
+                    true, "opened_bell_tower_drop", "E  RETURN TO THE FORGOTTEN CITY"
+                )
         "A7":
             _spawn_exit_door(
                 72.0, "E  RETURN TO THE MONASTERY", "monastery_tower",
@@ -576,7 +695,14 @@ func _spawn_region_exits() -> void:
                 map_width - 72.0, "E  ENTER THE ROYAL OUTER RING", "royal_outer_ring",
                 "res://scenes/royal_outer_ring.tscn", "west"
             )
-            _spawn_a11_maintenance_gate(2110.0)
+            _spawn_h06_gate(1870.0)
+            if WorldState.is_hidden_path_opened("H04"):
+                _spawn_exit_door(
+                    930.0, "E  OPEN THE ROYAL TOMB SIDE DOOR", "reflected_stairwell",
+                    "res://scenes/reflected_stairwell.tscn", "east",
+                    true, "opened_royal_tomb_side_door", "E  ENTER THE REFLECTION STAIRS"
+                )
+            _spawn_a11_maintenance_gate(2310.0)
 
         "A9":
             _spawn_exit_door(
@@ -587,6 +713,18 @@ func _spawn_region_exits() -> void:
                 map_width - 72.0, "E  CLIMB TO THE GREAT CATHEDRAL", "grand_cathedral",
                 "res://scenes/grand_cathedral.tscn", "west"
             )
+            if WorldState.is_hidden_path_opened("H03"):
+                _spawn_exit_door(
+                    1020.0, "E  OPEN THE OLD SERVICE DOOR", "erased_third_street",
+                    "res://scenes/erased_third_street.tscn", "east",
+                    true, "opened_old_service_door", "E  ENTER THE THIRD STREET"
+                )
+            if WorldState.is_hidden_path_opened("H06"):
+                _spawn_exit_door(
+                    2200.0, "E  OPEN THE ROYAL TRANSPORT SIDE DOOR", "erased_royal_name_corridor",
+                    "res://scenes/erased_royal_name_corridor.tscn", "east",
+                    true, "opened_royal_transport_side_door", "E  ENTER THE ROYAL NAME CORRIDOR"
+                )
             _spawn_a9_mirror_gate(1850.0)
         "A10":
             _spawn_exit_door(
@@ -653,6 +791,61 @@ func _spawn_region_exits() -> void:
                 "res://scenes/sewer_reservoir.tscn",
                 "east",
                 can_return_to_a4
+            )
+
+        "H02":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE PILGRIM ROAD", "ash_forest",
+                "res://scenes/ash_forest.tscn", "bell_gate"
+            )
+            _spawn_exit_door(
+                map_width - 105.0, "E  RETURN THROUGH THE BELL TOWER",
+                "old_battlefield", "res://scenes/old_battlefield.tscn", "bell_tower",
+                "opened_old_bell_tower_connection" in WorldState.achievement_flags
+            )
+
+        "H03":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE FORGOTTEN CITY", "forgotten_city",
+                "res://scenes/forgotten_city.tscn", "third_street_gate"
+            )
+            _spawn_exit_door(
+                map_width - 105.0, "E  RETURN THROUGH THE OLD SERVICE DOOR",
+                "royal_outer_ring", "res://scenes/royal_outer_ring.tscn", "third_street_service",
+                "opened_old_service_door" in WorldState.achievement_flags
+            )
+
+        "H04":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE RESERVOIR", "sewer_reservoir",
+                "res://scenes/sewer_reservoir.tscn", "water_reflection_gate"
+            )
+            _spawn_exit_door(
+                map_width - 105.0, "E  RETURN THROUGH THE ROYAL TOMB DOOR",
+                "royal_tomb", "res://scenes/royal_tomb.tscn", "royal_tomb_side",
+                "opened_royal_tomb_side_door" in WorldState.achievement_flags
+            )
+
+        "H05":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE MONASTERY", "monastery_tower",
+                "res://scenes/monastery_tower.tscn", "silent_window"
+            )
+            _spawn_exit_door(
+                map_width - 105.0, "E  RETURN THROUGH THE BELL TOWER DROP",
+                "forgotten_city", "res://scenes/forgotten_city.tscn", "bell_drop",
+                "opened_bell_tower_drop" in WorldState.achievement_flags
+            )
+
+        "H06":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE ROYAL TOMB", "royal_tomb",
+                "res://scenes/royal_tomb.tscn", "royal_name_gate"
+            )
+            _spawn_exit_door(
+                map_width - 105.0, "E  RETURN THROUGH THE ROYAL TRANSPORT DOOR",
+                "royal_outer_ring", "res://scenes/royal_outer_ring.tscn", "royal_transport",
+                "opened_royal_transport_side_door" in WorldState.achievement_flags
             )
 
         "A11":
@@ -788,6 +981,88 @@ func _on_mirror_street_gate_opened(secret_id: String) -> void:
     )
 
 
+func _spawn_h02_gate(x: float) -> void:
+    var gate := Node2D.new()
+    gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+    gate.name = "HiddenBellChamberGate"
+    gate.position = Vector2(x, floor_y)
+    gate.secret_id = "H02"
+    gate.target_scene_path = "res://scenes/hidden_bell_chamber.tscn"
+    gate.target_location_id = "hidden_bell_chamber"
+    gate.target_spawn_side = "west"
+    gate.required_resonance = 18
+    gate.opened.connect(_on_optional_hidden_gate_opened)
+    add_child(gate)
+
+func _spawn_h03_gate(x: float) -> void:
+    var gate := Node2D.new()
+    gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+    gate.name = "ErasedThirdStreetGate"
+    gate.position = Vector2(x, floor_y)
+    gate.secret_id = "H03"
+    gate.target_scene_path = "res://scenes/erased_third_street.tscn"
+    gate.target_location_id = "erased_third_street"
+    gate.target_spawn_side = "west"
+    gate.required_resonance = 28
+    gate.opened.connect(_on_optional_hidden_gate_opened)
+    add_child(gate)
+
+func _spawn_h04_gate(x: float) -> void:
+    var gate := Node2D.new()
+    gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+    gate.name = "ReflectedStairwellGate"
+    gate.position = Vector2(x, floor_y)
+    gate.secret_id = "H04"
+    gate.target_scene_path = "res://scenes/reflected_stairwell.tscn"
+    gate.target_location_id = "reflected_stairwell"
+    gate.target_spawn_side = "west"
+    gate.required_resonance = 36
+    gate.required_ancient_exposure = 1
+    gate.opened.connect(_on_optional_hidden_gate_opened)
+    add_child(gate)
+
+func _spawn_h05_gate(x: float) -> void:
+    var gate := Node2D.new()
+    gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+    gate.name = "SilentBellRoomGate"
+    gate.position = Vector2(x, floor_y)
+    gate.secret_id = "H05"
+    gate.target_scene_path = "res://scenes/silent_bell_room.tscn"
+    gate.target_location_id = "silent_bell_room"
+    gate.target_spawn_side = "west"
+    gate.required_resonance = 42
+    gate.required_ancient_exposure = 1
+    gate.opened.connect(_on_optional_hidden_gate_opened)
+    add_child(gate)
+
+func _spawn_h06_gate(x: float) -> void:
+    var gate := Node2D.new()
+    gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+    gate.name = "ErasedRoyalNameGate"
+    gate.position = Vector2(x, floor_y)
+    gate.secret_id = "H06"
+    gate.target_scene_path = "res://scenes/erased_royal_name_corridor.tscn"
+    gate.target_location_id = "erased_royal_name_corridor"
+    gate.target_spawn_side = "west"
+    gate.required_resonance = 55
+    gate.required_ancient_exposure = 2
+    gate.required_source_ids = ["anomaly_bell_retiming", "anomaly_erased_street_sign"]
+    gate.opened.connect(_on_optional_hidden_gate_opened)
+    add_child(gate)
+
+func _on_optional_hidden_gate_opened(secret_id: String) -> void:
+    if not is_instance_valid(narrative):
+        return
+    var details := {
+        "H02": ["THE BELL BEFORE THE SOUND", "The bell's tongue remains still.\n\nThe echo answers from a place you have not reached."],
+        "H03": ["THE STREET THE CITY REMOVED", "The houses have doors on both sides.\n\nOnly one side appears on the city plan."],
+        "H04": ["THE STAIRS BEHIND THE WATER", "The reflection has dry steps.\n\nYour boots leave no mark on the water above them."],
+        "H05": ["THE WINDOW THAT CASTS NO SHADOW", "The bell tower window has no view beyond it.\n\nSomeone has been using it from the inside."],
+        "H06": ["THE NAME SCRAPED FROM STONE", "The inscription is not weathered.\n\nThe chisel marks begin after the tomb was sealed."]
+    }
+    var entry: Array = details.get(secret_id, ["THE ABNORMAL STONEWORK", "The wall opens without moving."])
+    narrative.show_message(str(entry[0]), str(entry[1]), 5.0)
+
 func _spawn_a4_hidden_well_gate(x: float) -> void:
     # This is the far-side entrance to H01, not a bypass: it still requires active Resonance Sight.
     # A4 另一侧井门也使用同一 H01 状态，但首次发现仍必须通过灵视条件。
@@ -919,6 +1194,16 @@ func _draw() -> void:
 
         "H01":
             _draw_well_landmarks()
+        "H02":
+            _draw_hidden_bell_chamber_landmarks()
+        "H03":
+            _draw_erased_third_street_landmarks()
+        "H04":
+            _draw_reflected_stairwell_landmarks()
+        "H05":
+            _draw_silent_bell_room_landmarks()
+        "H06":
+            _draw_erased_royal_name_landmarks()
         "H08":
             _draw_primordial_hollow_landmarks()
 
@@ -964,6 +1249,16 @@ func _background_color() -> Color:
 
         "H01":
             return Color("#100f18")
+        "H02":
+            return Color("#171822")
+        "H03":
+            return Color("#1b171f")
+        "H04":
+            return Color("#111a20")
+        "H05":
+            return Color("#191722")
+        "H06":
+            return Color("#1a151c")
         "A11":
             return Color("#16151e")
         "H08":
@@ -999,6 +1294,16 @@ func _platform_color() -> Color:
 
         "H01":
             return Color("#39303a")
+        "H02":
+            return Color("#3b3541")
+        "H03":
+            return Color("#39303a")
+        "H04":
+            return Color("#303c43")
+        "H05":
+            return Color("#403943")
+        "H06":
+            return Color("#403039")
         "A11":
             return Color("#393744")
         "H08":
@@ -1143,6 +1448,51 @@ func _draw_royal_tomb_landmarks() -> void:
     draw_line(Vector2(1648, floor_y - 244), Vector2(1734, floor_y - 244), Color("#817079"), 5.0)
     draw_string(ThemeDB.fallback_font, Vector2(1500, floor_y - 270), "NAME REMOVED", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#8f8086"))
 
+
+func _draw_hidden_bell_chamber_landmarks() -> void:
+    draw_arc(Vector2(560, floor_y - 75), 88.0, PI, TAU, 32, Color("#49404b"), 8.0)
+    draw_rect(Rect2(520, floor_y - 95, 80, 65), Color("#292430"))
+    draw_line(Vector2(560, floor_y - 180), Vector2(560, floor_y - 92), Color("#817081"), 3.0)
+    draw_line(Vector2(530, floor_y - 70), Vector2(590, floor_y - 70), Color("#6f5969"), 3.0)
+    draw_string(ThemeDB.fallback_font, Vector2(900, floor_y - 190), "THE TONGUE DOES NOT MOVE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#817081"))
+
+func _draw_erased_third_street_landmarks() -> void:
+    for x in range(180, int(map_width), 360):
+        draw_rect(Rect2(x, floor_y - 205, 160, 205), Color("#28242e"))
+        draw_rect(Rect2(x + 52, floor_y - 112, 42, 112), Color("#111018"))
+        draw_rect(Rect2(x + 17, floor_y - 164, 20, 28), Color("#17141d"))
+        draw_rect(Rect2(x + 123, floor_y - 164, 20, 28), Color("#17141d"))
+        draw_line(Vector2(x + 8, floor_y - 210), Vector2(x + 151, floor_y - 210), Color("#50424f"), 2.0)
+    draw_string(ThemeDB.fallback_font, Vector2(760, floor_y - 250), "NO STREET NUMBER THREE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color("#8a727f"))
+
+func _draw_reflected_stairwell_landmarks() -> void:
+    draw_rect(Rect2(0, floor_y + 48, map_width, 36), Color("#15252d"))
+    draw_line(Vector2(0, floor_y + 48), Vector2(map_width, floor_y + 48), Color("#50727b"), 3.0)
+    for i in range(6):
+        var step_x := 250.0 + float(i) * 230.0
+        var step_y := floor_y - 48.0 - float(i) * 32.0
+        draw_rect(Rect2(step_x, step_y, 150.0, 10.0), Color("#596e78"))
+        draw_line(Vector2(step_x, step_y), Vector2(step_x + 150.0, step_y), Color("#8fa8ac"), 2.0)
+    draw_string(ThemeDB.fallback_font, Vector2(700, floor_y - 260), "DRY STAIRS IN A WET ROOM", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#77959d"))
+
+func _draw_silent_bell_room_landmarks() -> void:
+    draw_rect(Rect2(900, floor_y - 390, 300, 390), Color("#292632"))
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(865, floor_y - 390), Vector2(1050, floor_y - 545),
+        Vector2(1235, floor_y - 390)
+    ]), Color("#38303f"))
+    draw_arc(Vector2(1050, floor_y - 290), 56.0, PI, TAU, 30, Color("#74677d"), 3.0)
+    draw_line(Vector2(1050, floor_y - 346), Vector2(1050, floor_y - 230), Color("#74677d"), 2.0)
+    draw_rect(Rect2(1017, floor_y - 270, 66, 82), Color("#16131d"))
+    draw_string(ThemeDB.fallback_font, Vector2(1320, floor_y - 250), "NO SHADOW", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#8a7b94"))
+
+func _draw_erased_royal_name_landmarks() -> void:
+    for x in [320.0, 760.0, 1200.0, 1640.0]:
+        draw_rect(Rect2(x, floor_y - 82, 190, 54), Color("#393039"))
+        draw_rect(Rect2(x + 14, floor_y - 94, 162, 14), Color("#5b4953"))
+        draw_line(Vector2(x + 26, floor_y - 68), Vector2(x + 152, floor_y - 68), Color("#78636e"), 2.0)
+        draw_line(Vector2(x + 74, floor_y - 62), Vector2(x + 112, floor_y - 74), Color("#8b7480"), 2.0)
+    draw_string(ThemeDB.fallback_font, Vector2(720, floor_y - 190), "A NAME SCRAPED AWAY", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#9b808d"))
 
 func _draw_deep_research_landmarks() -> void:
     # The laboratory is built around an older, warmer stone structure.
