@@ -148,13 +148,13 @@ func update_pose(
 			else:
 				# Three distinct arcs prevent every combo hit from reading as the same swing.
 				# 三段连击采用不同挥动弧线，避免每一击看起来都相同。
-				var combo_phase := int(floor(strike * 3.0))
-				var local_phase := fposmod(strike * 3.0, 1.0)
-				var torso_end := [0.12, -0.10, 0.18][mini(combo_phase, 2)]
-				var arm_start := [-0.20, 0.18, -0.32][mini(combo_phase, 2)]
-				var arm_end := [0.32, -0.24, 0.42][mini(combo_phase, 2)]
-				var weapon_start := [-0.55, 0.62, -0.78][mini(combo_phase, 2)]
-				var weapon_end := [1.18, -0.92, 1.32][mini(combo_phase, 2)]
+				var combo_phase: int = mini(int(floor(strike * 3.0)), 2)
+				var local_phase: float = fposmod(strike * 3.0, 1.0)
+				var torso_end: float = [0.12, -0.10, 0.18][combo_phase]
+				var arm_start: float = [-0.20, 0.18, -0.32][combo_phase]
+				var arm_end: float = [0.32, -0.24, 0.42][combo_phase]
+				var weapon_start: float = [-0.55, 0.62, -0.78][combo_phase]
+				var weapon_end: float = [1.18, -0.92, 1.32][combo_phase]
 				_set_rotation("Torso", lerpf(-0.06, torso_end, strike))
 				_set_rotation("FrontArm", lerpf(arm_start, arm_end, local_phase))
 				_set_rotation("Weapon", lerpf(weapon_start, weapon_end, local_phase))
