@@ -598,7 +598,7 @@
       "event": "在沉积大厅辨认后世管线覆盖的古老石层",
       "source_id": "anomaly_old_stone_layer",
       "resonance_delta": 8,
-      "ancient_exposure_delta": 1,
+      "ancient_exposure_delta": 0,
       "enables": [
         "H04"
       ],
@@ -714,7 +714,7 @@
       "resonance_delta": 8,
       "resonance_after": 36,
       "record_source": true,
-      "ancient_exposure_delta": 1,
+      "ancient_exposure_delta": 0,
       "outer_exposure_delta": 0
     },
     {
