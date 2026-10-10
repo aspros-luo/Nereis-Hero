@@ -72,7 +72,7 @@ func _draw() -> void:
     if hero_nearby and not consumed and not WorldState.input_locked and INTERACTION_FOCUS_SCRIPT.is_focused(self):
         draw_string(
             ThemeDB.fallback_font,
-            Vector2(-56.0, 31.0),
+            Vector2(-56.0, 13.0),
             NereisLocalization.translate_text("E  Examine"),
             HORIZONTAL_ALIGNMENT_LEFT,
             -1.0,
