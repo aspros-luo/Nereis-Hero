@@ -27,6 +27,11 @@ REGIONS = {
     "H08": ("scenes/primordial_hollow.tscn", "primordial_hollow", "THE WOMB BELOW THE LAB"),
     "H07": ("scenes/mirror_street.tscn", "mirror_street", "MIRROR STREET: BEHIND THE RAIN"),
     "H01": ("scenes/hidden_well.tscn", "hidden_well", "THE WELL BELOW THE WELL"),
+    "H02": ("scenes/hidden_bell_chamber.tscn", "hidden_bell_chamber", "THE BELL BEFORE THE SOUND"),
+    "H03": ("scenes/erased_third_street.tscn", "erased_third_street", "THE STREET THE CITY REMOVED"),
+    "H04": ("scenes/reflected_stairwell.tscn", "reflected_stairwell", "THE STAIRS BEHIND THE WATER"),
+    "H05": ("scenes/silent_bell_room.tscn", "silent_bell_room", "THE WINDOW THAT CASTS NO SHADOW"),
+    "H06": ("scenes/erased_royal_name_corridor.tscn", "erased_royal_name_corridor", "THE NAME SCRAPED FROM STONE"),
 }
 
 REQUIRED_FILES = [
@@ -89,17 +94,32 @@ def main() -> int:
         'const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")',
         "_spawn_a4_hidden_well_gate(map_width - 105.0)",
         'gate.secret_id = "H01"',
+        'gate.secret_id = "H02"',
+        'gate.secret_id = "H03"',
+        'gate.secret_id = "H04"',
+        'gate.secret_id = "H05"',
+        'gate.secret_id = "H06"',
         'gate.secret_id = "H07"',
         'gate.secret_id = "C15"',
         'gate.secret_id = "C19"',
         'gate.secret_id = "H08"',
         'gate.region_record_id = "A11"',
+        'func _spawn_h02_gate',
+        'func _spawn_h03_gate',
+        'func _spawn_h04_gate',
+        'func _spawn_h05_gate',
+        'func _spawn_h06_gate',
         'func _spawn_a11_maintenance_gate',
         'func _spawn_a11_chapel_gate',
         'func _spawn_h08_gate',
         'func _on_h08_gate_opened',
         'func _draw_deep_research_landmarks',
         'func _draw_primordial_hollow_landmarks',
+        'func _draw_hidden_bell_chamber_landmarks',
+        'func _draw_erased_third_street_landmarks',
+        'func _draw_reflected_stairwell_landmarks',
+        'func _draw_silent_bell_room_landmarks',
+        'func _draw_erased_royal_name_landmarks',
         'anomaly_observer_reaction',
         'if WorldState.physical_union_complete:',
         'ENDGAME_GATE_SCRIPT',
@@ -131,6 +151,16 @@ def main() -> int:
         '"anomaly_silent_bell_window"',
         '"anomaly_erased_royal_name"',
         'opened_sewer_inspection_hatch_from_A4',
+        'opened_old_bell_tower_connection',
+        'opened_old_service_door',
+        'opened_royal_tomb_side_door',
+        'opened_bell_tower_drop',
+        'opened_royal_transport_side_door',
+        'WorldState.mark_hidden_region_entered("H02")',
+        'WorldState.mark_hidden_region_entered("H03")',
+        'WorldState.mark_hidden_region_entered("H04")',
+        'WorldState.mark_hidden_region_entered("H05")',
+        'WorldState.mark_hidden_region_entered("H06")',
         'unlock_once_flag_id: String = ""',
         'door.unlock_once_flag_id = unlock_once_flag_id',
         '"reached_A4_via_A3"',
@@ -179,6 +209,10 @@ def main() -> int:
         "WorldState.pending_region_spawn_side = target_spawn_side",
         "match secret_id:",
         "func _draw_well_marker() -> void:",
+        "func _draw_early_bell_marker() -> void:",
+        "func _draw_erased_street_marker() -> void:",
+        "func _draw_reflected_stairs_marker() -> void:",
+        "func _draw_silent_window_marker() -> void:",
         "func _draw_mirror_street_marker() -> void:",
         "func _draw_erased_royal_name_marker() -> void:",
         "func _draw_silent_chapel_marker() -> void:",
@@ -206,9 +240,9 @@ def main() -> int:
         return 1
 
     print("GRAYBOX SCENE WIRING STATIC CHECK PASSED")
-    print(" - A2-A12 plus H01/H07/H08 scenes have scripts and resume mappings.")
+    print(" - A2-A12 plus H01-H08 scenes have scripts and resume mappings.")
     print(" - The R01-R08 anomaly source chain is present.")
-    print(" - H01/H07/H08 plus C15/C19 gates use saved discovery/open/entry state and progression conditions.")
+    print(" - H01-H08 plus C15/C19 gates use saved discovery/open/entry state and progression conditions.")
     print(" - C15 enters A11 from A8; C19 is the alternate A10 entry; H08 ending exit requires physical union.")
     print("NOTE: Godot runtime/collision/input validation is still required.")
     return 0
