@@ -383,7 +383,7 @@
         "to": "A4",
         "unlock_condition": "reached_A4_via_A3_then_opened_well_gate_from_A4",
         "opens_from": "A4",
-        "requires_target_already_reached": false,
+        "requires_target_already_reached": true,
         "requires_ending_state": false
       }
     },
@@ -498,7 +498,8 @@
         "opens_from": "A9",
         "requires_target_already_reached": true,
         "requires_ending_state": false
-      }
+      },
+      "min_distinct_anomaly_sources": 2
     },
     {
       "id": "H07",
@@ -546,7 +547,8 @@
         "opens_from": "A11",
         "requires_target_already_reached": false,
         "requires_ending_state": true
-      }
+      },
+      "min_distinct_anomaly_sources": 3
     }
   ],
   "resonance_progression_contract": [
