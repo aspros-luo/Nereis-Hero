@@ -670,10 +670,14 @@
       "id": "S01",
       "trigger": "WorldState.mark_outer_god_resonance",
       "effects": {
-        "outer_exposure_min": 12
+        "outer_exposure_min": 12,
+        "outer_exposure_min_if_source_present": {
+          "source_id": "anomaly_observer_reaction",
+          "minimum": 18
+        }
       },
       "source_id": "mite_outer_resonance_awakened",
-      "note": "运行时代码已在外神共鸣剧情事实成立时将 outer_exposure 提升到至少 12；镜街和胎宫仍需各自的鸣响与证据条件。"
+      "note": "外神共鸣剧情事实至少将接触度提升到 12；若 R08 已记录，则补齐至 18，让两个事件无论先后发生都满足相同门槛。"
     }
   ],
   "resonance_baseline_at_prologue": 0,
