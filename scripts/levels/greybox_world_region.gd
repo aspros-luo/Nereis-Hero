@@ -110,7 +110,6 @@ func _get_objective_text() -> String:
             return "DESCEND THROUGH THE CELLS. FIND THE ROYAL CRYPT."
         "A8":
             return "READ THE NAMES THAT WERE REMOVED."
-            _spawn_a11_maintenance_gate(2110.0)
 
         "A9":
             return "CROSS THE OUTER RING. FOLLOW THE RAIN REFLECTIONS."
@@ -120,7 +119,6 @@ func _get_objective_text() -> String:
             return "FOLLOW THE OBSERVATION PATH. THE WALLS REMEMBER EACH VISITOR."
         "H08":
             return "FOLLOW THE WALL THAT BREATHES WITHOUT WAKING IT."
-            _spawn_a11_chapel_gate(1900.0)
 
         "A12":
             return "ENTER THE THRONE DISTRICT. DECIDE WHAT MUST FALL."
@@ -578,6 +576,7 @@ func _spawn_region_exits() -> void:
                 map_width - 72.0, "E  ENTER THE ROYAL OUTER RING", "royal_outer_ring",
                 "res://scenes/royal_outer_ring.tscn", "west"
             )
+            _spawn_a11_maintenance_gate(2110.0)
 
         "A9":
             _spawn_exit_door(
@@ -589,6 +588,7 @@ func _spawn_region_exits() -> void:
                 "res://scenes/grand_cathedral.tscn", "west"
             )
             _spawn_a9_mirror_gate(1850.0)
+            _spawn_a11_chapel_gate(1900.0)
         "A10":
             _spawn_exit_door(
                 72.0, "E  RETURN TO THE OUTER RING", "royal_outer_ring",
