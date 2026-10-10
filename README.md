@@ -44,6 +44,14 @@ World map atlas diagram (SVG):
 
 `docs/assets/COMPLETE_WORLD_MAP_ATLAS.svg`
 
+Map validation and resonance hidden areas (Chinese):
+
+`docs/MAP_TOPOLOGY_VALIDATION_AND_HIDDEN_AREAS_CN.md`
+
+Hidden map network diagram (SVG):
+
+`docs/assets/HIDDEN_MAPS_NETWORK.svg`
+
 Director plan:
 
 `docs/DIRECTOR_NARRATIVE_PLAN.md`
