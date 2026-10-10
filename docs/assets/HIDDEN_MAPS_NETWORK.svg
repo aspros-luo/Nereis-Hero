@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1180" viewBox="0 0 1800 1180" role="img" aria-labelledby="title desc">
+<title id="title">Nereis Hero 灵视隐藏地图挂接图</title>
+<desc id="desc">七个隐藏子区划分别挂接在 A2、A3、A4、A6、A8、A9 与 A11。必须达到鸣响和接触门槛，在 V 灵视期间按 E 共鸣开启，并将入口状态存档。</desc>
+<defs>
+<style>
+ text{font-family:"Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;fill:#26313a}
+ .h1{font-size:32px;font-weight:700}.sub{font-size:16px;fill:#657078}.layer{font-size:19px;font-weight:700;fill:#59656f}
+ .parent{fill:#6c7780;stroke:#3e4a53;stroke-width:1.5}.parentText{font-size:17px;font-weight:700;fill:#fffdf8}
+ .hidden{fill:#f8f4eb;stroke:#8b674a;stroke-width:2.2}.id{font-size:13px;font-weight:700;fill:#89603c;letter-spacing:1px}.name{font-size:20px;font-weight:700}.detail{font-size:14px;fill:#4d5962}
+ .branch{fill:none;stroke:#9b744c;stroke-width:3;stroke-dasharray:9 8}.return{fill:none;stroke:#657d88;stroke-width:3;stroke-dasharray:3 7}
+ .note{font-size:15px;fill:#48535b}
+</style>
+<marker id="branchArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L0 6 L9 3Z" fill="#9b744c"/></marker>
+<marker id="returnArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L0 6 L9 3Z" fill="#657d88"/></marker>
+</defs>
+<rect width="1800" height="1180" fill="#f3f0e8"/>
+<text x="60" y="56" class="h1">NEREIS HERO｜灵视隐藏地图挂接图</text>
+<text x="62" y="86" class="sub">隐藏子区划不是另一个菜单里的关卡，而是埋在已知区域中的入口与回路</text>
+<path d="M50 110 H1750" stroke="#cbc6bb" stroke-width="2"/>
+
+<rect x="50" y="135" width="1700" height="300" rx="20" fill="#e9eadf" stroke="#d4d7ca"/>
+<text x="78" y="172" class="layer">第一批可回访区域｜野外、城区与地下</text>
+<rect x="78" y="198" width="220" height="72" rx="12" class="parent"/><text x="98" y="225" class="parentText">A2 · 雾林与钟墓</text><text x="98" y="249" font-size="13" fill="#fffdf8">前置地图 / 墓钟矛盾</text>
+<rect x="335" y="198" width="220" height="72" rx="12" class="parent"/><text x="355" y="225" class="parentText">A3 · 废弃城区</text><text x="355" y="249" font-size="13" fill="#fffdf8">壁画 / 被抹门牌</text>
+<rect x="592" y="198" width="220" height="72" rx="12" class="parent"/><text x="612" y="225" class="parentText">A4 · 下水道与水库</text><text x="612" y="249" font-size="13" fill="#fffdf8">倒影 / 水位异常</text>
+<rect x="849" y="198" width="220" height="72" rx="12" class="parent"/><text x="869" y="225" class="parentText">A6 · 修道院与钟塔</text><text x="869" y="249" font-size="13" fill="#fffdf8">无声钟 / 影子窗口</text>
+<rect x="1106" y="198" width="220" height="72" rx="12" class="parent"/><text x="1126" y="225" class="parentText">A8 · 旧王墓</text><text x="1126" y="249" font-size="13" fill="#fffdf8">被抹去的名字</text>
+<rect x="1363" y="198" width="310" height="72" rx="12" class="parent"/><text x="1383" y="225" class="parentText">A9 · 王城外环</text><text x="1383" y="249" font-size="13" fill="#fffdf8">雨水倒影 / 街道残影</text>
+
+<path class="branch" marker-end="url(#branchArrow)" d="M188 270 V310"/>
+<path class="branch" marker-end="url(#branchArrow)" d="M445 270 V310"/>
+<path class="branch" marker-end="url(#branchArrow)" d="M702 270 V310"/>
+<path class="branch" marker-end="url(#branchArrow)" d="M959 270 V310"/>
+<path class="branch" marker-end="url(#branchArrow)" d="M1216 270 V310"/>
+<path class="branch" marker-end="url(#branchArrow)" d="M1518 270 V310"/>
+<rect x="78" y="310" width="220" height="98" rx="12" class="hidden"/><text x="96" y="336" class="id">H01</text><text x="96" y="361" class="name">无名祷坑</text><text x="96" y="384" class="detail">18 / 2 / 0 · 微型区</text>
+<rect x="335" y="310" width="220" height="98" rx="12" class="hidden"/><text x="353" y="336" class="id">H02</text><text x="353" y="361" class="name">被抹去的市街</text><text x="353" y="384" class="detail">28 / 3 / 0 · 小型区</text>
+<rect x="592" y="310" width="220" height="98" rx="12" class="hidden"/><text x="610" y="336" class="id">H03</text><text x="610" y="361" class="name">逆流水库</text><text x="610" y="384" class="detail">32 / 5 / 0 · 中小型区</text>
+<rect x="849" y="310" width="220" height="98" rx="12" class="hidden"/><text x="867" y="336" class="id">H04</text><text x="867" y="361" class="name">无声钟室</text><text x="867" y="384" class="detail">38 / 6 / 0 · 中型支区</text>
+<rect x="1106" y="310" width="220" height="98" rx="12" class="hidden"/><text x="1124" y="336" class="id">H05</text><text x="1124" y="361" class="name">王名抹除廊</text><text x="1124" y="384" class="detail">45 / 10 / 0 + 2 异常</text>
+<rect x="1363" y="310" width="310" height="98" rx="12" class="hidden"/><text x="1381" y="336" class="id">H06</text><text x="1381" y="361" class="name">镜街：雨幕背后</text><text x="1381" y="384" class="detail">52 / 0 / 8 · 异象小区</text>
+
+<rect x="50" y="465" width="1700" height="230" rx="20" fill="#e5e6e8" stroke="#cbd0d3"/>
+<text x="78" y="502" class="layer">深层研究区｜隐藏地图的最终层级</text>
+<rect x="80" y="540" width="270" height="94" rx="12" class="parent"/><text x="103" y="570" class="parentText">A11 · 古神遗迹 / 深层研究区</text><text x="103" y="596" font-size="13" fill="#fffdf8">前厅、古代石层、失稳祭坛</text>
+<path class="branch" marker-end="url(#branchArrow)" d="M350 587 H545"/>
+<rect x="545" y="530" width="410" height="115" rx="14" class="hidden"/><text x="570" y="558" class="id">H07 · 大型隐藏区域</text><text x="570" y="588" class="name">胎宫 / 原初空腔</text><text x="570" y="614" class="detail">65 / 15 / 18 + 至少 3 个不同异常来源 · 6–10 节点</text>
+<path class="return" marker-end="url(#returnArrow)" d="M955 587 H1135"/>
+<rect x="1135" y="540" width="270" height="94" rx="12" class="parent"/><text x="1158" y="570" class="parentText">返回 A11 / 深层裂隙</text><text x="1158" y="596" font-size="13" fill="#fffdf8">有明确退出路线，不会软锁</text>
+<path class="branch" marker-end="url(#branchArrow)" d="M1405 587 H1490"/>
+<rect x="1490" y="540" width="205" height="94" rx="12" fill="#74627e" stroke="#403148" stroke-width="1.5"/><text x="1510" y="570" font-size="15" font-weight="700" fill="#fffdf8">A13 · 终局异象</text><text x="1510" y="596" font-size="13" fill="#fffdf8">非必经捷径</text>
+
+<rect x="50" y="725" width="1700" height="350" rx="20" fill="#f9f7f1" stroke="#d1cdc3"/>
+<text x="80" y="768" font-size="22" font-weight="700">统一开门规则</text>
+<g>
+<circle cx="115" cy="823" r="22" fill="#7b858d"/><text x="108" y="830" font-size="18" font-weight="700" fill="#fffdf8">1</text>
+<text x="157" y="816" font-size="18" font-weight="700">满足感知门槛</text><text x="157" y="844" class="note">鸣响 + 古神 / 外神接触值；必要时需要此前发现的异常 ID</text>
+<circle cx="115" cy="892" r="22" fill="#7b858d"/><text x="108" y="899" font-size="18" font-weight="700" fill="#fffdf8">2</text>
+<text x="157" y="885" font-size="18" font-weight="700">V 启动灵视，异常短暂显形</text><text x="157" y="913" class="note">当前灵视窗口约 4.5 秒；具体门槛与数值需要实际游戏校准</text>
+<circle cx="115" cy="961" r="22" fill="#7b858d"/><text x="108" y="968" font-size="18" font-weight="700" fill="#fffdf8">3</text>
+<text x="157" y="954" font-size="18" font-weight="700">接近并按 E 共鸣</text><text x="157" y="982" class="note">写入稳定的 secret_id，开门状态持久化；灵视结束后不重新封闭</text>
+<circle cx="115" cy="1030" r="22" fill="#7b858d"/><text x="108" y="1037" font-size="18" font-weight="700" fill="#fffdf8">4</text>
+<text x="157" y="1023" font-size="18" font-weight="700">进入隐藏子区划，并通过明确出口返回</text><text x="157" y="1051" class="note">隐藏地图不作为普通主线必需条件；绝不因鸣响下降或死亡造成软锁</text>
+</g>
+<path d="M1100 795 V1038" stroke="#d1cdc3" stroke-width="2"/>
+<text x="1140" y="824" font-size="18" font-weight="700">图例</text>
+<path class="branch" d="M1140 866 H1260" marker-end="url(#branchArrow)"/><text x="1280" y="872" class="note">隐藏入口 / 发现连接</text>
+<path class="return" d="M1140 908 H1260" marker-end="url(#returnArrow)"/><text x="1280" y="914" class="note">返回主区域的安全出口</text>
+<rect x="1140" y="942" width="32" height="22" rx="5" class="hidden"/><text x="1185" y="958" class="note">隐藏子区划</text>
+<rect x="1140" y="980" width="32" height="22" rx="5" class="parent"/><text x="1185" y="996" class="note">原有主要区域</text>
+<text x="1140" y="1037" class="note">门槛仅为设计起始值，</text><text x="1140" y="1058" class="note">以正常流程的实际成长曲线校准。</text>
+
+<text x="60" y="1127" class="sub">设计文件：docs/MAP_TOPOLOGY_VALIDATION_AND_HIDDEN_AREAS_CN.md · 版本 0.1 · Nereis Hero</text>
+</svg>
