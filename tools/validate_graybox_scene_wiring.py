@@ -27,6 +27,7 @@ REQUIRED_FILES = [
     "scripts/levels/greybox_world_region.gd",
     "scripts/world/resonance_source_clue.gd",
     "scripts/world/resonance_secret_gate.gd",
+    "scripts/world/interaction_door.gd",
     "scripts/levels/village_hub.gd",
     "scripts/levels/village_defense_demo.gd",
     "scripts/core/world_state.gd",
@@ -98,6 +99,12 @@ def main() -> int:
         'unlock_once_flag_id: String = ""',
         'door.unlock_once_flag_id = unlock_once_flag_id',
         '"reached_A4_via_A3"',
+        '"old_battlefield"',
+        '"monastery_tower"',
+        '"prison_depths"',
+        '"royal_tomb"',
+        'E  OPEN THE INSPECTION HATCH',
+        'opened_sewer_inspection_hatch_from_A4',
         'SceneTransition.fade_to_scene(target_scene)',
         "clue.ancient_exposure_floor = ancient_floor",
     ]:
@@ -109,6 +116,15 @@ def main() -> int:
     require(source_clue, "outer_exposure_floor", "Resonance source exposure floor", errors)
     require(source_clue, 'KEY_E', "Resonance source clue", errors)
     require(source_clue, "INTERACTION_FOCUS_SCRIPT.is_focused(self)", "Resonance source clue", errors)
+
+    interaction_door = read("scripts/world/interaction_door.gd", errors)
+    for contract in [
+        'unlock_once_flag_id: String = ""',
+        'opened_prompt_text: String = ""',
+        'WorldState.record_achievement(unlock_once_flag_id)',
+        'prompt_text = opened_prompt_text',
+    ]:
+        require(interaction_door, contract, "One-time inspection hatch", errors)
 
     secret_gate = read("scripts/world/resonance_secret_gate.gd", errors)
     for contract in [
