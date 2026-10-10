@@ -69,7 +69,10 @@ func _process(delta: float) -> void:
         queue_free()
 
 func _draw() -> void:
+    # Ease the fade so the slash has a readable bright core and a softer trailing edge.
+    # 使用缓出淡化，让刀光核心清晰、尾迹柔和。
     var alpha: float = clampf(lifetime / maxf(total_lifetime, 0.01), 0.0, 1.0)
+    alpha = alpha * alpha * (3.0 - 2.0 * alpha)
     if not combat_technique.is_empty():
         _draw_weapon_technique(alpha)
         return
@@ -79,7 +82,30 @@ func _draw() -> void:
     var start := -0.72 if blood_iaijutsu and facing > 0.0 else (-2.42 if blood_iaijutsu else (-0.85 if short_blade and facing > 0.0 else (-1.18 if facing > 0.0 else 1.18)))
     var end := 0.72 if blood_iaijutsu and facing > 0.0 else (3.86 if blood_iaijutsu else (0.85 if short_blade and facing > 0.0 else (1.18 if facing > 0.0 else 5.10)))
     var slash_color := Color(0.07, 0.05, 0.10, alpha) if technique_variant == "black_horizon" else Color(0.42, 0.20, 0.72, alpha) if technique_variant == "abyssal" else Color(0.78, 0.84, 0.90, alpha) if technique_variant == "human_iaijutsu" else Color(0.80, 0.12, 0.20, alpha) if blood_iaijutsu else Color(0.90, 0.86, 0.74, alpha)
-    draw_arc(center, radius, start, end, 24, slash_color, width)
+    # Layered strokes create a restrained glow without relying on screen-wide bloom.
+    # 多层线条形成克制的刀光层次，不依赖全屏泛光。
+    var glow_color := Color(slash_color.r, slash_color.g, slash_color.b, alpha * 0.18)
+    var core_color := Color(
+        minf(1.0, slash_color.r * 1.12 + 0.12),
+        minf(1.0, slash_color.g * 1.08 + 0.10),
+        minf(1.0, slash_color.b * 1.04 + 0.08),
+        alpha * 0.72
+    )
+    draw_arc(center, radius, start, end, 36, glow_color, width * 2.8, true)
+    draw_arc(center, radius, start, end, 36, slash_color, width, true)
+    if width >= 5.0:
+        draw_arc(center, radius - 3.0, start + 0.06, end - 0.06, 30, core_color, maxf(1.0, width * 0.28), true)
+
+    # A few directional flecks sell motion, while remaining deterministic and inexpensive.
+    # 少量定向碎光强调挥砍速度，且不使用随机粒子，成本稳定。
+    if not short_blade and combo_step >= 2:
+        for fleck_index in range(3):
+            var t: float = float(fleck_index + 1) / 4.0
+            var angle: float = lerpf(start, end, t)
+            var inner_point := center + Vector2(cos(angle), sin(angle)) * (radius - 8.0)
+            var outer_point := center + Vector2(cos(angle), sin(angle)) * (radius + 5.0 + float(combo_step))
+            draw_line(inner_point, outer_point, Color(core_color.r, core_color.g, core_color.b, alpha * 0.48), 1.5, true)
+
     if technique_variant == "black_horizon":
         draw_line(Vector2(facing * 8.0, -25.0), Vector2(facing * 178.0, -40.0), Color(0.06, 0.04, 0.09, alpha * 0.9), 8.0)
         draw_arc(center, radius + 15.0, start + 0.08, end - 0.08, 24, Color(0.50, 0.40, 0.66, alpha * 0.55), 3.0)
