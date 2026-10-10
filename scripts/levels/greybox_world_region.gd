@@ -520,7 +520,7 @@ func _spawn_region_sources() -> void:
             )
         "A8":
             _spawn_source(
-                Vector2(1740, floor_y - 18.0),
+                Vector2(1530, floor_y - 18.0),
                 "anomaly_erased_royal_name",
                 "THE NAME SCRAPED FROM STONE",
                 "The inscription is not worn.\n\nThe chisel marks begin after the stone had already been sealed.",
@@ -1130,6 +1130,25 @@ func _on_exit_interacted(target_location: String, target_scene: String, spawn_si
         WorldState.mark_hidden_region_entered("H07")
     elif target_location == "sewer_reservoir" and region_id == "H01":
         WorldState.mark_hidden_region_entered("H01")
+
+    # Re-entry through a far-side shortcut must update the same persistent region record.
+    # 从远侧捷径再次进入时，仍需更新同一个隐藏区域的持久记录。
+    match target_location:
+        "hidden_bell_chamber":
+            WorldState.discover_hidden_region("H02")
+            WorldState.mark_hidden_region_entered("H02")
+        "erased_third_street":
+            WorldState.discover_hidden_region("H03")
+            WorldState.mark_hidden_region_entered("H03")
+        "reflected_stairwell":
+            WorldState.discover_hidden_region("H04")
+            WorldState.mark_hidden_region_entered("H04")
+        "silent_bell_room":
+            WorldState.discover_hidden_region("H05")
+            WorldState.mark_hidden_region_entered("H05")
+        "erased_royal_name_corridor":
+            WorldState.discover_hidden_region("H06")
+            WorldState.mark_hidden_region_entered("H06")
 
     WorldState.pending_region_spawn_side = spawn_side
     WorldState.set_location(target_location)
