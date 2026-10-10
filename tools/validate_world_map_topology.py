@@ -228,6 +228,73 @@ def validate(data: dict[str, Any]) -> list[str]:
         else:
             fail(errors, f"{sid}: a hidden area needs a safe secondary exit or an explicit single-entry return design.")
 
+
+    # Keep resonance thresholds reachable from a documented, one-time source path.
+    progression = data.get("resonance_progression_contract", [])
+    if len(progression) != 8:
+        fail(errors, f"Expected 8 resonance progression milestones, found {len(progression)}.")
+
+    milestone_ids = [item.get("id", "") for item in progression]
+    if len(milestone_ids) != len(set(milestone_ids)):
+        fail(errors, "Duplicate resonance progression milestone IDs.")
+
+    progression_source_ids = [item.get("source_id", "") for item in progression]
+    nonempty_source_ids = [source_id for source_id in progression_source_ids if source_id]
+    if len(nonempty_source_ids) != len(progression_source_ids):
+        fail(errors, "Every resonance milestone must define a stable source_id.")
+    if len(nonempty_source_ids) != len(set(nonempty_source_ids)):
+        fail(errors, "Duplicate resonance progression source IDs.")
+
+    hidden_by_id = {item.get("id", ""): item for item in hidden}
+    running_resonance = 0
+    ancient_growth = 0
+    outer_growth = 0
+    for milestone in progression:
+        mid = milestone.get("id", "<unknown>")
+        if milestone.get("region") not in region_ids:
+            fail(errors, f"{mid}: resonance source references unknown region {milestone.get('region')}.")
+
+        delta = int(milestone.get("resonance_delta", 0))
+        if delta <= 0:
+            fail(errors, f"{mid}: resonance_delta must be positive.")
+        running_resonance += max(0, delta)
+        if milestone.get("cumulative_target") != running_resonance:
+            fail(errors, f"{mid}: cumulative_target must match the one-time resonance source curve.")
+
+        ancient_growth += max(0, int(milestone.get("ancient_exposure_delta", 0)))
+        outer_growth += max(0, int(milestone.get("outer_exposure_delta", 0)))
+
+        for target_id in milestone.get("enables", []):
+            secret = hidden_by_id.get(target_id)
+            if secret is None:
+                fail(errors, f"{mid}: unlocks unknown hidden region {target_id}.")
+            elif int(secret.get("min_resonance", -1)) != int(milestone.get("cumulative_target", -2)):
+                fail(errors, f"{mid}: resonance target does not match {target_id}'s gate.")
+
+    known_source_ids = set(nonempty_source_ids)
+    story_outer_seed = max(
+        (
+            int(effect.get("effects", {}).get("outer_exposure_min", 0))
+            for effect in data.get("story_state_effects", [])
+        ),
+        default=0,
+    )
+    for secret in hidden:
+        sid = secret.get("id", "<unknown>")
+        required_sources = secret.get("required_resonance_sources", [])
+        if len(required_sources) != len(set(required_sources)):
+            fail(errors, f"{sid}: duplicate required resonance source IDs.")
+        unknown_sources = sorted(set(required_sources) - known_source_ids)
+        if unknown_sources:
+            fail(errors, f"{sid}: references unknown resonance sources {unknown_sources}.")
+        min_sources = int(secret.get("min_distinct_anomaly_sources", 0))
+        if min_sources < 0 or min_sources > len(required_sources):
+            fail(errors, f"{sid}: min_distinct_anomaly_sources exceeds its listed source prerequisites.")
+        if int(secret.get("min_ancient_exposure", 0)) > ancient_growth:
+            fail(errors, f"{sid}: ancient exposure gate exceeds all planned source gains.")
+        if int(secret.get("min_outer_exposure", 0)) > outer_growth + story_outer_seed:
+            fail(errors, f"{sid}: outer exposure gate exceeds all planned source / story gains.")
+
     # Ensure the three intended macro loops are recorded, not merely implicit.
     expected_loops = {"L01", "L02", "L03"}
     if {loop.get("id") for loop in loops} != expected_loops:
