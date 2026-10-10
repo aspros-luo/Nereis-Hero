@@ -1,10 +1,9 @@
 extends Node
 
 signal hidden_resistance_awakened_event
-signal witch_time_started(duration: float)
-signal witch_time_ended
 
 const SAVE_PATH := "user://nereis_hero_save.json"
+const WITCH_TIME_OVERLAY_SCRIPT: Script = preload("res://scripts/effects/witch_time_overlay.gd")
 
 var hero_memory := 0
 var hero_humanity := 100
@@ -29,14 +28,37 @@ var graveyard_cleared := false
 var graveyard_keeper_heard := false
 var weapon_level := 1
 var hero_attack_damage := 34
+
+# Hidden protagonist progression. Never expose these values in normal HUD.
+var hero_resonance := 0
+var ancient_exposure := 0
+var outer_exposure := 0
+var abnormal_load := 0.0
+var current_weapon_style := "long_sword"
+var learned_techniques: Array[String] = []
+var technique_variants: Dictionary = {}
+var resonance_sources: Array[String] = []
+
+# Data-driven ability progression. Unlock records store their origin for debugging and save migration.
+# 数据驱动的能力成长：保存解锁来源，便于排查和兼容旧存档。
+const ABILITY_IDS := ["iaijutsu_basic", "double_jump", "quick_dash", "witch_time", "grapple", "wall_climb", "resonance_sight", "technique_judgment_slash", "technique_crescent_combo", "eldritch_echo"]
+const ABILITY_SOURCE_TYPES := ["story", "exploration", "achievement", "resonance", "material"]
+var unlocked_abilities: Dictionary = {}
+var achievement_flags: Array[String] = []
+var upgrade_materials: Dictionary = {}
 var input_locked := false
+# Menu lock disables Hero input while the world and all gameplay timers keep running.
+var menu_input_locked := false
 var hitstop_serial := 0
-var hitstop_active := false
-var active_hitstop_scale := 0.08
-var witch_time_serial := 0
-var witch_time_active := false
-var witch_time_scale := 0.24
-var witch_time_cooldown_until_msec := 0
+
+# Witch Time scales hostile AI delta only; Hero input and physics stay responsive.
+# 魔女时间只缩放敌方 AI 的 delta，不减慢主角输入与物理响应。
+var witch_time_remaining := 0.0
+var witch_time_enemy_scale := 0.22
+var witch_time_visual: CanvasLayer
+var resonance_sight_active := false
+var _last_runtime_scene_path := ""
+var _last_resonance_signature := Vector3i(-1, -1, -1)
 
 # Narrative state is stored as facts/flags, not as a visible romance meter.
 var mite_first_meeting := false
@@ -54,16 +76,106 @@ var ending_route := ""
 var prologue_complete := false
 
 func _ready() -> void:
+    process_mode = Node.PROCESS_MODE_ALWAYS
     load_game()
+
+func _process(delta: float) -> void:
+    var scene := get_tree().current_scene
+    if scene != null:
+        var scene_path := str(scene.scene_file_path)
+        if _last_runtime_scene_path.is_empty():
+            _last_runtime_scene_path = scene_path
+        elif scene_path != _last_runtime_scene_path:
+            clear_witch_time("scene changed")
+            set_resonance_sight_active(false)
+            _last_runtime_scene_path = scene_path
+
+    if input_locked or menu_input_locked or get_tree().paused:
+        clear_witch_time("input/menu lock")
+        set_resonance_sight_active(false)
+        return
+
+    if resonance_sight_active:
+        var signature := Vector3i(hero_resonance, ancient_exposure, outer_exposure)
+        if signature != _last_resonance_signature:
+            _last_resonance_signature = signature
+            refresh_resonance_reveals()
+    else:
+        _last_resonance_signature = Vector3i(-1, -1, -1)
+
+    if witch_time_remaining > 0.0:
+        if not is_instance_valid(witch_time_visual):
+            _show_witch_time_visual()
+        witch_time_remaining = maxf(0.0, witch_time_remaining - delta)
+        if witch_time_remaining <= 0.0:
+            print("[NEREIS][ABILITY] Witch Time ended")
+            _hide_witch_time_visual()
 
 func prepare_scene_runtime() -> void:
     get_tree().paused = false
     input_locked = false
+    menu_input_locked = false
+    clear_witch_time("scene runtime reset")
+    set_resonance_sight_active(false)
+    _last_runtime_scene_path = ""
     hitstop_serial += 1
-    witch_time_serial += 1
-    hitstop_active = false
-    witch_time_active = false
     Engine.time_scale = 1.0
+
+func trigger_witch_time(duration: float = 2.4, enemy_scale: float = 0.22) -> void:
+    if input_locked or menu_input_locked or duration <= 0.0:
+        return
+    var was_active := witch_time_remaining > 0.0
+    witch_time_remaining = maxf(witch_time_remaining, duration)
+    witch_time_enemy_scale = clampf(enemy_scale, 0.08, 0.60)
+    if not was_active:
+        _show_witch_time_visual()
+    # Do not replay the activation sting on every precision dodge while already slowed.
+    # 魔女时间已激活时再次触发，不重复播放入场音，避免连续精准闪避造成音效轰炸。
+    print("[NEREIS][ABILITY] Witch Time active for %.2fs; enemy delta scale=%.2f" % [witch_time_remaining, witch_time_enemy_scale])
+
+func clear_witch_time(reason: String = "") -> void:
+    if witch_time_remaining > 0.0:
+        print("[NEREIS][ABILITY] Witch Time cleared%s" % (": " + reason if not reason.is_empty() else ""))
+    witch_time_remaining = 0.0
+    witch_time_enemy_scale = 1.0
+    _hide_witch_time_visual()
+
+func _show_witch_time_visual() -> void:
+    var scene := get_tree().current_scene
+    if scene == null:
+        return
+    if is_instance_valid(witch_time_visual) and witch_time_visual.get_parent() != scene:
+        witch_time_visual.queue_free()
+        witch_time_visual = null
+    if not is_instance_valid(witch_time_visual):
+        witch_time_visual = CanvasLayer.new()
+        witch_time_visual.set_script(WITCH_TIME_OVERLAY_SCRIPT)
+        witch_time_visual.name = "WitchTimeVisual"
+        scene.add_child(witch_time_visual)
+    else:
+        witch_time_visual.call("play_activation")
+
+func _hide_witch_time_visual() -> void:
+    if is_instance_valid(witch_time_visual):
+        witch_time_visual.queue_free()
+    witch_time_visual = null
+
+func get_combat_enemy_time_scale() -> float:
+    return witch_time_enemy_scale if witch_time_remaining > 0.0 else 1.0
+
+func set_resonance_sight_active(active: bool) -> void:
+    if resonance_sight_active == active:
+        return
+    resonance_sight_active = active
+    _last_resonance_signature = Vector3i(-1, -1, -1)
+    refresh_resonance_reveals()
+
+func refresh_resonance_reveals(debug_override: bool = false) -> void:
+    for target in get_tree().get_nodes_in_group("resonance_hidden_targets"):
+        if not is_instance_valid(target) or target.is_queued_for_deletion():
+            continue
+        if target.has_method("update_reveal_state"):
+            target.call("update_reveal_state", resonance_sight_active, hero_resonance, ancient_exposure, outer_exposure, debug_override)
 
 func unlock_first_memory() -> void:
     if first_memory_unlocked:
@@ -130,44 +242,11 @@ func trigger_hitstop(duration: float = 0.045, slow_scale: float = 0.08) -> void:
 
     hitstop_serial += 1
     var serial: int = hitstop_serial
-    hitstop_active = true
-    active_hitstop_scale = clampf(slow_scale, 0.01, 1.0)
-    _refresh_time_scale()
+    Engine.time_scale = minf(Engine.time_scale, slow_scale)
     get_tree().create_timer(duration, true, false, true).timeout.connect(func() -> void:
         if serial == hitstop_serial:
-            hitstop_active = false
-            _refresh_time_scale()
+            Engine.time_scale = 1.0
     )
-
-func trigger_witch_time(duration: float = 0.52, slow_scale: float = 0.24) -> bool:
-    var now_msec := Time.get_ticks_msec()
-    if duration <= 0.0 or now_msec < witch_time_cooldown_until_msec:
-        return false
-
-    witch_time_cooldown_until_msec = now_msec + 1450
-    witch_time_serial += 1
-    var serial: int = witch_time_serial
-    witch_time_active = true
-    witch_time_scale = clampf(slow_scale, 0.12, 0.6)
-    _refresh_time_scale()
-    witch_time_started.emit(duration)
-    print("[NEREIS][COMBAT] WITCH TIME! duration=%.2f scale=%.2f" % [duration, witch_time_scale])
-
-    get_tree().create_timer(duration, true, false, true).timeout.connect(func() -> void:
-        if serial == witch_time_serial:
-            witch_time_active = false
-            _refresh_time_scale()
-            witch_time_ended.emit()
-    )
-    return true
-
-func _refresh_time_scale() -> void:
-    var target_scale := 1.0
-    if witch_time_active:
-        target_scale = minf(target_scale, witch_time_scale)
-    if hitstop_active:
-        target_scale = minf(target_scale, active_hitstop_scale)
-    Engine.time_scale = target_scale
 
 func record_mite_interaction(interaction_id: String) -> bool:
     if interaction_id in mite_interactions_seen:
@@ -194,7 +273,12 @@ func mark_ancient_residue_awakened() -> void:
     if ancient_residue_awakened:
         return
     ancient_residue_awakened = true
-    print("[NEREIS][STORY] Ancient-god residue awakened")
+    # The awakening is a real bodily exposure, not a visible character stat.
+    ancient_exposure = maxi(ancient_exposure, 1)
+    hero_resonance = maxi(hero_resonance, 12)
+    if "ancient_residue_awakened" not in resonance_sources:
+        resonance_sources.append("ancient_residue_awakened")
+    print("[NEREIS][STORY] Ancient-god residue awakened; hidden protagonist response recorded")
     save_game()
 
 func mark_outer_god_resonance() -> void:
@@ -298,6 +382,17 @@ func save_game() -> void:
         "graveyard_keeper_heard": graveyard_keeper_heard,
         "weapon_level": weapon_level,
         "hero_attack_damage": hero_attack_damage,
+        "hero_resonance": hero_resonance,
+        "ancient_exposure": ancient_exposure,
+        "outer_exposure": outer_exposure,
+        "abnormal_load": abnormal_load,
+        "current_weapon_style": current_weapon_style,
+        "learned_techniques": learned_techniques,
+        "technique_variants": technique_variants,
+        "resonance_sources": resonance_sources,
+        "unlocked_abilities": unlocked_abilities,
+        "achievement_flags": achievement_flags,
+        "upgrade_materials": upgrade_materials,
         "mite_first_meeting": mite_first_meeting,
         "mite_interactions_seen": mite_interactions_seen,
         "mite_last_interaction_location": mite_last_interaction_location,
@@ -381,6 +476,45 @@ func load_game() -> void:
 
     weapon_level = int(parsed.get("weapon_level", 1))
     hero_attack_damage = int(parsed.get("hero_attack_damage", 34))
+    hero_resonance = clampi(int(parsed.get("hero_resonance", 0)), 0, 100)
+    ancient_exposure = clampi(int(parsed.get("ancient_exposure", 0)), 0, 100)
+    outer_exposure = clampi(int(parsed.get("outer_exposure", 0)), 0, 100)
+    abnormal_load = clampf(float(parsed.get("abnormal_load", 0.0)), 0.0, 100.0)
+    current_weapon_style = str(parsed.get("current_weapon_style", "long_sword"))
+    if current_weapon_style not in ["long_sword", "short_blade"]:
+        current_weapon_style = "long_sword"
+    learned_techniques.clear()
+    var saved_techniques = parsed.get("learned_techniques", [])
+    if saved_techniques is Array:
+        for technique_id in saved_techniques:
+            learned_techniques.append(str(technique_id))
+    technique_variants = {}
+    var saved_variants = parsed.get("technique_variants", {})
+    if saved_variants is Dictionary:
+        technique_variants = saved_variants.duplicate(true)
+    unlocked_abilities = {}
+    var saved_abilities = parsed.get("unlocked_abilities", {})
+    if saved_abilities is Dictionary:
+        for ability_id in saved_abilities.keys():
+            if str(ability_id) in ABILITY_IDS and saved_abilities[ability_id] is Dictionary:
+                unlocked_abilities[str(ability_id)] = saved_abilities[ability_id].duplicate(true)
+    achievement_flags.clear()
+    var saved_achievements = parsed.get("achievement_flags", [])
+    if saved_achievements is Array:
+        for achievement_id in saved_achievements:
+            var normalized_achievement := str(achievement_id)
+            if not normalized_achievement.is_empty() and normalized_achievement not in achievement_flags:
+                achievement_flags.append(normalized_achievement)
+    upgrade_materials = {}
+    var saved_materials = parsed.get("upgrade_materials", {})
+    if saved_materials is Dictionary:
+        for material_id in saved_materials.keys():
+            upgrade_materials[str(material_id)] = maxi(0, int(saved_materials[material_id]))
+    resonance_sources.clear()
+    var saved_resonance_sources = parsed.get("resonance_sources", [])
+    if saved_resonance_sources is Array:
+        for source_id in saved_resonance_sources:
+            resonance_sources.append(str(source_id))
     mite_first_meeting = bool(parsed.get("mite_first_meeting", false))
     mite_interactions_seen.clear()
     var saved_mite_interactions = parsed.get("mite_interactions_seen", [])
@@ -390,6 +524,10 @@ func load_game() -> void:
     mite_last_interaction_location = str(parsed.get("mite_last_interaction_location", ""))
     mite_connection_missed = bool(parsed.get("mite_connection_missed", false))
     ancient_residue_awakened = bool(parsed.get("ancient_residue_awakened", false))
+    # Migrate older saves where this story flag existed before protagonist progression was wired in.
+    if ancient_residue_awakened:
+        ancient_exposure = maxi(ancient_exposure, 1)
+        hero_resonance = maxi(hero_resonance, 12)
     outer_god_resonance = bool(parsed.get("outer_god_resonance", false))
     mite_control_stage = clampi(int(parsed.get("mite_control_stage", 0)), 0, 3)
     physical_union_complete = bool(parsed.get("physical_union_complete", false))
@@ -403,7 +541,71 @@ func load_game() -> void:
     ending_route = str(parsed.get("ending_route", ""))
     prologue_complete = bool(parsed.get("prologue_complete", false))
 
+    # Legacy saves that already reached the village must retain the first story reward.
+    # 已经完成序章的旧存档，也应保留第一项剧情奖励。
+    var migrated_basic_iaijutsu := false
+    if prologue_complete and not unlocked_abilities.has("iaijutsu_basic"):
+        unlocked_abilities["iaijutsu_basic"] = {
+            "source_type": "story",
+            "source_id": "legacy_prologue_completion"
+        }
+        migrated_basic_iaijutsu = true
+        print("[NEREIS][SAVE] Migrated completed prologue to basic iaijutsu unlock")
+
     print("[NEREIS][SAVE] Game loaded; memory=%d boss_defeated=%s choice=%s" % [hero_memory, boss_defeated, first_choice_made])
+    if migrated_basic_iaijutsu:
+        save_game()
+
+func is_ability_unlocked(ability_id: String) -> bool:
+    return ability_id in ABILITY_IDS and unlocked_abilities.has(ability_id)
+
+func unlock_ability(ability_id: String, source_type: String, source_id: String) -> bool:
+    # Call only after the relevant story/exploration/achievement/resonance/material requirement is fulfilled.
+    # 仅在对应剧情、探索、成就、共鸣或材料条件满足后调用。
+    if ability_id not in ABILITY_IDS or source_type not in ABILITY_SOURCE_TYPES or source_id.strip_edges().is_empty():
+        return false
+    if ability_id == "iaijutsu_basic" and source_type != "story":
+        return false
+    if unlocked_abilities.has(ability_id):
+        return false
+    unlocked_abilities[ability_id] = {"source_type": source_type, "source_id": source_id}
+    print("[NEREIS][PROGRESSION] Ability unlocked id=%s source=%s:%s" % [ability_id, source_type, source_id])
+    save_game()
+    return true
+
+func record_achievement(achievement_id: String) -> bool:
+    var normalized_id := achievement_id.strip_edges()
+    if normalized_id.is_empty() or normalized_id in achievement_flags:
+        return false
+    achievement_flags.append(normalized_id)
+    save_game()
+    return true
+
+func add_upgrade_material(material_id: String, amount: int = 1) -> int:
+    var normalized_id := material_id.strip_edges()
+    if normalized_id.is_empty() or amount <= 0:
+        return int(upgrade_materials.get(normalized_id, 0))
+    upgrade_materials[normalized_id] = maxi(0, int(upgrade_materials.get(normalized_id, 0))) + amount
+    save_game()
+    return int(upgrade_materials[normalized_id])
+
+func spend_upgrade_material(material_id: String, amount: int = 1) -> bool:
+    var normalized_id := material_id.strip_edges()
+    if normalized_id.is_empty() or amount <= 0:
+        return false
+    var owned := maxi(0, int(upgrade_materials.get(normalized_id, 0)))
+    if owned < amount:
+        return false
+    upgrade_materials[normalized_id] = owned - amount
+    save_game()
+    return true
+
+func record_resonance_source(source_id: String) -> bool:
+    if source_id.is_empty() or source_id in resonance_sources:
+        return false
+    resonance_sources.append(source_id)
+    save_game()
+    return true
 
 func mark_prologue_complete() -> void:
     if prologue_complete:
@@ -444,6 +646,17 @@ func reset() -> void:
     graveyard_keeper_heard = false
     weapon_level = 1
     hero_attack_damage = 34
+    hero_resonance = 0
+    ancient_exposure = 0
+    outer_exposure = 0
+    abnormal_load = 0.0
+    current_weapon_style = "long_sword"
+    learned_techniques.clear()
+    technique_variants.clear()
+    resonance_sources.clear()
+    unlocked_abilities.clear()
+    achievement_flags.clear()
+    upgrade_materials.clear()
     mite_first_meeting = false
     mite_interactions_seen.clear()
     mite_last_interaction_location = ""
@@ -458,10 +671,10 @@ func reset() -> void:
     ending_route = ""
     prologue_complete = false
     input_locked = false
+    menu_input_locked = false
+    clear_witch_time("world state reset")
+    set_resonance_sight_active(false)
     hitstop_serial += 1
-    witch_time_serial += 1
-    hitstop_active = false
-    witch_time_active = false
     Engine.time_scale = 1.0
 
 func record_route_memory(memory_id: String, humanity_delta: int = 0) -> bool:

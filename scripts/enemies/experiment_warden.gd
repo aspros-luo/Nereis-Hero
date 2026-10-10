@@ -24,6 +24,7 @@ var animation_time := 0.0
 var attack_hitbox: Area2D
 
 func _ready() -> void:
+    add_to_group("combat_enemies")
     attack_hitbox = Area2D.new()
     attack_hitbox.set_script(HITBOX_SCRIPT)
     add_child(attack_hitbox)
@@ -36,8 +37,7 @@ func _ready() -> void:
     queue_redraw()
 
 func _process(delta: float) -> void:
-    if WorldState.input_locked:
-        return
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     animation_time += delta
@@ -48,13 +48,12 @@ func _process(delta: float) -> void:
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
-    if WorldState.input_locked:
-        return
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     if stun_time > 0.0:
         velocity.x = move_toward(velocity.x, 0.0, 1000.0 * delta)
-        move_and_slide()
+        _move_and_slide_scaled()
         return
 
     var hero := get_node_or_null("../Hero") as Node2D
@@ -80,7 +79,7 @@ func _physics_process(delta: float) -> void:
                 released = false
                 attack_telegraphed.emit()
 
-    move_and_slide()
+    _move_and_slide_scaled()
 
 func receive_damage(amount: int, source: Node = null) -> void:
     health = max(0, health - amount)
@@ -121,3 +120,15 @@ func _draw() -> void:
         draw_arc(Vector2(facing * 26.0, -26), 40.0, -0.85 if facing > 0 else 3.99, 0.85 if facing > 0 else 5.42, 14, Color("#d18f8b"), 4.0)
 
     draw_string(ThemeDB.fallback_font, Vector2(-66, -82), "EXPERIMENT WARDEN", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
+
+
+func _move_and_slide_scaled() -> void:
+    # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
+    # CharacterBody2D.move_and_slide() 使用引擎物理步长，因此只在位移调用期间缩放速度。
+    var enemy_time_scale: float = WorldState.get_combat_enemy_time_scale()
+    if enemy_time_scale >= 0.999:
+        move_and_slide()
+        return
+    velocity *= enemy_time_scale
+    move_and_slide()
+    velocity /= enemy_time_scale

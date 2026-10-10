@@ -20,7 +20,7 @@ signal phase_changed(phase: int)
 signal attack_telegraphed
 
 func _ready() -> void:
-    add_to_group("hostile_actors")
+    add_to_group("combat_enemies")
     _setup_combat_components()
     _log("BOSS", "Ashen Knight initialized; hp=240")
     queue_redraw()
@@ -39,12 +39,14 @@ func _setup_combat_components() -> void:
     hurtbox.setup(self, Vector2(48, 94), Vector2(0, -38))
 
 func _process(delta: float) -> void:
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     animation_time += delta
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     attack_cooldown = max(0.0, attack_cooldown - delta)
@@ -62,7 +64,7 @@ func _physics_process(delta: float) -> void:
 
     if stun_time > 0.0:
         velocity.x = move_toward(velocity.x, 0.0, 1200.0 * delta)
-        move_and_slide()
+        _move_and_slide_scaled()
         queue_redraw()
         return
 
@@ -93,7 +95,7 @@ func _physics_process(delta: float) -> void:
                 attack_telegraphed.emit()
                 _log("BOSS", "Ashen Knight attack telegraph phase=%d" % (2 if phase_two else 1))
 
-    move_and_slide()
+    _move_and_slide_scaled()
     queue_redraw()
 
 func _spawn_death_burst() -> void:
@@ -101,9 +103,6 @@ func _spawn_death_burst() -> void:
     effect.global_position = global_position + Vector2(0, -44)
     get_parent().add_child(effect)
     effect.call("setup", 26.0)
-
-func is_attack_telegraphed() -> bool:
-    return windup > 0.0
 
 func _spawn_hit_spark() -> void:
     var effect := Node2D.new()
@@ -130,6 +129,20 @@ func receive_damage(amount: int, source: Node = null) -> void:
 func take_damage(amount: int) -> void:
     receive_damage(amount, null)
 
+func apply_echo_stagger(duration: float) -> bool:
+    if health <= 0 or is_queued_for_deletion():
+        return false
+    # Bosses resist the full control effect; Echo can interrupt a tell but never lock the boss down.
+    # Boss 对控制效果有抗性：余响可打断起手，但不能长时间压制。
+    var capped_duration := minf(duration, 0.12 if phase_two else 0.15)
+    stun_time = maxf(stun_time, capped_duration)
+    windup = 0.0
+    attack_released = true
+    hit_flash = maxf(hit_flash, 0.10)
+    velocity.x *= 0.35
+    _log("BOSS", "Eldritch Echo caused brief stagger %.2fs (phase=%d)" % [capped_duration, 2 if phase_two else 1])
+    return true
+
 func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
@@ -152,3 +165,14 @@ func _draw() -> void:
         draw_arc(Vector2(0, -34), 68.0 if phase_two else 58.0, 0, TAU, 28, telegraph_color, 5.0)
         draw_line(Vector2(facing * 34.0, -34), Vector2(facing * 102.0, -34), telegraph_color, 4.0)
     draw_string(ThemeDB.fallback_font, Vector2(-72, -94), NereisLocalization.translate_text("ASHEN KNIGHT %d") % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
+
+func _move_and_slide_scaled() -> void:
+    # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
+    # CharacterBody2D.move_and_slide() 使用引擎物理步长，因此只在位移调用期间缩放速度。
+    var enemy_time_scale: float = WorldState.get_combat_enemy_time_scale()
+    if enemy_time_scale >= 0.999:
+        move_and_slide()
+        return
+    velocity *= enemy_time_scale
+    move_and_slide()
+    velocity /= enemy_time_scale

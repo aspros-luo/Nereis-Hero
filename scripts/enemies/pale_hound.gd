@@ -26,7 +26,7 @@ signal defeated
 signal attack_telegraphed
 
 func _ready() -> void:
-    add_to_group("hostile_actors")
+    add_to_group("combat_enemies")
     _setup_combat_components()
     _log("ENEMY", "Pale Hound initialized; hp=70")
     queue_redraw()
@@ -45,12 +45,14 @@ func _setup_combat_components() -> void:
     hurtbox.setup(self, Vector2(52, 48), Vector2(0, -24))
 
 func _process(delta: float) -> void:
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     animation_time += delta
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     attack_timer = max(0.0, attack_timer - delta)
@@ -63,7 +65,7 @@ func _physics_process(delta: float) -> void:
         velocity.x = move_toward(velocity.x, 0.0, 1000.0 * delta)
         if not is_on_floor():
             velocity.y += 1400.0 * delta
-        move_and_slide()
+        _move_and_slide_scaled()
         queue_redraw()
         return
 
@@ -100,7 +102,7 @@ func _physics_process(delta: float) -> void:
     if not is_on_floor():
         velocity.y += 1400.0 * delta
 
-    move_and_slide()
+    _move_and_slide_scaled()
     queue_redraw()
 
 func receive_damage(amount: int, source: Node = null) -> void:
@@ -126,9 +128,6 @@ func _spawn_death_burst() -> void:
     effect.global_position = global_position + Vector2(0, -18)
     get_parent().add_child(effect)
     effect.call("setup", 16.0)
-
-func is_attack_telegraphed() -> bool:
-    return attack_windup > 0.0
 
 func _spawn_hit_spark() -> void:
     var effect := Node2D.new()
@@ -166,3 +165,15 @@ func _draw_body_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
         var angle := TAU * float(i) / 24.0
         points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
     draw_colored_polygon(points, color)
+
+
+func _move_and_slide_scaled() -> void:
+    # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
+    # CharacterBody2D.move_and_slide() 使用引擎物理步长，因此只在位移调用期间缩放速度。
+    var enemy_time_scale: float = WorldState.get_combat_enemy_time_scale()
+    if enemy_time_scale >= 0.999:
+        move_and_slide()
+        return
+    velocity *= enemy_time_scale
+    move_and_slide()
+    velocity /= enemy_time_scale

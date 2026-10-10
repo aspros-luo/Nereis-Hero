@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 var hero: Node
-var debug_enabled := true
+var debug_enabled := false
 var debug_panel: ColorRect
 var debug_label: Label
 var title_label: Label
@@ -10,6 +10,7 @@ var region_label: Label
 var objective_label: Label
 var combat_banner: Label
 var combat_banner_time := 0.0
+var technique_banner_queue: Array[String] = []
 var boss: Node
 var boss_panel: ColorRect
 var boss_bar: ColorRect
@@ -21,13 +22,10 @@ var hp_label: Label
 var stamina_label: Label
 var humanity_label: Label
 var humanity_bar: ColorRect
+var humanity_bg: ColorRect
 var objective_rule: ColorRect
 var impact_flash: ColorRect
 var impact_flash_time := 0.0
-var witch_time_overlay: ColorRect
-var witch_time_label: Label
-var witch_time_display_time := 0.0
-var witch_time_display_duration := 0.52
 var pause_overlay: ColorRect
 var pause_panel: ColorRect
 var pause_title: Label
@@ -38,41 +36,19 @@ var title_button: Button
 var language_option: OptionButton
 var language_label: Label
 var save_status_label: Label
+var character_button: Button
+var character_details_label: Label
 var new_game_dialog: ConfirmationDialog
 var story_region_source := ""
 var story_objective_source := ""
 var pause_open := false
+var character_details_open := false
 
 func _ready() -> void:
     layer = 10
     process_mode = Node.PROCESS_MODE_ALWAYS
     if not WorldState.hidden_resistance_awakened_event.is_connected(_on_hidden_resistance_awakened):
         WorldState.hidden_resistance_awakened_event.connect(_on_hidden_resistance_awakened)
-    if not WorldState.witch_time_started.is_connected(_on_witch_time_started):
-        WorldState.witch_time_started.connect(_on_witch_time_started)
-    if not WorldState.witch_time_ended.is_connected(_on_witch_time_ended):
-        WorldState.witch_time_ended.connect(_on_witch_time_ended)
-
-    witch_time_overlay = ColorRect.new()
-    witch_time_overlay.position = Vector2.ZERO
-    witch_time_overlay.color = Color("#5b3d76", 0.0)
-    witch_time_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    witch_time_overlay.visible = false
-    add_child(witch_time_overlay)
-
-    witch_time_label = Label.new()
-    witch_time_label.position = Vector2(400, 278)
-    witch_time_label.size = Vector2(480, 72)
-    witch_time_label.text = "W I T C H   T I M E"
-    witch_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    witch_time_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-    witch_time_label.add_theme_font_size_override("font_size", 34)
-    witch_time_label.add_theme_color_override("font_color", Color("#e4d0ef", 0.0))
-    witch_time_label.add_theme_color_override("font_shadow_color", Color("#1a1023", 0.9))
-    witch_time_label.add_theme_constant_override("shadow_offset_x", 2)
-    witch_time_label.add_theme_constant_override("shadow_offset_y", 3)
-    witch_time_label.visible = false
-    add_child(witch_time_label)
 
     impact_flash = ColorRect.new()
     impact_flash.position = Vector2.ZERO
@@ -89,7 +65,7 @@ func _ready() -> void:
 
     controls_label = Label.new()
     controls_label.position = Vector2(38, 62)
-    controls_label.text = "A/D  MOVE     SPACE  JUMP     J  ATTACK     K  DODGE"
+    controls_label.text = "A/D  MOVE     SPACE  JUMP     J  ATTACK     K  DODGE     Q  WEAPON"
     controls_label.add_theme_font_size_override("font_size", 13)
     controls_label.add_theme_color_override("font_color", Color("#8f8586"))
     add_child(controls_label)
@@ -123,7 +99,7 @@ func _ready() -> void:
 
     status_panel = ColorRect.new()
     status_panel.position = Vector2(36, 630)
-    status_panel.size = Vector2(300, 98)
+    status_panel.size = Vector2(300, 70)
     status_panel.color = Color("#0a090d", 0.78)
     add_child(status_panel)
 
@@ -166,16 +142,19 @@ func _ready() -> void:
     humanity_label.add_theme_font_size_override("font_size", 13)
     status_panel.add_child(humanity_label)
 
-    var humanity_bg := ColorRect.new()
+    humanity_bg = ColorRect.new()
     humanity_bg.position = Vector2(72, 70)
     humanity_bg.size = Vector2(235, 10)
     humanity_bg.color = Color("#2a2026")
+    humanity_bg.visible = false
     status_panel.add_child(humanity_bg)
 
     humanity_bar = ColorRect.new()
     humanity_bar.position = Vector2(72, 70)
     humanity_bar.size = Vector2(235, 10)
     humanity_bar.color = Color("#8e7777")
+    humanity_bar.visible = false
+    humanity_label.visible = false
     status_panel.add_child(humanity_bar)
 
     boss_panel = ColorRect.new()
@@ -199,21 +178,47 @@ func _ready() -> void:
 
     debug_panel = ColorRect.new()
     debug_panel.position = Vector2(930, 24)
-    debug_panel.size = Vector2(326, 260)
+    debug_panel.size = Vector2(326, 460)
     debug_panel.color = Color("#0a090d", 0.88)
     add_child(debug_panel)
 
     debug_label = Label.new()
     debug_label.position = Vector2(18, 14)
-    debug_label.size = Vector2(290, 230)
-    debug_label.add_theme_font_size_override("font_size", 15)
+    debug_label.size = Vector2(290, 430)
+    debug_label.add_theme_font_size_override("font_size", 12)
     debug_panel.add_child(debug_label)
+    debug_panel.visible = debug_enabled
 
     _build_pause_menu()
     _refresh_localized_ui()
 
 func bind_hero(target: Node) -> void:
     hero = target
+    var system: Node = target.get_node_or_null("HeroSystem") if is_instance_valid(target) else null
+    if system and system.has_signal("technique_understood"):
+        var callback := Callable(self, "_on_technique_understood")
+        if not system.is_connected("technique_understood", callback):
+            system.connect("technique_understood", callback)
+
+func _on_technique_understood(technique_id: String) -> void:
+    var message_key := ""
+    match technique_id:
+        "blood_iaijutsu":
+            message_key = "technique.blood_unlocked"
+        "abyss_iaijutsu":
+            message_key = "technique.abyss_unlocked"
+        "black_horizon":
+            message_key = "technique.black_horizon_unlocked"
+        _:
+            return
+    technique_banner_queue.append(NereisLocalization.t(message_key))
+    if combat_banner_time <= 0.0:
+        _show_next_technique_banner()
+
+func _show_next_technique_banner() -> void:
+    if technique_banner_queue.is_empty():
+        return
+    _show_banner(technique_banner_queue.pop_front(), 2.4)
 
 func set_story_mode(region: String, objective: String) -> void:
     story_region_source = region
@@ -221,7 +226,7 @@ func set_story_mode(region: String, objective: String) -> void:
     title_label.text = NereisLocalization.t("hud.title")
     region_label.text = _localize_region(region)
     objective_label.text = _localize_objective(objective)
-    _set_humanity_visible(true)
+    _set_humanity_visible(false)
 
 func set_combat_demo_mode() -> void:
     title_label.text = NereisLocalization.t("hud.title") + "  /  " + NereisLocalization.translate_text("CORE COMBAT")
@@ -231,9 +236,11 @@ func set_combat_demo_mode() -> void:
 func _on_hidden_resistance_awakened() -> void:
     _show_banner("A WARMTH UNDER THE SKIN", 1.9)
 
-func _set_humanity_visible(value: bool) -> void:
-    humanity_label.visible = value
-    humanity_bar.visible = value
+func _set_humanity_visible(_value: bool) -> void:
+    # Hidden narrative values never appear in the normal HUD.
+    humanity_label.visible = false
+    humanity_bg.visible = false
+    humanity_bar.visible = false
 
 
 func set_combat_demo_progress(defeated: int, boss_active: bool, complete: bool) -> void:
@@ -244,18 +251,6 @@ func set_combat_demo_progress(defeated: int, boss_active: bool, complete: bool) 
         objective_label.text = NereisLocalization.translate_text("DEFEAT THE ASHEN KNIGHT")
     else:
         objective_label.text = NereisLocalization.translate_text("DEFEAT SMALL ENEMIES    %d / 3") % defeated
-
-func _on_witch_time_started(duration: float) -> void:
-    witch_time_display_duration = maxf(0.1, duration)
-    witch_time_display_time = witch_time_display_duration
-    witch_time_overlay.visible = true
-    witch_time_label.visible = true
-    witch_time_overlay.color.a = 0.0
-    witch_time_label.add_theme_color_override("font_color", Color("#e4d0ef", 0.0))
-
-func _on_witch_time_ended() -> void:
-    witch_time_display_duration = 0.12
-    witch_time_display_time = 0.12
 
 func show_hit_confirm(damage: int) -> void:
     impact_flash_time = 0.07 if damage < 50 else 0.10
@@ -289,23 +284,15 @@ func _process(delta: float) -> void:
     impact_flash_time = max(0.0, impact_flash_time - delta)
     var viewport_size: Vector2 = get_viewport().get_visible_rect().size
     impact_flash.size = viewport_size
-    witch_time_overlay.size = viewport_size
-    if witch_time_display_time > 0.0:
-        witch_time_display_time = maxf(0.0, witch_time_display_time - delta)
-        var witch_ratio: float = witch_time_display_time / witch_time_display_duration
-        witch_time_overlay.color.a = 0.18 * witch_ratio
-        witch_time_label.add_theme_color_override("font_color", Color(0.89, 0.81, 0.95, clampf(witch_ratio * 1.6, 0.0, 1.0)))
-        witch_time_overlay.visible = true
-        witch_time_label.visible = true
-    else:
-        witch_time_overlay.visible = false
-        witch_time_label.visible = false
     var flash_ratio: float = clampf(impact_flash_time / 0.07, 0.0, 1.0)
     impact_flash.color.a = flash_ratio * 0.12
 
     combat_banner_time = max(0.0, combat_banner_time - delta)
     if combat_banner_time <= 0.0:
-        combat_banner.visible = false
+        if not technique_banner_queue.is_empty():
+            _show_next_technique_banner()
+        else:
+            combat_banner.visible = false
 
     _update_status_bars()
     _update_boss_bar()
@@ -317,8 +304,19 @@ func _process(delta: float) -> void:
     var stamina: int = int(hero.get("stamina"))
     var invulnerable: bool = bool(hero.get("invulnerable"))
 
+    var action_kind: String = str(hero.call("get_debug_action_kind")) if hero.has_method("get_debug_action_kind") else "unknown"
+    var echo_cooldown: float = float(hero.call("get_debug_eldritch_cooldown")) if hero.has_method("get_debug_eldritch_cooldown") else 0.0
+    var debug_override: bool = bool(hero.get("debug_ability_override"))
     debug_label.text = (
-        "DEBUG [F4]\n"
+        "DEBUG [F3] WORLD PANEL | F4 HERO\nF5 ALL ABILITIES | F6 RESET\n"
+        + "A/D move  Space jump  J attack\n"
+        + "K dodge  Q weapon  X dash\n"
+        + "G grapple/cancel  W wall climb\n"
+        + "V sight  F weapon art  R Echo\n"
+        + "L iaijutsu  PgUp/PgDn form\n"
+        + "Technique override: %s\n" % debug_override
+        + "Action: %s\n" % action_kind
+        + "Echo cooldown: %.1fs\n" % echo_cooldown
         + "Hero HP: %d\n" % hp
         + "Stamina: %d\n" % stamina
         + "State: %s\n" % state_name
@@ -357,14 +355,15 @@ func _localize_objective(value: String) -> String:
 func _build_pause_menu() -> void:
     pause_overlay = ColorRect.new()
     pause_overlay.position = Vector2.ZERO
+    pause_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     pause_overlay.color = Color("#07060b", 0.82)
     pause_overlay.visible = false
     pause_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
     add_child(pause_overlay)
 
     pause_panel = ColorRect.new()
-    pause_panel.position = Vector2(390, 135)
-    pause_panel.size = Vector2(500, 450)
+    pause_panel.position = Vector2(390, 90)
+    pause_panel.size = Vector2(500, 540)
     pause_panel.color = Color("#111018", 0.97)
     pause_overlay.add_child(pause_panel)
 
@@ -377,33 +376,47 @@ func _build_pause_menu() -> void:
     pause_panel.add_child(pause_title)
 
     resume_button = _make_menu_button()
-    resume_button.position = Vector2(90, 88)
+    character_details_label = Label.new()
+    character_details_label.position = Vector2(48, 72)
+    character_details_label.size = Vector2(404, 52)
+    character_details_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    character_details_label.visible = false
+    character_details_label.add_theme_font_size_override("font_size", 13)
+    character_details_label.add_theme_color_override("font_color", Color("#b7a48c"))
+    pause_panel.add_child(character_details_label)
+
+    resume_button.position = Vector2(90, 132)
     pause_panel.add_child(resume_button)
     resume_button.pressed.connect(_close_pause_menu)
 
     save_button = _make_menu_button()
-    save_button.position = Vector2(90, 148)
+    save_button.position = Vector2(90, 187)
     pause_panel.add_child(save_button)
     save_button.pressed.connect(_save_from_menu)
 
     new_game_button = _make_menu_button()
-    new_game_button.position = Vector2(90, 208)
+    new_game_button.position = Vector2(90, 242)
     pause_panel.add_child(new_game_button)
     new_game_button.pressed.connect(_confirm_new_game)
 
+    character_button = _make_menu_button()
+    character_button.position = Vector2(90, 297)
+    pause_panel.add_child(character_button)
+    character_button.pressed.connect(_toggle_character_details)
+
     title_button = _make_menu_button()
-    title_button.position = Vector2(90, 268)
+    title_button.position = Vector2(90, 352)
     pause_panel.add_child(title_button)
     title_button.pressed.connect(_return_to_title)
 
     language_label = Label.new()
-    language_label.position = Vector2(90, 337)
+    language_label.position = Vector2(90, 408)
     language_label.add_theme_font_size_override("font_size", 14)
     language_label.add_theme_color_override("font_color", Color("#8f8586"))
     pause_panel.add_child(language_label)
 
     language_option = OptionButton.new()
-    language_option.position = Vector2(90, 360)
+    language_option.position = Vector2(90, 430)
     language_option.size = Vector2(320, 42)
     for language in NereisLocalization.LANGUAGES:
         language_option.add_item(NereisLocalization.language_name(language))
@@ -411,7 +424,7 @@ func _build_pause_menu() -> void:
     pause_panel.add_child(language_option)
 
     save_status_label = Label.new()
-    save_status_label.position = Vector2(90, 405)
+    save_status_label.position = Vector2(90, 478)
     save_status_label.size = Vector2(320, 28)
     save_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     save_status_label.add_theme_font_size_override("font_size", 13)
@@ -440,11 +453,11 @@ func _refresh_localized_ui() -> void:
         objective_label.text = _localize_objective(story_objective_source)
     hp_label.text = NereisLocalization.t("hud.hp")
     stamina_label.text = NereisLocalization.t("hud.sta")
-    humanity_label.text = NereisLocalization.t("hud.hum")
     pause_title.text = NereisLocalization.t("menu.paused")
     resume_button.text = NereisLocalization.t("menu.resume")
     save_button.text = NereisLocalization.t("menu.save")
     new_game_button.text = NereisLocalization.t("menu.new_game")
+    character_button.text = NereisLocalization.t("menu.character")
     title_button.text = NereisLocalization.t("menu.return_title")
     language_label.text = NereisLocalization.t("menu.select_language")
     if language_option:
@@ -453,12 +466,34 @@ func _refresh_localized_ui() -> void:
     new_game_dialog.dialog_text = NereisLocalization.t("menu.confirm_new_game")
     new_game_dialog.ok_button_text = NereisLocalization.t("menu.confirm")
     new_game_dialog.cancel_button_text = NereisLocalization.t("menu.cancel")
+    _refresh_character_details()
 
 func _on_language_selected(index: int) -> void:
     var language: String = NereisLocalization.LANGUAGES[clampi(index, 0, NereisLocalization.LANGUAGES.size() - 1)]
     WorldState.set_language(language)
     _refresh_localized_ui()
     save_status_label.text = NereisLocalization.language_name(language)
+
+func _toggle_character_details() -> void:
+    character_details_open = not character_details_open
+    character_details_label.visible = character_details_open
+    _refresh_character_details()
+
+func _refresh_character_details() -> void:
+    var weapon_key := "menu.weapon_short_blade" if str(WorldState.current_weapon_style) == "short_blade" else "menu.weapon_long_sword"
+    var weapon_name := NereisLocalization.t(weapon_key)
+    var technique_names: PackedStringArray = []
+    if WorldState.is_ability_unlocked("iaijutsu_basic"):
+        technique_names.append(NereisLocalization.t("menu.technique_basic_iaijutsu"))
+    for technique_id in WorldState.learned_techniques:
+        if technique_id == "blood_iaijutsu":
+            technique_names.append(NereisLocalization.t("menu.technique_blood_iaijutsu"))
+        elif technique_id == "abyss_iaijutsu":
+            technique_names.append(NereisLocalization.t("menu.technique_abyss_iaijutsu"))
+        elif technique_id == "black_horizon":
+            technique_names.append(NereisLocalization.t("menu.technique_black_horizon"))
+    var techniques_text := ", ".join(technique_names) if not technique_names.is_empty() else NereisLocalization.t("menu.no_techniques")
+    character_details_label.text = "%s: %s\n%s: %s\n%s" % [NereisLocalization.t("menu.weapon"), weapon_name, NereisLocalization.t("menu.techniques"), techniques_text, NereisLocalization.t("menu.hidden_stats_note")]
 
 func _save_from_menu() -> void:
     WorldState.save_game()
@@ -471,6 +506,7 @@ func _confirm_new_game() -> void:
 
 func _start_new_game() -> void:
     WorldState.delete_save()
+    WorldState.menu_input_locked = false
     pause_open = false
     pause_overlay.visible = false
     get_tree().paused = false
@@ -478,6 +514,7 @@ func _start_new_game() -> void:
     get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
 
 func _return_to_title() -> void:
+    WorldState.menu_input_locked = false
     pause_open = false
     pause_overlay.visible = false
     get_tree().paused = false
@@ -485,17 +522,20 @@ func _return_to_title() -> void:
 
 func _open_pause_menu() -> void:
     pause_open = true
+    character_details_open = false
+    character_details_label.visible = false
+    WorldState.menu_input_locked = true
     pause_overlay.visible = true
     save_status_label.text = ""
     language_option.select(NereisLocalization.language_index(str(WorldState.language)))
-    get_tree().paused = true
-    print("[NEREIS][MENU] Pause menu opened")
+    _refresh_character_details()
+    print("[NEREIS][MENU] Menu opened; world simulation continues")
 
 func _close_pause_menu() -> void:
     pause_open = false
+    WorldState.menu_input_locked = false
     pause_overlay.visible = false
-    get_tree().paused = false
-    print("[NEREIS][MENU] Pause menu closed")
+    print("[NEREIS][MENU] Menu closed; world simulation continues")
 
 func _toggle_pause_menu() -> void:
     if pause_open:
@@ -504,8 +544,12 @@ func _toggle_pause_menu() -> void:
         _open_pause_menu()
 
 func _unhandled_input(event: InputEvent) -> void:
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3:
+        set_debug_visible(not debug_enabled)
+        get_viewport().set_input_as_handled()
+        return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
-        if WorldState.input_locked:
+        if WorldState.input_locked and not pause_open:
             return
         _toggle_pause_menu()
         get_viewport().set_input_as_handled()
@@ -515,13 +559,10 @@ func _update_status_bars() -> void:
         return
     var hp: int = clampi(int(hero.get("health")), 0, 100)
     var stamina: float = clampf(float(hero.get("stamina")), 0.0, 100.0)
-    var humanity: int = clampi(int(WorldState.hero_humanity), 0, 100)
     hp_bar.size.x = 235.0 * float(hp) / 100.0
     stamina_bar.size.x = 235.0 * stamina / 100.0
-    humanity_bar.size.x = 235.0 * float(humanity) / 100.0
     hp_label.text = "%s %d" % [NereisLocalization.t("hud.hp"), hp]
     stamina_label.text = "%s %d" % [NereisLocalization.t("hud.sta"), int(stamina)]
-    humanity_label.text = "%s %d" % [NereisLocalization.t("hud.hum"), humanity]
 
 func _update_boss_bar() -> void:
     if not boss or not is_instance_valid(boss) or boss.is_queued_for_deletion() or WorldState.boss_defeated:

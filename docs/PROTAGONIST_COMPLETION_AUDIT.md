@@ -1,0 +1,78 @@
+# 主角系统完成审计 / Protagonist Completion Audit
+
+日期：2026-10-09  
+分支：feature/protagonist-system
+
+## 当前阶段边界
+先完成主角操控、战斗、能力、存档和性能验证。暂停新增剧情、剧情触发和关卡实现；不实现王城下水道内容。
+
+## P0：状态与战斗可靠性
+- [ ] 检查攻击、战技、闪避、受击、死亡和菜单输入锁之间的状态转换。
+- [x] 已实现精准闪避首段窗口与一次性反击奖励；命中框仅在实际命中时消费奖励，静态检查通过，Godot 实测待完成。
+- [ ] 确认受击、死亡、休息恢复时会关闭旧命中框并清空动作计时、缓存输入、连击、闪避无敌、快速冲刺和跳跃计数。
+- [ ] 检查所有战技是否只扣费一次、只在预期窗口命中；HP 消耗型拔刀斩不能把主角扣至 0 HP。
+- [x] 源码定义异常负荷 20/40/65/85 阈值的体力恢复惩罚；真实休息降低 35 点，Debug 临时负荷不写入存档。
+- [ ] Godot 实测各负荷阈值、休息恢复量与存档隔离。
+- [ ] 实测长剑三段、短刃四段的距离、伤害、体力成本、输入窗口和命中去重。
+- [ ] 回归死亡重生、检查点、休息恢复与序章遭遇重置。
+
+## P1：能力闭环
+- [x] 基础跳跃、跳跃缓冲、土狼时间已有代码，待实测。
+- [x] 二段跳已有代码且默认锁定，待实测一次额外跳跃和落地重置。
+- [x] 已加入快速冲刺 quick_dash 原型：X 输入、24 体力、0.16 秒持续、1.10 秒冷却、无闪避无敌帧；仅正式解锁或会话级 Debug 覆盖可以启动。
+- [ ] Godot 运行验收：验证地面/空中位移、碰撞阻挡、体力与冷却、受击中断、菜单锁、死亡/休息复位，以及与普通闪避互不干扰。
+- [x] 源码实现 witch_time：精准闪避启动敌方计时/动画与实际位移缩放（move_and_slide 期间临时缩放速度）；清理路径覆盖受击、菜单/输入锁、暂停与切场景。
+- [x] 源码实现 `grapple`：仅连接 `grapple_anchors` 组锚点；具备距离、超时、到达、目标丢失和 G 手动取消路径。
+- [x] 源码实现 `wall_climb`：仅作用于 `wall_climb_surfaces` 组，包含攀墙、滑墙与蹬墙跳。
+- [x] 源码实现限时 `resonance_sight` 与 `resonance_hidden_targets` 门槛组件；F5 临时生成测试锚点、隐藏痕迹和标记墙，PageUp/PageDown 测试四种拔刀形态。
+- [x] Debug 拔刀产生的异常负荷只存于 HeroSystem 内存，不调用 WorldState 存档。
+- [ ] Godot 实机：验证能力碰撞、时间响应、动画/特效、菜单/死亡/切场景清理和关闭解锁时的限制。
+
+## P1：性能
+- [x] 静态修正：移除 `_process()` 中重复的 `queue_redraw()`；物理更新路径已经请求重绘。仍需在 Godot 中测量帧时间，确认实际收益。
+- [ ] 检查斩击、火花、回声特效的生命周期，排查遗留节点、重复信号连接、无上限日志与 Timer。
+- [ ] 检查 Hitstop 和相机震动在死亡、切场景后能否恢复。
+- [ ] 建立固定压力场景，记录 FPS、帧时间峰值、节点数和日志量，再决定是否优化；无基准数据不宣称性能提升。
+
+## P1：存档与隐藏成长
+- [ ] 测试新存档、旧存档迁移、保存后重启、非法存档和新游戏重置。
+- [ ] 验证武器、能力、已学战技、成就、材料和隐藏状态一致恢复。
+- [ ] 验证拔刀斩各形态的伤害、HP/体力成本、异常负荷、前摇、距离、命中框和视觉表现。
+- [ ] 不新增或改写剧情成长触发；先把剧情状态写入路径记录清楚，留到主角阶段验收后再处理。
+
+## 验收规则
+每项分别标记“代码存在 / 静态检查 / Godot 实测”。当前环境无 Godot 4.6.1，因此不能将任何未运行的项目标为实测通过。不要触发 GitHub Actions。
+
+## 执行顺序
+1. 状态机、输入缓存、命中框与扣费。
+2. 死亡/休息重置及存档回归。
+3. 双武器与战技实战调校。
+4. 已有源码的快速冲刺、魔女时间、钩爪、爬墙、共鸣视野和拔刀形态逐项做 Godot 运行验收。
+5. 有数据支撑的性能审计。
+6. 主角系统验收后再恢复剧情与关卡开发。
+
+
+## 本轮补充静态修正 / Additional source-level fixes
+
+- [x] 魔女时间不再只减慢计时器/动画：所有敌人脚本在实际 move_and_slide 位移期间缩放速度；主角不受该局部缩放影响。
+- [x] 共鸣隐藏目标组件可通过 reveal_target_path 控制指定 CanvasItem 的显隐，不限于绘制调试标记。
+- [x] F5 Debug 锚点固定在生成时的位置，不再跟随主角漂移；锚点测试标签会正确显示。
+- [x] 关闭 F5 时清除魔女时间并中止尚在执行的 Debug 冲刺。
+- [ ] 上述变化仍需在 Godot 中运行验证，特别是敌方位移速度、垂直运动、墙面碰撞与隐藏对象显隐。
+
+- [x] Witch Time follow-up: enemy-owned hitbox lifetime also uses the enemy-local time scale, so active hostile strike windows remain coherent with slowed windups and movement; Hero hitboxes are unaffected.
+- [ ] Godot runtime: validate active hostile hitboxes last longer during Witch Time and restore normal lifetime after effect expiry.
+
+- [x] Added all enemy actor scripts to combat_enemies group so Eldritch Echo targeting and enemy-owned hitbox time dilation use a consistent target registry.
+
+- [x] Source cleanup pass: world input lock clears jump buffer, precision/riposte windows, camera shake, and stale action states; menu input lock prevents wall climbing; hit/damage, death, rest and F6 clear wall-climb and camera feedback residue.
+- [ ] Godot runtime: verify those interrupt paths visually and confirm the Hero can immediately act after the lock/respawn/rest ends.
+
+- [x] Source fix: routine calls to _cancel_grapple no longer print a message every locked frame or every unrelated hit; the end message is emitted only when a grapple was actually active.
+- [ ] Godot runtime: confirm logs stay quiet during long input-lock sequences and show one cancellation message for an active grapple.
+
+- [x] Source fix: new-game/reset clears Witch Time and Resonance Sight as well as resetting global hitstop time scale; hidden targets are refreshed to hidden.
+- [ ] Godot runtime: activate Sight/Witch Time, use F9/new-game reset, verify enemy timing returns to normal and every hidden visual is hidden.
+
+- [x] Source fix: Quick Dash clears attack, grapple, and Resonance Sight requests along with other buffered actions; damage now immediately clears jump buffer plus queued grapple/sight/dash requests.
+- [ ] Godot runtime: press X with J/G/V input on the same frame and verify no action fires unexpectedly after the dash; press jump/sight/grapple then take damage and verify nothing triggers after hitstun.

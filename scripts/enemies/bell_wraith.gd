@@ -19,6 +19,7 @@ var attack_hitbox: Area2D
 signal defeated
 
 func _ready() -> void:
+    add_to_group("combat_enemies")
     _setup_combat_components()
     hover_time = randf() * TAU
     _log("ENEMY", "Bell Wraith initialized; hp=%d" % MAX_HEALTH)
@@ -38,6 +39,7 @@ func _setup_combat_components() -> void:
     hurtbox.setup(self, Vector2(48, 70), Vector2(0, -8))
 
 func _physics_process(delta: float) -> void:
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     attack_timer = max(0.0, attack_timer - delta)
@@ -64,7 +66,7 @@ func _physics_process(delta: float) -> void:
             attack_hitbox.activate(15, 0.12)
             _log("COMBAT", "Bell Wraith sonic pulse; damage=15")
 
-    move_and_slide()
+    _move_and_slide_scaled()
     queue_redraw()
 
 func receive_damage(amount: int, source: Node = null) -> void:
@@ -103,3 +105,15 @@ func _draw() -> void:
     draw_line(Vector2(-15, hover + 6), Vector2(-28, hover + 34), c, 5.0)
     draw_line(Vector2(15, hover + 6), Vector2(28, hover + 34), c, 5.0)
     draw_string(ThemeDB.fallback_font, Vector2(-62, hover - 42), "BELL WRAITH %d" % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
+
+
+func _move_and_slide_scaled() -> void:
+    # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
+    # CharacterBody2D.move_and_slide() 使用引擎物理步长，因此只在位移调用期间缩放速度。
+    var enemy_time_scale: float = WorldState.get_combat_enemy_time_scale()
+    if enemy_time_scale >= 0.999:
+        move_and_slide()
+        return
+    velocity *= enemy_time_scale
+    move_and_slide()
+    velocity /= enemy_time_scale

@@ -25,6 +25,7 @@ var stun_time := 0.0
 var animation_time := 0.0
 
 func _ready() -> void:
+    add_to_group("combat_enemies")
     var hitbox := Area2D.new()
     hitbox.set_script(HITBOX_SCRIPT)
     add_child(hitbox)
@@ -38,8 +39,7 @@ func _ready() -> void:
     queue_redraw()
 
 func _process(delta: float) -> void:
-    if WorldState.input_locked:
-        return
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     animation_time += delta
@@ -50,13 +50,12 @@ func _process(delta: float) -> void:
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
-    if WorldState.input_locked:
-        return
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     if stun_time > 0.0:
         velocity.x = move_toward(velocity.x, 0.0, 1200.0 * delta)
-        move_and_slide()
+        _move_and_slide_scaled()
         return
 
     var hero := get_node_or_null("../Hero") as Node2D
@@ -85,7 +84,7 @@ func _physics_process(delta: float) -> void:
             released = false
             attack_telegraphed.emit()
 
-    move_and_slide()
+    _move_and_slide_scaled()
 
 func receive_damage(amount: int, _source: Node = null) -> void:
     health = max(0, health - amount)
@@ -138,3 +137,15 @@ func _draw() -> void:
         draw_circle(Vector2(facing * 4.0, -105), 4.0, Color("#c87876"))
 
     draw_string(ThemeDB.fallback_font, Vector2(-64, -114), "THE KING  //  PHASE %d" % phase, HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#d6c7b2"))
+
+
+func _move_and_slide_scaled() -> void:
+    # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
+    # CharacterBody2D.move_and_slide() 使用引擎物理步长，因此只在位移调用期间缩放速度。
+    var enemy_time_scale: float = WorldState.get_combat_enemy_time_scale()
+    if enemy_time_scale >= 0.999:
+        move_and_slide()
+        return
+    velocity *= enemy_time_scale
+    move_and_slide()
+    velocity /= enemy_time_scale

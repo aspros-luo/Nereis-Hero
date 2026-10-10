@@ -18,6 +18,7 @@ func setup(hero_target: Node2D, variant_seed: float) -> void:
     speed += fmod(absf(variant_seed * 37.0), 40.0)
 
 func _ready() -> void:
+    add_to_group("combat_enemies")
     collision_layer = 0
     collision_mask = 0
 
@@ -29,6 +30,7 @@ func _ready() -> void:
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
+    delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
     animation_time += delta
@@ -46,7 +48,7 @@ func _physics_process(delta: float) -> void:
         velocity.x = 0.0
 
     velocity.y = sin(animation_time * 3.0 + seed_offset) * 8.0
-    move_and_slide()
+    _move_and_slide_scaled()
     queue_redraw()
 
 func receive_damage(_amount: int, source: Node = null) -> void:
@@ -84,3 +86,15 @@ func _draw() -> void:
     )
     draw_line(Vector2(-12, -2 + sway), Vector2(-32, 11 + sway), body, 6.0)
     draw_line(Vector2(12, -2 + sway), Vector2(32, 11 + sway), body, 6.0)
+
+
+func _move_and_slide_scaled() -> void:
+    # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
+    # CharacterBody2D.move_and_slide() 使用引擎物理步长，因此只在位移调用期间缩放速度。
+    var enemy_time_scale: float = WorldState.get_combat_enemy_time_scale()
+    if enemy_time_scale >= 0.999:
+        move_and_slide()
+        return
+    velocity *= enemy_time_scale
+    move_and_slide()
+    velocity /= enemy_time_scale
