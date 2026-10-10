@@ -14,6 +14,7 @@ const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.g
 @export_range(0, 100, 1) var outer_exposure_delta: int = 0
 @export_range(0, 100, 1) var ancient_exposure_floor: int = 0
 @export_range(0, 100, 1) var outer_exposure_floor: int = 0
+@export var require_outer_god_resonance: bool = false
 @export var unlock_ability_id: String = ""
 @export var unlock_source_type: String = "resonance"
 @export var interaction_radius: float = 105.0
@@ -50,6 +51,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
         cooldown = 0.6
+        var effective_outer_floor := outer_exposure_floor
+        if require_outer_god_resonance and not WorldState.outer_god_resonance:
+            effective_outer_floor = 0
+
         var recorded := WorldState.record_resonance_milestone(
             source_id,
             resonance_target,
@@ -58,7 +63,7 @@ func _unhandled_input(event: InputEvent) -> void:
             unlock_ability_id,
             unlock_source_type,
             ancient_exposure_floor,
-            outer_exposure_floor
+            effective_outer_floor
         )
         consumed = source_id in WorldState.resonance_sources
         if recorded:
