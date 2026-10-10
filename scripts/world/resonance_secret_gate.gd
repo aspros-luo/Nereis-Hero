@@ -115,6 +115,30 @@ func _unhandled_input(event: InputEvent) -> void:
         get_viewport().set_input_as_handled()
 
 func _draw() -> void:
+    # Draw the anomaly using the motif of its parent region. A mirror-street entrance
+    # must never look like another well just because both gates share this component.
+    # 根据入口类型绘制对应的异常意象，避免镜街入口也呈现为一口井。
+    match secret_id:
+        "H01":
+            _draw_well_marker()
+        "H07":
+            _draw_mirror_street_marker()
+        _:
+            _draw_generic_anomaly_marker()
+
+    if hero_nearby and not WorldState.input_locked and INTERACTION_FOCUS_SCRIPT.is_focused(self):
+        var prompt := "E  Descend" if opened_permanently else "E  Resonate"
+        draw_string(
+            ThemeDB.fallback_font,
+            Vector2(-58.0, 36.0),
+            NereisLocalization.translate_text(prompt),
+            HORIZONTAL_ALIGNMENT_LEFT,
+            -1.0,
+            15,
+            Color("#d6c7b2")
+        )
+
+func _draw_well_marker() -> void:
     # The physical well exists before it can be understood; only the abnormal depth is hidden.
     draw_rect(Rect2(-52.0, -5.0, 104.0, 24.0), Color("#28232b"))
     draw_arc(Vector2(0.0, -2.0), 42.0, PI, TAU, 28, Color("#665b5d"), 5.0)
@@ -130,14 +154,44 @@ func _draw() -> void:
             draw_line(Vector2(-14.0, -1.0), Vector2(-32.0, 45.0), tint, 3.0)
             draw_line(Vector2(14.0, -1.0), Vector2(32.0, 45.0), tint, 3.0)
 
-    if hero_nearby and not WorldState.input_locked and INTERACTION_FOCUS_SCRIPT.is_focused(self):
-        var prompt := "E  Descend" if opened_permanently else "E  Resonate"
-        draw_string(
-            ThemeDB.fallback_font,
-            Vector2(-52.0, 17.0),
-            NereisLocalization.translate_text(prompt),
-            HORIZONTAL_ALIGNMENT_LEFT,
-            -1.0,
-            15,
-            Color("#d6c7b2")
-        )
+func _draw_mirror_street_marker() -> void:
+    # The clue is a puddle first; a door only appears after the player resonates with it.
+    var puddle := PackedVector2Array([
+        Vector2(-62.0, 8.0), Vector2(-52.0, -1.0), Vector2(-34.0, -7.0),
+        Vector2(-9.0, -10.0), Vector2(21.0, -7.0), Vector2(47.0, -2.0),
+        Vector2(61.0, 7.0), Vector2(46.0, 14.0), Vector2(17.0, 17.0),
+        Vector2(-16.0, 16.0), Vector2(-43.0, 13.0)
+    ])
+    draw_colored_polygon(puddle, Color("#17262c"))
+    draw_polyline(PackedVector2Array([
+        Vector2(-43.0, 5.0), Vector2(-21.0, 2.0), Vector2(2.0, 4.0),
+        Vector2(29.0, 1.0), Vector2(46.0, 5.0)
+    ]), Color("#52676b"), 2.0, true)
+
+    if revealed:
+        var tint := Color("#9ce0ce") if not opened_permanently else Color("#d6c7b2")
+        draw_arc(Vector2(0.0, 3.0), 56.0, PI, TAU, 32, tint, 2.0)
+        # A doorway reflected in water: the verticals bend away from each other.
+        draw_line(Vector2(-22.0, 4.0), Vector2(-17.0, -36.0), tint, 2.0)
+        draw_line(Vector2(22.0, 4.0), Vector2(17.0, -36.0), tint, 2.0)
+        draw_line(Vector2(-17.0, -36.0), Vector2(17.0, -36.0), tint, 2.0)
+        draw_line(Vector2(-35.0, -1.0), Vector2(-29.0, -5.0), Color(tint.r, tint.g, tint.b, 0.9), 2.0)
+        draw_line(Vector2(31.0, 0.0), Vector2(37.0, 5.0), Color(tint.r, tint.g, tint.b, 0.9), 2.0)
+        if opened_permanently:
+            draw_line(Vector2(-13.0, 4.0), Vector2(-10.0, -24.0), tint, 3.0)
+            draw_line(Vector2(13.0, 4.0), Vector2(10.0, -24.0), tint, 3.0)
+
+func _draw_generic_anomaly_marker() -> void:
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-36.0, 8.0), Vector2(-20.0, -13.0), Vector2(-5.0, -8.0),
+        Vector2(10.0, -29.0), Vector2(31.0, -8.0), Vector2(35.0, 11.0),
+        Vector2(12.0, 18.0), Vector2(-11.0, 14.0)
+    ]), Color("#28232b"))
+    if revealed:
+        var tint := Color("#9ce0ce") if not opened_permanently else Color("#d6c7b2")
+        draw_line(Vector2(-22.0, 9.0), Vector2(-9.0, -9.0), tint, 2.0)
+        draw_line(Vector2(-9.0, -9.0), Vector2(1.0, 3.0), tint, 2.0)
+        draw_line(Vector2(1.0, 3.0), Vector2(16.0, -19.0), tint, 2.0)
+        draw_line(Vector2(16.0, -19.0), Vector2(24.0, 5.0), tint, 2.0)
+        if opened_permanently:
+            draw_arc(Vector2(0.0, 0.0), 48.0, 0.0, TAU, 28, tint, 2.0)
