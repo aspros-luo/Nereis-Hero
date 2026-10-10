@@ -303,8 +303,8 @@ def validate(data: dict[str, Any]) -> list[str]:
 
     hidden_by_id = {item.get("id", ""): item for item in hidden}
     running_resonance = int(data.get("resonance_baseline_at_prologue", 0))
-    ancient_growth = 0
-    outer_growth = 0
+    ancient_growth = int(data.get("ancient_exposure_baseline_at_prologue", 0))
+    outer_growth = int(data.get("outer_exposure_baseline_at_prologue", 0))
     progression_by_source = {item.get("source_id", ""): item for item in progression}
     for milestone in progression:
         mid = milestone.get("id", "<unknown>")
