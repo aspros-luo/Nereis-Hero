@@ -62,6 +62,17 @@
 
 这意味着应该扩展既有系统，而不是重新发明一个独立的“隐藏地图管理器”。
 
+#### 3.2.1 正常流程的前置链仍未闭合
+
+核对当前脚本后，还发现两个会直接阻止隐藏地图正常运行的问题：
+
+- `WorldState.mark_ancient_residue_awakened()` 会将 `hero_resonance` 提升到至少 12、`ancient_exposure` 提升到至少 1；旧存档迁移也会保留这个最低值。
+- `HeroSystem.add_resonance()` 虽然存在，但在已核查的主线场景、NPC、敌人与世界交互脚本中没有找到正常流程调用。`WorldState.mark_outer_god_resonance()` 目前只设置布尔状态，不会自动增加 `outer_exposure`。
+- `hero.gd` 会在 `resonance_sight` 未解锁时拒绝响应 V；主线 / 场景调用链中暂未找到 `WorldState.unlock_ability("resonance_sight", ...)` 的正常解锁调用。
+- 当前 `resonance_hidden_target.gd` 的已确认实例化用途以主角的调试测试痕迹为主，没有与 H01–H08 正式地图入口形成可玩闭环。
+
+因此，表中鸣响门槛不能直接视为可达的正式数值。隐藏地图开发前必须打通：**剧情前置 → 解锁灵视 → 鸣响 / 接触成长 → 显现 → E 调查 → 永久开门 → 存档 / 回访**。
+
 ### 3.3 隐藏地图机制尚未形成完整闭环
 
 当前隐藏目标组件负责显示目标标记与可选的 CanvasItem，但尚未提供完整的地图发现流程：
