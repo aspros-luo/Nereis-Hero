@@ -156,6 +156,10 @@ def main() -> int:
         'target_spawn_side: String = "west"',
         "require_outer_god_resonance",
         "WorldState.pending_region_spawn_side = target_spawn_side",
+        "match secret_id:",
+        "func _draw_well_marker() -> void:",
+        "func _draw_mirror_street_marker() -> void:",
+        "func _draw_generic_anomaly_marker() -> void:",
     ]:
         require(secret_gate, contract, "Resonance hidden gate", errors)
 
