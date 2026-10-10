@@ -823,6 +823,11 @@ func _spawn_region_exits() -> void:
                     true, "opened_royal_transport_side_door", "E  ENTER THE ROYAL NAME CORRIDOR"
                 )
             _spawn_a9_mirror_gate(1850.0)
+            if "reached_A12_via_A10_then_opened_inner_city_side_gate" in WorldState.achievement_flags:
+                _spawn_exit_door(
+                    900.0, "E  RETURN TO THE INNER CITY", "inner_city",
+                    "res://scenes/inner_city.tscn", "inner_city_side_gate"
+                )
             # C16: reconnect A9 to A3 after the old lift is opened from the outer ring.
             # C16：从王城外环开启旧升降机后，重新连通 A9 与 A3。
             _spawn_exit_door(
