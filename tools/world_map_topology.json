@@ -623,12 +623,13 @@
       "event": "确认王墓铭文遭到主动抹除",
       "source_id": "anomaly_erased_royal_name",
       "resonance_delta": 13,
-      "ancient_exposure_delta": 1,
+      "ancient_exposure_delta": 0,
       "enables": [
         "H06"
       ],
       "cumulative_target": 55,
-      "note": "进入隐藏廊道前取得第二层古代接触。"
+      "note": "王墓铭文调查会确保古神接触度至少为 2；若此前已达 2，不重复累加。这样不会因错过序章线索或绕过 A4 而永久锁死 H06。",
+      "ancient_exposure_floor": 2
     },
     {
       "id": "R07",
@@ -733,13 +734,13 @@
       "id": "R06",
       "source_id": "anomaly_erased_royal_name",
       "location": "A8",
-      "description": "确认王墓铭文被主动抹除",
+      "description": "确认王墓铭文被主动抹除；确保古神接触度至少为 2，已有接触不重复累加",
       "resonance_delta": 13,
       "resonance_after": 55,
       "record_source": true,
-      "ancient_exposure_delta": 1,
+      "ancient_exposure_delta": 0,
       "outer_exposure_delta": 0,
-      "ancient_exposure_after": 2
+      "ancient_exposure_floor": 2
     },
     {
       "id": "R07",
