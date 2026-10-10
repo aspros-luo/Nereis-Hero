@@ -1,0 +1,522 @@
+{
+  "schema_version": 1,
+  "title": "Nereis Hero World Topology",
+  "status": "design_baseline_not_runtime_verified",
+  "validation_note": "This data validates abstract region connectivity only. Godot graybox movement, collisions, doors, save/resume, death recovery, and runtime transitions require in-engine acceptance.",
+  "regions": [
+    {
+      "id": "A0",
+      "name": "边境手术所与逃脱通道",
+      "role": "prologue"
+    },
+    {
+      "id": "A1",
+      "name": "边境村庄",
+      "role": "hub"
+    },
+    {
+      "id": "A2",
+      "name": "雾林、钟墓与旧朝圣路",
+      "role": "surface"
+    },
+    {
+      "id": "A3",
+      "name": "废弃城区",
+      "role": "hub"
+    },
+    {
+      "id": "A4",
+      "name": "下水道、沉积大厅与旧水库",
+      "role": "underground_hub"
+    },
+    {
+      "id": "A5",
+      "name": "旧战场与边境堡垒",
+      "role": "surface"
+    },
+    {
+      "id": "A6",
+      "name": "修道院、回廊与钟塔",
+      "role": "vertical_building"
+    },
+    {
+      "id": "A7",
+      "name": "监牢、忏悔井与维护竖井",
+      "role": "vertical_underground"
+    },
+    {
+      "id": "A8",
+      "name": "旧王墓与王室地下道",
+      "role": "underground_hub"
+    },
+    {
+      "id": "A9",
+      "name": "王城外环与废弃街区",
+      "role": "hub"
+    },
+    {
+      "id": "A10",
+      "name": "大圣堂、朝圣阶梯与教会内廷",
+      "role": "mainline"
+    },
+    {
+      "id": "A11",
+      "name": "古神遗迹与深层研究区",
+      "role": "optional_deep"
+    },
+    {
+      "id": "A12",
+      "name": "王室内城与王座区",
+      "role": "mainline_ending"
+    },
+    {
+      "id": "A13",
+      "name": "深层梦境与终局异象",
+      "role": "ending_layer"
+    }
+  ],
+  "primary_route": [
+    "A0",
+    "A1",
+    "A2",
+    "A3",
+    "A5",
+    "A6",
+    "A7",
+    "A8",
+    "A9",
+    "A10",
+    "A12"
+  ],
+  "connections": [
+    {
+      "id": "C01",
+      "from": "A0",
+      "to": "A1",
+      "kind": "main",
+      "initial_access": "from_to",
+      "final_direction": "forward",
+      "unlock_condition": "",
+      "opens_from": ""
+    },
+    {
+      "id": "C02",
+      "from": "A1",
+      "to": "A2",
+      "kind": "main",
+      "initial_access": "both",
+      "final_direction": "both",
+      "unlock_condition": "",
+      "opens_from": ""
+    },
+    {
+      "id": "C03",
+      "from": "A2",
+      "to": "A3",
+      "kind": "main",
+      "initial_access": "both",
+      "final_direction": "both",
+      "unlock_condition": "",
+      "opens_from": ""
+    },
+    {
+      "id": "C04",
+      "from": "A2",
+      "to": "A5",
+      "kind": "shortcut",
+      "initial_access": "blocked",
+      "final_direction": "both",
+      "unlock_condition": "reached_A5_and_opened_old_pilgrim_highroad",
+      "opens_from": "A5"
+    },
+    {
+      "id": "C05",
+      "from": "A3",
+      "to": "A4",
+      "kind": "underground_route",
+      "initial_access": "from_to",
+      "final_direction": "both",
+      "unlock_condition": "opened_sewer_inspection_hatch_from_A4",
+      "opens_from": "A4"
+    },
+    {
+      "id": "C06",
+      "from": "A4",
+      "to": "A1",
+      "kind": "shortcut",
+      "initial_access": "blocked",
+      "final_direction": "forward",
+      "unlock_condition": "opened_watergate_and_village_well_exit",
+      "opens_from": "A4"
+    },
+    {
+      "id": "C07",
+      "from": "A4",
+      "to": "A8",
+      "kind": "shortcut",
+      "initial_access": "blocked",
+      "final_direction": "both",
+      "unlock_condition": "reached_A8_via_A7_then_opened_royal_tomb_gate",
+      "opens_from": "A8"
+    },
+    {
+      "id": "C08",
+      "from": "A3",
+      "to": "A5",
+      "kind": "main",
+      "initial_access": "both",
+      "final_direction": "both",
+      "unlock_condition": "",
+      "opens_from": ""
+    },
+    {
+      "id": "C09",
+      "from": "A5",
+      "to": "A6",
+      "kind": "main",
+      "initial_access": "both",
+      "final_direction": "both",
+      "unlock_condition": "",
+      "opens_from": ""
+    },
+    {
+      "id": "C10",
+      "from": "A6",
+      "to": "A3",
+      "kind": "shortcut",
+      "initial_access": "blocked",
+      "final_direction": "both",
+      "unlock_condition": "reached_A6_then_opened_bell_tower_drop",
+      "opens_from": "A6"
+    },
+    {
+      "id": "C11",
+      "from": "A6",
+      "to": "A7",
+      "kind": "main",
+      "initial_access": "both",
+      "final_direction": "both",
+      "unlock_condition": "",
+      "opens_from": ""
+    },
+    {
+      "id": "C12",
+      "from": "A7",
+      "to": "A4",
+      "kind": "shortcut",
+      "initial_access": "blocked",
+      "final_direction": "both",
+      "unlock_condition": "reached_A7_then_opened_supply_tunnel",
+      "opens_from": "A7"
+    },
+    {
+      "id": "C13",
+      "from": "A7",
+      "to": "A8",
+      "kind": "main",
+      "initial_access": "both",
+      "final_direction": "both",
+      "unlock_condition": "",
+      "opens_from": ""
+    },
+    {
+      "id": "C14",
+      "from": "A8",
+      "to": "A9",
+      "kind": "main",
+      "initial_access": "both",
+      "final_direction": "both",
+      "unlock_condition": "",
+      "opens_from": ""
+    },
+    {
+      "id": "C15",
+      "from": "A8",
+      "to": "A11",
+      "kind": "secret",
+      "initial_access": "blocked",
+      "final_direction": "both",
+      "unlock_condition": "discovered_royal_tomb_maintenance_shaft_after_reaching_A8",
+      "opens_from": "A8"
+    },
+    {
+      "id": "C16",
+      "from": "A3",
+      "to": "A9",
+      "kind": "shortcut",
+      "initial_access": "blocked",
+      "final_direction": "both",
+      "unlock_condition": "reached_A9_via_A8_then_opened_old_lift_from_A9",
+      "opens_from": "A9"
+    },
+    {
+      "id": "C17",
+      "from": "A9",
+      "to": "A10",
+      "kind": "main",
+      "initial_access": "both",
+      "final_direction": "both",
+      "unlock_condition": "",
+      "opens_from": ""
+    },
+    {
+      "id": "C18",
+      "from": "A9",
+      "to": "A12",
+      "kind": "shortcut",
+      "initial_access": "blocked",
+      "final_direction": "both",
+      "unlock_condition": "reached_A12_via_A10_then_opened_inner_city_side_gate",
+      "opens_from": "A12"
+    },
+    {
+      "id": "C19",
+      "from": "A10",
+      "to": "A11",
+      "kind": "secret",
+      "initial_access": "blocked",
+      "final_direction": "both",
+      "unlock_condition": "discovered_and_opened_silent_side_chapel_in_A10",
+      "opens_from": "A10"
+    },
+    {
+      "id": "C20",
+      "from": "A10",
+      "to": "A12",
+      "kind": "main",
+      "initial_access": "both",
+      "final_direction": "both",
+      "unlock_condition": "",
+      "opens_from": ""
+    },
+    {
+      "id": "C21",
+      "from": "A11",
+      "to": "A13",
+      "kind": "ending",
+      "initial_access": "blocked",
+      "final_direction": "forward",
+      "unlock_condition": "ending_state_allows_deep_dream_entry",
+      "opens_from": "A11"
+    },
+    {
+      "id": "C22",
+      "from": "A12",
+      "to": "A13",
+      "kind": "ending",
+      "initial_access": "blocked",
+      "final_direction": "forward",
+      "unlock_condition": "ending_state_allows_throne_entry",
+      "opens_from": "A12"
+    },
+    {
+      "id": "C23",
+      "from": "A9",
+      "to": "A4",
+      "kind": "shortcut",
+      "initial_access": "blocked",
+      "final_direction": "both",
+      "unlock_condition": "reached_A9_then_opened_royal_drain_from_outer_ring",
+      "opens_from": "A9"
+    }
+  ],
+  "loops": [
+    {
+      "id": "L01",
+      "name": "边境环路",
+      "path": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A1"
+      ],
+      "requires": [
+        "opened_sewer_inspection_hatch_from_A4",
+        "opened_watergate_and_village_well_exit"
+      ]
+    },
+    {
+      "id": "L02",
+      "name": "中层环路",
+      "path": [
+        "A3",
+        "A5",
+        "A6",
+        "A3"
+      ],
+      "requires": [
+        "reached_A6_then_opened_bell_tower_drop"
+      ]
+    },
+    {
+      "id": "L03",
+      "name": "王国深层环路",
+      "path": [
+        "A4",
+        "A8",
+        "A9",
+        "A4"
+      ],
+      "requires": [
+        "reached_A8_via_A7_then_opened_royal_tomb_gate",
+        "reached_A9_then_opened_royal_drain_from_outer_ring"
+      ]
+    }
+  ],
+  "hidden_regions": [
+    {
+      "id": "H01",
+      "name": "井底回声层",
+      "parent": "A1",
+      "anchor": "村庄老井",
+      "min_resonance": 12,
+      "min_ancient_exposure": 1,
+      "min_outer_exposure": 0,
+      "requires_sight_active": true,
+      "interaction_key": "E",
+      "persistent_on_open": true,
+      "return_to_parent": true,
+      "secondary_exit": {
+        "to": "A4",
+        "unlock_condition": "reached_A4_via_A3_and_opened_watergate",
+        "opens_from": "A4",
+        "requires_target_already_reached": true
+      }
+    },
+    {
+      "id": "H02",
+      "name": "倒响钟室",
+      "parent": "A2",
+      "anchor": "钟墓",
+      "min_resonance": 18,
+      "min_ancient_exposure": 1,
+      "min_outer_exposure": 0,
+      "requires_sight_active": true,
+      "interaction_key": "E",
+      "persistent_on_open": true,
+      "return_to_parent": true,
+      "secondary_exit": {
+        "to": "A5",
+        "unlock_condition": "reached_A5_then_opened_old_bell_tower_connection",
+        "opens_from": "A5",
+        "requires_target_already_reached": true
+      }
+    },
+    {
+      "id": "H03",
+      "name": "被删去的第三街",
+      "parent": "A3",
+      "anchor": "废弃城区旧市场 / 旧礼拜堂",
+      "min_resonance": 28,
+      "min_ancient_exposure": 1,
+      "min_outer_exposure": 0,
+      "requires_sight_active": true,
+      "interaction_key": "E",
+      "persistent_on_open": true,
+      "return_to_parent": true,
+      "secondary_exit": {
+        "to": "A9",
+        "unlock_condition": "reached_A9_then_opened_old_service_door",
+        "opens_from": "A9",
+        "requires_target_already_reached": true
+      }
+    },
+    {
+      "id": "H04",
+      "name": "水面背后的楼梯",
+      "parent": "A4",
+      "anchor": "旧水库",
+      "min_resonance": 36,
+      "min_ancient_exposure": 1,
+      "min_outer_exposure": 0,
+      "requires_sight_active": true,
+      "interaction_key": "E",
+      "persistent_on_open": true,
+      "return_to_parent": true,
+      "secondary_exit": {
+        "to": "A8",
+        "unlock_condition": "reached_A8_via_A7_then_opened_royal_tomb_side_door",
+        "opens_from": "A8",
+        "requires_target_already_reached": true
+      }
+    },
+    {
+      "id": "H05",
+      "name": "无号牢房",
+      "parent": "A7",
+      "anchor": "监牢牢房廊道",
+      "min_resonance": 42,
+      "min_ancient_exposure": 1,
+      "min_outer_exposure": 0,
+      "requires_sight_active": true,
+      "interaction_key": "E",
+      "persistent_on_open": true,
+      "return_to_parent": true,
+      "secondary_exit": {
+        "to": "A11",
+        "unlock_condition": "reached_A11_via_main_route_then_opened_maintenance_gate",
+        "opens_from": "A11",
+        "requires_target_already_reached": true
+      }
+    },
+    {
+      "id": "H06",
+      "name": "墓室背面",
+      "parent": "A8",
+      "anchor": "旧王墓浮雕",
+      "min_resonance": 55,
+      "min_ancient_exposure": 2,
+      "min_outer_exposure": 0,
+      "requires_sight_active": true,
+      "interaction_key": "E",
+      "persistent_on_open": true,
+      "return_to_parent": true,
+      "secondary_exit": {
+        "to": "A9",
+        "unlock_condition": "reached_A9_via_A8_then_opened_royal_transport_side_door",
+        "opens_from": "A9",
+        "requires_target_already_reached": true
+      }
+    },
+    {
+      "id": "H07",
+      "name": "无声侧堂",
+      "parent": "A10",
+      "anchor": "大圣堂侧堂 / 唱诗席",
+      "min_resonance": 68,
+      "min_ancient_exposure": 0,
+      "min_outer_exposure": 12,
+      "requires_sight_active": true,
+      "interaction_key": "E",
+      "persistent_on_open": true,
+      "return_to_parent": true,
+      "secondary_exit": {
+        "to": "A11",
+        "unlock_condition": "opened_silent_side_chapel_and_accepted_deep_research_risk",
+        "opens_from": "A10",
+        "requires_target_already_reached": false
+      }
+    },
+    {
+      "id": "H08",
+      "name": "观察者回廊",
+      "parent": "A11",
+      "anchor": "深层研究区观测壁",
+      "min_resonance": 78,
+      "min_ancient_exposure": 2,
+      "min_outer_exposure": 12,
+      "requires_sight_active": true,
+      "interaction_key": "E",
+      "persistent_on_open": true,
+      "return_to_parent": true,
+      "secondary_exit": {
+        "to": "A13",
+        "unlock_condition": "ending_state_allows_deep_dream_entry_and_required_evidence_present",
+        "opens_from": "A11",
+        "requires_target_already_reached": false,
+        "requires_ending_state": true
+      }
+    }
+  ]
+}
