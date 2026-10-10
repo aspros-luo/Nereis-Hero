@@ -60,9 +60,13 @@ Repeatable static topology validator:
 
 `python3 tools/validate_world_map_topology.py`
 
-A2–A4 / H01 graybox implementation notes and runtime acceptance checklist (Chinese):
+A2–A4 / H01 first-loop graybox notes and runtime acceptance checklist (Chinese):
 
 `docs/GRAYBOX_A2_A4_IMPLEMENTATION_CN.md`
+
+A5–A8 main-route graybox extension notes (Chinese):
+
+`docs/GRAYBOX_A5_A8_IMPLEMENTATION_CN.md`
 
 Graybox scene wiring static checker:
 
@@ -132,14 +136,18 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 
 ### World-map graybox — first connected loop
 
-- A2 Old Pilgrim Road, A3 Forgotten City, A4 Sewer / Sediment Hall, and H01 Well Below the Well have programmatic graybox scenes and initial source wiring.
-- R01 unlocks the existing Resonance Sight ability; R02–R04 record one-time anomalies and raise resonance to defined minimums.
-- H01 has persistent discovered / opened / entered states, shared by its village and A4 entrances.
+- A2–A8 now have programmatic graybox scenes; H01 has a connected hidden-well scene.
+- R01 unlocks the existing Resonance Sight ability; R02–R06 record one-time anomalies and raise resonance to defined minimums.
+- H01 has persistent discovered / opened / entered states shared by its village and A4 entrances; the A4 return hatch is a one-time unlock.
 - Current state: code and scene wiring committed; Godot 4.6.x runtime acceptance is still pending.
 
 Implementation notes and acceptance checklist:
 
 `docs/GRAYBOX_A2_A4_IMPLEMENTATION_CN.md`
+
+A5–A8 extension details:
+
+`docs/GRAYBOX_A5_A8_IMPLEMENTATION_CN.md`
 
 ### Combat
 
