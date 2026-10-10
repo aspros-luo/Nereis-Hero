@@ -32,6 +32,10 @@ Phase I level topology (Chinese draft):
 
 `docs/LEVEL_TOPOLOGY_PHASE_1_CN.md`
 
+Full world network topology (Chinese draft):
+
+`docs/WORLD_NETWORK_TOPOLOGY_CN.md`
+
 Director plan:
 
 `docs/DIRECTOR_NARRATIVE_PLAN.md`
