@@ -63,27 +63,51 @@ func _spawn_x_for_side(side: String) -> float:
     if region_id == "H06" and side == "royal_transport_entry":
         return map_width - 360.0
     if region_id == "A2" and side == "bell_gate":
-        return map_width - 360.0
+        # Leave the H02 entrance's interaction radius after returning from the hidden chamber.
+        # 从倒响钟室返回时，出生点应离入口足够远，避免一落地就抢占 E 交互。
+        return map_width - 450.0
     if region_id == "A3" and side == "third_street_gate":
-        return map_width - 390.0
+        # The gate is at map_width - 300; keep the return spawn outside its 80px focus radius.
+        # 第三街入口位于 map_width - 300；返回出生点必须离开其 80px 交互半径。
+        return map_width - 500.0
     if region_id == "A3" and side == "bell_drop":
-        return 1820.0
+        # The return door is at x=1830; do not spawn inside its Area2D body-entered region.
+        # 钟塔落差门位于 x=1830；从隐藏区回来不能直接出生在门的触发区域内。
+        return 1600.0
     if region_id == "A4" and side == "water_reflection_gate":
-        return 1710.0
+        # Move away from H04, whose entrance is at x=1780.
+        # 旧水库侧的 H04 入口位于 x=1780，返回点与其保持明显距离。
+        return 1550.0
     if region_id == "A5" and side == "bell_tower":
-        return map_width - 480.0
+        # The far-side door is at x=2060; keep the arrival point clear of its trigger.
+        # 钟塔远侧门位于 x=2060，抵达战场时避免立即触发返回门。
+        return map_width - 800.0
     if region_id == "A6" and side == "silent_window":
-        return 1620.0
+        # H05 sits at x=1660. Keep this arrival away from its interaction radius.
+        # H05 入口位于 x=1660，返回修道院后不应立即重新聚焦该入口。
+        return 1400.0
     if region_id == "A8" and side == "royal_name_gate":
-        return 1850.0
+        # H06 sits at x=1870; place returnees clear of the secret entrance.
+        # H06 入口位于 x=1870，从王名抹除廊返回时应远离入口。
+        return 1350.0
     if region_id == "A8" and side == "royal_tomb_side":
-        return 920.0
+        # The side door is at x=930; avoid spawning inside the same door on return.
+        # 王墓侧门位于 x=930；从倒影阶梯返回时应离开门的触发范围。
+        return 1200.0
     if region_id == "A9" and side == "third_street_service":
-        return 1050.0
+        # The service door is at x=1020; return to a neutral part of the street.
+        # 旧服务门位于 x=1020；回到王城外环后落在街道中段。
+        return 1250.0
     if region_id == "A9" and side == "royal_transport":
-        return map_width - 390.0
+        # Keep distance from both the royal transport door (x=2200) and H07 (x=1850).
+        # 远离王室运输门（x=2200）与 H07 镜街入口（x=1850）。
+        return map_width - 650.0
     if region_id == "A3" and side == "sewer":
         return 1380.0
+    if region_id == "H01" and side == "east":
+        # Return from A4 to the hidden well without immediately overlapping its east exit.
+        # 从 A4 回到隐藏水井时，不能直接出生在东侧出口触发区内。
+        return map_width - 360.0
     if side == "east":
         return map_width - 180.0
     if region_id == "H01":
