@@ -133,7 +133,7 @@ func _draw() -> void:
         var prompt := "E  Descend" if opened_permanently else "E  Resonate"
         draw_string(
             ThemeDB.fallback_font,
-            Vector2(-52.0, 45.0),
+            Vector2(-52.0, 17.0),
             NereisLocalization.translate_text(prompt),
             HORIZONTAL_ALIGNMENT_LEFT,
             -1.0,
