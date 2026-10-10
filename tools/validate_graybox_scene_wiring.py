@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static wiring checks for the A2-A4 graybox and H01 hidden-well loop.
+"""Static wiring checks for the A2-A8 graybox and H01 hidden-well loop.
 
 This script checks file references and save/transition contracts. It does not
 replace Godot runtime tests for collision, interaction focus, or scene changes.
@@ -16,6 +16,10 @@ REGIONS = {
     "A2": ("scenes/ash_forest.tscn", "ash_forest", "THE OLD PILGRIM ROAD"),
     "A3": ("scenes/forgotten_city.tscn", "forgotten_city", "THE FORGOTTEN CITY"),
     "A4": ("scenes/sewer_reservoir.tscn", "sewer_reservoir", "THE SEDIMENT HALL"),
+    "A5": ("scenes/old_battlefield.tscn", "old_battlefield", "THE BORDER BATTLEFIELD"),
+    "A6": ("scenes/monastery_tower.tscn", "monastery_tower", "THE MONASTERY THAT KEPT ITS BELL"),
+    "A7": ("scenes/prison_depths.tscn", "prison_depths", "THE PENITENTIAL DEPTHS"),
+    "A8": ("scenes/royal_tomb.tscn", "royal_tomb", "THE ROYAL TOMB"),
     "H01": ("scenes/hidden_well.tscn", "hidden_well", "THE WELL BELOW THE WELL"),
 }
 
@@ -88,6 +92,11 @@ def main() -> int:
         '"anomaly_old_pilgrim_echo"',
         '"anomaly_erased_street_sign"',
         '"anomaly_old_stone_layer"',
+        '"anomaly_silent_bell_window"',
+        '"anomaly_erased_royal_name"',
+        'opened_sewer_inspection_hatch_from_A4',
+        'unlock_once_flag_id: String = ""',
+        'door.unlock_once_flag_id = unlock_once_flag_id',
         '"reached_A4_via_A3"',
         'SceneTransition.fade_to_scene(target_scene)',
         "clue.ancient_exposure_floor = ancient_floor",
@@ -135,8 +144,8 @@ def main() -> int:
         return 1
 
     print("GRAYBOX SCENE WIRING STATIC CHECK PASSED")
-    print(" - A2, A3, A4 and H01 scenes have scripts and resume mappings.")
-    print(" - The R01-R04 anomaly source chain is present.")
+    print(" - A2-A8 and H01 scenes have scripts and resume mappings.")
+    print(" - The R01-R06 anomaly source chain is present.")
     print(" - The hidden-well gate is connected to the saved discovery/open/entry states.")
     print("NOTE: Godot runtime/collision/input validation is still required.")
     return 0
