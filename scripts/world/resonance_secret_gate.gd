@@ -126,6 +126,16 @@ func _draw() -> void:
     match secret_id:
         "H01":
             _draw_well_marker()
+        "H02":
+            _draw_early_bell_marker()
+        "H03":
+            _draw_erased_street_marker()
+        "H04":
+            _draw_reflected_stairs_marker()
+        "H05":
+            _draw_silent_window_marker()
+        "H06":
+            _draw_erased_royal_name_marker()
         "H07":
             _draw_mirror_street_marker()
         "C15":
@@ -191,6 +201,61 @@ func _draw_mirror_street_marker() -> void:
         if opened_permanently:
             draw_line(Vector2(-13.0, 4.0), Vector2(-10.0, -24.0), tint, 3.0)
             draw_line(Vector2(13.0, 4.0), Vector2(10.0, -24.0), tint, 3.0)
+
+func _draw_early_bell_marker() -> void:
+    # The bell is stationary; the displaced arcs represent sound arriving from the wrong direction.
+    draw_arc(Vector2(0.0, -12.0), 25.0, PI, TAU, 28, Color("#625568"), 3.0)
+    draw_line(Vector2(-25.0, -12.0), Vector2(-25.0, 16.0), Color("#625568"), 3.0)
+    draw_line(Vector2(25.0, -12.0), Vector2(25.0, 16.0), Color("#625568"), 3.0)
+    draw_line(Vector2(-34.0, 16.0), Vector2(34.0, 16.0), Color("#625568"), 3.0)
+    draw_line(Vector2(0.0, -45.0), Vector2(0.0, -6.0), Color("#83728c"), 2.0)
+    if revealed:
+        var tint := Color("#9ce0ce") if not opened_permanently else Color("#d6c7b2")
+        for radius in [38.0, 48.0, 58.0]:
+            draw_arc(Vector2(0.0, -8.0), radius, PI * 1.08, PI * 1.58, 18, tint, 2.0)
+        draw_line(Vector2(-9.0, -1.0), Vector2(9.0, -1.0), tint, 2.0)
+
+func _draw_erased_street_marker() -> void:
+    # A street sign with a blank third arm.
+    draw_rect(Rect2(-4.0, -8.0, 8.0, 38.0), Color("#5b4c51"))
+    draw_rect(Rect2(-34.0, -22.0, 68.0, 13.0), Color("#3b343d"))
+    draw_rect(Rect2(-34.0, -2.0, 55.0, 13.0), Color("#3b343d"))
+    draw_line(Vector2(2.0, -13.0), Vector2(35.0, -30.0), Color("#5b4c51"), 4.0)
+    if revealed:
+        var tint := Color("#9ce0ce") if not opened_permanently else Color("#d6c7b2")
+        draw_line(Vector2(2.0, -13.0), Vector2(42.0, -42.0), tint, 2.0)
+        draw_line(Vector2(42.0, -42.0), Vector2(42.0, -25.0), tint, 2.0)
+        draw_arc(Vector2(18.0, -13.0), 48.0, PI * 1.25, PI * 1.95, 24, tint, 2.0)
+
+func _draw_reflected_stairs_marker() -> void:
+    # The reflected steps climb in the opposite direction to the real ones.
+    draw_rect(Rect2(-42.0, 9.0, 84.0, 12.0), Color("#24323a"))
+    draw_polyline(PackedVector2Array([
+        Vector2(-34.0, 5.0), Vector2(-16.0, 5.0), Vector2(-16.0, -7.0),
+        Vector2(2.0, -7.0), Vector2(2.0, -19.0), Vector2(20.0, -19.0),
+        Vector2(20.0, -31.0), Vector2(35.0, -31.0)
+    ]), Color("#587680"), 3.0, true)
+    if revealed:
+        var tint := Color("#9ce0ce") if not opened_permanently else Color("#d6c7b2")
+        draw_polyline(PackedVector2Array([
+            Vector2(-35.0, -34.0), Vector2(-18.0, -34.0), Vector2(-18.0, -22.0),
+            Vector2(0.0, -22.0), Vector2(0.0, -10.0), Vector2(18.0, -10.0),
+            Vector2(18.0, 2.0), Vector2(35.0, 2.0)
+        ]), tint, 2.0, true)
+        draw_line(Vector2(-48.0, 25.0), Vector2(48.0, 25.0), Color(tint.r, tint.g, tint.b, 0.65), 2.0)
+
+func _draw_silent_window_marker() -> void:
+    draw_rect(Rect2(-35.0, -4.0, 70.0, 28.0), Color("#2a2632"))
+    draw_arc(Vector2(0.0, -8.0), 30.0, PI, TAU, 26, Color("#665d70"), 4.0)
+    draw_line(Vector2(-30.0, -8.0), Vector2(-30.0, 24.0), Color("#665d70"), 3.0)
+    draw_line(Vector2(30.0, -8.0), Vector2(30.0, 24.0), Color("#665d70"), 3.0)
+    draw_line(Vector2(0.0, -35.0), Vector2(0.0, 20.0), Color("#665d70"), 2.0)
+    if revealed:
+        var tint := Color("#9ce0ce") if not opened_permanently else Color("#d6c7b2")
+        draw_arc(Vector2(0.0, -8.0), 42.0, PI, TAU, 28, tint, 2.0)
+        draw_line(Vector2(-22.0, -1.0), Vector2(22.0, -1.0), tint, 2.0)
+        draw_line(Vector2(-22.0, 11.0), Vector2(22.0, 11.0), tint, 2.0)
+        draw_arc(Vector2(0.0, 8.0), 51.0, 0.0, TAU, 28, Color(tint.r, tint.g, tint.b, 0.7), 2.0)
 
 func _draw_erased_royal_name_marker() -> void:
     # The sign is a stone inscription first; only the missing name is anomalous.
