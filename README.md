@@ -44,13 +44,21 @@ World map atlas diagram (SVG):
 
 `docs/assets/COMPLETE_WORLD_MAP_ATLAS.svg`
 
-Map validation and resonance hidden areas (Chinese):
+Map validation and resonance hidden areas overview (Chinese):
 
 `docs/MAP_TOPOLOGY_VALIDATION_AND_HIDDEN_AREAS_CN.md`
 
+Detailed static world map validation report (Chinese):
+
+`docs/WORLD_MAP_VALIDATION_REPORT_CN.md`
+
+Resonance / hidden regions design — 8 optional subareas (Chinese):
+
+`docs/RESONANCE_HIDDEN_REGIONS_CN.md`
+
 Hidden map network diagram (SVG):
 
-`docs/assets/HIDDEN_MAPS_NETWORK.svg`
+`docs/assets/RESONANCE_HIDDEN_AREAS.svg`
 
 Director plan:
 
