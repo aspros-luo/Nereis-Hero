@@ -23,6 +23,8 @@ REGIONS = {
     "A9": ("scenes/royal_outer_ring.tscn", "royal_outer_ring", "THE ROYAL OUTER RING"),
     "A10": ("scenes/grand_cathedral.tscn", "grand_cathedral", "THE GREAT CATHEDRAL"),
     "A12": ("scenes/inner_city.tscn", "inner_city", "THE INNER CITY"),
+    "A11": ("scenes/deep_research_depths.tscn", "deep_research_depths", "THE DEPTHS THAT PRECEDED THE LAB"),
+    "H08": ("scenes/primordial_hollow.tscn", "primordial_hollow", "THE WOMB BELOW THE LAB"),
     "H07": ("scenes/mirror_street.tscn", "mirror_street", "MIRROR STREET: BEHIND THE RAIN"),
     "H01": ("scenes/hidden_well.tscn", "hidden_well", "THE WELL BELOW THE WELL"),
 }
@@ -88,6 +90,22 @@ def main() -> int:
         "_spawn_a4_hidden_well_gate(map_width - 105.0)",
         'gate.secret_id = "H01"',
         'gate.secret_id = "H07"',
+        'gate.secret_id = "C15"',
+        'gate.secret_id = "C19"',
+        'gate.secret_id = "H08"',
+        'gate.region_record_id = "A11"',
+        'func _spawn_a11_maintenance_gate',
+        'func _spawn_a11_chapel_gate',
+        'func _spawn_h08_gate',
+        'func _on_h08_gate_opened',
+        'func _draw_deep_research_landmarks',
+        'func _draw_primordial_hollow_landmarks',
+        'anomaly_observer_reaction',
+        'if WorldState.physical_union_complete:',
+        'ENDGAME_GATE_SCRIPT',
+        'reached_A10_via_A9',
+        'primordial_hollow',
+        'deep_research_depths',
         'gate.required_resonance = 68',
         'gate.required_outer_exposure = 12',
         'gate.require_outer_god_resonance = true',
@@ -148,6 +166,8 @@ def main() -> int:
     for contract in [
         'add_to_group("resonance_hidden_targets")',
         "WorldState.is_hidden_path_opened(secret_id)",
+        "@export var region_record_id: String = \"\"",
+        "func _get_region_record_id() -> String:",
         "WorldState.discover_hidden_region(secret_id)",
         "WorldState.open_hidden_path(secret_id)",
         "WorldState.mark_hidden_region_entered(secret_id)",
@@ -184,8 +204,9 @@ def main() -> int:
 
     print("GRAYBOX SCENE WIRING STATIC CHECK PASSED")
     print(" - A2-A12 plus H01/H07 scenes have scripts and resume mappings.")
-    print(" - The R01-R07 anomaly source chain is present.")
-    print(" - H01 and H07 gates use saved discovery/open/entry state and progression conditions.")
+    print(" - The R01-R08 anomaly source chain is present.")
+    print(" - H01, H07, C15, C19, and H08 gates use saved discovery/open/entry state and progression conditions.")
+    print(" - A11 and H08 have resume mappings; ending exits are gated by physical union state.")
     print("NOTE: Godot runtime/collision/input validation is still required.")
     return 0
 
