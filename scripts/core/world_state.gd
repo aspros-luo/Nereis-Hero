@@ -873,6 +873,14 @@ func get_resume_scene_path() -> String:
             return "res://scenes/forgotten_city.tscn"
         "sewer_reservoir":
             return "res://scenes/sewer_reservoir.tscn"
+        "old_battlefield":
+            return "res://scenes/old_battlefield.tscn"
+        "monastery_tower":
+            return "res://scenes/monastery_tower.tscn"
+        "prison_depths":
+            return "res://scenes/prison_depths.tscn"
+        "royal_tomb":
+            return "res://scenes/royal_tomb.tscn"
         "hidden_well":
             return "res://scenes/hidden_well.tscn"
         "tavern":
