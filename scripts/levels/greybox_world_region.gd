@@ -556,7 +556,7 @@ func _spawn_region_exits() -> void:
                 and WorldState.is_hidden_path_opened("H07")
             ):
                 _spawn_exit_door(
-                    350.0, "E  OPEN THE MIRROR STREET SIDE GATE", "mirror_street",
+                    map_width - 350.0, "E  OPEN THE MIRROR STREET SIDE GATE", "mirror_street",
                     "res://scenes/mirror_street.tscn", "east",
                     true, "opened_mirror_street_side_gate", "E  ENTER MIRROR STREET"
                 )
