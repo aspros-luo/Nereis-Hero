@@ -203,6 +203,9 @@ def main() -> int:
 
     source_clue = read("scripts/world/resonance_source_clue.gd", errors)
     require(source_clue, "WorldState.record_resonance_milestone(", "Resonance source clue", errors)
+    require(source_clue, "func _milestone_needs_repair() -> bool:", "Legacy-save anomaly repair", errors)
+    require(source_clue, "func _refresh_consumed_state() -> void:", "Legacy-save anomaly repair", errors)
+    require(source_clue, "not WorldState.is_ability_unlocked(unlock_ability_id)", "Legacy-save ability repair", errors)
     require(source_clue, "ancient_exposure_floor,", "Resonance source exposure floor", errors)
     require(source_clue, "outer_exposure_floor", "Resonance source exposure floor", errors)
     require(source_clue, "require_outer_god_resonance", "Resonance source story gate", errors)
