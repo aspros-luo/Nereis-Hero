@@ -26,12 +26,16 @@ var resonance_well_gate: Node2D
 
 func _ready() -> void:
     WorldState.prepare_scene_runtime()
-    WorldState.current_location = "village"
-    print("[NEREIS][VILLAGE] Entered Village Hub route=%s" % WorldState.selected_route)
+    var spawn_side := WorldState.pending_region_spawn_side
+    WorldState.pending_region_spawn_side = "west"
+    WorldState.set_location("village")
+    print("[NEREIS][VILLAGE] Entered Village Hub route=%s spawn_side=%s" % [WorldState.selected_route, spawn_side])
     WorldState.set_checkpoint(Vector2(360, 520))
     _create_floor()
     _create_boundaries()
-    _spawn_hero()
+    # The watergate arrival must be away from the resonance well gate and the north-gate interaction.
+    # 水闸回村的出生点应避开灵视井门与北门交互区。
+    _spawn_hero(1900.0 if spawn_side == "well_exit" else 260.0)
     _spawn_checkpoint()
     _spawn_mite()
     _spawn_mite_house_door()
@@ -44,10 +48,10 @@ func _ready() -> void:
     _spawn_fireflies()
     queue_redraw()
 
-func _spawn_hero() -> void:
+func _spawn_hero(spawn_x: float = 260.0) -> void:
     hero = CharacterBody2D.new()
     hero.set_script(HERO_SCRIPT)
-    hero.position = Vector2(260, 520)
+    hero.position = Vector2(spawn_x, 520)
     hero.name = "Hero"
     _add_character_collision(hero, 18.0, 48.0)
     add_child(hero)
