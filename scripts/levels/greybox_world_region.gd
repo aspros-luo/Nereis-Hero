@@ -612,6 +612,20 @@ func _spawn_region_exits() -> void:
                     "res://scenes/mirror_street.tscn", "east",
                     true, "opened_mirror_street_side_gate", "E  ENTER MIRROR STREET"
                 )
+
+            # The throne route chooses the ending from persistent story facts rather than requiring a secret map.
+            # 王座区的最终路线依据持久剧情事实选择结局，不要求玩家先发现隐藏地图。
+            var ending_gate := ENDGAME_GATE_SCRIPT.new()
+            var ending_scene_path := str(ending_gate.call("route_candidate"))
+            var ending_location := "church_final_demo"
+            if ending_scene_path.ends_with("ending_paradise_demo.tscn"):
+                ending_location = "ending_paradise_demo"
+            elif ending_scene_path.ends_with("ending_fire_demo.tscn"):
+                ending_location = "ending_fire_demo"
+            _spawn_exit_door(
+                map_width - 72.0, "E  ENTER THE THRONE CHAMBER", ending_location,
+                ending_scene_path, "west"
+            )
         "H07":
             _spawn_exit_door(
                 72.0, "E  RETURN THROUGH THE PUDDLES", "royal_outer_ring",
