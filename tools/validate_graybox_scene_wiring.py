@@ -184,6 +184,8 @@ def main() -> int:
         ('if region_id == "A2" and side == "bell_gate":', "return map_width - 450.0"),
         ('if region_id == "A2" and side == "old_pilgrim_highroad":', "return map_width - 650.0"),
         ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 850.0"),
+        ('if region_id == "A9" and side == "old_lift":', "return 1450.0"),
+        ('if region_id == "A9" and side == "inner_city_side_gate":', "return 1650.0"),
         ('if region_id == "A3" and side == "third_street_gate":', "return map_width - 500.0"),
         ('if region_id == "A3" and side == "bell_drop":', "return 1600.0"),
         ('if region_id == "A4" and side == "water_reflection_gate":', "return 1550.0"),
