@@ -41,8 +41,9 @@
 ### 可复核的拓扑清单与静态校验工具
 
 - 机器可读的连接清单：`tools/world_map_topology.json`
-- 可重复运行的标准库校验脚本：`tools/validate_world_map_topology.py`
-- 运行命令：`python3 tools/validate_world_map_topology.py`
+- 可重复运行的标准库拓扑校验脚本：`tools/validate_world_map_topology.py`
+- 灰盒场景接线校验脚本：`tools/validate_graybox_scene_wiring.py`
+- 运行命令：`python3 tools/validate_world_map_topology.py` 与 `python3 tools/validate_graybox_scene_wiring.py`
 
 当前对远程清单执行的静态检查结果：
 
@@ -80,30 +81,23 @@
 
 这意味着应该扩展既有系统，而不是重新发明一个独立的“隐藏地图管理器”。
 
-#### 3.2.1 正常流程的前置链仍未闭合
+#### 3.2.1 A2–A4 / H01 灰盒的代码接线进度
 
-核对当前脚本后，还发现两个会直接阻止隐藏地图正常运行的问题：
+这一轮已补上首条实现链，但尚未在 Godot 4.6.x 中运行验收：
 
-- `WorldState.mark_ancient_residue_awakened()` 会将 `hero_resonance` 提升到至少 12、`ancient_exposure` 提升到至少 1；旧存档迁移也会保留这个最低值。
-- `HeroSystem.add_resonance()` 虽然存在，但在已核查的主线场景、NPC、敌人与世界交互脚本中没有找到正常流程调用。`WorldState.mark_outer_god_resonance()` 目前只设置布尔状态，不会自动增加 `outer_exposure`。
-- `hero.gd` 会在 `resonance_sight` 未解锁时拒绝响应 V；主线 / 场景调用链中暂未找到 `WorldState.unlock_ability("resonance_sight", ...)` 的正常解锁调用。
-- 当前 `resonance_hidden_target.gd` 的已确认实例化用途以主角的调试测试痕迹为主，没有与 H01–H08 正式地图入口形成可玩闭环。
+- `WorldState.mark_ancient_residue_awakened()` 在序章把鸣响提升到至少 12、古神接触度提升到至少 1；旧存档迁移继续保留这个最低值。
+- 新增 `scripts/world/resonance_source_clue.gd`，并在 A2 / A3 / A4 灰盒接入 R01–R04 的一次性调查。R01 把鸣响提升到目标下限 12，并通过现有能力解锁 API 开启 `resonance_sight`；R02–R04 的目标下限分别为 18、28、36。
+- `WorldState.record_resonance_milestone()` 使用固定 source ID，避免重复调查重复奖励；改变探索顺序时，已获得的鸣响不会倒退。
+- `WorldState.mark_outer_god_resonance()` 现在会在真实的外神共鸣剧情事实成立时，把 `outer_exposure` 提升到至少 12，修补此前只记录布尔事实的断链。
+- 新增 `scripts/world/resonance_secret_gate.gd` 与三类持久状态 `discovered_hidden_regions`、`opened_hidden_paths`、`entered_hidden_regions`。H01 的显现 / 开启 / 进入和 A4 侧门已在代码中接线。
 
-因此，表中鸣响门槛不能直接视为可达的正式数值。隐藏地图开发前必须打通：**剧情前置 → 解锁灵视 → 鸣响 / 接触成长 → 显现 → E 调查 → 永久开门 → 存档 / 回访**。
+这些功能目前只通过远程源码与配置的静态接线审查，尚未在 Godot 4.6.x 中运行验证。R05–R08 与 H02–H08 仍需接入对应区域。完整可玩闭环必须在引擎里确认：**调查 → 解锁灵视 → 显现 → E 开门 → E 进入 → 存档 / 回访**。
 
-为防止把“设计数据通过”误写成“玩法已经实现”，`tools/world_map_topology.json` 现在同时记录 `resonance_progression_contract` 与细化的 `resonance_sources`：R01 使用“至少达到 12”而非盲目增加 12，避免和可选剧情已有的鸣响增量重复；R04 / R06 规划古神接触增量；外神共鸣剧情状态规划将外神接触提升至 12，R08 再提升至 18。校验脚本会检查两张来源表的一致性、累计门槛、隐藏门依赖的异常来源 ID 与接触度可达性。这些仍然是**待接入运行时的来源合同**，不代表相关事件已写入场景脚本。
+### 3.3 H01 入口已接入代码，仍待引擎验收
 
-### 3.3 隐藏地图机制尚未形成完整闭环
+`resonance_hidden_target.gd` 继续作为通用的显现目标组件；H01 使用新增的 `resonance_secret_gate.gd` 承担持久入口交互。WorldState 已增加发现、开启、实际进入三类状态，并接入保存、读取、reset 与旧存档默认值迁移。
 
-当前隐藏目标组件负责显示目标标记与可选的 CanvasItem，但尚未提供完整的地图发现流程：
-
-1. 发现记录不会因为目标显现而自动持久化；
-2. 没有专门的隐藏区域 / 隐藏通路开启记录；
-3. 目标组件本身不负责 E 键交互、开启门或切换场景；
-4. WorldState 当前没有 discovered_hidden_regions / opened_hidden_paths 之类的保存字段；
-5. 目前无法仅凭组件存在，就认定任何完整隐藏地图已经可被玩家发现和进入。
-
-后续实现应优先扩展 resonance_hidden_target.gd、既有交互焦点机制与 WorldState 存档，不要增加一套平行的能力 / 状态系统。
+A2、A3、A4、H01 已加入场景恢复映射。A4 侧井门只在玩家通过 A3 抵达 A4 后才会开放；两侧共用 `H01` 通路 ID，避免开门状态不同步。以上属于**代码接线已提交**，不是 Godot 实机通过。H02–H08 仍处于设计阶段，需要逐个接入并验收。
 
 ## 4. 需要修订的地图规则
 
@@ -130,20 +124,20 @@
 - [x] 检查区域拓扑与现有相关状态字段。
 - [x] 对主要区域图进行静态连通性检查。
 - [x] 建立宏观区域连接的方向、初始状态、解锁条件与开启侧清单（具体房间级出口仍待灰盒补齐）。
-- [x] 在隐藏地图设计中定义发现记录、通路开启记录与进入记录的存档合同（代码尚未实现）。
+- [x] 实现发现记录、通路开启记录与进入记录的 WorldState 存档字段（尚未实机测试）。
 - [x] 明确“留有痕迹、显现、发现并开启、实际进入”四个状态的区别。
 
 ### 阶段 2 — A0–A4 灰盒
 
-- [ ] 盘点现有 A0 / A1，确认实际入口、复位、存档点和场景转换。
-- [ ] 搭建 A2 的主路、钟墓支路与回环。
-- [ ] 搭建 A3 上层环路与地下入口。
-- [ ] 搭建 A4 回水闸和返回 A1 的捷径。
-- [ ] 实际测试所有计划路线是否可达、是否出现软锁或无意义的重复战斗。
+- [x] 创建 A2 雾林 / 旧朝圣路、A3 废弃城区、A4 下水道 / 沉积大厅的程序化灰盒场景。
+- [x] 接入村庄防守完成后的 A2 入口，以及 A2 → A3 → A4 / 反向回程门。
+- [x] 接入 R01–R04 一次性异常来源；R01 解锁现有灵视能力。
+- [x] 创建 H01 井底灰盒、灵视永久入口与 A4 侧门状态。
+- [ ] 在 Godot 4.6.x 实际走图，验证平台碰撞、镜头、E 键焦点、死亡回程和场景切换。
 
 ### 阶段 3 — 灵视隐藏地图试点
 
-先只在现有 A1 或已建立的 A2 放置一个隐藏入口，验证：
+首个入口 H01 的代码已接入村庄与井底灰盒；下一步需在 Godot 中完成：
 
 - 鸣响低于门槛时没有显眼交互提示，但背景异常可被观察；
 - 灵视激活且达到门槛时，在 4.5 秒窗口内显现；
