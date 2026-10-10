@@ -55,7 +55,7 @@
 
 | 来源 ID | 发生地点 / 事件 | 鸣响变化 | 接触变化 / 解锁 | 支持的门槛 |
 |---|---|---:|---|---|
-| R01 `anomaly_bell_retiming` | A2：首次确认钟声先于钟锤动作 | +0（保留 A0 已建立的鸣响 12） | 通过现有能力解锁 API 开启 `resonance_sight`，记录 R01 来源 ID | 首次灵视；回访 A1 的 H01 |
+| R01 `anomaly_bell_retiming` | A2：首次确认钟声先于钟锤动作 | 确保鸣响至少为 12（不是额外 +12） | 通过现有能力解锁 API 开启 `resonance_sight`，记录 R01 来源 ID | 首次灵视；回访 A1 的 H01 |
 | R02 `anomaly_old_pilgrim_echo` | A2：旧朝圣石阶的第二处回声 | +6（累计 18） | 无 | H02 |
 | R03 `anomaly_erased_street_sign` | A3：入口附近发现“第三街”路牌 | +10（累计 28） | 记录异常 ID | H03；H06 / H08 前置证据 |
 | R04 `anomaly_old_stone_layer` | A4：在沉积大厅辨认旧石构与后世管线的年代冲突，发生在 H04 隐藏楼梯之前 | +8（累计 36） | 若序章未记录古神接触，在此确保接触度至少为 1；已有接触不重复增加 | H04；H08 前置证据 |
@@ -203,7 +203,7 @@ flowchart LR
 
 当前代码已接通以下首轮链路，但**尚未在 Godot 实机运行验证**：
 
-- **A2 / R01：** 调查 `anomaly_bell_retiming` 后，通过 `WorldState.record_resonance_milestone()` 记录来源、把鸣响提高到至少 12，并解锁现有 `resonance_sight`。序章已有的鸣响值不会再被重复增加。
+- **A2 / R01：** 调查 `anomaly_bell_retiming` 后，通过 `WorldState.record_resonance_milestone()` 记录来源、确保鸣响至少为 12，并解锁现有 `resonance_sight`。若序章可选线索已将鸣响提高到 12，则不会再额外增加；若玩家跳过该线索，R01 仍会补到 12。
 - **A2 / R02、A3 / R03、A4 / R04：** 一次性调查会分别将鸣响提高到至少 18、28、36。R04 还会确保古神接触度至少为 1，避免玩家错过序章可选线索后无法触发后续古神门槛；已达到该值时不重复增加。
 - **H01：** `scripts/world/resonance_secret_gate.gd` 负责临时显现、E 开启、E 进入；入口和进入状态调用 WorldState 的持久化 API。
 - **存档：** `discovered_hidden_regions`、`opened_hidden_paths`、`entered_hidden_regions` 已接入存档 / 读取 / reset；旧存档缺少这些字段时默认为空集合。
