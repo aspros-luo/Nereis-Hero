@@ -588,7 +588,6 @@ func _spawn_region_exits() -> void:
                 "res://scenes/grand_cathedral.tscn", "west"
             )
             _spawn_a9_mirror_gate(1850.0)
-            _spawn_a11_chapel_gate(1900.0)
         "A10":
             _spawn_exit_door(
                 72.0, "E  RETURN TO THE OUTER RING", "royal_outer_ring",
@@ -598,6 +597,7 @@ func _spawn_region_exits() -> void:
                 map_width - 72.0, "E  ENTER THE INNER CITY", "inner_city",
                 "res://scenes/inner_city.tscn", "west"
             )
+            _spawn_a11_chapel_gate(1900.0)
         "A12":
             _spawn_exit_door(
                 72.0, "E  RETURN TO THE CATHEDRAL", "grand_cathedral",
