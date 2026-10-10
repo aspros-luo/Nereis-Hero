@@ -76,6 +76,7 @@ def main() -> int:
         "_spawn_a4_hidden_well_gate(map_width - 105.0)",
         'gate.secret_id = "H01"',
         'gate.target_spawn_side = "east"',
+        'gate.required_resonance = 12',
         'if "reached_A4_via_A3" in WorldState.achievement_flags:',
         '"A2"',
         '"A3"',
@@ -113,6 +114,9 @@ def main() -> int:
     village_hub = read("scripts/levels/village_hub.gd", errors)
     require(village_hub, "_spawn_resonance_well_gate()", "Village hub", errors)
     require(village_hub, "resonance_well_gate.opened.connect(_on_resonance_well_opened)", "Village hub", errors)
+    require(village_hub, 'resonance_well_gate.secret_id = "H01"', "Village hidden gate ID", errors)
+    require(village_hub, 'resonance_well_gate.required_resonance = 12', "Village hidden gate threshold", errors)
+    require(village_hub, 'resonance_well_gate.target_location_id = "hidden_well"', "Village hidden gate destination", errors)
     require(village_hub, '"village_defense_survived"', "Village old-road unlock", errors)
     require(village_hub, 'res://scenes/ash_forest.tscn', "Village old-road route", errors)
 
