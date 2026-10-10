@@ -603,7 +603,8 @@
         "H04"
       ],
       "cumulative_target": 36,
-      "note": "A0 开场已将古神接触度提升到至少 1；本事件只记录异常来源，不重复增加接触度。"
+      "note": "为避免玩家错过序章手术台线索后永久错过古神接触门槛，A4 调查会把古神接触度确保到至少 1；若已经达到 1，不会重复增加。",
+      "ancient_exposure_floor": 1
     },
     {
       "id": "R05",
@@ -710,12 +711,13 @@
       "id": "R04",
       "source_id": "anomaly_old_stone_layer",
       "location": "A4",
-      "description": "辨认旧石构与后世管线的年代冲突；记录异常来源，不重复增加 A0 已建立的古神接触",
+      "description": "辨认旧石构与后世管线的年代冲突；若此前未建立古神接触，此处将其确保到至少 1，但不会重复增加已有接触度",
       "resonance_delta": 8,
       "resonance_after": 36,
       "record_source": true,
       "ancient_exposure_delta": 0,
-      "outer_exposure_delta": 0
+      "outer_exposure_delta": 0,
+      "ancient_exposure_floor": 1
     },
     {
       "id": "R05",
