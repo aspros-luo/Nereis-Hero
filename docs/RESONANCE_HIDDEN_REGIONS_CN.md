@@ -58,7 +58,7 @@
 | R01 `anomaly_bell_retiming` | A2：首次确认钟声先于钟锤动作 | +0（保留 A0 已建立的鸣响 12） | 通过现有能力解锁 API 开启 `resonance_sight`，记录 R01 来源 ID | 首次灵视；回访 A1 的 H01 |
 | R02 `anomaly_old_pilgrim_echo` | A2：旧朝圣石阶的第二处回声 | +6（累计 18） | 无 | H02 |
 | R03 `anomaly_erased_street_sign` | A3：入口附近发现“第三街”路牌 | +10（累计 28） | 记录异常 ID | H03；H06 / H08 前置证据 |
-| R04 `anomaly_old_stone_layer` | A4：在沉积大厅辨认旧石构与后世管线的年代冲突，发生在 H04 隐藏楼梯之前 | +8（累计 36） | 记录异常 ID；单纯观察石构不增加接触度 | H04；H08 前置证据 |
+| R04 `anomaly_old_stone_layer` | A4：在沉积大厅辨认旧石构与后世管线的年代冲突，发生在 H04 隐藏楼梯之前 | +8（累计 36） | 若序章未记录古神接触，在此确保接触度至少为 1；已有接触不重复增加 | H04；H08 前置证据 |
 | R05 `anomaly_silent_bell_window` | A6：在钟塔主路线一侧发现无声窗口 | +6（累计 42） | 无 | H05 |
 | R06 `anomaly_erased_royal_name` | A8：确认王墓铭文被主动抹除 | +13（累计 55） | 古神接触 +1（累计 2） | H06 |
 | R07 `anomaly_mirror_street_echo` | A9：在主路线经过的积水处辨认镜街倒影，调查点与 H07 入口分开 | +13（累计 68） | 仅当外神共鸣剧情事实成立时，已有故事事件将外神接触推进到 12 | H07 |
@@ -204,7 +204,7 @@ flowchart LR
 当前代码已接通以下首轮链路，但**尚未在 Godot 实机运行验证**：
 
 - **A2 / R01：** 调查 `anomaly_bell_retiming` 后，通过 `WorldState.record_resonance_milestone()` 记录来源、把鸣响提高到至少 12，并解锁现有 `resonance_sight`。序章已有的鸣响值不会再被重复增加。
-- **A2 / R02、A3 / R03、A4 / R04：** 一次性调查会分别将鸣响提高到至少 18、28、36。即使玩家先探索后段区域再回来补线索，鸣响也不会倒退，重复调查不会重复奖励。
+- **A2 / R02、A3 / R03、A4 / R04：** 一次性调查会分别将鸣响提高到至少 18、28、36。R04 还会确保古神接触度至少为 1，避免玩家错过序章可选线索后无法触发后续古神门槛；已达到该值时不重复增加。
 - **H01：** `scripts/world/resonance_secret_gate.gd` 负责临时显现、E 开启、E 进入；入口和进入状态调用 WorldState 的持久化 API。
 - **存档：** `discovered_hidden_regions`、`opened_hidden_paths`、`entered_hidden_regions` 已接入存档 / 读取 / reset；旧存档缺少这些字段时默认为空集合。
 - **返回路线：** A4 的井门只在玩家从 A3 正常抵达 A4 后开放；从 A4 侧开启 H01 后，村庄旧井的同一通路 ID 也保持开启。
