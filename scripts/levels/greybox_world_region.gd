@@ -227,7 +227,11 @@ func _spawn_region_sources() -> void:
                 "anomaly_old_stone_layer",
                 "STONE BENEATH THE PIPES",
                 "The pipes are bolted into stone cut by a different hand.\n\nThe workers who built the pipes did not carve the hall.",
-                36
+                36,
+                0,
+                0,
+                "",
+                1
             )
 
 func _spawn_source(
@@ -238,7 +242,9 @@ func _spawn_source(
     resonance_target: int,
     ancient_delta: int = 0,
     outer_delta: int = 0,
-    unlock_ability_id: String = ""
+    unlock_ability_id: String = "",
+    ancient_floor: int = 0,
+    outer_floor: int = 0
 ) -> void:
     var clue := Node2D.new()
     clue.set_script(RESONANCE_SOURCE_SCRIPT)
@@ -250,6 +256,8 @@ func _spawn_source(
     clue.resonance_target = resonance_target
     clue.ancient_exposure_delta = ancient_delta
     clue.outer_exposure_delta = outer_delta
+    clue.ancient_exposure_floor = ancient_floor
+    clue.outer_exposure_floor = outer_floor
     clue.unlock_ability_id = unlock_ability_id
     clue.unlock_source_type = "resonance"
     add_child(clue)
