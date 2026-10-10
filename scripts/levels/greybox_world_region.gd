@@ -7,6 +7,7 @@ const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
 const RESONANCE_SOURCE_SCRIPT = preload("res://scripts/world/resonance_source_clue.gd")
+const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")
 
 @export var region_id: String = "A2"
 @export var location_id: String = "ash_forest"
@@ -293,15 +294,8 @@ func _spawn_region_exits() -> void:
                 72.0, "E  RETURN TO THE CITY", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "east"
             )
-            var can_open_well_side := "reached_A4_via_A3" in WorldState.achievement_flags
-            _spawn_exit_door(
-                map_width - 105.0,
-                "E  OPEN THE OLD WELL GATE",
-                "hidden_well",
-                "res://scenes/hidden_well.tscn",
-                "east",
-                can_open_well_side
-            )
+            if "reached_A4_via_A3" in WorldState.achievement_flags:
+                _spawn_a4_hidden_well_gate(map_width - 105.0)
         "H01":
             _spawn_exit_door(
                 72.0, "E  RETURN TO VILLAGE", "village",
@@ -319,6 +313,32 @@ func _spawn_region_exits() -> void:
                 "east",
                 can_return_to_a4
             )
+
+func _spawn_a4_hidden_well_gate(x: float) -> void:
+    # This is the far-side entrance to H01, not a bypass: it still requires active Resonance Sight.
+    # A4 另一侧井门也使用同一 H01 状态，但首次发现仍必须通过灵视条件。
+    var gate := Node2D.new()
+    gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+    gate.name = "ResonanceWellGateFromA4"
+    gate.position = Vector2(x, floor_y)
+    gate.secret_id = "H01"
+    gate.target_scene_path = "res://scenes/hidden_well.tscn"
+    gate.target_location_id = "hidden_well"
+    gate.target_spawn_side = "east"
+    gate.required_resonance = 12
+    gate.required_ancient_exposure = 0
+    gate.required_outer_exposure = 0
+    gate.opened.connect(_on_hidden_well_gate_opened)
+    add_child(gate)
+
+func _on_hidden_well_gate_opened(secret_id: String) -> void:
+    if narrative == null or not is_instance_valid(narrative):
+        return
+    narrative.show_message(
+        "THE WELL HAS ANOTHER MOUTH",
+        "The stone opens without turning.\n\nYou can no longer tell which side is above.",
+        4.0
+    )
 
 func _spawn_exit_door(
     x: float,
