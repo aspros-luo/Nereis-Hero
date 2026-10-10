@@ -642,31 +642,48 @@ func record_resonance_milestone(
     outer_exposure_floor: int = 0
 ) -> bool:
     var normalized_id := source_id.strip_edges()
-    if normalized_id.is_empty() or normalized_id in resonance_sources:
+    if normalized_id.is_empty():
         return false
 
-    resonance_sources.append(normalized_id)
+    # Existing records do not grant deltas twice, but may safely repair missing
+    # minimums / ability unlocks after an update or an older save.
+    # 已记录的来源不会重复发放增量，但允许补齐版本更新后的最低值与能力解锁。
+    var is_new_source := normalized_id not in resonance_sources
+    var resonance_before := hero_resonance
+    var ancient_before := ancient_exposure
+    var outer_before := outer_exposure
+    var ability_id := unlock_ability_id.strip_edges()
+    var ability_was_unlocked := ability_id.is_empty() or is_ability_unlocked(ability_id)
+
+    if is_new_source:
+        resonance_sources.append(normalized_id)
     hero_resonance = maxi(hero_resonance, clampi(resonance_target, 0, 100))
-    ancient_exposure = clampi(
-        maxi(ancient_exposure, clampi(ancient_exposure_floor, 0, 100)) + maxi(0, ancient_exposure_delta),
-        0,
-        100
-    )
-    outer_exposure = clampi(
-        maxi(outer_exposure, clampi(outer_exposure_floor, 0, 100)) + maxi(0, outer_exposure_delta),
-        0,
-        100
-    )
+    ancient_exposure = maxi(ancient_exposure, clampi(ancient_exposure_floor, 0, 100))
+    outer_exposure = maxi(outer_exposure, clampi(outer_exposure_floor, 0, 100))
 
-    if not unlock_ability_id.strip_edges().is_empty() and not is_ability_unlocked(unlock_ability_id):
-        unlock_ability(unlock_ability_id, unlock_source_type, normalized_id)
+    if is_new_source:
+        ancient_exposure = clampi(ancient_exposure + maxi(0, ancient_exposure_delta), 0, 100)
+        outer_exposure = clampi(outer_exposure + maxi(0, outer_exposure_delta), 0, 100)
 
-    print("[NEREIS][SENSE] Anomaly recorded id=%s resonance=%d ancient=%d outer=%d" % [
-        normalized_id, hero_resonance, ancient_exposure, outer_exposure
+    if not ability_id.is_empty() and not is_ability_unlocked(ability_id):
+        unlock_ability(ability_id, unlock_source_type, normalized_id)
+
+    var state_changed := (
+        is_new_source
+        or hero_resonance != resonance_before
+        or ancient_exposure != ancient_before
+        or outer_exposure != outer_before
+        or (not ability_was_unlocked and not ability_id.is_empty() and is_ability_unlocked(ability_id))
+    )
+    if not state_changed:
+        return false
+
+    print("[NEREIS][SENSE] Anomaly recorded id=%s new=%s resonance=%d ancient=%d outer=%d" % [
+        normalized_id, str(is_new_source), hero_resonance, ancient_exposure, outer_exposure
     ])
     save_game()
     refresh_resonance_reveals()
-    return true
+    return is_new_source
 
 func discover_hidden_region(region_id: String) -> bool:
     var normalized_id := region_id.strip_edges()
