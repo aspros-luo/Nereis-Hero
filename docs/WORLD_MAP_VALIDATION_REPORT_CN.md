@@ -43,6 +43,7 @@
 - 机器可读的连接清单：`tools/world_map_topology.json`
 - 可重复运行的标准库拓扑校验脚本：`tools/validate_world_map_topology.py`
 - 灰盒场景接线校验脚本：`tools/validate_graybox_scene_wiring.py`
+- 灰盒阶段说明：`docs/GRAYBOX_A2_A4_IMPLEMENTATION_CN.md`、`docs/GRAYBOX_A5_A8_IMPLEMENTATION_CN.md`、`docs/GRAYBOX_A9_A12_IMPLEMENTATION_CN.md`
 - 运行命令：`python3 tools/validate_world_map_topology.py` 与 `python3 tools/validate_graybox_scene_wiring.py`
 
 当前对远程清单执行的静态检查结果：
@@ -159,4 +160,4 @@ H01 / H07 的实机流程通过后，按统一组件接入 H02–H06、H08；再
 
 **可以作为设计基准继续推进；还不能标记为“地图已实机验证”。**
 
-当前最合理的下一步，不是立即批量创建所有区域，而是先锁定隐藏地图规则和入口合同，再用 A1 / A2 的小型灰盒验证灵视 → 发现 → 开启 → 保存 → 回访整条流程。这样既能保护已冻结的战斗和角色基线，也能避免后期发现隐藏门、地图状态和存档逻辑互相冲突。
+当前最合理的下一步是进入 Godot 4.6.x 实机验收：先跑通 A2 → A3 → A5 → A6 → A7 → A8 → A9 → A10 → A12 主路，再测试 A4 检修闸回环、H01 双侧井门，以及 H07 的外神剧情门槛和 A12 侧门进程锁。实机验收通过后，再接入 A11 / A13 并逐一实例化 H02–H06 / H08。这样可以继续保护已冻结的战斗与角色基线，同时把剩余工作集中在地图、存档与入口行为上。
