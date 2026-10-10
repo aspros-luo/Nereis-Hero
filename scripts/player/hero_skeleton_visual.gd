@@ -209,4 +209,6 @@ func update_pose(
 func _set_rotation(bone_name: String, angle: float) -> void:
 	var bone := bones.get(bone_name) as Bone2D
 	if bone != null:
-		bone.rotation = angle
+		# Blend state changes instead of snapping joints between unrelated poses.
+		# 状态切换时平滑过渡关节，避免动作姿势突然跳变。
+		bone.rotation = lerp_angle(bone.rotation, angle, pose_blend)
