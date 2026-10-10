@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static wiring checks for the A2-A8 graybox and H01 hidden-well loop.
+"""Static wiring checks for the A2-A12 graybox and H01 hidden-well loop.
 
 This script checks file references and save/transition contracts. It does not
 replace Godot runtime tests for collision, interaction focus, or scene changes.
@@ -20,6 +20,10 @@ REGIONS = {
     "A6": ("scenes/monastery_tower.tscn", "monastery_tower", "THE MONASTERY THAT KEPT ITS BELL"),
     "A7": ("scenes/prison_depths.tscn", "prison_depths", "THE PENITENTIAL DEPTHS"),
     "A8": ("scenes/royal_tomb.tscn", "royal_tomb", "THE ROYAL TOMB"),
+    "A9": ("scenes/royal_outer_ring.tscn", "royal_outer_ring", "THE ROYAL OUTER RING"),
+    "A10": ("scenes/grand_cathedral.tscn", "grand_cathedral", "THE GREAT CATHEDRAL"),
+    "A12": ("scenes/inner_city.tscn", "inner_city", "THE INNER CITY"),
+    "H07": ("scenes/mirror_street.tscn", "mirror_street", "MIRROR STREET: BEHIND THE RAIN"),
     "H01": ("scenes/hidden_well.tscn", "hidden_well", "THE WELL BELOW THE WELL"),
 }
 
@@ -82,6 +86,18 @@ def main() -> int:
         'const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")',
         "_spawn_a4_hidden_well_gate(map_width - 105.0)",
         'gate.secret_id = "H01"',
+        'gate.secret_id = "H07"',
+        'gate.required_resonance = 68',
+        'gate.required_outer_exposure = 12',
+        'gate.require_outer_god_resonance = true',
+        'gate.required_source_ids = ["anomaly_mirror_street_echo"]',
+        'opened_mirror_street_side_gate',
+        'reached_A12_via_A10',
+        'anomaly_mirror_street_echo',
+        'royal_outer_ring',
+        'grand_cathedral',
+        'inner_city',
+        'mirror_street',
         'gate.target_spawn_side = "east"',
         'gate.required_resonance = 12',
         'if "reached_A4_via_A3" in WorldState.achievement_flags:',
@@ -114,6 +130,7 @@ def main() -> int:
     require(source_clue, "WorldState.record_resonance_milestone(", "Resonance source clue", errors)
     require(source_clue, "ancient_exposure_floor,", "Resonance source exposure floor", errors)
     require(source_clue, "outer_exposure_floor", "Resonance source exposure floor", errors)
+    require(source_clue, "require_outer_god_resonance", "Resonance source story gate", errors)
     require(source_clue, 'KEY_E', "Resonance source clue", errors)
     require(source_clue, "INTERACTION_FOCUS_SCRIPT.is_focused(self)", "Resonance source clue", errors)
 
@@ -137,6 +154,7 @@ def main() -> int:
         "KEY_E",
         "SceneTransition.fade_to_scene(target_scene_path)",
         'target_spawn_side: String = "west"',
+        "require_outer_god_resonance",
         "WorldState.pending_region_spawn_side = target_spawn_side",
     ]:
         require(secret_gate, contract, "Resonance hidden gate", errors)
@@ -160,9 +178,9 @@ def main() -> int:
         return 1
 
     print("GRAYBOX SCENE WIRING STATIC CHECK PASSED")
-    print(" - A2-A8 and H01 scenes have scripts and resume mappings.")
-    print(" - The R01-R06 anomaly source chain is present.")
-    print(" - The hidden-well gate is connected to the saved discovery/open/entry states.")
+    print(" - A2-A12 plus H01/H07 scenes have scripts and resume mappings.")
+    print(" - The R01-R07 anomaly source chain is present.")
+    print(" - H01 and H07 gates use saved discovery/open/entry state and progression conditions.")
     print("NOTE: Godot runtime/collision/input validation is still required.")
     return 0
 
