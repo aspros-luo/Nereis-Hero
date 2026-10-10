@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1410" viewBox="0 0 1800 1410" role="img" aria-labelledby="title desc">
 <title id="title">Nereis Hero 鸣响隐藏地图网络</title>
-<desc id="desc">八个隐藏地图节点，分别附着于村庄、钟墓、废弃城区、旧水库、监牢、旧王墓、大圣堂和深层研究区，通过鸣响与灵视发现。</desc>
+<desc id="desc">八个隐藏地图节点，分别附着于村庄、钟墓、废弃城区、旧水库、修道院钟塔、旧王墓、王城外环和深层研究区，通过鸣响与灵视发现。</desc>
 <defs>
 <style>
  text{font-family:"Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;fill:#24323b}
@@ -88,22 +88,22 @@
 <g transform="translate(665 585)">
   <rect width="500" height="205" rx="16" fill="#73757d" class="card"/>
   <path d="M0 16 Q0 0 16 0 H484 Q500 0 500 16 V61 H0Z" fill="#595b63"/>
-  <text x="22" y="25" class="id">H05 · ANCHOR A7</text><text x="22" y="49" class="cardhead">无号牢房</text>
+  <text x="22" y="25" class="id">H05 · ANCHOR A6</text><text x="22" y="49" class="cardhead">无声钟室</text>
   <rect x="355" y="75" width="120" height="30" rx="15" class="pill"/><text x="375" y="95" class="pilltext">鸣响 ≥ 42</text>
-  <text x="22" y="92" class="body">伏笔：无光墙面出现牢门影子</text>
-  <text x="22" y="124" class="body">空间：被删改的牢房编号与维护层</text>
-  <text x="22" y="156" class="body">出口：深层研究区通路须先由主线打开</text>
-  <text x="22" y="184" class="small">目的：展示制度盲区；不堆砌重复牢房</text>
+  <text x="22" y="92" class="body">伏笔：钟塔阴影里出现没有钟声的窗口</text>
+  <text x="22" y="124" class="body">空间：旧钟机构、窗洞与垂直维护层</text>
+  <text x="22" y="156" class="body">出口：后期开启钟塔回落口，连接 A3 上层</text>
+  <text x="22" y="184" class="small">目的：形成中层捷径；不绕过 A5 主线</text>
 </g>
 <g transform="translate(1265 585)">
   <rect width="470" height="205" rx="16" fill="#8b7668" class="card"/>
   <path d="M0 16 Q0 0 16 0 H454 Q470 0 470 16 V61 H0Z" fill="#6d594c"/>
-  <text x="22" y="25" class="id">H06 · ANCHOR A8</text><text x="22" y="49" class="cardhead">墓室背面</text>
+  <text x="22" y="25" class="id">H06 · ANCHOR A8</text><text x="22" y="49" class="cardhead">王名抹除廊</text>
   <rect x="325" y="75" width="120" height="30" rx="15" class="pill"/><text x="345" y="95" class="pilltext">鸣响 ≥ 55</text>
-  <text x="22" y="92" class="body">伏笔：浮雕的反面有相反的布局</text>
-  <text x="22" y="124" class="body">空间：隐藏墓室与王室运送道</text>
+  <text x="22" y="92" class="body">伏笔：铭文空白处没有风化，灵视显出被刮去的字形</text>
+  <text x="22" y="124" class="body">空间：隐匿铭文层与王室运送道</text>
   <text x="22" y="156" class="body">出口：连接 A9 的侧门捷径</text>
-  <text x="22" y="184" class="small">目的：重构王墓 / 王城关系，不跳过主线</text>
+  <text x="22" y="184" class="small">目的：需要 2 个前置异常；重构王墓 / 王城关系</text>
 </g>
 <path d="M565 687 H650" class="route" marker-end="url(#goldarrow)"/>
 <path d="M1165 687 H1250" class="route" marker-end="url(#goldarrow)"/>
@@ -112,22 +112,22 @@
 <g transform="translate(65 870)">
   <rect width="800" height="205" rx="16" fill="#765c70" class="card"/>
   <path d="M0 16 Q0 0 16 0 H784 Q800 0 800 16 V61 H0Z" fill="#5d4658"/>
-  <text x="22" y="25" class="id">H07 · ANCHOR A10</text><text x="22" y="49" class="cardhead">无声侧堂</text>
+  <text x="22" y="25" class="id">H07 · ANCHOR A9</text><text x="22" y="49" class="cardhead">镜街：雨幕背后</text>
   <rect x="620" y="75" width="150" height="30" rx="15" class="pill"/><text x="639" y="95" class="pilltext">鸣响 ≥ 68</text>
   <text x="22" y="92" class="body">附加条件：外神接触 ≥ 12</text>
-  <text x="22" y="124" class="body">伏笔：合唱消失，唱诗席仍在动作；灵视揭示不在建筑平面上的门。</text>
-  <text x="22" y="156" class="body">路线价值：通向 A11 的替代入口，改变信息顺序，而不是替代主线。</text>
-  <text x="22" y="184" class="small">内容原则：展示仪式空间的裂缝，不设置必做的“真相讲解”任务</text>
+  <text x="22" y="124" class="body">伏笔：水洼映出现实里不存在的街道、门洞和路灯。</text>
+  <text x="22" y="156" class="body">路线价值：小型雨幕异象区，侧门在 A12 主线通路开放后才可进入。</text>
+  <text x="22" y="184" class="small">内容原则：不扩建为第二座城市，不用它跳过王室内城</text>
 </g>
 <g transform="translate(935 870)">
   <rect width="800" height="205" rx="16" fill="#76647f" class="card"/>
   <path d="M0 16 Q0 0 16 0 H784 Q800 0 800 16 V61 H0Z" fill="#5c4b66"/>
-  <text x="22" y="25" class="id">H08 · ANCHOR A11</text><text x="22" y="49" class="cardhead">观察者回廊</text>
+  <text x="22" y="25" class="id">H08 · ANCHOR A11</text><text x="22" y="49" class="cardhead">胎宫 / 原初空腔</text>
   <rect x="620" y="75" width="150" height="30" rx="15" class="pill"/><text x="639" y="95" class="pilltext">鸣响 ≥ 78</text>
-  <text x="22" y="92" class="body">附加条件：古神接触 ≥ 2；外神接触 ≥ 12</text>
-  <text x="22" y="124" class="body">伏笔：观测铭文会随站位指向不同的观察对象。</text>
-  <text x="22" y="156" class="body">路线价值：汇聚矛盾证据；去 A13 的部分路线还需剧情 / 结局状态。</text>
-  <text x="22" y="184" class="small">内容原则：回廊方向可以不可靠，返回已知区的主路必须清晰</text>
+  <text x="22" y="92" class="body">附加条件：古神接触 ≥ 2；外神接触 ≥ 18；3 个前置异常</text>
+  <text x="22" y="124" class="body">伏笔：深层墙面仿佛在呼吸，轮廓随观察角度变化。</text>
+  <text x="22" y="156" class="body">路线价值：汇聚矛盾证据；通向 A13 仍需剧情 / 结局状态。</text>
+  <text x="22" y="184" class="small">内容原则：空间感可以不可靠，返回 A11 的主路必须清晰</text>
 </g>
 <path d="M865 972 H920" class="route" marker-end="url(#goldarrow)"/>
 
