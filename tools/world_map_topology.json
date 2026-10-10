@@ -371,7 +371,7 @@
       "parent": "A1",
       "anchor": "村庄老井",
       "min_resonance": 12,
-      "min_ancient_exposure": 1,
+      "min_ancient_exposure": 0,
       "min_outer_exposure": 0,
       "requires_sight_active": true,
       "interaction_key": "E",
@@ -388,9 +388,9 @@
       "id": "H02",
       "name": "倒响钟室",
       "parent": "A2",
-      "anchor": "钟墓",
+      "anchor": "钟墓 / 旧朝圣石阶",
       "min_resonance": 18,
-      "min_ancient_exposure": 1,
+      "min_ancient_exposure": 0,
       "min_outer_exposure": 0,
       "requires_sight_active": true,
       "interaction_key": "E",
@@ -409,7 +409,7 @@
       "parent": "A3",
       "anchor": "废弃城区旧市场 / 旧礼拜堂",
       "min_resonance": 28,
-      "min_ancient_exposure": 1,
+      "min_ancient_exposure": 0,
       "min_outer_exposure": 0,
       "requires_sight_active": true,
       "interaction_key": "E",
@@ -443,9 +443,9 @@
     },
     {
       "id": "H05",
-      "name": "无号牢房",
-      "parent": "A7",
-      "anchor": "监牢牢房廊道",
+      "name": "无声钟室",
+      "parent": "A6",
+      "anchor": "修道院钟塔 / 无声窗口",
       "min_resonance": 42,
       "min_ancient_exposure": 1,
       "min_outer_exposure": 0,
@@ -454,17 +454,17 @@
       "persistent_on_open": true,
       "return_to_parent": true,
       "secondary_exit": {
-        "to": "A11",
-        "unlock_condition": "reached_A11_via_main_route_then_opened_maintenance_gate",
-        "opens_from": "A11",
+        "to": "A3",
+        "unlock_condition": "reached_A6_then_opened_bell_tower_drop",
+        "opens_from": "A6",
         "requires_target_already_reached": true
       }
     },
     {
       "id": "H06",
-      "name": "墓室背面",
+      "name": "王名抹除廊",
       "parent": "A8",
-      "anchor": "旧王墓浮雕",
+      "anchor": "旧王墓铭文墙",
       "min_resonance": 55,
       "min_ancient_exposure": 2,
       "min_outer_exposure": 0,
@@ -477,13 +477,14 @@
         "unlock_condition": "reached_A9_via_A8_then_opened_royal_transport_side_door",
         "opens_from": "A9",
         "requires_target_already_reached": true
-      }
+      },
+      "min_distinct_anomaly_sources": 2
     },
     {
       "id": "H07",
-      "name": "无声侧堂",
-      "parent": "A10",
-      "anchor": "大圣堂侧堂 / 唱诗席",
+      "name": "镜街：雨幕背后",
+      "parent": "A9",
+      "anchor": "王城外环积水街",
       "min_resonance": 68,
       "min_ancient_exposure": 0,
       "min_outer_exposure": 12,
@@ -492,20 +493,20 @@
       "persistent_on_open": true,
       "return_to_parent": true,
       "secondary_exit": {
-        "to": "A11",
-        "unlock_condition": "opened_silent_side_chapel_and_accepted_deep_research_risk",
-        "opens_from": "A10",
-        "requires_target_already_reached": false
+        "to": "A12",
+        "unlock_condition": "reached_A12_then_opened_mirror_street_side_gate",
+        "opens_from": "A12",
+        "requires_target_already_reached": true
       }
     },
     {
       "id": "H08",
-      "name": "观察者回廊",
+      "name": "胎宫 / 原初空腔",
       "parent": "A11",
       "anchor": "深层研究区观测壁",
       "min_resonance": 78,
       "min_ancient_exposure": 2,
-      "min_outer_exposure": 12,
+      "min_outer_exposure": 18,
       "requires_sight_active": true,
       "interaction_key": "E",
       "persistent_on_open": true,
@@ -516,7 +517,100 @@
         "opens_from": "A11",
         "requires_target_already_reached": false,
         "requires_ending_state": true
-      }
+      },
+      "min_distinct_anomaly_sources": 3
+    }
+  ],
+  "resonance_progression_contract": [
+    {
+      "id": "R01",
+      "region": "A2",
+      "event": "首次确认钟声与钟锤不同步",
+      "resonance_delta": 12,
+      "unlock_ability": "resonance_sight",
+      "required_before": [
+        "reached_A2"
+      ],
+      "enables": [
+        "H01"
+      ],
+      "note": "H01 设计为回访 A1 的早期秘密，不依赖蜜忒关系线。"
+    },
+    {
+      "id": "R02",
+      "region": "A2",
+      "event": "沿旧朝圣石阶确认第二处异常",
+      "resonance_delta": 6,
+      "enables": [
+        "H02"
+      ],
+      "cumulative_target": 18
+    },
+    {
+      "id": "R03",
+      "region": "A3",
+      "event": "在旧市场发现第三街路牌",
+      "resonance_delta": 10,
+      "enables": [
+        "H03"
+      ],
+      "cumulative_target": 28
+    },
+    {
+      "id": "R04",
+      "region": "A4",
+      "event": "调查旧水库的古老石层",
+      "resonance_delta": 8,
+      "ancient_exposure_delta": 1,
+      "enables": [
+        "H04"
+      ],
+      "cumulative_target": 36
+    },
+    {
+      "id": "R05",
+      "region": "A6",
+      "event": "在钟塔内部发现失声窗口",
+      "resonance_delta": 6,
+      "enables": [
+        "H05"
+      ],
+      "cumulative_target": 42
+    },
+    {
+      "id": "R06",
+      "region": "A8",
+      "event": "确认王墓铭文遭到主动抹除",
+      "resonance_delta": 13,
+      "ancient_exposure_delta": 1,
+      "enables": [
+        "H06"
+      ],
+      "cumulative_target": 55
+    },
+    {
+      "id": "R07",
+      "region": "A9",
+      "event": "在主线抵达外环后稳定镜街倒影",
+      "resonance_delta": 13,
+      "outer_exposure_delta": 12,
+      "enables": [
+        "H07"
+      ],
+      "cumulative_target": 68,
+      "note": "外神暴露可依剧情关系状态延后；不要求普通主线完成。"
+    },
+    {
+      "id": "R08",
+      "region": "A11",
+      "event": "深层研究区中观察者反应并拼合证据",
+      "resonance_delta": 10,
+      "ancient_exposure_delta": 0,
+      "outer_exposure_delta": 6,
+      "enables": [
+        "H08"
+      ],
+      "cumulative_target": 78
     }
   ]
 }
