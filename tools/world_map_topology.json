@@ -571,15 +571,15 @@
     {
       "id": "R04",
       "region": "A4",
-      "event": "调查旧水库的古老石层与倒影",
-      "source_id": "anomaly_water_reflection",
+      "event": "在沉积大厅辨认后世管线覆盖的古老石层",
+      "source_id": "anomaly_old_stone_layer",
       "resonance_delta": 8,
       "ancient_exposure_delta": 1,
       "enables": [
         "H04"
       ],
       "cumulative_target": 36,
-      "note": "事件位于隐藏楼梯入口之前，避免自解锁循环。"
+      "note": "该前置调查发生在 H04 隐藏楼梯之前，避免入口自我解锁。"
     },
     {
       "id": "R05",
@@ -611,12 +611,14 @@
       "event": "在主线经过的外环积水处稳定镜街倒影",
       "source_id": "anomaly_mirror_street_echo",
       "resonance_delta": 13,
-      "outer_exposure_delta": 12,
       "enables": [
         "H07"
       ],
       "cumulative_target": 68,
-      "note": "该来源点与隐藏入口分开；外神接触可受关系 / 剧情状态影响。"
+      "note": "仅在现有外神共鸣剧情事实成立后，才把高鸣响映射到镜街入口；普通主线无需完成此秘密。",
+      "requires_flags": [
+        "outer_god_resonance"
+      ]
     },
     {
       "id": "R08",
@@ -630,6 +632,17 @@
       ],
       "cumulative_target": 78,
       "note": "该来源点位于隐藏入口之前；终局出口仍检查结局状态。"
+    }
+  ],
+  "story_state_effects": [
+    {
+      "id": "S01",
+      "trigger": "WorldState.mark_outer_god_resonance",
+      "effects": {
+        "outer_exposure_min": 12
+      },
+      "source_id": "mite_outer_resonance_awakened",
+      "note": "设计合同：外神共鸣剧情事实首次成立时才增加接触度；当前源码只记录布尔标记，这项数值效果尚未实现。"
     }
   ]
 }
