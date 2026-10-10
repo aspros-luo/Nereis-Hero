@@ -128,6 +128,12 @@ func _draw() -> void:
             _draw_well_marker()
         "H07":
             _draw_mirror_street_marker()
+        "C15":
+            _draw_erased_royal_name_marker()
+        "C19":
+            _draw_silent_chapel_marker()
+        "H08":
+            _draw_breathing_wall_marker()
         _:
             _draw_generic_anomaly_marker()
 
@@ -185,6 +191,55 @@ func _draw_mirror_street_marker() -> void:
         if opened_permanently:
             draw_line(Vector2(-13.0, 4.0), Vector2(-10.0, -24.0), tint, 3.0)
             draw_line(Vector2(13.0, 4.0), Vector2(10.0, -24.0), tint, 3.0)
+
+func _draw_erased_royal_name_marker() -> void:
+    # The sign is a stone inscription first; only the missing name is anomalous.
+    draw_rect(Rect2(-42.0, -28.0, 84.0, 58.0), Color("#302b31"))
+    draw_rect(Rect2(-35.0, -21.0, 70.0, 44.0), Color("#24212a"))
+    draw_line(Vector2(-25.0, -11.0), Vector2(22.0, -11.0), Color("#5c5052"), 2.0)
+    draw_line(Vector2(-25.0, 1.0), Vector2(25.0, 1.0), Color("#5c5052"), 2.0)
+    draw_line(Vector2(-25.0, 13.0), Vector2(12.0, 13.0), Color("#5c5052"), 2.0)
+    if revealed:
+        var tint := Color("#9ce0ce") if not opened_permanently else Color("#d6c7b2")
+        draw_line(Vector2(-23.0, -3.0), Vector2(-7.0, 7.0), tint, 2.0)
+        draw_line(Vector2(-7.0, 7.0), Vector2(1.0, -3.0), tint, 2.0)
+        draw_line(Vector2(7.0, -3.0), Vector2(24.0, 8.0), tint, 2.0)
+        draw_arc(Vector2(0.0, 1.0), 54.0, PI * 1.08, PI * 1.92, 24, tint, 2.0)
+
+func _draw_silent_chapel_marker() -> void:
+    # A chapel window without a shadow; the bell-shaped arch appears only under resonance.
+    draw_rect(Rect2(-42.0, -4.0, 84.0, 27.0), Color("#29242e"))
+    draw_arc(Vector2(0.0, -9.0), 31.0, PI, TAU, 28, Color("#5c5361"), 4.0)
+    draw_line(Vector2(-31.0, -9.0), Vector2(-31.0, 21.0), Color("#5c5361"), 3.0)
+    draw_line(Vector2(31.0, -9.0), Vector2(31.0, 21.0), Color("#5c5361"), 3.0)
+    if revealed:
+        var tint := Color("#9ce0ce") if not opened_permanently else Color("#d6c7b2")
+        draw_arc(Vector2(0.0, -9.0), 42.0, PI, TAU, 28, tint, 2.0)
+        draw_line(Vector2(0.0, -33.0), Vector2(0.0, 12.0), tint, 2.0)
+        draw_line(Vector2(-18.0, -7.0), Vector2(18.0, -7.0), tint, 2.0)
+        draw_line(Vector2(-18.0, 5.0), Vector2(18.0, 5.0), tint, 2.0)
+
+func _draw_breathing_wall_marker() -> void:
+    # The wall should feel grown, not mechanical.
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(-44.0, 13.0), Vector2(-35.0, -8.0), Vector2(-18.0, -17.0),
+        Vector2(-6.0, -10.0), Vector2(4.0, -34.0), Vector2(23.0, -22.0),
+        Vector2(38.0, -4.0), Vector2(42.0, 15.0), Vector2(22.0, 24.0),
+        Vector2(-7.0, 19.0)
+    ]), Color("#202b31"))
+    draw_polyline(PackedVector2Array([
+        Vector2(-30.0, 8.0), Vector2(-15.0, 0.0), Vector2(-7.0, 9.0),
+        Vector2(3.0, -13.0), Vector2(17.0, -4.0), Vector2(29.0, 11.0)
+    ]), Color("#3e555a"), 2.0, true)
+    if revealed:
+        var tint := Color("#9ce0ce") if not opened_permanently else Color("#d6c7b2")
+        draw_arc(Vector2(0.0, 0.0), 48.0, PI * 1.05, PI * 1.95, 28, tint, 2.0)
+        draw_arc(Vector2(0.0, 0.0), 35.0, PI * 0.05, PI * 0.95, 28, Color(tint.r, tint.g, tint.b, 0.75), 2.0)
+        draw_line(Vector2(-6.0, -23.0), Vector2(-1.0, -5.0), tint, 2.0)
+        draw_line(Vector2(-1.0, -5.0), Vector2(8.0, 12.0), tint, 2.0)
+        draw_line(Vector2(8.0, 12.0), Vector2(17.0, -8.0), tint, 2.0)
+        if opened_permanently:
+            draw_arc(Vector2(0.0, 0.0), 55.0, 0.0, TAU, 32, tint, 2.0)
 
 func _draw_generic_anomaly_marker() -> void:
     draw_colored_polygon(PackedVector2Array([
