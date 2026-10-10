@@ -196,7 +196,7 @@ def main() -> int:
             fail(errors, f"Graybox spawn mapping: missing {condition!r}")
             continue
         branch = region_script[start:]
-        next_branch = branch.find("\\n    if ", len(condition))
+        next_branch = branch.find("\n    if ", len(condition))
         if next_branch >= 0:
             branch = branch[:next_branch]
         require(branch, expected_return, f"Graybox spawn mapping {condition}", errors)
