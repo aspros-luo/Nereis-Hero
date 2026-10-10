@@ -175,6 +175,32 @@ def main() -> int:
     ]:
         require(region_script, contract, "Graybox region controller", errors)
 
+    # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
+    # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
+    spawn_contracts = [
+        ('if region_id == "A2" and side == "bell_gate":', "return map_width - 450.0"),
+        ('if region_id == "A3" and side == "third_street_gate":', "return map_width - 500.0"),
+        ('if region_id == "A3" and side == "bell_drop":', "return 1600.0"),
+        ('if region_id == "A4" and side == "water_reflection_gate":', "return 1550.0"),
+        ('if region_id == "A5" and side == "bell_tower":', "return map_width - 800.0"),
+        ('if region_id == "A6" and side == "silent_window":', "return 1400.0"),
+        ('if region_id == "A8" and side == "royal_name_gate":', "return 1350.0"),
+        ('if region_id == "A8" and side == "royal_tomb_side":', "return 1200.0"),
+        ('if region_id == "A9" and side == "third_street_service":', "return 1250.0"),
+        ('if region_id == "A9" and side == "royal_transport":', "return map_width - 650.0"),
+        ('if region_id == "H01" and side == "east":', "return map_width - 360.0"),
+    ]
+    for condition, expected_return in spawn_contracts:
+        start = region_script.find(condition)
+        if start < 0:
+            fail(errors, f"Graybox spawn mapping: missing {condition!r}")
+            continue
+        branch = region_script[start:]
+        next_branch = branch.find("\\n    if ", len(condition))
+        if next_branch >= 0:
+            branch = branch[:next_branch]
+        require(branch, expected_return, f"Graybox spawn mapping {condition}", errors)
+
     source_clue = read("scripts/world/resonance_source_clue.gd", errors)
     require(source_clue, "WorldState.record_resonance_milestone(", "Resonance source clue", errors)
     require(source_clue, "ancient_exposure_floor,", "Resonance source exposure floor", errors)
