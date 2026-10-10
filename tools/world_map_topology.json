@@ -557,7 +557,7 @@
       "region": "A2",
       "event": "首次确认钟声与钟锤不同步",
       "source_id": "anomaly_bell_retiming",
-      "resonance_delta": 12,
+      "resonance_delta": 0,
       "unlock_ability": "resonance_sight",
       "required_before": [
         "reached_A2"
@@ -565,8 +565,10 @@
       "enables": [
         "H01"
       ],
-      "note": "H01是回访A1的早期秘密，不依赖蜜忒关系线。",
-      "cumulative_target": 12
+      "note": "若其他剧情已把鸣响提高到 12，本事件只记录来源并解锁灵视，不重复增加鸣响。",
+      "cumulative_target": 12,
+      "resonance_target": 12,
+      "grant_mode": "raise_to_minimum_once"
     },
     {
       "id": "R02",
@@ -637,7 +639,10 @@
         "H07"
       ],
       "cumulative_target": 68,
-      "note": "该主线路径事件正常增加鸣响；H07 仍需外神共鸣剧情事实与 outer_exposure ≥ 12，因此不做外神路线的玩家不会看到可用入口。"
+      "note": "该主线路径事件正常增加鸣响；H07 仍需外神共鸣剧情事实与 outer_exposure ≥ 12，因此不做外神路线的玩家不会看到可用入口。",
+      "outer_exposure_floor": 12,
+      "outer_exposure_requires": "outer_god_resonance",
+      "outer_exposure_delta": 0
     },
     {
       "id": "R08",
@@ -664,7 +669,7 @@
       "note": "设计合同：外神共鸣剧情事实首次成立时才增加接触度；当前源码只记录布尔标记，这项数值效果尚未实现。"
     }
   ],
-  "resonance_baseline_at_prologue": 12,
+  "resonance_baseline_at_prologue": 0,
   "resonance_sources": [
     {
       "id": "R01",
@@ -676,7 +681,9 @@
       "unlock_ability": "resonance_sight",
       "record_source": true,
       "ancient_exposure_delta": 0,
-      "outer_exposure_delta": 0
+      "outer_exposure_delta": 0,
+      "minimum_resonance": 12,
+      "grant_mode": "raise_to_minimum_once"
     },
     {
       "id": "R02",
@@ -707,7 +714,7 @@
       "resonance_delta": 8,
       "resonance_after": 36,
       "record_source": true,
-      "ancient_exposure_delta": 0,
+      "ancient_exposure_delta": 1,
       "outer_exposure_delta": 0
     },
     {
@@ -759,7 +766,8 @@
       "outer_exposure_delta": 6,
       "outer_exposure_after_if_qualified": 18,
       "outer_exposure_after_if_not_qualified": 6,
-      "requires_prior_outer_exposure": 12
+      "requires_prior_outer_exposure": 12,
+      "outer_exposure_after": 18
     }
   ],
   "ancient_exposure_baseline_at_prologue": 1,
