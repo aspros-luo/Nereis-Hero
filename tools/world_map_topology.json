@@ -729,7 +729,8 @@
       "resonance_after": 55,
       "record_source": true,
       "ancient_exposure_delta": 1,
-      "outer_exposure_delta": 0
+      "outer_exposure_delta": 0,
+      "ancient_exposure_after": 2
     },
     {
       "id": "R07",
@@ -742,7 +743,9 @@
       "ancient_exposure_delta": 0,
       "outer_exposure_floor": 12,
       "outer_exposure_requires": "outer_god_resonance",
-      "outer_exposure_delta": 0
+      "outer_exposure_delta": 0,
+      "outer_exposure_after_if_qualified": 12,
+      "outer_exposure_after_if_not_qualified": 0
     },
     {
       "id": "R08",
@@ -754,7 +757,11 @@
       "record_source": true,
       "ancient_exposure_delta": 0,
       "outer_exposure_delta": 6,
-      "outer_exposure_after": 18
+      "outer_exposure_after_if_qualified": 18,
+      "outer_exposure_after_if_not_qualified": 6,
+      "requires_prior_outer_exposure": 12
     }
-  ]
+  ],
+  "ancient_exposure_baseline_at_prologue": 1,
+  "outer_exposure_baseline_at_prologue": 0
 }
