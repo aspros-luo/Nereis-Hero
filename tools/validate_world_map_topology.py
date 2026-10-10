@@ -195,6 +195,24 @@ def validate(data: dict[str, Any]) -> list[str]:
     if any(not source_id.strip() for source_id in source_ids):
         fail(errors, "Every resonance progression event needs a stable source_id.")
 
+    if sources:
+        first_source = sources[0]
+        if first_source.get("id") != "R01" or int(first_source.get("resonance_delta", -1)) != 0:
+            fail(errors, "R01 must record the first anomaly and unlock sight without duplicating the A0 resonance baseline.")
+        if first_source.get("unlock_ability") != "resonance_sight":
+            fail(errors, "R01 must unlock the existing resonance_sight ability.")
+
+    expected_ancient = int(data.get("ancient_exposure_baseline_at_prologue", 0))
+    for source in sources:
+        expected_ancient += int(source.get("ancient_exposure_delta", 0))
+        declared_ancient = source.get("ancient_exposure_after")
+        if declared_ancient is not None and expected_ancient != int(declared_ancient):
+            fail(
+                errors,
+                f"{source.get('id')}: expected cumulative ancient exposure {expected_ancient}, "
+                f"but manifest declares {declared_ancient}.",
+            )
+
     expected_resonance = int(data.get("resonance_baseline_at_prologue", 0))
     for source in sources:
         expected_resonance += int(source.get("resonance_delta", 0))
@@ -219,8 +237,10 @@ def validate(data: dict[str, Any]) -> list[str]:
     r08 = next((item for item in sources if item.get("id") == "R08"), None)
     if h08 and int(h08.get("min_outer_exposure", 0)) < 18:
         fail(errors, "H08 must require outer exposure >= 18.")
-    if r08 and int(r08.get("outer_exposure_after", 0)) != 18:
-        fail(errors, "R08 must define the planned outer exposure target of 18.")
+    if r08 and int(r08.get("outer_exposure_after_if_qualified", 0)) != 18:
+        fail(errors, "R08 must define the conditional outer exposure target of 18.")
+    if r08 and int(r08.get("requires_prior_outer_exposure", 0)) < 12:
+        fail(errors, "R08 must not grant the deep outer-exposure target without the prior outer-god resonance condition.")
 
     hidden_ids = [item.get("id", "") for item in hidden]
     if len(hidden_ids) != len(set(hidden_ids)):
