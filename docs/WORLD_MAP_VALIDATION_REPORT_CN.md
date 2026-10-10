@@ -88,7 +88,7 @@
 - `WorldState.mark_ancient_residue_awakened()` 在序章把鸣响提升到至少 12、古神接触度提升到至少 1；旧存档迁移继续保留这个最低值。
 - 新增 `scripts/world/resonance_source_clue.gd`，并在 A2 / A3 / A4 灰盒接入 R01–R04 的一次性调查。R01 把鸣响提升到目标下限 12，并通过现有能力解锁 API 开启 `resonance_sight`；R02–R04 的目标下限分别为 18、28、36。
 - `WorldState.record_resonance_milestone()` 使用固定 source ID，避免重复调查重复奖励；改变探索顺序时，已获得的鸣响不会倒退。
-- R04 的古神接触度采用“至少达到 1”的下限，而不是无条件累加；即使玩家跳过序章的可选手术台线索，也不会永久失去 H04 的接触条件。R06 再增加 1，达到 H06 的接触阈值 2。
+- R04 会确保古神接触度至少为 1；R06 会确保至少达到 2。两者都采用下限而不是无条件累加，因此即使玩家跳过序章可选线索或绕过 A4，也不会永久失去 H04 / H06 的接触条件。
 - `WorldState.mark_outer_god_resonance()` 现在会在真实的外神共鸣剧情事实成立时，把 `outer_exposure` 提升到至少 12，修补此前只记录布尔事实的断链。
 - 新增 `scripts/world/resonance_secret_gate.gd` 与三类持久状态 `discovered_hidden_regions`、`opened_hidden_paths`、`entered_hidden_regions`。H01 的显现 / 开启 / 进入和 A4 侧门已在代码中接线。
 
