@@ -60,6 +60,14 @@ Repeatable static topology validator:
 
 `python3 tools/validate_world_map_topology.py`
 
+A2–A4 / H01 graybox implementation notes and runtime acceptance checklist (Chinese):
+
+`docs/GRAYBOX_A2_A4_IMPLEMENTATION_CN.md`
+
+Graybox scene wiring static checker:
+
+`tools/validate_graybox_scene_wiring.py`
+
 Resonance / hidden regions design — 8 optional subareas (Chinese):
 
 `docs/RESONANCE_HIDDEN_REGIONS_CN.md`
