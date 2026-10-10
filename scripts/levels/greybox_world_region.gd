@@ -43,6 +43,9 @@ func _ready() -> void:
         get_tree().create_timer(0.55).timeout.connect(_show_intro)
 
 func _spawn_x_for_side(side: String) -> float:
+    if region_id == "A9" and side == "mirror":
+        return 1680.0
+
     if region_id == "A3" and side == "sewer":
         return 1380.0
     if side == "east":
@@ -102,6 +105,14 @@ func _get_objective_text() -> String:
             return "DESCEND THROUGH THE CELLS. FIND THE ROYAL CRYPT."
         "A8":
             return "READ THE NAMES THAT WERE REMOVED."
+        "A9":
+            return "CROSS THE OUTER RING. FOLLOW THE RAIN REFLECTIONS."
+        "A10":
+            return "CLIMB THE PILGRIM STEPS. FIND THE CHURCH INNER COURT."
+        "A12":
+            return "ENTER THE THRONE DISTRICT. DECIDE WHAT MUST FALL."
+        "H07":
+            return "FOLLOW THE STREET THAT ONLY EXISTS IN WATER."
         "H01":
             return "FIND A WAY BACK TO THE SURFACE."
         _:
@@ -151,6 +162,30 @@ func _show_intro() -> void:
             narrative.show_message(
                 "THE ROYAL TOMB",
                 "The inscriptions have not weathered away.\n\nSomeone wanted the names to stop existing.",
+                5.0
+            )
+        "A9":
+            narrative.show_message(
+                "THE ROYAL OUTER RING",
+                "Rainwater pools in the street, though the roofs are dry.\\n\\nThe lamps in the puddles are lit. The lamps above them are not.",
+                5.0
+            )
+        "A10":
+            narrative.show_message(
+                "THE GREAT CATHEDRAL",
+                "The choir stops when you reach the steps.\\n\\nNo one turns to look at you.",
+                5.0
+            )
+        "A12":
+            narrative.show_message(
+                "THE INNER CITY",
+                "The palace doors stand open.\\n\\nThe guards have not been dismissed.",
+                5.0
+            )
+        "H07":
+            narrative.show_message(
+                "MIRROR STREET: BEHIND THE RAIN",
+                "The rain falls upward here.\\n\\nYour reflection arrives one step before you.",
                 5.0
             )
         "H01":
@@ -242,6 +277,39 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1390, 395, 170, 18))
             _add_platform(Rect2(1670, 445, 150, 18))
             _add_platform(Rect2(1960, 480, 180, 18))
+        "A9":
+            _add_platform(Rect2(280, 475, 170, 18))
+            _add_platform(Rect2(530, 430, 150, 18))
+            _add_platform(Rect2(800, 390, 190, 18))
+            _add_platform(Rect2(1110, 445, 165, 18))
+            _add_platform(Rect2(1410, 405, 175, 18))
+            _add_platform(Rect2(1700, 455, 175, 18))
+            _add_platform(Rect2(2040, 420, 170, 18))
+        "A10":
+            _add_platform(Rect2(260, 485, 185, 18))
+            _add_platform(Rect2(520, 440, 155, 18))
+            _add_platform(Rect2(760, 395, 160, 18))
+            _add_platform(Rect2(1010, 350, 145, 18))
+            _add_platform(Rect2(1250, 305, 145, 18))
+            _add_platform(Rect2(1480, 350, 160, 18))
+            _add_platform(Rect2(1730, 405, 165, 18))
+            _add_platform(Rect2(2010, 455, 185, 18))
+        "A12":
+            _add_platform(Rect2(300, 475, 160, 18))
+            _add_platform(Rect2(560, 430, 150, 18))
+            _add_platform(Rect2(850, 385, 180, 18))
+            _add_platform(Rect2(1160, 435, 170, 18))
+            _add_platform(Rect2(1460, 390, 180, 18))
+            _add_platform(Rect2(1770, 435, 170, 18))
+            _add_platform(Rect2(2100, 475, 190, 18))
+        "H07":
+            _add_platform(Rect2(250, 475, 150, 18))
+            _add_platform(Rect2(520, 425, 125, 18))
+            _add_platform(Rect2(780, 380, 160, 18))
+            _add_platform(Rect2(1060, 430, 150, 18))
+            _add_platform(Rect2(1350, 385, 160, 18))
+            _add_platform(Rect2(1650, 440, 150, 18))
+            _add_platform(Rect2(1970, 475, 170, 18))
         "H01":
             _add_platform(Rect2(310, 465, 140, 18))
             _add_platform(Rect2(540, 420, 130, 18))
@@ -325,6 +393,15 @@ func _spawn_region_sources() -> void:
                 0,
                 "",
                 2
+            )
+
+        "A9":
+            _spawn_source(
+                Vector2(1380, floor_y - 18.0),
+                "anomaly_mirror_street_echo",
+                "THE STREET IN THE PUDDLE",
+                "The puddle reflects a street with one more lamp.\\n\\nYou count the lights again. Nothing changes above you.",
+                68
             )
 
 func _spawn_source(
@@ -437,6 +514,54 @@ func _spawn_region_exits() -> void:
                 72.0, "E  RETURN TO THE PRISON", "prison_depths",
                 "res://scenes/prison_depths.tscn", "east"
             )
+            _spawn_exit_door(
+                map_width - 72.0, "E  ENTER THE ROYAL OUTER RING", "royal_outer_ring",
+                "res://scenes/royal_outer_ring.tscn", "west"
+            )
+
+        "A9":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE ROYAL TOMB", "royal_tomb",
+                "res://scenes/royal_tomb.tscn", "east"
+            )
+            _spawn_exit_door(
+                map_width - 72.0, "E  CLIMB TO THE GREAT CATHEDRAL", "grand_cathedral",
+                "res://scenes/grand_cathedral.tscn", "west"
+            )
+            _spawn_a9_mirror_gate(1850.0)
+        "A10":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE OUTER RING", "royal_outer_ring",
+                "res://scenes/royal_outer_ring.tscn", "east"
+            )
+            _spawn_exit_door(
+                map_width - 72.0, "E  ENTER THE INNER CITY", "inner_city",
+                "res://scenes/inner_city.tscn", "west"
+            )
+        "A12":
+            _spawn_exit_door(
+                72.0, "E  RETURN TO THE CATHEDRAL", "grand_cathedral",
+                "res://scenes/grand_cathedral.tscn", "east"
+            )
+            if (
+                "reached_A12_via_A10" in WorldState.achievement_flags
+                and WorldState.is_hidden_path_opened("H07")
+            ):
+                _spawn_exit_door(
+                    350.0, "E  OPEN THE MIRROR STREET SIDE GATE", "mirror_street",
+                    "res://scenes/mirror_street.tscn", "east",
+                    true, "opened_mirror_street_side_gate", "E  ENTER MIRROR STREET"
+                )
+        "H07":
+            _spawn_exit_door(
+                72.0, "E  RETURN THROUGH THE PUDDLES", "royal_outer_ring",
+                "res://scenes/royal_outer_ring.tscn", "mirror"
+            )
+            if "opened_mirror_street_side_gate" in WorldState.achievement_flags:
+                _spawn_exit_door(
+                    map_width - 72.0, "E  RETURN TO THE INNER CITY", "inner_city",
+                    "res://scenes/inner_city.tscn", "west"
+                )
 
         "H01":
             _spawn_exit_door(
@@ -455,6 +580,33 @@ func _spawn_region_exits() -> void:
                 "east",
                 can_return_to_a4
             )
+
+func _spawn_a9_mirror_gate(x: float) -> void:
+    var gate := Node2D.new()
+    gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+    gate.name = "ResonanceMirrorStreetGate"
+    gate.position = Vector2(x, floor_y)
+    gate.secret_id = "H07"
+    gate.target_scene_path = "res://scenes/mirror_street.tscn"
+    gate.target_location_id = "mirror_street"
+    gate.target_spawn_side = "west"
+    gate.required_resonance = 68
+    gate.required_ancient_exposure = 0
+    gate.required_outer_exposure = 12
+    gate.require_outer_god_resonance = true
+    gate.required_source_ids = ["anomaly_mirror_street_echo"]
+    gate.opened.connect(_on_mirror_street_gate_opened)
+    add_child(gate)
+
+func _on_mirror_street_gate_opened(secret_id: String) -> void:
+    if narrative == null or not is_instance_valid(narrative):
+        return
+    narrative.show_message(
+        "THE STREET THAT WAS REMOVED",
+        "The reflection stops following the rain.\\n\\nFor the first time, the door has a shadow.",
+        4.5
+    )
+
 
 func _spawn_a4_hidden_well_gate(x: float) -> void:
     # This is the far-side entrance to H01, not a bypass: it still requires active Resonance Sight.
@@ -517,6 +669,10 @@ func _on_exit_interacted(target_location: String, target_scene: String, spawn_si
         WorldState.discover_hidden_region("H01")
         WorldState.open_hidden_path("H01")
         WorldState.mark_hidden_region_entered("H01")
+    if target_location == "inner_city" and region_id == "A10":
+        WorldState.record_achievement("reached_A12_via_A10")
+    if target_location == "mirror_street":
+        WorldState.mark_hidden_region_entered("H07")
     elif target_location == "sewer_reservoir" and region_id == "H01":
         WorldState.mark_hidden_region_entered("H01")
 
@@ -570,6 +726,15 @@ func _draw() -> void:
         "A8":
             _draw_royal_tomb_landmarks()
 
+        "A9":
+            _draw_outer_ring_landmarks()
+        "A10":
+            _draw_cathedral_landmarks()
+        "A12":
+            _draw_inner_city_landmarks()
+        "H07":
+            _draw_mirror_street_landmarks()
+
         "H01":
             _draw_well_landmarks()
 
@@ -604,6 +769,15 @@ func _background_color() -> Color:
         "A8":
             return Color("#1a171d")
 
+        "A9":
+            return Color("#1a1a22")
+        "A10":
+            return Color("#211b25")
+        "A12":
+            return Color("#201b20")
+        "H07":
+            return Color("#10191e")
+
         "H01":
             return Color("#100f18")
         _:
@@ -625,6 +799,15 @@ func _platform_color() -> Color:
             return Color("#35333b")
         "A8":
             return Color("#40383e")
+
+        "A9":
+            return Color("#373741")
+        "A10":
+            return Color("#403847")
+        "A12":
+            return Color("#42343b")
+        "H07":
+            return Color("#2d4144")
 
         "H01":
             return Color("#39303a")
@@ -674,6 +857,58 @@ func _draw_reservoir_landmarks() -> void:
     draw_rect(Rect2(0, floor_y + 48, map_width, 36), Color("#19272f"))
     draw_line(Vector2(0, floor_y + 48), Vector2(map_width, floor_y + 48), Color("#405660"), 2.0)
     draw_string(ThemeDB.fallback_font, Vector2(960, floor_y + 75), "WATER BELOW THE STONE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#637a83"))
+
+func _draw_outer_ring_landmarks() -> void:
+    for x in range(200, int(map_width), 360):
+        draw_rect(Rect2(x, floor_y - 180, 170, 180), Color("#292733"))
+        draw_colored_polygon(PackedVector2Array([
+            Vector2(x - 18, floor_y - 180),
+            Vector2(x + 85, floor_y - 250),
+            Vector2(x + 188, floor_y - 180)
+        ]), Color("#35313b"))
+        draw_rect(Rect2(x + 65, floor_y - 92, 35, 92), Color("#14131a"))
+    draw_rect(Rect2(1320, floor_y - 160, 170, 160), Color("#202128"))
+    draw_arc(Vector2(1380, floor_y - 18), 58.0, PI, TAU, 30, Color("#6d8790"), 3.0)
+    draw_string(ThemeDB.fallback_font, Vector2(1300, floor_y - 195), "RAIN WITHOUT CLOUDS", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#718790"))
+
+func _draw_cathedral_landmarks() -> void:
+    draw_rect(Rect2(880, floor_y - 330, 600, 330), Color("#302b38"))
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(830, floor_y - 330),
+        Vector2(1180, floor_y - 555),
+        Vector2(1530, floor_y - 330)
+    ]), Color("#403546"))
+    for x in [960, 1100, 1240, 1380]:
+        draw_rect(Rect2(x, floor_y - 245, 42, 100), Color("#131119"))
+        draw_colored_polygon(PackedVector2Array([
+            Vector2(x - 10, floor_y - 245),
+            Vector2(x + 21, floor_y - 285),
+            Vector2(x + 52, floor_y - 245)
+        ]), Color("#18141e"))
+    draw_line(Vector2(875, floor_y - 325), Vector2(1485, floor_y - 325), Color("#766578"), 4.0)
+
+func _draw_inner_city_landmarks() -> void:
+    for x in range(260, int(map_width), 460):
+        draw_rect(Rect2(x, floor_y - 205, 190, 205), Color("#302932"))
+        draw_rect(Rect2(x + 70, floor_y - 125, 48, 125), Color("#151217"))
+        draw_rect(Rect2(x + 18, floor_y - 160, 20, 25), Color("#17141b"))
+        draw_rect(Rect2(x + 145, floor_y - 160, 20, 25), Color("#17141b"))
+    draw_rect(Rect2(1670, floor_y - 280, 400, 280), Color("#3b3039"))
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(1620, floor_y - 280),
+        Vector2(1870, floor_y - 420),
+        Vector2(2120, floor_y - 280)
+    ]), Color("#54414e"))
+    draw_rect(Rect2(1825, floor_y - 175, 90, 175), Color("#141118"))
+
+func _draw_mirror_street_landmarks() -> void:
+    for x in range(160, int(map_width), 340):
+        draw_rect(Rect2(x, floor_y - 150, 110, 150), Color("#263438"))
+        draw_rect(Rect2(x + 37, floor_y - 92, 36, 92), Color("#0c1317"))
+        draw_rect(Rect2(x - 18, floor_y + 42, 146, 24), Color("#28444a"))
+        draw_line(Vector2(x - 18, floor_y + 42), Vector2(x + 128, floor_y + 42), Color("#6ca5ad"), 2.0)
+    draw_string(ThemeDB.fallback_font, Vector2(680, floor_y - 220), "THE LAMPS ARE UNDER THE WATER", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#70979a"))
+
 
 func _draw_battlefield_landmarks() -> void:
     for x in range(260, int(map_width), 390):
