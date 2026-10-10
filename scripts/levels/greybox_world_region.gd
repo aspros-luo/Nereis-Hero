@@ -309,6 +309,10 @@ func _spawn_region_sources() -> void:
                 "THE WINDOW WITHOUT A SOUND",
                 "The bell tower window has no view beyond it.\n\nIts shadow falls across a wall that is not there.",
                 42
+                0,
+                0,
+                "",
+                1
             )
         "A8":
             _spawn_source(
