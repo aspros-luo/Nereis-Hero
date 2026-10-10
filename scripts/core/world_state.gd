@@ -902,6 +902,16 @@ func get_resume_scene_path() -> String:
             return "res://scenes/ending_paradise_demo.tscn"
         "ending_fire_demo":
             return "res://scenes/ending_fire_demo.tscn"
+        "hidden_bell_chamber":
+            return "res://scenes/hidden_bell_chamber.tscn"
+        "erased_third_street":
+            return "res://scenes/erased_third_street.tscn"
+        "reflected_stairwell":
+            return "res://scenes/reflected_stairwell.tscn"
+        "silent_bell_room":
+            return "res://scenes/silent_bell_room.tscn"
+        "erased_royal_name_corridor":
+            return "res://scenes/erased_royal_name_corridor.tscn"
         "mirror_street":
             return "res://scenes/mirror_street.tscn"
         "hidden_well":
