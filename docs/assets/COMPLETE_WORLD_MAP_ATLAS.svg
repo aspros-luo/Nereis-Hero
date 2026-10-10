@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1480" viewBox="0 0 1900 1480" role="img" aria-labelledby="title desc">
+<title id="title">Nereis Hero 完整世界地图区划示意图</title>
+<desc id="desc">十四个主要区域的空间布局，分为地表高地、中层城市和地下深层，展示主路线与后期开启的捷径。</desc>
+<defs>
+  <style>
+    text { font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #26313a; }
+    .heading { font-size: 32px; font-weight: 700; letter-spacing: 1px; }
+    .subheading { font-size: 16px; fill: #5e6871; }
+    .layer { font-size: 20px; font-weight: 700; letter-spacing: 2px; fill: #59656f; }
+    .zone { stroke: #34414a; stroke-width: 1.5; }
+    .zoneid { font-size: 15px; font-weight: 700; letter-spacing: 1px; fill: #fffdf8; }
+    .zonetitle { font-size: 19px; font-weight: 700; fill: #fffdf8; }
+    .place { font-size: 14px; fill: #26313a; }
+    .route { fill: none; stroke: #4d5962; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
+    .shortcut { fill: none; stroke: #986e42; stroke-width: 4; stroke-dasharray: 10 9; stroke-linecap: round; stroke-linejoin: round; opacity: .95; }
+    .optional { fill: none; stroke: #6c7480; stroke-width: 3; stroke-dasharray: 3 8; stroke-linecap: round; stroke-linejoin: round; }
+    .legend { font-size: 15px; fill: #414c55; }
+    .note { font-size: 14px; fill: #656f77; }
+  </style>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L8,3 z" fill="#4d5962"/>
+  </marker>
+  <marker id="shortarrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L8,3 z" fill="#986e42"/>
+  </marker>
+</defs>
+<rect width="1900" height="1480" fill="#f3f0e8"/>
+<path d="M40 105 H1860" stroke="#c9c5bb" stroke-width="2"/>
+<text x="60" y="58" class="heading">NEREIS HERO｜完整世界地图区划</text>
+<text x="62" y="86" class="subheading">设计者总图 · 14 个主要区域 · 地表 / 中层 / 地下互通 · 非比例示意</text>
+
+<rect x="45" y="125" width="1810" height="345" rx="22" fill="#e8eadf" stroke="#d1d5c8"/>
+<rect x="45" y="490" width="1810" height="365" rx="22" fill="#e5e7e8" stroke="#cbd0d3"/>
+<rect x="45" y="875" width="1810" height="440" rx="22" fill="#e4e0e2" stroke="#d0c7ca"/>
+<text x="70" y="157" class="layer">地表与高地｜森林、旧道路、公开信仰与王权</text>
+<text x="70" y="522" class="layer">中层城市｜废弃街区、军政设施与垂直建筑</text>
+<text x="70" y="907" class="layer">地下深层｜旧交通、墓穴、研究设施与终局异象</text>
+
+<!-- Connections first, so region cards cover their endpoints -->
+<g id="main-routes">
+  <path class="route" marker-end="url(#arrow)" d="M185 350 C185 380 185 394 185 421"/>
+  <path class="route" marker-end="url(#arrow)" d="M315 510 C342 510 346 510 365 510"/>
+  <path class="route" marker-end="url(#arrow)" d="M490 590 C490 618 505 630 505 657"/>
+  <path class="route" marker-end="url(#arrow)" d="M615 730 C655 715 664 680 687 650"/>
+  <path class="route" marker-end="url(#arrow)" d="M805 325 C840 325 854 325 884 325"/>
+  <path class="route" marker-end="url(#arrow)" d="M1008 405 C1008 455 1008 490 1008 568"/>
+  <path class="route" marker-end="url(#arrow)" d="M1034 730 C1034 790 1034 835 1034 905"/>
+  <path class="route" marker-end="url(#arrow)" d="M635 737 C575 790 575 840 576 908"/>
+  <path class="route" marker-end="url(#arrow)" d="M684 995 C758 995 816 995 882 995"/>
+  <path class="route" marker-end="url(#arrow)" d="M1125 995 C1170 975 1210 930 1265 775"/>
+  <path class="route" marker-end="url(#arrow)" d="M1490 660 C1535 615 1545 522 1570 430"/>
+  <path class="route" marker-end="url(#arrow)" d="M1685 430 C1700 450 1708 460 1712 482"/>
+  <path class="route" marker-end="url(#arrow)" d="M1490 760 C1535 800 1567 828 1604 870"/>
+  <path class="route" marker-end="url(#arrow)" d="M1514 430 C1470 590 1455 730 1430 910"/>
+  <path class="route" marker-end="url(#arrow)" d="M1400 1100 C1370 1140 1320 1170 1280 1194"/>
+  <path class="route" marker-end="url(#arrow)" d="M1675 1040 C1610 1120 1490 1190 1390 1225"/>
+  <path class="route" marker-end="url(#arrow)" d="M1283 600 C1325 560 1395 490 1455 430"/>
+</g>
+<g id="later-shortcuts">
+  <path class="shortcut" marker-end="url(#shortarrow)" d="M443 915 C315 860 205 790 185 580"/>
+  <path class="shortcut" marker-end="url(#shortarrow)" d="M1007 568 C895 515 770 580 650 657"/>
+  <path class="shortcut" marker-end="url(#shortarrow)" d="M1125 940 C1202 860 1274 790 1320 755"/>
+  <path class="shortcut" marker-end="url(#shortarrow)" d="M1130 285 C1215 260 1334 267 1450 320"/>
+  <path class="optional" d="M615 480 C656 415 673 370 687 325"/>
+  <path class="optional" d="M1125 995 C1210 1050 1280 1060 1360 1050"/>
+</g>
+
+<!-- Zone A0 -->
+<g transform="translate(65 185)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#6a7882"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#53616b"/>
+  <text x="16" y="22" class="zoneid">A0 · 序章</text>
+  <text x="16" y="42" class="zonetitle">边境手术所</text>
+  <text x="16" y="72" class="place">01 消毒病房</text><text x="16" y="94" class="place">02 实验走廊</text><text x="16" y="116" class="place">03 山腹逃生道</text>
+  <text x="16" y="146" class="note">单向逃脱 · 不扩建成大型关卡</text>
+</g>
+<!-- Zone A1 -->
+<g transform="translate(65 421)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#8e795d"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#766147"/>
+  <text x="16" y="22" class="zoneid">A1 · 枢纽</text><text x="16" y="42" class="zonetitle">边境村庄</text>
+  <text x="16" y="72" class="place">01 石井广场 / 02 旅店</text><text x="16" y="94" class="place">03 蜜忒小路 / 04 废弃磨坊</text><text x="16" y="116" class="place">05 村外林门 / 06 老井口</text>
+  <text x="16" y="146" class="note">生活锚点 · 第一条回访捷径</text>
+</g>
+<!-- Zone A2 -->
+<g transform="translate(365 430)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#71876f"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#596f58"/>
+  <text x="16" y="22" class="zoneid">A2 · 野外区</text><text x="16" y="42" class="zonetitle">雾林与钟墓</text>
+  <text x="16" y="72" class="place">01 雾林边缘 / 02 猎人谷道</text><text x="16" y="94" class="place">03 断桥观景台 / 04 朝圣石阶</text><text x="16" y="116" class="place">05 钟墓 / 06 地下钟室 / 07 裂隙</text>
+  <text x="16" y="146" class="note">可选支路 · 远景与旧路</text>
+</g>
+<!-- Zone A5 -->
+<g transform="translate(565 165)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#9b8054"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#80683f"/>
+  <text x="16" y="22" class="zoneid">A5 · 中期地表</text><text x="16" y="42" class="zonetitle">旧战场与边境堡垒</text>
+  <text x="16" y="72" class="place">01 断旗平原 / 02 塌陷战壕</text><text x="16" y="94" class="place">03 破城攻门 / 04 堡垒外墙</text><text x="16" y="116" class="place">05 兵站遗址 / 06 旧朝圣高路</text>
+  <text x="16" y="146" class="note">战争历史 · 进入修道院的主路</text>
+</g>
+<!-- Zone A6 -->
+<g transform="translate(884 240)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#817789"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#695f73"/>
+  <text x="16" y="22" class="zoneid">A6 · 建筑区</text><text x="16" y="42" class="zonetitle">修道院与钟塔</text>
+  <text x="16" y="72" class="place">01 外院 / 02 朝圣回廊</text><text x="16" y="94" class="place">03 住宿膳堂 / 04 档案礼拜室</text><text x="16" y="116" class="place">05 钟塔下层 / 06 机房 / 07 回落口</text>
+  <text x="16" y="146" class="note">多层结构 · 后期开启城区捷径</text>
+</g>
+<!-- Zone A10 -->
+<g transform="translate(1420 265)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#765c70"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#5d4658"/>
+  <text x="16" y="22" class="zoneid">A10 · 权力区</text><text x="16" y="42" class="zonetitle">大圣堂与教会内廷</text>
+  <text x="16" y="72" class="place">01 朝圣阶梯 / 02 集会庭</text><text x="16" y="94" class="place">03 大圣堂 / 04 侧堂唱诗席</text><text x="16" y="116" class="place">05 内廷 / 06 封存档案 / 07 地底入口</text>
+  <text x="16" y="146" class="note">公开信仰与隐藏行政结构</text>
+</g>
+<!-- Zone A12 -->
+<g transform="translate(1600 125)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#9a7551"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#7c5d40"/>
+  <text x="16" y="22" class="zoneid">A12 · 终局主线</text><text x="16" y="42" class="zonetitle">王室内城与王座区</text>
+  <text x="16" y="72" class="place">01 内城侧门 / 02 王室庭院</text><text x="16" y="94" class="place">03 行政厅 / 04 私人回廊</text><text x="16" y="116" class="place">05 王座前厅 / 06 王座大厅</text>
+  <text x="16" y="146" class="note">王权的责任与自我辩护</text>
+</g>
+<!-- Zone A3 -->
+<g transform="translate(390 657)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#8b8581"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#6e6966"/>
+  <text x="16" y="22" class="zoneid">A3 · 大型枢纽</text><text x="16" y="42" class="zonetitle">废弃城区</text>
+  <text x="16" y="72" class="place">01 外街 / 02 倒塌住宅区</text><text x="16" y="94" class="place">03 旧市场 / 04 封锁大道</text><text x="16" y="116" class="place">05 屋顶木桥 / 06 礼拜堂 / 07 排水口</text>
+  <text x="16" y="146" class="note">上层环路 + 地下回环</text>
+</g>
+<!-- Zone A4 -->
+<g transform="translate(434 908)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#6f8993"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#536e79"/>
+  <text x="16" y="22" class="zoneid">A4 · 地下网络</text><text x="16" y="42" class="zonetitle">下水道与旧水库</text>
+  <text x="16" y="72" class="place">01 入口闸室 / 02 分流渠</text><text x="16" y="94" class="place">03 维护桥 / 04 沉积大厅</text><text x="16" y="116" class="place">05 回水闸 / 06 旧水库 / 07 王墓廊</text>
+  <text x="16" y="146" class="note">开闸后回村庄 · 接入王墓</text>
+</g>
+<!-- Zone A7 -->
+<g transform="translate(884 568)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#73757d"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#595b63"/>
+  <text x="16" y="22" class="zoneid">A7 · 垂直地下区</text><text x="16" y="42" class="zonetitle">监牢与忏悔井</text>
+  <text x="16" y="72" class="place">01 收押前厅 / 02 牢房廊道</text><text x="16" y="94" class="place">03 忏悔井 / 04 隔离区</text><text x="16" y="116" class="place">05 供水维护层 / 06 王室封闭竖井</text>
+  <text x="16" y="146" class="note">惩戒体系与隐藏用途</text>
+</g>
+<!-- Zone A8 -->
+<g transform="translate(882 908)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#8b7668"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#6d594c"/>
+  <text x="16" y="22" class="zoneid">A8 · 地下枢纽</text><text x="16" y="42" class="zonetitle">旧王墓与王室地下道</text>
+  <text x="16" y="72" class="place">01 外廊 / 02 旧王墓室</text><text x="16" y="94" class="place">03 铭文库 / 04 地下运送道</text><text x="16" y="116" class="place">05 升降厅 / 06 封锁闸 / 07 检修支路</text>
+  <text x="16" y="146" class="note">通向王城与深层研究区</text>
+</g>
+<!-- Zone A9 -->
+<g transform="translate(1265 600)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#6d7f8c"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#536674"/>
+  <text x="16" y="22" class="zoneid">A9 · 大型枢纽</text><text x="16" y="42" class="zonetitle">王城外环与废弃街区</text>
+  <text x="16" y="72" class="place">01 外城门楼 / 02 旧商业街</text><text x="16" y="94" class="place">03 空置住宅 / 04 守卫坡道</text><text x="16" y="116" class="place">05 高架水渠 / 06 城墙 / 07 排水门</text>
+  <text x="16" y="146" class="note">多入口 · 连接王室与教会</text>
+</g>
+<!-- Zone A11 -->
+<g transform="translate(1360 910)">
+  <rect class="zone" width="250" height="165" rx="14" fill="#76647f"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#5c4b66"/>
+  <text x="16" y="22" class="zoneid">A11 · 隐藏高风险区</text><text x="16" y="42" class="zonetitle">古神遗迹与研究区</text>
+  <text x="16" y="72" class="place">01 研究前厅 / 02 古代石层</text><text x="16" y="94" class="place">03 遗骸储存 / 04 实验档案</text><text x="16" y="116" class="place">05 失稳祭坛 / 06 深层裂隙 / 07 王墓口</text>
+  <text x="16" y="146" class="note">真相证据分散，不给单一答案</text>
+</g>
+<!-- Zone A13 -->
+<g transform="translate(1190 1194)">
+  <rect class="zone" width="250" height="105" rx="14" fill="#66566e"/>
+  <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#4f4057"/>
+  <text x="16" y="22" class="zoneid">A13 · 结局层</text><text x="16" y="42" class="zonetitle">深层梦境与终局异象</text>
+  <text x="16" y="73" class="place">共鸣边界 · 静谧花园 · 灰烬圣堂 · 城市回声</text>
+</g>
+
+<!-- Legend -->
+<rect x="65" y="1155" width="1000" height="145" rx="14" fill="#f8f6f0" stroke="#d1cdc3"/>
+<text x="90" y="1186" font-size="18" font-weight="700">图例与阅读方法</text>
+<path class="route" d="M92 1220 H190" marker-end="url(#arrow)"/>
+<text x="210" y="1226" class="legend">主路线 / 已知空间连接</text>
+<path class="shortcut" d="M445 1220 H545" marker-end="url(#shortarrow)"/>
+<text x="565" y="1226" class="legend">后期开启的捷径</text>
+<path class="optional" d="M790 1220 H890"/>
+<text x="910" y="1226" class="legend">可选 / 隐藏连接</text>
+<text x="90" y="1260" class="note">框内列出的是地图子区划候选，并非逐个 Godot 场景。</text>
+<text x="90" y="1283" class="note">箭头和线条表示连接意图，不按比例；实际能力门槛需盘点现有技能解锁顺序后确定。</text>
+
+<text x="60" y="1374" class="subheading">设计目标：玩家逐渐学会王国的地理，而不是依次选择章节。普通路线可错过深层真相；捷径应改变回程与空间认知。</text>
+<text x="60" y="1403" class="subheading">文档基准：docs/COMPLETE_WORLD_MAP_ATLAS_CN.md · Nereis Hero · Draft 1.0</text>
+</svg>
