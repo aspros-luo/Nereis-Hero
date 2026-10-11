@@ -32,7 +32,17 @@
 - `tools/validate_graybox_scene_wiring.py`：新增菜单输入锁与隐藏入口 Debug 覆盖的静态回归合同。
 - `docs/MAP_GATE_ACCEPTANCE_MATRIX_CN.md`：补充菜单交互锁与 F5 + V 地图验收步骤。
 
-### 读档出生侧问题与修复\n\n静态追踪发现：地图出口设置 `pending_region_spawn_side` 后调用 `set_location()` 写入当前地点，但该字段此前不在存档中；继续游戏只根据 `current_location` 选择场景，导致读档无法恢复最近一次地图切换的进入侧。现已增加持久字段 `resume_spawn_side`，并在 Continue 与灰盒场景初始化中串起恢复/保存流程；旧存档缺失该字段时回退到 west。该修复是源码层面的，尚未经过引擎运行。\n\n### 本轮远程源码静态抽查
+### 读档出生侧问题与修复\n\n静态追踪发现：地图出口设置 `pending_region_spawn_side` 后调用 `set_location()` 写入当前地点，但该字段此前不在存档中；继续游戏只根据 `current_location` 选择场景，导致读档无法恢复最近一次地图切换的进入侧。现已增加持久字段 `resume_spawn_side`，并在 Continue 与灰盒场景初始化中串起恢复/保存流程；旧存档缺失该字段时回退到 west。该修复是源码层面的，尚未经过引擎运行。\n\n### 补充源码交叉核对
+
+- 灰盒出口：核对了 60 处 `_spawn_exit_door` 调用。
+- 出生侧：所有面向灰盒场景的自定义出生侧均有对应分支；隐藏区入口包含 `bell_tower_entry`、`third_street_entry`、`royal_tomb_side_entry`、`bell_drop_entry`、`royal_transport_entry` 和 `chapel_entry`。
+- 隐藏入口来源：门槛声明的必需异常来源均能在区域控制器中找到实际生成点。
+- 菜单锁：门和隐藏入口使用共享交互焦点，菜单输入锁状态会阻止世界交互。
+- 读档出生侧：新增 `resume_spawn_side` 保存/加载、Continue 恢复和旧存档 west 默认值；自定义出生侧不会被不完整白名单过滤。
+
+以上为远程源码交叉核对，不代表已运行 Python 校验器或 Godot 场景。碰撞、实际出生点、切图时序和死亡回程仍需引擎验收。
+
+### 本轮远程源码静态抽查
 
 | 项目 | 结果 | 边界 |
 |---|---|---|
