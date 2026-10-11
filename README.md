@@ -22,6 +22,10 @@ The original combat demo remains available at:
 
 `res://scenes/combat_demo.tscn`
 
+Development working charter (Chinese / English):
+
+`docs/DEVELOPMENT_WORKING_CHARTER_CN_EN.md`
+
 ## Current narrative foundation
 
 Canonical story memory:
