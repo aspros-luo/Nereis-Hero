@@ -1577,7 +1577,7 @@ func _spawn_a11_maintenance_gate(x: float) -> void:
 	gate.target_spawn_side = "west"
 	gate.required_resonance = 55
 	gate.required_ancient_exposure = 2
-	gate.required_source_ids = ["anomaly_bell_retiming", "anomaly_erased_royal_name"]
+	gate.required_source_ids = Array[String](["anomaly_bell_retiming", "anomaly_erased_royal_name"])
 	gate.opened.connect(_on_a11_gate_opened)
 	add_child(gate)
 
@@ -1596,7 +1596,7 @@ func _spawn_a11_chapel_gate(x: float) -> void:
 	gate.required_resonance = 68
 	gate.required_outer_exposure = 12
 	gate.require_outer_god_resonance = true
-	gate.required_source_ids = ["anomaly_mirror_street_echo"]
+	gate.required_source_ids = Array[String](["anomaly_mirror_street_echo"])
 	gate.opened.connect(_on_a11_gate_opened)
 	add_child(gate)
 
@@ -1623,11 +1623,11 @@ func _spawn_h08_gate(x: float) -> void:
 	gate.required_ancient_exposure = 2
 	gate.required_outer_exposure = 18
 	gate.require_outer_god_resonance = true
-	gate.required_source_ids = [
+	gate.required_source_ids = Array[String]([
 		"anomaly_bell_retiming",
 		"anomaly_erased_street_sign",
 		"anomaly_old_stone_layer"
-	]
+	])
 	gate.opened.connect(_on_h08_gate_opened)
 	add_child(gate)
 
@@ -1945,7 +1945,7 @@ func _spawn_h06_gate(x: float) -> void:
 	gate.target_spawn_side = "west"
 	gate.required_resonance = 55
 	gate.required_ancient_exposure = 2
-	gate.required_source_ids = ["anomaly_bell_retiming", "anomaly_erased_street_sign"]
+	gate.required_source_ids = Array[String](["anomaly_bell_retiming", "anomaly_erased_street_sign"])
 	gate.opened.connect(_on_optional_hidden_gate_opened)
 	add_child(gate)
 
