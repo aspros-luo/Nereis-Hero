@@ -820,5 +820,29 @@
     }
   ],
   "ancient_exposure_baseline_at_prologue": 0,
-  "outer_exposure_baseline_at_prologue": 0
+  "outer_exposure_baseline_at_prologue": 0,
+  "local_resonance_routes": [
+    {
+      "id": "A3_THIRD_STREET_ROOFLINE",
+      "region_id": "A3",
+      "required_resonance": 28,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 1690,
+      "bridge_end_x": 2050,
+      "bridge_y": 350,
+      "persistent_on_open": true,
+      "design_intent": "Reconnects the erased third street inside A3 without entering H03 or bypassing a main-story gate."
+    },
+    {
+      "id": "A4_OLD_STONE_AQUEDUCT",
+      "region_id": "A4",
+      "required_resonance": 36,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 1760,
+      "bridge_end_x": 1940,
+      "bridge_y": 310,
+      "persistent_on_open": true,
+      "design_intent": "Reveals a dry aqueduct span above the old reservoir; it is a local traversal route, not a hidden-scene entrance."
+    }
+  ]
 }
