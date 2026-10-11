@@ -37,6 +37,9 @@ func _process(delta: float) -> void:
     opened_permanently = WorldState.is_hidden_path_opened(route_id)
     var hero := get_node_or_null("../Hero") as Node2D
     var bridge_center := Vector2((bridge_start_x + bridge_end_x) * 0.5, bridge_y)
+    # Focus arbitration must measure this composite route at its bridge anchor, not at the root origin (0, 0).
+    # 共享焦点仲裁必须以桥体锚点计算距离，不能把根节点原点 (0, 0) 当作交互位置。
+    set_meta("interaction_focus_position", to_global(bridge_center))
     hero_nearby = hero != null and hero.global_position.distance_to(to_global(bridge_center)) <= 105.0
     # Keep a temporary bridge solid while the Hero is standing on it, even if Sight expires.
     # 即使灵视计时结束，只要主角仍站在临时桥体上，就暂时保留碰撞，避免脚下消失。
