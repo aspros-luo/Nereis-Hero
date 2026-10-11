@@ -318,29 +318,30 @@ func _spawn_ui() -> void:
 	hud.set_story_mode(_localized_region_title(), _get_objective_text())
 
 func _localized_region_title() -> String:
+	var display_name := region_title
 	match region_id:
-		"A0": return "边境手术所与逃脱通道"
-		"A1": return "边境村庄"
-		"A2": return "雾林、钟墓与旧朝圣路"
-		"A3": return "被遗忘的城区"
-		"A4": return "下水道、沉积大厅与旧水库"
-		"A5": return "旧战场与边境堡垒"
-		"A6": return "修道院、回廊与钟塔"
-		"A7": return "监牢、忏悔井与维护竖井"
-		"A8": return "旧王墓与王室地下道"
-		"A9": return "王城外环与废弃街区"
-		"A10": return "大圣堂、朝圣阶梯与教会内廷"
-		"A11": return "古神遗迹与深层研究区"
-		"A12": return "王室内城与王座区"
-		"H01": return "井底回声层"
-		"H02": return "倒响钟室"
-		"H03": return "被删去的第三街"
-		"H04": return "水面背后的楼梯"
-		"H05": return "无声钟室"
-		"H06": return "王名抹除廊"
-		"H07": return "镜街：雨幕背后"
-		"H08": return "胎宫／原初空腔"
-		_: return region_title
+		"A0": display_name = "教会手术所与逃脱通道"
+		"A1": display_name = "边境村庄"
+		"A2": display_name = "雾林、钟墓与旧朝圣路"
+		"A3": display_name = "被遗忘的城区"
+		"A4": display_name = "下水道、沉积大厅与旧水库"
+		"A5": display_name = "旧战场与边境堡垒"
+		"A6": display_name = "修道院、回廊与钟塔"
+		"A7": display_name = "监牢、忏悔井与维护竖井"
+		"A8": display_name = "旧王墓与王室地下道"
+		"A9": display_name = "王城外环与废弃街区"
+		"A10": display_name = "大圣堂、朝圣阶梯与教会内廷"
+		"A11": display_name = "古神遗迹与深层研究区"
+		"A12": display_name = "王室内城与王座区"
+		"H01": display_name = "井底回声层"
+		"H02": display_name = "倒响钟室"
+		"H03": display_name = "被删去的第三街"
+		"H04": display_name = "水面背后的楼梯"
+		"H05": display_name = "无声钟室"
+		"H06": display_name = "王名抹除廊"
+		"H07": display_name = "镜街：雨幕背后"
+		"H08": display_name = "胎宫／原初空腔"
+	return "%s｜%s" % [region_id, display_name]
 
 func _get_objective_text() -> String:
 	match region_id:
