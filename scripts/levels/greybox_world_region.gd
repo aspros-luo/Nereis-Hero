@@ -1680,7 +1680,7 @@ func _spawn_local_resonance_routes() -> void:
             route.required_resonance = 24
             route.bridge_start_x = 880.0
             route.bridge_end_x = 1340.0
-            route.bridge_y = 380.0
+            route.bridge_y = 390.0
             route.prompt_text = "E  RAISE THE BURIED STANDARD"
         "A6":
             # The silent bell's upper service walk reconnects the tower stair to the outer cloister.
@@ -1728,7 +1728,7 @@ func _spawn_local_resonance_routes() -> void:
             route.required_resonance = 44
             route.bridge_start_x = 1260.0
             route.bridge_end_x = 1520.0
-            route.bridge_y = 330.0
+            route.bridge_y = 335.0
             route.prompt_text = "E  ANCHOR THE RAIN REFLECTION"
         "A10":
             # The choir gallery bridges the staggered upper chapel ledges; it does not replace the cathedral exits or C19.
@@ -1740,7 +1740,7 @@ func _spawn_local_resonance_routes() -> void:
             route.required_resonance = 48
             route.bridge_start_x = 675.0
             route.bridge_end_x = 1075.0
-            route.bridge_y = 300.0
+            route.bridge_y = 310.0
             route.prompt_text = "E  ANCHOR THE CHOIRLESS GALLERY"
         "A11":
             # An upper span reconnects two ancient observation ledges above the later Church laboratory.
