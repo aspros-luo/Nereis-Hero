@@ -7,7 +7,7 @@ Current contract: endings are determined by Resonance, truth-anchor items and ex
 The evaluator in scripts/core/ending_evaluator.gd uses these prototype thresholds:
 
 - Cosmic Resonance: hero_resonance >= 68.
-- Eternal Paradise: Resonance >= 68, outer_exposure >= 6, at least one hidden region entered, and Blazing Judgment requirements are not met.
+- Eternal Paradise: Resonance >= 68, the anomaly_observer_reaction source is recorded, at least one hidden region is entered, and Blazing Judgment requirements are not met.
 - Blazing Judgment: Resonance >= 68, at least 3 unique truth-anchor sources, and at least 2 hidden regions entered.
 - Mortal's Grave: all other combinations.
 
@@ -23,7 +23,7 @@ Keep Resonance below 68, or reach high Resonance without the exploration / expos
 
 Hero's Resonance becomes a signal the Outer God can answer. Exploration exposes him to an Outer-God trace, but he has not assembled enough truth anchors and explored enough hidden regions to preserve his individuality.
 
-Required: hero_resonance >= 68, outer_exposure >= 6, entered_hidden_regions.size() >= 1, and Blazing Judgment requirements not both met.
+Required: hero_resonance >= 68, anomaly_observer_reaction is present in resonance_sources, entered_hidden_regions.size() >= 1, and Blazing Judgment requirements not both met.
 
 Physical intimacy with Mite is not required. The ending theater must not mark physical_union_complete as a side effect.
 
@@ -37,12 +37,12 @@ Four canonical sources: ancient_lab, graveyard_bell, rebel_order, memory_echo. T
 
 ## Acceptance matrix
 
-| Resonance | Outer exposure | Truth anchors | Hidden regions entered | Expected ending |
+| Resonance | Observer Reaction recorded | Truth anchors | Hidden regions entered | Expected ending |
 |---:|---:|---:|---:|---|
 | 0–67 | Any | Any | Any | 凡人之墓 |
-| 68+ | 6+ | 0–2 | 1+ | 永恒乐园 |
+| 68+ | Yes | 0–2 | 1+ | 永恒乐园 |
 | 68+ | Any | 3+ | 2+ | 烈火天罚 |
-| 68+ | Below 6 | 0–2 | Any | 凡人之墓 |
+| 68+ | No | 0–2 | Any | 凡人之墓 |
 
 Blazing Judgment has priority when both cosmic routes appear plausible.
 
