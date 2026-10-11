@@ -1094,6 +1094,7 @@ def main() -> int:
                 errors.append(f"Topology local route {route_id} must persist after opening.")
             if route_design.get("region_id") not in known_region_ids:
                 errors.append(f"Topology local route {route_id} references unknown region {route_design.get('region_id')}.")
+            geometry_valid = True
             try:
                 start_x = float(route_design.get("bridge_start_x"))
                 end_x = float(route_design.get("bridge_end_x"))
@@ -1101,12 +1102,18 @@ def main() -> int:
                 threshold = int(route_design.get("required_resonance"))
                 if end_x <= start_x:
                     errors.append(f"Topology local route {route_id} must have bridge_end_x > bridge_start_x.")
+                    geometry_valid = False
                 if not 0 <= threshold <= 100:
                     errors.append(f"Topology local route {route_id} has an invalid Resonance threshold.")
+                    geometry_valid = False
                 if not 0.0 <= bridge_y <= 540.0:
                     errors.append(f"Topology local route {route_id} has a bridge elevation outside the graybox floor bounds.")
+                    geometry_valid = False
             except (TypeError, ValueError):
                 errors.append(f"Topology local route {route_id} has non-numeric geometry or threshold values.")
+                geometry_valid = False
+            if not geometry_valid:
+                continue
             route_platforms = platforms_by_region.get(route_design.get("region_id"), [])
             if not route_platforms:
                 errors.append(f"Local route {route_id} has no parsed platform layout for {route_design.get('region_id')}.")
