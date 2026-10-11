@@ -29,12 +29,12 @@ const HIDDEN_NODES: Array[Dictionary] = [
 	{"id":"H08","name":"原初空腔","p":Vector2(0.755,0.92),"parents":["A11"]}
 ]
 
-const MAIN_EDGES: Array[Array] = [
+const MAIN_EDGES = [
 	["A0","A1"],["A1","A2"],["A2","A3"],["A3","A5"],["A5","A6"],
 	["A6","A7"],["A7","A8"],["A8","A9"],["A9","A10"],["A10","A12"]
 ]
 
-const LOOP_EDGES: Array[Array] = [
+const LOOP_EDGES = [
 	["A3","A4"],["A4","A1"],["A4","A7"],["A4","A8"],["A4","A9"],
 	["A3","A6"],["A2","A5"],["A9","A12"],["A8","A11"],["A10","A11"]
 ]
