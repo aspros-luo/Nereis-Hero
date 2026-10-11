@@ -8,6 +8,7 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
 const RESONANCE_SOURCE_SCRIPT = preload("res://scripts/world/resonance_source_clue.gd")
 const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")
+const LOCAL_RESONANCE_ROUTE_SCRIPT = preload("res://scripts/world/resonance_local_route.gd")
 const ENDGAME_GATE_SCRIPT = preload("res://scripts/core/endgame_gate.gd")
 
 @export var region_id: String = "A2"
@@ -51,6 +52,7 @@ func _ready() -> void:
     _spawn_ui()
     _spawn_region_sources()
     _spawn_region_exits()
+    _spawn_local_resonance_routes()
     queue_redraw()
 
     var intro_id := "graybox_intro_%s" % location_id
@@ -1180,6 +1182,32 @@ func _on_mirror_street_gate_opened(secret_id: String) -> void:
         4.5
     )
 
+
+func _spawn_local_resonance_routes() -> void:
+    # A3's erased street can be crossed inside the familiar map when Resonance Sight reveals the missing roof bridge.
+    # A3 被抹除的街道可在熟悉地图内部通过鸣响显现屋顶桥，不必进入独立隐藏场景。
+    if region_id != "A3":
+        return
+    var route := Node2D.new()
+    route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+    route.name = "ThirdStreetResonanceBridge"
+    route.route_id = "A3_THIRD_STREET_ROOFLINE"
+    route.required_resonance = 28
+    route.bridge_start_x = 1690.0
+    route.bridge_end_x = 2050.0
+    route.bridge_y = 350.0
+    route.opened.connect(_on_local_resonance_route_opened)
+    add_child(route)
+
+func _on_local_resonance_route_opened(route_id: String) -> void:
+    if not is_instance_valid(narrative):
+        return
+    narrative.show_message(
+        "THE THIRD STREET HOLDS",
+        "A bridge appears where the city map was scraped clean. The road does not lead to another place; it reconnects two parts of the street you already knew.\n\nThe stone will remember this route.",
+        5.0
+    )
+    print("[NEREIS][MAP][LOCAL_ROUTE] opened id=%s" % route_id)
 
 func _spawn_h02_gate(x: float) -> void:
     var gate := Node2D.new()
