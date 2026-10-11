@@ -1238,7 +1238,7 @@ func _spawn_region_exits() -> void:
 				)
 			# Keep the erased-street gate beside its clue and away from the raised battlefield exit.
 			# 被删去的第三街入口紧邻路牌线索，并与高台战场出口保持距离。
-			_spawn_h03_gate(1060.0)
+			_spawn_h03_gate(1120.0)
 			if WorldState.is_hidden_path_opened("H05") and "opened_bell_tower_drop" in WorldState.achievement_flags:
 				# Keep the optional H05 return door well clear of the C10 monastery-drop door at x=1710.
 				# H05 回程门与 x=1710 的 C10 钟塔落差门保持足够间距，避免两个 E 交互争抢。
