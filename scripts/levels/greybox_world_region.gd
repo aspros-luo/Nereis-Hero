@@ -582,6 +582,8 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1820, 345, 120, 18))
             _add_platform(Rect2(1960, 390, 120, 18))
         "H07":
+            # The reflected avenue has a lower waterline and an upper lamp-bridge route.
+            # 倒影大道同时具有低位水线与高位灯桥路线。
             _add_platform(Rect2(250, 475, 150, 18))
             _add_platform(Rect2(520, 425, 125, 18))
             _add_platform(Rect2(780, 380, 160, 18))
@@ -589,12 +591,29 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1350, 385, 160, 18))
             _add_platform(Rect2(1650, 440, 150, 18))
             _add_platform(Rect2(1970, 475, 170, 18))
+            _add_platform(Rect2(380, 395, 110, 18))
+            _add_platform(Rect2(505, 350, 115, 18))
+            _add_platform(Rect2(645, 310, 120, 18))
+            _add_platform(Rect2(790, 330, 120, 18))
+            _add_platform(Rect2(930, 375, 120, 18))
+            _add_platform(Rect2(1190, 385, 120, 18))
+            _add_platform(Rect2(1325, 340, 120, 18))
+            _add_platform(Rect2(1460, 300, 120, 18))
+            _add_platform(Rect2(1600, 340, 120, 18))
         "H01":
+            # The well shaft descends by ledges, then curls around a sealed echo chamber.
+            # 井道以错层石沿向下，随后绕过被封住的回声室。
             _add_platform(Rect2(310, 465, 140, 18))
             _add_platform(Rect2(540, 420, 130, 18))
             _add_platform(Rect2(780, 375, 150, 18))
             _add_platform(Rect2(1040, 430, 160, 18))
             _add_platform(Rect2(1320, 475, 140, 18))
+            _add_platform(Rect2(450, 345, 110, 18))
+            _add_platform(Rect2(590, 300, 110, 18))
+            _add_platform(Rect2(720, 260, 115, 18))
+            _add_platform(Rect2(850, 290, 115, 18))
+            _add_platform(Rect2(970, 335, 115, 18))
+            _add_platform(Rect2(1080, 380, 115, 18))
         "A11":
             # The old ruin's observation gallery crosses above the newer laboratory floor.
             # 观测廊横跨新建实验室地面之上，强调古老遗迹与现代设施的叠压。
@@ -618,45 +637,105 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1800, 285, 120, 18))
             _add_platform(Rect2(1940, 330, 120, 18))
         "H08":
+            # Organic ribs spiral around the central cavity; no single straight floor line dominates.
+            # 有机骨脊围绕中央空腔盘旋，不再由一条直线地面主导空间。
             _add_platform(Rect2(250, 470, 150, 18))
             _add_platform(Rect2(505, 425, 135, 18))
             _add_platform(Rect2(755, 380, 160, 18))
             _add_platform(Rect2(1030, 430, 145, 18))
             _add_platform(Rect2(1290, 385, 165, 18))
             _add_platform(Rect2(1560, 440, 145, 18))
+            _add_platform(Rect2(390, 385, 110, 18))
+            _add_platform(Rect2(515, 340, 115, 18))
+            _add_platform(Rect2(650, 300, 120, 18))
+            _add_platform(Rect2(790, 320, 120, 18))
+            _add_platform(Rect2(925, 365, 115, 18))
+            _add_platform(Rect2(1070, 375, 115, 18))
+            _add_platform(Rect2(1200, 330, 120, 18))
+            _add_platform(Rect2(1340, 290, 120, 18))
+            _add_platform(Rect2(1480, 335, 115, 18))
+            _add_platform(Rect2(1620, 390, 115, 18))
         "H02":
+            # The silent bell chamber spirals around a suspended bell, with a broken upper gallery.
+            # 无声钟室围绕悬钟盘旋，上层廊道则断续残缺。
             _add_platform(Rect2(260, 475, 145, 18))
             _add_platform(Rect2(515, 430, 135, 18))
             _add_platform(Rect2(790, 385, 160, 18))
             _add_platform(Rect2(1070, 435, 145, 18))
             _add_platform(Rect2(1340, 390, 155, 18))
+            _add_platform(Rect2(390, 400, 110, 18))
+            _add_platform(Rect2(515, 355, 115, 18))
+            _add_platform(Rect2(650, 315, 115, 18))
+            _add_platform(Rect2(790, 335, 115, 18))
+            _add_platform(Rect2(930, 380, 115, 18))
+            _add_platform(Rect2(1070, 385, 115, 18))
         "H03":
+            # The erased third street is split into visible and absent segments, with a roofline in between.
+            # 被抹除的第三街分成可见与缺失的路段，中间由屋顶线连接。
             _add_platform(Rect2(250, 475, 150, 18))
             _add_platform(Rect2(515, 430, 140, 18))
             _add_platform(Rect2(780, 385, 175, 18))
             _add_platform(Rect2(1080, 445, 155, 18))
             _add_platform(Rect2(1420, 400, 170, 18))
             _add_platform(Rect2(1760, 455, 160, 18))
+            _add_platform(Rect2(380, 395, 110, 18))
+            _add_platform(Rect2(505, 350, 115, 18))
+            _add_platform(Rect2(645, 310, 120, 18))
+            _add_platform(Rect2(790, 330, 120, 18))
+            _add_platform(Rect2(930, 375, 115, 18))
+            _add_platform(Rect2(1210, 395, 115, 18))
+            _add_platform(Rect2(1340, 350, 115, 18))
+            _add_platform(Rect2(1475, 310, 120, 18))
+            _add_platform(Rect2(1615, 350, 120, 18))
         "H04":
+            # Water reflection becomes a stairway that folds back over itself.
+            # 水中倒影化作折返的阶梯。
             _add_platform(Rect2(250, 475, 160, 18))
             _add_platform(Rect2(530, 425, 140, 18))
             _add_platform(Rect2(810, 380, 165, 18))
             _add_platform(Rect2(1100, 435, 150, 18))
             _add_platform(Rect2(1390, 390, 170, 18))
+            _add_platform(Rect2(390, 400, 110, 18))
+            _add_platform(Rect2(515, 355, 115, 18))
+            _add_platform(Rect2(650, 315, 115, 18))
+            _add_platform(Rect2(790, 335, 115, 18))
+            _add_platform(Rect2(930, 380, 115, 18))
+            _add_platform(Rect2(1070, 385, 115, 18))
         "H05":
+            # The upper silent-bell gallery crosses over a lower chamber with no moving shadows.
+            # 无声钟上层廊道横跨一间没有移动阴影的下层房室。
             _add_platform(Rect2(280, 480, 155, 18))
             _add_platform(Rect2(560, 430, 135, 18))
             _add_platform(Rect2(840, 385, 150, 18))
             _add_platform(Rect2(1120, 340, 140, 18))
             _add_platform(Rect2(1400, 395, 155, 18))
             _add_platform(Rect2(1700, 450, 160, 18))
+            _add_platform(Rect2(400, 405, 110, 18))
+            _add_platform(Rect2(530, 360, 115, 18))
+            _add_platform(Rect2(670, 320, 115, 18))
+            _add_platform(Rect2(810, 285, 115, 18))
+            _add_platform(Rect2(950, 305, 115, 18))
+            _add_platform(Rect2(1090, 345, 115, 18))
+            _add_platform(Rect2(1230, 390, 115, 18))
         "H06":
+            # Name tablets are arranged as an interrupted procession, with an upper route past the erased names.
+            # 王名石板沿中断的仪式队列排列，上层路线从被抹除的姓名上方经过。
             _add_platform(Rect2(260, 480, 160, 18))
             _add_platform(Rect2(540, 440, 140, 18))
             _add_platform(Rect2(820, 395, 165, 18))
             _add_platform(Rect2(1110, 445, 155, 18))
             _add_platform(Rect2(1420, 395, 165, 18))
             _add_platform(Rect2(1730, 450, 160, 18))
+            _add_platform(Rect2(390, 405, 110, 18))
+            _add_platform(Rect2(520, 360, 115, 18))
+            _add_platform(Rect2(660, 320, 115, 18))
+            _add_platform(Rect2(800, 340, 115, 18))
+            _add_platform(Rect2(940, 385, 115, 18))
+            _add_platform(Rect2(1080, 395, 115, 18))
+            _add_platform(Rect2(1220, 350, 115, 18))
+            _add_platform(Rect2(1360, 310, 115, 18))
+            _add_platform(Rect2(1500, 350, 115, 18))
+            _add_platform(Rect2(1640, 395, 115, 18))
 
 func _add_platform(rect: Rect2) -> void:
     platforms.append(rect)
