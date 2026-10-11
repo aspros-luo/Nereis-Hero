@@ -35,7 +35,7 @@ static func _focus_position(node: Node2D) -> Vector2:
     # Some interactables are large composites whose root origin is not their actual focus point.
     # 部分交互对象是大型组合节点，根节点原点并非实际交互焦点。
     var focus_position: Variant = node.get_meta("interaction_focus_position", node.global_position)
-    if focus_position is Vector2:
+    if typeof(focus_position) == TYPE_VECTOR2:
         return focus_position
     return node.global_position
 
