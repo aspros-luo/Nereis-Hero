@@ -1487,7 +1487,7 @@ Implementation source of truth: scripts/core/ending_evaluator.gd. These are prot
 
 In Nereis-Hero, Hero defeats the Church's leadership and the King, helping the Restoration Army win. The political victory is real, but the Restoration Army gradually recreates the structures of coercion and corruption it claimed to destroy.
 
-Nereis-Lullaby, primarily from Mite's perspective, may portray Hero's later compromises and fall inside the new order. He may abandon Mite after repeatedly choosing public duty and institutional survival over personal bonds. This must be a gradual character tragedy, not an unexplained personality flip.
+The planned Nereis-Lullaby cross-game mainline, primarily from Mite's perspective, follows Hero's later compromises and fall inside the new order until he abandons Mite; the world enters another cycle. He repeatedly chooses public duty and institutional survival over personal bonds. This must be a gradual character tragedy, not an unexplained personality flip. Other branches may explore alternatives.
 
 The Outer God remains indifferent to these human cycles. It continues seeking another vessel even if Mite is abandoned or one vessel plan fails.
 
