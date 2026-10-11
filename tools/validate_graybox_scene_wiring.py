@@ -873,8 +873,11 @@ def main() -> int:
         'opened_prompt_text: String = ""',
         'WorldState.record_achievement(unlock_once_flag_id)',
         'prompt_text = opened_prompt_text',
+        'var available := enabled and not WorldState.input_locked and hero_nearby and cooldown <= 0.0',
     ]:
         require(interaction_door, contract, "One-time inspection hatch", errors)
+    if "if hero_nearby and WorldState.input_locked:" in interaction_door:
+        errors.append("Interaction doors must preserve physical proximity while dialogue locks world input.")
 
     secret_gate = read("scripts/world/resonance_secret_gate.gd", errors)
     for contract in [
