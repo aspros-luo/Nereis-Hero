@@ -88,9 +88,9 @@ func _spawn_x_for_side(side: String) -> float:
         # C04 回程门位于 x=1880；出生点必须避开其交互触发范围。
         return 1750.0
     if region_id == "A5" and side == "old_pilgrim_highroad":
-        # C04 arrives near the city-facing end of the battlefield shortcut.
-        # C04 从捷径抵达战场时，出生在靠近旧城的一侧。
-        return 850.0
+        # C04's battlefield door is at x=520; land nearby without overlapping its trigger.
+        # C04 战场侧门位于 x=520；出生在门附近，但不进入其触发区。
+        return 650.0
     if region_id == "A2" and side == "bell_gate":
         # Leave the H02 entrance's interaction radius after returning from the hidden chamber.
         # 从倒响钟室返回时，出生点应离入口足够远，避免一落地就抢占 E 交互。
