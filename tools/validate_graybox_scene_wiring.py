@@ -332,6 +332,19 @@ def main() -> int:
     ]:
         require(region_script, contract, "C04 old pilgrim highroad", errors)
 
+    # C24 must be gated on the city side too, matching the village's defense requirement.
+    # C24 城区侧也必须受村庄防卫标记约束，与村庄入口条件一致。
+    a3_start = region_script.find('        "A3":', region_script.find("func _spawn_region_exits"))
+    a4_start = region_script.find('        "A4":', a3_start)
+    a3_exit_block = region_script[a3_start:a4_start] if a3_start >= 0 and a4_start > a3_start else ""
+    if not a3_exit_block:
+        fail(errors, "C24 route audit: cannot isolate A3 exit block.")
+    else:
+        require(a3_exit_block, 'if "village_defense_survived" in WorldState.achievement_flags:', "C24 city-side defense gate", errors)
+        require(a3_exit_block, '"E  RETURN THROUGH THE OLD DRAIN"', "C24 city-side return door", errors)
+        if a3_exit_block.find('"E  RETURN THROUGH THE OLD DRAIN"') < a3_exit_block.find('if "village_defense_survived" in WorldState.achievement_flags:'):
+            fail(errors, "C24 A3 return door must remain inside the village-defense condition.")
+
     # C10 must be available independently of H05; its only persisted unlock is its own drop flag.
     # C10 必须独立于 H05 可用；它只依赖自身的钟塔落差开门标记。
     a6_start = region_script.find('        "A6":', region_script.find("func _spawn_region_exits"))
