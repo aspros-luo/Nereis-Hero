@@ -229,7 +229,13 @@ func set_story_mode(region: String, objective: String) -> void:
     story_region_source = region
     story_objective_source = objective
     title_label.text = NereisLocalization.t("hud.title")
-    region_label.text = _localize_region(region)
+    # Keep the authored map code visible even when the region name is localized.
+    # 即使区域名称被本地化，也始终保留 A1／H01 等地图编号。
+    var region_parts := region.split("｜", false, 1)
+    if region_parts.size() == 2 and (region_parts[0].begins_with("A") or region_parts[0].begins_with("H")):
+        region_label.text = "%s｜%s" % [region_parts[0], _localize_region(region_parts[1])]
+    else:
+        region_label.text = _localize_region(region)
     objective_label.text = _localize_objective(objective)
     _set_humanity_visible(false)
 
