@@ -25,7 +25,7 @@ First physical-route pass: the A2-to-A3 exit now sits on the eastern canopy ledg
 - **Royal-depth loop:** A4 ↔ A8 ↔ A9 ↔ A4. Doors must open from the intended side and retain their state.
 - **Main route:** A0 → A1 → A2 → A3 → A5 → A6 → A7 → A8 → A9 → A10 → A12.
 - **Deep branch:** Reach A11 through C15 from A8 or C19 from A10. H08 may extend this branch, but the branch must not block the ordinary ending.
-- **Anomaly branches:** H01–H08 should branch from established landmarks and retain credible return routes.
+- **Anomaly branches:** H01–H09 should branch from established landmarks and retain credible return routes.
 
 ## Next physical-layout pass
 
@@ -97,7 +97,7 @@ Do not represent all five states with one boolean or a vague shared “unlocked�
 
 ## Status
 
-- Done: world-map overlay for A0–A12 and discovered hidden areas; M toggles it, Esc closes it, and main routes are visually distinguished from loops.
+- Done: world-map overlay for A0–A12 and discovered H01–H09 hidden areas; M toggles it, Esc closes it, and main routes are visually distinguished from loops. H09 appears only after discovery.
 - Implemented, pending runtime verification: A2-to-A3 now uses a rising canopy route to an eastern raised exit (about x=2240, y=380); A3-to-A5 uses the eastern raised parapet (about x=2240, y=410); H03 sits beside the Third Street clue (about x=1120). F10 navigation and objective text were aligned with these changes.
-- Remaining: extend vertical-space and loop readability improvements to A2, A4, A6, A8, and A9, then verify jump reachability and interaction spacing in Godot.
+- Remaining: audit conditional-shortcut debug markers in the other regions, then verify jump reachability, one-way collision, interaction spacing, and window adaptation in Godot.
 - Not yet runtime-verified: Godot 4.6.x parsing, input-lock behavior, window-size adaptation, and full natural exploration. Static checks are not runtime acceptance.
