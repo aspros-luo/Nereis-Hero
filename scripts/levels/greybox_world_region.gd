@@ -1307,33 +1307,33 @@ func _register_debug_locked_route_hints() -> void:
 
 
 func _debug_route_label(target_location: String) -> String:
-	match target_location:
-		"church_escape": return "A0 教会手术所"
-		"village": return "A1 边境村庄"
-		"ash_forest": return "A2 雾林钟墓"
-		"forgotten_city": return "A3 被遗忘城区"
-		"sewer_reservoir": return "A4 旧水库"
-		"old_battlefield": return "A5 旧战场"
-		"monastery_tower": return "A6 修道院钟塔"
-		"prison_depths": return "A7 监牢深处"
-		"royal_tomb": return "A8 旧王墓"
-		"royal_outer_ring": return "A9 王城外环"
-		"grand_cathedral": return "A10 大圣堂"
-		"deep_research_depths": return "A11 深层研究区"
-		"inner_city": return "A12 王室内城"
-		"hidden_well": return "H01 井底回声层"
-		"hidden_bell_chamber": return "H02 倒响钟室"
-		"erased_third_street": return "H03 被删去的第三街"
-		"reflected_stairwell": return "H04 水面背后的楼梯"
-		"silent_bell_room": return "H05 无声钟室"
-		"erased_royal_name_corridor": return "H06 王名抹除廊"
-		"mirror_street": return "H07 镜街"
-		"primordial_hollow": return "H08 胎宫／原初空腔"
-		"cliff_cave_experiment": return "H09 崖下实验窟"
-		"ending_fire_demo": return "结局：烈火天罚"
-		"ending_paradise_demo": return "结局：永恒乐园"
-		_:
-			return target_location
+	var labels := {
+		"church_escape": "A0 教会手术所",
+		"village": "A1 边境村庄",
+		"ash_forest": "A2 雾林钟墓",
+		"forgotten_city": "A3 被遗忘城区",
+		"sewer_reservoir": "A4 旧水库",
+		"old_battlefield": "A5 旧战场",
+		"monastery_tower": "A6 修道院钟塔",
+		"prison_depths": "A7 监牢深处",
+		"royal_tomb": "A8 旧王墓",
+		"royal_outer_ring": "A9 王城外环",
+		"grand_cathedral": "A10 大圣堂",
+		"deep_research_depths": "A11 深层研究区",
+		"inner_city": "A12 王室内城",
+		"hidden_well": "H01 井底回声层",
+		"hidden_bell_chamber": "H02 倒响钟室",
+		"erased_third_street": "H03 被删去的第三街",
+		"reflected_stairwell": "H04 水面背后的楼梯",
+		"silent_bell_room": "H05 无声钟室",
+		"erased_royal_name_corridor": "H06 王名抹除廊",
+		"mirror_street": "H07 镜街",
+		"primordial_hollow": "H08 胎宫／原初空腔",
+		"cliff_cave_experiment": "H09 崖下实验窟",
+		"ending_fire_demo": "结局：烈火天罚",
+		"ending_paradise_demo": "结局：永恒乐园"
+	}
+	return str(labels.get(target_location, target_location))
 
 
 func _register_debug_locked_route_hint(x: float, target: String, condition: String) -> void:
