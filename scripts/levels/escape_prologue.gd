@@ -79,7 +79,7 @@ func _spawn_clue() -> void:
     clue.position = Vector2(620, FLOOR_Y)
     clue.clue_id = "escape_surgical_mark"
     clue.humanity_delta = -1
-    clue.display_name = "SURGICAL TRAY"
+    clue.display_name = "手术托盘"
     clue.description = "A metal tray holds dried black residue beneath a layer of blood.\n\nThe Hero touches it.\n\nSomething inside his arm answers.\n\nThe sensation stops before it becomes a memory."
     add_child(clue)
     clue.examined.connect(_on_clue_examined.bind(clue))
@@ -93,7 +93,7 @@ func _spawn_rest() -> void:
     rest.set_script(REST_POINT_SCRIPT)
     rest.position = Vector2(350, FLOOR_Y)
     rest.rest_id = "escape_stool"
-    rest.display_name = "BROKEN STOOL"
+    rest.display_name = "破损的凳子"
     add_child(rest)
 
 func _spawn_exit() -> void:
@@ -101,7 +101,7 @@ func _spawn_exit() -> void:
     exit_area.set_script(INTERACTION_DOOR_SCRIPT)
     exit_area.position = Vector2(2040, FLOOR_Y)
     exit_area.name = "VillageRoadExit"
-    exit_area.prompt_text = "E  Escape"
+    exit_area.prompt_text = "E  逃离"
     exit_area.enabled = false
 
     var shape := CollisionShape2D.new()
@@ -125,7 +125,7 @@ func _open_exit() -> void:
     exit_open = true
     exit_area.enabled = true
     narrative.show_message(
-        "THE ROAD OUT",
+        "逃脱之路 OUT",
         "The final lock gives way.\n\nYou do not remember how you arrived here.\n\nYou only remember that staying means dying.",
         5.0
     )
@@ -166,11 +166,11 @@ func _spawn_ui() -> void:
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
     hud.bind_hero(hero)
-    hud.set_story_mode("THE SURGICAL WARD", "ESCAPE THE CHURCH")
+    hud.set_story_mode("THE 教会手术所", "ESCAPE THE CHURCH")
 
 func _show_intro() -> void:
     narrative.show_message(
-        "THE SURGICAL WARD",
+        "THE 教会手术所",
         "The straps are broken. The room smells of iron and incense.\n\nSomewhere behind the walls, a bell keeps ringing.",
         5.5
     )
@@ -254,7 +254,7 @@ func _draw() -> void:
 
     draw_rect(Rect2(120, 280, 420, 240), Color("#29222c"))
     draw_rect(Rect2(180, 240, 300, 40), Color("#352d38"))
-    draw_string(ThemeDB.fallback_font, Vector2(210, 215), NereisLocalization.translate_text("SURGICAL WARD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
+    draw_string(ThemeDB.fallback_font, Vector2(210, 215), NereisLocalization.translate_text("教会手术所"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
 
     # Broken rails mark the optional maintenance catwalk above the surgical tables.
     # 断裂护栏标出手术台上方的可选维护高路。
@@ -278,7 +278,7 @@ func _draw() -> void:
         ]),
         Color("#241e27")
     )
-    draw_string(ThemeDB.fallback_font, Vector2(1810, 250), NereisLocalization.translate_text("THE ROAD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#6d5c64"))
+    draw_string(ThemeDB.fallback_font, Vector2(1810, 250), NereisLocalization.translate_text("逃脱之路"), HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#6d5c64"))
 
     if not exit_open:
         draw_rect(Rect2(2000, 300, 90, 220), Color("#18151b"))
@@ -286,4 +286,4 @@ func _draw() -> void:
         draw_line(Vector2(2080, 320), Vector2(2080, 500), Color("#5d4c55"), 5.0)
     else:
         draw_rect(Rect2(2000, 300, 90, 220), Color("#33232a"))
-        draw_string(ThemeDB.fallback_font, Vector2(1995, 275), NereisLocalization.translate_text("OPEN"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
+        draw_string(ThemeDB.fallback_font, Vector2(1995, 275), NereisLocalization.translate_text("开启"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
