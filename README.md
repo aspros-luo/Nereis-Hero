@@ -48,6 +48,10 @@ Complete world map atlas (Chinese draft):
 
 `docs/COMPLETE_WORLD_MAP_ATLAS_CN.md`
 
+Map-first content completion roadmap (Chinese):
+
+`docs/MAP_CONTENT_COMPLETION_ROADMAP_CN.md`
+
 World map atlas diagram (SVG):
 
 `docs/assets/COMPLETE_WORLD_MAP_ATLAS.svg`
