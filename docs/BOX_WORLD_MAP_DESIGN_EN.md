@@ -4,7 +4,9 @@
 
 During a simple playtest on 2026-10-11, holding Right continuously was enough to reach the “A Grave for Mortals” ending. This is not a testing mistake; it reveals a real graybox presentation issue. Most main-route exits sit on the right edge, and most regions use a single horizontal ground plane. A loop existing in the topology does not automatically make the world feel interconnected during play.
 
-A player-facing world-map overlay has now been added (press **M** to open or close it). It visualizes the main route, loops, and optional A11. This is an aid, not a substitute for physical level design.
+A player-facing world-map overlay has now been added (press **M** to open or close it), and its region nodes have been rearranged from a single row into a layered, loop-oriented spatial graph. It visualizes the main route, loops, and optional A11. This is an aid, not a substitute for physical level design.
+
+First physical-route pass: the A2-to-A3 exit now sits on the eastern canopy ledge (about x=2240, y=380), with a rising chain of platforms. Players must notice and climb the upper route instead of simply walking right along the ground. The ground-level bell-grave anomaly remains a separate choice. F10 navigation was updated; jumping and interaction still require in-engine verification.
 
 ## Design principles
 
@@ -29,7 +31,8 @@ A player-facing world-map overlay has now been added (press **M** to open or clo
 
 Prioritize A2, A3, A4, A6, A8, and A9:
 
-- Move some entrances to raised platforms, descending passages, or mid-level branches rather than placing every exit on the floor at either boundary.
+- Place main routes, shortcuts, and hidden entrances on upper platforms, descending passages, and mid-level branches; do not make every objective reachable along the same flat ground line.
+- Keep the main direction readable while offering high, low, and side routes in key regions; at least one route should reconnect to an old region through a different entrance.
 - Use silhouettes of buildings, stairs, shafts, drainage pipes, bell towers, and visible sealed doors to suggest cross-level connections.
 - Give each region a clear main route, an optional upper route, and a return shortcut where appropriate; routes should differ in risk, distance, or clues.
 - Whenever an exit moves, update spawn-side mapping, F10 target coordinates, platform reachability, and interaction-prompt spacing together.
@@ -48,6 +51,6 @@ Prioritize A2, A3, A4, A6, A8, and A9:
 ## Status
 
 - Done: world-map overlay for A0–A12 and discovered hidden areas; M toggles it, Esc closes it, and main routes are visually distinguished from loops.
-- Implemented, pending runtime verification: the A3-to-A5 exit now sits on the eastern raised parapet (about x=2240, y=410); the H03 gate has moved beside the Third Street clue (about x=1120). F10 navigation and objective text were aligned with these changes.
+- Implemented, pending runtime verification: A2-to-A3 now uses a rising canopy route to an eastern raised exit (about x=2240, y=380); A3-to-A5 uses the eastern raised parapet (about x=2240, y=410); H03 sits beside the Third Street clue (about x=1120). F10 navigation and objective text were aligned with these changes.
 - Remaining: extend vertical-space and loop readability improvements to A2, A4, A6, A8, and A9, then verify jump reachability and interaction spacing in Godot.
 - Not yet runtime-verified: Godot 4.6.x parsing, input-lock behavior, window-size adaptation, and full natural exploration. Static checks are not runtime acceptance.
