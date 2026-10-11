@@ -1062,12 +1062,13 @@ func _spawn_region_exits() -> void:
                     "res://scenes/old_battlefield.tscn", "old_pilgrim_highroad"
                 )
         "A3":
-            # The city can also return directly to the village through the drainage passage.
-            # 城区可经排水通路直接返回村庄，形成第二条回环。
-            _spawn_exit_door(
-                520.0, "E  RETURN THROUGH THE OLD DRAIN", "village",
-                "res://scenes/village_hub.tscn", "city_cut_return"
-            )
+            # C24 remains sealed on both ends until the village defense chapter is survived.
+            # C24 两端都必须等到村庄防卫章节结束后才开放，避免城区侧提前绕过世界门槛。
+            if "village_defense_survived" in WorldState.achievement_flags:
+                _spawn_exit_door(
+                    520.0, "E  RETURN THROUGH THE OLD DRAIN", "village",
+                    "res://scenes/village_hub.tscn", "city_cut_return"
+                )
             _spawn_exit_door(
                 72.0, "E  RETURN TO PILGRIM ROAD", "ash_forest",
                 "res://scenes/ash_forest.tscn", "east"
