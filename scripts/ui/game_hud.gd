@@ -70,7 +70,7 @@ func _ready() -> void:
 
     controls_label = Label.new()
     controls_label.position = Vector2(38, 62)
-    controls_label.text = "A/D 移动    空格 跳跃    J 攻击    K 闪避    Q 切换武器"
+    controls_label.text = "A/D 移动    空格 跳跃    J 攻击    K 闪避    Q 切换武器    M 世界路线图"
     controls_label.add_theme_font_size_override("font_size", 13)
     controls_label.add_theme_color_override("font_color", Color("#8f8586"))
     add_child(controls_label)
