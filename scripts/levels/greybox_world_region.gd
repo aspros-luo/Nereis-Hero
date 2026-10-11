@@ -2005,6 +2005,10 @@ func _draw_mirror_street_landmarks() -> void:
     draw_line(Vector2(1190, floor_y - 155), Vector2(1325, floor_y - 200), Color("#6ca5ad"), 3.0)
     draw_line(Vector2(1325, floor_y - 200), Vector2(1460, floor_y - 240), Color("#6ca5ad"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(980, floor_y - 270), "THE REFLECTION HAS A SECOND FLOOR", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#70979a"))
+    for lamp in range(6):
+        draw_circle(Vector2(2130.0 + float(lamp) * 24.0, floor_y - 24), 4.0, Color("#6ca5ad"))
+    draw_circle(Vector2(2200, floor_y - 56), 5.0, Color("#b6d4d0"))
+    draw_line(Vector2(2125, floor_y - 14), Vector2(2265, floor_y - 14), Color("#6ca5ad"), 2.0)
 
 
 func _draw_battlefield_landmarks() -> void:
@@ -2100,6 +2104,9 @@ func _draw_hidden_bell_chamber_landmarks() -> void:
     draw_line(Vector2(515, floor_y - 185), Vector2(650, floor_y - 225), Color("#62566c"), 3.0)
     draw_line(Vector2(650, floor_y - 225), Vector2(790, floor_y - 205), Color("#62566c"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(650, floor_y - 260), "THE SOUND HAS A SHAPE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8b7893"))
+    draw_arc(Vector2(1650, floor_y - 88), 36.0, PI, TAU, 24, Color("#817081"), 3.0)
+    draw_line(Vector2(1650, floor_y - 124), Vector2(1650, floor_y - 48), Color("#817081"), 3.0)
+    draw_line(Vector2(1628, floor_y - 62), Vector2(1672, floor_y - 62), Color("#817081"), 2.0)
 
 func _draw_erased_third_street_landmarks() -> void:
     for x in range(180, int(map_width), 360):
@@ -2117,6 +2124,8 @@ func _draw_erased_third_street_landmarks() -> void:
     draw_line(Vector2(1210, floor_y - 145), Vector2(1340, floor_y - 190), Color("#6a5369"), 3.0)
     draw_line(Vector2(1340, floor_y - 190), Vector2(1475, floor_y - 230), Color("#6a5369"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(1240, floor_y - 265), "THE MISSING STREET HAS ROOFS", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8a727f"))
+    draw_rect(Rect2(1990, floor_y - 72, 64, 44), Color("#38303e"))
+    draw_string(ThemeDB.fallback_font, Vector2(1998, floor_y - 42), "1  2  _", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#b19aa9"))
 
 func _draw_reflected_stairwell_landmarks() -> void:
     draw_rect(Rect2(0, floor_y + 48, map_width, 36), Color("#15252d"))
@@ -2131,6 +2140,9 @@ func _draw_reflected_stairwell_landmarks() -> void:
     draw_line(Vector2(515, floor_y - 185), Vector2(650, floor_y - 225), Color("#5e8792"), 3.0)
     draw_line(Vector2(650, floor_y - 225), Vector2(790, floor_y - 205), Color("#5e8792"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(990, floor_y - 275), "THE REFLECTION CLIMBS", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#77959d"))
+    for ripple in range(3):
+        draw_arc(Vector2(1740, floor_y - 22), 18.0 + float(ripple) * 10.0, PI, TAU, 20, Color("#5e8792"), 2.0)
+    draw_line(Vector2(1700, floor_y - 18), Vector2(1780, floor_y - 18), Color("#5e8792"), 2.0)
 
 func _draw_silent_bell_room_landmarks() -> void:
     draw_rect(Rect2(900, floor_y - 390, 300, 390), Color("#292632"))
@@ -2146,6 +2158,10 @@ func _draw_silent_bell_room_landmarks() -> void:
     draw_line(Vector2(530, floor_y - 180), Vector2(670, floor_y - 220), Color("#766b85"), 3.0)
     draw_line(Vector2(670, floor_y - 220), Vector2(810, floor_y - 255), Color("#766b85"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(1260, floor_y - 290), "THE BELL CASTS NO SHADOW", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8a7b94"))
+    draw_rect(Rect2(1925, floor_y - 66, 72, 42), Color("#393341"))
+    draw_line(Vector2(1935, floor_y - 56), Vector2(1987, floor_y - 56), Color("#9b8ea6"), 2.0)
+    draw_line(Vector2(1935, floor_y - 46), Vector2(1987, floor_y - 46), Color("#9b8ea6"), 2.0)
+    draw_line(Vector2(1935, floor_y - 36), Vector2(1970, floor_y - 36), Color("#9b8ea6"), 2.0)
 
 func _draw_erased_royal_name_landmarks() -> void:
     for x in [320.0, 760.0, 1200.0, 1640.0]:
@@ -2160,6 +2176,11 @@ func _draw_erased_royal_name_landmarks() -> void:
     draw_line(Vector2(1220, floor_y - 150), Vector2(1360, floor_y - 195), Color("#7c6475"), 3.0)
     draw_line(Vector2(1360, floor_y - 195), Vector2(1500, floor_y - 235), Color("#7c6475"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(1190, floor_y - 270), "THE ROYAL LINE ENDS HERE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#9b808d"))
+    draw_rect(Rect2(1940, floor_y - 74, 86, 46), Color("#393039"))
+    draw_line(Vector2(1950, floor_y - 64), Vector2(2016, floor_y - 64), Color("#a38b98"), 2.0)
+    draw_line(Vector2(1950, floor_y - 54), Vector2(2016, floor_y - 54), Color("#a38b98"), 2.0)
+    draw_line(Vector2(1960, floor_y - 44), Vector2(1976, floor_y - 60), Color("#a38b98"), 2.0)
+    draw_line(Vector2(1976, floor_y - 60), Vector2(1992, floor_y - 44), Color("#a38b98"), 2.0)
 
 func _draw_deep_research_landmarks() -> void:
     # The laboratory is built around an older, warmer stone structure.
@@ -2229,6 +2250,9 @@ func _draw_primordial_hollow_landmarks() -> void:
     draw_line(Vector2(1200, floor_y - 150), Vector2(1340, floor_y - 195), Color("#668b8b"), 3.0)
     draw_line(Vector2(1340, floor_y - 195), Vector2(1480, floor_y - 235), Color("#668b8b"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(1120, 245), "THE CAVITY HAS RIBS", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#8db8b4"))
+    draw_arc(Vector2(1850, floor_y - 30), 38.0, PI, TAU, 24, Color("#668b8b"), 4.0)
+    draw_arc(Vector2(1850, floor_y - 30), 26.0, PI, TAU, 24, Color("#668b8b"), 3.0)
+    draw_line(Vector2(1812, floor_y - 30), Vector2(1888, floor_y - 30), Color("#668b8b"), 3.0)
 
 func _draw_well_landmarks() -> void:
     draw_rect(Rect2(460, 70, 170, floor_y - 70), Color("#1b1822"))
@@ -2244,4 +2268,7 @@ func _draw_well_landmarks() -> void:
     draw_line(Vector2(680, floor_y - 235), Vector2(820, floor_y - 215), Color("#6b596f"), 3.0)
     draw_line(Vector2(820, floor_y - 215), Vector2(950, floor_y - 170), Color("#6b596f"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(660, floor_y - 265), "THE WELL HAS AN UPPER SHORE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8b7890"))
+    draw_arc(Vector2(1600, floor_y - 18), 34.0, PI, TAU, 24, Color("#6e8b91"), 3.0)
+    draw_line(Vector2(1565, floor_y - 18), Vector2(1635, floor_y - 18), Color("#6e8b91"), 2.0)
+    draw_string(ThemeDB.fallback_font, Vector2(1540, floor_y - 65), "WET / EMPTY", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 10, Color("#7a9aa0"))
 
