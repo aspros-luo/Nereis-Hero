@@ -543,12 +543,12 @@ def main() -> int:
     a12_route_block = region_script[a12_start:h07_start] if a12_start >= 0 and h07_start > a12_start else ""
     for contract in [
         '"E  CLIMB TO THE GREAT CATHEDRAL"',
-        '"grand_cathedral.tscn", "west"',
+        'res://scenes/grand_cathedral.tscn", "west"',
     ]:
         require(a9_route_block, contract, "C17 outer-ring-to-cathedral main route", errors)
     for contract in [
         '"E  ENTER THE INNER CITY"',
-        '"inner_city.tscn", "west"',
+        'res://scenes/inner_city.tscn", "west"',
     ]:
         require(a10_route_block, contract, "C20 cathedral-to-inner-city main route", errors)
     require(a12_route_block, '"E  RETURN TO THE CATHEDRAL"', "C20 inner-city return route", errors)
