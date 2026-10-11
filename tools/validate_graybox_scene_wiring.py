@@ -415,6 +415,62 @@ def main() -> int:
     if '1020.0, "E  OPEN THE OLD SERVICE DOOR"' in region_script:
         fail(errors, "A9 H03 service door remains too close to the C18 inner-city side gate.")
 
+    # Hidden-region exits must preserve their intended return loops and second-side unlocks.
+    # 隐藏区域的出口必须保留预期回环，并且远侧出口只能在对应实体门开启后可用。
+    hidden_exit_contracts = {
+        "H01": [
+            '"E  RETURN TO VILLAGE"',
+            '"reached_A4_via_A3" in WorldState.achievement_flags',
+            'WorldState.is_hidden_path_opened("H01")',
+            '"sewer_reservoir"',
+        ],
+        "H02": [
+            '"E  RETURN TO THE PILGRIM ROAD"',
+            '"opened_old_bell_tower_connection" in WorldState.achievement_flags',
+            '"old_battlefield"',
+        ],
+        "H03": [
+            '"E  RETURN TO THE FORGOTTEN CITY"',
+            '"opened_old_service_door" in WorldState.achievement_flags',
+            '"royal_outer_ring"',
+        ],
+        "H04": [
+            '"E  RETURN TO THE RESERVOIR"',
+            '"opened_royal_tomb_side_door" in WorldState.achievement_flags',
+            '"royal_tomb"',
+        ],
+        "H05": [
+            '"E  RETURN TO THE MONASTERY"',
+            '"opened_bell_tower_drop" in WorldState.achievement_flags',
+            '"forgotten_city"',
+        ],
+        "H06": [
+            '"E  RETURN TO THE ROYAL TOMB"',
+            '"opened_royal_transport_side_door" in WorldState.achievement_flags',
+            '"royal_outer_ring"',
+        ],
+        "H07": [
+            '"E  RETURN THROUGH THE PUDDLES"',
+            '"opened_mirror_street_side_gate" in WorldState.achievement_flags',
+            '"inner_city"',
+        ],
+        "H08": [
+            '"E  RETURN TO THE DEPTHS"',
+            'if WorldState.physical_union_complete:',
+            'ending_gate.call("route_candidate")',
+        ],
+    }
+    exits_start = region_script.find("func _spawn_region_exits")
+    for hidden_id, contracts in hidden_exit_contracts.items():
+        block_start = region_script.find(f'        "{hidden_id}":', exits_start)
+        block_end = region_script.find("\n        \"", block_start + 12) if block_start >= 0 else -1
+        block = region_script[block_start:block_end] if block_start >= 0 and block_end > block_start else ""
+        if not block:
+            fail(errors, f"{hidden_id} hidden-region exit block is missing or malformed.")
+            continue
+        for contract in contracts:
+            require(block, contract, f"{hidden_id} hidden-region return contract", errors)
+
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
     spawn_contracts = [
