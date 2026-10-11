@@ -38,6 +38,9 @@ func _process(delta: float) -> void:
     var hero := get_node_or_null("../Hero") as Node2D
     var bridge_center := Vector2((bridge_start_x + bridge_end_x) * 0.5, bridge_y)
     hero_nearby = hero != null and hero.global_position.distance_to(to_global(bridge_center)) <= 105.0
+    # Keep a temporary bridge solid while the Hero is standing on it, even if Sight expires.
+    # 即使灵视计时结束，只要主角仍站在临时桥体上，就暂时保留碰撞，避免脚下消失。
+    _sync_bridge_collision()
     var available := (
         not WorldState.input_locked
         and hero_nearby
@@ -60,8 +63,19 @@ func update_reveal_state(
     _sync_bridge_collision()
     queue_redraw()
 
+func _hero_over_bridge() -> bool:
+    var hero := get_node_or_null("../Hero") as Node2D
+    if hero == null:
+        return false
+    var hero_local := to_local(hero.global_position)
+    return (
+        hero_local.x >= bridge_start_x - 24.0
+        and hero_local.x <= bridge_end_x + 24.0
+        and absf(hero_local.y - bridge_y) <= 72.0
+    )
+
 func _sync_bridge_collision() -> void:
-    var should_exist := revealed or opened_permanently
+    var should_exist := revealed or opened_permanently or _hero_over_bridge()
     var has_bridge := is_instance_valid(bridge_body)
     if should_exist and not has_bridge:
         bridge_body = StaticBody2D.new()
@@ -99,7 +113,7 @@ func _unhandled_input(event: InputEvent) -> void:
         get_viewport().set_input_as_handled()
 
 func _draw() -> void:
-    if revealed or opened_permanently:
+    if revealed or opened_permanently or _hero_over_bridge():
         var width := bridge_end_x - bridge_start_x
         draw_rect(Rect2(bridge_start_x, bridge_y, width, 18.0), Color("#536b75"))
         draw_line(
