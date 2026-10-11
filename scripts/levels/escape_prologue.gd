@@ -80,7 +80,7 @@ func _spawn_clue() -> void:
     clue.clue_id = "escape_surgical_mark"
     clue.humanity_delta = -1
     clue.display_name = "手术托盘"
-    clue.description = "A metal tray holds dried black residue beneath a layer of blood.\n\nThe Hero touches it.\n\nSomething inside his arm answers.\n\nThe sensation stops before it becomes a memory."
+    clue.description = "金属托盘上覆着一层血，下面凝结着干涸的黑色残留物。\n\n英雄伸手触碰。\n\n他手臂深处的某种东西作出了回应。\n\n这种感觉尚未成为记忆，便突然中断。"
     add_child(clue)
     clue.examined.connect(_on_clue_examined.bind(clue))
 
@@ -126,7 +126,7 @@ func _open_exit() -> void:
     exit_area.enabled = true
     narrative.show_message(
         "逃脱之路 OUT",
-        "The final lock gives way.\n\nYou do not remember how you arrived here.\n\nYou only remember that staying means dying.",
+        "最后一道锁终于松开。\n\n你不记得自己如何来到这里。\n\n你只记得，留下来就意味着死亡。",
         5.0
     )
     print("[NEREIS][PROLOGUE] Escape route opened")
@@ -141,7 +141,7 @@ func _on_exit_interacted() -> void:
     WorldState.input_locked = true
     narrative.show_message(
         "THE VILLAGE",
-        "Cold air. A road. A cluster of lights in the distance.\n\nThe Hero keeps walking.",
+        "冷冽的空气。一条道路。远处聚集着几簇灯火。\n\n英雄继续向前走。",
         4.5
     )
     await narrative.message_finished
@@ -171,7 +171,7 @@ func _spawn_ui() -> void:
 func _show_intro() -> void:
     narrative.show_message(
         "THE 教会手术所",
-        "The straps are broken. The room smells of iron and incense.\n\nSomewhere behind the walls, a bell keeps ringing.",
+        "束缚带已经断裂。房间里弥漫着铁锈与焚香的气味。\n\n墙壁深处，有一口钟始终响个不停。",
         5.5
     )
 
