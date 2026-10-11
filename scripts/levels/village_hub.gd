@@ -5,6 +5,7 @@ const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
+const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
 const VILLAGE_POI_SCRIPT = preload("res://scripts/world/village_poi.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
 const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
@@ -39,6 +40,7 @@ func _ready() -> void:
     var spawn_x := 1900.0 if spawn_side == "well_exit" else (350.0 if spawn_side == "city_cut_return" else 260.0)
     _spawn_hero(spawn_x)
     _spawn_checkpoint()
+    _spawn_village_rest_point()
     _spawn_mite()
     _spawn_mite_house_door()
     _spawn_gatekeeper()
@@ -68,6 +70,18 @@ func _spawn_hero(spawn_x: float = 260.0) -> void:
     camera.limit_bottom = 720
     camera.position = Vector2.ZERO
     hero.add_child(camera)
+
+func _spawn_village_rest_point() -> void:
+    # The village hearth is a safe hub rest point, separate from the checkpoint's spawn marker.
+    # 村庄炉火是安全据点的休整点，与单纯记录出生位置的检查点分开。
+    var rest := Node2D.new()
+    rest.set_script(REST_POINT_SCRIPT)
+    rest.name = "VillageHearthRestPoint"
+    rest.position = Vector2(620, 520)
+    rest.rest_id = "rest_A1_village_hearth"
+    rest.display_name = "VILLAGE HEARTH"
+    add_child(rest)
+
 
 func _spawn_checkpoint() -> void:
     checkpoint = Area2D.new()
@@ -513,6 +527,13 @@ func _draw() -> void:
     )
     draw_rect(Rect2(430, 430, 50, 90), Color("#17141b"))
     draw_string(ThemeDB.fallback_font, Vector2(388, 332), NereisLocalization.translate_text("MITE'S HOUSE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
+
+    # A low hearth marks the safe hub and the point where survivors gather.
+    # 低矮炉火标记安全据点，也是村民聚集的地方。
+    draw_rect(Rect2(590, 492, 62, 28), Color("#3a2d35"))
+    draw_circle(Vector2(620, 492), 11.0, Color("#a85e45"))
+    draw_circle(Vector2(620, 487), 6.0, Color("#d49b68"))
+    draw_string(ThemeDB.fallback_font, Vector2(584, 475), "HEARTH", HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color("#8d7776"))
 
     # Leave the western edge open for the old drainage passage; houses begin beyond its arch.
     # 西侧为旧排水通路保留空间，民居从拱门以东开始排列。
