@@ -60,7 +60,7 @@ func _ready() -> void:
 
     title_label = Label.new()
     title_label.position = Vector2(36, 24)
-    title_label.text = "NEREIS HERO"
+    title_label.text = "蜜忒之歌：英雄"
     title_label.add_theme_font_size_override("font_size", 24)
     title_label.add_theme_color_override("font_color", Color("#d6c7b2"))
     add_child(title_label)
@@ -74,7 +74,7 @@ func _ready() -> void:
 
     region_label = Label.new()
     region_label.position = Vector2(38, 91)
-    region_label.text = NereisLocalization.translate_text("ASHEN ROAD")
+    region_label.text = NereisLocalization.translate_text("灰烬之路")
     region_label.add_theme_font_size_override("font_size", 13)
     region_label.add_theme_color_override("font_color", Color("#665b5d"))
     add_child(region_label)
@@ -168,7 +168,7 @@ func _ready() -> void:
 
     boss_title = Label.new()
     boss_title.position = Vector2(16, 7)
-    boss_title.text = "ASHEN KNIGHT"
+    boss_title.text = "灰烬骑士"
     boss_title.add_theme_font_size_override("font_size", 15)
     boss_panel.add_child(boss_title)
 
@@ -234,12 +234,12 @@ func set_story_mode(region: String, objective: String) -> void:
     _set_humanity_visible(false)
 
 func set_combat_demo_mode() -> void:
-    title_label.text = NereisLocalization.t("hud.title") + "  /  " + NereisLocalization.translate_text("CORE COMBAT")
-    region_label.text = "ASHEN ROAD"
+    title_label.text = NereisLocalization.t("hud.title") + "  /  " + NereisLocalization.translate_text("核心战斗")
+    region_label.text = "灰烬之路"
     _set_humanity_visible(false)
 
 func _on_hidden_resistance_awakened() -> void:
-    _show_banner("A WARMTH UNDER THE SKIN", 1.9)
+    _show_banner("皮肤之下的温热", 1.9)
 
 func _set_humanity_visible(_value: bool) -> void:
     # Hidden narrative values never appear in the normal HUD.
@@ -250,28 +250,28 @@ func _set_humanity_visible(_value: bool) -> void:
 
 func set_combat_demo_progress(defeated: int, boss_active: bool, complete: bool) -> void:
     if complete:
-        objective_label.text = NereisLocalization.translate_text("CORE COMBAT DEMO COMPLETE")
+        objective_label.text = NereisLocalization.translate_text("核心战斗 DEMO COMPLETE")
 
     elif boss_active:
-        objective_label.text = NereisLocalization.translate_text("DEFEAT THE ASHEN KNIGHT")
+        objective_label.text = NereisLocalization.translate_text("DEFEAT THE 灰烬骑士")
     else:
-        objective_label.text = NereisLocalization.translate_text("DEFEAT SMALL ENEMIES    %d / 3") % defeated
+        objective_label.text = NereisLocalization.translate_text("击败小型敌人    %d / 3") % defeated
 
 func show_hit_confirm(damage: int) -> void:
     impact_flash_time = 0.07 if damage < 50 else 0.10
-    _show_banner("HIT  %d" % damage, 0.18)
+    _show_banner("命中  %d" % damage, 0.18)
 
 func show_death_feedback() -> void:
-    _show_banner("DEFEATED  //  RETURNING TO CHECKPOINT", 0.75)
+    _show_banner("战败  //  返回检查点", 0.75)
 
 func show_boss_intro() -> void:
-    _show_banner("THE ASHEN KNIGHT", 1.40)
+    _show_banner("THE 灰烬骑士", 1.40)
 
 func show_phase_two() -> void:
-    _show_banner("THE ASHEN KNIGHT  //  PHASE II", 1.10)
+    _show_banner("THE 灰烬骑士  //  PHASE II", 1.10)
 
 func show_complete() -> void:
-    _show_banner("CORE COMBAT DEMO COMPLETE", 2.40)
+    _show_banner("核心战斗 DEMO COMPLETE", 2.40)
 
 func _show_banner(message: String, duration: float) -> void:
     combat_banner.text = NereisLocalization.translate_text(message)
@@ -584,7 +584,7 @@ func _update_boss_bar() -> void:
     var phase_variant = boss.get("phase")
     var phase: int = int(phase_variant) if phase_variant != null else 1
     var name_variant = boss.get("boss_display_name")
-    var display_name: String = str(name_variant) if name_variant != null else "ASHEN KNIGHT"
+    var display_name: String = str(name_variant) if name_variant != null else "灰烬骑士"
     display_name = NereisLocalization.translate_text(display_name)
     var ratio: float = clampf(float(hp) / max_health, 0.0, 1.0)
     boss_title.text = "%s  //  PHASE %d" % [display_name, phase]
