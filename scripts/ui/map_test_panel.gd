@@ -117,12 +117,18 @@ func _ready() -> void:
 func _build_panel() -> void:
 	panel = PanelContainer.new()
 	panel.position = Vector2(260, 24)
-	panel.size = Vector2(820, 820)
+	panel.size = Vector2(820, 672)
 	add_child(panel)
 
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_child(scroll)
+
 	var column := VBoxContainer.new()
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override("separation", 10)
-	panel.add_child(column)
+	scroll.add_child(column)
 
 	var title := Label.new()
 	title.text = "地图测试模式"
