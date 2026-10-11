@@ -1682,6 +1682,18 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_end_x = 1220.0
             route.bridge_y = 345.0
             route.prompt_text = "E  RAISE THE BURIED STANDARD"
+        "A6":
+            # The silent bell's upper service walk reconnects the tower stair to the outer cloister.
+            # 无声钟的高位检修道重新连接钟塔阶梯与外侧回廊。
+            route = Node2D.new()
+            route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+            route.name = "SilentBellServiceWalk"
+            route.route_id = "A6_SILENT_BELL_SERVICE_WALK"
+            route.required_resonance = 32
+            route.bridge_start_x = 1180.0
+            route.bridge_end_x = 1480.0
+            route.bridge_y = 250.0
+            route.prompt_text = "E  ANCHOR THE SILENT BELL WALK"
         _:
             return
     route.opened.connect(_on_local_resonance_route_opened)
@@ -1701,6 +1713,12 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
             narrative.show_message(
                 "THE STANDARD THAT OUTLIVED THE ARMY",
                 "The cloth has rotted away, but its shadow still points across the trench. The fortress map marks this gap as impassable. The dead were ordered to hold a road that the Church later removed from every record.",
+                5.0
+            )
+        "A6_SILENT_BELL_SERVICE_WALK":
+            narrative.show_message(
+                "THE SERVICE WALK OF THE SILENT BELL",
+                "The upper walkway bears fresh maintenance marks, but the bell above it has never moved. The repair ledger lists a bell-ringer who was born decades after the monastery was sealed.",
                 5.0
             )
         _:
