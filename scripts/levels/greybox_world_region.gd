@@ -1654,9 +1654,9 @@ func _spawn_local_resonance_routes() -> void:
             route.name = "ThirdStreetResonanceBridge"
             route.route_id = "A3_THIRD_STREET_ROOFLINE"
             route.required_resonance = 28
-            route.bridge_start_x = 1690.0
-            route.bridge_end_x = 2050.0
-            route.bridge_y = 350.0
+            route.bridge_start_x = 1320.0
+            route.bridge_end_x = 1690.0
+            route.bridge_y = 400.0
             route.prompt_text = "E  ANCHOR THE THIRD STREET"
         "A4":
             # A dry aqueduct span appears above the old reservoir only after the buried stone answers.
@@ -1666,9 +1666,9 @@ func _spawn_local_resonance_routes() -> void:
             route.name = "OldStoneAqueductRoute"
             route.route_id = "A4_OLD_STONE_AQUEDUCT"
             route.required_resonance = 36
-            route.bridge_start_x = 1760.0
-            route.bridge_end_x = 1940.0
-            route.bridge_y = 310.0
+            route.bridge_start_x = 1650.0
+            route.bridge_end_x = 1935.0
+            route.bridge_y = 335.0
             route.prompt_text = "E  ANCHOR THE DRY AQUEDUCT"
         "A5":
             # A buried standard marks a trench crossing erased from the fortress survey.
@@ -1678,9 +1678,9 @@ func _spawn_local_resonance_routes() -> void:
             route.name = "BuriedStandardTrenchRoute"
             route.route_id = "A5_BURIED_STANDARD_CROSSING"
             route.required_resonance = 24
-            route.bridge_start_x = 1000.0
-            route.bridge_end_x = 1220.0
-            route.bridge_y = 345.0
+            route.bridge_start_x = 880.0
+            route.bridge_end_x = 1340.0
+            route.bridge_y = 380.0
             route.prompt_text = "E  RAISE THE BURIED STANDARD"
         "A6":
             # The silent bell's upper service walk reconnects the tower stair to the outer cloister.
@@ -1690,9 +1690,9 @@ func _spawn_local_resonance_routes() -> void:
             route.name = "SilentBellServiceWalk"
             route.route_id = "A6_SILENT_BELL_SERVICE_WALK"
             route.required_resonance = 32
-            route.bridge_start_x = 1180.0
-            route.bridge_end_x = 1480.0
-            route.bridge_y = 250.0
+            route.bridge_start_x = 1250.0
+            route.bridge_end_x = 1510.0
+            route.bridge_y = 290.0
             route.prompt_text = "E  ANCHOR THE SILENT BELL WALK"
         "A7":
             # A maintenance catwalk bridges two cell-block levels without opening the royal tomb gate.
@@ -1702,9 +1702,9 @@ func _spawn_local_resonance_routes() -> void:
             route.name = "PrisonMaintenanceCrosswalk"
             route.route_id = "A7_PRISON_MAINTENANCE_CROSSWALK"
             route.required_resonance = 30
-            route.bridge_start_x = 1080.0
-            route.bridge_end_x = 1320.0
-            route.bridge_y = 285.0
+            route.bridge_start_x = 1280.0
+            route.bridge_end_x = 1530.0
+            route.bridge_y = 340.0
             route.prompt_text = "E  ANCHOR THE PRISON CROSSWALK"
         "A8":
             # The erased regent gallery spans the upper tomb passage, linking the name-wall ledge to the return gallery.
@@ -1714,8 +1714,8 @@ func _spawn_local_resonance_routes() -> void:
             route.name = "ErasedRegentGalleryRoute"
             route.route_id = "A8_ERASED_REGENT_GALLERY"
             route.required_resonance = 40
-            route.bridge_start_x = 1330.0
-            route.bridge_end_x = 1600.0
+            route.bridge_start_x = 1240.0
+            route.bridge_end_x = 1490.0
             route.bridge_y = 330.0
             route.prompt_text = "E  ANCHOR THE ERASED REGENT GALLERY"
         "A9":
@@ -1727,8 +1727,8 @@ func _spawn_local_resonance_routes() -> void:
             route.route_id = "A9_RAIN_REFLECTION_ROOFWALK"
             route.required_resonance = 44
             route.bridge_start_x = 1260.0
-            route.bridge_end_x = 1540.0
-            route.bridge_y = 285.0
+            route.bridge_end_x = 1520.0
+            route.bridge_y = 330.0
             route.prompt_text = "E  ANCHOR THE RAIN REFLECTION"
         "A10":
             # The choir gallery bridges the staggered upper chapel ledges; it does not replace the cathedral exits or C19.
@@ -1740,7 +1740,7 @@ func _spawn_local_resonance_routes() -> void:
             route.required_resonance = 48
             route.bridge_start_x = 675.0
             route.bridge_end_x = 1075.0
-            route.bridge_y = 270.0
+            route.bridge_y = 300.0
             route.prompt_text = "E  ANCHOR THE CHOIRLESS GALLERY"
         "A11":
             # An upper span reconnects two ancient observation ledges above the later Church laboratory.
@@ -1752,8 +1752,20 @@ func _spawn_local_resonance_routes() -> void:
             route.required_resonance = 56
             route.bridge_start_x = 1230.0
             route.bridge_end_x = 1920.0
-            route.bridge_y = 265.0
+            route.bridge_y = 285.0
             route.prompt_text = "E  ANCHOR THE OBSERVER SPAN"
+        "A12":
+            # The crown wall offers a risky upper traverse but leaves the throne approach and ending gate untouched.
+            # 王冠城墙提供高风险上层横道，但不改变王座入口与结局门槛。
+            route = Node2D.new()
+            route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+            route.name = "CrownWallWalk"
+            route.route_id = "A12_CROWN_WALL_WALK"
+            route.required_resonance = 62
+            route.bridge_start_x = 1400.0
+            route.bridge_end_x = 1940.0
+            route.bridge_y = 325.0
+            route.prompt_text = "E  ANCHOR THE CROWN WALL"
         _:
             return
     route.opened.connect(_on_local_resonance_route_opened)
@@ -1809,6 +1821,12 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
             narrative.show_message(
                 "THE OBSERVER WHO LEFT NO FOOTPRINTS",
                 "The old ledges meet above the laboratory's newest instruments. One observation slate records two shadows entering the chamber and only one body leaving. A later hand has rewritten the count as a lighting error.",
+                5.0
+            )
+        "A12_CROWN_WALL_WALK":
+            narrative.show_message(
+                "THE WALL BUILT FOR A KING'S ABSENCE",
+                "The upper wall was built to watch the avenue, not defend it. Its arrow slits face inward. The palace feared what might leave the throne room more than what might approach it.",
                 5.0
             )
         _:
