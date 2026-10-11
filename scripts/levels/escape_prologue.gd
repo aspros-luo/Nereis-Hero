@@ -28,6 +28,7 @@ func _ready() -> void:
     WorldState.set_checkpoint(Vector2(300, FLOOR_Y))
 
     _create_floor()
+    _create_surgical_catwalks()
     _create_boundaries()
     _spawn_hero()
     _spawn_wardens()
@@ -184,6 +185,30 @@ func _create_floor() -> void:
     floor.add_child(shape)
     add_child(floor)
 
+func _create_surgical_catwalks() -> void:
+    # A short optional maintenance route crosses the first surgical rooms but cannot bypass the wardens or exit lock.
+    # 可选维护高路穿过前段手术室，但不能绕过守卫战或出口锁。
+    var route := [
+        Rect2(430, 445, 100, 16),
+        Rect2(560, 400, 110, 16),
+        Rect2(700, 355, 110, 16),
+        Rect2(850, 390, 110, 16),
+        Rect2(1000, 430, 110, 16),
+        Rect2(1130, 390, 110, 16)
+    ]
+    for platform_rect in route:
+        var body := StaticBody2D.new()
+        body.name = "SurgicalCatwalkPlatform"
+        body.position = platform_rect.position
+        var shape := CollisionShape2D.new()
+        var rectangle := RectangleShape2D.new()
+        rectangle.size = platform_rect.size
+        shape.shape = rectangle
+        shape.position = platform_rect.size * 0.5
+        body.add_child(shape)
+        add_child(body)
+
+
 func _create_boundaries() -> void:
     var left := StaticBody2D.new()
     var ls := CollisionShape2D.new()
@@ -230,6 +255,15 @@ func _draw() -> void:
     draw_rect(Rect2(120, 280, 420, 240), Color("#29222c"))
     draw_rect(Rect2(180, 240, 300, 40), Color("#352d38"))
     draw_string(ThemeDB.fallback_font, Vector2(210, 215), NereisLocalization.translate_text("SURGICAL WARD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
+
+    # Broken rails mark the optional maintenance catwalk above the surgical tables.
+    # 断裂护栏标出手术台上方的可选维护高路。
+    draw_line(Vector2(430, 445), Vector2(560, 400), Color("#66515f"), 3.0)
+    draw_line(Vector2(560, 400), Vector2(700, 355), Color("#66515f"), 3.0)
+    draw_line(Vector2(700, 355), Vector2(850, 390), Color("#66515f"), 3.0)
+    draw_line(Vector2(850, 390), Vector2(1000, 430), Color("#66515f"), 3.0)
+    draw_line(Vector2(1000, 430), Vector2(1130, 390), Color("#66515f"), 3.0)
+    draw_string(ThemeDB.fallback_font, Vector2(620, 295), "MAINTENANCE ACCESS ONLY", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#8b737e"))
 
     for x in [700.0, 1120.0, 1500.0]:
         draw_rect(Rect2(x - 55, 310, 110, 210), Color("#1f1a22"))
