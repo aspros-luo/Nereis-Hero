@@ -28,8 +28,10 @@ var resonance_well_gate: Node2D
 func _ready() -> void:
     WorldState.prepare_scene_runtime()
     var spawn_side := WorldState.pending_region_spawn_side
-    WorldState.pending_region_spawn_side = "west"
+    # Persist the incoming side before clearing the one-shot transition value.
+    # 必须先保存实际进入侧，再清理一次性切图方向，确保 Continue 能恢复正确落点。
     WorldState.set_location("village")
+    WorldState.pending_region_spawn_side = "west"
     print("[NEREIS][VILLAGE] Entered Village Hub route=%s spawn_side=%s" % [WorldState.selected_route, spawn_side])
     WorldState.set_checkpoint(Vector2(360, 520))
     _create_floor()
