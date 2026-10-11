@@ -174,11 +174,8 @@ func _enable_test_mode() -> void:
 func _start_natural_exploration() -> void:
 	# Reset only the in-memory WorldState. Enable save protection again before loading A0.
 	# 只重置内存中的游戏状态；进入 A0 前重新开启存档保护，绝不删除或覆盖正式存档。
-	WorldState.debug_map_test_mode = true
 	WorldState.reset()
-	WorldState.debug_map_test_mode = true
-	WorldState.debug_natural_test_active = true
-	WorldState.debug_natural_test_visited_regions.clear()
+	WorldState.begin_natural_test_session()
 	WorldState.debug_ability_override_active = false
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.resume_spawn_side = "west"
