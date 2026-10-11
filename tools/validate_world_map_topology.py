@@ -258,7 +258,13 @@ def validate(data: dict[str, Any]) -> list[str]:
 
     expected_resonance = int(data.get("resonance_baseline_at_prologue", 0))
     for source in sources:
-        expected_resonance += int(source.get("resonance_delta", 0))
+        # Some one-time clues establish a floor rather than adding a delta.
+        # R01 unlocks Resonance Sight and guarantees at least 12 resonance,
+        # but must not grant the same baseline twice if the prologue already did.
+        expected_resonance = max(
+            expected_resonance + int(source.get("resonance_delta", 0)),
+            int(source.get("minimum_resonance", 0)),
+        )
         actual = int(source.get("resonance_after", -1))
         if expected_resonance != actual:
             fail(
