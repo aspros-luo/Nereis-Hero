@@ -19,14 +19,14 @@ const MAIN_NODES: Array[Dictionary] = [
 ]
 
 const HIDDEN_NODES: Array[Dictionary] = [
-	{"id":"H01","name":"井底回声","p":Vector2(0.125,0.78),"parent":"A1"},
-	{"id":"H02","name":"倒响钟室","p":Vector2(0.255,0.18),"parent":"A2"},
-	{"id":"H03","name":"被删去的街","p":Vector2(0.315,0.18),"parent":"A3"},
-	{"id":"H04","name":"水面背阶","p":Vector2(0.475,0.88),"parent":"A4"},
-	{"id":"H05","name":"无声钟室","p":Vector2(0.505,0.18),"parent":"A6"},
-	{"id":"H06","name":"王名抹除廊","p":Vector2(0.665,0.18),"parent":"A8"},
-	{"id":"H07","name":"镜街","p":Vector2(0.835,0.78),"parent":"A9"},
-	{"id":"H08","name":"原初空腔","p":Vector2(0.755,0.92),"parent":"A11"}
+	{"id":"H01","name":"井底回声","p":Vector2(0.125,0.78),"parents":["A1"]},
+	{"id":"H02","name":"倒响钟室","p":Vector2(0.255,0.18),"parents":["A2","A5"]},
+	{"id":"H03","name":"被删去的街","p":Vector2(0.315,0.18),"parents":["A3"]},
+	{"id":"H04","name":"水面背阶","p":Vector2(0.475,0.88),"parents":["A4"]},
+	{"id":"H05","name":"无声钟室","p":Vector2(0.505,0.18),"parents":["A6","A3"]},
+	{"id":"H06","name":"王名抹除廊","p":Vector2(0.665,0.18),"parents":["A8"]},
+	{"id":"H07","name":"镜街","p":Vector2(0.835,0.78),"parents":["A9","A12"]},
+	{"id":"H08","name":"原初空腔","p":Vector2(0.755,0.92),"parents":["A11"]}
 ]
 
 const MAIN_EDGES: Array[Array] = [
@@ -60,7 +60,7 @@ func _ready() -> void:
 	queue_redraw()
 
 func open_map() -> void:
-	current_region = str(LOCATION_TO_REGION.get(WorldState.current_location, "A0"))
+	current_region = str(LOCATION_TO_REGION.get(WorldState.current_location, ""))
 	visible = true
 	queue_redraw()
 
@@ -90,7 +90,8 @@ func _draw() -> void:
 		var hidden_id := str(node["id"])
 		if not _is_hidden_node_known(hidden_id):
 			continue
-		_draw_edge(str(node["parent"]), hidden_id, Color("#8d6b9d"), 1.8, true)
+		for parent_id in node["parents"]:
+			_draw_edge(str(parent_id), hidden_id, Color("#8d6b9d"), 1.8, true)
 
 	for node in MAIN_NODES:
 		_draw_node(node, false)
