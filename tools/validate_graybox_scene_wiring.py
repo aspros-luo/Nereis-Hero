@@ -125,6 +125,9 @@ def main() -> int:
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
     require(region_script, "[NEREIS][MAP][SPAWN] region=%s", "Map spawn Debug log", errors)
     require(region_script, "[NEREIS][MAP][EXIT] from=%s", "Map exit Debug log", errors)
+    require(region_script, 'const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")', "Regional rest point script", errors)
+    require(region_script, "func _spawn_region_rest_point() -> void:", "Regional rest point builder", errors)
+    require(region_script, 'rest.rest_id = "rest_%s" % region_id', "Regional rest point identity", errors)
     local_route_script = read("scripts/world/resonance_local_route.gd", errors)
     require(region_script, 'const LOCAL_RESONANCE_ROUTE_SCRIPT = preload("res://scripts/world/resonance_local_route.gd")', "A3 local resonance route preload", errors)
     require(region_script, 'route.route_id = "A3_THIRD_STREET_ROOFLINE"', "A3 local route identity", errors)
@@ -136,6 +139,8 @@ def main() -> int:
     # M1 替代路线与垂直探索的静态契约。
     village_route_script = read("scripts/levels/village_hub.gd", errors)
     require(village_route_script, 'city_cut.poi_id = "city_cut"', "A1 drainage route", errors)
+    require(village_route_script, "func _spawn_village_rest_point() -> void:", "A1 hearth rest point", errors)
+    require(village_route_script, 'rest.rest_id = "rest_A1_village_hearth"', "A1 rest point persistence ID", errors)
     require(village_route_script, '"village_defense_survived" in WorldState.achievement_flags', "A1 drainage gate", errors)
     require(village_route_script, 'WorldState.pending_region_spawn_side = "village_city_cut"', "A1 to A3 spawn mapping", errors)
     require(village_route_script, "func _create_village_rooftop_route() -> void:", "A1 rooftop route builder", errors)
