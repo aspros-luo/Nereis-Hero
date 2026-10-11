@@ -48,7 +48,7 @@ Prioritize A2, A3, A4, A6, A8, and A9:
 - **Show connections in debug builds.** Mark exits, shortcuts, and Resonance gates with a direction marker and target-region label. Where possible, mark unmet requirements as well. Release builds can hide these explicit markers or conceal the entrance until the relevant conditions are satisfied.
 - Debug markers are development aids, not final art. In release, architecture silhouettes, lighting, sound, and terrain should communicate the route.
 
-This iteration adds debug-only markers for instantiated exits, shortcuts, and Resonance gates in the shared graybox scene. Runtime checks are still needed for draw order, text clipping, and window sizes. Conditional shortcuts that have not been instantiated still need “ghost exit” markers; the current implementation does not yet cover every locked connection.
+This iteration adds debug-only markers for instantiated exits, shortcuts, and Resonance gates, plus ghost markers for common conditional shortcuts in A2, A3, A4, A5, A8, and A9. Runtime checks are still needed for draw order, text clipping, and window sizes, and the remaining regions still need a complete audit.
 
 ### Release stage: trigger, revisit, hint, reward
 
