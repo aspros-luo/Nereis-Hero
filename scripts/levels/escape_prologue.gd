@@ -125,7 +125,7 @@ func _open_exit() -> void:
     exit_open = true
     exit_area.enabled = true
     narrative.show_message(
-        "逃脱之路 OUT",
+        "逃脱之路",
         "最后一道锁终于松开。\n\n你不记得自己如何来到这里。\n\n你只记得，留下来就意味着死亡。",
         5.0
     )
@@ -140,7 +140,7 @@ func _on_exit_interacted() -> void:
     WorldState.current_location = "village"
     WorldState.input_locked = true
     narrative.show_message(
-        "THE VILLAGE",
+        "边境村庄",
         "冷冽的空气。一条道路。远处聚集着几簇灯火。\n\n英雄继续向前走。",
         4.5
     )
@@ -166,11 +166,11 @@ func _spawn_ui() -> void:
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
     hud.bind_hero(hero)
-    hud.set_story_mode("THE 教会手术所", "ESCAPE THE CHURCH")
+    hud.set_story_mode("教会手术所", "逃离教会")
 
 func _show_intro() -> void:
     narrative.show_message(
-        "THE 教会手术所",
+        "教会手术所",
         "束缚带已经断裂。房间里弥漫着铁锈与焚香的气味。\n\n墙壁深处，有一口钟始终响个不停。",
         5.5
     )
@@ -263,7 +263,7 @@ func _draw() -> void:
     draw_line(Vector2(700, 365), Vector2(850, 400), Color("#66515f"), 3.0)
     draw_line(Vector2(850, 400), Vector2(1000, 440), Color("#66515f"), 3.0)
     draw_line(Vector2(1000, 440), Vector2(1130, 400), Color("#66515f"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(620, 295), "MAINTENANCE ACCESS ONLY", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#8b737e"))
+    draw_string(ThemeDB.fallback_font, Vector2(620, 295), "仅供维护人员通行", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#8b737e"))
 
     for x in [700.0, 1120.0, 1500.0]:
         draw_rect(Rect2(x - 55, 310, 110, 210), Color("#1f1a22"))
