@@ -77,8 +77,8 @@ func _make_activation_sound() -> AudioStreamWAV:
         var byte_offset := i * 4
         bytes[byte_offset] = left_value & 0xFF
         bytes[byte_offset + 1] = (left_value >> 8) & 0xFF
-        bytes[offset + 2] = right_value & 0xFF
-        bytes[offset + 3] = (right_value >> 8) & 0xFF
+        bytes[byte_offset + 2] = right_value & 0xFF
+        bytes[byte_offset + 3] = (right_value >> 8) & 0xFF
 
     var stream := AudioStreamWAV.new()
     stream.format = AudioStreamWAV.FORMAT_16_BITS
