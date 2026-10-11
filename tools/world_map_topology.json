@@ -905,7 +905,7 @@
       "required_resonance": 48,
       "requires_resonance_sight": true,
       "bridge_start_x": 675,
-      "bridge_end_x": 1075,
+      "bridge_end_x": 960,
       "bridge_y": 310,
       "persistent_on_open": true,
       "design_intent": "A choirless upper gallery links the staggered cathedral chapel ledges as a local traversal shortcut; it must not replace either cathedral exit or bypass C19."
