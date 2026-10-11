@@ -1,7 +1,7 @@
 # 主角能力独立 Debug 指南 / Protagonist Ability Debug Guide
 
 日期 / Date: 2026-10-09  
-分支 / Branch: feature/protagonist-system  
+分支 / Branch: development  
 范围 / Scope: 独立测试主角能力，不添加剧情、正式地图、奖励点或存档成长。
 
 ## 快速开始 / Quick start
@@ -33,6 +33,24 @@ Open the project in Godot 4.6.x and run res://scenes/combat_demo.tscn directly. 
 | PageUp / PageDown | F5 开启时切换拔刀斩形态 / Choose form while F5 is ON |
 | F3 / F4 / F5 / F6 | 世界面板 / 主角面板 / 全能力临时覆盖 / 恢复复位 / Global panel / Hero panel / Override / Reset |
 | T（仅 F5 开启时） | 直接触发 2.4 秒魔女时间，用于单独验证敌人减速 / Force Witch Time for 2.4 seconds to test enemy slowdown independently |
+
+## 地图灰盒验收扩展 / Map Graybox Acceptance Extension
+
+地图验收时运行整个项目（启动场景为 `res://scenes/boot.tscn`），不要只运行独立的 `combat_demo.tscn`。
+
+1. 在开发分支按 **F5** 启用会话级能力覆盖，再按 **V** 激活共鸣视野。隐藏入口会临时忽略鸣响 / 接触度门槛，便于检查入口显现、交互焦点与碰撞位置。
+2. 仍按正常流程 **第一次 E 开门、第二次 E 进入**。这样可以测试真实的门状态、场景切换和出生点，而不是用调试按钮直接传送。
+3. F5 覆盖状态由 WorldState 在当前运行会话中保留，跨地图切换仍有效；它不写入存档，新游戏重置会清除它。
+4. 第一次 E 正常开门会把永久通路状态写入存档。请使用专用测试存档，验收后清理；不要把 Debug 绕过门槛的结果记作自然门槛验收通过。
+5. 关闭 F5 后，重新按正常鸣响、接触度和来源条件测试入口。只有正常条件也能显现时，才能把门槛行为记为通过。
+
+For map acceptance, run the whole project (startup scene: `res://scenes/boot.tscn`), not only the standalone `combat_demo.tscn`.
+
+1. Press **F5** to enable the session-only ability override, then **V** to activate Resonance Sight. Hidden gates temporarily ignore resonance/exposure thresholds so their reveal, focus, and collision can be inspected.
+2. Keep the real interaction sequence: **first E opens the gate; second E enters**. This exercises gate state, scene transition, and spawn-side logic rather than teleporting directly.
+3. WorldState retains the F5 override across scene changes for the current session. It is not saved, and a new-game reset clears it.
+4. The first normal E interaction persists the opened-gate state. Use a dedicated test save and clean it after acceptance. Do not count a Debug-bypassed reveal as a natural threshold pass.
+5. Turn F5 off and retest the normal resonance, exposure, and source requirements before marking the gate thresholds as passed.
 
 ## 分项测试 / Test cases
 
