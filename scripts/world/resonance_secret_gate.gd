@@ -94,6 +94,23 @@ func update_reveal_state(
     if revealed == next_revealed:
         return
     revealed = next_revealed
+    print(
+        "[NEREIS][MAP][GATE] id=%s revealed=%s active=%s debug=%s resonance=%d/%d ancient=%d/%d outer=%d/%d sources_ok=%s opened=%s"
+        % [
+            secret_id,
+            str(revealed),
+            str(active),
+            str(allow_override),
+            resonance,
+            required_resonance,
+            ancient_exposure,
+            required_ancient_exposure,
+            outer_exposure,
+            required_outer_exposure,
+            str(_has_required_sources()),
+            str(opened_permanently)
+        ]
+    )
     queue_redraw()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -111,6 +128,7 @@ func _unhandled_input(event: InputEvent) -> void:
             WorldState.mark_hidden_region_entered(_get_region_record_id())
             WorldState.pending_region_spawn_side = target_spawn_side
             WorldState.set_location(target_location_id)
+            print("[NEREIS][MAP][GATE] enter id=%s target=%s location=%s spawn_side=%s" % [secret_id, target_scene_path, target_location_id, target_spawn_side])
             get_viewport().set_input_as_handled()
             SceneTransition.fade_to_scene(target_scene_path)
             return
