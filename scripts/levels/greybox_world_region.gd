@@ -64,6 +64,7 @@ func _ready() -> void:
 	_spawn_ui()
 	_spawn_region_sources()
 	_spawn_region_exits()
+	_register_debug_locked_route_hints()
 	_spawn_region_rest_point()
 	_spawn_region_encounters()
 	queue_redraw()
@@ -1195,6 +1196,47 @@ func _on_source_activated(
 		message += "\n\n能力觉醒：灵视。按 V 聆听异常。"
 	narrative.show_message(display_name, message, 6.0)
 
+func _register_debug_locked_route_hints() -> void:
+	# Ghost markers reveal conditional shortcuts in development even before their doors are instantiated.
+	# 即使条件捷径尚未生成实体门，开发构建也要显示其位置与未满足条件。
+	if not OS.is_debug_build():
+		return
+	match region_id:
+		"A2":
+			_register_debug_locked_route_hint(1880.0, "old_battlefield", "旧朝圣高路需从 A5 开启")
+		"A3":
+			_register_debug_locked_route_hint(520.0, "village", "村庄防卫章节完成后开放")
+			_register_debug_locked_route_hint(1150.0, "royal_outer_ring", "需从 A9 开启旧升降机")
+			_register_debug_locked_route_hint(1710.0, "monastery_tower", "需先从 A6 开启钟塔落差")
+			_register_debug_locked_route_hint(1900.0, "silent_bell_room", "需先发现并开启 H05")
+		"A4":
+			_register_debug_locked_route_hint(1050.0, "prison_depths", "需从 A7 开启补给隧道")
+			_register_debug_locked_route_hint(1250.0, "royal_tomb", "需从 A8 开启王墓水道")
+			_register_debug_locked_route_hint(1450.0, "royal_outer_ring", "需从 A9 开启王城排水道")
+			_register_debug_locked_route_hint(map_width - 90.0, "hidden_well", "需先实际抵达 A4，再以灵视发现 H01")
+		"A5":
+			_register_debug_locked_route_hint(2060.0, "hidden_bell_chamber", "需先发现并开启 H02")
+		"A8":
+			_register_debug_locked_route_hint(930.0, "reflected_stairwell", "需先发现并开启 H04")
+		"A9":
+			_register_debug_locked_route_hint(900.0, "inner_city", "需从 A12 侧开启内城侧门")
+			_register_debug_locked_route_hint(1250.0, "erased_third_street", "需先发现并开启 H03")
+			_register_debug_locked_route_hint(2200.0, "erased_royal_name_corridor", "需先发现并开启 H06")
+
+
+func _register_debug_locked_route_hint(x: float, target: String, condition: String) -> void:
+	for marker in debug_exit_markers:
+		var marker_position: Vector2 = marker.get("position", Vector2.ZERO)
+		if is_equal_approx(marker_position.x, x) and str(marker.get("label", "")) == target:
+			return
+	debug_exit_markers.append({
+		"position": Vector2(x, floor_y),
+		"label": target,
+		"kind": "locked",
+		"condition": condition
+	})
+
+
 func _spawn_region_exits() -> void:
 	match region_id:
 		"A2":
@@ -2061,16 +2103,28 @@ func _draw_debug_exit_markers() -> void:
 	for marker in debug_exit_markers:
 		var marker_position: Vector2 = marker.get("position", Vector2.ZERO)
 		var marker_kind := str(marker.get("kind", "exit"))
-		var marker_color := Color("#f0c674") if marker_kind == "shortcut" else Color("#8bd5ca")
+		var marker_color := Color("#8bd5ca")
+		if marker_kind == "shortcut":
+			marker_color = Color("#f0c674")
+		elif marker_kind == "secret":
+			marker_color = Color("#c6a0f6")
+		elif marker_kind == "locked":
+			marker_color = Color("#ed8796")
 		var marker_top := marker_position + Vector2(0.0, -118.0)
 		draw_line(marker_position + Vector2(0.0, -8.0), marker_top, marker_color, 3.0, true)
 		draw_line(marker_top + Vector2(-12.0, 12.0), marker_top, marker_color, 3.0)
 		draw_line(marker_top + Vector2(12.0, 12.0), marker_top, marker_color, 3.0)
-		var marker_label := "[出口] " if marker_kind == "exit" else "[捷径] "
+		var marker_label := "[出口] "
+		if marker_kind == "shortcut":
+			marker_label = "[捷径] "
+		elif marker_kind == "secret":
+			marker_label = "[灵视入口] "
+		elif marker_kind == "locked":
+			marker_label = "[条件未满足] "
 		marker_label += str(marker.get("label", "unknown"))
 		var condition := str(marker.get("condition", ""))
 		if not condition.is_empty():
-			marker_label += " *"
+			marker_label += " — " + condition
 		draw_string(ThemeDB.fallback_font, marker_top + Vector2(14.0, -4.0), marker_label, HORIZONTAL_ALIGNMENT_LEFT, 300.0, 14, marker_color)
 
 func _on_exit_interacted(target_location: String, target_scene: String, spawn_side: String) -> void:
