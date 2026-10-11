@@ -32,11 +32,7 @@ func _ready() -> void:
     # 先保存目标地图与进入侧，再清理一次性切图方向。
     WorldState.set_location(location_id)
     WorldState.pending_region_spawn_side = "west"
-    if region_id == "A4":
-        # Reaching the reservoir records the C05 route and enables the return-side well entrance on later visits.
-        # 抵达旧水库即记录 C05 路线；之后再次进入时，才会生成回程侧的水井入口。
-        WorldState.record_achievement("reached_A4_via_A3")
-    elif region_id == "A10":
+    if region_id == "A10":
         # Being inside the cathedral proves the main route has reached A10; this also repairs older saves.
         # 进入大圣堂本身即证明主线已抵达 A10，也可修复旧存档中的进程标记。
         WorldState.record_achievement("reached_A10_via_A9")
