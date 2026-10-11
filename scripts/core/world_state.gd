@@ -752,6 +752,9 @@ func mark_prologue_complete() -> void:
     save_game()
 
 func delete_save() -> void:
+    if debug_map_test_mode:
+        print("[NEREIS][DEBUG] Save deletion blocked during map test mode")
+        return
     if FileAccess.file_exists(SAVE_PATH):
         DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
         print("[NEREIS][SAVE] Save file deleted")
