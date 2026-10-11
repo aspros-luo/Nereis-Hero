@@ -484,7 +484,7 @@ def main() -> int:
         ('if region_id == "A3" and side == "sewer":', "return 1380.0"),
         ('if region_id == "A2" and side == "bell_gate":', "return map_width - 450.0"),
         ('if region_id == "A2" and side == "old_pilgrim_highroad":', "return 1750.0"),
-        ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 850.0"),
+        ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 650.0"),
         ('if region_id == "A3" and side == "bell_drop":', "return 1600.0"),
         ('if region_id == "A3" and side == "old_lift":', "return 1060.0"),
         ('if region_id == "A6" and side == "bell_drop":', "return 1900.0"),
