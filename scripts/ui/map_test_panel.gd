@@ -55,6 +55,7 @@ const PROGRESSION_FLAGS := [
 var panel: PanelContainer
 var map_picker: OptionButton
 var status_label: Label
+var exploration_label: Label
 var mode_button: Button
 var natural_start_button: Button
 var full_sight_button: Button
@@ -121,6 +122,11 @@ func _build_panel() -> void:
 	restore_button.pressed.connect(_restore_disk_save)
 	column.add_child(restore_button)
 
+	exploration_label = Label.new()
+	exploration_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	exploration_label.text = "自然探索记录：未启动"
+	column.add_child(exploration_label)
+
 	status_label = Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_label.text = "F10：打开／关闭本面板。自然探索会重置当前内存进度并从 A0 开始，但不删除或覆盖磁盘正式存档。"
@@ -137,6 +143,18 @@ func _make_button(caption: String) -> Button:
 	button.custom_minimum_size = Vector2(0, 42)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	return button
+
+func _process(_delta: float) -> void:
+	if exploration_label == null:
+		return
+	if not WorldState.debug_natural_test_active:
+		exploration_label.text = "自然探索记录：未启动"
+		return
+	var visited := " → ".join(WorldState.debug_natural_test_visited_regions)
+	exploration_label.text = "自然探索实走地图：%d/21\n%s" % [
+		WorldState.debug_natural_test_visited_regions.size(),
+		visited if not visited.is_empty() else "尚未抵达地图区域"
+	]
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10:
@@ -159,6 +177,8 @@ func _start_natural_exploration() -> void:
 	WorldState.debug_map_test_mode = true
 	WorldState.reset()
 	WorldState.debug_map_test_mode = true
+	WorldState.debug_natural_test_active = true
+	WorldState.debug_natural_test_visited_regions.clear()
 	WorldState.debug_ability_override_active = false
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.resume_spawn_side = "west"
@@ -210,6 +230,8 @@ func _apply_all_routes_profile() -> void:
 
 func _restore_disk_save() -> void:
 	WorldState.debug_map_test_mode = false
+	WorldState.debug_natural_test_active = false
+	WorldState.debug_natural_test_visited_regions.clear()
 	WorldState.debug_ability_override_active = false
 	WorldState.load_game()
 	WorldState.prepare_scene_runtime()
