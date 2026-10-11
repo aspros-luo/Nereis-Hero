@@ -502,7 +502,7 @@ func _show_intro() -> void:
         "H06":
             narrative.show_message(
                 "石碑上被刮去的名字",
-                "The inscription is not weathered.\n\nThe chisel marks begin after the tomb was sealed.",
+                "铭文并非被风雨磨损。\n\n凿痕是在墓穴封闭之后才留下的。",
                 5.0
             )
 
@@ -1606,7 +1606,7 @@ func _on_a11_gate_opened(secret_id: String) -> void:
     var title := "王名背后的竖井" if secret_id == "C15" else "静默侧堂"
     narrative.show_message(
         title,
-        "The stone opens inward.\n\nThe records say the Church excavated this depth. The dust has settled on the Church's tools, not the stone.",
+        "石门向内开启。\n\n记录称这一深度由教会挖掘而成。积尘落在教会的工具上，而非石壁上。",
         5.0
     )
 
@@ -1636,7 +1636,7 @@ func _on_h08_gate_opened(_secret_id: String) -> void:
         return
     narrative.show_message(
         "会呼吸的墙",
-        "The wall exhales.\n\nYou cannot tell whether the passage was built for you, or whether it noticed you first.",
+        "墙壁缓缓吐息。\n\n你无法判断这条通道是为你而建，还是它先注意到了你。",
         5.0
     )
 
@@ -1663,7 +1663,7 @@ func _on_mirror_street_gate_opened(secret_id: String) -> void:
         return
     narrative.show_message(
         "被抹去的街道",
-        "The reflection stops following the rain.\n\nFor the first time, the door has a shadow.",
+        "倒影不再追随雨水。\n\n那扇门第一次拥有了影子。",
         4.5
     )
 
@@ -1815,61 +1815,61 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
         "A2_BELLGRAVE_CANOPY_CROSSING":
             narrative.show_message(
                 "钟的第二道影子",
-                "The canopy path crosses a gap that the forest survey marks as solid rock. The bell above casts two shadows: one on the tower, and one on a road that is not there. The second shadow ends at a sealed door.",
+                "这条树冠通路横跨一段被森林测绘图标记为完整岩层的空隙。上方的钟投下两道影子：一道落在塔上，另一道落在一条并不存在的道路上。第二道影子止于一扇封闭的门前。",
                 5.0
             )
         "A4_OLD_STONE_AQUEDUCT":
             narrative.show_message(
                 "无水渡槽",
-                "The pipes end at a stone channel older than the reservoir. When the bridge settles, water can be heard flowing upward through the sealed rock.\n\nThe channel remembers a river that no longer exists.",
+                "管道止于一条比水库更古老的石渠。桥面落定时，封闭的岩层中竟传来水流向上涌动的声音。\n\n这条石渠仍记得一条早已消失的河流。",
                 5.0
             )
         "A5_BURIED_STANDARD_CROSSING":
             narrative.show_message(
                 "比军队存续更久的军旗",
-                "The cloth has rotted away, but its shadow still points across the trench. The fortress map marks this gap as impassable. The dead were ordered to hold a road that the Church later removed from every record.",
+                "旗布早已腐烂，影子却仍横越战壕。堡垒地图将此处标为绝对不可通行。那些死者曾奉命守住一条后来被教会从所有记录中抹去的道路。",
                 5.0
             )
         "A6_SILENT_BELL_SERVICE_WALK":
             narrative.show_message(
                 "无声之钟的维护通道",
-                "The upper walkway bears fresh maintenance marks, but the bell above it has never moved. The repair ledger lists a bell-ringer who was born decades after the monastery was sealed.",
+                "上层通道留有新鲜的维修痕迹，上方的钟却从未移动。维修账册中记载了一位钟手，而他的出生年份竟比修道院封闭晚了数十年。",
                 5.0
             )
         "A7_PRISON_MAINTENANCE_CROSSWALK":
             narrative.show_message(
                 "没有编号牢房之间的通路",
-                "The maintenance ledger counts every hinge and drain, but leaves the cells themselves unnumbered. A repair entry orders the crew to preserve the lower doors and seal the upper ones from the outside. The names were not omitted by accident.",
+                "维护账册记录了每一枚铰链与每一道排水口，却唯独不给牢房编号。一条维修记录命令工人保留下层牢门，并从外部封死上层牢门。那些名字并非偶然遗漏。",
                 5.0
             )
         "A8_ERASED_REGENT_GALLERY":
             narrative.show_message(
                 "从未执政的摄政者",
-                "The gallery joins two burial ledges without passing the sealed royal gate. One stone names a regent; the matching socket on the opposite wall has been chiseled away. The tomb was not built to forget a king. It was altered to make the succession impossible to read.",
+                "这条长廊连接两处墓台，却不经过封闭的王室大门。一块石碑记载着摄政者，另一侧墙上对应的凹槽却已被凿去。王墓并非为了遗忘某位国王而建；它被改造过，好让王位继承的真相无法辨读。",
                 5.0
             )
         "A9_RAIN_REFLECTION_ROOFWALK":
             narrative.show_message(
                 "雨水记得的家园",
-                "The roofline crosses houses whose doors were sealed from the street side. In the rainwater, warm windows appear beneath roofs that have stood empty for years. The old city did not lose its people all at once; someone taught the records to call them never-born.",
+                "屋顶通路越过一排从街道侧封死门窗的房屋。雨水倒影中，空置多年的屋檐下却亮着温暖的窗。旧城的人并非一夜之间消失；有人教会了档案把他们称作从未出生。",
                 5.0
             )
         "A10_CHOIRLESS_UPPER_GALLERY":
             narrative.show_message(
                 "从未被记录的唱诗班",
-                "The gallery overlooks the cathedral choir, but no sound rises from below. Dust outlines a row of kneeling figures where the floor has been worn smooth. The service ledger lists every hymn and every bell—except the names of those who sang here.",
+                "长廊俯瞰大圣堂的唱诗席，下方却没有任何声音传来。地面被磨得光滑，尘土勾勒出一排跪姿人形。礼仪账册记录了每一首圣歌与每一口钟，却唯独没有记下曾在此歌唱之人的名字。",
                 5.0
             )
         "A11_SECOND_OBSERVER_SPAN":
             narrative.show_message(
                 "没有留下脚印的观测者",
-                "The old ledges meet above the laboratory's newest instruments. One observation slate records two shadows entering the chamber and only one body leaving. A later hand has rewritten the count as a lighting error.",
+                "古老的石台在实验室最新的仪器上方交汇。一块观测板记载着两道影子进入密室，却只有一具身体离开。后来有人将这个数字改写成了光线误差。",
                 5.0
             )
         "A12_CROWN_WALL_WALK":
             narrative.show_message(
                 "为国王的缺席而建的墙",
-                "The upper wall was built to watch the avenue, not defend it. Its arrow slits face inward. The palace feared what might leave the throne room more than what might approach it.",
+                "这道高墙是为了监视大道，而非抵御外敌。箭孔全部朝向内侧。王宫更害怕有东西从王座厅离开，而不是有什么东西靠近。",
                 5.0
             )
         _:
@@ -1957,7 +1957,7 @@ func _on_optional_hidden_gate_opened(secret_id: String) -> void:
         "H03": ["被城市删去的街道", "房屋两侧都有门。\n\n城图上却只画出其中一侧。"],
         "H04": ["水面背后的阶梯", "倒影里有一段干燥的阶梯。\n\n你的靴子无法在阶梯上方的水面留下痕迹。"],
         "H05": ["不投影的窗", "钟塔的窗外没有景色。\n\n但有人一直从里面使用这扇窗。"],
-        "H06": ["石碑上被刮去的名字", "The inscription is not weathered.\n\nThe chisel marks begin after the tomb was sealed."]
+        "H06": ["石碑上被刮去的名字", "铭文并非被风雨磨损。\n\n凿痕是在墓穴封闭之后才留下的。"]
     }
     var entry: Array = details.get(secret_id, ["异常的石构", "墙壁没有移动，却向你敞开。"])
     narrative.show_message(str(entry[0]), str(entry[1]), 5.0)
@@ -1984,7 +1984,7 @@ func _on_hidden_well_gate_opened(secret_id: String) -> void:
         return
     narrative.show_message(
         "井还有另一个出口",
-        "The stone opens without turning.\n\nYou can no longer tell which side is above.",
+        "石门没有转动，却自行开启。\n\n你已无法分辨哪一侧才是上方。",
         4.0
     )
 
