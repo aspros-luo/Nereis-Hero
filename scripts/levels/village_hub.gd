@@ -38,7 +38,7 @@ func _ready() -> void:
     # The watergate arrival must be away from the resonance well gate and the north-gate interaction.
     # 水闸回村的出生点应避开灵视井门、酒馆与复国军营交互区。
     # Spawn after the watergate outside the well gate, tavern, and restoration-camp interaction radii.
-    var spawn_x := 1850.0 if spawn_side == "well_exit" else (350.0 if spawn_side == "city_cut_return" else 260.0)
+    var spawn_x := 1850.0 if spawn_side == "well_exit" else (350.0 if spawn_side == "city_cut_return" else (2310.0 if spawn_side == "north_gate" else 260.0))
     _spawn_hero(spawn_x)
     _spawn_checkpoint()
     _spawn_village_rest_point()
@@ -281,7 +281,9 @@ func _spawn_village_pois() -> void:
 
     var church := Node2D.new()
     church.set_script(VILLAGE_POI_SCRIPT)
-    church.position = Vector2(2220, 520)
+    # Keep a clear landing corridor between the church and north-gate interaction zones.
+    # 教堂交互点与北门之间保留无交互提示的回程落脚区。
+    church.position = Vector2(2180, 520)
     church.poi_id = "church"
     church.display_name = "THE CHURCH"
     church.dialogue = "The church door bears your name beneath layers of newer paint.\n\nSomeone has tried to erase it many times."
