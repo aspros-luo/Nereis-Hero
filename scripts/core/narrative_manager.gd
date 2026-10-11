@@ -31,7 +31,7 @@ func _ready() -> void:
     title_label = Label.new()
     title_label.position = Vector2(28, 18)
     title_label.add_theme_font_size_override("font_size", 22)
-    title_label.text = "MEMORY"
+    title_label.text = "记忆"
     panel.add_child(title_label)
 
     body_label = Label.new()
@@ -104,12 +104,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func play_first_memory() -> void:
     if WorldState.first_memory_unlocked:
-        show_message("OLD HUNTER", "You have already heard this memory.")
+        show_message("老猎人", "这段记忆，你已经听过了。")
         return
 
     WorldState.unlock_first_memory()
     show_message(
-        "A MEMORY THAT DOES NOT FEEL LIKE YOURS",
+        "A 记忆 THAT DOES NOT FEEL LIKE YOURS",
         "The old hunter looks at your face and goes pale.\n\n\"You used to come here before the church took you. You always asked whether the song was still playing.\"\n\nSomewhere beyond the village, a lullaby answers.",
         8.0
     )
@@ -156,8 +156,8 @@ func begin_first_choice() -> void:
     if not get_tree().paused:
         get_tree().paused = true
         paused_for_narrative = true
-    title_label.text = NereisLocalization.translate_text("THE ROAD REMEMBERS YOU")
-    body_label.text = NereisLocalization.translate_text("Inside the fallen armor you find a church seal.\n\nFrom the village, the lullaby begins again. You can follow the seal, or follow the song.\n\n[1] Follow the church seal\n[2] Follow the lullaby")
+    title_label.text = NereisLocalization.translate_text("道路记得你")
+    body_label.text = NereisLocalization.translate_text("你在倒下的铠甲中找到一枚教会印记。\n\n村庄方向再次传来摇篮曲。你可以追随印记，也可以循着歌声前行。\n\n[1] 追随教会印记\n[2] 追随摇篮曲")
     continue_button.visible = false
     panel.visible = true
     WorldState.input_locked = true
@@ -171,17 +171,17 @@ func _select_choice(choice: int) -> void:
         paused_for_narrative = false
     WorldState.make_first_choice(choice)
     if choice == 1:
-        show_message("THE CHURCH SEAL", "You close your hand around the seal.\n\nThe metal is warm. Someone, somewhere, expected you to come back.")
+        show_message("教会印记", "你将印记握在掌心。\n\n金属仍有温度。某个地方的某个人，早已料到你会回来。")
     else:
-        show_message("THE LULLABY", "You turn toward the song.\n\nFor one heartbeat, you remember the village before the church found you.")
+        show_message("摇篮曲", "你转向歌声传来的方向。\n\n有那么一瞬间，你想起了教会找到你之前的村庄。")
     print("[NEREIS][STORY] First choice resolved=%d" % choice)
     _mark_input_handled()
 
  
 func play_weapon_upgrade() -> void:
     if WorldState.weapon_level >= 2:
-        show_message("OLD HUNTER", "The blade is as sharp as it needs to be. For now.")
+        show_message("老猎人", "这把刀暂时已经足够锋利。")
         return
     WorldState.upgrade_weapon()
-    show_message("A BETTER GRIP", "The old hunter corrects your stance.\n\n\"You keep fighting like you remember dying.\"\n\nYour sword cuts deeper now.")
+    show_message("更稳的握法", "老猎人纠正了你的架势。\n\n“你一直像记得自己如何死去一样战斗。”\n\n如今，你的剑刃更加致命。")
     print("[NEREIS][STORY] First weapon upgrade delivered")
