@@ -686,13 +686,6 @@ func _spawn_region_exits() -> void:
                     1880.0, "E  RETURN TO THE BATTLEFIELD", "old_battlefield",
                     "res://scenes/old_battlefield.tscn", "old_pilgrim_highroad"
                 )
-            # C10 reverse door: only exists after the bell-tower drop has been opened from A6.
-            # C10 反向门：必须先从 A6 开启钟塔落差，A3 才生成回程捷径。
-            if "opened_bell_tower_drop" in WorldState.achievement_flags:
-                _spawn_exit_door(
-                    1710.0, "E  RETURN TO THE MONASTERY DROP", "monastery_tower",
-                    "res://scenes/monastery_tower.tscn", "bell_drop"
-                )
         "A3":
             _spawn_exit_door(
                 72.0, "E  RETURN TO PILGRIM ROAD", "ash_forest",
@@ -718,6 +711,13 @@ func _spawn_region_exits() -> void:
                 _spawn_exit_door(
                     1830.0, "E  RETURN TO THE SILENT BELL WINDOW", "silent_bell_room",
                     "res://scenes/silent_bell_room.tscn", "bell_drop_entry"
+                )
+            # C10 reverse door: only exists after the bell-tower drop has been opened from A6.
+            # C10 反向门：必须先从 A6 开启钟塔落差，A3 才生成回程捷径。
+            if "opened_bell_tower_drop" in WorldState.achievement_flags:
+                _spawn_exit_door(
+                    1710.0, "E  RETURN TO THE MONASTERY DROP", "monastery_tower",
+                    "res://scenes/monastery_tower.tscn", "bell_drop"
                 )
             # C10's destination is the monastery tower, so the return spawn must use the drop-side mapping.
             # C10 的回程目的地是修道院塔，因此出生点必须使用钟塔落差侧的映射。
