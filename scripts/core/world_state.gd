@@ -21,8 +21,11 @@ var route_memory_seen := false
 var route_memory_id := ""
 var route_complete := false
 var current_location := "slice"
-# Transient direction used by graybox region scene transitions; intentionally not saved.
+# Transient direction used by the next scene transition.
 var pending_region_spawn_side := "west"
+# Persisted direction used when Continue resumes the last saved graybox region.
+# 读档继续时恢复最近一次保存的灰盒区域出生侧。
+var resume_spawn_side := "west"
 var language := "zh_cn"
 var interior_clues_seen: Array[String] = []
 var world_clues_seen: Array[String] = []
@@ -395,6 +398,7 @@ func save_game() -> void:
         "route_memory_id": route_memory_id,
         "route_complete": route_complete,
         "current_location": current_location,
+        "resume_spawn_side": resume_spawn_side,
         "language": language,
         "interior_clues_seen": interior_clues_seen,
         "world_clues_seen": world_clues_seen,
@@ -479,6 +483,9 @@ func load_game() -> void:
     route_memory_id = str(parsed.get("route_memory_id", ""))
     route_complete = bool(parsed.get("route_complete", false))
     current_location = str(parsed.get("current_location", "slice"))
+    resume_spawn_side = str(parsed.get("resume_spawn_side", "west"))
+    if resume_spawn_side not in ["west", "east", "bell_gate", "old_pilgrim_highroad", "bell_drop", "third_street_gate", "water_reflection_gate", "prison_tunnel", "royal_tomb_waterway", "royal_drain", "bell_tower", "silent_window", "royal_name_gate", "royal_tomb_side", "third_street_service", "royal_transport", "inner_city_side_gate", "chapel_entry", "mirror", "old_lift", "royal_drain", "hidden_well"]:
+        resume_spawn_side = "west"
     language = str(parsed.get("language", "zh_cn"))
     if language not in ["zh_cn", "zh_tw", "en", "ja"]:
         language = "zh_cn"
@@ -765,6 +772,8 @@ func reset() -> void:
     route_memory_id = ""
     route_complete = false
     current_location = "church_escape"
+    pending_region_spawn_side = "west"
+    resume_spawn_side = "west"
     language = preserved_language
     interior_clues_seen.clear()
     world_clues_seen.clear()
@@ -860,6 +869,8 @@ func get_humanity_state() -> String:
 
 func set_location(location_id: String) -> void:
     current_location = location_id
+    if pending_region_spawn_side in ["west", "east", "bell_gate", "old_pilgrim_highroad", "bell_drop", "third_street_gate", "water_reflection_gate", "prison_tunnel", "royal_tomb_waterway", "royal_drain", "bell_tower", "silent_window", "royal_name_gate", "royal_tomb_side", "third_street_service", "royal_transport", "inner_city_side_gate", "chapel_entry", "mirror", "old_lift", "hidden_well"]:
+        resume_spawn_side = pending_region_spawn_side
     print("[NEREIS][WORLD] Current location=%s" % current_location)
     save_game()
 
