@@ -595,6 +595,7 @@ def main() -> int:
     require(village_hub, 'resonance_well_gate.secret_id = "H01"', "Village hidden gate ID", errors)
     require(village_hub, 'resonance_well_gate.required_resonance = 12', "Village hidden gate threshold", errors)
     require(village_hub, 'resonance_well_gate.target_location_id = "hidden_well"', "Village hidden gate destination", errors)
+    require(village_hub, 'var spawn_x := 1850.0 if spawn_side == "well_exit"', "Village watergate return spawn spacing", errors)
     require(village_hub, '"village_defense_survived"', "Village old-road unlock", errors)
     require(village_hub, 'res://scenes/ash_forest.tscn', "Village old-road route", errors)
 
