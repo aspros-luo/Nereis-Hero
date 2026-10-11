@@ -115,17 +115,19 @@ func _unhandled_input(event: InputEvent) -> void:
 func _draw() -> void:
     if revealed or opened_permanently or _hero_over_bridge():
         var width := bridge_end_x - bridge_start_x
-        draw_rect(Rect2(bridge_start_x, bridge_y, width, 18.0), Color("#536b75"))
+        var bridge_color := Color("#667d6b") if opened_permanently else Color("#536b75")
+        var edge_color := Color("#c1d6ad") if opened_permanently else Color("#9bb5b9")
+        draw_rect(Rect2(bridge_start_x, bridge_y, width, 18.0), bridge_color)
         draw_line(
             Vector2(bridge_start_x, bridge_y),
             Vector2(bridge_end_x, bridge_y),
-            Color("#9bb5b9"),
+            edge_color,
             3.0
         )
         for x in range(int(bridge_start_x + 24.0), int(bridge_end_x), 48):
             draw_line(Vector2(x, bridge_y + 2.0), Vector2(x - 8.0, bridge_y + 16.0), Color("#26323a"), 2.0)
-        draw_circle(Vector2(bridge_start_x + 8.0, bridge_y - 8.0), 4.0, Color("#b5c8bd"))
-        draw_circle(Vector2(bridge_end_x - 8.0, bridge_y - 8.0), 4.0, Color("#b5c8bd"))
+        draw_circle(Vector2(bridge_start_x + 8.0, bridge_y - 8.0), 4.0, edge_color)
+        draw_circle(Vector2(bridge_end_x - 8.0, bridge_y - 8.0), 4.0, edge_color)
         if hero_nearby and not WorldState.input_locked and revealed and not opened_permanently and INTERACTION_FOCUS_SCRIPT.is_focused(self):
             draw_string(
                 ThemeDB.fallback_font,
