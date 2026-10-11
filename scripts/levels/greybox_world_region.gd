@@ -1764,7 +1764,7 @@ func _spawn_local_resonance_routes() -> void:
             route.required_resonance = 62
             route.bridge_start_x = 1400.0
             route.bridge_end_x = 1940.0
-            route.bridge_y = 325.0
+            route.bridge_y = 323.0
             route.prompt_text = "E  ANCHOR THE CROWN WALL"
         _:
             return
