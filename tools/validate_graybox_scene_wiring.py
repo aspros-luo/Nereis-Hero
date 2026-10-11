@@ -987,6 +987,10 @@ def main() -> int:
     try:
         topology_for_local_routes = json.loads((ROOT / "tools/world_map_topology.json").read_text(encoding="utf-8"))
         local_routes = topology_for_local_routes.get("local_resonance_routes", [])
+        local_route_ids = [route.get("id") for route in local_routes]
+        if len(local_route_ids) != len(set(local_route_ids)):
+            errors.append("Topology contains duplicate local Resonance route IDs.")
+        known_region_ids = {region.get("id") for region in topology_for_local_routes.get("regions", [])}
         route_by_id = {route.get("id"): route for route in local_routes}
         expected_local_route_ids = ("A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK", "A7_PRISON_MAINTENANCE_CROSSWALK", "A8_ERASED_REGENT_GALLERY", "A9_RAIN_REFLECTION_ROOFWALK", "A10_CHOIRLESS_UPPER_GALLERY", "A11_SECOND_OBSERVER_SPAN", "A12_CROWN_WALL_WALK")
         for route_id in expected_local_route_ids:
@@ -1019,6 +1023,21 @@ def main() -> int:
                 errors.append(f"Topology local route {route_id} must require Resonance Sight.")
             if route_design.get("persistent_on_open") is not True:
                 errors.append(f"Topology local route {route_id} must persist after opening.")
+            if route_design.get("region_id") not in known_region_ids:
+                errors.append(f"Topology local route {route_id} references unknown region {route_design.get('region_id')}.")
+            try:
+                start_x = float(route_design.get("bridge_start_x"))
+                end_x = float(route_design.get("bridge_end_x"))
+                bridge_y = float(route_design.get("bridge_y"))
+                threshold = int(route_design.get("required_resonance"))
+                if end_x <= start_x:
+                    errors.append(f"Topology local route {route_id} must have bridge_end_x > bridge_start_x.")
+                if not 0 <= threshold <= 100:
+                    errors.append(f"Topology local route {route_id} has an invalid Resonance threshold.")
+                if not 0.0 <= bridge_y <= 540.0:
+                    errors.append(f"Topology local route {route_id} has a bridge elevation outside the graybox floor bounds.")
+            except (TypeError, ValueError):
+                errors.append(f"Topology local route {route_id} has non-numeric geometry or threshold values.")
             route_platforms = platforms_by_region.get(route_design.get("region_id"), [])
             if not route_platforms:
                 errors.append(f"Local route {route_id} has no parsed platform layout for {route_design.get('region_id')}.")
