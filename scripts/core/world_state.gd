@@ -66,6 +66,8 @@ var debug_ability_override_active := false
 # Session-only map acceptance mode. While active, debug exploration never overwrites the real save.
 # 仅当前会话有效的地图验收模式；开启时调试探索不会覆盖正式存档。
 var debug_map_test_mode := false
+var debug_natural_test_active := false
+var debug_natural_test_visited_regions: Array[String] = []
 var hitstop_serial := 0
 
 # Witch Time scales hostile AI delta only; Hero input and physics stay responsive.
@@ -764,6 +766,8 @@ func delete_save() -> void:
 func reset() -> void:
     var preserved_language := language
     debug_map_test_mode = false
+    debug_natural_test_active = false
+    debug_natural_test_visited_regions.clear()
     debug_ability_override_active = false
     hero_memory = 0
     hero_humanity = 100
@@ -876,8 +880,43 @@ func get_humanity_state() -> String:
         return "frayed"
     return "stable"
 
+func _record_natural_test_location(location_id: String) -> void:
+    if not debug_natural_test_active:
+        return
+    var region_by_location := {
+        "church_escape": "A0",
+        "village": "A1",
+        "ash_forest": "A2",
+        "forgotten_city": "A3",
+        "sewer_reservoir": "A4",
+        "old_battlefield": "A5",
+        "monastery_tower": "A6",
+        "prison_depths": "A7",
+        "royal_tomb": "A8",
+        "royal_outer_ring": "A9",
+        "grand_cathedral": "A10",
+        "deep_research_depths": "A11",
+        "inner_city": "A12",
+        "hidden_well": "H01",
+        "hidden_bell_chamber": "H02",
+        "erased_third_street": "H03",
+        "reflected_stairwell": "H04",
+        "silent_bell_room": "H05",
+        "erased_royal_name_corridor": "H06",
+        "mirror_street": "H07",
+        "primordial_hollow": "H08"
+    }
+    var region_id := str(region_by_location.get(location_id, ""))
+    if region_id.is_empty() or region_id in debug_natural_test_visited_regions:
+        return
+    debug_natural_test_visited_regions.append(region_id)
+    print("[NEREIS][MAP][NATURAL_TEST] Visited %s (%s) [%d/21]" % [
+        region_id, location_id, debug_natural_test_visited_regions.size()
+    ])
+
 func set_location(location_id: String) -> void:
     current_location = location_id
+    _record_natural_test_location(location_id)
     var requested_spawn_side := pending_region_spawn_side.strip_edges()
     if not requested_spawn_side.is_empty() and requested_spawn_side.length() <= 64:
         resume_spawn_side = requested_spawn_side
