@@ -111,7 +111,8 @@ func _spawn_region_encounters() -> void:
 		"A5":
 			_spawn_encounter(BANDIT_RAIDER_SCRIPT, "A5_Bandit_01", 800.0, 14.0, 40.0)
 		"A6":
-			_spawn_encounter(CHURCH_INQUISITOR_SCRIPT, "A6_Inquisitor_01", 850.0, 14.0, 42.0)
+			if "defeated_mad_cleric" not in WorldState.achievement_flags:
+				_spawn_encounter(CHURCH_INQUISITOR_SCRIPT, "A6_MadCleric_01", 850.0, 17.0, 48.0)
 		"A7":
 			_spawn_encounter(RESEARCH_HUSK_SCRIPT, "A7_ResearchHusk_01", 1750.0, 14.0, 42.0)
 		"A8":
@@ -140,6 +141,9 @@ func _spawn_region_encounters() -> void:
 			_spawn_encounter(PALE_HOUND_SCRIPT, "H07_PaleHound_01", 1400.0, 14.0, 32.0)
 		"H08":
 			_spawn_encounter(RESEARCH_HUSK_SCRIPT, "H08_ResearchHusk_01", 1500.0, 14.0, 42.0)
+		"H09":
+			if "cliff_cave_experiment_defeated" not in WorldState.achievement_flags:
+				_spawn_encounter(RESEARCH_HUSK_SCRIPT, "H09_AncientExperiment", 1450.0, 20.0, 54.0)
 
 
 func _spawn_encounter(enemy_script: Script, enemy_name: String, spawn_x: float, body_radius: float, body_height: float) -> void:
@@ -151,8 +155,34 @@ func _spawn_encounter(enemy_script: Script, enemy_name: String, spawn_x: float, 
 	enemy.set_meta("region_encounter", true)
 	enemy.set_meta("encounter_active", false)
 	add_child(enemy)
+	if enemy.has_signal("defeated"):
+		enemy.connect("defeated", _on_region_enemy_defeated.bind(enemy_name))
+	if enemy_name == "A6_MadCleric_01":
+		enemy.set("health", 240)
+	elif enemy_name == "H09_AncientExperiment":
+		enemy.set("health", 360)
 	enemy.set_physics_process(false)
 	print("[NEREIS][MAP][ENCOUNTER] region=%s enemy=%s x=%.1f" % [region_id, enemy_name, spawn_x])
+
+
+func _on_region_enemy_defeated(enemy_name: String) -> void:
+	if enemy_name == "A6_MadCleric_01":
+		if WorldState.record_achievement("defeated_mad_cleric") and is_instance_valid(narrative):
+			narrative.show_message(
+				"疯狂神职人员",
+				"他倒下时，祷词仍在继续。你从他的衣襟里听见蜂群般的振翅声——不是昆虫，而是某种在石头内部移动的东西。\n\n村庄的山崖似乎回应了这声低鸣。",
+				6.0
+			)
+	elif enemy_name == "H09_AncientExperiment":
+		if WorldState.record_achievement("cliff_cave_experiment_defeated"):
+			WorldState.record_achievement("third_umbilical_cord_fragment_acquired")
+			WorldState.add_hidden_artifact_piece()
+			if is_instance_valid(narrative):
+				narrative.show_message(
+					"第三根脐带的残片",
+					"实验体的胸腔里没有心脏，只有一段被教会包裹在银线中的脐带。它并非完整的遗物，却在触碰时与体内的古老残留同步搏动。\n\n【烈火天罚条件之一】已记录。还需要其他真相锚点与隐藏探索。",
+					7.0
+				)
 
 
 func _spawn_x_for_side(side: String) -> float:
@@ -345,6 +375,7 @@ func _localized_region_title() -> String:
 		"H06": display_name = "王名抹除廊"
 		"H07": display_name = "镜街：雨幕背后"
 		"H08": display_name = "胎宫／原初空腔"
+		"H09": display_name = "崖下实验窟"
 	return "%s｜%s" % [region_id, display_name]
 
 func _get_objective_text() -> String:
@@ -382,6 +413,8 @@ func _get_objective_text() -> String:
 			return "沿观测通道前行，墙壁记得每一位来客。"
 		"H08":
 			return "沿着那面沉睡的呼吸之墙前行。"
+		"H09":
+			return "寻找古神实验体；它的遗物可能成为抵抗外神意志的锚点。"
 
 		"A12":
 			return "进入王座区，决定什么必须覆灭。"
@@ -461,6 +494,12 @@ func _show_intro() -> void:
 				"实验室下方的胎宫",
 				"墙壁温热，所有装置都已停止运转。\n\n石头中的某种东西，总在你呼气之前先行吐息。",
 				5.0
+			)
+		"H09":
+			narrative.show_message(
+				"崖下实验窟",
+				"蜂巢不是入口，而是封条。蜂蜡中混着教会的银线，洞壁上却留有远早于教会的骨质纹路。\n\n有东西在深处拖动身体，像在练习如何成为人。",
+				6.0
 			)
 		"A12":
 			narrative.show_message(
@@ -795,9 +834,24 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1660, 325, 120, 18))
 			_add_platform(Rect2(1800, 285, 120, 18))
 			_add_platform(Rect2(1940, 330, 120, 18))
+		"H09":
+			# A compact optional cave: a safe entrance shelf, a lower combat basin, and a raised relic ledge.
+			# 紧凑的可选洞窟：入口安全石台、下层战斗盆地与高位遗物台形成三层空间。
+			_add_platform(Rect2(260, 455, 180, 18))
+			_add_platform(Rect2(620, 410, 145, 18))
+			_add_platform(Rect2(990, 465, 190, 18))
+			_add_platform(Rect2(1370, 420, 170, 18))
+			_add_platform(Rect2(1690, 455, 180, 18))
+			_add_platform(Rect2(420, 385, 120, 18))
+			_add_platform(Rect2(555, 340, 120, 18))
+			_add_platform(Rect2(700, 300, 135, 18))
+			_add_platform(Rect2(850, 340, 120, 18))
+			_add_platform(Rect2(1110, 365, 125, 18))
+			_add_platform(Rect2(1260, 325, 120, 18))
+			_add_platform(Rect2(1510, 350, 125, 18))
+			_add_platform(Rect2(1650, 395, 120, 18))
 		"H08":
 			# Organic ribs spiral around the central cavity; no single straight floor line dominates.
-			# 有机骨脊围绕中央空腔盘旋，不再由一条直线地面主导空间。
 			_add_platform(Rect2(250, 470, 150, 18))
 			_add_platform(Rect2(505, 425, 135, 18))
 			_add_platform(Rect2(755, 380, 160, 18))
@@ -1603,6 +1657,11 @@ func _spawn_region_exits() -> void:
 			)
 			_spawn_h08_gate(map_width - 300.0)
 
+		"H09":
+			_spawn_exit_door(
+				72.0, "E  返回村庄山崖", "village",
+				"res://scenes/village_hub.tscn", "cliff_cave_return"
+			)
 		"H08":
 			_spawn_exit_door(
 				72.0, "E  返回深层研究区", "deep_research_depths",
@@ -2236,6 +2295,8 @@ func _draw() -> void:
 			_draw_erased_royal_name_landmarks()
 		"H08":
 			_draw_primordial_hollow_landmarks()
+		"H09":
+			_draw_cliff_cave_landmarks()
 
 	for platform in platforms:
 		draw_rect(platform, _platform_color())
@@ -2296,6 +2357,8 @@ func _background_color() -> Color:
 			return Color("#16151e")
 		"H08":
 			return Color("#0e1419")
+		"H09":
+			return Color("#18131b")
 		_:
 			return Color("#111018")
 
@@ -2341,6 +2404,8 @@ func _platform_color() -> Color:
 			return Color("#393744")
 		"H08":
 			return Color("#2c3c40")
+		"H09":
+			return Color("#3c303b")
 		_:
 			return Color("#302a33")
 
@@ -2719,6 +2784,33 @@ func _draw_deep_research_landmarks() -> void:
 	draw_line(Vector2(1510, floor_y - 175), Vector2(1660, floor_y - 215), Color("#635a70"), 3.0)
 	draw_line(Vector2(1660, floor_y - 215), Vector2(1800, floor_y - 255), Color("#635a70"), 3.0)
 	draw_string(ThemeDB.fallback_font, Vector2(1170, 255), "观测者也是实验的一部分", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8b8195"))
+
+func _draw_cliff_cave_landmarks() -> void:
+	# Layered limestone ribs frame a disturbed hive seal and the Church's silver restraints.
+	# 多层石灰岩骨脊围出被破坏的蜂巢封条与教会银质束缚。
+	for x in [220.0, 520.0, 860.0, 1190.0, 1530.0, 1840.0]:
+		var height := 155.0 + fmod(x, 3.0) * 38.0
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(x - 78.0, floor_y),
+			Vector2(x - 26.0, floor_y - height),
+			Vector2(x + 12.0, floor_y - height - 38.0),
+			Vector2(x + 74.0, floor_y)
+		]), Color("#28212d"))
+		draw_line(Vector2(x - 24.0, floor_y - height + 18.0), Vector2(x + 8.0, floor_y - height - 16.0), Color("#574453"), 3.0)
+	# A ribbed organic membrane surrounds the empty restraint ring after the experiment is defeated.
+	# 实验体被击败后，空束缚环仍留在有机膜中央。
+	draw_arc(Vector2(1460.0, floor_y - 36.0), 64.0, PI, TAU, 28, Color("#8c6877"), 4.0)
+	draw_arc(Vector2(1460.0, floor_y - 36.0), 46.0, PI, TAU, 24, Color("#51414f"), 2.0)
+	draw_line(Vector2(1395.0, floor_y - 36.0), Vector2(1525.0, floor_y - 36.0), Color("#6d5267"), 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(1320.0, floor_y - 130.0), "银线束缚已断", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#ad879b"))
+	draw_rect(Rect2(1810.0, floor_y - 215.0, 110.0, 215.0), Color("#211923"))
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(1785.0, floor_y - 215.0),
+		Vector2(1865.0, floor_y - 275.0),
+		Vector2(1945.0, floor_y - 215.0)
+	]), Color("#3c2d3b"))
+	draw_string(ThemeDB.fallback_font, Vector2(1750.0, floor_y - 290.0), "祷词从石头里传来", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#98768b"))
+
 
 func _draw_primordial_hollow_landmarks() -> void:
 	# This room is grown from the research wall, rather than constructed as a machine hall.
