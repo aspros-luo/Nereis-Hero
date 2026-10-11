@@ -82,7 +82,7 @@ func _spawn_village_rest_point() -> void:
     rest.name = "VillageHearthRestPoint"
     rest.position = Vector2(620, 520)
     rest.rest_id = "rest_A1_village_hearth"
-    rest.display_name = "VILLAGE HEARTH"
+    rest.display_name = "村庄炉火"
     add_child(rest)
 
 
@@ -106,7 +106,7 @@ func _spawn_mite() -> void:
         absence.name = "MiteAbsence"
         absence.set_script(VILLAGE_POI_SCRIPT)
         absence.poi_id = "mite_absence"
-        absence.display_name = "AN EMPTY CHAIR"
+        absence.display_name = "空椅子"
         absence.dialogue = "The chair beside the fire is empty.\n\nA cup has been left on the table. It is still warm.\n\nNo one is home."
         add_child(absence)
         absence.interacted.connect(_on_mite_absence_interacted)
@@ -122,7 +122,7 @@ func _spawn_mite() -> void:
     print("[NEREIS][VILLAGE] Mite present; relationship facts=%d" % WorldState.mite_interactions_seen.size())
 
 func _on_mite_absence_interacted() -> void:
-    narrative.show_message("AN EMPTY CHAIR", "The cup is still warm.\n\nYou are certain you did not leave it here.", 5.0)
+    narrative.show_message("空椅子", "杯子仍然温热。\n\n你确信自己没有把它留在这里。", 5.0)
 
 func _on_mite_interacted(_interaction_id: String, title: String, message: String) -> void:
     narrative.show_message(title, message, 7.0)
@@ -147,7 +147,7 @@ func _spawn_mite_house_door() -> void:
     mite_house_door.set_script(INTERACTION_DOOR_SCRIPT)
     mite_house_door.position = Vector2(455, 520)
     mite_house_door.name = "MiteHouseDoor"
-    mite_house_door.prompt_text = "E  Enter"
+    mite_house_door.prompt_text = "E  进入"
     var shape := CollisionShape2D.new()
     var rectangle := RectangleShape2D.new()
     rectangle.size = Vector2(70, 120)
@@ -183,7 +183,7 @@ func _spawn_gatekeeper() -> void:
     npc.set_script(ROUTE_NPC_SCRIPT)
     npc.position = Vector2(760, 520)
     npc.npc_id = "village_gatekeeper"
-    npc.display_name = "VILLAGE GATEKEEPER"
+    npc.display_name = "村庄守门人"
     if WorldState.selected_route == "church":
         npc.dialogue = "The gatekeeper studies the church seal.\n\n\"They told us you would never return. Why did they send the same man back?\""
     else:
@@ -196,7 +196,7 @@ func _spawn_shared_world_npcs() -> void:
     youth.set_script(ROUTE_NPC_SCRIPT)
     youth.position = Vector2(1120, 520)
     youth.npc_id = "amnesiac_youth"
-    youth.display_name = "AMNESIAC YOUTH"
+    youth.display_name = "失忆的年轻人"
     if WorldState.get_humanity_state() == "hollow":
         youth.dialogue = "The young man takes one step back.\n\n\"I know that look. Something in you already left.\""
     elif WorldState.selected_route == "church":
@@ -210,7 +210,7 @@ func _spawn_shared_world_npcs() -> void:
     merchant.set_script(ROUTE_NPC_SCRIPT)
     merchant.position = Vector2(1380, 520)
     merchant.npc_id = "traveling_merchant"
-    merchant.display_name = "TRAVELING MERCHANT"
+    merchant.display_name = "旅行商人"
     if WorldState.get_humanity_state() == "hollow":
         merchant.dialogue = "The merchant stops smiling.\n\n\"You should not be able to hear the song anymore.\""
     elif WorldState.selected_route == "church":
@@ -230,7 +230,7 @@ func _spawn_village_pois() -> void:
     tavern.set_script(VILLAGE_POI_SCRIPT)
     tavern.position = Vector2(1730, 520)
     tavern.poi_id = "tavern"
-    tavern.display_name = "THE TAVERN"
+    tavern.display_name = "酒馆"
     tavern.dialogue = "The tavern door is warm beneath your hand.\n\nFor a moment you hear a lullaby from inside. The voice stops when you touch the handle."
     add_child(tavern)
     tavern.interacted.connect(_on_village_poi_interacted.bind(tavern))
@@ -239,7 +239,7 @@ func _spawn_village_pois() -> void:
     graveyard.set_script(VILLAGE_POI_SCRIPT)
     graveyard.position = Vector2(950, 520)
     graveyard.poi_id = "graveyard"
-    graveyard.display_name = "VILLAGE GRAVEYARD"
+    graveyard.display_name = "村庄墓地"
     graveyard.dialogue = "The cemetery gate is open.\n\nThe bell tower has not rung in years. Something inside still answers when you call."
     add_child(graveyard)
     graveyard.interacted.connect(_on_village_poi_interacted.bind(graveyard))
@@ -248,7 +248,7 @@ func _spawn_village_pois() -> void:
     rebel_camp.set_script(VILLAGE_POI_SCRIPT)
     rebel_camp.position = Vector2(1990, 520)
     rebel_camp.poi_id = "rebel_camp"
-    rebel_camp.display_name = "RESTORATION CAMP"
+    rebel_camp.display_name = "复国军营地"
     rebel_camp.dialogue = "A small fire burns behind the hill.\n\nSomeone has pitched a camp without a flag.\n\nYou hear soldiers arguing about the throne."
     add_child(rebel_camp)
     rebel_camp.interacted.connect(_on_village_poi_interacted.bind(rebel_camp))
@@ -258,7 +258,7 @@ func _spawn_village_pois() -> void:
     north_gate.position = Vector2(2440, 520)
     north_gate.poi_id = "north_gate"
     var old_pilgrim_road_open := "village_defense_survived" in WorldState.achievement_flags
-    north_gate.display_name = "OLD PILGRIM ROAD" if old_pilgrim_road_open else "NORTH GATE"
+    north_gate.display_name = "旧朝圣路" if old_pilgrim_road_open else "北门"
     if old_pilgrim_road_open:
         north_gate.dialogue = "The gate has been repaired, but the old road beyond it is still there.\n\nThe stones carry a bell sound from somewhere in the forest."
     else:
@@ -273,7 +273,7 @@ func _spawn_village_pois() -> void:
     city_cut.position = Vector2(100, 520)
     city_cut.poi_id = "city_cut"
     var city_cut_open := "village_defense_survived" in WorldState.achievement_flags
-    city_cut.display_name = "OLD DRAINAGE PASSAGE" if city_cut_open else "SEALED DRAINAGE PASSAGE"
+    city_cut.display_name = "旧排水通道" if city_cut_open else "封闭的排水通道"
     if city_cut_open:
         city_cut.dialogue = "The old drain runs beneath the city wall. Its stonework predates the village houses.\n\nA narrow path leads toward the forgotten streets."
     else:
@@ -287,7 +287,7 @@ func _spawn_village_pois() -> void:
     # 教堂交互点与北门之间保留无交互提示的回程落脚区。
     church.position = Vector2(2180, 520)
     church.poi_id = "church"
-    church.display_name = "THE CHURCH"
+    church.display_name = "教会"
     church.dialogue = "The church door bears your name beneath layers of newer paint.\n\nSomeone has tried to erase it many times."
     add_child(church)
     church.interacted.connect(_on_village_poi_interacted.bind(church))
@@ -367,13 +367,13 @@ func _spawn_ui() -> void:
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
     hud.bind_hero(hero)
-    hud.set_story_mode("THE REMOTE VILLAGE", "LEARN WHY THE VILLAGE SAVED YOU")
+    hud.set_story_mode("THE REMOTE VILLAGE", "LEARN WHY 边境村庄 SAVED YOU")
 
     get_tree().create_timer(0.7).timeout.connect(_show_village_intro)
 
 func _show_village_intro() -> void:
     narrative.show_message(
-        "THE VILLAGE",
+        "边境村庄",
         "The road ends where the village begins.\n\nThe Hero recognizes none of it. The village recognizes him.\n\nSomeone has left a place for him by the fire.",
         6.0
     )
@@ -506,7 +506,7 @@ func _draw() -> void:
     for x in range(0, 2600, 64):
         draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
 
-    draw_string(ThemeDB.fallback_font, Vector2(100, 230), NereisLocalization.translate_text("THE VILLAGE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 30, Color("#4d454d"))
+    draw_string(ThemeDB.fallback_font, Vector2(100, 230), NereisLocalization.translate_text("边境村庄"), HORIZONTAL_ALIGNMENT_LEFT, -1, 30, Color("#4d454d"))
 
     # The western drain is a visible alternate route; rubble remains until the village defense is survived.
     # 西侧排水通路作为可见的替代路线；村庄防卫战完成前仍由碎石封住。
@@ -531,7 +531,7 @@ func _draw() -> void:
         Color("#302832")
     )
     draw_rect(Rect2(430, 430, 50, 90), Color("#17141b"))
-    draw_string(ThemeDB.fallback_font, Vector2(388, 332), NereisLocalization.translate_text("MITE'S HOUSE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
+    draw_string(ThemeDB.fallback_font, Vector2(388, 332), NereisLocalization.translate_text("蜜忒的家"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
 
     # A low hearth marks the safe hub and the point where survivors gather.
     # 低矮炉火标记安全据点，也是村民聚集的地方。
@@ -566,10 +566,10 @@ func _draw() -> void:
         Color("#3a303a")
     )
     draw_rect(Rect2(1690, 400, 80, 120), Color("#17141b"))
-    draw_string(ThemeDB.fallback_font, Vector2(1630, 275), NereisLocalization.translate_text("THE TAVERN"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
+    draw_string(ThemeDB.fallback_font, Vector2(1630, 275), NereisLocalization.translate_text("酒馆"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
 
     draw_rect(Rect2(900, 390, 120, 130), Color("#28212a"))
-    draw_string(ThemeDB.fallback_font, Vector2(885, 365), NereisLocalization.translate_text("GRAVEYARD"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(885, 365), NereisLocalization.translate_text("墓地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
 
     draw_rect(Rect2(1940, 360, 150, 160), Color("#27212a"))
     draw_colored_polygon(
@@ -581,12 +581,12 @@ func _draw() -> void:
         Color("#312934")
     )
     draw_circle(Vector2(2015, 455), 34.0, Color("#63322f"))
-    draw_string(ThemeDB.fallback_font, Vector2(1900, 335), NereisLocalization.translate_text("RESTORATION CAMP"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
+    draw_string(ThemeDB.fallback_font, Vector2(1900, 335), NereisLocalization.translate_text("复国军营地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
 
     draw_rect(Rect2(2380, 330, 120, 190), Color("#241e27"))
     draw_rect(Rect2(2410, 350, 18, 170), Color("#4a3439"))
     draw_rect(Rect2(2460, 350, 18, 170), Color("#4a3439"))
-    draw_string(ThemeDB.fallback_font, Vector2(2370, 310), NereisLocalization.translate_text("NORTH GATE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(2370, 310), NereisLocalization.translate_text("北门"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
 
     # Broken roof beams mark an optional high route across the village; they are not a required path.
     # 断裂屋脊标记穿越村庄的可选高路，不是主线必经路线。
@@ -614,4 +614,4 @@ func _draw() -> void:
         ]),
         Color("#312934")
     )
-    draw_string(ThemeDB.fallback_font, Vector2(2135, 200), NereisLocalization.translate_text("CHURCH"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#796d67"))
+    draw_string(ThemeDB.fallback_font, Vector2(2135, 200), NereisLocalization.translate_text("教会"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#796d67"))
