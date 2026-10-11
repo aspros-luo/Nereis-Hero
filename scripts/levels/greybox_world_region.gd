@@ -928,7 +928,7 @@ func _spawn_region_rest_point() -> void:
             rest_name = "王室墓碑"
         "A9":
             rest_x = 1100.0
-            rest_name = "OUTER RING 歇脚圣龛"
+            rest_name = "外环圣龛"
         "A10":
             rest_x = 1200.0
             rest_name = "礼拜堂歇脚处"
@@ -1194,7 +1194,7 @@ func _spawn_region_exits() -> void:
                 "res://scenes/village_hub.tscn", "north_gate"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  ENTER 被遗忘的城区", "forgotten_city",
+                map_width - 72.0, "E  进入被遗忘的城区", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "west"
             )
             _spawn_h02_gate(map_width - 300.0)
@@ -1229,7 +1229,7 @@ func _spawn_region_exits() -> void:
             )
             if "reached_A9_via_A8_then_opened_old_lift_from_A9" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    1150.0, "E  RETURN TO 王城外环", "royal_outer_ring",
+                    1150.0, "E  返回王城外环", "royal_outer_ring",
                     "res://scenes/royal_outer_ring.tscn", "old_lift"
                 )
             _spawn_h03_gate(map_width - 300.0)
@@ -1270,12 +1270,12 @@ func _spawn_region_exits() -> void:
                 )
             if "reached_A8_via_A7_then_opened_royal_tomb_gate" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    1250.0, "E  RETURN TO 旧王墓", "royal_tomb",
+                    1250.0, "E  返回旧王墓", "royal_tomb",
                     "res://scenes/royal_tomb.tscn", "royal_tomb_waterway"
                 )
             if "reached_A9_then_opened_royal_drain_from_outer_ring" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    1450.0, "E  RETURN TO 王城外环", "royal_outer_ring",
+                    1450.0, "E  返回王城外环", "royal_outer_ring",
                     "res://scenes/royal_outer_ring.tscn", "royal_drain"
                 )
             if "reached_A4_via_A3" in WorldState.achievement_flags:
@@ -1283,7 +1283,7 @@ func _spawn_region_exits() -> void:
 
         "A5":
             _spawn_exit_door(
-                72.0, "E  RETURN TO 被遗忘的城区", "forgotten_city",
+                72.0, "E  返回被遗忘的城区", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "east"
             )
             _spawn_exit_door(
@@ -1318,7 +1318,7 @@ func _spawn_region_exits() -> void:
             _spawn_exit_door(
                 2110.0, "E  打开钟塔落差通路", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "bell_drop",
-                true, "opened_bell_tower_drop", "E  RETURN TO 被遗忘的城区"
+                true, "opened_bell_tower_drop", "E  返回被遗忘的城区"
             )
         "A7":
             _spawn_exit_door(
@@ -1326,7 +1326,7 @@ func _spawn_region_exits() -> void:
                 "res://scenes/monastery_tower.tscn", "east"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  ENTER 旧王墓", "royal_tomb",
+                map_width - 72.0, "E  进入旧王墓", "royal_tomb",
                 "res://scenes/royal_tomb.tscn", "west"
             )
             # C12: unlock the supply tunnel from the prison side; the first E opens it, the second traverses.
@@ -1342,20 +1342,20 @@ func _spawn_region_exits() -> void:
                 "res://scenes/prison_depths.tscn", "east"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  ENTER 王城外环", "royal_outer_ring",
+                map_width - 72.0, "E  进入王城外环", "royal_outer_ring",
                 "res://scenes/royal_outer_ring.tscn", "west"
             )
             # C07: the royal-tomb shortcut back to the reservoir is unlocked from A8.
             # C07：旧王墓返回旧水库的捷径只能在 A8 侧开启。
             _spawn_exit_door(
-                520.0, "E  OPEN 旧王墓 WATERWAY", "sewer_reservoir",
+                520.0, "E  打开王墓水道", "sewer_reservoir",
                 "res://scenes/sewer_reservoir.tscn", "royal_tomb_waterway",
                 true, "reached_A8_via_A7_then_opened_royal_tomb_gate", "E  沿王室水道返回"
             )
             _spawn_h06_gate(1870.0)
             if WorldState.is_hidden_path_opened("H04"):
                 _spawn_exit_door(
-                    930.0, "E  OPEN 旧王墓 SIDE DOOR", "reflected_stairwell",
+                    930.0, "E  打开王墓侧门", "reflected_stairwell",
                     "res://scenes/reflected_stairwell.tscn", "royal_tomb_side_entry",
                     true, "opened_royal_tomb_side_door", "E  进入倒影阶梯"
                 )
@@ -1363,11 +1363,11 @@ func _spawn_region_exits() -> void:
 
         "A9":
             _spawn_exit_door(
-                72.0, "E  RETURN TO 旧王墓", "royal_tomb",
+                72.0, "E  返回旧王墓", "royal_tomb",
                 "res://scenes/royal_tomb.tscn", "east"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  CLIMB TO 大圣堂", "grand_cathedral",
+                map_width - 72.0, "E  登上大圣堂", "grand_cathedral",
                 "res://scenes/grand_cathedral.tscn", "west"
             )
             if WorldState.is_hidden_path_opened("H03"):
@@ -1385,7 +1385,7 @@ func _spawn_region_exits() -> void:
             _spawn_a9_mirror_gate(1850.0)
             if "reached_A12_via_A10_then_opened_inner_city_side_gate" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    900.0, "E  RETURN TO 王室内城", "inner_city",
+                    900.0, "E  返回王室内城", "inner_city",
                     "res://scenes/inner_city.tscn", "inner_city_side_gate"
                 )
             # C16: reconnect A9 to A3 after the old lift is opened from the outer ring.
@@ -1408,7 +1408,7 @@ func _spawn_region_exits() -> void:
                 "res://scenes/royal_outer_ring.tscn", "east"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  ENTER 王室内城", "inner_city",
+                map_width - 72.0, "E  进入王室内城", "inner_city",
                 "res://scenes/inner_city.tscn", "west"
             )
             _spawn_a11_chapel_gate(1900.0)
@@ -1454,7 +1454,7 @@ func _spawn_region_exits() -> void:
             )
             if "opened_mirror_street_side_gate" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    map_width - 72.0, "E  RETURN TO 王室内城", "inner_city",
+                    map_width - 72.0, "E  返回王室内城", "inner_city",
                     "res://scenes/inner_city.tscn", "west"
                 )
 
@@ -1489,7 +1489,7 @@ func _spawn_region_exits() -> void:
 
         "H03":
             _spawn_exit_door(
-                72.0, "E  RETURN TO 被遗忘的城区", "forgotten_city",
+                72.0, "E  返回被遗忘的城区", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "third_street_gate"
             )
             _spawn_exit_door(
@@ -1504,7 +1504,7 @@ func _spawn_region_exits() -> void:
                 "res://scenes/sewer_reservoir.tscn", "water_reflection_gate"
             )
             _spawn_exit_door(
-                map_width - 105.0, "E  RETURN THROUGH 旧王墓 DOOR",
+                map_width - 105.0, "E  穿过王墓门返回",
                 "royal_tomb", "res://scenes/royal_tomb.tscn", "royal_tomb_side",
                 "opened_royal_tomb_side_door" in WorldState.achievement_flags
             )
@@ -1515,14 +1515,14 @@ func _spawn_region_exits() -> void:
                 "res://scenes/monastery_tower.tscn", "silent_window"
             )
             _spawn_exit_door(
-                map_width - 105.0, "E  穿过钟塔返回 DROP",
+                map_width - 105.0, "E  穿过钟塔落差通路返回",
                 "forgotten_city", "res://scenes/forgotten_city.tscn", "bell_drop",
                 "opened_bell_tower_drop" in WorldState.achievement_flags
             )
 
         "H06":
             _spawn_exit_door(
-                72.0, "E  RETURN TO 旧王墓", "royal_tomb",
+                72.0, "E  返回旧王墓", "royal_tomb",
                 "res://scenes/royal_tomb.tscn", "royal_name_gate"
             )
             _spawn_exit_door(
@@ -1539,7 +1539,7 @@ func _spawn_region_exits() -> void:
                 "res://scenes/royal_tomb.tscn", "east", can_return_to_tomb
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  RETURN TO 大圣堂", "grand_cathedral",
+                map_width - 72.0, "E  返回大圣堂", "grand_cathedral",
                 "res://scenes/grand_cathedral.tscn", "east", can_return_to_cathedral
             )
             _spawn_h08_gate(map_width - 300.0)
@@ -1694,7 +1694,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 1320.0
             route.bridge_end_x = 1690.0
             route.bridge_y = 400.0
-            route.prompt_text = "E  ANCHOR 第三街"
+            route.prompt_text = "E  固定第三街通路"
         "A4":
             # A dry aqueduct span appears above the old reservoir only after the buried stone answers.
             # 旧水库上方的干涸渡槽只有在埋藏石层回应鸣响后才显现。
@@ -1874,7 +1874,7 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
             )
         _:
             narrative.show_message(
-                "第三街 HOLDS",
+                "第三街仍然存在",
                 "A bridge appears where the city map was scraped clean. The road does not lead to another place; it reconnects two parts of the street you already knew.\n\nThe stone will remember this route.",
                 5.0
             )
