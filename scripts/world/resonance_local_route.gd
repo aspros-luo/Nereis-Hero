@@ -89,6 +89,9 @@ func _sync_bridge_collision() -> void:
         rectangle.size = Vector2(bridge_end_x - bridge_start_x, 18.0)
         collision.shape = rectangle
         collision.position = rectangle.size * 0.5
+        # Resonance bridges are walkable surfaces, not solid walls; the Hero may jump through from below.
+        # 鸣响桥只提供可站立面，不应成为实心墙；主角可以从下方跳穿。
+        collision.one_way_collision = true
         bridge_body.add_child(collision)
         add_child(bridge_body)
     elif not should_exist and has_bridge:
