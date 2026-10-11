@@ -889,6 +889,87 @@ His signature is steady. The seal is not.",
                 74
             )
 
+        "H01":
+            _spawn_source(
+                Vector2(1600, floor_y - 18.0),
+                "hidden_well_no_water",
+                "THE WELL HAS NO WATER",
+                "The stone is wet, but there is no water below it.
+
+The dampness smells like rain falling beneath the earth.",
+                0
+            )
+        "H02":
+            _spawn_source(
+                Vector2(1650, floor_y - 18.0),
+                "hidden_bell_after_sound",
+                "THE BELL AFTER THE SOUND",
+                "The bell's tongue moves only after the sound has stopped.
+
+The metal is cold. The air around it is warm.",
+                0
+            )
+        "H03":
+            _spawn_source(
+                Vector2(2020, floor_y - 18.0),
+                "hidden_third_street_numbers",
+                "THE NUMBERS SKIP THREE",
+                "Every doorway is numbered in order until the third.
+
+There is no missing number. The wall has been cut to make the count look natural.",
+                0
+            )
+        "H04":
+            _spawn_source(
+                Vector2(1740, floor_y - 18.0),
+                "hidden_stair_reflection",
+                "THE STAIR THAT CLIMBS DOWN",
+                "The reflection climbs while the stone stair descends.
+
+At the landing, both versions pause to listen.",
+                0
+            )
+        "H05":
+            _spawn_source(
+                Vector2(1960, floor_y - 18.0),
+                "hidden_bell_shadowless_record",
+                "THE SHADOWLESS RECORD",
+                "The bell is recorded as removed from the tower.
+
+Its shadow is still listed in the inventory, signed for every morning.",
+                0
+            )
+        "H06":
+            _spawn_source(
+                Vector2(1980, floor_y - 18.0),
+                "hidden_royal_name_scrape",
+                "THE STONE REMEMBERS THE NAME",
+                "The names are gone, but the chisel marks stop at each letter's boundary.
+
+Someone erased the words carefully enough to preserve their shapes.",
+                0
+            )
+        "H07":
+            _spawn_source(
+                Vector2(2200, floor_y - 18.0),
+                "hidden_mirror_lamp_count",
+                "THE EXTRA LAMP",
+                "You count seven lamps in the water and six on the street.
+
+When you turn around, the seventh light has moved behind you.",
+                0
+            )
+        "H08":
+            _spawn_source(
+                Vector2(1850, floor_y - 18.0),
+                "hidden_primordial_cradle",
+                "THE EMPTY CRADLE",
+                "The hollow in the living stone is too small for a body and too carefully shaped to be natural.
+
+The wall contracts around it, then relaxes.",
+                0
+            )
+
 func _spawn_source(
     source_position: Vector2,
     source_id: String,
