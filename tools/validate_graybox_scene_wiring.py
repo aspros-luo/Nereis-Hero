@@ -142,6 +142,10 @@ def main() -> int:
     require(region_script, "_add_platform(Rect2(1250, 270, 120, 18))", "A6 cloister balcony route", errors)
     require(region_script, "_add_platform(Rect2(1280, 320, 110, 18))", "A7 maintenance catwalk", errors)
     require(region_script, "_add_platform(Rect2(1240, 310, 110, 18))", "A8 upper burial gallery", errors)
+    require(region_script, "_add_platform(Rect2(390, 395, 115, 18))", "A9 outer-ring roof loop", errors)
+    require(region_script, "_add_platform(Rect2(815, 290, 120, 18))", "A10 cathedral choir gallery", errors)
+    require(region_script, "_add_platform(Rect2(1230, 285, 120, 18))", "A11 observation bridge", errors)
+    require(region_script, "_add_platform(Rect2(1400, 305, 120, 18))", "A12 crown-wall route", errors)
 
     # Verify that every source ID required by a gate is actually spawned by the region controller.
     # 检查所有入口要求的异常来源，都确实由区域控制器生成。
