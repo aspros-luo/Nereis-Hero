@@ -50,19 +50,19 @@
 4. 全程只使用正常移动、战斗、NPC／线索交互、灵视能力、机关与场景入口。若某地图无法抵达，记录上一个地图、所走出口、当前鸣响／接触状态和 Output 中的 `[NEREIS][MAP]` 日志，不要通过传送绕过。
 5. 可以按 F10 查看面板，但不要点击状态预设或传送按钮。测试结束时点击“退出测试并恢复磁盘存档”，回到标题菜单后用“继续游戏”确认正式存档恢复到测试前的位置。
 
-该模式的目的不是证明地图可传送，而是验证**从 A0 出发的真实探索链**。面板会显示“自然探索实走地图：n/21”，只在目标场景实际加载后才计数；Output 也会打印 `[NEREIS][MAP][NATURAL_TEST] Visited ...`。地图测试面板本身仍存在，因此必须遵守上述操作约束。调试会话期间所有 `save_game()` 磁盘写入都会被拦截。计数是场景到达记录，不等于该地图的所有捷径、隐藏线索或回程已验收。
+该模式的目的不是证明地图可传送，而是验证**从 A0 出发的真实探索链**。面板会显示“自然探索实走地图：n/22”，只在目标场景实际加载后才计数；Output 也会打印 `[NEREIS][MAP][NATURAL_TEST] Visited ...`。地图测试面板本身仍存在，因此必须遵守上述操作约束。调试会话期间所有 `save_game()` 磁盘写入都会被拦截。计数是场景到达记录，不等于该地图的所有捷径、隐藏线索或回程已验收。
 
 
-### 新增：Debug 全图逐步指引（30 步）
+### 新增：Debug 全图逐步指引（31 步）
 
-F10 面板现在包含“自然探索路线指引”，覆盖从 A0 逃脱、主线 A0–A12、隐藏区 H01–H08、两条 A11 深层入口、三条箱庭回环与存档恢复。
+F10 面板现在包含“自然探索路线指引”，覆盖从 A0 逃脱、主线 A0–A12、隐藏区 H01–H09、两条 A11 深层入口、三条箱庭回环与存档恢复。
 
 1. 点击“自然探索验收：从 A0 开始（无传送／无作弊解锁）”。
 2. 游戏开始后按 F10 打开面板，滚动到“自然探索路线指引”。
 3. 每张主地图的 HUD 现在会显示 `A1｜边境村庄` 这样的区域编号；A1 村庄 HUD 也已标注 A1。F10 指引会实时读取主角的地图内 X 坐标，并显示“向左走（A）／向右走（D）”、目标出口或线索名称、目标坐标与大致距离。
 4. 使用“上一步指引／下一步指引”切换任务文字。指引只告诉你方向，不会自动判定成功；请在真实进入区域、调查线索、打开捷径并实际走通回程后再前进。
 5. 指引不会传送、加鸣响、补进度或开门。遇到门尚未显现时，先继续主线、提升正常获得的条件，再回访该地点；不要用预设绕过它。
-6. 最后确认自然探索实走地图为 21/21，再使用“退出测试并恢复磁盘存档”。
+6. 最后确认自然探索实走地图为 22/22，再使用“退出测试并恢复磁盘存档”。
 
 面板使用滚动区域，较小窗口下请在面板内部滚动。方向坐标是当前灰盒地图的场景内 X 坐标，距离会随主角移动更新；当目标入口有前置条件时，指引会同时显示条件。实走计数只代表场景被实际加载过，不代表每条路线已经通过；请同时按步骤检查门、线索、回程与出生点。
 
@@ -72,7 +72,7 @@ F10 面板现在包含“自然探索路线指引”，覆盖从 A0 逃脱、主
 - 边境箱庭回环：先抵达 A4，再按实际开启的闸门／回程连接走通 A3 → A4 → A1。
 - 中层箱庭回环：从 A6 开启钟塔下落捷径，实际走通 A6 ↔ A3。
 - 王国深层回环：从 A8/A9 的合法侧开启对应通路后，走通 A4 ↔ A8 ↔ A9 ↔ A4。
-- 隐藏区域：H01 井底回声层、H02 倒响钟室、H03 被删去的第三街、H04 水面背后的楼梯、H05 无声钟室、H06 王名抹除廊、H07 镜街、H08 胎宫／原初空腔。
+- 隐藏区域：H01 井底回声层、H02 倒响钟室、H03 被删去的第三街、H04 水面背后的楼梯、H05 无声钟室、H06 王名抹除廊、H07 镜街、H08 胎宫／原初空腔、H09 崖下实验窟。
 - 深层研究区 A11：通过 C15（王墓侧）或 C19（静默侧堂）真实开门进入；两条入口都应符合各自的异常来源、鸣响／接触门槛与剧情事实。
 - A13 是世界拓扑中的终局抽象节点，目前没有独立地图场景；通过真实结局路线验收结局场景，不把 A13 当作独立可探索地图。
 
@@ -194,7 +194,7 @@ A0 → A1 → A2 → A3 → A5 → A6 → A7 → A8 → A9 → A10 → A12
 - A2–A4：雾林、钟墓、城区、排水系统是否形成可回访的旧世界交通网。
 - A5–A8：战场、修道院、监牢、王墓是否逐渐提供相互印证或彼此矛盾的历史证据。
 - A9–A12：王城、圣堂、内城是否让玩家逐渐察觉教会与王权的真实关系。
-- A11／H01–H08：隐藏内容是否改变玩家对既有场景的理解，而不是只有无剧情奖励房。
+- A11／H01–H09：隐藏内容是否改变玩家对既有场景的理解，而不是只有无剧情奖励房。
 - 通过标准：玩家可从空间、地标、遗物与异常线索逐渐拼出故事；普通路线不被隐藏内容强制阻塞。
 
 ### MAP-07：存档隔离回归
@@ -230,8 +230,8 @@ A0 → A1 → A2 → A3 → A5 → A6 → A7 → A8 → A9 → A10 → A12
 - 键位、脚本路径、场景 ID、区域 ID、存档字段名和程序日志中的技术标识可保留英文。
 - 游戏内世界观专有名词应统一：鸣响／灵视、古神、外神、教会、复国军、蜜忒，以及三个结局“凡人之墓／永恒乐园／烈火天罚”。
 - 英文仅作为有意保留的专名、符号或开发日志，不应因为缺少翻译而直接出现在中文版玩家界面。
-- 本轮已对齐序章 A0、村庄 A1、主地图 A2–A12、隐藏地图 H01–H08 的主要区域标题、路线目标、入口提示、环境铭文、调查线索与关键序章／村庄对白，并将地图测试面板和调试 HUD 改为简体中文。仍需在 Godot 实机检查 NPC 交互提示、其他独立室内场景、战斗演示与结局场景；发现英文漏项后应回写统一词条，不能只在截图中临时改字。
+- 本轮已对齐序章 A0、村庄 A1、主地图 A2–A12、隐藏地图 H01–H09 的主要区域标题、路线目标、入口提示、环境铭文、调查线索与关键序章／村庄对白，并将地图测试面板和调试 HUD 改为简体中文。仍需在 Godot 实机检查 NPC 交互提示、其他独立室内场景、战斗演示与结局场景；发现英文漏项后应回写统一词条，不能只在截图中临时改字。
 
 ## English summary
 
-Use the F10 map test panel to teleport among the 13 implemented primary map scenes and eight hidden areas. The panel now also provides a 30-step natural-exploration walkthrough covering the main route, hidden areas, loops, both A11 entrances, and save restoration. Its Previous/Next buttons only change the written guidance; they never teleport or unlock anything. The panel still offers resonance and all-routes presets for separate diagnostics. Activate natural exploration for the clean A0 run, and restore the on-disk save from the panel when finished. Validate actual routes, loops, hidden-area discovery, return paths, narrative geography, and text consistency in Godot; static checks are not runtime acceptance.
+Use the F10 map test panel to teleport among the 13 implemented primary map scenes and nine hidden areas. The panel now also provides a 31-step natural-exploration walkthrough covering the main route, hidden areas, loops, both A11 entrances, and save restoration. Its Previous/Next buttons only change the written guidance; they never teleport or unlock anything. The panel still offers resonance and all-routes presets for separate diagnostics. Activate natural exploration for the clean A0 run, and restore the on-disk save from the panel when finished. Validate actual routes, loops, hidden-area discovery, return paths, narrative geography, and text consistency in Godot; static checks are not runtime acceptance.
