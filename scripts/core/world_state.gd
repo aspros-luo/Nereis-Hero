@@ -980,6 +980,8 @@ func get_resume_scene_path() -> String:
             return "res://scenes/deep_research_depths.tscn"
         "primordial_hollow":
             return "res://scenes/primordial_hollow.tscn"
+        "cliff_cave_experiment":
+            return "res://scenes/cliff_cave_experiment.tscn"
         "church_final_demo":
             return "res://scenes/church_final_demo.tscn"
         "ending_paradise_demo":
