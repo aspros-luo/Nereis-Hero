@@ -70,6 +70,11 @@ def main() -> int:
             "Interaction focus must block world interactions while menu_input_locked is active."
         )
 
+    secret_gate = read("scripts/world/resonance_secret_gate.gd", errors)
+    require(secret_gate, "func _is_debug_override_active()", "Resonance secret gate", errors)
+    require(secret_gate, "allow_debug_override: bool = true", "Resonance secret gate", errors)
+    require(secret_gate, "_is_debug_override_active()", "Resonance secret gate", errors)
+
     world_state = read("scripts/core/world_state.gd", errors)
     for method in [
         "func record_resonance_milestone(",
