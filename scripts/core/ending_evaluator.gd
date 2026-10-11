@@ -4,7 +4,7 @@ class_name NereisEndingEvaluator
 # Ending routes depend on Resonance, truth-anchor items and exploration, never physical intimacy.
 # 结局由鸣响、真相锚点道具与探索决定，绝不以身体结合为门槛。
 const COSMIC_RESONANCE_THRESHOLD: int = 68
-const PARADISE_OUTER_EXPOSURE_THRESHOLD: int = 6
+const PARADISE_TRACE_SOURCE: String = "anomaly_observer_reaction"
 const REQUIRED_ARTIFACT_PIECES: int = 3
 const REQUIRED_HIDDEN_REGIONS_FOR_FIRE: int = 2
 
@@ -12,12 +12,12 @@ static func get_candidate() -> String:
     var resonance := WorldState.hero_resonance
     var pieces := WorldState.hidden_artifact_pieces
     var explored := WorldState.entered_hidden_regions.size()
-    var outer_exposure := WorldState.outer_exposure
+    var has_outer_trace := PARADISE_TRACE_SOURCE in WorldState.resonance_sources
 
     if resonance >= COSMIC_RESONANCE_THRESHOLD and pieces >= REQUIRED_ARTIFACT_PIECES and explored >= REQUIRED_HIDDEN_REGIONS_FOR_FIRE:
         return "烈火天罚"
 
-    if resonance >= COSMIC_RESONANCE_THRESHOLD and outer_exposure >= PARADISE_OUTER_EXPOSURE_THRESHOLD and explored >= 1:
+    if resonance >= COSMIC_RESONANCE_THRESHOLD and has_outer_trace and explored >= 1:
         return "永恒乐园"
 
     return "凡人之墓"
@@ -26,12 +26,12 @@ static func get_candidate_reason() -> String:
     var resonance := WorldState.hero_resonance
     var pieces := WorldState.hidden_artifact_pieces
     var explored := WorldState.entered_hidden_regions.size()
-    var outer_exposure := WorldState.outer_exposure
+    var has_outer_trace := PARADISE_TRACE_SOURCE in WorldState.resonance_sources
 
     if resonance < COSMIC_RESONANCE_THRESHOLD:
         return "Resonance %d/%d: the Hero has not become a strong enough signal; the human political ending remains." % [resonance, COSMIC_RESONANCE_THRESHOLD]
     if pieces >= REQUIRED_ARTIFACT_PIECES and explored >= REQUIRED_HIDDEN_REGIONS_FOR_FIRE:
         return "High Resonance, %d truth anchors, and %d hidden regions explored preserve the Hero's agency." % [pieces, explored]
-    if outer_exposure >= PARADISE_OUTER_EXPOSURE_THRESHOLD and explored >= 1:
-        return "High Resonance and Outer-God exposure %d, but no complete resistance anchor: the vessel path is open." % outer_exposure
+    if has_outer_trace and explored >= 1:
+        return "High Resonance and the recorded Observer Reaction, but no complete resistance anchor: the vessel path is open."
     return "High Resonance alone is insufficient; the required Outer-God trace or deep exploration is missing."
