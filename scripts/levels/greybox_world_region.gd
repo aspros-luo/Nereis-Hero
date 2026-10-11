@@ -100,9 +100,13 @@ func _spawn_x_for_side(side: String) -> float:
         # 第三街入口位于 map_width - 300；返回出生点必须离开其 80px 交互半径。
         return map_width - 500.0
     if region_id == "A3" and side == "bell_drop":
-        # The return door is at x=1830; do not spawn inside its Area2D body-entered region.
-        # 钟塔落差门位于 x=1830；从隐藏区回来不能直接出生在门的触发区域内。
+        # The C10 return door is at x=1710; stay outside its trigger while landing on the same route.
+        # C10 回程门位于 x=1710；出生点应在同一路线附近，但避开门的触发区。
         return 1600.0
+    if region_id == "A3" and side == "old_lift":
+        # C16 returns near the old-lift door at x=1150, clear of the anomaly at x=900.
+        # C16 回程落在 x=1150 旧升降机门附近，同时避开 x=900 的异常调查点。
+        return 1060.0
     if region_id == "A4" and side == "water_reflection_gate":
         # Move away from H04, whose entrance is at x=1780.
         # 旧水库侧的 H04 入口位于 x=1780，返回点与其保持明显距离。
@@ -112,21 +116,37 @@ func _spawn_x_for_side(side: String) -> float:
         # A4 东侧井门靠近地图边界；返回时避开其 80px 交互范围，防止落地就重新聚焦。
         return map_width - 360.0
     if region_id == "A4" and side == "prison_tunnel":
-        return 520.0
+        # C12's return door is at x=1050; share the safe landing corridor between C12 and C07.
+        # C12 回程门位于 x=1050；落点放在 C12 与 C07 之间的安全走廊。
+        return 1160.0
     if region_id == "A4" and side == "royal_tomb_waterway":
-        return 760.0
+        # C07's return door is at x=1250; keep clear of C12 at x=1050 and the anomaly at x=980.
+        # C07 回程门位于 x=1250；避开 x=1050 的 C12 门与 x=980 的异常调查点。
+        return 1160.0
     if region_id == "A4" and side == "royal_drain":
-        return 760.0
-    if region_id == "A9" and side == "old_lift":
-        # Keep the old-lift arrival away from the R07 anomaly source at x=1380.
-        # 旧升降机回程出生点避开 x=1380 的 R07 异常调查点。
+        # C23's return door is at x=1450; arrive near it without entering H04's radius at x=1780.
+        # C23 回程门位于 x=1450；落点靠近捷径，同时避开 x=1780 的 H04。
         return 1600.0
+    if region_id == "A9" and side == "old_lift":
+        # C16 opens at x=520; land between it and C23 at x=720, clear of both door triggers.
+        # C16 门位于 x=520；落在它与 x=720 的 C23 门之间，避开两侧触发区。
+        return 610.0
+    if region_id == "A9" and side == "royal_drain":
+        # C23 opens at x=720; land between C23 and C18 at x=900, clear of both triggers.
+        # C23 门位于 x=720；落在 C23 与 x=900 的 C18 之间，避开两侧触发区。
+        return 810.0
     if region_id == "A9" and side == "inner_city_side_gate":
-        return 1650.0
+        # C18 opens at x=900; land just beyond its trigger and clear of the rest point at x=1100.
+        # C18 门位于 x=900；落点避开门的触发区与 x=1100 的休整点。
+        return 980.0
     if region_id == "A5" and side == "bell_tower":
         # The far-side door is at x=2060; keep the arrival point clear of its trigger.
         # 钟塔远侧门位于 x=2060，抵达战场时避免立即触发返回门。
         return map_width - 800.0
+    if region_id == "A6" and side == "bell_drop":
+        # C10's return door is at x=2110; land near the drop but outside its trigger and H05 at x=1660.
+        # C10 回程门位于 x=2110；出生点靠近落差处，同时避开该门与 x=1660 的 H05。
+        return 1900.0
     if region_id == "A6" and side == "silent_window":
         # H05 sits at x=1660. Keep this arrival away from its interaction radius.
         # H05 入口位于 x=1660，返回修道院后不应立即重新聚焦该入口。
