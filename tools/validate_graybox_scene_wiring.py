@@ -68,6 +68,8 @@ def fail(errors: list[str], message: str) -> None:
 
 def main() -> int:
     errors: list[str] = []
+    platform_audit_regions = 0
+    platform_audit_count = 0
 
     # The topology metadata must agree with the playable C10 shortcut.
     # 世界拓扑元数据必须与实际可玩的 C10 钟塔捷径保持一致。
@@ -329,6 +331,8 @@ def main() -> int:
                 ]
                 if not platforms:
                     continue
+                platform_audit_regions += 1
+                platform_audit_count += len(platforms)
                 # Node zero is the continuous ground floor. Platform tuples are x, y, width, height.
                 nodes = [(0.0, 540.0, 2600.0, 40.0, True)] + [
                     (x, y, width, height, False) for x, y, width, height in platforms
@@ -780,6 +784,7 @@ def main() -> int:
     print(" - A2-A12 plus H01-H08 scenes have scripts and resume mappings.")
     print(" - The R01-R08 anomaly source chain is present.")
     print(" - H01-H08 plus C15/C19 gates use saved discovery/open/entry state and progression conditions.")
+    print(f" - Platform reachability estimate: {platform_audit_regions} regions, {platform_audit_count} platforms.")
     print(" - C15 enters A11 from A8; C19 is the alternate A10 entry; H08 ending exit requires physical union.")
     print("NOTE: Godot runtime/collision/input validation is still required.")
     return 0
