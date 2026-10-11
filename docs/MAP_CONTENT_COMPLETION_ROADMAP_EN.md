@@ -29,6 +29,7 @@ Every bridge requires active Resonance Sight and the listed resonance threshold.
 
 | Region | Route ID | Threshold | Span (x) | Elevation (y) | Purpose / boundary |
 |---|---|---:|---:|---:|---|
+| A2 | `A2_BELLGRAVE_CANOPY_CROSSING` | 20 | 1380–1610 | 328 | Reconnects upper bell-grave ledges on a return visit; does not open H02. |
 | A3 | `A3_THIRD_STREET_ROOFLINE` | 28 | 1320–1690 | 400 | Reconnects the erased street; does not enter H03. |
 | A4 | `A4_OLD_STONE_AQUEDUCT` | 36 | 1650–1935 | 335 | Reconnects the dry aqueduct; does not enter H04. |
 | A5 | `A5_BURIED_STANDARD_CROSSING` | 24 | 880–1220 | 390 | Crosses the trench beneath the buried standard; does not bypass the fortress gate. |
