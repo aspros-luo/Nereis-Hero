@@ -823,6 +823,17 @@
   "outer_exposure_baseline_at_prologue": 0,
   "local_resonance_routes": [
     {
+      "id": "A2_BELLGRAVE_CANOPY_CROSSING",
+      "region_id": "A2",
+      "required_resonance": 20,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 1380,
+      "bridge_end_x": 1610,
+      "bridge_y": 328,
+      "persistent_on_open": true,
+      "design_intent": "A canopy crossing reconnects the high bell-grave ledges during a return visit; it must not open or replace H02, the hidden bell chamber."
+    },
+    {
       "id": "A3_THIRD_STREET_ROOFLINE",
       "region_id": "A3",
       "required_resonance": 28,
