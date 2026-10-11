@@ -7,6 +7,7 @@ replace Godot runtime tests for collision, interaction focus, or scene changes.
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -118,6 +119,27 @@ def main() -> int:
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
     require(region_script, "[NEREIS][MAP][SPAWN] region=%s", "Map spawn Debug log", errors)
     require(region_script, "[NEREIS][MAP][EXIT] from=%s", "Map exit Debug log", errors)
+
+    # Verify that every source ID required by a gate is actually spawned by the region controller.
+    # 检查所有入口要求的异常来源，都确实由区域控制器生成。
+    required_source_ids: set[str] = set()
+    for raw_ids in re.findall(r'gate\\.required_source_ids\\s*=\\s*\\[([^\\]]*)\\]', region_script, re.DOTALL):
+        required_source_ids.update(re.findall(r'"([^"]+)"', raw_ids))
+    spawned_source_ids = set(
+        re.findall(r'_spawn_source\\(\\s*Vector2\\([^)]*\\),\\s*"([^"]+)"', region_script, re.DOTALL)
+    )
+    missing_source_ids = sorted(required_source_ids - spawned_source_ids)
+    if missing_source_ids:
+        errors.append(f"Hidden gate source IDs have no spawn point: {missing_source_ids}")
+
+    # Check scene paths used by the map, save-resume routing, and hidden gates.
+    # 检查地图、存档续玩和隐藏入口引用的场景路径均存在。
+    referenced_scripts = [world_state, boot_script, region_script, secret_gate]
+    for referenced_scene in sorted(set(
+        re.findall(r'res://(scenes/[^"\\s]+\\.tscn)', "\\n".join(referenced_scripts))
+    )):
+        if not (ROOT / referenced_scene).is_file():
+            errors.append(f"Missing referenced scene: {referenced_scene}")
     for contract in [
         'const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")',
         "_spawn_a4_hidden_well_gate(map_width - 105.0)",
