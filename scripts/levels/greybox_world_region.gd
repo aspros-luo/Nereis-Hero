@@ -440,6 +440,8 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1650, 310, 130, 18))
             _add_platform(Rect2(1810, 355, 125, 18))
         "A5":
+            # The ground trench route remains open; a broken parapet line provides an optional high crossing.
+            # 地面战壕主路保持开放；断裂的城墙高路提供可选的上层穿越。
             _add_platform(Rect2(280, 485, 185, 18))
             _add_platform(Rect2(560, 455, 160, 18))
             _add_platform(Rect2(850, 485, 210, 18))
@@ -447,7 +449,18 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1490, 485, 175, 18))
             _add_platform(Rect2(1800, 445, 185, 18))
             _add_platform(Rect2(2150, 485, 180, 18))
+            _add_platform(Rect2(420, 420, 120, 18))
+            _add_platform(Rect2(560, 375, 130, 18))
+            _add_platform(Rect2(720, 335, 120, 18))
+            _add_platform(Rect2(880, 370, 130, 18))
+            _add_platform(Rect2(1050, 420, 120, 18))
+            _add_platform(Rect2(1220, 390, 120, 18))
+            _add_platform(Rect2(1390, 345, 130, 18))
+            _add_platform(Rect2(1550, 390, 120, 18))
+            _add_platform(Rect2(1730, 430, 110, 18))
         "A6":
+            # Main stair climbs the bell tower; the side cloister balcony loops around its outer wall.
+            # 主阶梯攀上钟塔；侧边回廊阳台绕塔外墙形成另一条路线。
             _add_platform(Rect2(300, 475, 155, 18))
             _add_platform(Rect2(525, 430, 125, 18))
             _add_platform(Rect2(720, 385, 125, 18))
@@ -457,7 +470,12 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1560, 405, 145, 18))
             _add_platform(Rect2(1840, 460, 160, 18))
             _add_platform(Rect2(2150, 485, 150, 18))
+            _add_platform(Rect2(1250, 270, 120, 18))
+            _add_platform(Rect2(1390, 310, 120, 18))
+            _add_platform(Rect2(1530, 360, 120, 18))
         "A7":
+            # Cells remain traversable at ground level; the maintenance catwalk forms a zig-zag above the bars.
+            # 牢房地面主路保持畅通；维修栈道在铁栏上方形成之字形路线。
             _add_platform(Rect2(300, 480, 170, 18))
             _add_platform(Rect2(585, 440, 140, 18))
             _add_platform(Rect2(850, 480, 185, 18))
@@ -465,7 +483,21 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1420, 480, 190, 18))
             _add_platform(Rect2(1740, 440, 150, 18))
             _add_platform(Rect2(2040, 480, 180, 18))
+            _add_platform(Rect2(440, 420, 110, 18))
+            _add_platform(Rect2(560, 375, 110, 18))
+            _add_platform(Rect2(700, 330, 110, 18))
+            _add_platform(Rect2(850, 365, 110, 18))
+            _add_platform(Rect2(1000, 410, 110, 18))
+            _add_platform(Rect2(1140, 365, 110, 18))
+            _add_platform(Rect2(1280, 320, 110, 18))
+            _add_platform(Rect2(1420, 365, 110, 18))
+            _add_platform(Rect2(1560, 410, 110, 18))
+            _add_platform(Rect2(1700, 365, 110, 18))
+            _add_platform(Rect2(1840, 320, 110, 18))
+            _add_platform(Rect2(1980, 365, 110, 18))
         "A8":
+            # The floor route passes the sarcophagi; the upper burial gallery reveals the erased royal names from above.
+            # 地面路线经过石棺；上层墓廊让玩家从高处观察被抹去的王室姓名。
             _add_platform(Rect2(280, 480, 155, 18))
             _add_platform(Rect2(560, 440, 130, 18))
             _add_platform(Rect2(820, 395, 160, 18))
@@ -473,6 +505,19 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1390, 395, 170, 18))
             _add_platform(Rect2(1670, 445, 150, 18))
             _add_platform(Rect2(1960, 480, 180, 18))
+            _add_platform(Rect2(400, 420, 110, 18))
+            _add_platform(Rect2(530, 375, 110, 18))
+            _add_platform(Rect2(670, 330, 110, 18))
+            _add_platform(Rect2(820, 350, 110, 18))
+            _add_platform(Rect2(960, 395, 110, 18))
+            _add_platform(Rect2(1100, 355, 110, 18))
+            _add_platform(Rect2(1240, 310, 110, 18))
+            _add_platform(Rect2(1380, 350, 110, 18))
+            _add_platform(Rect2(1520, 395, 110, 18))
+            _add_platform(Rect2(1660, 355, 110, 18))
+            _add_platform(Rect2(1800, 310, 110, 18))
+            _add_platform(Rect2(1940, 355, 110, 18))
+            _add_platform(Rect2(2080, 400, 110, 18))
         "A9":
             _add_platform(Rect2(280, 475, 170, 18))
             _add_platform(Rect2(530, 430, 150, 18))
@@ -1689,6 +1734,13 @@ func _draw_battlefield_landmarks() -> void:
     draw_rect(Rect2(2080, floor_y - 170, 52, 170), Color("#151318"))
     draw_rect(Rect2(2190, floor_y - 170, 52, 170), Color("#151318"))
     draw_line(Vector2(2030, floor_y - 235), Vector2(2300, floor_y - 235), Color("#6a5050"), 4.0)
+    # A broken parapet silhouette marks the optional upper crossing over the trenches.
+    # 断裂城墙剪影标记战壕上方的可选高路。
+    draw_line(Vector2(420, floor_y - 130), Vector2(565, floor_y - 175), Color("#6d5150"), 4.0)
+    draw_line(Vector2(565, floor_y - 175), Vector2(725, floor_y - 215), Color("#6d5150"), 4.0)
+    draw_line(Vector2(725, floor_y - 215), Vector2(885, floor_y - 180), Color("#6d5150"), 4.0)
+    draw_line(Vector2(885, floor_y - 180), Vector2(1055, floor_y - 130), Color("#6d5150"), 4.0)
+    draw_string(ThemeDB.fallback_font, Vector2(720, floor_y - 245), "NO FLAG ON THE WALL", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8d6c6a"))
 
 func _draw_monastery_landmarks() -> void:
     draw_rect(Rect2(930, floor_y - 355, 270, 355), Color("#292833"))
@@ -1702,6 +1754,11 @@ func _draw_monastery_landmarks() -> void:
     draw_line(Vector2(1097, floor_y - 322), Vector2(1097, floor_y - 250), Color("#716975"), 2.0)
     draw_rect(Rect2(1760, floor_y - 165, 220, 165), Color("#25242e"))
     draw_rect(Rect2(1810, floor_y - 125, 42, 125), Color("#121118"))
+    # The side balcony wraps the bell tower instead of repeating the same staircase.
+    # 侧阳台绕过钟塔外墙，避免整张地图只有重复阶梯。
+    draw_line(Vector2(1245, floor_y - 280), Vector2(1390, floor_y - 320), Color("#625a6e"), 3.0)
+    draw_line(Vector2(1390, floor_y - 320), Vector2(1535, floor_y - 270), Color("#625a6e"), 3.0)
+    draw_line(Vector2(1535, floor_y - 270), Vector2(1650, floor_y - 235), Color("#625a6e"), 3.0)
 
 func _draw_prison_landmarks() -> void:
     for x in range(330, int(map_width), 330):
@@ -1711,6 +1768,12 @@ func _draw_prison_landmarks() -> void:
         draw_line(Vector2(x, floor_y - 82), Vector2(x + 73, floor_y - 82), Color("#4a464e"), 5.0)
     draw_rect(Rect2(1660, floor_y - 265, 150, 265), Color("#29272f"))
     draw_rect(Rect2(1713, floor_y - 214, 44, 214), Color("#121117"))
+    # A narrow maintenance shaft is visible behind the cell bars.
+    # 铁栏后方保留一条狭窄维护竖井。
+    draw_line(Vector2(1280, floor_y - 320), Vector2(1280, floor_y - 205), Color("#716b76"), 3.0)
+    draw_line(Vector2(1270, floor_y - 300), Vector2(1290, floor_y - 300), Color("#716b76"), 2.0)
+    draw_line(Vector2(1270, floor_y - 265), Vector2(1290, floor_y - 265), Color("#716b76"), 2.0)
+    draw_line(Vector2(1270, floor_y - 230), Vector2(1290, floor_y - 230), Color("#716b76"), 2.0)
 
 func _draw_royal_tomb_landmarks() -> void:
     for x in [360, 760, 1160, 1560, 1960]:
@@ -1721,6 +1784,16 @@ func _draw_royal_tomb_landmarks() -> void:
     draw_rect(Rect2(1694, floor_y - 244, 28, 170), Color("#51454d"))
     draw_line(Vector2(1648, floor_y - 244), Vector2(1734, floor_y - 244), Color("#817079"), 5.0)
     draw_string(ThemeDB.fallback_font, Vector2(1500, floor_y - 270), "NAME REMOVED", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#8f8086"))
+    # The upper gallery forms a broken crown over the sarcophagi.
+    # 上层墓廊像破碎的王冠一样覆盖石棺列。
+    draw_line(Vector2(400, floor_y - 130), Vector2(535, floor_y - 175), Color("#6b5b66"), 3.0)
+    draw_line(Vector2(535, floor_y - 175), Vector2(675, floor_y - 220), Color("#6b5b66"), 3.0)
+    draw_line(Vector2(675, floor_y - 220), Vector2(825, floor_y - 200), Color("#6b5b66"), 3.0)
+    draw_line(Vector2(825, floor_y - 200), Vector2(965, floor_y - 155), Color("#6b5b66"), 3.0)
+    draw_line(Vector2(1105, floor_y - 185), Vector2(1245, floor_y - 230), Color("#6b5b66"), 3.0)
+    draw_line(Vector2(1245, floor_y - 230), Vector2(1385, floor_y - 190), Color("#6b5b66"), 3.0)
+    draw_line(Vector2(1525, floor_y - 145), Vector2(1665, floor_y - 185), Color("#6b5b66"), 3.0)
+    draw_line(Vector2(1805, floor_y - 230), Vector2(1945, floor_y - 185), Color("#6b5b66"), 3.0)
 
 
 func _draw_hidden_bell_chamber_landmarks() -> void:
