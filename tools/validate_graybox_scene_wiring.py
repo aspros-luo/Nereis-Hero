@@ -83,6 +83,12 @@ def main() -> int:
             h05 = next((region for region in hidden_regions if region.get("id") == "H05"), None)
             if h05 is None or h05.get("secondary_exit", {}).get("requires_target_already_reached") is not True:
                 errors.append("Topology H05/C10 contract must record A3 as already reached before the shortcut.")
+            h01 = next((region for region in hidden_regions if region.get("id") == "H01"), None)
+            h01_exit = h01.get("secondary_exit", {}) if h01 else {}
+            if h01_exit.get("unlock_condition") != "reached_A4_via_A3_and_H01_opened_from_either_side":
+                errors.append("Topology H01 return contract must match the shared persistent gate state used by runtime.")
+            if h01_exit.get("opens_from") != "A4" or h01_exit.get("to") != "A4":
+                errors.append("Topology H01 secondary exit must remain the A4-side return through the well gate.")
             regions = topology.get("regions", [])
             region_ids = [region.get("id") for region in regions]
             if len(region_ids) != len(set(region_ids)):
