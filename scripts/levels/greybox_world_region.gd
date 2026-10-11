@@ -57,10 +57,6 @@ func _ready() -> void:
     # 局部桥先于主角生成，确保桥体绘制在角色后方。
     _spawn_local_resonance_routes()
     _spawn_hero(_spawn_x_for_side(spawn_side))
-    # Every region owns its death checkpoint; never respawn at a coordinate from a previous scene.
-    # 每张区域地图都以本区出生点作为死亡检查点，避免复活到上一张地图的坐标。
-    if is_instance_valid(hero):
-        WorldState.set_checkpoint(hero.global_position)
     print("[NEREIS][MAP][SPAWN] region=%s location=%s side=%s x=%.1f resume_side=%s" % [region_id, location_id, spawn_side, hero.position.x, WorldState.resume_spawn_side])
     _spawn_ui()
     _spawn_region_sources()
