@@ -64,6 +64,12 @@ def main() -> int:
     for relative_path in REQUIRED_FILES:
         read(relative_path, errors)
 
+    interaction_focus = read("scripts/core/interaction_focus.gd", errors)
+    if interaction_focus.count("WorldState.menu_input_locked") < 2:
+        errors.append(
+            "Interaction focus must block world interactions while menu_input_locked is active."
+        )
+
     world_state = read("scripts/core/world_state.gd", errors)
     for method in [
         "func record_resonance_milestone(",
