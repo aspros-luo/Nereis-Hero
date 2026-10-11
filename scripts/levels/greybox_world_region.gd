@@ -348,7 +348,7 @@ func _get_objective_text() -> String:
 		"A2":
 			return "沿旧路前行，聆听钟声。"
 		"A3":
-			return "寻找被城市遗忘的街道。"
+			return "调查第三街；沿东侧残墙高路前往战场。"
 		"A4":
 			return "追寻水面之下的古老石路。"
 		"A5":
