@@ -1126,7 +1126,7 @@ def main() -> int:
                 if body_match is not None:
                     localized_sources.append(body_match.group(1))
             for source_text in localized_sources:
-                entry = re.search(rf'"{re.escape(source_text)}"\s*:\s*\{([^}]*)\}', localization_script)
+                entry = re.search(rf'"{re.escape(source_text)}"\s*:\s*\{{([^}}]*)\}}', localization_script)
                 if entry is None:
                     errors.append(f"{route_id} is missing a localization entry for {source_text[:70]!r}.")
                     continue
