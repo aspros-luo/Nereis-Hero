@@ -850,7 +850,7 @@
       "required_resonance": 24,
       "requires_resonance_sight": true,
       "bridge_start_x": 880,
-      "bridge_end_x": 1340,
+      "bridge_end_x": 1220,
       "bridge_y": 390,
       "persistent_on_open": true,
       "design_intent": "A resonance-anchored trench crossing under a buried standard; it shortens the risky battlefield route but does not bypass the fortress's story gate."
@@ -906,7 +906,7 @@
       "requires_resonance_sight": true,
       "bridge_start_x": 675,
       "bridge_end_x": 960,
-      "bridge_y": 310,
+      "bridge_y": 307,
       "persistent_on_open": true,
       "design_intent": "A choirless upper gallery links the staggered cathedral chapel ledges as a local traversal shortcut; it must not replace either cathedral exit or bypass C19."
     },
@@ -915,8 +915,8 @@
       "region_id": "A11",
       "required_resonance": 56,
       "requires_resonance_sight": true,
-      "bridge_start_x": 1230,
-      "bridge_end_x": 1920,
+      "bridge_start_x": 1350,
+      "bridge_end_x": 1800,
       "bridge_y": 285,
       "persistent_on_open": true,
       "design_intent": "A high observation span reconnects two ancient ruin ledges above the Church laboratory; it must not unlock H08 or bypass C15/C19 progression gates."
