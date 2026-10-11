@@ -1,106 +1,52 @@
 # ALL ENDINGS GUIDE
 
-This guide describes the current development build behavior. It is intended for acceptance/testing before the final shipping flow is wired into the main story.
+Current contract: endings are determined by Resonance, truth-anchor items and exploration. Physical intimacy with Mite is not an ending condition.
 
-## Ending rules
+## Rules
 
-The current ending evaluator uses three facts:
+The evaluator in scripts/core/ending_evaluator.gd uses these prototype thresholds:
 
-- No physical union -> 凡人之墓
-- Physical union + fewer than 3 hidden artifact sources -> 永恒乐园
-- Physical union + at least 3 hidden artifact sources -> 烈火天罚
+- Cosmic Resonance: hero_resonance >= 68.
+- Eternal Paradise: Resonance >= 68, outer_exposure >= 6, at least one hidden region entered, and Blazing Judgment requirements are not met.
+- Blazing Judgment: Resonance >= 68, at least 3 unique truth-anchor sources, and at least 2 hidden regions entered.
+- Mortal's Grave: all other combinations.
 
-Physical union happens when Mite has four unique relationship interactions recorded and the Hero rests at Mite's house.
+The evaluator does not read physical_union_complete, mite_connection_missed, Mite interaction count, or outer_god_resonance.
 
-## 1. 凡人之墓
+## 凡人之墓 — Mortal's Grave
 
-Goal: finish the visible political story without reaching the physical union.
+Hero defeats the Church's leadership and the King. The Restoration Army removes the Church's immediate control and claims victory. The epilogue shows the army later reproducing the same patterns of authority and corruption.
 
-Recommended path:
+Keep Resonance below 68, or reach high Resonance without the exploration / exposure facts required for either cosmic ending. Mite relationship scenes can be present or absent.
 
-1. Start a new game.
-2. Meet Mite and interact with her fewer than four times.
-3. Do not trigger the bed scene in Mite's house.
-4. Avoid entering the Church before mite_stay_a_while if you still want Mite to remain present.
-5. Progress the visible Church / Restoration conflict.
-6. Return to the Village Hub.
-7. In the current development build, press F1 in the Village Hub. The evaluator will choose 凡人之墓 because physical_union_complete is false.
-8. The ending theater runs the High Priest -> Ancient God -> King sequence.
+## 永恒乐园 — Eternal Paradise
 
-The important acceptance point is that you never complete the physical union.
+Hero's Resonance becomes a signal the Outer God can answer. Exploration exposes him to an Outer-God trace, but he has not assembled enough truth anchors and explored enough hidden regions to preserve his individuality.
 
-## 2. 永恒乐园
+Required: hero_resonance >= 68, outer_exposure >= 6, entered_hidden_regions.size() >= 1, and Blazing Judgment requirements not both met.
 
-Goal: complete the relationship, but do not awaken the hidden resistance anchor.
+Physical intimacy with Mite is not required. The ending theater must not mark physical_union_complete as a side effect.
 
-Recommended path:
+## 烈火天罚 — Blazing Judgment
 
-1. Start a new game.
-2. Reach Mite and complete four unique interactions:
-   - mite_first_meeting
-   - mite_meal
-   - mite_stay_a_while
-   - mite_return
-3. The Mite interaction system normally allows only one new interaction per location, so leave the Village and return between interactions when necessary.
-4. Enter Mite's house.
-5. Rest at the bed after the four interactions.
-6. The game records:
-   - physical_union_complete = true
-   - ancient_residue_awakened = true
-   - outer_god_resonance = true
-7. Do not collect three hidden artifact sources.
-8. Return to the Village Hub and press F1.
-9. The evaluator will choose 永恒乐园.
+Hero has enough Resonance to draw the cosmic threat near, and has assembled a multi-part truth anchor while exploring deeply enough to preserve agency.
 
-For a clean test run, avoid examining:
-- the Weathered Stone in the graveyard;
-- the Unsent Order in the Restoration Camp;
-- the Ancient Research Ward clues / Research Husk;
-- the route memory echo.
+Required: hero_resonance >= 68, hidden_artifact_pieces >= 3, entered_hidden_regions.size() >= 2.
 
-## 3. 烈火天罚
+Four canonical sources: ancient_lab, graveyard_bell, rebel_order, memory_echo. Three unique sources are sufficient; the fourth provides additional context. The ending remains tragic and does not promise that Hero can save Mite or the city.
 
-Goal: complete the relationship after awakening the hidden resistance anchor.
+## Acceptance matrix
 
-Collect any three of the following four hidden sources:
+| Resonance | Outer exposure | Truth anchors | Hidden regions entered | Expected ending |
+|---:|---:|---:|---:|---|
+| 0–67 | Any | Any | Any | 凡人之墓 |
+| 68+ | 6+ | 0–2 | 1+ | 永恒乐园 |
+| 68+ | Any | 3+ | 2+ | 烈火天罚 |
+| 68+ | Below 6 | 0–2 | Any | 凡人之墓 |
 
-| Source | How to record it |
-| --- | --- |
-| ancient_lab | Examine any Ancient Research Ward clue, or defeat the Research Husk |
-| graveyard_bell | Examine the Weathered Stone after entering the graveyard |
-| rebel_order | Examine the Unsent Order in the Restoration Camp |
-| memory_echo | Examine a route memory echo on the Church or Lullaby route |
-
-Three unique sources are enough. The fourth is optional.
-
-Then:
-
-1. Complete the four unique Mite interactions.
-2. Enter Mite's house.
-3. Rest at the bed.
-4. Confirm the state reaches hidden_artifact_pieces >= 3 and physical_union_complete = true.
-5. Return to the Village Hub.
-6. Press F1.
-7. The evaluator will choose 烈火天罚.
-8. The ending theater then presents the 100-cultist set piece, Mite's final encounter, the city destruction, and the final fire sequence.
-
-## Recommended acceptance order
-
-Because the current build uses a single save slot, the easiest testing order is:
-
-凡人之墓 -> 永恒乐园 -> 烈火天罚
-
-Start a new game between each run.
-
-For the Fire run, the most reliable three-source combination is:
-
-Ancient Research Ward + Graveyard Weathered Stone + Restoration Camp Unsent Order
-
-This avoids depending on route selection just to unlock the hidden resistance.
+Blazing Judgment has priority when both cosmic routes appear plausible.
 
 ## Developer shortcuts
-
-These are still development/director controls, not shipping player-facing features:
 
 - F1: evaluate current state and open the candidate ending theater.
 - F2: open Eternal Paradise theater directly.
@@ -108,7 +54,7 @@ These are still development/director controls, not shipping player-facing featur
 - F5: open Village Defense theater.
 - F6: open Mite Resonance theater.
 - F7: open Church final boss theater.
-- F8: open Blazing Judgment theater.
+- F8: open Blazing Judgment director theater.
 - F9: delete the current save and restart the prologue.
 
-The final release should eventually replace the F1 ending shortcut with the real mainline endgame gate while keeping the evaluator and state facts unchanged.
+These are developer shortcuts, not shipping player-facing features.
