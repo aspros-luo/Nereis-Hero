@@ -82,7 +82,7 @@
   <path d="M0 14 Q0 0 14 0 H236 Q250 0 250 14 V48 H0Z" fill="#766147"/>
   <text x="16" y="22" class="zoneid">A1 · 枢纽</text><text x="16" y="42" class="zonetitle">边境村庄</text>
   <text x="16" y="72" class="place">01 石井广场 / 02 旅店</text><text x="16" y="94" class="place">03 蜜忒小路 / 04 废弃磨坊</text><text x="16" y="116" class="place">05 村外林门 / 06 老井口</text>
-  <text x="16" y="146" class="note">生活锚点 · 第一条回访捷径</text>
+  <text x="16" y="146" class="note">生活锚点 · 林路 / 排水双向探索</text>
 </g>
 <!-- Zone A2 -->
 <g transform="translate(365 430)">
