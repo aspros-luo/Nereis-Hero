@@ -50,6 +50,21 @@ Prioritize A2, A3, A4, A6, A8, and A9:
 
 This iteration adds debug-only markers for instantiated exits, shortcuts, and Resonance gates, plus ghost markers for common conditional shortcuts in A2, A3, A4, A5, A8, and A9. Runtime checks are still needed for draw order, text clipping, and window sizes, and the remaining regions still need a complete audit.
 
+### Implemented conditional route: H09, “The Cave Beneath the Cliff”
+
+- The mad cleric in A6 is a distinct optional story boss. Defeating him records `defeated_mad_cleric` and connects his final, bee-like resonance to the village cliff.
+- Only after the player physically returns to A1 from another region is `returned_to_village_after_mad_cleric` recorded. The hive seal then changes visually, the cave entrance appears, and a one-time low-intensity sensory hint plays.
+- H09 uses its own scene, `scenes/cliff_cave_experiment.tscn`, with an entrance shelf, a lower combat basin, and raised terrain. Defeating the ancient-god test subject records `cliff_cave_experiment_defeated` and `third_umbilical_cord_fragment_acquired`, and awards one hidden truth anchor.
+- The anchor is only one component of the “Inferno of Divine Retribution” ending conditions. H09 has a real return exit to the village. Skipping the cave—or never defeating the mad cleric—does not block the ordinary main route or “A Mortal’s Grave.”
+- H09 appears on the world map only after discovery. The F10 natural-exploration checklist now includes H09 and tracks 22 regions.
+
+### Reducing platform obstruction and refining the art
+
+- Graybox platforms now use one-way collision so the Hero can jump through their undersides instead of being blocked by every ledge. The village rooftop route uses the same treatment.
+- Platform visuals are thinner, with a top-edge highlight and underside shadow to make the walkable surface clear without filling the screen with chunky blocks.
+- The village receives low fog, warm window light, ground cracks, and state-dependent hive/cave art. The mad cleric and ancient-god test subject have distinct silhouettes and color treatment.
+- These collision and art changes still require a Godot runtime playtest. If one-way collision behaves poorly with the current movement states or unusual terrain, adjust it based on actual play.
+
 ### Release stage: trigger, revisit, hint, reward
 
 A hidden route should follow **event trigger → changed old location → sensory feedback → optional challenge → meaningful reward**, not simply spawn an unrelated reward room.
