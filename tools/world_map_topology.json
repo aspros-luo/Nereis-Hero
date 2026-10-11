@@ -120,6 +120,16 @@
       "opens_from": ""
     },
     {
+      "id": "C24",
+      "from": "A1",
+      "to": "A3",
+      "kind": "shortcut",
+      "initial_access": "blocked",
+      "final_direction": "both",
+      "unlock_condition": "village_defense_survived",
+      "opens_from": "A1"
+    },
+    {
       "id": "C04",
       "from": "A2",
       "to": "A5",
