@@ -1,205 +1,63 @@
 # Nereis Hero — Story Foundation
 
-> Canonical developer memory: [DEVELOPER_STORY_MEMORY.md](./DEVELOPER_STORY_MEMORY.md)
->
-> This document is the shorter story foundation.
+> Canonical developer memory: [DEVELOPER_STORY_MEMORY.md](./DEVELOPER_STORY_MEMORY.md)  
+> Shared-world canon: [CROSS_GAME_STORY_CANON_CN.md](./CROSS_GAME_STORY_CANON_CN.md) / [CROSS_GAME_STORY_CANON_EN.md](./CROSS_GAME_STORY_CANON_EN.md)
 
 ## Core premise
 
-A wounded Kingdom knight escapes Church experimentation with his memories destroyed.
+A wounded Kingdom knight escapes Church experimentation with his memories destroyed. A remote village rescues him, and there he meets **Mite**. Mite's early innocence is genuine; she does not consciously understand the Outer-God influence connected to her. Hero does not knowingly learn Mite's true identity during the RPG main story.
 
-He is rescued by a remote village.
+The Church studied a sleeping ancient god and used traces of its body to manufacture counterfeit “faith power”. The experiments left ancient-god residue inside Hero. The Church treats people as expendable research material; the Kingdom's political institutions are compromised in different ways.
 
-There he truly meets **Mite** for the first time.
+## Revised catalyst
 
-Mite is a genuinely pure young woman. She is curious about Hero, gradually becomes attached to him, and genuinely loves him.
+Hero's ancient-god residue, growing Resonance, and the Outer-God trace connected to Mite can interact. Physical intimacy is one possible emotional and narrative catalyst, and may change Mite's personal scenes and the influence she experiences. **It is not a required event for any ending and is not read by the ending evaluator.**
 
-Hero never learns that Mite is connected to an Outer God.
+The Outer God does not depend on one romantic event or one vessel. It can answer a sufficiently strong Resonance signal, exploit accumulated exposure, and continue searching for another vessel if one attempt fails. Mite's early affection is not a planned deception.
 
-The player may learn this long before Hero does.
+## Ending evaluation contract
 
-The central tragedy is that Mite does not begin as a conscious mastermind.
+The ending is chosen from the Hero's accumulated **Resonance, truth-anchor items, and exploration record**. Relationship scenes remain meaningful story content, but never gate the three endings. Prototype thresholds live in scripts/core/ending_evaluator.gd:
 
-## The hidden catalyst
+- **凡人之墓 / Mortal's Grave** — the combined Resonance and exploration evidence for a cosmic ending is missing. Hero defeats the Church's leadership and the King, helping the Restoration Army remove the Church's immediate control. The victory is real, but the restored order gradually reproduces the corruption it replaced.
+- **永恒乐园 / Eternal Paradise** — Resonance reaches the cosmic threshold and exploration exposes Hero to an Outer-God trace, but he has not assembled enough truth anchors and explored enough hidden regions to preserve his individuality. The Outer God turns him into a vessel and draws the world into an eternal dream. A physical relationship with Mite is not required.
+- **烈火天罚 / Blazing Judgment** — Resonance reaches the cosmic threshold, Hero finds at least three truth-anchor sources, and explores at least two hidden regions. The assembled anchor preserves enough agency to resist the Outer God's completion. Resistance still comes at a catastrophic cost.
 
-The Church's experiments left **ancient-god residue inside Hero's body**.
+### Prototype thresholds
 
-Much later, after Hero and Mite develop a genuine relationship, they enter a physical relationship.
+- Cosmic Resonance threshold: 68.
+- Eternal Paradise: Resonance >= 68, Outer-God exposure >= 6, and at least one hidden region entered, unless Blazing Judgment requirements are met.
+- Blazing Judgment: Resonance >= 68, at least 3 unique truth-anchor sources, and at least 2 hidden regions entered.
+- Mortal's Grave: all other combinations.
 
-That physical union creates contact between:
-
-- the ancient-god residue inside Hero
-- the Outer-God influence connected to Mite
-
-This resonance becomes the bridge through which the Outer God notices, reaches and gradually influences Mite.
-
-From this point onward, Mite's behavior becomes increasingly difficult for her to control.
-
-The tragedy is therefore created by intimacy itself.
-
-## Relationship paths
-
-### 凡人之墓
-
-The player prioritizes the visible main story and misses enough Mite-centered interactions.
-
-Hero and Mite eventually lose contact before they become physically intimate.
-
-No vessel is opened.
-
-No ancient-god / Outer-God resonance is activated.
-
-Hero helps the restoration / rebel forces defeat the Church.
-
-The rebels restore the Kingdom.
-
-The political victory is real, but the same human corruption eventually returns.
-
-Theme:
-
-**Ordinary human life, ordinary human love, ordinary human mortality — and the endless repetition of human mistakes.**
-
-### 永恒乐园
-
-Hero and Mite's relationship develops naturally.
-
-They physically join.
-
-The hidden resonance activates.
-
-Mite is gradually guided / controlled by the Outer God and begins leading Hero toward the eternal dream.
-
-Hero becomes the Outer God's vessel.
-
-Humanity enters a paradise without ordinary death and loneliness, but individual separation and freedom disappear.
-
-Theme:
-
-**Two people become one so completely that neither remains an individual.**
-
-### 烈火天罚
-
-Hero and Mite also physically join.
-
-But the player has explored several apparently unrelated hidden side stories and assembled a multi-part artifact that preserves Hero's individuality.
-
-Mite is already largely unable to control the influence acting through her.
-
-Her love, dependency, fear and the Outer God's will become a single distorted relationship.
-
-The final conflict ends with:
-
-- the Church's highest authority defeated
-- a large-scale wave of Outer-God-influenced cultists
-- a dramatic one-hit execution set-piece
-- Mite reduced to an effectively one-hit state
-- Hero being forced to kill her
-- further cultists and mutated Church personnel flooding the city
-- the city being destroyed by a final fire / explosion
-
-The explosion is not victory.
-
-It is the destruction of the relationship and the destruction of the vessel site.
-
-Theme:
-
-**They did become one, but the union became a prison. Hero can no longer save the girl he loves, so he destroys the world around her before the Outer God can complete its descent.**
+These are gameplay tuning values, not immutable metaphysical laws.
 
 ## Final confrontations
 
 ### 凡人之墓
-
-Pope / High Priest:
-
-- Phase I: human
-- Phase II: ancient-god-derived monster
-- Phase III: the King personally enters the battle
-
-The King is not secretly a cartoon villain.
-
-He believes preserving the Kingdom requires accepting terrible compromises.
+1. Hero confronts the Church's highest authority.
+2. The Pope / High Priest transforms through ancient-god power.
+3. The King enters the battlefield, believing terrible compromises are necessary to preserve the Kingdom.
+4. Hero defeats them; the Restoration Army takes control.
+5. The epilogue reveals corruption slowly returning under a new name.
 
 ### 永恒乐园
-
-Pope / High Priest and King both reach monstrous forms.
-
-They represent different versions of human institutional survival, but both ultimately become irrelevant beside the Outer God.
-
-Hero defeats them while losing his own individuality.
+Hero's Resonance becomes a beacon. Without enough evidence to preserve his selfhood, he becomes a vessel. The Church and King become temporary obstacles swallowed by the Outer God's eternal dream. Mite's role depends on the relationship scenes actually experienced; the ending must not assume physical union occurred.
 
 ### 烈火天罚
+The multi-part truth anchor preserves Hero's agency long enough to resist the Outer God's completion. The Church's authority falls, Outer-God-influenced cultists overwhelm the city, and the final confrontation with Mite is a tragic set-piece rather than a conventional boss loop. Physical intimacy is not a prerequisite.
 
-The Church's highest authority is defeated first.
+## Cross-game cycle
 
-Then the game becomes a city-collapse set-piece rather than a normal boss arena.
+The RPG's Mortal's Grave ending is not the world's final answer. After the Church is removed, the Restoration Army gradually becomes another corrupt institution. In **Nereis-Lullaby**, told primarily through Mite's perspective, players can witness Hero's later compromises, his fall into the new order, and the way he abandons Mite or leaves her behind. Mite may understand only fragments. The Outer God is indifferent to human political cycles and continues looking for another vessel.
 
-The player cuts through a huge number of cultists with decisive one-hit attacks.
-
-The exact number is not important; the intended scale is roughly one hundred.
-
-Then comes Mite.
-
-She should not behave like a normal boss with a fair combat loop.
-
-She is almost completely controlled.
-
-Her effectively 1-HP state represents that Hero can kill her, not that she is a conventional combat opponent.
-
-The killing blow is forced by the narrative.
-
-Only after losing Mite does the player enter the final destruction sequence.
+This continues rather than retcons the RPG's victory: Hero can win the battle and still fail to break the cycle.
 
 ## Narrative rules
 
 - Mite's early innocence is genuine.
-- Do not reveal her true nature directly through exposition.
-- Hero never knowingly learns her identity during the main story.
-- Romance is expressed through scenes, habits, choices and absence, not an affection meter.
-- Missing Mite's side interactions should feel like missed human opportunities, not failed quest flags.
-- The three endings are consequences of the relationship and investigation state, not final menu choices.
+- Hero does not knowingly identify Mite as an Outer-God proxy during the RPG main story.
+- Relationship content changes scenes and emotional meaning; it does not decide the ending.
+- Resonance reveals evidence but does not guarantee understanding.
+- Hidden sources should initially appear unrelated and later form a larger explanation.
 - No ending is a clean happy ending.
-
-## Open design questions
-
-Still to be designed deliberately:
-
-- exact Mite / Hero relationship scenes
-- exact ancient-god residue mechanics
-- the multi-part artifact and its four hidden side stories
-- the final Church / King fight details
-- exact way Mite begins hearing / feeling the Outer God's influence
-- final city destruction sequence
-- exact true-faith vs ancient-god power relationship
-
-
-## Production clarification — 烈火天罚 final set-piece
-
-The 100-cultist section is intentionally a spectacle rather than a lore quest.
-
-- Target scale: 100 cultists for now.
-- They can later be used for an opt-in supporter cameo system if the project is crowdfunded.
-- Supporter display names should be used with consent; the game should not be designed as a real-person harassment feature.
-
-The contrast is deliberate:
-
-**a hundred disposable enemies vs. one irreplaceable Mite.**
-
-After the cultist section, Mite is not a conventional boss.
-
-The intended final beat is:
-
-1. Hero reaches Mite.
-2. The normal boss presentation drops away.
-3. Mite is effectively one decisive action from death.
-4. The player may wait.
-5. A roughly 60-second idle performance window gives the scene room to breathe.
-6. If the player refuses to act long enough, Mite eventually moves on her own and throws herself toward Hero's weapon.
-7. The final death can also resolve through the player's earlier attack, without a repetitive three-hit sequence.
-8. Her last action should read as both the consequence of Outer-God control and a final act that helps Hero end what she has become.
-9. Only after Mite's death does the city-destruction sequence begin.
-
-The scene should favor silence, ash, fire, damaged lullaby motifs, and minimal dialogue.
-
-The player should feel:
-
-**I did not defeat Mite. I witnessed the end of Mite.**
