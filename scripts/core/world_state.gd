@@ -350,6 +350,8 @@ func record_hidden_artifact_source(source_id: String) -> bool:
     return true
 
 func _canonical_artifact_source(source_id: String) -> String:
+    if source_id == "third_umbilical_cord_fragment":
+        return "third_umbilical_cord"
     if source_id.begins_with("lab_") or source_id == "ancient_lab_husk":
         return "ancient_lab"
     if source_id == "graveyard_hero_gravestone":
