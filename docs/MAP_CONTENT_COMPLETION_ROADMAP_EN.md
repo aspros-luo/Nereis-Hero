@@ -36,7 +36,7 @@ Every bridge requires active Resonance Sight and the listed resonance threshold.
 | A7 | `A7_PRISON_MAINTENANCE_CROSSWALK` | 30 | 1280–1530 | 340 | Connects prison maintenance levels; does not open the royal tomb gate. |
 | A8 | `A8_ERASED_REGENT_GALLERY` | 40 | 1240–1490 | 330 | Connects erased royal-name ledges; does not enter H06. |
 | A9 | `A9_RAIN_REFLECTION_ROOFWALK` | 44 | 1260–1520 | 335 | Reconnects abandoned roofs; does not replace H07 or the royal transport gate. |
-| A10 | `A10_CHOIRLESS_UPPER_GALLERY` | 48 | 675–1075 | 310 | Connects chapel / choir ledges; does not replace either cathedral exit or C19. |
+| A10 | `A10_CHOIRLESS_UPPER_GALLERY` | 48 | 675–960 | 310 | Connects chapel / choir ledges; does not replace either cathedral exit or C19. |
 | A11 | `A11_SECOND_OBSERVER_SPAN` | 56 | 1230–1920 | 285 | Connects ancient observation ledges; does not unlock H08 or bypass C15/C19. |
 | A12 | `A12_CROWN_WALL_WALK` | 62 | 1400–1940 | 325 | Connects upper palace ledges; does not alter throne access or ending gates. |
 
