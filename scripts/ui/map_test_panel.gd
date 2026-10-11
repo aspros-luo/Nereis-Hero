@@ -150,7 +150,7 @@ func _process(_delta: float) -> void:
 	if not WorldState.debug_natural_test_active:
 		exploration_label.text = "自然探索记录：未启动"
 		return
-	var visited := " → ".join(WorldState.debug_natural_test_visited_regions)
+	var visited := " → ".join(PackedStringArray(WorldState.debug_natural_test_visited_regions))
 	exploration_label.text = "自然探索实走地图：%d/21\n%s" % [
 		WorldState.debug_natural_test_visited_regions.size(),
 		visited if not visited.is_empty() else "尚未抵达地图区域"
