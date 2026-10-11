@@ -2187,9 +2187,12 @@ func _draw_debug_exit_markers() -> void:
 			marker_label = "[条件未满足] "
 		marker_label += str(marker.get("label", "unknown"))
 		var condition := str(marker.get("condition", ""))
+		var label_offset := Vector2(14.0, -4.0)
+		if marker_position.x > map_width - 420.0:
+			label_offset = Vector2(-320.0, -4.0)
+		draw_string(ThemeDB.fallback_font, marker_top + label_offset, marker_label, HORIZONTAL_ALIGNMENT_LEFT, 320.0, 13, marker_color)
 		if not condition.is_empty():
-			marker_label += " — " + condition
-		draw_string(ThemeDB.fallback_font, marker_top + Vector2(14.0, -4.0), marker_label, HORIZONTAL_ALIGNMENT_LEFT, 300.0, 14, marker_color)
+			draw_string(ThemeDB.fallback_font, marker_top + label_offset + Vector2(0.0, 15.0), condition, HORIZONTAL_ALIGNMENT_LEFT, 320.0, 10, marker_color)
 
 func _on_exit_interacted(target_location: String, target_scene: String, spawn_side: String) -> void:
 	if region_id == "A3" and target_location == "sewer_reservoir":
