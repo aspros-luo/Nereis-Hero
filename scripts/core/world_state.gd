@@ -483,8 +483,8 @@ func load_game() -> void:
     route_memory_id = str(parsed.get("route_memory_id", ""))
     route_complete = bool(parsed.get("route_complete", false))
     current_location = str(parsed.get("current_location", "slice"))
-    resume_spawn_side = str(parsed.get("resume_spawn_side", "west"))
-    if resume_spawn_side not in ["west", "east", "bell_gate", "old_pilgrim_highroad", "bell_drop", "third_street_gate", "water_reflection_gate", "prison_tunnel", "royal_tomb_waterway", "royal_drain", "bell_tower", "silent_window", "royal_name_gate", "royal_tomb_side", "third_street_service", "royal_transport", "inner_city_side_gate", "chapel_entry", "mirror", "old_lift", "royal_drain", "hidden_well"]:
+    resume_spawn_side = str(parsed.get("resume_spawn_side", "west")).strip_edges()
+    if resume_spawn_side.is_empty() or resume_spawn_side.length() > 64:
         resume_spawn_side = "west"
     language = str(parsed.get("language", "zh_cn"))
     if language not in ["zh_cn", "zh_tw", "en", "ja"]:
@@ -869,8 +869,9 @@ func get_humanity_state() -> String:
 
 func set_location(location_id: String) -> void:
     current_location = location_id
-    if pending_region_spawn_side in ["west", "east", "bell_gate", "old_pilgrim_highroad", "bell_drop", "third_street_gate", "water_reflection_gate", "prison_tunnel", "royal_tomb_waterway", "royal_drain", "bell_tower", "silent_window", "royal_name_gate", "royal_tomb_side", "third_street_service", "royal_transport", "inner_city_side_gate", "chapel_entry", "mirror", "old_lift", "hidden_well"]:
-        resume_spawn_side = pending_region_spawn_side
+    var requested_spawn_side := pending_region_spawn_side.strip_edges()
+    if not requested_spawn_side.is_empty() and requested_spawn_side.length() <= 64:
+        resume_spawn_side = requested_spawn_side
     print("[NEREIS][WORLD] Current location=%s" % current_location)
     save_game()
 
