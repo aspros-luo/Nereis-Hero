@@ -217,7 +217,6 @@ def main() -> int:
         ('if region_id == "A4" and side == "prison_tunnel":', "return 520.0"),
         ('if region_id == "A4" and side == "royal_tomb_waterway":', "return 760.0"),
         ('if region_id == "A4" and side == "royal_drain":', "return 760.0"),
-        ('if region_id == "A4" and side == "royal_tomb_waterway":', "return 760.0"),
         ('if region_id == "A5" and side == "bell_tower":', "return map_width - 800.0"),
         ('if region_id == "A6" and side == "silent_window":', "return 1400.0"),
         ('if region_id == "A8" and side == "royal_name_gate":', "return 1350.0"),
