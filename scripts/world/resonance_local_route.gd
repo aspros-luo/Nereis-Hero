@@ -19,6 +19,7 @@ var cooldown := 0.0
 var bridge_body: StaticBody2D
 
 func _ready() -> void:
+    z_index = -1
     add_to_group("resonance_hidden_targets")
     opened_permanently = WorldState.is_hidden_path_opened(route_id)
     update_reveal_state(
