@@ -1477,7 +1477,7 @@ This section supersedes earlier wording that made physical union the gateway to 
 The Hero's three endings are determined by accumulated Resonance, truth-anchor items, and exploration. Physical intimacy with Mite is optional narrative content and is never read by the ending evaluator. Current prototype contract:
 
 - Cosmic Resonance threshold: 68.
-- Eternal Paradise: Resonance >= 68, Outer-God exposure >= 6, and at least one hidden region entered, unless Blazing Judgment requirements are met.
+- Eternal Paradise: Resonance >= 68, the Observer Reaction source is recorded, and at least one hidden region is entered, unless Blazing Judgment requirements are met.
 - Blazing Judgment: Resonance >= 68, at least 3 unique truth-anchor sources, and at least 2 hidden regions entered.
 - Mortal's Grave: otherwise.
 
