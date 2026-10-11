@@ -324,6 +324,9 @@ def main() -> int:
         require(a6_exit_block, '"opened_bell_tower_drop"', "C10 monastery shortcut", errors)
         if 'if WorldState.is_hidden_path_opened("H05")' in a6_exit_block:
             fail(errors, "C10 monastery shortcut must not depend on the optional H05 secret path.")
+    if "1830.0, \"E  RETURN TO THE SILENT BELL WINDOW\"" in region_script:
+        fail(errors, "H05 return door at x=1830 is too close to the C10 door at x=1710.")
+    require(region_script, '1950.0, "E  RETURN TO THE SILENT BELL WINDOW"', "H05/C10 interaction spacing", errors)
 
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
