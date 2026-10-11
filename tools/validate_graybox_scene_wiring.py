@@ -38,13 +38,32 @@ REGIONS = {
 
 REQUIRED_FILES = [
     "scripts/levels/greybox_world_region.gd",
+    "scripts/levels/escape_prologue.gd",
+    "scripts/levels/village_hub.gd",
+    "scripts/levels/village_defense_demo.gd",
     "scripts/world/resonance_source_clue.gd",
     "scripts/world/resonance_secret_gate.gd",
     "scripts/world/interaction_door.gd",
     "scripts/world/resonance_local_route.gd",
-    "scripts/levels/village_hub.gd",
-    "scripts/levels/village_defense_demo.gd",
+    "scripts/world/rest_point.gd",
+    "scripts/world/world_clue.gd",
+    "scripts/world/checkpoint.gd",
+    "scripts/world/village_poi.gd",
     "scripts/core/world_state.gd",
+    "scripts/core/boot.gd",
+    "scripts/core/narrative_manager.gd",
+    "scripts/player/hero.gd",
+    "scripts/enemies/experiment_warden.gd",
+    "scripts/npc/route_npc.gd",
+    "scripts/npc/mite.gd",
+    "scripts/audio/narrative_audio.gd",
+    "scripts/effects/village_fireflies.gd",
+]
+
+REQUIRED_ENTRY_SCENES = [
+    "scenes/boot.tscn",
+    "scenes/escape_prologue.tscn",
+    "scenes/village_hub.tscn",
 ]
 
 
@@ -184,6 +203,8 @@ def main() -> int:
             errors.append(f"World map topology cannot be parsed: {exc}")
 
     for relative_path in REQUIRED_FILES:
+        read(relative_path, errors)
+    for relative_path in REQUIRED_ENTRY_SCENES:
         read(relative_path, errors)
 
     interaction_focus = read("scripts/core/interaction_focus.gd", errors)
