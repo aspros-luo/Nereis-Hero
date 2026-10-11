@@ -38,6 +38,38 @@ Prioritize A2, A3, A4, A6, A8, and A9:
 - Whenever an exit moves, update spawn-side mapping, F10 target coordinates, platform reachability, and interaction-prompt spacing together.
 - Do not change story gates or save fields unless natural-exploration regression demonstrates a structural problem.
 
+## Route Readability and Conditional Exploration
+
+### During graybox development
+
+- **Collision geometry must serve a purpose.** Use it for platforming, combat cover, hazards, or intentional route blocking. Rubble, roots, corpses, and pillars that only establish atmosphere should usually be background art, not needless obstructions.
+- **Keep critical paths clear.** Leave enough space around exits, jump landings, NPC interactions, and rest points. Avoid overlapping decorative platforms, enemy collision bodies, and multiple interaction zones.
+- **Make every connection legible from a distance.** A doorway, broken wall, shaft, ladder, rope, drop, or strong light/fog direction should indicate where the route goes. An E prompt that appears only at close range is not enough.
+- **Show connections in debug builds.** Mark exits, shortcuts, and Resonance gates with a direction marker and target-region label. Where possible, mark unmet requirements as well. Release builds can hide these explicit markers or conceal the entrance until the relevant conditions are satisfied.
+- Debug markers are development aids, not final art. In release, architecture silhouettes, lighting, sound, and terrain should communicate the route.
+
+This iteration adds debug-only markers for instantiated exits, shortcuts, and Resonance gates in the shared graybox scene. Runtime checks are still needed for draw order, text clipping, and window sizes. Conditional shortcuts that have not been instantiated still need “ghost exit” markers; the current implementation does not yet cover every locked connection.
+
+### Release stage: trigger, revisit, hint, reward
+
+A hidden route should follow **event trigger → changed old location → sensory feedback → optional challenge → meaningful reward**, not simply spawn an unrelated reward room.
+
+Example: after the player defeats a Church fanatic, a persistent story fact is recorded. On a later return to a particular cliff in the border village, an unnatural beehive/swarm has shifted and reveals a cave. The main route remains unobstructed. From a distance, the player can notice the bees moving strangely or hear an impossible resonance behind the rock; nearby, sound, Resonance Sight, or an item reaction gives a subtle cue without a quest arrow.
+
+The cave leads to a Church site where an ancient-god test subject was kept. The optional encounter rewards a cord-like relic, one component required for the “Inferno of Divine Retribution” ending. This relic is only one condition; it neither forces the detour nor guarantees that ending by itself.
+
+Every route of this kind must document: trigger fact ID, revisit region, reveal condition, before/after visual state, hint channel, hidden-region exit, reward ID, ending impact, and main-route behavior if missed. Conditions must persist across scene changes and save/load.
+
+### Keep progression states distinct
+
+- **Undiscovered:** no explicit entrance prompt in the release build.
+- **Sensed:** resonance, sound, or an item reaction draws attention to the anomaly, but the entrance may remain sealed.
+- **Opened:** the physical entrance changes after conditions are met.
+- **Entered:** the player has actually visited the region.
+- **Key item acquired:** the reward is recorded independently as a possible ending-condition source.
+
+Do not represent all five states with one boolean or a vague shared “unlocked” flag.
+
 ## Acceptance criteria
 
 - Holding Right must not be the only meaningful way to read the map. The main route may remain beatable, but branches and vertical connections should be legible from environmental landmarks.
