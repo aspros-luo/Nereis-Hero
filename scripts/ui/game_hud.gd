@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+const MAP_TEST_PANEL_SCRIPT = preload("res://scripts/ui/map_test_panel.gd")
+
 var hero: Node
 var debug_enabled := false
 var debug_panel: ColorRect
@@ -190,6 +192,9 @@ func _ready() -> void:
     debug_panel.visible = debug_enabled
 
     _build_pause_menu()
+    var map_test_panel := MAP_TEST_PANEL_SCRIPT.new()
+    map_test_panel.name = "MapTestPanel"
+    add_child(map_test_panel)
     _refresh_localized_ui()
 
 func bind_hero(target: Node) -> void:
@@ -308,40 +313,40 @@ func _process(delta: float) -> void:
     var echo_cooldown: float = float(hero.call("get_debug_eldritch_cooldown")) if hero.has_method("get_debug_eldritch_cooldown") else 0.0
     var debug_override: bool = bool(hero.get("debug_ability_override"))
     debug_label.text = (
-        "DEBUG [F3] WORLD PANEL | F4 HERO\nF5 ALL ABILITIES | F6 RESET\n"
-        + "A/D move  Space jump  J attack\n"
-        + "K dodge  Q weapon  X dash\n"
-        + "G grapple/cancel  W wall climb\n"
-        + "V sight  F weapon art  R Echo\n"
-        + "L iaijutsu  PgUp/PgDn form\n"
-        + "Technique override: %s\n" % debug_override
-        + "Action: %s\n" % action_kind
-        + "Echo cooldown: %.1fs\n" % echo_cooldown
-        + "Hero HP: %d\n" % hp
-        + "Stamina: %d\n" % stamina
-        + "State: %s\n" % state_name
-        + "Invulnerable: %s\n" % invulnerable
-        + "Memory: %d\n" % WorldState.hero_memory
-        + "Humanity: %d\n" % WorldState.hero_humanity
-        + "Church Alignment: %d\n" % WorldState.church_alignment
-        + "Lullaby Resonance: %d\n" % WorldState.lullaby_resonance
-        + "Mite Interactions: %d\n" % WorldState.mite_interactions_seen.size()
-        + "Mite Missed: %s\n" % WorldState.mite_connection_missed
-        + "Ancient Residue: %s\n" % WorldState.ancient_residue_awakened
-        + "Outer Resonance: %s\n" % WorldState.outer_god_resonance
-        + "Mite Control: %d/3\n" % WorldState.mite_control_stage
-        + "Union: %s\n" % WorldState.physical_union_complete
-        + "Artifact: %d/4\n" % WorldState.hidden_artifact_pieces
-        + "Anchor Awake: %s\n" % WorldState.hidden_resistance_awakened
-        + "Ending: %s\n" % WorldState.ending_route
-        + "Candidate: %s\n" % NereisEndingEvaluator.get_candidate()
-        + "Location: %s\n" % WorldState.current_location
-        + "Route: %s\n" % WorldState.selected_route
-        + "Interior Clues: %d\n" % WorldState.interior_clues_seen.size()
-        + "World Clues: %d\n" % WorldState.world_clues_seen.size()
-        + "Boss Defeated: %s\n" % WorldState.boss_defeated
-        + "Route Complete: %s\n" % WorldState.route_complete
-        + "Slice Complete: %s" % WorldState.slice_complete
+        "调试信息 [F3] 世界面板｜F4 主角面板\nF5 能力调试｜F6 恢复战斗资源｜F10 地图测试\n"
+        + "A/D 移动  空格跳跃  J 攻击\n"
+        + "K 闪避  Q 切换武器  X 冲刺\n"
+        + "G 抓钩／取消  W 攀墙\n"
+        + "V 灵视  F 武器战技  R 深渊回响\n"
+        + "L 居合斩  PgUp/PgDn 切换招式\n"
+        + "能力调试：%s\n" % debug_override
+        + "当前动作：%s\n" % action_kind
+        + "回响冷却：%.1f 秒\n" % echo_cooldown
+        + "生命：%d\n" % hp
+        + "体力：%d\n" % stamina
+        + "动作状态：%s\n" % state_name
+        + "无敌状态：%s\n" % invulnerable
+        + "记忆：%d\n" % WorldState.hero_memory
+        + "人性：%d\n" % WorldState.hero_humanity
+        + "教会倾向：%d\n" % WorldState.church_alignment
+        + "摇篮曲共鸣：%d\n" % WorldState.lullaby_resonance
+        + "蜜忒互动次数：%d\n" % WorldState.mite_interactions_seen.size()
+        + "错过蜜忒关系线：%s\n" % WorldState.mite_connection_missed
+        + "古神残留苏醒：%s\n" % WorldState.ancient_residue_awakened
+        + "外神共鸣：%s\n" % WorldState.outer_god_resonance
+        + "蜜忒影响阶段：%d/3\n" % WorldState.mite_control_stage
+        + "身体交融：%s\n" % WorldState.physical_union_complete
+        + "隐藏证物：%d/4\n" % WorldState.hidden_artifact_pieces
+        + "复国线索锚点：%s\n" % WorldState.hidden_resistance_awakened
+        + "结局路线：%s\n" % WorldState.ending_route
+        + "结局候选：%s\n" % NereisEndingEvaluator.get_candidate()
+        + "当前位置：%s\n" % WorldState.current_location
+        + "探索路线：%s\n" % WorldState.selected_route
+        + "室内线索：%d\n" % WorldState.interior_clues_seen.size()
+        + "世界线索：%d\n" % WorldState.world_clues_seen.size()
+        + "首领已击败：%s\n" % WorldState.boss_defeated
+        + "路线已完成：%s\n" % WorldState.route_complete
+        + "切片已完成：%s" % WorldState.slice_complete
     )
 
 func _localize_region(value: String) -> String:
