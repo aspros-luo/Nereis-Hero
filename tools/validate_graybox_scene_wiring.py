@@ -70,6 +70,7 @@ def main() -> int:
     errors: list[str] = []
     platform_audit_regions = 0
     platform_audit_count = 0
+    platforms_by_region: dict[str, list[tuple[float, float, float, float]]] = {}
 
     # The topology metadata must agree with the playable C10 shortcut.
     # 世界拓扑元数据必须与实际可玩的 C10 钟塔捷径保持一致。
@@ -254,15 +255,15 @@ def main() -> int:
     require(region_script, 'const LOCAL_RESONANCE_ROUTE_SCRIPT = preload("res://scripts/world/resonance_local_route.gd")', "A3 local resonance route preload", errors)
     require(region_script, 'route.route_id = "A3_THIRD_STREET_ROOFLINE"', "A3 local route identity", errors)
     require(region_script, "route.required_resonance = 28", "A3 local route resonance threshold", errors)
-    require(region_script, "route.bridge_start_x = 1690.0", "A3 local route start coordinate", errors)
+    require(region_script, "route.bridge_start_x = 1320.0", "A3 local route start coordinate", errors)
     require(region_script, 'route.route_id = "A4_OLD_STONE_AQUEDUCT"', "A4 local route identity", errors)
     require(region_script, "route.required_resonance = 36", "A4 local route resonance threshold", errors)
-    require(region_script, "route.bridge_start_x = 1760.0", "A4 local route start coordinate", errors)
-    require(region_script, "route.bridge_end_x = 1940.0", "A4 local route end coordinate", errors)
+    require(region_script, "route.bridge_start_x = 1650.0", "A4 local route start coordinate", errors)
+    require(region_script, "route.bridge_end_x = 1935.0", "A4 local route end coordinate", errors)
     require(region_script, 'route.prompt_text = "E  ANCHOR THE DRY AQUEDUCT"', "A4 local route interaction prompt", errors)
     require(local_route_script, "@export var prompt_text: String = \"E  ANCHOR THE THIRD STREET\"", "Configurable local route prompt", errors)
-    require(region_script, "route.bridge_end_x = 2050.0", "A3 local route end coordinate", errors)
-    require(region_script, "route.bridge_y = 350.0", "A3 local route vertical placement", errors)
+    require(region_script, "route.bridge_end_x = 1690.0", "A3 local route end coordinate", errors)
+    require(region_script, "route.bridge_y = 400.0", "A3 local route vertical placement", errors)
     require(local_route_script, 'add_to_group("resonance_hidden_targets")', "Local resonance route reveal registration", errors)
     require(local_route_script, "func update_reveal_state(", "Local route reacts to Resonance Sight state changes", errors)
     require(local_route_script, "sight_active and resonance >= required_resonance", "Local route requires active sight and sufficient resonance", errors)
@@ -370,6 +371,7 @@ def main() -> int:
                     continue
                 platform_audit_regions += 1
                 platform_audit_count += len(platforms)
+                platforms_by_region[region_id] = platforms
                 # Node zero is the continuous ground floor. Platform tuples are x, y, width, height.
                 nodes = [(0.0, 540.0, 2600.0, 40.0, True)] + [
                     (x, y, width, height, False) for x, y, width, height in platforms
@@ -986,7 +988,7 @@ def main() -> int:
         topology_for_local_routes = json.loads((ROOT / "tools/world_map_topology.json").read_text(encoding="utf-8"))
         local_routes = topology_for_local_routes.get("local_resonance_routes", [])
         route_by_id = {route.get("id"): route for route in local_routes}
-        expected_local_route_ids = ("A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK", "A7_PRISON_MAINTENANCE_CROSSWALK", "A8_ERASED_REGENT_GALLERY", "A9_RAIN_REFLECTION_ROOFWALK", "A10_CHOIRLESS_UPPER_GALLERY", "A11_SECOND_OBSERVER_SPAN")
+        expected_local_route_ids = ("A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK", "A7_PRISON_MAINTENANCE_CROSSWALK", "A8_ERASED_REGENT_GALLERY", "A9_RAIN_REFLECTION_ROOFWALK", "A10_CHOIRLESS_UPPER_GALLERY", "A11_SECOND_OBSERVER_SPAN", "A12_CROWN_WALL_WALK")
         for route_id in expected_local_route_ids:
             route_design = route_by_id.get(route_id)
             if route_design is None:
@@ -1017,6 +1019,25 @@ def main() -> int:
                 errors.append(f"Topology local route {route_id} must require Resonance Sight.")
             if route_design.get("persistent_on_open") is not True:
                 errors.append(f"Topology local route {route_id} must persist after opening.")
+            route_platforms = platforms_by_region.get(route_design.get("region_id"), [])
+            if not route_platforms:
+                errors.append(f"Local route {route_id} has no parsed platform layout for {route_design.get('region_id')}.")
+            else:
+                bridge_y = float(route_design.get("bridge_y", 0.0))
+                for endpoint_key in ("bridge_start_x", "bridge_end_x"):
+                    endpoint_x = float(route_design.get(endpoint_key, 0.0))
+                    nearest = min(
+                        (
+                            max(0.0, x - endpoint_x, endpoint_x - (x + width)),
+                            abs(y - bridge_y),
+                        )
+                        for x, y, width, _height in route_platforms
+                    , key=lambda gap: (gap[0] ** 2 + gap[1] ** 2))
+                    if nearest[0] > 100.0 or nearest[1] > 45.0:
+                        errors.append(
+                            f"Local route {route_id} {endpoint_key} is detached from nearby platforms "
+                            f"(horizontal gap={nearest[0]:g}, vertical gap={nearest[1]:g})."
+                        )
     except (json.JSONDecodeError, OSError) as exc:
         errors.append(f"Local Resonance route topology audit could not read topology: {exc}")
 
