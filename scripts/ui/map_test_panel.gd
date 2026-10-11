@@ -73,7 +73,7 @@ const OBJECTIVE_POINTS: Dictionary = {
 	"A3": [{"x":900.0,"name":"第三街路牌异常"}],
 	"A4": [{"x":980.0,"name":"管道下的古老石层"},{"x":1780.0,"name":"水面背后的阶梯入口"}],
 	"A5": [{"x":1100.0,"name":"迟于死者抵达的命令"}],
-	"A6": [{"x":1125.0,"name":"无声之窗"},{"x":1660.0,"name":"无声钟室入口"}],
+	"A6": [{"x":850.0,"name":"疯狂神职人员"},{"x":1125.0,"name":"无声之窗"},{"x":1660.0,"name":"无声钟室入口"}],
 	"A7": [{"x":1070.0,"name":"无名者名册"}],
 	"A8": [{"x":1530.0,"name":"被刮去的王室姓名"},{"x":1870.0,"name":"王名抹除廊入口"},{"x":2310.0,"name":"深层研究区王室竖井"}],
 	"A9": [{"x":1380.0,"name":"水洼中的镜街异常"},{"x":1850.0,"name":"镜街入口"}],
@@ -96,7 +96,7 @@ const STEP_OBJECTIVE_POINTS: Dictionary = {
 }
 const EXIT_HINTS: Dictionary = {
 	"A0": [{"target":"A1","x":2040.0,"name":"最右侧逃脱出口","condition":"先击败三名守卫，出口开启后按 E"}],
-	"A1": [{"target":"A2","x":2440.0,"name":"最右侧北门／旧朝圣路","condition":"村庄防卫章节完成后开放"},{"target":"A3","x":100.0,"name":"最左侧旧排水通道","condition":"村庄防卫章节完成后开放"},{"target":"H01","x":1555.0,"name":"村庄中右部的井口异常","condition":"鸣响达到 12 并开启灵视"}],
+	"A1": [{"target":"A2","x":2440.0,"name":"最右侧北门／旧朝圣路","condition":"村庄防卫章节完成后开放"},{"target":"A3","x":100.0,"name":"最左侧旧排水通道","condition":"村庄防卫章节完成后开放"},{"target":"H01","x":1555.0,"name":"村庄中右部的井口异常","condition":"鸣响达到 12 并开启灵视"},{"target":"H09","x":2260.0,"name":"东侧屋顶下方的崖下实验窟","condition":"击败 A6 疯狂神职人员，并从其他区域实际返回村庄"}],
 	"A2": [{"target":"A1","x":72.0,"name":"最左侧村庄出口","condition":""},{"target":"A3","x":2240.0,"name":"东侧树冠高台上的城区主路出口","condition":"沿上层平台连续攀升后按 E"},{"target":"H02","x":2300.0,"name":"东侧地面的倒响钟室异常入口","condition":"鸣响达到 18，并调查静止的钟"},{"target":"A5","x":1880.0,"name":"右侧旧朝圣高路捷径","condition":"须先从 A5 侧开启"}],
 	"A3": [{"target":"A2","x":72.0,"name":"最左侧旧朝圣路出口","condition":""},{"target":"A4","x":1480.0,"name":"中右部下水道入口","condition":""},{"target":"A5","x":2240.0,"name":"东侧高台上的战场出口","condition":"沿残墙平台跳上高路后按 E"},{"target":"H03","x":1120.0,"name":"第三街路牌旁的异常入口","condition":"鸣响达到 28，并调查第三街路牌"},{"target":"A6","x":1710.0,"name":"右侧钟塔落差捷径","condition":"须先从 A6 侧开启"}],
 	"A4": [{"target":"A3","x":72.0,"name":"最左侧城区检修舱口","condition":"首次互动开启舱口，再按 E 通行"},{"target":"A1","x":2350.0,"name":"最右侧村庄井道水闸","condition":"首次互动开闸，再按 E 通行"},{"target":"A7","x":1050.0,"name":"左半区监牢补给隧道","condition":"须先从 A7 侧开启"},{"target":"A8","x":1250.0,"name":"中部王墓水道","condition":"须先从 A8 侧开启"},{"target":"A9","x":1450.0,"name":"中右部王城排水道","condition":"须先从 A9 侧开启"},{"target":"H04","x":1780.0,"name":"右侧倒影阶梯异常入口","condition":"鸣响达到 36、古神接触达到 1"},{"target":"H01","x":2510.0,"name":"最右侧井道暗门","condition":"鸣响达到 12 且开启灵视"}],
@@ -134,7 +134,7 @@ const ALL_ANOMALIES := [
 ]
 const PROGRESSION_FLAGS := [
 	"village_defense_survived", "reached_A5", "reached_A7", "reached_A8_via_A7",
-	"defeated_mad_cleric", "returned_to_village_after_mad_cleric", "cliff_cave_experiment_defeated", "third_umbilical_cord_fragment_acquired",
+	"defeated_mad_cleric", "returned_to_village_after_mad_cleric", "cliff_cave_hint_seen", "cliff_cave_experiment_defeated", "third_umbilical_cord_fragment_acquired", "village_intro_seen",
 	"reached_A9_via_A8", "reached_A10_via_A9", "reached_A12_via_A10",
 	"opened_old_pilgrim_highroad", "opened_sewer_inspection_hatch_from_A4",
 	"opened_watergate_and_village_well_exit", "opened_royal_tomb_gate",
