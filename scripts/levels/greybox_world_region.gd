@@ -151,6 +151,14 @@ func _spawn_x_for_side(side: String) -> float:
         # H05 sits at x=1660. Keep this arrival away from its interaction radius.
         # H05 入口位于 x=1660，返回修道院后不应立即重新聚焦该入口。
         return 1400.0
+    if region_id == "A7" and side == "supply_tunnel":
+        # C12's prison-side door is at x=520; return near it, away from the royal-tomb entrance at the east edge.
+        # C12 监牢侧门位于 x=520；回程落在门附近，避开东侧王墓主入口。
+        return 610.0
+    if region_id == "A8" and side == "royal_tomb_waterway":
+        # C07 returns beside its A8 door at x=520, without overlapping the door trigger.
+        # C07 回到 A8 时落在 x=520 王墓水道门附近，但不进入门的触发范围。
+        return 610.0
     if region_id == "A8" and side == "royal_name_gate":
         # H06 sits at x=1870; place returnees clear of the secret entrance.
         # H06 入口位于 x=1870，从王名抹除廊返回时应远离入口。
@@ -1138,7 +1146,7 @@ func _spawn_region_exits() -> void:
             if "reached_A7_then_opened_supply_tunnel" in WorldState.achievement_flags:
                 _spawn_exit_door(
                     1050.0, "E  RETURN TO THE PRISON", "prison_depths",
-                    "res://scenes/prison_depths.tscn", "east"
+                    "res://scenes/prison_depths.tscn", "supply_tunnel"
                 )
             if "reached_A8_via_A7_then_opened_royal_tomb_gate" in WorldState.achievement_flags:
                 _spawn_exit_door(
