@@ -102,6 +102,8 @@ func _process(delta: float) -> void:
     var scene := get_tree().current_scene
     if scene != null:
         var scene_path := str(scene.scene_file_path)
+        if debug_natural_test_active:
+            _record_natural_test_scene(scene_path)
         if _last_runtime_scene_path.is_empty():
             _last_runtime_scene_path = scene_path
         elif scene_path != _last_runtime_scene_path:
@@ -891,38 +893,35 @@ func record_natural_test_region(region_id: String, location_id: String = "") -> 
         region_id, location_label, debug_natural_test_visited_regions.size()
     ])
 
-func _record_natural_test_location(location_id: String) -> void:
-    if not debug_natural_test_active:
-        return
-    var region_by_location := {
-        "church_escape": "A0",
-        "village": "A1",
-        "ash_forest": "A2",
-        "forgotten_city": "A3",
-        "sewer_reservoir": "A4",
-        "old_battlefield": "A5",
-        "monastery_tower": "A6",
-        "prison_depths": "A7",
-        "royal_tomb": "A8",
-        "royal_outer_ring": "A9",
-        "grand_cathedral": "A10",
-        "deep_research_depths": "A11",
-        "inner_city": "A12",
-        "hidden_well": "H01",
-        "hidden_bell_chamber": "H02",
-        "erased_third_street": "H03",
-        "reflected_stairwell": "H04",
-        "silent_bell_room": "H05",
-        "erased_royal_name_corridor": "H06",
-        "mirror_street": "H07",
-        "primordial_hollow": "H08"
+func _record_natural_test_scene(scene_path: String) -> void:
+    var region_by_scene := {
+        "res://scenes/escape_prologue.tscn": "A0",
+        "res://scenes/village_hub.tscn": "A1",
+        "res://scenes/ash_forest.tscn": "A2",
+        "res://scenes/forgotten_city.tscn": "A3",
+        "res://scenes/sewer_reservoir.tscn": "A4",
+        "res://scenes/old_battlefield.tscn": "A5",
+        "res://scenes/monastery_tower.tscn": "A6",
+        "res://scenes/prison_depths.tscn": "A7",
+        "res://scenes/royal_tomb.tscn": "A8",
+        "res://scenes/royal_outer_ring.tscn": "A9",
+        "res://scenes/grand_cathedral.tscn": "A10",
+        "res://scenes/deep_research_depths.tscn": "A11",
+        "res://scenes/inner_city.tscn": "A12",
+        "res://scenes/hidden_well.tscn": "H01",
+        "res://scenes/hidden_bell_chamber.tscn": "H02",
+        "res://scenes/erased_third_street.tscn": "H03",
+        "res://scenes/reflected_stairwell.tscn": "H04",
+        "res://scenes/silent_bell_room.tscn": "H05",
+        "res://scenes/erased_royal_name_corridor.tscn": "H06",
+        "res://scenes/mirror_street.tscn": "H07",
+        "res://scenes/primordial_hollow.tscn": "H08"
     }
-    var region_id := str(region_by_location.get(location_id, ""))
-    record_natural_test_region(region_id, location_id)
+    var region_id := str(region_by_scene.get(scene_path, ""))
+    record_natural_test_region(region_id, scene_path.get_file())
 
 func set_location(location_id: String) -> void:
     current_location = location_id
-    _record_natural_test_location(location_id)
     var requested_spawn_side := pending_region_spawn_side.strip_edges()
     if not requested_spawn_side.is_empty() and requested_spawn_side.length() <= 64:
         resume_spawn_side = requested_spawn_side
