@@ -312,6 +312,19 @@ def main() -> int:
     ]:
         require(region_script, contract, "C04 old pilgrim highroad", errors)
 
+    # C10 must be available independently of H05; its only persisted unlock is its own drop flag.
+    # C10 必须独立于 H05 可用；它只依赖自身的钟塔落差开门标记。
+    a6_start = region_script.find('        "A6":', region_script.find("func _spawn_region_exits"))
+    a7_start = region_script.find('        "A7":', a6_start)
+    a6_exit_block = region_script[a6_start:a7_start] if a6_start >= 0 and a7_start > a6_start else ""
+    if not a6_exit_block:
+        fail(errors, "C10 route audit: cannot isolate A6 exit block.")
+    else:
+        require(a6_exit_block, '"E  OPEN THE BELL TOWER DROP"', "C10 monastery shortcut", errors)
+        require(a6_exit_block, '"opened_bell_tower_drop"', "C10 monastery shortcut", errors)
+        if 'if WorldState.is_hidden_path_opened("H05")' in a6_exit_block:
+            fail(errors, "C10 monastery shortcut must not depend on the optional H05 secret path.")
+
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
     spawn_contracts = [
