@@ -185,7 +185,7 @@ func _build_panel() -> void:
 	guide_prev_button = _make_button("上一步指引")
 	guide_prev_button.pressed.connect(_previous_guide_step)
 	guide_buttons.add_child(guide_prev_button)
-	guide_next_button = _make_button("标记完成／下一步")
+	guide_next_button = _make_button("下一步指引")
 	guide_next_button.pressed.connect(_next_guide_step)
 	guide_buttons.add_child(guide_next_button)
 
@@ -234,7 +234,7 @@ func _update_guide() -> void:
 		str(step["title"]), str(step["text"]), location_note
 	]
 	guide_prev_button.disabled = guide_step_index <= 0
-	guide_next_button.text = "完成本步／下一步" if guide_step_index < GUIDE_STEPS.size() - 1 else "重新查看最后一步"
+	guide_next_button.text = "下一步指引" if guide_step_index < GUIDE_STEPS.size() - 1 else "已到最后一步"
 
 func _previous_guide_step() -> void:
 	guide_step_index = maxi(0, guide_step_index - 1)
