@@ -31,7 +31,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
 		if WorldState.record_achievement("third_umbilical_cord_fragment_acquired"):
-			WorldState.add_hidden_artifact_piece()
+			WorldState.record_hidden_artifact_source("third_umbilical_cord_fragment")
 			collected.emit()
 			print("[NEREIS][ENDING] Third umbilical cord fragment acquired; hidden anchor added.")
 		queue_free()
