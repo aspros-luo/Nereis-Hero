@@ -1527,7 +1527,11 @@ func _spawn_region_exits() -> void:
             if WorldState.physical_union_complete:
                 var ending_gate := ENDGAME_GATE_SCRIPT.new()
                 var ending_scene_path := str(ending_gate.call("route_candidate"))
-                var ending_location := "ending_paradise_demo" if ending_scene_path.ends_with("ending_paradise_demo.tscn") else "ending_fire_demo"
+                var ending_location := "church_final_demo"
+                if ending_scene_path.ends_with("ending_paradise_demo.tscn"):
+                    ending_location = "ending_paradise_demo"
+                elif ending_scene_path.ends_with("ending_fire_demo.tscn"):
+                    ending_location = "ending_fire_demo"
                 _spawn_exit_door(
                     map_width - 72.0, "E  FOLLOW THE LAST DREAM", ending_location,
                     ending_scene_path, "west"
