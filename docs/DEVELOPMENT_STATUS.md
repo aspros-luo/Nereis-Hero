@@ -198,3 +198,25 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - After Outer-God resonance, a subset of fireflies becomes synchronized and colder in tone.
 - The final Mite waiting scene has 15s / 35s / 50s micro-movements before the 60s decision.
 - The final Mite lunge has restrained camera impact; city detonation uses a much heavier impact.
+
+
+## Map production continuation — 2026-10-11
+
+### Completed in this continuation
+
+- Audited the existing A3 local Resonance Sight bridge against the Hero → WorldState → `resonance_hidden_targets` refresh path. The bridge already receives state changes through `WorldState.refresh_resonance_reveals()`; no duplicate runtime mechanism was added.
+- Strengthened `tools/validate_graybox_scene_wiring.py` so future edits must preserve the A3 route ID, resonance threshold (28), bridge coordinates, persistent open-state restoration, collision lifecycle, shared E-focus interaction, and the WorldState reveal dispatch.
+- The validator source was re-fetched after its commit and the newly added assertions were checked against the current A3 route and WorldState source text. This is a contract-presence audit only; the Python validator itself was not executed in a local checkout.
+
+### Still outstanding
+
+- Godot 4.6.x runtime acceptance remains pending because no Godot executable is available in the maintainer environment.
+- The updated Python validators have not yet been run against a local working tree in this continuation.
+- The A0–A12 / H01–H08 platform routes, C01–C24 transitions, save/continue spawn restoration, interaction arbitration, death recovery, and all ending handoffs still need runtime traversal. Do not describe them as runtime-passed.
+- Continue by auditing the highest-risk unresolved map contracts and, where practical, improve static tooling before expanding further graybox geometry. Preserve the DS1-style interconnected box-world and Resonance Sight's ability to reveal routes within familiar regions.
+
+### Verification boundary
+
+- **Confirmed:** latest development branch source was fetched; validator assertions were committed; the current checked source strings satisfy the added local-route contracts.
+- **Not confirmed:** execution of `python3 tools/validate_world_map_topology.py`, execution of `python3 tools/validate_graybox_scene_wiring.py`, Godot parser/import, collision behavior, player traversal, or frame-level scene changes.
+- **Workflow policy:** no GitHub Actions were triggered.
