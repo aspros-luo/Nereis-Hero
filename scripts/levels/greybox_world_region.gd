@@ -1694,6 +1694,18 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_end_x = 1480.0
             route.bridge_y = 250.0
             route.prompt_text = "E  ANCHOR THE SILENT BELL WALK"
+        "A7":
+            # A maintenance catwalk bridges two cell-block levels without opening the royal tomb gate.
+            # 维修栈道横接两层牢房，但不会打开王墓主门。
+            route = Node2D.new()
+            route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+            route.name = "PrisonMaintenanceCrosswalk"
+            route.route_id = "A7_PRISON_MAINTENANCE_CROSSWALK"
+            route.required_resonance = 30
+            route.bridge_start_x = 1080.0
+            route.bridge_end_x = 1320.0
+            route.bridge_y = 285.0
+            route.prompt_text = "E  ANCHOR THE PRISON CROSSWALK"
         _:
             return
     route.opened.connect(_on_local_resonance_route_opened)
@@ -1719,6 +1731,12 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
             narrative.show_message(
                 "THE SERVICE WALK OF THE SILENT BELL",
                 "The upper walkway bears fresh maintenance marks, but the bell above it has never moved. The repair ledger lists a bell-ringer who was born decades after the monastery was sealed.",
+                5.0
+            )
+        "A7_PRISON_MAINTENANCE_CROSSWALK":
+            narrative.show_message(
+                "THE CROSSWALK OF UNNUMBERED CELLS",
+                "The maintenance ledger counts every hinge and drain, but leaves the cells themselves unnumbered. A repair entry orders the crew to preserve the lower doors and seal the upper ones from the outside. The names were not omitted by accident.",
                 5.0
             )
         _:
