@@ -159,7 +159,7 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 ### Hidden investigation
 
 - Persistent hidden artifact evidence state
-- Four independent hidden story sources can assemble the resistance anchor
+- Independent hidden story sources—including the optional third cord—can assemble the resistance anchor
 - Ancient research ward
 - Graveyard bell story
 - Restoration order
@@ -176,15 +176,15 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 - A2 now has an optional canopy platform route; A3 has an optional rooftop loop plus a local Resonance Sight bridge that can be permanently anchored in the same map; A4 has a raised pipe-walk route alongside the ground path.
 - A5–A8 now have distinct optional upper routes: battlefield parapet, monastery side balcony, prison maintenance catwalk, and royal-tomb gallery.
 - A9–A12 now have optional upper traversal routes: outer-ring rooftops, cathedral choir gallery, research observation bridge, and inner-city crown wall.
-- H01–H08 now each have a distinct upper/returning route motif, from the well's upper ledges and reflected stairs to the mirror avenue lamp bridge and the organic ribs of H08.
+- H01–H09 now each have a distinct upper/returning route motif, from the well's upper ledges and reflected stairs to the mirror avenue lamp bridge and the organic ribs of H08.
 - A5, A7, A10, and A12 now have persistent environmental evidence sources covering the battlefield's rewritten history, prisoner transfers, the church's double-sealed relic, and the king's knowledge of church experiments.
-- H01–H08 now each contain a unique one-time environmental evidence source; these clues do not grant free resonance or ancient/outer-god exposure.
+- H01–H08 contain unique one-time environmental evidence sources; H09 adds a conditional boss-and-relic route; these clues do not grant free resonance or ancient/outer-god exposure.
 - A1 now includes a 17-segment optional rooftop traversal line and a village-hearth rest point; A0's surgical ward now has a six-platform maintenance catwalk that does not bypass the warden lock.
-- A2–A12 each have a region-specific rest point; hidden regions H01–H08 intentionally do not grant free rest points. These are graybox code additions, not yet runtime-verified.
+- A2–A12 each have a region-specific rest point; hidden regions H01–H09 intentionally do not grant free rest points. These are graybox code additions, not yet runtime-verified.
 - H07 requires Resonance Sight, resonance ≥ 68, outer exposure ≥ 12, the outer-god story flag, and the R07 evidence source. Its A12 shortcut stays locked until the player reaches the Inner City and opens the far-side gate.
 - A11 can be reached from A8 through C15 (Royal Tomb maintenance shaft) or A10 through C19 (Silent Chapel). Each path has its own persistent gate ID while both record entry to A11. R08 raises resonance to 78 and adds the planned outer exposure.
 - H08 requires resonance ≥ 78, ancient exposure ≥ 2, outer exposure ≥ 18, the outer-god story flag, and three prior anomaly sources. A12 routes through the shared ending evaluator; H08 offers an optional deep-dream exit only after the physical-union story state.
-- Current state: code and scene wiring committed; Godot 4.6.x runtime acceptance is still pending. A13 remains a topology-level ending layer rather than a dedicated standalone scene.
+- H09 Cave Beneath the Cliff is unlocked only after defeating the A6 mad cleric and returning to A1; its ancient-god specimen drops a persistent third-cord fragment pickup. Platforms are one-way and their visuals are thinner. Current state: code and scene wiring committed; Godot 4.6.x runtime acceptance is still pending. A13 remains a topology-level ending layer rather than a dedicated standalone scene.
 
 Implementation notes and acceptance checklists:
 
@@ -258,9 +258,9 @@ The intended narrative language is:
 
 - [地图测试模式与完整验收用例](docs/MAP_TEST_MODE_AND_ACCEPTANCE_CN.md)
 
-当前地图测试面板支持 A0–A12 中已实现的场景与 H01–H08 隐藏区域直接传送，并提供灵视条件和全地图连通测试预设。**请先进入已有存档，再按 F10 开启地图测试模式；不要按 F9 或开始新游戏。** 测试模式会暂停正式存档写入，结束时可选择重新读取磁盘存档。
+当前地图测试面板支持 A0–A12 中已实现的场景与 H01–H09 隐藏区域直接传送，并提供灵视条件和全地图连通测试预设。**请先进入已有存档，再按 F10 开启地图测试模式；不要按 F9 或开始新游戏。** 测试模式会暂停正式存档写入，结束时可选择重新读取磁盘存档。
 
-中文界面的地图测试面板与调试 HUD 已开始对齐；完整游戏仍需逐场景审查所有玩家可见文本，未完成审查前不宣称全项目中文化已完成。
+H09 崖下实验窟已加入条件回访、实体遗物拾取与世界地图发现状态。中文界面的地图测试面板与调试 HUD 已开始对齐；完整游戏仍需逐场景审查所有玩家可见文本，未完成审查前不宣称全项目中文化已完成。
 
 ## Save / Resume
 
