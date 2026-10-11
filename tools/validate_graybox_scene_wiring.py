@@ -624,6 +624,13 @@ def main() -> int:
         if a3_exit_block.find('"E  RETURN THROUGH THE OLD DRAIN"') < a3_exit_block.find('if "village_defense_survived" in WorldState.achievement_flags:'):
             fail(errors, "C24 A3 return door must remain inside the village-defense condition.")
 
+    # Locate the exit mapping before any public or hidden route audit uses it.
+    # 在公开路线与隐藏路线审计使用前，先定位出口映射函数。
+    exits_start = region_script.find("func _spawn_region_exits")
+    if exits_start < 0:
+        fail(errors, "Graybox route audit: cannot find _spawn_region_exits function.")
+        exits_start = 0
+
     # Check both directions of the remaining public backbone connections.
     # 检查其余公开主干连线的双向出口，避免场景仍存在但主线断开。
     route_blocks = {}
@@ -777,7 +784,6 @@ def main() -> int:
             'elif ending_scene_path.ends_with("ending_fire_demo.tscn"):',
         ],
     }
-    exits_start = region_script.find("func _spawn_region_exits")
     for hidden_id, contracts in hidden_exit_contracts.items():
         block_start = region_script.find(f'        "{hidden_id}":', exits_start)
         block_end = region_script.find("\n        \"", block_start + 12) if block_start >= 0 else -1
