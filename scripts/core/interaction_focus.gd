@@ -8,6 +8,7 @@ static func sync(node: Node2D, available: bool, priority: int = 0) -> void:
     var actionable := (
         available
         and not WorldState.input_locked
+        and not WorldState.menu_input_locked
         and not node.get_tree().paused
     )
     node.set_meta("interaction_available", actionable)
@@ -34,6 +35,7 @@ static func is_focused(node: Node2D) -> bool:
     if (
         not bool(node.get_meta("interaction_available", false))
         or WorldState.input_locked
+        or WorldState.menu_input_locked
         or node.get_tree().paused
     ):
         return false
