@@ -66,6 +66,7 @@ const MAPS: Array[Dictionary] = [
 # Navigation data mirrors the authored exit and clue positions in the playable graybox scenes.
 # 导航坐标对应可玩灰盒场景中实际生成的出口与线索位置。
 const OBJECTIVE_POINTS: Dictionary = {
+	"A0": [{"x":620.0,"name":"手术托盘线索"},{"x":2040.0,"name":"最右侧逃脱出口"}],
 	"A2": [{"x":735.0,"name":"从未移动的钟"},{"x":1530.0,"name":"第二道回声"},{"x":2300.0,"name":"倒响钟室异常入口"}],
 	"A3": [{"x":900.0,"name":"第三街路牌异常"}],
 	"A4": [{"x":980.0,"name":"管道下的古老石层"},{"x":1780.0,"name":"水面背后的阶梯入口"}],
@@ -87,6 +88,7 @@ const OBJECTIVE_POINTS: Dictionary = {
 	"H08": [{"x":1850.0,"name":"空摇篮"}]
 }
 const EXIT_HINTS: Dictionary = {
+	"A0": [{"target":"A1","x":2040.0,"name":"最右侧逃脱出口","condition":"先击败三名守卫，出口开启后按 E"}],
 	"A1": [{"target":"A2","x":2440.0,"name":"最右侧北门／旧朝圣路","condition":"村庄防卫章节完成后开放"},{"target":"A3","x":100.0,"name":"最左侧旧排水通道","condition":"村庄防卫章节完成后开放"}],
 	"A2": [{"target":"A1","x":72.0,"name":"最左侧村庄出口","condition":""},{"target":"A3","x":2528.0,"name":"最右侧城区主路出口","condition":""},{"target":"H02","x":2300.0,"name":"右侧倒响钟室异常入口","condition":"鸣响达到 18，并调查静止的钟"},{"target":"A5","x":1880.0,"name":"右侧旧朝圣高路捷径","condition":"须先从 A5 侧开启"}],
 	"A3": [{"target":"A2","x":72.0,"name":"最左侧旧朝圣路出口","condition":""},{"target":"A4","x":1480.0,"name":"中右部下水道入口","condition":""},{"target":"A5","x":2528.0,"name":"最右侧战场道路出口","condition":""},{"target":"H03","x":2300.0,"name":"右侧第三街异常入口","condition":"鸣响达到 28，并调查第三街路牌"},{"target":"A6","x":1710.0,"name":"右侧钟塔落差捷径","condition":"须先从 A6 侧开启"}],
