@@ -128,6 +128,25 @@ def validate(data: dict[str, Any]) -> list[str]:
     if len(edge_ids) != len(set(edge_ids)):
         fail(errors, "Duplicate connection IDs.")
 
+    # C24 is the alternate A1-to-A3 route added after the village defense.
+    # C24 是村庄防卫后开放的 A1 → A3 替代路线。
+    c24 = next((edge for edge in connections if edge.get("id") == "C24"), None)
+    if c24 is None:
+        fail(errors, "Missing C24: post-defense A1-to-A3 drainage route.")
+    else:
+        expected_c24 = {
+            "from": "A1",
+            "to": "A3",
+            "kind": "shortcut",
+            "initial_access": "blocked",
+            "final_direction": "both",
+            "unlock_condition": "village_defense_survived",
+            "opens_from": "A1",
+        }
+        for key, value in expected_c24.items():
+            if c24.get(key) != value:
+                fail(errors, f"C24: expected {key}={value!r}, got {c24.get(key)!r}.")
+
     for edge in connections:
         source, target = edge.get("from"), edge.get("to")
         if source not in region_ids or target not in region_ids:
