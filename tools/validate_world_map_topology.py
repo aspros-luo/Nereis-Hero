@@ -217,8 +217,7 @@ def validate(data: dict[str, Any]) -> list[str]:
             loop_unlock_conditions.update(
                 str(edge.get("unlock_condition", "")).strip()
                 for edge in matching_edges
-                if edge.get("initial_access") == "blocked"
-                and str(edge.get("unlock_condition", "")).strip()
+                if str(edge.get("unlock_condition", "")).strip()
             )
         if not loop.get("requires"):
             fail(errors, f"{loop.get('id')}: loop must list its unlock requirements.")
