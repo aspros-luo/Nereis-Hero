@@ -98,6 +98,7 @@ var prologue_complete := false
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
     load_game()
+    _migrate_third_cord_anchor()
 
 func _process(delta: float) -> void:
     var scene := get_tree().current_scene
@@ -348,6 +349,23 @@ func record_hidden_artifact_source(source_id: String) -> bool:
     print("[NEREIS][SECRET] Hidden artifact source=%s pieces=%d/4" % [canonical_id, hidden_artifact_pieces])
     save_game()
     return true
+
+func _migrate_third_cord_anchor() -> void:
+    # A previous graybox iteration awarded the cord automatically on boss defeat.
+    # Earlier graybox saves may already have the achievement; migrate it into the source-based anchor system.
+    if (
+        "third_umbilical_cord_fragment_acquired" not in achievement_flags
+        or "third_umbilical_cord" in hidden_artifact_sources
+    ):
+        return
+    hidden_artifact_sources.append("third_umbilical_cord")
+    hidden_artifact_pieces = mini(maxi(hidden_artifact_pieces, hidden_artifact_sources.size()), 4)
+    if hidden_artifact_pieces >= 3 and not hidden_resistance_awakened:
+        hidden_resistance_awakened = true
+        hidden_resistance_awakened_event.emit()
+    print("[NEREIS][SAVE] Migrated third-cord fragment into the hidden truth-anchor list.")
+    save_game()
+
 
 func _canonical_artifact_source(source_id: String) -> String:
     if source_id == "third_umbilical_cord_fragment":
