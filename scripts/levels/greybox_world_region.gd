@@ -388,6 +388,8 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1500, 480, 160, 18))
             _add_platform(Rect2(1840, 445, 130, 18))
         "A3":
+            # Street-level route: rubble, market, sewer descent, and the battlefield road.
+            # 地面主路连接碎墙、市场、下水道入口与战场方向。
             _add_platform(Rect2(300, 470, 170, 18))
             _add_platform(Rect2(600, 430, 110, 18))
             _add_platform(Rect2(850, 390, 180, 18))
@@ -395,13 +397,33 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1540, 425, 150, 18))
             _add_platform(Rect2(1880, 470, 170, 18))
             _add_platform(Rect2(2180, 410, 140, 18))
+            # Optional rooftop loop rises above the erased third street, then descends to the sewer-side route.
+            # 可选屋顶环路爬过被抹除的第三街，再下降接回下水道一侧的主路。
+            _add_platform(Rect2(450, 400, 110, 18))
+            _add_platform(Rect2(565, 355, 120, 18))
+            _add_platform(Rect2(700, 310, 120, 18))
+            _add_platform(Rect2(850, 300, 120, 18))
+            _add_platform(Rect2(1000, 340, 120, 18))
+            _add_platform(Rect2(1130, 390, 120, 18))
+            _add_platform(Rect2(1320, 425, 130, 18))
         "A4":
+            # The floor remains the safe route; a raised pipe walk is an optional way through the old stonework.
+            # 地面保持安全主路；抬高的管线栈道提供穿越古老石殿的可选路线。
             _add_platform(Rect2(360, 475, 140, 18))
             _add_platform(Rect2(640, 435, 120, 18))
             _add_platform(Rect2(940, 395, 180, 18))
             _add_platform(Rect2(1260, 455, 190, 18))
             _add_platform(Rect2(1600, 420, 150, 18))
             _add_platform(Rect2(1980, 470, 170, 18))
+            _add_platform(Rect2(470, 400, 115, 18))
+            _add_platform(Rect2(600, 355, 120, 18))
+            _add_platform(Rect2(760, 315, 130, 18))
+            _add_platform(Rect2(930, 330, 125, 18))
+            _add_platform(Rect2(1090, 375, 125, 18))
+            _add_platform(Rect2(1320, 400, 120, 18))
+            _add_platform(Rect2(1480, 355, 120, 18))
+            _add_platform(Rect2(1650, 310, 130, 18))
+            _add_platform(Rect2(1810, 355, 125, 18))
         "A5":
             _add_platform(Rect2(280, 485, 185, 18))
             _add_platform(Rect2(560, 455, 160, 18))
@@ -1529,9 +1551,22 @@ func _draw_city_landmarks() -> void:
         draw_rect(Rect2(x + 56, floor_y - 92, 38, 92), Color("#131117"))
         draw_rect(Rect2(x + 20, floor_y - 150, 18, 26), Color("#15131b"))
         draw_rect(Rect2(x + 112, floor_y - 150, 18, 26), Color("#15131b"))
+    # The third-street sign and the false wall are the city's primary spatial landmark.
+    # 第三街路牌与假墙是城区最重要的空间地标。
     draw_rect(Rect2(842, 340, 146, 28), Color("#4a3c43"))
     draw_string(ThemeDB.fallback_font, Vector2(855, 360), "III STREET", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color("#98867e"))
     draw_line(Vector2(905, 365), Vector2(905, 418), Color("#98867e"), 2.0)
+    draw_rect(Rect2(930, floor_y - 235, 105, 235), Color("#211e27"))
+    draw_rect(Rect2(946, floor_y - 205, 22, 46), Color("#131117"))
+    draw_rect(Rect2(996, floor_y - 205, 22, 46), Color("#131117"))
+    draw_line(Vector2(920, floor_y - 240), Vector2(1045, floor_y - 240), Color("#66535e"), 4.0)
+    draw_string(ThemeDB.fallback_font, Vector2(920, floor_y - 255), "WALL / NO STREET", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 10, Color("#8b737b"))
+    # Roof silhouettes mark the optional upper route; the platforms above them are physically traversable.
+    # 屋顶剪影提示上层支路；其上的平台具有真实碰撞，可供玩家跳跃穿行。
+    draw_line(Vector2(440, 390), Vector2(570, 345), Color("#5b4b57"), 3.0)
+    draw_line(Vector2(570, 345), Vector2(710, 300), Color("#5b4b57"), 3.0)
+    draw_line(Vector2(710, 300), Vector2(870, 290), Color("#5b4b57"), 3.0)
+    draw_line(Vector2(870, 290), Vector2(1020, 330), Color("#5b4b57"), 3.0)
 
 func _draw_reservoir_landmarks() -> void:
     for x in range(180, int(map_width), 410):
