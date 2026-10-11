@@ -1028,11 +1028,14 @@ def main() -> int:
                     endpoint_x = float(route_design.get(endpoint_key, 0.0))
                     nearest = min(
                         (
-                            max(0.0, x - endpoint_x, endpoint_x - (x + width)),
-                            abs(y - bridge_y),
-                        )
-                        for x, y, width, _height in route_platforms
-                    , key=lambda gap: (gap[0] ** 2 + gap[1] ** 2))
+                            (
+                                max(0.0, x - endpoint_x, endpoint_x - (x + width)),
+                                abs(y - bridge_y),
+                            )
+                            for x, y, width, _height in route_platforms
+                        ),
+                        key=lambda gap: gap[0] ** 2 + gap[1] ** 2,
+                    )
                     if nearest[0] > 100.0 or nearest[1] > 45.0:
                         errors.append(
                             f"Local route {route_id} {endpoint_key} is detached from nearby platforms "
