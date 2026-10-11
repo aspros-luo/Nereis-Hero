@@ -9,10 +9,10 @@
 | 结局 | 条件 |
 |---|---|
 | 凡人之墓 | 未同时满足任一宇宙结局的鸣响、证据和探索门槛 |
-| 永恒乐园 | 鸣响 ≥ 68，外神接触度 ≥ 6，至少进入 1 处隐藏区域，且未满足烈火天罚条件 |
+| 永恒乐园 | 鸣响 ≥ 68，已记录观测者反应线索，至少进入 1 处隐藏区域，且未满足烈火天罚条件 |
 | 烈火天罚 | 鸣响 ≥ 68，收集至少 3 个独立真相锚点来源，并进入至少 2 处隐藏区域 |
 
-结局判定不读取 physical_union_complete、mite_connection_missed、蜜忒互动数量或 outer_god_resonance。
+永恒乐园检查实际探索记录 anomaly_observer_reaction，而不是身体结合可能产生的 outer_exposure 数值。结局判定不读取 physical_union_complete、mite_connection_missed、蜜忒互动数量或 outer_god_resonance。
 
 ## 一、凡人之墓
 
@@ -26,7 +26,7 @@
 
 条件：
 - hero_resonance >= 68
-- outer_exposure >= 6
+- resonance_sources 中包含 anomaly_observer_reaction
 - 至少进入 1 处隐藏区域
 - 未满足烈火天罚的完整抵抗条件
 
