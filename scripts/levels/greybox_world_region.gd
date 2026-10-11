@@ -790,6 +790,18 @@ func _spawn_region_sources() -> void:
                 1
             )
 
+        "A5":
+            _spawn_source(
+                Vector2(1100, floor_y - 18.0),
+                "anomaly_battlefield_late_orders",
+                "THE ORDERS THAT ARRIVED AFTER THE DEAD",
+                "The field report is dated three days after the battle.
+
+The bodies were already arranged to face the fortress, as if someone had corrected the scene for a witness.
+
+The last line orders the survivors to call the slaughter a miracle of faith.",
+                46
+            )
         "A6":
             _spawn_source(
                 Vector2(1125, 278),
@@ -801,6 +813,18 @@ func _spawn_region_sources() -> void:
                 0,
                 "",
                 1
+            )
+        "A7":
+            _spawn_source(
+                Vector2(1070, floor_y - 18.0),
+                "anomaly_prisoner_register",
+                "THE REGISTER OF UNPERSONS",
+                "The ledger has columns for name, sentence, and transfer.
+
+The transfer column is full. The execution column is almost empty.
+
+Every destination is written as OBSERVATION.",
+                52
             )
         "A8":
             _spawn_source(
@@ -829,6 +853,16 @@ func _spawn_region_sources() -> void:
                 12,
                 true
             )
+        "A10":
+            _spawn_source(
+                Vector2(700, floor_y - 18.0),
+                "anomaly_double_sealed_reliquary",
+                "THE RELIQUARY WITH TWO SEALS",
+                "The church seal was pressed over an older mark.
+
+The wax bears the same shape as the cut in the reliquary stone. The official prayer was added later.",
+                62
+            )
         "A11":
             _spawn_source(
                 Vector2(1450, floor_y - 18.0),
@@ -840,6 +874,19 @@ func _spawn_region_sources() -> void:
                 6,
                 "",
                 2
+            )
+
+        "A12":
+            _spawn_source(
+                Vector2(1070, floor_y - 18.0),
+                "anomaly_kings_unopened_letter",
+                "THE KING'S UNOPENED LETTER",
+                "The letter was never sent.
+
+The king names the church's experiments plainly, then asks the reader to preserve the kingdom even if the truth must remain buried.
+
+His signature is steady. The seal is not.",
+                74
             )
 
 func _spawn_source(
