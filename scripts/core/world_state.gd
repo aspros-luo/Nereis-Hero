@@ -77,6 +77,7 @@ var witch_time_enemy_scale := 0.22
 var witch_time_visual: CanvasLayer
 var resonance_sight_active := false
 var _last_runtime_scene_path := ""
+var _last_natural_test_scene_path := ""
 var _last_resonance_signature := Vector3i(-1, -1, -1)
 
 # Narrative state is stored as facts/flags, not as a visible romance meter.
@@ -102,8 +103,9 @@ func _process(delta: float) -> void:
     var scene := get_tree().current_scene
     if scene != null:
         var scene_path := str(scene.scene_file_path)
-        if debug_natural_test_active:
+        if debug_natural_test_active and scene_path != _last_natural_test_scene_path:
             _record_natural_test_scene(scene_path)
+            _last_natural_test_scene_path = scene_path
         if _last_runtime_scene_path.is_empty():
             _last_runtime_scene_path = scene_path
         elif scene_path != _last_runtime_scene_path:
@@ -770,6 +772,7 @@ func reset() -> void:
     debug_map_test_mode = false
     debug_natural_test_active = false
     debug_natural_test_visited_regions.clear()
+    _last_natural_test_scene_path = ""
     debug_ability_override_active = false
     hero_memory = 0
     hero_humanity = 100
