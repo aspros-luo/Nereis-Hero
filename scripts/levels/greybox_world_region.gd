@@ -1730,6 +1730,18 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_end_x = 1540.0
             route.bridge_y = 285.0
             route.prompt_text = "E  ANCHOR THE RAIN REFLECTION"
+        "A10":
+            # The choir gallery bridges the staggered upper chapel ledges; it does not replace the cathedral exits or C19.
+            # 唱诗席高廊横接错层的礼拜堂高台，不替代大圣堂出口或 C19 深层入口。
+            route = Node2D.new()
+            route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+            route.name = "ChoirlessUpperGallery"
+            route.route_id = "A10_CHOIRLESS_UPPER_GALLERY"
+            route.required_resonance = 48
+            route.bridge_start_x = 675.0
+            route.bridge_end_x = 1075.0
+            route.bridge_y = 270.0
+            route.prompt_text = "E  ANCHOR THE CHOIRLESS GALLERY"
         _:
             return
     route.opened.connect(_on_local_resonance_route_opened)
@@ -1773,6 +1785,12 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
             narrative.show_message(
                 "THE HOMES THAT THE RAIN REMEMBERS",
                 "The roofline crosses houses whose doors were sealed from the street side. In the rainwater, warm windows appear beneath roofs that have stood empty for years. The old city did not lose its people all at once; someone taught the records to call them never-born.",
+                5.0
+            )
+        "A10_CHOIRLESS_UPPER_GALLERY":
+            narrative.show_message(
+                "THE CHOIR THAT WAS NEVER RECORDED",
+                "The gallery overlooks the cathedral choir, but no sound rises from below. Dust outlines a row of kneeling figures where the floor has been worn smooth. The service ledger lists every hymn and every bell—except the names of those who sang here.",
                 5.0
             )
         _:
