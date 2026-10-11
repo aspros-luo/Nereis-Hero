@@ -11,6 +11,15 @@ const RESONANCE_SOURCE_SCRIPT = preload("res://scripts/world/resonance_source_cl
 const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")
 const LOCAL_RESONANCE_ROUTE_SCRIPT = preload("res://scripts/world/resonance_local_route.gd")
 const ENDGAME_GATE_SCRIPT = preload("res://scripts/core/endgame_gate.gd")
+const CULTIST_SCRIPT = preload("res://scripts/enemies/cultist.gd")
+const PALE_HOUND_SCRIPT = preload("res://scripts/enemies/pale_hound.gd")
+const BANDIT_RAIDER_SCRIPT = preload("res://scripts/enemies/bandit_raider.gd")
+const RESEARCH_HUSK_SCRIPT = preload("res://scripts/enemies/research_husk.gd")
+const CHURCH_INQUISITOR_SCRIPT = preload("res://scripts/enemies/church_inquisitor.gd")
+const BELL_WRAITH_SCRIPT = preload("res://scripts/enemies/bell_wraith.gd")
+
+const ENCOUNTER_ACTIVATE_RANGE := 420.0
+const ENCOUNTER_DEACTIVATE_RANGE := 560.0
 
 @export var region_id: String = "A2"
 @export var location_id: String = "ash_forest"
@@ -53,12 +62,94 @@ func _ready() -> void:
     _spawn_region_sources()
     _spawn_region_exits()
     _spawn_region_rest_point()
+    _spawn_region_encounters()
     queue_redraw()
 
     var intro_id := "graybox_intro_%s" % location_id
     if intro_id not in WorldState.achievement_flags:
         WorldState.record_achievement(intro_id)
         get_tree().create_timer(0.55).timeout.connect(_show_intro)
+
+func _process(_delta: float) -> void:
+    # Encounters wake only when the Hero is nearby, so distant enemies do not cross the entire region.
+    # 敌人只在主角接近时启动 AI，避免远处敌人横穿整张地图追击。
+    if hero == null or not is_instance_valid(hero):
+        return
+    for child in get_children():
+        if not (child is CharacterBody2D) or not child.has_meta("region_encounter"):
+            continue
+        if child.is_queued_for_deletion():
+            continue
+        var enemy := child as CharacterBody2D
+        var distance := absf(hero.global_position.x - enemy.global_position.x)
+        var active := bool(enemy.get_meta("encounter_active", false))
+        if active and distance > ENCOUNTER_DEACTIVATE_RANGE:
+            active = false
+        elif not active and distance <= ENCOUNTER_ACTIVATE_RANGE:
+            active = true
+        if active != bool(enemy.get_meta("encounter_active", false)):
+            enemy.set_meta("encounter_active", active)
+            enemy.set_physics_process(active)
+
+
+func _spawn_region_encounters() -> void:
+    # One or two authored encounters per region; A9 stays a low-pressure transit hub.
+    # 每个区域布置一至两场有意安排的遭遇；A9 保留为低压力的交通枢纽。
+    match region_id:
+        "A2":
+            _spawn_encounter(PALE_HOUND_SCRIPT, "A2_PaleHound_01", 500.0, 14.0, 32.0)
+            _spawn_encounter(CULTIST_SCRIPT, "A2_Cultist_01", 1750.0, 13.0, 38.0)
+        "A3":
+            _spawn_encounter(BANDIT_RAIDER_SCRIPT, "A3_Bandit_01", 350.0, 14.0, 40.0)
+            _spawn_encounter(CULTIST_SCRIPT, "A3_Cultist_01", 1320.0, 13.0, 38.0)
+        "A4":
+            _spawn_encounter(RESEARCH_HUSK_SCRIPT, "A4_ResearchHusk_01", 700.0, 14.0, 42.0)
+        "A5":
+            _spawn_encounter(BANDIT_RAIDER_SCRIPT, "A5_Bandit_01", 800.0, 14.0, 40.0)
+        "A6":
+            _spawn_encounter(CHURCH_INQUISITOR_SCRIPT, "A6_Inquisitor_01", 850.0, 14.0, 42.0)
+        "A7":
+            _spawn_encounter(RESEARCH_HUSK_SCRIPT, "A7_ResearchHusk_01", 1750.0, 14.0, 42.0)
+        "A8":
+            _spawn_encounter(CULTIST_SCRIPT, "A8_Cultist_01", 1800.0, 13.0, 38.0)
+        "A10":
+            _spawn_encounter(CHURCH_INQUISITOR_SCRIPT, "A10_Inquisitor_01", 600.0, 14.0, 42.0)
+            _spawn_encounter(BELL_WRAITH_SCRIPT, "A10_BellWraith_01", 1700.0, 14.0, 40.0)
+        "A11":
+            _spawn_encounter(RESEARCH_HUSK_SCRIPT, "A11_ResearchHusk_01", 500.0, 14.0, 42.0)
+        "A12":
+            _spawn_encounter(CHURCH_INQUISITOR_SCRIPT, "A12_Inquisitor_01", 900.0, 14.0, 42.0)
+            _spawn_encounter(CULTIST_SCRIPT, "A12_Cultist_01", 1800.0, 13.0, 38.0)
+        "H01":
+            _spawn_encounter(CULTIST_SCRIPT, "H01_Cultist_01", 1200.0, 13.0, 38.0)
+        "H02":
+            _spawn_encounter(BELL_WRAITH_SCRIPT, "H02_BellWraith_01", 1300.0, 14.0, 40.0)
+        "H03":
+            _spawn_encounter(BANDIT_RAIDER_SCRIPT, "H03_Bandit_01", 1400.0, 14.0, 40.0)
+        "H04":
+            _spawn_encounter(PALE_HOUND_SCRIPT, "H04_PaleHound_01", 1400.0, 14.0, 32.0)
+        "H05":
+            _spawn_encounter(BELL_WRAITH_SCRIPT, "H05_BellWraith_01", 1300.0, 14.0, 40.0)
+        "H06":
+            _spawn_encounter(CHURCH_INQUISITOR_SCRIPT, "H06_Inquisitor_01", 1450.0, 14.0, 42.0)
+        "H07":
+            _spawn_encounter(PALE_HOUND_SCRIPT, "H07_PaleHound_01", 1400.0, 14.0, 32.0)
+        "H08":
+            _spawn_encounter(RESEARCH_HUSK_SCRIPT, "H08_ResearchHusk_01", 1500.0, 14.0, 42.0)
+
+
+func _spawn_encounter(enemy_script: Script, enemy_name: String, spawn_x: float, body_radius: float, body_height: float) -> void:
+    var enemy := CharacterBody2D.new()
+    enemy.set_script(enemy_script)
+    enemy.name = enemy_name
+    enemy.position = Vector2(spawn_x, floor_y)
+    _add_character_collision(enemy, body_radius, body_height)
+    enemy.set_meta("region_encounter", true)
+    enemy.set_meta("encounter_active", false)
+    add_child(enemy)
+    enemy.set_physics_process(false)
+    print("[NEREIS][MAP][ENCOUNTER] region=%s enemy=%s x=%.1f" % [region_id, enemy_name, spawn_x])
+
 
 func _spawn_x_for_side(side: String) -> float:
     if region_id == "A9" and side == "mirror":
