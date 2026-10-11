@@ -128,7 +128,8 @@ func _continue_game() -> void:
         return
 
     var next_scene := WorldState.get_resume_scene_path()
-    print("[NEREIS][BOOT] Continue scene=%s" % next_scene)
+    WorldState.pending_region_spawn_side = WorldState.resume_spawn_side
+    print("[NEREIS][BOOT] Continue scene=%s spawn_side=%s" % [next_scene, WorldState.pending_region_spawn_side])
     get_tree().change_scene_to_file(next_scene)
 
 func _confirm_new_game() -> void:
