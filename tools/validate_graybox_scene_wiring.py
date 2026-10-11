@@ -936,6 +936,12 @@ def main() -> int:
                     errors.append(
                         f"{hidden_id} gate source mismatch: topology={expected_sources}, runtime={actual_sources}."
                     )
+                minimum_distinct_sources = int(hidden.get("min_distinct_anomaly_sources", 0))
+                if minimum_distinct_sources > len(actual_sources):
+                    errors.append(
+                        f"{hidden_id} requires {minimum_distinct_sources} distinct anomaly sources, "
+                        f"but its runtime gate lists only {len(actual_sources)}."
+                    )
 
                 expected_outer_resonance = hidden.get("requires_outer_god_resonance", False)
                 actual_outer_resonance = bool(re.search(
