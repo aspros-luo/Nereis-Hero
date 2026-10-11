@@ -851,7 +851,7 @@
       "requires_resonance_sight": true,
       "bridge_start_x": 880,
       "bridge_end_x": 1340,
-      "bridge_y": 380,
+      "bridge_y": 390,
       "persistent_on_open": true,
       "design_intent": "A resonance-anchored trench crossing under a buried standard; it shortens the risky battlefield route but does not bypass the fortress's story gate."
     },
@@ -895,7 +895,7 @@
       "requires_resonance_sight": true,
       "bridge_start_x": 1260,
       "bridge_end_x": 1520,
-      "bridge_y": 330,
+      "bridge_y": 335,
       "persistent_on_open": true,
       "design_intent": "A rain-reflection roofwalk reconnects abandoned outer-ring homes as a local traversal loop; it must not open or bypass the royal transport gate or H07."
     },
@@ -906,7 +906,7 @@
       "requires_resonance_sight": true,
       "bridge_start_x": 675,
       "bridge_end_x": 1075,
-      "bridge_y": 300,
+      "bridge_y": 310,
       "persistent_on_open": true,
       "design_intent": "A choirless upper gallery links the staggered cathedral chapel ledges as a local traversal shortcut; it must not replace either cathedral exit or bypass C19."
     },
