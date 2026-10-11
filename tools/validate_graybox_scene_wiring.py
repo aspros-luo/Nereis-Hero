@@ -357,7 +357,20 @@ def main() -> int:
                         if discriminant < 0.0:
                             continue
                         flight_time = (jump_speed + discriminant ** 0.5) / gravity
+                        horizontal_overlap = min(sx + sw, tx + tw) - max(sx, tx)
                         horizontal_gap = max(0.0, tx - (sx + sw), sx - (tx + tw))
+                        if vertical_delta < 0.0 and horizontal_overlap > 0.0:
+                            # A solid platform blocks a direct upward jump from underneath it.
+                            # Permit an edge approach only when the source platform extends beyond the target.
+                            # 实体平台会挡住从下方直接上跳；只有起跳平台在目标平台边缘之外留有可绕行空间时才计入。
+                            approach_gaps = []
+                            if sx < tx:
+                                approach_gaps.append(tx - sx)
+                            if sx + sw > tx + tw:
+                                approach_gaps.append((sx + sw) - (tx + tw))
+                            if not approach_gaps:
+                                continue
+                            horizontal_gap = min(approach_gaps)
                         if horizontal_gap <= move_speed * flight_time + 36.0:
                             adjacency[source_index].append(target_index)
                 reachable = {0}
