@@ -39,10 +39,8 @@ var ending_cg: Control
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
-    # Director test scene only. Do not save these forced ending facts.
+    # Director test scene only. Do not save forced ending facts or fabricate relationship milestones.
     WorldState.current_location = "ending_fire_demo"
-    WorldState.physical_union_complete = true
-    WorldState.outer_god_resonance = true
     WorldState.ancient_residue_awakened = true
     WorldState.hidden_artifact_pieces = 3
 
