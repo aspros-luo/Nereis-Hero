@@ -17,7 +17,9 @@ const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.g
 @export var require_outer_god_resonance: bool = false
 @export var required_source_ids: Array[String] = []
 @export var interaction_radius: float = 80.0
-@export var allow_debug_override: bool = false
+# F5 debug override may bypass reveal thresholds for testing, but never opens or persists a gate by itself.
+# F5 调试覆盖仅用于绕过显现门槛；它本身不会开门或写入永久通路状态。
+@export var allow_debug_override: bool = true
 
 var revealed := false
 var opened_permanently := false
@@ -32,7 +34,8 @@ func _ready() -> void:
         WorldState.resonance_sight_active,
         WorldState.hero_resonance,
         WorldState.ancient_exposure,
-        WorldState.outer_exposure
+        WorldState.outer_exposure,
+        _is_debug_override_active()
     )
     queue_redraw()
 
@@ -43,7 +46,8 @@ func _process(delta: float) -> void:
         WorldState.resonance_sight_active,
         WorldState.hero_resonance,
         WorldState.ancient_exposure,
-        WorldState.outer_exposure
+        WorldState.outer_exposure,
+        _is_debug_override_active()
     )
 
     var hero := get_node_or_null("../Hero") as Node2D
@@ -56,6 +60,14 @@ func _process(delta: float) -> void:
     )
     INTERACTION_FOCUS_SCRIPT.sync(self, available, 25)
     queue_redraw()
+
+func _is_debug_override_active() -> bool:
+    var hero := get_node_or_null("../Hero")
+    return (
+        allow_debug_override
+        and hero != null
+        and bool(hero.get("debug_ability_override"))
+    )
 
 func _get_region_record_id() -> String:
     var normalized_id := region_record_id.strip_edges()
