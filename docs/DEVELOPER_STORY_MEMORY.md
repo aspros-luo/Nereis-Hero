@@ -1464,3 +1464,37 @@ Still intentionally open:
 - exact ending-state formulas
 
 This document is the canonical memory for future development sessions.
+
+
+---
+
+# Latest Cross-Game Canon Clarification — 2026-10-11
+
+This section supersedes earlier wording that made physical union the gateway to the three endings. Older notes preserve historical design context; this section is authoritative when they conflict.
+
+## Ending selection is no longer relationship-gated
+
+The Hero's three endings are determined by accumulated Resonance, truth-anchor items, and exploration. Physical intimacy with Mite is optional narrative content and is never read by the ending evaluator. Current prototype contract:
+
+- Cosmic Resonance threshold: 68.
+- Eternal Paradise: Resonance >= 68, Outer-God exposure >= 6, and at least one hidden region entered, unless Blazing Judgment requirements are met.
+- Blazing Judgment: Resonance >= 68, at least 3 unique truth-anchor sources, and at least 2 hidden regions entered.
+- Mortal's Grave: otherwise.
+
+Implementation source of truth: scripts/core/ending_evaluator.gd. These are prototype tuning values, not immutable metaphysical laws.
+
+## Shared-world cycle after Mortal's Grave
+
+In Nereis-Hero, Hero defeats the Church's leadership and the King, helping the Restoration Army win. The political victory is real, but the Restoration Army gradually recreates the structures of coercion and corruption it claimed to destroy.
+
+Nereis-Lullaby, primarily from Mite's perspective, may portray Hero's later compromises and fall inside the new order. He may abandon Mite after repeatedly choosing public duty and institutional survival over personal bonds. This must be a gradual character tragedy, not an unexplained personality flip.
+
+The Outer God remains indifferent to these human cycles. It continues seeking another vessel even if Mite is abandoned or one vessel plan fails.
+
+## Canon constraints
+
+- Mite's early innocence is genuine.
+- Hero does not consciously identify Mite as an Outer-God proxy during the RPG main story.
+- Physical union may change relationship scenes and the influence Mite experiences, but is not required to reach any ending.
+- The three endings are driven by Hero's Resonance, items and exploration.
+- See CROSS_GAME_STORY_CANON_CN.md and CROSS_GAME_STORY_CANON_EN.md for the shared-world continuation.
