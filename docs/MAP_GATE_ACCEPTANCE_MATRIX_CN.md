@@ -83,5 +83,6 @@
 - [ ] 逐条验收 H01–H08 的显现、两次 E、永久开门和读档。
 - [ ] 验收所有出生点、死亡回程、交互焦点和旧存档迁移。
 - [ ] 读档出生侧：从主线出口、隐藏区专用入口（如 `bell_tower_entry` / `bell_drop_entry` / `chapel_entry`）进入目标地图，退出游戏后点 Continue，确认出生侧一致且不与入口碰撞区重叠；旧存档无 `resume_spawn_side` 时应安全回退到 west。
+- [ ] Debug 日志：在 Godot Output 中核对 `[NEREIS][MAP][GATE]` 的显现条件与进入目标、`[NEREIS][MAP][EXIT]` 的转场方向、`[NEREIS][MAP][SPAWN]` 的实际出生坐标；日志与画面不一致时先记录最小复现，再修复。
 
 **重要：** 该矩阵是可执行验收清单，不是通过声明。当前环境没有运行 Godot 场景，因此所有引擎行为仍标记为待实机验收。
