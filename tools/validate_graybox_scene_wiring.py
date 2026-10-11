@@ -417,6 +417,36 @@ def main() -> int:
     if '1020.0, "E  OPEN THE OLD SERVICE DOOR"' in region_script:
         fail(errors, "A9 H03 service door remains too close to the C18 inner-city side gate.")
 
+    # Each playable region must have its intended lightweight encounter roster.
+    # 每个可玩区域必须保留对应的轻量遭遇配置，A9 作为交通枢纽刻意不生成战斗敌人。
+    encounter_contracts = {
+        "A2": ["A2_PaleHound_01", "A2_Cultist_01"],
+        "A3": ["A3_Bandit_01", "A3_Cultist_01"],
+        "A4": ["A4_ResearchHusk_01"],
+        "A5": ["A5_Bandit_01"],
+        "A6": ["A6_Inquisitor_01"],
+        "A7": ["A7_ResearchHusk_01"],
+        "A8": ["A8_Cultist_01"],
+        "A10": ["A10_Inquisitor_01", "A10_BellWraith_01"],
+        "A11": ["A11_ResearchHusk_01"],
+        "A12": ["A12_Inquisitor_01", "A12_Cultist_01"],
+        "H01": ["H01_Cultist_01"],
+        "H02": ["H02_BellWraith_01"],
+        "H03": ["H03_Bandit_01"],
+        "H04": ["H04_PaleHound_01"],
+        "H05": ["H05_BellWraith_01"],
+        "H06": ["H06_Inquisitor_01"],
+        "H07": ["H07_PaleHound_01"],
+        "H08": ["H08_ResearchHusk_01"],
+    }
+    for region_id, enemy_names in encounter_contracts.items():
+        require(region_script, f'"{region_id}":', f"{region_id} encounter region", errors)
+        for enemy_name in enemy_names:
+            require(region_script, f'"{enemy_name}"', f"{region_id} encounter roster", errors)
+    require(region_script, "ENCOUNTER_ACTIVATE_RANGE := 420.0", "Encounter activation radius", errors)
+    require(region_script, "ENCOUNTER_DEACTIVATE_RANGE := 560.0", "Encounter deactivation hysteresis", errors)
+    require(region_script, 'enemy.set_physics_process(false)', "Dormant encounters do not chase across the whole region", errors)
+
     # Hidden-region exits must preserve their intended return loops and second-side unlocks.
     # 隐藏区域的出口必须保留预期回环，并且远侧出口只能在对应实体门开启后可用。
     hidden_exit_contracts = {
