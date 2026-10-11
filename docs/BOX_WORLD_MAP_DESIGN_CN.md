@@ -54,7 +54,7 @@
 
 - A6 的疯狂神职人员是独立的可选剧情头目；击败后记录 `defeated_mad_cleric`，并留下蜂鸣与山崖的叙事联系。
 - 只有从其他地图实际返回 A1 村庄后，才记录 `returned_to_village_after_mad_cleric`。此时蜂巢封条视觉改变、洞穴入口出现，并播放一次性的低强度感知提示。
-- H09 使用独立场景 `scenes/cliff_cave_experiment.tscn`，包含入口石台、下层战斗区和高位地形。古神实验体被击败后，记录 `cliff_cave_experiment_defeated` 与 `third_umbilical_cord_fragment_acquired`，并增加一枚隐藏真相锚点。
+- H09 使用独立场景 `scenes/cliff_cave_experiment.tscn`，包含入口石台、下层战斗区和高位地形。古神实验体被击败后，残片会作为可见物品留在场景中；玩家按 E 拾取后才记录 `third_umbilical_cord_fragment_acquired`，并将其作为独立隐藏真相锚点。若玩家离开后再返回，未拾取的残片仍会保留。
 - 该锚点只计入「烈火天罚」的组合条件之一。洞窟有返回村庄的真实出口；没有击败疯狂神职人员或没有发现洞窟，都不妨碍普通主线与「凡人之墓」。
 - 世界路线图仅在 H09 被发现后显示它；F10 自然探索验收列表已加入 H09，并将地图实走总数更新为 22 个区域。
 
