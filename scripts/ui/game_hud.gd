@@ -304,12 +304,12 @@ func _process(delta: float) -> void:
     if not debug_enabled or not hero:
         return
 
-    var state_name: String = hero.get_debug_state()
+    var state_name: String = _localize_debug_state(str(hero.get_debug_state()))
     var hp: int = int(hero.get("health"))
     var stamina: int = int(hero.get("stamina"))
     var invulnerable: bool = bool(hero.get("invulnerable"))
 
-    var action_kind: String = str(hero.call("get_debug_action_kind")) if hero.has_method("get_debug_action_kind") else "unknown"
+    var action_kind: String = _localize_debug_action(str(hero.call("get_debug_action_kind"))) if hero.has_method("get_debug_action_kind") else "未知"
     var echo_cooldown: float = float(hero.call("get_debug_eldritch_cooldown")) if hero.has_method("get_debug_eldritch_cooldown") else 0.0
     var debug_override: bool = bool(hero.get("debug_ability_override"))
     debug_label.text = (
@@ -338,16 +338,57 @@ func _process(delta: float) -> void:
         + "身体交融：%s\n" % WorldState.physical_union_complete
         + "隐藏证物：%d/4\n" % WorldState.hidden_artifact_pieces
         + "复国线索锚点：%s\n" % WorldState.hidden_resistance_awakened
-        + "结局路线：%s\n" % WorldState.ending_route
+        + "结局路线：%s\n" % _localize_route(WorldState.ending_route)
         + "结局候选：%s\n" % NereisEndingEvaluator.get_candidate()
-        + "当前位置：%s\n" % WorldState.current_location
-        + "探索路线：%s\n" % WorldState.selected_route
+        + "当前位置：%s\n" % _localize_location(WorldState.current_location)
+        + "探索路线：%s\n" % _localize_route(WorldState.selected_route)
         + "室内线索：%d\n" % WorldState.interior_clues_seen.size()
         + "世界线索：%d\n" % WorldState.world_clues_seen.size()
         + "首领已击败：%s\n" % WorldState.boss_defeated
         + "路线已完成：%s\n" % WorldState.route_complete
         + "切片已完成：%s" % WorldState.slice_complete
     )
+
+func _localize_debug_state(value: String) -> String:
+    var labels := {
+        "IDLE": "待机", "MOVE": "移动", "JUMP": "跳跃", "FALL": "下落",
+        "ATTACK": "攻击", "DODGE": "闪避", "QUICK_DASH": "快速冲刺",
+        "GRAPPLE": "抓钩移动", "WALL_CLIMB": "攀墙", "HURT": "受击", "DEAD": "死亡"
+    }
+    return str(labels.get(value, value))
+
+func _localize_debug_action(value: String) -> String:
+    var labels := {
+        "none": "无", "basic": "普通攻击", "judgment_slash": "裁决斩",
+        "crescent_combo": "新月连斩", "eldritch_echo": "深渊回响",
+        "human_iaijutsu": "凡人居合", "blood": "血之居合",
+        "abyssal": "深渊居合", "black_horizon": "黑色天际"
+    }
+    return str(labels.get(value, value))
+
+func _localize_location(value: String) -> String:
+    var labels := {
+        "church_escape": "教会手术所", "village": "边境村庄", "ash_forest": "雾林与旧朝圣路",
+        "forgotten_city": "被遗忘的城区", "sewer_reservoir": "下水道与旧水库",
+        "old_battlefield": "旧战场", "monastery_tower": "修道院与钟塔",
+        "prison_depths": "监牢深处", "royal_tomb": "旧王墓", "royal_outer_ring": "王城外环",
+        "grand_cathedral": "大圣堂", "deep_research_depths": "古神遗迹与深层研究区",
+        "inner_city": "王室内城", "hidden_well": "井底回声层", "hidden_bell_chamber": "倒响钟室",
+        "erased_third_street": "被删去的第三街", "reflected_stairwell": "水面背后的楼梯",
+        "silent_bell_room": "无声钟室", "erased_royal_name_corridor": "王名抹除廊",
+        "mirror_street": "镜街", "primordial_hollow": "胎宫／原初空腔"
+    }
+    return str(labels.get(value, value))
+
+func _localize_route(value: String) -> String:
+    match value:
+        "church": return "教会线"
+        "lullaby": return "摇篮曲线"
+        "ending_paradise": return "永恒乐园"
+        "ending_fire": return "烈火天罚"
+        "mortal_grave": return "凡人之墓"
+        "": return "尚未选择"
+        _: return value
 
 func _localize_region(value: String) -> String:
     var key := NereisLocalization.key_for_region(value)
