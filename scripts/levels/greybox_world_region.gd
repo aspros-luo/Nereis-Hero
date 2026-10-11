@@ -477,19 +477,19 @@ func _show_intro() -> void:
             )
         "H02":
             narrative.show_message(
-                "THE BELL BEFORE THE SOUND",
+                "先于声音的钟",
                 "钟舌始终静止。\n\n回声却从你尚未抵达的地方回应。",
                 5.0
             )
         "H03":
             narrative.show_message(
-                "THE STREET THE CITY REMOVED",
+                "被城市删去的街道",
                 "房屋两侧都有门。\n\n城图上却只画出其中一侧。",
                 5.0
             )
         "H04":
             narrative.show_message(
-                "THE STAIRS BEHIND THE WATER",
+                "水面背后的阶梯",
                 "倒影里有一段干燥的阶梯。\n\n你的靴子无法在阶梯上方的水面留下痕迹。",
                 5.0
             )
@@ -501,7 +501,7 @@ func _show_intro() -> void:
             )
         "H06":
             narrative.show_message(
-                "THE NAME SCRAPED FROM STONE",
+                "石碑上被刮去的名字",
                 "The inscription is not weathered.\n\nThe chisel marks begin after the tomb was sealed.",
                 5.0
             )
@@ -903,41 +903,41 @@ func _spawn_region_rest_point() -> void:
     # Main regions receive one deliberate rest point; hidden regions remain riskier and have no free checkpoint.
     # 主区域各有一处有意布置的休整点；隐藏区域不提供免费的安全检查点。
     var rest_x := -1.0
-    var rest_name := "WAYSHRINE"
+    var rest_name := "歇脚圣龛"
     match region_id:
         "A2":
             rest_x = 1150.0
-            rest_name = "OLD PILGRIM SHRINE"
+            rest_name = "旧朝圣圣龛"
         "A3":
             rest_x = 2100.0
-            rest_name = "ABANDONED STREET SHRINE"
+            rest_name = "废街圣龛"
         "A4":
             rest_x = 2050.0
-            rest_name = "RESERVOIR ALTAR"
+            rest_name = "水库祭坛"
         "A5":
             rest_x = 1360.0
-            rest_name = "BATTLEFIELD MEMORIAL"
+            rest_name = "战场纪念碑"
         "A6":
             rest_x = 1300.0
-            rest_name = "CLOISTER REST"
+            rest_name = "回廊歇脚处"
         "A7":
             rest_x = 1320.0
-            rest_name = "PRISONER'S BENCH"
+            rest_name = "囚徒长椅"
         "A8":
             rest_x = 1150.0
-            rest_name = "ROYAL TOMBSTONE"
+            rest_name = "王室墓碑"
         "A9":
             rest_x = 1100.0
-            rest_name = "OUTER RING WAYSHRINE"
+            rest_name = "OUTER RING 歇脚圣龛"
         "A10":
             rest_x = 1200.0
-            rest_name = "CHAPEL REST"
+            rest_name = "礼拜堂歇脚处"
         "A11":
             rest_x = 1050.0
-            rest_name = "OBSERVATION REST"
+            rest_name = "观测室歇脚处"
         "A12":
             rest_x = 1360.0
-            rest_name = "THRONE DISTRICT SHRINE"
+            rest_name = "王座区圣龛"
         _:
             return
 
@@ -956,7 +956,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(735, floor_y - 18.0),
                 "anomaly_bell_retiming",
-                "THE BELL THAT DID NOT MOVE",
+                "从未移动的钟",
                 "钟舌垂落不动。\n\n钟声却依然响起。你掌下的石头震动了一次，随后归于沉寂。\n\n第二道脉动仍残留在你的眼后。",
                 12,
                 0,
@@ -966,7 +966,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1530, floor_y - 18.0),
                 "anomaly_old_pilgrim_echo",
-                "THE SECOND ECHO",
+                "第二道回声",
                 "你轻敲旧里程碑，回应却从身后的道路传来。\n\n石头仍然温热，仿佛有人刚刚离开。",
                 18
             )
@@ -974,7 +974,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(900, floor_y - 18.0),
                 "anomaly_erased_street_sign",
-                "THE THIRD STREET",
+                "第三街",
                 "路牌列出了三条街道，如今只剩两条。\n\n原本指向第三条街的地方布满刮痕。",
                 28
             )
@@ -982,7 +982,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(980, floor_y - 18.0),
                 "anomaly_old_stone_layer",
-                "STONE BENEATH THE PIPES",
+                "管道下的石头",
                 "管道被固定在另一种工艺切削的石层上。\n\n铺设管道的工人并不是这座大厅的建造者。",
                 36,
                 0,
@@ -995,7 +995,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1100, floor_y - 18.0),
                 "anomaly_battlefield_late_orders",
-                "THE ORDERS THAT ARRIVED AFTER THE DEAD",
+                "迟于死者抵达的命令",
                 "战场报告的日期比战役晚了三天。\n\n尸体早已被摆成面向堡垒的姿势，仿佛有人专为目击者修整过现场。\n\n最后一行命令幸存者将这场屠杀称为信仰的奇迹。",
                 46
             )
@@ -1003,7 +1003,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1125, 278),
                 "anomaly_silent_bell_window",
-                "THE WINDOW WITHOUT A SOUND",
+                "无声之窗",
                 "钟塔窗外没有景色。\n\n它的影子却落在一面并不存在的墙上。",
                 42,
                 0,
@@ -1015,7 +1015,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1070, floor_y - 18.0),
                 "anomaly_prisoner_register",
-                "THE REGISTER OF UNPERSONS",
+                "无名者名册",
                 "账册分为姓名、判决与转送三栏。\n\n转送一栏写得满满当当，处决一栏却几乎空白。\n\n所有目的地都被写成了“观测区”。",
                 52
             )
@@ -1023,7 +1023,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1530, floor_y - 18.0),
                 "anomaly_erased_royal_name",
-                "THE NAME SCRAPED FROM STONE",
+                "石碑上被刮去的名字",
                 "铭文并未磨损。\n\n凿痕是在石碑封存之后才留下的。",
                 55,
                 0,
@@ -1036,7 +1036,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1380, floor_y - 18.0),
                 "anomaly_mirror_street_echo",
-                "THE STREET IN THE PUDDLE",
+                "水洼中的街道",
                 "水洼倒映出一条多了一盏灯的街道。\n\n你再次清点灯火，头顶的街景却毫无变化。",
                 68,
                 0,
@@ -1050,7 +1050,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(700, floor_y - 18.0),
                 "anomaly_double_sealed_reliquary",
-                "THE RELIQUARY WITH TWO SEALS",
+                "双重封印的圣物匣",
                 "教会印记覆盖在更古老的符号之上。\n\n封蜡与圣物石匣上的刻痕形状相同，官方祷文则是后来才添上的。",
                 62
             )
@@ -1058,7 +1058,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1450, floor_y - 18.0),
                 "anomaly_observer_reaction",
-                "THE SECOND OBSERVER",
+                "第二位观测者",
                 "记录中写着一位从未进入密室的观测者。\n\n另一行字迹来自不同的人，描述的却是你离开的情景。",
                 78,
                 0,
@@ -1071,7 +1071,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1070, floor_y - 18.0),
                 "anomaly_kings_unopened_letter",
-                "THE KING'S UNOPENED LETTER",
+                "国王未曾拆开的信",
                 "这封信从未寄出。\n\n国王直言教会的实验，并请求读信者即使埋葬真相，也要保全王国。\n\n他的签名沉稳，封印却颤抖不止。",
                 74
             )
@@ -1080,7 +1080,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1600, floor_y - 18.0),
                 "hidden_well_no_water",
-                "THE WELL HAS NO WATER",
+                "井中无水",
                 "石头是湿的，下面却没有水。\n\n潮气闻起来像是雨落在地底深处。",
                 0
             )
@@ -1088,7 +1088,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1650, floor_y - 18.0),
                 "hidden_bell_after_sound",
-                "THE BELL AFTER THE SOUND",
+                "声音之后的钟",
                 "钟声停止之后，钟舌才开始摆动。\n\n金属冰冷，周围的空气却温热。",
                 0
             )
@@ -1096,7 +1096,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(2020, floor_y - 18.0),
                 "hidden_third_street_numbers",
-                "THE NUMBERS SKIP THREE",
+                "编号跳过了三",
                 "每一道门都按顺序编号，直到第三道。\n\n没有缺失的号码；墙体被刻意切削过，只为让编号看起来顺理成章。",
                 0
             )
@@ -1104,7 +1104,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1740, floor_y - 18.0),
                 "hidden_stair_reflection",
-                "THE STAIR THAT CLIMBS DOWN",
+                "向下攀升的阶梯",
                 "石阶向下延伸，倒影中的阶梯却向上攀升。\n\n抵达平台时，两种景象同时停下，仿佛在聆听。",
                 0
             )
@@ -1112,7 +1112,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1960, floor_y - 18.0),
                 "hidden_bell_shadowless_record",
-                "THE SHADOWLESS RECORD",
+                "无影档案",
                 "档案记载钟已从塔中移走。\n\n库存清单却仍记录着它的影子，每天早晨都有人签收。",
                 0
             )
@@ -1120,7 +1120,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1980, floor_y - 18.0),
                 "hidden_royal_name_scrape",
-                "THE STONE REMEMBERS THE NAME",
+                "石头记得那个名字",
                 "名字已被抹去，凿痕却恰好停在每个字的边界。\n\n有人细致地擦除了文字，甚至保留了它们的轮廓。",
                 0
             )
@@ -1128,7 +1128,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(2200, floor_y - 18.0),
                 "hidden_mirror_lamp_count",
-                "THE EXTRA LAMP",
+                "多出来的一盏灯",
                 "水中有七盏灯，街上只有六盏。\n\n当你转过身，第七盏灯已经移动到你的身后。",
                 0
             )
@@ -1136,7 +1136,7 @@ func _spawn_region_sources() -> void:
             _spawn_source(
                 Vector2(1850, floor_y - 18.0),
                 "hidden_primordial_cradle",
-                "THE EMPTY CRADLE",
+                "空摇篮",
                 "活石上的凹槽容不下一个人的身体，形状却精细得绝非天然形成。\n\n墙壁围绕凹槽收缩了一次，随后缓缓松弛。",
                 0
             )
@@ -1183,7 +1183,7 @@ func _on_source_activated(
         return
     var message := description
     if not unlock_ability_id.is_empty() and WorldState.is_ability_unlocked(unlock_ability_id):
-        message += "\n\nAbility awakened: RESONANCE SIGHT — press V to listen."
+        message += "\n\n能力觉醒：灵视。按 V 聆听异常。"
     narrative.show_message(display_name, message, 6.0)
 
 func _spawn_region_exits() -> void:
@@ -1287,7 +1287,7 @@ func _spawn_region_exits() -> void:
                 "res://scenes/forgotten_city.tscn", "east"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  ENTER THE MONASTERY", "monastery_tower",
+                map_width - 72.0, "E  进入修道院", "monastery_tower",
                 "res://scenes/monastery_tower.tscn", "west"
             )
             if WorldState.is_hidden_path_opened("H02"):
@@ -1478,7 +1478,7 @@ func _spawn_region_exits() -> void:
 
         "H02":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE PILGRIM ROAD", "ash_forest",
+                72.0, "E  返回旧朝圣路", "ash_forest",
                 "res://scenes/ash_forest.tscn", "bell_gate"
             )
             _spawn_exit_door(
@@ -1603,7 +1603,7 @@ func _spawn_a11_chapel_gate(x: float) -> void:
 func _on_a11_gate_opened(secret_id: String) -> void:
     if not is_instance_valid(narrative):
         return
-    var title := "THE SHAFT BEHIND THE KING'S NAME" if secret_id == "C15" else "THE SILENT CHAPEL"
+    var title := "王名背后的竖井" if secret_id == "C15" else "静默侧堂"
     narrative.show_message(
         title,
         "The stone opens inward.\n\nThe records say the Church excavated this depth. The dust has settled on the Church's tools, not the stone.",
@@ -1635,7 +1635,7 @@ func _on_h08_gate_opened(_secret_id: String) -> void:
     if not is_instance_valid(narrative):
         return
     narrative.show_message(
-        "THE WALL THAT BREATHES",
+        "会呼吸的墙",
         "The wall exhales.\n\nYou cannot tell whether the passage was built for you, or whether it noticed you first.",
         5.0
     )
@@ -1662,7 +1662,7 @@ func _on_mirror_street_gate_opened(secret_id: String) -> void:
     if narrative == null or not is_instance_valid(narrative):
         return
     narrative.show_message(
-        "THE STREET THAT WAS REMOVED",
+        "被抹去的街道",
         "The reflection stops following the rain.\n\nFor the first time, the door has a shadow.",
         4.5
     )
@@ -1684,7 +1684,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 1380.0
             route.bridge_end_x = 1610.0
             route.bridge_y = 328.0
-            route.prompt_text = "E  ANCHOR THE BELLGRAVE CANOPY"
+            route.prompt_text = "E  固定钟墓上层通路"
         "A3":
             route = Node2D.new()
             route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
@@ -1694,7 +1694,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 1320.0
             route.bridge_end_x = 1690.0
             route.bridge_y = 400.0
-            route.prompt_text = "E  ANCHOR THE THIRD STREET"
+            route.prompt_text = "E  ANCHOR 第三街"
         "A4":
             # A dry aqueduct span appears above the old reservoir only after the buried stone answers.
             # 旧水库上方的干涸渡槽只有在埋藏石层回应鸣响后才显现。
@@ -1706,7 +1706,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 1650.0
             route.bridge_end_x = 1935.0
             route.bridge_y = 335.0
-            route.prompt_text = "E  ANCHOR THE DRY AQUEDUCT"
+            route.prompt_text = "E  固定干涸渡槽"
         "A5":
             # A buried standard marks a trench crossing erased from the fortress survey.
             # 被埋没的军旗标记着堡垒测绘图中被删去的战壕横渡路线。
@@ -1718,7 +1718,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 880.0
             route.bridge_end_x = 1220.0
             route.bridge_y = 390.0
-            route.prompt_text = "E  RAISE THE BURIED STANDARD"
+            route.prompt_text = "E  升起被埋葬的军旗"
         "A6":
             # The silent bell's upper service walk reconnects the tower stair to the outer cloister.
             # 无声钟的高位检修道重新连接钟塔阶梯与外侧回廊。
@@ -1730,7 +1730,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 1250.0
             route.bridge_end_x = 1510.0
             route.bridge_y = 290.0
-            route.prompt_text = "E  ANCHOR THE SILENT BELL WALK"
+            route.prompt_text = "E  固定无声钟室通路"
         "A7":
             # A maintenance catwalk bridges two cell-block levels without opening the royal tomb gate.
             # 维修栈道横接两层牢房，但不会打开王墓主门。
@@ -1742,7 +1742,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 1280.0
             route.bridge_end_x = 1530.0
             route.bridge_y = 340.0
-            route.prompt_text = "E  ANCHOR THE PRISON CROSSWALK"
+            route.prompt_text = "E  固定监牢维护通路"
         "A8":
             # The erased regent gallery spans the upper tomb passage, linking the name-wall ledge to the return gallery.
             # 被抹去的摄政王墓廊横跨王墓上层，连接王名墙平台与回程廊道。
@@ -1754,7 +1754,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 1240.0
             route.bridge_end_x = 1490.0
             route.bridge_y = 330.0
-            route.prompt_text = "E  ANCHOR THE ERASED REGENT GALLERY"
+            route.prompt_text = "E  固定被抹除的摄政长廊"
         "A9":
             # A rain-reflection roofwalk bridges the abandoned outer-ring homes without opening the royal transport gate.
             # 雨中倒影屋顶道横接王城外环的废弃民居，但不会开启王室运输门。
@@ -1766,7 +1766,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 1260.0
             route.bridge_end_x = 1520.0
             route.bridge_y = 332.0
-            route.prompt_text = "E  ANCHOR THE RAIN REFLECTION"
+            route.prompt_text = "E  固定雨中倒影通路"
         "A10":
             # The choir gallery bridges the staggered upper chapel ledges; it does not replace the cathedral exits or C19.
             # 唱诗席高廊横接错层的礼拜堂高台，不替代大圣堂出口或 C19 深层入口。
@@ -1778,7 +1778,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 675.0
             route.bridge_end_x = 960.0
             route.bridge_y = 307.0
-            route.prompt_text = "E  ANCHOR THE CHOIRLESS GALLERY"
+            route.prompt_text = "E  固定无唱诗班长廊"
         "A11":
             # An upper span reconnects two ancient observation ledges above the later Church laboratory.
             # 高位横桥重连后建教会实验室上方的两处古老观测台。
@@ -1790,7 +1790,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 1350.0
             route.bridge_end_x = 1800.0
             route.bridge_y = 285.0
-            route.prompt_text = "E  ANCHOR THE OBSERVER SPAN"
+            route.prompt_text = "E  固定观测者桥廊"
         "A12":
             # The crown wall offers a risky upper traverse but leaves the throne approach and ending gate untouched.
             # 王冠城墙提供高风险上层横道，但不改变王座入口与结局门槛。
@@ -1802,7 +1802,7 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_start_x = 1400.0
             route.bridge_end_x = 1940.0
             route.bridge_y = 323.0
-            route.prompt_text = "E  ANCHOR THE CROWN WALL"
+            route.prompt_text = "E  固定王冠城墙通路"
         _:
             return
     route.opened.connect(_on_local_resonance_route_opened)
@@ -1814,67 +1814,67 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
     match route_id:
         "A2_BELLGRAVE_CANOPY_CROSSING":
             narrative.show_message(
-                "THE BELL'S SECOND SHADOW",
+                "钟的第二道影子",
                 "The canopy path crosses a gap that the forest survey marks as solid rock. The bell above casts two shadows: one on the tower, and one on a road that is not there. The second shadow ends at a sealed door.",
                 5.0
             )
         "A4_OLD_STONE_AQUEDUCT":
             narrative.show_message(
-                "THE AQUEDUCT WITHOUT WATER",
+                "无水渡槽",
                 "The pipes end at a stone channel older than the reservoir. When the bridge settles, water can be heard flowing upward through the sealed rock.\n\nThe channel remembers a river that no longer exists.",
                 5.0
             )
         "A5_BURIED_STANDARD_CROSSING":
             narrative.show_message(
-                "THE STANDARD THAT OUTLIVED THE ARMY",
+                "比军队存续更久的军旗",
                 "The cloth has rotted away, but its shadow still points across the trench. The fortress map marks this gap as impassable. The dead were ordered to hold a road that the Church later removed from every record.",
                 5.0
             )
         "A6_SILENT_BELL_SERVICE_WALK":
             narrative.show_message(
-                "THE SERVICE WALK OF THE SILENT BELL",
+                "无声之钟的维护通道",
                 "The upper walkway bears fresh maintenance marks, but the bell above it has never moved. The repair ledger lists a bell-ringer who was born decades after the monastery was sealed.",
                 5.0
             )
         "A7_PRISON_MAINTENANCE_CROSSWALK":
             narrative.show_message(
-                "THE CROSSWALK OF UNNUMBERED CELLS",
+                "没有编号牢房之间的通路",
                 "The maintenance ledger counts every hinge and drain, but leaves the cells themselves unnumbered. A repair entry orders the crew to preserve the lower doors and seal the upper ones from the outside. The names were not omitted by accident.",
                 5.0
             )
         "A8_ERASED_REGENT_GALLERY":
             narrative.show_message(
-                "THE REGENT WHO NEVER REIGNED",
+                "从未执政的摄政者",
                 "The gallery joins two burial ledges without passing the sealed royal gate. One stone names a regent; the matching socket on the opposite wall has been chiseled away. The tomb was not built to forget a king. It was altered to make the succession impossible to read.",
                 5.0
             )
         "A9_RAIN_REFLECTION_ROOFWALK":
             narrative.show_message(
-                "THE HOMES THAT THE RAIN REMEMBERS",
+                "雨水记得的家园",
                 "The roofline crosses houses whose doors were sealed from the street side. In the rainwater, warm windows appear beneath roofs that have stood empty for years. The old city did not lose its people all at once; someone taught the records to call them never-born.",
                 5.0
             )
         "A10_CHOIRLESS_UPPER_GALLERY":
             narrative.show_message(
-                "THE CHOIR THAT WAS NEVER RECORDED",
+                "从未被记录的唱诗班",
                 "The gallery overlooks the cathedral choir, but no sound rises from below. Dust outlines a row of kneeling figures where the floor has been worn smooth. The service ledger lists every hymn and every bell—except the names of those who sang here.",
                 5.0
             )
         "A11_SECOND_OBSERVER_SPAN":
             narrative.show_message(
-                "THE OBSERVER WHO LEFT NO FOOTPRINTS",
+                "没有留下脚印的观测者",
                 "The old ledges meet above the laboratory's newest instruments. One observation slate records two shadows entering the chamber and only one body leaving. A later hand has rewritten the count as a lighting error.",
                 5.0
             )
         "A12_CROWN_WALL_WALK":
             narrative.show_message(
-                "THE WALL BUILT FOR A KING'S ABSENCE",
+                "为国王的缺席而建的墙",
                 "The upper wall was built to watch the avenue, not defend it. Its arrow slits face inward. The palace feared what might leave the throne room more than what might approach it.",
                 5.0
             )
         _:
             narrative.show_message(
-                "THE THIRD STREET HOLDS",
+                "第三街 HOLDS",
                 "A bridge appears where the city map was scraped clean. The road does not lead to another place; it reconnects two parts of the street you already knew.\n\nThe stone will remember this route.",
                 5.0
             )
@@ -1953,13 +1953,13 @@ func _on_optional_hidden_gate_opened(secret_id: String) -> void:
     if not is_instance_valid(narrative):
         return
     var details := {
-        "H02": ["THE BELL BEFORE THE SOUND", "钟舌始终静止。\n\n回声却从你尚未抵达的地方回应。"],
-        "H03": ["THE STREET THE CITY REMOVED", "房屋两侧都有门。\n\n城图上却只画出其中一侧。"],
-        "H04": ["THE STAIRS BEHIND THE WATER", "倒影里有一段干燥的阶梯。\n\n你的靴子无法在阶梯上方的水面留下痕迹。"],
+        "H02": ["先于声音的钟", "钟舌始终静止。\n\n回声却从你尚未抵达的地方回应。"],
+        "H03": ["被城市删去的街道", "房屋两侧都有门。\n\n城图上却只画出其中一侧。"],
+        "H04": ["水面背后的阶梯", "倒影里有一段干燥的阶梯。\n\n你的靴子无法在阶梯上方的水面留下痕迹。"],
         "H05": ["不投影的窗", "钟塔的窗外没有景色。\n\n但有人一直从里面使用这扇窗。"],
-        "H06": ["THE NAME SCRAPED FROM STONE", "The inscription is not weathered.\n\nThe chisel marks begin after the tomb was sealed."]
+        "H06": ["石碑上被刮去的名字", "The inscription is not weathered.\n\nThe chisel marks begin after the tomb was sealed."]
     }
-    var entry: Array = details.get(secret_id, ["THE ABNORMAL STONEWORK", "The wall opens without moving."])
+    var entry: Array = details.get(secret_id, ["异常的石构", "墙壁没有移动，却向你敞开。"])
     narrative.show_message(str(entry[0]), str(entry[1]), 5.0)
 
 func _spawn_a4_hidden_well_gate(x: float) -> void:
@@ -1983,7 +1983,7 @@ func _on_hidden_well_gate_opened(secret_id: String) -> void:
     if narrative == null or not is_instance_valid(narrative):
         return
     narrative.show_message(
-        "THE WELL HAS ANOTHER MOUTH",
+        "井还有另一个出口",
         "The stone opens without turning.\n\nYou can no longer tell which side is above.",
         4.0
     )
@@ -2550,7 +2550,7 @@ func _draw_silent_bell_room_landmarks() -> void:
     draw_line(Vector2(400, floor_y - 135), Vector2(530, floor_y - 180), Color("#766b85"), 3.0)
     draw_line(Vector2(530, floor_y - 180), Vector2(670, floor_y - 220), Color("#766b85"), 3.0)
     draw_line(Vector2(670, floor_y - 220), Vector2(810, floor_y - 255), Color("#766b85"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1260, floor_y - 290), "THE BELL CASTS 没有影子", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8a7b94"))
+    draw_string(ThemeDB.fallback_font, Vector2(1260, floor_y - 290), "钟没有投下影子", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8a7b94"))
     draw_rect(Rect2(1925, floor_y - 66, 72, 42), Color("#393341"))
     draw_line(Vector2(1935, floor_y - 56), Vector2(1987, floor_y - 56), Color("#9b8ea6"), 2.0)
     draw_line(Vector2(1935, floor_y - 46), Vector2(1987, floor_y - 46), Color("#9b8ea6"), 2.0)
@@ -2562,13 +2562,13 @@ func _draw_erased_royal_name_landmarks() -> void:
         draw_rect(Rect2(x + 14, floor_y - 94, 162, 14), Color("#5b4953"))
         draw_line(Vector2(x + 26, floor_y - 68), Vector2(x + 152, floor_y - 68), Color("#78636e"), 2.0)
         draw_line(Vector2(x + 74, floor_y - 62), Vector2(x + 112, floor_y - 74), Color("#8b7480"), 2.0)
-    draw_string(ThemeDB.fallback_font, Vector2(720, floor_y - 190), "A NAME SCRAPED AWAY", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#9b808d"))
+    draw_string(ThemeDB.fallback_font, Vector2(720, floor_y - 190), "一个被刮去的名字", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#9b808d"))
     draw_line(Vector2(390, floor_y - 135), Vector2(520, floor_y - 180), Color("#7c6475"), 3.0)
     draw_line(Vector2(520, floor_y - 180), Vector2(660, floor_y - 220), Color("#7c6475"), 3.0)
     draw_line(Vector2(660, floor_y - 220), Vector2(800, floor_y - 200), Color("#7c6475"), 3.0)
     draw_line(Vector2(1220, floor_y - 150), Vector2(1360, floor_y - 195), Color("#7c6475"), 3.0)
     draw_line(Vector2(1360, floor_y - 195), Vector2(1500, floor_y - 235), Color("#7c6475"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1190, floor_y - 270), "THE ROYAL LINE ENDS HERE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#9b808d"))
+    draw_string(ThemeDB.fallback_font, Vector2(1190, floor_y - 270), "王室血脉在此终结", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#9b808d"))
     draw_rect(Rect2(1940, floor_y - 74, 86, 46), Color("#393039"))
     draw_line(Vector2(1950, floor_y - 64), Vector2(2016, floor_y - 64), Color("#a38b98"), 2.0)
     draw_line(Vector2(1950, floor_y - 54), Vector2(2016, floor_y - 54), Color("#a38b98"), 2.0)
@@ -2587,7 +2587,7 @@ func _draw_deep_research_landmarks() -> void:
     draw_string(
         ThemeDB.fallback_font,
         Vector2(1220, 310),
-        NereisLocalization.translate_text("OBSERVATION CHAMBER"),
+        NereisLocalization.translate_text("观测室"),
         HORIZONTAL_ALIGNMENT_LEFT, -1.0, 16, Color("#827887")
     )
     draw_rect(Rect2(2050, 250, 270, 270), Color("#211f28"))
@@ -2604,7 +2604,7 @@ func _draw_deep_research_landmarks() -> void:
     draw_line(Vector2(1230, floor_y - 255), Vector2(1370, floor_y - 215), Color("#635a70"), 3.0)
     draw_line(Vector2(1510, floor_y - 175), Vector2(1660, floor_y - 215), Color("#635a70"), 3.0)
     draw_line(Vector2(1660, floor_y - 215), Vector2(1800, floor_y - 255), Color("#635a70"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1170, 255), "THE OBSERVER IS PART OF THE EXPERIMENT", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8b8195"))
+    draw_string(ThemeDB.fallback_font, Vector2(1170, 255), "观测者也是实验的一部分", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8b8195"))
 
 func _draw_primordial_hollow_landmarks() -> void:
     # This room is grown from the research wall, rather than constructed as a machine hall.
@@ -2634,7 +2634,7 @@ func _draw_primordial_hollow_landmarks() -> void:
     draw_string(
         ThemeDB.fallback_font,
         Vector2(510, 265),
-        NereisLocalization.translate_text("THE STONE BREATHES"),
+        NereisLocalization.translate_text("石头正在呼吸"),
         HORIZONTAL_ALIGNMENT_LEFT, -1.0, 17, Color("#8db8b4")
     )
     draw_line(Vector2(390, floor_y - 150), Vector2(515, floor_y - 195), Color("#668b8b"), 3.0)
@@ -2642,7 +2642,7 @@ func _draw_primordial_hollow_landmarks() -> void:
     draw_line(Vector2(650, floor_y - 235), Vector2(790, floor_y - 215), Color("#668b8b"), 3.0)
     draw_line(Vector2(1200, floor_y - 150), Vector2(1340, floor_y - 195), Color("#668b8b"), 3.0)
     draw_line(Vector2(1340, floor_y - 195), Vector2(1480, floor_y - 235), Color("#668b8b"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1120, 245), "THE CAVITY HAS RIBS", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#8db8b4"))
+    draw_string(ThemeDB.fallback_font, Vector2(1120, 245), "空腔长着肋骨", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#8db8b4"))
     draw_arc(Vector2(1850, floor_y - 30), 38.0, PI, TAU, 24, Color("#668b8b"), 4.0)
     draw_arc(Vector2(1850, floor_y - 30), 26.0, PI, TAU, 24, Color("#668b8b"), 3.0)
     draw_line(Vector2(1812, floor_y - 30), Vector2(1888, floor_y - 30), Color("#668b8b"), 3.0)
@@ -2660,8 +2660,8 @@ func _draw_well_landmarks() -> void:
     draw_line(Vector2(550, floor_y - 195), Vector2(680, floor_y - 235), Color("#6b596f"), 3.0)
     draw_line(Vector2(680, floor_y - 235), Vector2(820, floor_y - 215), Color("#6b596f"), 3.0)
     draw_line(Vector2(820, floor_y - 215), Vector2(950, floor_y - 170), Color("#6b596f"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(660, floor_y - 265), "THE WELL HAS AN UPPER SHORE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8b7890"))
+    draw_string(ThemeDB.fallback_font, Vector2(660, floor_y - 265), "井中另有上岸之处", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8b7890"))
     draw_arc(Vector2(1600, floor_y - 18), 34.0, PI, TAU, 24, Color("#6e8b91"), 3.0)
     draw_line(Vector2(1565, floor_y - 18), Vector2(1635, floor_y - 18), Color("#6e8b91"), 2.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1540, floor_y - 65), "WET / EMPTY", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 10, Color("#7a9aa0"))
+    draw_string(ThemeDB.fallback_font, Vector2(1540, floor_y - 65), "潮湿／空无", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 10, Color("#7a9aa0"))
 
