@@ -32,7 +32,7 @@
 - `tools/validate_graybox_scene_wiring.py`：新增菜单输入锁与隐藏入口 Debug 覆盖的静态回归合同。
 - `docs/MAP_GATE_ACCEPTANCE_MATRIX_CN.md`：补充菜单交互锁与 F5 + V 地图验收步骤。
 
-### 本轮远程源码静态抽查
+### 读档出生侧问题与修复\n\n静态追踪发现：地图出口设置 `pending_region_spawn_side` 后调用 `set_location()` 写入当前地点，但该字段此前不在存档中；继续游戏只根据 `current_location` 选择场景，导致读档无法恢复最近一次地图切换的进入侧。现已增加持久字段 `resume_spawn_side`，并在 Continue 与灰盒场景初始化中串起恢复/保存流程；旧存档缺失该字段时回退到 west。该修复是源码层面的，尚未经过引擎运行。\n\n### 本轮远程源码静态抽查
 
 | 项目 | 结果 | 边界 |
 |---|---|---|
