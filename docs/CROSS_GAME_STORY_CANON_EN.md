@@ -19,11 +19,9 @@ The corruption is gradual, not an overnight twist. It grows from the self-justif
 
 ## 3. Hero after the RPG
 
-The end of Nereis-Hero means Hero has completed the immediate battle, not that he has escaped politics and power forever. Nereis-Lullaby may portray his later choices inside the Restoration Army's new order. He may initially believe he is protecting survivors, preserving peace, or preventing the Kingdom's collapse. He then tolerates methods he once opposed, eventually becoming an enforcer, symbol, or silent accomplice of the new regime.
+The end of Nereis-Hero means Hero has completed the immediate battle, not that he has escaped politics and power forever. The planned cross-game mainline in Nereis-Lullaby follows his later choices inside the Restoration Army's new order. He initially believes he is protecting survivors, preserving peace, or preventing the Kingdom's collapse. He then tolerates methods he once opposed, eventually becoming an enforcer or silent accomplice of the new regime, and abandons Mite. The world enters the next cycle.
 
-He may leave Mite behind. This should not read as an abrupt transformation into a villain. A stronger arc is that he repeatedly places Mite, private promises and individual lives behind a supposedly greater duty, until he realizes he has become the kind of person he once hated.
-
-The exact outcome can vary by Nereis-Lullaby branches; abandoning Mite is a major narrative direction, not a forced event that erases every possible route.
+This should not read as an abrupt transformation into a villain. A stronger arc is that he repeatedly places Mite, private promises and individual lives behind a supposedly greater duty, until he realizes he has become the kind of person he once hated. Other branches may explore different choices, but this cross-game mainline connects the RPG's political victory to the novel game's personal tragedy.
 
 ## 4. Mite and the Outer God
 
