@@ -221,3 +221,21 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - **Confirmed:** latest development branch source was fetched; validator assertions were committed; the current checked source strings satisfy the added local-route contracts.
 - **Not confirmed:** execution of `python3 tools/validate_world_map_topology.py`, execution of `python3 tools/validate_graybox_scene_wiring.py`, Godot parser/import, collision behavior, player traversal, or frame-level scene changes.
 - **Workflow policy:** no GitHub Actions were triggered.
+
+## 2026-10-11 — Local Resonance route contract hardening
+
+### 中文
+
+- 加强 `tools/validate_graybox_scene_wiring.py`：现在会将 `greybox_world_region.gd` 中实际构造的局部鸣响路线 ID 与 `tools/world_map_topology.json` 完整比对，检查重复、缺失和多余 ID。
+- 每条路线还会核对运行时 `match region_id` 分支与拓扑声明的 `region_id`，避免路线参数正确、却被错误地图构造的情况。
+- 每条路线的交互提示、叙事标题和叙事正文都要求具有简体中文、繁体中文、日语非空译文；英文继续作为源文本与回退文本。
+- 已通过 GitHub 远程读取内容后进行独立字符串一致性核对：11 条拓扑路线与 11 条运行时路线 ID 一致，运行时分区与拓扑声明一致，交互提示译文完整。
+- **验证边界：** 以上是远程源码内容的一致性核对，不代表在本地执行了 Python 校验器，也不代表 Godot 4.6.x 运行时、碰撞、输入或实际走图已通过。正式验收仍需运行校验器并进行实机回归。
+
+### English
+
+- Strengthened `tools/validate_graybox_scene_wiring.py` to compare the complete set of runtime local Resonance route IDs against `tools/world_map_topology.json`, catching duplicates, missing routes, and unexpected routes.
+- Each route is now checked against its enclosing runtime `match region_id` branch, so correct parameters cannot silently be attached to the wrong region.
+- Every route prompt, narrative title, and narrative body must provide non-empty Simplified Chinese, Traditional Chinese, and Japanese translations. English remains the source and fallback text.
+- A separate string-level audit of the remotely retrieved source confirmed that all 11 topology route IDs match the 11 runtime route IDs, region assignments agree, and route prompts have translations.
+- **Validation boundary:** This was a remote-source consistency audit only. The Python validator was not executed in a local checkout, and Godot 4.6.x runtime behavior, collisions, input, and traversal remain unverified. Acceptance still requires running the validator and performing runtime regression tests.
