@@ -139,6 +139,10 @@ func _spawn_x_for_side(side: String) -> float:
         # C18 opens at x=900; land just beyond its trigger and clear of the rest point at x=1100.
         # C18 门位于 x=900；落点避开门的触发区与 x=1100 的休整点。
         return 980.0
+    if region_id == "A12" and side == "inner_city_side_gate":
+        # C18's inner-city door is at x=520; arrive nearby rather than at the cathedral entrance.
+        # C18 内城侧门位于 x=520；返回时落在门附近，而不是大圣堂主入口。
+        return 650.0
     if region_id == "A5" and side == "bell_tower":
         # H02's far-side door is at x=2060; land nearby without overlapping its trigger.
         # H02 远侧门位于 x=2060；落点靠近门，但不进入其触发区。
