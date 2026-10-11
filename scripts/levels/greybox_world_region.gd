@@ -23,7 +23,7 @@ const ENCOUNTER_DEACTIVATE_RANGE := 560.0
 
 @export var region_id: String = "A2"
 @export var location_id: String = "ash_forest"
-@export var region_title: String = "THE OLD PILGRIM ROAD"
+@export var region_title: String = "旧朝圣路"
 @export var map_width: float = 2600.0
 @export var floor_y: float = 540.0
 
@@ -320,47 +320,47 @@ func _spawn_ui() -> void:
 func _get_objective_text() -> String:
     match region_id:
         "A2":
-            return "FOLLOW THE OLD ROAD. LISTEN TO THE BELL."
+            return "沿旧路前行，聆听钟声。"
         "A3":
-            return "FIND THE STREET THAT THE CITY FORGOT."
+            return "寻找被城市遗忘的街道。"
         "A4":
-            return "TRACE THE OLD STONE BENEATH THE WATER."
+            return "追寻水面之下的古老石路。"
         "A5":
-            return "CROSS THE TRENCHES. FIND THE FORTRESS ROAD."
+            return "穿过战壕，寻找通往堡垒的道路。"
         "A6":
-            return "CLIMB THE MONASTERY TOWER. LISTEN FOR THE SILENT BELL."
+            return "登上修道院钟塔，寻找无声之钟。"
         "A7":
-            return "DESCEND THROUGH THE CELLS. FIND THE ROYAL CRYPT."
+            return "深入牢房，寻找王室墓穴。"
         "A8":
-            return "READ THE NAMES THAT WERE REMOVED."
+            return "读一读那些被抹去的名字。"
         "H02":
-            return "LISTEN FOR THE BELL THAT ARRIVES BEFORE ITS SOUND."
+            return "聆听先于声音抵达的钟。"
         "H03":
-            return "FOLLOW THE STREET THAT THE CITY ERASED."
+            return "沿着被城市抹去的街道前行。"
         "H04":
-            return "FOLLOW THE DRY STAIRS INSIDE THE WATER."
+            return "寻找水中那段干燥的阶梯。"
         "H05":
-            return "CLIMB THE WINDOW THAT CASTS NO SHADOW."
+            return "攀向那扇不投下影子的窗。"
         "H06":
-            return "READ THE NAME SCRAPED FROM THE ROYAL STONE."
+            return "辨认王室石碑上被刮去的名字。"
 
         "A9":
-            return "CROSS THE OUTER RING. FOLLOW THE RAIN REFLECTIONS."
+            return "穿过王城外环，追随雨中的倒影。"
         "A10":
-            return "CLIMB THE PILGRIM STEPS. FIND THE CHURCH INNER COURT."
+            return "登上朝圣阶梯，寻找教会内廷。"
         "A11":
-            return "FOLLOW THE OBSERVATION PATH. THE WALLS REMEMBER EACH VISITOR."
+            return "沿观测通道前行，墙壁记得每一位来客。"
         "H08":
-            return "FOLLOW THE WALL THAT BREATHES WITHOUT WAKING IT."
+            return "沿着那面沉睡的呼吸之墙前行。"
 
         "A12":
-            return "ENTER THE THRONE DISTRICT. DECIDE WHAT MUST FALL."
+            return "进入王座区，决定什么必须覆灭。"
         "H07":
-            return "FOLLOW THE STREET THAT ONLY EXISTS IN WATER."
+            return "追随只存在于水中的街道。"
         "H01":
-            return "FIND A WAY BACK TO THE SURFACE."
+            return "寻找返回地表的道路。"
         _:
-            return "SEARCH THE ABNORMAL STONEWORK."
+            return "调查这些不合常理的石构。"
 
 func _show_intro() -> void:
     if not is_instance_valid(narrative):
@@ -368,85 +368,85 @@ func _show_intro() -> void:
     match region_id:
         "A2":
             narrative.show_message(
-                "THE OLD PILGRIM ROAD",
+                "旧朝圣路",
                 "The forest has grown over the road, not across it.\n\nA bell hangs ahead. Its tongue does not move.",
                 5.0
             )
         "A3":
             narrative.show_message(
-                "THE FORGOTTEN CITY",
+                "被遗忘的城区",
                 "The street ends at a wall that should be facing another street.\n\nA faded sign names a third road. No road is there.",
                 5.0
             )
         "A4":
             narrative.show_message(
-                "THE SEDIMENT HALL",
+                "沉积大厅",
                 "New pipes run through stone that was already old when the pipes were made.\n\nWater moves somewhere below your feet.",
                 5.0
             )
         "A5":
             narrative.show_message(
-                "THE BORDER BATTLEFIELD",
+                "边境战场",
                 "The bodies face the wrong direction.\n\nThe fortress gates were closed from the inside.",
                 5.0
             )
         "A6":
             narrative.show_message(
-                "THE MONASTERY THAT KEPT ITS BELL",
+                "仍留着钟的修道院",
                 "Every bell has a tongue.\n\nOne casts no shadow on the wall.",
                 5.0
             )
         "A7":
             narrative.show_message(
-                "THE PENITENTIAL DEPTHS",
+                "忏悔深井",
                 "The cell doors open inward.\n\nThe names have been scraped from the hinges.",
                 5.0
             )
         "A8":
             narrative.show_message(
-                "THE ROYAL TOMB",
+                "旧王墓",
                 "The inscriptions have not weathered away.\n\nSomeone wanted the names to stop existing.",
                 5.0
             )
         "A9":
             narrative.show_message(
-                "THE ROYAL OUTER RING",
+                "王城外环",
                 "Rainwater pools in the street, though the roofs are dry.\n\nThe lamps in the puddles are lit. The lamps above them are not.",
                 5.0
             )
         "A10":
             narrative.show_message(
-                "THE GREAT CATHEDRAL",
+                "大圣堂",
                 "The choir stops when you reach the steps.\n\nNo one turns to look at you.",
                 5.0
             )
         "A11":
             narrative.show_message(
-                "THE DEPTHS THAT PRECEDED THE LAB",
+                "早于实验室的深层遗迹",
                 "The Church built its rooms around something already here.\n\nThe observation notes disagree about who entered first.",
                 5.0
             )
         "H08":
             narrative.show_message(
-                "THE WOMB BELOW THE LAB",
+                "实验室下方的胎宫",
                 "The wall is warm. No device is active.\n\nSomething in the stone exhales just before you do.",
                 5.0
             )
         "A12":
             narrative.show_message(
-                "THE INNER CITY",
+                "王室内城",
                 "The palace doors stand open.\n\nThe guards have not been dismissed.",
                 5.0
             )
         "H07":
             narrative.show_message(
-                "MIRROR STREET: BEHIND THE RAIN",
+                "镜街：雨幕背后",
                 "The rain falls upward here.\n\nYour reflection arrives one step before you.",
                 5.0
             )
         "H01":
             narrative.show_message(
-                "THE WELL BELOW THE WELL",
+                "井底回声层",
                 "The shaft is deeper than the village well could contain.\n\nYour footsteps return from above.",
                 5.0
             )
@@ -470,7 +470,7 @@ func _show_intro() -> void:
             )
         "H05":
             narrative.show_message(
-                "THE WINDOW THAT CASTS NO SHADOW",
+                "THE WINDOW THAT CASTS 没有影子",
                 "The bell tower window has no view beyond it.\n\nSomeone has been using it from the inside.",
                 5.0
             )
@@ -1165,11 +1165,11 @@ func _spawn_region_exits() -> void:
     match region_id:
         "A2":
             _spawn_exit_door(
-                72.0, "E  RETURN TO VILLAGE", "village",
+                72.0, "E  返回边境村庄", "village",
                 "res://scenes/village_hub.tscn", "north_gate"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  ENTER THE FORGOTTEN CITY", "forgotten_city",
+                map_width - 72.0, "E  ENTER 被遗忘的城区", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "west"
             )
             _spawn_h02_gate(map_width - 300.0)
@@ -1177,7 +1177,7 @@ func _spawn_region_exits() -> void:
             # C04 在 A5 侧开启；开启后，A2 侧永久生成对应回程门。
             if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    1880.0, "E  RETURN TO THE BATTLEFIELD", "old_battlefield",
+                    1880.0, "E  返回边境战场", "old_battlefield",
                     "res://scenes/old_battlefield.tscn", "old_pilgrim_highroad"
                 )
         "A3":
@@ -1185,26 +1185,26 @@ func _spawn_region_exits() -> void:
             # C24 两端都必须等到村庄防卫章节结束后才开放，避免城区侧提前绕过世界门槛。
             if "village_defense_survived" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    520.0, "E  RETURN THROUGH THE OLD DRAIN", "village",
+                    520.0, "E  经旧排水道返回", "village",
                     "res://scenes/village_hub.tscn", "city_cut_return"
                 )
             _spawn_exit_door(
-                72.0, "E  RETURN TO PILGRIM ROAD", "ash_forest",
+                72.0, "E  返回旧朝圣路", "ash_forest",
                 "res://scenes/ash_forest.tscn", "east"
             )
             # The sewer descent branches off mid-market; the main road continues to A5.
             # 下水道入口位于市场中段，城区东侧主路继续通往 A5。
             _spawn_exit_door(
-                1480.0, "E  DESCEND TO THE RESERVOIR", "sewer_reservoir",
+                1480.0, "E  下行至旧水库", "sewer_reservoir",
                 "res://scenes/sewer_reservoir.tscn", "west"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  FOLLOW THE BATTLEFIELD ROAD", "old_battlefield",
+                map_width - 72.0, "E  沿战场道路前进", "old_battlefield",
                 "res://scenes/old_battlefield.tscn", "west"
             )
             if "reached_A9_via_A8_then_opened_old_lift_from_A9" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    1150.0, "E  RETURN TO THE ROYAL OUTER RING", "royal_outer_ring",
+                    1150.0, "E  RETURN TO 王城外环", "royal_outer_ring",
                     "res://scenes/royal_outer_ring.tscn", "old_lift"
                 )
             _spawn_h03_gate(map_width - 300.0)
@@ -1212,45 +1212,45 @@ func _spawn_region_exits() -> void:
                 # Keep the optional H05 return door well clear of the C10 monastery-drop door at x=1710.
                 # H05 回程门与 x=1710 的 C10 钟塔落差门保持足够间距，避免两个 E 交互争抢。
                 _spawn_exit_door(
-                    1900.0, "E  RETURN TO THE SILENT BELL WINDOW", "silent_bell_room",
+                    1900.0, "E  返回无声之窗", "silent_bell_room",
                     "res://scenes/silent_bell_room.tscn", "bell_drop_entry"
                 )
             # C10 reverse door: only exists after the bell-tower drop has been opened from A6.
             # C10 反向门：必须先从 A6 开启钟塔落差，A3 才生成回程捷径。
             if "opened_bell_tower_drop" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    1710.0, "E  RETURN TO THE MONASTERY DROP", "monastery_tower",
+                    1710.0, "E  返回修道院落差口", "monastery_tower",
                     "res://scenes/monastery_tower.tscn", "bell_drop"
                 )
             # C10's destination is the monastery tower, so the return spawn must use the drop-side mapping.
             # C10 的回程目的地是修道院塔，因此出生点必须使用钟塔落差侧的映射。
         "A4":
             _spawn_exit_door(
-                72.0, "E  OPEN THE INSPECTION HATCH", "forgotten_city",
+                72.0, "E  打开检修舱口", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "sewer",
-                true, "opened_sewer_inspection_hatch_from_A4", "E  RETURN TO THE CITY"
+                true, "opened_sewer_inspection_hatch_from_A4", "E  返回城区"
             )
             # C06 is a one-way return shortcut from the reservoir to the village well.
             # C06 是从旧水库返回村庄的单向捷径；首次互动开闸，再次互动才转场。
             _spawn_exit_door(
-                map_width - 250.0, "E  OPEN THE VILLAGE WELL WATERGATE", "village",
+                map_width - 250.0, "E  打开村庄井道水闸", "village",
                 "res://scenes/village_hub.tscn", "well_exit",
-                true, "opened_watergate_and_village_well_exit", "E  RETURN TO THE VILLAGE"
+                true, "opened_watergate_and_village_well_exit", "E  返回边境村庄"
             )
             _spawn_h04_gate(1780.0)
             if "reached_A7_then_opened_supply_tunnel" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    1050.0, "E  RETURN TO THE PRISON", "prison_depths",
+                    1050.0, "E  返回监牢", "prison_depths",
                     "res://scenes/prison_depths.tscn", "supply_tunnel"
                 )
             if "reached_A8_via_A7_then_opened_royal_tomb_gate" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    1250.0, "E  RETURN TO THE ROYAL TOMB", "royal_tomb",
+                    1250.0, "E  RETURN TO 旧王墓", "royal_tomb",
                     "res://scenes/royal_tomb.tscn", "royal_tomb_waterway"
                 )
             if "reached_A9_then_opened_royal_drain_from_outer_ring" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    1450.0, "E  RETURN TO THE ROYAL OUTER RING", "royal_outer_ring",
+                    1450.0, "E  RETURN TO 王城外环", "royal_outer_ring",
                     "res://scenes/royal_outer_ring.tscn", "royal_drain"
                 )
             if "reached_A4_via_A3" in WorldState.achievement_flags:
@@ -1258,7 +1258,7 @@ func _spawn_region_exits() -> void:
 
         "A5":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE FORGOTTEN CITY", "forgotten_city",
+                72.0, "E  RETURN TO 被遗忘的城区", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "east"
             )
             _spawn_exit_door(
@@ -1267,146 +1267,146 @@ func _spawn_region_exits() -> void:
             )
             if WorldState.is_hidden_path_opened("H02"):
                 _spawn_exit_door(
-                    2060.0, "E  OPEN THE OLD BELL TOWER CONNECTION", "hidden_bell_chamber",
+                    2060.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
                     "res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
-                    true, "opened_old_bell_tower_connection", "E  ENTER THE BELL CHAMBER"
+                    true, "opened_old_bell_tower_connection", "E  进入倒响钟室"
                 )
             # C04: open the old pilgrim highroad from the battlefield side, then traverse on the next interaction.
             # C04：从战场侧开启旧朝圣高路；首次互动开路，下一次互动才转场。
             _spawn_exit_door(
-                520.0, "E  OPEN THE OLD PILGRIM HIGHROAD", "ash_forest",
+                520.0, "E  打开旧朝圣高路", "ash_forest",
                 "res://scenes/ash_forest.tscn", "old_pilgrim_highroad",
-                true, "reached_A5_and_opened_old_pilgrim_highroad", "E  RETURN BY THE OLD PILGRIM HIGHROAD"
+                true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回"
             )
         "A6":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE BATTLEFIELD", "old_battlefield",
+                72.0, "E  返回边境战场", "old_battlefield",
                 "res://scenes/old_battlefield.tscn", "east"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  DESCEND INTO THE PRISON", "prison_depths",
+                map_width - 72.0, "E  深入监牢", "prison_depths",
                 "res://scenes/prison_depths.tscn", "west"
             )
             _spawn_h05_gate(1660.0)
             # C10 is a physical monastery shortcut, independent of the optional H05 secret room.
             # C10 是修道院的实体捷径，不应被可选隐藏区 H05 的发现状态锁死。
             _spawn_exit_door(
-                2110.0, "E  OPEN THE BELL TOWER DROP", "forgotten_city",
+                2110.0, "E  打开钟塔落差通路", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "bell_drop",
-                true, "opened_bell_tower_drop", "E  RETURN TO THE FORGOTTEN CITY"
+                true, "opened_bell_tower_drop", "E  RETURN TO 被遗忘的城区"
             )
         "A7":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE MONASTERY", "monastery_tower",
+                72.0, "E  返回修道院", "monastery_tower",
                 "res://scenes/monastery_tower.tscn", "east"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  ENTER THE ROYAL TOMB", "royal_tomb",
+                map_width - 72.0, "E  ENTER 旧王墓", "royal_tomb",
                 "res://scenes/royal_tomb.tscn", "west"
             )
             # C12: unlock the supply tunnel from the prison side; the first E opens it, the second traverses.
             # C12：从监牢侧开启补给隧道；第一次 E 开门，第二次 E 才转场。
             _spawn_exit_door(
-                520.0, "E  OPEN THE SUPPLY TUNNEL", "sewer_reservoir",
+                520.0, "E  打开补给隧道", "sewer_reservoir",
                 "res://scenes/sewer_reservoir.tscn", "prison_tunnel",
-                true, "reached_A7_then_opened_supply_tunnel", "E  RETURN THROUGH THE SUPPLY TUNNEL"
+                true, "reached_A7_then_opened_supply_tunnel", "E  沿补给隧道返回"
             )
         "A8":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE PRISON", "prison_depths",
+                72.0, "E  返回监牢", "prison_depths",
                 "res://scenes/prison_depths.tscn", "east"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  ENTER THE ROYAL OUTER RING", "royal_outer_ring",
+                map_width - 72.0, "E  ENTER 王城外环", "royal_outer_ring",
                 "res://scenes/royal_outer_ring.tscn", "west"
             )
             # C07: the royal-tomb shortcut back to the reservoir is unlocked from A8.
             # C07：旧王墓返回旧水库的捷径只能在 A8 侧开启。
             _spawn_exit_door(
-                520.0, "E  OPEN THE ROYAL TOMB WATERWAY", "sewer_reservoir",
+                520.0, "E  OPEN 旧王墓 WATERWAY", "sewer_reservoir",
                 "res://scenes/sewer_reservoir.tscn", "royal_tomb_waterway",
-                true, "reached_A8_via_A7_then_opened_royal_tomb_gate", "E  RETURN THROUGH THE ROYAL WATERWAY"
+                true, "reached_A8_via_A7_then_opened_royal_tomb_gate", "E  沿王室水道返回"
             )
             _spawn_h06_gate(1870.0)
             if WorldState.is_hidden_path_opened("H04"):
                 _spawn_exit_door(
-                    930.0, "E  OPEN THE ROYAL TOMB SIDE DOOR", "reflected_stairwell",
+                    930.0, "E  OPEN 旧王墓 SIDE DOOR", "reflected_stairwell",
                     "res://scenes/reflected_stairwell.tscn", "royal_tomb_side_entry",
-                    true, "opened_royal_tomb_side_door", "E  ENTER THE REFLECTION STAIRS"
+                    true, "opened_royal_tomb_side_door", "E  进入倒影阶梯"
                 )
             _spawn_a11_maintenance_gate(2310.0)
 
         "A9":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE ROYAL TOMB", "royal_tomb",
+                72.0, "E  RETURN TO 旧王墓", "royal_tomb",
                 "res://scenes/royal_tomb.tscn", "east"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  CLIMB TO THE GREAT CATHEDRAL", "grand_cathedral",
+                map_width - 72.0, "E  CLIMB TO 大圣堂", "grand_cathedral",
                 "res://scenes/grand_cathedral.tscn", "west"
             )
             if WorldState.is_hidden_path_opened("H03"):
                 _spawn_exit_door(
-                    1250.0, "E  OPEN THE OLD SERVICE DOOR", "erased_third_street",
+                    1250.0, "E  打开旧服务门", "erased_third_street",
                     "res://scenes/erased_third_street.tscn", "third_street_entry",
-                    true, "opened_old_service_door", "E  ENTER THE THIRD STREET"
+                    true, "opened_old_service_door", "E  进入第三街"
                 )
             if WorldState.is_hidden_path_opened("H06"):
                 _spawn_exit_door(
-                    2200.0, "E  OPEN THE ROYAL TRANSPORT SIDE DOOR", "erased_royal_name_corridor",
+                    2200.0, "E  打开王室运输侧门", "erased_royal_name_corridor",
                     "res://scenes/erased_royal_name_corridor.tscn", "royal_transport_entry",
-                    true, "opened_royal_transport_side_door", "E  ENTER THE ROYAL NAME CORRIDOR"
+                    true, "opened_royal_transport_side_door", "E  进入王名抹除廊"
                 )
             _spawn_a9_mirror_gate(1850.0)
             if "reached_A12_via_A10_then_opened_inner_city_side_gate" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    900.0, "E  RETURN TO THE INNER CITY", "inner_city",
+                    900.0, "E  RETURN TO 王室内城", "inner_city",
                     "res://scenes/inner_city.tscn", "inner_city_side_gate"
                 )
             # C16: reconnect A9 to A3 after the old lift is opened from the outer ring.
             # C16：从王城外环开启旧升降机后，重新连通 A9 与 A3。
             _spawn_exit_door(
-                520.0, "E  OPEN THE OLD LIFT", "forgotten_city",
+                520.0, "E  打开旧升降梯", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "old_lift",
-                true, "reached_A9_via_A8_then_opened_old_lift_from_A9", "E  RETURN BY THE OLD LIFT"
+                true, "reached_A9_via_A8_then_opened_old_lift_from_A9", "E  乘旧升降梯返回"
             )
             # C23: the royal drain is a separate A9-to-A4 shortcut.
             # C23：王城排水道是另一条 A9 至 A4 的独立捷径。
             _spawn_exit_door(
-                720.0, "E  OPEN THE ROYAL DRAIN", "sewer_reservoir",
+                720.0, "E  打开王城排水门", "sewer_reservoir",
                 "res://scenes/sewer_reservoir.tscn", "royal_drain",
-                true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  RETURN THROUGH THE ROYAL DRAIN"
+                true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  沿王城排水道返回"
             )
         "A10":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE OUTER RING", "royal_outer_ring",
+                72.0, "E  返回王城外环", "royal_outer_ring",
                 "res://scenes/royal_outer_ring.tscn", "east"
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  ENTER THE INNER CITY", "inner_city",
+                map_width - 72.0, "E  ENTER 王室内城", "inner_city",
                 "res://scenes/inner_city.tscn", "west"
             )
             _spawn_a11_chapel_gate(1900.0)
         "A12":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE CATHEDRAL", "grand_cathedral",
+                72.0, "E  返回大圣堂", "grand_cathedral",
                 "res://scenes/grand_cathedral.tscn", "east"
             )
             # C18: the inner-city side gate can only be opened after reaching A12 by the main route.
             # C18：必须先沿主线抵达 A12，才能从内城侧开启通往 A9 的侧门。
             _spawn_exit_door(
-                520.0, "E  OPEN THE INNER-CITY SIDE GATE", "royal_outer_ring",
+                520.0, "E  打开内城侧门", "royal_outer_ring",
                 "res://scenes/royal_outer_ring.tscn", "inner_city_side_gate",
-                true, "reached_A12_via_A10_then_opened_inner_city_side_gate", "E  RETURN THROUGH THE SIDE GATE"
+                true, "reached_A12_via_A10_then_opened_inner_city_side_gate", "E  沿侧门返回"
             )
             if (
                 "reached_A12_via_A10" in WorldState.achievement_flags
                 and WorldState.is_hidden_path_opened("H07")
             ):
                 _spawn_exit_door(
-                    map_width - 350.0, "E  OPEN THE MIRROR STREET SIDE GATE", "mirror_street",
+                    map_width - 350.0, "E  打开镜街侧门", "mirror_street",
                     "res://scenes/mirror_street.tscn", "east",
-                    true, "opened_mirror_street_side_gate", "E  ENTER MIRROR STREET"
+                    true, "opened_mirror_street_side_gate", "E  进入镜街"
                 )
 
             # The throne route chooses the ending from persistent story facts rather than requiring a secret map.
@@ -1419,23 +1419,23 @@ func _spawn_region_exits() -> void:
             elif ending_scene_path.ends_with("ending_fire_demo.tscn"):
                 ending_location = "ending_fire_demo"
             _spawn_exit_door(
-                map_width - 72.0, "E  ENTER THE THRONE CHAMBER", ending_location,
+                map_width - 72.0, "E  进入王座区", ending_location,
                 ending_scene_path, "west"
             )
         "H07":
             _spawn_exit_door(
-                72.0, "E  RETURN THROUGH THE PUDDLES", "royal_outer_ring",
+                72.0, "E  穿过积水返回", "royal_outer_ring",
                 "res://scenes/royal_outer_ring.tscn", "mirror"
             )
             if "opened_mirror_street_side_gate" in WorldState.achievement_flags:
                 _spawn_exit_door(
-                    map_width - 72.0, "E  RETURN TO THE INNER CITY", "inner_city",
+                    map_width - 72.0, "E  RETURN TO 王室内城", "inner_city",
                     "res://scenes/inner_city.tscn", "west"
                 )
 
         "H01":
             _spawn_exit_door(
-                72.0, "E  RETURN TO VILLAGE", "village",
+                72.0, "E  返回边境村庄", "village",
                 "res://scenes/village_hub.tscn", "west"
             )
             var can_return_to_a4 := (
@@ -1444,7 +1444,7 @@ func _spawn_region_exits() -> void:
             )
             _spawn_exit_door(
                 map_width - 105.0,
-                "E  RETURN THROUGH THE WELL GATE",
+                "E  穿过井道闸门返回",
                 "sewer_reservoir",
                 "res://scenes/sewer_reservoir.tscn",
                 "east",
@@ -1457,51 +1457,51 @@ func _spawn_region_exits() -> void:
                 "res://scenes/ash_forest.tscn", "bell_gate"
             )
             _spawn_exit_door(
-                map_width - 105.0, "E  RETURN THROUGH THE BELL TOWER",
+                map_width - 105.0, "E  穿过钟塔返回",
                 "old_battlefield", "res://scenes/old_battlefield.tscn", "bell_tower",
                 "opened_old_bell_tower_connection" in WorldState.achievement_flags
             )
 
         "H03":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE FORGOTTEN CITY", "forgotten_city",
+                72.0, "E  RETURN TO 被遗忘的城区", "forgotten_city",
                 "res://scenes/forgotten_city.tscn", "third_street_gate"
             )
             _spawn_exit_door(
-                map_width - 105.0, "E  RETURN THROUGH THE OLD SERVICE DOOR",
+                map_width - 105.0, "E  穿过旧服务门返回",
                 "royal_outer_ring", "res://scenes/royal_outer_ring.tscn", "third_street_service",
                 "opened_old_service_door" in WorldState.achievement_flags
             )
 
         "H04":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE RESERVOIR", "sewer_reservoir",
+                72.0, "E  返回旧水库", "sewer_reservoir",
                 "res://scenes/sewer_reservoir.tscn", "water_reflection_gate"
             )
             _spawn_exit_door(
-                map_width - 105.0, "E  RETURN THROUGH THE ROYAL TOMB DOOR",
+                map_width - 105.0, "E  RETURN THROUGH 旧王墓 DOOR",
                 "royal_tomb", "res://scenes/royal_tomb.tscn", "royal_tomb_side",
                 "opened_royal_tomb_side_door" in WorldState.achievement_flags
             )
 
         "H05":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE MONASTERY", "monastery_tower",
+                72.0, "E  返回修道院", "monastery_tower",
                 "res://scenes/monastery_tower.tscn", "silent_window"
             )
             _spawn_exit_door(
-                map_width - 105.0, "E  RETURN THROUGH THE BELL TOWER DROP",
+                map_width - 105.0, "E  穿过钟塔返回 DROP",
                 "forgotten_city", "res://scenes/forgotten_city.tscn", "bell_drop",
                 "opened_bell_tower_drop" in WorldState.achievement_flags
             )
 
         "H06":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE ROYAL TOMB", "royal_tomb",
+                72.0, "E  RETURN TO 旧王墓", "royal_tomb",
                 "res://scenes/royal_tomb.tscn", "royal_name_gate"
             )
             _spawn_exit_door(
-                map_width - 105.0, "E  RETURN THROUGH THE ROYAL TRANSPORT DOOR",
+                map_width - 105.0, "E  穿过王室运输门返回",
                 "royal_outer_ring", "res://scenes/royal_outer_ring.tscn", "royal_transport",
                 "opened_royal_transport_side_door" in WorldState.achievement_flags
             )
@@ -1510,18 +1510,18 @@ func _spawn_region_exits() -> void:
             var can_return_to_tomb := WorldState.is_hidden_path_opened("C15")
             var can_return_to_cathedral := "reached_A10_via_A9" in WorldState.achievement_flags
             _spawn_exit_door(
-                72.0, "E  RETURN THROUGH THE ROYAL SHAFT", "royal_tomb",
+                72.0, "E  沿王室竖井返回", "royal_tomb",
                 "res://scenes/royal_tomb.tscn", "east", can_return_to_tomb
             )
             _spawn_exit_door(
-                map_width - 72.0, "E  RETURN TO THE GREAT CATHEDRAL", "grand_cathedral",
+                map_width - 72.0, "E  RETURN TO 大圣堂", "grand_cathedral",
                 "res://scenes/grand_cathedral.tscn", "east", can_return_to_cathedral
             )
             _spawn_h08_gate(map_width - 300.0)
 
         "H08":
             _spawn_exit_door(
-                72.0, "E  RETURN TO THE DEPTHS", "deep_research_depths",
+                72.0, "E  返回深层研究区", "deep_research_depths",
                 "res://scenes/deep_research_depths.tscn", "east"
             )
             if WorldState.physical_union_complete:
@@ -1533,7 +1533,7 @@ func _spawn_region_exits() -> void:
                 elif ending_scene_path.ends_with("ending_fire_demo.tscn"):
                     ending_location = "ending_fire_demo"
                 _spawn_exit_door(
-                    map_width - 72.0, "E  FOLLOW THE LAST DREAM", ending_location,
+                    map_width - 72.0, "E  追随最后的梦境", ending_location,
                     ending_scene_path, "west"
                 )
 
@@ -1931,7 +1931,7 @@ func _on_optional_hidden_gate_opened(secret_id: String) -> void:
         "H02": ["THE BELL BEFORE THE SOUND", "The bell's tongue remains still.\n\nThe echo answers from a place you have not reached."],
         "H03": ["THE STREET THE CITY REMOVED", "The houses have doors on both sides.\n\nOnly one side appears on the city plan."],
         "H04": ["THE STAIRS BEHIND THE WATER", "The reflection has dry steps.\n\nYour boots leave no mark on the water above them."],
-        "H05": ["THE WINDOW THAT CASTS NO SHADOW", "The bell tower window has no view beyond it.\n\nSomeone has been using it from the inside."],
+        "H05": ["THE WINDOW THAT CASTS 没有影子", "The bell tower window has no view beyond it.\n\nSomeone has been using it from the inside."],
         "H06": ["THE NAME SCRAPED FROM STONE", "The inscription is not weathered.\n\nThe chisel marks begin after the tomb was sealed."]
     }
     var entry: Array = details.get(secret_id, ["THE ABNORMAL STONEWORK", "The wall opens without moving."])
@@ -2220,7 +2220,7 @@ func _draw_forest_landmarks() -> void:
     draw_rect(Rect2(710, 285, 48, 195), Color("#302c35"))
     draw_line(Vector2(704, 290), Vector2(765, 290), Color("#75666b"), 4.0)
     draw_line(Vector2(735, 300), Vector2(735, 350), Color("#75666b"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(690, 260), "NO WIND", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#75666b"))
+    draw_string(ThemeDB.fallback_font, Vector2(690, 260), "无风", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#75666b"))
     # Canopy silhouettes guide the optional upper traversal without hiding the bell landmark.
     # 树冠剪影提示上层可选路线，同时保留钟墓地标的可见性。
     draw_line(Vector2(755, 360), Vector2(875, 320), Color("#514957"), 3.0)
@@ -2250,13 +2250,13 @@ func _draw_city_landmarks() -> void:
     # The third-street sign and the false wall are the city's primary spatial landmark.
     # 第三街路牌与假墙是城区最重要的空间地标。
     draw_rect(Rect2(842, 340, 146, 28), Color("#4a3c43"))
-    draw_string(ThemeDB.fallback_font, Vector2(855, 360), "III STREET", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color("#98867e"))
+    draw_string(ThemeDB.fallback_font, Vector2(855, 360), "第三街", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color("#98867e"))
     draw_line(Vector2(905, 365), Vector2(905, 418), Color("#98867e"), 2.0)
     draw_rect(Rect2(1000, floor_y - 235, 105, 235), Color("#211e27"))
     draw_rect(Rect2(1016, floor_y - 205, 22, 46), Color("#131117"))
     draw_rect(Rect2(1066, floor_y - 205, 22, 46), Color("#131117"))
     draw_line(Vector2(990, floor_y - 240), Vector2(1115, floor_y - 240), Color("#66535e"), 4.0)
-    draw_string(ThemeDB.fallback_font, Vector2(990, floor_y - 255), "WALL / NO STREET", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 10, Color("#8b737b"))
+    draw_string(ThemeDB.fallback_font, Vector2(990, floor_y - 255), "有墙／无街", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 10, Color("#8b737b"))
     # Roof silhouettes mark the optional upper route; the platforms above them are physically traversable.
     # 屋顶剪影提示上层支路；其上的平台具有真实碰撞，可供玩家跳跃穿行。
     draw_line(Vector2(440, 390), Vector2(570, 345), Color("#5b4b57"), 3.0)
@@ -2271,7 +2271,7 @@ func _draw_reservoir_landmarks() -> void:
         draw_line(Vector2(x + 118, floor_y - 8), Vector2(x + 118, floor_y + 14), Color("#343a46"), 10.0)
     draw_rect(Rect2(0, floor_y + 48, map_width, 36), Color("#19272f"))
     draw_line(Vector2(0, floor_y + 48), Vector2(map_width, floor_y + 48), Color("#405660"), 2.0)
-    draw_string(ThemeDB.fallback_font, Vector2(960, floor_y + 75), "WATER BELOW THE STONE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#637a83"))
+    draw_string(ThemeDB.fallback_font, Vector2(960, floor_y + 75), "石下之水", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#637a83"))
 
 func _draw_outer_ring_landmarks() -> void:
     for x in range(200, int(map_width), 360):
@@ -2284,7 +2284,7 @@ func _draw_outer_ring_landmarks() -> void:
         draw_rect(Rect2(x + 65, floor_y - 92, 35, 92), Color("#14131a"))
     draw_rect(Rect2(1320, floor_y - 160, 170, 160), Color("#202128"))
     draw_arc(Vector2(1380, floor_y - 18), 58.0, PI, TAU, 30, Color("#6d8790"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1300, floor_y - 195), "RAIN WITHOUT CLOUDS", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#718790"))
+    draw_string(ThemeDB.fallback_font, Vector2(1300, floor_y - 195), "无云之雨", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#718790"))
     # Broken roof bridges trace a second street across the abandoned outer ring.
     # 断裂的屋顶桥在废弃外环上方勾出第二条街道。
     draw_line(Vector2(390, floor_y - 145), Vector2(520, floor_y - 185), Color("#5b5868"), 3.0)
@@ -2294,7 +2294,7 @@ func _draw_outer_ring_landmarks() -> void:
     draw_line(Vector2(1110, floor_y - 155), Vector2(1260, floor_y - 200), Color("#5b5868"), 3.0)
     draw_line(Vector2(1260, floor_y - 200), Vector2(1400, floor_y - 235), Color("#5b5868"), 3.0)
     draw_line(Vector2(1400, floor_y - 235), Vector2(1540, floor_y - 200), Color("#5b5868"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(760, floor_y - 275), "THE SECOND STREET IS ONLY IN THE RAIN", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#718790"))
+    draw_string(ThemeDB.fallback_font, Vector2(760, floor_y - 275), "第二条街只在雨中出现", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#718790"))
 
 func _draw_cathedral_landmarks() -> void:
     draw_rect(Rect2(880, floor_y - 330, 600, 330), Color("#302b38"))
@@ -2319,7 +2319,7 @@ func _draw_cathedral_landmarks() -> void:
     draw_line(Vector2(815, floor_y - 260), Vector2(960, floor_y - 230), Color("#6c5e72"), 3.0)
     draw_line(Vector2(1100, floor_y - 190), Vector2(1240, floor_y - 230), Color("#6c5e72"), 3.0)
     draw_line(Vector2(1240, floor_y - 230), Vector2(1380, floor_y - 195), Color("#6c5e72"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(570, floor_y - 255), "THE CHOIR SANG FOR THE WALL", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#92809b"))
+    draw_string(ThemeDB.fallback_font, Vector2(570, floor_y - 255), "唱诗班曾为墙而歌", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#92809b"))
     # The reliquary bears two seals from different eras.
     # 圣物匣上压着两个不同时代的封印。
     draw_rect(Rect2(670, floor_y - 55, 64, 38), Color("#514450"))
@@ -2349,7 +2349,7 @@ func _draw_inner_city_landmarks() -> void:
     draw_line(Vector2(1120, floor_y - 150), Vector2(1260, floor_y - 195), Color("#77616d"), 3.0)
     draw_line(Vector2(1260, floor_y - 195), Vector2(1400, floor_y - 235), Color("#77616d"), 3.0)
     draw_line(Vector2(1400, floor_y - 235), Vector2(1540, floor_y - 200), Color("#77616d"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1640, floor_y - 445), "THE CROWN HAS NO SHADOW", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#a18798"))
+    draw_string(ThemeDB.fallback_font, Vector2(1640, floor_y - 445), "王冠没有影子", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#a18798"))
     # The king's sealed letter remains beside the throne, never sent to the church.
     # 国王未寄出的信留在王座旁，从未送往教会。
     draw_rect(Rect2(1040, floor_y - 42, 58, 30), Color("#c0ad8d"))
@@ -2364,7 +2364,7 @@ func _draw_mirror_street_landmarks() -> void:
         draw_rect(Rect2(x + 37, floor_y - 92, 36, 92), Color("#0c1317"))
         draw_rect(Rect2(x - 18, floor_y + 42, 146, 24), Color("#28444a"))
         draw_line(Vector2(x - 18, floor_y + 42), Vector2(x + 128, floor_y + 42), Color("#6ca5ad"), 2.0)
-    draw_string(ThemeDB.fallback_font, Vector2(680, floor_y - 220), "THE LAMPS ARE UNDER THE WATER", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#70979a"))
+    draw_string(ThemeDB.fallback_font, Vector2(680, floor_y - 220), "灯在水下", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#70979a"))
     draw_line(Vector2(380, floor_y - 145), Vector2(505, floor_y - 190), Color("#6ca5ad"), 3.0)
     draw_line(Vector2(505, floor_y - 190), Vector2(645, floor_y - 230), Color("#6ca5ad"), 3.0)
     draw_line(Vector2(645, floor_y - 230), Vector2(790, floor_y - 210), Color("#6ca5ad"), 3.0)
@@ -2372,7 +2372,7 @@ func _draw_mirror_street_landmarks() -> void:
     draw_line(Vector2(1060, floor_y - 130), Vector2(1190, floor_y - 155), Color("#6ca5ad"), 3.0)
     draw_line(Vector2(1190, floor_y - 155), Vector2(1325, floor_y - 200), Color("#6ca5ad"), 3.0)
     draw_line(Vector2(1325, floor_y - 200), Vector2(1460, floor_y - 240), Color("#6ca5ad"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(980, floor_y - 270), "THE REFLECTION HAS A SECOND FLOOR", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#70979a"))
+    draw_string(ThemeDB.fallback_font, Vector2(980, floor_y - 270), "倒影里还有第二层", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#70979a"))
     for lamp in range(6):
         draw_circle(Vector2(2130.0 + float(lamp) * 24.0, floor_y - 24), 4.0, Color("#6ca5ad"))
     draw_circle(Vector2(2200, floor_y - 56), 5.0, Color("#b6d4d0"))
@@ -2393,7 +2393,7 @@ func _draw_battlefield_landmarks() -> void:
     draw_line(Vector2(565, floor_y - 175), Vector2(725, floor_y - 215), Color("#6d5150"), 4.0)
     draw_line(Vector2(725, floor_y - 215), Vector2(885, floor_y - 180), Color("#6d5150"), 4.0)
     draw_line(Vector2(885, floor_y - 180), Vector2(1055, floor_y - 130), Color("#6d5150"), 4.0)
-    draw_string(ThemeDB.fallback_font, Vector2(720, floor_y - 245), "NO FLAG ON THE WALL", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8d6c6a"))
+    draw_string(ThemeDB.fallback_font, Vector2(720, floor_y - 245), "墙上没有军旗", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8d6c6a"))
     # The report lies beside bodies deliberately turned toward the fortress.
     # 报告被放在面朝堡垒的尸体旁，暗示战场曾被重新布置。
     draw_rect(Rect2(1065, floor_y - 38, 54, 26), Color("#7a6c64"))
@@ -2449,7 +2449,7 @@ func _draw_royal_tomb_landmarks() -> void:
     draw_rect(Rect2(1660, floor_y - 244, 28, 170), Color("#51454d"))
     draw_rect(Rect2(1694, floor_y - 244, 28, 170), Color("#51454d"))
     draw_line(Vector2(1648, floor_y - 244), Vector2(1734, floor_y - 244), Color("#817079"), 5.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1500, floor_y - 270), "NAME REMOVED", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#8f8086"))
+    draw_string(ThemeDB.fallback_font, Vector2(1500, floor_y - 270), "名字已被抹去", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#8f8086"))
     # The upper gallery forms a broken crown over the sarcophagi.
     # 上层墓廊像破碎的王冠一样覆盖石棺列。
     draw_line(Vector2(400, floor_y - 130), Vector2(535, floor_y - 175), Color("#6b5b66"), 3.0)
@@ -2467,11 +2467,11 @@ func _draw_hidden_bell_chamber_landmarks() -> void:
     draw_rect(Rect2(520, floor_y - 95, 80, 65), Color("#292430"))
     draw_line(Vector2(560, floor_y - 180), Vector2(560, floor_y - 92), Color("#817081"), 3.0)
     draw_line(Vector2(530, floor_y - 70), Vector2(590, floor_y - 70), Color("#6f5969"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(900, floor_y - 190), "THE TONGUE DOES NOT MOVE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#817081"))
+    draw_string(ThemeDB.fallback_font, Vector2(900, floor_y - 190), "钟舌从未摆动", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#817081"))
     draw_line(Vector2(390, floor_y - 140), Vector2(515, floor_y - 185), Color("#62566c"), 3.0)
     draw_line(Vector2(515, floor_y - 185), Vector2(650, floor_y - 225), Color("#62566c"), 3.0)
     draw_line(Vector2(650, floor_y - 225), Vector2(790, floor_y - 205), Color("#62566c"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(650, floor_y - 260), "THE SOUND HAS A SHAPE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8b7893"))
+    draw_string(ThemeDB.fallback_font, Vector2(650, floor_y - 260), "声音有形状", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8b7893"))
     draw_arc(Vector2(1650, floor_y - 88), 36.0, PI, TAU, 24, Color("#817081"), 3.0)
     draw_line(Vector2(1650, floor_y - 124), Vector2(1650, floor_y - 48), Color("#817081"), 3.0)
     draw_line(Vector2(1628, floor_y - 62), Vector2(1672, floor_y - 62), Color("#817081"), 2.0)
@@ -2483,7 +2483,7 @@ func _draw_erased_third_street_landmarks() -> void:
         draw_rect(Rect2(x + 17, floor_y - 164, 20, 28), Color("#17141d"))
         draw_rect(Rect2(x + 123, floor_y - 164, 20, 28), Color("#17141d"))
         draw_line(Vector2(x + 8, floor_y - 210), Vector2(x + 151, floor_y - 210), Color("#50424f"), 2.0)
-    draw_string(ThemeDB.fallback_font, Vector2(760, floor_y - 250), "NO STREET NUMBER THREE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color("#8a727f"))
+    draw_string(ThemeDB.fallback_font, Vector2(760, floor_y - 250), "没有三号街", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color("#8a727f"))
     draw_line(Vector2(380, floor_y - 145), Vector2(505, floor_y - 190), Color("#6a5369"), 3.0)
     draw_line(Vector2(505, floor_y - 190), Vector2(645, floor_y - 230), Color("#6a5369"), 3.0)
     draw_line(Vector2(645, floor_y - 230), Vector2(790, floor_y - 210), Color("#6a5369"), 3.0)
@@ -2491,7 +2491,7 @@ func _draw_erased_third_street_landmarks() -> void:
     draw_line(Vector2(1070, floor_y - 155), Vector2(1210, floor_y - 145), Color("#6a5369"), 3.0)
     draw_line(Vector2(1210, floor_y - 145), Vector2(1340, floor_y - 190), Color("#6a5369"), 3.0)
     draw_line(Vector2(1340, floor_y - 190), Vector2(1475, floor_y - 230), Color("#6a5369"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1240, floor_y - 265), "THE MISSING STREET HAS ROOFS", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8a727f"))
+    draw_string(ThemeDB.fallback_font, Vector2(1240, floor_y - 265), "失踪的街道仍有屋顶", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8a727f"))
     draw_rect(Rect2(1990, floor_y - 72, 64, 44), Color("#38303e"))
     draw_string(ThemeDB.fallback_font, Vector2(1998, floor_y - 42), "1  2  _", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#b19aa9"))
 
@@ -2503,11 +2503,11 @@ func _draw_reflected_stairwell_landmarks() -> void:
         var step_y := floor_y - 48.0 - float(i) * 32.0
         draw_rect(Rect2(step_x, step_y, 150.0, 10.0), Color("#596e78"))
         draw_line(Vector2(step_x, step_y), Vector2(step_x + 150.0, step_y), Color("#8fa8ac"), 2.0)
-    draw_string(ThemeDB.fallback_font, Vector2(700, floor_y - 260), "DRY STAIRS IN A WET ROOM", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#77959d"))
+    draw_string(ThemeDB.fallback_font, Vector2(700, floor_y - 260), "湿室中的干燥阶梯", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#77959d"))
     draw_line(Vector2(390, floor_y - 140), Vector2(515, floor_y - 185), Color("#5e8792"), 3.0)
     draw_line(Vector2(515, floor_y - 185), Vector2(650, floor_y - 225), Color("#5e8792"), 3.0)
     draw_line(Vector2(650, floor_y - 225), Vector2(790, floor_y - 205), Color("#5e8792"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(990, floor_y - 275), "THE REFLECTION CLIMBS", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#77959d"))
+    draw_string(ThemeDB.fallback_font, Vector2(990, floor_y - 275), "倒影正在攀升", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#77959d"))
     for ripple in range(3):
         draw_arc(Vector2(1740, floor_y - 22), 18.0 + float(ripple) * 10.0, PI, TAU, 20, Color("#5e8792"), 2.0)
     draw_line(Vector2(1700, floor_y - 18), Vector2(1780, floor_y - 18), Color("#5e8792"), 2.0)
@@ -2521,11 +2521,11 @@ func _draw_silent_bell_room_landmarks() -> void:
     draw_arc(Vector2(1050, floor_y - 290), 56.0, PI, TAU, 30, Color("#74677d"), 3.0)
     draw_line(Vector2(1050, floor_y - 346), Vector2(1050, floor_y - 230), Color("#74677d"), 2.0)
     draw_rect(Rect2(1017, floor_y - 270, 66, 82), Color("#16131d"))
-    draw_string(ThemeDB.fallback_font, Vector2(1320, floor_y - 250), "NO SHADOW", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#8a7b94"))
+    draw_string(ThemeDB.fallback_font, Vector2(1320, floor_y - 250), "没有影子", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#8a7b94"))
     draw_line(Vector2(400, floor_y - 135), Vector2(530, floor_y - 180), Color("#766b85"), 3.0)
     draw_line(Vector2(530, floor_y - 180), Vector2(670, floor_y - 220), Color("#766b85"), 3.0)
     draw_line(Vector2(670, floor_y - 220), Vector2(810, floor_y - 255), Color("#766b85"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(1260, floor_y - 290), "THE BELL CASTS NO SHADOW", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8a7b94"))
+    draw_string(ThemeDB.fallback_font, Vector2(1260, floor_y - 290), "THE BELL CASTS 没有影子", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8a7b94"))
     draw_rect(Rect2(1925, floor_y - 66, 72, 42), Color("#393341"))
     draw_line(Vector2(1935, floor_y - 56), Vector2(1987, floor_y - 56), Color("#9b8ea6"), 2.0)
     draw_line(Vector2(1935, floor_y - 46), Vector2(1987, floor_y - 46), Color("#9b8ea6"), 2.0)
