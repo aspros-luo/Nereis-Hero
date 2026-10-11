@@ -1129,6 +1129,16 @@ def main() -> int:
                             f"Local route {route_id} {endpoint_key} is detached from nearby platforms "
                             f"(horizontal gap={nearest[0]:g}, vertical gap={nearest[1]:g})."
                         )
+                # A bridge may touch a platform edge, but should not be embedded through its collision body.
+                # 桥体可以与平台边缘相接，但不应大面积穿进平台碰撞体。
+                for x, y, width, height in route_platforms:
+                    horizontal_overlap = min(end_x, x + width) - max(start_x, x)
+                    vertical_overlap = min(bridge_y + 18.0, y + height) - max(bridge_y, y)
+                    if horizontal_overlap > 0.0 and vertical_overlap > 2.0:
+                        errors.append(
+                            f"Local route {route_id} overlaps a platform collision body by "
+                            f"{vertical_overlap:g}px vertically across {horizontal_overlap:g}px."
+                        )
     except (json.JSONDecodeError, OSError) as exc:
         errors.append(f"Local Resonance route topology audit could not read topology: {exc}")
 
