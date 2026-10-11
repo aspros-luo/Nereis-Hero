@@ -67,7 +67,7 @@ func _ready() -> void:
 
     controls_label = Label.new()
     controls_label.position = Vector2(38, 62)
-    controls_label.text = "A/D  MOVE     SPACE  JUMP     J  ATTACK     K  DODGE     Q  WEAPON"
+    controls_label.text = "A/D 移动    空格 跳跃    J 攻击    K 闪避    Q 切换武器"
     controls_label.add_theme_font_size_override("font_size", 13)
     controls_label.add_theme_color_override("font_color", Color("#8f8586"))
     add_child(controls_label)
@@ -250,10 +250,10 @@ func _set_humanity_visible(_value: bool) -> void:
 
 func set_combat_demo_progress(defeated: int, boss_active: bool, complete: bool) -> void:
     if complete:
-        objective_label.text = NereisLocalization.translate_text("核心战斗 DEMO COMPLETE")
+        objective_label.text = "核心战斗演示完成"
 
     elif boss_active:
-        objective_label.text = NereisLocalization.translate_text("DEFEAT THE 灰烬骑士")
+        objective_label.text = "击败灰烬骑士"
     else:
         objective_label.text = NereisLocalization.translate_text("击败小型敌人    %d / 3") % defeated
 
@@ -265,13 +265,13 @@ func show_death_feedback() -> void:
     _show_banner("战败  //  返回检查点", 0.75)
 
 func show_boss_intro() -> void:
-    _show_banner("THE 灰烬骑士", 1.40)
+    _show_banner("灰烬骑士", 1.40)
 
 func show_phase_two() -> void:
-    _show_banner("THE 灰烬骑士  //  PHASE II", 1.10)
+    _show_banner("灰烬骑士  //  第二阶段", 1.10)
 
 func show_complete() -> void:
-    _show_banner("核心战斗 DEMO COMPLETE", 2.40)
+    _show_banner("核心战斗演示完成", 2.40)
 
 func _show_banner(message: String, duration: float) -> void:
     combat_banner.text = NereisLocalization.translate_text(message)
@@ -451,7 +451,7 @@ func _refresh_localized_ui() -> void:
     if not is_instance_valid(title_label):
         return
     title_label.text = NereisLocalization.t("hud.title")
-    controls_label.text = NereisLocalization.t("hud.controls")
+    controls_label.text = "A/D 移动    空格 跳跃    J 攻击    K 闪避    Q 切换武器" if WorldState.language == "zh_cn" else NereisLocalization.t("hud.controls")
     if not story_region_source.is_empty():
         region_label.text = _localize_region(story_region_source)
     if not story_objective_source.is_empty():
