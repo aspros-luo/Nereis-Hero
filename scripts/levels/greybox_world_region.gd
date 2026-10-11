@@ -122,7 +122,9 @@ func _spawn_x_for_side(side: String) -> float:
     if region_id == "A4" and side == "royal_drain":
         return 760.0
     if region_id == "A9" and side == "old_lift":
-        return 1450.0
+        # Keep the old-lift arrival away from the R07 anomaly source at x=1380.
+        # 旧升降机回程出生点避开 x=1380 的 R07 异常调查点。
+        return 1600.0
     if region_id == "A9" and side == "inner_city_side_gate":
         return 1650.0
     if region_id == "A5" and side == "bell_tower":
