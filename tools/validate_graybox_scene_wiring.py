@@ -246,7 +246,13 @@ def main() -> int:
 
     # M1 alternate route and vertical traversal contracts.
     # M1 替代路线与垂直探索的静态契约。
+    prologue_route_script = read("scripts/levels/escape_prologue.gd", errors)
+    require(prologue_route_script, 'SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")', "C01 A0-to-A1 transition", errors)
     village_route_script = read("scripts/levels/village_hub.gd", errors)
+    require(village_route_script, 'if location_id == "north_gate":', "C02 A1 north-gate route", errors)
+    require(village_route_script, 'WorldState.pending_region_spawn_side = "west"', "C02 A1-to-A2 spawn side", errors)
+    require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/ash_forest.tscn")', "C02 A1-to-A2 transition", errors)
+    require(region_script, '"res://scenes/village_hub.tscn", "north_gate"', "C02 A2-to-A1 reverse transition", errors)
     require(village_route_script, 'city_cut.poi_id = "city_cut"', "A1 drainage route", errors)
     require(village_route_script, "func _spawn_village_rest_point() -> void:", "A1 hearth rest point", errors)
     require(village_route_script, 'rest.rest_id = "rest_A1_village_hearth"', "A1 rest point persistence ID", errors)
