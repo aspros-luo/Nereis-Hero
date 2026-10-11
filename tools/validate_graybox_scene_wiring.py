@@ -1091,7 +1091,15 @@ def main() -> int:
             require(route_builder, f'route.route_id = "{route_id}"', f"{route_id} runtime identity", errors)
             route_match = re.search(rf'route\.route_id\s*=\s*"{re.escape(route_id)}"', route_builder)
             if route_match is not None:
-                region_branches = re.findall(r'^\s*"([^"]+)":\s*
+                region_branches = re.findall(r'^\s*"([^"]+)":\s*$', route_builder[:route_match.start()], re.MULTILINE)
+                runtime_region = region_branches[-1] if region_branches else None
+                expected_region = route_design.get("region_id")
+                if runtime_region != expected_region:
+                    errors.append(
+                        f"Local route {route_id} is built under runtime region {runtime_region!r}, "
+                        f"but topology assigns it to {expected_region!r}."
+                    )
+            prompt = expected_local_route_prompts.get(route_id)
             if prompt:
                 require(region_script, f'route.prompt_text = "{prompt}"', f"{route_id} interaction prompt", errors)
             narrative_title = expected_local_route_narratives.get(route_id)
