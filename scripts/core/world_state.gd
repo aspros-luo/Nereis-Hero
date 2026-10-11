@@ -57,6 +57,9 @@ var upgrade_materials: Dictionary = {}
 var input_locked := false
 # Menu lock disables Hero input while the world and all gameplay timers keep running.
 var menu_input_locked := false
+# Session-only protagonist Debug override; intentionally not serialized to save data.
+# 主角 Debug 覆盖只在当前运行会话有效，不写入存档。
+var debug_ability_override_active := false
 var hitstop_serial := 0
 
 # Witch Time scales hostile AI delta only; Hero input and physics stay responsive.
@@ -745,6 +748,7 @@ func delete_save() -> void:
 
 func reset() -> void:
     var preserved_language := language
+    debug_ability_override_active = false
     hero_memory = 0
     hero_humanity = 100
     first_memory_unlocked = false
