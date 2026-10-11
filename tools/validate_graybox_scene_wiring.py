@@ -986,7 +986,7 @@ def main() -> int:
         topology_for_local_routes = json.loads((ROOT / "tools/world_map_topology.json").read_text(encoding="utf-8"))
         local_routes = topology_for_local_routes.get("local_resonance_routes", [])
         route_by_id = {route.get("id"): route for route in local_routes}
-        expected_local_route_ids = ("A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK")
+        expected_local_route_ids = ("A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK", "A7_PRISON_MAINTENANCE_CROSSWALK")
         for route_id in expected_local_route_ids:
             route_design = route_by_id.get(route_id)
             if route_design is None:
