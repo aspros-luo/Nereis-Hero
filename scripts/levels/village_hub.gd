@@ -478,7 +478,9 @@ func _draw() -> void:
     draw_rect(Rect2(430, 430, 50, 90), Color("#17141b"))
     draw_string(ThemeDB.fallback_font, Vector2(388, 332), NereisLocalization.translate_text("MITE'S HOUSE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
 
-    for x in range(120, 2300, 480):
+    # Leave the western edge open for the old drainage passage; houses begin beyond its arch.
+    # 西侧为旧排水通路保留空间，民居从拱门以东开始排列。
+    for x in range(600, 2300, 480):
         draw_rect(Rect2(x - 90, 360, 180, 160), Color("#29232b"))
         draw_colored_polygon(
             PackedVector2Array([
