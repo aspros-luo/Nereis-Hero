@@ -1087,8 +1087,10 @@ func _spawn_region_exits() -> void:
                 )
             _spawn_h03_gate(map_width - 300.0)
             if WorldState.is_hidden_path_opened("H05") and "opened_bell_tower_drop" in WorldState.achievement_flags:
+                # Keep the optional H05 return door well clear of the C10 monastery-drop door at x=1710.
+                # H05 回程门与 x=1710 的 C10 钟塔落差门保持足够间距，避免两个 E 交互争抢。
                 _spawn_exit_door(
-                    1830.0, "E  RETURN TO THE SILENT BELL WINDOW", "silent_bell_room",
+                    1950.0, "E  RETURN TO THE SILENT BELL WINDOW", "silent_bell_room",
                     "res://scenes/silent_bell_room.tscn", "bell_drop_entry"
                 )
             # C10 reverse door: only exists after the bell-tower drop has been opened from A6.
