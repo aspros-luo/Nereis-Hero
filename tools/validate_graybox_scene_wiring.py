@@ -74,6 +74,8 @@ def main() -> int:
     require(secret_gate, "func _is_debug_override_active()", "Resonance secret gate", errors)
     require(secret_gate, "allow_debug_override: bool = true", "Resonance secret gate", errors)
     require(secret_gate, "_is_debug_override_active()", "Resonance secret gate", errors)
+    require(secret_gate, "[NEREIS][MAP][GATE] id=%s revealed=%s", "Gate Debug log", errors)
+    require(secret_gate, "[NEREIS][MAP][GATE] enter id=%s", "Gate transition log", errors)
 
     world_state = read("scripts/core/world_state.gd", errors)
     require(world_state, "var debug_ability_override_active := false", "WorldState", errors)
@@ -114,6 +116,8 @@ def main() -> int:
         require(world_state, f'res://{scene_path}', "WorldState resume mapping", errors)
 
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
+    require(region_script, "[NEREIS][MAP][SPAWN] region=%s", "Map spawn Debug log", errors)
+    require(region_script, "[NEREIS][MAP][EXIT] from=%s", "Map exit Debug log", errors)
     for contract in [
         'const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")',
         "_spawn_a4_hidden_well_gate(map_width - 105.0)",
