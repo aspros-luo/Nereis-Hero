@@ -88,9 +88,9 @@ func _spawn_x_for_side(side: String) -> float:
     if region_id == "H06" and side == "royal_transport_entry":
         return map_width - 360.0
     if region_id == "A2" and side == "old_pilgrim_highroad":
-        # C04 returns to the eastern half of the pilgrim road, clear of the bell gate.
-        # C04 回到朝圣古道东段，并避开钟室入口。
-        return map_width - 650.0
+        # C04's return door is at x=1880; keep the arrival outside its interaction trigger.
+        # C04 回程门位于 x=1880；出生点必须避开其交互触发范围。
+        return 1750.0
     if region_id == "A5" and side == "old_pilgrim_highroad":
         # C04 arrives near the city-facing end of the battlefield shortcut.
         # C04 从捷径抵达战场时，出生在靠近旧城的一侧。
