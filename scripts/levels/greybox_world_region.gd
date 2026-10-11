@@ -1718,6 +1718,18 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_end_x = 1600.0
             route.bridge_y = 330.0
             route.prompt_text = "E  ANCHOR THE ERASED REGENT GALLERY"
+        "A9":
+            # A rain-reflection roofwalk bridges the abandoned outer-ring homes without opening the royal transport gate.
+            # 雨中倒影屋顶道横接王城外环的废弃民居，但不会开启王室运输门。
+            route = Node2D.new()
+            route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+            route.name = "RainReflectionRoofwalk"
+            route.route_id = "A9_RAIN_REFLECTION_ROOFWALK"
+            route.required_resonance = 44
+            route.bridge_start_x = 1260.0
+            route.bridge_end_x = 1540.0
+            route.bridge_y = 285.0
+            route.prompt_text = "E  ANCHOR THE RAIN REFLECTION"
         _:
             return
     route.opened.connect(_on_local_resonance_route_opened)
@@ -1755,6 +1767,12 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
             narrative.show_message(
                 "THE REGENT WHO NEVER REIGNED",
                 "The gallery joins two burial ledges without passing the sealed royal gate. One stone names a regent; the matching socket on the opposite wall has been chiseled away. The tomb was not built to forget a king. It was altered to make the succession impossible to read.",
+                5.0
+            )
+        "A9_RAIN_REFLECTION_ROOFWALK":
+            narrative.show_message(
+                "THE HOMES THAT THE RAIN REMEMBERS",
+                "The roofline crosses houses whose doors were sealed from the street side. In the rainwater, warm windows appear beneath roofs that have stood empty for years. The old city did not lose its people all at once; someone taught the records to call them never-born.",
                 5.0
             )
         _:
