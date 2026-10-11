@@ -1029,7 +1029,7 @@ def main() -> int:
             errors.append("Topology contains duplicate local Resonance route IDs.")
         known_region_ids = {region.get("id") for region in topology_for_local_routes.get("regions", [])}
         route_by_id = {route.get("id"): route for route in local_routes}
-        expected_local_route_ids = ("A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK", "A7_PRISON_MAINTENANCE_CROSSWALK", "A8_ERASED_REGENT_GALLERY", "A9_RAIN_REFLECTION_ROOFWALK", "A10_CHOIRLESS_UPPER_GALLERY", "A11_SECOND_OBSERVER_SPAN", "A12_CROWN_WALL_WALK")
+        expected_local_route_ids = ("A2_BELLGRAVE_CANOPY_CROSSING", "A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK", "A7_PRISON_MAINTENANCE_CROSSWALK", "A8_ERASED_REGENT_GALLERY", "A9_RAIN_REFLECTION_ROOFWALK", "A10_CHOIRLESS_UPPER_GALLERY", "A11_SECOND_OBSERVER_SPAN", "A12_CROWN_WALL_WALK")
         for route_id in expected_local_route_ids:
             route_design = route_by_id.get(route_id)
             if route_design is None:
