@@ -346,7 +346,7 @@ func _localized_region_title() -> String:
 func _get_objective_text() -> String:
 	match region_id:
 		"A2":
-			return "沿旧路前行，聆听钟声。"
+			return "聆听两道回声；主路沿右侧树冠高台前往城区，地面的钟墓入口可稍后探索。"
 		"A3":
 			return "调查第三街；沿东侧残墙高路前往战场。"
 		"A4":
@@ -542,6 +542,11 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1200, 435, 150, 18))
 			_add_platform(Rect2(1500, 480, 160, 18))
 			_add_platform(Rect2(1840, 445, 130, 18))
+			# The eastbound route climbs back onto the canopy instead of continuing along the uninterrupted floor.
+			# 向东的主路重新爬上树冠高台，不再沿着无间断的地面直线通行。
+			_add_platform(Rect2(1980, 425, 120, 18))
+			_add_platform(Rect2(2110, 400, 110, 18))
+			_add_platform(Rect2(2220, 380, 120, 18))
 			_add_platform(Rect2(760, 370, 110, 18))
 			_add_platform(Rect2(870, 330, 110, 18))
 			_add_platform(Rect2(1000, 360, 110, 18))
@@ -1194,9 +1199,12 @@ func _spawn_region_exits() -> void:
 				72.0, "E  返回边境村庄", "village",
 				"res://scenes/village_hub.tscn", "north_gate"
 			)
+			# The main route to A3 sits on the eastern canopy ledge; the ground-level bell anomaly remains a separate choice.
+			# 通往 A3 的主线出口位于东侧树冠高台；地面的钟墓异常入口保留为另一种探索选择。
 			_spawn_exit_door(
-				map_width - 72.0, "E  进入被遗忘的城区", "forgotten_city",
-				"res://scenes/forgotten_city.tscn", "west"
+				map_width - 360.0, "E  沿树冠高路进入被遗忘的城区", "forgotten_city",
+				"res://scenes/forgotten_city.tscn", "west",
+				true, "", "", floor_y - 160.0
 			)
 			_spawn_h02_gate(map_width - 300.0)
 			# C04 is opened from A5; once opened, keep the reverse entrance persistent on A2.
