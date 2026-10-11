@@ -89,6 +89,7 @@ def main() -> int:
     errors: list[str] = []
     platform_audit_regions = 0
     platform_audit_count = 0
+    local_route_count = 0
     platforms_by_region: dict[str, list[tuple[float, float, float, float]]] = {}
 
     # The topology metadata must agree with the playable C10 shortcut.
@@ -1024,6 +1025,7 @@ def main() -> int:
     try:
         topology_for_local_routes = json.loads((ROOT / "tools/world_map_topology.json").read_text(encoding="utf-8"))
         local_routes = topology_for_local_routes.get("local_resonance_routes", [])
+        local_route_count = len(local_routes)
         local_route_ids = [route.get("id") for route in local_routes]
         if len(local_route_ids) != len(set(local_route_ids)):
             errors.append("Topology contains duplicate local Resonance route IDs.")
@@ -1160,6 +1162,7 @@ def main() -> int:
     print(" - The R01-R08 anomaly source chain is present.")
     print(" - H01-H08 plus C15/C19 gates use saved discovery/open/entry state and progression conditions.")
     print(f" - Platform reachability estimate: {platform_audit_regions} regions, {platform_audit_count} platforms.")
+    print(f" - Local resonance route contract: {local_route_count} routes; IDs, prompts, narratives, endpoint proximity, collision overlap, sight gating, and persistence checked.")
     print(" - C15 enters A11 from A8; C19 is the alternate A10 entry; H08 ending exit requires physical union.")
     print("NOTE: Godot runtime/collision/input validation is still required.")
     return 0
