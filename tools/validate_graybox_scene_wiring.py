@@ -77,6 +77,12 @@ def main() -> int:
 
     world_state = read("scripts/core/world_state.gd", errors)
     require(world_state, "var debug_ability_override_active := false", "WorldState", errors)
+    require(world_state, '"resume_spawn_side": resume_spawn_side', "WorldState save payload", errors)
+    require(world_state, 'resume_spawn_side = str(parsed.get("resume_spawn_side", "west"))', "WorldState save migration", errors)
+    require(world_state, "resume_spawn_side = pending_region_spawn_side", "WorldState location save", errors)
+    require(world_state, "pending_region_spawn_side = \"west\"\n    resume_spawn_side = \"west\"", "WorldState new-game reset", errors)
+    require(boot_script := read("scripts/core/boot.gd", errors), "WorldState.pending_region_spawn_side = WorldState.resume_spawn_side", "Continue spawn restore", errors)
+    require(region_script := read("scripts/levels/greybox_world_region.gd", errors), "WorldState.set_location(location_id)\n    WorldState.pending_region_spawn_side = \"west\"", "Graybox spawn-side save order", errors)
     hero_script = read("scripts/player/hero.gd", errors)
     require(hero_script, "WorldState.debug_ability_override_active = enabled", "Hero Debug toggle", errors)
     require(hero_script, "debug_ability_override = WorldState.debug_ability_override_active", "Hero scene re-entry", errors)
