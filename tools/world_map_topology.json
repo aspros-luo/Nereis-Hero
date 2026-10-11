@@ -827,9 +827,9 @@
       "region_id": "A3",
       "required_resonance": 28,
       "requires_resonance_sight": true,
-      "bridge_start_x": 1690,
-      "bridge_end_x": 2050,
-      "bridge_y": 350,
+      "bridge_start_x": 1320,
+      "bridge_end_x": 1690,
+      "bridge_y": 400,
       "persistent_on_open": true,
       "design_intent": "Reconnects the erased third street inside A3 without entering H03 or bypassing a main-story gate."
     },
@@ -838,9 +838,9 @@
       "region_id": "A4",
       "required_resonance": 36,
       "requires_resonance_sight": true,
-      "bridge_start_x": 1760,
-      "bridge_end_x": 1940,
-      "bridge_y": 310,
+      "bridge_start_x": 1650,
+      "bridge_end_x": 1935,
+      "bridge_y": 335,
       "persistent_on_open": true,
       "design_intent": "Reveals a dry aqueduct span above the old reservoir; it is a local traversal route, not a hidden-scene entrance."
     },
@@ -849,9 +849,9 @@
       "region_id": "A5",
       "required_resonance": 24,
       "requires_resonance_sight": true,
-      "bridge_start_x": 1000,
-      "bridge_end_x": 1220,
-      "bridge_y": 345,
+      "bridge_start_x": 880,
+      "bridge_end_x": 1340,
+      "bridge_y": 380,
       "persistent_on_open": true,
       "design_intent": "A resonance-anchored trench crossing under a buried standard; it shortens the risky battlefield route but does not bypass the fortress's story gate."
     },
@@ -860,9 +860,9 @@
       "region_id": "A6",
       "required_resonance": 32,
       "requires_resonance_sight": true,
-      "bridge_start_x": 1180,
-      "bridge_end_x": 1480,
-      "bridge_y": 250,
+      "bridge_start_x": 1250,
+      "bridge_end_x": 1510,
+      "bridge_y": 290,
       "persistent_on_open": true,
       "design_intent": "A high service-walk shortcut links the tower stair and outer cloister near the silent bell; it shortens a local traversal loop without bypassing the H05 hidden window or the main story exit."
     },
@@ -871,9 +871,9 @@
       "region_id": "A7",
       "required_resonance": 30,
       "requires_resonance_sight": true,
-      "bridge_start_x": 1080,
-      "bridge_end_x": 1320,
-      "bridge_y": 285,
+      "bridge_start_x": 1280,
+      "bridge_end_x": 1530,
+      "bridge_y": 340,
       "persistent_on_open": true,
       "design_intent": "A local upper-level shortcut between prison maintenance landings. It improves the cell-block traversal loop but must not open or bypass the A7-to-A8 royal tomb story gate."
     },
@@ -882,8 +882,8 @@
       "region_id": "A8",
       "required_resonance": 40,
       "requires_resonance_sight": true,
-      "bridge_start_x": 1330,
-      "bridge_end_x": 1600,
+      "bridge_start_x": 1240,
+      "bridge_end_x": 1490,
       "bridge_y": 330,
       "persistent_on_open": true,
       "design_intent": "A resonance-anchored upper tomb gallery reconnects the erased royal-name ledge to the return gallery; it must not open or bypass the sealed royal story gate."
@@ -894,8 +894,8 @@
       "required_resonance": 44,
       "requires_resonance_sight": true,
       "bridge_start_x": 1260,
-      "bridge_end_x": 1540,
-      "bridge_y": 285,
+      "bridge_end_x": 1520,
+      "bridge_y": 330,
       "persistent_on_open": true,
       "design_intent": "A rain-reflection roofwalk reconnects abandoned outer-ring homes as a local traversal loop; it must not open or bypass the royal transport gate or H07."
     },
@@ -906,7 +906,7 @@
       "requires_resonance_sight": true,
       "bridge_start_x": 675,
       "bridge_end_x": 1075,
-      "bridge_y": 270,
+      "bridge_y": 300,
       "persistent_on_open": true,
       "design_intent": "A choirless upper gallery links the staggered cathedral chapel ledges as a local traversal shortcut; it must not replace either cathedral exit or bypass C19."
     },
@@ -917,9 +917,20 @@
       "requires_resonance_sight": true,
       "bridge_start_x": 1230,
       "bridge_end_x": 1920,
-      "bridge_y": 265,
+      "bridge_y": 285,
       "persistent_on_open": true,
       "design_intent": "A high observation span reconnects two ancient ruin ledges above the Church laboratory; it must not unlock H08 or bypass C15/C19 progression gates."
+    },
+    {
+      "id": "A12_CROWN_WALL_WALK",
+      "region_id": "A12",
+      "required_resonance": 62,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 1400,
+      "bridge_end_x": 1940,
+      "bridge_y": 325,
+      "persistent_on_open": true,
+      "design_intent": "A crown-wall traverse reconnects two upper palace ledges and exposes the inward-facing arrow slits; it must not bypass the throne approach or ending gates."
     }
   ]
 }
