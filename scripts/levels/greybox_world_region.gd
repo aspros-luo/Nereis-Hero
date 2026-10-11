@@ -1756,9 +1756,9 @@ func _draw_monastery_landmarks() -> void:
     draw_rect(Rect2(1810, floor_y - 125, 42, 125), Color("#121118"))
     # The side balcony wraps the bell tower instead of repeating the same staircase.
     # 侧阳台绕过钟塔外墙，避免整张地图只有重复阶梯。
-    draw_line(Vector2(1245, floor_y - 280), Vector2(1390, floor_y - 320), Color("#625a6e"), 3.0)
-    draw_line(Vector2(1390, floor_y - 320), Vector2(1535, floor_y - 270), Color("#625a6e"), 3.0)
-    draw_line(Vector2(1535, floor_y - 270), Vector2(1650, floor_y - 235), Color("#625a6e"), 3.0)
+    draw_line(Vector2(1245, floor_y - 280), Vector2(1390, floor_y - 240), Color("#625a6e"), 3.0)
+    draw_line(Vector2(1390, floor_y - 240), Vector2(1535, floor_y - 190), Color("#625a6e"), 3.0)
+    draw_line(Vector2(1535, floor_y - 190), Vector2(1650, floor_y - 145), Color("#625a6e"), 3.0)
 
 func _draw_prison_landmarks() -> void:
     for x in range(330, int(map_width), 330):
