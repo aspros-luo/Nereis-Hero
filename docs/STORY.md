@@ -26,7 +26,7 @@ The ending is chosen from the Hero's accumulated **Resonance, truth-anchor items
 ### Prototype thresholds
 
 - Cosmic Resonance threshold: 68.
-- Eternal Paradise: Resonance >= 68, Outer-God exposure >= 6, and at least one hidden region entered, unless Blazing Judgment requirements are met.
+- Eternal Paradise: Resonance >= 68, the Observer Reaction source is recorded, and at least one hidden region is entered, unless Blazing Judgment requirements are met.
 - Blazing Judgment: Resonance >= 68, at least 3 unique truth-anchor sources, and at least 2 hidden regions entered.
 - Mortal's Grave: all other combinations.
 
