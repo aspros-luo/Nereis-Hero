@@ -1742,6 +1742,18 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_end_x = 1075.0
             route.bridge_y = 270.0
             route.prompt_text = "E  ANCHOR THE CHOIRLESS GALLERY"
+        "A11":
+            # An upper span reconnects two ancient observation ledges above the later Church laboratory.
+            # 高位横桥重连后建教会实验室上方的两处古老观测台。
+            route = Node2D.new()
+            route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+            route.name = "SecondObserverSpan"
+            route.route_id = "A11_SECOND_OBSERVER_SPAN"
+            route.required_resonance = 56
+            route.bridge_start_x = 1230.0
+            route.bridge_end_x = 1920.0
+            route.bridge_y = 265.0
+            route.prompt_text = "E  ANCHOR THE OBSERVER SPAN"
         _:
             return
     route.opened.connect(_on_local_resonance_route_opened)
@@ -1791,6 +1803,12 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
             narrative.show_message(
                 "THE CHOIR THAT WAS NEVER RECORDED",
                 "The gallery overlooks the cathedral choir, but no sound rises from below. Dust outlines a row of kneeling figures where the floor has been worn smooth. The service ledger lists every hymn and every bell—except the names of those who sang here.",
+                5.0
+            )
+        "A11_SECOND_OBSERVER_SPAN":
+            narrative.show_message(
+                "THE OBSERVER WHO LEFT NO FOOTPRINTS",
+                "The old ledges meet above the laboratory's newest instruments. One observation slate records two shadows entering the chamber and only one body leaving. A later hand has rewritten the count as a lighting error.",
                 5.0
             )
         _:
