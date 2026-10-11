@@ -43,7 +43,13 @@ const PROGRESSION_FLAGS := [
 	"opened_watergate_and_village_well_exit", "opened_royal_tomb_gate",
 	"opened_bell_tower_drop", "opened_supply_tunnel", "opened_old_lift_from_A9",
 	"opened_inner_city_side_gate", "opened_royal_drain_from_outer_ring",
-	"outer_god_resonance"
+	"reached_A5_and_opened_old_pilgrim_highroad", "reached_A7_then_opened_supply_tunnel",
+	"reached_A8_via_A7_then_opened_royal_tomb_gate", "reached_A9_via_A8_then_opened_old_lift_from_A9",
+	"reached_A9_then_opened_royal_drain_from_outer_ring", "reached_A9_via_A8_then_opened_royal_transport_side_door",
+	"reached_A8_then_opened_royal_tomb_side_door", "reached_A5_then_opened_old_bell_tower_connection",
+	"reached_A9_then_opened_old_service_door", "discovered_royal_tomb_maintenance_shaft_after_reaching_A8",
+	"discovered_and_opened_silent_side_chapel_in_A10", "ending_state_allows_deep_dream_entry",
+	"ending_state_allows_throne_entry", "outer_god_resonance"
 ]
 
 var panel: PanelContainer
