@@ -97,22 +97,33 @@ func take_damage(amount: int) -> void:
     receive_damage(amount, null)
 
 func _draw() -> void:
-    var tissue := Color("#6c5a62") if hit_flash <= 0.0 else Color("#d77d78")
-    var bone := Color("#b8a69c")
-    var shadow := Color("#221c25")
-    var pulse := sin(animation_time * 2.1) * 2.0
+    var is_ancient_experiment := name == "H09_AncientExperiment"
+    var tissue := (Color("#765064") if is_ancient_experiment else Color("#6c5a62")) if hit_flash <= 0.0 else Color("#e2a0a0")
+    var bone := Color("#c8b6a5") if is_ancient_experiment else Color("#b8a69c")
+    var shadow := Color("#221720") if is_ancient_experiment else Color("#221c25")
+    var pulse := sin(animation_time * (3.0 if is_ancient_experiment else 2.1)) * (4.0 if is_ancient_experiment else 2.0)
 
-    draw_circle(Vector2(0, -56 + pulse), 21.0, shadow)
-    draw_circle(Vector2(facing * 6, -52 + pulse), 7.0, tissue)
+    draw_circle(Vector2(0, -56 + pulse), 21.0 if not is_ancient_experiment else 27.0, shadow)
+    draw_circle(Vector2(facing * 6, -52 + pulse), 7.0, Color("#c3a2d0") if is_ancient_experiment else tissue)
     draw_rect(Rect2(-24, -36 + pulse, 48, 46), tissue)
     draw_line(Vector2(-12, 0 + pulse), Vector2(-55, 14 + pulse), bone, 7.0)
     draw_line(Vector2(12, 0 + pulse), Vector2(50, 12 + pulse), bone, 7.0)
     draw_circle(Vector2(0, -18 + pulse), 9.0, Color("#8f5c6b", 0.34))
+    if is_ancient_experiment:
+        # Exposed vertebrae and a split crown identify this as an ancient-god specimen, not a generic husk.
+        # 外露脊椎与裂开的冠状骨辨认出这是古神实验体，而非普通研究残骸。
+        for rib in range(4):
+            var rib_y := -34.0 + float(rib) * 10.0 + pulse
+            draw_arc(Vector2(0, rib_y), 30.0 - float(rib) * 2.0, 0.15, PI - 0.15, 12, bone, 2.0)
+        draw_line(Vector2(-18, -74 + pulse), Vector2(-29, -96 + pulse), bone, 3.0)
+        draw_line(Vector2(0, -78 + pulse), Vector2(0, -104 + pulse), bone, 3.0)
+        draw_line(Vector2(18, -74 + pulse), Vector2(29, -96 + pulse), bone, 3.0)
+        draw_arc(Vector2(0, -74 + pulse), 34.0, PI + 0.1, TAU - 0.1, 20, Color("#ad779e"), 3.0)
 
     if windup > 0.0:
         draw_arc(Vector2(facing * 24, -26), 42.0, -0.85 if facing > 0 else 3.99, 0.85 if facing > 0 else 5.42, 16, Color("#d56b6a"), 4.0)
 
-    draw_string(ThemeDB.fallback_font, Vector2(-62, -86), "RESEARCH HUSK", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
+    draw_string(ThemeDB.fallback_font, Vector2(-86, -112 if name == "H09_AncientExperiment" else -86), "ANCIENT TEST SUBJECT" if name == "H09_AncientExperiment" else "RESEARCH HUSK", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#d3a9cb" if name == "H09_AncientExperiment" else "#b7a09b"))
 
 
 func _move_and_slide_scaled() -> void:
