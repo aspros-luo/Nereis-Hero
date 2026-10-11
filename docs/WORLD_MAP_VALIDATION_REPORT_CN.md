@@ -28,7 +28,7 @@
 本轮针对地图交互与 Debug 验收路径进行了远程源码静态复核，并提交以下修正：
 
 - `scripts/core/interaction_focus.gd`：共享交互焦点在可用性计算和最终焦点判定中都检查 `WorldState.menu_input_locked`，避免菜单打开时世界交互仍抢占 E 键。
-- `scripts/world/resonance_secret_gate.gd`：隐藏入口现可读取主角的会话级 F5 Debug 覆盖状态。F5 + V 激活灵视时，可临时绕过隐藏入口的鸣响 / 接触度显现门槛，仍保留“第一次 E 开门、第二次 E 进入”的真实交互链；F5 本身不永久开门。测试时正常按 E 开门会写入永久通路状态，因此应使用专用测试存档。
+- `scripts/world/resonance_secret_gate.gd`：隐藏入口现读取 WorldState 中不写入存档的 F5 Debug 会话状态。该状态由 Hero 在切场景后恢复，因此 F5 + V 激活灵视时可连续验收多个地图；它只绕过鸣响 / 接触度显现门槛，仍保留“第一次 E 开门、第二次 E 进入”的真实交互链。F5 本身不永久开门；测试中正常按 E 开门会写入永久通路状态，因此应使用专用测试存档。新游戏重置会清除 Debug 覆盖。
 - `tools/validate_graybox_scene_wiring.py`：新增菜单输入锁与隐藏入口 Debug 覆盖的静态回归合同。
 - `docs/MAP_GATE_ACCEPTANCE_MATRIX_CN.md`：补充菜单交互锁与 F5 + V 地图验收步骤。
 
