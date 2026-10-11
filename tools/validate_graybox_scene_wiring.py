@@ -715,6 +715,8 @@ def main() -> int:
             '"E  RETURN TO THE DEPTHS"',
             'if WorldState.physical_union_complete:',
             'ending_gate.call("route_candidate")',
+            'var ending_location := "church_final_demo"',
+            'elif ending_scene_path.ends_with("ending_fire_demo.tscn"):',
         ],
     }
     exits_start = region_script.find("func _spawn_region_exits")
