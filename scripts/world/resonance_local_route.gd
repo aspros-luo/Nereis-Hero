@@ -16,6 +16,8 @@ var revealed := false
 var opened_permanently := false
 var hero_nearby := false
 var cooldown := 0.0
+@export var prompt_text: String = "E  ANCHOR THE THIRD STREET"
+
 var bridge_body: StaticBody2D
 
 func _ready() -> void:
@@ -114,7 +116,7 @@ func _draw() -> void:
             draw_string(
                 ThemeDB.fallback_font,
                 Vector2((bridge_start_x + bridge_end_x) * 0.5 - 88.0, bridge_y - 14.0),
-                "E  ANCHOR THE THIRD STREET",
+                prompt_text,
                 HORIZONTAL_ALIGNMENT_LEFT,
                 -1.0,
                 13,
