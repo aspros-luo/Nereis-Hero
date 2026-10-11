@@ -56,6 +56,9 @@ func _ready() -> void:
     _spawn_ui()
     _spawn_narrative_audio()
     _spawn_fireflies()
+    if "returned_to_village_after_mad_cleric" in WorldState.achievement_flags and "cliff_cave_hint_seen" not in WorldState.achievement_flags:
+        WorldState.record_achievement("cliff_cave_hint_seen")
+        get_tree().create_timer(1.1).timeout.connect(_show_cliff_cave_hint)
     queue_redraw()
 
 func _spawn_hero(spawn_x: float = 260.0) -> void:
@@ -333,6 +336,16 @@ func _spawn_cliff_cave_door() -> void:
     cliff_cave_door.add_child(shape)
     add_child(cliff_cave_door)
     cliff_cave_door.interacted.connect(_on_cliff_cave_interacted)
+
+
+func _show_cliff_cave_hint() -> void:
+    if narrative == null or not is_instance_valid(narrative):
+        return
+    narrative.show_message(
+        "蜂鸣从石壁内部传来",
+        "蜂群没有散去，只是从巢中退向石壁。\n\n背包里的残留物轻轻抽动；这声音不像昆虫，更像某种东西在岩层深处缓慢呼吸。",
+        5.5
+    )
 
 
 func _on_cliff_cave_interacted() -> void:
