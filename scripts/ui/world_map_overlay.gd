@@ -3,30 +3,30 @@ extends Control
 ## 面向玩家的世界箱庭路线图：展示区域关系，不传送、不解锁任何路线。
 
 const MAIN_NODES: Array[Dictionary] = [
-	{"id":"A0","name":"手术所","p":Vector2(0.035,0.48)},
-	{"id":"A1","name":"边境村庄","p":Vector2(0.125,0.48)},
-	{"id":"A2","name":"雾林钟墓","p":Vector2(0.215,0.48)},
-	{"id":"A3","name":"废弃城区","p":Vector2(0.305,0.48)},
-	{"id":"A5","name":"旧战场","p":Vector2(0.395,0.48)},
-	{"id":"A6","name":"修道院","p":Vector2(0.485,0.48)},
-	{"id":"A7","name":"监牢深处","p":Vector2(0.575,0.48)},
-	{"id":"A8","name":"旧王墓","p":Vector2(0.665,0.48)},
-	{"id":"A9","name":"王城外环","p":Vector2(0.755,0.48)},
-	{"id":"A10","name":"大圣堂","p":Vector2(0.845,0.35)},
-	{"id":"A12","name":"王室内城","p":Vector2(0.935,0.48)},
-	{"id":"A4","name":"旧水库","p":Vector2(0.405,0.78)},
-	{"id":"A11","name":"深层研究区","p":Vector2(0.715,0.78)}
+	{"id":"A0","name":"手术所","p":Vector2(0.06,0.42)},
+	{"id":"A1","name":"边境村庄","p":Vector2(0.19,0.42)},
+	{"id":"A2","name":"雾林钟墓","p":Vector2(0.31,0.20)},
+	{"id":"A3","name":"废弃城区","p":Vector2(0.43,0.43)},
+	{"id":"A5","name":"旧战场","p":Vector2(0.49,0.19)},
+	{"id":"A6","name":"修道院","p":Vector2(0.65,0.18)},
+	{"id":"A7","name":"监牢深处","p":Vector2(0.71,0.43)},
+	{"id":"A8","name":"旧王墓","p":Vector2(0.78,0.64)},
+	{"id":"A9","name":"王城外环","p":Vector2(0.65,0.76)},
+	{"id":"A10","name":"大圣堂","p":Vector2(0.86,0.28)},
+	{"id":"A12","name":"王室内城","p":Vector2(0.94,0.46)},
+	{"id":"A4","name":"旧水库","p":Vector2(0.35,0.74)},
+	{"id":"A11","name":"深层研究区","p":Vector2(0.84,0.87)}
 ]
 
 const HIDDEN_NODES: Array[Dictionary] = [
-	{"id":"H01","name":"井底回声","p":Vector2(0.125,0.78),"parents":["A1"]},
-	{"id":"H02","name":"倒响钟室","p":Vector2(0.255,0.18),"parents":["A2","A5"]},
-	{"id":"H03","name":"被删去的街","p":Vector2(0.315,0.18),"parents":["A3"]},
-	{"id":"H04","name":"水面背阶","p":Vector2(0.475,0.88),"parents":["A4"]},
-	{"id":"H05","name":"无声钟室","p":Vector2(0.505,0.18),"parents":["A6","A3"]},
-	{"id":"H06","name":"王名抹除廊","p":Vector2(0.665,0.18),"parents":["A8"]},
-	{"id":"H07","name":"镜街","p":Vector2(0.835,0.78),"parents":["A9","A12"]},
-	{"id":"H08","name":"原初空腔","p":Vector2(0.755,0.92),"parents":["A11"]}
+	{"id":"H01","name":"井底回声","p":Vector2(0.15,0.70),"parents":["A1"]},
+	{"id":"H02","name":"倒响钟室","p":Vector2(0.39,0.08),"parents":["A2","A5"]},
+	{"id":"H03","name":"被删去的街","p":Vector2(0.43,0.30),"parents":["A3"]},
+	{"id":"H04","name":"水面背阶","p":Vector2(0.25,0.89),"parents":["A4"]},
+	{"id":"H05","name":"无声钟室","p":Vector2(0.58,0.08),"parents":["A6","A3"]},
+	{"id":"H06","name":"王名抹除廊","p":Vector2(0.81,0.51),"parents":["A8"]},
+	{"id":"H07","name":"镜街","p":Vector2(0.86,0.67),"parents":["A9","A12"]},
+	{"id":"H08","name":"原初空腔","p":Vector2(0.95,0.88),"parents":["A11"]}
 ]
 
 const MAIN_EDGES = [
