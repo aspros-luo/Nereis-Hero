@@ -519,6 +519,8 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1940, 355, 110, 18))
             _add_platform(Rect2(2080, 400, 110, 18))
         "A9":
+            # Street-level ring remains the safe route; the roofline creates a loop through abandoned homes.
+            # 街面外环保持安全可走；屋顶路线穿过废弃民居，形成可选回环。
             _add_platform(Rect2(280, 475, 170, 18))
             _add_platform(Rect2(530, 430, 150, 18))
             _add_platform(Rect2(800, 390, 190, 18))
@@ -526,7 +528,19 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1410, 405, 175, 18))
             _add_platform(Rect2(1700, 455, 175, 18))
             _add_platform(Rect2(2040, 420, 170, 18))
+            _add_platform(Rect2(390, 395, 115, 18))
+            _add_platform(Rect2(520, 355, 120, 18))
+            _add_platform(Rect2(665, 320, 120, 18))
+            _add_platform(Rect2(815, 340, 125, 18))
+            _add_platform(Rect2(960, 385, 120, 18))
+            _add_platform(Rect2(1110, 395, 120, 18))
+            _add_platform(Rect2(1260, 350, 120, 18))
+            _add_platform(Rect2(1400, 315, 120, 18))
+            _add_platform(Rect2(1540, 350, 120, 18))
+            _add_platform(Rect2(1680, 400, 120, 18))
         "A10":
+            # The pilgrim stair is the direct route; side chapels and the choir gallery offer a parallel traversal.
+            # 朝圣阶梯是直接主路；侧礼拜堂与唱诗席高廊提供并行路线。
             _add_platform(Rect2(260, 485, 185, 18))
             _add_platform(Rect2(520, 440, 155, 18))
             _add_platform(Rect2(760, 395, 160, 18))
@@ -535,7 +549,19 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1480, 350, 160, 18))
             _add_platform(Rect2(1730, 405, 165, 18))
             _add_platform(Rect2(2010, 455, 185, 18))
+            _add_platform(Rect2(400, 405, 115, 18))
+            _add_platform(Rect2(535, 365, 115, 18))
+            _add_platform(Rect2(675, 325, 115, 18))
+            _add_platform(Rect2(815, 290, 120, 18))
+            _add_platform(Rect2(960, 310, 115, 18))
+            _add_platform(Rect2(1100, 350, 115, 18))
+            _add_platform(Rect2(1240, 265, 115, 18))
+            _add_platform(Rect2(1380, 300, 115, 18))
+            _add_platform(Rect2(1520, 340, 115, 18))
+            _add_platform(Rect2(1660, 380, 115, 18))
         "A12":
+            # The royal avenue remains open; the wall-walk creates a risky upper approach to the throne district.
+            # 王室大道保持开放；城墙高路提供一条风险更高的王座区上层入口。
             _add_platform(Rect2(300, 475, 160, 18))
             _add_platform(Rect2(560, 430, 150, 18))
             _add_platform(Rect2(850, 385, 180, 18))
@@ -543,6 +569,18 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1460, 390, 180, 18))
             _add_platform(Rect2(1770, 435, 170, 18))
             _add_platform(Rect2(2100, 475, 190, 18))
+            _add_platform(Rect2(410, 405, 115, 18))
+            _add_platform(Rect2(545, 365, 115, 18))
+            _add_platform(Rect2(680, 325, 120, 18))
+            _add_platform(Rect2(820, 345, 120, 18))
+            _add_platform(Rect2(960, 390, 120, 18))
+            _add_platform(Rect2(1120, 390, 120, 18))
+            _add_platform(Rect2(1260, 345, 120, 18))
+            _add_platform(Rect2(1400, 305, 120, 18))
+            _add_platform(Rect2(1540, 340, 120, 18))
+            _add_platform(Rect2(1680, 385, 120, 18))
+            _add_platform(Rect2(1820, 345, 120, 18))
+            _add_platform(Rect2(1960, 390, 120, 18))
         "H07":
             _add_platform(Rect2(250, 475, 150, 18))
             _add_platform(Rect2(520, 425, 125, 18))
@@ -558,6 +596,8 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1040, 430, 160, 18))
             _add_platform(Rect2(1320, 475, 140, 18))
         "A11":
+            # The old ruin's observation gallery crosses above the newer laboratory floor.
+            # 观测廊横跨新建实验室地面之上，强调古老遗迹与现代设施的叠压。
             _add_platform(Rect2(280, 480, 165, 18))
             _add_platform(Rect2(565, 438, 140, 18))
             _add_platform(Rect2(850, 390, 175, 18))
@@ -565,6 +605,18 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1465, 385, 180, 18))
             _add_platform(Rect2(1780, 430, 150, 18))
             _add_platform(Rect2(2080, 475, 175, 18))
+            _add_platform(Rect2(390, 405, 115, 18))
+            _add_platform(Rect2(520, 360, 120, 18))
+            _add_platform(Rect2(660, 320, 120, 18))
+            _add_platform(Rect2(810, 335, 120, 18))
+            _add_platform(Rect2(950, 375, 120, 18))
+            _add_platform(Rect2(1090, 330, 120, 18))
+            _add_platform(Rect2(1230, 285, 120, 18))
+            _add_platform(Rect2(1370, 325, 120, 18))
+            _add_platform(Rect2(1510, 365, 120, 18))
+            _add_platform(Rect2(1660, 325, 120, 18))
+            _add_platform(Rect2(1800, 285, 120, 18))
+            _add_platform(Rect2(1940, 330, 120, 18))
         "H08":
             _add_platform(Rect2(250, 470, 150, 18))
             _add_platform(Rect2(505, 425, 135, 18))
@@ -1482,6 +1534,8 @@ func _draw() -> void:
             _draw_outer_ring_landmarks()
         "A10":
             _draw_cathedral_landmarks()
+        "A11":
+            _draw_deep_research_landmarks()
         "A12":
             _draw_inner_city_landmarks()
         "H07":
