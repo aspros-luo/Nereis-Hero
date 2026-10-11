@@ -482,6 +482,7 @@ def main() -> int:
         ('if region_id == "H05" and side == "bell_drop_entry":', "return map_width - 360.0"),
         ('if region_id == "H06" and side == "royal_transport_entry":', "return map_width - 360.0"),
         ('if region_id == "A3" and side == "sewer":', "return 1380.0"),
+        ('if region_id == "A3" and side == "village_city_cut":', "return 700.0"),
         ('if region_id == "A2" and side == "bell_gate":', "return map_width - 450.0"),
         ('if region_id == "A2" and side == "old_pilgrim_highroad":', "return 1750.0"),
         ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 650.0"),
@@ -502,9 +503,9 @@ def main() -> int:
         ('if region_id == "A6" and side == "silent_window":', "return 1400.0"),
         ('if region_id == "A8" and side == "royal_name_gate":', "return 1350.0"),
         ('if region_id == "A8" and side == "royal_tomb_waterway":', "return 610.0"),
-        ('if region_id == "A8" and side == "royal_tomb_side":', "return 1200.0"),
+        ('if region_id == "A8" and side == "royal_tomb_side":', "return 1020.0"),
         ('if region_id == "A9" and side == "third_street_service":', "return 1600.0"),
-        ('if region_id == "A9" and side == "royal_transport":', "return map_width - 650.0"),
+        ('if region_id == "A9" and side == "royal_transport":', "return 2050.0"),
         ('if region_id == "H01" and side == "east":', "return map_width - 360.0"),
     ]
     for condition, expected_return in spawn_contracts:
