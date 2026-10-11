@@ -191,20 +191,45 @@ def validate(data: dict[str, Any]) -> list[str]:
     if unreachable:
         fail(errors, f"Regions unreachable after all intended gates open: {unreachable}.")
 
+    # A loop is only real if each segment can be traversed in the final opened state.
+    # 回环必须在所有预期门打开后逐段可走；仅仅存在无向连线记录并不代表回程成立。
+    final_primary_graph = build_graph(region_ids, connections, initial=False, include_hidden=False)
     for loop in loops:
         path = loop.get("path", [])
         if len(path) < 4 or path[0] != path[-1]:
             fail(errors, f"{loop.get('id')}: loop path must return to its start.")
             continue
-        for source, target in zip(path, path[1:]):
-            connected = any(
-                {edge.get("from"), edge.get("to")} == {source, target}
-                for edge in connections
-            )
-            if not connected:
+        path_edges = list(zip(path, path[1:]))
+        loop_unlock_conditions: set[str] = set()
+        for source, target in path_edges:
+            matching_edges = [
+                edge for edge in connections
+                if {edge.get("from"), edge.get("to")} == {source, target}
+            ]
+            if not matching_edges:
                 fail(errors, f"{loop.get('id')}: no macro edge for {source} <-> {target}.")
+                continue
+            if target not in final_primary_graph.get(source, set()):
+                fail(
+                    errors,
+                    f"{loop.get('id')}: final map direction cannot traverse {source} -> {target}.",
+                )
+            loop_unlock_conditions.update(
+                str(edge.get("unlock_condition", "")).strip()
+                for edge in matching_edges
+                if edge.get("initial_access") == "blocked"
+                and str(edge.get("unlock_condition", "")).strip()
+            )
         if not loop.get("requires"):
             fail(errors, f"{loop.get('id')}: loop must list its unlock requirements.")
+        else:
+            declared_requirements = set(loop.get("requires", []))
+            if declared_requirements != loop_unlock_conditions:
+                fail(
+                    errors,
+                    f"{loop.get('id')}: declared loop requirements {sorted(declared_requirements)} "
+                    f"do not match blocked-edge gates {sorted(loop_unlock_conditions)}.",
+                )
 
     source_ids = [item.get("source_id", "") for item in sources]
     if len(sources) != 8:
