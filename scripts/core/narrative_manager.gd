@@ -110,7 +110,7 @@ func play_first_memory() -> void:
     WorldState.unlock_first_memory()
     show_message(
         "一段不属于你的记忆",
-        "The old hunter looks at your face and goes pale.\n\n\"You used to come here before the church took you. You always asked whether the song was still playing.\"\n\nSomewhere beyond the village, a lullaby answers.",
+        "老猎人看清你的脸后，瞬间失去血色。\n\n\"教会带走你之前，你常来这里。你每次都会问，那首歌是否还在继续。\"\n\n村庄之外，某处传来摇篮曲的回应。",
         8.0
     )
     print("[NEREIS][STORY] First memory event displayed")
