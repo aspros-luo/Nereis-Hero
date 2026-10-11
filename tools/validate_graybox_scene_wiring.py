@@ -893,7 +893,7 @@ def main() -> int:
                 source_kind, function_name = hidden_gate_functions[hidden_id]
                 source_text = source_by_kind[source_kind]
                 match = re.search(
-                    rf"func {re.escape(function_name)}\\([^)]*\\).*?(?=\\nfunc |\\Z)",
+                    rf"func {re.escape(function_name)}\([^)]*\).*?(?=\nfunc |\Z)",
                     source_text,
                     re.DOTALL,
                 )
@@ -903,16 +903,16 @@ def main() -> int:
                 gate_block = match.group(0)
 
                 def gate_int(property_name: str, default: int = 0) -> int:
-                    value = re.search(rf"gate\\.{re.escape(property_name)}\\s*=\\s*(\\d+)", gate_block)
+                    value = re.search(rf"gate\.{re.escape(property_name)}\s*=\s*(\d+)", gate_block)
                     return int(value.group(1)) if value else default
 
                 def gate_string(property_name: str) -> str:
-                    value = re.search(rf'gate\\.{re.escape(property_name)}\\s*=\\s*"([^"]*)"', gate_block)
+                    value = re.search(rf'gate\.{re.escape(property_name)}\s*=\s*"([^"]*)"', gate_block)
                     return value.group(1) if value else ""
 
                 def gate_string_array(property_name: str) -> list[str]:
                     value = re.search(
-                        rf"gate\\.{re.escape(property_name)}\\s*=\\s*\\[(.*?)\\]",
+                        rf"gate\.{re.escape(property_name)}\s*=\s*\[(.*?)\]",
                         gate_block,
                         re.DOTALL,
                     )
@@ -939,7 +939,7 @@ def main() -> int:
 
                 expected_outer_resonance = hidden.get("requires_outer_god_resonance", False)
                 actual_outer_resonance = bool(re.search(
-                    r"gate\\.require_outer_god_resonance\\s*=\\s*true",
+                    r"gate\.require_outer_god_resonance\s*=\s*true",
                     gate_block,
                 ))
                 if actual_outer_resonance != expected_outer_resonance:
