@@ -56,6 +56,7 @@ var panel: PanelContainer
 var map_picker: OptionButton
 var status_label: Label
 var mode_button: Button
+var natural_start_button: Button
 var full_sight_button: Button
 var all_routes_button: Button
 var teleport_button: Button
@@ -90,6 +91,10 @@ func _build_panel() -> void:
 	mode_button.pressed.connect(_enable_test_mode)
 	column.add_child(mode_button)
 
+	natural_start_button = _make_button("自然探索验收：从 A0 开始（无传送／无作弊解锁）")
+	natural_start_button.pressed.connect(_start_natural_exploration)
+	column.add_child(natural_start_button)
+
 	var map_label := Label.new()
 	map_label.text = "选择要直接进入的区域："
 	column.add_child(map_label)
@@ -118,7 +123,7 @@ func _build_panel() -> void:
 
 	status_label = Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	status_label.text = "F10：打开／关闭本面板。先开启测试模式，再使用传送与状态预设。"
+	status_label.text = "F10：打开／关闭本面板。自然探索会重置当前内存进度并从 A0 开始，但不删除或覆盖磁盘正式存档。"
 	column.add_child(status_label)
 
 	var controls := Label.new()
@@ -147,6 +152,19 @@ func _ensure_test_mode() -> void:
 func _enable_test_mode() -> void:
 	_ensure_test_mode()
 	status_label.text = "已开启地图测试模式。正式存档不会被调试状态覆盖；可直接选择区域传送。"
+
+func _start_natural_exploration() -> void:
+	# Reset only the in-memory WorldState. Enable save protection again before loading A0.
+	# 只重置内存中的游戏状态；进入 A0 前重新开启存档保护，绝不删除或覆盖正式存档。
+	WorldState.debug_map_test_mode = true
+	WorldState.reset()
+	WorldState.debug_map_test_mode = true
+	WorldState.debug_ability_override_active = false
+	WorldState.pending_region_spawn_side = "west"
+	WorldState.resume_spawn_side = "west"
+	status_label.text = "自然探索已启动：从 A0 正常开始；未解锁灵视、未开放隐藏门、未启用传送。正式存档写入保持关闭。全程不要使用区域传送或状态预设。"
+	print("[NEREIS][MAP][NATURAL_TEST] Started clean in-memory run from A0; disk save protected.")
+	SceneTransition.fade_to_scene("res://scenes/escape_prologue.tscn")
 
 func _teleport_to_selected_map() -> void:
 	_ensure_test_mode()
