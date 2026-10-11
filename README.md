@@ -60,7 +60,7 @@ M1 box-world route implementation log (Chinese; code committed, Godot runtime ac
 
 `docs/M1_BOX_WORLD_IMPLEMENTATION_LOG_CN.md`
 
-A3 Forgotten City layered spatial design (Chinese; design defined, implementation/runtime pending):
+A3 Forgotten City layered spatial design (Chinese; geometry and route wiring implemented, runtime acceptance pending):
 
 `docs/MAP_DESIGN_A3_FORGOTTEN_CITY_CN.md`
 
