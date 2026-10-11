@@ -48,6 +48,10 @@ Complete world map atlas (Chinese draft):
 
 `docs/COMPLETE_WORLD_MAP_ATLAS_CN.md`
 
+Interconnected box-world design principles (Chinese; authoritative map-design constraints):
+
+`docs/INTERCONNECTED_BOX_WORLD_DESIGN_CN.md`
+
 Map-first content completion roadmap (Chinese):
 
 `docs/MAP_CONTENT_COMPLETION_ROADMAP_CN.md`
