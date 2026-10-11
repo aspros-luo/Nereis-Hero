@@ -2261,8 +2261,19 @@ func _draw() -> void:
 	draw_rect(Rect2(0.0, 0.0, map_width, 720.0), background)
 	draw_rect(Rect2(0.0, floor_y, map_width, 180.0), Color("#211b23"))
 
-	for x in range(0, int(map_width), 64):
-		draw_line(Vector2(x, floor_y), Vector2(x + 32, floor_y + 32), Color("#302a31"), 2.0)
+	# Replace the old repetitive ground slashes with sparse, broken stone cracks and low atmospheric haze.
+	# 将重复的地面斜线改为稀疏断裂石纹与贴地薄雾，降低灰盒画面的噪声感。
+	var atmosphere := _atmosphere_color()
+	draw_rect(Rect2(0.0, floor_y - 92.0, map_width, 44.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.045))
+	draw_rect(Rect2(0.0, floor_y - 36.0, map_width, 20.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.025))
+	for x in range(28, int(map_width), 128):
+		draw_line(Vector2(x, floor_y + 10.0), Vector2(x + 13.0, floor_y + 17.0), Color("#302a31", 0.72), 1.0)
+		if x % 384 == 28:
+			draw_line(Vector2(x + 13.0, floor_y + 17.0), Vector2(x + 21.0, floor_y + 11.0), Color("#302a31", 0.58), 1.0)
+	for mote in range(22):
+		var mote_x := float((mote * 173 + int(region_id.hash() % 113)) % int(map_width))
+		var mote_y := 235.0 + float((mote * 67) % 185)
+		draw_circle(Vector2(mote_x, mote_y), 1.2 if mote % 4 != 0 else 1.8, Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.22))
 
 	match region_id:
 		"A2":
@@ -2327,6 +2338,23 @@ func _draw() -> void:
 		28,
 		Color("#b7a48c")
 	)
+
+func _atmosphere_color() -> Color:
+	match region_id:
+		"A2", "H02", "H05":
+			return Color("#8a9bb4")
+		"A3", "A9", "H03", "H07":
+			return Color("#9e819a")
+		"A4", "H04":
+			return Color("#78a4ac")
+		"A5", "A6", "A10":
+			return Color("#b38a83")
+		"A7", "A8", "H06":
+			return Color("#a79ba5")
+		"A11", "H08", "H09":
+			return Color("#aa7c9e")
+		_:
+			return Color("#93849b")
 
 func _background_color() -> Color:
 	match region_id:
