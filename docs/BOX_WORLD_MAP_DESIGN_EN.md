@@ -54,7 +54,7 @@ This iteration adds debug-only markers for instantiated exits, shortcuts, and Re
 
 - The mad cleric in A6 is a distinct optional story boss. Defeating him records `defeated_mad_cleric` and connects his final, bee-like resonance to the village cliff.
 - Only after the player physically returns to A1 from another region is `returned_to_village_after_mad_cleric` recorded. The hive seal then changes visually, the cave entrance appears, and a one-time low-intensity sensory hint plays.
-- H09 uses its own scene, `scenes/cliff_cave_experiment.tscn`, with an entrance shelf, a lower combat basin, and raised terrain. Defeating the ancient-god test subject records `cliff_cave_experiment_defeated` and `third_umbilical_cord_fragment_acquired`, and awards one hidden truth anchor.
+- H09 uses its own scene, `scenes/cliff_cave_experiment.tscn`, with an entrance shelf, a lower combat basin, and raised terrain. Defeating the ancient-god test subject leaves a visible relic in the scene. Only after pressing E to pick it up does the game record `third_umbilical_cord_fragment_acquired` and register a distinct hidden truth anchor. If the player leaves first, the uncollected relic persists on return.
 - The anchor is only one component of the “Inferno of Divine Retribution” ending conditions. H09 has a real return exit to the village. Skipping the cave—or never defeating the mad cleric—does not block the ordinary main route or “A Mortal’s Grave.”
 - H09 appears on the world map only after discovery. The F10 natural-exploration checklist now includes H09 and tracks 22 regions.
 
