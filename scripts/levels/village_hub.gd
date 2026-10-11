@@ -32,6 +32,7 @@ func _ready() -> void:
     print("[NEREIS][VILLAGE] Entered Village Hub route=%s spawn_side=%s" % [WorldState.selected_route, spawn_side])
     WorldState.set_checkpoint(Vector2(360, 520))
     _create_floor()
+    _create_village_rooftop_route()
     _create_boundaries()
     # The watergate arrival must be away from the resonance well gate and the north-gate interaction.
     # 水闸回村的出生点应避开灵视井门与北门交互区。
@@ -369,6 +370,41 @@ func _create_floor() -> void:
     floor.add_child(shape)
     add_child(floor)
 
+func _create_village_rooftop_route() -> void:
+    # Optional rooftop route: each short ledge is within ordinary jump reach of the previous one.
+    # 可选屋顶路线：相邻短平台保持在常规跳跃可达范围内。
+    var route := [
+        Rect2(220, 445, 90, 16),
+        Rect2(270, 400, 90, 16),
+        Rect2(320, 355, 100, 16),
+        Rect2(400, 340, 130, 16),
+        Rect2(600, 340, 110, 16),
+        Rect2(750, 380, 110, 16),
+        Rect2(900, 340, 110, 16),
+        Rect2(1040, 385, 110, 16),
+        Rect2(1160, 340, 110, 16),
+        Rect2(1300, 300, 110, 16),
+        Rect2(1430, 340, 110, 16),
+        Rect2(1580, 300, 110, 16),
+        Rect2(1710, 270, 110, 16),
+        Rect2(1840, 310, 110, 16),
+        Rect2(1980, 350, 110, 16),
+        Rect2(2110, 310, 110, 16),
+        Rect2(2240, 340, 110, 16)
+    ]
+    for platform_rect in route:
+        var body := StaticBody2D.new()
+        body.name = "VillageRooftopPlatform"
+        body.position = platform_rect.position
+        var shape := CollisionShape2D.new()
+        var rectangle := RectangleShape2D.new()
+        rectangle.size = platform_rect.size
+        shape.shape = rectangle
+        shape.position = platform_rect.size * 0.5
+        body.add_child(shape)
+        add_child(body)
+
+
 func _create_boundaries() -> void:
     var left := StaticBody2D.new()
     var left_shape := CollisionShape2D.new()
@@ -525,6 +561,23 @@ func _draw() -> void:
     draw_rect(Rect2(2410, 350, 18, 170), Color("#4a3439"))
     draw_rect(Rect2(2460, 350, 18, 170), Color("#4a3439"))
     draw_string(ThemeDB.fallback_font, Vector2(2370, 310), NereisLocalization.translate_text("NORTH GATE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
+
+    # Broken roof beams mark an optional high route across the village; they are not a required path.
+    # 断裂屋脊标记穿越村庄的可选高路，不是主线必经路线。
+    draw_line(Vector2(220, 445), Vector2(310, 400), Color("#514652"), 3.0)
+    draw_line(Vector2(310, 400), Vector2(420, 355), Color("#514652"), 3.0)
+    draw_line(Vector2(420, 355), Vector2(600, 350), Color("#514652"), 3.0)
+    draw_line(Vector2(600, 350), Vector2(750, 390), Color("#514652"), 3.0)
+    draw_line(Vector2(750, 390), Vector2(900, 350), Color("#514652"), 3.0)
+    draw_line(Vector2(900, 350), Vector2(1040, 395), Color("#514652"), 3.0)
+    draw_line(Vector2(1040, 395), Vector2(1160, 350), Color("#514652"), 3.0)
+    draw_line(Vector2(1160, 350), Vector2(1300, 310), Color("#514652"), 3.0)
+    draw_line(Vector2(1300, 310), Vector2(1430, 350), Color("#514652"), 3.0)
+    draw_line(Vector2(1580, 310), Vector2(1710, 280), Color("#514652"), 3.0)
+    draw_line(Vector2(1710, 280), Vector2(1840, 320), Color("#514652"), 3.0)
+    draw_line(Vector2(1840, 320), Vector2(1980, 360), Color("#514652"), 3.0)
+    draw_line(Vector2(1980, 360), Vector2(2110, 320), Color("#514652"), 3.0)
+    draw_string(ThemeDB.fallback_font, Vector2(1060, 285), "THE ROOFS REMEMBER THE WAY", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#796b7c"))
 
     draw_rect(Rect2(2180, 320, 80, 200), Color("#26202a"))
     draw_colored_polygon(
