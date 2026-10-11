@@ -492,6 +492,7 @@ def main() -> int:
         ('if region_id == "A9" and side == "royal_drain":', "return 810.0"),
         ('if region_id == "A9" and side == "old_lift":', "return 610.0"),
         ('if region_id == "A9" and side == "inner_city_side_gate":', "return 980.0"),
+        ('if region_id == "A12" and side == "inner_city_side_gate":', "return 650.0"),
         ('if region_id == "A3" and side == "third_street_gate":', "return map_width - 500.0"),
         ('if region_id == "A4" and side == "water_reflection_gate":', "return 1550.0"),
         ('if region_id == "A4" and side == "east":', "return map_width - 360.0"),
