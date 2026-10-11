@@ -56,6 +56,10 @@ Map-first content completion roadmap (Chinese):
 
 `docs/MAP_CONTENT_COMPLETION_ROADMAP_CN.md`
 
+Map-first content completion roadmap (English):
+
+`docs/MAP_CONTENT_COMPLETION_ROADMAP_EN.md`
+
 M1 box-world route implementation log (Chinese; code committed, Godot runtime acceptance pending):
 
 `docs/M1_BOX_WORLD_IMPLEMENTATION_LOG_CN.md`
