@@ -25,8 +25,9 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
     cooldown = maxf(0.0, cooldown - delta)
-    if hero_nearby and WorldState.input_locked:
-        hero_nearby = false
+    # Proximity is physical state, not input state. Do not clear it during dialogue:
+    # Area2D body_entered will not fire again if the Hero never leaves the trigger.
+    # 距离状态与输入锁无关；对话期间不能清空距离，否则主角不离开触发区就不会再次收到 body_entered。
     var available := enabled and not WorldState.input_locked and hero_nearby and cooldown <= 0.0
     INTERACTION_FOCUS_SCRIPT.sync(self, available, 100)
     queue_redraw()
