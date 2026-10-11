@@ -1706,6 +1706,18 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_end_x = 1320.0
             route.bridge_y = 285.0
             route.prompt_text = "E  ANCHOR THE PRISON CROSSWALK"
+        "A8":
+            # The erased regent gallery spans the upper tomb passage, linking the name-wall ledge to the return gallery.
+            # 被抹去的摄政王墓廊横跨王墓上层，连接王名墙平台与回程廊道。
+            route = Node2D.new()
+            route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+            route.name = "ErasedRegentGalleryRoute"
+            route.route_id = "A8_ERASED_REGENT_GALLERY"
+            route.required_resonance = 40
+            route.bridge_start_x = 1330.0
+            route.bridge_end_x = 1600.0
+            route.bridge_y = 330.0
+            route.prompt_text = "E  ANCHOR THE ERASED REGENT GALLERY"
         _:
             return
     route.opened.connect(_on_local_resonance_route_opened)
@@ -1737,6 +1749,12 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
             narrative.show_message(
                 "THE CROSSWALK OF UNNUMBERED CELLS",
                 "The maintenance ledger counts every hinge and drain, but leaves the cells themselves unnumbered. A repair entry orders the crew to preserve the lower doors and seal the upper ones from the outside. The names were not omitted by accident.",
+                5.0
+            )
+        "A8_ERASED_REGENT_GALLERY":
+            narrative.show_message(
+                "THE REGENT WHO NEVER REIGNED",
+                "The gallery joins two burial ledges without passing the sealed royal gate. One stone names a regent; the matching socket on the opposite wall has been chiseled away. The tomb was not built to forget a king. It was altered to make the succession impossible to read.",
                 5.0
             )
         _:
