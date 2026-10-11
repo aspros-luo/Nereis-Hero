@@ -885,6 +885,15 @@ func get_humanity_state() -> String:
         return "frayed"
     return "stable"
 
+func begin_natural_test_session() -> void:
+    debug_map_test_mode = true
+    debug_natural_test_active = true
+    debug_natural_test_visited_regions.clear()
+    var scene := get_tree().current_scene
+    _last_natural_test_scene_path = str(scene.scene_file_path) if scene != null else ""
+    if _last_natural_test_scene_path == "res://scenes/escape_prologue.tscn":
+        record_natural_test_region("A0", "escape_prologue.tscn")
+
 func record_natural_test_region(region_id: String, location_id: String = "") -> void:
     if not debug_natural_test_active:
         return
