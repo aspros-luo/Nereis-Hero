@@ -1306,6 +1306,36 @@ func _register_debug_locked_route_hints() -> void:
 			_register_debug_locked_route_hint(2200.0, "erased_royal_name_corridor", "需先发现并开启 H06")
 
 
+func _debug_route_label(target_location: String) -> String:
+	match target_location:
+		"church_escape": return "A0 教会手术所"
+		"village": return "A1 边境村庄"
+		"ash_forest": return "A2 雾林钟墓"
+		"forgotten_city": return "A3 被遗忘城区"
+		"sewer_reservoir": return "A4 旧水库"
+		"old_battlefield": return "A5 旧战场"
+		"monastery_tower": return "A6 修道院钟塔"
+		"prison_depths": return "A7 监牢深处"
+		"royal_tomb": return "A8 旧王墓"
+		"royal_outer_ring": return "A9 王城外环"
+		"grand_cathedral": return "A10 大圣堂"
+		"deep_research_depths": return "A11 深层研究区"
+		"inner_city": return "A12 王室内城"
+		"hidden_well": return "H01 井底回声层"
+		"hidden_bell_chamber": return "H02 倒响钟室"
+		"erased_third_street": return "H03 被删去的第三街"
+		"reflected_stairwell": return "H04 水面背后的楼梯"
+		"silent_bell_room": return "H05 无声钟室"
+		"erased_royal_name_corridor": return "H06 王名抹除廊"
+		"mirror_street": return "H07 镜街"
+		"primordial_hollow": return "H08 胎宫／原初空腔"
+		"cliff_cave_experiment": return "H09 崖下实验窟"
+		"ending_fire_demo": return "结局：烈火天罚"
+		"ending_paradise_demo": return "结局：永恒乐园"
+		_:
+			return target_location
+
+
 func _register_debug_locked_route_hint(x: float, target: String, condition: String) -> void:
 	for marker in debug_exit_markers:
 		var marker_position: Vector2 = marker.get("position", Vector2.ZERO)
@@ -1313,7 +1343,7 @@ func _register_debug_locked_route_hint(x: float, target: String, condition: Stri
 			return
 	debug_exit_markers.append({
 		"position": Vector2(x, floor_y),
-		"label": target,
+		"label": _debug_route_label(target),
 		"kind": "locked",
 		"condition": condition
 	})
@@ -2180,9 +2210,9 @@ func _spawn_exit_door(
 	add_child(door)
 	debug_exit_markers.append({
 		"position": door.position,
-		"label": target_location,
-		"kind": "shortcut" if not unlock_once_flag_id.is_empty() else "exit",
-		"condition": unlock_once_flag_id
+		"label": _debug_route_label(target_location),
+		"kind": "locked" if not enabled else ("shortcut" if not unlock_once_flag_id.is_empty() else "exit"),
+		"condition": unlock_once_flag_id if not unlock_once_flag_id.is_empty() else ("需从另一侧开启" if not enabled else "")
 	})
 	door.interacted.connect(_on_exit_interacted.bind(target_location, target_scene, spawn_side))
 
