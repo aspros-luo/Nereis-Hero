@@ -1,77 +1,37 @@
 # Route / Interpretation Foundation
 
-> **Important:** the Church / Lullaby split described here is an existing implementation foundation, not the final three-ending structure.
+> The Church / Lullaby split is an interpretation layer, not the three-ending selector.
 >
-> The canonical ending design is in [DEVELOPER_STORY_MEMORY.md](./DEVELOPER_STORY_MEMORY.md).
->
-> Future narrative work must not treat "Church route" or "Lullaby route" as the equivalent of the three canonical endings.
+> The canonical ending contract is documented in STORY.md and CROSS_GAME_STORY_CANON_CN.md.
 
 ## Current implementation foundation
 
-After Vertical Slice 001, the first player choice can currently select one of two narrative interpretations.
+The first player choice can select one of two narrative interpretations.
 
-## Church Route
+### Church Route
 
-State:
+- State: WorldState.selected_route = "church"
+- Scene: res://scenes/routes/church_path.tscn
+- Focus: names, records, seals, and the idea that the Church expected Hero to survive.
 
-WorldState.selected_route = "church"
+### Lullaby Route
 
-Scene:
+- State: WorldState.selected_route = "lullaby"
+- Scene: res://scenes/routes/lullaby_path.tscn
+- Focus: recognition, incomplete memories, and events that feel familiar before they can be explained.
 
-res://scenes/routes/church_path.tscn
+## Design role
 
-Perspective:
+The route choice records which interpretation Hero initially trusts; it is not a good/evil score or a direct ending lock. Later evidence can contradict either interpretation.
 
-The Hero follows institutional memory toward the old church. The route emphasizes names, records, seals, and the idea that the church expected the Hero to survive.
+## Three canonical endings
 
-Shared-world NPC:
+1. **凡人之墓 / Mortal's Grave** — Hero defeats the Church and King, helping the Restoration Army win. Its later corruption shows that human power repeats itself.
+2. **永恒乐园 / Eternal Paradise** — high Resonance plus an Outer-God trace, without enough truth anchors and exploration to preserve Hero's individuality.
+3. **烈火天罚 / Blazing Judgment** — high Resonance plus at least three truth-anchor sources and deep exploration preserve enough agency to resist the Outer God, at catastrophic cost.
 
-**Amnesiac Youth** — the same type of character that can appear in Nereis Lullaby, but encountered here through the Hero's perspective.
+The ending evaluator uses Hero Resonance, truth-anchor items and entered hidden regions. It must not read physical_union_complete, Mite interaction count, or relationship-missed flags.
 
-## Lullaby Route
+## Cross-game continuation
 
-State:
-
-WorldState.selected_route = "lullaby"
-
-Scene:
-
-res://scenes/routes/lullaby_path.tscn
-
-Perspective:
-
-The Hero follows the song toward village lights. The route emphasizes recognition, incomplete memories, and events that feel familiar before they can be explained.
-
-Shared-world NPC:
-
-**Traveling Merchant** — his knowledge of the Hero is intentionally different from the church's records.
-
-## Design Role
-
-The route choice is not currently treated as a simple good/evil morality score.
-
-It records which interpretation the Hero chose to trust:
-
-- Church alignment
-- Lullaby resonance
-
-Later story events can contradict either interpretation.
-
-## Future narrative direction
-
-The final game should use these choices as **evidence / interpretation layers**, not as permanent binary factions.
-
-The ultimate endings are:
-
-1. **凡人之墓** — the visible political conflict is resolved through the rebels, but the human cycle of corruption repeats.
-2. **永恒乐园** — Hero fully accepts Mite and becomes the Outer God's vessel.
-3. **烈火天罚** — Hero joins with Mite but hidden knowledge lets him retain enough selfhood to choose annihilation.
-
-Therefore:
-
-- Church evidence does not automatically lead to 凡人之墓.
-- Lullaby evidence does not automatically lead to 永恒乐园.
-- Discovering hidden clues is not a "secret route" by itself.
-- The final ending should emerge from the total playthrough state.
-
-The existing Church/Lullaby implementation may be retained as a narrative delivery mechanism until the final story structure is designed.
+Nereis-Lullaby is primarily told through Mite's perspective. After Mortal's Grave, it may show the Restoration Army gradually becoming a new corrupt institution, Hero compromising and eventually leaving Mite behind, and the Outer God continuing its search for another vessel. This continuation expands the aftermath; it does not erase the RPG's political victory.
