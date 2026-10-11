@@ -6,6 +6,7 @@ const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
+const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
 const RESONANCE_SOURCE_SCRIPT = preload("res://scripts/world/resonance_source_clue.gd")
 const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")
 const LOCAL_RESONANCE_ROUTE_SCRIPT = preload("res://scripts/world/resonance_local_route.gd")
@@ -55,6 +56,7 @@ func _ready() -> void:
     _spawn_ui()
     _spawn_region_sources()
     _spawn_region_exits()
+    _spawn_region_rest_point()
     queue_redraw()
 
     var intro_id := "graybox_intro_%s" % location_id
@@ -750,6 +752,57 @@ func _add_platform(rect: Rect2) -> void:
     shape.position = rect.size * 0.5
     body.add_child(shape)
     add_child(body)
+
+func _spawn_region_rest_point() -> void:
+    # Main regions receive one deliberate rest point; hidden regions remain riskier and have no free checkpoint.
+    # 主区域各有一处有意布置的休整点；隐藏区域不提供免费的安全检查点。
+    var rest_x := -1.0
+    var rest_name := "WAYSHRINE"
+    match region_id:
+        "A2":
+            rest_x = 1150.0
+            rest_name = "OLD PILGRIM SHRINE"
+        "A3":
+            rest_x = 1750.0
+            rest_name = "ABANDONED STREET SHRINE"
+        "A4":
+            rest_x = 1160.0
+            rest_name = "RESERVOIR ALTAR"
+        "A5":
+            rest_x = 1360.0
+            rest_name = "BATTLEFIELD MEMORIAL"
+        "A6":
+            rest_x = 1300.0
+            rest_name = "CLOISTER REST"
+        "A7":
+            rest_x = 1320.0
+            rest_name = "PRISONER'S BENCH"
+        "A8":
+            rest_x = 1150.0
+            rest_name = "ROYAL TOMBSTONE"
+        "A9":
+            rest_x = 1180.0
+            rest_name = "OUTER RING WAYSHRINE"
+        "A10":
+            rest_x = 1200.0
+            rest_name = "CHAPEL REST"
+        "A11":
+            rest_x = 1050.0
+            rest_name = "OBSERVATION REST"
+        "A12":
+            rest_x = 1360.0
+            rest_name = "THRONE DISTRICT SHRINE"
+        _:
+            return
+
+    var rest := Node2D.new()
+    rest.set_script(REST_POINT_SCRIPT)
+    rest.name = "RegionRestPoint_%s" % region_id
+    rest.position = Vector2(rest_x, floor_y)
+    rest.rest_id = "rest_%s" % region_id
+    rest.display_name = rest_name
+    add_child(rest)
+
 
 func _spawn_region_sources() -> void:
     match region_id:
