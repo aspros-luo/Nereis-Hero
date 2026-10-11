@@ -123,10 +123,10 @@ def main() -> int:
     # Verify that every source ID required by a gate is actually spawned by the region controller.
     # 检查所有入口要求的异常来源，都确实由区域控制器生成。
     required_source_ids: set[str] = set()
-    for raw_ids in re.findall(r'gate\\.required_source_ids\\s*=\\s*\\[([^\\]]*)\\]', region_script, re.DOTALL):
+    for raw_ids in re.findall(r'gate\.required_source_ids\s*=\s*\[([^\]]*)\]', region_script, re.DOTALL):
         required_source_ids.update(re.findall(r'"([^"]+)"', raw_ids))
     spawned_source_ids = set(
-        re.findall(r'_spawn_source\\(\\s*Vector2\\([^)]*\\),\\s*"([^"]+)"', region_script, re.DOTALL)
+        re.findall(r'_spawn_source\(\s*Vector2\([^)]*\),\s*"([^"]+)"', region_script, re.DOTALL)
     )
     missing_source_ids = sorted(required_source_ids - spawned_source_ids)
     if missing_source_ids:
@@ -136,7 +136,7 @@ def main() -> int:
     # 检查地图、存档续玩和隐藏入口引用的场景路径均存在。
     referenced_scripts = [world_state, boot_script, region_script, secret_gate]
     for referenced_scene in sorted(set(
-        re.findall(r'res://(scenes/[^"\\s]+\\.tscn)', "\\n".join(referenced_scripts))
+        re.findall(r'res://(scenes/[^"\s]+\.tscn)', "\n".join(referenced_scripts))
     )):
         if not (ROOT / referenced_scene).is_file():
             errors.append(f"Missing referenced scene: {referenced_scene}")
