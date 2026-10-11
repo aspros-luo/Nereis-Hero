@@ -271,6 +271,8 @@ def main() -> int:
     require(local_route_script, "WorldState.open_hidden_path(route_id)", "Local route persistence", errors)
     require(local_route_script, "func _sync_bridge_collision() -> void:", "Local route collision lifecycle", errors)
     require(local_route_script, "bridge_body.queue_free()", "Temporary bridge collision removal", errors)
+    require(local_route_script, "func _hero_over_bridge() -> bool:", "Local route protects a Hero standing on a temporary bridge", errors)
+    require(local_route_script, "revealed or opened_permanently or _hero_over_bridge()", "Bridge collision remains while the Hero occupies it", errors)
     require(local_route_script, "INTERACTION_FOCUS_SCRIPT.is_focused(self)", "Local route uses shared interaction focus", errors)
     require(local_route_script, '"E  ANCHOR THE THIRD STREET"', "Local route explicit E interaction", errors)
     require(world_state, 'for target in get_tree().get_nodes_in_group("resonance_hidden_targets"):', "WorldState refreshes resonance targets", errors)
