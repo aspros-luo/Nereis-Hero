@@ -233,6 +233,8 @@ def main() -> int:
 
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
     require(region_script, "[NEREIS][MAP][SPAWN] region=%s", "Map spawn Debug log", errors)
+    require(region_script, "WorldState.set_checkpoint(hero.global_position)", "Region-local death checkpoint", errors)
+    require(region_script, "Every region owns its death checkpoint", "Region-local death checkpoint rationale", errors)
     require(region_script, "[NEREIS][MAP][EXIT] from=%s", "Map exit Debug log", errors)
     require(region_script, 'const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")', "Regional rest point script", errors)
     require(region_script, "func _spawn_region_rest_point() -> void:", "Regional rest point builder", errors)
