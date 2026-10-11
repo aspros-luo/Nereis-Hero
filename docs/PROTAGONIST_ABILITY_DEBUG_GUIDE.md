@@ -52,6 +52,8 @@ For map acceptance, run the whole project (startup scene: `res://scenes/boot.tsc
 4. The first normal E interaction persists the opened-gate state. Use a dedicated test save and clean it after acceptance. Do not count a Debug-bypassed reveal as a natural threshold pass.
 5. Turn F5 off and retest the normal resonance, exposure, and source requirements before marking the gate thresholds as passed.
 
+During map acceptance, watch Godot's Output panel for `[NEREIS][MAP][GATE]`, `[NEREIS][MAP][EXIT]`, and `[NEREIS][MAP][SPAWN]`. These record reveal thresholds, target scene, transition side, and actual spawn X so a failed return can be reproduced from evidence rather than guesswork.
+
 ## 分项测试 / Test cases
 
 ### 1. 跳跃与位移 / Jump and mobility
