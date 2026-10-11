@@ -17,6 +17,7 @@ const BANDIT_RAIDER_SCRIPT = preload("res://scripts/enemies/bandit_raider.gd")
 const RESEARCH_HUSK_SCRIPT = preload("res://scripts/enemies/research_husk.gd")
 const CHURCH_INQUISITOR_SCRIPT = preload("res://scripts/enemies/church_inquisitor.gd")
 const BELL_WRAITH_SCRIPT = preload("res://scripts/enemies/bell_wraith.gd")
+const THIRD_CORD_FRAGMENT_SCRIPT = preload("res://scripts/world/third_cord_fragment.gd")
 
 const ENCOUNTER_ACTIVATE_RANGE := 420.0
 const ENCOUNTER_DEACTIVATE_RANGE := 560.0
@@ -144,6 +145,8 @@ func _spawn_region_encounters() -> void:
 		"H09":
 			if "cliff_cave_experiment_defeated" not in WorldState.achievement_flags:
 				_spawn_encounter(RESEARCH_HUSK_SCRIPT, "H09_AncientExperiment", 1450.0, 20.0, 54.0)
+			elif "third_umbilical_cord_fragment_acquired" not in WorldState.achievement_flags:
+				_spawn_cord_fragment_pickup(Vector2(1450.0, floor_y - 40.0))
 
 
 func _spawn_encounter(enemy_script: Script, enemy_name: String, spawn_x: float, body_radius: float, body_height: float) -> void:
@@ -156,7 +159,7 @@ func _spawn_encounter(enemy_script: Script, enemy_name: String, spawn_x: float, 
 	enemy.set_meta("encounter_active", false)
 	add_child(enemy)
 	if enemy.has_signal("defeated"):
-		enemy.connect("defeated", _on_region_enemy_defeated.bind(enemy_name))
+		enemy.connect("defeated", _on_region_enemy_defeated.bind(enemy_name, enemy))
 	if enemy_name == "A6_MadCleric_01":
 		enemy.set("health", 240)
 	elif enemy_name == "H09_AncientExperiment":
@@ -165,7 +168,7 @@ func _spawn_encounter(enemy_script: Script, enemy_name: String, spawn_x: float, 
 	print("[NEREIS][MAP][ENCOUNTER] region=%s enemy=%s x=%.1f" % [region_id, enemy_name, spawn_x])
 
 
-func _on_region_enemy_defeated(enemy_name: String) -> void:
+func _on_region_enemy_defeated(enemy_name: String, enemy_node: Node2D) -> void:
 	if enemy_name == "A6_MadCleric_01":
 		if WorldState.record_achievement("defeated_mad_cleric") and is_instance_valid(narrative):
 			narrative.show_message(
@@ -175,14 +178,34 @@ func _on_region_enemy_defeated(enemy_name: String) -> void:
 			)
 	elif enemy_name == "H09_AncientExperiment":
 		if WorldState.record_achievement("cliff_cave_experiment_defeated"):
-			WorldState.record_achievement("third_umbilical_cord_fragment_acquired")
-			WorldState.add_hidden_artifact_piece()
+			_spawn_cord_fragment_pickup(enemy_node.global_position + Vector2(0.0, -40.0))
 			if is_instance_valid(narrative):
 				narrative.show_message(
-					"第三根脐带的残片",
-					"实验体的胸腔里没有心脏，只有一段被教会包裹在银线中的脐带。它并非完整的遗物，却在触碰时与体内的古老残留同步搏动。\n\n【烈火天罚条件之一】已记录。还需要其他真相锚点与隐藏探索。",
-					7.0
+					"银线中仍有脉动",
+					"实验体的胸腔里没有心脏，只有一段被教会包裹在银线中的脐带。它仍悬在破裂的骨环里，轻轻抽动。\n\n靠近后按 E 拾取。若暂时离开，残片仍会留在这里。",
+					6.5
 				)
+
+
+func _spawn_cord_fragment_pickup(pickup_position: Vector2) -> void:
+	if "third_umbilical_cord_fragment_acquired" in WorldState.achievement_flags:
+		return
+	var pickup := Node2D.new()
+	pickup.set_script(THIRD_CORD_FRAGMENT_SCRIPT)
+	pickup.name = "ThirdUmbilicalCordFragment"
+	pickup.position = pickup_position
+	add_child(pickup)
+	pickup.collected.connect(_on_cord_fragment_collected)
+
+
+func _on_cord_fragment_collected() -> void:
+	if not is_instance_valid(narrative):
+		return
+	narrative.show_message(
+		"第三根脐带的残片",
+		"脐带贴近掌心时，远处所有钟声同时停止了一瞬。它不是完整的第三根脐带，却能在意志被吞没时留下一个锚点。\n\n【烈火天罚条件之一】已记录。还需要其他真相锚点与隐藏探索。",
+		7.0
+	)
 
 
 func _spawn_x_for_side(side: String) -> float:
