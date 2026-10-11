@@ -185,9 +185,9 @@ func _spawn_gatekeeper() -> void:
     npc.npc_id = "village_gatekeeper"
     npc.display_name = "村庄守门人"
     if WorldState.selected_route == "church":
-        npc.dialogue = "The gatekeeper studies the church seal.\n\n\"They told us you would never return. Why did they send the same man back?\""
+        npc.dialogue = "The gatekeeper studies the church seal.\n\n\"他们告诉我们，你再也不会回来。为什么他们又把同一个人送了回来？\""
     else:
-        npc.dialogue = "The gatekeeper hears the lullaby on the wind and shuts the tavern door halfway.\n\n\"Don't sing that here. Not unless you want the village to remember.\""
+        npc.dialogue = "The gatekeeper hears the lullaby on the wind and shuts the tavern door halfway.\n\n\"别在这里唱那首歌。除非你想让整座村庄都回想起来。\""
     add_child(npc)
     npc.interacted.connect(_on_village_npc_interacted.bind(npc))
 
@@ -198,11 +198,11 @@ func _spawn_shared_world_npcs() -> void:
     youth.npc_id = "amnesiac_youth"
     youth.display_name = "失忆的年轻人"
     if WorldState.get_humanity_state() == "hollow":
-        youth.dialogue = "The young man takes one step back.\n\n\"I know that look. Something in you already left.\""
+        youth.dialogue = "The young man takes one step back.\n\n\"我认得这种眼神。你身体里已经有某种东西离开了。\""
     elif WorldState.selected_route == "church":
-        youth.dialogue = "The young man touches your church seal and goes pale.\n\n\"I remember you kneeling there. They told me not to remember.\""
+        youth.dialogue = "The young man touches your church seal and goes pale.\n\n\"我记得你曾跪在那里。他们告诉我，不许记得这件事。\""
     else:
-        youth.dialogue = "The young man stares toward the tavern.\n\n\"You came back carrying someone once. I don't know who it was. I only remember the singing.\""
+        youth.dialogue = "The young man stares toward the tavern.\n\n\"有一次你回来时，怀里抱着一个人。我不知道那是谁，只记得当时有人在唱歌。\""
     add_child(youth)
     youth.interacted.connect(_on_village_npc_interacted.bind(youth))
 
@@ -212,11 +212,11 @@ func _spawn_shared_world_npcs() -> void:
     merchant.npc_id = "traveling_merchant"
     merchant.display_name = "旅行商人"
     if WorldState.get_humanity_state() == "hollow":
-        merchant.dialogue = "The merchant stops smiling.\n\n\"You should not be able to hear the song anymore.\""
+        merchant.dialogue = "The merchant stops smiling.\n\n\"你本不该再听见那首歌了。\""
     elif WorldState.selected_route == "church":
-        merchant.dialogue = "The merchant turns a silver token between two fingers.\n\n\"Church roads are safe only until the bells start. Then even the stones lie.\""
+        merchant.dialogue = "The merchant turns a silver token between two fingers.\n\n\"教会的道路只在钟声响起前安全。钟声一响，连石头都会说谎。\""
     else:
-        merchant.dialogue = "The merchant smiles without humor.\n\n\"I saw the village seven years ago. Your face was already on the church door.\""
+        merchant.dialogue = "The merchant smiles without humor.\n\n\"七年前我来过这座村庄。那时你的脸就已经画在教会的门上了。\""
     add_child(merchant)
     merchant.interacted.connect(_on_village_npc_interacted.bind(merchant))
 
