@@ -1043,7 +1043,7 @@ func _spawn_region_exits() -> void:
         "A2":
             _spawn_exit_door(
                 72.0, "E  RETURN TO VILLAGE", "village",
-                "res://scenes/village_hub.tscn", "west"
+                "res://scenes/village_hub.tscn", "north_gate"
             )
             _spawn_exit_door(
                 map_width - 72.0, "E  ENTER THE FORGOTTEN CITY", "forgotten_city",
