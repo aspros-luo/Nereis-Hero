@@ -843,6 +843,17 @@
       "bridge_y": 310,
       "persistent_on_open": true,
       "design_intent": "Reveals a dry aqueduct span above the old reservoir; it is a local traversal route, not a hidden-scene entrance."
+    },
+    {
+      "id": "A5_BURIED_STANDARD_CROSSING",
+      "region_id": "A5",
+      "required_resonance": 24,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 1000,
+      "bridge_end_x": 1220,
+      "bridge_y": 345,
+      "persistent_on_open": true,
+      "design_intent": "A resonance-anchored trench crossing under a buried standard; it shortens the risky battlefield route but does not bypass the fortress's story gate."
     }
   ]
 }
