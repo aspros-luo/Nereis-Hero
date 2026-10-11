@@ -1038,6 +1038,24 @@ def main() -> int:
             errors.append("Topology contains duplicate local Resonance route IDs.")
         known_region_ids = {region.get("id") for region in topology_for_local_routes.get("regions", [])}
         route_by_id = {route.get("id"): route for route in local_routes}
+        route_builder_start = region_script.find("func _spawn_local_resonance_routes()")
+        route_builder_end = region_script.find("func _on_local_resonance_route_opened", route_builder_start)
+        if route_builder_start < 0 or route_builder_end < 0:
+            route_builder = ""
+            errors.append("Could not isolate the local Resonance route builder for region/identity auditing.")
+        else:
+            route_builder = region_script[route_builder_start:route_builder_end]
+        runtime_route_ids = re.findall(r'route\.route_id\s*=\s*"([^"]+)"', route_builder)
+        if len(runtime_route_ids) != len(set(runtime_route_ids)):
+            errors.append("Runtime local Resonance route builder contains duplicate route IDs.")
+        topology_route_id_set = set(local_route_ids)
+        runtime_route_id_set = set(runtime_route_ids)
+        if runtime_route_id_set != topology_route_id_set:
+            errors.append(
+                "Runtime/topology local Resonance route ID mismatch: "
+                f"runtime-only={sorted(runtime_route_id_set - topology_route_id_set)}, "
+                f"topology-only={sorted(topology_route_id_set - runtime_route_id_set)}."
+            )
         expected_local_route_ids = ("A2_BELLGRAVE_CANOPY_CROSSING", "A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK", "A7_PRISON_MAINTENANCE_CROSSWALK", "A8_ERASED_REGENT_GALLERY", "A9_RAIN_REFLECTION_ROOFWALK", "A10_CHOIRLESS_UPPER_GALLERY", "A11_SECOND_OBSERVER_SPAN", "A12_CROWN_WALL_WALK")
         expected_local_route_prompts = {
             "A2_BELLGRAVE_CANOPY_CROSSING": "E  ANCHOR THE BELLGRAVE CANOPY",
@@ -1070,7 +1088,160 @@ def main() -> int:
             if route_design is None:
                 errors.append(f"Topology is missing local Resonance route {route_id}.")
                 continue
-            require(region_script, f'route.route_id = "{route_id}"', f"{route_id} runtime identity", errors)
+            require(route_builder, f'route.route_id = "{route_id}"', f"{route_id} runtime identity", errors)
+            route_match = re.search(rf'route\.route_id\s*=\s*"{re.escape(route_id)}"', route_builder)
+            if route_match is not None:
+                region_branches = re.findall(r'^\s*"([^"]+)":\s*
+            if prompt:
+                require(region_script, f'route.prompt_text = "{prompt}"', f"{route_id} interaction prompt", errors)
+            narrative_title = expected_local_route_narratives.get(route_id)
+            if narrative_title:
+                require(region_script, f'"{narrative_title}"', f"{route_id} narrative title", errors)
+                require(localization_script, f'"{narrative_title}": {{', f"{route_id} localized narrative title", errors)
+                body_match = re.search(
+                    rf'"{re.escape(narrative_title)}",\s*"((?:[^"\\]|\\.)*)"',
+                    region_script,
+                )
+                if body_match is None:
+                    errors.append(f"{route_id} narrative body could not be located for localization audit.")
+                else:
+                    require(
+                        localization_script,
+                        f'"{body_match.group(1)}": {{',
+                        f"{route_id} localized narrative body",
+                        errors,
+                    )
+            if prompt:
+                require(localization_script, f'"{prompt}": {{', f"{route_id} localized interaction prompt", errors)
+            # Every authored route string must have all three non-English translations;
+            # English is the source text and remains the fallback.
+            # 每条路线的标题、正文和交互提示都必须有简中、繁中、日语译文。
+            localized_sources = [value for value in (prompt, narrative_title) if value]
+            narrative_section_start = region_script.find("func _on_local_resonance_route_opened")
+            if narrative_title and narrative_section_start >= 0:
+                body_match = re.search(
+                    rf'"{re.escape(narrative_title)}",\s*"((?:[^"\\]|\\.)*)"',
+                    region_script[narrative_section_start:],
+                )
+                if body_match is not None:
+                    localized_sources.append(body_match.group(1))
+            for source_text in localized_sources:
+                entry = re.search(rf'"{re.escape(source_text)}"\s*:\s*\{([^}]*)\}', localization_script)
+                if entry is None:
+                    errors.append(f"{route_id} is missing a localization entry for {source_text[:70]!r}.")
+                    continue
+                for language in ("zh_cn", "zh_tw", "ja"):
+                    translation = re.search(rf'"{language}"\s*:\s*"([^"]+)"', entry.group(1))
+                    if translation is None or not translation.group(1).strip():
+                        errors.append(f"{route_id} has no non-empty {language} translation for {source_text[:70]!r}.")
+            for key, property_name in (
+                ("required_resonance", "required_resonance"),
+                ("bridge_start_x", "bridge_start_x"),
+                ("bridge_end_x", "bridge_end_x"),
+                ("bridge_y", "bridge_y"),
+            ):
+                expected_value = route_design.get(key)
+                if expected_value is None:
+                    errors.append(f"Topology local route {route_id} is missing {key}.")
+                    continue
+                if key == "required_resonance":
+                    literal = str(int(expected_value))
+                else:
+                    literal = f"{float(expected_value):.1f}"
+                require(
+                    region_script,
+                    f"route.{property_name} = {literal}",
+                    f"{route_id} {property_name} matches topology",
+                    errors,
+                )
+            if route_design.get("requires_resonance_sight") is not True:
+                errors.append(f"Topology local route {route_id} must require Resonance Sight.")
+            if route_design.get("persistent_on_open") is not True:
+                errors.append(f"Topology local route {route_id} must persist after opening.")
+            if route_design.get("region_id") not in known_region_ids:
+                errors.append(f"Topology local route {route_id} references unknown region {route_design.get('region_id')}.")
+            geometry_valid = True
+            try:
+                start_x = float(route_design.get("bridge_start_x"))
+                end_x = float(route_design.get("bridge_end_x"))
+                bridge_y = float(route_design.get("bridge_y"))
+                threshold = int(route_design.get("required_resonance"))
+                if end_x <= start_x:
+                    errors.append(f"Topology local route {route_id} must have bridge_end_x > bridge_start_x.")
+                    geometry_valid = False
+                if not 0 <= threshold <= 100:
+                    errors.append(f"Topology local route {route_id} has an invalid Resonance threshold.")
+                    geometry_valid = False
+                if not 0.0 <= bridge_y <= 540.0:
+                    errors.append(f"Topology local route {route_id} has a bridge elevation outside the graybox floor bounds.")
+                    geometry_valid = False
+            except (TypeError, ValueError):
+                errors.append(f"Topology local route {route_id} has non-numeric geometry or threshold values.")
+                geometry_valid = False
+            if not geometry_valid:
+                continue
+            route_platforms = platforms_by_region.get(route_design.get("region_id"), [])
+            if not route_platforms:
+                errors.append(f"Local route {route_id} has no parsed platform layout for {route_design.get('region_id')}.")
+            else:
+                bridge_y = float(route_design.get("bridge_y", 0.0))
+                for endpoint_key in ("bridge_start_x", "bridge_end_x"):
+                    endpoint_x = float(route_design.get(endpoint_key, 0.0))
+                    nearest = min(
+                        (
+                            (
+                                max(0.0, x - endpoint_x, endpoint_x - (x + width)),
+                                abs(y - bridge_y),
+                            )
+                            for x, y, width, _height in route_platforms
+                        ),
+                        key=lambda gap: gap[0] ** 2 + gap[1] ** 2,
+                    )
+                    if nearest[0] > 100.0 or nearest[1] > 45.0:
+                        errors.append(
+                            f"Local route {route_id} {endpoint_key} is detached from nearby platforms "
+                            f"(horizontal gap={nearest[0]:g}, vertical gap={nearest[1]:g})."
+                        )
+                # A bridge may touch a platform edge, but should not be embedded through its collision body.
+                # 桥体可以与平台边缘相接，但不应大面积穿进平台碰撞体。
+                for x, y, width, height in route_platforms:
+                    horizontal_overlap = min(end_x, x + width) - max(start_x, x)
+                    vertical_overlap = min(bridge_y + 18.0, y + height) - max(bridge_y, y)
+                    if horizontal_overlap > 0.0 and vertical_overlap > 2.0:
+                        errors.append(
+                            f"Local route {route_id} overlaps a platform collision body by "
+                            f"{vertical_overlap:g}px vertically across {horizontal_overlap:g}px."
+                        )
+    except (json.JSONDecodeError, OSError) as exc:
+        errors.append(f"Local Resonance route topology audit could not read topology: {exc}")
+
+    if errors:
+        print("GRAYBOX SCENE WIRING CHECK FAILED")
+        for error in errors:
+            print(f" - {error}")
+        return 1
+
+    print("GRAYBOX SCENE WIRING STATIC CHECK PASSED")
+    print(" - A2-A12 plus H01-H08 scenes have scripts and resume mappings.")
+    print(" - The R01-R08 anomaly source chain is present.")
+    print(" - H01-H08 plus C15/C19 gates use saved discovery/open/entry state and progression conditions.")
+    print(f" - Platform reachability estimate: {platform_audit_regions} regions, {platform_audit_count} platforms.")
+    print(f" - Local resonance route contract: {local_route_count} routes; IDs, prompts, narratives, endpoint proximity, collision overlap, sight gating, and persistence checked.")
+    print(" - C15 enters A11 from A8; C19 is the alternate A10 entry; H08 ending exit requires physical union.")
+    print("NOTE: Godot runtime/collision/input validation is still required.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+, route_builder[:route_match.start()], re.MULTILINE)
+                runtime_region = region_branches[-1] if region_branches else None
+                expected_region = route_design.get("region_id")
+                if runtime_region != expected_region:
+                    errors.append(
+                        f"Local route {route_id} is built under runtime region {runtime_region!r}, "
+                        f"but topology assigns it to {expected_region!r}."
+                    )
             prompt = expected_local_route_prompts.get(route_id)
             if prompt:
                 require(region_script, f'route.prompt_text = "{prompt}"', f"{route_id} interaction prompt", errors)
