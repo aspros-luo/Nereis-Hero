@@ -89,6 +89,10 @@ def main() -> int:
                 errors.append("Topology H01 return contract must match the shared persistent gate state used by runtime.")
             if h01_exit.get("opens_from") != "A4" or h01_exit.get("to") != "A4":
                 errors.append("Topology H01 secondary exit must remain the A4-side return through the well gate.")
+            h08 = next((region for region in hidden_regions if region.get("id") == "H08"), None)
+            h08_exit = h08.get("secondary_exit", {}) if h08 else {}
+            if h08_exit.get("unlock_condition") != "physical_union_complete_then_route_candidate_selects_ending":
+                errors.append("Topology H08 ending exit must match the runtime physical-union gate and delegate ending choice to the evaluator.")
             regions = topology.get("regions", [])
             region_ids = [region.get("id") for region in regions]
             if len(region_ids) != len(set(region_ids)):
