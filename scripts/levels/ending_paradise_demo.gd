@@ -39,8 +39,6 @@ var ending_cg: Control
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
     WorldState.current_location = "ending_paradise_demo"
-    WorldState.physical_union_complete = true
-    WorldState.outer_god_resonance = true
 
     _create_floor()
     _create_boundaries()
@@ -50,7 +48,7 @@ func _ready() -> void:
     _spawn_high_priest()
     _spawn_audio()
 
-    # Union begins only after both monstrous institutional bosses are defeated.
+    # The cosmic ending follows from Resonance and exploration, not a relationship milestone.
     queue_redraw()
 
 func _process(delta: float) -> void:
@@ -128,7 +126,7 @@ func _on_paradise_king_defeated() -> void:
         3.8
     )
     await narrative.message_finished
-    _begin_union()
+    _begin_paradise_ending()
     ending_active = true
 
 func _spawn_mite() -> void:
@@ -154,8 +152,7 @@ func _spawn_audio() -> void:
     audio_director.set_script(NARRATIVE_AUDIO_SCRIPT)
     add_child(audio_director)
 
-func _begin_union() -> void:
-    WorldState.mark_physical_union_complete()
+func _begin_paradise_ending() -> void:
     WorldState.ending_route = "永恒乐园"
     WorldState.save_game()
     if audio_director and audio_director.has_method("play_corrupted_lullaby"):
