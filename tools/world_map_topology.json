@@ -909,6 +909,17 @@
       "bridge_y": 270,
       "persistent_on_open": true,
       "design_intent": "A choirless upper gallery links the staggered cathedral chapel ledges as a local traversal shortcut; it must not replace either cathedral exit or bypass C19."
+    },
+    {
+      "id": "A11_SECOND_OBSERVER_SPAN",
+      "region_id": "A11",
+      "required_resonance": 56,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 1230,
+      "bridge_end_x": 1920,
+      "bridge_y": 265,
+      "persistent_on_open": true,
+      "design_intent": "A high observation span reconnects two ancient ruin ledges above the Church laboratory; it must not unlock H08 or bypass C15/C19 progression gates."
     }
   ]
 }
