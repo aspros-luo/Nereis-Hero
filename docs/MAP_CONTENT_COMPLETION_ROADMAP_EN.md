@@ -31,13 +31,13 @@ Every bridge requires active Resonance Sight and the listed resonance threshold.
 |---|---|---:|---:|---:|---|
 | A3 | `A3_THIRD_STREET_ROOFLINE` | 28 | 1320–1690 | 400 | Reconnects the erased street; does not enter H03. |
 | A4 | `A4_OLD_STONE_AQUEDUCT` | 36 | 1650–1935 | 335 | Reconnects the dry aqueduct; does not enter H04. |
-| A5 | `A5_BURIED_STANDARD_CROSSING` | 24 | 880–1340 | 390 | Crosses the trench beneath the buried standard; does not bypass the fortress gate. |
+| A5 | `A5_BURIED_STANDARD_CROSSING` | 24 | 880–1220 | 390 | Crosses the trench beneath the buried standard; does not bypass the fortress gate. |
 | A6 | `A6_SILENT_BELL_SERVICE_WALK` | 32 | 1250–1510 | 290 | Reconnects the bell-tower service walk; does not bypass H05 or the story exit. |
 | A7 | `A7_PRISON_MAINTENANCE_CROSSWALK` | 30 | 1280–1530 | 340 | Connects prison maintenance levels; does not open the royal tomb gate. |
 | A8 | `A8_ERASED_REGENT_GALLERY` | 40 | 1240–1490 | 330 | Connects erased royal-name ledges; does not enter H06. |
 | A9 | `A9_RAIN_REFLECTION_ROOFWALK` | 44 | 1260–1520 | 335 | Reconnects abandoned roofs; does not replace H07 or the royal transport gate. |
-| A10 | `A10_CHOIRLESS_UPPER_GALLERY` | 48 | 675–960 | 310 | Connects chapel / choir ledges; does not replace either cathedral exit or C19. |
-| A11 | `A11_SECOND_OBSERVER_SPAN` | 56 | 1230–1920 | 285 | Connects ancient observation ledges; does not unlock H08 or bypass C15/C19. |
+| A10 | `A10_CHOIRLESS_UPPER_GALLERY` | 48 | 675–960 | 307 | Connects chapel / choir ledges; does not replace either cathedral exit or C19. |
+| A11 | `A11_SECOND_OBSERVER_SPAN` | 56 | 1350–1800 | 285 | Connects ancient observation ledges; does not unlock H08 or bypass C15/C19. |
 | A12 | `A12_CROWN_WALL_WALK` | 62 | 1400–1940 | 325 | Connects upper palace ledges; does not alter throne access or ending gates. |
 
 The runtime controller, machine-readable topology, static checker, and Chinese roadmap must stay synchronized when a route is changed. The static checker also verifies that each bridge endpoint remains near a platform in its region. That proximity check is an estimate, not proof of a usable jump or collision-safe landing. Temporary bridges also retain their collision and visual while the Hero is standing on them after Sight expires, then disappear once the Hero leaves.
