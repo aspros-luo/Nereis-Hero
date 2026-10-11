@@ -1728,7 +1728,7 @@ func _spawn_local_resonance_routes() -> void:
             route.required_resonance = 44
             route.bridge_start_x = 1260.0
             route.bridge_end_x = 1520.0
-            route.bridge_y = 335.0
+            route.bridge_y = 332.0
             route.prompt_text = "E  ANCHOR THE RAIN REFLECTION"
         "A10":
             # The choir gallery bridges the staggered upper chapel ledges; it does not replace the cathedral exits or C19.
