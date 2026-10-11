@@ -1164,12 +1164,13 @@ func _spawn_region_exits() -> void:
                 "res://scenes/prison_depths.tscn", "west"
             )
             _spawn_h05_gate(1660.0)
-            if WorldState.is_hidden_path_opened("H05"):
-                _spawn_exit_door(
-                    2110.0, "E  OPEN THE BELL TOWER DROP", "forgotten_city",
-                    "res://scenes/forgotten_city.tscn", "bell_drop",
-                    true, "opened_bell_tower_drop", "E  RETURN TO THE FORGOTTEN CITY"
-                )
+            # C10 is a physical monastery shortcut, independent of the optional H05 secret room.
+            # C10 是修道院的实体捷径，不应被可选隐藏区 H05 的发现状态锁死。
+            _spawn_exit_door(
+                2110.0, "E  OPEN THE BELL TOWER DROP", "forgotten_city",
+                "res://scenes/forgotten_city.tscn", "bell_drop",
+                true, "opened_bell_tower_drop", "E  RETURN TO THE FORGOTTEN CITY"
+            )
         "A7":
             _spawn_exit_door(
                 72.0, "E  RETURN TO THE MONASTERY", "monastery_tower",
