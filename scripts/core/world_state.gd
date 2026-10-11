@@ -63,6 +63,9 @@ var menu_input_locked := false
 # Session-only protagonist Debug override; intentionally not serialized to save data.
 # 主角 Debug 覆盖只在当前运行会话有效，不写入存档。
 var debug_ability_override_active := false
+# Session-only map acceptance mode. While active, debug exploration never overwrites the real save.
+# 仅当前会话有效的地图验收模式；开启时调试探索不会覆盖正式存档。
+var debug_map_test_mode := false
 var hitstop_serial := 0
 
 # Witch Time scales hostile AI delta only; Hero input and physics stay responsive.
@@ -378,6 +381,8 @@ func set_language(language_id: String) -> void:
     save_game()
 
 func save_game() -> void:
+    if debug_map_test_mode:
+        return
     var data := {
         "hero_memory": hero_memory,
         "hero_humanity": hero_humanity,
@@ -755,6 +760,7 @@ func delete_save() -> void:
 
 func reset() -> void:
     var preserved_language := language
+    debug_map_test_mode = false
     debug_ability_override_active = false
     hero_memory = 0
     hero_humanity = 100
