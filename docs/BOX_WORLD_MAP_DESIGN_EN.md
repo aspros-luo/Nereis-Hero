@@ -48,5 +48,6 @@ Prioritize A2, A3, A4, A6, A8, and A9:
 ## Status
 
 - Done: world-map overlay for A0–A12 and discovered hidden areas; M toggles it, Esc closes it, and main routes are visually distinguished from loops.
-- Remaining: make the box-world structure tangible through vertical geometry, exit placement, landmarks, and shortcut return experiences.
+- Implemented, pending runtime verification: the A3-to-A5 exit now sits on the eastern raised parapet (about x=2240, y=410); the H03 gate has moved beside the Third Street clue (about x=1120). F10 navigation and objective text were aligned with these changes.
+- Remaining: extend vertical-space and loop readability improvements to A2, A4, A6, A8, and A9, then verify jump reachability and interaction spacing in Godot.
 - Not yet runtime-verified: Godot 4.6.x parsing, input-lock behavior, window-size adaptation, and full natural exploration. Static checks are not runtime acceptance.
