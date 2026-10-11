@@ -980,6 +980,44 @@ def main() -> int:
         except (json.JSONDecodeError, OSError) as exc:
             errors.append(f"Hidden gate/topology consistency audit could not read topology: {exc}")
 
+    # Keep the topology's local Resonance routes aligned with their runtime construction.
+    # 确保拓扑中的局部鸣响路线与运行时构造参数一致。
+    try:
+        topology_for_local_routes = json.loads((ROOT / "tools/world_map_topology.json").read_text(encoding="utf-8"))
+        runtime_route_contracts = {
+            "A3_THIRD_STREET_ROOFLINE": {
+                "required_resonance": "route.required_resonance = 28",
+                "bridge_start_x": "route.bridge_start_x = 1690.0",
+                "bridge_end_x": "route.bridge_end_x = 2050.0",
+                "bridge_y": "route.bridge_y = 350.0",
+            },
+            "A4_OLD_STONE_AQUEDUCT": {
+                "required_resonance": "route.required_resonance = 36",
+                "bridge_start_x": "route.bridge_start_x = 1760.0",
+                "bridge_end_x": "route.bridge_end_x = 1940.0",
+                "bridge_y": "route.bridge_y = 310.0",
+            },
+        }
+        local_routes = topology_for_local_routes.get("local_resonance_routes", [])
+        route_by_id = {route.get("id"): route for route in local_routes}
+        for route_id, runtime_contract in runtime_route_contracts.items():
+            route_design = route_by_id.get(route_id)
+            if route_design is None:
+                errors.append(f"Topology is missing local Resonance route {route_id}.")
+                continue
+            for key, source_fragment in runtime_contract.items():
+                expected_value = route_design.get(key)
+                if expected_value is None:
+                    errors.append(f"Topology local route {route_id} is missing {key}.")
+                elif source_fragment not in region_script:
+                    errors.append(f"Runtime local route {route_id} is missing contract fragment: {source_fragment}.")
+                elif key == "required_resonance" and int(expected_value) not in (28, 36):
+                    errors.append(f"Topology local route {route_id} has an unsupported resonance threshold.")
+                elif key != "required_resonance" and float(expected_value) not in (1690.0, 2050.0, 350.0, 1760.0, 1940.0, 310.0):
+                    errors.append(f"Topology local route {route_id} has an unexpected coordinate for {key}.")
+    except (json.JSONDecodeError, OSError) as exc:
+        errors.append(f"Local Resonance route topology audit could not read topology: {exc}")
+
     if errors:
         print("GRAYBOX SCENE WIRING CHECK FAILED")
         for error in errors:
