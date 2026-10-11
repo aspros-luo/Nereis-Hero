@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const MAP_TEST_PANEL_SCRIPT = preload("res://scripts/ui/map_test_panel.gd")
+const WORLD_MAP_OVERLAY_SCRIPT = preload("res://scripts/ui/world_map_overlay.gd")
 
 var hero: Node
 var debug_enabled := false
@@ -45,6 +46,8 @@ var story_region_source := ""
 var story_objective_source := ""
 var pause_open := false
 var character_details_open := false
+var world_map_overlay: Control
+var map_overlay_previous_input_locked := false
 
 func _ready() -> void:
     layer = 10
@@ -195,6 +198,10 @@ func _ready() -> void:
     var map_test_panel := MAP_TEST_PANEL_SCRIPT.new()
     map_test_panel.name = "MapTestPanel"
     add_child(map_test_panel)
+
+    world_map_overlay = WORLD_MAP_OVERLAY_SCRIPT.new()
+    world_map_overlay.name = "WorldMapOverlay"
+    add_child(world_map_overlay)
     _refresh_localized_ui()
 
 func bind_hero(target: Node) -> void:
@@ -596,15 +603,33 @@ func _toggle_pause_menu() -> void:
         _open_pause_menu()
 
 func _unhandled_input(event: InputEvent) -> void:
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_M:
+        if world_map_overlay and world_map_overlay.visible:
+            _close_world_map()
+        elif not pause_open and not character_details_open and not WorldState.input_locked:
+            map_overlay_previous_input_locked = WorldState.input_locked
+            world_map_overlay.open_map()
+            WorldState.input_locked = true
+        get_viewport().set_input_as_handled()
+        return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3:
         set_debug_visible(not debug_enabled)
         get_viewport().set_input_as_handled()
         return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+        if world_map_overlay and world_map_overlay.visible:
+            _close_world_map()
+            get_viewport().set_input_as_handled()
+            return
         if WorldState.input_locked and not pause_open:
             return
         _toggle_pause_menu()
         get_viewport().set_input_as_handled()
+
+func _close_world_map() -> void:
+    if world_map_overlay and world_map_overlay.visible:
+        world_map_overlay.visible = false
+        WorldState.input_locked = map_overlay_previous_input_locked
 
 func _update_status_bars() -> void:
     if not hero or not is_instance_valid(hero):
