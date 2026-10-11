@@ -10,7 +10,11 @@ The current default flow is:
 
 **Church surgical ward → escape → remote village → Mite → Church / village investigation**
 
-Default startup:
+Godot project startup scene (boot / save-resume routing):
+
+`res://scenes/boot.tscn`
+
+New-run opening scene:
 
 `res://scenes/escape_prologue.tscn`
 
