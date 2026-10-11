@@ -140,9 +140,9 @@ func _spawn_x_for_side(side: String) -> float:
         # C18 门位于 x=900；落点避开门的触发区与 x=1100 的休整点。
         return 980.0
     if region_id == "A5" and side == "bell_tower":
-        # The far-side door is at x=2060; keep the arrival point clear of its trigger.
-        # 钟塔远侧门位于 x=2060，抵达战场时避免立即触发返回门。
-        return map_width - 800.0
+        # H02's far-side door is at x=2060; land nearby without overlapping its trigger.
+        # H02 远侧门位于 x=2060；落点靠近门，但不进入其触发区。
+        return 1900.0
     if region_id == "A6" and side == "bell_drop":
         # C10's return door is at x=2110; land near the drop but outside its trigger and H05 at x=1660.
         # C10 回程门位于 x=2110；出生点靠近落差处，同时避开该门与 x=1660 的 H05。
