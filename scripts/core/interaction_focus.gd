@@ -31,6 +31,15 @@ static func clear_all(tree: SceneTree) -> void:
         if candidate is CanvasItem:
             candidate.queue_redraw()
 
+static func _focus_position(node: Node2D) -> Vector2:
+    # Some interactables are large composites whose root origin is not their actual focus point.
+    # 部分交互对象是大型组合节点，根节点原点并非实际交互焦点。
+    var focus_position: Variant = node.get_meta("interaction_focus_position", node.global_position)
+    if focus_position is Vector2:
+        return focus_position
+    return node.global_position
+
+
 static func is_focused(node: Node2D) -> bool:
     if (
         not bool(node.get_meta("interaction_available", false))
@@ -45,7 +54,7 @@ static func is_focused(node: Node2D) -> bool:
         return false
 
     var best_node: Node2D = node
-    var best_distance := node.global_position.distance_to(hero.global_position)
+    var best_distance := _focus_position(node).distance_to(hero.global_position)
     var best_priority := int(node.get_meta("interaction_priority", 0))
 
     for candidate in node.get_tree().get_nodes_in_group(GROUP):
@@ -58,7 +67,7 @@ static func is_focused(node: Node2D) -> bool:
         if other == null:
             continue
 
-        var distance := other.global_position.distance_to(hero.global_position)
+        var distance := _focus_position(other).distance_to(hero.global_position)
         var priority := int(other.get_meta("interaction_priority", 0))
         var distance_gap := distance - best_distance
 
