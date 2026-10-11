@@ -74,9 +74,9 @@ func _make_activation_sound() -> AudioStreamWAV:
         var right_sample := mixed * (0.94 + 0.06 * cos(TAU * 1.3 * t))
         var left_value := int(clampf(left_sample, -1.0, 1.0) * 32767.0)
         var right_value := int(clampf(right_sample, -1.0, 1.0) * 32767.0)
-        var offset := i * 4
-        bytes[offset] = left_value & 0xFF
-        bytes[offset + 1] = (left_value >> 8) & 0xFF
+        var byte_offset := i * 4
+        bytes[byte_offset] = left_value & 0xFF
+        bytes[byte_offset + 1] = (left_value >> 8) & 0xFF
         bytes[offset + 2] = right_value & 0xFF
         bytes[offset + 3] = (right_value >> 8) & 0xFF
 
