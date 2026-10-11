@@ -40,6 +40,7 @@ REQUIRED_FILES = [
     "scripts/world/resonance_source_clue.gd",
     "scripts/world/resonance_secret_gate.gd",
     "scripts/world/interaction_door.gd",
+    "scripts/world/resonance_local_route.gd",
     "scripts/levels/village_hub.gd",
     "scripts/levels/village_defense_demo.gd",
     "scripts/core/world_state.gd",
@@ -119,6 +120,12 @@ def main() -> int:
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
     require(region_script, "[NEREIS][MAP][SPAWN] region=%s", "Map spawn Debug log", errors)
     require(region_script, "[NEREIS][MAP][EXIT] from=%s", "Map exit Debug log", errors)
+    local_route_script = read("scripts/world/resonance_local_route.gd", errors)
+    require(region_script, 'const LOCAL_RESONANCE_ROUTE_SCRIPT = preload("res://scripts/world/resonance_local_route.gd")', "A3 local resonance route preload", errors)
+    require(region_script, 'route.route_id = "A3_THIRD_STREET_ROOFLINE"', "A3 local route identity", errors)
+    require(local_route_script, 'add_to_group("resonance_hidden_targets")', "Local resonance route reveal registration", errors)
+    require(local_route_script, "WorldState.open_hidden_path(route_id)", "Local route persistence", errors)
+    require(local_route_script, "bridge_body.queue_free()", "Temporary bridge collision removal", errors)
 
     # M1 alternate route and vertical traversal contracts.
     # M1 替代路线与垂直探索的静态契约。
@@ -146,7 +153,7 @@ def main() -> int:
 
     # Check scene paths used by the map, save-resume routing, and hidden gates.
     # 检查地图、存档续玩和隐藏入口引用的场景路径均存在。
-    referenced_scripts = [world_state, boot_script, region_script, secret_gate]
+    referenced_scripts = [world_state, boot_script, region_script, secret_gate, local_route_script]
     for referenced_scene in sorted(set(
         re.findall(r'res://(scenes/[^"\s]+\.tscn)', "\n".join(referenced_scripts))
     )):
