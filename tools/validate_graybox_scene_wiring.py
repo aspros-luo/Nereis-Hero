@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static wiring checks for the A2-A12 graybox and H01 hidden-well loop.
+"""Static wiring checks for the A0-A12 graybox, H01-H08, and world-map route contracts.
 
 This script checks file references and save/transition contracts. It does not
 replace Godot runtime tests for collision, interaction focus, or scene changes.
