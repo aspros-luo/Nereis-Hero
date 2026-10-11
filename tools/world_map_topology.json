@@ -898,6 +898,17 @@
       "bridge_y": 285,
       "persistent_on_open": true,
       "design_intent": "A rain-reflection roofwalk reconnects abandoned outer-ring homes as a local traversal loop; it must not open or bypass the royal transport gate or H07."
+    },
+    {
+      "id": "A10_CHOIRLESS_UPPER_GALLERY",
+      "region_id": "A10",
+      "required_resonance": 48,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 675,
+      "bridge_end_x": 1075,
+      "bridge_y": 270,
+      "persistent_on_open": true,
+      "design_intent": "A choirless upper gallery links the staggered cathedral chapel ledges as a local traversal shortcut; it must not replace either cathedral exit or bypass C19."
     }
   ]
 }
