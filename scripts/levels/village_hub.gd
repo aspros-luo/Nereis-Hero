@@ -12,6 +12,7 @@ const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 const FIREFLY_SCRIPT = preload("res://scripts/effects/village_fireflies.gd")
 const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")
+const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -24,6 +25,7 @@ var mite_house_door: Area2D
 var mite_house_transitioning := false
 var fireflies: Node2D
 var resonance_well_gate: Node2D
+var cliff_cave_door: Area2D
 
 func _ready() -> void:
     WorldState.prepare_scene_runtime()
@@ -40,7 +42,7 @@ func _ready() -> void:
     # Each village return route uses a safe landing zone clear of unrelated interaction prompts.
     # 村庄各条回程路线使用独立安全落点，避免刚切图就显示无关的 E 交互提示。
     # Spawn after the watergate outside the well gate, tavern, and restoration-camp interaction radii.
-    var spawn_x := 1850.0 if spawn_side == "well_exit" else (350.0 if spawn_side == "city_cut_return" else (2310.0 if spawn_side == "north_gate" else 260.0))
+    var spawn_x := 1850.0 if spawn_side in ["well_exit", "cliff_cave_return"] else (350.0 if spawn_side == "city_cut_return" else (2310.0 if spawn_side == "north_gate" else 260.0))
     _spawn_hero(spawn_x)
     _spawn_checkpoint()
     _spawn_village_rest_point()
@@ -50,6 +52,7 @@ func _ready() -> void:
     _spawn_shared_world_npcs()
     _spawn_village_pois()
     _spawn_resonance_well_gate()
+    _spawn_cliff_cave_door()
     _spawn_ui()
     _spawn_narrative_audio()
     _spawn_fireflies()
@@ -310,6 +313,37 @@ func _spawn_resonance_well_gate() -> void:
     resonance_well_gate.required_outer_exposure = 0
     resonance_well_gate.opened.connect(_on_resonance_well_opened)
     add_child(resonance_well_gate)
+
+func _spawn_cliff_cave_door() -> void:
+    # This entrance only appears after the Hero defeats the mad cleric and physically returns to the village.
+    # 只有击败疯狂神职人员并实际返回村庄后，崖下洞窟入口才会出现。
+    if "returned_to_village_after_mad_cleric" not in WorldState.achievement_flags:
+        return
+    cliff_cave_door = Area2D.new()
+    cliff_cave_door.set_script(INTERACTION_DOOR_SCRIPT)
+    cliff_cave_door.name = "CliffCaveExperimentDoor"
+    cliff_cave_door.position = Vector2(2260.0, 390.0)
+    cliff_cave_door.prompt_text = "E  进入蜂巢后的洞穴"
+    cliff_cave_door.set_meta("interaction_priority", 95)
+    var shape := CollisionShape2D.new()
+    var rectangle := RectangleShape2D.new()
+    rectangle.size = Vector2(100.0, 138.0)
+    shape.shape = rectangle
+    shape.position = Vector2(0.0, -69.0)
+    cliff_cave_door.add_child(shape)
+    add_child(cliff_cave_door)
+    cliff_cave_door.interacted.connect(_on_cliff_cave_interacted)
+
+
+func _on_cliff_cave_interacted() -> void:
+    WorldState.discover_hidden_region("H09")
+    WorldState.open_hidden_path("H09")
+    WorldState.mark_hidden_region_entered("H09")
+    WorldState.pending_region_spawn_side = "west"
+    WorldState.set_location("cliff_cave_experiment")
+    print("[NEREIS][SECRET] Entering H09: cliff cave experiment site")
+    SceneTransition.fade_to_scene(CLIFF_CAVE_SCENE)
+
 
 func _on_resonance_well_opened(secret_id: String) -> void:
     if narrative == null or not is_instance_valid(narrative):
@@ -615,3 +649,45 @@ func _draw() -> void:
         Color("#312934")
     )
     draw_string(ThemeDB.fallback_font, Vector2(2135, 200), NereisLocalization.translate_text("教会"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#796d67"))
+
+    # New art pass: broken stonework, amber window-light, and low fog separate the safe village from the old wall.
+    # 美术细化：破损石构、琥珀窗光与贴地薄雾，区分安全村庄与古老城墙。
+    for crack_x in [680.0, 1015.0, 1460.0, 1870.0, 2075.0]:
+        draw_line(Vector2(crack_x, 516), Vector2(crack_x + 18, 508), Color("#4a3b47"), 2.0)
+        draw_line(Vector2(crack_x + 18, 508), Vector2(crack_x + 29, 519), Color("#4a3b47"), 1.5)
+    for window_x in [650.0, 1120.0, 1490.0, 1800.0, 2040.0]:
+        draw_rect(Rect2(window_x, 390, 18, 30), Color("#17141b"))
+        draw_rect(Rect2(window_x + 4, 395, 10, 20), Color("#9b7157", 0.72))
+        draw_line(Vector2(window_x + 9, 394), Vector2(window_x + 9, 416), Color("#3e2b31"), 2.0)
+    for fog_index in range(5):
+        var fog_x := 240.0 + float(fog_index) * 510.0
+        draw_arc(Vector2(fog_x, 498.0), 118.0, PI + 0.2, TAU - 0.2, 28, Color("#777080", 0.10), 9.0)
+        draw_arc(Vector2(fog_x + 55.0, 506.0), 72.0, PI + 0.4, TAU - 0.4, 20, Color("#b5a1b2", 0.07), 6.0)
+
+    # The cliff hive is a story-state landmark: sealed before the return, a sickly-lit cave afterward.
+    # 山崖蜂巢是剧情状态地标：回访前被蜂巢封住，满足条件后才显露幽暗洞口。
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(2190, 520), Vector2(2205, 445), Vector2(2240, 408),
+        Vector2(2280, 422), Vector2(2315, 460), Vector2(2340, 520)
+    ]), Color("#39313c"))
+    var cave_open := "returned_to_village_after_mad_cleric" in WorldState.achievement_flags
+    if cave_open:
+        draw_arc(Vector2(2260, 455), 39.0, PI, TAU, 28, Color("#a77c91"), 5.0)
+        draw_rect(Rect2(2233, 450, 54, 70), Color("#100f18"))
+        draw_arc(Vector2(2260, 454), 28.0, PI, TAU, 22, Color("#6f91a0", 0.42), 8.0)
+        draw_circle(Vector2(2260, 485), 7.0, Color("#91a9b4", 0.42))
+        draw_string(ThemeDB.fallback_font, Vector2(2190, 392), "蜂群退入石壁", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#a5a1b9"))
+    else:
+        draw_colored_polygon(PackedVector2Array([
+            Vector2(2220, 458), Vector2(2234, 435), Vector2(2250, 449),
+            Vector2(2262, 428), Vector2(2280, 445), Vector2(2294, 465),
+            Vector2(2275, 483), Vector2(2245, 482)
+        ]), Color("#5d4b3a"))
+        for bee_index in range(9):
+            var bee_x := 2220.0 + float((bee_index * 17) % 70)
+            var bee_y := 425.0 + float((bee_index * 23) % 56)
+            draw_circle(Vector2(bee_x, bee_y), 2.5, Color("#c4a16b", 0.85))
+        draw_string(ThemeDB.fallback_font, Vector2(2180, 392), "蜂巢封住了旧石缝", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#9d8b7d"))
+        if OS.is_debug_build():
+            draw_line(Vector2(2260, 408), Vector2(2260, 300), Color("#ed8796"), 3.0, true)
+            draw_string(ThemeDB.fallback_font, Vector2(2110, 286), "[条件未满足] 崖下实验窟：击败疯狂神职人员并返回村庄", HORIZONTAL_ALIGNMENT_LEFT, 460.0, 13, Color("#ed8796"))
