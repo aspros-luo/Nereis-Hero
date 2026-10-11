@@ -239,3 +239,21 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - Every route prompt, narrative title, and narrative body must provide non-empty Simplified Chinese, Traditional Chinese, and Japanese translations. English remains the source and fallback text.
 - A separate string-level audit of the remotely retrieved source confirmed that all 11 topology route IDs match the 11 runtime route IDs, region assignments agree, and route prompts have translations.
 - **Validation boundary:** This was a remote-source consistency audit only. The Python validator was not executed in a local checkout, and Godot 4.6.x runtime behavior, collisions, input, and traversal remain unverified. Acceptance still requires running the validator and performing runtime regression tests.
+
+## 2026-10-11 — Local bridge interaction focus correction
+
+### 中文
+
+- 静态复核局部鸣响桥时发现一个会影响实际交互的焦点问题：路线是以地图根节点坐标绘制的组合对象，根节点通常位于 `(0, 0))，但共享交互焦点此前按根节点原点计算距离。即使主角站在桥体锚点附近，附近门或 NPC 仍可能错误抢走 E 焦点。
+- 修复 `scripts/core/interaction_focus.gd`：支持可选的 `interaction_focus_position` 元数据；未提供元数据的既有交互对象仍使用原有全局位置，保持向后兼容。
+- 修复 `scripts/world/resonance_local_route.gd`：每帧将桥体中心的全局坐标登记为焦点位置，让共享仲裁按真正的桥体锚点计算距离。
+- 将上述合同加入 `tools/validate_graybox_scene_wiring.py`，并把桥中心焦点、附近交互竞争和语言切换列入 `docs/MAP_GATE_ACCEPTANCE_MATRIX_CN.md`。
+- 这是根据源码定位并修复的逻辑缺陷，尚未通过 Godot 4.6.x 实机确认；仍需验证 E 提示显示、按 E 固定桥体，以及与相邻门 / NPC 的焦点竞争。
+
+### English
+
+- Static review found an interaction-focus defect: a local Resonance route is a composite object drawn in map coordinates, while its root origin is usually `(0, 0)`. Shared focus arbitration used that root origin for distance ranking, so a nearby door or NPC could incorrectly win the E prompt even when the Hero stood by the bridge anchor.
+- Updated `scripts/core/interaction_focus.gd` to support optional `interaction_focus_position` metadata. Existing interactables without the metadata retain their previous global-position behavior.
+- Updated `scripts/world/resonance_local_route.gd` to publish the bridge center's global position as the focus point, so arbitration uses the actual interaction anchor.
+- Added static contracts for the anchor-aware focus logic and acceptance cases for bridge-center focus, nearby interactable competition, and language switching.
+- This is a source-level defect fix, not a Godot 4.6.x runtime pass. In-engine verification is still required for the prompt, E-key anchoring, and focus competition with nearby doors/NPCs.
