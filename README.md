@@ -252,6 +252,16 @@ The intended narrative language is:
 
 **items as evidence + environment as narrative + NPCs as biased witnesses + contradictory memories + recurring symbols + emotional subtext**
 
+## 地图测试与中文版文字对齐
+
+地图实机验收入口（中文完整用例、F10 调试面板、存档保护说明）：
+
+- [地图测试模式与完整验收用例](docs/MAP_TEST_MODE_AND_ACCEPTANCE_CN.md)
+
+当前地图测试面板支持 A0–A12 中已实现的场景与 H01–H08 隐藏区域直接传送，并提供灵视条件和全地图连通测试预设。**请先进入已有存档，再按 F10 开启地图测试模式；不要按 F9 或开始新游戏。** 测试模式会暂停正式存档写入，结束时可选择重新读取磁盘存档。
+
+中文界面的地图测试面板与调试 HUD 已开始对齐；完整游戏仍需逐场景审查所有玩家可见文本，未完成审查前不宣称全项目中文化已完成。
+
 ## Save / Resume
 
 The default startup goes through:
