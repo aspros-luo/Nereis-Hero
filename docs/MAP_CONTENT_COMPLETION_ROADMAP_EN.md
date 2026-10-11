@@ -38,7 +38,7 @@ Every bridge requires active Resonance Sight and the listed resonance threshold.
 | A9 | `A9_RAIN_REFLECTION_ROOFWALK` | 44 | 1260–1520 | 332 | Reconnects abandoned roofs; does not replace H07 or the royal transport gate. |
 | A10 | `A10_CHOIRLESS_UPPER_GALLERY` | 48 | 675–960 | 307 | Connects chapel / choir ledges; does not replace either cathedral exit or C19. |
 | A11 | `A11_SECOND_OBSERVER_SPAN` | 56 | 1350–1800 | 285 | Connects ancient observation ledges; does not unlock H08 or bypass C15/C19. |
-| A12 | `A12_CROWN_WALL_WALK` | 62 | 1400–1940 | 325 | Connects upper palace ledges; does not alter throne access or ending gates. |
+| A12 | `A12_CROWN_WALL_WALK` | 62 | 1400–1940 | 323 | Connects upper palace ledges; does not alter throne access or ending gates. |
 
 The runtime controller, machine-readable topology, static checker, and Chinese roadmap must stay synchronized when a route is changed. The static checker also verifies that each bridge endpoint remains near a platform in its region. That proximity check is an estimate, not proof of a usable jump or collision-safe landing. Temporary bridges also retain their collision and visual while the Hero is standing on them after Sight expires, then disappear once the Hero leaves.
 
