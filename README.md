@@ -171,7 +171,9 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 - After the village defense, A1 has two main exploration directions: A2 through the old pilgrim road, or A3 through the old drainage passage. A3 returns to A1 and also connects to A2, A4, and A5.
 - A2 now has an optional canopy platform route; A3 has an optional rooftop loop plus a local Resonance Sight bridge that can be permanently anchored in the same map; A4 has a raised pipe-walk route alongside the ground path.
 - A5–A8 now have distinct optional upper routes: battlefield parapet, monastery side balcony, prison maintenance catwalk, and royal-tomb gallery.
-- A9–A12 now have optional upper traversal routes: outer-ring rooftops, cathedral choir gallery, research observation bridge, and inner-city crown wall. These are graybox code additions, not yet runtime-verified.
+- A9–A12 now have optional upper traversal routes: outer-ring rooftops, cathedral choir gallery, research observation bridge, and inner-city crown wall.
+- H01–H08 now each have a distinct upper/returning route motif, from the well's upper ledges and reflected stairs to the mirror avenue lamp bridge and the organic ribs of H08.
+- A1 now includes a 17-segment optional rooftop traversal line. These are graybox code additions, not yet runtime-verified.
 - H07 requires Resonance Sight, resonance ≥ 68, outer exposure ≥ 12, the outer-god story flag, and the R07 evidence source. Its A12 shortcut stays locked until the player reaches the Inner City and opens the far-side gate.
 - A11 can be reached from A8 through C15 (Royal Tomb maintenance shaft) or A10 through C19 (Silent Chapel). Each path has its own persistent gate ID while both record entry to A11. R08 raises resonance to 78 and adds the planned outer exposure.
 - H08 requires resonance ≥ 78, ancient exposure ≥ 2, outer exposure ≥ 18, the outer-god story flag, and three prior anomaly sources. A12 routes through the shared ending evaluator; H08 offers an optional deep-dream exit only after the physical-union story state.
