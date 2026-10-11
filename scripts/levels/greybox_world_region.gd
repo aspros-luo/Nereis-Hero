@@ -1654,7 +1654,7 @@ func _spawn_a9_mirror_gate(x: float) -> void:
 	gate.required_ancient_exposure = 0
 	gate.required_outer_exposure = 12
 	gate.require_outer_god_resonance = true
-	gate.required_source_ids = ["anomaly_mirror_street_echo"]
+	gate.required_source_ids = Array[String](["anomaly_mirror_street_echo"])
 	gate.opened.connect(_on_mirror_street_gate_opened)
 	add_child(gate)
 
