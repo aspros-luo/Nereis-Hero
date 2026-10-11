@@ -454,6 +454,9 @@ func _create_village_rooftop_route() -> void:
         rectangle.size = platform_rect.size
         shape.shape = rectangle
         shape.position = platform_rect.size * 0.5
+        # One-way rooftop ledges preserve the optional high route without blocking jumps from below.
+        # 单向屋顶平台保留高路探索，同时避免从下方跳跃时被平台侧面卡住。
+        shape.one_way_collision = true
         body.add_child(shape)
         add_child(body)
 
