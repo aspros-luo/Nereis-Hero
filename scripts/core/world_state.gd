@@ -880,6 +880,17 @@ func get_humanity_state() -> String:
         return "frayed"
     return "stable"
 
+func record_natural_test_region(region_id: String, location_id: String = "") -> void:
+    if not debug_natural_test_active:
+        return
+    if region_id.is_empty() or region_id in debug_natural_test_visited_regions:
+        return
+    debug_natural_test_visited_regions.append(region_id)
+    var location_label := location_id if not location_id.is_empty() else current_location
+    print("[NEREIS][MAP][NATURAL_TEST] Visited %s (%s) [%d/21]" % [
+        region_id, location_label, debug_natural_test_visited_regions.size()
+    ])
+
 func _record_natural_test_location(location_id: String) -> void:
     if not debug_natural_test_active:
         return
@@ -907,12 +918,7 @@ func _record_natural_test_location(location_id: String) -> void:
         "primordial_hollow": "H08"
     }
     var region_id := str(region_by_location.get(location_id, ""))
-    if region_id.is_empty() or region_id in debug_natural_test_visited_regions:
-        return
-    debug_natural_test_visited_regions.append(region_id)
-    print("[NEREIS][MAP][NATURAL_TEST] Visited %s (%s) [%d/21]" % [
-        region_id, location_id, debug_natural_test_visited_regions.size()
-    ])
+    record_natural_test_region(region_id, location_id)
 
 func set_location(location_id: String) -> void:
     current_location = location_id
