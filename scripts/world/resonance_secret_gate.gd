@@ -62,12 +62,7 @@ func _process(delta: float) -> void:
     queue_redraw()
 
 func _is_debug_override_active() -> bool:
-    var hero := get_node_or_null("../Hero")
-    return (
-        allow_debug_override
-        and hero != null
-        and bool(hero.get("debug_ability_override"))
-    )
+    return allow_debug_override and WorldState.debug_ability_override_active
 
 func _get_region_record_id() -> String:
     var normalized_id := region_record_id.strip_edges()
