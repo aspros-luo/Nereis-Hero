@@ -61,6 +61,11 @@ def require(text: str, needle: str, source: str, errors: list[str]) -> None:
         errors.append(f"{source}: missing required contract {needle!r}")
 
 
+def fail(errors: list[str], message: str) -> None:
+    """Append a focused static-contract failure without raising immediately."""
+    errors.append(message)
+
+
 def main() -> int:
     errors: list[str] = []
 
