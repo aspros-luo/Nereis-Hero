@@ -1648,6 +1648,18 @@ func _spawn_local_resonance_routes() -> void:
     # 局部鸣响路线只重连已探索的空间，不传送主角，也不绕过剧情门槛。
     var route: Node2D
     match region_id:
+        "A2":
+            # A canopy span reconnects the high bell-grave ledges without opening the hidden bell chamber.
+            # 树冠横桥重连钟墓高台，但不会开启隐藏钟室。
+            route = Node2D.new()
+            route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+            route.name = "BellgraveCanopyCrossing"
+            route.route_id = "A2_BELLGRAVE_CANOPY_CROSSING"
+            route.required_resonance = 20
+            route.bridge_start_x = 1380.0
+            route.bridge_end_x = 1610.0
+            route.bridge_y = 328.0
+            route.prompt_text = "E  ANCHOR THE BELLGRAVE CANOPY"
         "A3":
             route = Node2D.new()
             route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
@@ -1775,6 +1787,12 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
     if not is_instance_valid(narrative):
         return
     match route_id:
+        "A2_BELLGRAVE_CANOPY_CROSSING":
+            narrative.show_message(
+                "THE BELL'S SECOND SHADOW",
+                "The canopy path crosses a gap that the forest survey marks as solid rock. The bell above casts two shadows: one on the tower, and one on a road that is not there. The second shadow ends at a sealed door.",
+                5.0
+            )
         "A4_OLD_STONE_AQUEDUCT":
             narrative.show_message(
                 "THE AQUEDUCT WITHOUT WATER",
