@@ -62,6 +62,53 @@ const MAPS: Array[Dictionary] = [
 	{"label": "H08｜胎宫／原初空腔", "scene": "res://scenes/primordial_hollow.tscn"}
 ]
 
+
+# Navigation data mirrors the authored exit and clue positions in the playable graybox scenes.
+# 导航坐标对应可玩灰盒场景中实际生成的出口与线索位置。
+const OBJECTIVE_POINTS: Dictionary = {
+	"A2": [{"x":735.0,"name":"从未移动的钟"},{"x":1530.0,"name":"第二道回声"},{"x":2300.0,"name":"倒响钟室异常入口"}],
+	"A3": [{"x":900.0,"name":"第三街路牌异常"}],
+	"A4": [{"x":980.0,"name":"管道下的古老石层"},{"x":1780.0,"name":"水面背后的阶梯入口"}],
+	"A5": [{"x":1100.0,"name":"迟于死者抵达的命令"}],
+	"A6": [{"x":1125.0,"name":"无声之窗"},{"x":1660.0,"name":"无声钟室入口"}],
+	"A7": [{"x":1070.0,"name":"无名者名册"}],
+	"A8": [{"x":1530.0,"name":"被刮去的王室姓名"},{"x":1870.0,"name":"王名抹除廊入口"},{"x":2310.0,"name":"深层研究区王室竖井"}],
+	"A9": [{"x":1380.0,"name":"水洼中的镜街异常"},{"x":1850.0,"name":"镜街入口"}],
+	"A10": [{"x":700.0,"name":"双重封印的圣物匣"},{"x":1900.0,"name":"静默侧堂入口"}],
+	"A11": [{"x":1450.0,"name":"第二位观测者"},{"x":2300.0,"name":"胎宫入口"}],
+	"A12": [{"x":1070.0,"name":"国王未曾拆开的信"}],
+	"H01": [{"x":1600.0,"name":"井中无水"}],
+	"H02": [{"x":1650.0,"name":"声音之后的钟"}],
+	"H03": [{"x":2020.0,"name":"跳过三号的门牌"}],
+	"H04": [{"x":1740.0,"name":"向下攀升的阶梯"}],
+	"H05": [{"x":1960.0,"name":"无影档案"}],
+	"H06": [{"x":1980.0,"name":"石头记得的名字"}],
+	"H07": [{"x":2200.0,"name":"多出来的一盏灯"}],
+	"H08": [{"x":1850.0,"name":"空摇篮"}]
+}
+const EXIT_HINTS: Dictionary = {
+	"A1": [{"target":"A2","x":2440.0,"name":"最右侧北门／旧朝圣路","condition":"村庄防卫章节完成后开放"},{"target":"A3","x":100.0,"name":"最左侧旧排水通道","condition":"村庄防卫章节完成后开放"}],
+	"A2": [{"target":"A1","x":72.0,"name":"最左侧村庄出口","condition":""},{"target":"A3","x":2528.0,"name":"最右侧城区主路出口","condition":""},{"target":"H02","x":2300.0,"name":"右侧倒响钟室异常入口","condition":"鸣响达到 18，并调查静止的钟"},{"target":"A5","x":1880.0,"name":"右侧旧朝圣高路捷径","condition":"须先从 A5 侧开启"}],
+	"A3": [{"target":"A2","x":72.0,"name":"最左侧旧朝圣路出口","condition":""},{"target":"A4","x":1480.0,"name":"中右部下水道入口","condition":""},{"target":"A5","x":2528.0,"name":"最右侧战场道路出口","condition":""},{"target":"H03","x":2300.0,"name":"右侧第三街异常入口","condition":"鸣响达到 28，并调查第三街路牌"},{"target":"A6","x":1710.0,"name":"右侧钟塔落差捷径","condition":"须先从 A6 侧开启"}],
+	"A4": [{"target":"A3","x":72.0,"name":"最左侧城区检修舱口","condition":"首次互动开启舱口，再按 E 通行"},{"target":"A1","x":2350.0,"name":"最右侧村庄井道水闸","condition":"首次互动开闸，再按 E 通行"},{"target":"A7","x":1050.0,"name":"左半区监牢补给隧道","condition":"须先从 A7 侧开启"},{"target":"A8","x":1250.0,"name":"中部王墓水道","condition":"须先从 A8 侧开启"},{"target":"A9","x":1450.0,"name":"中右部王城排水道","condition":"须先从 A9 侧开启"},{"target":"H04","x":1780.0,"name":"右侧倒影阶梯异常入口","condition":"鸣响达到 36、古神接触达到 1"},{"target":"H01","x":2510.0,"name":"最右侧井道暗门","condition":"鸣响达到 12 且开启灵视"}],
+	"A5": [{"target":"A3","x":72.0,"name":"最左侧城区出口","condition":""},{"target":"A6","x":2528.0,"name":"最右侧修道院入口","condition":""},{"target":"A2","x":520.0,"name":"左侧旧朝圣高路门","condition":"首次互动开启，再按 E 通行"}],
+	"A6": [{"target":"A5","x":72.0,"name":"最左侧战场出口","condition":""},{"target":"A7","x":2528.0,"name":"最右侧监牢入口","condition":""},{"target":"A3","x":2110.0,"name":"右侧钟塔落差捷径","condition":"首次互动开启，再按 E 通行"},{"target":"H05","x":1660.0,"name":"右半区无声钟室入口","condition":"鸣响达到 42、古神接触达到 1"}],
+	"A7": [{"target":"A6","x":72.0,"name":"最左侧修道院出口","condition":""},{"target":"A8","x":2528.0,"name":"最右侧旧王墓入口","condition":""},{"target":"A4","x":520.0,"name":"左侧补给隧道","condition":"首次互动开启，再按 E 通行"}],
+	"A8": [{"target":"A7","x":72.0,"name":"最左侧监牢出口","condition":""},{"target":"A9","x":2528.0,"name":"最右侧王城外环出口","condition":""},{"target":"A4","x":520.0,"name":"左侧王墓水道","condition":"首次互动开启，再按 E 通行"},{"target":"H06","x":1870.0,"name":"右侧王名抹除廊入口","condition":"鸣响 55、古神接触 2，调查 A2 静止的钟与本区王名石碑"},{"target":"A11","x":2310.0,"name":"最右侧王室竖井入口","condition":"同样要求钟线索与王名石碑线索"}],
+	"A9": [{"target":"A8","x":72.0,"name":"最左侧王墓出口","condition":""},{"target":"A10","x":2528.0,"name":"最右侧大圣堂入口","condition":""},{"target":"A3","x":520.0,"name":"左侧旧升降梯","condition":"首次互动开启，再按 E 通行"},{"target":"A4","x":720.0,"name":"左半区王城排水门","condition":"首次互动开启，再按 E 通行"},{"target":"H07","x":1850.0,"name":"右半区镜街异常入口","condition":"鸣响 68、外神接触 12、外神共鸣成立并调查镜街异常"},{"target":"H06","x":2200.0,"name":"最右侧王室运输门","condition":"须先发现并开启王名抹除廊"}],
+	"A10": [{"target":"A9","x":72.0,"name":"最左侧王城外环出口","condition":""},{"target":"A12","x":2528.0,"name":"最右侧王室内城入口","condition":""},{"target":"A11","x":1900.0,"name":"右半区静默侧堂入口","condition":"鸣响 68、外神接触 12、外神共鸣成立并调查 A9 镜街异常"}],
+	"A11": [{"target":"A8","x":72.0,"name":"最左侧王室竖井回程","condition":"须从 A8 侧开启 C15"},{"target":"A10","x":2528.0,"name":"最右侧大圣堂回程","condition":"须从 A10 侧开启 C19"},{"target":"H08","x":2300.0,"name":"右侧胎宫入口","condition":"鸣响 78、古神接触 2、外神接触 18、外神共鸣，并调查 A2/A3/A4 三处线索"}],
+	"A12": [{"target":"A10","x":72.0,"name":"最左侧大圣堂出口","condition":""},{"target":"A9","x":520.0,"name":"左侧内城侧门","condition":"须先沿主线抵达内城并开启"},{"target":"H07","x":2250.0,"name":"右侧镜街侧门","condition":"须先发现并开启镜街侧门"},{"target":"ENDING","x":2528.0,"name":"最右侧王座区出口","condition":"按当前剧情状态进入结局"}],
+	"H01": [{"target":"A1","x":72.0,"name":"最左侧地表出口","condition":""},{"target":"A4","x":2495.0,"name":"最右侧井道闸门","condition":"须从 A4 侧解锁"}],
+	"H02": [{"target":"A2","x":72.0,"name":"最左侧旧朝圣路出口","condition":""},{"target":"A5","x":2495.0,"name":"最右侧钟塔通路","condition":"须从 A5 侧开启"}],
+	"H03": [{"target":"A3","x":72.0,"name":"最左侧城区出口","condition":""},{"target":"A9","x":2495.0,"name":"最右侧旧服务门","condition":"须从 A9 侧开启"}],
+	"H04": [{"target":"A4","x":72.0,"name":"最左侧水库出口","condition":""},{"target":"A8","x":2495.0,"name":"最右侧王墓侧门","condition":"须从 A8 侧开启"}],
+	"H05": [{"target":"A6","x":72.0,"name":"最左侧修道院出口","condition":""},{"target":"A3","x":2495.0,"name":"最右侧钟塔落差通路","condition":"须从 A6 侧开启"}],
+	"H06": [{"target":"A8","x":72.0,"name":"最左侧王墓出口","condition":""},{"target":"A9","x":2495.0,"name":"最右侧王室运输门","condition":"须从 A9 侧开启"}],
+	"H07": [{"target":"A9","x":72.0,"name":"最左侧镜街出口","condition":""},{"target":"A12","x":2495.0,"name":"最右侧内城侧门","condition":"须从内城侧开启"}],
+	"H08": [{"target":"A11","x":72.0,"name":"最左侧深层研究区出口","condition":""},{"target":"ENDING","x":2528.0,"name":"最右侧梦境出口","condition":"需要满足物理结合剧情状态"}]
+}
+
 const ALL_PATH_IDS := [
 	"C04", "C05", "C06", "C07", "C10", "C12", "C15", "C16", "C18", "C19",
 	"C21", "C22", "C23", "C24", "H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08"
@@ -225,14 +272,71 @@ func _update_guide() -> void:
 			current_region = str(entry["label"]).split("｜")[0]
 			break
 	var target := str(step["region"])
-	var location_note := "当前区域：%s" % current_region
+	var location_note := "当前位置：%s" % current_region
 	if target != "ALL" and current_region != target:
-		location_note += "；本步目标：%s" % target
+		location_note += "；本步目标区域：%s" % target
 	else:
-		location_note += "；本步目标已抵达或为全图检查"
-	guide_label.text = "自然探索路线指引（仅提示，不传送／不解锁）\\n%s\\n%s\\n%s" % [
-		str(step["title"]), str(step["text"]), location_note
+		location_note += "；本步目标位于当前区域或为全图检查"
+	var direction_note := _get_navigation_hint(current_region, target)
+	guide_label.text = "自然探索路线指引（仅提示，不传送／不解锁）\\n%s\\n%s\\n%s\\n%s" % [
+		str(step["title"]), str(step["text"]), location_note, direction_note
 	]
+
+func _get_navigation_hint(current_region: String, target_region: String) -> String:
+	var scene := get_tree().current_scene
+	var hero := scene.get_node_or_null("Hero") if scene != null else null
+	var hero_x := float(hero.position.x) if hero is Node2D else -1.0
+	var candidates: Array = []
+	if target_region == current_region:
+		candidates = OBJECTIVE_POINTS.get(current_region, [])
+		if not candidates.is_empty() and hero_x >= 0.0:
+			var nearest: Dictionary = candidates[0]
+			var nearest_distance := absf(float(nearest["x"]) - hero_x)
+			for candidate in candidates:
+				var distance := absf(float(candidate["x"]) - hero_x)
+				if distance < nearest_distance:
+					nearest = candidate
+					nearest_distance = distance
+				var clue_name := str(nearest["name"])
+				return _format_direction(hero_x, float(nearest["x"]), clue_name, "")
+	var exits: Array = EXIT_HINTS.get(current_region, [])
+	for exit_info in exits:
+		if str(exit_info["target"]) == target_region:
+			candidates.append(exit_info)
+	if candidates.is_empty():
+		for exit_info in exits:
+			if str(exit_info["target"]) in ["A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12"]:
+				candidates.append(exit_info)
+				break
+	if candidates.is_empty():
+		return "方向提示：当前区域没有已配置的坐标提示；按 F10 查看本步目标，并寻找带 E 提示的真实出口。"
+	var chosen: Dictionary = candidates[0]
+	if hero_x >= 0.0:
+		var best_distance := absf(float(chosen["x"]) - hero_x)
+		for candidate in candidates:
+			var distance := absf(float(candidate["x"]) - hero_x)
+			if distance < best_distance:
+				chosen = candidate
+				best_distance = distance
+	var condition := str(chosen.get("condition", ""))
+	return _format_direction(hero_x, float(chosen["x"]), str(chosen["name"]), condition)
+
+func _format_direction(hero_x: float, destination_x: float, destination_name: String, condition: String) -> String:
+	var direction := "未知方向"
+	var distance_text := ""
+	if hero_x >= 0.0:
+		var delta_x := destination_x - hero_x
+		if absf(delta_x) < 90.0:
+			direction = "就在附近，微调位置并按 E"
+		elif delta_x > 0.0:
+			direction = "向右走（D）"
+		else:
+			direction = "向左走（A）"
+		distance_text = "；距离约 %d 像素" % int(absf(delta_x))
+	var result := "实际导航：%s，目标「%s」（地图坐标 x≈%d%s）" % [direction, destination_name, int(destination_x), distance_text]
+	if not condition.is_empty():
+		result += "；条件：%s" % condition
+	return result
 	guide_prev_button.disabled = guide_step_index <= 0
 	guide_next_button.text = "下一步指引" if guide_step_index < GUIDE_STEPS.size() - 1 else "已到最后一步"
 
