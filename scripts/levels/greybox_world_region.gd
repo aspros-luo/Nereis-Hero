@@ -1534,8 +1534,6 @@ func _draw() -> void:
             _draw_outer_ring_landmarks()
         "A10":
             _draw_cathedral_landmarks()
-        "A11":
-            _draw_deep_research_landmarks()
         "A12":
             _draw_inner_city_landmarks()
         "H07":
