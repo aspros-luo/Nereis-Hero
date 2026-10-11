@@ -75,4 +75,4 @@ The runtime controller, machine-readable topology, static checker, and Chinese r
 
 ## Current status
 
-The ten local resonance routes are registered in runtime code, topology, and the static checker. Source-level endpoint-to-platform checks pass for all ten routes. **Godot runtime acceptance remains pending**: this work does not claim that the bridge collisions, jump arcs, interaction focus, or real shortcut loops have been tested in-engine.
+The eleven local resonance routes are registered in runtime code, topology, and the static checker. Source-level endpoint-to-platform checks pass for all ten routes. **Godot runtime acceptance remains pending**: this work does not claim that the bridge collisions, jump arcs, interaction focus, or real shortcut loops have been tested in-engine.
