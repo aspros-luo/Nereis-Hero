@@ -1644,29 +1644,53 @@ func _on_mirror_street_gate_opened(secret_id: String) -> void:
 
 
 func _spawn_local_resonance_routes() -> void:
-    # A3's erased street can be crossed inside the familiar map when Resonance Sight reveals the missing roof bridge.
-    # A3 被抹除的街道可在熟悉地图内部通过鸣响显现屋顶桥，不必进入独立隐藏场景。
-    if region_id != "A3":
-        return
-    var route := Node2D.new()
-    route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
-    route.name = "ThirdStreetResonanceBridge"
-    route.route_id = "A3_THIRD_STREET_ROOFLINE"
-    route.required_resonance = 28
-    route.bridge_start_x = 1690.0
-    route.bridge_end_x = 2050.0
-    route.bridge_y = 350.0
+    # Local routes reconnect familiar spaces; they do not teleport the Hero or bypass a story gate.
+    # 局部鸣响路线只重连已探索的空间，不传送主角，也不绕过剧情门槛。
+    var route: Node2D
+    match region_id:
+        "A3":
+            route = Node2D.new()
+            route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+            route.name = "ThirdStreetResonanceBridge"
+            route.route_id = "A3_THIRD_STREET_ROOFLINE"
+            route.required_resonance = 28
+            route.bridge_start_x = 1690.0
+            route.bridge_end_x = 2050.0
+            route.bridge_y = 350.0
+            route.prompt_text = "E  ANCHOR THE THIRD STREET"
+        "A4":
+            # A dry aqueduct span appears above the old reservoir only after the buried stone answers.
+            # 旧水库上方的干涸渡槽只有在埋藏石层回应鸣响后才显现。
+            route = Node2D.new()
+            route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+            route.name = "OldStoneAqueductRoute"
+            route.route_id = "A4_OLD_STONE_AQUEDUCT"
+            route.required_resonance = 36
+            route.bridge_start_x = 1760.0
+            route.bridge_end_x = 1940.0
+            route.bridge_y = 310.0
+            route.prompt_text = "E  ANCHOR THE DRY AQUEDUCT"
+        _:
+            return
     route.opened.connect(_on_local_resonance_route_opened)
     add_child(route)
 
 func _on_local_resonance_route_opened(route_id: String) -> void:
     if not is_instance_valid(narrative):
         return
-    narrative.show_message(
-        "THE THIRD STREET HOLDS",
-        "A bridge appears where the city map was scraped clean. The road does not lead to another place; it reconnects two parts of the street you already knew.\n\nThe stone will remember this route.",
-        5.0
-    )
+    match route_id:
+        "A4_OLD_STONE_AQUEDUCT":
+            narrative.show_message(
+                "THE AQUEDUCT WITHOUT WATER",
+                "The pipes end at a stone channel older than the reservoir. When the bridge settles, water can be heard flowing upward through the sealed rock.\n\nThe channel remembers a river that no longer exists.",
+                5.0
+            )
+        _:
+            narrative.show_message(
+                "THE THIRD STREET HOLDS",
+                "A bridge appears where the city map was scraped clean. The road does not lead to another place; it reconnects two parts of the street you already knew.\n\nThe stone will remember this route.",
+                5.0
+            )
     print("[NEREIS][MAP][LOCAL_ROUTE] opened id=%s" % route_id)
 
 func _spawn_h02_gate(x: float) -> void:
