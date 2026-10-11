@@ -380,6 +380,8 @@ func _configure_platforms() -> void:
     platforms.clear()
     match region_id:
         "A2":
+            # The ground route stays readable; the canopy route is a faster, riskier line across the forest.
+            # 地面主路保持清晰；树冠路线提供更快但更有风险的横穿方式。
             _add_platform(Rect2(430, 485, 105, 20))
             _add_platform(Rect2(535, 450, 110, 20))
             _add_platform(Rect2(645, 415, 130, 20))
@@ -387,6 +389,15 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(1200, 435, 150, 18))
             _add_platform(Rect2(1500, 480, 160, 18))
             _add_platform(Rect2(1840, 445, 130, 18))
+            _add_platform(Rect2(760, 370, 110, 18))
+            _add_platform(Rect2(870, 330, 110, 18))
+            _add_platform(Rect2(1000, 360, 110, 18))
+            _add_platform(Rect2(1120, 405, 110, 18))
+            _add_platform(Rect2(1260, 390, 110, 18))
+            _add_platform(Rect2(1380, 345, 110, 18))
+            _add_platform(Rect2(1500, 310, 110, 18))
+            _add_platform(Rect2(1620, 350, 110, 18))
+            _add_platform(Rect2(1740, 400, 110, 18))
         "A3":
             # Street-level route: rubble, market, sewer descent, and the battlefield road.
             # 地面主路连接碎墙、市场、下水道入口与战场方向。
@@ -1536,6 +1547,17 @@ func _draw_forest_landmarks() -> void:
     draw_line(Vector2(704, 290), Vector2(765, 290), Color("#75666b"), 4.0)
     draw_line(Vector2(735, 300), Vector2(735, 350), Color("#75666b"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(690, 260), "NO WIND", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#75666b"))
+    # Canopy silhouettes guide the optional upper traversal without hiding the bell landmark.
+    # 树冠剪影提示上层可选路线，同时保留钟墓地标的可见性。
+    draw_line(Vector2(755, 360), Vector2(875, 320), Color("#514957"), 3.0)
+    draw_line(Vector2(875, 320), Vector2(1005, 350), Color("#514957"), 3.0)
+    draw_line(Vector2(1005, 350), Vector2(1125, 395), Color("#514957"), 3.0)
+    draw_line(Vector2(1125, 395), Vector2(1265, 380), Color("#514957"), 3.0)
+    draw_line(Vector2(1265, 380), Vector2(1385, 335), Color("#514957"), 3.0)
+    draw_line(Vector2(1385, 335), Vector2(1505, 300), Color("#514957"), 3.0)
+    draw_line(Vector2(1505, 300), Vector2(1625, 340), Color("#514957"), 3.0)
+    draw_line(Vector2(1625, 340), Vector2(1745, 390), Color("#514957"), 3.0)
+    draw_line(Vector2(1745, 390), Vector2(1845, 435), Color("#514957"), 3.0)
 
 func _draw_city_landmarks() -> void:
     for x in range(200, int(map_width), 390):
