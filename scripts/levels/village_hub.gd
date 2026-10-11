@@ -367,7 +367,7 @@ func _spawn_ui() -> void:
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
     hud.bind_hero(hero)
-    hud.set_story_mode("THE REMOTE VILLAGE", "LEARN WHY 边境村庄 SAVED YOU")
+    hud.set_story_mode("A1｜边境村庄", "当前区域 A1：前往最右侧北门（约 x=2440）进入旧朝圣路 A2；若北门尚未开放，先完成村庄防卫。左侧 x≈100 的旧排水通道须在防卫后开放。")
 
     get_tree().create_timer(0.7).timeout.connect(_show_village_intro)
 
