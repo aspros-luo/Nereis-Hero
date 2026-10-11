@@ -167,10 +167,12 @@ def main() -> int:
     require(region_script, "_add_platform(Rect2(420, 390, 110, 18))", "H01 well upper shore", errors)
     require(region_script, "_add_platform(Rect2(390, 400, 110, 18))", "H02 silent bell gallery", errors)
     require(region_script, "_add_platform(Rect2(380, 395, 110, 18))", "H03 erased street roofline", errors)
+    require(region_script, "_add_platform(Rect2(1070, 385, 110, 18))", "H03 upper route gap bridge", errors)
     require(region_script, "_add_platform(Rect2(390, 400, 110, 18))", "H04 reflected stair loop", errors)
     require(region_script, "_add_platform(Rect2(400, 405, 110, 18))", "H05 silent bell gallery", errors)
     require(region_script, "_add_platform(Rect2(390, 405, 110, 18))", "H06 erased royal name gallery", errors)
     require(region_script, "_add_platform(Rect2(380, 395, 110, 18))", "H07 mirror avenue upper route", errors)
+    require(region_script, "_add_platform(Rect2(1060, 410, 110, 18))", "H07 lamp bridge gap", errors)
     require(region_script, "_add_platform(Rect2(390, 385, 110, 18))", "H08 organic rib route", errors)
 
     # Verify that every source ID required by a gate is actually spawned by the region controller.
