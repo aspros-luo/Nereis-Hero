@@ -854,6 +854,17 @@
       "bridge_y": 345,
       "persistent_on_open": true,
       "design_intent": "A resonance-anchored trench crossing under a buried standard; it shortens the risky battlefield route but does not bypass the fortress's story gate."
+    },
+    {
+      "id": "A6_SILENT_BELL_SERVICE_WALK",
+      "region_id": "A6",
+      "required_resonance": 32,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 1180,
+      "bridge_end_x": 1480,
+      "bridge_y": 250,
+      "persistent_on_open": true,
+      "design_intent": "A high service-walk shortcut links the tower stair and outer cloister near the silent bell; it shortens a local traversal loop without bypassing the H05 hidden window or the main story exit."
     }
   ]
 }
