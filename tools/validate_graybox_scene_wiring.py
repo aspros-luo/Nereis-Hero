@@ -202,7 +202,7 @@ def main() -> int:
             errors.append(f"Missing referenced scene: {referenced_scene}")
     for contract in [
         'const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")',
-        "_spawn_a4_hidden_well_gate(map_width - 105.0)",
+        "_spawn_a4_hidden_well_gate(map_width - 90.0)",
         'gate.secret_id = "H01"',
         'gate.secret_id = "H02"',
         'gate.secret_id = "H03"',
