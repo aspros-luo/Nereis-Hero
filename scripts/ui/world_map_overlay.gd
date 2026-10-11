@@ -26,7 +26,8 @@ const HIDDEN_NODES: Array[Dictionary] = [
 	{"id":"H05","name":"无声钟室","p":Vector2(0.58,0.08),"parents":["A6","A3"]},
 	{"id":"H06","name":"王名抹除廊","p":Vector2(0.81,0.51),"parents":["A8"]},
 	{"id":"H07","name":"镜街","p":Vector2(0.86,0.67),"parents":["A9","A12"]},
-	{"id":"H08","name":"原初空腔","p":Vector2(0.95,0.88),"parents":["A11"]}
+	{"id":"H08","name":"原初空腔","p":Vector2(0.95,0.88),"parents":["A11"]},
+	{"id":"H09","name":"崖下实验窟","p":Vector2(0.06,0.57),"parents":["A1"]}
 ]
 
 const MAIN_EDGES = [
@@ -46,7 +47,7 @@ const LOCATION_TO_REGION := {
 	"grand_cathedral":"A10","deep_research_depths":"A11","inner_city":"A12",
 	"hidden_well":"H01","hidden_bell_chamber":"H02","erased_third_street":"H03",
 	"reflected_stairwell":"H04","silent_bell_room":"H05",
-	"erased_royal_name_corridor":"H06","mirror_street":"H07","primordial_hollow":"H08"
+	"erased_royal_name_corridor":"H06","mirror_street":"H07","primordial_hollow":"H08","cliff_cave_experiment":"H09"
 }
 
 var current_region := "A0"
