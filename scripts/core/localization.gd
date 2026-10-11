@@ -211,6 +211,171 @@ const TEXT := {
 
 
 const SOURCE_TRANSLATIONS_EXTRA := {
+    "E  ANCHOR THE BELLGRAVE CANOPY": {
+        "zh_cn": "E  固定钟墓树冠桥",
+        "zh_tw": "E  固定鐘墓樹冠橋",
+        "ja": "E  鐘墓の樹冠橋を固定"
+    },
+    "E  ANCHOR THE THIRD STREET": {
+        "zh_cn": "E  固定第三街",
+        "zh_tw": "E  固定第三街",
+        "ja": "E  第三街を固定"
+    },
+    "E  ANCHOR THE DRY AQUEDUCT": {
+        "zh_cn": "E  固定干涸渡槽",
+        "zh_tw": "E  固定乾涸渡槽",
+        "ja": "E  乾いた水路を固定"
+    },
+    "E  RAISE THE BURIED STANDARD": {
+        "zh_cn": "E  升起埋葬的军旗",
+        "zh_tw": "E  升起埋藏的軍旗",
+        "ja": "E  埋もれた軍旗を掲げる"
+    },
+    "E  ANCHOR THE SILENT BELL WALK": {
+        "zh_cn": "E  固定无声钟栈道",
+        "zh_tw": "E  固定無聲鐘棧道",
+        "ja": "E  無音の鐘の通路を固定"
+    },
+    "E  ANCHOR THE PRISON CROSSWALK": {
+        "zh_cn": "E  固定牢房横道",
+        "zh_tw": "E  固定牢房橫道",
+        "ja": "E  牢獄の横断路を固定"
+    },
+    "E  ANCHOR THE ERASED REGENT GALLERY": {
+        "zh_cn": "E  固定被抹除的摄政王墓廊",
+        "zh_tw": "E  固定被抹除的攝政王墓廊",
+        "ja": "E  消された摂政の墓廊を固定"
+    },
+    "E  ANCHOR THE RAIN REFLECTION": {
+        "zh_cn": "E  固定雨中倒影",
+        "zh_tw": "E  固定雨中倒影",
+        "ja": "E  雨の映し道を固定"
+    },
+    "E  ANCHOR THE CHOIRLESS GALLERY": {
+        "zh_cn": "E  固定无声唱诗席",
+        "zh_tw": "E  固定無聲唱詩席",
+        "ja": "E  聖歌なき回廊を固定"
+    },
+    "E  ANCHOR THE OBSERVER SPAN": {
+        "zh_cn": "E  固定观测者高桥",
+        "zh_tw": "E  固定觀測者高橋",
+        "ja": "E  観測者の高架を固定"
+    },
+    "E  ANCHOR THE CROWN WALL": {
+        "zh_cn": "E  固定王冠城墙",
+        "zh_tw": "E  固定王冠城牆",
+        "ja": "E  王冠の城壁を固定"
+    },
+    "THE BELL'S SECOND SHADOW": {
+        "zh_cn": "钟的第二道影子",
+        "zh_tw": "鐘的第二道影子",
+        "ja": "鐘の二つ目の影"
+    },
+    "The canopy path crosses a gap that the forest survey marks as solid rock. The bell above casts two shadows: one on the tower, and one on a road that is not there. The second shadow ends at a sealed door.": {
+        "zh_cn": "树冠高路横越一处被森林测绘图标成实心岩层的断隙。上方的钟投下两道影子：一道落在钟楼上，另一道落在一条并不存在的道路上。第二道影子停在一扇封死的门前。",
+        "zh_tw": "樹冠高路橫越一處被森林測繪圖標成實心岩層的斷隙。上方的鐘投下兩道影子：一道落在鐘樓上，另一道落在一條並不存在的道路上。第二道影子停在一扇封死的門前。",
+        "ja": "樹冠の道は、森林測量図では固い岩盤と記された裂け目を横切る。頭上の鐘は二つの影を落としていた。一つは塔へ、もう一つは存在しない道へ。二つ目の影は封じられた扉の前で途切れている。"
+    },
+    "THE THIRD STREET HOLDS": {
+        "zh_cn": "第三街仍然存在",
+        "zh_tw": "第三街仍然存在",
+        "ja": "第三の街路はまだ残る"
+    },
+    "A bridge appears where the city map was scraped clean. The road does not lead to another place; it reconnects two parts of the street you already knew.\n\nThe stone will remember this route.": {
+        "zh_cn": "城市地图被刮得一干二净的地方，浮现出一座桥。这条路并不通往别处；它只是把你早已认识的街道两端重新接起。\n\n石头会记住这条路。",
+        "zh_tw": "城市地圖被刮得一乾二淨的地方，浮現出一座橋。這條路並不通往別處；它只是把你早已認識的街道兩端重新接起。\n\n石頭會記住這條路。",
+        "ja": "都市の地図が削り取られた場所に、橋が現れる。この道は別の場所へ続くのではない。知っていた街路の二つの断片を、もう一度つなぐのだ。\n\n石はこの道を忘れない。"
+    },
+    "THE AQUEDUCT WITHOUT WATER": {
+        "zh_cn": "无水渡槽",
+        "zh_tw": "無水渡槽",
+        "ja": "水のない水路"
+    },
+    "The pipes end at a stone channel older than the reservoir. When the bridge settles, water can be heard flowing upward through the sealed rock.\n\nThe channel remembers a river that no longer exists.": {
+        "zh_cn": "管道止于一条比水库更古老的石渠。桥体固定时，封死的岩层深处传来水流逆向上涌的声音。\n\n这条石渠仍记得一条早已消失的河。",
+        "zh_tw": "管道止於一條比水庫更古老的石渠。橋體固定時，封死的岩層深處傳來水流逆向上湧的聲音。\n\n這條石渠仍記得一條早已消失的河。",
+        "ja": "管は貯水池より古い石の水路で途切れている。橋が定まると、封じられた岩の奥から、水が上へ流れる音が聞こえた。\n\nこの水路は、もう存在しない川を覚えている。"
+    },
+    "THE STANDARD THAT OUTLIVED THE ARMY": {
+        "zh_cn": "比军队活得更久的军旗",
+        "zh_tw": "比軍隊活得更久的軍旗",
+        "ja": "軍より長く残った軍旗"
+    },
+    "The cloth has rotted away, but its shadow still points across the trench. The fortress map marks this gap as impassable. The dead were ordered to hold a road that the Church later removed from every record.": {
+        "zh_cn": "旗布早已腐烂，影子却仍指向战壕另一侧。堡垒地图把这道缺口标成不可通行。那些死者奉命守住一条道路，而教会后来把它从所有记录中抹去。",
+        "zh_tw": "旗布早已腐爛，影子卻仍指向戰壕另一側。堡壘地圖把這道缺口標成不可通行。那些死者奉命守住一條道路，而教會後來把它從所有紀錄中抹去。",
+        "ja": "旗布は朽ち果てたのに、その影だけは塹壕の向こうを指している。要塞の地図では、この隙間は通行不能とされている。死者たちは、教会が後にすべての記録から消した道を守るよう命じられた。"
+    },
+    "THE SERVICE WALK OF THE SILENT BELL": {
+        "zh_cn": "无声钟的检修栈道",
+        "zh_tw": "無聲鐘的檢修棧道",
+        "ja": "沈黙の鐘の整備通路"
+    },
+    "The upper walkway bears fresh maintenance marks, but the bell above it has never moved. The repair ledger lists a bell-ringer who was born decades after the monastery was sealed.": {
+        "zh_cn": "上层栈道留有新鲜的检修痕迹，头顶的钟却从未移动。维修账册记载了一名敲钟人，而他的出生年份竟在修道院封闭数十年之后。",
+        "zh_tw": "上層棧道留有新鮮的檢修痕跡，頭頂的鐘卻從未移動。維修帳冊記載了一名敲鐘人，而他的出生年份竟在修道院封閉數十年之後。",
+        "ja": "上層の通路には新しい整備跡があるのに、頭上の鐘は一度も動いていない。修繕台帳には鐘番の名があるが、その人物の生年は修道院が封鎖された数十年後だった。"
+    },
+    "THE CROSSWALK OF UNNUMBERED CELLS": {
+        "zh_cn": "没有编号的牢房横道",
+        "zh_tw": "沒有編號的牢房橫道",
+        "ja": "番号のない独房の横断路"
+    },
+    "The maintenance ledger counts every hinge and drain, but leaves the cells themselves unnumbered. A repair entry orders the crew to preserve the lower doors and seal the upper ones from the outside. The names were not omitted by accident.": {
+        "zh_cn": "维护账册逐一记录每副铰链与每条排水沟，却唯独不给牢房编号。一条维修指令要求工人保留下层牢门，并从外侧封死上层牢门。那些名字不是被无意漏掉的。",
+        "zh_tw": "維護帳冊逐一記錄每副鉸鏈與每條排水溝，卻唯獨不替牢房編號。一條維修指令要求工人保留下層牢門，並從外側封死上層牢門。那些名字不是被無意漏掉的。",
+        "ja": "整備台帳は蝶番も排水溝も一つずつ数えているのに、独房だけは番号がない。修繕記録には、下層の扉を残し、上層の扉は外から封鎖せよとある。名前が抜けているのは偶然ではない。"
+    },
+    "THE REGENT WHO NEVER REIGNED": {
+        "zh_cn": "从未称王的摄政者",
+        "zh_tw": "從未稱王的攝政者",
+        "ja": "王にならなかった摂政"
+    },
+    "The gallery joins two burial ledges without passing the sealed royal gate. One stone names a regent; the matching socket on the opposite wall has been chiseled away. The tomb was not built to forget a king. It was altered to make the succession impossible to read.": {
+        "zh_cn": "墓廊连接两处安葬高台，却不经过封闭的王室大门。一块石碑刻着摄政者的名字；对面墙上与之对应的石槽却被凿掉了。这座墓并非为了让人忘记一位国王，而是后来被改造，好让继承顺序再也无从辨认。",
+        "zh_tw": "墓廊連接兩處安葬高臺，卻不經過封閉的王室大門。一塊石碑刻著攝政者的名字；對面牆上與之對應的石槽卻被鑿掉了。這座墓並非為了讓人忘記一位國王，而是後來被改造，好讓繼承順序再也無從辨認。",
+        "ja": "墓廊は封じられた王門を通らず、二つの埋葬台をつないでいる。一方の石には摂政の名が刻まれているが、向かいの壁にあった対応する窪みは削り取られていた。この墓は王を忘れさせるために造られたのではない。継承の順序を読み取れなくするため、後から改変されたのだ。"
+    },
+    "THE HOMES THAT THE RAIN REMEMBERS": {
+        "zh_cn": "雨仍记得的家",
+        "zh_tw": "雨仍記得的家",
+        "ja": "雨が覚えている家々"
+    },
+    "The roofline crosses houses whose doors were sealed from the street side. In the rainwater, warm windows appear beneath roofs that have stood empty for years. The old city did not lose its people all at once; someone taught the records to call them never-born.": {
+        "zh_cn": "屋顶道越过几间从街道一侧被封死的房屋。雨水倒映出温暖的窗光，明明那些屋子已空置多年。古城的人并非一夜之间消失；有人教会了档案，把他们称作从未出生的人。",
+        "zh_tw": "屋頂道越過幾間從街道一側被封死的房屋。雨水倒映出溫暖的窗光，明明那些屋子已空置多年。古城的人並非一夜之間消失；有人教會了檔案，把他們稱作從未出生的人。",
+        "ja": "屋根伝いの道は、通り側から扉を封じられた家々を横切る。何年も空き家のはずなのに、雨水には温かな窓明かりが映っている。古い街から人々が一度に消えたのではない。記録に彼らを「生まれなかった者」と呼ばせた誰かがいる。"
+    },
+    "THE CHOIR THAT WAS NEVER RECORDED": {
+        "zh_cn": "从未被记录的唱诗班",
+        "zh_tw": "從未被記錄的唱詩班",
+        "ja": "記録されなかった聖歌隊"
+    },
+    "The gallery overlooks the cathedral choir, but no sound rises from below. Dust outlines a row of kneeling figures where the floor has been worn smooth. The service ledger lists every hymn and every bell—except the names of those who sang here.": {
+        "zh_cn": "高廊俯瞰大圣堂的唱诗席，下面却没有传来任何声音。地板被磨得光滑，灰尘勾勒出一排跪姿人影。礼拜账册记录了每一首圣歌、每一次钟鸣——唯独没有记下曾在此歌唱之人的姓名。",
+        "zh_tw": "高廊俯瞰大聖堂的唱詩席，下面卻沒有傳來任何聲音。地板被磨得光滑，灰塵勾勒出一排跪姿人影。禮拜帳冊記錄了每一首聖歌、每一次鐘鳴——唯獨沒有記下曾在此歌唱之人的姓名。",
+        "ja": "回廊から大聖堂の聖歌席を見下ろしても、下から音は届かない。床は磨り減って滑らかで、埃が跪く人々の列を縁取っている。礼拝記録には賛歌も鐘の音もすべて記されている――ここで歌った者たちの名だけを除いて。"
+    },
+    "THE OBSERVER WHO LEFT NO FOOTPRINTS": {
+        "zh_cn": "没有留下脚印的观测者",
+        "zh_tw": "沒有留下腳印的觀測者",
+        "ja": "足跡を残さなかった観測者"
+    },
+    "The old ledges meet above the laboratory's newest instruments. One observation slate records two shadows entering the chamber and only one body leaving. A later hand has rewritten the count as a lighting error.": {
+        "zh_cn": "古老高台在实验室最新的仪器上方交会。一块观测板记录着两道影子进入房间，却只有一具身体离开。后来有人把这个数字改写成了光照误差。",
+        "zh_tw": "古老高臺在實驗室最新的儀器上方交會。一塊觀測板記錄著兩道影子進入房間，卻只有一具身體離開。後來有人把這個數字改寫成了光照誤差。",
+        "ja": "古い観測台は、研究室の最新機器の上で交わる。観測板には二つの影が部屋へ入り、出ていった身体は一つだけと記されていた。後の筆跡は、その数を照明の誤差として書き換えている。"
+    },
+    "THE WALL BUILT FOR A KING'S ABSENCE": {
+        "zh_cn": "为国王缺席而筑的城墙",
+        "zh_tw": "為國王缺席而築的城牆",
+        "ja": "王の不在に備えた城壁"
+    },
+    "The upper wall was built to watch the avenue, not defend it. Its arrow slits face inward. The palace feared what might leave the throne room more than what might approach it.": {
+        "zh_cn": "这道高墙是为了监视大道，而不是防守大道。墙上的箭孔全都朝向城内。王宫害怕的并非靠近王座厅的东西，而是可能从王座厅里走出来的东西。",
+        "zh_tw": "這道高牆是為了監視大道，而不是防守大道。牆上的箭孔全都朝向城內。王宮害怕的並非靠近王座廳的東西，而是可能從王座廳裡走出來的東西。",
+        "ja": "この高壁は大通りを守るためではなく、見張るために築かれた。矢狭間はすべて内側を向いている。宮殿が恐れていたのは、玉座の間へ近づくものより、そこから出てくるものだった。"
+    },
     "The old hunter looks at your face and goes pale.\n\n\"You used to come here before the church took you. You always asked whether the song was still playing.\"\n\nSomewhere beyond the village, a lullaby answers.": {
         "zh_cn": "老猎人看着你的脸，脸色骤然变白。\n\n“在教会带走你之前，你以前常来这里。你总会问，那首歌是不是还在响。”\n\n村庄之外，摇篮曲回应了。",
         "zh_tw": "老獵人看著你的臉，臉色驟然變白。\n\n「在教會帶走你之前，你以前常來這裡。你總會問，那首歌是不是還在響。」\n\n村莊之外，搖籃曲回應了。",
