@@ -2,6 +2,42 @@ extends Control
 ## Temporary map acceptance tools. All changes stay in memory while WorldState.debug_map_test_mode is active.
 ## 临时地图验收工具。开启地图测试模式后，所有调试改动只保留在内存中。
 
+
+# Natural exploration walkthrough. This is guidance only: it never changes progression or teleports the Hero.
+# 自然探索逐步指引：只显示路线建议，不修改进度、不传送主角。
+const GUIDE_STEPS: Array[Dictionary] = [
+	{"region":"A0","title":"01/30｜逃离手术所","text":"正常完成序章战斗与逃脱，沿真实出口进入 A1。不要使用地图传送。"},
+	{"region":"A1","title":"02/30｜确认村庄枢纽","text":"探索村庄、与可交互 NPC 对话并确认可见出口；优先沿正常路线前往 A2。"},
+	{"region":"A2","title":"03/30｜调查静止的钟","text":"沿雾林旧朝圣路前进，寻找不会移动的钟并按 V 开启灵视、按 E 调查。确认鸣响／灵视能力正常解锁。"},
+	{"region":"A2","title":"04/30｜回看倒响钟室入口","text":"在钟墓附近开启灵视，寻找异常入口；达到鸣响 18 且调查钟的线索后，尝试按 E 开启 H02。若条件不足，先继续主线并记下此处，之后回访。"},
+	{"region":"H02","title":"05/30｜倒响钟室往返","text":"若已进入 H02，走到另一端检查远侧出口，再通过入口返回 A2；确认不是单向软锁。未显现则跳过并稍后回访。"},
+	{"region":"A3","title":"06/30｜进入被遗忘城区","text":"从 A2 沿真实城区入口进入 A3；调查第三街路牌／不合理的街道结构，记住异常位置。"},
+	{"region":"A3","title":"07/30｜寻找被删去的第三街","text":"在城区开启灵视并调查第三街异常；鸣响达到 28 后尝试 H03。进入后必须找到返回 A3 的出口。"},
+	{"region":"A4","title":"08/30｜下水道与旧水库","text":"从已发现的真实入口进入 A4，调查新管道下方的古老石层；尝试开启水闸／检查井回路，确认能回到 A1 或旧城区。"},
+	{"region":"H01","title":"09/30｜村庄井底回声层","text":"回到 A1 的井口，在鸣响达到 12 后用灵视寻找 H01；进入后走完整段并从远侧返回地表。"},
+	{"region":"H04","title":"10/30｜水面背后的楼梯","text":"在 A4 旧水库寻找反射不一致的阶梯；鸣响达到 36 且古神接触至少 1 后尝试 H04，确认隐藏区有回程。"},
+	{"region":"A5","title":"11/30｜旧战场与边境堡垒","text":"沿主线进入 A5，检查战壕、堡垒门与尸体朝向；寻找通往 A6 的路，并留意 A2 旧朝圣高路／钟塔的反向捷径。"},
+	{"region":"A6","title":"12/30｜修道院与钟塔","text":"进入 A6，调查没有影子的钟与无声钟窗；开启能从钟塔返回城区的下落捷径，之后实际走一次 A6 ↔ A3 回环。"},
+	{"region":"H05","title":"13/30｜无声钟室","text":"在 A6 开启灵视，鸣响达到 42 且古神接触至少 1 后调查无声钟窗，尝试进入 H05；从另一端走回 A6。"},
+	{"region":"A7","title":"14/30｜监牢与维护竖井","text":"沿主线进入 A7，检查牢门、登记册与维护竖井；寻找供给隧道／监牢侧回路，确认开门后能从两侧通行。"},
+	{"region":"A8","title":"15/30｜旧王墓与王名石碑","text":"进入 A8，调查被刮除的王室姓名与墓门；此处是王国深层路线枢纽，记录暂时打不开的侧门，稍后带着 A2 钟线索回来。"},
+	{"region":"H06","title":"16/30｜王名抹除廊","text":"鸣响达到 55、古神接触至少 2，并调查 A2 的钟与 A8 王室石碑后，在 A8 开启灵视寻找 H06；进入后确认能返回王墓。"},
+	{"region":"A9","title":"17/30｜王城外环与镜街线索","text":"进入 A9，检查王城外环、旧升降机、排水门和雨中倒影；按 V 调查镜街异常。不要把看见入口误当成已开门。"},
+	{"region":"H07","title":"18/30｜镜街：雨幕背后","text":"鸣响达到 68、外神接触至少 12 且外神共鸣成立后，调查 A9 镜街异常并尝试进入 H07；走到远端，验证镜街侧门／回程。"},
+	{"region":"A10","title":"19/30｜大圣堂与静默侧堂","text":"从 A9 正常进入 A10，探索朝圣阶梯与教会内廷；寻找静默侧堂入口，确认它与 A11 的 C19 连接真实可走。"},
+	{"region":"A11","title":"20/30｜深层研究区：王墓入口","text":"优先从 A8 侧验证 C15：鸣响至少 55、古神接触至少 2，并调查 A2 钟与 A8 王室石碑。按 E 开门进入 A11，检查入口落点和回程。"},
+	{"region":"A11","title":"21/30｜深层研究区：静默侧堂入口","text":"再从 A10 静默侧堂验证 C19：鸣响至少 68、外神接触至少 12、外神共鸣成立且调查 A9 镜街异常。确认第二入口不是仅有状态标记。"},
+	{"region":"H08","title":"22/30｜胎宫／原初空腔","text":"在 A11 达到鸣响 78、古神接触至少 2、外神接触至少 18、外神共鸣成立，并调查 A2 钟、A3 第三街、A4 古老石层后寻找 H08；结局出口还受剧情状态约束。"},
+	{"region":"A4","title":"23/30｜补完边境箱庭环","text":"回到 A4，实际走通 A3 → A4 → A1 的水闸／井道回环；检查每个入口的出生点不会压在门或 NPC 身上。"},
+	{"region":"A3","title":"24/30｜补完中层箱庭环","text":"从 A6 已开启的钟塔下落捷径返回 A3，再从 A3 回到 A6；确认捷径确实缩短回程，不只是地图标记已开启。"},
+	{"region":"A8","title":"25/30｜王国深层环的王墓侧","text":"从 A8 重新走向 A9，并尝试王室运输侧门／王墓侧门；记录哪些必须从另一侧开启。"},
+	{"region":"A9","title":"26/30｜王国深层环的外环侧","text":"从 A9 实际打开旧升降机、王室排水道及可用侧门，再走 A9 → A4 的回路；确认从 A4 回到 A8/A9 不会卡在入口。"},
+	{"region":"A10","title":"27/30｜教会内廷回访","text":"回访 A10，检查已发现的静默侧堂、侧门和捷径；确认从 A11 返回时出生位置安全，并检查相邻 E 交互提示是否冲突。"},
+	{"region":"A12","title":"28/30｜王室内城与王座区","text":"沿 A10 的真实主线出口进入 A12；检查王室内城与王座区的空间连接、回程门及剧情推进，不使用传送跳过主线。"},
+	{"region":"ALL","title":"29/30｜隐藏区回程复核","text":"按自然探索记录逐个回看已进入的 H01–H08：确认入口已发现、门已开启、实际进入三种状态分离；每个隐藏区都能按设计返回。"},
+	{"region":"ALL","title":"30/30｜完成记录与恢复正式存档","text":"确认自然探索实走地图达到 21/21，并在 Output 检查 [NEREIS][MAP][NATURAL_TEST] 记录。然后点击“退出测试并恢复磁盘存档”，回到标题菜单用“继续游戏”确认正式存档未被污染。"}
+]
+
 const MAPS: Array[Dictionary] = [
 	{"label": "A0｜教会手术所与逃脱通道", "scene": "res://scenes/escape_prologue.tscn"},
 	{"label": "A1｜边境村庄", "scene": "res://scenes/village_hub.tscn"},
@@ -67,16 +103,21 @@ var full_sight_button: Button
 var all_routes_button: Button
 var teleport_button: Button
 var restore_button: Button
+var guide_label: Label
+var guide_step_index := 0
+var guide_prev_button: Button
+var guide_next_button: Button
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_panel()
+	_update_guide()
 	visible = false
 
 func _build_panel() -> void:
 	panel = PanelContainer.new()
 	panel.position = Vector2(260, 24)
-	panel.size = Vector2(760, 672)
+	panel.size = Vector2(820, 820)
 	add_child(panel)
 
 	var column := VBoxContainer.new()
@@ -127,6 +168,21 @@ func _build_panel() -> void:
 	restore_button.pressed.connect(_restore_disk_save)
 	column.add_child(restore_button)
 
+	guide_label = Label.new()
+	guide_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	guide_label.custom_minimum_size = Vector2(0, 116)
+	column.add_child(guide_label)
+
+	var guide_buttons := HBoxContainer.new()
+	guide_buttons.add_theme_constant_override("separation", 8)
+	column.add_child(guide_buttons)
+	guide_prev_button = _make_button("上一步指引")
+	guide_prev_button.pressed.connect(_previous_guide_step)
+	guide_buttons.add_child(guide_prev_button)
+	guide_next_button = _make_button("标记完成／下一步")
+	guide_next_button.pressed.connect(_next_guide_step)
+	guide_buttons.add_child(guide_next_button)
+
 	exploration_label = Label.new()
 	exploration_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	exploration_label.text = "自然探索记录：未启动"
@@ -149,9 +205,43 @@ func _make_button(caption: String) -> Button:
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	return button
 
+func _update_guide() -> void:
+	if guide_label == null:
+		return
+	guide_step_index = clampi(guide_step_index, 0, GUIDE_STEPS.size() - 1)
+	var step: Dictionary = GUIDE_STEPS[guide_step_index]
+	var current_scene_path := ""
+	if get_tree().current_scene != null:
+		current_scene_path = str(get_tree().current_scene.scene_file_path)
+	var current_region := "未知"
+	for entry in MAPS:
+		if str(entry["scene"]) == current_scene_path:
+			current_region = str(entry["label"]).split("｜")[0]
+			break
+	var target := str(step["region"])
+	var location_note := "当前区域：%s" % current_region
+	if target != "ALL" and current_region != target:
+		location_note += "；本步目标：%s" % target
+	else:
+		location_note += "；本步目标已抵达或为全图检查"
+	guide_label.text = "自然探索路线指引（仅提示，不传送／不解锁）\\n%s\\n%s\\n%s" % [
+		str(step["title"]), str(step["text"]), location_note
+	]
+	guide_prev_button.disabled = guide_step_index <= 0
+	guide_next_button.text = "完成本步／下一步" if guide_step_index < GUIDE_STEPS.size() - 1 else "重新查看最后一步"
+
+func _previous_guide_step() -> void:
+	guide_step_index = maxi(0, guide_step_index - 1)
+	_update_guide()
+
+func _next_guide_step() -> void:
+	guide_step_index = mini(GUIDE_STEPS.size() - 1, guide_step_index + 1)
+	_update_guide()
+
 func _process(_delta: float) -> void:
 	if exploration_label == null:
 		return
+	_update_guide()
 	if not WorldState.debug_natural_test_active:
 		exploration_label.text = "自然探索记录：未启动"
 		return
@@ -184,6 +274,8 @@ func _start_natural_exploration() -> void:
 	WorldState.debug_ability_override_active = false
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.resume_spawn_side = "west"
+	guide_step_index = 0
+	_update_guide()
 	status_label.text = "自然探索已启动：从 A0 正常开始；未解锁灵视、未开放隐藏门、未启用传送。正式存档写入保持关闭。全程不要使用区域传送或状态预设。"
 	print("[NEREIS][MAP][NATURAL_TEST] Started clean in-memory run from A0; disk save protected.")
 	SceneTransition.fade_to_scene("res://scenes/escape_prologue.tscn")
@@ -234,6 +326,7 @@ func _restore_disk_save() -> void:
 	WorldState.debug_map_test_mode = false
 	WorldState.debug_natural_test_active = false
 	WorldState.debug_natural_test_visited_regions.clear()
+	guide_step_index = 0
 	WorldState.debug_ability_override_active = false
 	WorldState.load_game()
 	WorldState.prepare_scene_runtime()
