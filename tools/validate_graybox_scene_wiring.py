@@ -119,7 +119,7 @@ def main() -> int:
 
     prologue_script = read("scripts/levels/escape_prologue.gd", errors)
     require(prologue_script, "func _create_surgical_catwalks() -> void:", "A0 surgical catwalk builder", errors)
-    require(prologue_script, "Rect2(430, 445, 100, 16)", "A0 surgical first ledge", errors)
+    require(prologue_script, "Rect2(430, 455, 100, 16)", "A0 surgical first ledge", errors)
     require(prologue_script, "MAINTENANCE ACCESS ONLY", "A0 catwalk landmark", errors)
 
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
