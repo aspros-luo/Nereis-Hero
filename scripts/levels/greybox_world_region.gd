@@ -1739,7 +1739,7 @@ func _spawn_local_resonance_routes() -> void:
             route.route_id = "A10_CHOIRLESS_UPPER_GALLERY"
             route.required_resonance = 48
             route.bridge_start_x = 675.0
-            route.bridge_end_x = 1075.0
+            route.bridge_end_x = 960.0
             route.bridge_y = 310.0
             route.prompt_text = "E  ANCHOR THE CHOIRLESS GALLERY"
         "A11":
