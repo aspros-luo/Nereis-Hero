@@ -70,8 +70,8 @@ func _ready() -> void:
 
 func _build_panel() -> void:
 	panel = PanelContainer.new()
-	panel.position = Vector2(260, 54)
-	panel.size = Vector2(760, 612)
+	panel.position = Vector2(260, 24)
+	panel.size = Vector2(760, 672)
 	add_child(panel)
 
 	var column := VBoxContainer.new()
