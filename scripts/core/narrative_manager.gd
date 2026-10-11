@@ -109,7 +109,7 @@ func play_first_memory() -> void:
 
     WorldState.unlock_first_memory()
     show_message(
-        "A 记忆 THAT DOES NOT FEEL LIKE YOURS",
+        "一段不属于你的记忆",
         "The old hunter looks at your face and goes pale.\n\n\"You used to come here before the church took you. You always asked whether the song was still playing.\"\n\nSomewhere beyond the village, a lullaby answers.",
         8.0
     )
