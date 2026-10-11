@@ -416,7 +416,9 @@ func _spawn_ui() -> void:
     hud.bind_hero(hero)
     hud.set_story_mode("A1｜边境村庄", "先完成村庄防卫；之后向右走到北门（x≈2440）进入 A2。")
 
-    get_tree().create_timer(0.7).timeout.connect(_show_village_intro)
+    if "village_intro_seen" not in WorldState.achievement_flags:
+        WorldState.record_achievement("village_intro_seen")
+        get_tree().create_timer(0.7).timeout.connect(_show_village_intro)
 
 func _show_village_intro() -> void:
     narrative.show_message(
