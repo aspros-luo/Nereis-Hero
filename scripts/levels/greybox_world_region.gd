@@ -763,10 +763,10 @@ func _spawn_region_rest_point() -> void:
             rest_x = 1150.0
             rest_name = "OLD PILGRIM SHRINE"
         "A3":
-            rest_x = 1750.0
+            rest_x = 2100.0
             rest_name = "ABANDONED STREET SHRINE"
         "A4":
-            rest_x = 1160.0
+            rest_x = 2050.0
             rest_name = "RESERVOIR ALTAR"
         "A5":
             rest_x = 1360.0
@@ -781,7 +781,7 @@ func _spawn_region_rest_point() -> void:
             rest_x = 1150.0
             rest_name = "ROYAL TOMBSTONE"
         "A9":
-            rest_x = 1180.0
+            rest_x = 1100.0
             rest_name = "OUTER RING WAYSHRINE"
         "A10":
             rest_x = 1200.0
