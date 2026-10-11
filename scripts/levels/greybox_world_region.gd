@@ -1679,7 +1679,7 @@ func _spawn_local_resonance_routes() -> void:
             route.route_id = "A5_BURIED_STANDARD_CROSSING"
             route.required_resonance = 24
             route.bridge_start_x = 880.0
-            route.bridge_end_x = 1340.0
+            route.bridge_end_x = 1220.0
             route.bridge_y = 390.0
             route.prompt_text = "E  RAISE THE BURIED STANDARD"
         "A6":
@@ -1740,7 +1740,7 @@ func _spawn_local_resonance_routes() -> void:
             route.required_resonance = 48
             route.bridge_start_x = 675.0
             route.bridge_end_x = 960.0
-            route.bridge_y = 310.0
+            route.bridge_y = 307.0
             route.prompt_text = "E  ANCHOR THE CHOIRLESS GALLERY"
         "A11":
             # An upper span reconnects two ancient observation ledges above the later Church laboratory.
@@ -1750,8 +1750,8 @@ func _spawn_local_resonance_routes() -> void:
             route.name = "SecondObserverSpan"
             route.route_id = "A11_SECOND_OBSERVER_SPAN"
             route.required_resonance = 56
-            route.bridge_start_x = 1230.0
-            route.bridge_end_x = 1920.0
+            route.bridge_start_x = 1350.0
+            route.bridge_end_x = 1800.0
             route.bridge_y = 285.0
             route.prompt_text = "E  ANCHOR THE OBSERVER SPAN"
         "A12":
