@@ -493,7 +493,7 @@
         "to": "A3",
         "unlock_condition": "reached_A6_then_opened_bell_tower_drop_to_A3",
         "opens_from": "A6",
-        "requires_target_already_reached": false,
+        "requires_target_already_reached": true,
         "requires_ending_state": false
       },
       "scene_path": "scenes/silent_bell_room.tscn",
