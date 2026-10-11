@@ -57,6 +57,8 @@
   <path class="route" marker-end="url(#arrow)" d="M1283 600 C1325 560 1395 490 1455 430"/>
 </g>
 <g id="later-shortcuts">
+  <path class="shortcut" marker-end="url(#shortarrow)" d="M290 555 C325 600 345 645 390 690"/>
+
   <path class="shortcut" marker-end="url(#shortarrow)" d="M443 915 C315 860 205 790 185 580"/>
   <path class="shortcut" marker-end="url(#shortarrow)" d="M1007 568 C895 515 770 580 650 657"/>
   <path class="shortcut" marker-end="url(#shortarrow)" d="M1125 940 C1202 860 1274 790 1320 755"/>
