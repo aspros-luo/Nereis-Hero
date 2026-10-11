@@ -189,12 +189,12 @@ func _create_surgical_catwalks() -> void:
     # A short optional maintenance route crosses the first surgical rooms but cannot bypass the wardens or exit lock.
     # 可选维护高路穿过前段手术室，但不能绕过守卫战或出口锁。
     var route := [
-        Rect2(430, 445, 100, 16),
-        Rect2(560, 400, 110, 16),
-        Rect2(700, 355, 110, 16),
-        Rect2(850, 390, 110, 16),
-        Rect2(1000, 430, 110, 16),
-        Rect2(1130, 390, 110, 16)
+        Rect2(430, 455, 100, 16),
+        Rect2(560, 410, 110, 16),
+        Rect2(700, 365, 110, 16),
+        Rect2(850, 400, 110, 16),
+        Rect2(1000, 440, 110, 16),
+        Rect2(1130, 400, 110, 16)
     ]
     for platform_rect in route:
         var body := StaticBody2D.new()
@@ -258,11 +258,11 @@ func _draw() -> void:
 
     # Broken rails mark the optional maintenance catwalk above the surgical tables.
     # 断裂护栏标出手术台上方的可选维护高路。
-    draw_line(Vector2(430, 445), Vector2(560, 400), Color("#66515f"), 3.0)
-    draw_line(Vector2(560, 400), Vector2(700, 355), Color("#66515f"), 3.0)
-    draw_line(Vector2(700, 355), Vector2(850, 390), Color("#66515f"), 3.0)
-    draw_line(Vector2(850, 390), Vector2(1000, 430), Color("#66515f"), 3.0)
-    draw_line(Vector2(1000, 430), Vector2(1130, 390), Color("#66515f"), 3.0)
+    draw_line(Vector2(430, 455), Vector2(560, 410), Color("#66515f"), 3.0)
+    draw_line(Vector2(560, 410), Vector2(700, 365), Color("#66515f"), 3.0)
+    draw_line(Vector2(700, 365), Vector2(850, 400), Color("#66515f"), 3.0)
+    draw_line(Vector2(850, 400), Vector2(1000, 440), Color("#66515f"), 3.0)
+    draw_line(Vector2(1000, 440), Vector2(1130, 400), Color("#66515f"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(620, 295), "MAINTENANCE ACCESS ONLY", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#8b737e"))
 
     for x in [700.0, 1120.0, 1500.0]:
