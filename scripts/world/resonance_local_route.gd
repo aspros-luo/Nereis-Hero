@@ -79,7 +79,7 @@ func _sync_bridge_collision() -> void:
     var has_bridge := is_instance_valid(bridge_body)
     if should_exist and not has_bridge:
         bridge_body = StaticBody2D.new()
-        bridge_body.name = "AnchoredThirdStreetBridge"
+        bridge_body.name = "ResonanceBridge_%s" % route_id
         bridge_body.position = Vector2(bridge_start_x, bridge_y)
         var collision := CollisionShape2D.new()
         var rectangle := RectangleShape2D.new()
