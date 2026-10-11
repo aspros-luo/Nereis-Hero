@@ -120,6 +120,17 @@ def main() -> int:
     require(region_script, "[NEREIS][MAP][SPAWN] region=%s", "Map spawn Debug log", errors)
     require(region_script, "[NEREIS][MAP][EXIT] from=%s", "Map exit Debug log", errors)
 
+    # M1 alternate route and vertical traversal contracts.
+    # M1 替代路线与垂直探索的静态契约。
+    village_route_script = read("scripts/levels/village_hub.gd", errors)
+    require(village_route_script, 'city_cut.poi_id = "city_cut"', "A1 drainage route", errors)
+    require(village_route_script, '"village_defense_survived" in WorldState.achievement_flags', "A1 drainage gate", errors)
+    require(village_route_script, 'WorldState.pending_region_spawn_side = "village_city_cut"', "A1 to A3 spawn mapping", errors)
+    require(region_script, 'if region_id == "A3" and side == "village_city_cut"', "A3 alternate entrance spawn", errors)
+    require(region_script, '520.0, "E  RETURN THROUGH THE OLD DRAIN"', "A3 return-to-village exit", errors)
+    require(region_script, "_add_platform(Rect2(450, 400, 110, 18))", "A3 rooftop loop", errors)
+    require(region_script, "_add_platform(Rect2(1650, 310, 130, 18))", "A4 pipe-walk route", errors)
+
     # Verify that every source ID required by a gate is actually spawned by the region controller.
     # 检查所有入口要求的异常来源，都确实由区域控制器生成。
     required_source_ids: set[str] = set()
