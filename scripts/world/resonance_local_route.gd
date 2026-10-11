@@ -1,0 +1,128 @@
+extends Node2D
+## A local route inside an already explored map, revealed by Resonance Sight.
+## 在已探索地图内部显现的局部路线，由鸣响 / 灵视揭示。
+
+signal opened(route_id: String)
+
+const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
+
+@export var route_id: String = "A3_THIRD_STREET_ROOFLINE"
+@export var required_resonance: int = 28
+@export var bridge_start_x: float = 1690.0
+@export var bridge_end_x: float = 2050.0
+@export var bridge_y: float = 350.0
+
+var revealed := false
+var opened_permanently := false
+var hero_nearby := false
+var cooldown := 0.0
+var bridge_body: StaticBody2D
+
+func _ready() -> void:
+    add_to_group("resonance_hidden_targets")
+    opened_permanently = WorldState.is_hidden_path_opened(route_id)
+    update_reveal_state(
+        WorldState.resonance_sight_active,
+        WorldState.hero_resonance,
+        WorldState.ancient_exposure,
+        WorldState.outer_exposure,
+        WorldState.debug_ability_override_active
+    )
+    queue_redraw()
+
+func _process(delta: float) -> void:
+    cooldown = maxf(0.0, cooldown - delta)
+    opened_permanently = WorldState.is_hidden_path_opened(route_id)
+    var hero := get_node_or_null("../Hero") as Node2D
+    var bridge_center := Vector2((bridge_start_x + bridge_end_x) * 0.5, bridge_y)
+    hero_nearby = hero != null and hero.global_position.distance_to(to_global(bridge_center)) <= 105.0
+    var available := (
+        not WorldState.input_locked
+        and hero_nearby
+        and cooldown <= 0.0
+        and revealed
+        and not opened_permanently
+    )
+    INTERACTION_FOCUS_SCRIPT.sync(self, available, 30)
+    queue_redraw()
+
+func update_reveal_state(
+    sight_active: bool,
+    resonance: int,
+    _ancient_exposure: int,
+    _outer_exposure: int,
+    debug_override: bool = false
+) -> void:
+    opened_permanently = WorldState.is_hidden_path_opened(route_id)
+    revealed = opened_permanently or debug_override or (sight_active and resonance >= required_resonance)
+    _sync_bridge_collision()
+    queue_redraw()
+
+func _sync_bridge_collision() -> void:
+    var should_exist := revealed or opened_permanently
+    var has_bridge := is_instance_valid(bridge_body)
+    if should_exist and not has_bridge:
+        bridge_body = StaticBody2D.new()
+        bridge_body.name = "AnchoredThirdStreetBridge"
+        bridge_body.position = Vector2(bridge_start_x, bridge_y)
+        var collision := CollisionShape2D.new()
+        var rectangle := RectangleShape2D.new()
+        rectangle.size = Vector2(bridge_end_x - bridge_start_x, 18.0)
+        collision.shape = rectangle
+        collision.position = rectangle.size * 0.5
+        bridge_body.add_child(collision)
+        add_child(bridge_body)
+    elif not should_exist and has_bridge:
+        bridge_body.queue_free()
+        bridge_body = null
+
+func _unhandled_input(event: InputEvent) -> void:
+    if (
+        WorldState.input_locked
+        or not hero_nearby
+        or cooldown > 0.0
+        or opened_permanently
+        or not revealed
+        or not INTERACTION_FOCUS_SCRIPT.is_focused(self)
+    ):
+        return
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
+        cooldown = 0.7
+        WorldState.open_hidden_path(route_id)
+        opened_permanently = true
+        revealed = true
+        _sync_bridge_collision()
+        opened.emit(route_id)
+        print("[NEREIS][MAP][LOCAL_ROUTE] permanently_opened id=%s" % route_id)
+        get_viewport().set_input_as_handled()
+
+func _draw() -> void:
+    if revealed or opened_permanently:
+        var width := bridge_end_x - bridge_start_x
+        draw_rect(Rect2(bridge_start_x, bridge_y, width, 18.0), Color("#536b75"))
+        draw_line(
+            Vector2(bridge_start_x, bridge_y),
+            Vector2(bridge_end_x, bridge_y),
+            Color("#9bb5b9"),
+            3.0
+        )
+        for x in range(int(bridge_start_x + 24.0), int(bridge_end_x), 48):
+            draw_line(Vector2(x, bridge_y + 2.0), Vector2(x - 8.0, bridge_y + 16.0), Color("#26323a"), 2.0)
+        draw_circle(Vector2(bridge_start_x + 8.0, bridge_y - 8.0), 4.0, Color("#b5c8bd"))
+        draw_circle(Vector2(bridge_end_x - 8.0, bridge_y - 8.0), 4.0, Color("#b5c8bd"))
+        if hero_nearby and not WorldState.input_locked and revealed and not opened_permanently and INTERACTION_FOCUS_SCRIPT.is_focused(self):
+            draw_string(
+                ThemeDB.fallback_font,
+                Vector2((bridge_start_x + bridge_end_x) * 0.5 - 88.0, bridge_y - 14.0),
+                "E  ANCHOR THE THIRD STREET",
+                HORIZONTAL_ALIGNMENT_LEFT,
+                -1.0,
+                13,
+                Color("#d6c7b2")
+            )
+    else:
+        # Three pale scratches hint that the absent street has a physical anchor.
+        # 三道浅色刻痕提示这条不存在的街道仍有实体锚点。
+        draw_line(Vector2(bridge_start_x, bridge_y - 4.0), Vector2(bridge_start_x + 16.0, bridge_y - 12.0), Color("#5c5667"), 2.0)
+        draw_line(Vector2(bridge_start_x + 6.0, bridge_y + 2.0), Vector2(bridge_start_x + 22.0, bridge_y - 6.0), Color("#5c5667"), 2.0)
+        draw_line(Vector2(bridge_start_x + 12.0, bridge_y + 8.0), Vector2(bridge_start_x + 28.0, bridge_y), Color("#5c5667"), 2.0)
