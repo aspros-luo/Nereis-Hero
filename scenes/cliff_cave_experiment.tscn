@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+
+[node name="CliffCaveExperiment" type="Node2D"]
+script = ExtResource("1")
+region_id = "H09"
+location_id = "cliff_cave_experiment"
+region_title = "THE EXPERIMENT BENEATH THE HIVE"
+map_width = 2100.0
