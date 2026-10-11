@@ -121,8 +121,8 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, f"Expected 14 primary regions, found {len(region_ids)}.")
     if len(hidden) != 8:
         fail(errors, f"Expected 8 hidden regions, found {len(hidden)}.")
-    if len(connections) != 23:
-        fail(errors, f"Expected 23 macro connections, found {len(connections)}.")
+    if len(connections) != 24:
+        fail(errors, f"Expected 24 macro connections, found {len(connections)}.")
 
     edge_ids = [edge.get("id", "") for edge in connections]
     if len(edge_ids) != len(set(edge_ids)):
