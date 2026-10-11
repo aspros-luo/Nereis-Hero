@@ -33,6 +33,20 @@
 
 该模式的目的不是证明地图可传送，而是验证**从 A0 出发的真实探索链**。面板会显示“自然探索实走地图：n/21”，只在目标场景实际加载后才计数；Output 也会打印 `[NEREIS][MAP][NATURAL_TEST] Visited ...`。地图测试面板本身仍存在，因此必须遵守上述操作约束。调试会话期间所有 `save_game()` 磁盘写入都会被拦截。计数是场景到达记录，不等于该地图的所有捷径、隐藏线索或回程已验收。
 
+
+### 新增：Debug 全图逐步指引（30 步）
+
+F10 面板现在包含“自然探索路线指引”，覆盖从 A0 逃脱、主线 A0–A12、隐藏区 H01–H08、两条 A11 深层入口、三条箱庭回环与存档恢复。
+
+1. 点击“自然探索验收：从 A0 开始（无传送／无作弊解锁）”。
+2. 游戏开始后按 F10 打开面板，滚动到“自然探索路线指引”。
+3. 按当前步骤中的目标区域、线索、鸣响／接触门槛进行实际探索；使用“完成本步／下一步”只会切换文字，不会替玩家完成任务。
+4. “上一步指引”可返回查看。步骤不自动判定成功，因此请在真实进入区域、调查线索、打开捷径并实际走通回程后再点下一步。
+5. 指引不会传送、加鸣响、补进度或开门。遇到门尚未显现时，先继续主线、提升正常获得的条件，再回访该地点；不要用预设绕过它。
+6. 最后确认自然探索实走地图为 21/21，再使用“退出测试并恢复磁盘存档”。
+
+面板使用滚动区域，较小窗口下请在面板内部滚动。实走计数只代表场景被实际加载过，不代表每条路线已经通过；请同时按步骤检查门、线索、回程与出生点。
+
 ### 自然探索必须覆盖的目标
 
 - 主线：A0 → A1 → A2 → A3 → A5 → A6 → A7 → A8 → A9 → A10 → A12。
@@ -201,4 +215,4 @@ A0 → A1 → A2 → A3 → A5 → A6 → A7 → A8 → A9 → A10 → A12
 
 ## English summary
 
-Use the F10 map test panel to teleport among the 13 implemented primary map scenes and eight hidden areas. The panel offers a resonance-condition preset and an all-routes preset. Activate the test mode before changing state: save writes are suppressed for the session. Restore the on-disk save from the panel when finished. Validate actual routes, loops, hidden-area discovery, return paths, narrative geography, and text consistency in Godot; static checks are not runtime acceptance.
+Use the F10 map test panel to teleport among the 13 implemented primary map scenes and eight hidden areas. The panel now also provides a 30-step natural-exploration walkthrough covering the main route, hidden areas, loops, both A11 entrances, and save restoration. Its Previous/Next buttons only change the written guidance; they never teleport or unlock anything. The panel still offers resonance and all-routes presets for separate diagnostics. Activate natural exploration for the clean A0 run, and restore the on-disk save from the panel when finished. Validate actual routes, loops, hidden-area discovery, return paths, narrative geography, and text consistency in Godot; static checks are not runtime acceptance.
