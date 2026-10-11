@@ -216,7 +216,7 @@ def main() -> int:
         "scripts/levels/greybox_world_region.gd",
     ):
         source_text = read(source_path, errors)
-        for scene_path in set(re.findall(r'"res://(scenes/[^"]+\\.tscn)"', source_text)):
+        for scene_path in set(re.findall(r'"res://(scenes/[^"]+\.tscn)"', source_text)):
             if not (ROOT / scene_path).is_file():
                 errors.append(f"Scene reference in {source_path} does not exist: {scene_path}")
 
