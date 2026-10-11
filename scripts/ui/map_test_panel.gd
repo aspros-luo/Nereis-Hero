@@ -142,8 +142,7 @@ func _ensure_test_mode() -> void:
 	if WorldState.debug_map_test_mode:
 		return
 	WorldState.debug_map_test_mode = true
-	WorldState.debug_ability_override_active = true
-	status_label.text = "地图测试模式已开启：正式存档写入已暂停。当前场景中的主角可用 F5 开启能力调试。"
+	status_label.text = "地图测试模式已开启：正式存档写入已暂停。地图测试不会额外生成调试平台或敌人。"
 
 func _enable_test_mode() -> void:
 	_ensure_test_mode()
@@ -167,8 +166,7 @@ func _apply_full_sight_profile() -> void:
 	WorldState.outer_exposure = 100
 	WorldState.outer_god_resonance = true
 	WorldState.ancient_residue_awakened = true
-	WorldState.resonance_sight_active = true
-	WorldState.debug_ability_override_active = true
+	WorldState.set_resonance_sight_active(false)
 	for anomaly_id in ALL_ANOMALIES:
 		if anomaly_id not in WorldState.resonance_sources:
 			WorldState.resonance_sources.append(anomaly_id)
@@ -178,7 +176,6 @@ func _apply_full_sight_profile() -> void:
 	if "resonance_sight" not in WorldState.unlocked_abilities:
 		WorldState.unlocked_abilities["resonance_sight"] = {"source_type": "debug", "source_id": "map_test"}
 	WorldState.refresh_resonance_reveals(true)
-	_sync_current_hero_debug()
 	status_label.text = "灵视测试条件已设置：鸣响／古神接触／外神接触均为 100，已补齐常见异常来源与主线到达标记；隐藏门仍需按 E 开启。"
 
 func _apply_all_routes_profile() -> void:
@@ -192,19 +189,6 @@ func _apply_all_routes_profile() -> void:
 		if hidden_id not in WorldState.entered_hidden_regions:
 			WorldState.entered_hidden_regions.append(hidden_id)
 	status_label.text = "全地图连通测试条件已设置：常见隐藏门状态已开放。请逐条实际走过入口、回程与捷径；本预设不代表这些路线已经通过验收。"
-
-func _sync_current_hero_debug() -> void:
-	var current_scene := get_tree().current_scene
-	if current_scene == null:
-		return
-	var hero := current_scene.find_child("Hero", true, false)
-	if hero != null:
-		if hero.has_method("set_debug_ability_override"):
-			hero.call("set_debug_ability_override", true)
-		elif hero.has_method("_refresh_debug_test_fixtures"):
-			hero.call("_refresh_debug_test_fixtures", true)
-		if hero.has_method("queue_redraw"):
-			hero.call("queue_redraw")
 
 func _restore_disk_save() -> void:
 	WorldState.debug_map_test_mode = false
