@@ -1598,6 +1598,7 @@ func _spawn_a11_maintenance_gate(x: float) -> void:
 	gate.required_source_ids = required_source_ids
 	gate.opened.connect(_on_a11_gate_opened)
 	add_child(gate)
+	debug_exit_markers.append({"position": gate.position, "label": "C15｜王墓深层竖井", "kind": "secret", "condition": "灵视／剧情条件"})
 
 func _spawn_a11_chapel_gate(x: float) -> void:
 	# The cathedral approach is an alternate entrance; it still requires the Mite-related outer-god fact.
@@ -1618,6 +1619,7 @@ func _spawn_a11_chapel_gate(x: float) -> void:
 	gate.required_source_ids = required_source_ids
 	gate.opened.connect(_on_a11_gate_opened)
 	add_child(gate)
+	debug_exit_markers.append({"position": gate.position, "label": "C19｜静默侧堂入口", "kind": "secret", "condition": "灵视／剧情条件"})
 
 func _on_a11_gate_opened(secret_id: String) -> void:
 	if not is_instance_valid(narrative):
@@ -1650,6 +1652,7 @@ func _spawn_h08_gate(x: float) -> void:
 	gate.required_source_ids = required_source_ids
 	gate.opened.connect(_on_h08_gate_opened)
 	add_child(gate)
+	debug_exit_markers.append({"position": gate.position, "label": "H08｜胎宫／原初空腔", "kind": "secret", "condition": "灵视／剧情条件"})
 
 func _on_h08_gate_opened(_secret_id: String) -> void:
 	if not is_instance_valid(narrative):
@@ -1678,6 +1681,7 @@ func _spawn_a9_mirror_gate(x: float) -> void:
 	gate.required_source_ids = required_source_ids
 	gate.opened.connect(_on_mirror_street_gate_opened)
 	add_child(gate)
+	debug_exit_markers.append({"position": gate.position, "label": "H07｜镜街入口", "kind": "secret", "condition": "灵视／剧情条件"})
 
 func _on_mirror_street_gate_opened(secret_id: String) -> void:
 	if narrative == null or not is_instance_valid(narrative):
