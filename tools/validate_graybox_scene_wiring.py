@@ -76,10 +76,47 @@ def main() -> int:
             h05 = next((region for region in hidden_regions if region.get("id") == "H05"), None)
             if h05 is None or h05.get("secondary_exit", {}).get("requires_target_already_reached") is not True:
                 errors.append("Topology H05/C10 contract must record A3 as already reached before the shortcut.")
+            regions = topology.get("regions", [])
+            region_ids = [region.get("id") for region in regions]
+            if len(region_ids) != len(set(region_ids)):
+                errors.append("World map topology contains duplicate region IDs.")
+            region_id_set = set(region_ids)
+
+            primary_route = topology.get("primary_route", [])
+            for region_id in primary_route:
+                if region_id not in region_id_set:
+                    errors.append(f"Primary route references unknown region: {region_id}")
+
             connections = topology.get("connections", [])
             connection_ids = [connection.get("id") for connection in connections]
             if len(connection_ids) != len(set(connection_ids)):
                 errors.append("World map topology contains duplicate connection IDs.")
+            for connection in connections:
+                connection_id = connection.get("id", "<missing>")
+                for endpoint_key in ("from", "to"):
+                    endpoint = connection.get(endpoint_key)
+                    if endpoint not in region_id_set:
+                        errors.append(f"Connection {connection_id} references unknown {endpoint_key} region: {endpoint}")
+
+            loops = topology.get("loops", [])
+            loop_ids = [loop.get("id") for loop in loops]
+            if len(loop_ids) != len(set(loop_ids)):
+                errors.append("World map topology contains duplicate loop IDs.")
+            for loop in loops:
+                for region_id in loop.get("path", []):
+                    if region_id not in region_id_set:
+                        errors.append(f"Loop {loop.get('id', '<missing>')} references unknown region: {region_id}")
+
+            hidden_ids = [region.get("id") for region in hidden_regions]
+            if len(hidden_ids) != len(set(hidden_ids)):
+                errors.append("World map topology contains duplicate hidden-region IDs.")
+            for hidden in hidden_regions:
+                hidden_id = hidden.get("id", "<missing>")
+                if hidden.get("parent") not in region_id_set:
+                    errors.append(f"Hidden region {hidden_id} references unknown parent: {hidden.get('parent')}")
+                scene_path = hidden.get("scene_path", "")
+                if scene_path and not (ROOT / scene_path).is_file():
+                    errors.append(f"Hidden region {hidden_id} scene does not exist: {scene_path}")
         except (json.JSONDecodeError, OSError) as exc:
             errors.append(f"World map topology cannot be parsed: {exc}")
 
