@@ -374,6 +374,15 @@ def main() -> int:
     ]:
         require(region_script, contract, "C04 old pilgrim highroad", errors)
 
+    # C05 is recorded only by traversing from A3; merely loading/entering A4 from another branch must not fake it.
+    # C05 只能由 A3 实际进入 A4 时记录；从其他支路进入或读档不能伪造这条路线。
+    require(region_script, 'if region_id == "A3" and target_location == "sewer_reservoir":\\n        WorldState.record_achievement("reached_A4_via_A3")', "C05 route recording", errors)
+    a4_ready_start = region_script.find('func _ready()')
+    a4_ready_end = region_script.find('func _spawn_x_for_side', a4_ready_start)
+    ready_block = region_script[a4_ready_start:a4_ready_end] if a4_ready_start >= 0 and a4_ready_end > a4_ready_start else ""
+    if 'WorldState.record_achievement("reached_A4_via_A3")' in ready_block:
+        fail(errors, "C05 route flag must not be recorded unconditionally on A4 scene entry.")
+
     # C24 must be gated on the city side too, matching the village's defense requirement.
     # C24 城区侧也必须受村庄防卫标记约束，与村庄入口条件一致。
     a3_start = region_script.find('        "A3":', region_script.find("func _spawn_region_exits"))
