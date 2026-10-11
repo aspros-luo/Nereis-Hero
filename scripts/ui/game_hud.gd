@@ -75,8 +75,8 @@ func _ready() -> void:
     region_label = Label.new()
     region_label.position = Vector2(38, 91)
     region_label.text = NereisLocalization.translate_text("灰烬之路")
-    region_label.add_theme_font_size_override("font_size", 13)
-    region_label.add_theme_color_override("font_color", Color("#665b5d"))
+    region_label.add_theme_font_size_override("font_size", 16)
+    region_label.add_theme_color_override("font_color", Color("#b7a48c"))
     add_child(region_label)
 
     objective_label = Label.new()
