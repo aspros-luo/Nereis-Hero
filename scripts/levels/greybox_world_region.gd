@@ -1670,6 +1670,18 @@ func _spawn_local_resonance_routes() -> void:
             route.bridge_end_x = 1940.0
             route.bridge_y = 310.0
             route.prompt_text = "E  ANCHOR THE DRY AQUEDUCT"
+        "A5":
+            # A buried standard marks a trench crossing erased from the fortress survey.
+            # 被埋没的军旗标记着堡垒测绘图中被删去的战壕横渡路线。
+            route = Node2D.new()
+            route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+            route.name = "BuriedStandardTrenchRoute"
+            route.route_id = "A5_BURIED_STANDARD_CROSSING"
+            route.required_resonance = 24
+            route.bridge_start_x = 1000.0
+            route.bridge_end_x = 1220.0
+            route.bridge_y = 345.0
+            route.prompt_text = "E  RAISE THE BURIED STANDARD"
         _:
             return
     route.opened.connect(_on_local_resonance_route_opened)
@@ -1683,6 +1695,12 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
             narrative.show_message(
                 "THE AQUEDUCT WITHOUT WATER",
                 "The pipes end at a stone channel older than the reservoir. When the bridge settles, water can be heard flowing upward through the sealed rock.\n\nThe channel remembers a river that no longer exists.",
+                5.0
+            )
+        "A5_BURIED_STANDARD_CROSSING":
+            narrative.show_message(
+                "THE STANDARD THAT OUTLIVED THE ARMY",
+                "The cloth has rotted away, but its shadow still points across the trench. The fortress map marks this gap as impassable. The dead were ordered to hold a road that the Church later removed from every record.",
                 5.0
             )
         _:
