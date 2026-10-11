@@ -76,6 +76,10 @@ def main() -> int:
     require(secret_gate, "_is_debug_override_active()", "Resonance secret gate", errors)
 
     world_state = read("scripts/core/world_state.gd", errors)
+    require(world_state, "var debug_ability_override_active := false", "WorldState", errors)
+    hero_script = read("scripts/player/hero.gd", errors)
+    require(hero_script, "WorldState.debug_ability_override_active = enabled", "Hero Debug toggle", errors)
+    require(hero_script, "debug_ability_override = WorldState.debug_ability_override_active", "Hero scene re-entry", errors)
     for method in [
         "func record_resonance_milestone(",
         "ancient_exposure_floor: int = 0",
