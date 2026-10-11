@@ -1738,6 +1738,16 @@ func _draw_outer_ring_landmarks() -> void:
     draw_rect(Rect2(1320, floor_y - 160, 170, 160), Color("#202128"))
     draw_arc(Vector2(1380, floor_y - 18), 58.0, PI, TAU, 30, Color("#6d8790"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(1300, floor_y - 195), "RAIN WITHOUT CLOUDS", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#718790"))
+    # Broken roof bridges trace a second street across the abandoned outer ring.
+    # 断裂的屋顶桥在废弃外环上方勾出第二条街道。
+    draw_line(Vector2(390, floor_y - 145), Vector2(520, floor_y - 185), Color("#5b5868"), 3.0)
+    draw_line(Vector2(520, floor_y - 185), Vector2(665, floor_y - 220), Color("#5b5868"), 3.0)
+    draw_line(Vector2(665, floor_y - 220), Vector2(815, floor_y - 200), Color("#5b5868"), 3.0)
+    draw_line(Vector2(815, floor_y - 200), Vector2(960, floor_y - 155), Color("#5b5868"), 3.0)
+    draw_line(Vector2(1110, floor_y - 155), Vector2(1260, floor_y - 200), Color("#5b5868"), 3.0)
+    draw_line(Vector2(1260, floor_y - 200), Vector2(1400, floor_y - 235), Color("#5b5868"), 3.0)
+    draw_line(Vector2(1400, floor_y - 235), Vector2(1540, floor_y - 200), Color("#5b5868"), 3.0)
+    draw_string(ThemeDB.fallback_font, Vector2(760, floor_y - 275), "THE SECOND STREET IS ONLY IN THE RAIN", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#718790"))
 
 func _draw_cathedral_landmarks() -> void:
     draw_rect(Rect2(880, floor_y - 330, 600, 330), Color("#302b38"))
@@ -1754,6 +1764,15 @@ func _draw_cathedral_landmarks() -> void:
             Vector2(x + 52, floor_y - 245)
         ]), Color("#18141e"))
     draw_line(Vector2(875, floor_y - 325), Vector2(1485, floor_y - 325), Color("#766578"), 4.0)
+    # Side-chapel lintels lead toward a broken choir gallery above the nave.
+    # 侧礼拜堂的横梁指向中殿上方断裂的唱诗席高廊。
+    draw_line(Vector2(400, floor_y - 145), Vector2(535, floor_y - 185), Color("#6c5e72"), 3.0)
+    draw_line(Vector2(535, floor_y - 185), Vector2(675, floor_y - 225), Color("#6c5e72"), 3.0)
+    draw_line(Vector2(675, floor_y - 225), Vector2(815, floor_y - 260), Color("#6c5e72"), 3.0)
+    draw_line(Vector2(815, floor_y - 260), Vector2(960, floor_y - 230), Color("#6c5e72"), 3.0)
+    draw_line(Vector2(1100, floor_y - 190), Vector2(1240, floor_y - 230), Color("#6c5e72"), 3.0)
+    draw_line(Vector2(1240, floor_y - 230), Vector2(1380, floor_y - 195), Color("#6c5e72"), 3.0)
+    draw_string(ThemeDB.fallback_font, Vector2(570, floor_y - 255), "THE CHOIR SANG FOR THE WALL", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#92809b"))
 
 func _draw_inner_city_landmarks() -> void:
     for x in range(260, int(map_width), 460):
@@ -1768,6 +1787,15 @@ func _draw_inner_city_landmarks() -> void:
         Vector2(2120, floor_y - 280)
     ]), Color("#54414e"))
     draw_rect(Rect2(1825, floor_y - 175, 90, 175), Color("#141118"))
+    # The crown wall is visibly walkable only in fragments, echoing the kingdom's broken authority.
+    # 王冠城墙只剩断续可走的片段，映照王权破碎的状态。
+    draw_line(Vector2(410, floor_y - 135), Vector2(545, floor_y - 180), Color("#77616d"), 3.0)
+    draw_line(Vector2(545, floor_y - 180), Vector2(680, floor_y - 220), Color("#77616d"), 3.0)
+    draw_line(Vector2(680, floor_y - 220), Vector2(820, floor_y - 200), Color("#77616d"), 3.0)
+    draw_line(Vector2(1120, floor_y - 150), Vector2(1260, floor_y - 195), Color("#77616d"), 3.0)
+    draw_line(Vector2(1260, floor_y - 195), Vector2(1400, floor_y - 235), Color("#77616d"), 3.0)
+    draw_line(Vector2(1400, floor_y - 235), Vector2(1540, floor_y - 200), Color("#77616d"), 3.0)
+    draw_string(ThemeDB.fallback_font, Vector2(1640, floor_y - 445), "THE CROWN HAS NO SHADOW", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#a18798"))
 
 func _draw_mirror_street_landmarks() -> void:
     for x in range(160, int(map_width), 340):
@@ -1912,6 +1940,17 @@ func _draw_deep_research_landmarks() -> void:
     draw_line(Vector2(2070, 310), Vector2(2302, 290), Color("#4e495a"), 3.0)
     draw_line(Vector2(2060, 398), Vector2(2310, 420), Color("#4e495a"), 3.0)
     draw_arc(Vector2(2185, 388), 90.0, PI * 0.92, TAU * 0.86, 34, Color("#5c5367"), 2.0)
+    # A suspended observation bridge crosses the laboratory without erasing the older ruin beneath it.
+    # 悬空观测桥横跨实验室，却没有抹掉其下方更古老的遗迹。
+    draw_line(Vector2(390, floor_y - 135), Vector2(520, floor_y - 180), Color("#635a70"), 3.0)
+    draw_line(Vector2(520, floor_y - 180), Vector2(660, floor_y - 220), Color("#635a70"), 3.0)
+    draw_line(Vector2(660, floor_y - 220), Vector2(810, floor_y - 205), Color("#635a70"), 3.0)
+    draw_line(Vector2(950, floor_y - 165), Vector2(1090, floor_y - 210), Color("#635a70"), 3.0)
+    draw_line(Vector2(1090, floor_y - 210), Vector2(1230, floor_y - 255), Color("#635a70"), 3.0)
+    draw_line(Vector2(1230, floor_y - 255), Vector2(1370, floor_y - 215), Color("#635a70"), 3.0)
+    draw_line(Vector2(1510, floor_y - 175), Vector2(1660, floor_y - 215), Color("#635a70"), 3.0)
+    draw_line(Vector2(1660, floor_y - 215), Vector2(1800, floor_y - 255), Color("#635a70"), 3.0)
+    draw_string(ThemeDB.fallback_font, Vector2(1170, 255), "THE OBSERVER IS PART OF THE EXPERIMENT", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8b8195"))
 
 func _draw_primordial_hollow_landmarks() -> void:
     # This room is grown from the research wall, rather than constructed as a machine hall.
