@@ -876,6 +876,17 @@
       "bridge_y": 285,
       "persistent_on_open": true,
       "design_intent": "A local upper-level shortcut between prison maintenance landings. It improves the cell-block traversal loop but must not open or bypass the A7-to-A8 royal tomb story gate."
+    },
+    {
+      "id": "A8_ERASED_REGENT_GALLERY",
+      "region_id": "A8",
+      "required_resonance": 40,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 1330,
+      "bridge_end_x": 1600,
+      "bridge_y": 330,
+      "persistent_on_open": true,
+      "design_intent": "A resonance-anchored upper tomb gallery reconnects the erased royal-name ledge to the return gallery; it must not open or bypass the sealed royal story gate."
     }
   ]
 }
