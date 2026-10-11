@@ -797,11 +797,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1100, floor_y - 18.0),
                 "anomaly_battlefield_late_orders",
                 "THE ORDERS THAT ARRIVED AFTER THE DEAD",
-                "The field report is dated three days after the battle.
-
-The bodies were already arranged to face the fortress, as if someone had corrected the scene for a witness.
-
-The last line orders the survivors to call the slaughter a miracle of faith.",
+                "The field report is dated three days after the battle.\n\nThe bodies were already arranged to face the fortress, as if someone had corrected the scene for a witness.\n\nThe last line orders the survivors to call the slaughter a miracle of faith.",
                 46
             )
         "A6":
@@ -821,11 +817,7 @@ The last line orders the survivors to call the slaughter a miracle of faith.",
                 Vector2(1070, floor_y - 18.0),
                 "anomaly_prisoner_register",
                 "THE REGISTER OF UNPERSONS",
-                "The ledger has columns for name, sentence, and transfer.
-
-The transfer column is full. The execution column is almost empty.
-
-Every destination is written as OBSERVATION.",
+                "The ledger has columns for name, sentence, and transfer.\n\nThe transfer column is full. The execution column is almost empty.\n\nEvery destination is written as OBSERVATION.",
                 52
             )
         "A8":
@@ -860,9 +852,7 @@ Every destination is written as OBSERVATION.",
                 Vector2(700, floor_y - 18.0),
                 "anomaly_double_sealed_reliquary",
                 "THE RELIQUARY WITH TWO SEALS",
-                "The church seal was pressed over an older mark.
-
-The wax bears the same shape as the cut in the reliquary stone. The official prayer was added later.",
+                "The church seal was pressed over an older mark.\n\nThe wax bears the same shape as the cut in the reliquary stone. The official prayer was added later.",
                 62
             )
         "A11":
@@ -883,11 +873,7 @@ The wax bears the same shape as the cut in the reliquary stone. The official pra
                 Vector2(1070, floor_y - 18.0),
                 "anomaly_kings_unopened_letter",
                 "THE KING'S UNOPENED LETTER",
-                "The letter was never sent.
-
-The king names the church's experiments plainly, then asks the reader to preserve the kingdom even if the truth must remain buried.
-
-His signature is steady. The seal is not.",
+                "The letter was never sent.\n\nThe king names the church's experiments plainly, then asks the reader to preserve the kingdom even if the truth must remain buried.\n\nHis signature is steady. The seal is not.",
                 74
             )
 
@@ -896,9 +882,7 @@ His signature is steady. The seal is not.",
                 Vector2(1600, floor_y - 18.0),
                 "hidden_well_no_water",
                 "THE WELL HAS NO WATER",
-                "The stone is wet, but there is no water below it.
-
-The dampness smells like rain falling beneath the earth.",
+                "The stone is wet, but there is no water below it.\n\nThe dampness smells like rain falling beneath the earth.",
                 0
             )
         "H02":
@@ -906,9 +890,7 @@ The dampness smells like rain falling beneath the earth.",
                 Vector2(1650, floor_y - 18.0),
                 "hidden_bell_after_sound",
                 "THE BELL AFTER THE SOUND",
-                "The bell's tongue moves only after the sound has stopped.
-
-The metal is cold. The air around it is warm.",
+                "The bell's tongue moves only after the sound has stopped.\n\nThe metal is cold. The air around it is warm.",
                 0
             )
         "H03":
@@ -916,9 +898,7 @@ The metal is cold. The air around it is warm.",
                 Vector2(2020, floor_y - 18.0),
                 "hidden_third_street_numbers",
                 "THE NUMBERS SKIP THREE",
-                "Every doorway is numbered in order until the third.
-
-There is no missing number. The wall has been cut to make the count look natural.",
+                "Every doorway is numbered in order until the third.\n\nThere is no missing number. The wall has been cut to make the count look natural.",
                 0
             )
         "H04":
@@ -926,9 +906,7 @@ There is no missing number. The wall has been cut to make the count look natural
                 Vector2(1740, floor_y - 18.0),
                 "hidden_stair_reflection",
                 "THE STAIR THAT CLIMBS DOWN",
-                "The reflection climbs while the stone stair descends.
-
-At the landing, both versions pause to listen.",
+                "The reflection climbs while the stone stair descends.\n\nAt the landing, both versions pause to listen.",
                 0
             )
         "H05":
@@ -936,9 +914,7 @@ At the landing, both versions pause to listen.",
                 Vector2(1960, floor_y - 18.0),
                 "hidden_bell_shadowless_record",
                 "THE SHADOWLESS RECORD",
-                "The bell is recorded as removed from the tower.
-
-Its shadow is still listed in the inventory, signed for every morning.",
+                "The bell is recorded as removed from the tower.\n\nIts shadow is still listed in the inventory, signed for every morning.",
                 0
             )
         "H06":
@@ -946,9 +922,7 @@ Its shadow is still listed in the inventory, signed for every morning.",
                 Vector2(1980, floor_y - 18.0),
                 "hidden_royal_name_scrape",
                 "THE STONE REMEMBERS THE NAME",
-                "The names are gone, but the chisel marks stop at each letter's boundary.
-
-Someone erased the words carefully enough to preserve their shapes.",
+                "The names are gone, but the chisel marks stop at each letter's boundary.\n\nSomeone erased the words carefully enough to preserve their shapes.",
                 0
             )
         "H07":
@@ -956,9 +930,7 @@ Someone erased the words carefully enough to preserve their shapes.",
                 Vector2(2200, floor_y - 18.0),
                 "hidden_mirror_lamp_count",
                 "THE EXTRA LAMP",
-                "You count seven lamps in the water and six on the street.
-
-When you turn around, the seventh light has moved behind you.",
+                "You count seven lamps in the water and six on the street.\n\nWhen you turn around, the seventh light has moved behind you.",
                 0
             )
         "H08":
@@ -966,9 +938,7 @@ When you turn around, the seventh light has moved behind you.",
                 Vector2(1850, floor_y - 18.0),
                 "hidden_primordial_cradle",
                 "THE EMPTY CRADLE",
-                "The hollow in the living stone is too small for a body and too carefully shaped to be natural.
-
-The wall contracts around it, then relaxes.",
+                "The hollow in the living stone is too small for a body and too carefully shaped to be natural.\n\nThe wall contracts around it, then relaxes.",
                 0
             )
 
