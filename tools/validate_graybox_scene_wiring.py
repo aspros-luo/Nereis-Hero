@@ -240,9 +240,21 @@ def main() -> int:
     local_route_script = read("scripts/world/resonance_local_route.gd", errors)
     require(region_script, 'const LOCAL_RESONANCE_ROUTE_SCRIPT = preload("res://scripts/world/resonance_local_route.gd")', "A3 local resonance route preload", errors)
     require(region_script, 'route.route_id = "A3_THIRD_STREET_ROOFLINE"', "A3 local route identity", errors)
+    require(region_script, "route.required_resonance = 28", "A3 local route resonance threshold", errors)
+    require(region_script, "route.bridge_start_x = 1690.0", "A3 local route start coordinate", errors)
+    require(region_script, "route.bridge_end_x = 2050.0", "A3 local route end coordinate", errors)
+    require(region_script, "route.bridge_y = 350.0", "A3 local route vertical placement", errors)
     require(local_route_script, 'add_to_group("resonance_hidden_targets")', "Local resonance route reveal registration", errors)
+    require(local_route_script, "func update_reveal_state(", "Local route reacts to Resonance Sight state changes", errors)
+    require(local_route_script, "sight_active and resonance >= required_resonance", "Local route requires active sight and sufficient resonance", errors)
+    require(local_route_script, "WorldState.is_hidden_path_opened(route_id)", "Local route persistent open-state restore", errors)
     require(local_route_script, "WorldState.open_hidden_path(route_id)", "Local route persistence", errors)
+    require(local_route_script, "func _sync_bridge_collision() -> void:", "Local route collision lifecycle", errors)
     require(local_route_script, "bridge_body.queue_free()", "Temporary bridge collision removal", errors)
+    require(local_route_script, "INTERACTION_FOCUS_SCRIPT.is_focused(self)", "Local route uses shared interaction focus", errors)
+    require(local_route_script, '"E  ANCHOR THE THIRD STREET"', "Local route explicit E interaction", errors)
+    require(world_state, 'for target in get_tree().get_nodes_in_group("resonance_hidden_targets"):', "WorldState refreshes resonance targets", errors)
+    require(world_state, 'target.call("update_reveal_state", resonance_sight_active, hero_resonance, ancient_exposure, outer_exposure, debug_override)', "WorldState passes current sight state to map targets", errors)
 
     # M1 alternate route and vertical traversal contracts.
     # M1 替代路线与垂直探索的静态契约。
