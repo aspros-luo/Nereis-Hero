@@ -865,6 +865,17 @@
       "bridge_y": 250,
       "persistent_on_open": true,
       "design_intent": "A high service-walk shortcut links the tower stair and outer cloister near the silent bell; it shortens a local traversal loop without bypassing the H05 hidden window or the main story exit."
+    },
+    {
+      "id": "A7_PRISON_MAINTENANCE_CROSSWALK",
+      "region_id": "A7",
+      "required_resonance": 30,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 1080,
+      "bridge_end_x": 1320,
+      "bridge_y": 285,
+      "persistent_on_open": true,
+      "design_intent": "A local upper-level shortcut between prison maintenance landings. It improves the cell-block traversal loop but must not open or bypass the A7-to-A8 royal tomb story gate."
     }
   ]
 }
