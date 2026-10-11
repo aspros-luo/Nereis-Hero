@@ -193,7 +193,9 @@ func _sync_current_hero_debug() -> void:
 		return
 	var hero := current_scene.find_child("Hero", true, false)
 	if hero != null:
-		if hero.has_method("_refresh_debug_test_fixtures"):
+		if hero.has_method("set_debug_ability_override"):
+			hero.call("set_debug_ability_override", true)
+		elif hero.has_method("_refresh_debug_test_fixtures"):
 			hero.call("_refresh_debug_test_fixtures", true)
 		if hero.has_method("queue_redraw"):
 			hero.call("queue_redraw")
