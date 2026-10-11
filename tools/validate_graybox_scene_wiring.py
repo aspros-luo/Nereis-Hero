@@ -288,7 +288,7 @@ def main() -> int:
     require(region_script, "_add_platform(Rect2(390, 385, 110, 18))", "H08 organic rib route", errors)
 
     # Estimate jump reachability for every authored platform using the actual Hero constants.
-    # This is a conservative static check, not a replacement for collision testing in Godot.
+    # This is an approximate geometry check, not a replacement for collision testing in Godot.
     # 使用主角实际跳跃参数估算所有平台是否能从地面逐段抵达；这不能替代 Godot 碰撞实测。
     hero_physics = read("scripts/player/hero.gd", errors)
     speed_match = re.search(r"const SPEED := ([0-9.]+)", hero_physics)
