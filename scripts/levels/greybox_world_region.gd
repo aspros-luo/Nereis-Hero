@@ -186,6 +186,8 @@ func _on_region_enemy_defeated(enemy_name: String) -> void:
 
 
 func _spawn_x_for_side(side: String) -> float:
+	if region_id == "H09" and side == "east":
+		return map_width - 280.0
 	if region_id == "A9" and side == "mirror":
 		return 1680.0
 	if region_id == "A3" and side == "village_city_cut":
@@ -960,6 +962,9 @@ func _add_platform(rect: Rect2) -> void:
 	rectangle.size = rect.size
 	shape.shape = rectangle
 	shape.position = rect.size * 0.5
+	# One-way ledges let the Hero jump through their undersides instead of turning every platform into a wall.
+	# 单向平台允许主角从下方跳穿，避免每个平台都成为阻挡路线的墙体。
+	shape.one_way_collision = true
 	body.add_child(shape)
 	add_child(body)
 
@@ -2189,6 +2194,8 @@ func _draw_debug_exit_markers() -> void:
 func _on_exit_interacted(target_location: String, target_scene: String, spawn_side: String) -> void:
 	if region_id == "A3" and target_location == "sewer_reservoir":
 		WorldState.record_achievement("reached_A4_via_A3")
+	if target_location == "village" and "defeated_mad_cleric" in WorldState.achievement_flags:
+		WorldState.record_achievement("returned_to_village_after_mad_cleric")
 	if target_location == "hidden_well":
 		WorldState.discover_hidden_region("H01")
 		WorldState.open_hidden_path("H01")
@@ -2299,8 +2306,11 @@ func _draw() -> void:
 			_draw_cliff_cave_landmarks()
 
 	for platform in platforms:
-		draw_rect(platform, _platform_color())
-		draw_line(platform.position, Vector2(platform.end.x, platform.position.y), Color("#7d6c65"), 2.0)
+		# Thin bevelled ledges stay readable without visually filling the screen with solid blocks.
+		# 以薄平台与边缘高光表现可站立面，避免画面被厚重方块填满。
+		draw_rect(Rect2(platform.position + Vector2(0.0, 3.0), Vector2(platform.size.x, 9.0)), _platform_color())
+		draw_line(platform.position, Vector2(platform.end.x, platform.position.y), Color("#9a8178", 0.82), 2.0)
+		draw_line(platform.position + Vector2(2.0, 12.0), Vector2(platform.end.x - 2.0, platform.position.y + 12.0), Color("#1b171f", 0.75), 2.0)
 
 	if OS.is_debug_build():
 		_draw_debug_exit_markers()
