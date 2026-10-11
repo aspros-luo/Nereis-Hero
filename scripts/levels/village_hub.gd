@@ -37,8 +37,8 @@ func _ready() -> void:
     _create_floor()
     _create_village_rooftop_route()
     _create_boundaries()
-    # The watergate arrival must be away from the resonance well gate and the north-gate interaction.
-    # 水闸回村的出生点应避开灵视井门、酒馆与复国军营交互区。
+    # Each village return route uses a safe landing zone clear of unrelated interaction prompts.
+    # 村庄各条回程路线使用独立安全落点，避免刚切图就显示无关的 E 交互提示。
     # Spawn after the watergate outside the well gate, tavern, and restoration-camp interaction radii.
     var spawn_x := 1850.0 if spawn_side == "well_exit" else (350.0 if spawn_side == "city_cut_return" else (2310.0 if spawn_side == "north_gate" else 260.0))
     _spawn_hero(spawn_x)
