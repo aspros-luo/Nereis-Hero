@@ -928,7 +928,7 @@
       "requires_resonance_sight": true,
       "bridge_start_x": 1400,
       "bridge_end_x": 1940,
-      "bridge_y": 325,
+      "bridge_y": 323,
       "persistent_on_open": true,
       "design_intent": "A crown-wall traverse reconnects two upper palace ledges and exposes the inward-facing arrow slits; it must not bypass the throne approach or ending gates."
     }
