@@ -105,15 +105,25 @@ func take_damage(amount: int) -> void:
     receive_damage(amount, null)
 
 func _draw() -> void:
-    var robe := Color("#514653") if hit_flash <= 0.0 else Color("#c55d67")
-    var metal := Color("#ad9b91")
+    var is_mad_cleric := name == "A6_MadCleric_01"
+    var robe := (Color("#633443") if is_mad_cleric else Color("#514653")) if hit_flash <= 0.0 else Color("#c55d67")
+    var metal := Color("#c6a16b") if is_mad_cleric else Color("#ad9b91")
     var sway := sin(animation_time * 2.5) * 1.2
     draw_circle(Vector2(0, -56 + sway), 19.0, Color("#1f1a22"))
-    draw_circle(Vector2(facing * 5.0, -52 + sway), 6.0, Color("#8e565c"))
+    draw_circle(Vector2(facing * 5.0, -52 + sway), 6.0, Color("#b65e68") if is_mad_cleric else Color("#8e565c"))
+    if is_mad_cleric:
+        # A broken halo of iron thorns distinguishes this optional story boss from ordinary inquisitors.
+        # 断裂的铁棘光环让这名可选剧情头目与普通审判官清楚区分。
+        draw_arc(Vector2(0, -70 + sway), 25.0, PI + 0.15, TAU - 0.15, 18, Color("#b18a73"), 3.0)
+        for thorn in range(7):
+            var angle := PI + 0.2 + float(thorn) * 0.43
+            var start := Vector2(cos(angle) * 24.0, sin(angle) * 13.0 - 70.0 + sway)
+            var finish := start + Vector2(cos(angle) * 8.0, sin(angle) * 8.0 - 5.0)
+            draw_line(start, finish, Color("#c6a16b"), 2.0)
     draw_rect(Rect2(-22, -34 + sway, 44, 44), robe)
     draw_line(Vector2(0, -2 + sway), Vector2(facing * 62.0, 14 + sway), metal, 8.0)
     draw_arc(Vector2(facing * 27.0, -26), 38.0, -0.85 if facing > 0 else 3.99, 0.85 if facing > 0 else 5.42, 14, Color("#9d5860"), 3.0)
-    draw_string(ThemeDB.fallback_font, Vector2(-62, -80), "INQUISITOR", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
+    draw_string(ThemeDB.fallback_font, Vector2(-76, -88), "MAD CLERIC" if is_mad_cleric else "INQUISITOR", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#d4a5a7" if is_mad_cleric else "#b7a09b"))
 
 
 func _move_and_slide_scaled() -> void:
