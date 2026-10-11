@@ -107,7 +107,7 @@ func _spawn_mite() -> void:
         absence.set_script(VILLAGE_POI_SCRIPT)
         absence.poi_id = "mite_absence"
         absence.display_name = "空椅子"
-        absence.dialogue = "The chair beside the fire is empty.\n\nA cup has been left on the table. It is still warm.\n\nNo one is home."
+        absence.dialogue = "火堆旁的椅子空着。\n\n桌上留着一只杯子，仍然温热。\n\n这里没有人。"
         add_child(absence)
         absence.interacted.connect(_on_mite_absence_interacted)
         print("[NEREIS][RELATIONSHIP] Mite connection was missed; absence scene spawned")
@@ -231,7 +231,7 @@ func _spawn_village_pois() -> void:
     tavern.position = Vector2(1730, 520)
     tavern.poi_id = "tavern"
     tavern.display_name = "酒馆"
-    tavern.dialogue = "The tavern door is warm beneath your hand.\n\nFor a moment you hear a lullaby from inside. The voice stops when you touch the handle."
+    tavern.dialogue = "酒馆的门在你掌下发暖。\n\n你短暂地听见里面传来摇篮曲；当你碰到门把时，歌声却停了。"
     add_child(tavern)
     tavern.interacted.connect(_on_village_poi_interacted.bind(tavern))
 
@@ -240,7 +240,7 @@ func _spawn_village_pois() -> void:
     graveyard.position = Vector2(950, 520)
     graveyard.poi_id = "graveyard"
     graveyard.display_name = "村庄墓地"
-    graveyard.dialogue = "The cemetery gate is open.\n\nThe bell tower has not rung in years. Something inside still answers when you call."
+    graveyard.dialogue = "墓园的大门敞开着。\n\n钟塔多年未曾鸣响，但当你呼唤时，里面仍有某种东西回应。"
     add_child(graveyard)
     graveyard.interacted.connect(_on_village_poi_interacted.bind(graveyard))
 
@@ -249,7 +249,7 @@ func _spawn_village_pois() -> void:
     rebel_camp.position = Vector2(1990, 520)
     rebel_camp.poi_id = "rebel_camp"
     rebel_camp.display_name = "复国军营地"
-    rebel_camp.dialogue = "A small fire burns behind the hill.\n\nSomeone has pitched a camp without a flag.\n\nYou hear soldiers arguing about the throne."
+    rebel_camp.dialogue = "山丘后燃着一小堆篝火。\n\n有人在这里扎营，却没有竖起旗帜。\n\n你听见士兵们正在争论王座。"
     add_child(rebel_camp)
     rebel_camp.interacted.connect(_on_village_poi_interacted.bind(rebel_camp))
 
@@ -260,9 +260,9 @@ func _spawn_village_pois() -> void:
     var old_pilgrim_road_open := "village_defense_survived" in WorldState.achievement_flags
     north_gate.display_name = "旧朝圣路" if old_pilgrim_road_open else "北门"
     if old_pilgrim_road_open:
-        north_gate.dialogue = "The gate has been repaired, but the old road beyond it is still there.\n\nThe stones carry a bell sound from somewhere in the forest."
+        north_gate.dialogue = "大门已经修复，门后的旧路仍然存在。\n\n石头从森林深处传来钟声。"
     else:
-        north_gate.dialogue = "Fresh axe marks scar the gate.\n\nBeyond it, the road is too quiet.\n\nYou hear distant metal."
+        north_gate.dialogue = "新鲜的斧痕划伤了大门。\n\n门外的道路安静得反常。\n\n远处传来金属碰撞声。"
     add_child(north_gate)
     north_gate.interacted.connect(_on_village_poi_interacted.bind(north_gate))
 
@@ -275,9 +275,9 @@ func _spawn_village_pois() -> void:
     var city_cut_open := "village_defense_survived" in WorldState.achievement_flags
     city_cut.display_name = "旧排水通道" if city_cut_open else "封闭的排水通道"
     if city_cut_open:
-        city_cut.dialogue = "The old drain runs beneath the city wall. Its stonework predates the village houses.\n\nA narrow path leads toward the forgotten streets."
+        city_cut.dialogue = "旧排水道从城墙下穿过，其石构甚至早于村庄的房屋。\n\n一条狭窄通路通向被遗忘的街道。"
     else:
-        city_cut.dialogue = "A fallen beam and fresh rubble seal the passage. Someone blocked it recently.\n\nThe stone beyond the crack is older than the village."
+        city_cut.dialogue = "倒塌的横梁与新鲜碎石封住了通道。有人最近才堵上这里。\n\n裂缝另一侧的石头比村庄古老得多。"
     add_child(city_cut)
     city_cut.interacted.connect(_on_village_poi_interacted.bind(city_cut))
 
@@ -288,7 +288,7 @@ func _spawn_village_pois() -> void:
     church.position = Vector2(2180, 520)
     church.poi_id = "church"
     church.display_name = "教会"
-    church.dialogue = "The church door bears your name beneath layers of newer paint.\n\nSomeone has tried to erase it many times."
+    church.dialogue = "教会大门的层层新漆之下，隐约露出你的名字。\n\n有人曾多次试图将它抹去。"
     add_child(church)
     church.interacted.connect(_on_village_poi_interacted.bind(church))
 
