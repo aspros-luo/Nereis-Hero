@@ -887,6 +887,17 @@
       "bridge_y": 330,
       "persistent_on_open": true,
       "design_intent": "A resonance-anchored upper tomb gallery reconnects the erased royal-name ledge to the return gallery; it must not open or bypass the sealed royal story gate."
+    },
+    {
+      "id": "A9_RAIN_REFLECTION_ROOFWALK",
+      "region_id": "A9",
+      "required_resonance": 44,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 1260,
+      "bridge_end_x": 1540,
+      "bridge_y": 285,
+      "persistent_on_open": true,
+      "design_intent": "A rain-reflection roofwalk reconnects abandoned outer-ring homes as a local traversal loop; it must not open or bypass the royal transport gate or H07."
     }
   ]
 }
