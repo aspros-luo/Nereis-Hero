@@ -47,6 +47,7 @@ func _ready() -> void:
     _create_boundaries()
     _configure_platforms()
     _spawn_hero(_spawn_x_for_side(spawn_side))
+    print("[NEREIS][MAP][SPAWN] region=%s location=%s side=%s x=%.1f resume_side=%s" % [region_id, location_id, spawn_side, hero.position.x, WorldState.resume_spawn_side])
     _spawn_ui()
     _spawn_region_sources()
     _spawn_region_exits()
@@ -1308,6 +1309,7 @@ func _on_exit_interacted(target_location: String, target_scene: String, spawn_si
 
     WorldState.pending_region_spawn_side = spawn_side
     WorldState.set_location(target_location)
+    print("[NEREIS][MAP][EXIT] from=%s to=%s location=%s spawn_side=%s" % [region_id, target_scene, target_location, spawn_side])
     SceneTransition.fade_to_scene(target_scene)
 
 func _on_hero_defeated() -> void:
