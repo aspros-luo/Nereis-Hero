@@ -64,9 +64,9 @@ func _spawn_x_for_side(side: String) -> float:
     if region_id == "A9" and side == "mirror":
         return 1680.0
     if region_id == "A3" and side == "village_city_cut":
-        # Enter from the village drainage passage, away from the return door and city anomaly.
-        # 从村庄排水通路进入，避开回村门与城区异常调查点。
-        return 760.0
+        # C24's return door is at x=520; balance the landing between it and the anomaly at x=900.
+        # C24 回程门位于 x=520；出生点在回程门与 x=900 异常源之间保持安全距离。
+        return 700.0
     if region_id == "A11" and side == "chapel_entry":
         # C19 enters from the cathedral-facing side, but must not overlap A11's return door at the east boundary.
         # C19 从大圣堂侧进入 A11，但出生点不能与 A11 东侧边界的返回门重叠。
@@ -164,17 +164,17 @@ func _spawn_x_for_side(side: String) -> float:
         # H06 入口位于 x=1870，从王名抹除廊返回时应远离入口。
         return 1350.0
     if region_id == "A8" and side == "royal_tomb_side":
-        # The side door is at x=930; avoid spawning inside the same door on return.
-        # 王墓侧门位于 x=930；从倒影阶梯返回时应离开门的触发范围。
-        return 1200.0
+        # The side door is at x=930 and the rest point at x=1150; land in the clear corridor between them.
+        # 王墓侧门位于 x=930、休整点位于 x=1150；落点选择两者之间的安全走廊。
+        return 1020.0
     if region_id == "A9" and side == "third_street_service":
         # The service door now sits at x=1250; arrive beyond the anomaly source and away from the H07 gate.
         # 旧服务门移至 x=1250；回程出生点避开异常调查点与 H07 镜街入口。
         return 1600.0
     if region_id == "A9" and side == "royal_transport":
-        # Keep distance from both the royal transport door (x=2200) and H07 (x=1850).
-        # 远离王室运输门（x=2200）与 H07 镜街入口（x=1850）。
-        return map_width - 650.0
+        # Land between the royal transport door (x=2200) and H07 (x=1850), clear of both interaction zones.
+        # 落在王室运输门（x=2200）与 H07（x=1850）之间，避开两侧交互范围。
+        return 2050.0
     if region_id == "A3" and side == "sewer":
         return 1380.0
     if region_id == "H01" and side == "east":
