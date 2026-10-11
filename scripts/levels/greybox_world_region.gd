@@ -1556,11 +1556,11 @@ func _draw_city_landmarks() -> void:
     draw_rect(Rect2(842, 340, 146, 28), Color("#4a3c43"))
     draw_string(ThemeDB.fallback_font, Vector2(855, 360), "III STREET", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color("#98867e"))
     draw_line(Vector2(905, 365), Vector2(905, 418), Color("#98867e"), 2.0)
-    draw_rect(Rect2(930, floor_y - 235, 105, 235), Color("#211e27"))
-    draw_rect(Rect2(946, floor_y - 205, 22, 46), Color("#131117"))
-    draw_rect(Rect2(996, floor_y - 205, 22, 46), Color("#131117"))
-    draw_line(Vector2(920, floor_y - 240), Vector2(1045, floor_y - 240), Color("#66535e"), 4.0)
-    draw_string(ThemeDB.fallback_font, Vector2(920, floor_y - 255), "WALL / NO STREET", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 10, Color("#8b737b"))
+    draw_rect(Rect2(1000, floor_y - 235, 105, 235), Color("#211e27"))
+    draw_rect(Rect2(1016, floor_y - 205, 22, 46), Color("#131117"))
+    draw_rect(Rect2(1066, floor_y - 205, 22, 46), Color("#131117"))
+    draw_line(Vector2(990, floor_y - 240), Vector2(1115, floor_y - 240), Color("#66535e"), 4.0)
+    draw_string(ThemeDB.fallback_font, Vector2(990, floor_y - 255), "WALL / NO STREET", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 10, Color("#8b737b"))
     # Roof silhouettes mark the optional upper route; the platforms above them are physically traversable.
     # 屋顶剪影提示上层支路；其上的平台具有真实碰撞，可供玩家跳跃穿行。
     draw_line(Vector2(440, 390), Vector2(570, 345), Color("#5b4b57"), 3.0)
