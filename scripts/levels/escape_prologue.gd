@@ -167,7 +167,7 @@ func _spawn_ui() -> void:
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
     hud.bind_hero(hero)
-    hud.set_story_mode("教会手术所", "逃离教会")
+    hud.set_story_mode("A0｜教会手术所", "向右（D）推进；调查手术托盘。击败 3 名守卫后，前往最右侧出口（x≈2040）按 E 逃离。")
 
 func _show_intro() -> void:
     narrative.show_message(
