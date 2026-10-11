@@ -88,7 +88,7 @@ const OBJECTIVE_POINTS: Dictionary = {
 	"H06": [{"x":1980.0,"name":"石头记得的名字"}],
 	"H07": [{"x":2200.0,"name":"多出来的一盏灯"}],
 	"H08": [{"x":1850.0,"name":"空摇篮"}],
-	"H09": [{"x":1450.0,"name":"古神实验体"},{"x":1850.0,"name":"银线束缚环"}]
+	"H09": [{"x":1450.0,"name":"古神实验体／脐带残片"},{"x":1850.0,"name":"银线束缚环"}]
 }
 const STEP_OBJECTIVE_POINTS: Dictionary = {
 	3: {"region":"A2","x":2300.0,"name":"倒响钟室异常入口","condition":"鸣响达到 18，并调查静止的钟"},
