@@ -164,6 +164,8 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 - A11 Deep Research Depths and H08 Primordial Hollow have now been added using the shared graybox controller, with distinct environmental landmarks and scene-resume mappings.
 - R01–R08 are connected as one-time anomaly investigations. R01 unlocks the existing Resonance Sight ability; R04–R06 use minimum exposure floors to avoid permanently locking optional content.
 - H01 has persistent discovered / opened / entered states shared by its village and A4 entrances; the A4 return hatch is a one-time unlock.
+- After the village defense, A1 has two main exploration directions: A2 through the old pilgrim road, or A3 through the old drainage passage. A3 returns to A1 and also connects to A2, A4, and A5.
+- A3 now has an implemented optional rooftop platform loop around the erased-third-street landmark; A4 has an implemented raised pipe-walk route alongside the ground path. These geometry changes are code-complete but still need Godot runtime verification.
 - H07 requires Resonance Sight, resonance ≥ 68, outer exposure ≥ 12, the outer-god story flag, and the R07 evidence source. Its A12 shortcut stays locked until the player reaches the Inner City and opens the far-side gate.
 - A11 can be reached from A8 through C15 (Royal Tomb maintenance shaft) or A10 through C19 (Silent Chapel). Each path has its own persistent gate ID while both record entry to A11. R08 raises resonance to 78 and adds the planned outer exposure.
 - H08 requires resonance ≥ 78, ancient exposure ≥ 2, outer exposure ≥ 18, the outer-god story flag, and three prior anomaly sources. A12 routes through the shared ending evaluator; H08 offers an optional deep-dream exit only after the physical-union story state.
