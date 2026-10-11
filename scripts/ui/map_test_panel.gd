@@ -89,13 +89,13 @@ const OBJECTIVE_POINTS: Dictionary = {
 }
 const STEP_OBJECTIVE_POINTS: Dictionary = {
 	3: {"region":"A2","x":2300.0,"name":"倒响钟室异常入口","condition":"鸣响达到 18，并调查静止的钟"},
-	6: {"region":"A3","x":1060.0,"name":"被删去的第三街入口","condition":"鸣响达到 28，并调查第三街路牌"}
+	6: {"region":"A3","x":1120.0,"name":"被删去的第三街入口","condition":"鸣响达到 28，并调查第三街路牌"}
 }
 const EXIT_HINTS: Dictionary = {
 	"A0": [{"target":"A1","x":2040.0,"name":"最右侧逃脱出口","condition":"先击败三名守卫，出口开启后按 E"}],
 	"A1": [{"target":"A2","x":2440.0,"name":"最右侧北门／旧朝圣路","condition":"村庄防卫章节完成后开放"},{"target":"A3","x":100.0,"name":"最左侧旧排水通道","condition":"村庄防卫章节完成后开放"},{"target":"H01","x":1555.0,"name":"村庄中右部的井口异常","condition":"鸣响达到 12 并开启灵视"}],
 	"A2": [{"target":"A1","x":72.0,"name":"最左侧村庄出口","condition":""},{"target":"A3","x":2528.0,"name":"最右侧城区主路出口","condition":""},{"target":"H02","x":2300.0,"name":"右侧倒响钟室异常入口","condition":"鸣响达到 18，并调查静止的钟"},{"target":"A5","x":1880.0,"name":"右侧旧朝圣高路捷径","condition":"须先从 A5 侧开启"}],
-	"A3": [{"target":"A2","x":72.0,"name":"最左侧旧朝圣路出口","condition":""},{"target":"A4","x":1480.0,"name":"中右部下水道入口","condition":""},{"target":"A5","x":2240.0,"name":"东侧高台上的战场出口","condition":"沿残墙平台跳上高路后按 E"},{"target":"H03","x":1060.0,"name":"第三街路牌旁的异常入口","condition":"鸣响达到 28，并调查第三街路牌"},{"target":"A6","x":1710.0,"name":"右侧钟塔落差捷径","condition":"须先从 A6 侧开启"}],
+	"A3": [{"target":"A2","x":72.0,"name":"最左侧旧朝圣路出口","condition":""},{"target":"A4","x":1480.0,"name":"中右部下水道入口","condition":""},{"target":"A5","x":2240.0,"name":"东侧高台上的战场出口","condition":"沿残墙平台跳上高路后按 E"},{"target":"H03","x":1120.0,"name":"第三街路牌旁的异常入口","condition":"鸣响达到 28，并调查第三街路牌"},{"target":"A6","x":1710.0,"name":"右侧钟塔落差捷径","condition":"须先从 A6 侧开启"}],
 	"A4": [{"target":"A3","x":72.0,"name":"最左侧城区检修舱口","condition":"首次互动开启舱口，再按 E 通行"},{"target":"A1","x":2350.0,"name":"最右侧村庄井道水闸","condition":"首次互动开闸，再按 E 通行"},{"target":"A7","x":1050.0,"name":"左半区监牢补给隧道","condition":"须先从 A7 侧开启"},{"target":"A8","x":1250.0,"name":"中部王墓水道","condition":"须先从 A8 侧开启"},{"target":"A9","x":1450.0,"name":"中右部王城排水道","condition":"须先从 A9 侧开启"},{"target":"H04","x":1780.0,"name":"右侧倒影阶梯异常入口","condition":"鸣响达到 36、古神接触达到 1"},{"target":"H01","x":2510.0,"name":"最右侧井道暗门","condition":"鸣响达到 12 且开启灵视"}],
 	"A5": [{"target":"A3","x":72.0,"name":"最左侧城区出口","condition":""},{"target":"A6","x":2528.0,"name":"最右侧修道院入口","condition":""},{"target":"A2","x":520.0,"name":"左侧旧朝圣高路门","condition":"首次互动开启，再按 E 通行"}],
 	"A6": [{"target":"A5","x":72.0,"name":"最左侧战场出口","condition":""},{"target":"A7","x":2528.0,"name":"最右侧监牢入口","condition":""},{"target":"A3","x":2110.0,"name":"右侧钟塔落差捷径","condition":"首次互动开启，再按 E 通行"},{"target":"H05","x":1660.0,"name":"右半区无声钟室入口","condition":"鸣响达到 42、古神接触达到 1"}],
