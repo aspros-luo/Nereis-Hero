@@ -347,6 +347,9 @@ def main() -> int:
     if "1830.0, \"E  RETURN TO THE SILENT BELL WINDOW\"" in region_script:
         fail(errors, "H05 return door at x=1830 is too close to the C10 door at x=1710.")
     require(region_script, '1950.0, "E  RETURN TO THE SILENT BELL WINDOW"', "H05/C10 interaction spacing", errors)
+    require(region_script, '1250.0, "E  OPEN THE OLD SERVICE DOOR"', "A9 H03/C18 interaction spacing", errors)
+    if '1020.0, "E  OPEN THE OLD SERVICE DOOR"' in region_script:
+        fail(errors, "A9 H03 service door remains too close to the C18 inner-city side gate.")
 
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
@@ -375,7 +378,7 @@ def main() -> int:
         ('if region_id == "A6" and side == "silent_window":', "return 1400.0"),
         ('if region_id == "A8" and side == "royal_name_gate":', "return 1350.0"),
         ('if region_id == "A8" and side == "royal_tomb_side":', "return 1200.0"),
-        ('if region_id == "A9" and side == "third_street_service":', "return 1250.0"),
+        ('if region_id == "A9" and side == "third_street_service":', "return 1600.0"),
         ('if region_id == "A9" and side == "royal_transport":', "return map_width - 650.0"),
         ('if region_id == "H01" and side == "east":', "return map_width - 360.0"),
     ]
