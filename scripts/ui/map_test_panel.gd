@@ -31,10 +31,13 @@ const ALL_PATH_IDS := [
 	"C21", "C22", "C23", "C24", "H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08"
 ]
 const ALL_ANOMALIES := [
-	"anomaly_bell_retiming", "anomaly_erased_street_sign", "anomaly_old_stone_layer",
-	"anomaly_mirror_street_echo", "anomaly_erased_royal_name", "anomaly_observer_reaction",
-	"anomaly_old_battlefield_record", "anomaly_prisoner_transfer", "anomaly_double_sealed_relic",
-	"anomaly_king_knows", "anomaly_village_well_echo"
+	"anomaly_bell_retiming", "anomaly_old_pilgrim_echo", "anomaly_erased_street_sign",
+	"anomaly_old_stone_layer", "anomaly_battlefield_late_orders", "anomaly_silent_bell_window",
+	"anomaly_prisoner_register", "anomaly_erased_royal_name", "anomaly_mirror_street_echo",
+	"anomaly_double_sealed_reliquary", "anomaly_observer_reaction", "anomaly_kings_unopened_letter",
+	"hidden_well_no_water", "hidden_bell_after_sound", "hidden_third_street_numbers",
+	"hidden_stair_reflection", "hidden_bell_shadowless_record", "hidden_royal_name_scrape",
+	"hidden_mirror_lamp_count", "hidden_primordial_cradle"
 ]
 const PROGRESSION_FLAGS := [
 	"village_defense_survived", "reached_A5", "reached_A7", "reached_A8_via_A7",
@@ -47,7 +50,9 @@ const PROGRESSION_FLAGS := [
 	"reached_A8_via_A7_then_opened_royal_tomb_gate", "reached_A9_via_A8_then_opened_old_lift_from_A9",
 	"reached_A9_then_opened_royal_drain_from_outer_ring", "reached_A9_via_A8_then_opened_royal_transport_side_door",
 	"reached_A8_then_opened_royal_tomb_side_door", "reached_A5_then_opened_old_bell_tower_connection",
-	"reached_A9_then_opened_old_service_door", "discovered_royal_tomb_maintenance_shaft_after_reaching_A8",
+	"reached_A9_then_opened_old_service_door", "opened_royal_transport_side_door",
+	"opened_royal_tomb_side_door", "opened_old_bell_tower_connection", "opened_old_service_door",
+	"opened_mirror_street_side_gate", "discovered_royal_tomb_maintenance_shaft_after_reaching_A8",
 	"discovered_and_opened_silent_side_chapel_in_A10", "ending_state_allows_deep_dream_entry",
 	"ending_state_allows_throne_entry", "outer_god_resonance"
 ]
