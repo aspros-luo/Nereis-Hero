@@ -1980,6 +1980,13 @@ func _draw_cathedral_landmarks() -> void:
     draw_line(Vector2(1100, floor_y - 190), Vector2(1240, floor_y - 230), Color("#6c5e72"), 3.0)
     draw_line(Vector2(1240, floor_y - 230), Vector2(1380, floor_y - 195), Color("#6c5e72"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(570, floor_y - 255), "THE CHOIR SANG FOR THE WALL", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#92809b"))
+    # The reliquary bears two seals from different eras.
+    # 圣物匣上压着两个不同时代的封印。
+    draw_rect(Rect2(670, floor_y - 55, 64, 38), Color("#514450"))
+    draw_rect(Rect2(680, floor_y - 48, 18, 18), Color("#a18b78"))
+    draw_rect(Rect2(706, floor_y - 48, 18, 18), Color("#6f8a8c"))
+    draw_line(Vector2(680, floor_y - 39), Vector2(698, floor_y - 39), Color("#332b38"), 2.0)
+    draw_line(Vector2(706, floor_y - 39), Vector2(724, floor_y - 39), Color("#332b38"), 2.0)
 
 func _draw_inner_city_landmarks() -> void:
     for x in range(260, int(map_width), 460):
@@ -2003,6 +2010,13 @@ func _draw_inner_city_landmarks() -> void:
     draw_line(Vector2(1260, floor_y - 195), Vector2(1400, floor_y - 235), Color("#77616d"), 3.0)
     draw_line(Vector2(1400, floor_y - 235), Vector2(1540, floor_y - 200), Color("#77616d"), 3.0)
     draw_string(ThemeDB.fallback_font, Vector2(1640, floor_y - 445), "THE CROWN HAS NO SHADOW", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#a18798"))
+    # The king's sealed letter remains beside the throne, never sent to the church.
+    # 国王未寄出的信留在王座旁，从未送往教会。
+    draw_rect(Rect2(1040, floor_y - 42, 58, 30), Color("#c0ad8d"))
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(1040, floor_y - 42), Vector2(1069, floor_y - 25), Vector2(1098, floor_y - 42)
+    ]), Color("#79616d"))
+    draw_line(Vector2(1050, floor_y - 36), Vector2(1088, floor_y - 36), Color("#594753"), 2.0)
 
 func _draw_mirror_street_landmarks() -> void:
     for x in range(160, int(map_width), 340):
@@ -2034,6 +2048,13 @@ func _draw_battlefield_landmarks() -> void:
     draw_line(Vector2(725, floor_y - 215), Vector2(885, floor_y - 180), Color("#6d5150"), 4.0)
     draw_line(Vector2(885, floor_y - 180), Vector2(1055, floor_y - 130), Color("#6d5150"), 4.0)
     draw_string(ThemeDB.fallback_font, Vector2(720, floor_y - 245), "NO FLAG ON THE WALL", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#8d6c6a"))
+    # The report lies beside bodies deliberately turned toward the fortress.
+    # 报告被放在面朝堡垒的尸体旁，暗示战场曾被重新布置。
+    draw_rect(Rect2(1065, floor_y - 38, 54, 26), Color("#7a6c64"))
+    draw_line(Vector2(1074, floor_y - 30), Vector2(1110, floor_y - 30), Color("#c3b49a"), 2.0)
+    draw_line(Vector2(1074, floor_y - 22), Vector2(1102, floor_y - 22), Color("#c3b49a"), 2.0)
+    draw_line(Vector2(1085, floor_y - 12), Vector2(1085, floor_y + 4), Color("#6c5558"), 3.0)
+    draw_line(Vector2(1085, floor_y + 4), Vector2(1110, floor_y + 9), Color("#6c5558"), 3.0)
 
 func _draw_monastery_landmarks() -> void:
     draw_rect(Rect2(930, floor_y - 355, 270, 355), Color("#292833"))
@@ -2067,6 +2088,12 @@ func _draw_prison_landmarks() -> void:
     draw_line(Vector2(1270, floor_y - 300), Vector2(1290, floor_y - 300), Color("#716b76"), 2.0)
     draw_line(Vector2(1270, floor_y - 265), Vector2(1290, floor_y - 265), Color("#716b76"), 2.0)
     draw_line(Vector2(1270, floor_y - 230), Vector2(1290, floor_y - 230), Color("#716b76"), 2.0)
+    # Transfer ledgers are stacked beside the maintenance shaft, not the execution cells.
+    # 转移名册堆在维护竖井旁，而不是处刑牢房内。
+    draw_rect(Rect2(1035, floor_y - 48, 62, 34), Color("#5a505b"))
+    draw_line(Vector2(1043, floor_y - 39), Vector2(1087, floor_y - 39), Color("#b3a1ad"), 2.0)
+    draw_line(Vector2(1043, floor_y - 30), Vector2(1080, floor_y - 30), Color("#b3a1ad"), 2.0)
+    draw_line(Vector2(1043, floor_y - 21), Vector2(1087, floor_y - 21), Color("#b3a1ad"), 2.0)
 
 func _draw_royal_tomb_landmarks() -> void:
     for x in [360, 760, 1160, 1560, 1960]:
