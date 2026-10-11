@@ -207,6 +207,19 @@ def main() -> int:
     for relative_path in REQUIRED_ENTRY_SCENES:
         read(relative_path, errors)
 
+    # Audit direct scene targets used by the startup, prologue, hub, and regional controller.
+    # 检查启动、序章、村庄据点与区域控制器直接引用的所有场景路径。
+    for source_path in (
+        "scripts/core/boot.gd",
+        "scripts/levels/escape_prologue.gd",
+        "scripts/levels/village_hub.gd",
+        "scripts/levels/greybox_world_region.gd",
+    ):
+        source_text = read(source_path, errors)
+        for scene_path in set(re.findall(r'"res://(scenes/[^"]+\\.tscn)"', source_text)):
+            if not (ROOT / scene_path).is_file():
+                errors.append(f"Scene reference in {source_path} does not exist: {scene_path}")
+
     interaction_focus = read("scripts/core/interaction_focus.gd", errors)
     if interaction_focus.count("WorldState.menu_input_locked") < 2:
         errors.append(
