@@ -175,7 +175,7 @@ func _apply_full_sight_profile() -> void:
 			WorldState.achievement_flags.append(flag)
 	if "resonance_sight" not in WorldState.unlocked_abilities:
 		WorldState.unlocked_abilities["resonance_sight"] = {"source_type": "debug", "source_id": "map_test"}
-	WorldState.refresh_resonance_reveals(true)
+	WorldState.refresh_resonance_reveals(false)
 	status_label.text = "灵视测试条件已设置：鸣响／古神接触／外神接触均为 100，已补齐常见异常来源与主线到达标记；隐藏门仍需按 E 开启。"
 
 func _apply_all_routes_profile() -> void:
