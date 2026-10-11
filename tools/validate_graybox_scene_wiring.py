@@ -394,10 +394,11 @@ def main() -> int:
                         flight_time = (jump_speed + discriminant ** 0.5) / gravity
                         horizontal_overlap = min(sx + sw, tx + tw) - max(sx, tx)
                         horizontal_gap = max(0.0, tx - (sx + sw), sx - (tx + tw))
-                        if vertical_delta < 0.0 and horizontal_overlap > 0.0:
+                        if vertical_delta < 0.0 and horizontal_overlap > 0.0 and not _sfloor:
                             # A solid platform blocks a direct upward jump from underneath it.
+                            # The continuous ground is below the platforms, not an overhead obstruction.
                             # Permit an edge approach only when the source platform extends beyond the target.
-                            # 实体平台会挡住从下方直接上跳；只有起跳平台在目标平台边缘之外留有可绕行空间时才计入。
+                            # 实体平台会挡住从下方直接上跳；地面不是头顶障碍，只有起跳平台在目标平台边缘之外留有可绕行空间时才计入。
                             approach_gaps = []
                             if sx < tx:
                                 approach_gaps.append(tx - sx)
