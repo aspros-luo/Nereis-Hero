@@ -287,6 +287,7 @@ def main() -> int:
     require(region_script, "func _spawn_region_rest_point() -> void:", "Regional rest point builder", errors)
     require(region_script, 'rest.rest_id = "rest_%s" % region_id', "Regional rest point identity", errors)
     local_route_script = read("scripts/world/resonance_local_route.gd", errors)
+    localization_script = read("scripts/core/localization.gd", errors)
     require(region_script, 'const LOCAL_RESONANCE_ROUTE_SCRIPT = preload("res://scripts/world/resonance_local_route.gd")', "A3 local resonance route preload", errors)
     require(region_script, 'route.route_id = "A3_THIRD_STREET_ROOFLINE"', "A3 local route identity", errors)
     require(region_script, "route.required_resonance = 28", "A3 local route resonance threshold", errors)
@@ -1076,6 +1077,22 @@ def main() -> int:
             narrative_title = expected_local_route_narratives.get(route_id)
             if narrative_title:
                 require(region_script, f'"{narrative_title}"', f"{route_id} narrative title", errors)
+                require(localization_script, f'"{narrative_title}": {{', f"{route_id} localized narrative title", errors)
+                body_match = re.search(
+                    rf'"{re.escape(narrative_title)}",\s*"((?:[^"\\]|\\.)*)"',
+                    region_script,
+                )
+                if body_match is None:
+                    errors.append(f"{route_id} narrative body could not be located for localization audit.")
+                else:
+                    require(
+                        localization_script,
+                        f'"{body_match.group(1)}": {{',
+                        f"{route_id} localized narrative body",
+                        errors,
+                    )
+            if prompt:
+                require(localization_script, f'"{prompt}": {{', f"{route_id} localized interaction prompt", errors)
             for key, property_name in (
                 ("required_resonance", "required_resonance"),
                 ("bridge_start_x", "bridge_start_x"),
