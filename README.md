@@ -175,7 +175,8 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 - H01–H08 now each have a distinct upper/returning route motif, from the well's upper ledges and reflected stairs to the mirror avenue lamp bridge and the organic ribs of H08.
 - A5, A7, A10, and A12 now have persistent environmental evidence sources covering the battlefield's rewritten history, prisoner transfers, the church's double-sealed relic, and the king's knowledge of church experiments.
 - H01–H08 now each contain a unique one-time environmental evidence source; these clues do not grant free resonance or ancient/outer-god exposure.
-- A1 now includes a 17-segment optional rooftop traversal line; A0's surgical ward now has a six-platform maintenance catwalk that does not bypass the warden lock. These are graybox code additions, not yet runtime-verified.
+- A1 now includes a 17-segment optional rooftop traversal line and a village-hearth rest point; A0's surgical ward now has a six-platform maintenance catwalk that does not bypass the warden lock.
+- A2–A12 each have a region-specific rest point; hidden regions H01–H08 intentionally do not grant free rest points. These are graybox code additions, not yet runtime-verified.
 - H07 requires Resonance Sight, resonance ≥ 68, outer exposure ≥ 12, the outer-god story flag, and the R07 evidence source. Its A12 shortcut stays locked until the player reaches the Inner City and opens the far-side gate.
 - A11 can be reached from A8 through C15 (Royal Tomb maintenance shaft) or A10 through C19 (Silent Chapel). Each path has its own persistent gate ID while both record entry to A11. R08 raises resonance to 78 and adds the planned outer exposure.
 - H08 requires resonance ≥ 78, ancient exposure ≥ 2, outer exposure ≥ 18, the outer-god story flag, and three prior anomaly sources. A12 routes through the shared ending evaluator; H08 offers an optional deep-dream exit only after the physical-union story state.
