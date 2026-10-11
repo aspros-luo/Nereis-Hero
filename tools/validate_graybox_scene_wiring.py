@@ -1030,12 +1030,44 @@ def main() -> int:
         known_region_ids = {region.get("id") for region in topology_for_local_routes.get("regions", [])}
         route_by_id = {route.get("id"): route for route in local_routes}
         expected_local_route_ids = ("A2_BELLGRAVE_CANOPY_CROSSING", "A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK", "A7_PRISON_MAINTENANCE_CROSSWALK", "A8_ERASED_REGENT_GALLERY", "A9_RAIN_REFLECTION_ROOFWALK", "A10_CHOIRLESS_UPPER_GALLERY", "A11_SECOND_OBSERVER_SPAN", "A12_CROWN_WALL_WALK")
+        expected_local_route_prompts = {
+            "A2_BELLGRAVE_CANOPY_CROSSING": "E  ANCHOR THE BELLGRAVE CANOPY",
+            "A3_THIRD_STREET_ROOFLINE": "E  ANCHOR THE THIRD STREET",
+            "A4_OLD_STONE_AQUEDUCT": "E  ANCHOR THE DRY AQUEDUCT",
+            "A5_BURIED_STANDARD_CROSSING": "E  RAISE THE BURIED STANDARD",
+            "A6_SILENT_BELL_SERVICE_WALK": "E  ANCHOR THE SILENT BELL WALK",
+            "A7_PRISON_MAINTENANCE_CROSSWALK": "E  ANCHOR THE PRISON CROSSWALK",
+            "A8_ERASED_REGENT_GALLERY": "E  ANCHOR THE ERASED REGENT GALLERY",
+            "A9_RAIN_REFLECTION_ROOFWALK": "E  ANCHOR THE RAIN REFLECTION",
+            "A10_CHOIRLESS_UPPER_GALLERY": "E  ANCHOR THE CHOIRLESS GALLERY",
+            "A11_SECOND_OBSERVER_SPAN": "E  ANCHOR THE OBSERVER SPAN",
+            "A12_CROWN_WALL_WALK": "E  ANCHOR THE CROWN WALL",
+        }
+        expected_local_route_narratives = {
+            "A2_BELLGRAVE_CANOPY_CROSSING": "THE BELL'S SECOND SHADOW",
+            "A3_THIRD_STREET_ROOFLINE": "THE THIRD STREET HOLDS",
+            "A4_OLD_STONE_AQUEDUCT": "THE AQUEDUCT WITHOUT WATER",
+            "A5_BURIED_STANDARD_CROSSING": "THE STANDARD THAT OUTLIVED THE ARMY",
+            "A6_SILENT_BELL_SERVICE_WALK": "THE SERVICE WALK OF THE SILENT BELL",
+            "A7_PRISON_MAINTENANCE_CROSSWALK": "THE CROSSWALK OF UNNUMBERED CELLS",
+            "A8_ERASED_REGENT_GALLERY": "THE REGENT WHO NEVER REIGNED",
+            "A9_RAIN_REFLECTION_ROOFWALK": "THE HOMES THAT THE RAIN REMEMBERS",
+            "A10_CHOIRLESS_UPPER_GALLERY": "THE CHOIR THAT WAS NEVER RECORDED",
+            "A11_SECOND_OBSERVER_SPAN": "THE OBSERVER WHO LEFT NO FOOTPRINTS",
+            "A12_CROWN_WALL_WALK": "THE WALL BUILT FOR A KING'S ABSENCE",
+        }
         for route_id in expected_local_route_ids:
             route_design = route_by_id.get(route_id)
             if route_design is None:
                 errors.append(f"Topology is missing local Resonance route {route_id}.")
                 continue
             require(region_script, f'route.route_id = "{route_id}"', f"{route_id} runtime identity", errors)
+            prompt = expected_local_route_prompts.get(route_id)
+            if prompt:
+                require(region_script, f'route.prompt_text = "{prompt}"', f"{route_id} interaction prompt", errors)
+            narrative_title = expected_local_route_narratives.get(route_id)
+            if narrative_title:
+                require(region_script, f'"{narrative_title}"', f"{route_id} narrative title", errors)
             for key, property_name in (
                 ("required_resonance", "required_resonance"),
                 ("bridge_start_x", "bridge_start_x"),
