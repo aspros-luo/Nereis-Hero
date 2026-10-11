@@ -1339,7 +1339,7 @@ func _debug_route_label(target_location: String) -> String:
 func _register_debug_locked_route_hint(x: float, target: String, condition: String) -> void:
 	for marker in debug_exit_markers:
 		var marker_position: Vector2 = marker.get("position", Vector2.ZERO)
-		if is_equal_approx(marker_position.x, x) and str(marker.get("label", "")) == target:
+		if is_equal_approx(marker_position.x, x) and str(marker.get("label", "")) == _debug_route_label(target):
 			return
 	debug_exit_markers.append({
 		"position": Vector2(x, floor_y),
