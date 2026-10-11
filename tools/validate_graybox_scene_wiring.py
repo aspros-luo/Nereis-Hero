@@ -532,6 +532,37 @@ def main() -> int:
         if a3_exit_block.find('"E  RETURN THROUGH THE OLD DRAIN"') < a3_exit_block.find('if "village_defense_survived" in WorldState.achievement_flags:'):
             fail(errors, "C24 A3 return door must remain inside the village-defense condition.")
 
+    # Check both directions of the remaining public backbone connections.
+    # 检查其余公开主干连线的双向出口，避免场景仍存在但主线断开。
+    route_blocks = {}
+    ordered_route_regions = ["A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A12", "H07", "H01", "H02", "H03", "H04", "H05", "H06", "A11", "H08"]
+    route_positions = {
+        region: region_script.find(f'        "{region}":', exits_start)
+        for region in ordered_route_regions
+    }
+    sorted_route_regions = sorted(
+        ((position, region) for region, position in route_positions.items() if position >= 0)
+    )
+    for index, (position, region) in enumerate(sorted_route_regions):
+        next_position = sorted_route_regions[index + 1][0] if index + 1 < len(sorted_route_regions) else len(region_script)
+        route_blocks[region] = region_script[position:next_position]
+    main_route_contracts = [
+        ("A2", '"E  ENTER THE FORGOTTEN CITY"', "C03 A2-to-A3"),
+        ("A3", '"E  RETURN TO PILGRIM ROAD"', "C03 A3-to-A2"),
+        ("A3", '"E  FOLLOW THE BATTLEFIELD ROAD"', "C08 A3-to-A5"),
+        ("A5", '"E  RETURN TO THE FORGOTTEN CITY"', "C08 A5-to-A3"),
+        ("A5", '"E  ENTER THE MONASTERY"', "C09 A5-to-A6"),
+        ("A6", '"E  RETURN TO THE BATTLEFIELD"', "C09 A6-to-A5"),
+        ("A6", '"E  DESCEND INTO THE PRISON"', "C11 A6-to-A7"),
+        ("A7", '"E  RETURN TO THE MONASTERY"', "C11 A7-to-A6"),
+        ("A7", '"E  ENTER THE ROYAL TOMB"', "C13 A7-to-A8"),
+        ("A8", '"E  RETURN TO THE PRISON"', "C13 A8-to-A7"),
+        ("A8", '"E  ENTER THE ROYAL OUTER RING"', "C14 A8-to-A9"),
+        ("A9", '"E  RETURN TO THE ROYAL TOMB"', "C14 A9-to-A8"),
+    ]
+    for source_region, contract, connection_label in main_route_contracts:
+        require(route_blocks.get(source_region, ""), contract, connection_label, errors)
+
     # C17 and C20 are the intended public route through the cathedral; C18 must remain a later shortcut.
     # C17/C20 是经过大圣堂的公开主线；C18 只能作为抵达内城后的后期开启捷径。
     a9_start = region_script.find('        "A9":', exits_start)
