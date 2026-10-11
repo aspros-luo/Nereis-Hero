@@ -532,6 +532,30 @@ def main() -> int:
         if a3_exit_block.find('"E  RETURN THROUGH THE OLD DRAIN"') < a3_exit_block.find('if "village_defense_survived" in WorldState.achievement_flags:'):
             fail(errors, "C24 A3 return door must remain inside the village-defense condition.")
 
+    # C17 and C20 are the intended public route through the cathedral; C18 must remain a later shortcut.
+    # C17/C20 是经过大圣堂的公开主线；C18 只能作为抵达内城后的后期开启捷径。
+    a9_start = region_script.find('        "A9":', exits_start)
+    a10_start = region_script.find('        "A10":', a9_start)
+    a12_start = region_script.find('        "A12":', a10_start)
+    h07_start = region_script.find('        "H07":', a12_start)
+    a9_route_block = region_script[a9_start:a10_start] if a9_start >= 0 and a10_start > a9_start else ""
+    a10_route_block = region_script[a10_start:a12_start] if a10_start >= 0 and a12_start > a10_start else ""
+    a12_route_block = region_script[a12_start:h07_start] if a12_start >= 0 and h07_start > a12_start else ""
+    for contract in [
+        '"E  CLIMB TO THE GREAT CATHEDRAL"',
+        '"grand_cathedral.tscn", "west"',
+    ]:
+        require(a9_route_block, contract, "C17 outer-ring-to-cathedral main route", errors)
+    for contract in [
+        '"E  ENTER THE INNER CITY"',
+        '"inner_city.tscn", "west"',
+    ]:
+        require(a10_route_block, contract, "C20 cathedral-to-inner-city main route", errors)
+    require(a12_route_block, '"E  RETURN TO THE CATHEDRAL"', "C20 inner-city return route", errors)
+    require(a12_route_block, '"reached_A12_via_A10_then_opened_inner_city_side_gate"', "C18 main-route prerequisite", errors)
+    if a9_route_block.find('"E  RETURN TO THE INNER CITY"') >= 0 and a9_route_block.find('"reached_A12_via_A10_then_opened_inner_city_side_gate"') < 0:
+        fail(errors, "C18 A9-side shortcut must remain gated by opening it from A12 after the main route.")
+
     # C10 must be available independently of H05; its only persisted unlock is its own drop flag.
     # C10 必须独立于 H05 可用；它只依赖自身的钟塔落差开门标记。
     a6_start = region_script.find('        "A6":', region_script.find("func _spawn_region_exits"))
