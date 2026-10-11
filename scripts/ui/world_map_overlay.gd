@@ -72,7 +72,7 @@ func _draw() -> void:
 	draw_rect(panel, Color("#08090e", 0.94))
 	draw_rect(panel, Color("#746657", 0.9), false, 2.0)
 	draw_string(ThemeDB.fallback_font, Vector2(panel.position.x + 24, panel.position.y + 34), "世界路线图  /  按 M 关闭", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 22, Color("#d6c7b2"))
-	draw_string(ThemeDB.fallback_font, Vector2(panel.position.x + 24, panel.position.y + 58), "实线：主线通路    虚线：回环／捷径    紫色节点：已发现的异常区域", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#9c9290"))
+	draw_string(ThemeDB.fallback_font, Vector2(panel.position.x + 24, panel.position.y + 58), "实线：主线通路    虚线：回环／捷径（部分需从另一侧开启）    紫色节点：已发现的异常区域", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#9c9290"))
 
 	var map_rect := Rect2(panel.position + Vector2(24, 78), panel.size - Vector2(48, 110))
 	_node_positions.clear()
