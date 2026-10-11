@@ -1132,7 +1132,7 @@ func _spawn_region_exits() -> void:
                     "res://scenes/royal_outer_ring.tscn", "royal_drain"
                 )
             if "reached_A4_via_A3" in WorldState.achievement_flags:
-                _spawn_a4_hidden_well_gate(map_width - 105.0)
+                _spawn_a4_hidden_well_gate(map_width - 90.0)
 
         "A5":
             _spawn_exit_door(
