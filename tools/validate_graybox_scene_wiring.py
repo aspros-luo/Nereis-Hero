@@ -128,6 +128,7 @@ def main() -> int:
     require(village_route_script, 'WorldState.pending_region_spawn_side = "village_city_cut"', "A1 to A3 spawn mapping", errors)
     require(region_script, 'if region_id == "A3" and side == "village_city_cut"', "A3 alternate entrance spawn", errors)
     require(region_script, '520.0, "E  RETURN THROUGH THE OLD DRAIN"', "A3 return-to-village exit", errors)
+    require(region_script, "_add_platform(Rect2(760, 370, 110, 18))", "A2 forest canopy route", errors)
     require(region_script, "_add_platform(Rect2(450, 400, 110, 18))", "A3 rooftop loop", errors)
     require(region_script, "_add_platform(Rect2(1650, 310, 130, 18))", "A4 pipe-walk route", errors)
 
