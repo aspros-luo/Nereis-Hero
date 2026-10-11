@@ -32,6 +32,9 @@ var camera: Camera2D
 var narrative: CanvasLayer
 var hud: CanvasLayer
 var platforms: Array[Rect2] = []
+# Debug-only route markers make every authored exit and resonance gate obvious during graybox iteration.
+# 灰盒开发阶段专用的路线标记：明确显示每个实体出口与灵视入口，正式导出版本不绘制。
+var debug_exit_markers: Array[Dictionary] = []
 var respawning := false
 
 func _ready() -> void:
@@ -1910,6 +1913,7 @@ func _spawn_h02_gate(x: float) -> void:
 	gate.required_resonance = 18
 	gate.opened.connect(_on_optional_hidden_gate_opened)
 	add_child(gate)
+	debug_exit_markers.append({"position": gate.position, "label": "H02 倒响钟室", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _spawn_h03_gate(x: float) -> void:
 	var gate := Node2D.new()
@@ -1923,6 +1927,7 @@ func _spawn_h03_gate(x: float) -> void:
 	gate.required_resonance = 28
 	gate.opened.connect(_on_optional_hidden_gate_opened)
 	add_child(gate)
+	debug_exit_markers.append({"position": gate.position, "label": "H03 被删去的第三街", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _spawn_h04_gate(x: float) -> void:
 	var gate := Node2D.new()
@@ -1937,6 +1942,7 @@ func _spawn_h04_gate(x: float) -> void:
 	gate.required_ancient_exposure = 1
 	gate.opened.connect(_on_optional_hidden_gate_opened)
 	add_child(gate)
+	debug_exit_markers.append({"position": gate.position, "label": "H04 水面背后的楼梯", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _spawn_h05_gate(x: float) -> void:
 	var gate := Node2D.new()
@@ -1951,6 +1957,7 @@ func _spawn_h05_gate(x: float) -> void:
 	gate.required_ancient_exposure = 1
 	gate.opened.connect(_on_optional_hidden_gate_opened)
 	add_child(gate)
+	debug_exit_markers.append({"position": gate.position, "label": "H05 无声钟室", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _spawn_h06_gate(x: float) -> void:
 	var gate := Node2D.new()
@@ -1969,6 +1976,7 @@ func _spawn_h06_gate(x: float) -> void:
 	gate.required_source_ids = required_source_ids
 	gate.opened.connect(_on_optional_hidden_gate_opened)
 	add_child(gate)
+	debug_exit_markers.append({"position": gate.position, "label": "H06 王名抹除廊", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _on_optional_hidden_gate_opened(secret_id: String) -> void:
 	if not is_instance_valid(narrative):
@@ -1999,6 +2007,7 @@ func _spawn_a4_hidden_well_gate(x: float) -> void:
 	gate.required_outer_exposure = 0
 	gate.opened.connect(_on_hidden_well_gate_opened)
 	add_child(gate)
+	debug_exit_markers.append({"position": gate.position, "label": "H01 井底回声层", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _on_hidden_well_gate_opened(secret_id: String) -> void:
 	if narrative == null or not is_instance_valid(narrative):
@@ -2036,7 +2045,29 @@ func _spawn_exit_door(
 	shape.position = Vector2(0.0, -69.0)
 	door.add_child(shape)
 	add_child(door)
+	debug_exit_markers.append({
+		"position": door.position,
+		"label": target_location,
+		"kind": "shortcut" if not unlock_once_flag_id.is_empty() else "exit",
+		"condition": unlock_once_flag_id
+	})
 	door.interacted.connect(_on_exit_interacted.bind(target_location, target_scene, spawn_side))
+
+func _draw_debug_exit_markers() -> void:
+	for marker in debug_exit_markers:
+		var marker_position: Vector2 = marker.get("position", Vector2.ZERO)
+		var marker_kind := str(marker.get("kind", "exit"))
+		var marker_color := Color("#f0c674") if marker_kind == "shortcut" else Color("#8bd5ca")
+		var marker_top := marker_position + Vector2(0.0, -118.0)
+		draw_line(marker_position + Vector2(0.0, -8.0), marker_top, marker_color, 3.0, true)
+		draw_line(marker_top + Vector2(-12.0, 12.0), marker_top, marker_color, 3.0)
+		draw_line(marker_top + Vector2(12.0, 12.0), marker_top, marker_color, 3.0)
+		var marker_label := "[出口] " if marker_kind == "exit" else "[捷径] "
+		marker_label += str(marker.get("label", "unknown"))
+		var condition := str(marker.get("condition", ""))
+		if not condition.is_empty():
+			marker_label += " *"
+		draw_string(ThemeDB.fallback_font, marker_top + Vector2(14.0, -4.0), marker_label, HORIZONTAL_ALIGNMENT_LEFT, 300.0, 14, marker_color)
 
 func _on_exit_interacted(target_location: String, target_scene: String, spawn_side: String) -> void:
 	if region_id == "A3" and target_location == "sewer_reservoir":
@@ -2151,6 +2182,9 @@ func _draw() -> void:
 	for platform in platforms:
 		draw_rect(platform, _platform_color())
 		draw_line(platform.position, Vector2(platform.end.x, platform.position.y), Color("#7d6c65"), 2.0)
+
+	if OS.is_debug_build():
+		_draw_debug_exit_markers()
 
 	draw_string(
 		ThemeDB.fallback_font,
