@@ -223,6 +223,10 @@ func _ready() -> void:
 	hero_system.name = "HeroSystem"
 	add_child(hero_system)
 	_setup_combat_components()
+	debug_ability_override = WorldState.debug_ability_override_active
+	if debug_ability_override:
+		_refresh_debug_test_fixtures(true)
+		WorldState.refresh_resonance_reveals(true)
 	_log("BOOT", "Hero initialized")
 	queue_redraw()
 
@@ -684,6 +688,7 @@ func set_debug_ability_override(enabled: bool) -> void:
 	if debug_ability_override == enabled:
 		return
 	debug_ability_override = enabled
+	WorldState.debug_ability_override_active = enabled
 	if enabled:
 		_refresh_debug_test_fixtures(true)
 	else:
