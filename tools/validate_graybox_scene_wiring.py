@@ -603,7 +603,7 @@ def main() -> int:
     require(village_hub, 'resonance_well_gate.required_resonance = 12', "Village hidden gate threshold", errors)
     require(village_hub, 'resonance_well_gate.target_location_id = "hidden_well"', "Village hidden gate destination", errors)
     require(village_hub, 'var spawn_x := 1850.0 if spawn_side == "well_exit"', "Village watergate return spawn spacing", errors)
-    require(village_hub, 'var spawn_side := WorldState.pending_region_spawn_side\\n    # Persist the incoming side before clearing the one-shot transition value.\\n    # 必须先保存实际进入侧，再清理一次性切图方向，确保 Continue 能恢复正确落点。\\n    WorldState.set_location("village")\\n    WorldState.pending_region_spawn_side = "west"', "Village resume spawn-side save order", errors)
+    require(village_hub, 'var spawn_side := WorldState.pending_region_spawn_side\n    # Persist the incoming side before clearing the one-shot transition value.\n    # 必须先保存实际进入侧，再清理一次性切图方向，确保 Continue 能恢复正确落点。\n    WorldState.set_location("village")\n    WorldState.pending_region_spawn_side = "west"', "Village resume spawn-side save order", errors)
     require(village_hub, '2310.0 if spawn_side == "north_gate"', "Village north-gate return spawn", errors)
     require(region_spawn_script, '"res://scenes/village_hub.tscn", "north_gate"', "A2 village return side", errors)
     require(village_hub, '"village_defense_survived"', "Village old-road unlock", errors)
