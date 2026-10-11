@@ -869,6 +869,99 @@ def main() -> int:
     defense = read("scripts/levels/village_defense_demo.gd", errors)
     require(defense, 'WorldState.record_achievement("village_defense_survived")', "Village defense", errors)
 
+    # Keep the hidden-region design table and its actual gate constructors in sync.
+    # 将隐藏区域设计表与运行时入口构造函数逐项对齐，避免门槛、来源或落点悄悄漂移。
+    topology_path = ROOT / "tools/world_map_topology.json"
+    if topology_path.is_file():
+        try:
+            hidden_topology = json.loads(topology_path.read_text(encoding="utf-8"))
+            hidden_gate_functions = {
+                "H01": ("village_hub", "_spawn_resonance_well_gate"),
+                "H02": ("region", "_spawn_h02_gate"),
+                "H03": ("region", "_spawn_h03_gate"),
+                "H04": ("region", "_spawn_h04_gate"),
+                "H05": ("region", "_spawn_h05_gate"),
+                "H06": ("region", "_spawn_h06_gate"),
+                "H07": ("region", "_spawn_a9_mirror_gate"),
+                "H08": ("region", "_spawn_h08_gate"),
+            }
+            source_by_kind = {"region": region_script, "village_hub": village_hub}
+            for hidden in hidden_topology.get("hidden_regions", []):
+                hidden_id = hidden.get("id", "")
+                if hidden_id not in hidden_gate_functions:
+                    continue
+                source_kind, function_name = hidden_gate_functions[hidden_id]
+                source_text = source_by_kind[source_kind]
+                match = re.search(
+                    rf"func {re.escape(function_name)}\\([^)]*\\).*?(?=\\nfunc |\\Z)",
+                    source_text,
+                    re.DOTALL,
+                )
+                if match is None:
+                    errors.append(f"{hidden_id} topology gate audit cannot find {function_name}().")
+                    continue
+                gate_block = match.group(0)
+
+                def gate_int(property_name: str, default: int = 0) -> int:
+                    value = re.search(rf"gate\\.{re.escape(property_name)}\\s*=\\s*(\\d+)", gate_block)
+                    return int(value.group(1)) if value else default
+
+                def gate_string(property_name: str) -> str:
+                    value = re.search(rf'gate\\.{re.escape(property_name)}\\s*=\\s*"([^"]*)"', gate_block)
+                    return value.group(1) if value else ""
+
+                def gate_string_array(property_name: str) -> list[str]:
+                    value = re.search(
+                        rf"gate\\.{re.escape(property_name)}\\s*=\\s*\\[(.*?)\\]",
+                        gate_block,
+                        re.DOTALL,
+                    )
+                    return re.findall(r'"([^"]+)"', value.group(1)) if value else []
+
+                for topology_key, runtime_key in (
+                    ("min_resonance", "required_resonance"),
+                    ("min_ancient_exposure", "required_ancient_exposure"),
+                    ("min_outer_exposure", "required_outer_exposure"),
+                ):
+                    expected = int(hidden.get(topology_key, 0))
+                    actual = gate_int(runtime_key)
+                    if actual != expected:
+                        errors.append(
+                            f"{hidden_id} gate threshold mismatch: topology {topology_key}={expected}, runtime {runtime_key}={actual}."
+                        )
+
+                expected_sources = sorted(hidden.get("required_source_ids", []))
+                actual_sources = sorted(gate_string_array("required_source_ids"))
+                if actual_sources != expected_sources:
+                    errors.append(
+                        f"{hidden_id} gate source mismatch: topology={expected_sources}, runtime={actual_sources}."
+                    )
+
+                expected_outer_resonance = hidden.get("requires_outer_god_resonance", False)
+                actual_outer_resonance = bool(re.search(
+                    r"gate\\.require_outer_god_resonance\\s*=\\s*true",
+                    gate_block,
+                ))
+                if actual_outer_resonance != expected_outer_resonance:
+                    errors.append(
+                        f"{hidden_id} outer-god resonance mismatch: topology={expected_outer_resonance}, runtime={actual_outer_resonance}."
+                    )
+
+                expected_scene = hidden.get("scene_path", "")
+                actual_scene = gate_string("target_scene_path")
+                if actual_scene and actual_scene != f"res://{expected_scene}":
+                    errors.append(
+                        f"{hidden_id} target scene mismatch: topology={expected_scene}, runtime={actual_scene}."
+                    )
+                expected_location = hidden.get("location_id", "")
+                actual_location = gate_string("target_location_id")
+                if actual_location != expected_location:
+                    errors.append(
+                        f"{hidden_id} target location mismatch: topology={expected_location}, runtime={actual_location}."
+                    )
+        except (json.JSONDecodeError, OSError) as exc:
+            errors.append(f"Hidden gate/topology consistency audit could not read topology: {exc}")
+
     if errors:
         print("GRAYBOX SCENE WIRING CHECK FAILED")
         for error in errors:
