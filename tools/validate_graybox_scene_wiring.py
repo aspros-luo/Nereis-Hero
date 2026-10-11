@@ -7,6 +7,7 @@ replace Godot runtime tests for collision, interaction focus, or scene changes.
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -62,6 +63,25 @@ def require(text: str, needle: str, source: str, errors: list[str]) -> None:
 
 def main() -> int:
     errors: list[str] = []
+
+    # The topology metadata must agree with the playable C10 shortcut.
+    # 世界拓扑元数据必须与实际可玩的 C10 钟塔捷径保持一致。
+    topology_path = ROOT / "tools/world_map_topology.json"
+    if not topology_path.is_file():
+        errors.append("Missing file: tools/world_map_topology.json")
+    else:
+        try:
+            topology = json.loads(topology_path.read_text(encoding="utf-8"))
+            hidden_regions = topology.get("hidden_regions", [])
+            h05 = next((region for region in hidden_regions if region.get("id") == "H05"), None)
+            if h05 is None or h05.get("secondary_exit", {}).get("requires_target_already_reached") is not True:
+                errors.append("Topology H05/C10 contract must record A3 as already reached before the shortcut.")
+            connections = topology.get("connections", [])
+            connection_ids = [connection.get("id") for connection in connections]
+            if len(connection_ids) != len(set(connection_ids)):
+                errors.append("World map topology contains duplicate connection IDs.")
+        except (json.JSONDecodeError, OSError) as exc:
+            errors.append(f"World map topology cannot be parsed: {exc}")
 
     for relative_path in REQUIRED_FILES:
         read(relative_path, errors)
