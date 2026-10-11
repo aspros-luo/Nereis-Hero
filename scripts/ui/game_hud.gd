@@ -608,7 +608,7 @@ func _unhandled_input(event: InputEvent) -> void:
             _close_world_map()
         elif not pause_open and not character_details_open and not WorldState.input_locked:
             map_overlay_previous_input_locked = WorldState.input_locked
-            world_map_overlay.open_map()
+            world_map_overlay.call("open_map")
             WorldState.input_locked = true
         get_viewport().set_input_as_handled()
         return
