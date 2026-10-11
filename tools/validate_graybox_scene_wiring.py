@@ -158,6 +158,12 @@ def main() -> int:
     require(region_script, '"anomaly_prisoner_register"', "A7 prison evidence source", errors)
     require(region_script, '"anomaly_double_sealed_reliquary"', "A10 cathedral evidence source", errors)
     require(region_script, '"anomaly_kings_unopened_letter"', "A12 king letter evidence source", errors)
+    for source_id in [
+        "hidden_well_no_water", "hidden_bell_after_sound", "hidden_third_street_numbers",
+        "hidden_stair_reflection", "hidden_bell_shadowless_record", "hidden_royal_name_scrape",
+        "hidden_mirror_lamp_count", "hidden_primordial_cradle",
+    ]:
+        require(region_script, '"' + source_id + '"', "Hidden-area evidence source", errors)
     require(region_script, "_add_platform(Rect2(420, 390, 110, 18))", "H01 well upper shore", errors)
     require(region_script, "_add_platform(Rect2(390, 400, 110, 18))", "H02 silent bell gallery", errors)
     require(region_script, "_add_platform(Rect2(380, 395, 110, 18))", "H03 erased street roofline", errors)
