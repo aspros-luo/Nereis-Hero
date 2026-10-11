@@ -142,9 +142,9 @@ func _spawn_x_for_side(side: String) -> float:
         # 王墓侧门位于 x=930；从倒影阶梯返回时应离开门的触发范围。
         return 1200.0
     if region_id == "A9" and side == "third_street_service":
-        # The service door is at x=1020; return to a neutral part of the street.
-        # 旧服务门位于 x=1020；回到王城外环后落在街道中段。
-        return 1250.0
+        # The service door now sits at x=1250; arrive beyond the anomaly source and away from the H07 gate.
+        # 旧服务门移至 x=1250；回程出生点避开异常调查点与 H07 镜街入口。
+        return 1600.0
     if region_id == "A9" and side == "royal_transport":
         # Keep distance from both the royal transport door (x=2200) and H07 (x=1850).
         # 远离王室运输门（x=2200）与 H07 镜街入口（x=1850）。
@@ -1225,7 +1225,7 @@ func _spawn_region_exits() -> void:
             )
             if WorldState.is_hidden_path_opened("H03"):
                 _spawn_exit_door(
-                    1020.0, "E  OPEN THE OLD SERVICE DOOR", "erased_third_street",
+                    1250.0, "E  OPEN THE OLD SERVICE DOOR", "erased_third_street",
                     "res://scenes/erased_third_street.tscn", "third_street_entry",
                     true, "opened_old_service_door", "E  ENTER THE THIRD STREET"
                 )
