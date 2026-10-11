@@ -35,7 +35,8 @@ func _ready() -> void:
     _create_boundaries()
     # The watergate arrival must be away from the resonance well gate and the north-gate interaction.
     # 水闸回村的出生点应避开灵视井门与北门交互区。
-    _spawn_hero(1900.0 if spawn_side == "well_exit" else 260.0)
+    var spawn_x := 1900.0 if spawn_side == "well_exit" else (350.0 if spawn_side == "city_cut_return" else 260.0)
+    _spawn_hero(spawn_x)
     _spawn_checkpoint()
     _spawn_mite()
     _spawn_mite_house_door()
@@ -247,6 +248,21 @@ func _spawn_village_pois() -> void:
     add_child(north_gate)
     north_gate.interacted.connect(_on_village_poi_interacted.bind(north_gate))
 
+    # A second, lower route reaches the forgotten city without forcing every player through the forest first.
+    # 第二条低处通路可直达遗忘之城，避免所有玩家都必须先穿过森林。
+    var city_cut := Node2D.new()
+    city_cut.set_script(VILLAGE_POI_SCRIPT)
+    city_cut.position = Vector2(100, 520)
+    city_cut.poi_id = "city_cut"
+    var city_cut_open := "village_defense_survived" in WorldState.achievement_flags
+    city_cut.display_name = "OLD DRAINAGE PASSAGE" if city_cut_open else "SEALED DRAINAGE PASSAGE"
+    if city_cut_open:
+        city_cut.dialogue = "The old drain runs beneath the city wall. Its stonework predates the village houses.\n\nA narrow path leads toward the forgotten streets."
+    else:
+        city_cut.dialogue = "A fallen beam and fresh rubble seal the passage. Someone blocked it recently.\n\nThe stone beyond the crack is older than the village."
+    add_child(city_cut)
+    city_cut.interacted.connect(_on_village_poi_interacted.bind(city_cut))
+
     var church := Node2D.new()
     church.set_script(VILLAGE_POI_SCRIPT)
     church.position = Vector2(2220, 520)
@@ -309,6 +325,14 @@ func _enter_village_location(location_id: String) -> void:
             WorldState.set_location("village")
             print("[NEREIS][VILLAGE] Triggering village defense chapter")
             SceneTransition.fade_to_scene("res://scenes/village_defense_demo.tscn")
+    elif location_id == "city_cut":
+        if "village_defense_survived" in WorldState.achievement_flags:
+            WorldState.pending_region_spawn_side = "village_city_cut"
+            WorldState.set_location("forgotten_city")
+            print("[NEREIS][MAP] Entering A3: Forgotten City via the old drainage passage")
+            SceneTransition.fade_to_scene("res://scenes/forgotten_city.tscn")
+        else:
+            print("[NEREIS][MAP] Old drainage passage remains sealed until the village attack is survived")
     elif location_id == "graveyard":
         WorldState.set_location("graveyard")
         print("[NEREIS][VILLAGE] Entering Village Graveyard")
@@ -428,6 +452,18 @@ func _draw() -> void:
         draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
 
     draw_string(ThemeDB.fallback_font, Vector2(100, 230), NereisLocalization.translate_text("THE VILLAGE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 30, Color("#4d454d"))
+
+    # The western drain is a visible alternate route; rubble remains until the village defense is survived.
+    # 西侧排水通路作为可见的替代路线；村庄防卫战完成前仍由碎石封住。
+    var drain_open := "village_defense_survived" in WorldState.achievement_flags
+    draw_rect(Rect2(18, 420, 96, 100), Color("#25232b"))
+    draw_rect(Rect2(32, 438, 68, 82), Color("#11141a"))
+    draw_arc(Vector2(66, 440), 34.0, PI, TAU, 20, Color("#5d5964"), 6.0)
+    if not drain_open:
+        draw_rect(Rect2(24, 425, 84, 88), Color("#514149"))
+        for rubble_x in [34, 55, 77, 94]:
+            draw_line(Vector2(rubble_x, 435), Vector2(rubble_x - 5, 500), Color("#79656a"), 5.0)
+    draw_string(ThemeDB.fallback_font, Vector2(20, 400), "OLD DRAIN", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#8d7776"))
 
     # Small house where the Hero first recovers.
     draw_rect(Rect2(350, 360, 210, 160), Color("#27222b"))
