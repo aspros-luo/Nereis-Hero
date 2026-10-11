@@ -209,6 +209,7 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - The validator source was re-fetched after its commit and the newly added assertions were checked against the current A3 route and WorldState source text. This is a contract-presence audit only; the Python validator itself was not executed in a local checkout.
 
 ### Still outstanding
+- Re-audited regional death checkpoints: `_spawn_hero()` already stores the current region spawn as the checkpoint. The continuation now strengthens the static regression contract and avoids adding a duplicate save call; runtime respawn still needs Godot verification.
 
 - Godot 4.6.x runtime acceptance remains pending because no Godot executable is available in the maintainer environment.
 - The updated Python validators have not yet been run against a local working tree in this continuation.
