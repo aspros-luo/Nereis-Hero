@@ -1949,7 +1949,9 @@ func _spawn_h06_gate(x: float) -> void:
 	gate.target_spawn_side = "west"
 	gate.required_resonance = 55
 	gate.required_ancient_exposure = 2
-	var required_source_ids: Array[String] = ["anomaly_bell_retiming", "anomaly_erased_street_sign"]
+	# The royal-name corridor requires the actual royal inscription clue, not the unrelated third-street clue.
+	# 王名抹除廊要求调查王室石碑本身，而不是城区第三街的无关线索。
+	var required_source_ids: Array[String] = ["anomaly_bell_retiming", "anomaly_erased_royal_name"]
 	gate.required_source_ids = required_source_ids
 	gate.opened.connect(_on_optional_hidden_gate_opened)
 	add_child(gate)
