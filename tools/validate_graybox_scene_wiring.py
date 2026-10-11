@@ -1057,6 +1057,12 @@ def main() -> int:
                 f"topology-only={sorted(topology_route_id_set - runtime_route_id_set)}."
             )
         expected_local_route_ids = ("A2_BELLGRAVE_CANOPY_CROSSING", "A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK", "A7_PRISON_MAINTENANCE_CROSSWALK", "A8_ERASED_REGENT_GALLERY", "A9_RAIN_REFLECTION_ROOFWALK", "A10_CHOIRLESS_UPPER_GALLERY", "A11_SECOND_OBSERVER_SPAN", "A12_CROWN_WALL_WALK")
+        if set(expected_local_route_ids) != topology_route_id_set:
+            errors.append(
+                "Validator/topology local Resonance route list drift: "
+                f"validator-only={sorted(set(expected_local_route_ids) - topology_route_id_set)}, "
+                f"topology-only={sorted(topology_route_id_set - set(expected_local_route_ids))}."
+            )
         expected_local_route_prompts = {
             "A2_BELLGRAVE_CANOPY_CROSSING": "E  ANCHOR THE BELLGRAVE CANOPY",
             "A3_THIRD_STREET_ROOFLINE": "E  ANCHOR THE THIRD STREET",
