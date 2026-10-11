@@ -578,10 +578,11 @@
       "return_to_parent": true,
       "secondary_exit": {
         "to": "A13",
-        "unlock_condition": "ending_state_allows_deep_dream_entry_and_required_evidence_present",
+        "unlock_condition": "physical_union_complete_then_route_candidate_selects_ending",
         "opens_from": "A11",
         "requires_target_already_reached": false,
-        "requires_ending_state": true
+        "requires_ending_state": true,
+        "notes": "The exit appears after physical union is complete. Evidence and ending facts are evaluated by the ending router; this gate must not hard-code one ending or require the player to have already unlocked a specific ending."
       },
       "min_distinct_anomaly_sources": 3,
       "scene_path": "scenes/primordial_hollow.tscn",
