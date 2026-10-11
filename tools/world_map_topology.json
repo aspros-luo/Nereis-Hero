@@ -391,10 +391,11 @@
       "return_to_parent": true,
       "secondary_exit": {
         "to": "A4",
-        "unlock_condition": "reached_A4_via_A3_then_opened_well_gate_from_A4",
+        "unlock_condition": "reached_A4_via_A3_and_H01_opened_from_either_side",
         "opens_from": "A4",
         "requires_target_already_reached": true,
-        "requires_ending_state": false
+        "requires_ending_state": false,
+        "notes": "A4 side uses the same persistent H01 gate state as the village side; reaching A4 and opening H01 from either side enables the return exit. Do not require a separate 'opened from A4' flag unless runtime behavior is changed."
       },
       "scene_path": "scenes/hidden_well.tscn",
       "location_id": "hidden_well",
