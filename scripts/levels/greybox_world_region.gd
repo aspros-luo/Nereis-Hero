@@ -315,7 +315,32 @@ func _spawn_ui() -> void:
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
     hud.bind_hero(hero)
-    hud.set_story_mode(region_title, _get_objective_text())
+    hud.set_story_mode(_localized_region_title(), _get_objective_text())
+
+func _localized_region_title() -> String:
+	match region_id:
+		"A0": return "边境手术所与逃脱通道"
+		"A1": return "边境村庄"
+		"A2": return "雾林、钟墓与旧朝圣路"
+		"A3": return "被遗忘的城区"
+		"A4": return "下水道、沉积大厅与旧水库"
+		"A5": return "旧战场与边境堡垒"
+		"A6": return "修道院、回廊与钟塔"
+		"A7": return "监牢、忏悔井与维护竖井"
+		"A8": return "旧王墓与王室地下道"
+		"A9": return "王城外环与废弃街区"
+		"A10": return "大圣堂、朝圣阶梯与教会内廷"
+		"A11": return "古神遗迹与深层研究区"
+		"A12": return "王室内城与王座区"
+		"H01": return "井底回声层"
+		"H02": return "倒响钟室"
+		"H03": return "被删去的第三街"
+		"H04": return "水面背后的楼梯"
+		"H05": return "无声钟室"
+		"H06": return "王名抹除廊"
+		"H07": return "镜街：雨幕背后"
+		"H08": return "胎宫／原初空腔"
+		_: return region_title
 
 func _get_objective_text() -> String:
     match region_id:
@@ -369,109 +394,109 @@ func _show_intro() -> void:
         "A2":
             narrative.show_message(
                 "旧朝圣路",
-                "The forest has grown over the road, not across it.\n\nA bell hangs ahead. Its tongue does not move.",
+                "森林覆盖了道路，却没有横断道路。\n\n前方悬着一口钟，钟舌纹丝不动。",
                 5.0
             )
         "A3":
             narrative.show_message(
                 "被遗忘的城区",
-                "The street ends at a wall that should be facing another street.\n\nA faded sign names a third road. No road is there.",
+                "街道尽头是一面本应面对另一条街的墙。\n\n褪色的路牌写着第三条道路的名字，那里却空无一物。",
                 5.0
             )
         "A4":
             narrative.show_message(
                 "沉积大厅",
-                "New pipes run through stone that was already old when the pipes were made.\n\nWater moves somewhere below your feet.",
+                "新铺设的管道穿过古老石层；石头的年代远早于管道。\n\n你的脚下深处，有水正在流动。",
                 5.0
             )
         "A5":
             narrative.show_message(
                 "边境战场",
-                "The bodies face the wrong direction.\n\nThe fortress gates were closed from the inside.",
+                "尸体倒下的方向不对。\n\n堡垒大门是从内部关闭的。",
                 5.0
             )
         "A6":
             narrative.show_message(
                 "仍留着钟的修道院",
-                "Every bell has a tongue.\n\nOne casts no shadow on the wall.",
+                "每一口钟都有钟舌。\n\n其中一口钟没有在墙上留下影子。",
                 5.0
             )
         "A7":
             narrative.show_message(
                 "忏悔深井",
-                "The cell doors open inward.\n\nThe names have been scraped from the hinges.",
+                "牢门向内开启。\n\n铰链上刻过的名字已被刮除。",
                 5.0
             )
         "A8":
             narrative.show_message(
                 "旧王墓",
-                "The inscriptions have not weathered away.\n\nSomeone wanted the names to stop existing.",
+                "铭文并非被风雨磨去。\n\n有人想让那些名字彻底不复存在。",
                 5.0
             )
         "A9":
             narrative.show_message(
                 "王城外环",
-                "Rainwater pools in the street, though the roofs are dry.\n\nThe lamps in the puddles are lit. The lamps above them are not.",
+                "屋顶干燥，街道上却积着雨水。\n\n水洼中的灯亮着，头顶对应的灯却没有点燃。",
                 5.0
             )
         "A10":
             narrative.show_message(
                 "大圣堂",
-                "The choir stops when you reach the steps.\n\nNo one turns to look at you.",
+                "你走上台阶时，唱诗声戛然而止。\n\n没有人转头看你。",
                 5.0
             )
         "A11":
             narrative.show_message(
                 "早于实验室的深层遗迹",
-                "The Church built its rooms around something already here.\n\nThe observation notes disagree about who entered first.",
+                "教会围绕某种早已存在的东西修建了这些房间。\n\n观测记录却对最先进入这里的人各执一词。",
                 5.0
             )
         "H08":
             narrative.show_message(
                 "实验室下方的胎宫",
-                "The wall is warm. No device is active.\n\nSomething in the stone exhales just before you do.",
+                "墙壁温热，所有装置都已停止运转。\n\n石头中的某种东西，总在你呼气之前先行吐息。",
                 5.0
             )
         "A12":
             narrative.show_message(
                 "王室内城",
-                "The palace doors stand open.\n\nThe guards have not been dismissed.",
+                "王宫大门敞开着。\n\n守卫却仍留在原位。",
                 5.0
             )
         "H07":
             narrative.show_message(
                 "镜街：雨幕背后",
-                "The rain falls upward here.\n\nYour reflection arrives one step before you.",
+                "这里的雨水向天空落去。\n\n倒影总比你提前一步抵达。",
                 5.0
             )
         "H01":
             narrative.show_message(
                 "井底回声层",
-                "The shaft is deeper than the village well could contain.\n\nYour footsteps return from above.",
+                "这口竖井深得远超村庄老井所能容纳的尺度。\n\n你的脚步声却从头顶传回。",
                 5.0
             )
         "H02":
             narrative.show_message(
                 "THE BELL BEFORE THE SOUND",
-                "The bell's tongue remains still.\n\nThe echo answers from a place you have not reached.",
+                "钟舌始终静止。\n\n回声却从你尚未抵达的地方回应。",
                 5.0
             )
         "H03":
             narrative.show_message(
                 "THE STREET THE CITY REMOVED",
-                "The houses have doors on both sides.\n\nOnly one side appears on the city plan.",
+                "房屋两侧都有门。\n\n城图上却只画出其中一侧。",
                 5.0
             )
         "H04":
             narrative.show_message(
                 "THE STAIRS BEHIND THE WATER",
-                "The reflection has dry steps.\n\nYour boots leave no mark on the water above them.",
+                "倒影里有一段干燥的阶梯。\n\n你的靴子无法在阶梯上方的水面留下痕迹。",
                 5.0
             )
         "H05":
             narrative.show_message(
-                "THE WINDOW THAT CASTS 没有影子",
-                "The bell tower window has no view beyond it.\n\nSomeone has been using it from the inside.",
+                "不投影的窗",
+                "钟塔的窗外没有景色。\n\n但有人一直从里面使用这扇窗。",
                 5.0
             )
         "H06":
@@ -932,7 +957,7 @@ func _spawn_region_sources() -> void:
                 Vector2(735, floor_y - 18.0),
                 "anomaly_bell_retiming",
                 "THE BELL THAT DID NOT MOVE",
-                "The bell's tongue hangs still.\n\nThe sound arrives anyway. The stone beneath your hand vibrates once, then stops.\n\nA second pulse remains behind your eyes.",
+                "钟舌垂落不动。\n\n钟声却依然响起。你掌下的石头震动了一次，随后归于沉寂。\n\n第二道脉动仍残留在你的眼后。",
                 12,
                 0,
                 0,
@@ -942,7 +967,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1530, floor_y - 18.0),
                 "anomaly_old_pilgrim_echo",
                 "THE SECOND ECHO",
-                "You tap the old milestone. The answer comes from the road behind you.\n\nThe stone is warm, as if someone stood here moments ago.",
+                "你轻敲旧里程碑，回应却从身后的道路传来。\n\n石头仍然温热，仿佛有人刚刚离开。",
                 18
             )
         "A3":
@@ -950,7 +975,7 @@ func _spawn_region_sources() -> void:
                 Vector2(900, floor_y - 18.0),
                 "anomaly_erased_street_sign",
                 "THE THIRD STREET",
-                "The sign names three streets. Two remain.\n\nScratches cover the space where the third direction should point.",
+                "路牌列出了三条街道，如今只剩两条。\n\n原本指向第三条街的地方布满刮痕。",
                 28
             )
         "A4":
@@ -958,7 +983,7 @@ func _spawn_region_sources() -> void:
                 Vector2(980, floor_y - 18.0),
                 "anomaly_old_stone_layer",
                 "STONE BENEATH THE PIPES",
-                "The pipes are bolted into stone cut by a different hand.\n\nThe workers who built the pipes did not carve the hall.",
+                "管道被固定在另一种工艺切削的石层上。\n\n铺设管道的工人并不是这座大厅的建造者。",
                 36,
                 0,
                 0,
@@ -971,7 +996,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1100, floor_y - 18.0),
                 "anomaly_battlefield_late_orders",
                 "THE ORDERS THAT ARRIVED AFTER THE DEAD",
-                "The field report is dated three days after the battle.\n\nThe bodies were already arranged to face the fortress, as if someone had corrected the scene for a witness.\n\nThe last line orders the survivors to call the slaughter a miracle of faith.",
+                "战场报告的日期比战役晚了三天。\n\n尸体早已被摆成面向堡垒的姿势，仿佛有人专为目击者修整过现场。\n\n最后一行命令幸存者将这场屠杀称为信仰的奇迹。",
                 46
             )
         "A6":
@@ -979,7 +1004,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1125, 278),
                 "anomaly_silent_bell_window",
                 "THE WINDOW WITHOUT A SOUND",
-                "The bell tower window has no view beyond it.\n\nIts shadow falls across a wall that is not there.",
+                "钟塔窗外没有景色。\n\n它的影子却落在一面并不存在的墙上。",
                 42,
                 0,
                 0,
@@ -991,7 +1016,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1070, floor_y - 18.0),
                 "anomaly_prisoner_register",
                 "THE REGISTER OF UNPERSONS",
-                "The ledger has columns for name, sentence, and transfer.\n\nThe transfer column is full. The execution column is almost empty.\n\nEvery destination is written as OBSERVATION.",
+                "账册分为姓名、判决与转送三栏。\n\n转送一栏写得满满当当，处决一栏却几乎空白。\n\n所有目的地都被写成了“观测区”。",
                 52
             )
         "A8":
@@ -999,7 +1024,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1530, floor_y - 18.0),
                 "anomaly_erased_royal_name",
                 "THE NAME SCRAPED FROM STONE",
-                "The inscription is not worn.\n\nThe chisel marks begin after the stone had already been sealed.",
+                "铭文并未磨损。\n\n凿痕是在石碑封存之后才留下的。",
                 55,
                 0,
                 0,
@@ -1012,7 +1037,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1380, floor_y - 18.0),
                 "anomaly_mirror_street_echo",
                 "THE STREET IN THE PUDDLE",
-                "The puddle reflects a street with one more lamp.\n\nYou count the lights again. Nothing changes above you.",
+                "水洼倒映出一条多了一盏灯的街道。\n\n你再次清点灯火，头顶的街景却毫无变化。",
                 68,
                 0,
                 0,
@@ -1026,7 +1051,7 @@ func _spawn_region_sources() -> void:
                 Vector2(700, floor_y - 18.0),
                 "anomaly_double_sealed_reliquary",
                 "THE RELIQUARY WITH TWO SEALS",
-                "The church seal was pressed over an older mark.\n\nThe wax bears the same shape as the cut in the reliquary stone. The official prayer was added later.",
+                "教会印记覆盖在更古老的符号之上。\n\n封蜡与圣物石匣上的刻痕形状相同，官方祷文则是后来才添上的。",
                 62
             )
         "A11":
@@ -1034,7 +1059,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1450, floor_y - 18.0),
                 "anomaly_observer_reaction",
                 "THE SECOND OBSERVER",
-                "The record names an observer who never entered the chamber.\n\nA second line has been added in a different hand. It describes you leaving.",
+                "记录中写着一位从未进入密室的观测者。\n\n另一行字迹来自不同的人，描述的却是你离开的情景。",
                 78,
                 0,
                 6,
@@ -1047,7 +1072,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1070, floor_y - 18.0),
                 "anomaly_kings_unopened_letter",
                 "THE KING'S UNOPENED LETTER",
-                "The letter was never sent.\n\nThe king names the church's experiments plainly, then asks the reader to preserve the kingdom even if the truth must remain buried.\n\nHis signature is steady. The seal is not.",
+                "这封信从未寄出。\n\n国王直言教会的实验，并请求读信者即使埋葬真相，也要保全王国。\n\n他的签名沉稳，封印却颤抖不止。",
                 74
             )
 
@@ -1056,7 +1081,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1600, floor_y - 18.0),
                 "hidden_well_no_water",
                 "THE WELL HAS NO WATER",
-                "The stone is wet, but there is no water below it.\n\nThe dampness smells like rain falling beneath the earth.",
+                "石头是湿的，下面却没有水。\n\n潮气闻起来像是雨落在地底深处。",
                 0
             )
         "H02":
@@ -1064,7 +1089,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1650, floor_y - 18.0),
                 "hidden_bell_after_sound",
                 "THE BELL AFTER THE SOUND",
-                "The bell's tongue moves only after the sound has stopped.\n\nThe metal is cold. The air around it is warm.",
+                "钟声停止之后，钟舌才开始摆动。\n\n金属冰冷，周围的空气却温热。",
                 0
             )
         "H03":
@@ -1072,7 +1097,7 @@ func _spawn_region_sources() -> void:
                 Vector2(2020, floor_y - 18.0),
                 "hidden_third_street_numbers",
                 "THE NUMBERS SKIP THREE",
-                "Every doorway is numbered in order until the third.\n\nThere is no missing number. The wall has been cut to make the count look natural.",
+                "每一道门都按顺序编号，直到第三道。\n\n没有缺失的号码；墙体被刻意切削过，只为让编号看起来顺理成章。",
                 0
             )
         "H04":
@@ -1080,7 +1105,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1740, floor_y - 18.0),
                 "hidden_stair_reflection",
                 "THE STAIR THAT CLIMBS DOWN",
-                "The reflection climbs while the stone stair descends.\n\nAt the landing, both versions pause to listen.",
+                "石阶向下延伸，倒影中的阶梯却向上攀升。\n\n抵达平台时，两种景象同时停下，仿佛在聆听。",
                 0
             )
         "H05":
@@ -1088,7 +1113,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1960, floor_y - 18.0),
                 "hidden_bell_shadowless_record",
                 "THE SHADOWLESS RECORD",
-                "The bell is recorded as removed from the tower.\n\nIts shadow is still listed in the inventory, signed for every morning.",
+                "档案记载钟已从塔中移走。\n\n库存清单却仍记录着它的影子，每天早晨都有人签收。",
                 0
             )
         "H06":
@@ -1096,7 +1121,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1980, floor_y - 18.0),
                 "hidden_royal_name_scrape",
                 "THE STONE REMEMBERS THE NAME",
-                "The names are gone, but the chisel marks stop at each letter's boundary.\n\nSomeone erased the words carefully enough to preserve their shapes.",
+                "名字已被抹去，凿痕却恰好停在每个字的边界。\n\n有人细致地擦除了文字，甚至保留了它们的轮廓。",
                 0
             )
         "H07":
@@ -1104,7 +1129,7 @@ func _spawn_region_sources() -> void:
                 Vector2(2200, floor_y - 18.0),
                 "hidden_mirror_lamp_count",
                 "THE EXTRA LAMP",
-                "You count seven lamps in the water and six on the street.\n\nWhen you turn around, the seventh light has moved behind you.",
+                "水中有七盏灯，街上只有六盏。\n\n当你转过身，第七盏灯已经移动到你的身后。",
                 0
             )
         "H08":
@@ -1112,7 +1137,7 @@ func _spawn_region_sources() -> void:
                 Vector2(1850, floor_y - 18.0),
                 "hidden_primordial_cradle",
                 "THE EMPTY CRADLE",
-                "The hollow in the living stone is too small for a body and too carefully shaped to be natural.\n\nThe wall contracts around it, then relaxes.",
+                "活石上的凹槽容不下一个人的身体，形状却精细得绝非天然形成。\n\n墙壁围绕凹槽收缩了一次，随后缓缓松弛。",
                 0
             )
 
@@ -1928,10 +1953,10 @@ func _on_optional_hidden_gate_opened(secret_id: String) -> void:
     if not is_instance_valid(narrative):
         return
     var details := {
-        "H02": ["THE BELL BEFORE THE SOUND", "The bell's tongue remains still.\n\nThe echo answers from a place you have not reached."],
-        "H03": ["THE STREET THE CITY REMOVED", "The houses have doors on both sides.\n\nOnly one side appears on the city plan."],
-        "H04": ["THE STAIRS BEHIND THE WATER", "The reflection has dry steps.\n\nYour boots leave no mark on the water above them."],
-        "H05": ["THE WINDOW THAT CASTS 没有影子", "The bell tower window has no view beyond it.\n\nSomeone has been using it from the inside."],
+        "H02": ["THE BELL BEFORE THE SOUND", "钟舌始终静止。\n\n回声却从你尚未抵达的地方回应。"],
+        "H03": ["THE STREET THE CITY REMOVED", "房屋两侧都有门。\n\n城图上却只画出其中一侧。"],
+        "H04": ["THE STAIRS BEHIND THE WATER", "倒影里有一段干燥的阶梯。\n\n你的靴子无法在阶梯上方的水面留下痕迹。"],
+        "H05": ["不投影的窗", "钟塔的窗外没有景色。\n\n但有人一直从里面使用这扇窗。"],
         "H06": ["THE NAME SCRAPED FROM STONE", "The inscription is not weathered.\n\nThe chisel marks begin after the tomb was sealed."]
     }
     var entry: Array = details.get(secret_id, ["THE ABNORMAL STONEWORK", "The wall opens without moving."])
