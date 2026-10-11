@@ -93,6 +93,51 @@ def main() -> int:
                     errors.append(f"Primary route references unknown region: {region_id}")
 
             connections = topology.get("connections", [])
+            # Check that the reliable main route is actually traversable in its intended direction
+            # before any shortcuts or secret gates are unlocked.
+            # 检查玩家不依赖捷径或隐藏门时，仍能沿设计方向走通可靠主线。
+            if primary_route and all(region_id in region_id_set for region_id in primary_route):
+                initially_reachable = {primary_route[0]}
+                changed = True
+                while changed:
+                    changed = False
+                    for connection in connections:
+                        access = connection.get("initial_access", "")
+                        source = connection.get("from")
+                        target = connection.get("to")
+                        if access in ("from_to", "both") and source in initially_reachable and target not in initially_reachable:
+                            initially_reachable.add(target)
+                            changed = True
+                        if access == "both" and target in initially_reachable and source not in initially_reachable:
+                            initially_reachable.add(source)
+                            changed = True
+                unreachable_route_regions = [
+                    region_id for region_id in primary_route if region_id not in initially_reachable
+                ]
+                if unreachable_route_regions:
+                    errors.append(
+                        "Primary route is not initially traversable from its start: "
+                        f"{unreachable_route_regions}"
+                    )
+
+            # Every documented loop must be a closed region path with an actual connection for
+            # each adjacent pair; the path is topology QA, not a claim of runtime traversal.
+            # 每条环路必须首尾闭合，且每一对相邻区域都存在对应拓扑连线。
+            for loop in topology.get("loops", []):
+                path = loop.get("path", [])
+                if len(path) < 3 or path[0] != path[-1]:
+                    errors.append(f"Loop {loop.get('id', '<missing>')} is not a closed path.")
+                    continue
+                for source, target in zip(path, path[1:]):
+                    linked = any(
+                        {connection.get("from"), connection.get("to")} == {source, target}
+                        for connection in connections
+                    )
+                    if not linked:
+                        errors.append(
+                            f"Loop {loop.get('id', '<missing>')} has no connection between {source} and {target}."
+                        )
+
             connection_ids = [connection.get("id") for connection in connections]
             if len(connection_ids) != len(set(connection_ids)):
                 errors.append("World map topology contains duplicate connection IDs.")
