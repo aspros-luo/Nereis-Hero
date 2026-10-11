@@ -608,12 +608,12 @@ func _configure_platforms() -> void:
             _add_platform(Rect2(780, 375, 150, 18))
             _add_platform(Rect2(1040, 430, 160, 18))
             _add_platform(Rect2(1320, 475, 140, 18))
-            _add_platform(Rect2(450, 345, 110, 18))
-            _add_platform(Rect2(590, 300, 110, 18))
-            _add_platform(Rect2(720, 260, 115, 18))
-            _add_platform(Rect2(850, 290, 115, 18))
-            _add_platform(Rect2(970, 335, 115, 18))
-            _add_platform(Rect2(1080, 380, 115, 18))
+            _add_platform(Rect2(420, 390, 110, 18))
+            _add_platform(Rect2(550, 345, 110, 18))
+            _add_platform(Rect2(680, 305, 115, 18))
+            _add_platform(Rect2(820, 325, 115, 18))
+            _add_platform(Rect2(950, 370, 115, 18))
+            _add_platform(Rect2(1080, 415, 115, 18))
         "A11":
             # The old ruin's observation gallery crosses above the newer laboratory floor.
             # 观测廊横跨新建实验室地面之上，强调古老遗迹与现代设施的叠压。
