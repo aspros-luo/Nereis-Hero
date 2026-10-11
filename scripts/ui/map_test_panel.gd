@@ -281,6 +281,8 @@ func _update_guide() -> void:
 	guide_label.text = "自然探索路线指引（仅提示，不传送／不解锁）\\n%s\\n%s\\n%s\\n%s" % [
 		str(step["title"]), str(step["text"]), location_note, direction_note
 	]
+	guide_prev_button.disabled = guide_step_index <= 0
+	guide_next_button.text = "下一步指引" if guide_step_index < GUIDE_STEPS.size() - 1 else "已到最后一步"
 
 func _get_navigation_hint(current_region: String, target_region: String) -> String:
 	var scene := get_tree().current_scene
@@ -297,8 +299,8 @@ func _get_navigation_hint(current_region: String, target_region: String) -> Stri
 				if distance < nearest_distance:
 					nearest = candidate
 					nearest_distance = distance
-				var clue_name := str(nearest["name"])
-				return _format_direction(hero_x, float(nearest["x"]), clue_name, "")
+			var clue_name := str(nearest["name"])
+			return _format_direction(hero_x, float(nearest["x"]), clue_name, "")
 	var exits: Array = EXIT_HINTS.get(current_region, [])
 	for exit_info in exits:
 		if str(exit_info["target"]) == target_region:
@@ -337,8 +339,6 @@ func _format_direction(hero_x: float, destination_x: float, destination_name: St
 	if not condition.is_empty():
 		result += "；条件：%s" % condition
 	return result
-	guide_prev_button.disabled = guide_step_index <= 0
-	guide_next_button.text = "下一步指引" if guide_step_index < GUIDE_STEPS.size() - 1 else "已到最后一步"
 
 func _previous_guide_step() -> void:
 	guide_step_index = maxi(0, guide_step_index - 1)
