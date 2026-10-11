@@ -229,6 +229,14 @@ def main() -> int:
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
     spawn_contracts = [
+        ('if region_id == "A9" and side == "mirror":', "return 1680.0"),
+        ('if region_id == "A11" and side == "chapel_entry":', "return map_width - 700.0"),
+        ('if region_id == "H02" and side == "bell_tower_entry":', "return map_width - 360.0"),
+        ('if region_id == "H03" and side == "third_street_entry":', "return map_width - 360.0"),
+        ('if region_id == "H04" and side == "royal_tomb_side_entry":', "return map_width - 360.0"),
+        ('if region_id == "H05" and side == "bell_drop_entry":', "return map_width - 360.0"),
+        ('if region_id == "H06" and side == "royal_transport_entry":', "return map_width - 360.0"),
+        ('if region_id == "A3" and side == "sewer":', "return 1380.0"),
         ('if region_id == "A2" and side == "bell_gate":', "return map_width - 450.0"),
         ('if region_id == "A2" and side == "old_pilgrim_highroad":', "return map_width - 650.0"),
         ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 850.0"),
