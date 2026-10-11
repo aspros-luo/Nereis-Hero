@@ -294,6 +294,33 @@ def main() -> int:
             branch = branch[:next_branch]
         require(branch, expected_return, f"Graybox spawn mapping {condition}", errors)
 
+    # Death recovery must stay inside the current region and restore the Hero safely.
+    # 死亡恢复必须留在当前区域，并安全恢复主角状态。
+    spawn_hero_start = region_script.find("func _spawn_hero(")
+    spawn_hero_end = region_script.find("\nfunc ", spawn_hero_start + 1)
+    spawn_hero_block = region_script[spawn_hero_start:spawn_hero_end if spawn_hero_end >= 0 else len(region_script)]
+    for contract in [
+        "WorldState.set_checkpoint(hero.global_position)",
+        "hero.defeated.connect(_on_hero_defeated)",
+    ]:
+        require(spawn_hero_block, contract, "Region-local checkpoint setup", errors)
+
+    death_start = region_script.find("func _on_hero_defeated() -> void:")
+    death_end = region_script.find("\nfunc ", death_start + 1)
+    death_block = region_script[death_start:death_end if death_end >= 0 else len(region_script)]
+    for contract in [
+        "if respawning:",
+        "respawning = true",
+        "hero.velocity = Vector2.ZERO",
+        "hero.global_position = WorldState.checkpoint_position",
+        'hero.call("restore_full")',
+        "WorldState.input_locked = false",
+        "respawning = false",
+    ]:
+        require(death_block, contract, "Death recovery", errors)
+    if "SceneTransition.fade_to_scene(" in death_block or "change_scene_to_file(" in death_block:
+        fail(errors, "Death recovery must not transition to another region or reuse a previous scene checkpoint.")
+
     source_clue = read("scripts/world/resonance_source_clue.gd", errors)
     require(source_clue, "WorldState.record_resonance_milestone(", "Resonance source clue", errors)
     require(source_clue, "func _milestone_needs_repair() -> bool:", "Legacy-save anomaly repair", errors)
