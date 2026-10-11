@@ -52,6 +52,10 @@ Map-first content completion roadmap (Chinese):
 
 `docs/MAP_CONTENT_COMPLETION_ROADMAP_CN.md`
 
+A3 Forgotten City layered spatial design (Chinese; design defined, implementation/runtime pending):
+
+`docs/MAP_DESIGN_A3_FORGOTTEN_CITY_CN.md`
+
 World map atlas diagram (SVG):
 
 `docs/assets/COMPLETE_WORLD_MAP_ATLAS.svg`
