@@ -1290,7 +1290,7 @@ func _register_debug_locked_route_hints() -> void:
 			_register_debug_locked_route_hint(520.0, "village", "村庄防卫章节完成后开放")
 			_register_debug_locked_route_hint(1150.0, "royal_outer_ring", "需从 A9 开启旧升降机")
 			_register_debug_locked_route_hint(1710.0, "monastery_tower", "需先从 A6 开启钟塔落差")
-			_register_debug_locked_route_hint(1900.0, "silent_bell_room", "需先发现并开启 H05")
+			_register_debug_locked_route_hint(1820.0, "silent_bell_room", "需先发现并开启 H05")
 		"A4":
 			_register_debug_locked_route_hint(1050.0, "prison_depths", "需从 A7 开启补给隧道")
 			_register_debug_locked_route_hint(1250.0, "royal_tomb", "需从 A8 开启王墓水道")
@@ -1411,10 +1411,10 @@ func _spawn_region_exits() -> void:
 			# 被删去的第三街入口紧邻路牌线索，并与高台战场出口保持距离。
 			_spawn_h03_gate(1120.0)
 			if WorldState.is_hidden_path_opened("H05") and "opened_bell_tower_drop" in WorldState.achievement_flags:
-				# Keep the optional H05 return door well clear of the C10 monastery-drop door at x=1710.
-				# H05 回程门与 x=1710 的 C10 钟塔落差门保持足够间距，避免两个 E 交互争抢。
+				# Keep H05 between C10 and the eastern rooftop lift without overlapping either interaction focus.
+				# H05 位于 C10 与东侧高位升降机之间，并与两者保持交互净空。
 				_spawn_exit_door(
-					1900.0, "E  返回无声之窗", "silent_bell_room",
+					1820.0, "E  返回无声之窗", "silent_bell_room",
 					"res://scenes/silent_bell_room.tscn", "bell_drop_entry"
 				)
 			# C10 reverse door: only exists after the bell-tower drop has been opened from A6.
