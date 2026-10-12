@@ -1223,5 +1223,284 @@
       "acceptance_required": false,
       "notes": "This region was implemented from an illustrative user example. It is tracked for structural completeness only; its premise, location, reward, and ending relevance are not approved canon and may be redesigned or removed during the narrative pass."
     }
-  ]
+  ],
+  "vertical_design": {
+    "version": "1.0",
+    "status": "final_spatial_design_baseline_not_runtime_verified",
+    "authority_documents": {
+      "zh_cn": "docs/BOX_WORLD_FINAL_MAP_DESIGN_CN.md",
+      "en": "docs/BOX_WORLD_FINAL_MAP_DESIGN_EN.md"
+    },
+    "elevation_bands": [
+      {
+        "id": "U3",
+        "name": "天际/塔顶",
+        "purpose": "远景、塔顶、屋顶与高位落差捷径"
+      },
+      {
+        "id": "U2",
+        "name": "高架/上层",
+        "purpose": "树冠、抬高管线、城墙、回廊与跨区高路"
+      },
+      {
+        "id": "U1",
+        "name": "地面/城市层",
+        "purpose": "主路、主要战斗、区域初次导航"
+      },
+      {
+        "id": "L1",
+        "name": "地下/维护层",
+        "purpose": "水渠、下水道、监牢、墓道与地下捷径"
+      },
+      {
+        "id": "L2",
+        "name": "深层/异象层",
+        "purpose": "隐藏区域、古神研究、灵视揭示与终局连接"
+      }
+    ],
+    "region_layers": {
+      "A0": [
+        "interior",
+        "descending_surgery_shaft",
+        "waste_channel"
+      ],
+      "A1": [
+        "village_lane",
+        "roofs_and_walkways",
+        "well_bottom"
+      ],
+      "A2": [
+        "forest_floor",
+        "bell_tomb_pit",
+        "canopy",
+        "pilgrim_high_road"
+      ],
+      "A3": [
+        "ground_street",
+        "rooftops",
+        "raised_pipewalk",
+        "drop_landing",
+        "sewer_hatch"
+      ],
+      "A4": [
+        "upper_inspection_gallery",
+        "middle_waterway",
+        "reservoir_edge",
+        "low_flood_channel",
+        "bottom_shaft"
+      ],
+      "A5": [
+        "trench_floor",
+        "collapsed_wall",
+        "fortress_wall",
+        "watchtower"
+      ],
+      "A6": [
+        "lower_cloister",
+        "courtyard",
+        "upper_gallery",
+        "bell_tower_mid",
+        "bell_tower_top"
+      ],
+      "A7": [
+        "cell_corridor",
+        "lower_cells",
+        "confession_well",
+        "maintenance_shaft_top",
+        "maintenance_shaft_bottom"
+      ],
+      "A8": [
+        "tomb_entrance",
+        "royal_chambers",
+        "middle_waterway",
+        "deep_inscription_gallery",
+        "maintenance_shaft"
+      ],
+      "A9": [
+        "lower_alleys",
+        "outer_plaza",
+        "rooftop_walks",
+        "high_royal_drain",
+        "inner_city_service_gate"
+      ],
+      "A10": [
+        "pilgrim_stair",
+        "main_nave",
+        "side_aisles",
+        "upper_gallery",
+        "silent_side_chapel"
+      ],
+      "A11": [
+        "royal_maintenance_shaft",
+        "church_lab",
+        "ancient_residue_layer",
+        "primordial_womb"
+      ],
+      "A12": [
+        "service_streets",
+        "royal_courtyard",
+        "wall_walk",
+        "upper_throne_hall"
+      ],
+      "A13": [
+        "ending_specific_anomaly_spaces"
+      ]
+    },
+    "mandatory_elevation_contracts": [
+      {
+        "connection": "C03",
+        "from": "A2.canopy",
+        "to": "A3.rooftops",
+        "reason": "主线跨区连接必须是高路，不得作为纯地面边界切换"
+      },
+      {
+        "connection": "C04",
+        "from": "A2.pilgrim_high_road",
+        "to": "A5.fortress_wall",
+        "reason": "后期开启的高架捷径"
+      },
+      {
+        "connection": "C05",
+        "from": "A3.raised_pipewalk",
+        "to": "A4.upper_inspection_gallery",
+        "reason": "城区高架管线进入地下枢纽上层"
+      },
+      {
+        "connection": "C06",
+        "from": "A4.reservoir_bottom",
+        "to": "A1.well_bottom",
+        "reason": "地下水库回村的垂直捷径，独立于 H01"
+      },
+      {
+        "connection": "C07",
+        "from": "A4.middle_waterway",
+        "to": "A8.middle_waterway",
+        "reason": "中层水道回环"
+      },
+      {
+        "connection": "C10",
+        "from": "A6.bell_tower_top",
+        "to": "A3.drop_landing",
+        "reason": "钟塔落差改变回访高度"
+      },
+      {
+        "connection": "C12",
+        "from": "A7.lower_cells",
+        "to": "A4.low_flood_channel",
+        "reason": "低位监牢补给隧道"
+      },
+      {
+        "connection": "C15",
+        "from": "A8.maintenance_shaft",
+        "to": "A11.royal_maintenance_shaft",
+        "reason": "王墓侧深层入口"
+      },
+      {
+        "connection": "C16",
+        "from": "A3.rooftops",
+        "to": "A9.rooftop_walks",
+        "reason": "后期开启的高位升降机"
+      },
+      {
+        "connection": "C17",
+        "from": "A9.rooftop_walks",
+        "to": "A10.upper_gallery",
+        "reason": "外环至圣堂高路"
+      },
+      {
+        "connection": "C19",
+        "from": "A10.silent_side_chapel",
+        "to": "A11.church_lab",
+        "reason": "与王墓入口不同高度/风险的秘密路线"
+      },
+      {
+        "connection": "C23",
+        "from": "A9.high_royal_drain",
+        "to": "A4.upper_inspection_gallery",
+        "reason": "高位排水回环，不能与低位通道重叠"
+      },
+      {
+        "connection": "C24",
+        "from": "A1.roofs_and_walkways",
+        "to": "A3.rooftops",
+        "reason": "村庄防卫事件后开放的上层近路"
+      }
+    ],
+    "target_loops": [
+      {
+        "id": "VL01",
+        "name": "边境垂直环路",
+        "regions": [
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A1"
+        ],
+        "bands": [
+          "U1",
+          "U2",
+          "L1"
+        ],
+        "goal": "经树冠、高架、地下水系与井道形成回环"
+      },
+      {
+        "id": "VL02",
+        "name": "中层落差环路",
+        "regions": [
+          "A3",
+          "A5",
+          "A6",
+          "A3"
+        ],
+        "bands": [
+          "U1",
+          "U2",
+          "U3"
+        ],
+        "goal": "经战壕、堡垒、钟塔与城区中层返回"
+      },
+      {
+        "id": "VL03",
+        "name": "王国深层环路",
+        "regions": [
+          "A4",
+          "A7",
+          "A8",
+          "A9",
+          "A4"
+        ],
+        "bands": [
+          "U2",
+          "U1",
+          "L1",
+          "L2"
+        ],
+        "goal": "结合低位监牢路、王墓中层、外环屋顶与高位排水"
+      },
+      {
+        "id": "VL04",
+        "name": "后期高架环路",
+        "regions": [
+          "A3",
+          "A9",
+          "A10",
+          "A12",
+          "A9"
+        ],
+        "bands": [
+          "U2",
+          "U3",
+          "U1"
+        ],
+        "goal": "高路推进、内城开启后低位回返"
+      }
+    ],
+    "implementation_rules": [
+      "区域级连接必须绑定实际高度层、实体入口和安全落点。",
+      "仅在同一屏幕放置多层平台不算跨区垂直互联。",
+      "设计文档与拓扑数据不能替代 Godot 实机验收。",
+      "玩家默认不显示完整开发者地图、敌人位置、奖励清单或隐藏出口。"
+    ]
+  }
 }
