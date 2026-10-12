@@ -100,6 +100,46 @@ func _ready() -> void:
     load_game()
     _migrate_third_cord_anchor()
 
+# Normalize legacy ending-anchor saves after load. Older builds stored relic aliases
+# and a provisional third-cord item that is not part of the approved ending design.
+# 载入旧存档后统一结局锚点数据：兼容旧来源别名，并移除未获剧情确认的临时脐带道具。
+func _migrate_third_cord_anchor() -> void:
+    var canonical_sources: Array[String] = []
+    var valid_sources := ["ancient_lab", "graveyard_bell", "rebel_order", "memory_echo"]
+    var changed := false
+
+    for source_id in hidden_artifact_sources:
+        var normalized_id := str(source_id).strip_edges()
+        if normalized_id == "third_umbilical_cord":
+            changed = true
+            continue
+        var canonical_id := normalized_id if normalized_id in valid_sources else _canonical_artifact_source(normalized_id)
+        if canonical_id.is_empty():
+            changed = true
+            continue
+        if canonical_id not in canonical_sources:
+            canonical_sources.append(canonical_id)
+        else:
+            changed = true
+        if canonical_id != normalized_id:
+            changed = true
+
+    if canonical_sources != hidden_artifact_sources:
+        hidden_artifact_sources = canonical_sources
+        changed = true
+
+    var migrated_piece_count := mini(hidden_artifact_sources.size(), 4)
+    if hidden_artifact_pieces != migrated_piece_count:
+        hidden_artifact_pieces = migrated_piece_count
+        changed = true
+    if hidden_artifact_pieces >= 3 and not hidden_resistance_awakened:
+        hidden_resistance_awakened = true
+        changed = true
+
+    if changed:
+        print("[NEREIS][SAVE] Migrated legacy third-cord/ending-anchor data; approved sources=%d" % hidden_artifact_sources.size())
+        save_game()
+
 func _process(delta: float) -> void:
     var scene := get_tree().current_scene
     if scene != null:
