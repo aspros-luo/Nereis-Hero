@@ -145,7 +145,7 @@ func _spawn_region_encounters() -> void:
 		"H09":
 			if "cliff_cave_experiment_defeated" not in WorldState.achievement_flags:
 				_spawn_encounter(RESEARCH_HUSK_SCRIPT, "H09_AncientExperiment", 1450.0, 20.0, 54.0)
-			elif "third_umbilical_cord_fragment_acquired" not in WorldState.achievement_flags:
+			elif "provisional_h09_relic_collected" not in WorldState.achievement_flags:
 				_spawn_cord_fragment_pickup(Vector2(1450.0, floor_y - 40.0))
 
 
@@ -202,9 +202,9 @@ func _on_cord_fragment_collected() -> void:
 	if not is_instance_valid(narrative):
 		return
 	narrative.show_message(
-		"第三根脐带的残片",
-		"脐带贴近掌心时，远处所有钟声同时停止了一瞬。它不是完整的第三根脐带，却能在意志被吞没时留下一个锚点。\n\n【烈火天罚条件之一】已记录。还需要其他真相锚点与隐藏探索。",
-		7.0
+		"临时候选遗物",
+		"这件遗物的材质与用途尚未确定。它只用于验证隐藏区域中的可选物品能否被拾取并持久记录；当前版本不会因此改变任何结局条件。",
+		6.5
 	)
 
 
