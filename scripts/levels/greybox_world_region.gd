@@ -1075,7 +1075,7 @@ func _spawn_region_sources() -> void:
 			)
 		"A4":
 			_spawn_source(
-				Vector2(980, floor_y - 18.0),
+				Vector2(850, floor_y - 18.0),
 				"anomaly_old_stone_layer",
 				"管道下的石头",
 				"管道被固定在另一种工艺切削的石层上。\n\n铺设管道的工人并不是这座大厅的建造者。",
