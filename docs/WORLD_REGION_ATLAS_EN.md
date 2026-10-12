@@ -100,3 +100,7 @@ Enemy waves, reward values, full sidequest dialogue, and room-by-room combat pac
 ## 6. Status
 
 This is a **narrative-level world map synthesis**, not proof that every place is built or runtime-tested. Next, use this atlas to add short events, environmental clues, and area connections in exploration order while preserving the box-world's multiple routes and verticality.
+
+## Round 2 macro map review
+
+Before small-map production, also review [Macro Map Spatial Layout and Connection Audit (Round 2)](WORLD_MAP_SPATIAL_REVIEW_EN.md). It audits C01–C24 link by link and clarifies relative geography, hub responsibilities, and soft-lock risks without locking illustrative abilities or quests as mandatory content.
