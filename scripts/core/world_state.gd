@@ -611,7 +611,7 @@ func load_game() -> void:
         print("[NEREIS][SAVE] Migrated completed prologue to basic iaijutsu unlock")
 
     print("[NEREIS][SAVE] Game loaded; memory=%d boss_defeated=%s choice=%s" % [hero_memory, boss_defeated, first_choice_made])
-    if migrated_basic_iaijutsu:
+    if migrated_basic_iaijutsu or removed_provisional_cord_source:
         save_game()
 
 func is_ability_unlocked(ability_id: String) -> bool:
