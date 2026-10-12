@@ -2546,6 +2546,15 @@ func _draw_atmospheric_layers() -> void:
 				draw_arc(Vector2(x + width * 0.5, base_y - height * 0.30), width * 0.42, PI, TAU, 20, silhouette_edge, 3.0)
 				draw_line(Vector2(x, base_y - height * 0.18), Vector2(x, base_y), silhouette_edge, 2.0)
 				draw_line(Vector2(x + width, base_y - height * 0.18), Vector2(x + width, base_y), silhouette_edge, 2.0)
+			"A13":
+				# Floating fragments replace the ordinary skyline at the world's terminal seam.
+				# 世界边界处的远景不再是建筑，而是悬浮的断裂碎片。
+				var shard_y := base_y - height * 0.55
+				draw_colored_polygon(PackedVector2Array([
+					Vector2(x + width * 0.12, shard_y), Vector2(x + width * 0.44, shard_y - 16.0),
+					Vector2(x + width, shard_y - 9.0), Vector2(x + width * 0.72, shard_y + 5.0)
+				]), silhouette)
+				draw_line(Vector2(x + width * 0.20, shard_y - 2.0), Vector2(x + width * 0.91, shard_y - 10.0), silhouette_edge, 1.5)
 			"A5":
 				# Uneven fortress battlements suggest a defensive line already breached.
 				draw_rect(Rect2(x, base_y - height * 0.68, width, height * 0.68), silhouette)
