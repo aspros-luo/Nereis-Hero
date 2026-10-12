@@ -108,12 +108,14 @@ def validate(data: dict[str, Any]) -> list[str]:
     regions = data.get("regions", [])
     connections = data.get("connections", [])
     hidden = data.get("hidden_regions", [])
+    provisional = data.get("provisional_regions", [])
     sources = data.get("resonance_sources", [])
     primary_route = data.get("primary_route", [])
     loops = data.get("loops", [])
     region_ids_list = [item.get("id", "") for item in regions]
     region_ids = set(region_ids_list)
-    all_ids = region_ids | {item.get("id", "") for item in hidden}
+    provisional_ids = {item.get("id", "") for item in provisional}
+    all_ids = region_ids | {item.get("id", "") for item in hidden} | provisional_ids
 
     if len(region_ids_list) != len(region_ids):
         fail(errors, "Duplicate primary region IDs.")
@@ -252,6 +254,12 @@ def validate(data: dict[str, Any]) -> list[str]:
             fail(errors, f"Initial throne path violates primary story order: {path_to_throne}.")
 
     final_graph = build_graph(all_ids, connections, hidden, initial=False, include_hidden=True)
+    for candidate in provisional:
+        parent = candidate.get("parent")
+        candidate_id = candidate.get("id")
+        if parent in final_graph and candidate_id in final_graph:
+            final_graph[parent].add(candidate_id)
+            final_graph[candidate_id].add(parent)
     final_reached = reachable(final_graph, "A0")
     unreachable = sorted(all_ids - final_reached)
     if unreachable:
@@ -361,7 +369,28 @@ def validate(data: dict[str, Any]) -> list[str]:
     if len(hidden_ids) != len(set(hidden_ids)):
         fail(errors, "Duplicate hidden region IDs.")
     if set(hidden_ids) != {f"H{i:02d}" for i in range(1, 9)}:
-        fail(errors, f"Hidden IDs must be H01-H08, found {sorted(hidden_ids)}.")
+        fail(errors, f"Canonical hidden IDs must remain H01-H08, found {sorted(hidden_ids)}.")
+
+    # Provisional graybox rooms are tracked separately so illustrative content does not
+    # silently become canon or a required hidden-region acceptance gate.
+    # 临时候选灰盒区域单独登记，避免示例内容被默认为正式设定或必验区域。
+    provisional_ids_list = [item.get("id", "") for item in provisional]
+    if len(provisional_ids_list) != len(set(provisional_ids_list)):
+        fail(errors, "Duplicate provisional region IDs.")
+    if provisional_ids & (region_ids | set(hidden_ids)):
+        fail(errors, f"Provisional region IDs collide with canonical IDs: {sorted(provisional_ids & (region_ids | set(hidden_ids)))}.")
+    for candidate in provisional:
+        cid = candidate.get("id", "<unknown>")
+        if candidate.get("parent") not in region_ids:
+            fail(errors, f"{cid}: provisional region has unknown parent {candidate.get('parent')}.")
+        if not candidate.get("scene_path", "").strip():
+            fail(errors, f"{cid}: provisional region needs a scene path.")
+        if candidate.get("story_canon") is not False:
+            fail(errors, f"{cid}: provisional region must explicitly remain non-canonical.")
+        if candidate.get("acceptance_required") is not False:
+            fail(errors, f"{cid}: provisional region must not be a core acceptance requirement.")
+        if candidate.get("return_to_parent") is not True:
+            fail(errors, f"{cid}: provisional region must document a return to its parent.")
 
     for secret in hidden:
         sid = secret.get("id", "<unknown>")
