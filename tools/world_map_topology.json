@@ -1168,7 +1168,7 @@
       "A3 C16 moved to x=2040 and its return spawn to x=1960; H05 moved to x=1870 and the A3 rest point moved to x=1470 to maintain non-overlapping interaction zones."
     ],
     "latest_structural_audit": [
-      "Raised exit doors previously used a 138px-high Area2D trigger extending from the doorway down to floor level; this allowed elevated routes to be bypassed from the ground. The trigger has been reduced to 100px and aligned 35px above the doorway origin.",
+      "Raised exit doors previously used a 138px-high Area2D trigger extending from the doorway down to floor level; this allowed elevated routes to be bypassed from the ground. The trigger has been reduced to 80px and aligned 35px above the doorway origin.",
       "The canonical resonance-hidden network remains H01-H08. H09 is listed separately as a provisional region candidate so it does not silently become approved world canon.",
       "Core map acceptance counts 13 playable primary regions A0-A12 plus 8 canonical hidden regions H01-H08 = 21 scene regions; A13 is an abstract ending layer and H09 is provisional."
     ]
