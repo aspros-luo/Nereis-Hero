@@ -325,10 +325,6 @@ func _spawn_x_for_side(side: String) -> float:
 		# H02's far-side door is at x=2060; land nearby without overlapping its trigger.
 		# H02 远侧门位于 x=2060；落点靠近门，但不进入其触发区。
 		return 1900.0
-	if region_id == "A6" and side == "bell_drop":
-		# C10's return door is at x=2110; land near the drop but outside its trigger and H05 at x=1660.
-		# C10 回程门位于 x=2110；出生点靠近落差处，同时避开该门与 x=1660 的 H05。
-		return 1900.0
 	if region_id == "A6" and side == "silent_window":
 		# H05 sits at x=1660. Keep this arrival away from its interaction radius.
 		# H05 入口位于 x=1660，返回修道院后不应立即重新聚焦该入口。
