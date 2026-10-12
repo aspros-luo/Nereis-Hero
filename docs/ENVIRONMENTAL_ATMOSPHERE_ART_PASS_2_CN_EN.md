@@ -81,3 +81,60 @@ Updated the procedural environment drawing in `scripts/levels/greybox_world_regi
 ### Next
 
 Refine terrain-to-wall transitions, foreground framing, and reusable environmental modules; then strengthen unique weather/light identities for key biomes. Re-check platform and exit contrast before integrating any third-party tileset.
+
+
+---
+
+# 色彩强化第三轮 / Chromatic Environment Pass 3
+
+**Implementation commit / 实现提交:** `b8dc0a4ff4a044c32c9b06ff2fe7d317447c7cc4`
+
+## 中文
+
+### 本轮目标
+
+回应“整体有点单调、缺少色彩”的反馈：不把所有区域简单提亮，而是让不同生态区拥有自己的主色与强调色。继续以暗色为底，但提升色相差异、局部饱和度和地面材质色彩。
+
+### 已实现
+
+- 新增 `_draw_biome_color_wash()`：按区域给原背景叠加半透明色彩分级，并加入低透明度色带与稀疏地平线色光。
+- 建立区域色彩识别：雾林偏苔绿、雨城与镜街偏玫紫、水库偏青蓝、旧战场偏焦橙、修道院/大圣堂偏暖金、监牢偏冷蓝、古墓偏紫、深层研究区偏洋红、终局异象偏星界紫。
+- 提高环境色与地面材质细节的色彩可见度：苔痕、积水反射、教会金色石缝、研究区有机微光和异象裂痕现在有更清楚的色相区分。
+- 修正地面材质分支的绘制位置：原本按区域绘制的细节位于循环之外，会错误地只参考循环结束后的索引与坐标；现已将区域材质绘制放回每块地面循环，使细节能沿整段地面分布。
+- 未改动平台碰撞、敌人、出口、路线拓扑、剧情状态或 Hero 本体。
+
+### 验证状态
+
+- [x] 已提交至 `development`。
+- [x] 静态检查新增代码的 Tab 缩进、函数锚点与区域分支。
+- [ ] 尚未在 Godot 4.6.x 实机运行；色彩观感、脚本解析与帧率仍需本地验收。
+- [ ] 本地验收时优先查看 A2、A3、A4、A5、A6、A10、A11、A13，以及 H04/H07/H08；重点确认色彩增强没有淹没平台边缘、敌人剪影、交互提示或出口。
+
+### 设计约束
+
+色彩强化不是把游戏做成明亮卡通风。大面积色彩覆盖保持半透明，饱和色集中在地面材质、环境光和区域标志上；后续仍需以实机截图校准透明度与对比度。
+
+## English
+
+### Goal
+
+Address the feedback that the world feels monotonous without simply brightening every scene. Each biome now has a distinct dominant hue and accent color while preserving the dark-fantasy foundation.
+
+### Implemented
+
+- Added `_draw_biome_color_wash()`, applying a translucent regional grade over the existing backdrop, with subtle color bands and sparse horizon glints.
+- Defined clearer biome identities: moss green for the fog forest; rose-violet for the rain city and mirror street; cyan-blue for the reservoir; ember orange for the battlefield; warm gold for monastery/cathedral spaces; cold blue for the prison; violet for the tomb; magenta for deep research areas; and astral purple for the terminal anomaly.
+- Increased the visibility of material pigments: moss traces, water reflections, golden church-stone seams, organic research glints, and anomaly cracks now use more distinguishable hues.
+- Fixed the ground-detail loop placement. Biome-specific marks were previously outside the tile loop and therefore used only the final loop index/position; they are now drawn for each ground segment.
+- No changes to platform collision, enemies, exits, route topology, narrative state, or Hero artwork.
+
+### Validation
+
+- [x] Committed to `development`.
+- [x] Static checks for Tab indentation, function anchors, and biome branches.
+- [ ] Not yet run in Godot 4.6.x; script parsing, visual balance, and frame rate remain unverified.
+- [ ] Prioritize local checks in A2, A3, A4, A5, A6, A10, A11, A13, plus H04/H07/H08. Ensure color grading does not obscure platform edges, enemy silhouettes, interaction prompts, or exits.
+
+### Art direction constraint
+
+This is not intended to turn the game into bright cartoon art. Large color washes remain translucent, while stronger saturation is concentrated in material details, environmental light, and biome identifiers. Tune opacity and contrast after reviewing in-game screenshots.
