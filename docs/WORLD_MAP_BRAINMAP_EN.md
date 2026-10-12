@@ -137,3 +137,7 @@ At this stage, review whether the macro map invites exploration and forms cohere
 - A straightforward route remains completable; exploration offers richer but optional understanding.
 
 **Current conclusion:** Keep the overall direction: the abandoned city is the early/midgame route hub, the royal necropolis is the mid/late vertical hub, and the secret research site is hidden depth spanning multiple areas. Before detailing small maps, review the relative positions, connection density, and hub workload on a top-down spatial sketch. Do not lock an illustrative grappling hook or a particular quest as mandatory content.
+
+## Round 2 macro spatial review
+
+The relative layout, vertical layers, and every C01–C24 link have now been reviewed. See [Macro Map Spatial Layout and Connection Audit (Round 2)](WORLD_MAP_SPATIAL_REVIEW_EN.md). The review keeps the current link count and focuses on the C05 soft-lock risk, confusing underground elevations in A4, and premature revelation through A11. This remains a design contract, not Godot runtime acceptance.
