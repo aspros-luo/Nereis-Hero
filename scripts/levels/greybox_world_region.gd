@@ -2411,7 +2411,9 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 func _draw() -> void:
 	var background := _background_color()
 	draw_rect(Rect2(0.0, 0.0, map_width, 720.0), background)
+	_draw_atmospheric_layers()
 	draw_rect(Rect2(0.0, floor_y, map_width, 180.0), Color("#211b23"))
+	_draw_ground_detail()
 
 	# Replace the old repetitive ground slashes with sparse, broken stone cracks and low atmospheric haze.
 	# 将重复的地面斜线改为稀疏断裂石纹与贴地薄雾，降低灰盒画面的噪声感。
@@ -2490,6 +2492,100 @@ func _draw() -> void:
 		28,
 		Color("#b7a48c")
 	)
+
+# A restrained second silhouette layer gives each region depth without external textures.
+# 克制的第二层剪影为各区域增加纵深，不依赖外部贴图。
+func _draw_atmospheric_layers() -> void:
+	var atmosphere := _atmosphere_color()
+	var silhouette := Color(atmosphere.r * 0.52, atmosphere.g * 0.52, atmosphere.b * 0.58, 0.34)
+	var silhouette_edge := Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.20)
+	var seed_offset := int(region_id.hash() % 97)
+
+	# Distant haze bands are broad and low contrast so the playable platforms remain legible.
+	# 远景雾带保持宽而淡，不与可站立平台争夺视觉焦点。
+	for band in range(3):
+		var band_y := 300.0 + float(band) * 62.0
+		var band_alpha := 0.018 + float(band) * 0.009
+		draw_rect(Rect2(0.0, band_y, map_width, 24.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, band_alpha))
+
+	for index in range(9):
+		var x := float(index) * 315.0 - 50.0 + float(seed_offset)
+		var width := 150.0 + float((index * 47 + seed_offset) % 95)
+		var height := 72.0 + float((index * 31 + seed_offset) % 112)
+		var base_y := floor_y - 12.0
+		match region_id:
+			"A2", "H01", "H08", "H09":
+				# Broken tree crowns or organic ribs, never a repeated flat skyline.
+				var crown := PackedVector2Array([
+					Vector2(x, base_y), Vector2(x + width * 0.18, base_y - height * 0.58),
+					Vector2(x + width * 0.31, base_y - height), Vector2(x + width * 0.46, base_y - height * 0.48),
+					Vector2(x + width * 0.65, base_y - height * 0.82), Vector2(x + width, base_y)
+				])
+				draw_colored_polygon(crown, silhouette)
+				draw_line(Vector2(x + width * 0.48, base_y), Vector2(x + width * 0.47, base_y - height * 0.52), silhouette_edge, 2.0)
+			"A4", "H04", "H07":
+				# Reservoir arches and reflected city ribs.
+				draw_rect(Rect2(x, base_y - height, width, height), Color(silhouette.r, silhouette.g, silhouette.b, 0.12))
+				draw_arc(Vector2(x + width * 0.5, base_y - height * 0.30), width * 0.42, PI, TAU, 20, silhouette_edge, 3.0)
+				draw_line(Vector2(x, base_y - height * 0.18), Vector2(x, base_y), silhouette_edge, 2.0)
+				draw_line(Vector2(x + width, base_y - height * 0.18), Vector2(x + width, base_y), silhouette_edge, 2.0)
+			"A5":
+				# Uneven fortress battlements suggest a defensive line already breached.
+				draw_rect(Rect2(x, base_y - height * 0.68, width, height * 0.68), silhouette)
+				for merlon in range(3):
+					draw_rect(Rect2(x + float(merlon) * width / 3.0, base_y - height, width / 5.0, height * 0.34), silhouette)
+			"A6", "A10", "A12":
+				# Gothic towers and lancet arches establish a sacred architectural family.
+				draw_rect(Rect2(x + width * 0.30, base_y - height, width * 0.40, height), silhouette)
+				draw_colored_polygon(PackedVector2Array([
+					Vector2(x + width * 0.18, base_y - height),
+					Vector2(x + width * 0.50, base_y - height - 42.0),
+					Vector2(x + width * 0.82, base_y - height)
+				]), silhouette)
+				draw_arc(Vector2(x + width * 0.50, base_y - height * 0.42), width * 0.15, PI, TAU, 16, silhouette_edge, 2.0)
+			"A3", "A9", "H03", "H06":
+				# Roofs, broken lintels, and missing upper storeys.
+				draw_rect(Rect2(x, base_y - height * 0.72, width, height * 0.72), silhouette)
+				draw_colored_polygon(PackedVector2Array([
+					Vector2(x - 10.0, base_y - height * 0.72),
+					Vector2(x + width * 0.52, base_y - height),
+					Vector2(x + width + 12.0, base_y - height * 0.72)
+				]), silhouette)
+				draw_rect(Rect2(x + width * 0.20, base_y - height * 0.42, 12.0, 25.0), silhouette_edge)
+			"A7", "A8", "H02", "H05":
+				# Cell blocks and tomb markers remain low and heavy.
+				draw_rect(Rect2(x, base_y - height * 0.62, width, height * 0.62), silhouette)
+				for slit in range(2):
+					draw_rect(Rect2(x + width * (0.25 + float(slit) * 0.38), base_y - height * 0.50, 8.0, height * 0.20), silhouette_edge)
+			_:
+				# A restrained silhouette fallback for transitional regions.
+				draw_rect(Rect2(x, base_y - height * 0.62, width, height * 0.62), silhouette)
+				draw_line(Vector2(x, base_y - height * 0.62), Vector2(x + width, base_y - height * 0.62), silhouette_edge, 2.0)
+
+	# A faint horizon line ties distant shapes together without boxing the screen.
+	# 淡淡的地平线将远景剪影连接起来，但不把画面框死。
+	draw_line(Vector2(0.0, floor_y - 9.0), Vector2(map_width, floor_y - 9.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.10), 1.0)
+
+
+# Broken paving seams and small rubble clusters make the ground read as a surface, not a flat bar.
+# 断续石板缝与少量碎石让地面呈现真实材质，而不是一条平色矩形。
+func _draw_ground_detail() -> void:
+	var atmosphere := _atmosphere_color()
+	draw_rect(Rect2(0.0, floor_y, map_width, 3.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.22))
+	for index in range(1, int(map_width / 180.0)):
+		var x := float(index) * 180.0 + float(int(region_id.hash() % 29))
+		var seam_height := 7.0 + float((index * 11) % 13)
+		draw_line(Vector2(x, floor_y + 25.0), Vector2(x - 4.0, floor_y + 25.0 + seam_height), Color("#0d0b11", 0.34), 1.0)
+		if index % 2 == 0:
+			draw_line(Vector2(x + 2.0, floor_y + 58.0), Vector2(x + 26.0, floor_y + 55.0), Color("#574750", 0.22), 1.0)
+		if index % 3 == 0:
+			var pebble_x := x + 32.0
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(pebble_x, floor_y + 74.0),
+				Vector2(pebble_x + 5.0, floor_y + 68.0),
+				Vector2(pebble_x + 13.0, floor_y + 75.0)
+			]), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.12))
+
 
 func _atmosphere_color() -> Color:
 	match region_id:
