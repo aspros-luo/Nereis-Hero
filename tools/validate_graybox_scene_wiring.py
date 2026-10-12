@@ -339,7 +339,7 @@ def main() -> int:
     require(village_route_script, "Rect2(220, 445, 90, 16)", "A1 rooftop first ledge", errors)
     require(village_route_script, "Rect2(1710, 270, 110, 16)", "A1 rooftop route over tavern", errors)
     require(region_script, 'if region_id == "A3" and side == "village_city_cut"', "A3 alternate entrance spawn", errors)
-    require(region_script, '520.0, "E  RETURN THROUGH THE OLD DRAIN"', "A3 return-to-village exit", errors)
+    require(region_script, '520.0, "E  经旧排水道返回"', "A3 return-to-village exit", errors)
     require(region_script, "_add_platform(Rect2(760, 370, 110, 18))", "A2 forest canopy route", errors)
     require(region_script, "_add_platform(Rect2(450, 400, 110, 18))", "A3 rooftop loop", errors)
     require(region_script, "_add_platform(Rect2(1650, 310, 130, 18))", "A4 pipe-walk route", errors)
@@ -583,7 +583,7 @@ def main() -> int:
         '"monastery_tower"',
         '"prison_depths"',
         '"royal_tomb"',
-        'E  OPEN THE INSPECTION HATCH',
+        'E  打开检修舱口',
         'opened_sewer_inspection_hatch_from_A4',
         'SceneTransition.fade_to_scene(target_scene)',
         "clue.ancient_exposure_floor = ancient_floor",
@@ -595,10 +595,10 @@ def main() -> int:
     if 'return 850.0    if region_id' in region_script:
         fail(errors, "Graybox spawn mapping: C04 A5 spawn branch is concatenated with the next if statement.")
     for contract in [
-        '"E  OPEN THE OLD PILGRIM HIGHROAD"',
-        '"E  RETURN TO THE BATTLEFIELD"',
+        '"E  打开旧朝圣高路"',
+        '"E  返回边境战场"',
         '"reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags',
-        '"reached_A5_and_opened_old_pilgrim_highroad", "E  RETURN BY THE OLD PILGRIM HIGHROAD"',
+        '"reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回"',
     ]:
         require(region_script, contract, "C04 old pilgrim highroad", errors)
 
@@ -620,8 +620,8 @@ def main() -> int:
         fail(errors, "C24 route audit: cannot isolate A3 exit block.")
     else:
         require(a3_exit_block, 'if "village_defense_survived" in WorldState.achievement_flags:', "C24 city-side defense gate", errors)
-        require(a3_exit_block, '"E  RETURN THROUGH THE OLD DRAIN"', "C24 city-side return door", errors)
-        if a3_exit_block.find('"E  RETURN THROUGH THE OLD DRAIN"') < a3_exit_block.find('if "village_defense_survived" in WorldState.achievement_flags:'):
+        require(a3_exit_block, '"E  经旧排水道返回"', "C24 city-side return door", errors)
+        if a3_exit_block.find('"E  经旧排水道返回"') < a3_exit_block.find('if "village_defense_survived" in WorldState.achievement_flags:'):
             fail(errors, "C24 A3 return door must remain inside the village-defense condition.")
 
     # Locate the exit mapping before any public or hidden route audit uses it.
@@ -646,18 +646,18 @@ def main() -> int:
         next_position = sorted_route_regions[index + 1][0] if index + 1 < len(sorted_route_regions) else len(region_script)
         route_blocks[region] = region_script[position:next_position]
     main_route_contracts = [
-        ("A2", '"E  ENTER THE FORGOTTEN CITY"', "C03 A2-to-A3"),
-        ("A3", '"E  RETURN TO PILGRIM ROAD"', "C03 A3-to-A2"),
-        ("A3", '"E  FOLLOW THE BATTLEFIELD ROAD"', "C08 A3-to-A5"),
-        ("A5", '"E  RETURN TO THE FORGOTTEN CITY"', "C08 A5-to-A3"),
-        ("A5", '"E  ENTER THE MONASTERY"', "C09 A5-to-A6"),
-        ("A6", '"E  RETURN TO THE BATTLEFIELD"', "C09 A6-to-A5"),
-        ("A6", '"E  DESCEND INTO THE PRISON"', "C11 A6-to-A7"),
-        ("A7", '"E  RETURN TO THE MONASTERY"', "C11 A7-to-A6"),
-        ("A7", '"E  ENTER THE ROYAL TOMB"', "C13 A7-to-A8"),
-        ("A8", '"E  RETURN TO THE PRISON"', "C13 A8-to-A7"),
-        ("A8", '"E  ENTER THE ROYAL OUTER RING"', "C14 A8-to-A9"),
-        ("A9", '"E  RETURN TO THE ROYAL TOMB"', "C14 A9-to-A8"),
+        ("A2", '"E  沿树冠高路进入被遗忘的城区"', "C03 A2-to-A3"),
+        ("A3", '"E  返回旧朝圣路"', "C03 A3-to-A2"),
+        ("A3", '"E  沿残墙高路前往战场"', "C08 A3-to-A5"),
+        ("A5", '"E  返回被遗忘的城区"', "C08 A5-to-A3"),
+        ("A5", '"E  进入修道院"', "C09 A5-to-A6"),
+        ("A6", '"E  返回边境战场"', "C09 A6-to-A5"),
+        ("A6", '"E  深入监牢"', "C11 A6-to-A7"),
+        ("A7", '"E  返回修道院"', "C11 A7-to-A6"),
+        ("A7", '"E  进入旧王墓"', "C13 A7-to-A8"),
+        ("A8", '"E  返回监牢"', "C13 A8-to-A7"),
+        ("A8", '"E  进入王城外环"', "C14 A8-to-A9"),
+        ("A9", '"E  返回旧王墓"', "C14 A9-to-A8"),
     ]
     for source_region, contract, connection_label in main_route_contracts:
         require(route_blocks.get(source_region, ""), contract, connection_label, errors)
@@ -672,16 +672,16 @@ def main() -> int:
     a10_route_block = region_script[a10_start:a12_start] if a10_start >= 0 and a12_start > a10_start else ""
     a12_route_block = region_script[a12_start:h07_start] if a12_start >= 0 and h07_start > a12_start else ""
     for contract in [
-        '"E  CLIMB TO THE GREAT CATHEDRAL"',
+        '"E  登上大圣堂"',
         'res://scenes/grand_cathedral.tscn", "west"',
     ]:
         require(a9_route_block, contract, "C17 outer-ring-to-cathedral main route", errors)
     for contract in [
-        '"E  ENTER THE INNER CITY"',
+        '"E  进入王室内城"',
         'res://scenes/inner_city.tscn", "west"',
     ]:
         require(a10_route_block, contract, "C20 cathedral-to-inner-city main route", errors)
-    require(a12_route_block, '"E  RETURN TO THE CATHEDRAL"', "C20 inner-city return route", errors)
+    require(a12_route_block, '"E  返回大圣堂"', "C20 inner-city return route", errors)
     require(a12_route_block, '"reached_A12_via_A10_then_opened_inner_city_side_gate"', "C18 main-route prerequisite", errors)
     if a9_route_block.find('"E  RETURN TO THE INNER CITY"') >= 0 and a9_route_block.find('"reached_A12_via_A10_then_opened_inner_city_side_gate"') < 0:
         fail(errors, "C18 A9-side shortcut must remain gated by opening it from A12 after the main route.")
@@ -694,7 +694,7 @@ def main() -> int:
     if not a6_exit_block:
         fail(errors, "C10 route audit: cannot isolate A6 exit block.")
     else:
-        require(a6_exit_block, '"E  OPEN THE BELL TOWER DROP"', "C10 monastery shortcut", errors)
+        require(a6_exit_block, '"E  打开钟塔落差通路"', "C10 monastery shortcut", errors)
         require(a6_exit_block, '"opened_bell_tower_drop"', "C10 monastery shortcut", errors)
         if 'if WorldState.is_hidden_path_opened("H05")' in a6_exit_block:
             fail(errors, "C10 monastery shortcut must not depend on the optional H05 secret path.")
@@ -703,8 +703,8 @@ def main() -> int:
     if "1950.0, \"E  RETURN TO THE SILENT BELL WINDOW\"" in region_script:
         fail(errors, "H05 return door at x=1950 overlaps the A3 rest-point interaction radius.")
     require(region_script, '1820.0, "E  返回无声之窗"', "H05/C10/C16 interaction spacing", errors)
-    require(region_script, '1250.0, "E  OPEN THE OLD SERVICE DOOR"', "A9 H03/C18 interaction spacing", errors)
-    if '1020.0, "E  OPEN THE OLD SERVICE DOOR"' in region_script:
+    require(region_script, '1250.0, "E  打开旧服务门"', "A9 H03/C18 interaction spacing", errors)
+    if '1020.0, "E  打开旧服务门"' in region_script:
         fail(errors, "A9 H03 service door remains too close to the C18 inner-city side gate.")
 
     # Each playable region must have its intended lightweight encounter roster.
@@ -752,7 +752,7 @@ def main() -> int:
             '"old_battlefield"',
         ],
         "H03": [
-            '"E  RETURN TO THE FORGOTTEN CITY"',
+            '"E  返回被遗忘的城区"',
             '"opened_old_service_door" in WorldState.achievement_flags',
             '"royal_outer_ring"',
         ],
@@ -762,12 +762,12 @@ def main() -> int:
             '"royal_tomb"',
         ],
         "H05": [
-            '"E  RETURN TO THE MONASTERY"',
+            '"E  返回修道院"',
             '"opened_bell_tower_drop" in WorldState.achievement_flags',
             '"forgotten_city"',
         ],
         "H06": [
-            '"E  RETURN TO THE ROYAL TOMB"',
+            '"E  返回旧王墓"',
             '"opened_royal_transport_side_door" in WorldState.achievement_flags',
             '"royal_outer_ring"',
         ],
