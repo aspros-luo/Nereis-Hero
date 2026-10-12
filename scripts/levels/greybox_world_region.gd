@@ -2568,9 +2568,6 @@ func _draw_biome_color_wash() -> void:
 		"A13":
 			wash = Color("#30205f")
 			accent = Color("#d0a4ff")
-		"H05":
-			wash = Color("#4c2556")
-			accent = Color("#ee9bda")
 	# The wash is intentionally translucent; gameplay silhouettes and exit markers stay dominant.
 	# 色彩覆盖保持半透明，避免角色剪影与出口标记被淹没。
 	draw_rect(Rect2(0.0, 0.0, map_width, 720.0), Color(wash.r, wash.g, wash.b, 0.20))
