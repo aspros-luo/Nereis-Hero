@@ -819,17 +819,14 @@ def main() -> int:
     # Elevated transitions must restore both horizontal position and platform height.
     # 高位跨区连接必须同时恢复横坐标与栈台高度，避免落在门下方的连续地面。
     require(region_script, '_spawn_hero(_spawn_x_for_side(spawn_side), _spawn_y_for_side(spawn_side))', "Spawn uses both axes", errors)
-    for condition, expected in [
-        ('if region_id == "A3" and side == "sewer":', "return floor_y - 115.0"),
-        ('if region_id == "A3" and side == "old_lift":', "return floor_y - 70.0"),
-        ('if region_id == "A4" and side == "prison_tunnel":', "return floor_y - 75.0"),
-        ('if region_id == "A4" and side == "royal_tomb_waterway":', "return floor_y - 85.0"),
-        ('if region_id == "A4" and side == "royal_drain":', "return floor_y - 120.0"),
+    for vertical_spawn_contract in [
+        'if region_id == "A3" and side == "sewer":\n\t\treturn floor_y - 115.0',
+        'if region_id == "A3" and side == "old_lift":\n\t\treturn floor_y - 70.0',
+        'if region_id == "A4" and side == "prison_tunnel":\n\t\treturn floor_y - 75.0',
+        'if region_id == "A4" and side == "royal_tomb_waterway":\n\t\treturn floor_y - 85.0',
+        'if region_id == "A4" and side == "royal_drain":\n\t\treturn floor_y - 120.0',
     ]:
-        start = region_script.find(condition, region_script.find("func _spawn_y_for_side"))
-        end = region_script.find("\n\tif ", start + len(condition)) if start >= 0 else -1
-        branch = region_script[start:end] if start >= 0 and end > start else ""
-        require(branch, expected, f"Vertical spawn mapping {condition}", errors)
+        require(region_script, vertical_spawn_contract, "Elevated route spawn height", errors)
 
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
