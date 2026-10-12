@@ -147,3 +147,11 @@ Before small-map/story work, map A0–A13 to real greybox scenes and transition 
 This pass compared macro connection contracts with the graybox exit code again. The static validator still expected the old prompt labels for C09 (A5→A6) and C17 (A9→A10), while the current scenes use explicit high-route wording. Those stale assertions could falsely report the correct implementation as missing. The assertions are now aligned, and the validator pins both elevated door contracts: C09 at A5 x=2250, `floor_y - 90`; C17 at A9 x=2350, `floor_y - 180`. These anchors match the intended elevated route design.
 
 **Boundary:** This is a source/validator contract correction only. The Python validators have not been executed, and Godot movement, collision, interaction, and scene transitions remain unverified.
+
+## 10. Fourth pass: H06 hidden-gate evidence contract (2026-10-12)
+
+This pass found a real data mismatch affecting hidden-route fairness. Runtime H06, the Erased Royal Name Corridor, requires `anomaly_bell_retiming` and `anomaly_erased_royal_name`, but topology incorrectly listed `anomaly_erased_street_sign` as its second clue. That source belongs to the city's erased third street and is not the royal inscription. The topology has been corrected to require the royal-inscription clue, and both topology and graybox wiring validators now contain regression contracts for this distinction.
+
+The narrative roles remain separate: the erased street sign supports the city's anomaly, while the defaced royal inscription supports the royal-name corridor. H06 still requires active Resonance Sight, resonance 55, ancient exposure 2, and investigation of the matching evidence.
+
+**Verification boundary:** Repository source, topology data, and validator text were cross-checked. The Python validators were not executed and Godot was not run; reveal timing, persistence, and return travel still require engine acceptance.
