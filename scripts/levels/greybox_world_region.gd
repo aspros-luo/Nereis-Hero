@@ -2461,6 +2461,8 @@ func _draw() -> void:
 			_draw_royal_tomb_landmarks()
 		"A11":
 			_draw_deep_research_landmarks()
+		"A13":
+			_draw_terminal_anomaly_landmarks()
 
 		"A9":
 			_draw_outer_ring_landmarks()
@@ -2616,6 +2618,8 @@ func _atmosphere_color() -> Color:
 			return Color("#a79ba5")
 		"A11", "H08", "H09":
 			return Color("#aa7c9e")
+		"A13":
+			return Color("#c49bbd")
 		_:
 			return Color("#93849b")
 
@@ -2659,6 +2663,8 @@ func _background_color() -> Color:
 			return Color("#1a151c")
 		"A11":
 			return Color("#16151e")
+		"A13":
+			return Color("#0d0c18")
 		"H08":
 			return Color("#0e1419")
 		"H09":
@@ -2706,6 +2712,8 @@ func _platform_color() -> Color:
 			return Color("#403039")
 		"A11":
 			return Color("#393744")
+		"A13":
+			return Color("#4b3d56")
 		"H08":
 			return Color("#2c3c40")
 		"H09":
@@ -3114,6 +3122,45 @@ func _draw_cliff_cave_landmarks() -> void:
 		Vector2(1945.0, floor_y - 215.0)
 	]), Color("#3c2d3b"))
 	draw_string(ThemeDB.fallback_font, Vector2(1750.0, floor_y - 290.0), "祷词从石头里传来", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#98768b"))
+
+
+func _draw_terminal_anomaly_landmarks() -> void:
+	# The terminal region abandons believable architecture: broken rings and stairs converge on one impossible horizon.
+	# 终局区域不再遵守正常建筑逻辑：断裂圆环与阶梯共同指向不可能存在的地平线。
+	var halo_center := Vector2(1320.0, 285.0)
+	for ring in range(5):
+		var radius := 72.0 + float(ring) * 28.0
+		var alpha := 0.12 - float(ring) * 0.016
+		draw_arc(halo_center, radius, PI * 0.12 + float(ring) * 0.17, TAU * 0.82 - float(ring) * 0.11, 44, Color("#b99ac7", alpha), 2.0)
+		draw_arc(halo_center, radius + 7.0, PI * 1.08, PI * 1.72, 22, Color("#8e789f", alpha * 0.72), 1.0)
+
+	# Thin, suspended fragments imply that several staircases occupy the same space.
+	# 悬浮的细长碎片暗示多段阶梯同时占据同一空间。
+	for index in range(8):
+		var x := 170.0 + float(index) * 300.0
+		var y := 250.0 + float((index * 43) % 150)
+		var width := 72.0 + float((index * 17) % 54)
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(x, y + 10.0), Vector2(x + width * 0.18, y),
+			Vector2(x + width, y + 2.0), Vector2(x + width * 0.82, y + 12.0)
+		]), Color("#4a3d57", 0.58))
+		draw_line(Vector2(x + width * 0.18, y), Vector2(x + width, y + 2.0), Color("#b69ac5", 0.28), 1.5)
+		if index % 2 == 0:
+			draw_line(Vector2(x + width * 0.52, y + 12.0), Vector2(x + width * 0.40, y + 44.0), Color("#9c7fae", 0.22), 1.0)
+
+	# A central, fractured monolith acts as a visual anchor, not a literal door or character silhouette.
+	# 中央断裂碑体只作为视觉锚点，不伪装成实际出口或角色轮廓。
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(1255.0, 475.0), Vector2(1278.0, 350.0), Vector2(1304.0, 315.0),
+		Vector2(1320.0, 345.0), Vector2(1342.0, 300.0), Vector2(1374.0, 475.0),
+		Vector2(1350.0, 490.0), Vector2(1290.0, 486.0)
+	]), Color("#292334", 0.92))
+	draw_polyline(PackedVector2Array([
+		Vector2(1278.0, 350.0), Vector2(1310.0, 390.0), Vector2(1296.0, 432.0),
+		Vector2(1335.0, 452.0), Vector2(1320.0, 486.0)
+	]), Color("#b69ac5", 0.48), 2.0, true)
+	draw_line(Vector2(80.0, 505.0), Vector2(map_width - 80.0, 505.0), Color("#8f789e", 0.13), 1.0)
+	draw_string(ThemeDB.fallback_font, Vector2(1050.0, 175.0), "没有两段阶梯通往同一处地方", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color("#a88fb7", 0.70))
 
 
 func _draw_primordial_hollow_landmarks() -> void:
