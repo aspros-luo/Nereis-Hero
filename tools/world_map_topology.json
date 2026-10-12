@@ -590,10 +590,21 @@
         "to_region_anchor": {
           "region": "A3",
           "x": 520,
-          "y_offset": 0,
-          "spawn_side": "west"
+          "y_offset": 0
         },
-        "intent": "The post-defense shortcut uses the old low drainage passage at ground level. It is a second route into the city, not a rooftop connection and not a replacement for the A2 forest/bell-tomb route."
+        "intent": "The post-defense shortcut uses the old low drainage passage at ground level. It is a second route into the city, not a rooftop connection and not a replacement for the A2 forest/bell-tomb route.",
+        "to_region_spawn": {
+          "region": "A3",
+          "x": 700,
+          "y_offset": 0,
+          "spawn_side": "village_city_cut"
+        },
+        "return_spawn": {
+          "region": "A1",
+          "x": 350,
+          "y_offset": 0,
+          "spawn_side": "city_cut_return"
+        }
       }
     }
   ],
