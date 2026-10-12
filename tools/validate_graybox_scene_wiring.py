@@ -302,6 +302,12 @@ def main() -> int:
     require(prologue_script, "MAINTENANCE ACCESS ONLY", "A0 catwalk landmark", errors)
 
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
+    # Visual polish helpers are part of the shared graybox renderer and must remain wired.
+    # 共享灰盒渲染器的美术层函数必须保持接入，避免后续重构时悄然退回纯色背景。
+    require(region_script, "_draw_atmospheric_layers()", "Regional atmosphere render call", errors)
+    require(region_script, "func _draw_atmospheric_layers() -> void:", "Regional silhouette layer", errors)
+    require(region_script, "func _draw_ground_detail() -> void:", "Ground surface detail layer", errors)
+    require(region_script, "Broken paving seams and small rubble clusters", "Ground material treatment", errors)
     # Elevated exits must not remain interactable from the uninterrupted ground floor.
     # 高位出口不能从连续地面直接交互，避免平台只成为装饰路线。
     require(region_script, "rectangle.size = Vector2(110.0, 80.0)", "Door interaction volume height", errors)
