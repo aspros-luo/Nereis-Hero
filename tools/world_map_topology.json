@@ -2858,7 +2858,7 @@
       "to": "A8-S06",
       "type": "stone_platform_lift",
       "initial_state": "sealed",
-      "unlock_condition": "opened_royal_tomb_platform",
+      "unlock_condition": "powered_royal_tomb_lift",
       "operation": "以墓室侧机关启动；可从中层水道回召",
       "safety": "升降平台连接墓室与中层水道，不直接跳过王墓主线门"
     },
@@ -2869,7 +2869,7 @@
       "to": "A9-S05",
       "type": "freight_lift",
       "initial_state": "locked",
-      "unlock_condition": "opened_old_lift_from_A9",
+      "unlock_condition": "opened_old_lift",
       "operation": "外环下层开闸后可往返屋顶站；跨区C16另行接入A3屋顶",
       "safety": "停靠动画/声音应能被附近玩家感知，避免无反馈传送"
     },
