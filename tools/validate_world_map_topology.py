@@ -150,6 +150,12 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C16 spatial anchor must match the A3 eastern rooftop lift.")
     if c16_spatial.get("return_spawn") != {"region": "A3", "x": 1940, "y_offset": -70}:
         fail(errors, "C16 return spawn must stay aligned with the eastern rooftop lift and clear of H05.")
+    c10 = next((edge for edge in connections if edge.get("id") == "C10"), None)
+    c10_spatial = c10.get("spatial_contract", {}) if c10 else {}
+    if c10_spatial.get("from_region_anchor") != {"region": "A6", "x": 2230, "y_offset": -55}:
+        fail(errors, "C10 must remain an elevated bell-tower drop in A6.")
+    if c10_spatial.get("return_spawn") != {"region": "A6", "x": 2100, "y_offset": -90}:
+        fail(errors, "C10 return spawn must land on the upper monastery approach.")
     h05 = next((region for region in hidden if region.get("id") == "H05"), None)
     h05_return_anchor = h05.get("secondary_exit", {}).get("return_spatial_anchor", {}) if h05 else {}
     if h05_return_anchor != {"region": "A3", "x": 1820, "layer": "street-level-return"}:
