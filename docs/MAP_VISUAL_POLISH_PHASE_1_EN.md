@@ -2,7 +2,7 @@
 
 ## Goal
 
-Give A2–A12 and H01–H08 readable environmental depth while preserving box-world topology, platform collision, exits, Resonance conditions, and story state. This pass uses native Godot drawing rather than new textures or plugins, keeping iteration fast and avoiding missing-resource risk.
+Give A2–A13 and H01–H08 readable environmental depth while preserving box-world topology, platform collision, exits, Resonance conditions, and story state. This pass uses native Godot drawing rather than new textures or plugins, keeping iteration fast and avoiding missing-resource risk.
 
 ## Implemented in the game
 
@@ -10,6 +10,7 @@ Give A2–A12 and H01–H08 readable environmental depth while preserving box-wo
 - Low-contrast haze bands: restrained horizontal color layers add depth without obscuring playable platforms.
 - Ground material cues: broken paving seams, sparse rubble, and a subtle floor edge reduce the flat-rectangle graybox appearance.
 - Lightweight motion: an independent regional particle layer drifts dust/spores, lets battlefield ash fall, and makes Mirror Street rain rise; particle placement is deterministic to avoid random flicker.
+- A13 terminal anomaly: fractured rings, suspended stair fragments, and a central monolith distinguish the ending space from ordinary city or Church architecture.
 - Regional palettes: existing background, platform, and atmosphere colors remain distinct; collision and playable geometry are unchanged.
 - Static guardrails: tools/validate_graybox_scene_wiring.py now checks that the shared atmosphere and ground-detail layers remain wired.
 
@@ -30,4 +31,4 @@ Give A2–A12 and H01–H08 readable environmental depth while preserving box-wo
 
 ## Acceptance boundary
 
-This is the first procedural-art enhancement and has not yet received a local, per-region Godot visual acceptance pass. Use the macro-map test menu to inspect A2, A3, A4, A6, A9, A10, H07, and H08. Report the region ID and screenshot if decoration obscures geometry or flickers.
+This is the first procedural-art enhancement and has not yet received a local, per-region Godot visual acceptance pass. Use the macro-map test menu to inspect A2, A3, A4, A6, A9, A10, A13, H07, and H08. Report the region ID and screenshot if decoration obscures geometry or flickers.
