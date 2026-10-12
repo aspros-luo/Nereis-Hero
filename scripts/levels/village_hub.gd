@@ -506,6 +506,10 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
+        if WorldState.debug_map_test_mode and event.keycode == KEY_F6:
+            _mark_input_handled()
+            get_tree().change_scene_to_file("res://scenes/world_map_test_menu.tscn")
+            return
         if event.keycode == KEY_F1:
             var endgame_scene := NereisEndingEvaluator.get_candidate()
             print("[NEREIS][DEBUG] Candidate endgame=%s" % endgame_scene)
