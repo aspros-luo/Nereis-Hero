@@ -197,7 +197,12 @@
           "region": "A4",
           "spawn_side": "west"
         },
-        "intent": "Underground hub entrance branches off the upper pipe-walk rather than the continuous street floor."
+        "intent": "Underground hub entrance branches off the upper pipe-walk rather than the continuous street floor.",
+        "return_spawn": {
+          "region": "A3",
+          "x": 1600,
+          "y_offset": -115
+        }
       }
     },
     {
@@ -242,7 +247,8 @@
         "intent": "Royal tomb return branches from the middle ledge, distinct from the low prison supply tunnel and the higher royal drain.",
         "return_spawn": {
           "region": "A4",
-          "x": 1260
+          "x": 1260,
+          "y_offset": -85
         }
       }
     },
@@ -306,7 +312,12 @@
           "x": 1050,
           "y_offset": -75
         },
-        "intent": "Prison supply tunnel lands on a dedicated low ledge instead of sharing the same floor lane as other hub doors."
+        "intent": "Prison supply tunnel lands on a dedicated low ledge instead of sharing the same floor lane as other hub doors.",
+        "return_spawn": {
+          "region": "A4",
+          "x": 1090,
+          "y_offset": -75
+        }
       }
     },
     {
@@ -361,7 +372,8 @@
         },
         "return_spawn": {
           "region": "A3",
-          "x": 1940
+          "x": 1940,
+          "y_offset": -70
         },
         "intent": "Late shortcut occupies the far-eastern upper lane, separate from H03 street-level anomaly and C10 monastery-drop door."
       }
@@ -448,7 +460,8 @@
         },
         "return_spawn": {
           "region": "A4",
-          "x": 1620
+          "x": 1620,
+          "y_offset": -120
         },
         "intent": "Royal drain uses the upper pipe ledge, separate from H04's water reflection entrance and the ground-level village watergate."
       }
@@ -1095,7 +1108,8 @@
       "H05 return gate in A3 moved to x=1820 to separate its interaction focus from C10 at x=1710 and C16 rooftop lift at x=1980.",
       "A4 now separates C12 (x=1050, y_offset=-75), C07 (x=1320, y_offset=-85), and C23 (x=1650, y_offset=-105) across distinct ledges; C06 village watergate moved to x=2220.",
       "A4 return spawns aligned with the layered doors: C12 x=1090, C07 x=1260, C23 x=1620.",
-      "C16 return spawn was tightened to x=1940 so it stays within reach of its elevated door while clear of H05 at x=1820."
+      "C16 return spawn was tightened to x=1940 so it stays within reach of its elevated door while clear of H05 at x=1820.",
+      "Elevated cross-region transitions now preserve the matching ledge height on arrival: C05 A3 x=1600/-115, C16 A3 x=1940/-70, C12 A4 x=1090/-75, C07 A4 x=1260/-85, C23 A4 x=1620/-120."
     ]
   }
 }
