@@ -3236,5 +3236,114 @@
         "王城终局入口"
       ]
     }
-  ]
+  ],
+  "exploration_gate_contracts": [
+    {
+      "id": "EG01",
+      "name": "村庄外围钩爪回环",
+      "status": "design_contract_not_runtime_verified",
+      "first_visit_region": "A1",
+      "related_subregions": [
+        "A1"
+      ],
+      "trigger": "complete_hunter_sidequest_and_blacksmith_repair",
+      "required_ability": "grappling_hook",
+      "visible_blocker": "village_outer_cliff_iron_anchor",
+      "destination": "hidden_windworn_lookout",
+      "reward": [
+        "traversal_or_combat_upgrade",
+        "hunter_heirloom",
+        "border_battlefield_clue"
+      ],
+      "return_route": "short_loop_returns_to_a_familiar_village_or_wilderness_path",
+      "reuse_points": [
+        "A2_canopy_hunting_route",
+        "A6_bell_tower_exterior",
+        "A3_upper_rooftop_route"
+      ],
+      "player_hint": "Show at least two recognizable hook anchors before the hook is acquired.",
+      "narrative_result": "Villagers preserve unofficial routes omitted from royal and Church maps."
+    },
+    {
+      "id": "EG02",
+      "name": "鸣响揭示但不自动开启",
+      "status": "design_contract_not_runtime_verified",
+      "first_visit_region": "A2",
+      "trigger": "reach_medium_resonance_or_find_corresponding_record",
+      "required_ability": null,
+      "visible_blocker": "erased_street_or_anomalous_wall_afterimage",
+      "destination": "H03_or_story_geography_G08_equivalent",
+      "additional_condition": "open_physical_latch_from_rooftop_or_underground_side",
+      "reward": [
+        "erased_history_evidence",
+        "unique_charm_or_resonance_upgrade"
+      ],
+      "narrative_result": "Resonance reveals evidence; physical space and story reasoning still govern access."
+    },
+    {
+      "id": "EG03",
+      "name": "村口事件开启旧路",
+      "status": "design_contract_not_runtime_verified",
+      "first_visit_region": "A1",
+      "trigger": "resolve_village_defense_sidequest",
+      "required_ability": null,
+      "visible_blocker": "damaged_walkway_or_barred_defense_gate",
+      "destination": "A3_non_main_route",
+      "reward": [
+        "safe_resupply_point",
+        "npc_state_change",
+        "shortcut"
+      ],
+      "narrative_result": "The raid leaves conflicting Church and bandit traces without revealing the full conspiracy."
+    },
+    {
+      "id": "EG04",
+      "name": "城区地面屋顶地下三层回环",
+      "status": "design_contract_not_runtime_verified",
+      "first_visit_region": "A3",
+      "trigger": "reach_city_from_A2_then_open_rooftop_and_sewer_mechanisms",
+      "required_ability": "grappling_hook_or_lift_access_for_selected_upper_routes",
+      "visible_blocker": "visible_upper_door_and_sealed_sewer_hatch",
+      "destination": "A3_rooftop_loop_and_A4_waterways",
+      "reward": [
+        "shortcut",
+        "merchant_quest_progress",
+        "royal_drain_evidence"
+      ],
+      "narrative_result": "A single landmark is revisited from street, roof, and underground levels."
+    },
+    {
+      "id": "EG05",
+      "name": "王名抹除廊的双重证据",
+      "status": "design_contract_not_runtime_verified",
+      "first_visit_region": "A8",
+      "trigger": "reach_royal_tomb_and_raise_resonance_to_threshold",
+      "required_ability": null,
+      "visible_blocker": "erased_royal_inscriptions",
+      "destination": "royal_name_erasure_gallery",
+      "additional_condition": "collect_records_from_city_and_royal_maintenance_route",
+      "reward": [
+        "royal_history_evidence",
+        "secret_research_route_clue"
+      ],
+      "narrative_result": "The player sees the missing text first but cannot interpret the history without corroboration."
+    },
+    {
+      "id": "EG06",
+      "name": "终局支线道具组合",
+      "status": "design_contract_not_runtime_verified",
+      "first_visit_region": "A11",
+      "trigger": "complete_multiple_character_sidequests_and_recover_relic_fragments",
+      "required_ability": null,
+      "visible_blocker": "ending_route_gate",
+      "destination": "A13_inferno_judgment_variant",
+      "additional_condition": "assemble_third_cord_evidence_and_meet_relationship_story_state",
+      "reward": [
+        "alternate_ending_route",
+        "unique_final_encounter_state"
+      ],
+      "narrative_result": "The ending depends on accumulated relationships and evidence, not a single key item."
+    }
+  ],
+  "exploration_gate_contracts_note": "These contracts connect narrative locations to ability, Resonance, story, and physical gates. They are design data only; do not treat them as runtime implementation evidence."
 }
