@@ -23,6 +23,7 @@ const FOREST_BACKDROP = preload("res://assets/art/backdrops/forest_backdrop.svg"
 const RUINS_BACKDROP = preload("res://assets/art/backdrops/ruins_backdrop.svg")
 const CHURCH_BACKDROP = preload("res://assets/art/backdrops/church_backdrop.svg")
 const ELDRITCH_BACKDROP = preload("res://assets/art/backdrops/eldritch_backdrop.svg")
+const STONE_FLOOR_STRIP = preload("res://assets/art/backdrops/stone_floor_strip.svg")
 
 const ENCOUNTER_ACTIVATE_RANGE := 420.0
 const ENCOUNTER_DEACTIVATE_RANGE := 560.0
@@ -2446,7 +2447,7 @@ func _draw() -> void:
 	else:
 		draw_rect(Rect2(0.0, 0.0, map_width, 720.0), _background_color())
 	_draw_atmospheric_layers()
-	draw_rect(Rect2(0.0, floor_y, map_width, 180.0), Color("#211b23"))
+	draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
 	_draw_ground_detail()
 
 	# Replace the old repetitive ground slashes with sparse, broken stone cracks and low atmospheric haze.
