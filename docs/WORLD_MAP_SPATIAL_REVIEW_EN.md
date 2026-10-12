@@ -74,7 +74,7 @@ The layout may be rotated or stretched, but water should not appear to flow uphi
 | C21 | A11 → A13 | Keep ending-state-gated endgame entry; one-way. |
 | C22 | A12 → A13 | Keep throne-route endgame entry; one-way, with a distinct entrance state if needed. |
 | C23 | A9 ↔ A4 | Keep high royal drain; distinct from C07's middle waterway and C12's low tunnel; open from A9. |
-| C24 | A1 ↔ A3 | Keep old route after village defense; show a legible old street/high road, not a source-less portal. |
+| C24 | A1 ↔ A3 | Keep the low, ground-level old drainage passage after village defense; A1 entry x=100 and A3 return door x=520. Do not label it a rooftop route. |
 
 ### Audit outcome
 
