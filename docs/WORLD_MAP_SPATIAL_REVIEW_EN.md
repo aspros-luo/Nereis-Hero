@@ -129,3 +129,15 @@ This round completes a **macro spatial proposal and connection-contract audit**.
 
 Before small-map/story work, map A0–A13 to real greybox scenes and transition anchors. If a scene conflicts with the contract, fix the map/topology mapping before writing events that depend on that room. Do not lock story beats to unverified room positions.
 
+## 8. Static review result and acceptance boundary
+
+| Item | Result this round | Evidence boundary |
+|---|---|---|
+| Macro counts | Static checks confirm 14 primary regions, 24 inter-region links, 76 subregions, 71 local links, and 8 lift contracts | Repository Python validators were not executed |
+| Main-route reachability | A custom graph check confirms the initial main route is reachable and all 14 primary regions are reachable in the final graph | Graph reachability does not prove that scenes are traversable |
+| C24 low drainage route | Topology, story geography, layer contract, entry/return spawns, and static assertions now agree | Source/data consistency was checked |
+| C16 / H05 anchors | C16 door x=2040, return spawn x=1960, and H05 return door x=1870 are synchronized across code, debug marker, and validator | Collision and interaction focus were not tested in-engine |
+| Hub workload | Keep A3's six links; three important shortcuts are staged and should not be deleted based on raw degree | Design decision, not proof of player experience |
+| Godot runtime | **Pending** | No Godot executable is available here; travel, interaction, collision, death recovery, and save/load regression were not run |
+
+**Conclusion: the macro design contract and the reviewed source coordinates are ready for macro-design review, but full in-engine acceptance has not passed.** Do not treat small-map and story production as the accepted next phase until Godot 4.6.x verifies the main route, C05 return hatch, C24's two-sided gate, C16/H05 interaction spacing, the three distinct A4 underground routes (C07/C12/C23), save/resume, and death recovery.
