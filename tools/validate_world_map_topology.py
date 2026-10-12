@@ -198,6 +198,35 @@ def validate(data: dict[str, Any]) -> list[str]:
         if not str(lift.get("unlock_condition", "")).strip():
             fail(errors, f"{lift.get('id')}: lift contract needs an unlock condition.")
 
+    # Narrative exploration gates connect places to ability, Resonance, story, and physical mechanisms.
+    # 剧情探索门槛将地点与能力、鸣响、支线和地理机关连接起来。
+    gate_contracts = data.get("exploration_gate_contracts", [])
+    if len(gate_contracts) < 1:
+        fail(errors, "At least one exploration gate contract is required.")
+    gate_ids = [item.get("id", "") for item in gate_contracts]
+    if len(gate_ids) != len(set(gate_ids)):
+        fail(errors, "Duplicate exploration gate contract IDs.")
+    for gate in gate_contracts:
+        gate_id = gate.get("id", "<missing-id>")
+        for field in ("name", "trigger", "visible_blocker", "destination", "narrative_result"):
+            if not str(gate.get(field, "")).strip():
+                fail(errors, f"{gate_id}: exploration gate needs {field}.")
+        if gate.get("status") != "design_contract_not_runtime_verified":
+            fail(errors, f"{gate_id}: design gate status must not imply runtime verification.")
+        if not isinstance(gate.get("reward", []), list) or not gate.get("reward"):
+            fail(errors, f"{gate_id}: exploration gate needs at least one reward.")
+        if gate.get("required_ability") == "grappling_hook" and not gate.get("player_hint"):
+            fail(errors, f"{gate_id}: grappling-hook gates must include a readable player hint.")
+    story_geography = data.get("story_geography", [])
+    if len(story_geography) != 15:
+        fail(errors, f"Expected 15 story geography groups, found {len(story_geography)}.")
+    story_ids = [item.get("id", "") for item in story_geography]
+    if len(story_ids) != len(set(story_ids)):
+        fail(errors, "Duplicate story geography IDs.")
+    for place_group in story_geography:
+        if not place_group.get("parent_macro") or not place_group.get("places"):
+            fail(errors, f"{place_group.get('id', '<missing-id>')}: story geography needs a parent macro and places.")
+
     # Spatial anchors are part of the box-world contract, not decorative documentation.
     # 空间锚点属于箱庭结构合同，不只是说明文字。
     c05 = next((edge for edge in connections if edge.get("id") == "C05"), None)
