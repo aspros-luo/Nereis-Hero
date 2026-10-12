@@ -2608,6 +2608,72 @@ func _draw_atmospheric_layers() -> void:
 				draw_rect(Rect2(x, base_y - height * 0.62, width, height * 0.62), silhouette)
 				draw_line(Vector2(x, base_y - height * 0.62), Vector2(x + width, base_y - height * 0.62), silhouette_edge, 2.0)
 
+	# Biome-specific light and silhouette cues add atmosphere without introducing collision or hiding exits.
+	# 区域专属的光影与剪影强化氛围，不新增碰撞，也不遮挡出口。
+	match region_id:
+		"A2", "H01", "H08", "H09":
+			# Low moonbeams cut through the canopy; thin hanging roots frame, rather than fill, the play space.
+			# 月光从树冠缝隙落下；细垂根只做边缘构图，不填满可玩空间。
+			for shaft in range(5):
+				var shaft_x := float((shaft * 487 + seed_offset * 3) % int(map_width))
+				draw_colored_polygon(PackedVector2Array([
+					Vector2(shaft_x, 72.0), Vector2(shaft_x + 24.0, 72.0),
+					Vector2(shaft_x + 108.0, floor_y - 48.0), Vector2(shaft_x + 66.0, floor_y - 48.0)
+				]), Color("#9aafbd", 0.018 if region_id == "A2" else 0.012))
+			for root in range(7):
+				var root_x := float((root * 397 + seed_offset * 5) % int(map_width))
+				var root_length := 34.0 + float((root * 29) % 64)
+				draw_line(Vector2(root_x, 0.0), Vector2(root_x + 7.0, root_length), Color("#111a20", 0.72), 3.0)
+		"A3", "A9", "A12", "H03", "H06", "H07":
+			# Sparse broken window lights imply a city beyond the visible route.
+			# 稀疏的破窗灯光暗示画面之外仍有城市延伸。
+			for window_index in range(18):
+				var window_x := float((window_index * 139 + seed_offset * 7) % int(map_width))
+				var window_y := 250.0 + float((window_index * 47) % 150)
+				var window_color := Color("#c49aa9", 0.13) if region_id != "H07" else Color("#83b4c0", 0.14)
+				draw_rect(Rect2(window_x, window_y, 3.0, 8.0), window_color)
+			if region_id == "A9" or region_id == "H07":
+				for reflection in range(10):
+					var reflection_x := float((reflection * 251 + seed_offset) % int(map_width))
+					draw_line(Vector2(reflection_x, floor_y - 52.0), Vector2(reflection_x + 18.0, floor_y - 50.0), Color("#9bbbc4", 0.055), 1.0)
+		"A4", "H04":
+			# Cold reflected light breaks up the reservoir's darkness.
+			# 冷色倒影打破水库区域的大面积暗部。
+			for reflection in range(12):
+				var reflection_x := float((reflection * 211 + seed_offset * 2) % int(map_width))
+				var reflection_y := 330.0 + float((reflection * 31) % 105)
+				draw_line(Vector2(reflection_x, reflection_y), Vector2(reflection_x + 38.0 + float(reflection % 3) * 17.0, reflection_y + 2.0), Color("#8db8c1", 0.055), 1.5)
+		"A5":
+			# Distant ember traces remain small so they do not resemble interactive pickups.
+			# 远处余烬保持微小，避免被误认为可拾取物。
+			for ember in range(9):
+				var ember_x := float((ember * 283 + seed_offset) % int(map_width))
+				var ember_y := 285.0 + float((ember * 43) % 120)
+				draw_circle(Vector2(ember_x, ember_y), 1.4, Color("#c17d68", 0.16))
+		"A6", "A10":
+			# Narrow, dusty light falls from unseen clerestory windows.
+			# 灰尘中的狭窄光柱来自画面外的高侧窗。
+			for beam in range(4):
+				var beam_x := float((beam * 613 + seed_offset * 2) % int(map_width))
+				draw_colored_polygon(PackedVector2Array([
+					Vector2(beam_x, 115.0), Vector2(beam_x + 11.0, 115.0),
+					Vector2(beam_x + 72.0, floor_y - 60.0), Vector2(beam_x + 44.0, floor_y - 60.0)
+				]), Color("#d6c2a0", 0.018))
+		"A11", "H08", "H09":
+			# Uneven organic glimmers hint at something breathing behind the masonry.
+			# 不均匀的有机微光暗示石墙背后有东西正在呼吸。
+			for node_index in range(11):
+				var node_x := float((node_index * 227 + seed_offset * 3) % int(map_width))
+				var node_y := 255.0 + float((node_index * 37) % 175)
+				draw_circle(Vector2(node_x, node_y), 5.0, Color("#8e789f", 0.025))
+				draw_circle(Vector2(node_x, node_y), 1.2, Color("#b38bab", 0.12))
+		"A13":
+			# Broken horizon echoes the terminal anomaly's impossible geometry.
+			# 断裂地平线呼应终局区域不可能存在的空间几何。
+			for seam in range(8):
+				var seam_x := float(seam) * map_width / 8.0 + float(seed_offset)
+				draw_line(Vector2(seam_x, 180.0 + float(seam % 3) * 19.0), Vector2(seam_x + 76.0, 176.0 + float(seam % 3) * 19.0), Color("#b99ac7", 0.10), 1.0)
+
 	# A faint horizon line ties distant shapes together without boxing the screen.
 	# 淡淡的地平线将远景剪影连接起来，但不把画面框死。
 	draw_line(Vector2(0.0, floor_y - 9.0), Vector2(map_width, floor_y - 9.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.10), 1.0)
@@ -2631,6 +2697,41 @@ func _draw_ground_detail() -> void:
 				Vector2(pebble_x + 5.0, floor_y + 68.0),
 				Vector2(pebble_x + 13.0, floor_y + 75.0)
 			]), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.12))
+
+	# Ground treatment changes by biome: damp reflections, moss, ash, or organic seepage.
+	# 地面材质随区域变化：潮湿反光、苔痕、灰烬或有机渗色。
+	match region_id:
+		"A2", "H01", "H08", "H09":
+			if index % 2 == 0:
+				draw_line(Vector2(x + 14.0, floor_y + 8.0), Vector2(x + 48.0, floor_y + 9.0), Color("#788f78", 0.20), 2.0)
+			if index % 4 == 0:
+				draw_circle(Vector2(x + 64.0, floor_y + 34.0), 2.0, Color("#9eb6a0", 0.14))
+		"A3", "A5", "A8", "A12":
+			if index % 2 == 0:
+				draw_line(Vector2(x + 38.0, floor_y + 18.0), Vector2(x + 55.0, floor_y + 31.0), Color("#b28b79", 0.16), 1.0)
+			if index % 5 == 0:
+				draw_colored_polygon(PackedVector2Array([
+					Vector2(x + 76.0, floor_y + 52.0), Vector2(x + 88.0, floor_y + 48.0),
+					Vector2(x + 98.0, floor_y + 54.0), Vector2(x + 83.0, floor_y + 59.0)
+				]), Color("#211a20", 0.34))
+		"A4", "A9", "H04", "H07":
+			if index % 2 == 0:
+				draw_line(Vector2(x + 18.0, floor_y + 42.0), Vector2(x + 74.0, floor_y + 44.0), Color("#91b8c1", 0.12), 2.0)
+			if index % 3 == 0:
+				draw_line(Vector2(x + 54.0, floor_y + 63.0), Vector2(x + 86.0, floor_y + 62.0), Color("#b2c9c8", 0.09), 1.0)
+		"A6", "A10":
+			if index % 2 == 0:
+				draw_line(Vector2(x + 24.0, floor_y + 12.0), Vector2(x + 45.0, floor_y + 12.0), Color("#c6b39a", 0.20), 1.0)
+			if index % 4 == 0:
+				draw_circle(Vector2(x + 61.0, floor_y + 49.0), 1.5, Color("#c6b39a", 0.14))
+		"A11", "H02", "H03", "H05", "H06":
+			if index % 2 == 0:
+				draw_line(Vector2(x + 18.0, floor_y + 30.0), Vector2(x + 43.0, floor_y + 34.0), Color("#94758e", 0.18), 1.5)
+			if index % 4 == 0:
+				draw_circle(Vector2(x + 67.0, floor_y + 45.0), 2.2, Color("#8e789f", 0.10))
+		"A13":
+			if index % 2 == 0:
+				draw_line(Vector2(x + 12.0, floor_y + 19.0), Vector2(x + 31.0, floor_y + 15.0), Color("#b99ac7", 0.22), 1.0)
 
 
 func _atmosphere_color() -> Color:
