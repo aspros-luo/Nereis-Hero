@@ -18,6 +18,7 @@ const RESEARCH_HUSK_SCRIPT = preload("res://scripts/enemies/research_husk.gd")
 const CHURCH_INQUISITOR_SCRIPT = preload("res://scripts/enemies/church_inquisitor.gd")
 const BELL_WRAITH_SCRIPT = preload("res://scripts/enemies/bell_wraith.gd")
 const THIRD_CORD_FRAGMENT_SCRIPT = preload("res://scripts/world/third_cord_fragment.gd")
+const REGION_AMBIENCE_SCRIPT = preload("res://scripts/effects/region_ambience.gd")
 
 const ENCOUNTER_ACTIVATE_RANGE := 420.0
 const ENCOUNTER_DEACTIVATE_RANGE := 560.0
@@ -57,6 +58,7 @@ func _ready() -> void:
 	_create_floor()
 	_create_boundaries()
 	_configure_platforms()
+	_spawn_region_ambience()
 	# Spawn the local bridge before the Hero so its visual is drawn behind the character.
 	# 局部桥先于主角生成，确保桥体绘制在角色后方。
 	_spawn_local_resonance_routes()
@@ -616,6 +618,19 @@ func _show_intro() -> void:
 				"铭文并非被风雨磨损。\n\n凿痕是在墓穴封闭之后才留下的。",
 				5.0
 			)
+
+func _spawn_region_ambience() -> void:
+	# Add a tiny independent draw layer so ambient motion never redraws the whole level.
+	# 独立绘制少量环境粒子，避免为了动态效果每帧重绘整张地图。
+	var ambience := Node2D.new()
+	ambience.set_script(REGION_AMBIENCE_SCRIPT)
+	ambience.name = "RegionAmbience"
+	ambience.set("map_width", map_width)
+	ambience.set("floor_y", floor_y)
+	ambience.set("region_id", region_id)
+	ambience.set("atmosphere_color", _atmosphere_color())
+	add_child(ambience)
+
 
 func _create_floor() -> void:
 	var floor := StaticBody2D.new()
