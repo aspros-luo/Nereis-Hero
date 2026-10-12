@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1480" viewBox="0 0 1900 1480" role="img" aria-labelledby="title desc">
 <title id="title">Nereis Hero 完整世界地图区划示意图</title>
-<desc id="desc">十四个主要区域的空间布局，分为地表高地、中层城市和地下深层，展示主路线与后期开启的捷径。</desc>
+<desc id="desc">十四个主要区域的空间布局，分为地表高地、中层城市和地下深层；C24 是村庄防卫后开放的低位旧排水通道，而非屋顶高路。</desc>
 <defs>
   <style>
     text { font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #26313a; }
@@ -58,6 +58,7 @@
 </g>
 <g id="later-shortcuts">
   <path class="shortcut" marker-end="url(#shortarrow)" d="M290 555 C325 600 345 645 390 690"/>
+  <text x="300" y="625" class="note">C24 防卫后开放：旧排水通道（地面层）</text>
 
   <path class="shortcut" marker-end="url(#shortarrow)" d="M443 915 C315 860 205 790 185 580"/>
   <path class="shortcut" marker-end="url(#shortarrow)" d="M1007 568 C895 515 770 580 650 657"/>
@@ -193,5 +194,5 @@
 <text x="90" y="1283" class="note">箭头和线条表示连接意图，不按比例；实际能力门槛需盘点现有技能解锁顺序后确定。</text>
 
 <text x="60" y="1374" class="subheading">设计目标：玩家逐渐学会王国的地理，而不是依次选择章节。普通路线可错过深层真相；捷径应改变回程与空间认知。</text>
-<text x="60" y="1403" class="subheading">文档基准：docs/COMPLETE_WORLD_MAP_ATLAS_CN.md · Nereis Hero · Draft 1.0</text>
+<text x="60" y="1403" class="subheading">文档基准：docs/COMPLETE_WORLD_MAP_ATLAS_CN.md · Nereis Hero · Draft 1.1（C24 低位排水路线）</text>
 </svg>
