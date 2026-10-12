@@ -811,8 +811,20 @@ def main() -> int:
         ],
     }
     for hidden_id, contracts in hidden_exit_contracts.items():
-        block_start = region_script.find(f'        "{hidden_id}":', exits_start)
-        block_end = region_script.find("\n        \"", block_start + 12) if block_start >= 0 else -1
+        # GDScript match branches are tab-indented; support either tabs or spaces so this
+        # source-level check does not silently fail when formatting changes.
+        branch_match = re.search(
+            rf'^[\\t ]*"{re.escape(hidden_id)}":',
+            region_script[exits_start:],
+            re.MULTILINE,
+        )
+        block_start = exits_start + branch_match.start() if branch_match else -1
+        next_branch = re.search(
+            r'^[\\t ]*"[A-Z]\\d{1,2}":',
+            region_script[block_start + 1:] if block_start >= 0 else "",
+            re.MULTILINE,
+        )
+        block_end = block_start + 1 + next_branch.start() if block_start >= 0 and next_branch else -1
         block = region_script[block_start:block_end] if block_start >= 0 and block_end > block_start else ""
         if not block:
             fail(errors, f"{hidden_id} hidden-region exit block is missing or malformed.")
@@ -822,8 +834,14 @@ def main() -> int:
 
     # A13 is a real terminal map layer, not merely an abstract topology node. Ending selection occurs after entering it.
     # A13 必须是实际终局地图层，而不是只存在于拓扑中的抽象节点；进入后才选择结局。
-    a13_start = region_script.find('        "A13":', exits_start)
-    a13_end = region_script.find('\n        "', a13_start + 12) if a13_start >= 0 else -1
+    a13_match = re.search(r'^[\\t ]*"A13":', region_script[exits_start:], re.MULTILINE)
+    a13_start = exits_start + a13_match.start() if a13_match else -1
+    a13_next = re.search(
+        r'^[\\t ]*"[A-Z]\\d{1,2}":',
+        region_script[a13_start + 1:] if a13_start >= 0 else "",
+        re.MULTILINE,
+    )
+    a13_end = a13_start + 1 + a13_next.start() if a13_start >= 0 and a13_next else -1
     a13_block = region_script[a13_start:a13_end] if a13_start >= 0 and a13_end > a13_start else ""
     if not a13_block:
         fail(errors, "A13 terminal exit block is missing or malformed.")
