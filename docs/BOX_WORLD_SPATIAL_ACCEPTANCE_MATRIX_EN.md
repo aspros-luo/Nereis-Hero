@@ -77,3 +77,8 @@ The games share world facts, but retain independent gameplay, viewpoints, and re
 ## 7. Current status
 
 This document is an executable acceptance matrix, not proof that all listed scenes have passed. The map remains in structural review and code-fix work; Godot runtime acceptance is pending.
+
+
+### Spatial consistency correction (source audit)
+
+The physical C05 door in A3 remains anchored on the raised pipe-walk at `x=1600, y_offset=-115`. When returning from A4 to A3, runtime places the Hero at `x=1380, y_offset=-115`, on the platform west of the door and outside its interaction focus. The topology `return_spawn` and static topology validator have been aligned to `x=1380`. This reconciles design data with the existing runtime implementation; it does not claim Godot runtime acceptance.
