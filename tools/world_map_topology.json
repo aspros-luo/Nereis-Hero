@@ -208,7 +208,16 @@
       "initial_access": "blocked",
       "final_direction": "forward",
       "unlock_condition": "opened_watergate_and_village_well_exit",
-      "opens_from": "A4"
+      "opens_from": "A4",
+      "spatial_contract": {
+        "route_layer": "reservoir_ground_return",
+        "from_region_anchor": {
+          "region": "A4",
+          "x": 2220,
+          "y_offset": 0
+        },
+        "intent": "Village well return remains on the safe ground lane, separated from H01 near the far-east well."
+      }
     },
     {
       "id": "C07",
@@ -218,7 +227,20 @@
       "initial_access": "blocked",
       "final_direction": "both",
       "unlock_condition": "reached_A8_via_A7_then_opened_royal_tomb_gate",
-      "opens_from": "A8"
+      "opens_from": "A8",
+      "spatial_contract": {
+        "route_layer": "middle_tomb_waterway_ledge",
+        "from_region_anchor": {
+          "region": "A4",
+          "x": 1320,
+          "y_offset": -85
+        },
+        "to_region_anchor": {
+          "region": "A8",
+          "x": 520
+        },
+        "intent": "Royal tomb return branches from the middle ledge, distinct from the low prison supply tunnel and the higher royal drain."
+      }
     },
     {
       "id": "C08",
@@ -268,7 +290,20 @@
       "initial_access": "blocked",
       "final_direction": "both",
       "unlock_condition": "reached_A7_then_opened_supply_tunnel",
-      "opens_from": "A7"
+      "opens_from": "A7",
+      "spatial_contract": {
+        "route_layer": "low_supply_tunnel_ledge",
+        "from_region_anchor": {
+          "region": "A7",
+          "x": 520
+        },
+        "to_region_anchor": {
+          "region": "A4",
+          "x": 1050,
+          "y_offset": -75
+        },
+        "intent": "Prison supply tunnel lands on a dedicated low ledge instead of sharing the same floor lane as other hub doors."
+      }
     },
     {
       "id": "C13",
@@ -395,7 +430,24 @@
       "initial_access": "blocked",
       "final_direction": "both",
       "unlock_condition": "reached_A9_then_opened_royal_drain_from_outer_ring",
-      "opens_from": "A9"
+      "opens_from": "A9",
+      "spatial_contract": {
+        "route_layer": "upper_royal_drain_pipe",
+        "from_region_anchor": {
+          "region": "A9",
+          "x": 720
+        },
+        "to_region_anchor": {
+          "region": "A4",
+          "x": 1650,
+          "y_offset": -105
+        },
+        "return_spawn": {
+          "region": "A4",
+          "x": 1620
+        },
+        "intent": "Royal drain uses the upper pipe ledge, separate from H04's water reflection entrance and the ground-level village watergate."
+      }
     },
     {
       "id": "C24",
@@ -1036,7 +1088,9 @@
     "latest_spatial_fixes": [
       "C05 A3-to-A4 moved to raised pipe-walk at x=1600, y_offset=-115.",
       "C16 A3-to-A9 return door moved to eastern rooftop at x=1980, y_offset=-70; A3 return spawn x=1860.",
-      "H05 return gate in A3 moved to x=1820 to separate its interaction focus from C10 at x=1710 and C16 rooftop lift at x=1980."
+      "H05 return gate in A3 moved to x=1820 to separate its interaction focus from C10 at x=1710 and C16 rooftop lift at x=1980.",
+      "A4 now separates C12 (x=1050, y_offset=-75), C07 (x=1320, y_offset=-85), and C23 (x=1650, y_offset=-105) across distinct ledges; C06 village watergate moved to x=2220.",
+      "A4 return spawns aligned with the layered doors: C12 x=1090, C07 x=1250, C23 x=1620."
     ]
   }
 }
