@@ -213,6 +213,8 @@ func _spawn_y_for_side(side: String) -> float:
 	# 高位跨区门应将主角送到对应栈台，而不是落在连续地面上、再要求玩家反向跳回门口。
 	if region_id == "A2" and side == "east":
 		return floor_y - 140.0
+	if region_id == "A6" and side == "bell_drop":
+		return floor_y - 90.0
 	if region_id == "A3" and side == "sewer":
 		return floor_y - 115.0
 	if region_id == "A3" and side == "old_lift":
@@ -227,6 +229,10 @@ func _spawn_y_for_side(side: String) -> float:
 
 
 func _spawn_x_for_side(side: String) -> float:
+	if region_id == "A6" and side == "bell_drop":
+		# C10 returns to the upper landing before the final step down to the elevated shortcut door.
+		# C10 回程落在高位落脚平台，再走到低一级的捷径门。
+		return 2100.0
 	if region_id == "A2" and side == "east":
 		# Returning from A3 lands on the western approach platform below A2's elevated A3 exit.
 		# 从 A3 返回时落在森林西侧的高路接近平台，与城区出口处于同一空间层。
@@ -716,6 +722,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1320, 350, 155, 18))
 			_add_platform(Rect2(1560, 405, 145, 18))
 			_add_platform(Rect2(1840, 460, 160, 18))
+			# The bell-tower drop is a real upper-lane branch, not another door on the floor.
+			# 钟塔落差改为真正的高位支路，不再只是地面上的另一扇门。
+			_add_platform(Rect2(2020, 450, 130, 18))
 			_add_platform(Rect2(2150, 485, 150, 18))
 			_add_platform(Rect2(1250, 270, 120, 18))
 			_add_platform(Rect2(1390, 310, 120, 18))
@@ -1521,7 +1530,7 @@ func _spawn_region_exits() -> void:
 			# C10 is a physical monastery shortcut, independent of the optional H05 secret room.
 			# C10 是修道院的实体捷径，不应被可选隐藏区 H05 的发现状态锁死。
 			_spawn_exit_door(
-				2110.0, "E  打开钟塔落差通路", "forgotten_city",
+				2230.0, "E  打开钟塔落差通路", "forgotten_city",
 				"res://scenes/forgotten_city.tscn", "bell_drop",
 				true, "opened_bell_tower_drop", "E  返回被遗忘的城区"
 			)
