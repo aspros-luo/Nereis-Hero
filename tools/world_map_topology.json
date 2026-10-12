@@ -22,7 +22,55 @@
     {
       "id": "A3",
       "name": "废弃城区",
-      "role": "hub"
+      "role": "hub",
+      "spatial_layers": [
+        {
+          "id": "street",
+          "purpose": "H03 anomaly clue and hidden entry",
+          "anchors": [
+            {
+              "id": "H03",
+              "x": 1120
+            }
+          ]
+        },
+        {
+          "id": "raised_pipe_walk",
+          "purpose": "C05 sewer-reservoir branch",
+          "anchors": [
+            {
+              "id": "C05",
+              "x": 1600,
+              "y_offset": -115
+            }
+          ]
+        },
+        {
+          "id": "upper_eastern_lift",
+          "purpose": "C16 late shortcut to A9",
+          "anchors": [
+            {
+              "id": "C16",
+              "x": 1980,
+              "y_offset": -70
+            }
+          ]
+        },
+        {
+          "id": "mid_return_lane",
+          "purpose": "C10 monastery drop return and H05 side return",
+          "anchors": [
+            {
+              "id": "C10",
+              "x": 1710
+            },
+            {
+              "id": "H05",
+              "x": 1820
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "A4",
@@ -525,7 +573,12 @@
         "unlock_condition": "reached_A6_then_opened_bell_tower_drop_to_A3",
         "opens_from": "A6",
         "requires_target_already_reached": true,
-        "requires_ending_state": false
+        "requires_ending_state": false,
+        "return_spatial_anchor": {
+          "region": "A3",
+          "x": 1820,
+          "layer": "street-level-return"
+        }
       },
       "scene_path": "scenes/silent_bell_room.tscn",
       "location_id": "silent_bell_room",
@@ -982,7 +1035,8 @@
     ],
     "latest_spatial_fixes": [
       "C05 A3-to-A4 moved to raised pipe-walk at x=1600, y_offset=-115.",
-      "C16 A3-to-A9 return door moved to eastern rooftop at x=1980, y_offset=-70; A3 return spawn x=1860."
+      "C16 A3-to-A9 return door moved to eastern rooftop at x=1980, y_offset=-70; A3 return spawn x=1860.",
+      "H05 return gate in A3 moved to x=1820 to separate its interaction focus from C10 at x=1710 and C16 rooftop lift at x=1980."
     ]
   }
 }
