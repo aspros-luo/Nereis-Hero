@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="720" viewBox="0 0 2600 720">
+<defs>
+ <linearGradient id="void" x2="0" y2="1"><stop stop-color="#090d18"/><stop offset=".45" stop-color="#1c1829"/><stop offset="1" stop-color="#46313f"/></linearGradient>
+ <radialGradient id="eye"><stop stop-color="#c4a3a7" stop-opacity=".36"/><stop offset=".48" stop-color="#8b5e83" stop-opacity=".12"/><stop offset="1" stop-color="#8b5e83" stop-opacity="0"/></radialGradient>
+ <linearGradient id="stone" x2="1" y2="0"><stop stop-color="#25212e"/><stop offset=".5" stop-color="#51404f"/><stop offset="1" stop-color="#171724"/></linearGradient>
+ <pattern id="stars" width="173" height="137" patternUnits="userSpaceOnUse"><circle cx="13" cy="23" r="1.7" fill="#d8c3c0" opacity=".5"/><circle cx="95" cy="77" r="1.2" fill="#c6a3bd" opacity=".5"/><path d="M140 11l5 9 -5 9 -5 -9Z" fill="#bba2bb" opacity=".3"/></pattern>
+</defs>
+<rect width="2600" height="720" fill="url(#void)"/><rect width="2600" height="590" fill="url(#stars)"/>
+<ellipse cx="1300" cy="270" rx="560" ry="330" fill="url(#eye)"/>
+<g fill="none" stroke="#9a7898" stroke-opacity=".24" stroke-width="5">
+<ellipse cx="1300" cy="280" rx="470" ry="175" transform="rotate(-17 1300 280)"/>
+<ellipse cx="1300" cy="280" rx="390" ry="220" transform="rotate(26 1300 280)"/>
+<ellipse cx="1300" cy="280" rx="280" ry="245" transform="rotate(-42 1300 280)"/>
+<path d="M730 270Q960 80 1150 255T1570 240T1910 270"/><path d="M820 330Q1030 450 1260 300T1720 330"/>
+</g>
+<g fill="#1c1927" stroke="#8f718a" stroke-opacity=".35" stroke-width="5">
+<path d="M0 555V450L105 405 155 435 210 360 260 410 330 385 380 455 450 430 500 490V555Z"/>
+<path d="M510 555V475L590 420 650 445 710 380 770 435 830 400 900 465 960 440 1010 555Z"/>
+<path d="M1590 555V465L1670 420 1730 445 1790 375 1850 430 1920 395 1980 465 2040 440 2100 555Z"/>
+<path d="M2110 555V480L2190 420 2250 450 2310 375 2370 430 2440 400 2490 465 2600 440V555Z"/>
+</g>
+<g fill="none" stroke="#b89bb7" stroke-opacity=".36" stroke-width="3">
+<path d="M180 520L320 450 360 490 440 420"/><path d="M690 525L760 475 840 500 920 445"/><path d="M1730 520L1810 470 1890 490 1960 430"/><path d="M2250 520L2330 465 2410 490 2510 440"/>
+<path d="M1230 550L1280 470 1330 530 1380 450 1440 540"/>
+</g>
+<g fill="#b68b9b" opacity=".35"><circle cx="930" cy="170" r="4"/><circle cx="1050" cy="380" r="3"/><circle cx="1550" cy="160" r="5"/><circle cx="1680" cy="360" r="3"/><circle cx="650" cy="260" r="3"/><circle cx="1980" cy="220" r="4"/></g>
+</svg>
