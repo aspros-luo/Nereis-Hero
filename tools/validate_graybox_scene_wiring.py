@@ -844,7 +844,7 @@ def main() -> int:
     a13_end = (
         a13_start + 1 + a13_next.start()
         if a13_start >= 0 and a13_next
-        else region_script.find("\\nfunc ", a13_start) if a13_start >= 0 else -1
+        else region_script.find("\nfunc ", a13_start) if a13_start >= 0 else -1
     )
     a13_block = region_script[a13_start:a13_end] if a13_start >= 0 and a13_end > a13_start else ""
     if not a13_block:
