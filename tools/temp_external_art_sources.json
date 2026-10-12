@@ -1,0 +1,97 @@
+{
+  "purpose": "Temporary replaceable art sources for Nereis-Hero macro-map visual prototype",
+  "asset_directory": "assets/temp_external/",
+  "runtime_network_dependency": false,
+  "import_status": "catalog_only_no_binary_assets_imported",
+  "constraints": [
+    "Do not change map topology, collision, spawn points, exits, Resonance gates, or save logic",
+    "Use art for background and non-colliding decoration only",
+    "Keep platforms, enemies, exit prompts, and HUD readable",
+    "Preserve source, author, license, and download date"
+  ],
+  "sources": [
+    {
+      "name": "Forest and Dungeon Tilesets from Eman Quest",
+      "author": "Night Blade",
+      "license": "CC0",
+      "url": "https://opengameart.org/content/forest-and-dungeon-tilesets-from-eman-quest",
+      "regions": [
+        "A2",
+        "H01",
+        "A4",
+        "A7",
+        "A8"
+      ]
+    },
+    {
+      "name": "32x32 Dungeon Tileset",
+      "author": "stealthix",
+      "license": "CC0",
+      "url": "https://opengameart.org/content/32x32-dungeon-tileset",
+      "regions": [
+        "A4",
+        "A7",
+        "A8",
+        "A11"
+      ]
+    },
+    {
+      "name": "2D Medieval Castle Dungeon Tileset",
+      "author": "TPC",
+      "license": "See source page; page describes it as free",
+      "url": "https://thepixelistcreator.itch.io/2d-medieval-castle-dungeon-tileset",
+      "regions": [
+        "A3",
+        "A6",
+        "A9",
+        "A10",
+        "A12"
+      ]
+    },
+    {
+      "name": "Dark Fantasy Pixel Art World DEMO",
+      "author": "Marco Brito",
+      "license": "See source page; page describes personal and commercial use",
+      "url": "https://marcomyly.itch.io/dark-fantasy-pixel-art-world-demo-tiles-props",
+      "regions": [
+        "A2",
+        "A5",
+        "A7",
+        "A8"
+      ]
+    },
+    {
+      "name": "Dark Fantasy Side-Scroller Tileset",
+      "author": "SakPix",
+      "license": "Review demo terms on source page",
+      "url": "https://sakpix.itch.io/dark-fantasy-side-scroller-tileset",
+      "regions": [
+        "A3",
+        "A6",
+        "A8",
+        "A10"
+      ]
+    },
+    {
+      "name": "Dark Castle Tileset",
+      "author": "Fabian Fuchs",
+      "license": "Commercial and non-commercial use per source page",
+      "url": "https://fabian-fuchs.itch.io/dark-castle-tileset",
+      "regions": [
+        "A6",
+        "A9",
+        "A10",
+        "A12"
+      ]
+    },
+    {
+      "name": "Free dark-fantasy tileset directory",
+      "author": "itch.io community directory",
+      "license": "Per individual asset page",
+      "url": "https://itch.io/game-assets/free/tag-dark-fantasy/tag-tileset",
+      "regions": [
+        "discovery"
+      ]
+    }
+  ]
+}
