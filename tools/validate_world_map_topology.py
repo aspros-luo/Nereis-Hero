@@ -148,6 +148,17 @@ def validate(data: dict[str, Any]) -> list[str]:
     h05_return_anchor = h05.get("secondary_exit", {}).get("return_spatial_anchor", {}) if h05 else {}
     if h05_return_anchor != {"region": "A3", "x": 1820, "layer": "street-level-return"}:
         fail(errors, "H05 return gate must remain spatially separated from A3 C10 and C16.")
+    expected_a4_spatial = {
+        "C06": ("reservoir_ground_return", {"region": "A4", "x": 2220, "y_offset": 0}),
+        "C07": ("middle_tomb_waterway_ledge", {"region": "A4", "x": 1320, "y_offset": -85}),
+        "C12": ("low_supply_tunnel_ledge", {"region": "A4", "x": 1050, "y_offset": -75}),
+        "C23": ("upper_royal_drain_pipe", {"region": "A4", "x": 1650, "y_offset": -105}),
+    }
+    for connection_id, (route_layer, expected_anchor) in expected_a4_spatial.items():
+        edge = next((item for item in connections if item.get("id") == connection_id), None)
+        spatial = edge.get("spatial_contract", {}) if edge else {}
+        if spatial.get("route_layer") != route_layer or spatial.get("from_region_anchor" if connection_id == "C06" else "to_region_anchor") != expected_anchor:
+            fail(errors, f"{connection_id} must match its declared A4 layered route anchor.")
 
     # C24 is the alternate A1-to-A3 route added after the village defense.
     # C24 是村庄防卫后开放的 A1 → A3 替代路线。
