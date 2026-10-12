@@ -128,6 +128,23 @@ def validate(data: dict[str, Any]) -> list[str]:
     if len(edge_ids) != len(set(edge_ids)):
         fail(errors, "Duplicate connection IDs.")
 
+    # Spatial anchors are part of the box-world contract, not decorative documentation.
+    # 空间锚点属于箱庭结构合同，不只是说明文字。
+    c05 = next((edge for edge in connections if edge.get("id") == "C05"), None)
+    c05_spatial = c05.get("spatial_contract", {}) if c05 else {}
+    if c05_spatial.get("route_layer") != "raised_pipe_walk":
+        fail(errors, "C05 must branch from the raised pipe-walk.")
+    if c05_spatial.get("from_region_anchor") != {"region": "A3", "x": 1600, "y_offset": -115}:
+        fail(errors, "C05 spatial anchor must match the A3 raised sewer branch.")
+    c16 = next((edge for edge in connections if edge.get("id") == "C16"), None)
+    c16_spatial = c16.get("spatial_contract", {}) if c16 else {}
+    if c16_spatial.get("route_layer") != "eastern_rooftop_lift":
+        fail(errors, "C16 must use the eastern rooftop lift lane.")
+    if c16_spatial.get("from_region_anchor") != {"region": "A3", "x": 1980, "y_offset": -70}:
+        fail(errors, "C16 spatial anchor must match the A3 eastern rooftop lift.")
+    if c16_spatial.get("return_spawn") != {"region": "A3", "x": 1860}:
+        fail(errors, "C16 return spawn must stay aligned with the eastern rooftop lift.")
+
     # C24 is the alternate A1-to-A3 route added after the village defense.
     # C24 是村庄防卫后开放的 A1 → A3 替代路线。
     c24 = next((edge for edge in connections if edge.get("id") == "C24"), None)
