@@ -768,13 +768,13 @@ def main() -> int:
     # 隐藏区域的出口必须保留预期回环，并且远侧出口只能在对应实体门开启后可用。
     hidden_exit_contracts = {
         "H01": [
-            '"E  RETURN TO VILLAGE"',
+            '"E  返回边境村庄"',
             '"reached_A4_via_A3" in WorldState.achievement_flags',
             'WorldState.is_hidden_path_opened("H01")',
             '"sewer_reservoir"',
         ],
         "H02": [
-            '"E  RETURN TO THE PILGRIM ROAD"',
+            '"E  返回旧朝圣路"',
             '"opened_old_bell_tower_connection" in WorldState.achievement_flags',
             '"old_battlefield"',
         ],
@@ -784,7 +784,7 @@ def main() -> int:
             '"royal_outer_ring"',
         ],
         "H04": [
-            '"E  RETURN TO THE RESERVOIR"',
+            '"E  返回旧水库"',
             '"opened_royal_tomb_side_door" in WorldState.achievement_flags',
             '"royal_tomb"',
         ],
@@ -799,7 +799,7 @@ def main() -> int:
             '"royal_outer_ring"',
         ],
         "H07": [
-            '"E  RETURN THROUGH THE PUDDLES"',
+            '"E  穿过积水返回"',
             '"opened_mirror_street_side_gate" in WorldState.achievement_flags',
             '"inner_city"',
         ],
@@ -841,7 +841,11 @@ def main() -> int:
         region_script[a13_start + 1:] if a13_start >= 0 else "",
         re.MULTILINE,
     )
-    a13_end = a13_start + 1 + a13_next.start() if a13_start >= 0 and a13_next else -1
+    a13_end = (
+        a13_start + 1 + a13_next.start()
+        if a13_start >= 0 and a13_next
+        else region_script.find("\\nfunc ", a13_start) if a13_start >= 0 else -1
+    )
     a13_block = region_script[a13_start:a13_end] if a13_start >= 0 and a13_end > a13_start else ""
     if not a13_block:
         fail(errors, "A13 terminal exit block is missing or malformed.")
