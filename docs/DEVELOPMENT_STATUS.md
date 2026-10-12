@@ -275,3 +275,5 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - Run both Python validators in a local checkout and complete Godot 4.6.x natural-exploration acceptance when an engine environment is available.
 
 - Second spatial pass: C09 (A5→A6) now leaves from the upper battlefield parapet; C17 (A9→A10) now uses a two-step upper roof approach. F10 route hints, topology anchors, and static regression contracts were updated together. Runtime reachability is still unverified.
+
+- H09 provisional loot is now decoupled from ending progression. New pickups only record `provisional_h09_relic_collected`; legacy `third_umbilical_cord` source entries from this candidate route are removed during load and the correction is saved. The third-cord motif remains undecided story material, not a finalized H09 requirement.
