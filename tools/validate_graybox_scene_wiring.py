@@ -802,6 +802,18 @@ def main() -> int:
     require(region_script, 'true, "", "", floor_y - 115.0', "A3 C05 elevation", errors)
     require(region_script, '1980.0, "E  经东侧高位旧升降机返回王城外环"', "A3 elevated C16 branch", errors)
     require(region_script, 'true, "", "", floor_y - 70.0', "A3 C16 elevation", errors)
+    require(region_script, '_register_debug_locked_route_hint(1980.0, "royal_outer_ring"', "A3 C16 debug marker", errors)
+
+    # A4's transport hub must distribute the three cross-region doors across separate ledges.
+    # A4 交通枢纽必须将三条跨区门分布在不同高度的栈台上。
+    require(region_script, '_add_platform(Rect2(930, 465, 180, 18))', "A4 low supply-tunnel ledge", errors)
+    require(region_script, '1050.0, "E  返回监牢"', "A4 C12 low ledge exit", errors)
+    require(region_script, 'true, "", "", floor_y - 75.0', "A4 C12 elevation", errors)
+    require(region_script, '1320.0, "E  返回旧王墓"', "A4 C07 middle ledge exit", errors)
+    require(region_script, 'true, "", "", floor_y - 85.0', "A4 C07 elevation", errors)
+    require(region_script, '1650.0, "E  返回王城外环"', "A4 C23 upper pipe exit", errors)
+    require(region_script, 'true, "", "", floor_y - 105.0', "A4 C23 elevation", errors)
+    require(region_script, '2220.0, "E  打开村庄井道水闸"', "A4 C06 return lane", errors)
 
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
@@ -828,10 +840,10 @@ def main() -> int:
         ('if region_id == "A3" and side == "third_street_gate":', "return map_width - 500.0"),
         ('if region_id == "A4" and side == "water_reflection_gate":', "return 1550.0"),
         ('if region_id == "A4" and side == "east":', "return map_width - 360.0"),
-        ('if region_id == "A4" and side == "prison_tunnel":', "return 1160.0"),
+        ('if region_id == "A4" and side == "prison_tunnel":', "return 1090.0"),
         ('if region_id == "A7" and side == "supply_tunnel":', "return 610.0"),
-        ('if region_id == "A4" and side == "royal_tomb_waterway":', "return 1160.0"),
-        ('if region_id == "A4" and side == "royal_drain":', "return 1600.0"),
+        ('if region_id == "A4" and side == "royal_tomb_waterway":', "return 1250.0"),
+        ('if region_id == "A4" and side == "royal_drain":', "return 1620.0"),
         ('if region_id == "A5" and side == "bell_tower":', "return 1900.0"),
         ('if region_id == "A6" and side == "silent_window":', "return 1400.0"),
         ('if region_id == "A8" and side == "royal_name_gate":', "return 1350.0"),
