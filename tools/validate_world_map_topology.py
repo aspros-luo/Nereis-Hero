@@ -148,9 +148,9 @@ def validate(data: dict[str, Any]) -> list[str]:
     c16_spatial = c16.get("spatial_contract", {}) if c16 else {}
     if c16_spatial.get("route_layer") != "eastern_rooftop_lift":
         fail(errors, "C16 must use the eastern rooftop lift lane.")
-    if c16_spatial.get("from_region_anchor") != {"region": "A3", "x": 1980, "y_offset": -70}:
+    if c16_spatial.get("from_region_anchor") != {"region": "A3", "x": 2040, "y_offset": -70}:
         fail(errors, "C16 spatial anchor must match the A3 eastern rooftop lift.")
-    if c16_spatial.get("return_spawn") != {"region": "A3", "x": 1940, "y_offset": -70}:
+    if c16_spatial.get("return_spawn") != {"region": "A3", "x": 1960, "y_offset": -70}:
         fail(errors, "C16 return spawn must stay aligned with the eastern rooftop lift and clear of H05.")
     if c16_spatial.get("to_region_anchor") != {"region": "A9", "x": 520, "y_offset": -110}:
         fail(errors, "C16 A9-side door must stay on the rooftop ledge.")
@@ -164,7 +164,7 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C10 return spawn must land on the upper monastery approach.")
     h05 = next((region for region in hidden if region.get("id") == "H05"), None)
     h05_return_anchor = h05.get("secondary_exit", {}).get("return_spatial_anchor", {}) if h05 else {}
-    if h05_return_anchor != {"region": "A3", "x": 1820, "layer": "street-level-return"}:
+    if h05_return_anchor != {"region": "A3", "x": 1870, "layer": "street-level-return"}:
         fail(errors, "H05 return gate must remain spatially separated from A3 C10 and C16.")
     expected_a4_spatial = {
         "C06": ("reservoir_ground_return", "from_region_anchor", {"region": "A4", "x": 2220, "y_offset": 0}),
