@@ -43,27 +43,23 @@ flowchart TB
   A1 --> A2L["A2 Forest Floor"]
   A2L <--> A2U["A2 Canopy / Pilgrim High Road"]
   A2U <--> A3U["A3 Raised Pipewalk / Upper City"]
-  A2L <--> A3G["A3 Ground City"]
   A2U -. C04 late shortcut .-> A5U["A5 Fortress Wall"]
-  A3G <--> A5G["A5 Battlefield"]
+  A3G["A3 Ground City"] <--> A5G["A5 Battlefield"]
   A5G <--> A5U
-  A5U <--> A6M["A6 Cloister"]
+  A5U["A5 Fortress Wall"] <--> A6M["A6 Cloister"]
   A6M <--> A6T["A6 Bell Tower"]
   A6M <--> A7["A7 Prison and Shafts"]
   A6T -. C10 drop shortcut .-> A3G
-  A7 <--> A8U["A8 Upper Tomb"]
+  A7 <--> A8U
   A7 <--> A8D["A8 Deep Tomb"]
-  A8U <--> A9G["A9 Outer Ring Streets"]
-  A8U <--> A9R["A9 Rooftop Route"]
-  A9R <--> A10U["A10 Cathedral Upper Gallery"]
-  A9G <--> A10G["A10 Pilgrim Stair"]
-  A10G <--> A12G["A12 Inner City"]
-  A10U <--> A12U["A12 Walls / Throne Upper Level"]
-  A3U <--> A4U["A4 Reservoir Middle Walk"]
+  A8U["A8 Upper Tomb"] <--> A9G["A9 Outer Ring Streets"]
+  A9R["A9 Rooftop Route"] <--> A10U["A10 Cathedral Upper Gallery"]
+  A10G["A10 Nave / Interior"] <--> A12G["A12 Inner City"]
+  A3U["A3 Raised Pipewalk"] <--> A4U["A4 Reservoir Middle Walk"]
   A4U <--> A4D["A4 Reservoir Bottom"]
   A4D <--> A7
   A4U <--> A8D
-  A9G <--> A4U
+  A9D["A9 High Royal Drain"] <--> A4U
   A3G <--> H03["H03 Erased Third Street"]
   A1 -. well shaft .-> H01["H01 Echo Well"]
   H01 -. late shaft .-> A4D
@@ -77,7 +73,7 @@ flowchart TB
   H06 -. late upper exit .-> A9R
   A9G -. reflected alley .-> H07["H07 Mirror Street"]
   H07 -. late side gate .-> A12G
-  A8D -. royal maintenance shaft .-> A11["A11 Ancient Research"]
+  A8D["A8 Deep Tomb"] -. royal maintenance shaft .-> A11["A11 Ancient Research"]
   A10U -. silent side chapel .-> A11
   A11 <--> H08["H08 Primordial Womb"]
   H08 --> A13["A13 Deep Dream / Endgame"]
