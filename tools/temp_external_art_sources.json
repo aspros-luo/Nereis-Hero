@@ -92,6 +92,50 @@
       "regions": [
         "discovery"
       ]
+    },
+    {
+      "name": "16x16 Dungeon Tileset",
+      "author": "0x72",
+      "license": "CC0 1.0 Universal per source page",
+      "url": "https://0x72.itch.io/16x16-dungeon-tileset",
+      "regions": [
+        "A4",
+        "A7",
+        "A8",
+        "A11"
+      ]
+    },
+    {
+      "name": "Dark World Asset Pack",
+      "author": "Kaishido",
+      "license": "CC0 1.0 Universal per source page",
+      "url": "https://kaishido.itch.io/dark-world",
+      "regions": [
+        "A2",
+        "A3",
+        "H01"
+      ]
+    },
+    {
+      "name": "16x16 Dark Dungeon Tileset",
+      "author": "Zoltan Kosina",
+      "license": "CC0 1.0 Universal per source page",
+      "url": "https://kosinaz.itch.io/16x16-dark-dungeon-tileset",
+      "regions": [
+        "A4",
+        "A7",
+        "A8",
+        "H01"
+      ]
+    },
+    {
+      "name": "The Spriters Resource",
+      "author": "Community archive; original game rights holders retain ownership",
+      "license": "Not assumed cleared for commercial use; use only where permitted",
+      "url": "https://www.spriters-resource.com/",
+      "regions": [
+        "reference_only"
+      ]
     }
   ]
 }
