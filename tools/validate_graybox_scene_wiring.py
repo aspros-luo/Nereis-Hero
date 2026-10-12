@@ -1339,7 +1339,7 @@ def main() -> int:
     print(" - H01-H08 plus C15/C19 gates use saved discovery/open/entry state and progression conditions.")
     print(f" - Platform reachability estimate: {platform_audit_regions} regions, {platform_audit_count} platforms.")
     print(f" - Local resonance route contract: {local_route_count} routes; IDs, prompts, narratives, endpoint proximity, collision overlap, sight gating, and persistence checked.")
-    print(" - C15 enters A11 from A8; C19 is the alternate A10 entry; H08 ending exit requires physical union.")
+    print(" - C15/C19 enter A11 from separate sides; H08 and the A11 deep-dream gate converge on A13 after physical union.")
     print("NOTE: Godot runtime/collision/input validation is still required.")
     return 0
 
