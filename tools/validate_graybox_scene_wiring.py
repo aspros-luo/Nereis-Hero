@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static wiring checks for the A0-A12 graybox, H01-H08, and world-map route contracts.
+"""Static wiring checks for the A0-A13 graybox, H01-H08, and world-map route contracts.
 
 This script checks file references and save/transition contracts. It does not
 replace Godot runtime tests for collision, interaction focus, or scene changes.
@@ -25,6 +25,7 @@ REGIONS = {
     "A9": ("scenes/royal_outer_ring.tscn", "royal_outer_ring", "THE ROYAL OUTER RING"),
     "A10": ("scenes/grand_cathedral.tscn", "grand_cathedral", "THE GREAT CATHEDRAL"),
     "A12": ("scenes/inner_city.tscn", "inner_city", "THE INNER CITY"),
+    "A13": ("scenes/terminal_anomaly.tscn", "terminal_anomaly", "THE DEEP DREAM AND FINAL ANOMALY"),
     "A11": ("scenes/deep_research_depths.tscn", "deep_research_depths", "THE DEPTHS THAT PRECEDED THE LAB"),
     "H08": ("scenes/primordial_hollow.tscn", "primordial_hollow", "THE WOMB BELOW THE LAB"),
     "H07": ("scenes/mirror_street.tscn", "mirror_street", "MIRROR STREET: BEHIND THE RAIN"),
@@ -117,8 +118,14 @@ def main() -> int:
                 errors.append("Runtime must keep H06 tied to the royal inscription while the erased-street clue remains a separate source.")
             h08 = next((region for region in hidden_regions if region.get("id") == "H08"), None)
             h08_exit = h08.get("secondary_exit", {}) if h08 else {}
-            if h08_exit.get("unlock_condition") != "physical_union_complete_then_route_candidate_selects_ending":
-                errors.append("Topology H08 ending exit must match the runtime physical-union gate and delegate ending choice to the evaluator.")
+            if h08_exit.get("unlock_condition") != "physical_union_complete_then_enter_A13_terminal_layer":
+                errors.append("Topology H08 exit must converge on A13 after physical union rather than skip the terminal layer.")
+            c21 = next((edge for edge in topology.get("connections", []) if edge.get("id") == "C21"), None)
+            c22 = next((edge for edge in topology.get("connections", []) if edge.get("id") == "C22"), None)
+            if not c21 or c21.get("unlock_condition") != "physical_union_complete" or c21.get("to") != "A13":
+                errors.append("C21 must gate the A11 deep-dream entrance on physical_union_complete.")
+            if not c22 or c22.get("initial_access") != "from_to" or c22.get("unlock_condition") != "reached_A12_via_A10" or c22.get("to") != "A13":
+                errors.append("C22 must route the main A12 path into A13 after reaching the inner city.")
             regions = topology.get("regions", [])
             region_ids = [region.get("id") for region in regions]
             if len(region_ids) != len(set(region_ids)):
@@ -797,11 +804,10 @@ def main() -> int:
             '"inner_city"',
         ],
         "H08": [
-            '"E  RETURN TO THE DEPTHS"',
+            '"E  返回深层研究区"',
             'if WorldState.physical_union_complete:',
-            'ending_gate.call("route_candidate")',
-            'var ending_location := "church_final_demo"',
-            'elif ending_scene_path.ends_with("ending_fire_demo.tscn"):',
+            '"terminal_anomaly"',
+            '"res://scenes/terminal_anomaly.tscn"',
         ],
     }
     for hidden_id, contracts in hidden_exit_contracts.items():
@@ -813,6 +819,21 @@ def main() -> int:
             continue
         for contract in contracts:
             require(block, contract, f"{hidden_id} hidden-region return contract", errors)
+
+    # A13 is a real terminal map layer, not merely an abstract topology node. Ending selection occurs after entering it.
+    # A13 必须是实际终局地图层，而不是只存在于拓扑中的抽象节点；进入后才选择结局。
+    a13_start = region_script.find('        "A13":', exits_start)
+    a13_end = region_script.find('\n        "', a13_start + 12) if a13_start >= 0 else -1
+    a13_block = region_script[a13_start:a13_end] if a13_start >= 0 and a13_end > a13_start else ""
+    if not a13_block:
+        fail(errors, "A13 terminal exit block is missing or malformed.")
+    else:
+        require(a13_block, 'ending_gate.call("route_candidate")', "A13 ending evaluator", errors)
+        require(a13_block, '"ending_fire_demo.tscn"', "A13 fire ending route", errors)
+        require(a13_block, '"ending_paradise_demo.tscn"', "A13 paradise ending route", errors)
+        require(a13_block, '"E  接受终局"', "A13 final threshold", errors)
+    require(region_script, '"terminal_anomaly"', "A13 runtime location id", errors)
+    require(world_state, '"terminal_anomaly":', "A13 save/resume mapping", errors)
 
     # A3 exits must occupy distinct spatial lanes: raised sewer branch, street-level hidden clue,
     # and elevated far-eastern lift. This prevents all major choices from collapsing into one doorway cluster.
