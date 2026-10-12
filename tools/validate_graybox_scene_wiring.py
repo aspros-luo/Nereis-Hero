@@ -110,6 +110,11 @@ def main() -> int:
                 errors.append("Topology H01 return contract must match the shared persistent gate state used by runtime.")
             if h01_exit.get("opens_from") != "A4" or h01_exit.get("to") != "A4":
                 errors.append("Topology H01 secondary exit must remain the A4-side return through the well gate.")
+            h06 = next((region for region in hidden_regions if region.get("id") == "H06"), None)
+            if h06 and set(h06.get("required_source_ids", [])) != {"anomaly_bell_retiming", "anomaly_erased_royal_name"}:
+                errors.append("Topology H06 must require the bell-retiming and royal-inscription clues.")
+            if '"anomaly_erased_royal_name"' not in region_script or '"anomaly_erased_street_sign"' not in region_script:
+                errors.append("Runtime must keep H06 tied to the royal inscription while the erased-street clue remains a separate source.")
             h08 = next((region for region in hidden_regions if region.get("id") == "H08"), None)
             h08_exit = h08.get("secondary_exit", {}) if h08 else {}
             if h08_exit.get("unlock_condition") != "physical_union_complete_then_route_candidate_selects_ending":
