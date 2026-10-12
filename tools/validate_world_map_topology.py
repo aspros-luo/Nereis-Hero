@@ -150,6 +150,10 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C16 spatial anchor must match the A3 eastern rooftop lift.")
     if c16_spatial.get("return_spawn") != {"region": "A3", "x": 1940, "y_offset": -70}:
         fail(errors, "C16 return spawn must stay aligned with the eastern rooftop lift and clear of H05.")
+    if c16_spatial.get("to_region_anchor") != {"region": "A9", "x": 520, "y_offset": -110}:
+        fail(errors, "C16 A9-side door must stay on the rooftop ledge.")
+    if c16_spatial.get("to_region_spawn") != {"region": "A9", "x": 610, "y_offset": -110}:
+        fail(errors, "C16 arrival in A9 must land on the same rooftop ledge.")
     c10 = next((edge for edge in connections if edge.get("id") == "C10"), None)
     c10_spatial = c10.get("spatial_contract", {}) if c10 else {}
     if c10_spatial.get("from_region_anchor") != {"region": "A6", "x": 2230, "y_offset": -55}:
@@ -183,6 +187,12 @@ def validate(data: dict[str, Any]) -> list[str]:
         spatial = edge.get("spatial_contract", {}) if edge else {}
         if spatial.get("return_spawn") != expected_spawn:
             fail(errors, f"{connection_id} return spawn must match its elevated destination ledge.")
+    c23 = next((edge for edge in connections if edge.get("id") == "C23"), None)
+    c23_spatial = c23.get("spatial_contract", {}) if c23 else {}
+    if c23_spatial.get("from_region_anchor") != {"region": "A9", "x": 850, "y_offset": -150}:
+        fail(errors, "C23 A9-side door must branch from the upper service ledge.")
+    if c23_spatial.get("from_region_spawn") != {"region": "A9", "x": 770, "y_offset": -150}:
+        fail(errors, "C23 arrival in A9 must land on the upper service ledge.")
 
     # C24 is the alternate A1-to-A3 route added after the village defense.
     # C24 是村庄防卫后开放的 A1 → A3 替代路线。
