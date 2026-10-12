@@ -13,6 +13,7 @@
 - 新增 `assets/art/backdrops/eldritch_backdrop.svg`：终局异象、非欧几何环与虚空层。
 - 新增 `assets/art/backdrops/stone_floor_strip.svg`：石板、裂缝、磨损和地面边缘。
 - 新增 `assets/art/backdrops/surgery_ward_backdrop.svg` 与 `surgery_floor_strip.svg`：将新游戏的第一幕（教会手术所）也从纯色底图改为带玻璃实验舱、悬挂灯具和染污地砖的场景插画。
+- 新增 `assets/art/backdrops/village_backdrop.svg` 与 `village_ground_strip.svg`：为逃出手术所后的首个安全据点加入远山、树线、村屋剪影和泥石路纹理。
 - 修改 `scripts/levels/greybox_world_region.gd`：根据区域 ID 选择背景，并将平坦地面替换为纹理地面。背景仅负责绘制，不创建碰撞体、不移动出口、不改变出生点或存档标记。
 
 这些 SVG 是为本项目绘制的可替换视觉资源，不是外部游戏的拆包素材。它们是第一轮场景底图，不代表角色、敌人和动画美术已完成。
@@ -54,6 +55,7 @@
 - `eldritch_backdrop.svg`: terminal anomaly, non-Euclidean rings, void atmosphere.
 - `stone_floor_strip.svg`: worn flagstones, cracks, seams, and a readable ground edge.
 - `surgery_ward_backdrop.svg` and `surgery_floor_strip.svg`: the new-run opening room now has illustrated glass experiment tanks, hanging surgical fixtures, and stained floor tiles instead of a flat-color base.
+- `village_backdrop.svg` and `village_ground_strip.svg`: the first safe hub after the escape now has distant hills, tree lines, village silhouettes, and a textured dirt-and-stone road.
 - `scripts/levels/greybox_world_region.gd` now selects a backdrop by region ID and draws a textured floor strip. These are visual-only changes: no collision bodies, exits, spawn positions, or save flags are intentionally changed.
 
 These SVGs are original project artwork, not ripped game assets. They establish a first environmental art pass; character sprites, enemy sprites, and animation replacement remain unfinished.
