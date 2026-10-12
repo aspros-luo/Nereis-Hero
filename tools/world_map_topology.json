@@ -1502,5 +1502,6 @@
       "设计文档与拓扑数据不能替代 Godot 实机验收。",
       "玩家默认不显示完整开发者地图、敌人位置、奖励清单或隐藏出口。"
     ]
-  }
+  },
+  "primary_route_role": "first-run orientation spine only; not an exclusive traversal path. Final spatial authority is vertical_design and docs/BOX_WORLD_FINAL_MAP_DESIGN_CN.md."
 }
