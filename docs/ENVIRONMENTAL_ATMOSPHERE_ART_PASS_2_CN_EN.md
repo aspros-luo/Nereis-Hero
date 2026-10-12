@@ -179,3 +179,23 @@ This pass addresses the remaining “flat gray rectangle” feeling in terrain a
 - [x] Committed to `development`.
 - [x] Static review of material draw placement and platform draw order.
 - [ ] Godot 4.6.x runtime parsing and visual acceptance are still pending. Check that highlights stay within narrow platforms and that floor stains do not become too dense.
+
+
+## 第五轮：中景环境节奏 / Pass 5: Midground Environmental Rhythm
+
+### 中文
+- 新增中景环境强调层，补足此前细节较少的区域：起始边境的折断木桩、教会区域的悬挂香炉与链条、监牢铁链、古墓墓碑队列、深层研究区的悬吊样本管、内城区断裂信号线，以及隐藏密室的旧机关丝线。
+- 悬崖洞穴增加上方边缘矿脉尖齿，中央活动空间保持留白。
+- 新层在远景雾与区域剪影之后、地面和平台之前绘制；不创建节点、不新增碰撞、不改变平台、出口、地图连通或剧情状态。
+- 所有位置由区域 ID 和固定索引决定，没有每帧随机数。
+
+### English
+- Added a midground accent layer for previously under-detailed regions: snapped stakes at the outskirts; suspended censers and chains in sacred interiors; prison chains; tomb markers; hanging specimen tubes in deep research; broken signal wires in the inner city; and dormant mechanism threads in hidden chambers.
+- Cliff-cave mineral teeth frame the upper edge while leaving the central play space open.
+- The layer draws after atmospheric haze and regional silhouettes, but before the floor and platforms. It creates no nodes or collision and does not change platforms, exits, map connectivity, or narrative state.
+- Placement is deterministic from region IDs and fixed indices; no per-frame randomness is used.
+
+### Validation / 验证
+- [x] Static review confirms one new draw helper and one call from the main draw sequence.
+- [x] New accents are draw-only and do not mutate gameplay state.
+- [ ] Godot 4.6.x runtime parsing, visual readability, and performance still require local playtesting.
