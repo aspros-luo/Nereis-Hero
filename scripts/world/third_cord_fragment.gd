@@ -1,6 +1,6 @@
 extends Node2D
-## Optional ending-condition relic dropped by the ancient-god test subject.
-## 古神实验体掉落的可选结局条件遗物。
+## Provisional H09 relic pickup used to test persistent optional-room loot.
+## H09 临时候选遗物，仅用于验证可选区域物品的持久化，不参与结局条件。
 
 signal collected
 
@@ -30,10 +30,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	):
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E:
-		if WorldState.record_achievement("third_umbilical_cord_fragment_acquired"):
-			WorldState.record_hidden_artifact_source("third_umbilical_cord_fragment")
+		if WorldState.record_achievement("provisional_h09_relic_collected"):
 			collected.emit()
-			print("[NEREIS][ENDING] Third umbilical cord fragment acquired; hidden anchor added.")
+			print("[NEREIS][MAP][PROVISIONAL] H09 candidate relic collected; no ending condition recorded.")
 		queue_free()
 		get_viewport().set_input_as_handled()
 
@@ -49,4 +48,4 @@ func _draw() -> void:
 	draw_line(Vector2(7.0, -22.0 + bob), Vector2(-4.0, -11.0 + bob), Color("#c7a3b9"), 3.0)
 	draw_circle(Vector2(0.0, -24.0 + bob), 3.0, Color("#e3c7df"))
 	if hero_nearby and INTERACTION_FOCUS_SCRIPT.is_focused(self) and not WorldState.input_locked:
-		draw_string(ThemeDB.fallback_font, Vector2(-54.0, 18.0), "E  拾取脐带残片", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 15, Color("#e1c6df"))
+		draw_string(ThemeDB.fallback_font, Vector2(-54.0, 18.0), "E  拾取候选遗物", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 15, Color("#e1c6df"))
