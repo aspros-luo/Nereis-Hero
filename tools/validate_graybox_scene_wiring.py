@@ -817,6 +817,11 @@ def main() -> int:
     require(region_script, '2020, 450, 130, 18', "A6 C10 upper approach platform", errors)
     require(region_script, '2230.0, "E  打开钟塔落差通路"', "A6 C10 elevated door", errors)
     require(region_script, 'true, "opened_bell_tower_drop", "E  返回被遗忘的城区", floor_y - 55.0', "A6 C10 door height", errors)
+    require(region_script, '520.0, "E  打开旧升降梯"', "A9 C16 rooftop door", errors)
+    require(region_script, 'true, "reached_A9_via_A8_then_opened_old_lift_from_A9", "E  乘旧升降梯返回",\n\t\t\t\tfloor_y - 110.0', "A9 C16 door height", errors)
+    require(region_script, '_add_platform(Rect2(680, 390, 120, 18))', "A9 C23 upper service ledge", errors)
+    require(region_script, '850.0, "E  打开王城排水门"', "A9 C23 upper door", errors)
+    require(region_script, 'true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  沿王城排水道返回",\n\t\t\t\tfloor_y - 150.0', "A9 C23 door height", errors)
     require(region_script, 'Vector2(850, floor_y - 18.0),\n\t\t\t\t"anomaly_old_stone_layer"', "A4 clue/door interaction spacing", errors)
 
     # Elevated transitions must restore both horizontal position and platform height.
@@ -830,6 +835,8 @@ def main() -> int:
         'if region_id == "A4" and side == "prison_tunnel":\n\t\treturn floor_y - 75.0',
         'if region_id == "A4" and side == "royal_tomb_waterway":\n\t\treturn floor_y - 85.0',
         'if region_id == "A4" and side == "royal_drain":\n\t\treturn floor_y - 120.0',
+        'if region_id == "A9" and side == "old_lift":\n\t\treturn floor_y - 110.0',
+        'if region_id == "A9" and side == "royal_drain":\n\t\treturn floor_y - 150.0',
     ]:
         require(region_script, vertical_spawn_contract, "Elevated route spawn height", errors)
 
@@ -852,7 +859,7 @@ def main() -> int:
         ('if region_id == "A3" and side == "bell_drop":', "return 1600.0"),
         ('if region_id == "A3" and side == "old_lift":', "return 1940.0"),
         ('if region_id == "A6" and side == "bell_drop":', "return 2100.0"),
-        ('if region_id == "A9" and side == "royal_drain":', "return 810.0"),
+        ('if region_id == "A9" and side == "royal_drain":', "return 770.0"),
         ('if region_id == "A9" and side == "old_lift":', "return 610.0"),
         ('if region_id == "A9" and side == "inner_city_side_gate":', "return 980.0"),
         ('if region_id == "A12" and side == "inner_city_side_gate":', "return 650.0"),
