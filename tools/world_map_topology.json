@@ -524,7 +524,7 @@
       "kind": "ending",
       "initial_access": "blocked",
       "final_direction": "forward",
-      "unlock_condition": "ending_state_allows_deep_dream_entry",
+      "unlock_condition": "physical_union_complete",
       "opens_from": "A11"
     },
     {
@@ -532,9 +532,9 @@
       "from": "A12",
       "to": "A13",
       "kind": "ending",
-      "initial_access": "blocked",
+      "initial_access": "from_to",
       "final_direction": "forward",
-      "unlock_condition": "ending_state_allows_throne_entry",
+      "unlock_condition": "reached_A12_via_A10",
       "opens_from": "A12"
     },
     {
@@ -861,11 +861,11 @@
       "return_to_parent": true,
       "secondary_exit": {
         "to": "A13",
-        "unlock_condition": "physical_union_complete_then_route_candidate_selects_ending",
-        "opens_from": "A11",
+        "unlock_condition": "physical_union_complete_then_enter_A13_terminal_layer",
+        "opens_from": "H08",
         "requires_target_already_reached": false,
         "requires_ending_state": true,
-        "notes": "The exit appears after physical union is complete. Evidence and ending facts are evaluated by the ending router; this gate must not hard-code one ending or require the player to have already unlocked a specific ending."
+        "notes": "The hidden H08 route converges on A13 after physical union; A13 then delegates ending choice to the existing evaluator. It must not skip the terminal map layer or hard-code one ending."
       },
       "min_distinct_anomaly_sources": 3,
       "scene_path": "scenes/primordial_hollow.tscn",
