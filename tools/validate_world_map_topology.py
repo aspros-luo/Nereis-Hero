@@ -470,6 +470,9 @@ def validate(data: dict[str, Any]) -> list[str]:
         missing_sources = sorted(set(secret.get("required_source_ids", [])) - set(source_ids))
         if missing_sources:
             fail(errors, f"{secret.get('id')}: references missing resonance sources {missing_sources}.")
+    h06 = next((item for item in hidden if item.get("id") == "H06"), None)
+    if h06 and set(h06.get("required_source_ids", [])) != {"anomaly_bell_retiming", "anomaly_erased_royal_name"}:
+        fail(errors, "H06 must require the bell-retiming clue and the royal-inscription clue, not the unrelated erased-street sign.")
     h07 = next((item for item in hidden if item.get("id") == "H07"), None)
     if h07 and (int(h07.get("min_outer_exposure", 0)) < 12 or h07.get("requires_outer_god_resonance") is not True):
         fail(errors, "H07 must require the outer-god resonance story fact and outer exposure >= 12.")
