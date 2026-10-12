@@ -407,14 +407,20 @@
         },
         "to_region_anchor": {
           "region": "A9",
-          "spawn_side": "old_lift"
+          "x": 520,
+          "y_offset": -110
         },
         "return_spawn": {
           "region": "A3",
           "x": 1940,
           "y_offset": -70
         },
-        "intent": "Late shortcut occupies the far-eastern upper lane, separate from H03 street-level anomaly and C10 monastery-drop door."
+        "intent": "Late shortcut occupies the far-eastern upper lane, separate from H03 street-level anomaly and C10 monastery-drop door.",
+        "to_region_spawn": {
+          "region": "A9",
+          "x": 610,
+          "y_offset": -110
+        }
       }
     },
     {
@@ -490,7 +496,8 @@
         "route_layer": "upper_royal_drain_pipe",
         "from_region_anchor": {
           "region": "A9",
-          "x": 720
+          "x": 850,
+          "y_offset": -150
         },
         "to_region_anchor": {
           "region": "A4",
@@ -502,7 +509,12 @@
           "x": 1620,
           "y_offset": -120
         },
-        "intent": "Royal drain uses the upper pipe ledge, separate from H04's water reflection entrance and the ground-level village watergate."
+        "intent": "Royal drain uses the upper pipe ledge, separate from H04's water reflection entrance and the ground-level village watergate.",
+        "from_region_spawn": {
+          "region": "A9",
+          "x": 770,
+          "y_offset": -150
+        }
       }
     },
     {
@@ -1150,7 +1162,8 @@
       "C16 return spawn was tightened to x=1940 so it stays within reach of its elevated door while clear of H05 at x=1820.",
       "Elevated cross-region transitions now preserve the matching ledge height on arrival: C05 A3 x=1600/-115, C16 A3 x=1940/-70, C12 A4 x=1090/-75, C07 A4 x=1260/-85, C23 A4 x=1620/-120.",
       "C03 A3-to-A2 return now lands on the A2 canopy approach at x=2120, y_offset=-140, matching the elevated exit route.",
-      "C10 Bell Tower Drop moved from the A6 floor to x=2230 on the upper/eastern landing; its A6 return spawn is x=2100, y_offset=-90."
+      "C10 Bell Tower Drop moved from the A6 floor to x=2230 on the upper/eastern landing; its A6 return spawn is x=2100, y_offset=-90.",
+      "A9 C16 old lift now occupies the x=520 rooftop ledge (y_offset=-110); C23 royal drain now branches from x=850 on the upper service ledge (y_offset=-150), with A9 return spawn x=770 at the same height."
     ]
   }
 }
