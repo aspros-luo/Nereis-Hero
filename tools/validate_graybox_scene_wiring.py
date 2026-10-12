@@ -103,6 +103,9 @@ def fail(errors: list[str], message: str) -> None:
 
 def main() -> int:
     errors: list[str] = []
+    # Load the shared controller before topology checks that inspect its clue wiring.
+    # 拓扑检查会读取共享控制器中的线索 ID，因此必须先加载，避免局部变量尚未赋值。
+    region_script = read("scripts/levels/greybox_world_region.gd", errors)
     platform_audit_regions = 0
     platform_audit_count = 0
     local_route_count = 0
@@ -316,7 +319,6 @@ def main() -> int:
     require(prologue_script, "Cold surgical shafts and suspended cables", "A0 environmental lighting layer", errors)
     require(prologue_script, "Sparse surgical floor seams", "A0 floor material layer", errors)
 
-    region_script = read("scripts/levels/greybox_world_region.gd", errors)
     # Visual polish helpers are part of the shared graybox renderer and must remain wired.
     # 共享灰盒渲染器的美术层函数必须保持接入，避免后续重构时悄然退回纯色背景。
     require(region_script, "_draw_atmospheric_layers()", "Regional atmosphere render call", errors)
