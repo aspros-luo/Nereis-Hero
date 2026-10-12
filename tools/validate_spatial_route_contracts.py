@@ -124,6 +124,50 @@ def main() -> int:
         "C24: village_hub.gd must map city_cut_return to its safe x=350 landing.",
     )
 
+    # Elevated exits must be anchored to a platform at the authored doorway height.
+    # This catches metadata/code drift that a region-level graph cannot detect.
+    platform_function = function_body(region_source, "_configure_platforms")
+    region_blocks = {
+        match.group(1): match.group(2)
+        for match in re.finditer(
+            r'^\t\t"([A-Z]\d{1,2})":\n(.*?)(?=^\t\t"[A-Z]\d{1,2}":|^\t\t_:|\Z)',
+            platform_function,
+            re.MULTILINE | re.DOTALL,
+        )
+    }
+    platform_rects: dict[str, list[tuple[float, float, float, float]]] = {}
+    for region, block in region_blocks.items():
+        platform_rects[region] = [
+            tuple(float(value) for value in match.groups())
+            for match in re.finditer(
+                r"_add_platform\(Rect2\(([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)\)\)",
+                block,
+            )
+        ]
+
+    # (connection, region, x, y_offset); y is derived from the shared floor_y=540.
+    elevated_doors = [
+        ("C03", "A2", 2240.0, -160.0),
+        ("C05", "A3", 1600.0, -115.0),
+        ("C09", "A5", 2250.0, -90.0),
+        ("C10", "A6", 2230.0, -55.0),
+        ("C16", "A3", 2040.0, -70.0),
+        ("C17", "A9", 2350.0, -180.0),
+        ("C23", "A9", 850.0, -150.0),
+        ("C23", "A4", 1650.0, -105.0),
+    ]
+    for edge_id, region, x, y_offset in elevated_doors:
+        door_y = 540.0 + y_offset
+        supported = any(
+            left <= x <= left + width and abs(platform_y - door_y) <= 20.0
+            for left, platform_y, width, _height in platform_rects.get(region, [])
+        )
+        require(
+            errors,
+            supported,
+            f"{edge_id}: elevated door anchor {region} x={x:g}, y={door_y:g} is not supported by a nearby authored platform.",
+        )
+
     # C17 has no explicit return_spawn field, but its high approach and target spawn side are important.
     c17 = edges.get("C17", {}).get("spatial_contract", {})
     from_anchor = c17.get("from_region_anchor", {})
