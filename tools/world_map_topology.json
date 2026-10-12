@@ -12,7 +12,20 @@
     {
       "id": "A1",
       "name": "边境村庄",
-      "role": "hub"
+      "role": "hub",
+      "spatial_layers": [
+        {
+          "id": "old_drainage_threshold",
+          "purpose": "C24 ground-level alternative route to A3 after village defense",
+          "anchors": [
+            {
+              "id": "C24",
+              "x": 100,
+              "y_offset": 0
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "A2",
@@ -24,6 +37,17 @@
       "name": "废弃城区",
       "role": "hub",
       "spatial_layers": [
+        {
+          "id": "old_drainage_return",
+          "purpose": "C24 ground-level return to the village",
+          "anchors": [
+            {
+              "id": "C24",
+              "x": 520,
+              "y_offset": 0
+            }
+          ]
+        },
         {
           "id": "street",
           "purpose": "H03 anomaly clue and hidden entry",
@@ -555,7 +579,22 @@
       "initial_access": "blocked",
       "final_direction": "both",
       "unlock_condition": "village_defense_survived",
-      "opens_from": "A1"
+      "opens_from": "A1",
+      "spatial_contract": {
+        "route_layer": "old_drainage_passage",
+        "from_region_anchor": {
+          "region": "A1",
+          "x": 100,
+          "y_offset": 0
+        },
+        "to_region_anchor": {
+          "region": "A3",
+          "x": 520,
+          "y_offset": 0,
+          "spawn_side": "west"
+        },
+        "intent": "The post-defense shortcut uses the old low drainage passage at ground level. It is a second route into the city, not a rooftop connection and not a replacement for the A2 forest/bell-tomb route."
+      }
     }
   ],
   "loops": [
@@ -1421,9 +1460,9 @@
       },
       {
         "connection": "C24",
-        "from": "A1.roofs_and_walkways",
-        "to": "A3.rooftops",
-        "reason": "村庄防卫事件后开放的上层近路"
+        "from": "A1.village_lane",
+        "to": "A3.ground_street",
+        "reason": "村庄防卫事件后开放的低位旧排水通道；提供第二条进城路线，不承担屋顶高路功能"
       }
     ],
     "target_loops": [
@@ -1609,7 +1648,7 @@
       "parent_region": "A1",
       "name": "屋顶木栈道",
       "layer": "upper",
-      "role": "C24上层近路起点"
+      "role": "可选屋顶探索路线；C24不经过此处"
     },
     {
       "id": "A1-S04",
@@ -1686,7 +1725,7 @@
       "parent_region": "A3",
       "name": "屋顶连廊",
       "layer": "upper",
-      "role": "C16与C24落点"
+      "role": "C16高位落点与屋顶探索；C24不经过此处"
     },
     {
       "id": "A3-S05",
@@ -2925,7 +2964,7 @@
         "雾林入口",
         "峡谷/旧朝圣路",
         "老井地下水道",
-        "后期打开的城区高路"
+        "村庄防卫后开放的旧排水通道（低位）"
       ]
     },
     {
@@ -3008,7 +3047,7 @@
       ],
       "story_role": "第一核心枢纽；街面、屋顶与管线多层交错，灵视揭露被城市记忆抹去的街区。",
       "connections": [
-        "村庄后期开启的高路",
+        "村庄防卫后开启的旧排水通道（地面层）",
         "雾林",
         "战场",
         "下水道",
