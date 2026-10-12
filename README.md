@@ -137,6 +137,10 @@ Spatial route contract audit and local runtime checklist (Chinese / English):
 
 `docs/SPATIAL_ROUTE_CONTRACT_AUDIT_PASS_1_CN_EN.md`
 
+Connection wiring audit pass 1 (Chinese / English; validator initialization defect fixed, full execution pending):
+
+`docs/CONNECTION_WIRING_AUDIT_PASS_1_CN_EN.md`
+
 A2–A4 / H01 first-loop graybox notes and runtime acceptance checklist (Chinese):
 
 `docs/GRAYBOX_A2_A4_IMPLEMENTATION_CN.md`
