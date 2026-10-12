@@ -156,6 +156,14 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C16 A9-side door must stay on the rooftop ledge.")
     if c16_spatial.get("to_region_spawn") != {"region": "A9", "x": 610, "y_offset": -110}:
         fail(errors, "C16 arrival in A9 must land on the same rooftop ledge.")
+    c09 = next((edge for edge in connections if edge.get("id") == "C09"), None)
+    c09_spatial = c09.get("spatial_contract", {}) if c09 else {}
+    if c09_spatial.get("from_region_anchor") != {"region": "A5", "x": 2250, "y_offset": -90}:
+        fail(errors, "C09 main exit must leave A5 from the upper battlefield parapet.")
+    c17 = next((edge for edge in connections if edge.get("id") == "C17"), None)
+    c17_spatial = c17.get("spatial_contract", {}) if c17 else {}
+    if c17_spatial.get("from_region_anchor") != {"region": "A9", "x": 2350, "y_offset": -180}:
+        fail(errors, "C17 main exit must use the elevated cathedral roof approach.")
     c10 = next((edge for edge in connections if edge.get("id") == "C10"), None)
     c10_spatial = c10.get("spatial_contract", {}) if c10 else {}
     if c10_spatial.get("from_region_anchor") != {"region": "A6", "x": 2230, "y_offset": -55}:
