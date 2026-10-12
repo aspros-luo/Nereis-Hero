@@ -257,6 +257,23 @@ func _draw() -> void:
     draw_rect(Rect2(0, 0, LEVEL_WIDTH, 720), Color("#100d12"))
     draw_rect(Rect2(0, FLOOR_Y, LEVEL_WIDTH, 180), Color("#211a22"))
 
+    # Cold surgical shafts and suspended cables establish depth before the room's props are drawn.
+    # 冷色手术灯柱与悬垂线缆先建立空间纵深，再绘制房间内的物件。
+    for lamp_x in [700.0, 1120.0, 1500.0]:
+        draw_rect(Rect2(lamp_x - 28.0, 86.0, 56.0, 420.0), Color("#b66e82", 0.025))
+        draw_rect(Rect2(lamp_x - 12.0, 105.0, 24.0, 300.0), Color("#d49aa8", 0.018))
+        draw_line(Vector2(lamp_x - 58.0, 0.0), Vector2(lamp_x - 58.0, 306.0), Color("#51404d", 0.70), 2.0)
+        draw_line(Vector2(lamp_x + 58.0, 0.0), Vector2(lamp_x + 58.0, 306.0), Color("#51404d", 0.70), 2.0)
+        draw_line(Vector2(lamp_x - 58.0, 306.0), Vector2(lamp_x + 58.0, 306.0), Color("#6e4b5a", 0.65), 2.0)
+        draw_circle(Vector2(lamp_x, 320.0), 24.0, Color("#b66e82", 0.035))
+        draw_circle(Vector2(lamp_x, 320.0), 9.0, Color("#b66e82", 0.12))
+
+    # Sparse surgical floor seams and a few broken tile marks replace the uninterrupted flat floor.
+    # 稀疏的手术室地砖缝与破损痕迹打破连续纯色地面。
+    for tile_x in range(90, int(LEVEL_WIDTH), 210):
+        draw_line(Vector2(tile_x, FLOOR_Y + 12.0), Vector2(tile_x - 7.0, FLOOR_Y + 38.0), Color("#0b090f", 0.48), 1.0)
+        draw_line(Vector2(tile_x + 34.0, FLOOR_Y + 68.0), Vector2(tile_x + 66.0, FLOOR_Y + 64.0), Color("#57434d", 0.22), 1.0)
+
     draw_rect(Rect2(120, 280, 420, 240), Color("#29222c"))
     draw_rect(Rect2(180, 240, 300, 40), Color("#352d38"))
     draw_string(ThemeDB.fallback_font, Vector2(210, 215), NereisLocalization.translate_text("教会手术所"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
