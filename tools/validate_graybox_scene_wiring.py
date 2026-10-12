@@ -307,6 +307,7 @@ def main() -> int:
     # 共享灰盒渲染器的美术层函数必须保持接入，避免后续重构时悄然退回纯色背景。
     require(region_script, "_draw_atmospheric_layers()", "Regional atmosphere render call", errors)
     require(region_script, "func _draw_atmospheric_layers() -> void:", "Regional silhouette layer", errors)
+    require(region_script, 'func _draw_terminal_anomaly_landmarks() -> void:', "A13 terminal environment landmark", errors)
     require(region_script, "func _draw_ground_detail() -> void:", "Ground surface detail layer", errors)
     require(region_script, 'const REGION_AMBIENCE_SCRIPT = preload("res://scripts/effects/region_ambience.gd")', "Regional ambience script preload", errors)
     require(region_script, "func _spawn_region_ambience() -> void:", "Regional ambience setup", errors)
