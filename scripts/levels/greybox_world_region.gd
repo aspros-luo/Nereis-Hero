@@ -420,6 +420,7 @@ func _localized_region_title() -> String:
 		"A10": display_name = "大圣堂、朝圣阶梯与教会内廷"
 		"A11": display_name = "古神遗迹与深层研究区"
 		"A12": display_name = "王室内城与王座区"
+		"A13": display_name = "深层梦境与终局异象"
 		"H01": display_name = "井底回声层"
 		"H02": display_name = "倒响钟室"
 		"H03": display_name = "被删去的第三街"
@@ -471,6 +472,8 @@ func _get_objective_text() -> String:
 
 		"A12":
 			return "进入王座区，决定什么必须覆灭。"
+		"A13":
+			return "沿断裂的阶梯走向终局；这里不再提供普通回程。"
 		"H07":
 			return "追随只存在于水中的街道。"
 		"H01":
@@ -559,6 +562,12 @@ func _show_intro() -> void:
 				"王室内城",
 				"王宫大门敞开着。\n\n守卫却仍留在原位。",
 				5.0
+			)
+		"A13":
+			narrative.show_message(
+				"终局异象",
+				"这里没有旗帜，也没有祷词。\n\n阶梯的每一段都指向同一个方向，但没有两段阶梯通往同一处地方。\n\n你仍然可以向前。",
+				6.0
 			)
 		"H07":
 			narrative.show_message(
@@ -1019,6 +1028,15 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1360, 310, 115, 18))
 			_add_platform(Rect2(1500, 350, 115, 18))
 			_add_platform(Rect2(1640, 395, 115, 18))
+		"A13":
+			# The terminal layer uses a broken ascent that converges on the ending threshold.
+			# 终局层以断裂的上升路径汇聚到结局门槛。
+			_add_platform(Rect2(320, 475, 180, 18))
+			_add_platform(Rect2(620, 420, 150, 18))
+			_add_platform(Rect2(900, 365, 160, 18))
+			_add_platform(Rect2(1210, 315, 180, 18))
+			_add_platform(Rect2(1530, 355, 170, 18))
+			_add_platform(Rect2(1830, 420, 180, 18))
 
 func _add_platform(rect: Rect2) -> void:
 	platforms.append(rect)
@@ -1374,6 +1392,7 @@ func _debug_route_label(target_location: String) -> String:
 		"mirror_street": "H07 镜街",
 		"primordial_hollow": "H08 胎宫／原初空腔",
 		"cliff_cave_experiment": "H09 崖下实验窟",
+		"terminal_anomaly": "A13 深层梦境与终局异象",
 		"ending_fire_demo": "结局：烈火天罚",
 		"ending_paradise_demo": "结局：永恒乐园"
 	}
@@ -1669,9 +1688,11 @@ func _spawn_region_exits() -> void:
 				ending_location = "ending_paradise_demo"
 			elif ending_scene_path.ends_with("ending_fire_demo.tscn"):
 				ending_location = "ending_fire_demo"
+			# C22 now enters the real A13 terminal layer; the ending evaluator is invoked there.
+			# C22 先进入真正的 A13 终局层，再由该层调用现有结局评估器。
 			_spawn_exit_door(
-				map_width - 72.0, "E  进入王座区", ending_location,
-				ending_scene_path, "west"
+				map_width - 72.0, "E  进入王座区", "terminal_anomaly",
+				"res://scenes/terminal_anomaly.tscn", "west"
 			)
 		"H07":
 			_spawn_exit_door(
@@ -1769,6 +1790,13 @@ func _spawn_region_exits() -> void:
 				"res://scenes/grand_cathedral.tscn", "east", can_return_to_cathedral
 			)
 			_spawn_h08_gate(map_width - 300.0)
+			# C21 is an optional deep-dream entrance, available only after the physical-union story fact.
+			# C21 是可选的深层梦境入口，只有身体交融这一剧情事实成立后才出现。
+			if WorldState.physical_union_complete:
+				_spawn_exit_door(
+					2050.0, "E  追随深层梦境", "terminal_anomaly",
+					"res://scenes/terminal_anomaly.tscn", "west"
+				)
 
 		"H09":
 			_spawn_exit_door(
@@ -1781,17 +1809,25 @@ func _spawn_region_exits() -> void:
 				"res://scenes/deep_research_depths.tscn", "east"
 			)
 			if WorldState.physical_union_complete:
-				var ending_gate := ENDGAME_GATE_SCRIPT.new()
-				var ending_scene_path := str(ending_gate.call("route_candidate"))
-				var ending_location := "church_final_demo"
-				if ending_scene_path.ends_with("ending_paradise_demo.tscn"):
-					ending_location = "ending_paradise_demo"
-				elif ending_scene_path.ends_with("ending_fire_demo.tscn"):
-					ending_location = "ending_fire_demo"
+				# The hidden route converges on A13 instead of skipping the terminal map layer.
+				# 隐藏路线汇入 A13，不再跳过终局地图层直接进入结局演示。
 				_spawn_exit_door(
-					map_width - 72.0, "E  追随最后的梦境", ending_location,
-					ending_scene_path, "west"
+					map_width - 72.0, "E  追随最后的梦境", "terminal_anomaly",
+					"res://scenes/terminal_anomaly.tscn", "west"
 				)
+
+		"A13":
+			var ending_gate := ENDGAME_GATE_SCRIPT.new()
+			var ending_scene_path := str(ending_gate.call("route_candidate"))
+			var ending_location := "church_final_demo"
+			if ending_scene_path.ends_with("ending_paradise_demo.tscn"):
+				ending_location = "ending_paradise_demo"
+			elif ending_scene_path.ends_with("ending_fire_demo.tscn"):
+				ending_location = "ending_fire_demo"
+			_spawn_exit_door(
+				map_width - 90.0, "E  接受终局", ending_location,
+				ending_scene_path, "west"
+			)
 
 
 func _spawn_a11_maintenance_gate(x: float) -> void:
