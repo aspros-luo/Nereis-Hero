@@ -61,7 +61,7 @@ func _ready() -> void:
 	# 局部桥先于主角生成，确保桥体绘制在角色后方。
 	_spawn_local_resonance_routes()
 	_spawn_hero(_spawn_x_for_side(spawn_side), _spawn_y_for_side(spawn_side))
-	print("[NEREIS][MAP][SPAWN] region=%s location=%s side=%s x=%.1f resume_side=%s" % [region_id, location_id, spawn_side, hero.position.x, WorldState.resume_spawn_side])
+	print("[NEREIS][MAP][SPAWN] region=%s location=%s side=%s x=%.1f y=%.1f resume_side=%s" % [region_id, location_id, spawn_side, hero.position.x, hero.position.y, WorldState.resume_spawn_side])
 	_spawn_ui()
 	_spawn_region_sources()
 	_spawn_region_exits()
