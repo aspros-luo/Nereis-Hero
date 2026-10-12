@@ -286,9 +286,9 @@ func _spawn_x_for_side(side: String) -> float:
 		# C10 回程门位于 x=1710；出生点应在同一路线附近，但避开门的触发区。
 		return 1600.0
 	if region_id == "A3" and side == "old_lift":
-		# C16 returns just below its elevated door, while staying clear of H05 at x=1820 and the rest point.
-		# C16 回程落在高位门下方，同时与 x=1820 的 H05 回程门及休整点保持净空。
-		return 1940.0
+		# C16 returns to the eastern upper ledge, outside both the H05 and door interaction triggers.
+		# C16 回程落在东侧高位平台，并避开 H05 与旧升降机门的交互范围。
+		return 1960.0
 	if region_id == "A4" and side == "water_reflection_gate":
 		# Move away from H04, whose entrance is at x=1780.
 		# 旧水库侧的 H04 入口位于 x=1780，返回点与其保持明显距离。
@@ -1038,7 +1038,7 @@ func _spawn_region_rest_point() -> void:
 			rest_x = 1150.0
 			rest_name = "旧朝圣圣龛"
 		"A3":
-			rest_x = 2100.0
+			rest_x = 1470.0
 			rest_name = "废街圣龛"
 		"A4":
 			rest_x = 2050.0
@@ -1327,7 +1327,7 @@ func _register_debug_locked_route_hints() -> void:
 			_register_debug_locked_route_hint(520.0, "village", "村庄防卫章节完成后开放")
 			_register_debug_locked_route_hint(1980.0, "royal_outer_ring", "东侧高位旧升降机：需从 A9 开启")
 			_register_debug_locked_route_hint(1710.0, "monastery_tower", "需先从 A6 开启钟塔落差")
-			_register_debug_locked_route_hint(1820.0, "silent_bell_room", "需先发现并开启 H05")
+			_register_debug_locked_route_hint(1870.0, "silent_bell_room", "需先发现并开启 H05")
 		"A4":
 			_register_debug_locked_route_hint(1050.0, "prison_depths", "低位栈台：需从 A7 开启补给隧道")
 			_register_debug_locked_route_hint(1320.0, "royal_tomb", "中层平台：需从 A8 开启王墓水道")
@@ -1437,10 +1437,10 @@ func _spawn_region_exits() -> void:
 				true, "", "", floor_y - 130.0
 			)
 			if "reached_A9_via_A8_then_opened_old_lift_from_A9" in WorldState.achievement_flags:
-				# C16 returns through the elevated old lift on the far eastern rooftop, distinct from H03.
-				# C16 从东侧高位旧升降机返回王城外环，与 H03 第三街入口分离。
+				# C16 returns through the elevated old lift on the far eastern rooftop, distinct from H03 and H05.
+				# C16 从东侧高位旧升降机返回王城外环，与 H03、H05 分离。
 				_spawn_exit_door(
-					1980.0, "E  经东侧高位旧升降机返回王城外环", "royal_outer_ring",
+					2040.0, "E  经东侧高位旧升降机返回王城外环", "royal_outer_ring",
 					"res://scenes/royal_outer_ring.tscn", "old_lift",
 					true, "", "", floor_y - 70.0
 				)
@@ -1451,7 +1451,7 @@ func _spawn_region_exits() -> void:
 				# Keep H05 between C10 and the eastern rooftop lift without overlapping either interaction focus.
 				# H05 位于 C10 与东侧高位升降机之间，并与两者保持交互净空。
 				_spawn_exit_door(
-					1820.0, "E  返回无声之窗", "silent_bell_room",
+					1870.0, "E  返回无声之窗", "silent_bell_room",
 					"res://scenes/silent_bell_room.tscn", "bell_drop_entry"
 				)
 			# C10 reverse door: only exists after the bell-tower drop has been opened from A6.
