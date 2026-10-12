@@ -129,6 +129,10 @@ Repeatable static topology validator:
 
 `python3 tools/validate_world_map_topology.py`
 
+Spatial route spawn/elevation contract validator:
+
+`python3 tools/validate_spatial_route_contracts.py`
+
 A2–A4 / H01 first-loop graybox notes and runtime acceptance checklist (Chinese):
 
 `docs/GRAYBOX_A2_A4_IMPLEMENTATION_CN.md`
