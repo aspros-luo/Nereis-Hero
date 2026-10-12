@@ -69,6 +69,8 @@ ART_ASSETS = [
     "assets/art/backdrops/church_backdrop.svg",
     "assets/art/backdrops/eldritch_backdrop.svg",
     "assets/art/backdrops/stone_floor_strip.svg",
+    "assets/art/backdrops/surgery_ward_backdrop.svg",
+    "assets/art/backdrops/surgery_floor_strip.svg",
 ]
 
 REQUIRED_ENTRY_SCENES = [
@@ -335,6 +337,11 @@ def main() -> int:
     require(region_script, 'const STONE_FLOOR_STRIP = preload("res://assets/art/backdrops/stone_floor_strip.svg")', "Textured floor preload", errors)
     require(region_script, "func _region_backdrop_texture() -> Texture2D:", "Biome backdrop selector", errors)
     require(region_script, "draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)", "Textured ground draw call", errors)
+    prologue_script = read("scripts/levels/escape_prologue.gd", errors)
+    require(prologue_script, 'const SURGERY_BACKDROP = preload("res://assets/art/backdrops/surgery_ward_backdrop.svg")', "Opening surgery backdrop preload", errors)
+    require(prologue_script, 'const SURGERY_FLOOR_STRIP = preload("res://assets/art/backdrops/surgery_floor_strip.svg")', "Opening surgery floor preload", errors)
+    require(prologue_script, "draw_texture_rect(SURGERY_BACKDROP, Rect2(0, 0, LEVEL_WIDTH, 720), false)", "Opening surgery illustrated backdrop", errors)
+    require(prologue_script, "draw_texture_rect(SURGERY_FLOOR_STRIP, Rect2(0, FLOOR_Y, LEVEL_WIDTH, 180), false)", "Opening surgery floor texture", errors)
     # Elevated exits must not remain interactable from the uninterrupted ground floor.
     # 高位出口不能从连续地面直接交互，避免平台只成为装饰路线。
     require(region_script, "rectangle.size = Vector2(110.0, 80.0)", "Door interaction volume height", errors)
