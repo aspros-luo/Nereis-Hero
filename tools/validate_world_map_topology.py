@@ -320,6 +320,18 @@ def validate(data: dict[str, Any]) -> list[str]:
             if c24.get(key) != value:
                 fail(errors, f"C24: expected {key}={value!r}, got {c24.get(key)!r}.")
 
+        expected_c24_spatial = {
+            "route_layer": "old_drainage_passage",
+            "from_region_anchor": {"region": "A1", "x": 100, "y_offset": 0},
+            "to_region_anchor": {"region": "A3", "x": 520, "y_offset": 0},
+            "to_region_spawn": {"region": "A3", "x": 700, "y_offset": 0, "spawn_side": "village_city_cut"},
+            "return_spawn": {"region": "A1", "x": 350, "y_offset": 0, "spawn_side": "city_cut_return"},
+        }
+        c24_spatial = c24.get("spatial_contract", {})
+        for key, value in expected_c24_spatial.items():
+            if c24_spatial.get(key) != value:
+                fail(errors, f"C24: spatial_contract.{key} must match the implemented low drainage route.")
+
     for edge in connections:
         source, target = edge.get("from"), edge.get("to")
         if source not in region_ids or target not in region_ids:
