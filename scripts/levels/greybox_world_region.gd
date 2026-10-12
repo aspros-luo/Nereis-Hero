@@ -19,6 +19,10 @@ const CHURCH_INQUISITOR_SCRIPT = preload("res://scripts/enemies/church_inquisito
 const BELL_WRAITH_SCRIPT = preload("res://scripts/enemies/bell_wraith.gd")
 const THIRD_CORD_FRAGMENT_SCRIPT = preload("res://scripts/world/third_cord_fragment.gd")
 const REGION_AMBIENCE_SCRIPT = preload("res://scripts/effects/region_ambience.gd")
+const FOREST_BACKDROP = preload("res://assets/art/backdrops/forest_backdrop.svg")
+const RUINS_BACKDROP = preload("res://assets/art/backdrops/ruins_backdrop.svg")
+const CHURCH_BACKDROP = preload("res://assets/art/backdrops/church_backdrop.svg")
+const ELDRITCH_BACKDROP = preload("res://assets/art/backdrops/eldritch_backdrop.svg")
 
 const ENCOUNTER_ACTIVATE_RANGE := 420.0
 const ENCOUNTER_DEACTIVATE_RANGE := 560.0
@@ -2423,9 +2427,24 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 	collision.position = Vector2(0, -height * 0.5)
 	character.add_child(collision)
 
+func _region_backdrop_texture() -> Texture2D:
+	match region_id:
+		"A1", "A2", "H01", "H08", "H09":
+			return FOREST_BACKDROP
+		"A0", "A6", "A10", "A11":
+			return CHURCH_BACKDROP
+		"A13":
+			return ELDRITCH_BACKDROP
+		_:
+			return RUINS_BACKDROP
+
+
 func _draw() -> void:
-	var background := _background_color()
-	draw_rect(Rect2(0.0, 0.0, map_width, 720.0), background)
+	var backdrop: Texture2D = _region_backdrop_texture()
+	if backdrop != null:
+		draw_texture_rect(backdrop, Rect2(0.0, 0.0, map_width, 720.0), false)
+	else:
+		draw_rect(Rect2(0.0, 0.0, map_width, 720.0), _background_color())
 	_draw_atmospheric_layers()
 	draw_rect(Rect2(0.0, floor_y, map_width, 180.0), Color("#211b23"))
 	_draw_ground_detail()
