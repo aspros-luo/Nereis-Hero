@@ -51,7 +51,7 @@ flowchart TB
     A3 -. "Upper old lift" .- A9
     A9 -. "Royal high drain" .-> A4
     A9 -. "Inner-city side gate" .- A12
-    A1 -. "Old village route" .- A3
+    A1 -. "Old drainage passage" .- A3
 
     A8 -. "Maintenance-shaft entrance" .- A11
     A10 -. "Church secret entrance" .- A11
