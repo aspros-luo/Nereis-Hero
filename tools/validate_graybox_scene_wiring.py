@@ -221,6 +221,11 @@ def main() -> int:
             if not (ROOT / scene_path).is_file():
                 errors.append(f"Scene reference in {source_path} does not exist: {scene_path}")
 
+    # Elevated exits must not remain interactable from the uninterrupted ground floor.
+    # 高位出口不能从连续地面直接交互，避免平台只成为装饰路线。
+    require(region_script, "rectangle.size = Vector2(110.0, 100.0)", "Door interaction volume height", errors)
+    require(region_script, "shape.position = Vector2(0.0, -35.0)", "Door interaction volume vertical alignment", errors)
+
     interaction_focus = read("scripts/core/interaction_focus.gd", errors)
     if interaction_focus.count("WorldState.menu_input_locked") < 2:
         errors.append(
