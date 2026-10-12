@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="180" viewBox="0 0 2600 180">
+<defs>
+ <linearGradient id="base" x2="0" y2="1"><stop stop-color="#55464c"/><stop offset=".12" stop-color="#312a32"/><stop offset="1" stop-color="#17171f"/></linearGradient>
+ <linearGradient id="stone" x2="0" y2="1"><stop stop-color="#51434a"/><stop offset=".2" stop-color="#3a323b"/><stop offset="1" stop-color="#24232c"/></linearGradient>
+ <pattern id="slabs" width="260" height="92" patternUnits="userSpaceOnUse">
+  <path d="M0 2H260M0 46H260M45 2V46M188 2V46M112 46V92M226 46V92" stroke="#16161e" stroke-width="5" fill="none" opacity=".85"/>
+  <path d="M0 0H260M0 44H260M43 0V44M186 0V44M110 44V92M224 44V92" stroke="#827079" stroke-width="2" fill="none" opacity=".52"/>
+  <path d="M12 18l28 -4M78 32l17 -5M151 17l20 2M202 68l24 -6M34 73l18 3M136 55l16 -4" stroke="#c2a5a0" stroke-width="2" opacity=".18"/>
+  <path d="M68 3l-4 14 8 6 -7 12M205 46l-6 11 8 7 -3 15M148 1l5 10 -7 7" stroke="#17171f" stroke-width="3" fill="none" opacity=".9"/>
+ </pattern>
+</defs>
+<rect width="2600" height="180" fill="url(#base)"/>
+<path d="M0 0H2600V17Q2350 9 2100 18T1600 15T1100 18T550 14T0 17Z" fill="#79636b" opacity=".6"/>
+<path d="M0 20H2600" stroke="#b59a98" stroke-opacity=".32" stroke-width="3"/>
+<rect y="15" width="2600" height="165" fill="url(#stone)"/>
+<rect y="15" width="2600" height="165" fill="url(#slabs)"/>
+<g fill="#15161e" opacity=".75"><path d="M140 45l30 -8 15 8 -24 4Z"/><path d="M420 100l35 -6 18 10 -40 6Z"/><path d="M700 58l26 -8 22 9 -28 5Z"/><path d="M980 128l40 -9 18 12 -35 7Z"/><path d="M1290 62l34 -8 14 9 -29 7Z"/><path d="M1560 105l28 -10 23 10 -35 8Z"/><path d="M1860 52l34 -5 15 8 -27 8Z"/><path d="M2170 125l42 -10 17 12 -34 8Z"/><path d="M2450 65l28 -8 18 8 -25 7Z"/></g>
+<g fill="#a97b75" opacity=".25"><path d="M240 33l7 8 -13 7 -4 -6Z"/><path d="M840 78l8 7 -14 9 -5 -7Z"/><path d="M1460 31l8 7 -10 8 -7 -6Z"/><path d="M2040 91l8 6 -14 8 -5 -7Z"/></g>
+<path d="M0 178Q330 169 650 178T1300 176T1950 178T2600 174V180H0Z" fill="#0c0e15"/>
+</svg>
