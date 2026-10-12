@@ -2448,6 +2448,7 @@ func _draw() -> void:
 		draw_rect(Rect2(0.0, 0.0, map_width, 720.0), _background_color())
 	_draw_biome_color_wash()
 	_draw_atmospheric_layers()
+	_draw_midground_accents()
 	draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
 	_draw_ground_detail()
 
@@ -2735,6 +2736,89 @@ func _draw_atmospheric_layers() -> void:
 	# A faint horizon line ties distant shapes together without boxing the screen.
 	# 淡淡的地平线将远景剪影连接起来，但不把画面框死。
 	draw_line(Vector2(0.0, floor_y - 9.0), Vector2(map_width, floor_y - 9.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.10), 1.0)
+
+
+# Midground accents give underused biomes their own environmental rhythm without affecting traversal.
+# 中景强调层为此前细节较少的区域建立独立节奏，不影响任何可通行路线。
+func _draw_midground_accents() -> void:
+	var seed_offset := int(region_id.hash() % 83)
+	match region_id:
+		"A1":
+			# Snapped stakes and a distant watchline make the starting outskirts feel abandoned.
+			# 折断木桩与远处哨线表达起始边境的荒废感。
+			for index in range(8):
+				var x := float(index) * 287.0 + float(seed_offset)
+				var height := 28.0 + float((index * 19) % 31)
+				draw_line(Vector2(x, floor_y - 18.0), Vector2(x - 4.0, floor_y - height), Color("#49434a", 0.38), 3.0)
+				draw_line(Vector2(x - 4.0, floor_y - height), Vector2(x + 12.0, floor_y - height + 5.0), Color("#6e5d59", 0.30), 2.0)
+		"A6", "A10":
+			# Suspended censers and fine chains create a sacred interior scale cue.
+			# 悬挂香炉与细链条建立教会建筑的纵向尺度。
+			for index in range(5):
+				var x := float((index * 433 + seed_offset * 2) % int(map_width))
+				var drop := 92.0 + float((index * 23) % 58)
+				draw_line(Vector2(x, 0.0), Vector2(x + 2.0, drop), Color("#8c795d", 0.25), 1.0)
+				draw_arc(Vector2(x + 2.0, drop + 8.0), 7.0, PI, TAU, 12, Color("#c3a56f", 0.22), 1.5)
+				draw_circle(Vector2(x + 2.0, drop + 8.0), 2.0, Color("#d8b875", 0.12))
+		"A7":
+			# Prison chains stop well above the floor route.
+			# 监牢铁链始终远离地面通行区域。
+			for index in range(7):
+				var x := float((index * 311 + seed_offset) % int(map_width))
+				var drop := 120.0 + float((index * 37) % 115)
+				draw_line(Vector2(x, 0.0), Vector2(x + 1.0, drop), Color("#66788a", 0.26), 2.0)
+				for link in range(3):
+					var link_y := drop * (float(link + 1) / 4.0)
+					draw_arc(Vector2(x, link_y), 3.0, 0.0, TAU, 8, Color("#8aa0b0", 0.22), 1.0)
+		"A8":
+			# Uneven tomb markers form a low procession instead of another skyline.
+			# 高低错落的墓碑队列区别于常规城市天际线。
+			for index in range(10):
+				var x := float(index) * 241.0 + float(seed_offset)
+				var height := 34.0 + float((index * 17) % 46)
+				var width := 13.0 + float(index % 3) * 5.0
+				draw_rect(Rect2(x, floor_y - height, width, height), Color("#332b40", 0.52))
+				draw_colored_polygon(PackedVector2Array([
+					Vector2(x - 3.0, floor_y - height + 2.0),
+					Vector2(x + width * 0.5, floor_y - height - 8.0),
+					Vector2(x + width + 3.0, floor_y - height + 2.0)
+				]), Color("#4b3c59", 0.42))
+		"A11":
+			# Hanging specimen tubes imply a laboratory beyond the room.
+			# 悬吊样本管暗示实验室向当前房间之外延伸。
+			for index in range(6):
+				var x := float((index * 367 + seed_offset * 3) % int(map_width))
+				var top := 90.0 + float((index * 29) % 85)
+				var bottom := top + 42.0 + float(index % 3) * 18.0
+				draw_line(Vector2(x, top), Vector2(x, bottom), Color("#9c6d9c", 0.24), 2.0)
+				draw_arc(Vector2(x, top + 3.0), 5.0, PI, TAU, 10, Color("#d18bc7", 0.22), 1.0)
+				draw_arc(Vector2(x, bottom), 5.0, 0.0, PI, 10, Color("#d18bc7", 0.22), 1.0)
+		"A12":
+			# Broken signal wires remain between the inner-city rooflines.
+			# 内城区屋顶之间残留断裂的信号线。
+			for index in range(4):
+				var x := 180.0 + float(index) * 560.0 + float(seed_offset % 37)
+				var y := 155.0 + float((index * 41) % 75)
+				draw_line(Vector2(x, y), Vector2(x + 125.0, y + 9.0), Color("#b77d7b", 0.20), 1.0)
+				draw_line(Vector2(x + 125.0, y + 9.0), Vector2(x + 184.0, y + 2.0), Color("#b77d7b", 0.16), 1.0)
+		"H02", "H05", "H06":
+			# Hidden chambers carry faint threads like dormant old mechanisms.
+			# 隐藏密室悬着细微丝线，像被遗弃的旧机关。
+			for index in range(8):
+				var x := float((index * 263 + seed_offset) % int(map_width))
+				var drop := 65.0 + float((index * 31) % 105)
+				draw_line(Vector2(x, 0.0), Vector2(x + 5.0, drop), Color("#a47b9e", 0.18), 1.0)
+				draw_circle(Vector2(x + 5.0, drop), 2.0, Color("#d7a5d2", 0.16))
+		"H09":
+			# Mineral teeth frame the upper corners and leave the central play space open.
+			# 矿脉尖齿只压住上方边角，为中央活动空间留白。
+			for index in range(6):
+				var x := float(index) * 355.0 + float(seed_offset)
+				var length := 22.0 + float((index * 13) % 36)
+				draw_colored_polygon(PackedVector2Array([
+					Vector2(x, 0.0), Vector2(x + 18.0, 0.0),
+					Vector2(x + 11.0, length), Vector2(x + 5.0, length * 0.65)
+				]), Color("#3c3041", 0.44))
 
 
 # Broken paving seams and small rubble clusters make the ground read as a surface, not a flat bar.
