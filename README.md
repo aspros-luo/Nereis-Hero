@@ -133,6 +133,10 @@ Spatial route spawn/elevation contract validator:
 
 `python3 tools/validate_spatial_route_contracts.py`
 
+Spatial route contract audit and local runtime checklist (Chinese / English):
+
+`docs/SPATIAL_ROUTE_CONTRACT_AUDIT_PASS_1_CN_EN.md`
+
 A2–A4 / H01 first-loop graybox notes and runtime acceptance checklist (Chinese):
 
 `docs/GRAYBOX_A2_A4_IMPLEMENTATION_CN.md`
