@@ -794,7 +794,7 @@
       "min_outer_exposure": 0,
       "required_source_ids": [
         "anomaly_bell_retiming",
-        "anomaly_erased_street_sign"
+        "anomaly_erased_royal_name"
       ],
       "requires_outer_god_resonance": false,
       "requires_sight_active": true,
