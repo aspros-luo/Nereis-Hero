@@ -1,5 +1,7 @@
 # Nereis-Hero Complete Box-World Map Design
 
+> **Design version note (2026-10-12):** This is the v0.1 topology baseline and playtime-planning draft. Spatial authority now belongs to [Final Box-World Map Design v1.0 — Vertically Interconnected World](BOX_WORLD_FINAL_MAP_DESIGN_EN.md). This document remains historical context and a playtime baseline, not the final spatial authority.
+
 > Version: 0.1 (topology baseline and playtime plan)  
 > Date: 2026-10-12  
 > Branch: `development`  
