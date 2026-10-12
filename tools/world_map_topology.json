@@ -2409,10 +2409,10 @@
       "id": "SC032",
       "from": "A6-S04",
       "to": "A6-S05",
-      "kind": "lift",
+      "kind": "ladder",
       "travel": "both",
-      "initial_state": "locked",
-      "unlock_condition": "powered_bell_tower_lift",
+      "initial_state": "open",
+      "unlock_condition": "",
       "design_note": ""
     },
     {
@@ -2764,6 +2764,46 @@
       "initial_state": "open",
       "unlock_condition": "",
       "design_note": ""
+    },
+    {
+      "id": "SC068",
+      "from": "A2-S01",
+      "to": "A2-S04",
+      "kind": "lift",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "repaired_forest_counterweight",
+      "design_note": "对应 elevators 中的实体升降机合同；未解锁时仍须存在替代通路。"
+    },
+    {
+      "id": "SC069",
+      "from": "A4-S01",
+      "to": "A4-S06",
+      "kind": "lift",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "restored_reservoir_power",
+      "design_note": "对应 elevators 中的实体升降机合同；未解锁时仍须存在替代通路。"
+    },
+    {
+      "id": "SC070",
+      "from": "A6-S02",
+      "to": "A6-S05",
+      "kind": "lift",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_bell_tower_mechanism",
+      "design_note": "对应 elevators 中的实体升降机合同；未解锁时仍须存在替代通路。"
+    },
+    {
+      "id": "SC071",
+      "from": "A7-S01",
+      "to": "A7-S05",
+      "kind": "lift",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "released_prison_counterweight",
+      "design_note": "对应 elevators 中的实体升降机合同；未解锁时仍须存在替代通路。"
     }
   ],
   "elevators": [
