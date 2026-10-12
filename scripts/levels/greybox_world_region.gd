@@ -1532,7 +1532,7 @@ func _spawn_region_exits() -> void:
 			_spawn_exit_door(
 				2230.0, "E  打开钟塔落差通路", "forgotten_city",
 				"res://scenes/forgotten_city.tscn", "bell_drop",
-				true, "opened_bell_tower_drop", "E  返回被遗忘的城区"
+				true, "opened_bell_tower_drop", "E  返回被遗忘的城区", floor_y - 55.0
 			)
 		"A7":
 			_spawn_exit_door(
