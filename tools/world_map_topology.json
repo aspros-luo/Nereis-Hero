@@ -1151,7 +1151,8 @@
     "current_phase": "box_world_structure_reaudit",
     "runtime_status": "not_godot_runtime_verified",
     "provisional_content": [
-      "H09 cliff-cave experiment is implemented in code but not ratified as canonical world topology or final story content."
+      "H09 cliff-cave experiment is a code-present provisional candidate, not canonical story content and not required for core map acceptance.",
+      "Raised doorway interaction volumes are now constrained to the visible doorway height; static code review must not be treated as runtime proof."
     ],
     "latest_spatial_fixes": [
       "C05 A3-to-A4 moved to raised pipe-walk at x=1600, y_offset=-115.",
@@ -1165,6 +1166,29 @@
       "C10 Bell Tower Drop moved from the A6 floor to x=2230 on the upper/eastern landing; its A6 return spawn is x=2100, y_offset=-90.",
       "A9 C16 old lift now occupies the x=520 rooftop ledge (y_offset=-110); C23 royal drain now branches from x=850 on the upper service ledge (y_offset=-150), with A9 return spawn x=770 at the same height.",
       "A3 C16 moved to x=2040 and its return spawn to x=1960; H05 moved to x=1870 and the A3 rest point moved to x=1470 to maintain non-overlapping interaction zones."
+    ],
+    "latest_structural_audit": [
+      "Raised exit doors previously used a 138px-high Area2D trigger extending from the doorway down to floor level; this allowed elevated routes to be bypassed from the ground. The trigger has been reduced to 100px and aligned 35px above the doorway origin.",
+      "The canonical resonance-hidden network remains H01-H08. H09 is listed separately as a provisional region candidate so it does not silently become approved world canon.",
+      "Core map acceptance counts 13 playable primary regions A0-A12 plus 8 canonical hidden regions H01-H08 = 21 scene regions; A13 is an abstract ending layer and H09 is provisional."
     ]
-  }
+  },
+  "provisional_regions": [
+    {
+      "id": "H09",
+      "name": "临时候选：崖下实验窟",
+      "parent": "A1",
+      "anchor": "村庄山崖（候选位置，待整体地图与剧情复核）",
+      "scene_path": "scenes/cliff_cave_experiment.tscn",
+      "location_id": "cliff_cave_experiment",
+      "entry_condition": "returned_to_village_after_mad_cleric",
+      "return_to_parent": true,
+      "return_route": "H09 -> A1 via cliff_cave_return",
+      "requires_resonance_sight": false,
+      "implementation_status": "implemented_graybox_candidate_runtime_unverified",
+      "story_canon": false,
+      "acceptance_required": false,
+      "notes": "This region was implemented from an illustrative user example. It is tracked for structural completeness only; its premise, location, reward, and ending relevance are not approved canon and may be redesigned or removed during the narrative pass."
+    }
+  ]
 }
