@@ -1287,6 +1287,22 @@ func _draw() -> void:
 		Vector2(2, 5 + run_step), Vector2(-23, 11 - run_step),
 		Vector2(-19, -10 - run_step)
 	]), cloak)
+
+	# Torn split-cloak tails give the knight a stronger silhouette without changing collision.
+	# 破损分叉披风强化骑士轮廓；仅为绘制层，不改变碰撞。
+	var cloak_sway := sin(animation_time * (13.0 if state == CombatState.MOVE else 5.0)) * (5.0 if state == CombatState.MOVE else 2.0)
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(-18, -27 + bob), Vector2(-8, -20 + bob),
+		Vector2(-13 - cloak_sway, 4 + run_step), Vector2(-22 - cloak_sway, 16 + run_step),
+		Vector2(-25 - cloak_sway, 5 + run_step), Vector2(-31, 12 + run_step),
+		Vector2(-28, -10 + bob)
+	]), Color("#302831"))
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(-16, -24 + bob), Vector2(-10, -18 + bob),
+		Vector2(-17 - cloak_sway, 3 + run_step), Vector2(-22 - cloak_sway, 9 + run_step),
+		Vector2(-22, -4 + bob)
+	]), Color("#51404a"))
+	draw_line(Vector2(-15, -20 + bob), Vector2(-20 - cloak_sway, 5 + run_step), Color("#80616a", 0.72), 1.5)
 	draw_line(Vector2(-18, -13 + bob), Vector2(-27, 11 + run_step), armor, 8.0)
 	draw_line(Vector2(-27, 11 + run_step), Vector2(-34, 13 + run_step), armor_shadow, 5.0)
 	draw_line(Vector2(12, -12 + bob), Vector2(19 - lean, 10 - run_step), armor, 8.0)
@@ -1339,6 +1355,18 @@ func _draw() -> void:
 	draw_line(Vector2(-8, -60 + bob), Vector2(8, -60 + bob), Color("#17151b"), 2.5)
 	draw_line(Vector2(-2, -72 + bob), Vector2(1, -65 + bob), armor_light, 1.5)
 	draw_line(Vector2(-12, -54 + bob), Vector2(10, -51 + bob), armor_light, 1.5)
+	# Three small rivets and a narrow visor glint make the closed helm readable at gameplay scale.
+	# 三枚铆钉与狭窄面甲反光，让封闭头盔在实战缩放下仍可辨识。
+	for rivet_x in [-7.0, 0.0, 7.0]:
+		draw_circle(Vector2(rivet_x, -47 + bob), 1.2, metal)
+	var visor_glow := 0.0
+	if resonance_sight_time_remaining > 0.0:
+		visor_glow = 0.48 + 0.22 * sin(animation_time * 9.0)
+	elif invulnerable:
+		visor_glow = 0.34
+	if visor_glow > 0.0:
+		draw_line(Vector2(-7, -60 + bob), Vector2(7, -60 + bob), Color(0.54, 0.84, 0.88, visor_glow), 2.0)
+		draw_circle(Vector2(facing * 9, -60 + bob), 2.0, Color(0.54, 0.84, 0.88, visor_glow * 0.48))
 
 	# The blade changes pose between wind-up and active frames, helping attacks read.
 	var hand := Vector2(facing * (12.0 - lean * 0.25), -28.0 + bob)
@@ -1357,6 +1385,12 @@ func _draw() -> void:
 	draw_line(hand + Vector2(-facing * 5.0, 5.0), hand + Vector2(facing * 5.0, -5.0), armor_light, 3.0)
 	draw_circle(hand, 4.0, armor_shadow)
 	draw_circle(hand, 2.0, metal)
+	# A restrained edge glint follows the blade; it intensifies only during the active attack frames.
+	# 克制的刃口反光跟随武器，仅在攻击有效帧增强。
+	var blade_glint_alpha := 0.20
+	if attack_time > 0.0 and attack_windup <= 0.0:
+		blade_glint_alpha = 0.72 if combo_step == 3 else 0.48
+	draw_line(hand + Vector2(-facing * 2.0, -2.0), blade_tip + Vector2(-facing * 3.0, -2.0), Color(0.92, 0.86, 0.74, blade_glint_alpha), 1.4)
 
 	if WorldState.hidden_resistance_awakened:
 		var anchor_color := Color("#aa8d72") if WorldState.mite_control_stage < 2 else Color("#8d6c98")
