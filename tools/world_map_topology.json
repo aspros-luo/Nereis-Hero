@@ -137,7 +137,20 @@
       "initial_access": "from_to",
       "final_direction": "both",
       "unlock_condition": "opened_sewer_inspection_hatch_from_A4",
-      "opens_from": "A4"
+      "opens_from": "A4",
+      "spatial_contract": {
+        "route_layer": "raised_pipe_walk",
+        "from_region_anchor": {
+          "region": "A3",
+          "x": 1600,
+          "y_offset": -115
+        },
+        "to_region_anchor": {
+          "region": "A4",
+          "spawn_side": "west"
+        },
+        "intent": "Underground hub entrance branches off the upper pipe-walk rather than the continuous street floor."
+      }
     },
     {
       "id": "C06",
@@ -247,7 +260,24 @@
       "initial_access": "blocked",
       "final_direction": "both",
       "unlock_condition": "reached_A9_via_A8_then_opened_old_lift_from_A9",
-      "opens_from": "A9"
+      "opens_from": "A9",
+      "spatial_contract": {
+        "route_layer": "eastern_rooftop_lift",
+        "from_region_anchor": {
+          "region": "A3",
+          "x": 1980,
+          "y_offset": -70
+        },
+        "to_region_anchor": {
+          "region": "A9",
+          "spawn_side": "old_lift"
+        },
+        "return_spawn": {
+          "region": "A3",
+          "x": 1860
+        },
+        "intent": "Late shortcut occupies the far-eastern upper lane, separate from H03 street-level anomaly and C10 monastery-drop door."
+      }
     },
     {
       "id": "C17",
@@ -943,5 +973,16 @@
       "persistent_on_open": true,
       "design_intent": "A crown-wall traverse reconnects two upper palace ledges and exposes the inward-facing arrow slits; it must not bypass the throne approach or ending gates."
     }
-  ]
+  ],
+  "audit_notes": {
+    "current_phase": "box_world_structure_reaudit",
+    "runtime_status": "not_godot_runtime_verified",
+    "provisional_content": [
+      "H09 cliff-cave experiment is implemented in code but not ratified as canonical world topology or final story content."
+    ],
+    "latest_spatial_fixes": [
+      "C05 A3-to-A4 moved to raised pipe-walk at x=1600, y_offset=-115.",
+      "C16 A3-to-A9 return door moved to eastern rooftop at x=1980, y_offset=-70; A3 return spawn x=1860."
+    ]
+  }
 }
