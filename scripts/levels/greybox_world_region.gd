@@ -60,7 +60,7 @@ func _ready() -> void:
 	# Spawn the local bridge before the Hero so its visual is drawn behind the character.
 	# 局部桥先于主角生成，确保桥体绘制在角色后方。
 	_spawn_local_resonance_routes()
-	_spawn_hero(_spawn_x_for_side(spawn_side))
+	_spawn_hero(_spawn_x_for_side(spawn_side), _spawn_y_for_side(spawn_side))
 	print("[NEREIS][MAP][SPAWN] region=%s location=%s side=%s x=%.1f resume_side=%s" % [region_id, location_id, spawn_side, hero.position.x, WorldState.resume_spawn_side])
 	_spawn_ui()
 	_spawn_region_sources()
@@ -208,6 +208,22 @@ func _on_cord_fragment_collected() -> void:
 	)
 
 
+func _spawn_y_for_side(side: String) -> float:
+	# Elevated cross-region doors must land on their matching ledge, not underneath it on the continuous floor.
+	# 高位跨区门应将主角送到对应栈台，而不是落在连续地面上、再要求玩家反向跳回门口。
+	if region_id == "A3" and side == "sewer":
+		return floor_y - 115.0
+	if region_id == "A3" and side == "old_lift":
+		return floor_y - 70.0
+	if region_id == "A4" and side == "prison_tunnel":
+		return floor_y - 75.0
+	if region_id == "A4" and side == "royal_tomb_waterway":
+		return floor_y - 85.0
+	if region_id == "A4" and side == "royal_drain":
+		return floor_y - 120.0
+	return floor_y
+
+
 func _spawn_x_for_side(side: String) -> float:
 	if region_id == "H09" and side == "east":
 		return map_width - 280.0
@@ -343,10 +359,10 @@ func _spawn_x_for_side(side: String) -> float:
 		return 700.0
 	return 180.0
 
-func _spawn_hero(spawn_x: float) -> void:
+func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 	hero = CharacterBody2D.new()
 	hero.set_script(HERO_SCRIPT)
-	hero.position = Vector2(spawn_x, floor_y)
+	hero.position = Vector2(spawn_x, floor_y if spawn_y < 0.0 else spawn_y)
 	hero.name = "Hero"
 	_add_character_collision(hero, 18.0, 48.0)
 	add_child(hero)
