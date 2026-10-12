@@ -10,7 +10,7 @@
 
 本轮最重要的发现是：部分高位出口的交互触发体高达 138px，并从门的原点向下延伸至地面。即使门被放在树冠、残墙或钟塔高台，玩家仍可能从连续地面触发出口。这样会让平台看起来像路线，实际却不构成路线要求。
 
-已在 `scripts/levels/greybox_world_region.gd` 将出口触发体调整为 110×100，并把垂直偏移从 -69 调整为 -35，使触发体更贴合门洞高度。同步在 `tools/validate_graybox_scene_wiring.py` 加入静态合同，防止未来回归。该修正的实际碰撞行为仍需 Godot 实机确认。
+已在 `scripts/levels/greybox_world_region.gd` 将出口触发体调整为 110×80，并把垂直偏移从 -69 调整为 -35，使触发体更贴合门洞高度。同步在 `tools/validate_graybox_scene_wiring.py` 加入静态合同，防止未来回归。该修正的实际碰撞行为仍需 Godot 实机确认。
 
 ## 2. 地图层级与内容分类
 
