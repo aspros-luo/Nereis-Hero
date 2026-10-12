@@ -61,6 +61,17 @@ flowchart TB
 
 **Reading note:** Solid lines represent major geographic relationships; dashed lines represent shortcuts or special passages. Some peer-level links are omitted for readability. The authoritative connection IDs remain C01–C24 in `tools/world_map_topology.json`. This diagram expresses design intent, not completed Godot implementation.
 
+## 8. Cross-check against the current topology data
+
+The current `tools/world_map_topology.json` contains 14 macro regions and 24 inter-region connections. By raw connection count, A3 (Abandoned City) has 6 links; A4 (Sewers/Reservoir) and A9 (Outer Royal Ring) have 5 each; A1 (Village) and A8 (Royal Necropolis) have 4 each. This supports the intended hub roles for the city, underworks, and royal tombs, but also flags a risk that A3 may concentrate too much transit responsibility.
+
+- This brain map represents the **overall relationship after routes are progressively opened**, not the state in which every passage is available on first arrival.
+- Some shortcuts begin locked, including the old village route, bell-tower drop, upper old lift, and royal side gate.
+- The A4→A1 waterway return is recorded as a one-way final connection; the endgame entries A11→A13 and A12→A13 are also one-way in the data. Do not make them bidirectional merely to simplify the diagram.
+- The next map review should focus on A3's transit workload, whether the underground connections between A4 and A8 are too dense, and whether the secret entrances to A11 expose the truth too early.
+
+This is a static read and count of the design data, not an in-engine Godot test and not proof that every connection already provides a good player experience.
+
 ## 3. Spatial roles of the six macro areas
 
 | Macro area | Spatial role | Primary function | Avoid |
