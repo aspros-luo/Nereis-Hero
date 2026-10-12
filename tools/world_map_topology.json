@@ -239,7 +239,11 @@
           "region": "A8",
           "x": 520
         },
-        "intent": "Royal tomb return branches from the middle ledge, distinct from the low prison supply tunnel and the higher royal drain."
+        "intent": "Royal tomb return branches from the middle ledge, distinct from the low prison supply tunnel and the higher royal drain.",
+        "return_spawn": {
+          "region": "A4",
+          "x": 1260
+        }
       }
     },
     {
@@ -357,7 +361,7 @@
         },
         "return_spawn": {
           "region": "A3",
-          "x": 1860
+          "x": 1940
         },
         "intent": "Late shortcut occupies the far-eastern upper lane, separate from H03 street-level anomaly and C10 monastery-drop door."
       }
@@ -1090,7 +1094,8 @@
       "C16 A3-to-A9 return door moved to eastern rooftop at x=1980, y_offset=-70; A3 return spawn x=1860.",
       "H05 return gate in A3 moved to x=1820 to separate its interaction focus from C10 at x=1710 and C16 rooftop lift at x=1980.",
       "A4 now separates C12 (x=1050, y_offset=-75), C07 (x=1320, y_offset=-85), and C23 (x=1650, y_offset=-105) across distinct ledges; C06 village watergate moved to x=2220.",
-      "A4 return spawns aligned with the layered doors: C12 x=1090, C07 x=1250, C23 x=1620."
+      "A4 return spawns aligned with the layered doors: C12 x=1090, C07 x=1260, C23 x=1620.",
+      "C16 return spawn was tightened to x=1940 so it stays within reach of its elevated door while clear of H05 at x=1820."
     ]
   }
 }
