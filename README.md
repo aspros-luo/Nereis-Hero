@@ -311,3 +311,7 @@ Do not add or trigger GitHub Actions for this project.
 When implementation reaches a major unresolved story decision — especially Hero/Mite history, the four hidden resistance side stories, the final antagonist's political motive, the Outer God's identity, or the exact ending condition — stop coding that story layer and return to story design.
 
 For ordinary gameplay, combat, UI, effects, technical systems and presentation, development can proceed autonomously.
+
+### World-map terminal layer update (2026-10-12)
+
+The A13 terminal anomaly is now represented by `scenes/terminal_anomaly.tscn` rather than remaining a topology-only node. The A12 main route and the gated A11/H08 deep-dream routes converge on A13, which delegates the final choice to the existing ending evaluator. Save/resume mapping and static wiring contracts were updated. This is source-level integration only; Godot traversal and ending transitions remain unverified.
