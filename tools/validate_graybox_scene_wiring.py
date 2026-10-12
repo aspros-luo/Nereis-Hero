@@ -702,7 +702,7 @@ def main() -> int:
         fail(errors, "H05 return door at x=1830 is too close to the C10 door at x=1710.")
     if "1950.0, \"E  RETURN TO THE SILENT BELL WINDOW\"" in region_script:
         fail(errors, "H05 return door at x=1950 overlaps the A3 rest-point interaction radius.")
-    require(region_script, '1900.0, "E  RETURN TO THE SILENT BELL WINDOW"', "H05/C10 interaction spacing", errors)
+    require(region_script, '1820.0, "E  返回无声之窗"', "H05/C10/C16 interaction spacing", errors)
     require(region_script, '1250.0, "E  OPEN THE OLD SERVICE DOOR"', "A9 H03/C18 interaction spacing", errors)
     if '1020.0, "E  OPEN THE OLD SERVICE DOOR"' in region_script:
         fail(errors, "A9 H03 service door remains too close to the C18 inner-city side gate.")
