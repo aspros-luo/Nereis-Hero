@@ -2,10 +2,11 @@
 
 ## Goal
 
-Give A2–A13 and H01–H08 readable environmental depth while preserving box-world topology, platform collision, exits, Resonance conditions, and story state. This pass uses native Godot drawing rather than new textures or plugins, keeping iteration fast and avoiding missing-resource risk.
+Give A0, A2–A13, and H01–H08 readable environmental depth; A1 Village retains its existing houses, drain, rooftop route, and fireflies as a separate art pass while preserving box-world topology, platform collision, exits, Resonance conditions, and story state. This pass uses native Godot drawing rather than new textures or plugins, keeping iteration fast and avoiding missing-resource risk.
 
 ## Implemented in the game
 
+- A0 surgical ward: cold light shafts, suspended cables, lamp halos, and sparse floor seams strengthen the oppressive experimental-facility mood.
 - Distant silhouettes: tree crowns / organic ribs, city rooftops, fortress battlements, Gothic spires, tomb walls, or reservoir arches selected by region family.
 - Low-contrast haze bands: restrained horizontal color layers add depth without obscuring playable platforms.
 - Ground material cues: broken paving seams, sparse rubble, and a subtle floor edge reduce the flat-rectangle graybox appearance.
