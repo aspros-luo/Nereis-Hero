@@ -702,6 +702,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1490, 485, 175, 18))
 			_add_platform(Rect2(1800, 445, 185, 18))
 			_add_platform(Rect2(2150, 485, 180, 18))
+			# The monastery exit leaves the battlefield from the broken upper parapet, not the ground boundary.
+			# 修道院主出口从断裂的上层城墙离开战场，不再与地面边界连成直线。
+			_add_platform(Rect2(2190, 450, 140, 18))
 			_add_platform(Rect2(420, 420, 120, 18))
 			_add_platform(Rect2(560, 375, 130, 18))
 			_add_platform(Rect2(720, 335, 120, 18))
@@ -784,6 +787,10 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1410, 405, 175, 18))
 			_add_platform(Rect2(1700, 455, 175, 18))
 			_add_platform(Rect2(2040, 420, 170, 18))
+			# The cathedral approach climbs above the outer-ring service doors and uses two short roof steps.
+			# 大圣堂入口从外环服务门上方攀过两级屋顶，避免所有连接都落在同一地面线上。
+			_add_platform(Rect2(2190, 390, 140, 18))
+			_add_platform(Rect2(2300, 360, 140, 18))
 			_add_platform(Rect2(390, 395, 115, 18))
 			_add_platform(Rect2(520, 355, 120, 18))
 			_add_platform(Rect2(665, 320, 120, 18))
@@ -1504,8 +1511,8 @@ func _spawn_region_exits() -> void:
 				"res://scenes/forgotten_city.tscn", "east"
 			)
 			_spawn_exit_door(
-				map_width - 72.0, "E  进入修道院", "monastery_tower",
-				"res://scenes/monastery_tower.tscn", "west"
+				2250.0, "E  沿残墙高路进入修道院", "monastery_tower",
+				"res://scenes/monastery_tower.tscn", "west", true, "", "", floor_y - 90.0
 			)
 			if WorldState.is_hidden_path_opened("H02"):
 				_spawn_exit_door(
@@ -1584,8 +1591,8 @@ func _spawn_region_exits() -> void:
 				"res://scenes/royal_tomb.tscn", "east"
 			)
 			_spawn_exit_door(
-				map_width - 72.0, "E  登上大圣堂", "grand_cathedral",
-				"res://scenes/grand_cathedral.tscn", "west"
+				2350.0, "E  沿外环屋顶阶梯登上大圣堂", "grand_cathedral",
+				"res://scenes/grand_cathedral.tscn", "west", true, "", "", floor_y - 180.0
 			)
 			if WorldState.is_hidden_path_opened("H03"):
 				_spawn_exit_door(
