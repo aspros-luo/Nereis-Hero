@@ -1,0 +1,83 @@
+# 环境氛围美术第二轮 / Environmental Atmosphere Art Pass 2
+
+**Branch / 分支:** `development`  
+**Implementation commit / 实现提交:** `9e1c347032734a8bdaa3bf8c5cf7d83f30f11a9a`
+
+## 中文
+
+### 本轮目标
+
+按项目当前优先级，先推进地形、背景与环境氛围，而不是继续修改主角。保留现有箱式地图拓扑、平台碰撞、出生点、出口、隐藏路线和剧情状态。
+
+### 已实现
+
+修改 `scripts/levels/greybox_world_region.gd`，仅在现有程序化环境绘制层增加区域差异：
+
+- **雾林／原初空间：** 增加低对比月光斜束与稀疏垂根剪影，保留平台上方的清晰空间。
+- **城区／雨中外环／镜街：** 增加稀疏远景窗光；雨中区域增加地面反光细线。
+- **旧水库／倒影阶梯：** 增加冷色水面反光碎线，避免背景成为单一暗色块。
+- **旧战场：** 增加克制的远景余烬点，避免与可拾取物混淆。
+- **修道院／大圣堂：** 增加低透明度高窗光束，让建筑具有纵向光感。
+- **深层研究区：** 增加稀疏的紫色有机微光，强化“古老遗迹被教会改造”的不安感。
+- **终局异象：** 增加断裂地平线，呼应不稳定的空间结构。
+- **地面材质：** 按区域加入苔痕、湿石反光、战场碎屑、教会石材边缘光或异常渗色；细节位置由区域 ID 确定，避免每帧随机跳动。
+
+### 设计原则
+
+1. 环境负责建立情绪和空间纵深，不能盖过可站立平台、敌人、出口和交互提示。
+2. 光束、窗光和地面反射均采用低透明度，先保留暗黑奇幻的可读性。
+3. 环境细节不参与物理碰撞，不移动地图物件，不改变剧情与存档。
+4. 保留现有 SVG 背景与原生绘制方案；本轮不引入未核实许可的外部素材，也不改变 Hero 本体美术。
+
+### 验证状态
+
+- [x] 已提交到 `development`。
+- [x] 已静态复核新增分支缩进沿用 Tab，并修正重复匹配的区域分支。
+- [ ] 尚未在 Godot 4.6.x 中运行；当前不能宣称脚本解析、实际视觉效果或性能已经通过。
+- [ ] 本地建议优先检查 A2、A4、A5、A6、A9、A10、A11、A13、H07、H08，观察环境细节是否遮挡角色、敌人或出口。
+
+### 下一步
+
+1. 继续完善地面与墙体的材质过渡、前景遮挡层和可重复拼接的环境模块。
+2. 给关键区域建立更独特的天气与光照语言，优先 A2 雾林、A4 旧水库、A5 旧战场、A10 大圣堂和 A11 深层研究区。
+3. 再检查地图中平台边缘与环境明暗对比；美术不能降低跳跃距离、落脚点和路线出口的辨识度。
+4. 实机验收后再决定是否导入外部 tileset，避免素材风格冲突或许可不清。
+
+---
+
+## English
+
+### Goal
+
+This pass prioritizes terrain, backdrops, and environmental mood over further hero edits. Existing box-like map topology, platform collision, spawn points, exits, hidden routes, and narrative state are preserved.
+
+### Implemented
+
+Updated the procedural environment drawing in `scripts/levels/greybox_world_region.gd`:
+
+- **Misty forest / primordial spaces:** subtle angled moonbeams and sparse hanging-root silhouettes.
+- **City / outer ring / Mirror Street:** scattered distant window lights and thin ground reflections in wet areas.
+- **Old reservoir / reflected stairwell:** restrained cold-water reflection strokes.
+- **Battlefield:** tiny distant ember specks that should not read as pickups.
+- **Monastery / cathedral:** low-opacity clerestory light shafts for vertical architectural depth.
+- **Deep research:** sparse violet organic glimmers to suggest something living behind the masonry.
+- **Terminal anomaly:** broken horizon segments echoing unstable geometry.
+- **Ground materials:** biome-specific moss, wet-stone highlights, battlefield debris, church-stone glints, and anomalous discoloration. Placement is deterministic by region ID.
+
+### Art direction and safety
+
+1. Atmosphere must not obscure platforms, enemies, exits, or interaction prompts.
+2. Light beams and reflections remain low-opacity to preserve dark-fantasy readability.
+3. These are visual-only drawing changes: no collision, map object placement, narrative, or save-state changes were intended.
+4. Existing SVGs and native drawing remain in use. No unverified external assets were added, and hero artwork was not changed in this pass.
+
+### Verification
+
+- [x] Committed to `development`.
+- [x] Static inspection confirms Tab indentation and an exclusive biome-match branch.
+- [ ] Godot 4.6.x runtime validation has not been performed; script parsing, in-game appearance, and performance are not yet confirmed.
+- [ ] Local visual checks should prioritize A2, A4, A5, A6, A9, A10, A11, A13, H07, and H08.
+
+### Next
+
+Refine terrain-to-wall transitions, foreground framing, and reusable environmental modules; then strengthen unique weather/light identities for key biomes. Re-check platform and exit contrast before integrating any third-party tileset.
