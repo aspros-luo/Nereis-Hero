@@ -8,6 +8,8 @@ const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
 const VILLAGE_POI_SCRIPT = preload("res://scripts/world/village_poi.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
+const VILLAGE_BACKDROP = preload("res://assets/art/backdrops/village_backdrop.svg")
+const VILLAGE_GROUND_STRIP = preload("res://assets/art/backdrops/village_ground_strip.svg")
 const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 const FIREFLY_SCRIPT = preload("res://scripts/effects/village_fireflies.gd")
@@ -557,8 +559,8 @@ func _mark_input_handled() -> void:
         viewport.set_input_as_handled()
 
 func _draw() -> void:
-    draw_rect(Rect2(0, 0, 2600, 720), Color("#111018"))
-    draw_rect(Rect2(0, 520, 2600, 200), Color("#201c22"))
+    draw_texture_rect(VILLAGE_BACKDROP, Rect2(0, 0, 2600, 720), false)
+    draw_texture_rect(VILLAGE_GROUND_STRIP, Rect2(0, 520, 2600, 200), false)
     for x in range(0, 2600, 64):
         draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
 
