@@ -1,5 +1,8 @@
 # Final Box-World Map Design v1.0 — Vertically Interconnected World
 
+> Hierarchical expansion: also see [Macro Regions, Subregions, Connections and Lifts](BOX_WORLD_HIERARCHY_EN.md). Machine-readable contracts are in `macro_regions`, `subregions`, `intra_region_connections`, and `elevators` in `tools/world_map_topology.json`.
+
+
 > Project: Nereis-Hero  
 > Branch: development  
 > Status: **final spatial design baseline; implementation and in-engine acceptance pending**  
