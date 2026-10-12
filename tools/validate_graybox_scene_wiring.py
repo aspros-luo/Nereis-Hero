@@ -64,6 +64,7 @@ REQUIRED_FILES = [
 
 REQUIRED_ENTRY_SCENES = [
     "scenes/boot.tscn",
+    "scenes/world_map_test_menu.tscn",
     "scenes/escape_prologue.tscn",
     "scenes/village_hub.tscn",
 ]
