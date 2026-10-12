@@ -1291,7 +1291,7 @@ func _register_debug_locked_route_hints() -> void:
 			_register_debug_locked_route_hint(1880.0, "old_battlefield", "旧朝圣高路需从 A5 开启")
 		"A3":
 			_register_debug_locked_route_hint(520.0, "village", "村庄防卫章节完成后开放")
-			_register_debug_locked_route_hint(1150.0, "royal_outer_ring", "需从 A9 开启旧升降机")
+			_register_debug_locked_route_hint(1980.0, "royal_outer_ring", "东侧高位旧升降机：需从 A9 开启")
 			_register_debug_locked_route_hint(1710.0, "monastery_tower", "需先从 A6 开启钟塔落差")
 			_register_debug_locked_route_hint(1820.0, "silent_bell_room", "需先发现并开启 H05")
 		"A4":
