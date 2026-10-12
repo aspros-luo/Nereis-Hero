@@ -215,6 +215,10 @@ func _spawn_y_for_side(side: String) -> float:
 		return floor_y - 140.0
 	if region_id == "A6" and side == "bell_drop":
 		return floor_y - 90.0
+	if region_id == "A9" and side == "old_lift":
+		return floor_y - 110.0
+	if region_id == "A9" and side == "royal_drain":
+		return floor_y - 150.0
 	if region_id == "A3" and side == "sewer":
 		return floor_y - 115.0
 	if region_id == "A3" and side == "old_lift":
@@ -306,13 +310,13 @@ func _spawn_x_for_side(side: String) -> float:
 		# C23 高位管线门位于 x=1650；出生在平台下方，并与 x=1780 的 H04 保持距离。
 		return 1620.0
 	if region_id == "A9" and side == "old_lift":
-		# C16 opens at x=520; land between it and C23 at x=720, clear of both door triggers.
-		# C16 门位于 x=520；落在它与 x=720 的 C23 门之间，避开两侧触发区。
+		# C16's upper door is at x=520; land on the same ledge without overlapping the door focus.
+		# C16 高位门位于 x=520；落在同一栈台并避开门的交互焦点。
 		return 610.0
 	if region_id == "A9" and side == "royal_drain":
-		# C23 opens at x=720; land between C23 and C18 at x=900, clear of both triggers.
-		# C23 门位于 x=720；落在 C23 与 x=900 的 C18 之间，避开两侧触发区。
-		return 810.0
+		# C23's upper door is at x=850; land on the approach ledge at x=770, outside the door focus.
+		# C23 高位门位于 x=850；落在 x=770 的接近栈道，避开门的交互焦点。
+		return 770.0
 	if region_id == "A9" and side == "inner_city_side_gate":
 		# C18 opens at x=900; land just beyond its trigger and clear of the rest point at x=1100.
 		# C18 门位于 x=900；落点避开门的触发区与 x=1100 的休整点。
@@ -783,6 +787,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(390, 395, 115, 18))
 			_add_platform(Rect2(520, 355, 120, 18))
 			_add_platform(Rect2(665, 320, 120, 18))
+			# The royal drain branches from a continuous upper service ledge, separate from the street-level inner-city gate.
+			# 王城排水门从连续的上层检修栈道分出，与街面内城侧门分离。
+			_add_platform(Rect2(680, 390, 120, 18))
 			_add_platform(Rect2(815, 340, 125, 18))
 			_add_platform(Rect2(960, 385, 120, 18))
 			_add_platform(Rect2(1110, 395, 120, 18))
@@ -1603,14 +1610,16 @@ func _spawn_region_exits() -> void:
 			_spawn_exit_door(
 				520.0, "E  打开旧升降梯", "forgotten_city",
 				"res://scenes/forgotten_city.tscn", "old_lift",
-				true, "reached_A9_via_A8_then_opened_old_lift_from_A9", "E  乘旧升降梯返回"
+				true, "reached_A9_via_A8_then_opened_old_lift_from_A9", "E  乘旧升降梯返回",
+				floor_y - 110.0
 			)
 			# C23: the royal drain is a separate A9-to-A4 shortcut.
 			# C23：王城排水道是另一条 A9 至 A4 的独立捷径。
 			_spawn_exit_door(
-				720.0, "E  打开王城排水门", "sewer_reservoir",
+				850.0, "E  打开王城排水门", "sewer_reservoir",
 				"res://scenes/sewer_reservoir.tscn", "royal_drain",
-				true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  沿王城排水道返回"
+				true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  沿王城排水道返回",
+				floor_y - 150.0
 			)
 		"A10":
 			_spawn_exit_door(
