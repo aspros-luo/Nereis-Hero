@@ -353,6 +353,9 @@ def main() -> int:
     require(region_script, "_add_platform(Rect2(420, 420, 120, 18))", "A5 battlefield parapet route", errors)
     require(region_script, "_add_platform(Rect2(2190, 450, 140, 18))", "A5 elevated monastery approach", errors)
     require(region_script, "2250.0, \"E  沿残墙高路进入修道院\"", "A5 raised main exit", errors)
+    require(region_script, '"res://scenes/monastery_tower.tscn", "west", true, "", "", floor_y - 90.0', "C09 elevated door height contract", errors)
+    require(region_script, '2350.0, "E  沿外环屋顶阶梯登上大圣堂"', "C17 A9 rooftop exit anchor", errors)
+    require(region_script, '"res://scenes/grand_cathedral.tscn", "west", true, "", "", floor_y - 180.0', "C17 elevated door height contract", errors)
     require(region_script, "_add_platform(Rect2(1250, 270, 120, 18))", "A6 cloister balcony route", errors)
     require(region_script, "_add_platform(Rect2(1280, 320, 110, 18))", "A7 maintenance catwalk", errors)
     require(region_script, "_add_platform(Rect2(1240, 310, 110, 18))", "A8 upper burial gallery", errors)
@@ -662,7 +665,7 @@ def main() -> int:
         ("A3", '"E  返回旧朝圣路"', "C03 A3-to-A2"),
         ("A3", '"E  沿残墙高路前往战场"', "C08 A3-to-A5"),
         ("A5", '"E  返回被遗忘的城区"', "C08 A5-to-A3"),
-        ("A5", '"E  进入修道院"', "C09 A5-to-A6"),
+        ("A5", '"E  沿残墙高路进入修道院"', "C09 A5-to-A6"),
         ("A6", '"E  返回边境战场"', "C09 A6-to-A5"),
         ("A6", '"E  深入监牢"', "C11 A6-to-A7"),
         ("A7", '"E  返回修道院"', "C11 A7-to-A6"),
@@ -684,7 +687,7 @@ def main() -> int:
     a10_route_block = region_script[a10_start:a12_start] if a10_start >= 0 and a12_start > a10_start else ""
     a12_route_block = region_script[a12_start:h07_start] if a12_start >= 0 and h07_start > a12_start else ""
     for contract in [
-        '"E  登上大圣堂"',
+        '"E  沿外环屋顶阶梯登上大圣堂"',
         'res://scenes/grand_cathedral.tscn", "west"',
     ]:
         require(a9_route_block, contract, "C17 outer-ring-to-cathedral main route", errors)
