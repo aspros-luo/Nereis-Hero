@@ -2,7 +2,7 @@
   "schema_version": 1,
   "title": "Nereis Hero World Topology",
   "status": "design_baseline_not_runtime_verified",
-  "validation_note": "This data validates abstract region connectivity only. Godot graybox movement, collisions, doors, save/resume, death recovery, and runtime transitions require in-engine acceptance.",
+  "validation_note": "This data validates abstract region connectivity only. Godot graybox movement, collisions, doors, save/resume, death recovery, and runtime transitions require in-engine acceptance. Hierarchical macro-region/subregion/connection/elevator contracts are design data and are not evidence of runtime implementation.",
   "regions": [
     {
       "id": "A0",
@@ -1503,5 +1503,1358 @@
       "玩家默认不显示完整开发者地图、敌人位置、奖励清单或隐藏出口。"
     ]
   },
-  "primary_route_role": "first-run orientation spine only; not an exclusive traversal path. Final spatial authority is vertical_design and docs/BOX_WORLD_FINAL_MAP_DESIGN_CN.md."
+  "primary_route_role": "first-run orientation spine only; not an exclusive traversal path. Final spatial authority is vertical_design and docs/BOX_WORLD_FINAL_MAP_DESIGN_CN.md.",
+  "macro_regions": [
+    {
+      "id": "M1",
+      "name": "边境与雾林",
+      "name_en": "The Frontier and Mistwood",
+      "regions": [
+        "A0",
+        "A1",
+        "A2"
+      ],
+      "purpose": "序章、初始安全锚点、第一轮灵视探索；通过树冠和井道首次教会玩家垂直导航。"
+    },
+    {
+      "id": "M2",
+      "name": "废弃城区与地下水系",
+      "name_en": "The Abandoned City and Underworks",
+      "regions": [
+        "A3",
+        "A4"
+      ],
+      "purpose": "第一核心枢纽；把街道、屋顶、抬高管线、检查廊、水渠和水库组织成多层交通网。"
+    },
+    {
+      "id": "M3",
+      "name": "战场、修道院、监牢与王墓",
+      "name_en": "The Battlefield, Monastery, Prison and Royal Tomb",
+      "regions": [
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "purpose": "中层落差与地下穿行；以城墙、钟塔、忏悔井、维护竖井和王墓水道构成纵深回路。"
+    },
+    {
+      "id": "M4",
+      "name": "王城外环与大圣堂",
+      "name_en": "The Outer Royal Ring and Grand Cathedral",
+      "regions": [
+        "A9",
+        "A10"
+      ],
+      "purpose": "后期第二枢纽；屋顶、圣堂高廊、王室排水道和服务门形成高进低出的路线。"
+    },
+    {
+      "id": "M5",
+      "name": "王室内城与古神深层",
+      "name_en": "The Inner City and Primordial Depths",
+      "regions": [
+        "A11",
+        "A12",
+        "A13"
+      ],
+      "purpose": "王权终局与古神深层两条语义不同的路线；结局空间根据玩家状态显现。"
+    }
+  ],
+  "subregions": [
+    {
+      "id": "A0-S01",
+      "parent_region": "A0",
+      "name": "手术室",
+      "layer": "interior",
+      "role": "序章起点"
+    },
+    {
+      "id": "A0-S02",
+      "parent_region": "A0",
+      "name": "观察廊",
+      "layer": "upper",
+      "role": "俯视实验区域"
+    },
+    {
+      "id": "A0-S03",
+      "parent_region": "A0",
+      "name": "排污井",
+      "layer": "underground",
+      "role": "单向逃脱落差"
+    },
+    {
+      "id": "A1-S01",
+      "parent_region": "A1",
+      "name": "村庄主街",
+      "layer": "ground",
+      "role": "初始导航轴"
+    },
+    {
+      "id": "A1-S02",
+      "parent_region": "A1",
+      "name": "民居后巷",
+      "layer": "ground",
+      "role": "NPC与支路"
+    },
+    {
+      "id": "A1-S03",
+      "parent_region": "A1",
+      "name": "屋顶木栈道",
+      "layer": "upper",
+      "role": "C24上层近路起点"
+    },
+    {
+      "id": "A1-S04",
+      "parent_region": "A1",
+      "name": "老井平台",
+      "layer": "ground",
+      "role": "井口与安全交互点"
+    },
+    {
+      "id": "A1-S05",
+      "parent_region": "A1",
+      "name": "井底回声层入口",
+      "layer": "deep",
+      "role": "H01发现点"
+    },
+    {
+      "id": "A2-S01",
+      "parent_region": "A2",
+      "name": "雾林地面",
+      "layer": "ground",
+      "role": "主路与狭窄遭遇"
+    },
+    {
+      "id": "A2-S02",
+      "parent_region": "A2",
+      "name": "钟墓外圈",
+      "layer": "ground",
+      "role": "绕行和墓坑入口"
+    },
+    {
+      "id": "A2-S03",
+      "parent_region": "A2",
+      "name": "钟墓坑底",
+      "layer": "underground",
+      "role": "H02关联的低位空间"
+    },
+    {
+      "id": "A2-S04",
+      "parent_region": "A2",
+      "name": "树冠栈道",
+      "layer": "upper",
+      "role": "C03高路"
+    },
+    {
+      "id": "A2-S05",
+      "parent_region": "A2",
+      "name": "旧朝圣高路",
+      "layer": "upper",
+      "role": "C04远端捷径"
+    },
+    {
+      "id": "A3-S01",
+      "parent_region": "A3",
+      "name": "西侧城区入口",
+      "layer": "ground",
+      "role": "C03落点"
+    },
+    {
+      "id": "A3-S02",
+      "parent_region": "A3",
+      "name": "旧市场街",
+      "layer": "ground",
+      "role": "H03线索锚点"
+    },
+    {
+      "id": "A3-S03",
+      "parent_region": "A3",
+      "name": "东侧街巷",
+      "layer": "ground",
+      "role": "地面回环"
+    },
+    {
+      "id": "A3-S04",
+      "parent_region": "A3",
+      "name": "屋顶连廊",
+      "layer": "upper",
+      "role": "C16与C24落点"
+    },
+    {
+      "id": "A3-S05",
+      "parent_region": "A3",
+      "name": "抬高管线",
+      "layer": "upper",
+      "role": "C05入口"
+    },
+    {
+      "id": "A3-S06",
+      "parent_region": "A3",
+      "name": "钟塔落差平台",
+      "layer": "upper",
+      "role": "C10落点"
+    },
+    {
+      "id": "A3-S07",
+      "parent_region": "A3",
+      "name": "地下检查口",
+      "layer": "underground",
+      "role": "通往A4的下行口"
+    },
+    {
+      "id": "A4-S01",
+      "parent_region": "A4",
+      "name": "上层检查廊",
+      "layer": "upper",
+      "role": "C05/C23高位交通"
+    },
+    {
+      "id": "A4-S02",
+      "parent_region": "A4",
+      "name": "沉积大厅",
+      "layer": "ground",
+      "role": "主识别空间与战斗区"
+    },
+    {
+      "id": "A4-S03",
+      "parent_region": "A4",
+      "name": "中层水道",
+      "layer": "underground",
+      "role": "C07王墓水道"
+    },
+    {
+      "id": "A4-S04",
+      "parent_region": "A4",
+      "name": "旧水库边缘",
+      "layer": "ground",
+      "role": "水位机关"
+    },
+    {
+      "id": "A4-S05",
+      "parent_region": "A4",
+      "name": "低位淹水沟",
+      "layer": "underground",
+      "role": "C12补给道"
+    },
+    {
+      "id": "A4-S06",
+      "parent_region": "A4",
+      "name": "水库底层井道",
+      "layer": "deep",
+      "role": "C06回村与H04邻接"
+    },
+    {
+      "id": "A4-S07",
+      "parent_region": "A4",
+      "name": "水闸机房",
+      "layer": "underground",
+      "role": "控制回村捷径"
+    },
+    {
+      "id": "A5-S01",
+      "parent_region": "A5",
+      "name": "战壕地面",
+      "layer": "ground",
+      "role": "主战斗路径"
+    },
+    {
+      "id": "A5-S02",
+      "parent_region": "A5",
+      "name": "坍塌城墙",
+      "layer": "upper",
+      "role": "可攀登的中间层"
+    },
+    {
+      "id": "A5-S03",
+      "parent_region": "A5",
+      "name": "堡垒城墙",
+      "layer": "upper",
+      "role": "C09与C04连接点"
+    },
+    {
+      "id": "A5-S04",
+      "parent_region": "A5",
+      "name": "瞭望箭楼",
+      "layer": "tower",
+      "role": "远景与高风险支路"
+    },
+    {
+      "id": "A5-S05",
+      "parent_region": "A5",
+      "name": "断桥绞盘",
+      "layer": "upper",
+      "role": "开启A2高路回环"
+    },
+    {
+      "id": "A6-S01",
+      "parent_region": "A6",
+      "name": "下层回廊",
+      "layer": "ground",
+      "role": "A7主线入口"
+    },
+    {
+      "id": "A6-S02",
+      "parent_region": "A6",
+      "name": "修道院庭院",
+      "layer": "ground",
+      "role": "区域识别中心"
+    },
+    {
+      "id": "A6-S03",
+      "parent_region": "A6",
+      "name": "上层廊桥",
+      "layer": "upper",
+      "role": "俯视庭院的侧路"
+    },
+    {
+      "id": "A6-S04",
+      "parent_region": "A6",
+      "name": "钟塔中层",
+      "layer": "tower",
+      "role": "塔内垂直穿行"
+    },
+    {
+      "id": "A6-S05",
+      "parent_region": "A6",
+      "name": "钟塔顶",
+      "layer": "tower",
+      "role": "C10落差起点"
+    },
+    {
+      "id": "A6-S06",
+      "parent_region": "A6",
+      "name": "无声窗口",
+      "layer": "deep",
+      "role": "H05入口"
+    },
+    {
+      "id": "A7-S01",
+      "parent_region": "A7",
+      "name": "监牢走廊",
+      "layer": "ground",
+      "role": "主线推进"
+    },
+    {
+      "id": "A7-S02",
+      "parent_region": "A7",
+      "name": "下层囚室",
+      "layer": "underground",
+      "role": "高风险支路"
+    },
+    {
+      "id": "A7-S03",
+      "parent_region": "A7",
+      "name": "忏悔井",
+      "layer": "deep",
+      "role": "垂直下降空间"
+    },
+    {
+      "id": "A7-S04",
+      "parent_region": "A7",
+      "name": "维护竖井上缘",
+      "layer": "upper",
+      "role": "A8入口侧"
+    },
+    {
+      "id": "A7-S05",
+      "parent_region": "A7",
+      "name": "维护竖井底部",
+      "layer": "underground",
+      "role": "C12低位补给口"
+    },
+    {
+      "id": "A7-S06",
+      "parent_region": "A7",
+      "name": "供给隧道闸门",
+      "layer": "underground",
+      "role": "可从监牢侧开启"
+    },
+    {
+      "id": "A8-S01",
+      "parent_region": "A8",
+      "name": "王墓入口平台",
+      "layer": "ground",
+      "role": "A7进入点"
+    },
+    {
+      "id": "A8-S02",
+      "parent_region": "A8",
+      "name": "王族墓室",
+      "layer": "ground",
+      "role": "主路与王权线索"
+    },
+    {
+      "id": "A8-S03",
+      "parent_region": "A8",
+      "name": "中层墓道水渠",
+      "layer": "underground",
+      "role": "C07连接点"
+    },
+    {
+      "id": "A8-S04",
+      "parent_region": "A8",
+      "name": "深层铭文廊",
+      "layer": "deep",
+      "role": "H06线索"
+    },
+    {
+      "id": "A8-S05",
+      "parent_region": "A8",
+      "name": "王室维护井",
+      "layer": "deep",
+      "role": "C15秘密入口"
+    },
+    {
+      "id": "A8-S06",
+      "parent_region": "A8",
+      "name": "升降平台井",
+      "layer": "vertical",
+      "role": "王墓内部垂直捷径"
+    },
+    {
+      "id": "A9-S01",
+      "parent_region": "A9",
+      "name": "外环下层街巷",
+      "layer": "ground",
+      "role": "A8进入点"
+    },
+    {
+      "id": "A9-S02",
+      "parent_region": "A9",
+      "name": "外环广场",
+      "layer": "ground",
+      "role": "导航中心"
+    },
+    {
+      "id": "A9-S03",
+      "parent_region": "A9",
+      "name": "屋顶步道",
+      "layer": "upper",
+      "role": "C16/C17高路"
+    },
+    {
+      "id": "A9-S04",
+      "parent_region": "A9",
+      "name": "王室高位排水道",
+      "layer": "upper",
+      "role": "C23入口"
+    },
+    {
+      "id": "A9-S05",
+      "parent_region": "A9",
+      "name": "旧升降机下站",
+      "layer": "vertical",
+      "role": "C16升降机下站"
+    },
+    {
+      "id": "A9-S06",
+      "parent_region": "A9",
+      "name": "内城服务门",
+      "layer": "ground",
+      "role": "C18回环点"
+    },
+    {
+      "id": "A9-S07",
+      "parent_region": "A9",
+      "name": "积水镜街入口",
+      "layer": "deep",
+      "role": "H07入口"
+    },
+    {
+      "id": "A10-S01",
+      "parent_region": "A10",
+      "name": "朝圣阶梯",
+      "layer": "ground",
+      "role": "主路外部入口"
+    },
+    {
+      "id": "A10-S02",
+      "parent_region": "A10",
+      "name": "大圣堂主堂",
+      "layer": "ground",
+      "role": "主要仪式空间"
+    },
+    {
+      "id": "A10-S03",
+      "parent_region": "A10",
+      "name": "侧廊",
+      "layer": "ground",
+      "role": "环绕主堂的支路"
+    },
+    {
+      "id": "A10-S04",
+      "parent_region": "A10",
+      "name": "唱诗席高廊",
+      "layer": "upper",
+      "role": "C17进入点"
+    },
+    {
+      "id": "A10-S05",
+      "parent_region": "A10",
+      "name": "静默侧礼拜堂",
+      "layer": "deep",
+      "role": "C19秘密入口"
+    },
+    {
+      "id": "A10-S06",
+      "parent_region": "A10",
+      "name": "教会维护梯井",
+      "layer": "vertical",
+      "role": "高廊与下层维护空间"
+    },
+    {
+      "id": "A11-S01",
+      "parent_region": "A11",
+      "name": "王室维护井出口",
+      "layer": "underground",
+      "role": "C15进入点"
+    },
+    {
+      "id": "A11-S02",
+      "parent_region": "A11",
+      "name": "教会实验层",
+      "layer": "ground",
+      "role": "研究设施与线索"
+    },
+    {
+      "id": "A11-S03",
+      "parent_region": "A11",
+      "name": "古神遗留层",
+      "layer": "deep",
+      "role": "空间异常加剧"
+    },
+    {
+      "id": "A11-S04",
+      "parent_region": "A11",
+      "name": "胎宫外缘",
+      "layer": "deep",
+      "role": "H08前置空间"
+    },
+    {
+      "id": "A11-S05",
+      "parent_region": "A11",
+      "name": "原初空腔",
+      "layer": "deep",
+      "role": "终局异象连接"
+    },
+    {
+      "id": "A12-S01",
+      "parent_region": "A12",
+      "name": "内城服务街",
+      "layer": "ground",
+      "role": "C18回返落点"
+    },
+    {
+      "id": "A12-S02",
+      "parent_region": "A12",
+      "name": "王室庭院",
+      "layer": "ground",
+      "role": "王权主路线"
+    },
+    {
+      "id": "A12-S03",
+      "parent_region": "A12",
+      "name": "城墙步道",
+      "layer": "upper",
+      "role": "侧向高路"
+    },
+    {
+      "id": "A12-S04",
+      "parent_region": "A12",
+      "name": "王座厅上层",
+      "layer": "tower",
+      "role": "结局前空间"
+    },
+    {
+      "id": "A12-S05",
+      "parent_region": "A12",
+      "name": "城墙货运井",
+      "layer": "vertical",
+      "role": "内城垂直运输点"
+    },
+    {
+      "id": "A13-S01",
+      "parent_region": "A13",
+      "name": "梦境边界",
+      "layer": "deep",
+      "role": "按结局改变入口"
+    },
+    {
+      "id": "A13-S02",
+      "parent_region": "A13",
+      "name": "记忆回廊",
+      "layer": "deep",
+      "role": "结局专属空间"
+    },
+    {
+      "id": "A13-S03",
+      "parent_region": "A13",
+      "name": "终局场域",
+      "layer": "deep",
+      "role": "不同结局的战斗/叙事结构"
+    }
+  ],
+  "intra_region_connections": [
+    {
+      "id": "SC001",
+      "from": "A0-S01",
+      "to": "A0-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC002",
+      "from": "A0-S02",
+      "to": "A0-S03",
+      "kind": "drop",
+      "travel": "one_way",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC003",
+      "from": "A1-S01",
+      "to": "A1-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC004",
+      "from": "A1-S01",
+      "to": "A1-S03",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC005",
+      "from": "A1-S03",
+      "to": "A1-S04",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC006",
+      "from": "A1-S04",
+      "to": "A1-S05",
+      "kind": "resonance",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "resonance_12",
+      "design_note": ""
+    },
+    {
+      "id": "SC007",
+      "from": "A2-S01",
+      "to": "A2-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC008",
+      "from": "A2-S02",
+      "to": "A2-S03",
+      "kind": "drop",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC009",
+      "from": "A2-S01",
+      "to": "A2-S04",
+      "kind": "climb",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC010",
+      "from": "A2-S04",
+      "to": "A2-S05",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC011",
+      "from": "A2-S02",
+      "to": "A2-S04",
+      "kind": "loop",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_forest_rope_bridge",
+      "design_note": ""
+    },
+    {
+      "id": "SC012",
+      "from": "A3-S01",
+      "to": "A3-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC013",
+      "from": "A3-S02",
+      "to": "A3-S03",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC014",
+      "from": "A3-S01",
+      "to": "A3-S04",
+      "kind": "climb",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC015",
+      "from": "A3-S04",
+      "to": "A3-S05",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC016",
+      "from": "A3-S04",
+      "to": "A3-S06",
+      "kind": "drop",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_bell_tower_drop",
+      "design_note": ""
+    },
+    {
+      "id": "SC017",
+      "from": "A3-S03",
+      "to": "A3-S07",
+      "kind": "hatch",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC018",
+      "from": "A4-S01",
+      "to": "A4-S02",
+      "kind": "stairs",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC019",
+      "from": "A4-S02",
+      "to": "A4-S03",
+      "kind": "ladder",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC020",
+      "from": "A4-S03",
+      "to": "A4-S04",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC021",
+      "from": "A4-S04",
+      "to": "A4-S05",
+      "kind": "drop",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC022",
+      "from": "A4-S05",
+      "to": "A4-S06",
+      "kind": "shaft",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC023",
+      "from": "A4-S02",
+      "to": "A4-S07",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC024",
+      "from": "A4-S07",
+      "to": "A4-S06",
+      "kind": "gate",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_watergate",
+      "design_note": ""
+    },
+    {
+      "id": "SC025",
+      "from": "A5-S01",
+      "to": "A5-S02",
+      "kind": "climb",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC026",
+      "from": "A5-S02",
+      "to": "A5-S03",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC027",
+      "from": "A5-S03",
+      "to": "A5-S04",
+      "kind": "ladder",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC028",
+      "from": "A5-S03",
+      "to": "A5-S05",
+      "kind": "winch",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_pilgrim_highroad",
+      "design_note": ""
+    },
+    {
+      "id": "SC029",
+      "from": "A6-S01",
+      "to": "A6-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC030",
+      "from": "A6-S02",
+      "to": "A6-S03",
+      "kind": "stairs",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC031",
+      "from": "A6-S03",
+      "to": "A6-S04",
+      "kind": "ladder",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC032",
+      "from": "A6-S04",
+      "to": "A6-S05",
+      "kind": "lift",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "powered_bell_tower_lift",
+      "design_note": ""
+    },
+    {
+      "id": "SC033",
+      "from": "A6-S05",
+      "to": "A6-S06",
+      "kind": "resonance",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "resonance_42",
+      "design_note": ""
+    },
+    {
+      "id": "SC034",
+      "from": "A7-S01",
+      "to": "A7-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC035",
+      "from": "A7-S02",
+      "to": "A7-S03",
+      "kind": "drop",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC036",
+      "from": "A7-S03",
+      "to": "A7-S05",
+      "kind": "shaft",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC037",
+      "from": "A7-S01",
+      "to": "A7-S04",
+      "kind": "stairs",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC038",
+      "from": "A7-S05",
+      "to": "A7-S06",
+      "kind": "gate",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_supply_tunnel",
+      "design_note": ""
+    },
+    {
+      "id": "SC039",
+      "from": "A8-S01",
+      "to": "A8-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC040",
+      "from": "A8-S02",
+      "to": "A8-S03",
+      "kind": "stairs",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC041",
+      "from": "A8-S03",
+      "to": "A8-S04",
+      "kind": "ladder",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC042",
+      "from": "A8-S04",
+      "to": "A8-S05",
+      "kind": "hatch",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "discovered_royal_maintenance_shaft",
+      "design_note": ""
+    },
+    {
+      "id": "SC043",
+      "from": "A8-S02",
+      "to": "A8-S06",
+      "kind": "lift",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "powered_royal_tomb_lift",
+      "design_note": ""
+    },
+    {
+      "id": "SC044",
+      "from": "A8-S06",
+      "to": "A8-S03",
+      "kind": "loop",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_tomb_platform_loop",
+      "design_note": ""
+    },
+    {
+      "id": "SC045",
+      "from": "A9-S01",
+      "to": "A9-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC046",
+      "from": "A9-S02",
+      "to": "A9-S03",
+      "kind": "climb",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC047",
+      "from": "A9-S03",
+      "to": "A9-S04",
+      "kind": "crawl",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC048",
+      "from": "A9-S01",
+      "to": "A9-S05",
+      "kind": "lift",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_old_lift",
+      "design_note": ""
+    },
+    {
+      "id": "SC049",
+      "from": "A9-S05",
+      "to": "A9-S03",
+      "kind": "lift",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_old_lift",
+      "design_note": ""
+    },
+    {
+      "id": "SC050",
+      "from": "A9-S01",
+      "to": "A9-S06",
+      "kind": "gate",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_inner_city_side_gate",
+      "design_note": ""
+    },
+    {
+      "id": "SC051",
+      "from": "A9-S01",
+      "to": "A9-S07",
+      "kind": "resonance",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "resonance_68",
+      "design_note": ""
+    },
+    {
+      "id": "SC052",
+      "from": "A10-S01",
+      "to": "A10-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC053",
+      "from": "A10-S02",
+      "to": "A10-S03",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC054",
+      "from": "A10-S03",
+      "to": "A10-S04",
+      "kind": "stairs",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC055",
+      "from": "A10-S04",
+      "to": "A10-S05",
+      "kind": "resonance",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "discovered_silent_side_chapel",
+      "design_note": ""
+    },
+    {
+      "id": "SC056",
+      "from": "A10-S03",
+      "to": "A10-S06",
+      "kind": "ladder",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC057",
+      "from": "A11-S01",
+      "to": "A11-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC058",
+      "from": "A11-S02",
+      "to": "A11-S03",
+      "kind": "drop",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC059",
+      "from": "A11-S03",
+      "to": "A11-S04",
+      "kind": "hatch",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "resonance_78",
+      "design_note": ""
+    },
+    {
+      "id": "SC060",
+      "from": "A11-S04",
+      "to": "A11-S05",
+      "kind": "anomaly",
+      "travel": "one_way",
+      "initial_state": "locked",
+      "unlock_condition": "ending_state_allows_deep_dream_entry",
+      "design_note": ""
+    },
+    {
+      "id": "SC061",
+      "from": "A12-S01",
+      "to": "A12-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC062",
+      "from": "A12-S02",
+      "to": "A12-S03",
+      "kind": "stairs",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC063",
+      "from": "A12-S03",
+      "to": "A12-S04",
+      "kind": "lift",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_throne_service_lift",
+      "design_note": ""
+    },
+    {
+      "id": "SC064",
+      "from": "A12-S01",
+      "to": "A12-S05",
+      "kind": "lift",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_inner_city_cargo_lift",
+      "design_note": ""
+    },
+    {
+      "id": "SC065",
+      "from": "A12-S05",
+      "to": "A12-S03",
+      "kind": "lift",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_inner_city_cargo_lift",
+      "design_note": ""
+    },
+    {
+      "id": "SC066",
+      "from": "A13-S01",
+      "to": "A13-S02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC067",
+      "from": "A13-S02",
+      "to": "A13-S03",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    }
+  ],
+  "elevators": [
+    {
+      "id": "LFT01",
+      "name": "雾林绞盘升降台",
+      "from": "A2-S01",
+      "to": "A2-S04",
+      "type": "counterweight_platform",
+      "initial_state": "broken",
+      "unlock_condition": "repaired_forest_counterweight",
+      "operation": "上下站均有手动绞盘；第一次修复后永久可用",
+      "safety": "平台停靠时才允许上下；井道内设置可辨识的横梁和落差"
+    },
+    {
+      "id": "LFT02",
+      "name": "沉积大厅维护笼",
+      "from": "A4-S01",
+      "to": "A4-S06",
+      "type": "caged_service_lift",
+      "initial_state": "unpowered",
+      "unlock_condition": "restored_reservoir_power",
+      "operation": "先在机房恢复供能，再在上下站分别呼叫",
+      "safety": "未供能时使用梯子/坡道作为基础通路，不以升降机故障软锁玩家"
+    },
+    {
+      "id": "LFT03",
+      "name": "钟塔配重梯",
+      "from": "A6-S02",
+      "to": "A6-S05",
+      "type": "counterweight_lift",
+      "initial_state": "locked",
+      "unlock_condition": "opened_bell_tower_mechanism",
+      "operation": "庭院侧解锁，塔顶可反向召回",
+      "safety": "与C10落差捷径分离；电梯提供安全回程，落差提供快速但有风险的路线"
+    },
+    {
+      "id": "LFT04",
+      "name": "监牢维护吊笼",
+      "from": "A7-S01",
+      "to": "A7-S05",
+      "type": "cage_lift",
+      "initial_state": "locked",
+      "unlock_condition": "released_prison_counterweight",
+      "operation": "可从走廊或竖井底部操作",
+      "safety": "不替代C12低位补给隧道，二者提供不同风险与落点"
+    },
+    {
+      "id": "LFT05",
+      "name": "王墓石台",
+      "from": "A8-S02",
+      "to": "A8-S06",
+      "type": "stone_platform_lift",
+      "initial_state": "sealed",
+      "unlock_condition": "opened_royal_tomb_platform",
+      "operation": "以墓室侧机关启动；可从中层水道回召",
+      "safety": "升降平台连接墓室与中层水道，不直接跳过王墓主线门"
+    },
+    {
+      "id": "LFT06",
+      "name": "外环旧货梯",
+      "from": "A9-S01",
+      "to": "A9-S05",
+      "type": "freight_lift",
+      "initial_state": "locked",
+      "unlock_condition": "opened_old_lift_from_A9",
+      "operation": "外环下层开闸后可往返屋顶站；跨区C16另行接入A3屋顶",
+      "safety": "停靠动画/声音应能被附近玩家感知，避免无反馈传送"
+    },
+    {
+      "id": "LFT07",
+      "name": "内城货运升降机",
+      "from": "A12-S01",
+      "to": "A12-S05",
+      "type": "royal_service_lift",
+      "initial_state": "locked",
+      "unlock_condition": "opened_inner_city_cargo_lift",
+      "operation": "从服务街和城墙维护点双向操作",
+      "safety": "为高低层回环服务，不作为王座厅的强制捷径"
+    },
+    {
+      "id": "LFT08",
+      "name": "王座厅配重梯",
+      "from": "A12-S03",
+      "to": "A12-S04",
+      "type": "counterweight_lift",
+      "initial_state": "locked",
+      "unlock_condition": "opened_throne_service_lift",
+      "operation": "从城墙步道侧开启后可在王座厅上层召回",
+      "safety": "只改变进入高度，不改变结局判定"
+    }
+  ],
+  "hierarchy_design_version": "1.0"
 }
