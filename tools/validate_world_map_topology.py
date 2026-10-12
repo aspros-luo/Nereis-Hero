@@ -235,6 +235,16 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C05 must branch from the raised pipe-walk.")
     if c05_spatial.get("from_region_anchor") != {"region": "A3", "x": 1600, "y_offset": -115}:
         fail(errors, "C05 spatial anchor must match the A3 raised sewer branch.")
+    c21 = next((edge for edge in connections if edge.get("id") == "C21"), None)
+    c22 = next((edge for edge in connections if edge.get("id") == "C22"), None)
+    if not c21 or c21.get("to") != "A13" or c21.get("unlock_condition") != "physical_union_complete":
+        fail(errors, "C21 must be a physical-union-gated entrance into A13.")
+    if not c22 or c22.get("to") != "A13" or c22.get("initial_access") != "from_to":
+        fail(errors, "C22 must route the main A12 path into A13.")
+    h08 = next((region for region in hidden if region.get("id") == "H08"), None)
+    h08_exit = h08.get("secondary_exit", {}) if h08 else {}
+    if h08_exit.get("to") != "A13" or h08_exit.get("unlock_condition") != "physical_union_complete_then_enter_A13_terminal_layer":
+        fail(errors, "H08 must converge on A13 instead of bypassing the terminal layer.")
     c03 = next((edge for edge in connections if edge.get("id") == "C03"), None)
     c03_spatial = c03.get("spatial_contract", {}) if c03 else {}
     if c03_spatial.get("from_region_anchor") != {"region": "A2", "x": 2240, "y_offset": -160}:
