@@ -273,3 +273,5 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - Continue mapping every macro edge to its actual exit door, spawn side, height, and reverse-gate condition.
 - Reduce the remaining “continuous ground leads to the next boundary” feel without adding arbitrary collision obstacles; prioritize meaningful upper/lower routes and return shortcuts in A2–A4, then A5–A9.
 - Run both Python validators in a local checkout and complete Godot 4.6.x natural-exploration acceptance when an engine environment is available.
+
+- Second spatial pass: C09 (A5→A6) now leaves from the upper battlefield parapet; C17 (A9→A10) now uses a two-step upper roof approach. F10 route hints, topology anchors, and static regression contracts were updated together. Runtime reachability is still unverified.
