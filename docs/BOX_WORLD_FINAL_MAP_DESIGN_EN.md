@@ -220,7 +220,7 @@ Keep existing region-level IDs C01–C24, but map critical links to concrete ele
 - C16: A3 eastern rooftop lift ↔ A9 rooftop route.
 - C17: A9 rooftop ↔ A10 upper gallery; C20 progresses from the nave/interior to A12.
 - C23: A9 high royal drain ↔ A4 upper channel; it must not share the same ground entrance as C12/C07.
-- C24: A1 village ↔ A3 shortcut should enter at the city's edge from an upper defensive route, not add another flat ground door.
+- C24: A1 village ↔ A3 is now defined as the low old-drainage passage opened after village defense. Use the old stone channel beneath the wall, its blockage traces, and the city's ground-level outlet to establish believable geography; do not label it a rooftop route or make it a source-less portal.
 
 Target loop forms:
 
