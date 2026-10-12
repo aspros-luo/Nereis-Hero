@@ -108,6 +108,11 @@ Macro-map visual polish phase 1 (implemented procedural silhouette and ground-de
 - `docs/MAP_VISUAL_POLISH_PHASE_1_CN.md`
 - `docs/MAP_VISUAL_POLISH_PHASE_1_EN.md`
 
+Temporary external art source catalog (CN/EN; source links and region mapping recorded, binary assets not yet imported):
+
+- `docs/TEMP_EXTERNAL_ART_CATALOG_CN_EN.md`
+- `tools/temp_external_art_sources.json`
+
 Machine-readable world map topology:
 
 `tools/world_map_topology.json`
