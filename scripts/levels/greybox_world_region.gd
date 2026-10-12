@@ -2659,7 +2659,7 @@ func _draw_atmospheric_layers() -> void:
 					Vector2(beam_x, 115.0), Vector2(beam_x + 11.0, 115.0),
 					Vector2(beam_x + 72.0, floor_y - 60.0), Vector2(beam_x + 44.0, floor_y - 60.0)
 				]), Color("#d6c2a0", 0.018))
-		"A11", "H08", "H09":
+		"A11":
 			# Uneven organic glimmers hint at something breathing behind the masonry.
 			# 不均匀的有机微光暗示石墙背后有东西正在呼吸。
 			for node_index in range(11):
