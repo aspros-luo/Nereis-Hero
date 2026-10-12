@@ -221,11 +221,6 @@ def main() -> int:
             if not (ROOT / scene_path).is_file():
                 errors.append(f"Scene reference in {source_path} does not exist: {scene_path}")
 
-    # Elevated exits must not remain interactable from the uninterrupted ground floor.
-    # 高位出口不能从连续地面直接交互，避免平台只成为装饰路线。
-    require(region_script, "rectangle.size = Vector2(110.0, 100.0)", "Door interaction volume height", errors)
-    require(region_script, "shape.position = Vector2(0.0, -35.0)", "Door interaction volume vertical alignment", errors)
-
     interaction_focus = read("scripts/core/interaction_focus.gd", errors)
     if interaction_focus.count("WorldState.menu_input_locked") < 2:
         errors.append(
@@ -283,6 +278,11 @@ def main() -> int:
     require(prologue_script, "MAINTENANCE ACCESS ONLY", "A0 catwalk landmark", errors)
 
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
+    # Elevated exits must not remain interactable from the uninterrupted ground floor.
+    # 高位出口不能从连续地面直接交互，避免平台只成为装饰路线。
+    require(region_script, "rectangle.size = Vector2(110.0, 100.0)", "Door interaction volume height", errors)
+    require(region_script, "shape.position = Vector2(0.0, -35.0)", "Door interaction volume vertical alignment", errors)
+
     require(region_script, "[NEREIS][MAP][SPAWN] region=%s", "Map spawn Debug log", errors)
     require(region_script, "func _spawn_hero(spawn_x: float) -> void:", "Region-local death checkpoint setup", errors)
     require(region_script, "WorldState.set_checkpoint(hero.global_position)", "Region-local death checkpoint", errors)
