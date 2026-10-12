@@ -21,6 +21,11 @@
 | DARK FANTASY SIDE-SCROLLER TILESET by SakPix | 哥特城堡、墓室、诅咒森林；可先评估免费 Demo | https://sakpix.itch.io/dark-fantasy-side-scroller-tileset |
 | Dark Castle Tileset by Fabian Fuchs | 城堡内外环境候选；页面说明可用于商业与非商业项目 | https://fabian-fuchs.itch.io/dark-castle-tileset |
 | Free dark-fantasy tileset directory | 持续发现同风格免费图块 | https://itch.io/game-assets/free/tag-dark-fantasy/tag-tileset |
+| 16x16 Dungeon Tileset by 0x72 | CC0 地牢、角色与武器；适合快速验证精灵动画 | https://0x72.itch.io/16x16-dungeon-tileset |
+| Dark World Asset Pack by Kaishido | CC0 暗色环境、树木、蘑菇与 idle/walk 角色表；先验证视角是否适合横版 | https://kaishido.itch.io/dark-world |
+| 16x16 Dark Dungeon Tileset by Zoltan Kosina | CC0 暗色墙地、陷阱与装饰 | https://kosinaz.itch.io/16x16-dark-dungeon-tileset |
+| The Spriters Resource | 仅作参考或许可允许的非商业原型；素材通常仍归原权利人，不能默认用于商业发行 | https://www.spriters-resource.com/ |
+
 
 ## 区域映射建议
 
