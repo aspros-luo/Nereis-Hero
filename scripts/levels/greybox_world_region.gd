@@ -2251,9 +2251,12 @@ func _spawn_exit_door(
 
 	var shape := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(110.0, 138.0)
+	# Keep the interaction volume aligned to the visible doorway. The old 138px
+	# trigger reached the continuous floor even when the door was on an upper ledge.
+	# 交互触发区应贴合可见门洞；旧版 138px 高的触发体会延伸到地面，使高位出口可被绕过。
+	rectangle.size = Vector2(110.0, 100.0)
 	shape.shape = rectangle
-	shape.position = Vector2(0.0, -69.0)
+	shape.position = Vector2(0.0, -35.0)
 	door.add_child(shape)
 	add_child(door)
 	debug_exit_markers.append({
