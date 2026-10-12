@@ -34,7 +34,7 @@ flowchart TB
     A0 --> A1
     A1 <--> A2
     A2 <--> A3
-    A2 -. "Old Pilgrim High Road" .-> A5
+    A2 -. "Old Pilgrim High Road" .- A5
     A3 <--> A5
     A5 <--> A6
     A6 <--> A7
@@ -45,16 +45,16 @@ flowchart TB
 
     A3 <--> A4
     A4 -. "Village return" .-> A1
-    A4 -. "Royal tomb waterway" .-> A8
-    A7 -. "Supply passage" .-> A4
-    A6 -. "Bell-tower drop" .-> A3
-    A3 -. "Upper old lift" .-> A9
+    A4 -. "Royal tomb waterway" .- A8
+    A7 -. "Supply passage" .- A4
+    A6 -. "Bell-tower drop" .- A3
+    A3 -. "Upper old lift" .- A9
     A9 -. "Royal high drain" .-> A4
-    A9 -. "Inner-city side gate" .-> A12
-    A1 -. "Old village route" .-> A3
+    A9 -. "Inner-city side gate" .- A12
+    A1 -. "Old village route" .- A3
 
-    A8 -. "Maintenance-shaft entrance" .-> A11
-    A10 -. "Church secret entrance" .-> A11
+    A8 -. "Maintenance-shaft entrance" .- A11
+    A10 -. "Church secret entrance" .- A11
     A11 --> A13
     A12 --> A13
 ```
