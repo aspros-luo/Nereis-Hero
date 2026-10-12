@@ -60,6 +60,7 @@ REQUIRED_FILES = [
     "scripts/npc/mite.gd",
     "scripts/audio/narrative_audio.gd",
     "scripts/effects/village_fireflies.gd",
+    "scripts/effects/region_ambience.gd",
 ]
 
 REQUIRED_ENTRY_SCENES = [
@@ -307,6 +308,9 @@ def main() -> int:
     require(region_script, "_draw_atmospheric_layers()", "Regional atmosphere render call", errors)
     require(region_script, "func _draw_atmospheric_layers() -> void:", "Regional silhouette layer", errors)
     require(region_script, "func _draw_ground_detail() -> void:", "Ground surface detail layer", errors)
+    require(region_script, 'const REGION_AMBIENCE_SCRIPT = preload("res://scripts/effects/region_ambience.gd")', "Regional ambience script preload", errors)
+    require(region_script, "func _spawn_region_ambience() -> void:", "Regional ambience setup", errors)
+    require(region_script, 'ambience.set("atmosphere_color", _atmosphere_color())', "Regional ambience palette binding", errors)
     require(region_script, "Broken paving seams and small rubble clusters", "Ground material treatment", errors)
     # Elevated exits must not remain interactable from the uninterrupted ground floor.
     # 高位出口不能从连续地面直接交互，避免平台只成为装饰路线。
