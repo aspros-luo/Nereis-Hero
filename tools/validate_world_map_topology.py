@@ -144,6 +144,10 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C16 spatial anchor must match the A3 eastern rooftop lift.")
     if c16_spatial.get("return_spawn") != {"region": "A3", "x": 1860}:
         fail(errors, "C16 return spawn must stay aligned with the eastern rooftop lift.")
+    h05 = next((region for region in hidden if region.get("id") == "H05"), None)
+    h05_return_anchor = h05.get("secondary_exit", {}).get("return_spatial_anchor", {}) if h05 else {}
+    if h05_return_anchor != {"region": "A3", "x": 1820, "layer": "street-level-return"}:
+        fail(errors, "H05 return gate must remain spatially separated from A3 C10 and C16.")
 
     # C24 is the alternate A1-to-A3 route added after the village defense.
     # C24 是村庄防卫后开放的 A1 → A3 替代路线。
