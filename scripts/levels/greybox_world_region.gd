@@ -182,13 +182,13 @@ func _on_region_enemy_defeated(enemy_name: String, enemy_node: Node2D) -> void:
 			if is_instance_valid(narrative):
 				narrative.show_message(
 					"银线中仍有脉动",
-					"实验体的胸腔里没有心脏，只有一段被教会包裹在银线中的脐带。它仍悬在破裂的骨环里，轻轻抽动。\n\n靠近后按 E 拾取。若暂时离开，残片仍会留在这里。",
+					"实验体的胸腔里没有心脏，只有一件被银线缠绕、尚无法辨识的异物。它的用途与意义尚未确定。\n\n靠近后按 E 拾取；即使暂时离开，这件候选遗物仍会留在这里。",
 					6.5
 				)
 
 
 func _spawn_cord_fragment_pickup(pickup_position: Vector2) -> void:
-	if "third_umbilical_cord_fragment_acquired" in WorldState.achievement_flags:
+	if "provisional_h09_relic_collected" in WorldState.achievement_flags:
 		return
 	var pickup := Node2D.new()
 	pickup.set_script(THIRD_CORD_FRAGMENT_SCRIPT)
