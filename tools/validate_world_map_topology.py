@@ -142,7 +142,7 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C16 must use the eastern rooftop lift lane.")
     if c16_spatial.get("from_region_anchor") != {"region": "A3", "x": 1980, "y_offset": -70}:
         fail(errors, "C16 spatial anchor must match the A3 eastern rooftop lift.")
-    if c16_spatial.get("return_spawn") != {"region": "A3", "x": 1940}:
+    if c16_spatial.get("return_spawn") != {"region": "A3", "x": 1940, "y_offset": -70}:
         fail(errors, "C16 return spawn must stay aligned with the eastern rooftop lift and clear of H05.")
     h05 = next((region for region in hidden if region.get("id") == "H05"), None)
     h05_return_anchor = h05.get("secondary_exit", {}).get("return_spatial_anchor", {}) if h05 else {}
@@ -160,8 +160,17 @@ def validate(data: dict[str, Any]) -> list[str]:
         if spatial.get("route_layer") != route_layer or spatial.get(anchor_field) != expected_anchor:
             fail(errors, f"{connection_id} must match its declared A4 layered route anchor.")
     c07_spatial = next((edge for edge in connections if edge.get("id") == "C07"), {}).get("spatial_contract", {})
-    if c07_spatial.get("return_spawn") != {"region": "A4", "x": 1260}:
+    if c07_spatial.get("return_spawn") != {"region": "A4", "x": 1260, "y_offset": -85}:
         fail(errors, "C07 return spawn must sit within interaction range of the middle ledge door.")
+    for connection_id, expected_spawn in {
+        "C05": {"region": "A3", "x": 1600, "y_offset": -115},
+        "C12": {"region": "A4", "x": 1090, "y_offset": -75},
+        "C23": {"region": "A4", "x": 1620, "y_offset": -120},
+    }.items():
+        edge = next((item for item in connections if item.get("id") == connection_id), None)
+        spatial = edge.get("spatial_contract", {}) if edge else {}
+        if spatial.get("return_spawn") != expected_spawn:
+            fail(errors, f"{connection_id} return spawn must match its elevated destination ledge.")
 
     # C24 is the alternate A1-to-A3 route added after the village defense.
     # C24 是村庄防卫后开放的 A1 → A3 替代路线。
