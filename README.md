@@ -167,7 +167,7 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 ### Hidden investigation
 
 - Persistent hidden artifact evidence state
-- Independent hidden story sources can assemble the resistance anchor; the third-cord route is provisional and not a locked story requirement
+- The hidden resistance anchor is assembled from multiple independent story sources. H09's provisional relic is not wired into ending progression; its final role remains undecided.
 - Ancient research ward
 - Graveyard bell story
 - Restoration order
@@ -192,7 +192,7 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 - H07 requires Resonance Sight, resonance ≥ 68, outer exposure ≥ 12, the outer-god story flag, and the R07 evidence source. Its A12 shortcut stays locked until the player reaches the Inner City and opens the far-side gate.
 - A11 can be reached from A8 through C15 (Royal Tomb maintenance shaft) or A10 through C19 (Silent Chapel). Each path has its own persistent gate ID while both record entry to A11. R08 raises resonance to 78 and adds the planned outer exposure.
 - H08 requires resonance ≥ 78, ancient exposure ≥ 2, outer exposure ≥ 18, the outer-god story flag, and three prior anomaly sources. A12 routes through the shared ending evaluator; H08 offers an optional deep-dream exit only after the physical-union story state.
-- H09 Cave Beneath the Cliff, its mad cleric, specimen, and third-cord pickup remain a provisional implementation pending map review; they are not locked story requirements. Recent platform and A3 route edits are code-wired but still require Godot 4.6.x runtime acceptance. A13 remains a topology-level ending layer rather than a dedicated standalone scene.
+- H09 Cave Beneath the Cliff, its mad cleric, specimen, and candidate relic remain a provisional implementation pending map review; the relic does not affect ending eligibility and none of these details are locked story requirements. Recent platform and A3 route edits are code-wired but still require Godot 4.6.x runtime acceptance. A13 remains a topology-level ending layer rather than a dedicated standalone scene.
 
 Implementation notes and acceptance checklists:
 
