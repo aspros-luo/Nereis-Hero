@@ -254,9 +254,9 @@ func _spawn_x_for_side(side: String) -> float:
 		# C10 回程门位于 x=1710；出生点应在同一路线附近，但避开门的触发区。
 		return 1600.0
 	if region_id == "A3" and side == "old_lift":
-		# C16 returns to the elevated old-lift landing at x=1980, clear of the C10 door and rest point.
-		# C16 回程落在 x=1980 的高位旧升降机平台，避开 C10 钟塔门与休整点。
-		return 1860.0
+		# C16 returns just below its elevated door, while staying clear of H05 at x=1820 and the rest point.
+		# C16 回程落在高位门下方，同时与 x=1820 的 H05 回程门及休整点保持净空。
+		return 1940.0
 	if region_id == "A4" and side == "water_reflection_gate":
 		# Move away from H04, whose entrance is at x=1780.
 		# 旧水库侧的 H04 入口位于 x=1780，返回点与其保持明显距离。
@@ -270,9 +270,9 @@ func _spawn_x_for_side(side: String) -> float:
 		# C12 低位栈台门位于 x=1050；出生在门下方，短跳即可抵达。
 		return 1090.0
 	if region_id == "A4" and side == "royal_tomb_waterway":
-		# C07's middle platform door is at x=1320; land just before the platform so the route is visible.
-		# C07 中层平台门位于 x=1320；出生在平台前方，让玩家看见并跳上这条支路。
-		return 1250.0
+		# C07's middle platform door is at x=1320; land just before the platform within safe interaction range.
+		# C07 中层平台门位于 x=1320；出生在平台前方，距离足以交互且能看见支路。
+		return 1260.0
 	if region_id == "A4" and side == "royal_drain":
 		# C23's raised pipe door is at x=1650; arrive directly below its ledge, clear of H04 at x=1780.
 		# C23 高位管线门位于 x=1650；出生在平台下方，并与 x=1780 的 H04 保持距离。
