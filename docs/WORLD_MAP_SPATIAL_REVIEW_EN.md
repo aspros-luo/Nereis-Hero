@@ -155,3 +155,15 @@ This pass found a real data mismatch affecting hidden-route fairness. Runtime H0
 The narrative roles remain separate: the erased street sign supports the city's anomaly, while the defaced royal inscription supports the royal-name corridor. H06 still requires active Resonance Sight, resonance 55, ancient exposure 2, and investigation of the matching evidence.
 
 **Verification boundary:** Repository source, topology data, and validator text were cross-checked. The Python validators were not executed and Godot was not run; reveal timing, persistence, and return travel still require engine acceptance.
+
+## 11. Fifth pass: implement the A13 terminal map layer (2026-10-12)
+
+The audit found that C21 (A11 → A13) and C22 (A12 → A13) existed in topology data, while runtime doors from A12 / H08 skipped directly to ending demo scenes. A13 was therefore a design-only node, not an actual scene. The gap is now closed in source:
+
+- Added `scenes/terminal_anomaly.tscn` using the shared graybox controller, registered as `region_id = A13` and `location_id = terminal_anomaly`, with a dedicated broken-ascent platform layout.
+- The main route enters A13 from A12 through C22. C21 becomes an optional A11-side deep-dream entrance after the physical-union story fact is true.
+- H08 also converges on A13 after the same story gate instead of bypassing the terminal map layer.
+- A13 delegates ending selection to the existing `NereisEndingEvaluator` / `EndgameGate`; the three ending rules are not duplicated or rewritten.
+- Added Continue/resume mapping and updated both static validators to check the A13 scene, C21/C22 conditions, H08 convergence, and ending-evaluator wiring.
+
+The changes are committed to `development`. This is source/data contract work only: neither repository Python validator nor Godot was run. A12, A11, and H08 entry landings, A13 platform traversal, save/resume, and all three ending transitions still require in-engine verification.
