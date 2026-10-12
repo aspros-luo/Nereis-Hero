@@ -254,9 +254,9 @@ func _spawn_x_for_side(side: String) -> float:
 		# C10 回程门位于 x=1710；出生点应在同一路线附近，但避开门的触发区。
 		return 1600.0
 	if region_id == "A3" and side == "old_lift":
-		# C16 returns near the old-lift door at x=1150, clear of the anomaly at x=900.
-		# C16 回程落在 x=1150 旧升降机门附近，同时避开 x=900 的异常调查点。
-		return 1060.0
+		# C16 returns to the elevated old-lift landing at x=1980, clear of the C10 door and rest point.
+		# C16 回程落在 x=1980 的高位旧升降机平台，避开 C10 钟塔门与休整点。
+		return 1860.0
 	if region_id == "A4" and side == "water_reflection_gate":
 		# Move away from H04, whose entrance is at x=1780.
 		# 旧水库侧的 H04 入口位于 x=1780，返回点与其保持明显距离。
@@ -1385,9 +1385,12 @@ func _spawn_region_exits() -> void:
 			)
 			# The sewer descent branches off mid-market; the main road continues to A5.
 			# 下水道入口位于市场中段，城区东侧主路继续通往 A5。
+			# C05 branches off the raised pipe-walk, not the uninterrupted street floor.
+			# C05 从抬高的管线栈道分出，避免地下枢纽入口与城区地面主路混为一条直线。
 			_spawn_exit_door(
-				1480.0, "E  下行至旧水库", "sewer_reservoir",
-				"res://scenes/sewer_reservoir.tscn", "west"
+				1600.0, "E  沿旧管线栈道下行至水库", "sewer_reservoir",
+				"res://scenes/sewer_reservoir.tscn", "west",
+				true, "", "", floor_y - 115.0
 			)
 			# The city-to-battlefield route crosses a visible rooftop parapet, not the flat ground boundary.
 			# 城区通往战场的主路经过可见的残墙高台，不再与地面右边界连成一条直线。
@@ -1397,9 +1400,12 @@ func _spawn_region_exits() -> void:
 				true, "", "", floor_y - 130.0
 			)
 			if "reached_A9_via_A8_then_opened_old_lift_from_A9" in WorldState.achievement_flags:
+				# C16 returns through the elevated old lift on the far eastern rooftop, distinct from H03.
+				# C16 从东侧高位旧升降机返回王城外环，与 H03 第三街入口分离。
 				_spawn_exit_door(
-					1150.0, "E  返回王城外环", "royal_outer_ring",
-					"res://scenes/royal_outer_ring.tscn", "old_lift"
+					1980.0, "E  经东侧高位旧升降机返回王城外环", "royal_outer_ring",
+					"res://scenes/royal_outer_ring.tscn", "old_lift",
+					true, "", "", floor_y - 70.0
 				)
 			# Keep the erased-street gate beside its clue and away from the raised battlefield exit.
 			# 被删去的第三街入口紧邻路牌线索，并与高台战场出口保持距离。
