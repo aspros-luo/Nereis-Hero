@@ -136,8 +136,8 @@ def validate(data: dict[str, Any]) -> list[str]:
     subregions = data.get("subregions", [])
     local_connections = data.get("intra_region_connections", [])
     elevators = data.get("elevators", [])
-    if len(macro_regions) != 5:
-        fail(errors, f"Expected 5 macro regions, found {len(macro_regions)}.")
+    if len(macro_regions) != 6:
+        fail(errors, f"Expected 6 narrative macro regions, found {len(macro_regions)}.")
     if len(subregions) != 76:
         fail(errors, f"Expected 76 subregions, found {len(subregions)}.")
     if len(local_connections) != 71:
