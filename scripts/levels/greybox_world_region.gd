@@ -2512,11 +2512,18 @@ func _draw() -> void:
 			_draw_cliff_cave_landmarks()
 
 	for platform in platforms:
-		# Thin bevelled ledges stay readable without visually filling the screen with solid blocks.
-		# 以薄平台与边缘高光表现可站立面，避免画面被厚重方块填满。
-		draw_rect(Rect2(platform.position + Vector2(0.0, 3.0), Vector2(platform.size.x, 9.0)), _platform_color())
-		draw_line(platform.position, Vector2(platform.end.x, platform.position.y), Color("#9a8178", 0.82), 2.0)
-		draw_line(platform.position + Vector2(2.0, 12.0), Vector2(platform.end.x - 2.0, platform.position.y + 12.0), Color("#1b171f", 0.75), 2.0)
+		# A shallow tinted side face adds material depth while keeping the walkable top unmistakable.
+		# 薄薄的染色侧壁增加材质厚度，同时让可站立顶面保持清晰。
+		var platform_base := _platform_color()
+		var platform_accent := _atmosphere_color()
+		draw_rect(Rect2(platform.position + Vector2(0.0, 3.0), Vector2(platform.size.x, 9.0)), platform_base)
+		draw_rect(Rect2(platform.position + Vector2(0.0, 12.0), Vector2(platform.size.x, 5.0)), platform_base.darkened(0.42))
+		draw_line(platform.position, Vector2(platform.end.x, platform.position.y), platform_accent.lightened(0.22), 2.0)
+		draw_line(platform.position + Vector2(2.0, 12.0), Vector2(platform.end.x - 2.0, platform.position.y + 12.0), Color("#1b171f", 0.82), 2.0)
+		# Sparse mineral / moss flecks are deterministic and stay on the platform face.
+		# 少量矿物／苔痕斑点按平台位置固定分布，不会随机闪烁。
+		if int(platform.position.x / 37.0) % 3 == 0:
+			draw_line(platform.position + Vector2(12.0, 6.0), platform.position + Vector2(minf(platform.size.x - 8.0, 29.0), 7.0), Color(platform_accent.r, platform_accent.g, platform_accent.b, 0.34), 1.0)
 
 	if OS.is_debug_build():
 		_draw_debug_exit_markers()
@@ -2735,6 +2742,33 @@ func _draw_atmospheric_layers() -> void:
 func _draw_ground_detail() -> void:
 	var atmosphere := _atmosphere_color()
 	draw_rect(Rect2(0.0, floor_y, map_width, 3.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.34))
+	# Layered stone strata and broad stains break up the uninterrupted floor strip.
+	# 分层石材纹理与大块污渍打破整条地面的单调平色。
+	var material_shadow := Color("#100f17", 0.46)
+	var material_mid := _platform_color().lightened(0.08)
+	draw_rect(Rect2(0.0, floor_y + 92.0, map_width, 2.0), material_shadow)
+	draw_rect(Rect2(0.0, floor_y + 132.0, map_width, 1.0), Color(material_mid.r, material_mid.g, material_mid.b, 0.40))
+	for stain in range(12):
+		var stain_x := float((stain * 251 + int(region_id.hash() % 131)) % int(map_width))
+		var stain_y := floor_y + 42.0 + float((stain * 29) % 104)
+		var stain_width := 24.0 + float((stain * 17) % 48)
+		var stain_color := Color("#536a50", 0.18)
+		match region_id:
+			"A2", "H01", "H08", "H09":
+				stain_color = Color("#6c985d", 0.24)
+			"A3", "A9", "H03", "H07":
+				stain_color = Color("#80506f", 0.22)
+			"A4", "H04":
+				stain_color = Color("#4b9eae", 0.24)
+			"A5":
+				stain_color = Color("#a65338", 0.22)
+			"A6", "A10":
+				stain_color = Color("#a7894e", 0.22)
+			"A11", "H02", "H05":
+				stain_color = Color("#9e4e8d", 0.24)
+			"A13":
+				stain_color = Color("#8d6bc5", 0.28)
+		draw_rect(Rect2(stain_x, stain_y, stain_width, 2.0 + float(stain % 3)), stain_color)
 	# Keep every material mark inside the tile loop; this also ensures details repeat across the whole floor.
 	# 所有材质细节都在循环内绘制，确保整段地面重复铺开，而不是只落在最后一块石板上。
 	for index in range(1, int(map_width / 180.0)):
