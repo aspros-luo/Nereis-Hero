@@ -75,6 +75,11 @@ func _ready() -> void:
 		WorldState.record_achievement(intro_id)
 		get_tree().create_timer(0.55).timeout.connect(_show_intro)
 
+func _unhandled_input(event: InputEvent) -> void:
+	if WorldState.debug_map_test_mode and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F6:
+		get_viewport().set_input_as_handled()
+		get_tree().change_scene_to_file("res://scenes/world_map_test_menu.tscn")
+
 func _process(_delta: float) -> void:
 	# Encounters wake only when the Hero is nearby, so distant enemies do not cross the entire region.
 	# 敌人只在主角接近时启动 AI，避免远处敌人横穿整张地图追击。
