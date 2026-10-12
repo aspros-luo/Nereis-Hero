@@ -350,26 +350,7 @@ func record_hidden_artifact_source(source_id: String) -> bool:
     save_game()
     return true
 
-func _migrate_third_cord_anchor() -> void:
-    # A previous graybox iteration awarded the cord automatically on boss defeat.
-    # Earlier graybox saves may already have the achievement; migrate it into the source-based anchor system.
-    if (
-        "third_umbilical_cord_fragment_acquired" not in achievement_flags
-        or "third_umbilical_cord" in hidden_artifact_sources
-    ):
-        return
-    hidden_artifact_sources.append("third_umbilical_cord")
-    hidden_artifact_pieces = mini(maxi(hidden_artifact_pieces, hidden_artifact_sources.size()), 4)
-    if hidden_artifact_pieces >= 3 and not hidden_resistance_awakened:
-        hidden_resistance_awakened = true
-        hidden_resistance_awakened_event.emit()
-    print("[NEREIS][SAVE] Migrated third-cord fragment into the hidden truth-anchor list.")
-    save_game()
-
-
 func _canonical_artifact_source(source_id: String) -> String:
-    if source_id == "third_umbilical_cord_fragment":
-        return "third_umbilical_cord"
     if source_id.begins_with("lab_") or source_id == "ancient_lab_husk":
         return "ancient_lab"
     if source_id == "graveyard_hero_gravestone":
@@ -602,9 +583,19 @@ func load_game() -> void:
     hidden_artifact_sources.clear()
     hidden_resistance_awakened = bool(parsed.get("hidden_resistance_awakened", false))
     var saved_artifact_sources = parsed.get("hidden_artifact_sources", [])
+    var removed_provisional_cord_source := false
     if saved_artifact_sources is Array:
         for source_id in saved_artifact_sources:
-            hidden_artifact_sources.append(str(source_id))
+            var canonical_source := str(source_id)
+            # H09 was created from an illustrative example and is not an approved ending source.
+            # H09 来自示例性设计，尚未获得剧情确认；旧存档中的临时脐带来源不能影响结局条件。
+            if canonical_source == "third_umbilical_cord":
+                removed_provisional_cord_source = true
+                continue
+            hidden_artifact_sources.append(canonical_source)
+    if removed_provisional_cord_source:
+        hidden_artifact_pieces = mini(maxi(hidden_artifact_sources.size(), maxi(0, hidden_artifact_pieces - 1)), 4)
+        print("[NEREIS][SAVE] Removed provisional H09 relic from ending-anchor sources.")
     ending_route = str(parsed.get("ending_route", ""))
     prologue_complete = bool(parsed.get("prologue_complete", false))
 
