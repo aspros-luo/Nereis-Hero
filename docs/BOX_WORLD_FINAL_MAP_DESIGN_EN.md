@@ -97,7 +97,7 @@ The region is split into sub-areas in this diagram to force decisions about elev
 
 ### A1 — Border Village (first hub)
 - **Layers:** village lane, roofs/wooden walkways, well bottom.
-- **Main route:** village lane to A2; after the village-defense event, C24 opens a ground/roof-edge shortcut to A3.
+- **Main route:** the village lane connects to A2; after village defense, C24 opens the low old-drainage passage directly into A3. The village rooftop route remains a separate optional upper traversal and does not carry C24.
 - **Vertical route:** the old well descends to H01; a late shaft from H01 connects to A4's bottom layer, revealing that the village sits above the underground water system.
 - **Revisit value:** village events alter patrols, NPC positions, barricades, and roof access. On return, the player can enter from above instead of crossing the whole lane.
 - **Navigation:** a safe anchor with distant views of the canopy, city tower, and cathedral.
