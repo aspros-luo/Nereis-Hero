@@ -130,6 +130,74 @@ def validate(data: dict[str, Any]) -> list[str]:
     if len(edge_ids) != len(set(edge_ids)):
         fail(errors, "Duplicate connection IDs.")
 
+    # Hierarchical map contract: macro regions, subregions, local links, and lifts.
+    # 分层地图合同：大区域、小区域、区域内连接与升降机必须彼此一致。
+    macro_regions = data.get("macro_regions", [])
+    subregions = data.get("subregions", [])
+    local_connections = data.get("intra_region_connections", [])
+    elevators = data.get("elevators", [])
+    if len(macro_regions) != 5:
+        fail(errors, f"Expected 5 macro regions, found {len(macro_regions)}.")
+    if len(subregions) != 76:
+        fail(errors, f"Expected 76 subregions, found {len(subregions)}.")
+    if len(local_connections) != 71:
+        fail(errors, f"Expected 71 intra-region connections, found {len(local_connections)}.")
+    if len(elevators) != 8:
+        fail(errors, f"Expected 8 elevator contracts, found {len(elevators)}.")
+
+    macro_ids = [item.get("id", "") for item in macro_regions]
+    if len(macro_ids) != len(set(macro_ids)):
+        fail(errors, "Duplicate macro-region IDs.")
+    macro_members = [region_id for item in macro_regions for region_id in item.get("regions", [])]
+    if set(macro_members) != region_ids or len(macro_members) != len(region_ids):
+        fail(errors, "Every primary region must belong to exactly one macro region.")
+    for item in macro_regions:
+        unknown = sorted(set(item.get("regions", [])) - region_ids)
+        if unknown:
+            fail(errors, f"{item.get('id')}: macro region references unknown regions {unknown}.")
+
+    subregion_ids = [item.get("id", "") for item in subregions]
+    subregion_id_set = set(subregion_ids)
+    if len(subregion_ids) != len(subregion_id_set):
+        fail(errors, "Duplicate subregion IDs.")
+    for item in subregions:
+        if item.get("parent_region") not in region_ids:
+            fail(errors, f"{item.get('id')}: subregion references unknown parent {item.get('parent_region')!r}.")
+        if not item.get("layer") or not item.get("name"):
+            fail(errors, f"{item.get('id')}: subregion needs a name and layer.")
+
+    local_ids = [item.get("id", "") for item in local_connections]
+    if len(local_ids) != len(set(local_ids)):
+        fail(errors, "Duplicate intra-region connection IDs.")
+    for edge in local_connections:
+        source, target = edge.get("from"), edge.get("to")
+        if source not in subregion_id_set or target not in subregion_id_set:
+            fail(errors, f"{edge.get('id')}: local link references unknown subregion {source} -> {target}.")
+        if edge.get("travel") not in {"both", "one_way"}:
+            fail(errors, f"{edge.get('id')}: invalid local-link travel direction.")
+        if edge.get("initial_state") not in {"open", "locked"}:
+            fail(errors, f"{edge.get('id')}: invalid local-link initial_state.")
+        if edge.get("initial_state") == "locked" and not str(edge.get("unlock_condition", "")).strip():
+            fail(errors, f"{edge.get('id')}: locked local link needs an unlock condition.")
+
+    lift_ids = [item.get("id", "") for item in elevators]
+    if len(lift_ids) != len(set(lift_ids)):
+        fail(errors, "Duplicate elevator IDs.")
+    for lift in elevators:
+        source, target = lift.get("from"), lift.get("to")
+        if source not in subregion_id_set or target not in subregion_id_set:
+            fail(errors, f"{lift.get('id')}: elevator references unknown subregion {source} -> {target}.")
+        matching_lift_edges = [
+            edge for edge in local_connections
+            if edge.get("kind") == "lift"
+            and {edge.get("from"), edge.get("to")} == {source, target}
+            and edge.get("unlock_condition") == lift.get("unlock_condition")
+        ]
+        if not matching_lift_edges:
+            fail(errors, f"{lift.get('id')}: no matching local lift connection exists.")
+        if not str(lift.get("unlock_condition", "")).strip():
+            fail(errors, f"{lift.get('id')}: lift contract needs an unlock condition.")
+
     # Spatial anchors are part of the box-world contract, not decorative documentation.
     # 空间锚点属于箱庭结构合同，不只是说明文字。
     c05 = next((edge for edge in connections if edge.get("id") == "C05"), None)
