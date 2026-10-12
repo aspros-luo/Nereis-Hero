@@ -5,6 +5,7 @@ var title_label: Label
 var subtitle_label: Label
 var continue_button: Button
 var new_game_button: Button
+var map_test_button: Button
 var language_label: Label
 var language_option: OptionButton
 var status_label: Label
@@ -48,28 +49,34 @@ func _build_menu() -> void:
 
     title_panel = ColorRect.new()
     title_panel.position = Vector2(390, 285)
-    title_panel.size = Vector2(500, 300)
+    title_panel.size = Vector2(500, 335)
     title_panel.color = Color("#111018", 0.94)
     add_child(title_panel)
 
     continue_button = _make_button()
-    continue_button.position = Vector2(90, 50)
+    continue_button.position = Vector2(90, 32)
     title_panel.add_child(continue_button)
     continue_button.pressed.connect(_continue_game)
 
     new_game_button = _make_button()
-    new_game_button.position = Vector2(90, 110)
+    new_game_button.position = Vector2(90, 86)
     title_panel.add_child(new_game_button)
     new_game_button.pressed.connect(_confirm_new_game)
 
+    map_test_button = _make_button()
+    map_test_button.position = Vector2(90, 140)
+    map_test_button.text = "宏观地图验收 / World Map Test"
+    title_panel.add_child(map_test_button)
+    map_test_button.pressed.connect(_open_map_test)
+
     language_label = Label.new()
-    language_label.position = Vector2(90, 178)
+    language_label.position = Vector2(90, 198)
     language_label.add_theme_font_size_override("font_size", 14)
     language_label.add_theme_color_override("font_color", Color("#8f8586"))
     title_panel.add_child(language_label)
 
     language_option = OptionButton.new()
-    language_option.position = Vector2(90, 201)
+    language_option.position = Vector2(90, 221)
     language_option.size = Vector2(320, 42)
     for language in NereisLocalization.LANGUAGES:
         language_option.add_item(NereisLocalization.language_name(language))
@@ -77,8 +84,8 @@ func _build_menu() -> void:
     title_panel.add_child(language_option)
 
     status_label = Label.new()
-    status_label.position = Vector2(90, 250)
-    status_label.size = Vector2(320, 28)
+    status_label.position = Vector2(90, 272)
+    status_label.size = Vector2(320, 26)
     status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     status_label.add_theme_font_size_override("font_size", 12)
     status_label.add_theme_color_override("font_color", Color("#756d72"))
@@ -131,6 +138,10 @@ func _continue_game() -> void:
     WorldState.pending_region_spawn_side = WorldState.resume_spawn_side
     print("[NEREIS][BOOT] Continue scene=%s spawn_side=%s" % [next_scene, WorldState.pending_region_spawn_side])
     get_tree().change_scene_to_file(next_scene)
+
+func _open_map_test() -> void:
+    WorldState.debug_map_test_mode = true
+    get_tree().change_scene_to_file("res://scenes/world_map_test_menu.tscn")
 
 func _confirm_new_game() -> void:
     confirm_dialog.popup_centered()
