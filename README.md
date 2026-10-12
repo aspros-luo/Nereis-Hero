@@ -48,6 +48,16 @@ Complete world map atlas (Chinese draft):
 
 `docs/COMPLETE_WORLD_MAP_ATLAS_CN.md`
 
+Macro world-map brain map (Chinese / English):
+
+- `docs/WORLD_MAP_BRAINMAP_CN.md`
+- `docs/WORLD_MAP_BRAINMAP_EN.md`
+
+Second-round macro spatial layout and C01–C24 connection audit (Chinese / English; design review, not runtime acceptance):
+
+- `docs/WORLD_MAP_SPATIAL_REVIEW_CN.md`
+- `docs/WORLD_MAP_SPATIAL_REVIEW_EN.md`
+
 Interconnected box-world design principles (Chinese; authoritative map-design constraints):
 
 `docs/INTERCONNECTED_BOX_WORLD_DESIGN_CN.md`
