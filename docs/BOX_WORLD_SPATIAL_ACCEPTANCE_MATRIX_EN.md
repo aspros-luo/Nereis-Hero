@@ -82,3 +82,11 @@ This document is an executable acceptance matrix, not proof that all listed scen
 ### Spatial consistency correction (source audit)
 
 The physical C05 door in A3 remains anchored on the raised pipe-walk at `x=1600, y_offset=-115`. When returning from A4 to A3, runtime places the Hero at `x=1380, y_offset=-115`, on the platform west of the door and outside its interaction focus. The topology `return_spawn` and static topology validator have been aligned to `x=1380`. This reconciles design data with the existing runtime implementation; it does not claim Godot runtime acceptance.
+
+
+### Targeted source cross-check (2026-10-12)
+
+- Parsed 14 primary regions, 24 macro connections, and 8 canonical hidden regions from the current topology JSON.
+- Compared parseable graybox platform rectangles with topology connection anchors that declare an elevation offset. This targeted check found no other obvious elevated connection anchors detached from their corresponding platforms. Ground-level anchors are treated as using the continuous floor and do not require a separate platform rectangle.
+- Found and corrected the C05 return-spawn contract mismatch: runtime uses `A3 x=1380, y_offset=-115`; topology had incorrectly recorded `x=1600`. `x=1600` is the door anchor, not the return spawn.
+- This is a targeted static comparison of repository source, not execution of the repository's Python validators and not Godot runtime testing. Full validation remains pending an available repository checkout and Godot environment.
