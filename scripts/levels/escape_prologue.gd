@@ -6,6 +6,8 @@ const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
+const SURGERY_BACKDROP = preload("res://assets/art/backdrops/surgery_ward_backdrop.svg")
+const SURGERY_FLOOR_STRIP = preload("res://assets/art/backdrops/surgery_floor_strip.svg")
 
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 2200.0
@@ -254,8 +256,8 @@ func _mark_input_handled() -> void:
         viewport.set_input_as_handled()
 
 func _draw() -> void:
-    draw_rect(Rect2(0, 0, LEVEL_WIDTH, 720), Color("#100d12"))
-    draw_rect(Rect2(0, FLOOR_Y, LEVEL_WIDTH, 180), Color("#211a22"))
+    draw_texture_rect(SURGERY_BACKDROP, Rect2(0, 0, LEVEL_WIDTH, 720), false)
+    draw_texture_rect(SURGERY_FLOOR_STRIP, Rect2(0, FLOOR_Y, LEVEL_WIDTH, 180), false)
 
     # Cold surgical shafts and suspended cables establish depth before the room's props are drawn.
     # 冷色手术灯柱与悬垂线缆先建立空间纵深，再绘制房间内的物件。
