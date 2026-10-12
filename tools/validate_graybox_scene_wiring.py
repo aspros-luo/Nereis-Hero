@@ -814,6 +814,9 @@ def main() -> int:
     require(region_script, '1650.0, "E  返回王城外环"', "A4 C23 upper pipe exit", errors)
     require(region_script, 'true, "", "", floor_y - 105.0', "A4 C23 elevation", errors)
     require(region_script, '2220.0, "E  打开村庄井道水闸"', "A4 C06 return lane", errors)
+    require(region_script, '2020, 450, 130, 18', "A6 C10 upper approach platform", errors)
+    require(region_script, '2230.0, "E  打开钟塔落差通路"', "A6 C10 elevated door", errors)
+    require(region_script, 'true, "opened_bell_tower_drop", "E  返回被遗忘的城区", floor_y - 55.0', "A6 C10 door height", errors)
     require(region_script, 'Vector2(850, floor_y - 18.0),\n\t\t\t\t"anomaly_old_stone_layer"', "A4 clue/door interaction spacing", errors)
 
     # Elevated transitions must restore both horizontal position and platform height.
@@ -821,6 +824,7 @@ def main() -> int:
     require(region_script, '_spawn_hero(_spawn_x_for_side(spawn_side), _spawn_y_for_side(spawn_side))', "Spawn uses both axes", errors)
     for vertical_spawn_contract in [
         'if region_id == "A2" and side == "east":\n\t\treturn floor_y - 140.0',
+        'if region_id == "A6" and side == "bell_drop":\n\t\treturn floor_y - 90.0',
         'if region_id == "A3" and side == "sewer":\n\t\treturn floor_y - 115.0',
         'if region_id == "A3" and side == "old_lift":\n\t\treturn floor_y - 70.0',
         'if region_id == "A4" and side == "prison_tunnel":\n\t\treturn floor_y - 75.0',
@@ -847,7 +851,7 @@ def main() -> int:
         ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 650.0"),
         ('if region_id == "A3" and side == "bell_drop":', "return 1600.0"),
         ('if region_id == "A3" and side == "old_lift":', "return 1940.0"),
-        ('if region_id == "A6" and side == "bell_drop":', "return 1900.0"),
+        ('if region_id == "A6" and side == "bell_drop":', "return 2100.0"),
         ('if region_id == "A9" and side == "royal_drain":', "return 810.0"),
         ('if region_id == "A9" and side == "old_lift":', "return 610.0"),
         ('if region_id == "A9" and side == "inner_city_side_gate":', "return 980.0"),
