@@ -257,3 +257,19 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - Updated `scripts/world/resonance_local_route.gd` to publish the bridge center's global position as the focus point, so arbitration uses the actual interaction anchor.
 - Added static contracts for the anchor-aware focus logic and acceptance cases for bridge-center focus, nearby interactable competition, and language switching.
 - This is a source-level defect fix, not a Godot 4.6.x runtime pass. In-engine verification is still required for the prompt, E-key anchoring, and focus competition with nearby doors/NPCs.
+
+
+## Box-world structural re-audit — 2026-10-12
+
+- Fixed a structural bypass: shared graybox exit doors previously used a 138px-high interaction trigger that extended down to the continuous floor. The trigger is now 110×80 and vertically aligned near the doorway; this should make raised exits depend on reaching their ledge, pending Godot runtime confirmation.
+- Added a static regression contract for the trigger dimensions and alignment.
+- Reclassified H09 as a provisional map candidate separate from the canonical H01–H08 resonance-hidden network. H09 is not approved story canon and is not part of the 21-scene core map acceptance count.
+- Corrected stale validator contracts: the Hero spawn signature, C16 A3 anchor/return coordinates (2040/1960), and H05 return anchor (1870) now match the current scene code and topology manifest.
+- Checked the fetched topology manifest with a lightweight graph audit: 14 abstract primary nodes, 24 macro edges, 8 canonical hidden regions, 1 provisional region; the primary route is initially reachable, all declared nodes become reachable in the final abstract graph, and L01–L03 have closed paths with matching declared unlock requirements.
+- These are remote-source consistency checks, not execution of the repository Python validators or Godot runtime tests. No claim of in-engine traversal acceptance is made.
+
+### Still outstanding
+
+- Continue mapping every macro edge to its actual exit door, spawn side, height, and reverse-gate condition.
+- Reduce the remaining “continuous ground leads to the next boundary” feel without adding arbitrary collision obstacles; prioritize meaningful upper/lower routes and return shortcuts in A2–A4, then A5–A9.
+- Run both Python validators in a local checkout and complete Godot 4.6.x natural-exploration acceptance when an engine environment is available.
