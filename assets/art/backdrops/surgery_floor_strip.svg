@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="180" viewBox="0 0 2200 180">
+<defs><linearGradient id="base" x2="0" y2="1"><stop stop-color="#55404a"/><stop offset=".16" stop-color="#332630"/><stop offset="1" stop-color="#17141c"/></linearGradient><pattern id="tiles" width="150" height="74" patternUnits="userSpaceOnUse"><path d="M0 1H150M0 37H150M35 0V37M112 37V74" stroke="#0f1017" stroke-width="5"/><path d="M0 0H150M0 35H150M33 0V35M110 35V74" stroke="#8a6874" stroke-opacity=".42" stroke-width="2"/><path d="M13 17l18 -5M61 57l22 -4M121 14l16 3" stroke="#b6a0a3" stroke-opacity=".18" stroke-width="2"/><path d="M80 1l-5 13 8 8 -6 12M136 37l-4 12 7 5 -2 16" fill="none" stroke="#101017" stroke-width="3"/></pattern></defs>
+<rect width="2200" height="180" fill="url(#base)"/><path d="M0 0H2200V15Q1900 9 1600 15T1000 14T400 16T0 13Z" fill="#886572" opacity=".55"/><path d="M0 18H2200" stroke="#c0a1a8" stroke-opacity=".35" stroke-width="3"/><rect y="15" width="2200" height="165" fill="url(#tiles)"/>
+</svg>
