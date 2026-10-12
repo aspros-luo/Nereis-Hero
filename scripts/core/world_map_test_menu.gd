@@ -131,5 +131,8 @@ func _enter_region(entry: Dictionary) -> void:
 func _return_to_title() -> void:
     WorldState.debug_natural_test_active = false
     WorldState.debug_map_test_mode = false
-    WorldState.load_game()
+    if FileAccess.file_exists("user://nereis_hero_save.json"):
+        WorldState.load_game()
+    else:
+        WorldState.delete_save()
     get_tree().change_scene_to_file("res://scenes/boot.tscn")
