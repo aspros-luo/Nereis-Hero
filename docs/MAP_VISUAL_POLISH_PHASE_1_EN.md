@@ -9,6 +9,7 @@ Give A2–A12 and H01–H08 readable environmental depth while preserving box-wo
 - Distant silhouettes: tree crowns / organic ribs, city rooftops, fortress battlements, Gothic spires, tomb walls, or reservoir arches selected by region family.
 - Low-contrast haze bands: restrained horizontal color layers add depth without obscuring playable platforms.
 - Ground material cues: broken paving seams, sparse rubble, and a subtle floor edge reduce the flat-rectangle graybox appearance.
+- Lightweight motion: an independent regional particle layer drifts dust/spores, lets battlefield ash fall, and makes Mirror Street rain rise; particle placement is deterministic to avoid random flicker.
 - Regional palettes: existing background, platform, and atmosphere colors remain distinct; collision and playable geometry are unchanged.
 - Static guardrails: tools/validate_graybox_scene_wiring.py now checks that the shared atmosphere and ground-detail layers remain wired.
 
