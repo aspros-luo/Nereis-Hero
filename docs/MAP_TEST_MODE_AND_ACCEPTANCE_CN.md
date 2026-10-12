@@ -55,7 +55,7 @@
 
 ### 新增：Debug 全图逐步指引（30 步）
 
-F10 面板现在包含“自然探索路线指引”，覆盖从 A0 逃脱、主线 A0–A12、正式隐藏区 H01–H08、两条 A11 深层入口；H09 临时候选不计入正式验收、三条箱庭回环与存档恢复。
+F10 面板现在包含 30 步“自然探索路线指引”，覆盖从 A0 逃脱、主线 A0–A12、正式隐藏区 H01–H08、两条 A11 深层入口、三条箱庭回环与存档恢复。H09 是临时候选，不计入正式验收。
 
 1. 点击“自然探索验收：从 A0 开始（无传送／无作弊解锁）”。
 2. 游戏开始后按 F10 打开面板，滚动到“自然探索路线指引”。
@@ -194,7 +194,7 @@ A0 → A1 → A2 → A3 → A5 → A6 → A7 → A8 → A9 → A10 → A12
 - A2–A4：雾林、钟墓、城区、排水系统是否形成可回访的旧世界交通网。
 - A5–A8：战场、修道院、监牢、王墓是否逐渐提供相互印证或彼此矛盾的历史证据。
 - A9–A12：王城、圣堂、内城是否让玩家逐渐察觉教会与王权的真实关系。
-- A11／H01–H08：隐藏内容是否改变玩家对既有场景的理解；H09 临时候选不计入正式地图验收，而不是只有无剧情奖励房。
+- A11／H01–H08：检查隐藏内容是否改变玩家对既有场景的理解，而不只是提供没有叙事意义的奖励房。H09 临时候选不计入正式地图验收。
 - 通过标准：玩家可从空间、地标、遗物与异常线索逐渐拼出故事；普通路线不被隐藏内容强制阻塞。
 
 ### MAP-07：存档隔离回归
@@ -234,4 +234,4 @@ A0 → A1 → A2 → A3 → A5 → A6 → A7 → A8 → A9 → A10 → A12
 
 ## English summary
 
-Use the F10 map test panel to teleport among the 13 implemented primary map scenes and nine hidden areas. The panel now provides a 30-step natural-exploration walkthrough for the canonical map: the main route, H01–H08, loops, both A11 entrances, and save restoration. H09 remains a provisional debug candidate and is not part of canonical acceptance. Its Previous/Next buttons only change the written guidance; they never teleport or unlock anything. The panel still offers resonance and all-routes presets for separate diagnostics. Activate natural exploration for the clean A0 run, and restore the on-disk save from the panel when finished. Validate actual routes, loops, hidden-area discovery, return paths, narrative geography, and text consistency in Godot; static checks are not runtime acceptance.
+Use the F10 map test panel to teleport among the 13 implemented primary map scenes, eight canonical hidden areas, and the provisional H09 debug candidate. The panel now provides a 30-step natural-exploration walkthrough for the canonical map: the main route, H01–H08, loops, both A11 entrances, and save restoration. H09 remains a provisional debug candidate and is not part of canonical acceptance. Its Previous/Next buttons only change the written guidance; they never teleport or unlock anything. The panel still offers resonance and all-routes presets for separate diagnostics. Activate natural exploration for the clean A0 run, and restore the on-disk save from the panel when finished. Validate actual routes, loops, hidden-area discovery, return paths, narrative geography, and text consistency in Godot; static checks are not runtime acceptance.
