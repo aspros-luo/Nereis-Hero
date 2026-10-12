@@ -712,7 +712,7 @@ def main() -> int:
         fail(errors, "H05 return door at x=1830 is too close to the C10 door at x=1710.")
     if "1950.0, \"E  RETURN TO THE SILENT BELL WINDOW\"" in region_script:
         fail(errors, "H05 return door at x=1950 overlaps the A3 rest-point interaction radius.")
-    require(region_script, '1820.0, "E  返回无声之窗"', "H05/C10/C16 interaction spacing", errors)
+    require(region_script, '1870.0, "E  返回无声之窗"', "H05/C10/C16 interaction spacing", errors)
     require(region_script, '1250.0, "E  打开旧服务门"', "A9 H03/C18 interaction spacing", errors)
     if '1020.0, "E  打开旧服务门"' in region_script:
         fail(errors, "A9 H03 service door remains too close to the C18 inner-city side gate.")
@@ -810,9 +810,9 @@ def main() -> int:
     # 这样可以避免主要路线全部挤在同一片门口区域。
     require(region_script, '1600.0, "E  沿旧管线栈道下行至水库"', "A3 raised C05 branch", errors)
     require(region_script, 'true, "", "", floor_y - 115.0', "A3 C05 elevation", errors)
-    require(region_script, '1980.0, "E  经东侧高位旧升降机返回王城外环"', "A3 elevated C16 branch", errors)
+    require(region_script, '2040.0, "E  经东侧高位旧升降机返回王城外环"', "A3 elevated C16 branch", errors)
     require(region_script, 'true, "", "", floor_y - 70.0', "A3 C16 elevation", errors)
-    require(region_script, '_register_debug_locked_route_hint(1980.0, "royal_outer_ring"', "A3 C16 debug marker", errors)
+    require(region_script, '_register_debug_locked_route_hint(2040.0, "royal_outer_ring"', "A3 C16 debug marker", errors)
 
     # A4's transport hub must distribute the three cross-region doors across separate ledges.
     # A4 交通枢纽必须将三条跨区门分布在不同高度的栈台上。
@@ -867,7 +867,7 @@ def main() -> int:
         ('if region_id == "A2" and side == "old_pilgrim_highroad":', "return 1750.0"),
         ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 650.0"),
         ('if region_id == "A3" and side == "bell_drop":', "return 1600.0"),
-        ('if region_id == "A3" and side == "old_lift":', "return 1940.0"),
+        ('if region_id == "A3" and side == "old_lift":', "return 1960.0"),
         ('if region_id == "A6" and side == "bell_drop":', "return 2100.0"),
         ('if region_id == "A9" and side == "royal_drain":', "return 770.0"),
         ('if region_id == "A9" and side == "old_lift":', "return 610.0"),
