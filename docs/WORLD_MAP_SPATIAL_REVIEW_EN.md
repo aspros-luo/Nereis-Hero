@@ -141,3 +141,9 @@ Before small-map/story work, map A0–A13 to real greybox scenes and transition 
 | Godot runtime | **Pending** | No Godot executable is available here; travel, interaction, collision, death recovery, and save/load regression were not run |
 
 **Conclusion: the macro design contract and the reviewed source coordinates are ready for macro-design review, but full in-engine acceptance has not passed.** Do not treat small-map and story production as the accepted next phase until Godot 4.6.x verifies the main route, C05 return hatch, C24's two-sided gate, C16/H05 interaction spacing, the three distinct A4 underground routes (C07/C12/C23), save/resume, and death recovery.
+
+## 9. Third source-contract review (2026-10-12)
+
+This pass compared macro connection contracts with the graybox exit code again. The static validator still expected the old prompt labels for C09 (A5→A6) and C17 (A9→A10), while the current scenes use explicit high-route wording. Those stale assertions could falsely report the correct implementation as missing. The assertions are now aligned, and the validator pins both elevated door contracts: C09 at A5 x=2250, `floor_y - 90`; C17 at A9 x=2350, `floor_y - 180`. These anchors match the intended elevated route design.
+
+**Boundary:** This is a source/validator contract correction only. The Python validators have not been executed, and Godot movement, collision, interaction, and scene transitions remain unverified.
