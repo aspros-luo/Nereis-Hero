@@ -220,7 +220,7 @@
         "intent": "Underground hub entrance branches off the upper pipe-walk rather than the continuous street floor.",
         "return_spawn": {
           "region": "A3",
-          "x": 1600,
+          "x": 1380,
           "y_offset": -115
         }
       }
