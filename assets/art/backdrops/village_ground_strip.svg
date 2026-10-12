@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="200" viewBox="0 0 2600 200">
+<defs><linearGradient id="mud" x2="0" y2="1"><stop stop-color="#574149"/><stop offset=".15" stop-color="#342a31"/><stop offset="1" stop-color="#17191f"/></linearGradient><pattern id="earth" width="130" height="82" patternUnits="userSpaceOnUse"><path d="M0 1H130M0 42H130M40 0V42M102 42V82" stroke="#13151b" stroke-width="5"/><path d="M0 0H130M0 40H130M38 0V40M100 40V82" stroke="#84666a" stroke-opacity=".36" stroke-width="2"/><path d="M12 18l18 -5M62 60l22 -6M110 15l12 2M42 31l-5 8 6 4" fill="none" stroke="#b7a0a0" stroke-opacity=".18" stroke-width="2"/></pattern></defs>
+<rect width="2600" height="200" fill="url(#mud)"/><path d="M0 0H2600V18Q2200 8 1800 18T1000 15T0 16Z" fill="#8a666c" opacity=".5"/><path d="M0 20H2600" stroke="#bda0a0" stroke-opacity=".25" stroke-width="3"/><rect y="16" width="2600" height="184" fill="url(#earth)"/>
+<g fill="#15161d" opacity=".7"><path d="M220 80l45 -10 22 11 -36 9Z"/><path d="M680 132l32 -7 20 12 -38 7Z"/><path d="M1180 72l38 -8 20 10 -32 8Z"/><path d="M1760 143l45 -10 20 12 -40 8Z"/><path d="M2260 86l36 -8 19 10 -33 8Z"/></g>
+<g fill="#9b655f" opacity=".24"><ellipse cx="420" cy="115" rx="32" ry="9"/><ellipse cx="1420" cy="95" rx="28" ry="8"/><ellipse cx="2090" cy="145" rx="35" ry="10"/></g>
+</svg>
