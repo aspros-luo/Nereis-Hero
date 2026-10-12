@@ -98,6 +98,16 @@ Detailed static world map validation report (Chinese):
 
 `docs/WORLD_MAP_VALIDATION_REPORT_CN.md`
 
+Playable macro-map rollback baseline (2026-10-12):
+
+- `docs/MILESTONE_MACRO_MAP_PLAYABLE_2026-10-12_CN.md`
+- `docs/MILESTONE_MACRO_MAP_PLAYABLE_2026-10-12_EN.md`
+
+Macro-map visual polish phase 1 (implemented procedural silhouette and ground-detail layers; runtime visual acceptance pending):
+
+- `docs/MAP_VISUAL_POLISH_PHASE_1_CN.md`
+- `docs/MAP_VISUAL_POLISH_PHASE_1_EN.md`
+
 Machine-readable world map topology:
 
 `tools/world_map_topology.json`
