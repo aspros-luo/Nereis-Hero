@@ -814,13 +814,13 @@ def main() -> int:
         # GDScript match branches are tab-indented; support either tabs or spaces so this
         # source-level check does not silently fail when formatting changes.
         branch_match = re.search(
-            rf'^[\\t ]*"{re.escape(hidden_id)}":',
+            rf'^[\t ]*"{re.escape(hidden_id)}":',
             region_script[exits_start:],
             re.MULTILINE,
         )
         block_start = exits_start + branch_match.start() if branch_match else -1
         next_branch = re.search(
-            r'^[\\t ]*"[A-Z]\\d{1,2}":',
+            r'^[\t ]*"[A-Z]\d{1,2}":',
             region_script[block_start + 1:] if block_start >= 0 else "",
             re.MULTILINE,
         )
@@ -834,10 +834,10 @@ def main() -> int:
 
     # A13 is a real terminal map layer, not merely an abstract topology node. Ending selection occurs after entering it.
     # A13 必须是实际终局地图层，而不是只存在于拓扑中的抽象节点；进入后才选择结局。
-    a13_match = re.search(r'^[\\t ]*"A13":', region_script[exits_start:], re.MULTILINE)
+    a13_match = re.search(r'^[\t ]*"A13":', region_script[exits_start:], re.MULTILINE)
     a13_start = exits_start + a13_match.start() if a13_match else -1
     a13_next = re.search(
-        r'^[\\t ]*"[A-Z]\\d{1,2}":',
+        r'^[\t ]*"[A-Z]\d{1,2}":',
         region_script[a13_start + 1:] if a13_start >= 0 else "",
         re.MULTILINE,
     )
