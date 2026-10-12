@@ -12,7 +12,7 @@
 python3 tools/validate_spatial_route_contracts.py
 ```
 
-它对照 `tools/world_map_topology.json` 与共享灰盒控制器中的出生点映射，重点保护以下路线：
+它对照 `tools/world_map_topology.json`、共享灰盒控制器中的出生点映射，以及关键高位出口下方的平台矩形，重点保护以下路线：
 
 | 连接 | 回程区域 | 出生侧 | 目标落点 | 高度偏移 |
 |---|---|---|---:|---:|
@@ -32,7 +32,7 @@ python3 tools/validate_spatial_route_contracts.py
 - 已核对 C03、C05、C07、C10、C12、C16、C23 的拓扑回程坐标与灰盒出生侧映射。
 - 已核对 C24 两端的出生侧命名：A3 使用 `village_city_cut`，村庄使用 `city_cut_return`；村庄控制器将回程放在 x=350 的安全区域。
 - 已核对 C17 的城区高位入口仍在 A9 的 x=2350、地面上方 180 像素处，目标场景从 A10 的 west 侧进入。
-- 新工具同时检查拓扑记录与代码映射，避免只改 JSON 或只改 GDScript 后留下漂移。
+- 新工具同时检查拓扑记录、代码出生点映射与高位出口的平台支撑，避免只改 JSON 或只改 GDScript 后留下漂移。
 
 ### 验收边界
 
@@ -46,7 +46,7 @@ python3 tools/validate_spatial_route_contracts.py
 
 ## English summary
 
-This pass adds `tools/validate_spatial_route_contracts.py`, a repeatable static check that cross-references selected topology spawn contracts with the actual graybox spawn-side mappings.
+This pass adds `tools/validate_spatial_route_contracts.py`, a repeatable static check that cross-references selected topology spawn contracts with the actual graybox spawn-side mappings and checks that key elevated door anchors sit on authored platform rectangles.
 
 It covers C03, C05, C07, C10, C12, C16, C17, C23, and both ends of C24. The check protects the intended x/y landing points, the elevated A9-to-A10 approach, and the post-defense-only village drainage shortcut.
 
