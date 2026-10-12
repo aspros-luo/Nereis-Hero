@@ -52,6 +52,7 @@ REQUIRED_FILES = [
     "scripts/world/village_poi.gd",
     "scripts/core/world_state.gd",
     "scripts/core/boot.gd",
+    "scripts/core/world_map_test_menu.gd",
     "scripts/core/narrative_manager.gd",
     "scripts/player/hero.gd",
     "scripts/enemies/experiment_warden.gd",
