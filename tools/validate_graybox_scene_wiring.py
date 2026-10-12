@@ -63,6 +63,14 @@ REQUIRED_FILES = [
     "scripts/effects/region_ambience.gd",
 ]
 
+ART_ASSETS = [
+    "assets/art/backdrops/forest_backdrop.svg",
+    "assets/art/backdrops/ruins_backdrop.svg",
+    "assets/art/backdrops/church_backdrop.svg",
+    "assets/art/backdrops/eldritch_backdrop.svg",
+    "assets/art/backdrops/stone_floor_strip.svg",
+]
+
 REQUIRED_ENTRY_SCENES = [
     "scenes/boot.tscn",
     "scenes/world_map_test_menu.tscn",
@@ -315,6 +323,18 @@ def main() -> int:
     require(region_script, "func _spawn_region_ambience() -> void:", "Regional ambience setup", errors)
     require(region_script, 'ambience.set("atmosphere_color", _atmosphere_color())', "Regional ambience palette binding", errors)
     require(region_script, "Broken paving seams and small rubble clusters", "Ground material treatment", errors)
+    # Original SVG art must be present and wired into the shared renderer.
+    # 原创 SVG 美术资源必须存在，并由共享渲染器实际调用。
+    for art_path in ART_ASSETS:
+        if not (ROOT / art_path).is_file():
+            errors.append(f"Missing art asset: {art_path}")
+    require(region_script, 'const FOREST_BACKDROP = preload("res://assets/art/backdrops/forest_backdrop.svg")', "Forest backdrop preload", errors)
+    require(region_script, 'const RUINS_BACKDROP = preload("res://assets/art/backdrops/ruins_backdrop.svg")', "Ruins backdrop preload", errors)
+    require(region_script, 'const CHURCH_BACKDROP = preload("res://assets/art/backdrops/church_backdrop.svg")', "Church backdrop preload", errors)
+    require(region_script, 'const ELDRITCH_BACKDROP = preload("res://assets/art/backdrops/eldritch_backdrop.svg")', "Eldritch backdrop preload", errors)
+    require(region_script, 'const STONE_FLOOR_STRIP = preload("res://assets/art/backdrops/stone_floor_strip.svg")', "Textured floor preload", errors)
+    require(region_script, "func _region_backdrop_texture() -> Texture2D:", "Biome backdrop selector", errors)
+    require(region_script, "draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)", "Textured ground draw call", errors)
     # Elevated exits must not remain interactable from the uninterrupted ground floor.
     # 高位出口不能从连续地面直接交互，避免平台只成为装饰路线。
     require(region_script, "rectangle.size = Vector2(110.0, 80.0)", "Door interaction volume height", errors)
