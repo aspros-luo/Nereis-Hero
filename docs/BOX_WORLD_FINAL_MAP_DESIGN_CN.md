@@ -1,5 +1,8 @@
 # 最终箱式世界地图设计 v1.0（垂直互联版）
 
+> 分层细化补充：请同时参阅 [大区域—小区域—连接与升降机设计](BOX_WORLD_HIERARCHY_CN.md)。机器可读清单位于 `tools/world_map_topology.json` 的 `macro_regions`、`subregions`、`intra_region_connections` 与 `elevators`。
+
+
 > 项目：Nereis-Hero  
 > 分支：development  
 > 状态：**最终空间设计基线；待按本方案实施与实机验收**  
