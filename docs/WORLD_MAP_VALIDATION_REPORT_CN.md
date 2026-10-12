@@ -231,3 +231,15 @@ H01–H08 / C15 / C19 的引擎流程尚未通过；H02–H06 已无需再做入
 复核 H01–H08 的灵视门槛、异常来源和拓扑记录时，发现 H06「王名抹除廊」存在证据 ID 串线：运行时代码要求 `anomaly_bell_retiming` 与 `anomaly_erased_royal_name`，拓扑却错误引用了 A3 的 `anomaly_erased_street_sign`。现已修正拓扑，并在 `validate_world_map_topology.py` 与 `validate_graybox_scene_wiring.py` 中增加 H06 回归合同，确保王室铭文与第三街路牌不会互相替代。
 
 本轮对照确认 H01–H08 的当前鸣响、古神接触、外神接触、额外外神共鸣与已登记异常来源条件均与对应入口实现一致；H06 是本轮发现并修正的差异。**这些是远程源码/JSON 静态对照，不是 Python 脚本执行结果，也不是 Godot 实机通过结果。**
+
+## 本轮增量：A13 终局地图从设计节点补齐为实际灰盒场景（2026-10-12）
+
+复核发现此前报告将 A13 标记为“仍是抽象终局区域”是准确的：C21/C22 已存在于拓扑，但 A12 与 H08 的运行时代码直接跳转到结局演示场景，A13 未进入游戏场景网络。本轮已完成源码接线：
+
+- 新增 `scenes/terminal_anomaly.tscn`，接入共享灰盒脚本，配置 A13 区域 ID、存档 location ID 与独立平台布局。
+- A12 的 C22 主线出口现在进入 A13；A11 在 `physical_union_complete` 后出现 C21 可选终局入口。
+- H08 在同一剧情条件成立后汇入 A13，避免隐藏路线跳过终局地图。
+- A13 统一调用既有结局评估器，仍由其决定凡人之墓、永恒乐园或烈火天罚对应的演示场景。
+- `WorldState.get_resume_scene_path()` 增加 A13 映射；`validate_world_map_topology.py` 与 `validate_graybox_scene_wiring.py` 增加终局入口和汇流合同。
+
+**验证边界：** 已完成远程源码/JSON 静态一致性核对；本轮没有执行 Python 校验脚本或 Godot。A13 的平台跳跃、三入口出生点、存档继续和结局场景转场仍待引擎验收。地图宏观结构因此从“14 个主区域中 A13 仅有设计数据”推进到“14 个主区域均有对应场景路径声明”，但不能据此宣称所有场景均已运行通过。
