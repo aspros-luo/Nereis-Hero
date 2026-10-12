@@ -136,6 +136,12 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C05 must branch from the raised pipe-walk.")
     if c05_spatial.get("from_region_anchor") != {"region": "A3", "x": 1600, "y_offset": -115}:
         fail(errors, "C05 spatial anchor must match the A3 raised sewer branch.")
+    c03 = next((edge for edge in connections if edge.get("id") == "C03"), None)
+    c03_spatial = c03.get("spatial_contract", {}) if c03 else {}
+    if c03_spatial.get("from_region_anchor") != {"region": "A2", "x": 2240, "y_offset": -160}:
+        fail(errors, "C03 main exit must remain on the A2 canopy high road.")
+    if c03_spatial.get("return_spawn") != {"region": "A2", "x": 2120, "y_offset": -140}:
+        fail(errors, "C03 return spawn must align with the A2 canopy approach.")
     c16 = next((edge for edge in connections if edge.get("id") == "C16"), None)
     c16_spatial = c16.get("spatial_contract", {}) if c16 else {}
     if c16_spatial.get("route_layer") != "eastern_rooftop_lift":
