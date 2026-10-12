@@ -2,6 +2,8 @@
 
 > This is a developer-facing design record, not player-facing map content. The machine-readable contracts live in `tools/world_map_topology.json`. Static design data does not prove that scenes are implemented or runtime-tested in Godot.
 
+> **Narrative area grouping updated:** use the [World Region Atlas](WORLD_REGION_ATLAS_EN.md) as the current story-planning baseline. The older five-area grouping below is retained only as an earlier engineering organization and is no longer the narrative macro-area authority.
+
 ## 1. Five macro regions
 
 | ID | Macro region | Included regions | Design responsibility |
