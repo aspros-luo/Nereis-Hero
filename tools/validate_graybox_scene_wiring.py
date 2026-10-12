@@ -794,6 +794,15 @@ def main() -> int:
         for contract in contracts:
             require(block, contract, f"{hidden_id} hidden-region return contract", errors)
 
+    # A3 exits must occupy distinct spatial lanes: raised sewer branch, street-level hidden clue,
+    # and elevated far-eastern lift. This prevents all major choices from collapsing into one doorway cluster.
+    # A3 出口必须分布在不同空间层：抬高的下水道支路、街面隐藏线索、东侧高位升降机。
+    # 这样可以避免主要路线全部挤在同一片门口区域。
+    require(region_script, '1600.0, "E  沿旧管线栈道下行至水库"', "A3 raised C05 branch", errors)
+    require(region_script, 'true, "", "", floor_y - 115.0', "A3 C05 elevation", errors)
+    require(region_script, '1980.0, "E  经东侧高位旧升降机返回王城外环"', "A3 elevated C16 branch", errors)
+    require(region_script, 'true, "", "", floor_y - 70.0', "A3 C16 elevation", errors)
+
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
     spawn_contracts = [
@@ -810,7 +819,7 @@ def main() -> int:
         ('if region_id == "A2" and side == "old_pilgrim_highroad":', "return 1750.0"),
         ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 650.0"),
         ('if region_id == "A3" and side == "bell_drop":', "return 1600.0"),
-        ('if region_id == "A3" and side == "old_lift":', "return 1060.0"),
+        ('if region_id == "A3" and side == "old_lift":', "return 1860.0"),
         ('if region_id == "A6" and side == "bell_drop":', "return 1900.0"),
         ('if region_id == "A9" and side == "royal_drain":', "return 810.0"),
         ('if region_id == "A9" and side == "old_lift":', "return 610.0"),
