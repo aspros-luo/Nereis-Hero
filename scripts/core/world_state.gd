@@ -931,6 +931,7 @@ func _record_natural_test_scene(scene_path: String) -> void:
         "res://scenes/grand_cathedral.tscn": "A10",
         "res://scenes/deep_research_depths.tscn": "A11",
         "res://scenes/inner_city.tscn": "A12",
+        "res://scenes/terminal_anomaly.tscn": "A13",
         "res://scenes/hidden_well.tscn": "H01",
         "res://scenes/hidden_bell_chamber.tscn": "H02",
         "res://scenes/erased_third_street.tscn": "H03",
