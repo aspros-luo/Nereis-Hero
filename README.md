@@ -78,6 +78,10 @@ Map-first content completion roadmap (English):
 
 `docs/MAP_CONTENT_COMPLETION_ROADMAP_EN.md`
 
+Map–narrative integration pass 1 (Chinese / English; region evidence chains, spatial-story intent, and next acceptance priorities):
+
+`docs/MAP_STORY_INTEGRATION_PASS_1_CN_EN.md`
+
 M1 box-world route implementation log (Chinese; code committed, Godot runtime acceptance pending):
 
 `docs/M1_BOX_WORLD_IMPLEMENTATION_LOG_CN.md`
@@ -221,7 +225,7 @@ Much later, Hero and Mite's physical relationship becomes the bridge between the
 - H07 requires Resonance Sight, resonance ≥ 68, outer exposure ≥ 12, the outer-god story flag, and the R07 evidence source. Its A12 shortcut stays locked until the player reaches the Inner City and opens the far-side gate.
 - A11 can be reached from A8 through C15 (Royal Tomb maintenance shaft) or A10 through C19 (Silent Chapel). Each path has its own persistent gate ID while both record entry to A11. R08 raises resonance to 78 and adds the planned outer exposure.
 - H08 requires resonance ≥ 78, ancient exposure ≥ 2, outer exposure ≥ 18, the outer-god story flag, and three prior anomaly sources. A12 routes through the shared ending evaluator; H08 offers an optional deep-dream exit only after the physical-union story state.
-- H09 Cave Beneath the Cliff, its mad cleric, specimen, and candidate relic remain a provisional implementation pending map review; the relic does not affect ending eligibility and none of these details are locked story requirements. Recent platform and A3 route edits are code-wired but still require Godot 4.6.x runtime acceptance. A13 remains a topology-level ending layer rather than a dedicated standalone scene.
+- H09 Cave Beneath the Cliff, its mad cleric, specimen, and candidate relic remain a provisional implementation pending map review; the relic does not affect ending eligibility and none of these details are locked story requirements. Recent platform and A3 route edits are code-wired but still require Godot 4.6.x runtime acceptance. A13 has a dedicated standalone scene (`scenes/terminal_anomaly.tscn`) and acts as the ending-convergence layer rather than an ordinary exploration region.
 
 Implementation notes and acceptance checklists:
 
