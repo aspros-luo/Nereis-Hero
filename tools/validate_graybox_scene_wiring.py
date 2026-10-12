@@ -820,6 +820,7 @@ def main() -> int:
     # 高位跨区连接必须同时恢复横坐标与栈台高度，避免落在门下方的连续地面。
     require(region_script, '_spawn_hero(_spawn_x_for_side(spawn_side), _spawn_y_for_side(spawn_side))', "Spawn uses both axes", errors)
     for vertical_spawn_contract in [
+        'if region_id == "A2" and side == "east":\n\t\treturn floor_y - 140.0',
         'if region_id == "A3" and side == "sewer":\n\t\treturn floor_y - 115.0',
         'if region_id == "A3" and side == "old_lift":\n\t\treturn floor_y - 70.0',
         'if region_id == "A4" and side == "prison_tunnel":\n\t\treturn floor_y - 75.0',
@@ -831,6 +832,7 @@ def main() -> int:
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
     spawn_contracts = [
+        ('if region_id == "A2" and side == "east":', "return 2120.0"),
         ('if region_id == "A9" and side == "mirror":', "return 1680.0"),
         ('if region_id == "A11" and side == "chapel_entry":', "return map_width - 700.0"),
         ('if region_id == "H02" and side == "bell_tower_entry":', "return map_width - 360.0"),
