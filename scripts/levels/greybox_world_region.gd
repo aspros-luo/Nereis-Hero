@@ -2446,6 +2446,7 @@ func _draw() -> void:
 		draw_texture_rect(backdrop, Rect2(0.0, 0.0, map_width, 720.0), false)
 	else:
 		draw_rect(Rect2(0.0, 0.0, map_width, 720.0), _background_color())
+	_draw_biome_color_wash()
 	_draw_atmospheric_layers()
 	draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
 	_draw_ground_detail()
@@ -2529,6 +2530,59 @@ func _draw() -> void:
 		28,
 		Color("#b7a48c")
 	)
+
+
+# A restrained color grade gives every biome its own chromatic identity without hiding the backdrop.
+# 以克制的色彩分级建立区域识别度，同时保留原有背景细节。
+func _draw_biome_color_wash() -> void:
+	var wash := Color("#263e36")
+	var accent := Color("#7fbf8d")
+	match region_id:
+		"A1", "A2", "H01", "H08", "H09":
+			wash = Color("#244b39")
+			accent = Color("#a1dc91")
+		"A3", "A9", "H03", "H07":
+			wash = Color("#492b53")
+			accent = Color("#e08cbf")
+		"A4", "H04":
+			wash = Color("#174b60")
+			accent = Color("#69dce7")
+		"A5":
+			wash = Color("#6b3025")
+			accent = Color("#ff9b58")
+		"A6", "A10":
+			wash = Color("#584126")
+			accent = Color("#f4cb78")
+		"A7":
+			wash = Color("#263f62")
+			accent = Color("#80b9e8")
+		"A8", "H06":
+			wash = Color("#44305d")
+			accent = Color("#bd9bea")
+		"A11", "H02", "H05":
+			wash = Color("#5b2055")
+			accent = Color("#f078d4")
+		"A12":
+			wash = Color("#672d2c")
+			accent = Color("#ff9b78")
+		"A13":
+			wash = Color("#30205f")
+			accent = Color("#d0a4ff")
+		"H05":
+			wash = Color("#4c2556")
+			accent = Color("#ee9bda")
+	# The wash is intentionally translucent; gameplay silhouettes and exit markers stay dominant.
+	# 色彩覆盖保持半透明，避免角色剪影与出口标记被淹没。
+	draw_rect(Rect2(0.0, 0.0, map_width, 720.0), Color(wash.r, wash.g, wash.b, 0.20))
+	for band in range(4):
+		var band_y := 150.0 + float(band) * 118.0
+		var band_alpha := 0.025 + float(band % 2) * 0.012
+		draw_rect(Rect2(0.0, band_y, map_width, 46.0), Color(accent.r, accent.g, accent.b, band_alpha))
+	# Sparse chromatic glints near the skyline create a light source cue, not a HUD-like glow.
+	# 地平线附近的稀疏彩色亮点暗示环境光源，不做成 HUD 式发光。
+	for index in range(5):
+		var glow_x := float(index) * (map_width / 5.0) + float(int(region_id.hash() % 71))
+		draw_line(Vector2(glow_x, 265.0), Vector2(glow_x + 52.0, 265.0), Color(accent.r, accent.g, accent.b, 0.18), 2.0)
 
 # A restrained second silhouette layer gives each region depth without external textures.
 # 克制的第二层剪影为各区域增加纵深，不依赖外部贴图。
@@ -2683,75 +2737,83 @@ func _draw_atmospheric_layers() -> void:
 # 断续石板缝与少量碎石让地面呈现真实材质，而不是一条平色矩形。
 func _draw_ground_detail() -> void:
 	var atmosphere := _atmosphere_color()
-	draw_rect(Rect2(0.0, floor_y, map_width, 3.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.22))
+	draw_rect(Rect2(0.0, floor_y, map_width, 3.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.34))
+	# Keep every material mark inside the tile loop; this also ensures details repeat across the whole floor.
+	# 所有材质细节都在循环内绘制，确保整段地面重复铺开，而不是只落在最后一块石板上。
 	for index in range(1, int(map_width / 180.0)):
 		var x := float(index) * 180.0 + float(int(region_id.hash() % 29))
 		var seam_height := 7.0 + float((index * 11) % 13)
-		draw_line(Vector2(x, floor_y + 25.0), Vector2(x - 4.0, floor_y + 25.0 + seam_height), Color("#0d0b11", 0.34), 1.0)
+		draw_line(Vector2(x, floor_y + 25.0), Vector2(x - 4.0, floor_y + 25.0 + seam_height), Color("#0d0b11", 0.42), 1.0)
 		if index % 2 == 0:
-			draw_line(Vector2(x + 2.0, floor_y + 58.0), Vector2(x + 26.0, floor_y + 55.0), Color("#574750", 0.22), 1.0)
+			draw_line(Vector2(x + 2.0, floor_y + 58.0), Vector2(x + 26.0, floor_y + 55.0), Color("#574750", 0.30), 1.0)
 		if index % 3 == 0:
 			var pebble_x := x + 32.0
 			draw_colored_polygon(PackedVector2Array([
 				Vector2(pebble_x, floor_y + 74.0),
 				Vector2(pebble_x + 5.0, floor_y + 68.0),
 				Vector2(pebble_x + 13.0, floor_y + 75.0)
-			]), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.12))
+			]), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.20))
 
-	# Ground treatment changes by biome: damp reflections, moss, ash, or organic seepage.
-	# 地面材质随区域变化：潮湿反光、苔痕、灰烬或有机渗色。
-	match region_id:
-		"A2", "H01", "H08", "H09":
-			if index % 2 == 0:
-				draw_line(Vector2(x + 14.0, floor_y + 8.0), Vector2(x + 48.0, floor_y + 9.0), Color("#788f78", 0.20), 2.0)
-			if index % 4 == 0:
-				draw_circle(Vector2(x + 64.0, floor_y + 34.0), 2.0, Color("#9eb6a0", 0.14))
-		"A3", "A5", "A8", "A12":
-			if index % 2 == 0:
-				draw_line(Vector2(x + 38.0, floor_y + 18.0), Vector2(x + 55.0, floor_y + 31.0), Color("#b28b79", 0.16), 1.0)
-			if index % 5 == 0:
-				draw_colored_polygon(PackedVector2Array([
-					Vector2(x + 76.0, floor_y + 52.0), Vector2(x + 88.0, floor_y + 48.0),
-					Vector2(x + 98.0, floor_y + 54.0), Vector2(x + 83.0, floor_y + 59.0)
-				]), Color("#211a20", 0.34))
-		"A4", "A9", "H04", "H07":
-			if index % 2 == 0:
-				draw_line(Vector2(x + 18.0, floor_y + 42.0), Vector2(x + 74.0, floor_y + 44.0), Color("#91b8c1", 0.12), 2.0)
-			if index % 3 == 0:
-				draw_line(Vector2(x + 54.0, floor_y + 63.0), Vector2(x + 86.0, floor_y + 62.0), Color("#b2c9c8", 0.09), 1.0)
-		"A6", "A10":
-			if index % 2 == 0:
-				draw_line(Vector2(x + 24.0, floor_y + 12.0), Vector2(x + 45.0, floor_y + 12.0), Color("#c6b39a", 0.20), 1.0)
-			if index % 4 == 0:
-				draw_circle(Vector2(x + 61.0, floor_y + 49.0), 1.5, Color("#c6b39a", 0.14))
-		"A11", "H02", "H03", "H05", "H06":
-			if index % 2 == 0:
-				draw_line(Vector2(x + 18.0, floor_y + 30.0), Vector2(x + 43.0, floor_y + 34.0), Color("#94758e", 0.18), 1.5)
-			if index % 4 == 0:
-				draw_circle(Vector2(x + 67.0, floor_y + 45.0), 2.2, Color("#8e789f", 0.10))
-		"A13":
-			if index % 2 == 0:
-				draw_line(Vector2(x + 12.0, floor_y + 19.0), Vector2(x + 31.0, floor_y + 15.0), Color("#b99ac7", 0.22), 1.0)
+		# Biome-specific pigments make each floor read differently at a glance.
+		# 依照区域加入不同色相，让地面一眼可辨，而不是统一灰色。
+		match region_id:
+			"A2", "H01", "H08", "H09":
+				if index % 2 == 0:
+					draw_line(Vector2(x + 14.0, floor_y + 8.0), Vector2(x + 48.0, floor_y + 9.0), Color("#79b66f", 0.34), 2.0)
+				if index % 4 == 0:
+					draw_circle(Vector2(x + 64.0, floor_y + 34.0), 2.4, Color("#b5d69c", 0.22))
+			"A3", "A5", "A8", "A12":
+				if index % 2 == 0:
+					draw_line(Vector2(x + 38.0, floor_y + 18.0), Vector2(x + 55.0, floor_y + 31.0), Color("#d28a62", 0.28), 1.5)
+				if index % 5 == 0:
+					draw_colored_polygon(PackedVector2Array([
+						Vector2(x + 76.0, floor_y + 52.0), Vector2(x + 88.0, floor_y + 48.0),
+						Vector2(x + 98.0, floor_y + 54.0), Vector2(x + 83.0, floor_y + 59.0)
+					]), Color("#351d26", 0.48))
+			"A4", "A9", "H04", "H07":
+				if index % 2 == 0:
+					draw_line(Vector2(x + 18.0, floor_y + 42.0), Vector2(x + 74.0, floor_y + 44.0), Color("#62c6d4", 0.28), 2.0)
+				if index % 3 == 0:
+					draw_line(Vector2(x + 54.0, floor_y + 63.0), Vector2(x + 86.0, floor_y + 62.0), Color("#b2edf0", 0.20), 1.0)
+			"A6", "A10":
+				if index % 2 == 0:
+					draw_line(Vector2(x + 24.0, floor_y + 12.0), Vector2(x + 45.0, floor_y + 12.0), Color("#e6bd70", 0.34), 1.5)
+				if index % 4 == 0:
+					draw_circle(Vector2(x + 61.0, floor_y + 49.0), 1.8, Color("#ffe0a0", 0.24))
+			"A11", "H02", "H03", "H05", "H06":
+				if index % 2 == 0:
+					draw_line(Vector2(x + 18.0, floor_y + 30.0), Vector2(x + 43.0, floor_y + 34.0), Color("#d66dc2", 0.32), 1.5)
+				if index % 4 == 0:
+					draw_circle(Vector2(x + 67.0, floor_y + 45.0), 2.4, Color("#ed9be4", 0.20))
+			"A13":
+				if index % 2 == 0:
+					draw_line(Vector2(x + 12.0, floor_y + 19.0), Vector2(x + 31.0, floor_y + 15.0), Color("#d4a1ff", 0.36), 1.5)
 
 
 func _atmosphere_color() -> Color:
 	match region_id:
-		"A2", "H02", "H05":
-			return Color("#8a9bb4")
+		"A2", "H01", "H08", "H09":
+			return Color("#8fbd86")
 		"A3", "A9", "H03", "H07":
-			return Color("#9e819a")
+			return Color("#d28ab8")
 		"A4", "H04":
-			return Color("#78a4ac")
-		"A5", "A6", "A10":
-			return Color("#b38a83")
-		"A7", "A8", "H06":
-			return Color("#a79ba5")
-		"A11", "H08", "H09":
-			return Color("#aa7c9e")
+			return Color("#70c7d8")
+		"A5":
+			return Color("#ed9165")
+		"A6", "A10":
+			return Color("#e5c17b")
+		"A7":
+			return Color("#83b8e4")
+		"A8", "H06":
+			return Color("#b5a0e6")
+		"A11", "H02", "H05":
+			return Color("#dc82d0")
+		"A12":
+			return Color("#e98b77")
 		"A13":
-			return Color("#c49bbd")
+			return Color("#d0a4ff")
 		_:
-			return Color("#93849b")
+			return Color("#b2a0bd")
 
 func _background_color() -> Color:
 	match region_id:
