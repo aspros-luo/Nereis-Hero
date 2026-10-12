@@ -312,6 +312,10 @@ When implementation reaches a major unresolved story decision — especially Her
 
 For ordinary gameplay, combat, UI, effects, technical systems and presentation, development can proceed autonomously.
 
+### Macro-map acceptance mode (2026-10-12)
+
+The title menu now includes **World Map Test / 宏观地图验收**. It opens a session-only selector for A0–A13 and H01–H08, primes route flags for direct traversal, and supports F6 to return to the selector. Save writes are disabled in acceptance mode. See [Chinese guide](docs/MACRO_MAP_ACCEPTANCE_GUIDE_CN.md) and [English guide](docs/MACRO_MAP_ACCEPTANCE_GUIDE_EN.md). This is a test harness, not a claim of Godot runtime validation.
+
 ### World-map terminal layer update (2026-10-12)
 
 The A13 terminal anomaly is now represented by `scenes/terminal_anomaly.tscn` rather than remaining a topology-only node. The A12 main route and the gated A11/H08 deep-dream routes converge on A13, which delegates the final choice to the existing ending evaluator. Save/resume mapping and static wiring contracts were updated. This is source-level integration only; Godot traversal and ending transitions remain unverified.
