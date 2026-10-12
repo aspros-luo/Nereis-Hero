@@ -118,7 +118,8 @@ func _prepare_test_state() -> void:
     for hidden_id in ["H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08"]:
         if hidden_id not in WorldState.opened_hidden_paths:
             WorldState.opened_hidden_paths.append(hidden_id)
-    WorldState.begin_natural_test_session()
+    if not WorldState.debug_natural_test_active:
+        WorldState.begin_natural_test_session()
     print("[NEREIS][MAP][ACCEPTANCE] Test flags primed; normal save writes disabled.")
 
 func _enter_region(entry: Dictionary) -> void:
