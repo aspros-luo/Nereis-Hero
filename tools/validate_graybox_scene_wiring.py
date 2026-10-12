@@ -284,7 +284,7 @@ def main() -> int:
     require(region_script, "shape.position = Vector2(0.0, -35.0)", "Door interaction volume vertical alignment", errors)
 
     require(region_script, "[NEREIS][MAP][SPAWN] region=%s", "Map spawn Debug log", errors)
-    require(region_script, "func _spawn_hero(spawn_x: float) -> void:", "Region-local death checkpoint setup", errors)
+    require(region_script, "func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:", "Region-local death checkpoint setup", errors)
     require(region_script, "WorldState.set_checkpoint(hero.global_position)", "Region-local death checkpoint", errors)
     require(region_script, "Keep death recovery inside the current region", "Region-local death checkpoint rationale", errors)
     require(region_script, "[NEREIS][MAP][EXIT] from=%s", "Map exit Debug log", errors)
