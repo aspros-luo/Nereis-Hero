@@ -138,3 +138,44 @@ Address the feedback that the world feels monotonous without simply brightening 
 ### Art direction constraint
 
 This is not intended to turn the game into bright cartoon art. Large color washes remain translucent, while stronger saturation is concentrated in material details, environmental light, and biome identifiers. Tune opacity and contrast after reviewing in-game screenshots.
+
+
+---
+
+# 地形材质深化第四轮 / Terrain Material Pass 4
+
+**Implementation commit / 实现提交:** `65ecb5629f9ac83b023578193b6ad6d9a9ecf0cc`
+
+## 中文
+
+### 本轮工作
+
+在色彩体系的基础上，进一步解决地面和平台仍像“统一灰色矩形”的问题。
+
+- 地面增加分层石材线、区域色污渍与固定位置的材质变化，强化苔绿、积水青蓝、战场焦橙、教会暖金、研究区洋红和终局紫色的识别。
+- 平台增加较暗的浅侧壁、区域色顶边高光，以及少量固定分布的矿物／苔痕细节。平台顶面仍保留明确的边缘线，以保护跳跃和落脚点的可读性。
+- 所有新细节都使用确定性位置，不依赖每帧随机值；不新增碰撞体、不移动平台，也不改变路线与剧情。
+- 暂不引入外部贴图，继续用程序绘制验证材质语言；后续可依据实机截图判断哪些位置值得换成授权明确的 tile/纹理素材。
+
+### 验证状态
+
+- [x] 已提交到 `development`。
+- [x] 静态复核新增材质绘制位置与平台绘制顺序。
+- [ ] 尚未通过 Godot 4.6.x 实机解析与视觉验收；请重点检查细平台上的高光线是否越界，以及地面污渍是否过密。
+
+## English
+
+### Work completed
+
+This pass addresses the remaining “flat gray rectangle” feeling in terrain and platform surfaces.
+
+- Added layered stone strata, region-tinted stains, and deterministic material variation across the ground strip. Accents reinforce moss green, reservoir cyan, battlefield ember orange, church gold, research magenta, and terminal violet.
+- Platforms now have a shallow dark side face, biome-colored top-edge highlights, and sparse deterministic mineral/moss marks. The top edge remains clearly defined for jumping and landing readability.
+- All details use stable positions; no per-frame randomness, new collision shapes, platform movement, route changes, or narrative changes were introduced.
+- No external textures were added. The procedural material language remains easy to tune before selecting properly licensed tiles or texture assets.
+
+### Validation
+
+- [x] Committed to `development`.
+- [x] Static review of material draw placement and platform draw order.
+- [ ] Godot 4.6.x runtime parsing and visual acceptance are still pending. Check that highlights stay within narrow platforms and that floor stains do not become too dense.
