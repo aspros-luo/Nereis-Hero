@@ -52,6 +52,10 @@ Interconnected box-world design principles (Chinese; authoritative map-design co
 
 `docs/INTERCONNECTED_BOX_WORLD_DESIGN_CN.md`
 
+Box-world structural re-audit (Chinese, 2026-10-12):
+
+`docs/BOX_WORLD_REAUDIT_2026-10-12_CN.md`
+
 Box-world structure re-audit and current spatial fixes (Chinese):
 
 `docs/BOX_WORLD_STRUCTURE_REAUDIT_CN.md`
