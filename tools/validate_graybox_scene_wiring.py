@@ -252,6 +252,8 @@ def main() -> int:
     require(world_state, "var debug_ability_override_active := false", "WorldState", errors)
     require(world_state, '"resume_spawn_side": resume_spawn_side', "WorldState save payload", errors)
     require(world_state, 'resume_spawn_side = str(parsed.get("resume_spawn_side", "west"))', "WorldState save migration", errors)
+    require(world_state, '"res://scenes/terminal_anomaly.tscn": "A13"', "Natural map test A13 tracking", errors)
+    require(world_state, "[%d/22]", "Natural map test region total", errors)
     require(world_state, 'resume_spawn_side = requested_spawn_side', "WorldState location save", errors)
     require(world_state, 'resume_spawn_side.length() > 64', "WorldState spawn-side input guard", errors)
     require(world_state, "pending_region_spawn_side = \"west\"\n    resume_spawn_side = \"west\"", "WorldState new-game reset", errors)
