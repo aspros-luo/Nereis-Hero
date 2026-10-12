@@ -266,17 +266,17 @@ func _spawn_x_for_side(side: String) -> float:
 		# A4 东侧井门靠近地图边界；返回时避开其 80px 交互范围，防止落地就重新聚焦。
 		return map_width - 360.0
 	if region_id == "A4" and side == "prison_tunnel":
-		# C12's return door is at x=1050; share the safe landing corridor between C12 and C07.
-		# C12 回程门位于 x=1050；落点放在 C12 与 C07 之间的安全走廊。
-		return 1160.0
+		# C12's low ledge is at x=1050; arrive below it within one short jump of the door.
+		# C12 低位栈台门位于 x=1050；出生在门下方，短跳即可抵达。
+		return 1090.0
 	if region_id == "A4" and side == "royal_tomb_waterway":
-		# C07's return door is at x=1250; keep clear of C12 at x=1050 and the anomaly at x=980.
-		# C07 回程门位于 x=1250；避开 x=1050 的 C12 门与 x=980 的异常调查点。
-		return 1160.0
+		# C07's middle platform door is at x=1320; land just before the platform so the route is visible.
+		# C07 中层平台门位于 x=1320；出生在平台前方，让玩家看见并跳上这条支路。
+		return 1250.0
 	if region_id == "A4" and side == "royal_drain":
-		# C23's return door is at x=1450; arrive near it without entering H04's radius at x=1780.
-		# C23 回程门位于 x=1450；落点靠近捷径，同时避开 x=1780 的 H04。
-		return 1600.0
+		# C23's raised pipe door is at x=1650; arrive directly below its ledge, clear of H04 at x=1780.
+		# C23 高位管线门位于 x=1650；出生在平台下方，并与 x=1780 的 H04 保持距离。
+		return 1620.0
 	if region_id == "A9" and side == "old_lift":
 		# C16 opens at x=520; land between it and C23 at x=720, clear of both door triggers.
 		# C16 门位于 x=520；落在它与 x=720 的 C23 门之间，避开两侧触发区。
@@ -649,6 +649,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(360, 475, 140, 18))
 			_add_platform(Rect2(640, 435, 120, 18))
 			_add_platform(Rect2(940, 395, 180, 18))
+			# The supply-tunnel branch gets its own low ledge instead of sharing the same floor lane as the tomb and drain doors.
+			# 补给隧道分支使用独立的低位平台，不再与王墓水道和王城排水门挤在同一地面线上。
+			_add_platform(Rect2(930, 465, 180, 18))
 			_add_platform(Rect2(1260, 455, 190, 18))
 			_add_platform(Rect2(1600, 420, 150, 18))
 			_add_platform(Rect2(1980, 470, 170, 18))
@@ -1292,9 +1295,9 @@ func _register_debug_locked_route_hints() -> void:
 			_register_debug_locked_route_hint(1710.0, "monastery_tower", "需先从 A6 开启钟塔落差")
 			_register_debug_locked_route_hint(1820.0, "silent_bell_room", "需先发现并开启 H05")
 		"A4":
-			_register_debug_locked_route_hint(1050.0, "prison_depths", "需从 A7 开启补给隧道")
-			_register_debug_locked_route_hint(1250.0, "royal_tomb", "需从 A8 开启王墓水道")
-			_register_debug_locked_route_hint(1450.0, "royal_outer_ring", "需从 A9 开启王城排水道")
+			_register_debug_locked_route_hint(1050.0, "prison_depths", "低位栈台：需从 A7 开启补给隧道")
+			_register_debug_locked_route_hint(1320.0, "royal_tomb", "中层平台：需从 A8 开启王墓水道")
+			_register_debug_locked_route_hint(1650.0, "royal_outer_ring", "高位管线：需从 A9 开启王城排水道")
 			_register_debug_locked_route_hint(map_width - 90.0, "hidden_well", "需先实际抵达 A4，再以灵视发现 H01")
 		"A5":
 			_register_debug_locked_route_hint(2060.0, "hidden_bell_chamber", "需先发现并开启 H02")
@@ -1435,7 +1438,7 @@ func _spawn_region_exits() -> void:
 			# C06 is a one-way return shortcut from the reservoir to the village well.
 			# C06 是从旧水库返回村庄的单向捷径；首次互动开闸，再次互动才转场。
 			_spawn_exit_door(
-				map_width - 250.0, "E  打开村庄井道水闸", "village",
+				2220.0, "E  打开村庄井道水闸", "village",
 				"res://scenes/village_hub.tscn", "well_exit",
 				true, "opened_watergate_and_village_well_exit", "E  返回边境村庄"
 			)
@@ -1443,17 +1446,20 @@ func _spawn_region_exits() -> void:
 			if "reached_A7_then_opened_supply_tunnel" in WorldState.achievement_flags:
 				_spawn_exit_door(
 					1050.0, "E  返回监牢", "prison_depths",
-					"res://scenes/prison_depths.tscn", "supply_tunnel"
+					"res://scenes/prison_depths.tscn", "supply_tunnel",
+					true, "", "", floor_y - 75.0
 				)
 			if "reached_A8_via_A7_then_opened_royal_tomb_gate" in WorldState.achievement_flags:
 				_spawn_exit_door(
-					1250.0, "E  返回旧王墓", "royal_tomb",
-					"res://scenes/royal_tomb.tscn", "royal_tomb_waterway"
+					1320.0, "E  返回旧王墓", "royal_tomb",
+					"res://scenes/royal_tomb.tscn", "royal_tomb_waterway",
+					true, "", "", floor_y - 85.0
 				)
 			if "reached_A9_then_opened_royal_drain_from_outer_ring" in WorldState.achievement_flags:
 				_spawn_exit_door(
-					1450.0, "E  返回王城外环", "royal_outer_ring",
-					"res://scenes/royal_outer_ring.tscn", "royal_drain"
+					1650.0, "E  返回王城外环", "royal_outer_ring",
+					"res://scenes/royal_outer_ring.tscn", "royal_drain",
+					true, "", "", floor_y - 105.0
 				)
 			if "reached_A4_via_A3" in WorldState.achievement_flags:
 				_spawn_a4_hidden_well_gate(map_width - 90.0)
