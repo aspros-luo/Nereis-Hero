@@ -301,6 +301,8 @@ def main() -> int:
     require(prologue_script, "func _create_surgical_catwalks() -> void:", "A0 surgical catwalk builder", errors)
     require(prologue_script, "Rect2(430, 455, 100, 16)", "A0 surgical first ledge", errors)
     require(prologue_script, "MAINTENANCE ACCESS ONLY", "A0 catwalk landmark", errors)
+    require(prologue_script, "Cold surgical shafts and suspended cables", "A0 environmental lighting layer", errors)
+    require(prologue_script, "Sparse surgical floor seams", "A0 floor material layer", errors)
 
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
     # Visual polish helpers are part of the shared graybox renderer and must remain wired.
