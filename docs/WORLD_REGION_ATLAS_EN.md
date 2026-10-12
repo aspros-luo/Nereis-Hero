@@ -2,6 +2,10 @@
 
 > This is the current narrative map outline. It groups the world geographically and by faction first, then lists meaningful places within each area. It is not a player-facing map, and not every candidate needs to become a separate level. A0–A13 are existing greybox region IDs; the locations below are story-design names.
 
+## Macro map brain map
+
+Before detailing any small map, review [World Map Brain Map and Spatial Relationships](WORLD_MAP_BRAINMAP_EN.md) to assess the relative positions of the six macro areas, hub responsibilities, and major connections. Do not treat illustrative abilities or quests as mandatory while the macro layout remains under review.
+
 ## 1. Six macro areas
 
 | Macro area | Existing regions | Core purpose |
