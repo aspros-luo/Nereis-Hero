@@ -912,7 +912,7 @@ func record_natural_test_region(region_id: String, location_id: String = "") -> 
         return
     debug_natural_test_visited_regions.append(region_id)
     var location_label := location_id if not location_id.is_empty() else current_location
-    print("[NEREIS][MAP][NATURAL_TEST] Visited %s (%s) [%d/21]" % [
+    print("[NEREIS][MAP][NATURAL_TEST] Visited %s (%s) [%d/22]" % [
         region_id, location_label, debug_natural_test_visited_regions.size()
     ])
 
