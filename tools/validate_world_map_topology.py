@@ -142,8 +142,8 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C16 must use the eastern rooftop lift lane.")
     if c16_spatial.get("from_region_anchor") != {"region": "A3", "x": 1980, "y_offset": -70}:
         fail(errors, "C16 spatial anchor must match the A3 eastern rooftop lift.")
-    if c16_spatial.get("return_spawn") != {"region": "A3", "x": 1860}:
-        fail(errors, "C16 return spawn must stay aligned with the eastern rooftop lift.")
+    if c16_spatial.get("return_spawn") != {"region": "A3", "x": 1940}:
+        fail(errors, "C16 return spawn must stay aligned with the eastern rooftop lift and clear of H05.")
     h05 = next((region for region in hidden if region.get("id") == "H05"), None)
     h05_return_anchor = h05.get("secondary_exit", {}).get("return_spatial_anchor", {}) if h05 else {}
     if h05_return_anchor != {"region": "A3", "x": 1820, "layer": "street-level-return"}:
@@ -159,6 +159,9 @@ def validate(data: dict[str, Any]) -> list[str]:
         spatial = edge.get("spatial_contract", {}) if edge else {}
         if spatial.get("route_layer") != route_layer or spatial.get(anchor_field) != expected_anchor:
             fail(errors, f"{connection_id} must match its declared A4 layered route anchor.")
+    c07_spatial = next((edge for edge in connections if edge.get("id") == "C07"), {}).get("spatial_contract", {})
+    if c07_spatial.get("return_spawn") != {"region": "A4", "x": 1260}:
+        fail(errors, "C07 return spawn must sit within interaction range of the middle ledge door.")
 
     # C24 is the alternate A1-to-A3 route added after the village defense.
     # C24 是村庄防卫后开放的 A1 → A3 替代路线。
