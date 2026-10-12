@@ -189,7 +189,7 @@ def validate(data: dict[str, Any]) -> list[str]:
     if c07_spatial.get("return_spawn") != {"region": "A4", "x": 1260, "y_offset": -85}:
         fail(errors, "C07 return spawn must sit within interaction range of the middle ledge door.")
     for connection_id, expected_spawn in {
-        "C05": {"region": "A3", "x": 1600, "y_offset": -115},
+        "C05": {"region": "A3", "x": 1380, "y_offset": -115},
         "C12": {"region": "A4", "x": 1090, "y_offset": -75},
         "C23": {"region": "A4", "x": 1620, "y_offset": -120},
     }.items():
