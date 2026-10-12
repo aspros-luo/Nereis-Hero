@@ -814,6 +814,7 @@ def main() -> int:
     require(region_script, '1650.0, "E  返回王城外环"', "A4 C23 upper pipe exit", errors)
     require(region_script, 'true, "", "", floor_y - 105.0', "A4 C23 elevation", errors)
     require(region_script, '2220.0, "E  打开村庄井道水闸"', "A4 C06 return lane", errors)
+    require(region_script, 'Vector2(850, floor_y - 18.0),\n\t\t\t\t"anomaly_old_stone_layer"', "A4 clue/door interaction spacing", errors)
 
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
