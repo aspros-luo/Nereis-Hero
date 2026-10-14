@@ -10,6 +10,10 @@ const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const COMBAT_AUDIO_SCRIPT = preload("res://scripts/audio/combat_audio.gd")
 const ASH_PARTICLES_SCRIPT = preload("res://scripts/effects/ash_particles.gd")
 
+## Enable the production Hero's opt-in skeletal visual only in the A3 preview scene.
+## 仅在 A3 预览场景启用正式主角的可选骨骼表现。
+@export var use_skeleton_visual_preview := false
+
 const LEVEL_WIDTH := 2400.0
 const FLOOR_Y := 540.0
 
@@ -52,6 +56,7 @@ func _ready() -> void:
 func _spawn_hero() -> void:
     hero = CharacterBody2D.new()
     hero.set_script(HERO_SCRIPT)
+    hero.set("use_skeleton_visual", use_skeleton_visual_preview)
     hero.position = Vector2(260, FLOOR_Y)
     hero.name = "Hero"
     _add_character_collision(hero, 18.0, 48.0)
