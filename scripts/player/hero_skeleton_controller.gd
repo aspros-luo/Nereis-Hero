@@ -42,6 +42,7 @@ const HURT_COLOR := Color("#e06b73")
 var current_pose: PoseState = PoseState.IDLE
 var combo_step: int = 1
 var facing: float = 1.0
+var weapon_style: String = "long_sword"
 var animation_time: float = 0.0
 var _neutral_rotations: Dictionary = {}
 var _sword_line: Line2D
@@ -70,6 +71,7 @@ func _process(delta: float) -> void:
 ## Optional presentation adapter entry point. The dictionary is read-only input.
 ## 可选的表现层适配入口；只读取正式 Hero 提供的状态快照。
 func apply_visual_context(context: Dictionary) -> void:
+	weapon_style = str(context.get("weapon", "long_sword"))
 	var state_name := str(context.get("state", "idle"))
 	var next_pose := PoseState.IDLE
 	match state_name:
@@ -165,7 +167,7 @@ func _reset_pose() -> void:
 	if _sword_line:
 		# Restore the neutral long-sword silhouette before each pose applies its own weapon shape.
 		# 每次切换姿势先恢复默认长剑轮廓，短刃姿势再显式缩短，避免武器形态残留。
-		_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(30, -4)])
+		_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(19 if weapon_style == "short_blade" else 30, -2 if weapon_style == "short_blade" else -4)])
 
 
 func _build_visuals() -> void:
@@ -281,7 +283,8 @@ func _apply_pose() -> void:
 			arm_left_bone.rotation = 0.72
 			leg_left_bone.rotation = -0.32
 			leg_right_bone.rotation = 0.3
-			_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(40, -7)])
+			var technique_length := 26.0 if weapon_style == "short_blade" else 40.0
+			_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(technique_length, -7)])
 		PoseState.GRAPPLE:
 			body_bone.rotation = -0.2
 			arm_left_bone.rotation = -1.0
