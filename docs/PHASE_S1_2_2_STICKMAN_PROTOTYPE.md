@@ -7,12 +7,13 @@
 
 ## S1.2.2-A2 — Visual debug layer
 - `SkeletonDebug` remains a separate `Node2D` sibling and does not replace the character's production rendering.
-- The debug overlay reads live `Bone2D.global_position` values and redraws while enabled, following animated bone transforms.
+- The debug overlay reads live `Bone2D.global_position` values and redraws while enabled, following animated bone transforms. Position conversion uses the shared parent origin rather than `Node2D.to_local()` to avoid a singular-transform inverse in preview setups.
 
 ## S1.2.2-A3 — AnimationPlayer & skeletal animation prototype
 
 ### Implemented / 已实现
 - `AnimationPlayer` is a sibling of the `CharacterBody2D` root and receives a runtime `AnimationLibrary` with looping `Idle` and `Run` clips.
+- Added an enabled `Camera2D` to the standalone prototype scene with a 4× preview zoom so the small stick figure is visible when running the scene directly.
 - `Idle`: subtle spine/head/arm sway; both legs are explicitly keyed to neutral rotations so the run pose does not remain after stopping.
 - `Run`: alternating arm and leg rotations with a small spine counter-swing and subtle head movement.
 - Added a short `Idle` ↔ `Run` blend time to soften movement transitions.
@@ -34,9 +35,10 @@
 - Repository scene/script paths and the current branch contents were inspected.
 - The code change addresses pose persistence when transitioning from Run back to Idle, sets a short blend for Idle/Run transitions, and checks `has_animation_library("")` before removing the default library so an absent library is never queried with `get_animation_library("")`.
 - The connected GitHub session cannot launch the local Godot 4.6.1 editor/runtime. Therefore, parser/import/playback and physical movement are **not claimed as runtime-tested**; local acceptance below is still required.
+- Follow-up fixes: avoid querying a missing default animation library, prevent the debug overlay from requiring a global-transform inverse, and add a camera to the isolated preview scene.
 
 ### Local acceptance / 本地验收
-1. Open the project in Godot 4.6.1 and run the project or instantiate `res://scenes/characters/stickman_hero.tscn`.
+1. Open the project in Godot 4.6.1, open `res://scenes/characters/stickman_hero.tscn`, and use **Run Current Scene (F6)**. Running the project with F5 still launches `res://scenes/boot.tscn`, not this standalone prototype.
 2. Confirm there are no parser/import errors and that `Idle` starts automatically from the controller.
 3. Hold Left/Right (Godot's default `ui_left` / `ui_right`): the root `CharacterBody2D` should move while the debug skeleton loops through `Run`.
 4. Release the key: movement stops, `Idle` resumes, and the legs return to neutral rather than freezing in the last run pose.
