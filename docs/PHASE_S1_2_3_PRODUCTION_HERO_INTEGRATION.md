@@ -152,3 +152,37 @@ A4/A5 local acceptance — Godot 4.6.1:
 7. Check Godot Output for parse/runtime errors.
 
 Source files and documentation have been committed and read back from GitHub. Runtime validation remains local; this connected session has not executed Godot.
+
+### S1.2.3-A6 — Fuller stickman and animation pass — implementation committed
+
+Implemented:
+
+- Increased torso, arm and leg stroke widths independently and enabled rounded line caps/joints, so the silhouette reads as a fuller stickman rather than thin wireframe limbs.
+- Added a filled head silhouette with a restrained light value against the dark outline.
+- Added a small idle breathing/weight-shift loop and a more readable run swing/bounce.
+- Added short visual-only follow-through arcs for long-sword attacks, short-blade attacks and weapon techniques, plus subtle movement in jump/fall, dodge and hitstun poses.
+- Pose time resets only when the presentation state, combo stage or facing changes. It never drives combat timing, damage, hitboxes, stamina or progression.
+- Expanded the isolated F6 pose gallery so every current movement/combat presentation state can be checked directly.
+
+本轮实现：
+
+- 分别加粗躯干、手臂和腿部线条，并启用圆角端点/连接点，让轮廓更接近饱满火柴人，而不是细线骨架。
+- 为头部增加填充剪影，深色描边保持整体哥特线稿风格。
+- 待机加入轻微呼吸与重心变化，跑步加入更清楚的摆臂、摆腿和起伏。
+- 为长剑、短刃和武器战技增加短促的视觉蓄势/回弹；跳跃、下落、闪避和受击也加入轻微动态。
+- 只有表现状态、连击段或朝向发生变化时才重置表现计时；该计时不参与正式战斗时序、伤害、判定、体力或进度。
+- 扩展独立 F6 姿势预览，覆盖当前所有动作状态，便于逐一验收。
+
+Local preview acceptance — Godot 4.6.1:
+
+1. Open `res://scenes/player/hero_skeleton_pose_preview.tscn` and press **F6**.
+2. Keys: `1` idle, `2` run, `3` jump, `4` fall, `5` long-sword attack, `6` short-blade attack, `7` weapon technique, `8` dodge, `9` quick dash, `0` grapple, `G` wall climb, `H` hurt, `D` death.
+3. `Z/X/C` selects combo stage 1/2/3; Left/Right flips facing.
+4. Confirm limbs look fuller without merging into an unreadable blob, idle/run feel alive, each action remains distinct, and returning to idle leaves no residual pose.
+5. Open `res://scenes/player/hero_skeleton_combat_preview.tscn` with **F6** and test the real production Hero. Compare against `res://scenes/combat_demo.tscn` and inspect Output for parser/runtime errors.
+
+The user-referenced Muramasa: The Demon Blade heroine texture sheet was not available as a readable asset in the current repository or accessible file payload during this pass, so no guessed texture was imported and no existing project art was overwritten. Keep texture/atlas experimentation as a separate follow-up once the exact source image is accessible. The current work deliberately improves the native Godot skeleton path first.
+
+胧村正女主纹理图在本轮可访问的仓库文件和文件载荷中未能定位到可读取的原始素材，因此没有猜测图片、没有导入不确定的纹理，也没有覆盖项目已有美术。待能读取确切原图后，再单独建立纹理/图集实验场景；当前优先把 Godot 原生骨骼表现做好。
+
+Source and documentation are committed and read back from GitHub. Godot runtime validation remains local; this connected session has not executed the Godot engine.
