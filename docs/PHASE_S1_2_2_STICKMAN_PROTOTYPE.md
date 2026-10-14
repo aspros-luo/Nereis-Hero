@@ -40,3 +40,7 @@ The scene hierarchy and script paths were checked against the current repository
 - Replace the prototype stick figure with authored character art/skin binding after the animation test passes.
 - Add dedicated animation clips and state priorities for long-sword attack, short-blade attack, Dodge/Witch Time, hit reaction, and boss actions.
 - Add floor/gravity/collision only when integrating the prototype into a real gameplay scene; this harness intentionally tests horizontal movement and skeleton animation in isolation.
+
+## Repository permission check
+- On 2026-10-14, the connected GitHub API successfully read this private repository and the `development` branch; repository metadata reports `push: true` for the active connection.
+- A documentation update was successfully committed to `development` to verify write access. This confirms connector write capability; it does not substitute for running the Godot project locally.
