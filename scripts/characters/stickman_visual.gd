@@ -1,19 +1,20 @@
 extends Node2D
 
-# S1.2.2-A5: independent stickman presentation layer.
-# This renderer follows the rig but is separate from the technical debug overlay.
+# S1.2.2-A6: silhouette-first line-art presentation.
+# The renderer deliberately uses a small number of rounded strokes instead of
+# adding more joints or decorative anatomy. Bone transforms drive the pose.
 
 @export var outline_color := Color(0.12, 0.11, 0.14, 1.0)
 @export var body_color := Color(0.88, 0.86, 0.80, 1.0)
-@export var outline_width: float = 6.0
-@export var body_width: float = 3.5
-@export var head_radius: float = 5.5
+@export var outline_width: float = 5.0
+@export var body_width: float = 2.6
+@export var head_radius: float = 7.0
+@export var arm_length: float = 10.5
 
 @onready var skeleton: Skeleton2D = get_parent().get_node_or_null("Skeleton2D") as Skeleton2D
 
 
 func _process(_delta: float) -> void:
-	# The rig moves every animation frame, so redraw from current bone transforms.
 	queue_redraw()
 
 
@@ -24,6 +25,8 @@ func _draw() -> void:
 	var root := _bone_position("RootBone")
 	var spine := _bone_position("RootBone/Spine")
 	var head := _bone_position("RootBone/Spine/Head")
+	var arm_l_bone := _get_bone("RootBone/Spine/Arm_L")
+	var arm_r_bone := _get_bone("RootBone/Spine/Arm_R")
 	var arm_l := _bone_position("RootBone/Spine/Arm_L")
 	var arm_r := _bone_position("RootBone/Spine/Arm_R")
 	var hip_l := _bone_position("RootBone/Leg_L")
@@ -33,12 +36,11 @@ func _draw() -> void:
 	var knee_r := _bone_position("RootBone/Leg_R/Knee_R")
 	var foot_r := _bone_position("RootBone/Leg_R/Knee_R/Foot_R")
 
-	# Dark outline + warm inner stroke gives the prototype a character silhouette,
-	# while the F3 overlay remains a separate, pure-white technical visualization.
+	# Core silhouette: compact torso, readable shoulder span, and longer legs.
 	_draw_limb(root, spine)
 	_draw_limb(spine, head)
-	_draw_limb(spine, arm_l)
-	_draw_limb(spine, arm_r)
+	_draw_limb(arm_l, _arm_tip(arm_l, arm_l_bone))
+	_draw_limb(arm_r, _arm_tip(arm_r, arm_r_bone))
 	_draw_limb(root, hip_l)
 	_draw_limb(hip_l, knee_l)
 	_draw_limb(knee_l, foot_l)
@@ -46,8 +48,18 @@ func _draw() -> void:
 	_draw_limb(hip_r, knee_r)
 	_draw_limb(knee_r, foot_r)
 
-	draw_circle(head, head_radius + 1.5, outline_color)
+	# A restrained shoulder bridge keeps the upper body readable without
+	# turning the prototype into a detailed anatomy diagram.
+	_draw_limb(arm_l, arm_r)
+	draw_circle(head, head_radius + 1.2, outline_color)
 	draw_circle(head, head_radius, body_color)
+
+
+func _arm_tip(shoulder: Vector2, arm_bone: Bone2D) -> Vector2:
+	if arm_bone == null:
+		return shoulder + Vector2(0.0, arm_length)
+	# The existing arm bone rotation controls the direction; no extra elbow bones.
+	return shoulder + Vector2(0.0, arm_length).rotated(arm_bone.global_rotation)
 
 
 func _draw_limb(start: Vector2, finish: Vector2) -> void:
@@ -59,8 +71,12 @@ func _draw_limb(start: Vector2, finish: Vector2) -> void:
 	draw_circle(finish, body_width * 0.5, body_color)
 
 
+func _get_bone(relative_path: String) -> Bone2D:
+	return skeleton.get_node_or_null(relative_path) as Bone2D
+
+
 func _bone_position(relative_path: String) -> Vector2:
-	var bone := skeleton.get_node_or_null(relative_path) as Bone2D
+	var bone := _get_bone(relative_path)
 	if bone == null:
 		return Vector2.ZERO
 	return bone.global_position - get_parent().global_position

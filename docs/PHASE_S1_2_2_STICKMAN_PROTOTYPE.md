@@ -87,3 +87,21 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 ## Repository permission check
 - On 2026-10-14, the connected GitHub API successfully read this private repository and `development`; repository metadata reported `push: true`.
 - A documentation write test and subsequent code/documentation commits succeeded on `development`. This confirms connector write capability, not local Godot runtime validity.
+
+
+## S1.2.2-A6 — Silhouette proportion pass / 轮廓比例优化
+
+- Rebalanced the rig around a shorter torso and larger head: the spine anchor moves from -20 to -18, the head offset from -14 to -12, and the head radius increases to 7 world units.
+- Narrowed the shoulder span from 26 to 19 units. The visual layer now draws short, rotation-driven arms from the existing shoulder bones, instead of treating each shoulder point as the end of an arm. No elbow bones were added.
+- Standardized both thigh anchors and knee offsets to a more even 12 + 10 unit leg chain, with slightly wider foot endpoints for a clear grounded stance.
+- Reduced line widths and retained rounded caps/joints. The intent is a bold, minimal silhouette with a strong head read, not a technical skeleton diagram.
+- Tuned run swing amplitude for a clear stride while avoiding exaggerated arm flailing. Attack and dodge clips explicitly key foot angles so their recovery poses do not inherit stale foot rotations from locomotion.
+- Scope: standalone stickman prototype only; production `hero.gd` rendering and combat behavior are unchanged.
+
+### Local visual acceptance / 本地视觉验收
+1. Run `res://scenes/characters/stickman_hero.tscn` with F6.
+2. Compare the head-to-body read at the 4× preview zoom; the head should be the first readable shape, without the old stretched-neck impression.
+3. Run left/right and inspect shoulder width, arm reach, knee bend, and foot separation in the full run loop.
+4. Press J/K while moving and while idle. Arms should extend from the shoulder in the attack direction and legs should settle cleanly at recovery.
+5. Press F3: only the white technical overlay should toggle; the refined line-art silhouette remains visible.
+6. This change was authored through the GitHub API. The connected session cannot launch the local Godot runtime, so parser/runtime and subjective visual acceptance remain pending local Godot 4.6.1 verification.

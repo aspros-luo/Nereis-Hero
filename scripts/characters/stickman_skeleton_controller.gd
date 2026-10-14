@@ -187,13 +187,13 @@ func _make_run_animation() -> Animation:
 	var times := [0.0, 0.2, 0.4, 0.6, 0.8]
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.04, -0.04, 0.04, -0.04, 0.04])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.015, 0.0, -0.015, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.65, 0.65, -0.65, 0.65, -0.65])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.65, -0.65, 0.65, -0.65, 0.65])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.58, 0.58, -0.58, 0.58, -0.58])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.58, -0.58, 0.58, -0.58, 0.58])
 	# Opposing hip swings create a readable stride; knee bends lift the trailing foot.
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.62, -0.62, 0.62, -0.62, 0.62])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [-0.62, 0.62, -0.62, 0.62, -0.62])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.45, 0.0, 0.12, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.45, 0.0, 0.12, 0.0, 0.45])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.72, -0.72, 0.72, -0.72, 0.72])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [-0.72, 0.72, -0.72, 0.72, -0.72])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.38, 0.0, 0.16, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.38, 0.0, 0.16, 0.0, 0.38])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [-0.12, 0.18, -0.12, 0.08, -0.12])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.18, -0.12, 0.08, -0.12, 0.18])
 	return animation
@@ -216,6 +216,8 @@ func _make_long_sword_attack_animation() -> Animation:
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [0.0, 0.12, -0.16, -0.06, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.12, 0.22, 0.1, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.08, -0.08, 0.0, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [0.0, -0.08, 0.05, 0.02, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.0, 0.04, -0.03, 0.0, 0.0])
 	return animation
 
 
@@ -235,6 +237,8 @@ func _make_short_blade_attack_animation() -> Animation:
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [0.0, 0.08, -0.1, -0.03, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.05, 0.16, 0.06, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.0, -0.06, 0.0, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [0.0, -0.04, 0.06, 0.02, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.0, 0.02, -0.03, 0.0, 0.0])
 	return animation
 
 
@@ -253,6 +257,8 @@ func _make_dodge_animation() -> Animation:
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [0.0, -0.28, 0.48, 0.16, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.22, 0.32, 0.12, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.12, 0.26, 0.10, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [0.0, 0.12, 0.06, 0.02, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.0, -0.08, -0.03, 0.0, 0.0])
 	return animation
 
 
