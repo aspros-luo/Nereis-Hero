@@ -60,27 +60,28 @@ func _draw_swing_trail(grip: Vector2, direction: Vector2, weapon_length: float, 
 		return
 
 	var state_name: String = controller.get_state_name()
+	var step: int = maxi(controller.get_combo_step(), 1)
 	var elapsed: float = animation_player.current_animation_position
-	var phase_start: float = 0.0
-	var phase_end: float = 0.0
-	var peak_time: float = 0.0
-	var arc_span: float = 0.0
-	var trail_width: float = 0.0
-	var trail_color: Color = Color.TRANSPARENT
+	var phase_start: float
+	var phase_end: float
+	var peak_time: float
+	var arc_span: float
+	var trail_width: float
+	var trail_color: Color
 
 	if state_name == "LONG_SWORD_ATTACK":
-		phase_start = 0.16
-		peak_time = 0.34
-		phase_end = 0.49
-		arc_span = 0.62
-		trail_width = 3.0
+		phase_start = [0.16, 0.14, 0.12][step - 1]
+		peak_time = [0.34, 0.30, 0.28][step - 1]
+		phase_end = [0.49, 0.46, 0.44][step - 1]
+		arc_span = [0.62, 0.70, 0.82][step - 1]
+		trail_width = 3.0 if step < 3 else 3.6
 		trail_color = long_trail_color
 	elif state_name == "SHORT_BLADE_ATTACK":
-		phase_start = 0.045
-		peak_time = 0.105
-		phase_end = 0.19
-		arc_span = 0.38
-		trail_width = 1.8
+		phase_start = [0.045, 0.04, 0.035][step - 1]
+		peak_time = [0.105, 0.12, 0.10][step - 1]
+		phase_end = [0.19, 0.20, 0.18][step - 1]
+		arc_span = [0.38, 0.46, 0.56][step - 1]
+		trail_width = 1.8 if step < 3 else 2.2
 		trail_color = short_trail_color
 	else:
 		return
@@ -98,7 +99,6 @@ func _draw_swing_trail(grip: Vector2, direction: Vector2, weapon_length: float, 
 	var end_angle: float = center_angle + arc_span
 	var point_count: int = 12 if is_short_blade else 18
 	draw_arc(grip, radius, start_angle, end_angle, point_count, trail_color, trail_width, true)
-	# A short inner echo makes the long-sword sweep feel weightier without particles.
 	if not is_short_blade:
 		var echo_color: Color = trail_color
 		echo_color.a *= 0.42
@@ -106,26 +106,31 @@ func _draw_swing_trail(grip: Vector2, direction: Vector2, weapon_length: float, 
 
 
 func _get_weapon_angle_offset(is_short_blade: bool) -> float:
-	var state_name := controller.get_state_name()
+	var state_name: String = controller.get_state_name()
 	if animation_player == null:
 		return -2.65
 
+	var step: int = clampi(controller.get_combo_step(), 1, 3)
+	var elapsed: float = animation_player.current_animation_position
 	if state_name == "LONG_SWORD_ATTACK":
-		return _sample_curve(
-			animation_player.current_animation_position,
-			[0.0, 0.12, 0.25, 0.40, 0.54, 0.68],
-			[-2.65, -2.40, -2.05, -1.80, -2.20, -2.65]
-		)
+		match step:
+			2:
+				return _sample_curve(elapsed, [0.0, 0.10, 0.22, 0.36, 0.49, 0.62], [-2.65, -2.30, -2.00, -1.72, -2.18, -2.65])
+			3:
+				return _sample_curve(elapsed, [0.0, 0.10, 0.22, 0.36, 0.49, 0.62], [-2.65, -2.50, -2.10, -1.62, -2.02, -2.65])
+			_:
+				return _sample_curve(elapsed, [0.0, 0.12, 0.25, 0.40, 0.54, 0.68], [-2.65, -2.40, -2.05, -1.80, -2.20, -2.65])
 	if state_name == "SHORT_BLADE_ATTACK":
-		return _sample_curve(
-			animation_player.current_animation_position,
-			[0.0, 0.035, 0.095, 0.17, 0.28],
-			[-2.65, -2.45, -2.00, -2.30, -2.65]
-		)
+		match step:
+			2:
+				return _sample_curve(elapsed, [0.0, 0.045, 0.11, 0.19, 0.27, 0.34], [-2.65, -2.25, -1.88, -2.20, -2.45, -2.65])
+			3:
+				return _sample_curve(elapsed, [0.0, 0.045, 0.11, 0.19, 0.27, 0.34], [-2.65, -2.55, -1.75, -2.15, -2.35, -2.65])
+			_:
+				return _sample_curve(elapsed, [0.0, 0.035, 0.095, 0.17, 0.28], [-2.65, -2.45, -2.00, -2.30, -2.65])
 	if state_name == "DODGE":
 		return -2.55
 
-	# Locomotion keeps the blade forward of the hand without a swing arc.
 	return -2.55 if is_short_blade else -2.65
 
 
