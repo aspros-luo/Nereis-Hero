@@ -18,34 +18,34 @@ script = ExtResource("2")
 [node name="RootBone" type="Bone2D" parent="Skeleton2D"]
 
 [node name="Spine" type="Bone2D" parent="Skeleton2D/RootBone"]
-position = Vector2(0, -32)
+position = Vector2(0, -20)
 
 [node name="Head" type="Bone2D" parent="Skeleton2D/RootBone/Spine"]
-position = Vector2(0, -24)
+position = Vector2(0, -14)
 
 [node name="Arm_L" type="Bone2D" parent="Skeleton2D/RootBone/Spine"]
-position = Vector2(-18, 0)
+position = Vector2(-13, 0)
 
 [node name="Arm_R" type="Bone2D" parent="Skeleton2D/RootBone/Spine"]
-position = Vector2(18, 0)
+position = Vector2(13, 0)
 
 [node name="Leg_L" type="Bone2D" parent="Skeleton2D/RootBone"]
-position = Vector2(-6, 0)
+position = Vector2(-4, 0)
 
 [node name="Knee_L" type="Bone2D" parent="Skeleton2D/RootBone/Leg_L"]
-position = Vector2(0, 16)
+position = Vector2(0, 14)
 
 [node name="Foot_L" type="Bone2D" parent="Skeleton2D/RootBone/Leg_L/Knee_L"]
-position = Vector2(6, 2)
+position = Vector2(5, 10)
 
 [node name="Leg_R" type="Bone2D" parent="Skeleton2D/RootBone"]
-position = Vector2(6, 0)
+position = Vector2(4, 0)
 
 [node name="Knee_R" type="Bone2D" parent="Skeleton2D/RootBone/Leg_R"]
 position = Vector2(0, 16)
 
 [node name="Foot_R" type="Bone2D" parent="Skeleton2D/RootBone/Leg_R/Knee_R"]
-position = Vector2(-6, 2)
+position = Vector2(-5, 10)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("..")
