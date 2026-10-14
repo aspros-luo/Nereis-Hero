@@ -2,7 +2,7 @@
 
 ## S1.2.2-A1 — Skeleton scene
 - Added `scenes/characters/stickman_hero.tscn` as a standalone `CharacterBody2D` prototype.
-- Bone hierarchy: `Skeleton2D/RootBone`, `Spine`, `Head`, `Arm_L`, `Arm_R`, `Leg_L`, `Leg_R`.
+- Bone hierarchy: `Skeleton2D/RootBone`, `Spine`, `Head`, `Arm_L`, `Arm_R`, plus articulated `Leg_L/Knee_L/Foot_L` and `Leg_R/Knee_R/Foot_R` chains.
 - Kept `WeaponSocket` and `EffectSocket` as siblings of `Skeleton2D` so later weapon/effect placement is not coupled to a specific bone.
 
 ## S1.2.2-A2 — Visual debug layer
@@ -15,7 +15,8 @@
 - `AnimationPlayer` is a sibling of the `CharacterBody2D` root and receives a runtime `AnimationLibrary` with looping `Idle` and `Run` clips.
 - Added an enabled `Camera2D` to the standalone prototype scene with a 4× preview zoom so the small stick figure is visible when running the scene directly. The camera is `top_level` so it remains fixed while the `CharacterBody2D` moves; otherwise a child camera follows the character and makes movement look stationary.
 - `Idle`: subtle spine/head/arm sway; both legs are explicitly keyed to neutral rotations so the run pose does not remain after stopping.
-- `Run`: alternating arm and leg rotations with a small spine counter-swing and subtle head movement.
+- `Run`: alternating arm and leg rotations with a small spine counter-swing and subtle head movement. Each leg now has a thigh, knee, and lower-leg/foot endpoint, so the debug silhouette reads as two separate legs rather than one vertical line.
+- `SkeletonDebug` draws each leg as hip → knee → foot and the run clip bends the knees in alternation for a clearer walking stride.
 - Added a short `Idle` ↔ `Run` blend time to soften movement transitions.
 - Built-in `ui_left` / `ui_right` actions plus explicit Left/Right and A/D key polling move the root and select `Run`; releasing the keys returns to `Idle`. No project-wide Input Map changes are required.
 - Future state names are reserved for `LONG_SWORD_ATTACK`, `SHORT_BLADE_ATTACK`, `HURT`, `DODGE`, `WITCH_TIME`, and `BOSS_ACTION`. These states intentionally have no authored clips yet.
@@ -35,7 +36,7 @@
 - Repository scene/script paths and the current branch contents were inspected.
 - The code change addresses pose persistence when transitioning from Run back to Idle, sets a short blend for Idle/Run transitions, and checks `has_animation_library("")` before removing the default library so an absent library is never queried with `get_animation_library("")`.
 - The connected GitHub session cannot launch the local Godot 4.6.1 editor/runtime. Therefore, parser/import/playback and physical movement are **not claimed as runtime-tested**; local acceptance below is still required.
-- Follow-up fixes: avoid querying a missing default animation library, prevent the debug overlay from requiring a global-transform inverse, keep the preview camera fixed instead of parent-following, and support both arrow keys and A/D.
+- Follow-up fixes: avoid querying a missing default animation library, prevent the debug overlay from requiring a global-transform inverse, keep the preview camera fixed instead of parent-following, support both arrow keys and A/D, and add articulated knee/foot joints with an alternating two-segment leg cycle.
 
 ### Local acceptance / 本地验收
 1. Open the project in Godot 4.6.1, open `res://scenes/characters/stickman_hero.tscn`, and use **Run Current Scene (F6)**. Running the project with F5 still launches `res://scenes/boot.tscn`, not this standalone prototype.
