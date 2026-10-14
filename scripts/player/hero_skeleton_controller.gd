@@ -52,6 +52,8 @@ var _left_arm_line: Line2D
 var _right_arm_line: Line2D
 var _left_leg_line: Line2D
 var _right_leg_line: Line2D
+var _cape_shape: Polygon2D
+var _cape_outline: Line2D
 
 
 func _ready() -> void:
@@ -171,12 +173,24 @@ func _reset_pose() -> void:
 
 
 func _build_visuals() -> void:
-	_body_line = _add_line(body_bone, [Vector2.ZERO, Vector2(0, 23)], line_width, INK)
-	_head_line = _add_circle(head_bone, 8.0, line_width, INK)
-	_left_arm_line = _add_line(arm_left_bone, [Vector2.ZERO, Vector2(-15, 9)], line_width, INK)
-	_right_arm_line = _add_line(arm_right_bone, [Vector2.ZERO, Vector2(15, 9)], line_width, INK)
-	_left_leg_line = _add_line(leg_left_bone, [Vector2.ZERO, Vector2(1, 20)], line_width, CLOTH)
-	_right_leg_line = _add_line(leg_right_bone, [Vector2.ZERO, Vector2(-1, 20)], line_width, CLOTH)
+	# A5 proportions: shorter torso/head stack, longer legs and arms to avoid the stretched-body silhouette.
+	# A5 比例调整：缩短躯干与头部堆叠、加长四肢，避免身体过长、腿部过短。
+	_body_line = _add_line(body_bone, [Vector2.ZERO, Vector2(0, 20)], line_width, INK)
+	_head_line = _add_circle(head_bone, 7.0, line_width, INK)
+	_left_arm_line = _add_line(arm_left_bone, [Vector2.ZERO, Vector2(-17, 10)], line_width, INK)
+	_right_arm_line = _add_line(arm_right_bone, [Vector2.ZERO, Vector2(17, 10)], line_width, INK)
+	_left_leg_line = _add_line(leg_left_bone, [Vector2.ZERO, Vector2(1, 24)], line_width, CLOTH)
+	_right_leg_line = _add_line(leg_right_bone, [Vector2.ZERO, Vector2(-1, 24)], line_width, CLOTH)
+	# A restrained split cloak restores the protagonist's recognizable silhouette without replacing the rig.
+	# 简洁的分叉披风补回主角轮廓特征，不改变骨骼控制结构。
+	_cape_shape = Polygon2D.new()
+	_cape_shape.name = "CloakSilhouette"
+	_cape_shape.color = Color("#302831")
+	_cape_shape.polygon = PackedVector2Array([Vector2(-7, -20), Vector2(7, -20), Vector2(13, -5), Vector2(22, 12), Vector2(11, 8), Vector2(5, 15), Vector2(-3, 5), Vector2(-14, 13), Vector2(-11, -5)])
+	_cape_shape.z_index = -1
+	root_bone.add_child(_cape_shape)
+	_cape_outline = _add_line(root_bone, [Vector2(-7, -20), Vector2(7, -20), Vector2(13, -5), Vector2(22, 12), Vector2(11, 8), Vector2(5, 15), Vector2(-3, 5), Vector2(-14, 13), Vector2(-11, -5), Vector2(-7, -20)], maxf(1.5, line_width * 0.42), Color("#6e5966"))
+	_cape_outline.z_index = -1
 	_sword_line = _add_line(weapon_point, [Vector2.ZERO, Vector2(30, -4)], maxf(2.5, line_width * 0.72), METAL)
 	_sword_line.z_index = 2
 
