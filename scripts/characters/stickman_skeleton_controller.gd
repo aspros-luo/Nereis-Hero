@@ -187,13 +187,13 @@ func _make_run_animation() -> Animation:
 	var times := [0.0, 0.2, 0.4, 0.6, 0.8]
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.04, -0.04, 0.04, -0.04, 0.04])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.015, 0.0, -0.015, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.58, 0.58, -0.58, 0.58, -0.58])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.58, -0.58, 0.58, -0.58, 0.58])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.46, 0.46, -0.46, 0.46, -0.46])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.46, -0.46, 0.46, -0.46, 0.46])
 	# Opposing hip swings create a readable stride; knee bends lift the trailing foot.
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.72, -0.72, 0.72, -0.72, 0.72])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [-0.72, 0.72, -0.72, 0.72, -0.72])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.38, 0.0, 0.16, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.38, 0.0, 0.16, 0.0, 0.38])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.66, -0.66, 0.66, -0.66, 0.66])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [-0.66, 0.66, -0.66, 0.66, -0.66])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.46, 0.0, 0.20, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.46, 0.0, 0.20, 0.0, 0.46])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [-0.12, 0.18, -0.12, 0.08, -0.12])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.18, -0.12, 0.08, -0.12, 0.18])
 	return animation
