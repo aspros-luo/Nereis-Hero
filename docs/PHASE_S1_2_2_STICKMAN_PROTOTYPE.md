@@ -211,3 +211,45 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 4. Test **Space** dodge with and without movement input. Dodge should complete once, then return to the correct locomotion state.
 5. Confirm no warnings/errors appear and that the A11 swing trails still disappear when the action finishes.
 6. Repository read-back confirms the source and documentation updates; Godot runtime validation remains pending locally.
+
+## S1.2.2-A14 — Weapon/animation synchronization / 武器与动画同步
+
+- Weapon pose sampling continues to follow the live right-arm bone and current animation position. Combo step 1/2/3 now has distinct angle curves and trail timing for both weapons.
+- Long-sword trails use a broader arc and a stronger third-step accent; short-blade trails remain compact and faster, with distinct second/third-step arcs.
+- Facing remains locked during the action chain. The rig is mirrored only after the action state ends, avoiding a mid-swing visual flip.
+- No weapon hitboxes or damage are implied by the visual trail.
+
+## S1.2.2-A15 — Combo state machine / 连击状态机
+
+- Added a per-chain step counter (1–3), an explicit buffered-input flag, and an active animation name used to validate animation completion callbacks.
+- Press **J** to start/continue the long-sword chain and **K** to start/continue the short-blade chain. During a chain, only the matching weapon key can queue the next step; cross-weapon inputs remain ignored by the action lock.
+- Inputs are accepted only inside the current step's combo window. Inputs outside the window are ignored, and holding a key does not auto-repeat into a chain because only non-echo key-down events are handled.
+- A matching animation-finished event advances a buffered step. The action timer remains a defensive fallback and also honors a valid buffered step.
+- The third step is the finisher. It does not accept a fourth step; completion clears the chain and returns to Idle/Run using current movement input.
+
+## S1.2.2-A16 — Long-sword three-step combo / 长剑三段连击
+
+- Added separate non-looping clips: `LongSwordAttack`, `LongSwordAttack2`, and `LongSwordAttack3`.
+- The chain progresses from a deliberate opening cut, into a broad reverse sweep, and into a wider finishing cut. Each clip returns its tracked bones to neutral by the final key.
+- The input windows are intentionally later in the first swing and slightly earlier on the follow-up, giving the player a readable rhythm rather than allowing arbitrary canceling.
+- Long-sword trail width/arc increases on the finisher for readability; this remains presentation-only.
+
+## S1.2.2-A17 — Short-blade three-step combo / 短刃三段连击
+
+- Added separate non-looping clips: `ShortBladeAttack`, `ShortBladeAttack2`, and `ShortBladeAttack3`.
+- The chain uses compact, quicker motions: opening cut, reverse cut, and a more committed final flurry. The short-blade windows are shorter than the long-sword windows.
+- Weapon angle curves and trails differ by step so the chain is not merely the long-sword animation played faster.
+- This is still a prototype: no hit confirmation, damage scaling, stamina, enemy reaction, or invulnerability frames are included.
+
+## S1.2.2-A18 — Combo regression checklist / 连击回归验收
+
+### Local acceptance / 本地验收
+1. In Godot 4.6.1, run `res://scenes/characters/stickman_hero.tscn` with **F6**.
+2. Tap **J** once: exactly one long-sword attack should play and return to locomotion.
+3. Tap **J** again inside the first attack's combo window: the second and third steps should only play when separately queued; no step should auto-play from holding the key.
+4. Repeat with **K** and verify the short-blade chain is visibly faster and more compact.
+5. Press the matching key outside its combo window; the input should be ignored. Press the other weapon key during a chain; it should not switch weapons mid-chain.
+6. Move during a chain and reverse direction. The character should keep the action's facing until the chain completes, then resume movement/facing from current input.
+7. Test Space before and after a chain, and verify it cannot interrupt an active chain. Confirm the third step resets the chain and no fourth step occurs.
+8. Confirm each step's trail appears only during its swing phase and disappears afterward. Check Output for parser/runtime errors.
+9. This change was verified by GitHub source read-back and static structural checks only. Godot runtime acceptance remains pending locally.
