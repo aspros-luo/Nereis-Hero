@@ -2,7 +2,7 @@
 
 Status: **A1–A4 implementation committed; A1–A3 locally accepted by the user; A4 runtime rollout check pending**. The procedural renderer remains available as a reversible fallback.
 
-状态：**整合计划与接口约定**。A19–A22 火柴人战斗测试场景已由用户本地验收通过。本文件定义下一阶段的安全实施边界，不代表正式角色骨骼已经替换现有表现层。
+状态：**A1–A3 已由用户本地验收通过；A4 代码已提交、等待本地运行验收；A5 视觉比例与反馈补强已提交、等待本地运行验收**。原程序绘制仍可通过 Debug F8 回退。
 
 ## Goal / 目标
 
@@ -14,8 +14,8 @@ Connect the proven skeletal-animation workflow to the production Hero while keep
 
 - `scripts/player/hero.gd` is the production gameplay controller. It already owns movement, jump, 3-step attacks, weapon-specific hitboxes, stamina, dodge invulnerability, perfect-dodge/riposte, hitstun, weapon techniques, ancient-god abilities, traversal, death and respawn interactions.
 - `scripts/player/hero_system.gd` owns weapon/profile/progression rules. Do not duplicate these rules in a visual controller.
-- `scripts/player/hero_skeleton_controller.gd` is currently a visual-state scaffold; its `_apply_pose()` is a no-op.
-- `scenes/player/hero_skeleton.tscn` is an unintegrated skeletal rig scaffold. It has no complete production animation library and is not currently the active visual of `hero.gd`.
+- `scripts/player/hero_skeleton_controller.gd` now applies presentation-only skeletal poses and is being incrementally refined; it does not own gameplay rules.
+- `scenes/player/hero_skeleton.tscn` is the active optional skeletal visual rig. Its pose controller is still a lightweight Line2D/Polygon2D presentation prototype, not a final sprite/animation library.
 - `scripts/player/hero_visual_controller.gd` and `hero_visual_states.gd` are also scaffolds, not a completed production adapter.
 - `scenes/characters/stickman_combat_test.tscn` and its controller are the validated isolated regression harness. Keep them independent from the production player.
 
@@ -121,3 +121,34 @@ The stickman harness values are test values only. Production currently uses its 
 ## Local validation policy / 本地验收原则
 
 Repository reads and commits do not equal Godot runtime validation. For each integration slice, run the new preview scene and the existing combat demo in Godot 4.6.1. Report parser/runtime errors verbatim and fix them before moving to the next slice. No claim of runtime success should be made without an actual engine run.
+
+
+### S1.2.3-A5 — Proportion and feedback pass — implementation committed
+
+Implemented:
+
+- Shortened the torso/head stack and lengthened the legs and arms to address the earlier stretched-body / short-leg silhouette.
+- Added a restrained split-cloak silhouette behind the rig to recover part of the Hero's recognizable outline while retaining the lightweight line-art direction.
+- Preserved the floor alignment by keeping the leg endpoints near the existing Hero drawing's ground baseline.
+- Fixed a visual integration gap: while the skeletal body is active, the production Hero now still draws its grounding shadow, health/stamina display, combo indicator, invulnerability cue, resistance marker and attack/hit-confirm feedback. The procedural body itself remains hidden to prevent double rendering.
+- No combat state, damage, attack timing, hitbox, stamina cost or progression logic was changed.
+
+本轮补强：
+
+- 缩短躯干与头部的纵向堆叠、加长腿部和手臂，针对此前“身体过长、腿太短”的比例问题。
+- 在骨骼后方增加克制的分叉披风轮廓，补回部分主角识别度，同时保持轻量线稿方向。
+- 保持脚部接近正式 Hero 原有绘制的地面基线。
+- 修复骨骼模式下的表现缺失：继续显示落地阴影、生命/体力条、连击数字、无敌提示、隐藏抵抗标记以及攻击/命中反馈；只隐藏旧角色主体，避免两套身体重叠。
+- 没有修改战斗状态、伤害、攻击时序、命中框、体力消耗或进度逻辑。
+
+A4/A5 local acceptance — Godot 4.6.1:
+
+1. Launch with F5 and enter the prologue. Confirm skeletal visuals appear.
+2. Press F8 twice and confirm skeletal/procedural modes switch both ways. Check that position, health, stamina and current action are not reset.
+3. Confirm the Hero's feet align with the ground, torso no longer looks excessively long, legs are visibly longer, and the split cloak does not obscure the weapon.
+4. Confirm health/stamina UI, shadow, combo indicator, attack arc/hit feedback and invulnerability cue remain visible in skeletal mode.
+5. Test both weapons, all three combo stages, jump/fall, dodge, hit reaction and death/respawn.
+6. Enter the village and one greybox region; check newly spawned Heroes use the current global visual setting.
+7. Check Godot Output for parse/runtime errors.
+
+Source files and documentation have been committed and read back from GitHub. Runtime validation remains local; this connected session has not executed Godot.
