@@ -69,14 +69,27 @@ Local preview controls:
 
 Acceptance remains pending Godot runtime validation. The connected repository session can verify source commits, but cannot honestly claim the scene has been run in Godot 4.6.1.
 
-### S1.2.3-A3 — Opt-in production preview
+### S1.2.3-A3 — Opt-in production preview — implementation committed
 
-- Add an isolated preview scene that uses the production Hero controller and an opt-in skeletal visual layer.
-- Initially keep the existing procedural renderer available as a fallback.
-- Validate all production mechanics in the preview: move/jump, 3-step attack, dodge, hit reaction, stamina, weapon switch and weapon techniques.
-- Compare hitbox behavior before/after visual integration; visual work must not change hit results.
+Implemented in this slice:
 
-Acceptance: all checklist items pass locally in Godot 4.6.1 and Output contains no parser/runtime errors.
+- `Hero` has an exported `use_skeleton_visual` switch, defaulting to `false`. The normal game therefore keeps the existing procedural renderer.
+- When enabled, the production Hero instantiates `hero_skeleton.tscn` and passes `get_visual_context()` to the skeletal controller each rendered frame. Combat state, damage, stamina, invulnerability, hitboxes and progression remain owned by the production controller/system.
+- The procedural `_draw()` output is skipped only while the explicit opt-in flag is enabled, avoiding double-rendering without deleting the fallback.
+- The skeleton consumes the production weapon metadata for its idle weapon silhouette and maps grapple, wall-climb and weapon-technique action contexts to presentation poses.
+- `combat_demo.gd` exposes a preview-only switch, defaulting to `false`; the new `res://scenes/player/hero_skeleton_combat_preview.tscn` enables it. The default boot scene and regular combat demo behavior are unchanged.
+
+Local acceptance — open `res://scenes/player/hero_skeleton_combat_preview.tscn`, press **F6**, then verify:
+
+1. Walk, run, jump and land; facing changes should flip the skeleton without changing movement.
+2. Use the normal three-hit combo with both weapons; confirm the third strike is distinct and the short blade remains visually shorter.
+3. Test dodge/quick dash and take a hit; confirm the correct pose appears and returns to neutral without residual rotation.
+4. Check stamina costs and recovery against the regular combat demo.
+5. Press **Q** to switch weapons and use the normal weapon-technique input; visual changes must not change hit results.
+6. Compare attack reach and target damage with the regular `res://scenes/combat_demo.tscn` by repeating the same attack spacing.
+7. Check Godot Output for parser/runtime errors.
+
+The code and scene have been committed and read back through GitHub. This connected session cannot run Godot; A3 runtime acceptance is therefore still pending until the local checklist above passes.
 
 ### S1.2.3-A4 — Controlled rollout
 
