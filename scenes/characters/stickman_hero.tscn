@@ -26,10 +26,22 @@ position = Vector2(-18, 0)
 position = Vector2(18, 0)
 
 [node name="Leg_L" type="Bone2D" parent="Skeleton2D/RootBone"]
-position = Vector2(-10, 0)
+position = Vector2(-6, 0)
+
+[node name="Knee_L" type="Bone2D" parent="Skeleton2D/RootBone/Leg_L"]
+position = Vector2(0, 16)
+
+[node name="Foot_L" type="Bone2D" parent="Skeleton2D/RootBone/Leg_L/Knee_L"]
+position = Vector2(0, 16)
 
 [node name="Leg_R" type="Bone2D" parent="Skeleton2D/RootBone"]
-position = Vector2(10, 0)
+position = Vector2(6, 0)
+
+[node name="Knee_R" type="Bone2D" parent="Skeleton2D/RootBone/Leg_R"]
+position = Vector2(0, 16)
+
+[node name="Foot_R" type="Bone2D" parent="Skeleton2D/RootBone/Leg_R/Knee_R"]
+position = Vector2(0, 16)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("..")
