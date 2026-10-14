@@ -12,8 +12,11 @@ enum PoseState {
 	FALL,
 	ATTACK_LONG,
 	ATTACK_SHORT,
+	WEAPON_TECHNIQUE,
 	DODGE,
 	QUICK_DASH,
+	GRAPPLE,
+	WALL_CLIMB,
 	HURT,
 	DEATH
 }
@@ -88,8 +91,15 @@ func apply_visual_context(context: Dictionary) -> void:
 			next_pose = PoseState.HURT
 		"death":
 			next_pose = PoseState.DEATH
+		"grapple":
+			next_pose = PoseState.GRAPPLE
+		"wall_climb":
+			next_pose = PoseState.WALL_CLIMB
 		_:
 			next_pose = PoseState.IDLE
+	var action_kind := str(context.get("action_kind", "none"))
+	if next_pose in [PoseState.ATTACK_LONG, PoseState.ATTACK_SHORT] and action_kind in ["judgment_slash", "crescent_combo", "eldritch_echo", "iaijutsu"]:
+		next_pose = PoseState.WEAPON_TECHNIQUE
 	set_pose(next_pose, int(context.get("combo_step", 1)), float(context.get("facing", 1.0)))
 
 
@@ -264,6 +274,26 @@ func _apply_pose() -> void:
 					arm_left_bone.rotation = -0.48
 					leg_left_bone.rotation = -0.42
 			_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(19, -2)])
+		PoseState.WEAPON_TECHNIQUE:
+			# A committed, open silhouette for weapon skills; combat timing remains in hero.gd.
+			body_bone.rotation = -0.5 if combo_step < 3 else 0.62
+			arm_right_bone.rotation = -1.35 if combo_step < 3 else 1.05
+			arm_left_bone.rotation = 0.72
+			leg_left_bone.rotation = -0.32
+			leg_right_bone.rotation = 0.3
+			_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(40, -7)])
+		PoseState.GRAPPLE:
+			body_bone.rotation = -0.2
+			arm_left_bone.rotation = -1.0
+			arm_right_bone.rotation = -0.9
+			leg_left_bone.rotation = 0.25
+			leg_right_bone.rotation = -0.22
+		PoseState.WALL_CLIMB:
+			body_bone.rotation = -0.18
+			arm_left_bone.rotation = -1.2
+			arm_right_bone.rotation = -0.8
+			leg_left_bone.rotation = -0.35
+			leg_right_bone.rotation = 0.45
 		PoseState.DODGE:
 			body_bone.rotation = -0.55
 			head_bone.rotation = 0.3
