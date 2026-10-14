@@ -16,9 +16,11 @@ enum State {
 }
 
 @export var move_speed: float = 160.0
+@export var prototype_dodge_speed: float = 360.0
 
 var current_state: State = State.IDLE
 var action_time_remaining: float = 0.0
+var action_facing_direction: float = 1.0
 @onready var animation_player: AnimationPlayer = get_node_or_null("AnimationPlayer") as AnimationPlayer
 @onready var skeleton: Skeleton2D = get_node_or_null("Skeleton2D") as Skeleton2D
 
@@ -37,7 +39,12 @@ func _physics_process(_delta: float) -> void:
 		direction = -1.0
 	elif Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
 		direction = 1.0
-	velocity.x = direction * move_speed
+	# Capture facing when an action begins. A dodge moves in that direction even
+	# if the player releases the movement key, making this a movement test too.
+	if current_state == State.DODGE:
+		velocity.x = action_facing_direction * prototype_dodge_speed
+	else:
+		velocity.x = direction * move_speed
 	if skeleton != null and absf(direction) > 0.01:
 		# Flip only the rig, not the CharacterBody2D or its camera.
 		skeleton.scale.x = -1.0 if direction < 0.0 else 1.0
@@ -47,6 +54,7 @@ func _physics_process(_delta: float) -> void:
 	if _is_action_state(current_state):
 		action_time_remaining -= _delta
 		if action_time_remaining <= 0.0:
+			velocity.x = direction * move_speed
 			_set_locomotion_state(direction)
 		return
 
@@ -91,13 +99,21 @@ func set_state(next_state: State) -> void:
 		State.RUN:
 			animation_player.play("Run")
 		State.LONG_SWORD_ATTACK:
+			_capture_action_facing()
 			_play_action("LongSwordAttack")
 		State.SHORT_BLADE_ATTACK:
+			_capture_action_facing()
 			_play_action("ShortBladeAttack")
 		State.DODGE:
+			_capture_action_facing()
 			_play_action("Dodge")
 		State.HURT, State.WITCH_TIME, State.BOSS_ACTION:
 			animation_player.stop()
+
+
+func _capture_action_facing() -> void:
+	if skeleton != null:
+		action_facing_direction = -1.0 if skeleton.scale.x < 0.0 else 1.0
 
 
 func _play_action(animation_name: String) -> void:
@@ -186,11 +202,18 @@ func _make_long_sword_attack_animation() -> Animation:
 	animation.resource_name = "LongSwordAttack"
 	animation.length = 0.42
 	animation.loop_mode = Animation.LOOP_NONE
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", [0.0, 0.12, 0.28, 0.42], [0.0, -0.28, 0.42, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", [0.0, 0.12, 0.28, 0.42], [-0.1, -1.0, 0.75, -0.025])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", [0.0, 0.12, 0.28, 0.42], [0.1, -1.15, 0.9, 0.025])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", [0.0, 0.12, 0.28, 0.42], [0.0, -0.18, 0.12, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", [0.0, 0.12, 0.28, 0.42], [0.0, 0.12, -0.12, 0.0])
+	# Broad timing arc: anticipation, committed swing, follow-through, recovery.
+	# This is intentionally a readable single strike, not an elaborate combo.
+	var times := [0.0, 0.10, 0.22, 0.34, 0.52]
+	animation.length = 0.52
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.0, -0.32, 0.48, 0.22, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.04, -0.08, -0.03, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.1, -0.92, 0.72, 0.32, -0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.1, -1.12, 0.88, 0.38, 0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.0, -0.2, 0.14, 0.08, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [0.0, 0.12, -0.16, -0.06, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.12, 0.22, 0.1, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.08, -0.08, 0.0, 0.0])
 	return animation
 
 
@@ -199,11 +222,17 @@ func _make_short_blade_attack_animation() -> Animation:
 	animation.resource_name = "ShortBladeAttack"
 	animation.length = 0.3
 	animation.loop_mode = Animation.LOOP_NONE
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", [0.0, 0.08, 0.18, 0.3], [0.0, 0.18, -0.24, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", [0.0, 0.08, 0.18, 0.3], [-0.025, -0.65, 0.4, -0.025])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", [0.0, 0.08, 0.18, 0.3], [0.025, -0.85, 0.55, 0.025])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", [0.0, 0.08, 0.18, 0.3], [0.0, -0.08, 0.08, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", [0.0, 0.08, 0.18, 0.3], [0.0, 0.08, -0.08, 0.0])
+	# Compact, quick strike: little wind-up, sharp extension, fast recovery.
+	var times := [0.0, 0.045, 0.13, 0.22, 0.32]
+	animation.length = 0.32
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.0, 0.12, -0.28, -0.08, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, -0.02, 0.06, 0.02, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.025, -0.42, 0.46, 0.18, -0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.025, -0.78, 0.62, 0.22, 0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.0, -0.08, 0.12, 0.04, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [0.0, 0.08, -0.1, -0.03, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.05, 0.16, 0.06, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.0, -0.06, 0.0, 0.0])
 	return animation
 
 
@@ -212,12 +241,16 @@ func _make_dodge_animation() -> Animation:
 	animation.resource_name = "Dodge"
 	animation.length = 0.36
 	animation.loop_mode = Animation.LOOP_NONE
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", [0.0, 0.1, 0.24, 0.36], [0.0, -0.42, -0.2, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", [0.0, 0.1, 0.24, 0.36], [0.0, 0.16, 0.08, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", [0.0, 0.1, 0.24, 0.36], [-0.025, -0.8, -0.5, -0.025])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", [0.0, 0.1, 0.24, 0.36], [0.025, -0.8, -0.5, 0.025])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", [0.0, 0.1, 0.24, 0.36], [0.0, 0.5, -0.3, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", [0.0, 0.1, 0.24, 0.36], [0.0, -0.3, 0.5, 0.0])
+	# The dodge is a short evasive burst with a low silhouette, not a roll.
+	var times := [0.0, 0.07, 0.20, 0.29, 0.36]
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.0, -0.48, -0.30, -0.12, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.18, 0.10, 0.04, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.025, -0.72, -0.52, -0.22, -0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.025, -0.72, -0.52, -0.22, 0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.0, 0.52, -0.30, -0.12, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [0.0, -0.28, 0.48, 0.16, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.22, 0.32, 0.12, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.12, 0.26, 0.10, 0.0])
 	return animation
 
 
