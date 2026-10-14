@@ -87,7 +87,10 @@ func _physics_process(delta: float) -> void:
 	if _is_action_state(current_state):
 		action_time_remaining -= delta
 		if action_time_remaining <= 0.0:
-			_finish_action()
+			if combo_input_buffered and combo_step < 3 and (current_state == State.LONG_SWORD_ATTACK or current_state == State.SHORT_BLADE_ATTACK):
+				_start_combo_step(combo_step + 1)
+			else:
+				_finish_action()
 		return
 
 	_set_locomotion_state(direction)
