@@ -19,6 +19,7 @@ enum State {
 
 var current_state: State = State.IDLE
 @onready var animation_player: AnimationPlayer = get_node_or_null("AnimationPlayer") as AnimationPlayer
+@onready var skeleton: Skeleton2D = get_node_or_null("Skeleton2D") as Skeleton2D
 
 
 func _ready() -> void:
@@ -36,6 +37,9 @@ func _physics_process(_delta: float) -> void:
 	elif Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
 		direction = 1.0
 	velocity.x = direction * move_speed
+	if skeleton != null and absf(direction) > 0.01:
+		# Flip only the rig, not the CharacterBody2D or its camera.
+		skeleton.scale.x = -1.0 if direction < 0.0 else 1.0
 	move_and_slide()
 
 	if absf(direction) > 0.01:
