@@ -156,6 +156,17 @@ func _start_combo_step(next_step: int) -> void:
 	action_time_remaining = animation_player.current_animation_length
 
 
+func _on_animation_finished(animation_name: StringName) -> void:
+	if not _is_action_state(current_state):
+		return
+	if String(animation_name) != active_action_animation:
+		return
+	if (current_state == State.LONG_SWORD_ATTACK or current_state == State.SHORT_BLADE_ATTACK) and combo_input_buffered and combo_step < 3:
+		_start_combo_step(combo_step + 1)
+		return
+	_finish_action()
+
+
 func _finish_action() -> void:
 	if not _is_action_state(current_state):
 		return
