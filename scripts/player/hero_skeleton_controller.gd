@@ -189,8 +189,8 @@ func _build_visuals() -> void:
 	_body_line = _add_line(body_bone, [Vector2.ZERO, Vector2(0, 20)], line_width * 1.45, INK)
 	_head_fill = _add_filled_circle(head_bone, 6.6, Color("#b7a9a0"))
 	_head_line = _add_circle(head_bone, 6.8, maxf(2.8, line_width * 0.55), INK)
-	_left_arm_line = _add_line(arm_left_bone, [Vector2.ZERO, Vector2(-17, 10)], line_width * 1.2, INK)
-	_right_arm_line = _add_line(arm_right_bone, [Vector2.ZERO, Vector2(17, 10)], line_width * 1.2, INK)
+	_left_arm_line = _add_line(arm_left_bone, [Vector2.ZERO, Vector2(-8, 16)], line_width * 1.2, INK)
+	_right_arm_line = _add_line(arm_right_bone, [Vector2.ZERO, Vector2(8, 16)], line_width * 1.2, INK)
 	_left_leg_line = _add_line(leg_left_bone, [Vector2.ZERO, Vector2(1, 24)], line_width * 1.35, CLOTH)
 	_right_leg_line = _add_line(leg_right_bone, [Vector2.ZERO, Vector2(-1, 24)], line_width * 1.35, CLOTH)
 	# A restrained split cloak restores the protagonist's recognizable silhouette without replacing the rig.
