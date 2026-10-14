@@ -144,3 +144,21 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 - This preserves the endpoint direction under the rig's horizontal scale flip, so turning left/right should mirror the short arm strokes and toe direction consistently with the animated bones.
 - Both layers use the same transform-derived method; the debug overlay remains read-only and F3 still only toggles its visibility.
 - Verification boundary: source-level endpoint logic was updated. Godot 4.6.1 runtime parsing and left/right visual acceptance still require local validation.
+
+
+## S1.2.2-A10 — Weapon silhouette and animation linkage / 武器轮廓与动作联动
+
+- Added `scripts/characters/stickman_weapon_visual.gd` and attached it as the separate `WeaponVisual` presentation node in `stickman_hero.tscn`.
+- The weapon grip follows the live right-arm bone endpoint. Blade direction samples a small attack-timing curve so the long sword has a deliberate load/sweep/follow-through arc while the short blade has a faster, tighter thrust/slash profile.
+- Added an explicit prototype `WeaponKind` selection to the controller. Pressing **J** selects the long sword and attacks; pressing **K** selects the short blade and attacks. The chosen weapon remains visible through locomotion and dodge until the other attack key selects the alternate weapon.
+- Long sword and short blade have distinct lengths, blade widths, guard sizes, and grip proportions. Both use a restrained outline/metal highlight so they remain legible at the prototype's 4× preview zoom.
+- Scope remains visual-only: no hitboxes, damage, stamina, clash, shield-break, or production Hero integration was added. `WeaponSocket` remains reserved for later effect/weapon attachment work; this prototype renderer follows the hand bone directly.
+- Source-level checks are required for the new node path, scene resource count, controller weapon selection, and both attack curves. Godot 4.6.1 parsing and visual feel still require local runtime validation.
+
+### Local acceptance / 本地验收
+1. Run `res://scenes/characters/stickman_hero.tscn` with **F6**.
+2. Press **J**: a longer, broader long sword should be visible at the hand and its direction should move through anticipation, swing, follow-through, and recovery.
+3. Press **K**: the shorter blade should replace the long sword and show a quicker, more compact trajectory.
+4. Walk/run and dodge after selecting each weapon. The chosen weapon should remain equipped and follow the hand while the character faces both left and right.
+5. Toggle **F3**. Only the white skeleton debug overlay should change; the character and weapon presentation should remain visible.
+6. Check the Godot Output panel for parser errors, missing node paths, or invalid drawing calls. This has not been runtime-tested by the connected session.
