@@ -293,3 +293,18 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 7. Press **U** during Dodge's early/middle phase and confirm no hitstun occurs. Press **U** after dodge ends and confirm a short Hurt pose/knockback, followed by recovery to Idle/Run.
 8. Confirm that the original `res://scenes/characters/stickman_hero.tscn` still runs on its own and that production `hero.gd` is untouched.
 9. Validation boundary: these changes were committed and read back through GitHub. The connected session cannot launch Godot, so GDScript parsing, physics overlap timing, and visual readability still require local Godot runtime acceptance. Treat any parser/runtime error as a blocker and report the complete message and line number.
+
+
+## Scene selection and A22 boundary / 场景选择与 A22 阶段边界
+
+- `res://scenes/characters/stickman_hero.tscn` is the isolated character prototype. Its scene tree contains the Hero rig, visual/debug layers, weapon visual, camera, and AttackArea; it does **not** instance the training dummy or combat HUD. Seeing only the Hero and attack-range outline in this scene is expected.
+- `res://scenes/characters/stickman_combat_test.tscn` is the A19–A22 integration harness. It instances the Hero, TrainingDummy, floor guide, and HUD. To test dummy damage, HUD, stamina, dodge and the U-key incoming-hit test, open this exact file in the FileSystem and press **F6 (Run Current Scene)**.
+- `project.godot` intentionally keeps `res://scenes/boot.tscn` as the main scene. **F5 (Run Project)** opens the game's boot/menu flow, not the combat harness. Do not change the production main scene just to run this prototype.
+- A22 completes the **prototype validation slice**; it does not mean the temporary controller should already replace the production Hero controller. After the A19–A22 harness passes local Godot validation, the next step is to plan a separate integration phase: migrate the proven combat rules into the real player architecture, preserve `hero.gd`/production scenes until that integration is tested, and keep this harness as a regression scene. Do not treat the prototype harness as production-ready merely because the source has been committed.
+
+### Quick diagnosis / 快速定位
+
+- **Only Hero + attack outline:** likely running `stickman_hero.tscn`; open `stickman_combat_test.tscn` and use F6.
+- **Combat scene open but HUD/dummy missing:** check the Scene dock's runtime root is `StickmanCombatTest`, with `TrainingDummy` and `HUD/Panel/Instructions` beneath it; then inspect Godot Output for parse/resource errors.
+- **HUD/dummy visible but attacks do not register:** move Hero toward the dummy before attacking; F4's outline is only a debug drawing and does not itself prove physics hit detection.
+- **U-key feedback:** tap U while the combat test window has focus, then inspect Godot Output for the `[CombatTest]` line. During dodge's invulnerability window it should report `BLOCKED (invulnerable)`; outside that window it should normally report `APPLIED` unless already in hitstun.
