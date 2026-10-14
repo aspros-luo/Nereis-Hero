@@ -342,9 +342,12 @@ func receive_damage(amount: float, knockback_direction: float = -1.0) -> bool:
 
 
 func _update_stamina(delta: float) -> void:
+	var action_locked: bool = current_state == State.LONG_SWORD_ATTACK or current_state == State.SHORT_BLADE_ATTACK or current_state == State.DODGE or current_state == State.HURT
+	if action_locked:
+		return
 	if stamina_recovery_delay > 0.0:
 		stamina_recovery_delay = maxf(0.0, stamina_recovery_delay - delta)
-	elif current_state != State.LONG_SWORD_ATTACK and current_state != State.SHORT_BLADE_ATTACK and current_state != State.DODGE and current_state != State.HURT:
+	else:
 		stamina = minf(max_stamina, stamina + stamina_recovery_rate * delta)
 
 
