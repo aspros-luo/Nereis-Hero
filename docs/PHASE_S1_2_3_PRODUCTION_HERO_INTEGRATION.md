@@ -161,7 +161,7 @@ Implemented:
 - Added a filled head silhouette with a restrained light value against the dark outline.
 - Relaxed the neutral arm angle from a wide, almost T-shaped spread to a natural downward angle, and moved the hand/weapon socket to match the new wrist endpoint.
 - Added a small idle breathing/weight-shift loop and a more readable run swing/bounce.
-- Added short visual-only follow-through arcs for long-sword attacks, short-blade attacks and weapon techniques, plus subtle movement in jump/fall, dodge and hitstun poses.
+- Added short visual-only follow-through arcs for long-sword attacks, short-blade attacks and weapon techniques, plus subtle movement in jump/fall and hitstun. Grapple and wall-climb now cycle their limbs; dodge/quick-dash ease out of their compressed pose; death animates into its collapse pose.
 - Pose time resets only when the presentation state, combo stage or facing changes. It never drives combat timing, damage, hitboxes, stamina or progression.
 - Expanded the isolated F6 pose gallery so every current movement/combat presentation state can be checked directly.
 
@@ -171,7 +171,7 @@ Implemented:
 - 为头部增加填充剪影，深色描边保持整体哥特线稿风格。
 - 将待机手臂从近似横向张开的姿势调整为自然下垂，并同步手部/武器插槽位置，避免“四仰八叉”的轮廓。
 - 待机加入轻微呼吸与重心变化，跑步加入更清楚的摆臂、摆腿和起伏。
-- 为长剑、短刃和武器战技增加短促的视觉蓄势/回弹；跳跃、下落、闪避和受击也加入轻微动态。
+- 为长剑、短刃和武器战技增加短促的视觉蓄势/回弹；跳跃、下落和受击加入轻微动态；抓钩/攀墙加入交替肢体循环，闪避/快速冲刺加入收势，死亡会逐步倒下。
 - 只有表现状态、连击段或朝向发生变化时才重置表现计时；该计时不参与正式战斗时序、伤害、判定、体力或进度。
 - 扩展独立 F6 姿势预览，覆盖当前所有动作状态，便于逐一验收。
 
