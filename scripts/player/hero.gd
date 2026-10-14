@@ -17,6 +17,7 @@ const HERO_SKELETON_SCENE = preload("res://scenes/player/hero_skeleton.tscn")
 ## A3 独立预览专用的可选表现开关；正常游戏默认关闭。
 @export var use_skeleton_visual := false
 var skeleton_visual: Node2D
+var skeleton_visual_enabled := false
 
 const SPEED := 260.0
 const ATTACK_MOVE_SPEED := 92.0
@@ -171,6 +172,11 @@ func _input(event: InputEvent) -> void:
 			debug_refill_combat_resources()
 			queue_redraw()
 			get_viewport().set_input_as_handled()
+		elif event.keycode == KEY_F8 and OS.is_debug_build():
+			WorldState.hero_skeleton_visual_enabled = not WorldState.hero_skeleton_visual_enabled
+			_set_skeleton_visual_enabled(WorldState.hero_skeleton_visual_enabled)
+			_log("VISUAL", "Skeletal Hero %s (F8 toggles procedural fallback)" % ("ON" if skeleton_visual_enabled else "OFF"))
+			get_viewport().set_input_as_handled()
 		elif event.keycode == KEY_T:
 			# Debug-only smoke test: isolate enemy time scaling from the precision-dodge trigger.
 			# 仅限 Debug 覆盖：将敌人减速效果与精准闪避触发条件分开测试。
@@ -230,8 +236,7 @@ func _ready() -> void:
 	hero_system.name = "HeroSystem"
 	add_child(hero_system)
 	_setup_combat_components()
-	if use_skeleton_visual:
-		_enable_skeleton_visual()
+	_set_skeleton_visual_enabled(use_skeleton_visual or WorldState.hero_skeleton_visual_enabled)
 	debug_ability_override = WorldState.debug_ability_override_active
 	if debug_ability_override:
 		_refresh_debug_test_fixtures(true)
@@ -259,14 +264,19 @@ func _process(delta: float) -> void:
 	# Physics updates already request redraws. Avoid issuing a second redraw every rendered frame.
 
 
-func _enable_skeleton_visual() -> void:
-	if is_instance_valid(skeleton_visual):
-		return
-	skeleton_visual = HERO_SKELETON_SCENE.instantiate() as Node2D
-	skeleton_visual.name = "HeroSkeletonVisual"
-	# The rig's feet extend below its root; offset it to align with the production Hero's floor origin.
-	skeleton_visual.position = Vector2(0.0, -34.0)
-	add_child(skeleton_visual)
+func _set_skeleton_visual_enabled(enabled: bool) -> void:
+	skeleton_visual_enabled = enabled
+	if enabled:
+		if not is_instance_valid(skeleton_visual):
+			skeleton_visual = HERO_SKELETON_SCENE.instantiate() as Node2D
+			skeleton_visual.name = "HeroSkeletonVisual"
+			# The rig's feet extend below its root; align them to the production Hero's floor origin.
+			skeleton_visual.position = Vector2(0.0, -34.0)
+			add_child(skeleton_visual)
+	else:
+		if is_instance_valid(skeleton_visual):
+			skeleton_visual.queue_free()
+		skeleton_visual = null
 	queue_redraw()
 
 func _physics_process(delta: float) -> void:
@@ -1331,8 +1341,8 @@ func _log(category: String, message: String) -> void:
 	print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-	# The old procedural renderer remains the default and is skipped only in explicit A3 preview mode.
-	if use_skeleton_visual:
+	# Keep the procedural renderer as a live fallback; only one visual path is drawn at a time.
+	if skeleton_visual_enabled:
 		return
 	var idle_bob: float = sin(animation_time * 7.0) * 1.5 if state == CombatState.IDLE else 0.0
 	var run_step: float = sin(animation_time * 11.0) * 2.5 if state == CombatState.MOVE else 0.0
