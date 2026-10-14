@@ -149,7 +149,7 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 ## S1.2.2-A10 — Weapon silhouette and animation linkage / 武器轮廓与动作联动
 
 - Added `scripts/characters/stickman_weapon_visual.gd` and attached it as the separate `WeaponVisual` presentation node in `stickman_hero.tscn`.
-- The weapon grip follows the live right-arm bone endpoint. Blade direction samples a small attack-timing curve so the long sword has a deliberate load/sweep/follow-through arc while the short blade has a faster, tighter thrust/slash profile.
+- The weapon grip follows the live right-arm bone endpoint, and blade direction is calculated relative to the live arm direction rather than as an unrelated screen-space angle. A small attack-timing offset curve gives the long sword a deliberate load/sweep/follow-through arc and the short blade a faster, tighter thrust/slash profile; the offset is mirrored with the facing direction.
 - Added an explicit prototype `WeaponKind` selection to the controller. Pressing **J** selects the long sword and attacks; pressing **K** selects the short blade and attacks. The chosen weapon remains visible through locomotion and dodge until the other attack key selects the alternate weapon.
 - Long sword and short blade have distinct lengths, blade widths, guard sizes, and grip proportions. Both use a restrained outline/metal highlight so they remain legible at the prototype's 4× preview zoom.
 - Scope remains visual-only: no hitboxes, damage, stamina, clash, shield-break, or production Hero integration was added. `WeaponSocket` remains reserved for later effect/weapon attachment work; this prototype renderer follows the hand bone directly.
