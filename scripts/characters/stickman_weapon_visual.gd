@@ -27,20 +27,20 @@ func _draw() -> void:
 	if hand_bone == null:
 		return
 
-	var grip_global := hand_bone.global_position + hand_bone.global_transform.basis_xform(Vector2(0.0, arm_length))
-	var grip := grip_global - get_parent().global_position
+	var grip_global: Vector2 = hand_bone.global_position + hand_bone.global_transform.basis_xform(Vector2(0.0, arm_length))
+	var grip: Vector2 = grip_global - get_parent().global_position
 	var facing := -1.0 if skeleton.scale.x < 0.0 else 1.0
 	var is_short_blade := controller.get_equipped_weapon_name() == "short_blade"
 	var weapon_length := short_blade_length if is_short_blade else long_sword_length
-	var arm_direction := hand_bone.global_transform.basis_xform(Vector2(0.0, 1.0)).normalized()
+	var arm_direction: Vector2 = hand_bone.global_transform.basis_xform(Vector2(0.0, 1.0)).normalized()
 	var angle_offset := _get_weapon_angle_offset(is_short_blade)
 	# Rotate relative to the live arm direction; invert the offset when mirrored.
-	var direction := arm_direction.rotated(angle_offset * facing).normalized()
-	var tip := grip + direction * weapon_length
-	var blade_base := grip + direction * (3.0 if is_short_blade else 4.0)
-	var guard_center := grip + direction * 2.0
+	var direction: Vector2 = arm_direction.rotated(angle_offset * facing).normalized()
+	var tip: Vector2 = grip + direction * weapon_length
+	var blade_base: Vector2 = grip + direction * (3.0 if is_short_blade else 4.0)
+	var guard_center: Vector2 = grip + direction * 2.0
 	var guard_half_span := 3.0 if is_short_blade else 5.0
-	var perpendicular := Vector2(-direction.y, direction.x)
+	var perpendicular: Vector2 = Vector2(-direction.y, direction.x)
 
 	# Blade silhouette first, then a narrow metal highlight.
 	draw_line(blade_base, tip, outline_color, 4.0 if is_short_blade else 5.2, true)
