@@ -7,7 +7,7 @@
 
 ## S1.2.2-A2 — Visual debug layer
 - `SkeletonDebug` remains a separate `Node2D` sibling and does not replace the character's production rendering.
-- The debug lines are a reference overlay; they are not skinned to the animated bones.
+- Updated the debug overlay to read the live `Bone2D.global_position` values and redraw while enabled. It now follows the animated bone transforms instead of showing a static, non-animated stick figure.
 
 ## S1.2.2-A3 — AnimationPlayer integration test
 
@@ -23,7 +23,7 @@
 - `CharacterBody2D`: root movement/state harness.
 - `Skeleton2D` + `Bone2D`: bone transforms animated by value tracks.
 - `AnimationPlayer`: owns and plays the prototype clips.
-- `SkeletonDebug`: static visual reference only.
+- `SkeletonDebug`: bone-following visual overlay used only for validation.
 - `WeaponSocket` / `EffectSocket`: retained for later sword, short-blade, dodge, and boss effect work.
 
 ### Verification boundary
@@ -32,7 +32,7 @@ The scene hierarchy and script paths were checked against the current repository
 ### Local acceptance
 1. Open the project in Godot 4.6.1 and run the project or instantiate `res://scenes/characters/stickman_hero.tscn`.
 2. Confirm there are no parser/import errors and that the initial Idle clip starts.
-3. Hold Left/Right (the default `ui_left` / `ui_right` bindings): the CharacterBody2D root should move and the bones should loop through Run.
+3. Hold Left/Right (the default `ui_left` / `ui_right` bindings): the CharacterBody2D root should move and the debug skeleton should visibly loop through Run.
 4. Release the key: movement stops and Idle resumes.
 5. Confirm the `SkeletonDebug`, `Skeleton2D`, `AnimationPlayer`, `WeaponSocket`, and `EffectSocket` coexist without changing the existing `hero.gd` rendering path.
 
