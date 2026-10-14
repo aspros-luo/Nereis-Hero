@@ -11,6 +11,13 @@ const GRAPPLE_ANCHOR_SCRIPT = preload("res://scripts/systems/grapple_anchor.gd")
 const RESONANCE_TARGET_SCRIPT = preload("res://scripts/systems/resonance_hidden_target.gd")
 const DEBUG_WALL_SCRIPT = preload("res://scripts/systems/debug_traversal_wall.gd")
 
+const HERO_SKELETON_SCENE = preload("res://scenes/player/hero_skeleton.tscn")
+
+## Opt-in presentation switch for the isolated A3 preview. False in normal gameplay.
+## A3 独立预览专用的可选表现开关；正常游戏默认关闭。
+@export var use_skeleton_visual := false
+var skeleton_visual: Node2D
+
 const SPEED := 260.0
 const ATTACK_MOVE_SPEED := 92.0
 const JUMP_VELOCITY := -520.0
@@ -223,6 +230,8 @@ func _ready() -> void:
 	hero_system.name = "HeroSystem"
 	add_child(hero_system)
 	_setup_combat_components()
+	if use_skeleton_visual:
+		_enable_skeleton_visual()
 	debug_ability_override = WorldState.debug_ability_override_active
 	if debug_ability_override:
 		_refresh_debug_test_fixtures(true)
@@ -245,7 +254,20 @@ func _setup_combat_components() -> void:
 
 func _process(delta: float) -> void:
 	animation_time += delta
+	if is_instance_valid(skeleton_visual) and skeleton_visual.has_method("apply_visual_context"):
+		skeleton_visual.call("apply_visual_context", get_visual_context())
 	# Physics updates already request redraws. Avoid issuing a second redraw every rendered frame.
+
+
+func _enable_skeleton_visual() -> void:
+	if is_instance_valid(skeleton_visual):
+		return
+	skeleton_visual = HERO_SKELETON_SCENE.instantiate() as Node2D
+	skeleton_visual.name = "HeroSkeletonVisual"
+	# The rig's feet extend below its root; offset it to align with the production Hero's floor origin.
+	skeleton_visual.position = Vector2(0.0, -34.0)
+	add_child(skeleton_visual)
+	queue_redraw()
 
 func _physics_process(delta: float) -> void:
 	if state == CombatState.DEAD:
@@ -1309,6 +1331,9 @@ func _log(category: String, message: String) -> void:
 	print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
+	# The old procedural renderer remains the default and is skipped only in explicit A3 preview mode.
+	if use_skeleton_visual:
+		return
 	var idle_bob: float = sin(animation_time * 7.0) * 1.5 if state == CombatState.IDLE else 0.0
 	var run_step: float = sin(animation_time * 11.0) * 2.5 if state == CombatState.MOVE else 0.0
 	var dodging := state == CombatState.DODGE
