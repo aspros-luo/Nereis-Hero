@@ -32,8 +32,10 @@ func _draw() -> void:
 	var facing := -1.0 if skeleton.scale.x < 0.0 else 1.0
 	var is_short_blade := controller.get_equipped_weapon_name() == "short_blade"
 	var weapon_length := short_blade_length if is_short_blade else long_sword_length
-	var angle := _get_weapon_angle(is_short_blade)
-	var direction := Vector2(cos(angle) * facing, sin(angle)).normalized()
+	var arm_direction := hand_bone.global_transform.basis_xform(Vector2(0.0, 1.0)).normalized()
+	var angle_offset := _get_weapon_angle_offset(is_short_blade)
+	# Rotate relative to the live arm direction; invert the offset when mirrored.
+	var direction := arm_direction.rotated(angle_offset * facing).normalized()
 	var tip := grip + direction * weapon_length
 	var blade_base := grip + direction * (3.0 if is_short_blade else 4.0)
 	var guard_center := grip + direction * 2.0
@@ -49,28 +51,28 @@ func _draw() -> void:
 	draw_line(grip - direction * 3.5, grip + direction * 0.5, hilt_color, 2.0, true)
 
 
-func _get_weapon_angle(is_short_blade: bool) -> float:
+func _get_weapon_angle_offset(is_short_blade: bool) -> float:
 	var state_name := controller.get_state_name()
 	if animation_player == null:
-		return -1.1
+		return -2.65
 
 	if state_name == "LONG_SWORD_ATTACK":
 		return _sample_curve(
 			animation_player.current_animation_position,
 			[0.0, 0.12, 0.25, 0.40, 0.54, 0.68],
-			[-1.10, -2.15, -1.85, 0.22, 0.72, -1.10]
+			[-2.65, -2.40, -2.05, -1.80, -2.20, -2.65]
 		)
 	if state_name == "SHORT_BLADE_ATTACK":
 		return _sample_curve(
 			animation_player.current_animation_position,
 			[0.0, 0.035, 0.095, 0.17, 0.28],
-			[-0.95, -1.70, -0.22, 0.18, -0.95]
+			[-2.65, -2.45, -2.00, -2.30, -2.65]
 		)
 	if state_name == "DODGE":
-		return -1.15
+		return -2.55
 
-	# In locomotion, keep the weapon angled forward without an idle swing arc.
-	return -0.95 if is_short_blade else -1.10
+	# Locomotion keeps the blade forward of the hand without a swing arc.
+	return -2.55 if is_short_blade else -2.65
 
 
 func _sample_curve(time: float, key_times: Array, key_values: Array) -> float:
