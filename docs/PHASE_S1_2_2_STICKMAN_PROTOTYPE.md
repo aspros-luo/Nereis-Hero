@@ -6,7 +6,7 @@
 - Kept `WeaponSocket` and `EffectSocket` as siblings of `Skeleton2D` so later weapon/effect placement is not coupled to a specific bone.
 
 ## S1.2.2-A2 — Visual debug layer
-- `SkeletonDebug` remains a separate `Node2D` sibling and does not replace the character's production rendering.
+- `SkeletonDebug` remains a separate `Node2D` sibling and does not replace the character's production rendering. Press **F3** in the prototype to toggle this technical overlay on/off at runtime without changing the skeleton or animation state.
 - The debug overlay reads live `Bone2D.global_position` values and redraws while enabled, following animated bone transforms. Position conversion uses the shared parent origin rather than `Node2D.to_local()` to avoid a singular-transform inverse in preview setups.
 
 ## S1.2.2-A3 — AnimationPlayer & skeletal animation prototype
@@ -46,6 +46,7 @@
 ### Local acceptance / 本地验收
 1. Open the project in Godot 4.6.1, open `res://scenes/characters/stickman_hero.tscn`, and use **Run Current Scene (F6)**. Running the project with F5 still launches `res://scenes/boot.tscn`, not this standalone prototype.
 2. Confirm there are no parser/import errors and that `Idle` starts automatically from the controller.
+3. Press **F3** and confirm the white bone lines/head circle disappear and reappear while the character rig and movement continue unchanged.
 3. Hold Left/Right or A/D: the root `CharacterBody2D` should visibly move across the viewport while the fixed preview camera remains stationary and the debug skeleton loops through `Run`.
 4. Release the key: movement stops, `Idle` resumes, and the legs return to neutral rather than freezing in the last run pose.
 5. Press **J** and **K** separately. Confirm the long-sword action feels more deliberate than the compact short-blade action and returns to the correct locomotion pose. These are visual-only tests, not functional combat.
