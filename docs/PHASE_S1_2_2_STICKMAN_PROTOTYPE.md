@@ -196,3 +196,18 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 5. Hold movement during an attack, release movement before the clip ends, and verify the rig keeps its action-facing direction until recovery, then resumes the correct Idle/Run state based on current input.
 6. Check the Output panel for warnings/errors. The missing-animation fallback is defensive and should not emit a warning in the normal scene, where the controller builds all prototype clips during startup.
 7. Godot runtime validation is still required locally; this commit is confirmed by repository read-back, not by launching the editor in this session.
+
+## S1.2.2-A13 — Animation-driven action recovery / 动画驱动的动作恢复
+
+- Action recovery now listens to `AnimationPlayer.animation_finished` and only accepts the finish event matching the active action state (`LongSwordAttack`, `ShortBladeAttack`, or `Dodge`). A stale or unrelated animation-finished event cannot end another action.
+- The existing duration countdown remains as a defensive fallback if an action clip is stopped or its completion signal is missed. Both paths share one idempotent recovery function, which resets the timer and returns to Idle/Run based on current movement input.
+- Movement-direction reading is centralized so A/D and arrow-key behavior stays consistent when an action ends. This change does not alter the existing action lock or weapon selection behavior.
+- This is a lifecycle robustness improvement only; no combat hit resolution or new gameplay mechanics were added.
+
+### Local acceptance / 本地验收
+1. Run `res://scenes/characters/stickman_hero.tscn` with **F6** and watch the Output panel.
+2. Repeatedly alternate **J** and **K**, waiting for each attack to finish. Every action should return to locomotion without freezing or leaving limbs in an attack pose.
+3. Start an attack while holding **A/D** or the arrow keys, then release or reverse movement before the clip ends. Recovery should select Idle or Run from the current input.
+4. Test **Space** dodge with and without movement input. Dodge should complete once, then return to the correct locomotion state.
+5. Confirm no warnings/errors appear and that the A11 swing trails still disappear when the action finishes.
+6. Repository read-back confirms the source and documentation updates; Godot runtime validation remains pending locally.
