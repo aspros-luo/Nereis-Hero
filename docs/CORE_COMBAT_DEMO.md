@@ -1,8 +1,8 @@
 # Core Combat Demo
 
-The default startup scene is now:
+The normal project startup remains `res://scenes/boot.tscn`. The combat demo is an explicit test scene:
 
-res://scenes/combat_demo.tscn
+`res://scenes/combat_demo.tscn` (open it and press F6 to run the current scene).
 
 ## Goal
 
