@@ -45,7 +45,9 @@ func _physics_process(_delta: float) -> void:
 		velocity.x = action_facing_direction * prototype_dodge_speed
 	else:
 		velocity.x = direction * move_speed
-	if skeleton != null and absf(direction) > 0.01:
+	if skeleton != null and not _is_action_state(current_state) and absf(direction) > 0.01:
+		# Lock the rig's facing throughout attacks and dodge so the pose and travel
+		# direction cannot disagree if the player presses the opposite direction.
 		# Flip only the rig, not the CharacterBody2D or its camera.
 		skeleton.scale.x = -1.0 if direction < 0.0 else 1.0
 	move_and_slide()
