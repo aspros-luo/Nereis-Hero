@@ -111,6 +111,8 @@ func _make_idle_animation() -> Animation:
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", [0.0, 0.8, 1.6], [0.0, 0.0, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", [0.0, 0.8, 1.6], [0.0, 0.0, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", [0.0, 0.8, 1.6], [0.0, 0.0, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", [0.0, 0.8, 1.6], [0.0, 0.0, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", [0.0, 0.8, 1.6], [0.0, 0.0, 0.0])
 	return animation
 
 
@@ -130,6 +132,8 @@ func _make_run_animation() -> Animation:
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [-0.62, 0.62, -0.62, 0.62, -0.62])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.45, 0.0, 0.12, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.45, 0.0, 0.12, 0.0, 0.45])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [-0.12, 0.18, -0.12, 0.08, -0.12])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.18, -0.12, 0.08, -0.12, 0.18])
 	return animation
 
 
