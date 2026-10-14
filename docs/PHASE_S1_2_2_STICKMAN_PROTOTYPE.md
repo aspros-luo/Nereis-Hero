@@ -136,3 +136,11 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 - Added short blend times between locomotion and action clips to soften transitions without blurring weapon identity.
 - Improved production line art and the optional debug overlay to draw matching shoulder-to-arm segments, arm tips, and foot/toe direction from the same live Bone2D transforms. Debug rendering remains read-only and F3 only toggles its own overlay.
 - Verification boundary: source-level checks confirm the intended tracks and shared bone-derived endpoints. Run the scene in Godot 4.6.1 to judge animation feel and confirm there are no runtime animation-track/path warnings.
+
+
+## S1.2.2-A9 — Mirrored bone endpoint correction / 镜像骨骼端点修正
+
+- Corrected arm-tip and toe endpoint calculations in both `StickmanVisual` and `SkeletonDebug`: use each bone's global transform basis rather than only its global rotation angle.
+- This preserves the endpoint direction under the rig's horizontal scale flip, so turning left/right should mirror the short arm strokes and toe direction consistently with the animated bones.
+- Both layers use the same transform-derived method; the debug overlay remains read-only and F3 still only toggles its visibility.
+- Verification boundary: source-level endpoint logic was updated. Godot 4.6.1 runtime parsing and left/right visual acceptance still require local validation.
