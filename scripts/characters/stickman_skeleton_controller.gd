@@ -27,9 +27,14 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	# Use built-in ui_left / ui_right actions for a self-contained prototype.
+	# Support both arrow keys (ui_left/ui_right) and familiar A/D controls.
+	# The prototype intentionally avoids project-wide Input Map changes.
 	# CharacterBody2D owns movement; animation only changes Bone2D rotations.
 	var direction := Input.get_axis("ui_left", "ui_right")
+	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+		direction = -1.0
+	elif Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
+		direction = 1.0
 	velocity.x = direction * move_speed
 	move_and_slide()
 
