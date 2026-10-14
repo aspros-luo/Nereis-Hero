@@ -180,3 +180,19 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 4. Verify no trail appears while idle, running, or dodging, and that the weapon silhouette is drawn clearly in front of the trail.
 5. Repeat while facing both directions; the arc should follow the hand/weapon orientation without remaining on the wrong side of the character.
 6. Check the Godot Output panel for parser or drawing errors. Source changes were committed through GitHub; local Godot runtime verification remains pending.
+
+## S1.2.2-A12 — Action input lock and recovery safety / 动作输入锁与恢复保护
+
+- Attack and dodge inputs are now ignored while a prototype action state is active. This prevents repeated key-down events or cross-weapon presses from replacing an in-progress clip halfway through its authored timing; the next action can begin after the current action returns to locomotion.
+- Added a defensive fallback for a missing action animation: emit a warning and return to the current locomotion state rather than leaving the controller stuck in an action state indefinitely.
+- Horizontal movement remains available during attacks as a prototype movement test, while rig facing stays captured for the duration of the action. Dodge continues to use its captured facing direction.
+- This remains a controller-stability pass only. No hitboxes, damage, stamina, enemy reactions, heavy weapon, clash, or shield-break logic was introduced.
+
+### Local acceptance / 本地验收
+1. Run `res://scenes/characters/stickman_hero.tscn` with **F6**.
+2. Press **J**, then immediately press **K** during the long-sword swing. The long-sword action should finish its clip; the short blade should be selected only when the next eligible attack starts.
+3. Repeat with **K** then **J**, and press **Space** during each attack. Neither input should cancel the current attack.
+4. Press **Space** to dodge, then quickly press **J/K**. The dodge should finish before the next attack begins.
+5. Hold movement during an attack, release movement before the clip ends, and verify the rig keeps its action-facing direction until recovery, then resumes the correct Idle/Run state based on current input.
+6. Check the Output panel for warnings/errors. The missing-animation fallback is defensive and should not emit a warning in the normal scene, where the controller builds all prototype clips during startup.
+7. Godot runtime validation is still required locally; this commit is confirmed by repository read-back, not by launching the editor in this session.
