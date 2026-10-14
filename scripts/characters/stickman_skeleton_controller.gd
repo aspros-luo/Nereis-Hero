@@ -27,6 +27,9 @@ var current_state: State = State.IDLE
 var equipped_weapon: WeaponKind = WeaponKind.LONG_SWORD
 var action_time_remaining: float = 0.0
 var action_facing_direction: float = 1.0
+var combo_step: int = 0
+var combo_input_buffered: bool = false
+var active_action_animation: String = ""
 @onready var animation_player: AnimationPlayer = get_node_or_null("AnimationPlayer") as AnimationPlayer
 @onready var skeleton: Skeleton2D = get_node_or_null("Skeleton2D") as Skeleton2D
 
@@ -45,11 +48,15 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	match event.keycode:
 		KEY_J:
-			if not _is_action_state(current_state):
+			if current_state == State.LONG_SWORD_ATTACK:
+				_try_buffer_combo_input(WeaponKind.LONG_SWORD)
+			elif not _is_action_state(current_state):
 				set_state(State.LONG_SWORD_ATTACK)
 			get_viewport().set_input_as_handled()
 		KEY_K:
-			if not _is_action_state(current_state):
+			if current_state == State.SHORT_BLADE_ATTACK:
+				_try_buffer_combo_input(WeaponKind.SHORT_BLADE)
+			elif not _is_action_state(current_state):
 				set_state(State.SHORT_BLADE_ATTACK)
 			get_viewport().set_input_as_handled()
 		KEY_SPACE:
@@ -97,32 +104,69 @@ func _get_movement_direction() -> float:
 	return direction
 
 
-func _on_animation_finished(animation_name: StringName) -> void:
-	if not _is_action_state(current_state):
+	if String(animation_name) != active_action_animation:
 		return
-	if String(animation_name) != _get_current_action_animation_name():
-		return
+	if current_state == State.LONG_SWORD_ATTACK or current_state == State.SHORT_BLADE_ATTACK:
+		if combo_input_buffered and combo_step < 3:
+			_start_combo_step(combo_step + 1)
+			return
 	_finish_action()
 
 
 func _get_current_action_animation_name() -> String:
-	match current_state:
-		State.LONG_SWORD_ATTACK:
-			return "LongSwordAttack"
-		State.SHORT_BLADE_ATTACK:
-			return "ShortBladeAttack"
-		State.DODGE:
-			return "Dodge"
-	return ""
+	return active_action_animation
+
+
+func _try_buffer_combo_input(weapon: WeaponKind) -> void:
+	if combo_step >= 3 or animation_player == null:
+		return
+	if weapon == WeaponKind.LONG_SWORD and current_state != State.LONG_SWORD_ATTACK:
+		return
+	if weapon == WeaponKind.SHORT_BLADE and current_state != State.SHORT_BLADE_ATTACK:
+		return
+	var elapsed: float = animation_player.current_animation_position
+	var window_start: float = 0.0
+	var window_end: float = 0.0
+	if weapon == WeaponKind.LONG_SWORD:
+		window_start = 0.38 if combo_step == 1 else 0.34
+		window_end = 0.60 if combo_step == 1 else 0.56
+	else:
+		window_start = 0.13 if combo_step == 1 else 0.11
+		window_end = 0.235 if combo_step == 1 else 0.215
+	if elapsed >= window_start and elapsed <= window_end:
+		combo_input_buffered = true
+
+
+func _start_combo_step(next_step: int) -> void:
+	if animation_player == null or next_step < 1 or next_step > 3:
+		_finish_action()
+		return
+	combo_step = next_step
+	combo_input_buffered = false
+	var prefix: String = "LongSwordAttack" if current_state == State.LONG_SWORD_ATTACK else "ShortBladeAttack"
+	active_action_animation = prefix if next_step == 1 else prefix + str(next_step)
+	if not animation_player.has_animation(active_action_animation):
+		push_warning("Stickman prototype combo animation is missing: " + active_action_animation)
+		_finish_action()
+		return
+	animation_player.play(active_action_animation)
+	action_time_remaining = animation_player.current_animation_length
 
 
 func _finish_action() -> void:
 	if not _is_action_state(current_state):
 		return
 	action_time_remaining = 0.0
+	combo_input_buffered = false
+	combo_step = 0
+	active_action_animation = ""
 	var direction: float = _get_movement_direction()
 	velocity.x = direction * move_speed
 	_set_locomotion_state(direction)
+
+
+func get_combo_step() -> int:
+	return combo_step
 
 
 func _set_locomotion_state(direction: float) -> void:
@@ -197,9 +241,13 @@ func _build_prototype_animations() -> void:
 	var idle_result := library.add_animation("Idle", _make_idle_animation())
 	var run_result := library.add_animation("Run", _make_run_animation())
 	var long_attack_result := library.add_animation("LongSwordAttack", _make_long_sword_attack_animation())
+	var long_attack_2_result := library.add_animation("LongSwordAttack2", _make_combo_attack_animation(false, 2))
+	var long_attack_3_result := library.add_animation("LongSwordAttack3", _make_combo_attack_animation(false, 3))
 	var short_attack_result := library.add_animation("ShortBladeAttack", _make_short_blade_attack_animation())
+	var short_attack_2_result := library.add_animation("ShortBladeAttack2", _make_combo_attack_animation(true, 2))
+	var short_attack_3_result := library.add_animation("ShortBladeAttack3", _make_combo_attack_animation(true, 3))
 	var dodge_result := library.add_animation("Dodge", _make_dodge_animation())
-	if idle_result != OK or run_result != OK or long_attack_result != OK or short_attack_result != OK or dodge_result != OK:
+	if idle_result != OK or run_result != OK or long_attack_result != OK or long_attack_2_result != OK or long_attack_3_result != OK or short_attack_result != OK or short_attack_2_result != OK or short_attack_3_result != OK or dodge_result != OK:
 		push_error("Could not build stickman prototype animation library.")
 		return
 
@@ -216,12 +264,15 @@ func _build_prototype_animations() -> void:
 	# Smooth locomotion transitions, with shorter transitions into/out of actions.
 	animation_player.set_blend_time("Idle", "Run", 0.10)
 	animation_player.set_blend_time("Run", "Idle", 0.10)
+	var action_names := ["LongSwordAttack", "LongSwordAttack2", "LongSwordAttack3", "ShortBladeAttack", "ShortBladeAttack2", "ShortBladeAttack3", "Dodge"]
 	for locomotion in ["Idle", "Run"]:
-		for action in ["LongSwordAttack", "ShortBladeAttack", "Dodge"]:
+		for action in action_names:
 			animation_player.set_blend_time(locomotion, action, 0.04)
 			animation_player.set_blend_time(action, locomotion, 0.07)
-	animation_player.set_blend_time("LongSwordAttack", "ShortBladeAttack", 0.03)
-	animation_player.set_blend_time("ShortBladeAttack", "LongSwordAttack", 0.03)
+	for first_action in action_names:
+		for second_action in action_names:
+			if first_action != second_action:
+				animation_player.set_blend_time(first_action, second_action, 0.025)
 
 
 func _make_idle_animation() -> Animation:
@@ -326,6 +377,59 @@ func _make_dodge_animation() -> Animation:
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.12, 0.26, 0.10, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [0.0, 0.12, 0.06, 0.02, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.0, -0.08, -0.03, 0.0, 0.0])
+	return animation
+
+
+func _make_combo_attack_animation(is_short_blade: bool, step: int) -> Animation:
+	var animation := Animation.new()
+	var prefix: String = "ShortBladeAttack" if is_short_blade else "LongSwordAttack"
+	animation.resource_name = prefix + str(step)
+	animation.length = 0.34 if is_short_blade else 0.62
+	animation.loop_mode = Animation.LOOP_NONE
+	var times: Array
+	var spine_values: Array
+	var left_arm_values: Array
+	var right_arm_values: Array
+	var left_leg_values: Array
+	var right_leg_values: Array
+	if is_short_blade:
+		times = [0.0, 0.045, 0.11, 0.19, 0.27, 0.34]
+		if step == 2:
+			spine_values = [0.0, -0.12, 0.38, 0.16, -0.08, 0.0]
+			left_arm_values = [-0.025, 0.22, 0.72, 0.38, 0.05, -0.025]
+			right_arm_values = [0.025, 0.82, -0.72, -0.28, 0.04, 0.025]
+		else:
+			spine_values = [0.0, 0.28, -0.52, -0.22, 0.10, 0.0]
+			left_arm_values = [-0.025, -0.55, 0.88, 0.32, -0.02, -0.025]
+			right_arm_values = [0.025, -0.92, 0.92, 0.22, 0.03, 0.025]
+		left_leg_values = [0.0, -0.08, 0.14, 0.04, 0.0, 0.0]
+		right_leg_values = [0.0, 0.08, -0.14, -0.03, 0.0, 0.0]
+	else:
+		times = [0.0, 0.10, 0.22, 0.36, 0.49, 0.62]
+		if step == 2:
+			spine_values = [0.0, 0.32, 0.12, -0.60, -0.26, 0.0]
+			left_arm_values = [-0.025, 0.72, 0.52, -0.92, -0.40, -0.025]
+			right_arm_values = [0.025, 0.88, 0.62, -1.02, -0.44, 0.025]
+		else:
+			spine_values = [0.0, -0.48, -0.24, 0.72, 0.32, 0.0]
+			left_arm_values = [-0.025, -1.02, -0.82, 0.96, 0.42, -0.025]
+			right_arm_values = [0.025, -1.22, -0.94, 1.10, 0.48, 0.025]
+		left_leg_values = [0.0, -0.22, -0.14, 0.22, 0.08, 0.0]
+		right_leg_values = [0.0, 0.16, 0.10, -0.24, -0.08, 0.0]
+	if is_short_blade:
+		_add_position_track(animation, "Skeleton2D/RootBone", times, [Vector2.ZERO, Vector2(0, 0.3), Vector2(0, -0.5), Vector2(0, 0.2), Vector2(0, 0.1), Vector2.ZERO])
+	else:
+		_add_position_track(animation, "Skeleton2D/RootBone", times, [Vector2.ZERO, Vector2(0, 0.8), Vector2(0, 0.2), Vector2(0, -0.4), Vector2(0, 0.2), Vector2.ZERO])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, spine_values)
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.04, -0.06, 0.08, 0.02, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, left_arm_values)
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, right_arm_values)
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, left_leg_values)
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, right_leg_values)
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.08, 0.16, 0.10, 0.04, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.04, -0.08, -0.04, 0.0, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [0.0, -0.04, 0.06, 0.02, 0.0, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.0, 0.03, -0.03, 0.0, 0.0, 0.0])
 	return animation
 
 
