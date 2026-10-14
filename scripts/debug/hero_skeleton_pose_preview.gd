@@ -36,14 +36,26 @@ func _unhandled_input(event: InputEvent) -> void:
 		KEY_2:
 			selected_pose = HeroSkeletonController.PoseState.RUN
 		KEY_3:
-			selected_pose = HeroSkeletonController.PoseState.ATTACK_LONG
+			selected_pose = HeroSkeletonController.PoseState.JUMP
 		KEY_4:
-			selected_pose = HeroSkeletonController.PoseState.ATTACK_SHORT
+			selected_pose = HeroSkeletonController.PoseState.FALL
 		KEY_5:
-			selected_pose = HeroSkeletonController.PoseState.DODGE
+			selected_pose = HeroSkeletonController.PoseState.ATTACK_LONG
 		KEY_6:
-			selected_pose = HeroSkeletonController.PoseState.HURT
+			selected_pose = HeroSkeletonController.PoseState.ATTACK_SHORT
 		KEY_7:
+			selected_pose = HeroSkeletonController.PoseState.WEAPON_TECHNIQUE
+		KEY_8:
+			selected_pose = HeroSkeletonController.PoseState.DODGE
+		KEY_9:
+			selected_pose = HeroSkeletonController.PoseState.QUICK_DASH
+		KEY_0:
+			selected_pose = HeroSkeletonController.PoseState.GRAPPLE
+		KEY_G:
+			selected_pose = HeroSkeletonController.PoseState.WALL_CLIMB
+		KEY_H:
+			selected_pose = HeroSkeletonController.PoseState.HURT
+		KEY_D:
 			selected_pose = HeroSkeletonController.PoseState.DEATH
 		KEY_Z:
 			selected_combo_step = 1
@@ -66,7 +78,7 @@ func _apply_selected_pose() -> void:
 		return
 	rig.set_pose(selected_pose, selected_combo_step, selected_facing)
 	if status_label:
-		status_label.text = "S1.2.3-A2 | Skeleton Pose Preview\n" + _pose_name(selected_pose) + " | combo %d | facing %s\n\n1 Idle   2 Run   3 Long Sword   4 Short Blade\n5 Dodge   6 Hurt   7 Death\nZ/X/C combo stage 1/2/3 | Left/Right facing" % [selected_combo_step, "Left" if selected_facing < 0.0 else "Right"]
+		status_label.text = "S1.2.3-A6 | Fuller Stickman Animation Preview\n" + _pose_name(selected_pose) + " | combo %d | facing %s\n\n1 Idle  2 Run  3 Jump  4 Fall\n5 Long Sword  6 Short Blade  7 Technique\n8 Dodge  9 Quick Dash  0 Grapple\nG Wall Climb  H Hurt  D Death\nZ/X/C combo stage 1/2/3 | Left/Right facing" % [selected_combo_step, "Left" if selected_facing < 0.0 else "Right"]
 
 
 func _pose_name(pose: HeroSkeletonController.PoseState) -> String:
@@ -83,6 +95,12 @@ func _pose_name(pose: HeroSkeletonController.PoseState) -> String:
 			return "Long Sword Attack"
 		HeroSkeletonController.PoseState.ATTACK_SHORT:
 			return "Short Blade Attack"
+		HeroSkeletonController.PoseState.WEAPON_TECHNIQUE:
+			return "Weapon Technique"
+		HeroSkeletonController.PoseState.GRAPPLE:
+			return "Grapple"
+		HeroSkeletonController.PoseState.WALL_CLIMB:
+			return "Wall Climb"
 		HeroSkeletonController.PoseState.DODGE:
 			return "Dodge"
 		HeroSkeletonController.PoseState.QUICK_DASH:
