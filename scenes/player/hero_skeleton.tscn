@@ -22,7 +22,7 @@ position = Vector2(-12, 0)
 position = Vector2(12, 0)
 
 [node name="HandRightBone" type="Bone2D" parent="Skeleton2D/RootBone/BodyBone/ArmRightBone"]
-position = Vector2(16, 0)
+position = Vector2(8, 16)
 
 [node name="WeaponPoint" type="Marker2D" parent="Skeleton2D/RootBone/BodyBone/ArmRightBone/HandRightBone"]
 
