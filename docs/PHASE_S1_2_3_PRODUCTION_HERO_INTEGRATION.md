@@ -29,7 +29,18 @@ Connect the proven skeletal-animation workflow to the production Hero while keep
 
 ## Incremental implementation sequence / 分步实施
 
-### S1.2.3-A1 — State contract and adapter
+### S1.2.3-A1 — State contract and adapter — initial slice committed
+
+Implemented in the current branch:
+
+- `Hero.get_visual_state_name()` exposes a presentation-only name for every production combat state, including run/jump/fall, weapon-specific basic attacks, dodge, quick dash, grapple, wall climb, hurt and death.
+- `Hero.get_visual_context()` returns a read-only-by-convention snapshot of facing, combo step, weapon, action timing, invulnerability and hitstun timing for future visual consumers.
+- `HeroVisualStates.resolve_animation()` now maps these canonical presentation states to animation names.
+- These methods do not drive gameplay, change attack timing, or instantiate/replace any visual nodes. The current procedural Hero remains unchanged until a later opt-in preview passes local acceptance.
+
+Local acceptance for this slice: run the normal combat demo and confirm movement/combat behavior is unchanged; inspect Output for parser/runtime errors. The connected session can verify source content only, not execute Godot.
+
+### S1.2.3-A1 — Remaining work
 
 - Define a small visual-state contract sourced from production `CombatState` and current action context.
 - Map production states to presentation states: idle, run, jump/fall, long-sword attack, short-blade attack, dodge, hurt, and death.
