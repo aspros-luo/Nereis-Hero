@@ -152,6 +152,10 @@ func _reset_pose() -> void:
 		_left_leg_line.default_color = CLOTH
 	if _right_leg_line:
 		_right_leg_line.default_color = CLOTH
+	if _sword_line:
+		# Restore the neutral long-sword silhouette before each pose applies its own weapon shape.
+		# 每次切换姿势先恢复默认长剑轮廓，短刃姿势再显式缩短，避免武器形态残留。
+		_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(30, -4)])
 
 
 func _build_visuals() -> void:
