@@ -5,9 +5,9 @@ extends Node2D
 
 @export var outline_color := Color(0.12, 0.11, 0.14, 1.0)
 @export var body_color := Color(0.88, 0.86, 0.80, 1.0)
-@export var outline_width: float = 7.0
-@export var body_width: float = 4.0
-@export var head_radius: float = 7.0
+@export var outline_width: float = 6.0
+@export var body_width: float = 3.5
+@export var head_radius: float = 5.5
 
 @onready var skeleton: Skeleton2D = get_parent().get_node_or_null("Skeleton2D") as Skeleton2D
 
