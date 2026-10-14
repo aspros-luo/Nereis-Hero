@@ -30,6 +30,26 @@ func _ready() -> void:
 	set_state(State.IDLE)
 
 
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	# Godot's Input singleton has no is_key_just_pressed(keycode) method.
+	# Handle discrete key-down events here so holding a key cannot chain actions.
+	if not (event is InputEventKey and event.pressed and not event.echo):
+		return
+
+	match event.keycode:
+		KEY_J:
+			set_state(State.LONG_SWORD_ATTACK)
+			get_viewport().set_input_as_handled()
+		KEY_K:
+			set_state(State.SHORT_BLADE_ATTACK)
+			get_viewport().set_input_as_handled()
+		KEY_SPACE:
+			set_state(State.DODGE)
+			get_viewport().set_input_as_handled()
+
+
 func _physics_process(delta: float) -> void:
 	# Support both arrow keys (ui_left/ui_right) and familiar A/D controls.
 	# The prototype intentionally avoids project-wide Input Map changes.
@@ -59,19 +79,6 @@ func _physics_process(delta: float) -> void:
 		if action_time_remaining <= 0.0:
 			velocity.x = direction * move_speed
 			_set_locomotion_state(direction)
-		return
-
-	# Edge-trigger action controls: holding a key must not silently chain strikes
-	# the moment the previous clip ends. Release and press again for a new action.
-	# These remain animation-only tests: no hitboxes, damage, or invulnerability.
-	if Input.is_key_just_pressed(KEY_J):
-		set_state(State.LONG_SWORD_ATTACK)
-		return
-	if Input.is_key_just_pressed(KEY_K):
-		set_state(State.SHORT_BLADE_ATTACK)
-		return
-	if Input.is_key_just_pressed(KEY_SPACE):
-		set_state(State.DODGE)
 		return
 
 	_set_locomotion_state(direction)
