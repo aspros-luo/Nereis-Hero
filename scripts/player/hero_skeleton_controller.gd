@@ -47,6 +47,7 @@ var animation_time: float = 0.0
 var _neutral_rotations: Dictionary = {}
 var _neutral_positions: Dictionary = {}
 var _pose_time: float = 0.0
+var _context_driven: bool = false
 var _head_fill: Polygon2D
 var _sword_line: Line2D
 var _body_line: Line2D
@@ -68,15 +69,15 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	animation_time += delta
 	_pose_time += delta
-	if current_pose == PoseState.RUN and animate_run:
-		_apply_pose()
-	elif current_pose == PoseState.IDLE and animate_idle:
+	# Standalone pose gallery drives itself; the production Hero supplies context every frame.
+	if not _context_driven:
 		_apply_pose()
 
 
 ## Optional presentation adapter entry point. The dictionary is read-only input.
 ## 可选的表现层适配入口；只读取正式 Hero 提供的状态快照。
 func apply_visual_context(context: Dictionary) -> void:
+	_context_driven = true
 	weapon_style = str(context.get("weapon", "long_sword"))
 	var state_name := str(context.get("state", "idle"))
 	var next_pose := PoseState.IDLE
