@@ -13,7 +13,7 @@ size = Vector2(16, 30)
 position = Vector2(-35, 0)
 
 [node name="TrainingDummy" type="CharacterBody2D" parent="."]
-position = Vector2(0, 0)
+position = Vector2(0, 22)
 script = ExtResource("2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TrainingDummy"]
@@ -21,7 +21,7 @@ position = Vector2(0, -14)
 shape = SubResource("RectangleShape2D_dummy")
 
 [node name="FloorLine" type="Line2D" parent="."]
-points = PackedVector2Array(-260, 1, 260, 1)
+points = PackedVector2Array(-260, 22, 260, 22)
 width = 2.0
 default_color = Color(0.36, 0.34, 0.32, 1)
 
