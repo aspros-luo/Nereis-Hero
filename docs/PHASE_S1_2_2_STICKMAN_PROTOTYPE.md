@@ -162,3 +162,21 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 4. Walk/run and dodge after selecting each weapon. The chosen weapon should remain equipped and follow the hand while the character faces both left and right.
 5. Toggle **F3**. Only the white skeleton debug overlay should change; the character and weapon presentation should remain visible.
 6. Check the Godot Output panel for parser errors, missing node paths, or invalid drawing calls. This has not been runtime-tested by the connected session.
+
+
+
+
+## S1.2.2-A11 — Timed weapon swing trails / 武器挥砍轨迹
+
+- Added a lightweight arc trail to `StickmanWeaponVisual`, drawn only during the committed swing window of the corresponding attack state. The trail fades in toward the strike and fades out during follow-through; it is not visible during locomotion or dodge.
+- The long sword uses a wider, longer-lived pale arc plus a subtle inner echo to suggest weight. The short blade uses a tighter, thinner, quicker arc to preserve its compact identity.
+- Trail timing is aligned to the existing attack clips: long sword approximately 0.16–0.49 s in the 0.68 s clip; short blade approximately 0.045–0.19 s in the 0.28 s clip. These are presentation windows only, not hit-confirm windows.
+- The trail is drawn behind the weapon silhouette and follows the current hand-relative weapon direction. It uses no particles, hitboxes, damage, stamina, or enemy interaction.
+
+### Local acceptance / 本地验收
+1. Open `res://scenes/characters/stickman_hero.tscn` and run current scene with **F6**.
+2. Press **J** repeatedly with a pause between attacks: a broad long-sword arc should appear briefly around the committed swing, then disappear completely.
+3. Press **K**: the short blade should produce a tighter, quicker arc with less visual weight than the long sword.
+4. Verify no trail appears while idle, running, or dodging, and that the weapon silhouette is drawn clearly in front of the trail.
+5. Repeat while facing both directions; the arc should follow the hand/weapon orientation without remaining on the wrong side of the character.
+6. Check the Godot Output panel for parser or drawing errors. Source changes were committed through GitHub; local Godot runtime verification remains pending.
