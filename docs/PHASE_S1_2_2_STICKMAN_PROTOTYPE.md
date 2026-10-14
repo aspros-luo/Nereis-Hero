@@ -253,3 +253,43 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 7. Test Space before and after a chain, and verify it cannot interrupt an active chain. Confirm the third step resets the chain and no fourth step occurs.
 8. Confirm each step's trail appears only during its swing phase and disappears afterward. Check Output for parser/runtime errors.
 9. This change was verified by GitHub source read-back and static structural checks only. Godot runtime acceptance remains pending locally.
+
+
+## S1.2.2-A19 — Combo pose readability / 连击动作辨识度
+
+- Authored a visibly stronger third-step finisher for both weapon chains. Long sword uses deeper anticipation, a larger torso rotation and a wider committed follow-through; short blade uses a distinct compact cross-cut/flurry pose rather than reusing the first-step pose.
+- Kept the existing three-step state machine, timing and skeleton hierarchy intact. This is a targeted pose pass, not a new animation framework.
+- Source-level note: the rig remains a deliberately small stick-figure prototype. Final subjective readability must be judged in Godot at normal gameplay scale.
+
+## S1.2.2-A20 — Isolated combat test scene / 独立战斗测试场景
+
+- Added `res://scenes/characters/stickman_combat_test.tscn`, which instances the existing stickman hero beside a reusable training dummy and shows a small HUD for state, combo step and stamina.
+- The dummy is a damageable physics body with a visible health bar and hit flash/knockback response. It automatically resets after reaching zero health so repeated tests do not require restarting the scene.
+- Added a rectangular `AttackArea` to the prototype hero scene. The debug outline is visible by default and can be toggled with **F4**. **F3** continues to toggle the skeleton overlay.
+- The test harness is separate from the production `hero.gd` path; no production Hero behavior was replaced.
+
+## S1.2.2-A21 — Timed hit detection and reaction / 攻击判定与受击反馈
+
+- The controller activates the weapon `Area2D` only during each combo step's committed strike window. Long sword has a broader/longer reach; short blade has a compact hit region.
+- Each target can be hit at most once per combo step. A new combo step clears the per-step hit set, allowing the same target to be struck again by a later swing.
+- Long-sword hits deal higher prototype damage and stronger knockback; the third hit receives a finisher multiplier. The training dummy displays damage through its health bar, brief flash and knockback.
+- Added a short Hurt pose and hitstun state. Incoming damage can interrupt an attack; dodge invulnerability rejects incoming damage before it changes state. The swing trail remains visual-only and is not used as a collision source.
+
+## S1.2.2-A22 — Dodge invulnerability and stamina loop / 闪避无敌帧与体力循环
+
+- Dodge consumes 22 stamina, long-sword strikes consume 10 per step, and short-blade strikes consume 6 per step. Stamina regenerates at 28 points/second after a short recovery delay, while attacking, dodging or in hitstun.
+- Dodge invulnerability is currently the 0.06–0.25 second window of the 0.36 second Dodge clip. This is a prototype tuning value, not a final balance decision.
+- **Space** starts a dodge only when sufficient stamina is available. **U** simulates an incoming hit for testing: tap it during dodge's invulnerability window and the hit should be rejected; tap it outside the window and the controller should enter hitstun.
+- Attack and dodge remain action-locked. Hitstun stops the attack area and briefly overrides horizontal movement with knockback before returning to Idle/Run.
+
+### Local acceptance for A19–A22 / 本地验收
+
+1. In Godot 4.6.1, open `res://scenes/characters/stickman_combat_test.tscn` and run it with **F6**.
+2. Tap **J** and observe all three long-sword steps. Queue each follow-up separately; the third step should have a more committed pose/trail than the first two.
+3. Repeat with **K**. The short-blade chain should remain faster and more compact, with a distinct third-step pose.
+4. Move the hero toward the training dummy and attack. The dummy should lose health, flash and recoil; one swing must not damage it repeatedly while the area overlaps. A later combo step may hit it again.
+5. Toggle **F4** to show/hide the attack-range debug outline. Toggle **F3** to show/hide the skeleton debug overlay independently.
+6. Watch the HUD stamina value. Repeated attacks and dodges should spend stamina; after the recovery delay it should regenerate. With insufficient stamina, the action should not start/continue.
+7. Press **U** during Dodge's early/middle phase and confirm no hitstun occurs. Press **U** after dodge ends and confirm a short Hurt pose/knockback, followed by recovery to Idle/Run.
+8. Confirm that the original `res://scenes/characters/stickman_hero.tscn` still runs on its own and that production `hero.gd` is untouched.
+9. Validation boundary: these changes were committed and read back through GitHub. The connected session cannot launch Godot, so GDScript parsing, physics overlap timing, and visual readability still require local Godot runtime acceptance. Treat any parser/runtime error as a blocker and report the complete message and line number.
