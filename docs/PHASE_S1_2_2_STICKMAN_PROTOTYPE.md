@@ -105,3 +105,24 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 4. Press J/K while moving and while idle. Arms should extend from the shoulder in the attack direction and legs should settle cleanly at recovery.
 5. Press F3: only the white technical overlay should toggle; the refined line-art silhouette remains visible.
 6. This change was authored through the GitHub API. The connected session cannot launch the local Godot runtime, so parser/runtime and subjective visual acceptance remain pending local Godot 4.6.1 verification.
+
+
+## S1.2.2-A7 — Run / attack pose review (2026-10-14)
+
+### Scope and findings / 范围与检查结论
+- Re-checked the current stickman scene, live-bone renderer, animation controller, and existing phase notes on the `development` branch.
+- Run-cycle code review found that the previous arm swing (±0.58 rad) was comparatively broad while knee flexion peaked at 0.38 rad. This can make the arms dominate the small silhouette while the lower legs read as relatively stiff. This is a source-level assessment; it is not a claim that the local Godot scene was visually run in this session.
+- Applied a restrained Run-only curve adjustment: arm swing reduced to ±0.46 rad, thigh swing to ±0.66 rad, and alternating knee flexion increased to 0.46 rad (with the secondary bend at 0.20 rad). This aims to keep the arm rhythm readable while making the running legs articulate more clearly.
+- Attack clips (`LongSwordAttack` and `ShortBladeAttack`) were inspected but their curves were deliberately left unchanged until local visual comparison confirms whether arm direction, overlap, and planted-leg poses actually need adjustment. No speculative attack curve edits were made.
+- No bones, weapon mechanics, hitboxes, heavy-long-sword progression, or weapon-clash features were added. Production `hero.gd` and its rendering path remain untouched.
+
+### Permission and validation boundary / 权限与验证边界
+- GitHub connector successfully found the private repository, located the `development` branch, and read the scene, controller, renderer, and phase documentation. The controller update was accepted by GitHub and produced commit `1b00f6e16c90ddff9d0ac0b94be79d866685fa64`, confirming write capability on this branch.
+- The connected session cannot launch the user's local Godot 4.6.1 runtime. GDScript parser/runtime and subjective pose quality therefore remain pending local validation.
+
+### Local acceptance / 本地验收
+1. Open `res://scenes/characters/stickman_hero.tscn` and run current scene with F6.
+2. Inspect left/right Run at normal speed and with F3 debug overlay toggled. Check whether arm swing remains behind/in front of the torso without swallowing the torso silhouette, and whether alternating knees visibly separate the feet.
+3. Press J and K both while idle and while moving. Check anticipation, arm orientation, arm overlap, planted-leg stability, and return to locomotion.
+4. If attacks still look unclear, capture a frame or short clip of each attack before changing attack curves; tune the specific phase keys from that evidence rather than adding bones.
+5. Confirm no parser errors, stale leg poses after returning to Idle, or changes to the production Hero scene.
