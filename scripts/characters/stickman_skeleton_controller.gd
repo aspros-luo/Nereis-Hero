@@ -77,8 +77,9 @@ func _build_prototype_animations() -> void:
 		push_error("Could not build stickman prototype animation library.")
 		return
 
-	var existing_library := animation_player.get_animation_library("")
-	if existing_library != null:
+	# Avoid get_animation_library("") when the default library is absent:
+	# Godot reports an engine error for that lookup even if we only check null.
+	if animation_player.has_animation_library(""):
 		animation_player.remove_animation_library("")
 	var result := animation_player.add_animation_library("", library)
 	if result != OK:
