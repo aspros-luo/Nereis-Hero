@@ -10,7 +10,7 @@ size = Vector2(16, 30)
 [node name="StickmanCombatTest" type="Node2D"]
 
 [node name="StickmanHero" parent="." instance=ExtResource("1")]
-position = Vector2(-42, 0)
+position = Vector2(-35, 0)
 
 [node name="TrainingDummy" type="CharacterBody2D" parent="."]
 position = Vector2(0, 0)
