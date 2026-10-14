@@ -126,3 +126,13 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 3. Press J and K both while idle and while moving. Check anticipation, arm orientation, arm overlap, planted-leg stability, and return to locomotion.
 4. If attacks still look unclear, capture a frame or short clip of each attack before changing attack curves; tune the specific phase keys from that evidence rather than adding bones.
 5. Confirm no parser errors, stale leg poses after returning to Idle, or changes to the production Hero scene.
+
+
+## S1.2.2-A8 — Animation readability and pose synchronization
+- Refined the run cycle into a 0.72-second stride with opposite thigh swings, alternating knee flex, counter-swinging arms, subtle pelvis bounce, and foot counter-rotation.
+- Extended the long-sword attack to 0.68 seconds with six authored beats: neutral, deliberate load, committed cut, follow-through, recovery, and neutral. The torso/arms and leg counterpose have a broader silhouette than the short blade.
+- Tightened the short-blade attack to 0.28 seconds with a small preparation, sharp extension, and quick recoil/recovery.
+- Added explicit RootBone position tracks to every clip and neutral end keys for articulated joints, preventing pelvis bob from persisting across Run, Idle, attacks, and Dodge.
+- Added short blend times between locomotion and action clips to soften transitions without blurring weapon identity.
+- Improved production line art and the optional debug overlay to draw matching shoulder-to-arm segments, arm tips, and foot/toe direction from the same live Bone2D transforms. Debug rendering remains read-only and F3 only toggles its own overlay.
+- Verification boundary: source-level checks confirm the intended tracks and shared bone-derived endpoints. Run the scene in Godot 4.6.1 to judge animation feel and confirm there are no runtime animation-track/path warnings.
