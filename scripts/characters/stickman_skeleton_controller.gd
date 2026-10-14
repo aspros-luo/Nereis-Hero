@@ -88,7 +88,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		KEY_U:
 			# Debug-only incoming hit to verify dodge invulnerability and hitstun.
-			receive_damage(10.0, -action_facing_direction)
+			var accepted: bool = receive_damage(10.0, -action_facing_direction)
+			print("[CombatTest] U incoming-hit test: ", "BLOCKED (invulnerable)" if not accepted and is_invulnerable() else ("APPLIED" if accepted else "IGNORED (already in hitstun)"), " | state=", get_state_name())
 			get_viewport().set_input_as_handled()
 
 
