@@ -33,6 +33,8 @@ var action_facing_direction: float = 1.0
 
 func _ready() -> void:
 	_build_prototype_animations()
+	if animation_player != null and not animation_player.animation_finished.is_connected(_on_animation_finished):
+		animation_player.animation_finished.connect(_on_animation_finished)
 	set_state(State.IDLE)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -57,14 +59,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	# Support both arrow keys (ui_left/ui_right) and familiar A/D controls.
-	# The prototype intentionally avoids project-wide Input Map changes.
 	# CharacterBody2D owns movement; animation only changes Bone2D rotations.
-	var direction := Input.get_axis("ui_left", "ui_right")
-	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
-		direction = -1.0
-	elif Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
-		direction = 1.0
+	var direction: float = _get_movement_direction()
 
 	# Capture facing when an action begins. A dodge moves in that direction even
 	# if the player releases the movement key, making this a movement test too.
@@ -79,14 +75,53 @@ func _physics_process(delta: float) -> void:
 		skeleton.scale.x = -1.0 if direction < 0.0 else 1.0
 	move_and_slide()
 
-	# Temporary action states own playback until their non-looping clip ends.
+	# The animation_finished signal is authoritative; this timer is a defensive
+	# fallback in case a clip is stopped or its finish signal is missed.
 	if _is_action_state(current_state):
 		action_time_remaining -= delta
 		if action_time_remaining <= 0.0:
-			velocity.x = direction * move_speed
-			_set_locomotion_state(direction)
+			_finish_action()
 		return
 
+	_set_locomotion_state(direction)
+
+
+func _get_movement_direction() -> float:
+	# Support both arrow keys (ui_left/ui_right) and familiar A/D controls
+	# without requiring project-wide Input Map changes.
+	var direction: float = Input.get_axis("ui_left", "ui_right")
+	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+		return -1.0
+	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
+		return 1.0
+	return direction
+
+
+func _on_animation_finished(animation_name: StringName) -> void:
+	if not _is_action_state(current_state):
+		return
+	if String(animation_name) != _get_current_action_animation_name():
+		return
+	_finish_action()
+
+
+func _get_current_action_animation_name() -> String:
+	match current_state:
+		State.LONG_SWORD_ATTACK:
+			return "LongSwordAttack"
+		State.SHORT_BLADE_ATTACK:
+			return "ShortBladeAttack"
+		State.DODGE:
+			return "Dodge"
+	return ""
+
+
+func _finish_action() -> void:
+	if not _is_action_state(current_state):
+		return
+	action_time_remaining = 0.0
+	var direction: float = _get_movement_direction()
+	velocity.x = direction * move_speed
 	_set_locomotion_state(direction)
 
 
