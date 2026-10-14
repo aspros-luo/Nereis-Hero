@@ -3,6 +3,7 @@
 ## S1.2.2-A1 — Skeleton scene
 - Added `scenes/characters/stickman_hero.tscn` as a standalone `CharacterBody2D` prototype.
 - Bone hierarchy: `Skeleton2D/RootBone`, `Spine`, `Head`, `Arm_L`, `Arm_R`, plus articulated `Leg_L/Knee_L/Foot_L` and `Leg_R/Knee_R/Foot_R` chains.
+- Revised proportions after visual review: shortened the torso/head spacing, brought the shoulders closer to the body, and lengthened both leg chains. The renderer stroke widths and head radius were reduced to match the more balanced silhouette.
 - Kept `WeaponSocket` and `EffectSocket` as siblings of `Skeleton2D` so later weapon/effect placement is not coupled to a specific bone.
 
 ## S1.2.2-A2 — Visual debug layer
@@ -57,7 +58,7 @@
 9. Confirm `StickmanVisual`, `SkeletonDebug`, `Skeleton2D`, `AnimationPlayer`, `WeaponSocket`, and `EffectSocket` coexist without changing the production `hero.gd` rendering path.
 
 ## S1.2.2-A5 — Independent character presentation / 独立角色表现层
-- `StickmanVisual` reads live bone positions and draws a stylized outlined figure independently from `SkeletonDebug`.
+- `StickmanVisual` reads live bone positions and draws a stylized outlined figure independently from `SkeletonDebug`. Its stroke widths and head radius match the revised, less elongated torso and longer legs.
 - F3 toggles only the white technical overlay; the character-facing silhouette should remain visible.
 - This is temporary prototype art, not final protagonist art or a replacement for the production Hero rendering path.
 
