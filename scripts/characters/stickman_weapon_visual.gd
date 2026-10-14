@@ -61,12 +61,12 @@ func _draw_swing_trail(grip: Vector2, direction: Vector2, weapon_length: float, 
 
 	var state_name: String = controller.get_state_name()
 	var elapsed: float = animation_player.current_animation_position
-	var phase_start: float
-	var phase_end: float
-	var peak_time: float
-	var arc_span: float
-	var trail_width: float
-	var trail_color: Color
+	var phase_start: float = 0.0
+	var phase_end: float = 0.0
+	var peak_time: float = 0.0
+	var arc_span: float = 0.0
+	var trail_width: float = 0.0
+	var trail_color: Color = Color.TRANSPARENT
 
 	if state_name == "LONG_SWORD_ATTACK":
 		phase_start = 0.16
