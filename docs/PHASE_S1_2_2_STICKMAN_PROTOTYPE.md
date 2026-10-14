@@ -277,7 +277,7 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 
 ## S1.2.2-A22 — Dodge invulnerability and stamina loop / 闪避无敌帧与体力循环
 
-- Dodge consumes 22 stamina, long-sword strikes consume 10 per step, and short-blade strikes consume 6 per step. Stamina regenerates at 28 points/second after a short recovery delay, while attacking, dodging or in hitstun.
+- Dodge consumes 22 stamina, long-sword strikes consume 10 per step, and short-blade strikes consume 6 per step. Stamina regenerates at 28 points/second after a 0.55-second recovery delay; the delay begins counting down after the action lock ends, and stamina does not regenerate during attacks, dodge or hitstun.
 - Dodge invulnerability is currently the 0.06–0.25 second window of the 0.36 second Dodge clip. This is a prototype tuning value, not a final balance decision.
 - **Space** starts a dodge only when sufficient stamina is available. **U** simulates an incoming hit for testing: tap it during dodge's invulnerability window and the hit should be rejected; tap it outside the window and the controller should enter hitstun.
 - Attack and dodge remain action-locked. Hitstun stops the attack area and briefly overrides horizontal movement with knockback before returning to Idle/Run.
