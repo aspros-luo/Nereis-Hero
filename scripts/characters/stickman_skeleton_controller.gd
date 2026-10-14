@@ -15,10 +15,16 @@ enum State {
 	BOSS_ACTION
 }
 
+enum WeaponKind {
+	LONG_SWORD,
+	SHORT_BLADE
+}
+
 @export var move_speed: float = 160.0
 @export var prototype_dodge_speed: float = 360.0
 
 var current_state: State = State.IDLE
+var equipped_weapon: WeaponKind = WeaponKind.LONG_SWORD
 var action_time_remaining: float = 0.0
 var action_facing_direction: float = 1.0
 @onready var animation_player: AnimationPlayer = get_node_or_null("AnimationPlayer") as AnimationPlayer
@@ -107,9 +113,11 @@ func set_state(next_state: State) -> void:
 		State.RUN:
 			animation_player.play("Run")
 		State.LONG_SWORD_ATTACK:
+			equipped_weapon = WeaponKind.LONG_SWORD
 			_capture_action_facing()
 			_play_action("LongSwordAttack")
 		State.SHORT_BLADE_ATTACK:
+			equipped_weapon = WeaponKind.SHORT_BLADE
 			_capture_action_facing()
 			_play_action("ShortBladeAttack")
 		State.DODGE:
@@ -133,6 +141,10 @@ func _play_action(animation_name: String) -> void:
 
 func get_state_name() -> String:
 	return State.keys()[current_state]
+
+
+func get_equipped_weapon_name() -> String:
+	return "short_blade" if equipped_weapon == WeaponKind.SHORT_BLADE else "long_sword"
 
 
 func _build_prototype_animations() -> void:
