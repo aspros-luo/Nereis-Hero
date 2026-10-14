@@ -41,7 +41,7 @@
 
 ### Verification boundary / 验证范围
 - Repository scene/script paths and the current branch contents were inspected.
-- The code change addresses pose persistence when transitioning from Run back to Idle, sets a short blend for Idle/Run transitions, and checks `has_animation_library("")` before removing the default library so an absent library is never queried with `get_animation_library("")`.
+- The prototype includes a separate outlined character renderer driven by live bone positions, alongside the independently toggleable white debug overlay. The code changes address pose persistence when transitioning from Run back to Idle, set a short blend for Idle/Run transitions, and check `has_animation_library("")` before removing the default library so an absent library is never queried with `get_animation_library("")`.
 - The connected GitHub session cannot launch the local Godot 4.6.1 editor/runtime. Therefore, parser/import/playback and physical movement are **not claimed as runtime-tested**; local acceptance below is still required.
 - Follow-up fixes: avoid querying a missing default animation library, prevent the debug overlay from requiring a global-transform inverse, keep the preview camera fixed instead of parent-following, support both arrow keys and A/D, add articulated knee/foot joints with an alternating two-segment leg cycle, offset/animate the feet for a more legible walk silhouette, and flip the rig to face left/right movement.
 
@@ -49,7 +49,7 @@
 1. Open the project in Godot 4.6.1, open `res://scenes/characters/stickman_hero.tscn`, and use **Run Current Scene (F6)**. Running the project with F5 still launches `res://scenes/boot.tscn`, not this standalone prototype.
 2. Confirm there are no parser/import errors and that `Idle` starts automatically from the controller.
 3. Press **F3** and confirm the white technical lines disappear and reappear while the outlined stickman remains visible and movement continues unchanged.
-4. Hold Left/Right or A/D: the root `CharacterBody2D` should visibly move across the viewport while the fixed preview camera remains stationary and the debug skeleton loops through `Run`.
+4. Hold Left/Right or A/D: the root `CharacterBody2D` should visibly move across the viewport while the fixed preview camera remains stationary and the stickman silhouette animates through `Run`.
 5. Release the key: movement stops, `Idle` resumes, and the legs return to neutral rather than freezing in the last run pose.
 6. Press **J** and **K** separately. Confirm the long-sword action feels more deliberate than the compact short-blade action and returns to the correct locomotion pose. These are visual-only tests, not functional combat.
 7. Press **Space** while facing left and right. Confirm the character moves in its captured facing direction during the short dodge burst, then returns to normal movement. Tune `prototype_dodge_speed` only after local feel testing.
