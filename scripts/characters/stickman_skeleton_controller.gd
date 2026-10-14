@@ -43,13 +43,16 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	match event.keycode:
 		KEY_J:
-			set_state(State.LONG_SWORD_ATTACK)
+			if not _is_action_state(current_state):
+				set_state(State.LONG_SWORD_ATTACK)
 			get_viewport().set_input_as_handled()
 		KEY_K:
-			set_state(State.SHORT_BLADE_ATTACK)
+			if not _is_action_state(current_state):
+				set_state(State.SHORT_BLADE_ATTACK)
 			get_viewport().set_input_as_handled()
 		KEY_SPACE:
-			set_state(State.DODGE)
+			if not _is_action_state(current_state):
+				set_state(State.DODGE)
 			get_viewport().set_input_as_handled()
 
 
@@ -134,6 +137,9 @@ func _capture_action_facing() -> void:
 
 func _play_action(animation_name: String) -> void:
 	if animation_player == null or not animation_player.has_animation(animation_name):
+		push_warning("Stickman prototype action animation is missing: " + animation_name)
+		action_time_remaining = 0.0
+		_set_locomotion_state(Input.get_axis("ui_left", "ui_right"))
 		return
 	animation_player.play(animation_name)
 	action_time_remaining = animation_player.current_animation_length
