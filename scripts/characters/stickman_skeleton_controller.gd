@@ -38,6 +38,10 @@ func _physics_process(_delta: float) -> void:
 
 func set_state(next_state: State) -> void:
     if current_state == next_state:
+        # _ready() starts in IDLE; ensure the first idle clip actually begins.
+        if animation_player != null and not animation_player.is_playing():
+            if next_state == State.IDLE or next_state == State.RUN:
+                animation_player.play("Idle" if next_state == State.IDLE else "Run")
         return
 
     current_state = next_state
