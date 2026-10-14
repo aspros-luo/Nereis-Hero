@@ -22,6 +22,13 @@ enum WeaponKind {
 
 @export var move_speed: float = 160.0
 @export var prototype_dodge_speed: float = 360.0
+@export var max_stamina: float = 100.0
+@export var stamina_recovery_rate: float = 28.0
+@export var long_sword_stamina_cost: float = 10.0
+@export var short_blade_stamina_cost: float = 6.0
+@export var dodge_stamina_cost: float = 22.0
+@export var hitstun_duration: float = 0.28
+@export var knockback_strength: float = 185.0
 
 var current_state: State = State.IDLE
 var equipped_weapon: WeaponKind = WeaponKind.LONG_SWORD
@@ -30,14 +37,26 @@ var action_facing_direction: float = 1.0
 var combo_step: int = 0
 var combo_input_buffered: bool = false
 var active_action_animation: String = ""
+var stamina: float = 100.0
+var stamina_recovery_delay: float = 0.0
+var hitstun_time_remaining: float = 0.0
+var debug_hitbox_enabled: bool = true
+var hit_targets_this_step: Dictionary = {}
 @onready var animation_player: AnimationPlayer = get_node_or_null("AnimationPlayer") as AnimationPlayer
 @onready var skeleton: Skeleton2D = get_node_or_null("Skeleton2D") as Skeleton2D
+@onready var attack_area: Area2D = get_node_or_null("AttackArea") as Area2D
+@onready var attack_shape: CollisionShape2D = get_node_or_null("AttackArea/CollisionShape2D") as CollisionShape2D
 
 
 func _ready() -> void:
+	stamina = max_stamina
 	_build_prototype_animations()
 	if animation_player != null and not animation_player.animation_finished.is_connected(_on_animation_finished):
 		animation_player.animation_finished.connect(_on_animation_finished)
+	if attack_area != null:
+		attack_area.monitoring = false
+		if not attack_area.body_entered.is_connected(_on_attack_area_body_entered):
+			attack_area.body_entered.connect(_on_attack_area_body_entered)
 	set_state(State.IDLE)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -60,17 +79,36 @@ func _unhandled_input(event: InputEvent) -> void:
 				set_state(State.SHORT_BLADE_ATTACK)
 			get_viewport().set_input_as_handled()
 		KEY_SPACE:
-			if not _is_action_state(current_state):
+			if not _is_action_state(current_state) and stamina >= dodge_stamina_cost:
 				set_state(State.DODGE)
+			get_viewport().set_input_as_handled()
+		KEY_F4:
+			debug_hitbox_enabled = not debug_hitbox_enabled
+			queue_redraw()
+			get_viewport().set_input_as_handled()
+		KEY_U:
+			# Debug-only incoming hit to verify dodge invulnerability and hitstun.
+			receive_damage(10.0, -action_facing_direction)
 			get_viewport().set_input_as_handled()
 
 
 func _physics_process(delta: float) -> void:
 	# CharacterBody2D owns movement; animation only changes Bone2D rotations.
 	var direction: float = _get_movement_direction()
+	_update_stamina(delta)
+	_update_attack_hitbox()
+
+	if current_state == State.HURT:
+		hitstun_time_remaining -= delta
+		velocity.x = move_toward(velocity.x, 0.0, knockback_strength * 4.0 * delta)
+		if hitstun_time_remaining <= 0.0:
+			_finish_action()
+		move_and_slide()
+		queue_redraw()
+		return
 
 	# Capture facing when an action begins. A dodge moves in that direction even
-	# if the player releases the movement key, making this a movement test too.
+	# if the player releases the movement key, making it a committed evasive burst.
 	if current_state == State.DODGE:
 		velocity.x = action_facing_direction * prototype_dodge_speed
 	else:
@@ -94,6 +132,17 @@ func _physics_process(delta: float) -> void:
 		return
 
 	_set_locomotion_state(direction)
+	queue_redraw()
+
+
+func _draw() -> void:
+	if not debug_hitbox_enabled or attack_area == null:
+		return
+	var reach: float = 26.0 if equipped_weapon == WeaponKind.LONG_SWORD else 17.0
+	var half_width: float = 19.0 if equipped_weapon == WeaponKind.LONG_SWORD else 13.0
+	var rect := Rect2(attack_area.position - Vector2(half_width, 11.0), Vector2(half_width * 2.0, 22.0))
+	draw_rect(rect, Color(1.0, 0.22, 0.12, 0.75), false, 1.0)
+	draw_line(Vector2.ZERO, Vector2(action_facing_direction * reach, -22.0), Color(1.0, 0.22, 0.12, 0.35), 1.0)
 
 
 func _get_movement_direction() -> float:
@@ -136,7 +185,15 @@ func _start_combo_step(next_step: int) -> void:
 	if animation_player == null or next_step < 1 or next_step > 3:
 		_finish_action()
 		return
+	var stamina_cost: float = long_sword_stamina_cost if current_state == State.LONG_SWORD_ATTACK else short_blade_stamina_cost
+	if stamina < stamina_cost:
+		combo_input_buffered = false
+		_finish_action()
+		return
+	stamina = maxf(0.0, stamina - stamina_cost)
+	stamina_recovery_delay = 0.55
 	combo_step = next_step
+	hit_targets_this_step.clear()
 	combo_input_buffered = false
 	var prefix: String = "LongSwordAttack" if current_state == State.LONG_SWORD_ATTACK else "ShortBladeAttack"
 	active_action_animation = prefix if next_step == 1 else prefix + str(next_step)
@@ -160,9 +217,12 @@ func _on_animation_finished(animation_name: StringName) -> void:
 
 
 func _finish_action() -> void:
-	if not _is_action_state(current_state):
+	if not _is_action_state(current_state) and current_state != State.HURT:
 		return
 	action_time_remaining = 0.0
+	hitstun_time_remaining = 0.0
+	if attack_area != null:
+		attack_area.monitoring = false
 	combo_input_buffered = false
 	combo_step = 0
 	active_action_animation = ""
@@ -180,7 +240,7 @@ func _set_locomotion_state(direction: float) -> void:
 
 
 func _is_action_state(state: State) -> bool:
-	return state == State.LONG_SWORD_ATTACK or state == State.SHORT_BLADE_ATTACK or state == State.DODGE
+	return state == State.LONG_SWORD_ATTACK or state == State.SHORT_BLADE_ATTACK or state == State.DODGE or state == State.HURT
 
 
 func set_state(next_state: State) -> void:
@@ -209,11 +269,26 @@ func set_state(next_state: State) -> void:
 			_capture_action_facing()
 			_start_combo_step(1)
 		State.DODGE:
+			if stamina < dodge_stamina_cost:
+				current_state = State.IDLE
+				return
+			stamina = maxf(0.0, stamina - dodge_stamina_cost)
+			stamina_recovery_delay = 0.75
 			combo_step = 0
 			combo_input_buffered = false
 			_capture_action_facing()
 			_play_action("Dodge")
-		State.HURT, State.WITCH_TIME, State.BOSS_ACTION:
+		State.HURT:
+			combo_step = 0
+			combo_input_buffered = false
+			hitstun_time_remaining = hitstun_duration
+			action_time_remaining = hitstun_duration
+			active_action_animation = ""
+			if animation_player.has_animation("Hurt"):
+				animation_player.play("Hurt")
+			else:
+				animation_player.stop()
+		State.WITCH_TIME, State.BOSS_ACTION:
 			animation_player.stop()
 
 
@@ -238,6 +313,82 @@ func get_state_name() -> String:
 	return State.keys()[current_state]
 
 
+func get_stamina() -> float:
+	return stamina
+
+
+func get_max_stamina() -> float:
+	return max_stamina
+
+
+func is_invulnerable() -> bool:
+	if current_state != State.DODGE or animation_player == null:
+		return false
+	var elapsed: float = animation_player.current_animation_position
+	return elapsed >= 0.06 and elapsed <= 0.25
+
+
+func receive_damage(amount: float, knockback_direction: float = -1.0) -> bool:
+	if amount <= 0.0 or is_invulnerable():
+		return false
+	if current_state == State.HURT:
+		return false
+	if attack_area != null:
+		attack_area.monitoring = false
+	# Prototype has no player HP bar yet; damage is represented by hitstun.
+	velocity.x = signf(knockback_direction) * knockback_strength
+	set_state(State.HURT)
+	return true
+
+
+func _update_stamina(delta: float) -> void:
+	if stamina_recovery_delay > 0.0:
+		stamina_recovery_delay = maxf(0.0, stamina_recovery_delay - delta)
+	elif current_state != State.LONG_SWORD_ATTACK and current_state != State.SHORT_BLADE_ATTACK and current_state != State.DODGE and current_state != State.HURT:
+		stamina = minf(max_stamina, stamina + stamina_recovery_rate * delta)
+
+
+func _update_attack_hitbox() -> void:
+	if attack_area == null:
+		return
+	var is_attacking: bool = current_state == State.LONG_SWORD_ATTACK or current_state == State.SHORT_BLADE_ATTACK
+	var active: bool = false
+	var reach: float = 26.0 if equipped_weapon == WeaponKind.LONG_SWORD else 17.0
+	var half_width: float = 19.0 if equipped_weapon == WeaponKind.LONG_SWORD else 13.0
+	if is_attacking and animation_player != null:
+		var elapsed: float = animation_player.current_animation_position
+		if equipped_weapon == WeaponKind.LONG_SWORD:
+			var starts: Array = [0.23, 0.20, 0.17]
+			var ends: Array = [0.46, 0.44, 0.43]
+			active = elapsed >= starts[clampi(combo_step - 1, 0, 2)] and elapsed <= ends[clampi(combo_step - 1, 0, 2)]
+		else:
+			var starts: Array = [0.06, 0.07, 0.06]
+			var ends: Array = [0.17, 0.21, 0.19]
+			active = elapsed >= starts[clampi(combo_step - 1, 0, 2)] and elapsed <= ends[clampi(combo_step - 1, 0, 2)]
+	attack_area.position = Vector2(action_facing_direction * reach, -22.0)
+	if attack_shape != null and attack_shape.shape is RectangleShape2D:
+		(attack_shape.shape as RectangleShape2D).size = Vector2(half_width * 2.0, 22.0)
+	if attack_area.monitoring != active:
+		attack_area.monitoring = active
+	queue_redraw()
+
+
+func _on_attack_area_body_entered(body: Node2D) -> void:
+	if not (current_state == State.LONG_SWORD_ATTACK or current_state == State.SHORT_BLADE_ATTACK):
+		return
+	if not body.is_in_group("damageable") or not body.has_method("take_damage"):
+		return
+	var instance_id: int = body.get_instance_id()
+	if hit_targets_this_step.has(instance_id):
+		return
+	hit_targets_this_step[instance_id] = true
+	var damage: float = 18.0 if equipped_weapon == WeaponKind.LONG_SWORD else 10.0
+	if combo_step == 3:
+		damage *= 1.5
+	var direction: float = action_facing_direction
+	body.call("take_damage", damage, direction * (knockback_strength if equipped_weapon == WeaponKind.LONG_SWORD else knockback_strength * 0.65))
+
+
 func get_equipped_weapon_name() -> String:
 	return "short_blade" if equipped_weapon == WeaponKind.SHORT_BLADE else "long_sword"
 
@@ -257,7 +408,8 @@ func _build_prototype_animations() -> void:
 	var short_attack_2_result := library.add_animation("ShortBladeAttack2", _make_combo_attack_animation(true, 2))
 	var short_attack_3_result := library.add_animation("ShortBladeAttack3", _make_combo_attack_animation(true, 3))
 	var dodge_result := library.add_animation("Dodge", _make_dodge_animation())
-	if idle_result != OK or run_result != OK or long_attack_result != OK or long_attack_2_result != OK or long_attack_3_result != OK or short_attack_result != OK or short_attack_2_result != OK or short_attack_3_result != OK or dodge_result != OK:
+	var hurt_result := library.add_animation("Hurt", _make_hurt_animation())
+	if idle_result != OK or run_result != OK or long_attack_result != OK or long_attack_2_result != OK or long_attack_3_result != OK or short_attack_result != OK or short_attack_2_result != OK or short_attack_3_result != OK or dodge_result != OK or hurt_result != OK:
 		push_error("Could not build stickman prototype animation library.")
 		return
 
@@ -274,7 +426,7 @@ func _build_prototype_animations() -> void:
 	# Smooth locomotion transitions, with shorter transitions into/out of actions.
 	animation_player.set_blend_time("Idle", "Run", 0.10)
 	animation_player.set_blend_time("Run", "Idle", 0.10)
-	var action_names := ["LongSwordAttack", "LongSwordAttack2", "LongSwordAttack3", "ShortBladeAttack", "ShortBladeAttack2", "ShortBladeAttack3", "Dodge"]
+	var action_names := ["LongSwordAttack", "LongSwordAttack2", "LongSwordAttack3", "ShortBladeAttack", "ShortBladeAttack2", "ShortBladeAttack3", "Dodge", "Hurt"]
 	for locomotion in ["Idle", "Run"]:
 		for action in action_names:
 			animation_player.set_blend_time(locomotion, action, 0.04)
@@ -369,6 +521,22 @@ func _make_short_blade_attack_animation() -> Animation:
 	return animation
 
 
+func _make_hurt_animation() -> Animation:
+	var animation := Animation.new()
+	animation.resource_name = "Hurt"
+	animation.length = 0.28
+	animation.loop_mode = Animation.LOOP_NONE
+	var times := [0.0, 0.06, 0.16, 0.28]
+	_add_position_track(animation, "Skeleton2D/RootBone", times, [Vector2.ZERO, Vector2(0, 0.8), Vector2(0, 0.4), Vector2.ZERO])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.0, 0.35, 0.18, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, -0.12, -0.06, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.025, -0.42, -0.24, -0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.025, 0.48, 0.22, 0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.0, -0.12, -0.06, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [0.0, 0.18, 0.08, 0.0])
+	return animation
+
+
 func _make_dodge_animation() -> Animation:
 	var animation := Animation.new()
 	animation.resource_name = "Dodge"
@@ -408,6 +576,10 @@ func _make_combo_attack_animation(is_short_blade: bool, step: int) -> Animation:
 			spine_values = [0.0, -0.12, 0.38, 0.16, -0.08, 0.0]
 			left_arm_values = [-0.025, 0.22, 0.72, 0.38, 0.05, -0.025]
 			right_arm_values = [0.025, 0.82, -0.72, -0.28, 0.04, 0.025]
+		elif step == 3:
+			spine_values = [0.0, -0.38, -0.64, -0.30, 0.18, 0.0]
+			left_arm_values = [-0.025, -0.78, 1.05, 0.48, -0.08, -0.025]
+			right_arm_values = [0.025, -1.10, 1.18, 0.36, -0.04, 0.025]
 		else:
 			spine_values = [0.0, 0.28, -0.52, -0.22, 0.10, 0.0]
 			left_arm_values = [-0.025, -0.55, 0.88, 0.32, -0.02, -0.025]
@@ -420,6 +592,10 @@ func _make_combo_attack_animation(is_short_blade: bool, step: int) -> Animation:
 			spine_values = [0.0, 0.32, 0.12, -0.60, -0.26, 0.0]
 			left_arm_values = [-0.025, 0.72, 0.52, -0.92, -0.40, -0.025]
 			right_arm_values = [0.025, 0.88, 0.62, -1.02, -0.44, 0.025]
+		elif step == 3:
+			spine_values = [0.0, -0.62, -0.34, 0.94, 0.52, 0.0]
+			left_arm_values = [-0.025, -1.24, -1.02, 1.18, 0.58, -0.025]
+			right_arm_values = [0.025, -1.42, -1.18, 1.28, 0.64, 0.025]
 		else:
 			spine_values = [0.0, -0.48, -0.24, 0.72, 0.32, 0.0]
 			left_arm_values = [-0.025, -1.02, -0.82, 0.96, 0.42, -0.025]
