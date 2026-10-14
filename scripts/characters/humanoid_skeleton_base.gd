@@ -35,7 +35,13 @@ func attach_weapon(weapon: Node2D) -> void:
 	if socket != null:
 		socket.add_child(weapon)
 
+func get_weapon_socket() -> Node:
+	return get_node_or_null(weapon_socket_path)
+
+func get_effect_socket() -> Node:
+	return get_node_or_null(effect_socket_path)
+
 func _apply_visual_state() -> void:
-	# Reserved for Skeleton2D / AnimationPlayer integration.
-	# Combat state remains owned by character gameplay scripts.
+	# Skeleton2D / AnimationPlayer integration is added during Hero scene migration.
+	# Gameplay state remains owned by character gameplay scripts.
 	pass
