@@ -31,6 +31,9 @@ position = Vector2(-10, 0)
 [node name="Leg_R" type="Bone2D" parent="Skeleton2D/RootBone"]
 position = Vector2(10, 0)
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("..")
+
 [node name="WeaponSocket" type="Marker2D" parent="."]
 position = Vector2(24, -20)
 
