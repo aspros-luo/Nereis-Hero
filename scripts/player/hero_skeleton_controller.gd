@@ -333,17 +333,19 @@ func _apply_pose() -> void:
 			var technique_length := 26.0 if weapon_style == "short_blade" else 40.0
 			_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(technique_length, -7)])
 		PoseState.GRAPPLE:
-			body_bone.rotation = -0.2
-			arm_left_bone.rotation = -1.0
-			arm_right_bone.rotation = -0.9
-			leg_left_bone.rotation = 0.25
-			leg_right_bone.rotation = -0.22
+			var swing := sin(animation_time * 4.5)
+			body_bone.rotation = -0.2 + swing * 0.045
+			arm_left_bone.rotation = -1.0 + swing * 0.08
+			arm_right_bone.rotation = -0.9 - swing * 0.08
+			leg_left_bone.rotation = 0.25 + swing * 0.12
+			leg_right_bone.rotation = -0.22 - swing * 0.12
 		PoseState.WALL_CLIMB:
+			var climb_cycle := sin(animation_time * 6.5)
 			body_bone.rotation = -0.18
-			arm_left_bone.rotation = -1.2
-			arm_right_bone.rotation = -0.8
-			leg_left_bone.rotation = -0.35
-			leg_right_bone.rotation = 0.45
+			arm_left_bone.rotation = -1.2 + climb_cycle * 0.18
+			arm_right_bone.rotation = -0.8 - climb_cycle * 0.18
+			leg_left_bone.rotation = -0.35 - climb_cycle * 0.2
+			leg_right_bone.rotation = 0.45 + climb_cycle * 0.2
 		PoseState.DODGE:
 			body_bone.rotation = -0.55
 			head_bone.rotation = 0.3
@@ -398,8 +400,22 @@ func _apply_pose() -> void:
 		PoseState.FALL:
 			arm_left_bone.rotation += sin(animation_time * 4.0) * 0.045
 			arm_right_bone.rotation -= sin(animation_time * 4.0) * 0.045
-		PoseState.DODGE, PoseState.QUICK_DASH:
-			body_bone.rotation += sin(animation_time * 20.0) * 0.025
+		PoseState.DODGE:
+			var dodge_recovery := clampf(_pose_time / 0.22, 0.0, 1.0)
+			body_bone.rotation += dodge_recovery * 0.2
+			arm_left_bone.rotation -= dodge_recovery * 0.08
+		PoseState.QUICK_DASH:
+			var dash_recovery := clampf(_pose_time / 0.18, 0.0, 1.0)
+			body_bone.rotation += dash_recovery * 0.16
 		PoseState.HURT:
 			body_bone.rotation += sin(_pose_time * 36.0) * 0.035
+		PoseState.DEATH:
+			var collapse := clampf(_pose_time / 0.42, 0.0, 1.0)
+			root_bone.rotation = lerpf(0.0, 1.15, collapse)
+			body_bone.rotation = lerpf(0.0, 0.65, collapse)
+			head_bone.rotation = lerpf(0.0, -0.4, collapse)
+			arm_left_bone.rotation = lerpf(0.0, -1.0, collapse)
+			arm_right_bone.rotation = lerpf(0.0, 1.2, collapse)
+			leg_left_bone.rotation = lerpf(0.0, 0.6, collapse)
+			leg_right_bone.rotation = lerpf(0.0, -0.75, collapse)
 
