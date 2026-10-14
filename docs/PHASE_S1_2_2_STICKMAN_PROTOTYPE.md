@@ -26,9 +26,13 @@
 - `SkeletonDebug`: optional bone-following visual debug overlay.
 - `WeaponSocket` / `EffectSocket`: reserved attachment points for weapons and effects.
 
+### Follow-up bug fix / 后续错误修复
+- A local runtime report showed `get_animation_library("")` emitted an engine error when the default animation library did not yet exist.
+- Replaced the unsafe lookup with `has_animation_library("")` before removal. This keeps initialization safe for the current scene, whose `AnimationPlayer` starts without a serialized animation library.
+
 ### Verification boundary / 验证范围
 - Repository scene/script paths and the current branch contents were inspected.
-- The code change addresses pose persistence when transitioning from Run back to Idle, and sets a short blend for Idle/Run transitions.
+- The code change addresses pose persistence when transitioning from Run back to Idle, sets a short blend for Idle/Run transitions, and checks `has_animation_library("")` before removing the default library so an absent library is never queried with `get_animation_library("")`.
 - The connected GitHub session cannot launch the local Godot 4.6.1 editor/runtime. Therefore, parser/import/playback and physical movement are **not claimed as runtime-tested**; local acceptance below is still required.
 
 ### Local acceptance / 本地验收
