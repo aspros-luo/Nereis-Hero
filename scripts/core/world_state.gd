@@ -63,6 +63,9 @@ var menu_input_locked := false
 # Session-only protagonist Debug override; intentionally not serialized to save data.
 # 主角 Debug 覆盖只在当前运行会话有效，不写入存档。
 var debug_ability_override_active := false
+# Runtime-only visual rollout switch. Defaults to skeletal Hero visuals; F8 toggles the procedural fallback in debug builds.
+# 仅运行时有效的表现层切换开关：默认启用骨骼主角；Debug 构建中按 F8 可切回程序绘制。
+var hero_skeleton_visual_enabled := true
 # Session-only map acceptance mode. While active, debug exploration never overwrites the real save.
 # 仅当前会话有效的地图验收模式；开启时调试探索不会覆盖正式存档。
 var debug_map_test_mode := false
