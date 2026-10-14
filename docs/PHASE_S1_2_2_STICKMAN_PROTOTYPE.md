@@ -7,6 +7,7 @@
 
 ## S1.2.2-A2 — Visual debug layer
 - `SkeletonDebug` remains a separate `Node2D` sibling and does not replace the character's production rendering. Press **F3** in the prototype to toggle this technical overlay on/off at runtime without changing the skeleton or animation state.
+- Added `StickmanVisual` (`scripts/characters/stickman_visual.gd`) as a separate presentation layer. It follows the same bone transforms but draws a dark outline and warm inner stroke with rounded joints; F3 hides only the white technical overlay, not the character silhouette.
 - The debug overlay reads live `Bone2D.global_position` values and redraws while enabled, following animated bone transforms. Position conversion uses the shared parent origin rather than `Node2D.to_local()` to avoid a singular-transform inverse in preview setups.
 
 ## S1.2.2-A3 — AnimationPlayer & skeletal animation prototype
@@ -29,6 +30,7 @@
 ### Node responsibilities / 节点职责
 - `CharacterBody2D`: movement and collision/physics responsibility.
 - `Skeleton2D` + `Bone2D`: skeletal pose transforms only.
+- `StickmanVisual`: character-facing line-art presentation, independent from technical debug drawing.
 - `AnimationPlayer`: owns and plays the prototype animation clips.
 - `SkeletonDebug`: optional bone-following visual debug overlay.
 - `WeaponSocket` / `EffectSocket`: reserved attachment points for weapons and effects.
@@ -46,13 +48,18 @@
 ### Local acceptance / 本地验收
 1. Open the project in Godot 4.6.1, open `res://scenes/characters/stickman_hero.tscn`, and use **Run Current Scene (F6)**. Running the project with F5 still launches `res://scenes/boot.tscn`, not this standalone prototype.
 2. Confirm there are no parser/import errors and that `Idle` starts automatically from the controller.
-3. Press **F3** and confirm the white bone lines/head circle disappear and reappear while the character rig and movement continue unchanged.
+3. Press **F3** and confirm the white technical lines disappear and reappear while the outlined stickman remains visible while the character rig and movement continue unchanged.
 4. Hold Left/Right or A/D: the root `CharacterBody2D` should visibly move across the viewport while the fixed preview camera remains stationary and the debug skeleton loops through `Run`.
 5. Release the key: movement stops, `Idle` resumes, and the legs return to neutral rather than freezing in the last run pose.
 6. Press **J** and **K** separately. Confirm the long-sword action feels more deliberate than the compact short-blade action and returns to the correct locomotion pose. These are visual-only tests, not functional combat.
 7. Press **Space** while facing left and right. Confirm the character moves in its captured facing direction during the short dodge burst, then returns to normal movement. Tune `prototype_dodge_speed` only after local feel testing.
 8. Repeat Run/Idle switching several times and confirm there is no accumulating bone rotation or visible snap beyond the intended short blend.
 9. Confirm `SkeletonDebug`, `Skeleton2D`, `AnimationPlayer`, `WeaponSocket`, and `EffectSocket` coexist without changing the production `hero.gd` rendering path.
+
+## S1.2.2-A5 — Independent character presentation / 独立角色表现层
+- `StickmanVisual` reads live bone positions and draws a stylized outlined figure independently from `SkeletonDebug`.
+- F3 toggles only the white technical overlay; the character-facing silhouette should remain visible.
+- This is temporary prototype art, not final protagonist art or a replacement for the production Hero rendering path.
 
 ## Animation feel principles / 动作手感原则
 - Use simple, readable poses inspired by stick-figure action animation; do not copy its high action density or elaborate choreography into this Soulslike prototype.
