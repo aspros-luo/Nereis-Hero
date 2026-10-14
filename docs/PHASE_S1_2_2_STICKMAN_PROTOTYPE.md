@@ -7,40 +7,43 @@
 
 ## S1.2.2-A2 — Visual debug layer
 - `SkeletonDebug` remains a separate `Node2D` sibling and does not replace the character's production rendering.
-- Updated the debug overlay to read the live `Bone2D.global_position` values and redraw while enabled. It now follows the animated bone transforms instead of showing a static, non-animated stick figure.
+- The debug overlay reads live `Bone2D.global_position` values and redraws while enabled, following animated bone transforms.
 
-## S1.2.2-A3 — AnimationPlayer integration test
+## S1.2.2-A3 — AnimationPlayer & skeletal animation prototype
 
-### Implemented
-- Added an `AnimationPlayer` sibling to the `CharacterBody2D` root.
-- The controller builds a small runtime `AnimationLibrary` containing looping `Idle` and `Run` clips. Keeping the test clips generated in code avoids committing opaque editor-generated animation data; these can later be replaced with authored clips without changing the scene hierarchy.
-- `Idle`: subtle spine, head, and arm movement.
-- `Run`: alternating arm/leg rotation with a small spine counter-swing.
-- `ui_left` / `ui_right` move the root `CharacterBody2D`; the controller selects `Run` while moving and `Idle` when released. These are Godot's built-in UI actions, so no global Input Map changes are needed.
-- `Attack`, `Hurt`, and `Dodge` remain reserved states and do not yet have clips.
+### Implemented / 已实现
+- `AnimationPlayer` is a sibling of the `CharacterBody2D` root and receives a runtime `AnimationLibrary` with looping `Idle` and `Run` clips.
+- `Idle`: subtle spine/head/arm sway; both legs are explicitly keyed to neutral rotations so the run pose does not remain after stopping.
+- `Run`: alternating arm and leg rotations with a small spine counter-swing and subtle head movement.
+- Added a short `Idle` ↔ `Run` blend time to soften movement transitions.
+- Built-in `ui_left` / `ui_right` actions move the root and select `Run`; releasing the keys returns to `Idle`. No project-wide Input Map changes are required.
+- Future state names are reserved for `LONG_SWORD_ATTACK`, `SHORT_BLADE_ATTACK`, `HURT`, `DODGE`, `WITCH_TIME`, and `BOSS_ACTION`. These states intentionally have no authored clips yet.
 
-### Node responsibilities
-- `CharacterBody2D`: root movement/state harness.
-- `Skeleton2D` + `Bone2D`: bone transforms animated by value tracks.
-- `AnimationPlayer`: owns and plays the prototype clips.
-- `SkeletonDebug`: bone-following visual overlay used only for validation.
-- `WeaponSocket` / `EffectSocket`: retained for later sword, short-blade, dodge, and boss effect work.
+### Node responsibilities / 节点职责
+- `CharacterBody2D`: movement and collision/physics responsibility.
+- `Skeleton2D` + `Bone2D`: skeletal pose transforms only.
+- `AnimationPlayer`: owns and plays the prototype animation clips.
+- `SkeletonDebug`: optional bone-following visual debug overlay.
+- `WeaponSocket` / `EffectSocket`: reserved attachment points for weapons and effects.
 
-### Verification boundary
-The scene hierarchy and script paths were checked against the current repository files. This connector session cannot launch the local Godot 4.6.1 editor/runtime, so an actual import/parser/playback test still needs to be run locally. This commit should be treated as an animation pipeline prototype, not final combat animation.
+### Verification boundary / 验证范围
+- Repository scene/script paths and the current branch contents were inspected.
+- The code change addresses pose persistence when transitioning from Run back to Idle, and sets a short blend for Idle/Run transitions.
+- The connected GitHub session cannot launch the local Godot 4.6.1 editor/runtime. Therefore, parser/import/playback and physical movement are **not claimed as runtime-tested**; local acceptance below is still required.
 
-### Local acceptance
+### Local acceptance / 本地验收
 1. Open the project in Godot 4.6.1 and run the project or instantiate `res://scenes/characters/stickman_hero.tscn`.
-2. Confirm there are no parser/import errors and that the initial Idle clip starts.
-3. Hold Left/Right (the default `ui_left` / `ui_right` bindings): the CharacterBody2D root should move and the debug skeleton should visibly loop through Run.
-4. Release the key: movement stops and Idle resumes.
-5. Confirm the `SkeletonDebug`, `Skeleton2D`, `AnimationPlayer`, `WeaponSocket`, and `EffectSocket` coexist without changing the existing `hero.gd` rendering path.
+2. Confirm there are no parser/import errors and that `Idle` starts automatically from the controller.
+3. Hold Left/Right (Godot's default `ui_left` / `ui_right`): the root `CharacterBody2D` should move while the debug skeleton loops through `Run`.
+4. Release the key: movement stops, `Idle` resumes, and the legs return to neutral rather than freezing in the last run pose.
+5. Repeat Run/Idle switching several times and confirm there is no accumulating bone rotation or visible snap beyond the intended short blend.
+6. Confirm `SkeletonDebug`, `Skeleton2D`, `AnimationPlayer`, `WeaponSocket`, and `EffectSocket` coexist without changing the production `hero.gd` rendering path.
 
-## Follow-up
+## Follow-up / 后续
 - Replace the prototype stick figure with authored character art/skin binding after the animation test passes.
-- Add dedicated animation clips and state priorities for long-sword attack, short-blade attack, Dodge/Witch Time, hit reaction, and boss actions.
-- Add floor/gravity/collision only when integrating the prototype into a real gameplay scene; this harness intentionally tests horizontal movement and skeleton animation in isolation.
+- Add authored long-sword and short-blade attacks, Dodge/Witch Time, hit reaction, and boss-specific clips when the combat design is ready.
+- Add floor/gravity/collision only when integrating the prototype into a real gameplay scene; this harness currently isolates horizontal movement and skeletal animation.
 
 ## Repository permission check
-- On 2026-10-14, the connected GitHub API successfully read this private repository and the `development` branch; repository metadata reports `push: true` for the active connection.
-- A documentation update was successfully committed to `development` to verify write access. This confirms connector write capability; it does not substitute for running the Godot project locally.
+- On 2026-10-14, the connected GitHub API successfully read this private repository and `development`; repository metadata reported `push: true`.
+- A documentation write test and subsequent code/documentation commits succeeded on `development`. This confirms connector write capability, not local Godot runtime validity.
