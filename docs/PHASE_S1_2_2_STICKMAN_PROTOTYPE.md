@@ -19,7 +19,10 @@
 - `SkeletonDebug` draws each leg as hip → knee → foot and the run clip bends the knees in alternation for a clearer walking stride. The foot endpoints are offset left/right to read as feet instead of two perfectly vertical lines, with subtle foot-angle keys during the cycle.
 - Added a short `Idle` ↔ `Run` blend time to soften movement transitions.
 - Built-in `ui_left` / `ui_right` actions plus explicit Left/Right and A/D key polling move the root and select `Run`; releasing the keys returns to `Idle`. The rig flips horizontally to face the current movement direction without flipping the CharacterBody2D or its fixed camera. No project-wide Input Map changes are required.
-- Future state names are reserved for `LONG_SWORD_ATTACK`, `SHORT_BLADE_ATTACK`, `HURT`, `DODGE`, `WITCH_TIME`, and `BOSS_ACTION`. These states intentionally have no authored clips yet.
+- Added first-pass, non-looping `LongSwordAttack`, `ShortBladeAttack`, and `Dodge` skeletal pose clips. They are deliberately rough timing/pose placeholders, not final weapon choreography.
+- Added temporary prototype controls: **J** = long-sword attack, **K** = short-blade attack, **Space** = dodge. Each action owns its state until its clip duration elapses, then returns to Run or Idle based on horizontal input; movement remains responsive during the pose test.
+- These actions are visual state tests only: there are no weapon sprites, hitboxes, damage, stamina cost, invulnerability frames, combo buffering, or Witch Time behavior yet. Holding an action key may trigger another test after the current clip completes.
+- `HURT`, `WITCH_TIME`, and `BOSS_ACTION` remain reserved states without authored clips.
 
 ### Node responsibilities / 节点职责
 - `CharacterBody2D`: movement and collision/physics responsibility.
@@ -43,8 +46,9 @@
 2. Confirm there are no parser/import errors and that `Idle` starts automatically from the controller.
 3. Hold Left/Right or A/D: the root `CharacterBody2D` should visibly move across the viewport while the fixed preview camera remains stationary and the debug skeleton loops through `Run`.
 4. Release the key: movement stops, `Idle` resumes, and the legs return to neutral rather than freezing in the last run pose.
-5. Repeat Run/Idle switching several times and confirm there is no accumulating bone rotation or visible snap beyond the intended short blend.
-6. Confirm `SkeletonDebug`, `Skeleton2D`, `AnimationPlayer`, `WeaponSocket`, and `EffectSocket` coexist without changing the production `hero.gd` rendering path.
+5. Press **J**, **K**, and **Space** one at a time. Confirm each distinct action pose plays once per short clip and then returns to the correct locomotion pose; these are visual-only tests, not functional combat.
+6. Repeat Run/Idle switching several times and confirm there is no accumulating bone rotation or visible snap beyond the intended short blend.
+7. Confirm `SkeletonDebug`, `Skeleton2D`, `AnimationPlayer`, `WeaponSocket`, and `EffectSocket` coexist without changing the production `hero.gd` rendering path.
 
 ## Follow-up / 后续
 - Replace the prototype stick figure with authored character art/skin binding after the animation test passes.
