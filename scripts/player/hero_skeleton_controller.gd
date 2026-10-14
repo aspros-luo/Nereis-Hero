@@ -333,12 +333,12 @@ func _apply_pose() -> void:
 			var technique_length := 26.0 if weapon_style == "short_blade" else 40.0
 			_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(technique_length, -7)])
 		PoseState.GRAPPLE:
-			var swing := sin(animation_time * 4.5)
-			body_bone.rotation = -0.2 + swing * 0.045
-			arm_left_bone.rotation = -1.0 + swing * 0.08
-			arm_right_bone.rotation = -0.9 - swing * 0.08
-			leg_left_bone.rotation = 0.25 + swing * 0.12
-			leg_right_bone.rotation = -0.22 - swing * 0.12
+			var grapple_swing := sin(animation_time * 4.5)
+			body_bone.rotation = -0.2 + grapple_swing * 0.045
+			arm_left_bone.rotation = -1.0 + grapple_swing * 0.08
+			arm_right_bone.rotation = -0.9 - grapple_swing * 0.08
+			leg_left_bone.rotation = 0.25 + grapple_swing * 0.12
+			leg_right_bone.rotation = -0.22 - grapple_swing * 0.12
 		PoseState.WALL_CLIMB:
 			var climb_cycle := sin(animation_time * 6.5)
 			body_bone.rotation = -0.18
