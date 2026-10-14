@@ -1,8 +1,8 @@
 # Phase S1.2.3 — Production Hero Visual Integration / 正式主角表现层整合
 
-Status: **A1–A4 implementation committed; A1–A3 locally accepted by the user; A4 runtime rollout check pending**. The procedural renderer remains available as a reversible fallback.
+Status: **A1–A6 implementation committed; A1–A5 locally accepted by the user; A6 fuller-stickman/animation runtime check pending**. The procedural renderer remains available as a reversible fallback.
 
-状态：**A1–A3 已由用户本地验收通过；A4 代码已提交、等待本地运行验收；A5 视觉比例与反馈补强已提交、等待本地运行验收**。原程序绘制仍可通过 Debug F8 回退。
+状态：**A1–A5 已由用户本地验收通过；A6 火柴人加粗与动作补强已提交、等待本地运行验收**。原程序绘制仍可通过 Debug F8 回退。
 
 ## Goal / 目标
 
@@ -110,7 +110,7 @@ A4 local rollout acceptance — in Godot 4.6.1:
 5. In `res://scenes/combat_demo.tscn`, verify the normal combat demo still runs; use F8 to compare both visual paths. No Ashen Knight victory is required for this visual-layer check.
 6. Inspect Output for parser/runtime errors.
 
-The source and documentation have been committed and read back from GitHub. Godot runtime validation cannot be executed from this connected session; the A4 rollout still needs local acceptance.
+The source and documentation have been committed and read back from GitHub. The user subsequently confirmed the A4/A5 local acceptance passed. Godot runtime validation cannot be executed from this connected session.
 
 ## Production combat values remain authoritative / 正式战斗参数保持权威
 
@@ -151,7 +151,7 @@ A4/A5 local acceptance — Godot 4.6.1:
 6. Enter the village and one greybox region; check newly spawned Heroes use the current global visual setting.
 7. Check Godot Output for parse/runtime errors.
 
-Source files and documentation have been committed and read back from GitHub. Runtime validation remains local; this connected session has not executed Godot.
+Source files and documentation have been committed and read back from GitHub. The user confirmed the A4/A5 local acceptance passed on 2026-10-14. Runtime validation for the new A6 visual changes remains local; this connected session has not executed Godot.
 
 ### S1.2.3-A6 — Fuller stickman and animation pass — implementation committed
 
