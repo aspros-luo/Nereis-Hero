@@ -30,7 +30,7 @@ func _ready() -> void:
 	set_state(State.IDLE)
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	# Support both arrow keys (ui_left/ui_right) and familiar A/D controls.
 	# The prototype intentionally avoids project-wide Input Map changes.
 	# CharacterBody2D owns movement; animation only changes Bone2D rotations.
@@ -39,6 +39,7 @@ func _physics_process(_delta: float) -> void:
 		direction = -1.0
 	elif Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
 		direction = 1.0
+
 	# Capture facing when an action begins. A dodge moves in that direction even
 	# if the player releases the movement key, making this a movement test too.
 	if current_state == State.DODGE:
@@ -54,21 +55,22 @@ func _physics_process(_delta: float) -> void:
 
 	# Temporary action states own playback until their non-looping clip ends.
 	if _is_action_state(current_state):
-		action_time_remaining -= _delta
+		action_time_remaining -= delta
 		if action_time_remaining <= 0.0:
 			velocity.x = direction * move_speed
 			_set_locomotion_state(direction)
 		return
 
-	# Prototype controls: J = long sword, K = short blade, Space = dodge.
-	# These are animation/timing tests only: no hitboxes, damage, or invulnerability.
-	if Input.is_key_pressed(KEY_J):
+	# Edge-trigger action controls: holding a key must not silently chain strikes
+	# the moment the previous clip ends. Release and press again for a new action.
+	# These remain animation-only tests: no hitboxes, damage, or invulnerability.
+	if Input.is_key_just_pressed(KEY_J):
 		set_state(State.LONG_SWORD_ATTACK)
 		return
-	if Input.is_key_pressed(KEY_K):
+	if Input.is_key_just_pressed(KEY_K):
 		set_state(State.SHORT_BLADE_ATTACK)
 		return
-	if Input.is_key_pressed(KEY_SPACE):
+	if Input.is_key_just_pressed(KEY_SPACE):
 		set_state(State.DODGE)
 		return
 
@@ -202,12 +204,11 @@ func _make_run_animation() -> Animation:
 func _make_long_sword_attack_animation() -> Animation:
 	var animation := Animation.new()
 	animation.resource_name = "LongSwordAttack"
-	animation.length = 0.42
+	animation.length = 0.52
 	animation.loop_mode = Animation.LOOP_NONE
 	# Broad timing arc: anticipation, committed swing, follow-through, recovery.
 	# This is intentionally a readable single strike, not an elaborate combo.
 	var times := [0.0, 0.10, 0.22, 0.34, 0.52]
-	animation.length = 0.52
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.0, -0.32, 0.48, 0.22, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.04, -0.08, -0.03, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.1, -0.92, 0.72, 0.32, -0.025])
@@ -224,11 +225,10 @@ func _make_long_sword_attack_animation() -> Animation:
 func _make_short_blade_attack_animation() -> Animation:
 	var animation := Animation.new()
 	animation.resource_name = "ShortBladeAttack"
-	animation.length = 0.3
+	animation.length = 0.32
 	animation.loop_mode = Animation.LOOP_NONE
 	# Compact, quick strike: little wind-up, sharp extension, fast recovery.
 	var times := [0.0, 0.045, 0.13, 0.22, 0.32]
-	animation.length = 0.32
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.0, 0.12, -0.28, -0.08, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, -0.02, 0.06, 0.02, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.025, -0.42, 0.46, 0.18, -0.025])
