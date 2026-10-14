@@ -1341,8 +1341,9 @@ func _log(category: String, message: String) -> void:
 	print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-	# Keep the procedural renderer as a live fallback; only one visual path is drawn at a time.
+	# Keep the procedural renderer as a live fallback; only one character silhouette is drawn at a time.
 	if skeleton_visual_enabled:
+		_draw_skeleton_mode_overlay()
 		return
 	var idle_bob: float = sin(animation_time * 7.0) * 1.5 if state == CombatState.IDLE else 0.0
 	var run_step: float = sin(animation_time * 11.0) * 2.5 if state == CombatState.MOVE else 0.0
@@ -1499,6 +1500,34 @@ func _draw() -> void:
 	draw_rect(Rect2(-32, -100, 64.0 * (stamina / MAX_STAMINA), 5), Color("#b7a48c"))
 	if combo_step > 0 and attack_time > 0.0:
 		draw_string(ThemeDB.fallback_font, Vector2(-8, -112), "%d" % combo_step, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#e0d6c3"))
+
+
+## Draw UI and combat feedback that must remain visible when the skeleton replaces the procedural body.
+## 骨骼替换程序角色主体时，仍需绘制的状态 UI 与战斗反馈。
+func _draw_skeleton_mode_overlay() -> void:
+	_draw_shadow_ellipse(Vector2(0, 2), 30.0, 7.0, Color(0.04, 0.03, 0.05, 0.42))
+	var hud_color := Color("#d6c7b2")
+	draw_string(ThemeDB.fallback_font, Vector2(-52, -88), "HERO %d" % health, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, hud_color)
+	draw_rect(Rect2(-32, -100, 64, 5), Color("#27212a"))
+	draw_rect(Rect2(-32, -100, 64.0 * (stamina / MAX_STAMINA), 5), Color("#b7a48c"))
+	if combo_step > 0 and attack_time > 0.0:
+		draw_string(ThemeDB.fallback_font, Vector2(-8, -112), "%d" % combo_step, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#e0d6c3"))
+	if invulnerable:
+		draw_arc(Vector2(0, -34), 25.0, 0.0, TAU, 24, Color(0.54, 0.84, 0.88, 0.38), 1.5)
+	if WorldState.hidden_resistance_awakened:
+		var anchor_color := Color("#aa8d72") if WorldState.mite_control_stage < 2 else Color("#8d6c98")
+		draw_arc(Vector2(-13, -1), 7.0, 0.0, TAU, 16, anchor_color, 2.0)
+	if hit_confirm_time > 0.0:
+		draw_arc(Vector2(facing * 30, -28), 70.0, 0.0, TAU, 24, Color("#efe1c8"), 5.0)
+	elif attack_time > 0.0 and attack_windup <= 0.0:
+		var arc_start := -1.20 if facing > 0 else 1.20
+		var arc_end := 1.20 if facing > 0 else 5.08
+		var arc_radius := 64.0 + combo_step * 3.0
+		draw_arc(Vector2(facing * 26, -27), arc_radius, arc_start, arc_end, 20, Color(0.88, 0.80, 0.68, 0.82), 4.0)
+		if combo_step == 3:
+			draw_line(Vector2(facing * 18, -24), Vector2(facing * 94, -44), Color("#eee0c8"), 2.0)
+	elif attack_time > 0.0:
+		draw_arc(Vector2(facing * 24, -28), 42.0, -0.45 if facing > 0 else 3.59, 0.45 if facing > 0 else 4.49, 12, Color("#c3a98d"), 3.0)
 
 
 func _draw_shadow_ellipse(center: Vector2, radius_x: float, radius_y: float, color: Color) -> void:
