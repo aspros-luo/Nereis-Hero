@@ -21,7 +21,7 @@ enum PoseState {
 	DEATH
 }
 
-@export var line_width: float = 4.5
+@export var line_width: float = 6.0
 @export var animate_idle: bool = true
 @export var animate_run: bool = true
 
@@ -45,6 +45,9 @@ var facing: float = 1.0
 var weapon_style: String = "long_sword"
 var animation_time: float = 0.0
 var _neutral_rotations: Dictionary = {}
+var _neutral_positions: Dictionary = {}
+var _pose_time: float = 0.0
+var _head_fill: Polygon2D
 var _sword_line: Line2D
 var _body_line: Line2D
 var _head_line: Line2D
@@ -64,6 +67,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	animation_time += delta
+	_pose_time += delta
 	if current_pose == PoseState.RUN and animate_run:
 		_apply_pose()
 	elif current_pose == PoseState.IDLE and animate_idle:
@@ -108,9 +112,13 @@ func apply_visual_context(context: Dictionary) -> void:
 
 
 func set_pose(next_pose: PoseState, next_combo_step: int = 1, next_facing: float = 1.0) -> void:
+	var next_step := clampi(next_combo_step, 1, 3)
+	var next_direction := -1.0 if next_facing < 0.0 else 1.0
+	if current_pose != next_pose or combo_step != next_step or not is_equal_approx(facing, next_direction):
+		_pose_time = 0.0
 	current_pose = next_pose
-	combo_step = clampi(next_combo_step, 1, 3)
-	facing = -1.0 if next_facing < 0.0 else 1.0
+	combo_step = next_step
+	facing = next_direction
 	scale.x = absf(scale.x) * facing
 	_apply_pose()
 
@@ -146,6 +154,7 @@ func play_death(direction: float = 1.0) -> void:
 func _capture_neutral_pose() -> void:
 	for bone in [root_bone, body_bone, head_bone, arm_left_bone, arm_right_bone, leg_left_bone, leg_right_bone]:
 		_neutral_rotations[bone] = bone.rotation
+		_neutral_positions[bone] = bone.position
 
 
 func _reset_pose() -> void:
@@ -154,6 +163,7 @@ func _reset_pose() -> void:
 		var node := bone as Bone2D
 		if is_instance_valid(node):
 			node.rotation = float(_neutral_rotations[bone])
+			node.position = _neutral_positions[bone]
 	if _body_line:
 		_body_line.default_color = INK
 	if _head_line:
@@ -175,12 +185,13 @@ func _reset_pose() -> void:
 func _build_visuals() -> void:
 	# A5 proportions: shorter torso/head stack, longer legs and arms to avoid the stretched-body silhouette.
 	# A5 比例调整：缩短躯干与头部堆叠、加长四肢，避免身体过长、腿部过短。
-	_body_line = _add_line(body_bone, [Vector2.ZERO, Vector2(0, 20)], line_width, INK)
-	_head_line = _add_circle(head_bone, 7.0, line_width, INK)
-	_left_arm_line = _add_line(arm_left_bone, [Vector2.ZERO, Vector2(-17, 10)], line_width, INK)
-	_right_arm_line = _add_line(arm_right_bone, [Vector2.ZERO, Vector2(17, 10)], line_width, INK)
-	_left_leg_line = _add_line(leg_left_bone, [Vector2.ZERO, Vector2(1, 24)], line_width, CLOTH)
-	_right_leg_line = _add_line(leg_right_bone, [Vector2.ZERO, Vector2(-1, 24)], line_width, CLOTH)
+	_body_line = _add_line(body_bone, [Vector2.ZERO, Vector2(0, 20)], line_width * 1.45, INK)
+	_head_fill = _add_filled_circle(head_bone, 6.6, Color("#b7a9a0"))
+	_head_line = _add_circle(head_bone, 6.8, maxf(2.8, line_width * 0.55), INK)
+	_left_arm_line = _add_line(arm_left_bone, [Vector2.ZERO, Vector2(-17, 10)], line_width * 1.2, INK)
+	_right_arm_line = _add_line(arm_right_bone, [Vector2.ZERO, Vector2(17, 10)], line_width * 1.2, INK)
+	_left_leg_line = _add_line(leg_left_bone, [Vector2.ZERO, Vector2(1, 24)], line_width * 1.35, CLOTH)
+	_right_leg_line = _add_line(leg_right_bone, [Vector2.ZERO, Vector2(-1, 24)], line_width * 1.35, CLOTH)
 	# A restrained split cloak restores the protagonist's recognizable silhouette without replacing the rig.
 	# 简洁的分叉披风补回主角轮廓特征，不改变骨骼控制结构。
 	_cape_shape = Polygon2D.new()
@@ -201,9 +212,25 @@ func _add_line(parent: Node2D, points: Array[Vector2], width: float, color: Colo
 	line.width = width
 	line.default_color = color
 	line.antialiased = true
+	line.joint_mode = Line2D.LINE_JOINT_ROUND
+	line.begin_cap_mode = Line2D.LINE_CAP_ROUND
+	line.end_cap_mode = Line2D.LINE_CAP_ROUND
 	line.points = PackedVector2Array(points)
 	parent.add_child(line)
 	return line
+
+
+func _add_filled_circle(parent: Node2D, radius: float, color: Color) -> Polygon2D:
+	var shape := Polygon2D.new()
+	shape.name = "FilledHeadSilhouette"
+	shape.color = color
+	var points := PackedVector2Array()
+	for index in range(20):
+		var angle := TAU * float(index) / 20.0
+		points.append(Vector2(cos(angle), sin(angle)) * radius)
+	shape.polygon = points
+	parent.add_child(shape)
+	return shape
 
 
 func _add_circle(parent: Node2D, radius: float, width: float, color: Color) -> Line2D:
@@ -228,17 +255,22 @@ func _apply_pose() -> void:
 	match current_pose:
 		PoseState.IDLE:
 			if animate_idle:
-				body_bone.rotation = sin(animation_time * 2.8) * 0.025
-				head_bone.rotation = sin(animation_time * 2.8 + 0.5) * 0.025
-				arm_right_bone.rotation = 0.12
-				arm_left_bone.rotation = -0.08
+				# Quiet breathing, relaxed shoulders and a tiny weight shift keep the silhouette alive.
+				var breath := sin(animation_time * 2.4)
+				body_bone.rotation = breath * 0.035
+				head_bone.rotation = sin(animation_time * 2.4 + 0.55) * 0.025
+				arm_right_bone.rotation = 0.12 + breath * 0.025
+				arm_left_bone.rotation = -0.08 - breath * 0.02
+				leg_left_bone.rotation = sin(animation_time * 1.6) * 0.018
+				leg_right_bone.rotation = -sin(animation_time * 1.6) * 0.018
 		PoseState.RUN:
-			var swing := run_cycle * 0.62 if animate_run else 0.0
-			body_bone.rotation = -0.08
-			arm_left_bone.rotation = swing
-			arm_right_bone.rotation = -swing - 0.18
-			leg_left_bone.rotation = -swing * 0.9
-			leg_right_bone.rotation = swing * 0.9
+			var swing := run_cycle * 0.72 if animate_run else 0.0
+			var bounce := absf(sin(animation_time * 11.0))
+			body_bone.rotation = -0.12 - bounce * 0.035
+			arm_left_bone.rotation = swing + 0.08
+			arm_right_bone.rotation = -swing - 0.2
+			leg_left_bone.rotation = -swing * 1.05
+			leg_right_bone.rotation = swing * 1.05
 		PoseState.JUMP:
 			body_bone.rotation = -0.12
 			arm_left_bone.rotation = -0.85
@@ -345,4 +377,28 @@ func _apply_pose() -> void:
 			leg_right_bone.rotation = -0.75
 			_body_line.default_color = CLOTH
 			_head_line.default_color = HURT_COLOR
+
+	# Short follow-through arcs add anticipation/recoil without owning combat timing.
+	# 短促的蓄势与回弹只影响视觉，不改变正式战斗计时。
+	var action_arc := sin(clampf(_pose_time / 0.32, 0.0, 1.0) * PI)
+	match current_pose:
+		PoseState.ATTACK_LONG:
+			body_bone.rotation += action_arc * (0.10 if combo_step < 3 else 0.16)
+			arm_right_bone.rotation += action_arc * 0.16
+		PoseState.ATTACK_SHORT:
+			body_bone.rotation += action_arc * 0.07
+			arm_right_bone.rotation += action_arc * 0.12
+		PoseState.WEAPON_TECHNIQUE:
+			body_bone.rotation += action_arc * 0.12
+			arm_right_bone.rotation += action_arc * 0.2
+		PoseState.JUMP:
+			arm_left_bone.rotation += sin(animation_time * 5.0) * 0.035
+			arm_right_bone.rotation -= sin(animation_time * 5.0) * 0.035
+		PoseState.FALL:
+			arm_left_bone.rotation += sin(animation_time * 4.0) * 0.045
+			arm_right_bone.rotation -= sin(animation_time * 4.0) * 0.045
+		PoseState.DODGE, PoseState.QUICK_DASH:
+			body_bone.rotation += sin(animation_time * 20.0) * 0.025
+		PoseState.HURT:
+			body_bone.rotation += sin(_pose_time * 36.0) * 0.035
 
