@@ -140,9 +140,9 @@ func _draw() -> void:
 		return
 	var reach: float = 26.0 if equipped_weapon == WeaponKind.LONG_SWORD else 17.0
 	var half_width: float = 19.0 if equipped_weapon == WeaponKind.LONG_SWORD else 13.0
-	var rect := Rect2(attack_area.position - Vector2(half_width, 11.0), Vector2(half_width * 2.0, 22.0))
+	var rect := Rect2(attack_area.position - Vector2(half_width, 13.0), Vector2(half_width * 2.0, 26.0))
 	draw_rect(rect, Color(1.0, 0.22, 0.12, 0.75), false, 1.0)
-	draw_line(Vector2.ZERO, Vector2(action_facing_direction * reach, -22.0), Color(1.0, 0.22, 0.12, 0.35), 1.0)
+	draw_line(Vector2.ZERO, Vector2(action_facing_direction * reach, -17.0), Color(1.0, 0.22, 0.12, 0.35), 1.0)
 
 
 func _get_movement_direction() -> float:
@@ -370,7 +370,7 @@ func _update_attack_hitbox() -> void:
 			active = elapsed >= starts[clampi(combo_step - 1, 0, 2)] and elapsed <= ends[clampi(combo_step - 1, 0, 2)]
 	attack_area.position = Vector2(action_facing_direction * reach, -22.0)
 	if attack_shape != null and attack_shape.shape is RectangleShape2D:
-		(attack_shape.shape as RectangleShape2D).size = Vector2(half_width * 2.0, 22.0)
+		(attack_shape.shape as RectangleShape2D).size = Vector2(half_width * 2.0, 26.0)
 	if attack_area.monitoring != active:
 		attack_area.monitoring = active
 	queue_redraw()
