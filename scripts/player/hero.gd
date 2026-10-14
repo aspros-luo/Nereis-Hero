@@ -1049,7 +1049,7 @@ func get_visual_context() -> Dictionary:
 		"previous_combat_state": _state_name(previous_state),
 		"facing": facing,
 		"combo_step": combo_step,
-		"weapon": hero_system.get_weapon_name() if hero_system != null else "long_sword",
+		"weapon": "short_blade" if hero_system != null and hero_system.is_short_blade() else "long_sword",
 		"action_kind": active_action_kind,
 		"action_elapsed": action_elapsed,
 		"attack_time_remaining": attack_time,
