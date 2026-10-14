@@ -197,12 +197,14 @@ func set_state(next_state: State) -> void:
 		State.LONG_SWORD_ATTACK:
 			equipped_weapon = WeaponKind.LONG_SWORD
 			_capture_action_facing()
-			_play_action("LongSwordAttack")
+			_start_combo_step(1)
 		State.SHORT_BLADE_ATTACK:
 			equipped_weapon = WeaponKind.SHORT_BLADE
 			_capture_action_facing()
-			_play_action("ShortBladeAttack")
+			_start_combo_step(1)
 		State.DODGE:
+			combo_step = 0
+			combo_input_buffered = false
 			_capture_action_facing()
 			_play_action("Dodge")
 		State.HURT, State.WITCH_TIME, State.BOSS_ACTION:
@@ -218,8 +220,10 @@ func _play_action(animation_name: String) -> void:
 	if animation_player == null or not animation_player.has_animation(animation_name):
 		push_warning("Stickman prototype action animation is missing: " + animation_name)
 		action_time_remaining = 0.0
-		_set_locomotion_state(Input.get_axis("ui_left", "ui_right"))
+		active_action_animation = ""
+		_set_locomotion_state(_get_movement_direction())
 		return
+	active_action_animation = animation_name
 	animation_player.play(animation_name)
 	action_time_remaining = animation_player.current_animation_length
 
