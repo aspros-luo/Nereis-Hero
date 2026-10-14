@@ -32,21 +32,27 @@ func _draw() -> void:
 	var hip_l := _bone_position("RootBone/Leg_L")
 	var knee_l := _bone_position("RootBone/Leg_L/Knee_L")
 	var foot_l := _bone_position("RootBone/Leg_L/Knee_L/Foot_L")
+	var foot_l_bone := _get_bone("RootBone/Leg_L/Knee_L/Foot_L")
 	var hip_r := _bone_position("RootBone/Leg_R")
 	var knee_r := _bone_position("RootBone/Leg_R/Knee_R")
 	var foot_r := _bone_position("RootBone/Leg_R/Knee_R/Foot_R")
+	var foot_r_bone := _get_bone("RootBone/Leg_R/Knee_R/Foot_R")
 
 	# Core silhouette: compact torso, readable shoulder span, and longer legs.
 	_draw_limb(root, spine)
 	_draw_limb(spine, head)
+	_draw_limb(spine, arm_l)
+	_draw_limb(spine, arm_r)
 	_draw_limb(arm_l, _arm_tip(arm_l, arm_l_bone))
 	_draw_limb(arm_r, _arm_tip(arm_r, arm_r_bone))
 	_draw_limb(root, hip_l)
 	_draw_limb(hip_l, knee_l)
 	_draw_limb(knee_l, foot_l)
+	_draw_foot(foot_l, foot_l_bone)
 	_draw_limb(root, hip_r)
 	_draw_limb(hip_r, knee_r)
 	_draw_limb(knee_r, foot_r)
+	_draw_foot(foot_r, foot_r_bone)
 
 	# A restrained shoulder bridge keeps the upper body readable without
 	# turning the prototype into a detailed anatomy diagram.
@@ -60,6 +66,13 @@ func _arm_tip(shoulder: Vector2, arm_bone: Bone2D) -> Vector2:
 		return shoulder + Vector2(0.0, arm_length)
 	# The existing arm bone rotation controls the direction; no extra elbow bones.
 	return shoulder + Vector2(0.0, arm_length).rotated(arm_bone.global_rotation)
+
+
+func _draw_foot(ankle: Vector2, foot_bone: Bone2D) -> void:
+	if foot_bone == null:
+		return
+	var toe := ankle + Vector2(6.0, 0.0).rotated(foot_bone.global_rotation)
+	_draw_limb(ankle, toe)
 
 
 func _draw_limb(start: Vector2, finish: Vector2) -> void:
