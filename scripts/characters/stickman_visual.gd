@@ -65,13 +65,15 @@ func _arm_tip(shoulder: Vector2, arm_bone: Bone2D) -> Vector2:
 	if arm_bone == null:
 		return shoulder + Vector2(0.0, arm_length)
 	# The existing arm bone rotation controls the direction; no extra elbow bones.
-	return shoulder + Vector2(0.0, arm_length).rotated(arm_bone.global_rotation)
+	var arm_direction := arm_bone.global_transform.basis_xform(Vector2(0.0, arm_length))
+	return shoulder + arm_direction
 
 
 func _draw_foot(ankle: Vector2, foot_bone: Bone2D) -> void:
 	if foot_bone == null:
 		return
-	var toe := ankle + Vector2(6.0, 0.0).rotated(foot_bone.global_rotation)
+	var toe_direction := foot_bone.global_transform.basis_xform(Vector2(6.0, 0.0))
+	var toe := ankle + toe_direction
 	_draw_limb(ankle, toe)
 
 
