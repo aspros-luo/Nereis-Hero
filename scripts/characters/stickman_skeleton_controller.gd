@@ -29,9 +29,6 @@ func _ready() -> void:
 	_build_prototype_animations()
 	set_state(State.IDLE)
 
-
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	# Godot's Input singleton has no is_key_just_pressed(keycode) method.
 	# Handle discrete key-down events here so holding a key cannot chain actions.
@@ -163,8 +160,15 @@ func _build_prototype_animations() -> void:
 		return
 
 	animation_player.root_node = NodePath("..")
-	animation_player.set_blend_time("Idle", "Run", 0.12)
-	animation_player.set_blend_time("Run", "Idle", 0.12)
+	# Smooth locomotion transitions, with shorter transitions into/out of actions.
+	animation_player.set_blend_time("Idle", "Run", 0.10)
+	animation_player.set_blend_time("Run", "Idle", 0.10)
+	for locomotion in ["Idle", "Run"]:
+		for action in ["LongSwordAttack", "ShortBladeAttack", "Dodge"]:
+			animation_player.set_blend_time(locomotion, action, 0.04)
+			animation_player.set_blend_time(action, locomotion, 0.07)
+	animation_player.set_blend_time("LongSwordAttack", "ShortBladeAttack", 0.03)
+	animation_player.set_blend_time("ShortBladeAttack", "LongSwordAttack", 0.03)
 
 
 func _make_idle_animation() -> Animation:
@@ -173,6 +177,7 @@ func _make_idle_animation() -> Animation:
 	animation.length = 1.6
 	animation.loop_mode = Animation.LOOP_LINEAR
 
+	_add_position_track(animation, "Skeleton2D/RootBone", [0.0, 0.8, 1.6], [Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", [0.0, 0.8, 1.6], [0.0, 0.018, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", [0.0, 0.8, 1.6], [0.0, -0.025, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", [0.0, 0.8, 1.6], [-0.025, -0.01, -0.025])
@@ -190,62 +195,63 @@ func _make_idle_animation() -> Animation:
 func _make_run_animation() -> Animation:
 	var animation := Animation.new()
 	animation.resource_name = "Run"
-	animation.length = 0.8
+	animation.length = 0.72
 	animation.loop_mode = Animation.LOOP_LINEAR
-
-	var times := [0.0, 0.2, 0.4, 0.6, 0.8]
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.04, -0.04, 0.04, -0.04, 0.04])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.015, 0.0, -0.015, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.46, 0.46, -0.46, 0.46, -0.46])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.46, -0.46, 0.46, -0.46, 0.46])
-	# Opposing hip swings create a readable stride; knee bends lift the trailing foot.
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.66, -0.66, 0.66, -0.66, 0.66])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [-0.66, 0.66, -0.66, 0.66, -0.66])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.46, 0.0, 0.20, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.46, 0.0, 0.20, 0.0, 0.46])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [-0.12, 0.18, -0.12, 0.08, -0.12])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.18, -0.12, 0.08, -0.12, 0.18])
+	var times := [0.0, 0.18, 0.36, 0.54, 0.72]
+	# Opposing hips, alternating knee flex, counter-swinging arms and subtle pelvis bounce.
+	_add_position_track(animation, "Skeleton2D/RootBone", times, [Vector2.ZERO, Vector2(0, -1.6), Vector2.ZERO, Vector2(0, -1.6), Vector2.ZERO])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.035, -0.025, 0.035, -0.025, 0.035])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.012, 0.0, -0.012, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.52, 0.42, -0.52, 0.42, -0.52])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.52, -0.42, 0.52, -0.42, 0.52])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.62, 0.0, -0.62, 0.0, 0.62])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [-0.62, 0.0, 0.62, 0.0, -0.62])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.08, 0.46, 0.04, 0.18, 0.08])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.46, 0.04, 0.18, 0.08, 0.46])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [-0.16, 0.12, 0.06, -0.10, -0.16])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.12, -0.16, -0.10, 0.06, 0.12])
 	return animation
 
 
 func _make_long_sword_attack_animation() -> Animation:
 	var animation := Animation.new()
 	animation.resource_name = "LongSwordAttack"
-	animation.length = 0.52
+	animation.length = 0.68
 	animation.loop_mode = Animation.LOOP_NONE
-	# Broad timing arc: anticipation, committed swing, follow-through, recovery.
-	# This is intentionally a readable single strike, not an elaborate combo.
-	var times := [0.0, 0.10, 0.22, 0.34, 0.52]
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.0, -0.32, 0.48, 0.22, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.04, -0.08, -0.03, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.1, -0.92, 0.72, 0.32, -0.025])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.1, -1.12, 0.88, 0.38, 0.025])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.0, -0.2, 0.14, 0.08, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [0.0, 0.12, -0.16, -0.06, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.12, 0.22, 0.1, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.08, -0.08, 0.0, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [0.0, -0.08, 0.05, 0.02, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.0, 0.04, -0.03, 0.0, 0.0])
+	# Six beats: neutral, deliberate load, committed cut, follow-through, recovery, neutral.
+	var times := [0.0, 0.12, 0.25, 0.40, 0.54, 0.68]
+	_add_position_track(animation, "Skeleton2D/RootBone", times, [Vector2.ZERO, Vector2(0, 1.0), Vector2(0, 0.4), Vector2(0, -0.3), Vector2(0, 0.2), Vector2.ZERO])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.0, -0.42, -0.18, 0.58, 0.30, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.08, 0.02, -0.12, -0.04, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.1, -1.10, -0.86, 0.82, 0.40, -0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.1, -1.30, -1.02, 0.96, 0.46, 0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.0, -0.28, -0.18, 0.20, 0.10, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [0.0, 0.18, 0.12, -0.22, -0.10, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.16, 0.12, 0.24, 0.10, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.08, 0.04, -0.06, 0.0, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [0.0, -0.10, -0.04, 0.08, 0.03, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.0, 0.05, 0.02, -0.05, -0.02, 0.0])
 	return animation
 
 
 func _make_short_blade_attack_animation() -> Animation:
 	var animation := Animation.new()
 	animation.resource_name = "ShortBladeAttack"
-	animation.length = 0.32
+	animation.length = 0.28
 	animation.loop_mode = Animation.LOOP_NONE
-	# Compact, quick strike: little wind-up, sharp extension, fast recovery.
-	var times := [0.0, 0.045, 0.13, 0.22, 0.32]
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.0, 0.12, -0.28, -0.08, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, -0.02, 0.06, 0.02, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.025, -0.42, 0.46, 0.18, -0.025])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.025, -0.78, 0.62, 0.22, 0.025])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.0, -0.08, 0.12, 0.04, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [0.0, 0.08, -0.1, -0.03, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.05, 0.16, 0.06, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.0, -0.06, 0.0, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [0.0, -0.04, 0.06, 0.02, 0.0])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.0, 0.02, -0.03, 0.0, 0.0])
+	# Compact thrust/slash: short preparation, sharp extension, immediate recoil.
+	var times := [0.0, 0.035, 0.095, 0.17, 0.28]
+	_add_position_track(animation, "Skeleton2D/RootBone", times, [Vector2.ZERO, Vector2(0, 0.4), Vector2(0, -0.5), Vector2(0, 0.2), Vector2.ZERO])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.0, 0.18, -0.34, -0.10, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, -0.04, 0.08, 0.025, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.025, -0.48, 0.54, 0.16, -0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.025, -0.86, 0.76, 0.20, 0.025])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.0, -0.10, 0.16, 0.04, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [0.0, 0.10, -0.12, -0.03, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.06, 0.18, 0.06, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.0, 0.02, -0.08, 0.0, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [0.0, -0.05, 0.07, 0.02, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.0, 0.025, -0.035, 0.0, 0.0])
 	return animation
 
 
@@ -256,6 +262,7 @@ func _make_dodge_animation() -> Animation:
 	animation.loop_mode = Animation.LOOP_NONE
 	# The dodge is a short evasive burst with a low silhouette, not a roll.
 	var times := [0.0, 0.07, 0.20, 0.29, 0.36]
+	_add_position_track(animation, "Skeleton2D/RootBone", times, [Vector2.ZERO, Vector2(0, 1.5), Vector2(0, 0.8), Vector2(0, 0.2), Vector2.ZERO])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine", times, [0.0, -0.48, -0.30, -0.12, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.18, 0.10, 0.04, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.025, -0.72, -0.52, -0.22, -0.025])
@@ -267,6 +274,14 @@ func _make_dodge_animation() -> Animation:
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L/Foot_L", times, [0.0, 0.12, 0.06, 0.02, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R/Foot_R", times, [0.0, -0.08, -0.03, 0.0, 0.0])
 	return animation
+
+
+func _add_position_track(animation: Animation, bone_path: String, times: Array, values: Array) -> void:
+	var track_index := animation.add_track(Animation.TYPE_VALUE)
+	animation.track_set_path(track_index, NodePath(bone_path + ":position"))
+	animation.track_set_interpolation_type(track_index, Animation.INTERPOLATION_LINEAR)
+	for index in range(times.size()):
+		animation.track_insert_key(track_index, times[index], values[index])
 
 
 func _add_rotation_track(animation: Animation, bone_path: String, times: Array, values: Array) -> void:
