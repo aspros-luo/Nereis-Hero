@@ -1010,6 +1010,55 @@ func _state_name(value: CombatState) -> String:
 func get_debug_state() -> String:
 	return _state_name(state)
 
+## Presentation-only contract for the future skeletal visual adapter.
+## 仅供未来骨骼表现层读取；战斗规则仍由本控制器拥有。
+func get_visual_state_name() -> String:
+	match state:
+		CombatState.IDLE:
+			return "idle"
+		CombatState.MOVE:
+			return "run"
+		CombatState.JUMP:
+			return "jump"
+		CombatState.FALL:
+			return "fall"
+		CombatState.ATTACK:
+			if hero_system != null and hero_system.is_short_blade():
+				return "attack_short"
+			return "attack_long"
+		CombatState.DODGE:
+			return "dodge"
+		CombatState.QUICK_DASH:
+			return "quick_dash"
+		CombatState.GRAPPLE:
+			return "grapple"
+		CombatState.WALL_CLIMB:
+			return "wall_climb"
+		CombatState.HURT:
+			return "hurt"
+		CombatState.DEAD:
+			return "death"
+	return "idle"
+
+
+func get_visual_context() -> Dictionary:
+	# Return a snapshot only; callers must never mutate gameplay state through it.
+	return {
+		"state": get_visual_state_name(),
+		"combat_state": _state_name(state),
+		"previous_combat_state": _state_name(previous_state),
+		"facing": facing,
+		"combo_step": combo_step,
+		"weapon": hero_system.get_weapon_name() if hero_system != null else "long_sword",
+		"action_kind": active_action_kind,
+		"action_elapsed": action_elapsed,
+		"attack_time_remaining": attack_time,
+		"attack_windup_remaining": attack_windup,
+		"invulnerable": invulnerable,
+		"hurt_time_remaining": hurt_time,
+		"iaijutsu_active": iaijutsu_active
+	}
+
 func _spawn_slash_arc() -> void:
 	var effect: Node2D = SLASH_ARC_SCRIPT.new()
 	effect.global_position = global_position
