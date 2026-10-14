@@ -58,6 +58,17 @@
 - Test movement, attack commitment, dodge direction, and recovery in the running scene before adding more bones or building a general animation framework.
 - Keep the bone debug overlay a technical aid, not the intended final character rendering. The current white-line rig is not final art.
 
+## Future combat TODO / 后续战斗玩法待办
+
+These are design backlog items only; do not implement them during the current skeleton prototype pass.
+
+- [ ] **Heavy Long Sword / 重长剑**: treat as a later weapon progression or variant, with a heavier silhouette, slower commitment, and stronger impact feedback than the standard long sword.
+- [ ] **Weapon Clash / 拼刀**: explore a deliberate clash interaction for selected elite enemies and bosses. Define readable clash windows, opposing-force feedback, and a clear outcome before implementation; do not make every enemy attack clashable by default.
+- [ ] **Charged Shield Break / 蓄力破盾**: allow a committed heavy-long-sword charge attack to break or stagger selected shield-bearing enemies. Define charge duration, vulnerability, stamina/cost trade-offs, and enemy recovery window during combat design.
+- [ ] **Animation and feel validation / 动作与手感验证**: prototype the heavy weapon's anticipation, impact, follow-through, and recovery using the existing rig before adding more bones or a general-purpose animation framework.
+
+Priority note: keep these items in the backlog until basic locomotion, standard long-sword/short-blade attacks, and dodge feel solid. These are not current-sprint requirements.
+
 ## Follow-up / 后续
 - Replace the prototype stick figure with authored character art/skin binding after the animation test passes.
 - Add authored long-sword and short-blade attacks, Dodge/Witch Time, hit reaction, and boss-specific clips when the combat design is ready.
