@@ -49,14 +49,25 @@ Local acceptance for this slice: run the normal combat demo and confirm movement
 
 Acceptance: every production combat state maps deterministically; missing visual resources fall back safely to current procedural drawing.
 
-### S1.2.3-A2 — Skeleton pose prototype
+### S1.2.3-A2 — Skeleton pose prototype — implementation committed
 
-- Build the visual skeleton using the existing `Bone2D` hierarchy.
-- Implement idle/run/attack/dodge/hurt poses with explicit neutral keys/reset behavior so a previous pose cannot leak into the next.
-- Distinguish long-sword commitment from short-blade speed; third combo step must have a clearly different silhouette.
-- Keep the weapon and effects aligned to the facing/weapon presentation, without using visual positions as hit detection.
+Implemented in this slice:
 
-Acceptance: poses are readable at the actual game camera scale; no bone drift or residual pose after returning to idle.
+- `HeroSkeletonController` now builds a visible Line2D-based stick skeleton from the existing Bone2D hierarchy.
+- Added explicit neutral rotation resets before every pose update, plus a neutral weapon-shape reset to prevent short-blade dimensions leaking into the next state.
+- Implemented idle, run, jump, fall, long-sword attack, short-blade attack, dodge, quick dash, hurt and death poses.
+- Long-sword and short-blade attacks use different weapon lengths and posture. Combo stages 1/2/3 have distinct silhouettes, with a broader committed third-stage finisher.
+- Added `apply_visual_context(context)` as a presentation-only adapter for the state snapshot produced by the production Hero.
+- Added an isolated pose gallery at `res://scenes/player/hero_skeleton_pose_preview.tscn`; this does not replace or modify the production Hero scene.
+
+Local preview controls:
+
+- Open `res://scenes/player/hero_skeleton_pose_preview.tscn` and press **F6**.
+- `1` idle, `2` run, `3` long-sword attack, `4` short-blade attack, `5` dodge, `6` hurt, `7` death.
+- `Z/X/C` selects combo stage 1/2/3; Left/Right flips facing.
+- Switch from short-blade attack back to idle/run and confirm the sword returns to its neutral length. Cycle through every pose and return to idle to check for residual rotations.
+
+Acceptance remains pending Godot runtime validation. The connected repository session can verify source commits, but cannot honestly claim the scene has been run in Godot 4.6.1.
 
 ### S1.2.3-A3 — Opt-in production preview
 
