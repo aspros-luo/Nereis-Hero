@@ -8,6 +8,14 @@ extends Node2D
 @onready var skeleton: Skeleton2D = get_parent().get_node_or_null("Skeleton2D") as Skeleton2D
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	# F3 toggles the technical overlay without changing the underlying rig.
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3:
+		enabled = not enabled
+		queue_redraw()
+		get_viewport().set_input_as_handled()
+
+
 func _process(_delta: float) -> void:
 	# Follow live Bone2D transforms so the overlay shows the complete walk cycle.
 	if enabled:
