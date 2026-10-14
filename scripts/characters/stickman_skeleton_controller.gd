@@ -107,14 +107,6 @@ func _get_movement_direction() -> float:
 	return direction
 
 
-	if String(animation_name) != active_action_animation:
-		return
-	if current_state == State.LONG_SWORD_ATTACK or current_state == State.SHORT_BLADE_ATTACK:
-		if combo_input_buffered and combo_step < 3:
-			_start_combo_step(combo_step + 1)
-			return
-	_finish_action()
-
 
 func _get_current_action_animation_name() -> String:
 	return active_action_animation
