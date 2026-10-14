@@ -106,9 +106,11 @@ func _make_idle_animation() -> Animation:
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", [0.0, 0.8, 1.6], [0.0, -0.025, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", [0.0, 0.8, 1.6], [-0.025, -0.01, -0.025])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", [0.0, 0.8, 1.6], [0.025, 0.01, 0.025])
-	# Explicit neutral leg keys prevent the Run pose from remaining after stopping.
+	# Neutral thigh/knee keys reset the complete two-segment legs after running.
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", [0.0, 0.8, 1.6], [0.0, 0.0, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", [0.0, 0.8, 1.6], [0.0, 0.0, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", [0.0, 0.8, 1.6], [0.0, 0.0, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", [0.0, 0.8, 1.6], [0.0, 0.0, 0.0])
 	return animation
 
 
@@ -123,8 +125,11 @@ func _make_run_animation() -> Animation:
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Head", times, [0.0, 0.015, 0.0, -0.015, 0.0])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_L", times, [-0.65, 0.65, -0.65, 0.65, -0.65])
 	_add_rotation_track(animation, "Skeleton2D/RootBone/Spine/Arm_R", times, [0.65, -0.65, 0.65, -0.65, 0.65])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.7, -0.7, 0.7, -0.7, 0.7])
-	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [-0.7, 0.7, -0.7, 0.7, -0.7])
+	# Opposing hip swings create a readable stride; knee bends lift the trailing foot.
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L", times, [0.62, -0.62, 0.62, -0.62, 0.62])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R", times, [-0.62, 0.62, -0.62, 0.62, -0.62])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_L/Knee_L", times, [0.0, 0.45, 0.0, 0.12, 0.0])
+	_add_rotation_track(animation, "Skeleton2D/RootBone/Leg_R/Knee_R", times, [0.45, 0.0, 0.12, 0.0, 0.45])
 	return animation
 
 
