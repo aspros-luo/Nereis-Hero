@@ -16,28 +16,31 @@ func _process(_delta: float) -> void:
 
 
 func _draw() -> void:
-    if not enabled or skeleton == null:
-        return
+	if not enabled or skeleton == null:
+		return
 
-    var root := _bone_position("RootBone")
-    var spine := _bone_position("RootBone/Spine")
-    var head := _bone_position("RootBone/Spine/Head")
-    var arm_l := _bone_position("RootBone/Spine/Arm_L")
-    var arm_r := _bone_position("RootBone/Spine/Arm_R")
-    var leg_l := _bone_position("RootBone/Leg_L")
-    var leg_r := _bone_position("RootBone/Leg_R")
+	var root := _bone_position("RootBone")
+	var spine := _bone_position("RootBone/Spine")
+	var head := _bone_position("RootBone/Spine/Head")
+	var arm_l := _bone_position("RootBone/Spine/Arm_L")
+	var arm_r := _bone_position("RootBone/Spine/Arm_R")
+	var leg_l := _bone_position("RootBone/Leg_L")
+	var leg_r := _bone_position("RootBone/Leg_R")
 
-    draw_line(root, spine, Color.WHITE, 3.0)
-    draw_line(spine, head, Color.WHITE, 3.0)
-    draw_line(spine, arm_l, Color.WHITE, 3.0)
-    draw_line(spine, arm_r, Color.WHITE, 3.0)
-    draw_line(root, leg_l, Color.WHITE, 3.0)
-    draw_line(root, leg_r, Color.WHITE, 3.0)
-    draw_circle(head, 7.0, Color.WHITE)
+	draw_line(root, spine, Color.WHITE, 3.0)
+	draw_line(spine, head, Color.WHITE, 3.0)
+	draw_line(spine, arm_l, Color.WHITE, 3.0)
+	draw_line(spine, arm_r, Color.WHITE, 3.0)
+	draw_line(root, leg_l, Color.WHITE, 3.0)
+	draw_line(root, leg_r, Color.WHITE, 3.0)
+	draw_circle(head, 7.0, Color.WHITE)
 
 
 func _bone_position(relative_path: String) -> Vector2:
-    var bone := skeleton.get_node_or_null(relative_path) as Bone2D
-    if bone == null:
-        return Vector2.ZERO
-    return to_local(bone.global_position)
+	var bone := skeleton.get_node_or_null(relative_path) as Bone2D
+	if bone == null:
+		return Vector2.ZERO
+	# Both SkeletonDebug and Skeleton2D are siblings under the same character root.
+	# Convert through the shared parent's local space without inverting this node's
+	# global transform (which can be singular in a debug/preview setup).
+	return bone.global_position - get_parent().global_position
