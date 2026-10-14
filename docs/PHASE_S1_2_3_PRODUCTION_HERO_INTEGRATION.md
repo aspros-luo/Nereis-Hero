@@ -1,6 +1,6 @@
 # Phase S1.2.3 — Production Hero Visual Integration / 正式主角表现层整合
 
-Status: **Planning + integration contract**. The A19–A22 stickman combat harness has passed user-side local acceptance. This document defines the next safe step; it does not claim that the production skeleton has already replaced the current Hero visuals.
+Status: **A1–A4 implementation committed; A1–A3 locally accepted by the user; A4 runtime rollout check pending**. The procedural renderer remains available as a reversible fallback.
 
 状态：**整合计划与接口约定**。A19–A22 火柴人战斗测试场景已由用户本地验收通过。本文件定义下一阶段的安全实施边界，不代表正式角色骨骼已经替换现有表现层。
 
@@ -89,13 +89,28 @@ Local acceptance — open `res://scenes/player/hero_skeleton_combat_preview.tscn
 6. Compare attack reach and target damage with the regular `res://scenes/combat_demo.tscn` by repeating the same attack spacing.
 7. Check Godot Output for parser/runtime errors.
 
-The code and scene have been committed and read back through GitHub. This connected session cannot run Godot; A3 runtime acceptance is therefore still pending until the local checklist above passes.
+The code and scene were committed and read back through GitHub. The user has confirmed the full A3 local acceptance passed.
 
-### S1.2.3-A4 — Controlled rollout
+### S1.2.3-A4 — Controlled rollout — implementation committed
 
-- Enable the skeleton visual in the intended production scene only after preview acceptance.
-- Keep a reversible fallback flag for at least one regression pass.
-- Retain the A19–A22 stickman test scene for future combat-controller changes.
+Implemented:
+
+- Added the session-only `WorldState.hero_skeleton_visual_enabled` flag, defaulting to `true`. Because production scenes create the same `hero.gd` controller dynamically, this rolls the skeletal presentation into the actual game without editing every scene's spawn routine.
+- The production Hero now resolves its initial visual path from the global rollout flag or the scene's explicit `use_skeleton_visual` opt-in. The procedural renderer is still present and remains mutually exclusive with the skeleton renderer.
+- In debug builds, press **F8** to toggle the current Hero between skeletal visuals and the original procedural drawing. The setting is session-only and is not written to saves. Newly spawned Heroes inherit the global switch; an explicit preview-scene opt-in still starts that scene with the skeleton enabled.
+- The default boot scene and story flow remain unchanged; only the Hero presentation path changes. Combat state, collisions, hitboxes, stamina and progression remain in their existing owners.
+- The A19–A22 stickman harness and the A3 skeletal preview scenes remain available for regression.
+
+A4 local rollout acceptance — in Godot 4.6.1:
+
+1. Launch the normal game with **F5** and enter the opening prologue. Confirm the Hero uses the skeletal visual.
+2. Press **F8**. Confirm the skeleton disappears and the original procedural Hero appears without a movement/combat reset; press **F8** again to restore the skeleton.
+3. Test movement, jumping, both weapons, three-hit combos, dodge and a hit reaction in each visual mode. Confirm stamina and hit results remain unchanged.
+4. Transition to the village and one greybox region. Confirm newly spawned Heroes follow the current global visual switch.
+5. In `res://scenes/combat_demo.tscn`, verify the normal combat demo still runs; use F8 to compare both visual paths. No Ashen Knight victory is required for this visual-layer check.
+6. Inspect Output for parser/runtime errors.
+
+The source and documentation have been committed and read back from GitHub. Godot runtime validation cannot be executed from this connected session; the A4 rollout still needs local acceptance.
 
 ## Production combat values remain authoritative / 正式战斗参数保持权威
 
