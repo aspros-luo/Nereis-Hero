@@ -127,7 +127,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			frame_index = 0
 			elapsed = 0.0
 			playing = true
-		_update_label()
+			_update_label()
 		get_viewport().set_input_as_handled()
 
 
