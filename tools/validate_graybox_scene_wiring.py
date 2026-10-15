@@ -843,7 +843,7 @@ def main() -> int:
         '_add_platform(Rect2(420, 420, 120, 18))',
         '_add_platform(Rect2(560, 455, 160, 18))',
         'if region_id == "A4" and side == "prison_tunnel":\n\t\t# C12 arrives on the low ledge 90px away from its own return door.\n\t\t# C12 出生在低位栈台上，距回程门 90px，避免落地立即重新触发。\n\t\treturn 960.0',
-        'if region_id == "A4" and side == "royal_drain":\n\t\t# C23 lands on the lower support lip at x=1570, then steps right to the pipe door.\n\t\t# C23 落在 x=1570 的承托边沿，再向右走到管线门。\n\t\treturn 1570.0',
+        'if region_id == "A4" and side == "royal_drain":\n\t\t# C23 lands on the lower support lip at x=1540, leaving safer clearance from the x=1650 door.\n\t\t# C23 落在 x=1540 的承托边沿，与 x=1650 的门保持更充足净距。\n\t\treturn 1540.0',
         '_add_platform(Rect2(1530, 420, 70, 18))',
         '_add_platform(Rect2(620, 390, 180, 18))',
         '740.0, "E  打开王城排水门"',
