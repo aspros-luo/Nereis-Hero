@@ -581,13 +581,13 @@
         "from_region_anchor": {
           "region": "A7",
           "x": 2528,
-          "y_offset": -120,
+          "y_offset": -140,
           "spawn_side": "maintenance_shaft_entry"
         },
         "to_region_anchor": {
           "region": "A8",
           "x": 72,
-          "y_offset": -120,
+          "y_offset": -140,
           "spawn_side": "maintenance_shaft_return"
         },
         "to_region_spawn": {
@@ -598,11 +598,11 @@
         },
         "return_spawn": {
           "region": "A7",
-          "x": 2440,
+          "x": 2340,
           "y_offset": -120,
           "spawn_side": "maintenance_shaft_return"
         },
-        "intent": "C13 must remain an elevated, bidirectional transition between the prison maintenance shaft and royal-tomb entry platform. Neither end may fall back to the continuous ground lane."
+        "intent": "C13 must remain an elevated, bidirectional transition between the prison maintenance shaft and royal-tomb entry platform. Door anchors sit 20px above the ledge tops; the A7 return spawn stays 188px from the east door and avoids immediate re-focus."
       }
     },
     {
@@ -804,7 +804,7 @@
       "kind": "ending",
       "initial_access": "blocked",
       "final_direction": "forward",
-      "unlock_condition": "physical_union_complete",
+      "unlock_condition": "ending_candidate_is_not_human_grave_based_on_resonance_truth_anchors_and_exploration",
       "opens_from": "A11",
       "layer_contract": {
         "from_subregion": "A11-S05",
@@ -1169,11 +1169,11 @@
       "return_to_parent": true,
       "secondary_exit": {
         "to": "A13",
-        "unlock_condition": "physical_union_complete_then_enter_A13_terminal_layer",
+        "unlock_condition": "ending_candidate_is_not_human_grave_based_on_resonance_truth_anchors_and_exploration",
         "opens_from": "H08",
         "requires_target_already_reached": false,
         "requires_ending_state": true,
-        "notes": "The hidden H08 route converges on A13 after physical union; A13 then delegates ending choice to the existing evaluator. It must not skip the terminal map layer or hard-code one ending."
+        "notes": "The hidden H08 route converges on A13 only when the ending evaluator selects a non-human ending candidate based on resonance, truth anchors, and exploration. It must not skip the terminal map layer or hard-code one ending."
       },
       "min_distinct_anomaly_sources": 3,
       "scene_path": "scenes/primordial_hollow.tscn",
