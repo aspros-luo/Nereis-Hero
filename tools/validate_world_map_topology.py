@@ -245,6 +245,19 @@ def validate(data: dict[str, Any]) -> list[str]:
     h08_exit = h08.get("secondary_exit", {}) if h08 else {}
     if h08_exit.get("to") != "A13" or h08_exit.get("unlock_condition") != "physical_union_complete_then_enter_A13_terminal_layer":
         fail(errors, "H08 must converge on A13 instead of bypassing the terminal layer.")
+    c04 = next((edge for edge in connections if edge.get("id") == "C04"), None)
+    c04_spatial = c04.get("spatial_contract", {}) if c04 else {}
+    if c04_spatial.get("route_layer") != "old_pilgrim_canopy_highroad":
+        fail(errors, "C04 must remain an elevated old-pilgrim canopy shortcut.")
+    if c04_spatial.get("from_region_anchor") != {"region": "A2", "x": 1880, "y_offset": -115}:
+        fail(errors, "C04 A2 return door must align with the old-pilgrim canopy ledge.")
+    if c04_spatial.get("to_region_anchor") != {"region": "A5", "x": 520, "y_offset": -140, "spawn_side": "old_pilgrim_highroad"}:
+        fail(errors, "C04 A5 door must remain on the upper battlement approach.")
+    if c04_spatial.get("return_spawn") != {"region": "A2", "x": 1750, "y_offset": -160, "spawn_side": "old_pilgrim_highroad"}:
+        fail(errors, "C04 A2 arrival must land on the canopy approach platform.")
+    if c04_spatial.get("from_region_spawn") != {"region": "A5", "x": 650, "y_offset": -105, "spawn_side": "old_pilgrim_highroad"}:
+        fail(errors, "C04 A5 arrival must land on the battlement approach platform.")
+
     c03 = next((edge for edge in connections if edge.get("id") == "C03"), None)
     c03_spatial = c03.get("spatial_contract", {}) if c03 else {}
     if c03_spatial.get("from_region_anchor") != {"region": "A2", "x": 2240, "y_offset": -160}:
