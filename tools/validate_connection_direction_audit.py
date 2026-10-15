@@ -6,12 +6,14 @@ Run from any directory: python3 tools/validate_connection_direction_audit.py
 """
 from __future__ import annotations
 import json
+import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TOPOLOGY = ROOT / "tools/world_map_topology.json"
 REGION_SCRIPT = ROOT / "scripts/levels/greybox_world_region.gd"
 GATE_SCRIPT = ROOT / "scripts/world/resonance_secret_gate.gd"
+HERO_SCRIPT = ROOT / "scripts/player/hero.gd"
 
 def main() -> int:
     errors: list[str] = []
@@ -19,6 +21,7 @@ def main() -> int:
         data = json.loads(TOPOLOGY.read_text(encoding="utf-8"))
         region = REGION_SCRIPT.read_text(encoding="utf-8")
         gate = GATE_SCRIPT.read_text(encoding="utf-8")
+        hero = HERO_SCRIPT.read_text(encoding="utf-8")
     except (OSError, json.JSONDecodeError) as exc:
         print(f"CONNECTION DIRECTION AUDIT FAILED: {exc}")
         return 1
@@ -147,6 +150,36 @@ def main() -> int:
             errors.append("A13 must not expose a return transition to A11/A12")
         if "route_candidate" not in a13_branch:
             errors.append("A13 must delegate ending selection to the shared evaluator")
+
+    # C13 door trigger must be reachable from the upper platform but not by a max-height
+    # jump from the continuous ground. The source constants let us check the vertical
+    # envelope without pretending this replaces a Godot physics run.
+    c13_a7_split = exit_source.split('\n\t\t"A7":', 1)
+    c13_a7_branch = c13_a7_split[1].split('\n\t\t"', 1)[0] if len(c13_a7_split) > 1 else ""
+    c13_a8_split = exit_source.split('\n\t\t"A8":', 1)
+    c13_a8_branch = c13_a8_split[1].split('\n\t\t"', 1)[0] if len(c13_a8_split) > 1 else ""
+    for endpoint, branch in (("A7", c13_a7_branch), ("A8", c13_a8_branch)):
+        if 'true, "", "", floor_y - 140.0' not in branch:
+            errors.append(f"C13: {endpoint} high-door trigger must be positioned at floor_y - 140.0")
+    import re
+    jump_match = re.search(r"const JUMP_VELOCITY := (-?[0-9.]+)", hero)
+    gravity_match = re.search(r"const GRAVITY := ([0-9.]+)", hero)
+    if not jump_match or not gravity_match:
+        errors.append("C13: could not derive Hero jump envelope from hero.gd")
+    else:
+        jump_height = float(jump_match.group(1)) ** 2 / (2.0 * float(gravity_match.group(1)))
+        hero_half_height = 24.0
+        trigger_bottom_offset = -140.0 - 35.0 + 40.0
+        jump_top_offset = -jump_height - hero_half_height
+        if jump_top_offset <= trigger_bottom_offset:
+            errors.append(
+                f"C13: ground jump can reach high-door trigger (jump top {jump_top_offset:.1f}px, "
+                f"trigger bottom {trigger_bottom_offset:.1f}px relative to floor)"
+            )
+        platform_top_offset = -120.0
+        standing_hero_top_offset = platform_top_offset - hero_half_height
+        if standing_hero_top_offset >= trigger_bottom_offset:
+            errors.append("C13: upper-platform spawn no longer overlaps the high-door trigger vertically")
 
     # C13 return spawn must stay on the upper prison ledge with a safer door-focus margin.
     c13_spawn_start = region.find('if region_id == "A7" and side == "maintenance_shaft_return":', region.find("func _spawn_x_for_side"))
