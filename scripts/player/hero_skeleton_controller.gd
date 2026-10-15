@@ -368,15 +368,26 @@ func _apply_pose() -> void:
 			# A four-beat cut: load, accelerate through target, follow through, then recover.
 			var duration := maxf(0.01, _action_elapsed + _action_remaining)
 			var phase := clampf(_action_elapsed / duration, 0.0, 1.0)
-			var load := 1.0 - smoothstep(0.12, 0.42, phase)
-			var strike := smoothstep(0.18, 0.52, phase)
-			var recover := smoothstep(0.55, 1.0, phase)
 			var step_bias := 0.12 if combo_step == 1 else (0.28 if combo_step == 2 else -0.22)
-			body_bone.rotation = lerpf(-0.12, -0.52 + step_bias, load) if phase < 0.38 else lerpf(-0.52 + step_bias, 0.28 if combo_step == 3 else 0.12, strike)
-			body_bone.rotation = lerpf(body_bone.rotation, 0.0, recover)
-			arm_right_bone.rotation = lerpf(0.15, -1.45 + step_bias, load) if phase < 0.38 else lerpf(-1.45 + step_bias, 0.72 if combo_step == 3 else 0.35, strike)
-			arm_right_bone.rotation = lerpf(arm_right_bone.rotation, 0.12, recover)
-			arm_left_bone.rotation = lerpf(-0.08, 0.68, load) if phase < 0.38 else lerpf(0.68, -0.32, strike)
+			var loaded_body := -0.52 + step_bias
+			var strike_body := 0.28 if combo_step == 3 else 0.12
+			var loaded_arm := -1.45 + step_bias
+			var strike_arm := 0.72 if combo_step == 3 else 0.35
+			if phase < 0.25:
+				var load := smoothstep(0.0, 0.25, phase)
+				body_bone.rotation = lerpf(-0.12, loaded_body, load)
+				arm_right_bone.rotation = lerpf(0.15, loaded_arm, load)
+				arm_left_bone.rotation = lerpf(-0.08, 0.68, load)
+			elif phase < 0.62:
+				var strike := smoothstep(0.25, 0.62, phase)
+				body_bone.rotation = lerpf(loaded_body, strike_body, strike)
+				arm_right_bone.rotation = lerpf(loaded_arm, strike_arm, strike)
+				arm_left_bone.rotation = lerpf(0.68, -0.32, strike)
+			else:
+				var recover := smoothstep(0.62, 1.0, phase)
+				body_bone.rotation = lerpf(strike_body, 0.0, recover)
+				arm_right_bone.rotation = lerpf(strike_arm, 0.12, recover)
+				arm_left_bone.rotation = lerpf(-0.32, -0.08, recover)
 			leg_left_bone.rotation = -0.22 - (1.0 - recover) * 0.08
 			leg_right_bone.rotation = 0.18 + recover * 0.04
 			knee_left_bone.rotation = 0.16
