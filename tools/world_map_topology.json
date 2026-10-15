@@ -258,13 +258,13 @@
         "return_spawn": {
           "region": "A2",
           "x": 1750,
-          "y_offset": -160,
+          "y_offset": -140,
           "spawn_side": "old_pilgrim_highroad"
         },
         "from_region_spawn": {
           "region": "A5",
           "x": 650,
-          "y_offset": -105,
+          "y_offset": -85,
           "spawn_side": "old_pilgrim_highroad"
         },
         "intent": "C04 reconnects A2's canopy approach to A5's upper battlement. Both doors and arrival spawns must stay on their supporting ledges, not the continuous ground floor."
@@ -530,8 +530,14 @@
         "intent": "Prison supply tunnel lands on a dedicated low ledge instead of sharing the same floor lane as other hub doors.",
         "return_spawn": {
           "region": "A4",
-          "x": 1090,
+          "x": 960,
           "y_offset": -75
+        },
+        "from_region_spawn": {
+          "region": "A7",
+          "x": 610,
+          "y_offset": 0,
+          "spawn_side": "supply_tunnel"
         }
       },
       "layer_contract": {
@@ -770,7 +776,7 @@
         "route_layer": "upper_royal_drain_pipe",
         "from_region_anchor": {
           "region": "A9",
-          "x": 850,
+          "x": 740,
           "y_offset": -150
         },
         "to_region_anchor": {
@@ -780,13 +786,13 @@
         },
         "return_spawn": {
           "region": "A4",
-          "x": 1620,
+          "x": 1570,
           "y_offset": -120
         },
         "intent": "Royal drain uses the upper pipe ledge, separate from H04's water reflection entrance and the ground-level village watergate.",
         "from_region_spawn": {
           "region": "A9",
-          "x": 770,
+          "x": 650,
           "y_offset": -150
         }
       },
