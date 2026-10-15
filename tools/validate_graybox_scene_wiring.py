@@ -39,6 +39,8 @@ REGIONS = {
 
 REQUIRED_FILES = [
     "scripts/levels/greybox_world_region.gd",
+    "scripts/levels/royal_tomb_boss.gd",
+    "scenes/royal_tomb_boss.tscn",
     "scripts/levels/escape_prologue.gd",
     "scripts/levels/village_hub.gd",
     "scripts/levels/village_defense_demo.gd",
@@ -415,6 +417,32 @@ def main() -> int:
     require(world_state, "[%d/22]", "Natural map test region total", errors)
     require(world_state, 'resume_spawn_side = requested_spawn_side', "WorldState location save", errors)
     require(world_state, 'resume_spawn_side.length() > 64', "WorldState spawn-side input guard", errors)
+    require(world_state, '"royal_tomb_boss":', "Royal tomb boss Continue location", errors)
+    require(world_state, 'return "res://scenes/royal_tomb_boss.tscn"', "Royal tomb boss Continue scene", errors)
+    boss_arena_script = read("scripts/levels/royal_tomb_boss.gd", errors)
+    for contract in [
+        'const BOSS_FLAG := "defeated_royal_tomb_guardian"',
+        'WorldState.set_location("royal_tomb_boss")',
+        'boss.set("boss_display_name", "王墓守墓者")',
+        'boss.set("persist_global_boss_defeat", false)',
+        'boss.defeated.connect(_on_boss_defeated)',
+        'WorldState.record_achievement(BOSS_FLAG)',
+        'func _on_hero_defeated()',
+        'func _respawn_boss_after_death()',
+        'WorldState.pending_region_spawn_side = "boss_return"',
+        'WorldState.set_location("royal_tomb")',
+        'SceneTransition.fade_to_scene("res://scenes/royal_tomb.tscn")',
+        'func _spawn_return_door()',
+    ]:
+        require(boss_arena_script, contract, "Royal tomb Boss arena lifecycle", errors)
+    boss_scene = read("scenes/royal_tomb_boss.tscn", errors)
+    require(boss_scene, 'path="res://scripts/levels/royal_tomb_boss.gd"', "Royal tomb Boss scene script", errors)
+    ashen_knight_script = read("scripts/enemies/ashen_knight.gd", errors)
+    require(ashen_knight_script, 'var boss_display_name := "灰烬骑士"', "Reusable Boss display name", errors)
+    require(ashen_knight_script, "var persist_global_boss_defeat := true", "Reusable Boss legacy flag isolation", errors)
+    require(ashen_knight_script, 'if persist_global_boss_defeat:', "Reusable Boss victory persistence switch", errors)
+    require(hud_script := read("scripts/ui/game_hud.gd", errors), 'int(boss.get("health")) <= 0', "Encounter-local Boss HUD visibility", errors)
+
     require(world_state, "pending_region_spawn_side = \"west\"\n    resume_spawn_side = \"west\"", "WorldState new-game reset", errors)
     boot_script = read("scripts/core/boot.gd", errors)
     require(boot_script, "WorldState.pending_region_spawn_side = WorldState.resume_spawn_side", "Continue spawn restore", errors)
@@ -860,6 +888,17 @@ def main() -> int:
         "clue.ancient_exposure_floor = ancient_floor",
     ]:
         require(region_script, contract, "Graybox region controller", errors)
+
+    # P2 Boss requirement: the A8 arena is an optional independent scene and cannot replace the C13/C14/C07/C15 routes.
+    # P2 Boss 合同：A8 Boss 必须是独立可选场景，不能替代 C13/C14/C07/C15 既有路线。
+    a8_exit_start = region_script.find('        "A8":', region_script.find("func _spawn_region_exits"))
+    a9_exit_start = region_script.find('        "A9":', a8_exit_start)
+    a8_exit_block = region_script[a8_exit_start:a9_exit_start] if a8_exit_start >= 0 and a9_exit_start > a8_exit_start else ""
+    require(a8_exit_block, '"defeated_royal_tomb_guardian" not in WorldState.achievement_flags', "A8 optional Boss entrance gate", errors)
+    require(a8_exit_block, '"res://scenes/royal_tomb_boss.tscn"', "A8 Boss scene transition", errors)
+    require(a8_exit_block, '1540.0, "E  进入王墓内殿"', "A8 Boss door anchor", errors)
+    require(region_script, 'if region_id == "A8" and side == "boss_return":', "A8 Boss return spawn mapping", errors)
+    require(region_script, "return 1700.0", "A8 Boss return spawn clearance", errors)
 
     # Catch accidental line-join syntax defects in spawn mapping and ensure C04 is wired on both ends.
     # 检查出生点映射中意外粘连的语法错误，并确保 C04 两端都接线。
