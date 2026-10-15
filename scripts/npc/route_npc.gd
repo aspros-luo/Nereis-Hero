@@ -11,14 +11,14 @@ const HUMANOID_VISUAL_SCENE = preload("res://scenes/characters/humanoid_characte
 
 var cooldown := 0.0
 var hero_nearby := false
-var character_visual: Node2D
+var character_visual: HumanoidCharacterVisual
 
 func _ready() -> void:
-    character_visual = HUMANOID_VISUAL_SCENE.instantiate() as Node2D
+    character_visual = HUMANOID_VISUAL_SCENE.instantiate() as HumanoidCharacterVisual
     character_visual.name = "CharacterVisual"
     character_visual.position = Vector2(0.0, -20.0)
-    character_visual.set("skin_color", Color("#8d7566"))
-    character_visual.set("cloth_color", Color("#49424a"))
+    character_visual.skin_color = Color("#8d7566")
+    character_visual.cloth_color = Color("#49424a")
     add_child(character_visual)
     set_meta("interaction_priority", 60)
     print("[NEREIS][NPC] %s initialized id=%s" % [display_name, npc_id])
@@ -29,7 +29,7 @@ func _process(delta: float) -> void:
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 100.0
     if hero != null and not is_zero_approx(hero.global_position.x - global_position.x):
-        character_visual.call("set_facing", signf(hero.global_position.x - global_position.x))
+        character_visual.set_facing(signf(hero.global_position.x - global_position.x))
     var available := not WorldState.input_locked and hero_nearby and cooldown <= 0.0 and not display_name.is_empty() and not dialogue.is_empty()
     INTERACTION_FOCUS_SCRIPT.sync(self, available, 60)
     queue_redraw()
