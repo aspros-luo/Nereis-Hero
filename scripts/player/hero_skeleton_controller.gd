@@ -388,8 +388,8 @@ func _apply_pose() -> void:
 				body_bone.rotation = lerpf(strike_body, 0.0, recover)
 				arm_right_bone.rotation = lerpf(strike_arm, 0.12, recover)
 				arm_left_bone.rotation = lerpf(-0.32, -0.08, recover)
-			leg_left_bone.rotation = -0.22 - (1.0 - recover) * 0.08
-			leg_right_bone.rotation = 0.18 + recover * 0.04
+			leg_left_bone.rotation = -0.22 - (1.0 - smoothstep(0.62, 1.0, phase)) * 0.08
+			leg_right_bone.rotation = 0.18 + smoothstep(0.62, 1.0, phase) * 0.04
 			knee_left_bone.rotation = 0.16
 			knee_right_bone.rotation = 0.08
 			_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(38, -5)])
