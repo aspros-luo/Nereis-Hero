@@ -7,7 +7,7 @@ class_name HeroSkeletonTextureLab
 const ATLAS_PATH := "res://assets/art/hero_sprite_lab/muramasa_texture_atlas.png"
 
 @export var use_texture_atlas: bool = true
-@export var atlas_scale: float = 0.42
+@export var atlas_scale: float = 0.12
 
 var _atlas: Texture2D
 var _textured_parts: Array[Sprite2D] = []
