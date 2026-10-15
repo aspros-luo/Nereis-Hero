@@ -223,8 +223,6 @@ func _on_cord_fragment_collected() -> void:
 func _spawn_y_for_side(side: String) -> float:
 	# Elevated cross-region doors must land on their matching ledge, not underneath it on the continuous floor.
 	# 高位跨区门应将主角送到对应栈台，而不是落在连续地面上、再要求玩家反向跳回门口。
-	if region_id == "A4" and side == "sewer_upper":
-		return 180.0
 	if region_id == "A3" and side == "city_highroad_return":
 		return floor_y - 130.0
 	if region_id == "A5" and side == "city_highroad":
