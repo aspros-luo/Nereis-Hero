@@ -304,7 +304,34 @@
       "initial_access": "both",
       "final_direction": "both",
       "unlock_condition": "",
-      "opens_from": ""
+      "opens_from": "",
+      "spatial_contract": {
+        "route_layer": "raised_city_parapet",
+        "from_region_anchor": {
+          "region": "A3",
+          "x": 2240,
+          "y_offset": -130
+        },
+        "to_region_anchor": {
+          "region": "A5",
+          "x": 180,
+          "y_offset": -130,
+          "spawn_side": "city_highroad"
+        },
+        "return_spawn": {
+          "region": "A3",
+          "x": 2360,
+          "y_offset": -130,
+          "spawn_side": "city_highroad_return"
+        },
+        "from_region_spawn": {
+          "region": "A5",
+          "x": 330,
+          "y_offset": -130,
+          "spawn_side": "city_highroad"
+        },
+        "intent": "C08 is a paired elevated transition: A3's eastern parapet door and A5's return door share supported upper landings. It must not silently transition from an upper doorway to a ground-level spawn."
+      }
     },
     {
       "id": "C09",

@@ -223,6 +223,10 @@ func _on_cord_fragment_collected() -> void:
 func _spawn_y_for_side(side: String) -> float:
 	# Elevated cross-region doors must land on their matching ledge, not underneath it on the continuous floor.
 	# 高位跨区门应将主角送到对应栈台，而不是落在连续地面上、再要求玩家反向跳回门口。
+	if region_id == "A3" and side == "city_highroad_return":
+		return floor_y - 130.0
+	if region_id == "A5" and side == "city_highroad":
+		return floor_y - 130.0
 	if region_id == "A2" and side == "east":
 		return floor_y - 140.0
 	if region_id == "A6" and side == "bell_drop":
@@ -257,6 +261,14 @@ func _spawn_x_for_side(side: String) -> float:
 		return map_width - 280.0
 	if region_id == "A9" and side == "mirror":
 		return 1680.0
+	if region_id == "A3" and side == "city_highroad_return":
+		# C08 returns to the A3 upper parapet, clear of the door trigger and supported by its extended ledge.
+		# C08 回到 A3 残墙高台，避开门触发区，并落在延长后的平台范围内。
+		return 2360.0
+	if region_id == "A5" and side == "city_highroad":
+		# C08 enters the battlefield on its paired upper landing, not on the ground below the door.
+		# C08 从城区进入战场时落在对应高台，而不是门下方的地面。
+		return 330.0
 	if region_id == "A3" and side == "village_city_cut":
 		# C24's return door is at x=520; balance the landing between it and the anomaly at x=900.
 		# C24 回程门位于 x=520；出生点在回程门与 x=900 异常源之间保持安全距离。
@@ -695,7 +707,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1190, 465, 200, 18))
 			_add_platform(Rect2(1540, 425, 150, 18))
 			_add_platform(Rect2(1880, 470, 170, 18))
-			_add_platform(Rect2(2180, 410, 140, 18))
+			# Extend the C08 landing so its reverse spawn has a safe, continuous upper ledge.
+			# 延长 C08 落脚平台，确保反向回程出生点落在连续高台上。
+			_add_platform(Rect2(2180, 410, 250, 18))
 			# Optional rooftop loop rises above the erased third street, then descends to the sewer-side route.
 			# 可选屋顶环路爬过被抹除的第三街，再下降接回下水道一侧的主路。
 			_add_platform(Rect2(450, 400, 110, 18))
@@ -729,6 +743,9 @@ func _configure_platforms() -> void:
 		"A5":
 			# The ground trench route remains open; a broken parapet line provides an optional high crossing.
 			# 地面战壕主路保持开放；断裂的城墙高路提供可选的上层穿越。
+			# C08 arrival/return ledge: paired with A3's raised city parapet exit.
+			# C08 进出落脚高台：与 A3 的残墙高路出口配对。
+			_add_platform(Rect2(100, 410, 300, 18))
 			_add_platform(Rect2(280, 485, 185, 18))
 			_add_platform(Rect2(560, 455, 160, 18))
 			_add_platform(Rect2(850, 485, 210, 18))
@@ -1484,7 +1501,7 @@ func _spawn_region_exits() -> void:
 			# 城区通往战场的主路经过可见的残墙高台，不再与地面右边界连成一条直线。
 			_spawn_exit_door(
 				map_width - 360.0, "E  沿残墙高路前往战场", "old_battlefield",
-				"res://scenes/old_battlefield.tscn", "west",
+				"res://scenes/old_battlefield.tscn", "city_highroad",
 				true, "", "", floor_y - 130.0
 			)
 			if "reached_A9_via_A8_then_opened_old_lift_from_A9" in WorldState.achievement_flags:
@@ -1551,8 +1568,9 @@ func _spawn_region_exits() -> void:
 
 		"A5":
 			_spawn_exit_door(
-				72.0, "E  返回被遗忘的城区", "forgotten_city",
-				"res://scenes/forgotten_city.tscn", "east"
+				180.0, "E  沿残墙高路返回被遗忘的城区", "forgotten_city",
+				"res://scenes/forgotten_city.tscn", "city_highroad_return",
+				true, "", "", floor_y - 130.0
 			)
 			_spawn_exit_door(
 				2250.0, "E  沿残墙高路进入修道院", "monastery_tower",

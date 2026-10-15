@@ -62,6 +62,7 @@ def main() -> int:
         ("C03", "A2", "east", 2120.0, -140.0),
         ("C05", "A3", "sewer", 1380.0, -115.0),
         ("C07", "A4", "royal_tomb_waterway", 1260.0, -85.0),
+        ("C08", "A3", "city_highroad_return", 2360.0, -130.0),
         ("C10", "A6", "bell_drop", 2100.0, -90.0),
         ("C12", "A4", "prison_tunnel", 1090.0, -75.0),
         ("C16", "A3", "old_lift", 1960.0, -70.0),
@@ -92,6 +93,44 @@ def main() -> int:
             else has_side_return(y_body, region, side, "floor_y"),
             f"{edge_id}: _spawn_y_for_side lacks the matching vertical offset for {region}/{side}.",
         )
+
+    # C08 must remain a paired elevated route with matching destination and return spawn metadata.
+    c08 = edges.get("C08", {}).get("spatial_contract", {})
+    c08_from = c08.get("from_region_anchor", {})
+    c08_to = c08.get("to_region_anchor", {})
+    c08_return = c08.get("return_spawn", {})
+    c08_arrival = c08.get("from_region_spawn", {})
+    require(
+        errors,
+        c08_from.get("region") == "A3"
+        and float(c08_from.get("x", float("nan"))) == 2240.0
+        and float(c08_from.get("y_offset", float("nan"))) == -130.0,
+        "C08: A3 must leave from the raised parapet at x=2240 / y_offset=-130.",
+    )
+    require(
+        errors,
+        c08_to.get("region") == "A5"
+        and c08_to.get("x") == 180
+        and c08_to.get("y_offset") == -130
+        and c08_to.get("spawn_side") == "city_highroad",
+        "C08: A5 arrival must use the raised city_highroad landing at x=180 / y_offset=-130.",
+    )
+    require(
+        errors,
+        c08_return.get("region") == "A3"
+        and c08_return.get("x") == 2360
+        and c08_return.get("y_offset") == -130
+        and c08_return.get("spawn_side") == "city_highroad_return",
+        "C08: return to A3 must land on the supported upper parapet at x=2360 / y_offset=-130.",
+    )
+    require(
+        errors,
+        c08_arrival.get("region") == "A5"
+        and c08_arrival.get("x") == 330
+        and c08_arrival.get("y_offset") == -130
+        and c08_arrival.get("spawn_side") == "city_highroad",
+        "C08: reverse arrival in A5 must use the matching upper landing at x=330 / y_offset=-130.",
+    )
 
     # C24 is authored across two different controllers, so validate both sides explicitly.
     c24 = edges.get("C24", {}).get("spatial_contract", {})
@@ -126,6 +165,26 @@ def main() -> int:
 
     # Elevated exits must be anchored to a platform at the authored doorway height.
     # This catches metadata/code drift that a region-level graph cannot detect.
+    exit_function = function_body(region_source, "_spawn_region_exits")
+    exit_blocks = {
+        match.group(1): match.group(2)
+        for match in re.finditer(
+            r'^\t\t"([A-Z]\d{1,2})":\n(.*?)(?=^\t\t"[A-Z]\d{1,2}":|^\t\t_:|\Z)',
+            exit_function,
+            re.MULTILINE | re.DOTALL,
+        )
+    }
+    require(
+        errors,
+        "city_highroad" in exit_blocks.get("A3", "") and "floor_y - 130.0" in exit_blocks.get("A3", ""),
+        "C08: A3 must wire the raised exit to the city_highroad spawn side.",
+    )
+    require(
+        errors,
+        "city_highroad_return" in exit_blocks.get("A5", "") and "floor_y - 130.0" in exit_blocks.get("A5", ""),
+        "C08: A5 must wire the raised return door to city_highroad_return.",
+    )
+
     platform_function = function_body(region_source, "_configure_platforms")
     region_blocks = {
         match.group(1): match.group(2)
@@ -148,6 +207,8 @@ def main() -> int:
     # (connection, region, x, y_offset); y is derived from the shared floor_y=540.
     elevated_doors = [
         ("C03", "A2", 2240.0, -160.0),
+        ("C08", "A3", 2240.0, -130.0),
+        ("C08", "A5", 180.0, -130.0),
         ("C05", "A3", 1600.0, -115.0),
         ("C09", "A5", 2250.0, -90.0),
         ("C10", "A6", 2230.0, -55.0),
