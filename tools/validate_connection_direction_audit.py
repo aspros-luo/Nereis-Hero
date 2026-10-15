@@ -77,6 +77,29 @@ def main() -> int:
             if needle not in region:
                 errors.append(f"{edge_id}: missing endpoint wiring marker {needle!r}")
 
+    # C14 has paired ground-level doors. Keep topology anchors aligned with the actual
+    # boundary doors and the shared safe-spawn defaults.
+    c14 = edges.get("C14", {}).get("spatial_contract", {})
+    c14_from = c14.get("from_region_anchor", {})
+    c14_to = c14.get("to_region_anchor", {})
+    c14_return = c14.get("return_spawn", {})
+    c14_arrival = c14.get("from_region_spawn", {})
+    if not (
+        c14_from.get("region") == "A8" and c14_from.get("x") == 2528
+        and c14_from.get("y_offset") == 0
+        and c14_to.get("region") == "A9" and c14_to.get("x") == 72
+        and c14_to.get("y_offset") == 0 and c14_to.get("spawn_side") == "west"
+        and c14_return.get("region") == "A8" and c14_return.get("x") == 2420
+        and c14_return.get("y_offset") == 0 and c14_return.get("spawn_side") == "east"
+        and c14_arrival.get("region") == "A9" and c14_arrival.get("x") == 180
+        and c14_arrival.get("y_offset") == 0 and c14_arrival.get("spawn_side") == "west"
+    ):
+        errors.append("C14: topology must record the paired A8/A9 ground doors and safe arrival spawns.")
+    if '"res://scenes/royal_outer_ring.tscn", "west"' not in region or '"res://scenes/royal_tomb.tscn", "east"' not in region:
+        errors.append("C14: paired ground doors must remain wired between A8 and A9.")
+    if 'if side == "east":\n\t\treturn map_width - 180.0' not in region or '\n\treturn 180.0\n' not in region:
+        errors.append("C14: safe ground arrivals must remain on the far side of the paired boundary doors.")
+
     # Hidden gates must share persistent path state, require their intended evidence,
     # and only generate A11 return doors when that exact gate was opened.
     exit_start = region.find("func _spawn_region_exits()")
