@@ -915,6 +915,48 @@ def main() -> int:
     for index, (position, region) in enumerate(sorted_route_regions):
         next_position = sorted_route_regions[index + 1][0] if index + 1 < len(sorted_route_regions) else len(region_script)
         route_blocks[region] = region_script[position:next_position]
+    # Audit all 24 C-edges against the actual source-region transition wiring in one pass.
+    # 一次性逐条核对全部 24 条 C 连接的源区域转场代码与反向门，不再只依赖主线抽样断言。
+    village_route_script = read("scripts/levels/village_hub.gd", errors)
+    scene_path_by_region = {
+        "A0": "scenes/escape_prologue.tscn",
+        "A1": "scenes/village_hub.tscn",
+    }
+    scene_path_by_region.update({
+        region_id: scene_data[0]
+        for region_id, scene_data in REGIONS.items()
+        if region_id.startswith("A")
+    })
+    topology_for_route_audit = json.loads(topology_path.read_text(encoding="utf-8"))
+    runtime_route_source = dict(route_blocks)
+    runtime_route_source["A0"] = prologue_route_script
+    runtime_route_source["A1"] = village_route_script
+    for edge in topology_for_route_audit.get("connections", []):
+        edge_id = edge.get("id", "<missing>")
+        source_region = str(edge.get("from", ""))
+        target_region = str(edge.get("to", ""))
+        source_block = runtime_route_source.get(source_region, "")
+        target_block = runtime_route_source.get(target_region, "")
+        target_path = scene_path_by_region.get(target_region, "")
+        source_path = scene_path_by_region.get(source_region, "")
+        if not source_block:
+            errors.append(f"{edge_id} has no isolated runtime source block for {source_region}.")
+        elif edge_id == "C15":
+            require(source_block, "_spawn_a11_maintenance_gate(", "C15 A8-side gate wiring", errors)
+        elif edge_id == "C19":
+            require(source_block, "_spawn_a11_chapel_gate(", "C19 A10-side gate wiring", errors)
+        elif not target_path:
+            errors.append(f"{edge_id} has no scene-path mapping for target region {target_region}.")
+        else:
+            require(source_block, f'res://{target_path}', f"{edge_id} {source_region}-to-{target_region} transition", errors)
+        if edge.get("final_direction") == "both":
+            if not target_block:
+                errors.append(f"{edge_id} has no isolated runtime reverse block for {target_region}.")
+            elif not source_path:
+                errors.append(f"{edge_id} has no scene-path mapping for reverse target region {source_region}.")
+            else:
+                require(target_block, f'res://{source_path}', f"{edge_id} reverse {target_region}-to-{source_region} transition", errors)
+
     main_route_contracts = [
         ("A2", '"E  沿树冠高路进入被遗忘的城区"', "C03 A2-to-A3"),
         ("A3", '"E  返回旧朝圣路"', "C03 A3-to-A2"),
