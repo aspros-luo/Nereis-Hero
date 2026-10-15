@@ -78,6 +78,10 @@ P1–P4 full-map execution tracker (early mainline → full mainline → hidden 
 
 `docs/P1_P2_P3_P4_FULL_MAP_EXECUTION_CN.md`
 
+Macro-map and A8 Boss implementation audit (static contracts + complete Godot acceptance checklist):
+
+`docs/MACRO_MAP_A8_AUDIT_AND_RUNTIME_ACCEPTANCE_CN.md`
+
 Map-first content completion roadmap (English):
 
 `docs/MAP_CONTENT_COMPLETION_ROADMAP_EN.md`
