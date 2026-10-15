@@ -95,6 +95,11 @@ func _make_bone(parent: Node, bone_name: String, bone_position: Vector2) -> Bone
 	var bone := Bone2D.new()
 	bone.name = bone_name
 	bone.position = bone_position
+	# This rig drives bones through Node2D transforms rather than bone-length metadata.
+	# Store an explicit rest pose and disable auto-length calculation so terminal joints
+	# do not emit "cannot autocalculate" warnings when the scene enters the tree.
+	bone.rest = bone.transform
+	bone.set_autocalculate_length_and_angle(false)
 	parent.add_child(bone)
 	return bone
 
