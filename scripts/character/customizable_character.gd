@@ -3,6 +3,8 @@ extends Node2D
 
 signal appearance_changed(slot: StringName, index: int)
 
+const DEFAULT_ATLAS_PATH := "res://assets/art/hero_sprite_lab/muramasa_texture_atlas.png"
+
 @export var atlas_texture: Texture2D
 @export var hair_options: Array[CharacterPartData] = []
 @export var clothes_options: Array[CharacterPartData] = []
@@ -32,6 +34,10 @@ var current_accessory := -1
 
 
 func _ready() -> void:
+	if atlas_texture == null and ResourceLoader.exists(DEFAULT_ATLAS_PATH):
+		atlas_texture = load(DEFAULT_ATLAS_PATH) as Texture2D
+	if atlas_texture == null:
+		push_warning("No atlas assigned. Copy the local atlas to: " + DEFAULT_ATLAS_PATH)
 	for sprite in _all_slots():
 		if sprite == null:
 			continue
