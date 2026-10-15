@@ -1,0 +1,118 @@
+#!/usr/bin/env python3
+"""Focused direction and gate-contract audit for C11/C13/C14/C15/C19/C21/C22.
+
+This is a source-level contract checker, not a substitute for Godot runtime traversal.
+Run from any directory: python3 tools/validate_connection_direction_audit.py
+"""
+from __future__ import annotations
+import json
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+TOPOLOGY = ROOT / "tools/world_map_topology.json"
+REGION_SCRIPT = ROOT / "scripts/levels/greybox_world_region.gd"
+GATE_SCRIPT = ROOT / "scripts/world/resonance_secret_gate.gd"
+
+def main() -> int:
+    errors: list[str] = []
+    try:
+        data = json.loads(TOPOLOGY.read_text(encoding="utf-8"))
+        region = REGION_SCRIPT.read_text(encoding="utf-8")
+        gate = GATE_SCRIPT.read_text(encoding="utf-8")
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"CONNECTION DIRECTION AUDIT FAILED: {exc}")
+        return 1
+
+    edges = {item.get("id"): item for item in data.get("connections", [])}
+    expected = {
+        "C11": ("A6", "A7", "both", "both"),
+        "C13": ("A7", "A8", "both", "both"),
+        "C14": ("A8", "A9", "both", "both"),
+        "C15": ("A8", "A11", "blocked", "both"),
+        "C19": ("A10", "A11", "blocked", "both"),
+        "C21": ("A11", "A13", "blocked", "forward"),
+        "C22": ("A12", "A13", "from_to", "forward"),
+    }
+    for edge_id, (source, target, initial, final) in expected.items():
+        edge = edges.get(edge_id)
+        if edge is None:
+            errors.append(f"{edge_id}: missing from topology")
+            continue
+        actual = (edge.get("from"), edge.get("to"), edge.get("initial_access"), edge.get("final_direction"))
+        if actual != (source, target, initial, final):
+            errors.append(f"{edge_id}: expected {(source, target, initial, final)}, got {actual}")
+
+    # Mainline C11/C13/C14 must be explicitly wired from both endpoint scenes.
+    endpoint_contracts = {
+        "C11": [
+            '"A6":', '"res://scenes/prison_depths.tscn", "west"',
+            '"A7":', '"res://scenes/monastery_tower.tscn", "east"',
+        ],
+        "C13": [
+            '"A7":', '"res://scenes/royal_tomb.tscn", "maintenance_shaft_entry"',
+            '"A8":', '"res://scenes/prison_depths.tscn", "maintenance_shaft_return"',
+        ],
+        "C14": [
+            '"A8":', '"res://scenes/royal_outer_ring.tscn", "west"',
+            '"A9":', '"res://scenes/royal_tomb.tscn", "east"',
+        ],
+    }
+    for edge_id, needles in endpoint_contracts.items():
+        for needle in needles:
+            if needle not in region:
+                errors.append(f"{edge_id}: missing endpoint wiring marker {needle!r}")
+
+    # Hidden gates must share persistent path state, require their intended evidence,
+    # and only generate A11 return doors when that exact gate was opened.
+    for gate_id in ("C15", "C19"):
+        if f'gate.secret_id = "{gate_id}"' not in region:
+            errors.append(f"{gate_id}: runtime secret gate ID missing")
+        if f'WorldState.is_hidden_path_opened("{gate_id}")' not in region:
+            errors.append(f"{gate_id}: A11 return must be gated by its own persistent open state")
+    if 'gate.required_resonance = 55' not in region or '"anomaly_erased_royal_name"' not in region:
+        errors.append("C15: expected resonance 55 and royal-name evidence are not wired")
+    if 'gate.required_resonance = 68' not in region or '"anomaly_mirror_street_echo"' not in region:
+        errors.append("C19: expected resonance 68 and mirror-street evidence are not wired")
+    for needle in (
+        "and _has_required_sources()",
+        "and (not require_outer_god_resonance or WorldState.outer_god_resonance)",
+        "WorldState.open_hidden_path(secret_id)",
+    ):
+        if needle not in gate:
+            errors.append(f"Secret-gate implementation missing condition/state contract: {needle}")
+
+    # Endgame entry must be one-way in topology and A13 must not spawn an ordinary
+    # return door to A11/A12. The exit from A13 is only the ending-evaluator route.
+    if 'region_id == "A13"' not in region:
+        errors.append("A13 runtime branch missing")
+    a13 = region.split('\n\t\t"A13":', 1)
+    if len(a13) < 2:
+        errors.append("A13 exit branch could not be located")
+    else:
+        a13_branch = a13[1].split('\n\t\t"', 1)[0]
+        if '"deep_research_depths.tscn"' in a13_branch or '"inner_city.tscn"' in a13_branch:
+            errors.append("A13 must not expose a return transition to A11/A12")
+        if "route_candidate" not in a13_branch:
+            errors.append("A13 must delegate ending selection to the shared evaluator")
+
+    # Floor geometry is continuous by design; a trigger door is not a physical wall.
+    # Flag this explicitly as a manual runtime acceptance item, never as a passing claim.
+    if "func _create_floor()" not in region or "rectangle.size = Vector2(map_width, 40.0)" not in region:
+        errors.append("Could not verify the shared continuous-floor implementation; review bypass geometry manually")
+
+    if errors:
+        print("CONNECTION DIRECTION AUDIT FAILED")
+        for error in errors:
+            print(f" - {error}")
+        return 1
+    print("CONNECTION DIRECTION SOURCE CONTRACTS PASSED")
+    print(" - C11/C13/C14 endpoint wiring and intended bidirectional topology checked.")
+    print(" - C15/C19 hidden-gate thresholds, evidence, persistence, and per-gate return locks checked.")
+    print(" - C21/C22 one-way terminal topology and A13 ending-only exit checked.")
+    print("LIMITATION: continuous ground/fall/jump bypass, collision support, interaction focus, and transitions require Godot runtime acceptance.")
+    return 0
+
+if __name__ == "__main__":
+    raise SystemExit(main())
