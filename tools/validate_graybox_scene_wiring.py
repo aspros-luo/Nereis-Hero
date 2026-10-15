@@ -890,6 +890,1999 @@ def main() -> int:
     ]:
         require(region_script, contract, "Graybox region controller", errors)
 
+    def _region_exit_block(region_id: str) -> str:
+        # GDScript uses tabs in match-case indentation; whitespace-agnostic matching keeps this audit stable.
+        # GDScript 的 match 分支使用 Tab 缩进；提取时不应假定为 8 个空格。
+        exits_start = region_script.find("func _spawn_region_exits")
+        if exits_start < 0:
+            return ""
+        exits_end = region_script.find("\\nfunc ", exits_start + len("func _spawn_region_exits"))
+        if exits_end < 0:
+            exits_end = len(region_script)
+        exits_source = region_script[exits_start:exits_end]
+        current = re.search(rf'(?m)^[ \\t]*"{re.escape(region_id)}":[ \\t]*
+    # P2 Boss 合同：A8 Boss 必须是独立可选场景，不能替代 C13/C14/C07/C15 既有路线。
+    a8_exit_block = _region_exit_block("A8")
+    require(a8_exit_block, '"defeated_royal_tomb_guardian" not in WorldState.achievement_flags', "A8 optional Boss entrance gate", errors)
+    require(a8_exit_block, '"res://scenes/royal_tomb_boss.tscn"', "A8 Boss scene transition", errors)
+    require(a8_exit_block, '1540.0, "E  进入王墓内殿"', "A8 Boss door anchor", errors)
+    require(a8_exit_block, 'map_width - 72.0, "E  进入王城外环"', "A8→A9 main route remains open beside optional Boss", errors)
+    require(region_script, 'if region_id == "A8" and side == "boss_return":', "A8 Boss return spawn mapping", errors)
+    require(region_script, "return 1700.0", "A8 Boss return spawn clearance", errors)
+    # Keep the victory return away from both the arena entrance and the adjacent H06 gate's focus volume.
+    # 胜利回程点必须同时避开 Boss 入口与相邻 H06 的交互焦点。
+    if min(abs(1700.0 - 1540.0), abs(1870.0 - 1700.0)) < 130.0:
+        errors.append("A8 Boss return spawn is too close to the arena entrance or H06 gate.")
+
+    # Catch accidental line-join syntax defects in spawn mapping and ensure C04 is wired on both ends.
+    # 检查出生点映射中意外粘连的语法错误，并确保 C04 两端都接线。
+    if 'return 850.0    if region_id' in region_script:
+        fail(errors, "Graybox spawn mapping: C04 A5 spawn branch is concatenated with the next if statement.")
+    for contract in [
+        '"E  打开旧朝圣高路"',
+        '"E  返回边境战场"',
+        '"reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags',
+        '"reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回"',
+    ]:
+        require(region_script, contract, "C04 old pilgrim highroad", errors)
+
+    # C05 is recorded only by traversing from A3; merely loading/entering A4 from another branch must not fake it.
+    # C05 只能由 A3 实际进入 A4 时记录；从其他支路进入或读档不能伪造这条路线。
+    require(region_script, 'if region_id == "A3" and target_location == "sewer_reservoir":\n        WorldState.record_achievement("reached_A4_via_A3")', "C05 route recording", errors)
+    a4_ready_start = region_script.find('func _ready()')
+    a4_ready_end = region_script.find('func _spawn_x_for_side', a4_ready_start)
+    ready_block = region_script[a4_ready_start:a4_ready_end] if a4_ready_start >= 0 and a4_ready_end > a4_ready_start else ""
+    if 'WorldState.record_achievement("reached_A4_via_A3")' in ready_block:
+        fail(errors, "C05 route flag must not be recorded unconditionally on A4 scene entry.")
+
+    # C24 must be gated on the city side too, matching the village's defense requirement.
+    # C24 城区侧也必须受村庄防卫标记约束，与村庄入口条件一致。
+    a3_exit_block = _region_exit_block("A3")
+    if not a3_exit_block:
+        fail(errors, "C24 route audit: cannot isolate A3 exit block.")
+    else:
+        require(a3_exit_block, 'if "village_defense_survived" in WorldState.achievement_flags:', "C24 city-side defense gate", errors)
+        require(a3_exit_block, '"E  经旧排水道返回"', "C24 city-side return door", errors)
+        if a3_exit_block.find('"E  经旧排水道返回"') < a3_exit_block.find('if "village_defense_survived" in WorldState.achievement_flags:'):
+            fail(errors, "C24 A3 return door must remain inside the village-defense condition.")
+
+    # Locate the exit mapping before any public or hidden route audit uses it.
+    # 在公开路线与隐藏路线审计使用前，先定位出口映射函数。
+    exits_start = region_script.find("func _spawn_region_exits")
+    if exits_start < 0:
+        fail(errors, "Graybox route audit: cannot find _spawn_region_exits function.")
+        exits_start = 0
+
+    # Check both directions of the remaining public backbone connections.
+    # 检查其余公开主干连线的双向出口，避免场景仍存在但主线断开。
+    route_blocks = {}
+    ordered_route_regions = ["A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A12", "H07", "H01", "H02", "H03", "H04", "H05", "H06", "A11", "H08"]
+    for region in ordered_route_regions:
+        route_blocks[region] = _region_exit_block(region)
+        if not route_blocks[region]:
+            errors.append(f"Graybox route audit: cannot isolate {region} exit block.")
+    # Audit all 24 C-edges against the actual source-region transition wiring in one pass.
+    # 一次性逐条核对全部 24 条 C 连接的源区域转场代码与反向门，不再只依赖主线抽样断言。
+    village_route_script = read("scripts/levels/village_hub.gd", errors)
+    scene_path_by_region = {
+        "A0": "scenes/escape_prologue.tscn",
+        "A1": "scenes/village_hub.tscn",
+    }
+    scene_path_by_region.update({
+        region_id: scene_data[0]
+        for region_id, scene_data in REGIONS.items()
+        if region_id.startswith("A")
+    })
+    topology_for_route_audit = topology
+    runtime_route_source = dict(route_blocks)
+    runtime_route_source["A0"] = prologue_route_script
+    runtime_route_source["A1"] = village_route_script
+    for edge in topology_for_route_audit.get("connections", []):
+        edge_id = edge.get("id", "<missing>")
+        source_region = str(edge.get("from", ""))
+        target_region = str(edge.get("to", ""))
+        source_block = runtime_route_source.get(source_region, "")
+        target_block = runtime_route_source.get(target_region, "")
+        target_path = scene_path_by_region.get(target_region, "")
+        source_path = scene_path_by_region.get(source_region, "")
+        if not source_block:
+            errors.append(f"{edge_id} has no isolated runtime source block for {source_region}.")
+        elif edge_id == "C15":
+            require(source_block, "_spawn_a11_maintenance_gate(", "C15 A8-side gate wiring", errors)
+        elif edge_id == "C19":
+            require(source_block, "_spawn_a11_chapel_gate(", "C19 A10-side gate wiring", errors)
+        elif not target_path:
+            errors.append(f"{edge_id} has no scene-path mapping for target region {target_region}.")
+        else:
+            require(source_block, f'res://{target_path}', f"{edge_id} {source_region}-to-{target_region} transition", errors)
+        if edge.get("final_direction") == "both":
+            if not target_block:
+                errors.append(f"{edge_id} has no isolated runtime reverse block for {target_region}.")
+            elif not source_path:
+                errors.append(f"{edge_id} has no scene-path mapping for reverse target region {source_region}.")
+            else:
+                require(target_block, f'res://{source_path}', f"{edge_id} reverse {target_region}-to-{source_region} transition", errors)
+
+    main_route_contracts = [
+        ("A2", '"E  沿树冠高路进入被遗忘的城区"', "C03 A2-to-A3"),
+        ("A3", '"E  返回旧朝圣路"', "C03 A3-to-A2"),
+        ("A3", '"E  沿残墙高路前往战场"', "C08 A3-to-A5"),
+        ("A5", '"E  返回被遗忘的城区"', "C08 A5-to-A3"),
+        ("A5", '"E  沿残墙高路进入修道院"', "C09 A5-to-A6"),
+        ("A6", '"E  返回边境战场"', "C09 A6-to-A5"),
+        ("A6", '"E  深入监牢"', "C11 A6-to-A7"),
+        ("A7", '"E  返回修道院"', "C11 A7-to-A6"),
+        ("A7", '"E  进入旧王墓"', "C13 A7-to-A8"),
+        ("A8", '"E  返回监牢"', "C13 A8-to-A7"),
+        ("A8", '"E  进入王城外环"', "C14 A8-to-A9"),
+        ("A9", '"E  返回旧王墓"', "C14 A9-to-A8"),
+    ]
+    for source_region, contract, connection_label in main_route_contracts:
+        require(route_blocks.get(source_region, ""), contract, connection_label, errors)
+
+    # C13 must be elevated at both ends; its authored vertical route must not collapse into a ground-level door pair.
+    # C13 两端必须保持高位；维护竖井主线不能退化为地面门对门。
+    c13_route = route_blocks.get("A7", "")
+    c13_return_route = route_blocks.get("A8", "")
+    for required, label in [
+        ('"maintenance_shaft_entry"', "C13 A7-to-A8 target side"),
+        ('floor_y - 120.0', "C13 A7 elevated door height"),
+    ]:
+        require(c13_route, required, label, errors)
+    for required, label in [
+        ('"maintenance_shaft_return"', "C13 A8-to-A7 target side"),
+        ('floor_y - 120.0', "C13 A8 elevated door height"),
+    ]:
+        require(c13_return_route, required, label, errors)
+    for required, label in [
+        ('_add_platform(Rect2(2140, 460, 110, 18))', "C13 prison approach step"),
+        ('_add_platform(Rect2(2200, 420, 170, 18))', "C13 prison upper exit ledge"),
+        ('_add_platform(Rect2(80, 420, 150, 18))', "C13 tomb upper arrival ledge"),
+        ('_add_platform(Rect2(240, 420, 170, 18))', "C13 tomb route connection"),
+    ]:
+        require(region_script, required, label, errors)
+
+    # C19's A11 return is paired to the C19 opened state, not a generic A10 progression flag.
+    require(region_script, 'var can_return_to_cathedral := WorldState.is_hidden_path_opened("C19")', "C19 paired return gate", errors)
+
+    # C08/C09 high-road transitions must land on collision-backed ledges in both directions.
+    # C08/C09 高路转场的双向落点都必须由真实碰撞平台承托。
+    for contract, label in [
+        ('_add_platform(Rect2(2180, 410, 250, 18))', "C08 A3 upper return ledge"),
+        ('_add_platform(Rect2(100, 410, 300, 18))', "C08 A5 upper arrival ledge"),
+        ('_add_platform(Rect2(2190, 450, 140, 18))', "C09 A5 upper exit ledge"),
+        ('_add_platform(Rect2(2150, 485, 150, 18))', "C09 A5 lower return approach"),
+        ('_add_platform(Rect2(100, 450, 140, 18))', "C09 A6 west bridge arrival"),
+        ('if region_id == "A6" and side == "battlefield_entry":\n\t\treturn floor_y - 90.0', "C09 A6 bridge spawn height"),
+        ('if region_id == "A5" and side == "monastery_return":\n\t\treturn floor_y - 55.0', "C09 A5 return spawn height"),
+        ('if region_id == "A6" and side == "battlefield_entry":\n\t\treturn 160.0', "C09 A6 bridge spawn X"),
+        ('if region_id == "A5" and side == "monastery_return":\n\t\treturn 2165.0', "C09 A5 return spawn X"),
+    ]:
+        require(region_script, contract, label, errors)
+
+    # C04 is a paired upper-route shortcut: both door heights, platform support, and arrival elevations must remain aligned.
+    # C04 是双侧高路捷径：两侧门高、承托平台与到达高度必须保持一致。
+    for contract in (
+        '1880.0, "E  返回边境战场", "old_battlefield"',
+        '"res://scenes/old_battlefield.tscn", "old_pilgrim_highroad",\n\t\t\t\t\ttrue, "", "", floor_y - 115.0',
+        '520.0, "E  打开旧朝圣高路", "ash_forest"',
+        '"reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",\n\t\t\t\tfloor_y - 140.0',
+        'if region_id == "A2" and side == "old_pilgrim_highroad":\n\t\treturn floor_y - 140.0',
+        'if region_id == "A5" and side == "old_pilgrim_highroad":\n\t\treturn floor_y - 85.0',
+        '_add_platform(Rect2(1840, 445, 130, 18))',
+        '_add_platform(Rect2(420, 420, 120, 18))',
+        '_add_platform(Rect2(560, 455, 160, 18))',
+        'if region_id == "A4" and side == "prison_tunnel":\n\t\t# C12 arrives on the low ledge 90px away from its own return door.\n\t\t# C12 出生在低位栈台上，距回程门 90px，避免落地立即重新触发。\n\t\treturn 960.0',
+        'if region_id == "A4" and side == "royal_drain":\n\t\t# C23 lands on the lower support lip at x=1540, leaving safer clearance from the x=1650 door.\n\t\t# C23 落在 x=1540 的承托边沿，与 x=1650 的门保持更充足净距。\n\t\treturn 1540.0',
+        '_add_platform(Rect2(1530, 420, 70, 18))',
+        '_add_platform(Rect2(620, 390, 180, 18))',
+        '740.0, "E  打开王城排水门"',
+    ):
+        require(region_script, contract, "C04 paired canopy route", errors)
+
+    # C17 and C20 are the intended public route through the cathedral; C18 must remain a later shortcut.
+    # C17/C20 是经过大圣堂的公开主线；C18 只能作为抵达内城后的后期开启捷径。
+    a9_route_block = _region_exit_block("A9")
+    a10_route_block = _region_exit_block("A10")
+    a12_route_block = _region_exit_block("A12")
+    for contract in [
+        '"E  沿外环屋顶阶梯登上大圣堂"',
+        'res://scenes/grand_cathedral.tscn", "west"',
+    ]:
+        require(a9_route_block, contract, "C17 outer-ring-to-cathedral main route", errors)
+    for contract in [
+        '"E  进入王室内城"',
+        'res://scenes/inner_city.tscn", "west"',
+    ]:
+        require(a10_route_block, contract, "C20 cathedral-to-inner-city main route", errors)
+    require(a12_route_block, '"E  返回大圣堂"', "C20 inner-city return route", errors)
+    require(a12_route_block, '"reached_A12_via_A10_then_opened_inner_city_side_gate"', "C18 main-route prerequisite", errors)
+    require(region_script, '900.0, "E  返回王室内城"', "C18 A9-side door anchor", errors)
+    require(region_script, '520.0, "E  打开内城侧门"', "C18 A12-side door anchor", errors)
+    require(region_script, 'if region_id == "A9" and side == "inner_city_side_gate":\n\t\t# C18 lands outside the x=900 door trigger and just beyond the x=1100 rest point\'s 110px focus radius.\n\t\t# C18 出生点避开 x=900 门触发区，并位于 x=1100 休整点的 110px 交互半径之外。\n\t\treturn 980.0', "C18 A9 safe arrival", errors)
+    if a9_route_block.find('"E  RETURN TO THE INNER CITY"') >= 0 and a9_route_block.find('"reached_A12_via_A10_then_opened_inner_city_side_gate"') < 0:
+        fail(errors, "C18 A9-side shortcut must remain gated by opening it from A12 after the main route.")
+
+    # C10 must be available independently of H05; its only persisted unlock is its own drop flag.
+    # C10 必须独立于 H05 可用；它只依赖自身的钟塔落差开门标记。
+    a6_exit_block = _region_exit_block("A6")
+    if not a6_exit_block:
+        fail(errors, "C10 route audit: cannot isolate A6 exit block.")
+    else:
+        require(a6_exit_block, '"E  打开钟塔落差通路"', "C10 monastery shortcut", errors)
+        require(a6_exit_block, '"opened_bell_tower_drop"', "C10 monastery shortcut", errors)
+        if 'if WorldState.is_hidden_path_opened("H05")' in a6_exit_block:
+            fail(errors, "C10 monastery shortcut must not depend on the optional H05 secret path.")
+    if "1830.0, \"E  RETURN TO THE SILENT BELL WINDOW\"" in region_script:
+        fail(errors, "H05 return door at x=1830 is too close to the C10 door at x=1710.")
+    if "1950.0, \"E  RETURN TO THE SILENT BELL WINDOW\"" in region_script:
+        fail(errors, "H05 return door at x=1950 overlaps the A3 rest-point interaction radius.")
+    require(region_script, '1870.0, "E  返回无声之窗"', "H05/C10/C16 interaction spacing", errors)
+    require(region_script, '1250.0, "E  打开旧服务门"', "A9 H03/C18 interaction spacing", errors)
+    if '1020.0, "E  打开旧服务门"' in region_script:
+        fail(errors, "A9 H03 service door remains too close to the C18 inner-city side gate.")
+
+    # Each playable region must have its intended lightweight encounter roster.
+    # 每个可玩区域必须保留对应的轻量遭遇配置，A9 作为交通枢纽刻意不生成战斗敌人。
+    encounter_contracts = {
+        "A2": ["A2_PaleHound_01", "A2_Cultist_01"],
+        "A3": ["A3_Bandit_01", "A3_Cultist_01"],
+        "A4": ["A4_ResearchHusk_01"],
+        "A5": ["A5_Bandit_01"],
+        "A6": ["A6_Inquisitor_01"],
+        "A7": ["A7_ResearchHusk_01"],
+        "A8": ["A8_Cultist_01"],
+        "A10": ["A10_Inquisitor_01", "A10_BellWraith_01"],
+        "A11": ["A11_ResearchHusk_01"],
+        "A12": ["A12_Inquisitor_01", "A12_Cultist_01"],
+        "H01": ["H01_Cultist_01"],
+        "H02": ["H02_BellWraith_01"],
+        "H03": ["H03_Bandit_01"],
+        "H04": ["H04_PaleHound_01"],
+        "H05": ["H05_BellWraith_01"],
+        "H06": ["H06_Inquisitor_01"],
+        "H07": ["H07_PaleHound_01"],
+        "H08": ["H08_ResearchHusk_01"],
+    }
+    for region_id, enemy_names in encounter_contracts.items():
+        require(region_script, f'"{region_id}":', f"{region_id} encounter region", errors)
+        for enemy_name in enemy_names:
+            require(region_script, f'"{enemy_name}"', f"{region_id} encounter roster", errors)
+    require(region_script, "ENCOUNTER_ACTIVATE_RANGE := 420.0", "Encounter activation radius", errors)
+    require(region_script, "ENCOUNTER_DEACTIVATE_RANGE := 560.0", "Encounter deactivation hysteresis", errors)
+    require(region_script, 'enemy.set_physics_process(false)', "Dormant encounters do not chase across the whole region", errors)
+
+    # Hidden-region exits must preserve their intended return loops and second-side unlocks.
+    # 隐藏区域的出口必须保留预期回环，并且远侧出口只能在对应实体门开启后可用。
+    hidden_exit_contracts = {
+        "H01": [
+            '"E  返回边境村庄"',
+            '"reached_A4_via_A3" in WorldState.achievement_flags',
+            'WorldState.is_hidden_path_opened("H01")',
+            '"sewer_reservoir"',
+        ],
+        "H02": [
+            '"E  返回旧朝圣路"',
+            '"opened_old_bell_tower_connection" in WorldState.achievement_flags',
+            '"old_battlefield"',
+        ],
+        "H03": [
+            '"E  返回被遗忘的城区"',
+            '"opened_old_service_door" in WorldState.achievement_flags',
+            '"royal_outer_ring"',
+        ],
+        "H04": [
+            '"E  返回旧水库"',
+            '"opened_royal_tomb_side_door" in WorldState.achievement_flags',
+            '"royal_tomb"',
+        ],
+        "H05": [
+            '"E  返回修道院"',
+            '"opened_bell_tower_drop" in WorldState.achievement_flags',
+            '"forgotten_city"',
+        ],
+        "H06": [
+            '"E  返回旧王墓"',
+            '"opened_royal_transport_side_door" in WorldState.achievement_flags',
+            '"royal_outer_ring"',
+        ],
+        "H07": [
+            '"E  穿过积水返回"',
+            '"opened_mirror_street_side_gate" in WorldState.achievement_flags',
+            '"inner_city"',
+        ],
+        "H08": [
+            '"E  返回深层研究区"',
+            'if NereisEndingEvaluator.get_candidate() != "凡人之墓":',
+            '"terminal_anomaly"',
+            '"res://scenes/terminal_anomaly.tscn"',
+        ],
+    }
+    for hidden_id, contracts in hidden_exit_contracts.items():
+        # GDScript match branches are tab-indented; support either tabs or spaces so this
+        # source-level check does not silently fail when formatting changes.
+        branch_match = re.search(
+            rf'^[\t ]*"{re.escape(hidden_id)}":',
+            region_script[exits_start:],
+            re.MULTILINE,
+        )
+        block_start = exits_start + branch_match.start() if branch_match else -1
+        next_branch = re.search(
+            r'^[\t ]*"[A-Z]\d{1,2}":',
+            region_script[block_start + 1:] if block_start >= 0 else "",
+            re.MULTILINE,
+        )
+        block_end = block_start + 1 + next_branch.start() if block_start >= 0 and next_branch else -1
+        block = region_script[block_start:block_end] if block_start >= 0 and block_end > block_start else ""
+        if not block:
+            fail(errors, f"{hidden_id} hidden-region exit block is missing or malformed.")
+            continue
+        for contract in contracts:
+            require(block, contract, f"{hidden_id} hidden-region return contract", errors)
+
+    # A13 is a real terminal map layer, not merely an abstract topology node. Ending selection occurs after entering it.
+    # A13 必须是实际终局地图层，而不是只存在于拓扑中的抽象节点；进入后才选择结局。
+    a13_match = re.search(r'^[\t ]*"A13":', region_script[exits_start:], re.MULTILINE)
+    a13_start = exits_start + a13_match.start() if a13_match else -1
+    a13_next = re.search(
+        r'^[\t ]*"[A-Z]\d{1,2}":',
+        region_script[a13_start + 1:] if a13_start >= 0 else "",
+        re.MULTILINE,
+    )
+    a13_end = (
+        a13_start + 1 + a13_next.start()
+        if a13_start >= 0 and a13_next
+        else region_script.find("\nfunc ", a13_start) if a13_start >= 0 else -1
+    )
+    a13_block = region_script[a13_start:a13_end] if a13_start >= 0 and a13_end > a13_start else ""
+    if not a13_block:
+        fail(errors, "A13 terminal exit block is missing or malformed.")
+    else:
+        require(a13_block, 'ending_gate.call("route_candidate")', "A13 ending evaluator", errors)
+        require(a13_block, '"ending_fire_demo.tscn"', "A13 fire ending route", errors)
+        require(a13_block, '"ending_paradise_demo.tscn"', "A13 paradise ending route", errors)
+        require(a13_block, '"E  接受终局"', "A13 final threshold", errors)
+    require(region_script, '"terminal_anomaly"', "A13 runtime location id", errors)
+    require(world_state, '"terminal_anomaly":', "A13 save/resume mapping", errors)
+
+    # A3 exits must occupy distinct spatial lanes: raised sewer branch, street-level hidden clue,
+    # and elevated far-eastern lift. This prevents all major choices from collapsing into one doorway cluster.
+    # A3 出口必须分布在不同空间层：抬高的下水道支路、街面隐藏线索、东侧高位升降机。
+    # 这样可以避免主要路线全部挤在同一片门口区域。
+    require(region_script, '1600.0, "E  沿旧管线栈道下行至水库"', "A3 raised C05 branch", errors)
+    require(region_script, 'true, "", "", floor_y - 115.0', "A3 C05 elevation", errors)
+    require(region_script, '_add_platform(Rect2(80, 445, 220, 18))', "A4 C05 upper inspection landing", errors)
+    require(region_script, '"E  打开上层检修舱口"', "A4 C05 raised hatch label", errors)
+    require(region_script, '"E  返回城区", floor_y - 115.0', "A4 C05 hatch elevation", errors)
+    require(region_script, 'if region_id == "A4" and side == "sewer_upper":\n\t\t# The Hero origin is at the feet; align the spawn exactly with the landing y=445 collision top.\n\t\t# 主角坐标位于脚底；出生高度应与 y=445 的实体平台顶面精确对齐。\n\t\treturn floor_y - 95.0', "A4 C05 arrival height mapping", errors)
+    spawn_y_start = region_script.find("func _spawn_y_for_side(side: String) -> float:")
+    spawn_x_start = region_script.find("func _spawn_x_for_side(side: String) -> float:")
+    spawn_y_block = region_script[spawn_y_start:spawn_x_start] if spawn_y_start >= 0 and spawn_x_start > spawn_y_start else ""
+    c05_y_branch = 'if region_id == "A4" and side == "sewer_upper":\n\t\t# The Hero origin is at the feet; align the spawn exactly with the landing y=445 collision top.\n\t\t# 主角坐标位于脚底；出生高度应与 y=445 的实体平台顶面精确对齐。\n\t\treturn floor_y - 95.0'
+    if spawn_y_block.count(c05_y_branch) != 1:
+        fail(errors, "C05 A4 sewer_upper Y mapping must appear exactly once in _spawn_y_for_side.")
+    if 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn 180.0' in spawn_y_block:
+        fail(errors, "C05 A4 sewer_upper Y mapping must not use absolute y=180.0 above its supported landing.")
+    require(region_script, 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn 180.0', "A4 C05 arrival X mapping", errors)
+    require(region_script, '2040.0, "E  经东侧高位旧升降机返回王城外环"', "A3 elevated C16 branch", errors)
+    require(region_script, 'true, "", "", floor_y - 70.0', "A3 C16 elevation", errors)
+    require(region_script, '_register_debug_locked_route_hint(2040.0, "royal_outer_ring"', "A3 C16 debug marker", errors)
+
+    # A4's transport hub must distribute the three cross-region doors across separate ledges.
+    # A4 交通枢纽必须将三条跨区门分布在不同高度的栈台上。
+    require(region_script, '_add_platform(Rect2(930, 465, 180, 18))', "A4 low supply-tunnel ledge", errors)
+    require(region_script, '1050.0, "E  返回监牢"', "A4 C12 low ledge exit", errors)
+    require(region_script, 'if region_id == "A4" and side == "prison_tunnel":\n\t\t# C12 arrives on the low ledge 90px away from its own return door.\n\t\t# C12 出生在低位栈台上，距回程门 90px，避免落地立即重新触发。\n\t\treturn 960.0', "A4 C12 safe spawn", errors)
+    require(region_script, 'true, "", "", floor_y - 75.0', "A4 C12 elevation", errors)
+    require(region_script, '1320.0, "E  返回旧王墓"', "A4 C07 middle ledge exit", errors)
+    require(region_script, 'true, "", "", floor_y - 85.0', "A4 C07 elevation", errors)
+    require(region_script, '1650.0, "E  返回王城外环"', "A4 C23 upper pipe exit", errors)
+    require(region_script, 'true, "", "", floor_y - 105.0', "A4 C23 elevation", errors)
+    require(region_script, '2220.0, "E  打开村庄井道水闸"', "A4 C06 return lane", errors)
+    require(region_script, '2020, 450, 130, 18', "A6 C10 upper approach platform", errors)
+    require(region_script, '2230.0, "E  打开钟塔落差通路"', "A6 C10 elevated door", errors)
+    require(region_script, 'true, "opened_bell_tower_drop", "E  返回被遗忘的城区", floor_y - 55.0', "A6 C10 door height", errors)
+    require(region_script, '520.0, "E  打开旧升降梯"', "A9 C16 rooftop door", errors)
+    require(region_script, 'true, "reached_A9_via_A8_then_opened_old_lift_from_A9", "E  乘旧升降梯返回",\n\t\t\t\tfloor_y - 110.0', "A9 C16 door height", errors)
+    require(region_script, '_add_platform(Rect2(620, 390, 180, 18))', "A9 C23 supported upper service ledge", errors)
+    require(region_script, '740.0, "E  打开王城排水门"', "A9 C23 supported upper door", errors)
+    require(region_script, 'if region_id == "A9" and side == "royal_drain":\n\t\t# C23\'s door is at x=740; land at x=650 on the same supported ledge, clear of C16 and C18.\n\t\t# C23 门移至 x=740；落点 x=650 与门保持净距，并避开 C16 与 C18。\n\t\treturn 650.0', "A9 C23 safe spawn", errors)
+    require(region_script, '_add_platform(Rect2(1530, 420, 70, 18))', "A4 C23 return spawn support", errors)
+    require(region_script, 'return 1540.0', "A4 C23 safe return spawn", errors)
+    require(region_script, 'true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  沿王城排水道返回",\n\t\t\t\tfloor_y - 150.0', "A9 C23 door height", errors)
+    require(region_script, 'Vector2(850, floor_y - 18.0),\n\t\t\t\t"anomaly_old_stone_layer"', "A4 clue/door interaction spacing", errors)
+
+    # C03's canopy route and C07's middle tomb-waterway route must keep their authored elevation on both ends.
+    # C03 树冠高路与 C07 王墓中层水道必须在双向转场中保留设计高度。
+    for contract in [
+        'map_width - 160.0, "E  沿树冠高路进入被遗忘的城区"',
+        '"res://scenes/forgotten_city.tscn", "city_canopy_entry",',
+        'true, "", "", floor_y - 160.0',
+        '72.0, "E  返回旧朝圣路", "ash_forest"',
+        '_add_platform(Rect2(80, 410, 150, 18))',
+        'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn floor_y - 130.0',
+        'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn 180.0',
+        '_add_platform(Rect2(500, 375, 140, 18))',
+        '520.0, "E  打开王墓水道", "sewer_reservoir"',
+        'true, "reached_A8_via_A7_then_opened_royal_tomb_gate", "E  沿王室水道返回",\n\t\t\t\tfloor_y - 165.0',
+        'if region_id == "A8" and side == "royal_tomb_waterway":\n\t\treturn floor_y - 165.0',
+        'if region_id == "A8" and side == "royal_tomb_waterway":',
+        "C07 returns beside its A8 door",
+        "return 610.0",
+    ]:
+        require(region_script, contract, "C03/C07 vertical route contract", errors)
+    require(region_script, '_spawn_hero(_spawn_x_for_side(spawn_side), _spawn_y_for_side(spawn_side))', "Spawn uses both axes", errors)
+    for vertical_spawn_contract in [
+        'if region_id == "A2" and side == "east":\n\t\treturn floor_y - 140.0',
+        'if region_id == "A6" and side == "bell_drop":\n\t\treturn floor_y - 90.0',
+        'if region_id == "A3" and side == "sewer":\n\t\treturn floor_y - 115.0',
+        'if region_id == "A3" and side == "old_lift":\n\t\treturn floor_y - 70.0',
+        'if region_id == "A4" and side == "prison_tunnel":\n\t\treturn floor_y - 75.0',
+        'if region_id == "A4" and side == "royal_tomb_waterway":\n\t\treturn floor_y - 85.0',
+        'if region_id == "A4" and side == "royal_drain":\n\t\treturn floor_y - 120.0',
+        'if region_id == "A9" and side == "old_lift":\n\t\treturn floor_y - 110.0',
+        'if region_id == "A9" and side == "royal_drain":\n\t\treturn floor_y - 150.0',
+    ]:
+        require(region_script, vertical_spawn_contract, "Elevated route spawn height", errors)
+
+    # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
+    # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
+    spawn_contracts = [
+        ('if region_id == "A2" and side == "east":', "return 2120.0"),
+        ('if region_id == "A9" and side == "mirror":', "return 1680.0"),
+        ('if region_id == "A11" and side == "chapel_entry":', "return map_width - 700.0"),
+        ('if region_id == "H02" and side == "bell_tower_entry":', "return map_width - 360.0"),
+        ('if region_id == "H03" and side == "third_street_entry":', "return map_width - 360.0"),
+        ('if region_id == "H04" and side == "royal_tomb_side_entry":', "return map_width - 360.0"),
+        ('if region_id == "H05" and side == "bell_drop_entry":', "return map_width - 360.0"),
+        ('if region_id == "H06" and side == "royal_transport_entry":', "return map_width - 360.0"),
+        ('if region_id == "A3" and side == "sewer":', "return 1380.0"),
+        ('if region_id == "A3" and side == "village_city_cut":', "return 700.0"),
+        ('if region_id == "A2" and side == "bell_gate":', "return map_width - 450.0"),
+        ('if region_id == "A2" and side == "old_pilgrim_highroad":', "return 1750.0"),
+        ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 650.0"),
+        ('if region_id == "A3" and side == "bell_drop":', "return 1600.0"),
+        ('if region_id == "A3" and side == "old_lift":', "return 1960.0"),
+        ('if region_id == "A6" and side == "bell_drop":', "return 2100.0"),
+        ('if region_id == "A9" and side == "royal_drain":', "return 650.0"),
+        ('if region_id == "A9" and side == "old_lift":', "return 610.0"),
+        ('if region_id == "A9" and side == "inner_city_side_gate":', "return 980.0"),
+        ('if region_id == "A12" and side == "inner_city_side_gate":', "return 650.0"),
+        ('if region_id == "A3" and side == "third_street_gate":', "return map_width - 500.0"),
+        ('if region_id == "A4" and side == "water_reflection_gate":', "return 1550.0"),
+        ('if region_id == "A4" and side == "east":', "return map_width - 220.0"),
+        ('if region_id == "A4" and side == "prison_tunnel":', "return 960.0"),
+        ('if region_id == "A7" and side == "supply_tunnel":', "return 610.0"),
+        ('if region_id == "A4" and side == "royal_tomb_waterway":', "return 1410.0"),
+        ('if region_id == "A4" and side == "royal_drain":', "return 1540.0"),
+        ('if region_id == "A5" and side == "bell_tower":', "return 1900.0"),
+        ('if region_id == "A6" and side == "silent_window":', "return 1420.0"),
+        ('if region_id == "A8" and side == "royal_name_gate":', "return 1350.0"),
+        ('if region_id == "A8" and side == "royal_tomb_waterway":', "return 610.0"),
+        ('if region_id == "A8" and side == "royal_tomb_side":', "return 1020.0"),
+        ('if region_id == "A9" and side == "third_street_service":', "return 1600.0"),
+        ('if region_id == "A9" and side == "royal_transport":', "return 2050.0"),
+        ('if region_id == "H01" and side == "east":', "return map_width - 360.0"),
+    ]
+    for condition, expected_return in spawn_contracts:
+        start = region_script.find(condition)
+        if start < 0:
+            fail(errors, f"Graybox spawn mapping: missing {condition!r}")
+            continue
+        branch = region_script[start:]
+        next_branch = branch.find("\n    if ", len(condition))
+        if next_branch >= 0:
+            branch = branch[:next_branch]
+        require(branch, expected_return, f"Graybox spawn mapping {condition}", errors)
+
+    # Cross-check every spatial-contract spawn against its runtime side mapping and a real collision-backed landing.
+    # 将拓扑中所有出生点逐一对照运行时 side 映射，并确认高位落点有真实碰撞平台承托。
+    spawn_x_end = region_script.find("\nfunc ", spawn_x_start + 1)
+    spawn_x_block = region_script[spawn_x_start:spawn_x_end if spawn_x_end >= 0 else len(region_script)]
+
+    def _spawn_expression_value(expression: str, axis: str) -> float | None:
+        expression = expression.strip()
+        numeric = re.fullmatch(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)", expression)
+        if numeric:
+            value = float(expression)
+            return value if axis == "x" else (value - 540.0)
+        if axis == "x":
+            match = re.fullmatch(r"map_width\s*-\s*([\d.]+)", expression)
+            return 2600.0 - float(match.group(1)) if match else None
+        if expression == "floor_y":
+            return 0.0
+        match = re.fullmatch(r"floor_y\s*-\s*([\d.]+)", expression)
+        return -float(match.group(1)) if match else None
+
+    def _mapped_spawn_value(mapping_block: str, region_id: str, side: str, axis: str) -> float | None:
+        condition = re.compile(
+            rf'if region_id == "{re.escape(region_id)}" and side == "{re.escape(side)}":'
+            rf'(?P<body>(?:\n[ \t]*#.*)*\n[ \t]*return (?P<value>[^\n]+))'
+        )
+        match = condition.search(mapping_block)
+        if match:
+            return _spawn_expression_value(match.group("value"), axis)
+        # Match the shared fallback behavior only after confirming no region-specific branch exists.
+        # 仅在不存在区域专属映射时，才使用控制器的通用默认出生点。
+        if axis == "y":
+            return 0.0
+        if side == "east":
+            return 2420.0
+        if region_id == "H01":
+            return 700.0
+        return 180.0
+
+    topology_for_spawn_audit = topology
+    spawn_mapping_audit_count = 0
+    spawn_landing_audit_count = 0
+    for edge in topology_for_spawn_audit.get("connections", []):
+        edge_id = edge.get("id", "<missing>")
+        spatial = edge.get("spatial_contract", {})
+        for spawn_key in ("return_spawn", "from_region_spawn", "to_region_spawn"):
+            spawn = spatial.get(spawn_key)
+            if not isinstance(spawn, dict) or not spawn.get("region"):
+                continue
+            region_id = str(spawn.get("region"))
+            # A1 is a separate authored scene with its own spawn function and is checked above.
+            # A1 是独立场景，使用村庄脚本自己的出生映射并由前面的 C02/C24 断言覆盖。
+            if region_id == "A1":
+                continue
+            try:
+                spawn_x = float(spawn["x"])
+                spawn_y_offset = float(spawn.get("y_offset", 0.0))
+            except (KeyError, TypeError, ValueError):
+                errors.append(f"{edge_id} {spawn_key} has invalid spawn coordinates.")
+                continue
+            side = str(spawn.get("spawn_side", ""))
+            if side:
+                spawn_mapping_audit_count += 1
+                runtime_x = _mapped_spawn_value(spawn_x_block, region_id, side, "x")
+                runtime_y_offset = _mapped_spawn_value(spawn_y_block, region_id, side, "y")
+                if runtime_x is None or abs(runtime_x - spawn_x) > 0.1:
+                    errors.append(
+                        f"{edge_id} {spawn_key} X mapping mismatch for {region_id}/{side}: "
+                        f"topology={spawn_x}, runtime={runtime_x}."
+                    )
+                if runtime_y_offset is None or abs(runtime_y_offset - spawn_y_offset) > 0.1:
+                    errors.append(
+                        f"{edge_id} {spawn_key} Y mapping mismatch for {region_id}/{side}: "
+                        f"topology={spawn_y_offset}, runtime={runtime_y_offset}."
+                    )
+            spawn_landing_audit_count += 1
+            region_platforms = platforms_by_region.get(region_id, [])
+            supported = any(
+                abs(platform_y - (540.0 + spawn_y_offset)) <= 1.5
+                and spawn_x >= platform_x - 0.1
+                and spawn_x <= platform_x + platform_width + 0.1
+                for platform_x, platform_y, platform_width, _platform_height in region_platforms
+            )
+            if not supported:
+                errors.append(
+                    f"{edge_id} {spawn_key} is not directly supported by a collision platform: "
+                    f"{region_id} x={spawn_x:g}, y={540.0 + spawn_y_offset:g}."
+                )
+
+    # Death recovery must stay inside the current region and restore the Hero safely.
+    # 死亡恢复必须留在当前区域，并安全恢复主角状态。
+    spawn_hero_start = region_script.find("func _spawn_hero(")
+    spawn_hero_end = region_script.find("\nfunc ", spawn_hero_start + 1)
+    spawn_hero_block = region_script[spawn_hero_start:spawn_hero_end if spawn_hero_end >= 0 else len(region_script)]
+    for contract in [
+        "WorldState.set_checkpoint(hero.global_position)",
+        "hero.defeated.connect(_on_hero_defeated)",
+    ]:
+        require(spawn_hero_block, contract, "Region-local checkpoint setup", errors)
+
+    death_start = region_script.find("func _on_hero_defeated() -> void:")
+    death_end = region_script.find("\nfunc ", death_start + 1)
+    death_block = region_script[death_start:death_end if death_end >= 0 else len(region_script)]
+    for contract in [
+        "if respawning:",
+        "respawning = true",
+        "hero.velocity = Vector2.ZERO",
+        "hero.global_position = WorldState.checkpoint_position",
+        'hero.call("restore_full")',
+        "WorldState.input_locked = false",
+        "respawning = false",
+    ]:
+        require(death_block, contract, "Death recovery", errors)
+    if "SceneTransition.fade_to_scene(" in death_block or "change_scene_to_file(" in death_block:
+        fail(errors, "Death recovery must not transition to another region or reuse a previous scene checkpoint.")
+
+    source_clue = read("scripts/world/resonance_source_clue.gd", errors)
+    require(source_clue, "WorldState.record_resonance_milestone(", "Resonance source clue", errors)
+    require(source_clue, "func _milestone_needs_repair() -> bool:", "Legacy-save anomaly repair", errors)
+    require(source_clue, "func _refresh_consumed_state() -> void:", "Legacy-save anomaly repair", errors)
+    require(source_clue, "not WorldState.is_ability_unlocked(unlock_ability_id)", "Legacy-save ability repair", errors)
+    require(source_clue, "ancient_exposure_floor,", "Resonance source exposure floor", errors)
+    require(source_clue, "outer_exposure_floor", "Resonance source exposure floor", errors)
+    require(source_clue, "require_outer_god_resonance", "Resonance source story gate", errors)
+    require(source_clue, 'KEY_E', "Resonance source clue", errors)
+    require(source_clue, "INTERACTION_FOCUS_SCRIPT.is_focused(self)", "Resonance source clue", errors)
+
+    interaction_door = read("scripts/world/interaction_door.gd", errors)
+    for contract in [
+        'unlock_once_flag_id: String = ""',
+        'opened_prompt_text: String = ""',
+        'WorldState.record_achievement(unlock_once_flag_id)',
+        'prompt_text = opened_prompt_text',
+        'var available := enabled and not WorldState.input_locked and hero_nearby and cooldown <= 0.0',
+    ]:
+        require(interaction_door, contract, "One-time inspection hatch", errors)
+    if "if hero_nearby and WorldState.input_locked:" in interaction_door:
+        errors.append("Interaction doors must preserve physical proximity while dialogue locks world input.")
+
+    secret_gate = read("scripts/world/resonance_secret_gate.gd", errors)
+    for contract in [
+        'add_to_group("resonance_hidden_targets")',
+        "WorldState.is_hidden_path_opened(secret_id)",
+        "@export var region_record_id: String = \"\"",
+        "func _get_region_record_id() -> String:",
+        "WorldState.discover_hidden_region(_get_region_record_id())",
+        "WorldState.open_hidden_path(secret_id)",
+        "WorldState.mark_hidden_region_entered(_get_region_record_id())",
+        "WorldState.resonance_sight_active",
+        "KEY_E",
+        "SceneTransition.fade_to_scene(target_scene_path)",
+        'target_spawn_side: String = "west"',
+        "require_outer_god_resonance",
+        "WorldState.pending_region_spawn_side = target_spawn_side",
+        "match secret_id:",
+        "func _draw_well_marker() -> void:",
+        "func _draw_early_bell_marker() -> void:",
+        "func _draw_erased_street_marker() -> void:",
+        "func _draw_reflected_stairs_marker() -> void:",
+        "func _draw_silent_window_marker() -> void:",
+        "func _draw_mirror_street_marker() -> void:",
+        "func _draw_erased_royal_name_marker() -> void:",
+        "func _draw_silent_chapel_marker() -> void:",
+        "func _draw_breathing_wall_marker() -> void:",
+        "func _draw_generic_anomaly_marker() -> void:",
+    ]:
+        require(secret_gate, contract, "Resonance hidden gate", errors)
+
+    village_hub = read("scripts/levels/village_hub.gd", errors)
+    require(village_hub, "_spawn_resonance_well_gate()", "Village hub", errors)
+    require(village_hub, "resonance_well_gate.opened.connect(_on_resonance_well_opened)", "Village hub", errors)
+    require(village_hub, 'resonance_well_gate.secret_id = "H01"', "Village hidden gate ID", errors)
+    require(village_hub, 'resonance_well_gate.required_resonance = 12', "Village hidden gate threshold", errors)
+    require(village_hub, 'resonance_well_gate.target_location_id = "hidden_well"', "Village hidden gate destination", errors)
+    require(village_hub, 'var spawn_x := 1850.0 if spawn_side == "well_exit"', "Village watergate return spawn spacing", errors)
+    require(village_hub, 'var spawn_side := WorldState.pending_region_spawn_side\n    # Persist the incoming side before clearing the one-shot transition value.\n    # 必须先保存实际进入侧，再清理一次性切图方向，确保 Continue 能恢复正确落点。\n    WorldState.set_location("village")\n    WorldState.pending_region_spawn_side = "west"', "Village resume spawn-side save order", errors)
+    require(village_hub, '2310.0 if spawn_side == "north_gate"', "Village north-gate return spawn", errors)
+    require(region_spawn_script, '"res://scenes/village_hub.tscn", "north_gate"', "A2 village return side", errors)
+    require(village_hub, '"village_defense_survived"', "Village old-road unlock", errors)
+    require(village_hub, 'res://scenes/ash_forest.tscn', "Village old-road route", errors)
+
+    defense = read("scripts/levels/village_defense_demo.gd", errors)
+    require(defense, 'WorldState.record_achievement("village_defense_survived")', "Village defense", errors)
+
+    # Keep the hidden-region design table and its actual gate constructors in sync.
+    # 将隐藏区域设计表与运行时入口构造函数逐项对齐，避免门槛、来源或落点悄悄漂移。
+    topology_path = ROOT / "tools/world_map_topology.json"
+    if topology_path.is_file():
+        try:
+            hidden_topology = json.loads(topology_path.read_text(encoding="utf-8"))
+            hidden_gate_functions = {
+                "H01": ("village_hub", "_spawn_resonance_well_gate"),
+                "H02": ("region", "_spawn_h02_gate"),
+                "H03": ("region", "_spawn_h03_gate"),
+                "H04": ("region", "_spawn_h04_gate"),
+                "H05": ("region", "_spawn_h05_gate"),
+                "H06": ("region", "_spawn_h06_gate"),
+                "H07": ("region", "_spawn_a9_mirror_gate"),
+                "H08": ("region", "_spawn_h08_gate"),
+            }
+            source_by_kind = {"region": region_script, "village_hub": village_hub}
+            for hidden in hidden_topology.get("hidden_regions", []):
+                hidden_id = hidden.get("id", "")
+                if hidden_id not in hidden_gate_functions:
+                    continue
+                source_kind, function_name = hidden_gate_functions[hidden_id]
+                source_text = source_by_kind[source_kind]
+                match = re.search(
+                    rf"func {re.escape(function_name)}\([^)]*\).*?(?=\nfunc |\Z)",
+                    source_text,
+                    re.DOTALL,
+                )
+                if match is None:
+                    errors.append(f"{hidden_id} topology gate audit cannot find {function_name}().")
+                    continue
+                gate_block = match.group(0)
+
+                def gate_int(property_name: str, default: int = 0) -> int:
+                    value = re.search(rf"gate\.{re.escape(property_name)}\s*=\s*(\d+)", gate_block)
+                    return int(value.group(1)) if value else default
+
+                def gate_string(property_name: str) -> str:
+                    value = re.search(rf'gate\.{re.escape(property_name)}\s*=\s*"([^"]*)"', gate_block)
+                    return value.group(1) if value else ""
+
+                def gate_string_array(property_name: str) -> list[str]:
+                    value = re.search(
+                        rf"gate\.{re.escape(property_name)}\s*=\s*\[(.*?)\]",
+                        gate_block,
+                        re.DOTALL,
+                    )
+                    return re.findall(r'"([^"]+)"', value.group(1)) if value else []
+
+                for topology_key, runtime_key in (
+                    ("min_resonance", "required_resonance"),
+                    ("min_ancient_exposure", "required_ancient_exposure"),
+                    ("min_outer_exposure", "required_outer_exposure"),
+                ):
+                    expected = int(hidden.get(topology_key, 0))
+                    actual = gate_int(runtime_key)
+                    if actual != expected:
+                        errors.append(
+                            f"{hidden_id} gate threshold mismatch: topology {topology_key}={expected}, runtime {runtime_key}={actual}."
+                        )
+
+                expected_sources = sorted(hidden.get("required_source_ids", []))
+                actual_sources = sorted(gate_string_array("required_source_ids"))
+                if actual_sources != expected_sources:
+                    errors.append(
+                        f"{hidden_id} gate source mismatch: topology={expected_sources}, runtime={actual_sources}."
+                    )
+                minimum_distinct_sources = int(hidden.get("min_distinct_anomaly_sources", 0))
+                if minimum_distinct_sources > len(actual_sources):
+                    errors.append(
+                        f"{hidden_id} requires {minimum_distinct_sources} distinct anomaly sources, "
+                        f"but its runtime gate lists only {len(actual_sources)}."
+                    )
+
+                expected_outer_resonance = hidden.get("requires_outer_god_resonance", False)
+                actual_outer_resonance = bool(re.search(
+                    r"gate\.require_outer_god_resonance\s*=\s*true",
+                    gate_block,
+                ))
+                if actual_outer_resonance != expected_outer_resonance:
+                    errors.append(
+                        f"{hidden_id} outer-god resonance mismatch: topology={expected_outer_resonance}, runtime={actual_outer_resonance}."
+                    )
+
+                expected_scene = hidden.get("scene_path", "")
+                actual_scene = gate_string("target_scene_path")
+                if actual_scene and actual_scene != f"res://{expected_scene}":
+                    errors.append(
+                        f"{hidden_id} target scene mismatch: topology={expected_scene}, runtime={actual_scene}."
+                    )
+                expected_location = hidden.get("location_id", "")
+                actual_location = gate_string("target_location_id")
+                if actual_location != expected_location:
+                    errors.append(
+                        f"{hidden_id} target location mismatch: topology={expected_location}, runtime={actual_location}."
+                    )
+        except (json.JSONDecodeError, OSError) as exc:
+            errors.append(f"Hidden gate/topology consistency audit could not read topology: {exc}")
+
+    # Keep the topology's local Resonance routes aligned with their runtime construction.
+    # 确保拓扑中的局部鸣响路线与运行时构造参数一致。
+    try:
+        topology_for_local_routes = json.loads((ROOT / "tools/world_map_topology.json").read_text(encoding="utf-8"))
+        local_routes = topology_for_local_routes.get("local_resonance_routes", [])
+        local_route_count = len(local_routes)
+        local_route_ids = [route.get("id") for route in local_routes]
+        if len(local_route_ids) != len(set(local_route_ids)):
+            errors.append("Topology contains duplicate local Resonance route IDs.")
+        known_region_ids = {region.get("id") for region in topology_for_local_routes.get("regions", [])}
+        route_by_id = {route.get("id"): route for route in local_routes}
+        route_builder_start = region_script.find("func _spawn_local_resonance_routes()")
+        route_builder_end = region_script.find("func _on_local_resonance_route_opened", route_builder_start)
+        if route_builder_start < 0 or route_builder_end < 0:
+            route_builder = ""
+            errors.append("Could not isolate the local Resonance route builder for region/identity auditing.")
+        else:
+            route_builder = region_script[route_builder_start:route_builder_end]
+        runtime_route_ids = re.findall(r'route\.route_id\s*=\s*"([^"]+)"', route_builder)
+        if len(runtime_route_ids) != len(set(runtime_route_ids)):
+            errors.append("Runtime local Resonance route builder contains duplicate route IDs.")
+        topology_route_id_set = set(local_route_ids)
+        runtime_route_id_set = set(runtime_route_ids)
+        if runtime_route_id_set != topology_route_id_set:
+            errors.append(
+                "Runtime/topology local Resonance route ID mismatch: "
+                f"runtime-only={sorted(runtime_route_id_set - topology_route_id_set, key=str)}, "
+                f"topology-only={sorted(topology_route_id_set - runtime_route_id_set, key=str)}."
+            )
+        expected_local_route_ids = ("A2_BELLGRAVE_CANOPY_CROSSING", "A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK", "A7_PRISON_MAINTENANCE_CROSSWALK", "A8_ERASED_REGENT_GALLERY", "A9_RAIN_REFLECTION_ROOFWALK", "A10_CHOIRLESS_UPPER_GALLERY", "A11_SECOND_OBSERVER_SPAN", "A12_CROWN_WALL_WALK")
+        if set(expected_local_route_ids) != topology_route_id_set:
+            errors.append(
+                "Validator/topology local Resonance route list drift: "
+                f"validator-only={sorted(set(expected_local_route_ids) - topology_route_id_set, key=str)}, "
+                f"topology-only={sorted(topology_route_id_set - set(expected_local_route_ids), key=str)}."
+            )
+        expected_local_route_prompts = {
+            "A2_BELLGRAVE_CANOPY_CROSSING": "E  ANCHOR THE BELLGRAVE CANOPY",
+            "A3_THIRD_STREET_ROOFLINE": "E  ANCHOR THE THIRD STREET",
+            "A4_OLD_STONE_AQUEDUCT": "E  ANCHOR THE DRY AQUEDUCT",
+            "A5_BURIED_STANDARD_CROSSING": "E  RAISE THE BURIED STANDARD",
+            "A6_SILENT_BELL_SERVICE_WALK": "E  ANCHOR THE SILENT BELL WALK",
+            "A7_PRISON_MAINTENANCE_CROSSWALK": "E  ANCHOR THE PRISON CROSSWALK",
+            "A8_ERASED_REGENT_GALLERY": "E  ANCHOR THE ERASED REGENT GALLERY",
+            "A9_RAIN_REFLECTION_ROOFWALK": "E  ANCHOR THE RAIN REFLECTION",
+            "A10_CHOIRLESS_UPPER_GALLERY": "E  ANCHOR THE CHOIRLESS GALLERY",
+            "A11_SECOND_OBSERVER_SPAN": "E  ANCHOR THE OBSERVER SPAN",
+            "A12_CROWN_WALL_WALK": "E  ANCHOR THE CROWN WALL",
+        }
+        expected_local_route_narratives = {
+            "A2_BELLGRAVE_CANOPY_CROSSING": "THE BELL'S SECOND SHADOW",
+            "A3_THIRD_STREET_ROOFLINE": "THE THIRD STREET HOLDS",
+            "A4_OLD_STONE_AQUEDUCT": "THE AQUEDUCT WITHOUT WATER",
+            "A5_BURIED_STANDARD_CROSSING": "THE STANDARD THAT OUTLIVED THE ARMY",
+            "A6_SILENT_BELL_SERVICE_WALK": "THE SERVICE WALK OF THE SILENT BELL",
+            "A7_PRISON_MAINTENANCE_CROSSWALK": "THE CROSSWALK OF UNNUMBERED CELLS",
+            "A8_ERASED_REGENT_GALLERY": "THE REGENT WHO NEVER REIGNED",
+            "A9_RAIN_REFLECTION_ROOFWALK": "THE HOMES THAT THE RAIN REMEMBERS",
+            "A10_CHOIRLESS_UPPER_GALLERY": "THE CHOIR THAT WAS NEVER RECORDED",
+            "A11_SECOND_OBSERVER_SPAN": "THE OBSERVER WHO LEFT NO FOOTPRINTS",
+            "A12_CROWN_WALL_WALK": "THE WALL BUILT FOR A KING'S ABSENCE",
+        }
+        for route_id in expected_local_route_ids:
+            route_design = route_by_id.get(route_id)
+            if route_design is None:
+                errors.append(f"Topology is missing local Resonance route {route_id}.")
+                continue
+            require(route_builder, f'route.route_id = "{route_id}"', f"{route_id} runtime identity", errors)
+            route_match = re.search(rf'route\.route_id\s*=\s*"{re.escape(route_id)}"', route_builder)
+            if route_match is not None:
+                region_branches = re.findall(r'^\s*"([^"]+)":\s*$', route_builder[:route_match.start()], re.MULTILINE)
+                runtime_region = region_branches[-1] if region_branches else None
+                expected_region = route_design.get("region_id")
+                if runtime_region != expected_region:
+                    errors.append(
+                        f"Local route {route_id} is built under runtime region {runtime_region!r}, "
+                        f"but topology assigns it to {expected_region!r}."
+                    )
+            prompt = expected_local_route_prompts.get(route_id)
+            if prompt:
+                require(region_script, f'route.prompt_text = "{prompt}"', f"{route_id} interaction prompt", errors)
+            narrative_title = expected_local_route_narratives.get(route_id)
+            if narrative_title:
+                require(region_script, f'"{narrative_title}"', f"{route_id} narrative title", errors)
+                require(localization_script, f'"{narrative_title}": {{', f"{route_id} localized narrative title", errors)
+                body_match = re.search(
+                    rf'"{re.escape(narrative_title)}",\s*"((?:[^"\\]|\\.)*)"',
+                    region_script,
+                )
+                if body_match is None:
+                    errors.append(f"{route_id} narrative body could not be located for localization audit.")
+                else:
+                    require(
+                        localization_script,
+                        f'"{body_match.group(1)}": {{',
+                        f"{route_id} localized narrative body",
+                        errors,
+                    )
+            if prompt:
+                require(localization_script, f'"{prompt}": {{', f"{route_id} localized interaction prompt", errors)
+            # Every authored route string must have all three non-English translations;
+            # English is the source text and remains the fallback.
+            # 每条路线的标题、正文和交互提示都必须有简中、繁中、日语译文。
+            localized_sources = [value for value in (prompt, narrative_title) if value]
+            narrative_section_start = region_script.find("func _on_local_resonance_route_opened")
+            if narrative_title and narrative_section_start >= 0:
+                body_match = re.search(
+                    rf'"{re.escape(narrative_title)}",\s*"((?:[^"\\]|\\.)*)"',
+                    region_script[narrative_section_start:],
+                )
+                if body_match is not None:
+                    localized_sources.append(body_match.group(1))
+            for source_text in localized_sources:
+                entry = re.search(rf'"{re.escape(source_text)}"\s*:\s*\{{([^}}]*)\}}', localization_script)
+                if entry is None:
+                    errors.append(f"{route_id} is missing a localization entry for {source_text[:70]!r}.")
+                    continue
+                for language in ("zh_cn", "zh_tw", "ja"):
+                    translation = re.search(rf'"{language}"\s*:\s*"([^"]+)"', entry.group(1))
+                    if translation is None or not translation.group(1).strip():
+                        errors.append(f"{route_id} has no non-empty {language} translation for {source_text[:70]!r}.")
+            for key, property_name in (
+                ("required_resonance", "required_resonance"),
+                ("bridge_start_x", "bridge_start_x"),
+                ("bridge_end_x", "bridge_end_x"),
+                ("bridge_y", "bridge_y"),
+            ):
+                expected_value = route_design.get(key)
+                if expected_value is None:
+                    errors.append(f"Topology local route {route_id} is missing {key}.")
+                    continue
+                if key == "required_resonance":
+                    literal = str(int(expected_value))
+                else:
+                    literal = f"{float(expected_value):.1f}"
+                require(
+                    region_script,
+                    f"route.{property_name} = {literal}",
+                    f"{route_id} {property_name} matches topology",
+                    errors,
+                )
+            if route_design.get("requires_resonance_sight") is not True:
+                errors.append(f"Topology local route {route_id} must require Resonance Sight.")
+            if route_design.get("persistent_on_open") is not True:
+                errors.append(f"Topology local route {route_id} must persist after opening.")
+            if route_design.get("region_id") not in known_region_ids:
+                errors.append(f"Topology local route {route_id} references unknown region {route_design.get('region_id')}.")
+            geometry_valid = True
+            try:
+                start_x = float(route_design.get("bridge_start_x"))
+                end_x = float(route_design.get("bridge_end_x"))
+                bridge_y = float(route_design.get("bridge_y"))
+                threshold = int(route_design.get("required_resonance"))
+                if end_x <= start_x:
+                    errors.append(f"Topology local route {route_id} must have bridge_end_x > bridge_start_x.")
+                    geometry_valid = False
+                if not 0 <= threshold <= 100:
+                    errors.append(f"Topology local route {route_id} has an invalid Resonance threshold.")
+                    geometry_valid = False
+                if not 0.0 <= bridge_y <= 540.0:
+                    errors.append(f"Topology local route {route_id} has a bridge elevation outside the graybox floor bounds.")
+                    geometry_valid = False
+            except (TypeError, ValueError):
+                errors.append(f"Topology local route {route_id} has non-numeric geometry or threshold values.")
+                geometry_valid = False
+            if not geometry_valid:
+                continue
+            route_platforms = platforms_by_region.get(route_design.get("region_id"), [])
+            if not route_platforms:
+                errors.append(f"Local route {route_id} has no parsed platform layout for {route_design.get('region_id')}.")
+            else:
+                bridge_y = float(route_design.get("bridge_y", 0.0))
+                for endpoint_key in ("bridge_start_x", "bridge_end_x"):
+                    endpoint_x = float(route_design.get(endpoint_key, 0.0))
+                    nearest = min(
+                        (
+                            (
+                                max(0.0, x - endpoint_x, endpoint_x - (x + width)),
+                                abs(y - bridge_y),
+                            )
+                            for x, y, width, _height in route_platforms
+                        ),
+                        key=lambda gap: gap[0] ** 2 + gap[1] ** 2,
+                    )
+                    if nearest[0] > 100.0 or nearest[1] > 45.0:
+                        errors.append(
+                            f"Local route {route_id} {endpoint_key} is detached from nearby platforms "
+                            f"(horizontal gap={nearest[0]:g}, vertical gap={nearest[1]:g})."
+                        )
+                # A bridge may touch a platform edge, but should not be embedded through its collision body.
+                # 桥体可以与平台边缘相接，但不应大面积穿进平台碰撞体。
+                for x, y, width, height in route_platforms:
+                    horizontal_overlap = min(end_x, x + width) - max(start_x, x)
+                    vertical_overlap = min(bridge_y + 18.0, y + height) - max(bridge_y, y)
+                    if horizontal_overlap > 0.0 and vertical_overlap > 2.0:
+                        errors.append(
+                            f"Local route {route_id} overlaps a platform collision body by "
+                            f"{vertical_overlap:g}px vertically across {horizontal_overlap:g}px."
+                        )
+    except (json.JSONDecodeError, OSError) as exc:
+        errors.append(f"Local Resonance route topology audit could not read topology: {exc}")
+
+    if errors:
+        print("GRAYBOX SCENE WIRING CHECK FAILED")
+        for error in errors:
+            print(f" - {error}")
+        return 1
+
+    print("GRAYBOX SCENE WIRING STATIC CHECK PASSED")
+    print(" - A2-A13 plus H01-H08 scenes have scripts and resume mappings.")
+    print(f" - Full-map inventory: {len(topology.get('regions', []))} regions, {len(topology.get('connections', []))} C-edges, {len(topology.get('subregions', []))} subregions, {len(topology.get('intra_region_connections', []))} intra-region edges, {len(topology.get('elevators', []))} elevator contracts.")
+    print(f" - Runtime C-edge wiring: {len(topology_for_route_audit.get('connections', []))} connections audited; reverse source wiring checked where final_direction=both.")
+    print(f" - Spatial spawn contracts: {spawn_mapping_audit_count} side mappings and {spawn_landing_audit_count} collision-backed landings checked.")
+    print(" - The R01-R08 anomaly source chain is present.")
+    print(" - H01-H08 plus C15/C19 gates use saved discovery/open/entry state and progression conditions.")
+    print(f" - Platform reachability estimate: {platform_audit_regions} regions, {platform_audit_count} platforms.")
+    print(f" - Local resonance route contract: {local_route_count} routes; IDs, prompts, narratives, endpoint proximity, collision overlap, sight gating, and persistence checked.")
+    print(" - C15/C19 enter A11 from separate sides; H08 and C21 terminal access follow the shared ending evaluator.")
+    print("NOTE: Godot runtime/collision/input validation is still required.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+, exits_source)
+        if current is None:
+            return ""
+        next_region = re.search(r'(?m)^[ \\t]*"(?:A(?:[0-9]|1[0-3])|H(?:0[1-9]))":[ \\t]*
+    # P2 Boss 合同：A8 Boss 必须是独立可选场景，不能替代 C13/C14/C07/C15 既有路线。
+    a8_exit_start = region_script.find('        "A8":', region_script.find("func _spawn_region_exits"))
+    a9_exit_start = region_script.find('        "A9":', a8_exit_start)
+    a8_exit_block = region_script[a8_exit_start:a9_exit_start] if a8_exit_start >= 0 and a9_exit_start > a8_exit_start else ""
+    require(a8_exit_block, '"defeated_royal_tomb_guardian" not in WorldState.achievement_flags', "A8 optional Boss entrance gate", errors)
+    require(a8_exit_block, '"res://scenes/royal_tomb_boss.tscn"', "A8 Boss scene transition", errors)
+    require(a8_exit_block, '1540.0, "E  进入王墓内殿"', "A8 Boss door anchor", errors)
+    require(a8_exit_block, 'map_width - 72.0, "E  进入王城外环"', "A8→A9 main route remains open beside optional Boss", errors)
+    require(region_script, 'if region_id == "A8" and side == "boss_return":', "A8 Boss return spawn mapping", errors)
+    require(region_script, "return 1700.0", "A8 Boss return spawn clearance", errors)
+    # Keep the victory return away from both the arena entrance and the adjacent H06 gate's focus volume.
+    # 胜利回程点必须同时避开 Boss 入口与相邻 H06 的交互焦点。
+    if min(abs(1700.0 - 1540.0), abs(1870.0 - 1700.0)) < 130.0:
+        errors.append("A8 Boss return spawn is too close to the arena entrance or H06 gate.")
+
+    # Catch accidental line-join syntax defects in spawn mapping and ensure C04 is wired on both ends.
+    # 检查出生点映射中意外粘连的语法错误，并确保 C04 两端都接线。
+    if 'return 850.0    if region_id' in region_script:
+        fail(errors, "Graybox spawn mapping: C04 A5 spawn branch is concatenated with the next if statement.")
+    for contract in [
+        '"E  打开旧朝圣高路"',
+        '"E  返回边境战场"',
+        '"reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags',
+        '"reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回"',
+    ]:
+        require(region_script, contract, "C04 old pilgrim highroad", errors)
+
+    # C05 is recorded only by traversing from A3; merely loading/entering A4 from another branch must not fake it.
+    # C05 只能由 A3 实际进入 A4 时记录；从其他支路进入或读档不能伪造这条路线。
+    require(region_script, 'if region_id == "A3" and target_location == "sewer_reservoir":\n        WorldState.record_achievement("reached_A4_via_A3")', "C05 route recording", errors)
+    a4_ready_start = region_script.find('func _ready()')
+    a4_ready_end = region_script.find('func _spawn_x_for_side', a4_ready_start)
+    ready_block = region_script[a4_ready_start:a4_ready_end] if a4_ready_start >= 0 and a4_ready_end > a4_ready_start else ""
+    if 'WorldState.record_achievement("reached_A4_via_A3")' in ready_block:
+        fail(errors, "C05 route flag must not be recorded unconditionally on A4 scene entry.")
+
+    # C24 must be gated on the city side too, matching the village's defense requirement.
+    # C24 城区侧也必须受村庄防卫标记约束，与村庄入口条件一致。
+    a3_start = region_script.find('        "A3":', region_script.find("func _spawn_region_exits"))
+    a4_start = region_script.find('        "A4":', a3_start)
+    a3_exit_block = region_script[a3_start:a4_start] if a3_start >= 0 and a4_start > a3_start else ""
+    if not a3_exit_block:
+        fail(errors, "C24 route audit: cannot isolate A3 exit block.")
+    else:
+        require(a3_exit_block, 'if "village_defense_survived" in WorldState.achievement_flags:', "C24 city-side defense gate", errors)
+        require(a3_exit_block, '"E  经旧排水道返回"', "C24 city-side return door", errors)
+        if a3_exit_block.find('"E  经旧排水道返回"') < a3_exit_block.find('if "village_defense_survived" in WorldState.achievement_flags:'):
+            fail(errors, "C24 A3 return door must remain inside the village-defense condition.")
+
+    # Locate the exit mapping before any public or hidden route audit uses it.
+    # 在公开路线与隐藏路线审计使用前，先定位出口映射函数。
+    exits_start = region_script.find("func _spawn_region_exits")
+    if exits_start < 0:
+        fail(errors, "Graybox route audit: cannot find _spawn_region_exits function.")
+        exits_start = 0
+
+    # Check both directions of the remaining public backbone connections.
+    # 检查其余公开主干连线的双向出口，避免场景仍存在但主线断开。
+    route_blocks = {}
+    ordered_route_regions = ["A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A12", "H07", "H01", "H02", "H03", "H04", "H05", "H06", "A11", "H08"]
+    route_positions = {
+        region: region_script.find(f'        "{region}":', exits_start)
+        for region in ordered_route_regions
+    }
+    sorted_route_regions = sorted(
+        ((position, region) for region, position in route_positions.items() if position >= 0)
+    )
+    for index, (position, region) in enumerate(sorted_route_regions):
+        next_position = sorted_route_regions[index + 1][0] if index + 1 < len(sorted_route_regions) else len(region_script)
+        route_blocks[region] = region_script[position:next_position]
+    # Audit all 24 C-edges against the actual source-region transition wiring in one pass.
+    # 一次性逐条核对全部 24 条 C 连接的源区域转场代码与反向门，不再只依赖主线抽样断言。
+    village_route_script = read("scripts/levels/village_hub.gd", errors)
+    scene_path_by_region = {
+        "A0": "scenes/escape_prologue.tscn",
+        "A1": "scenes/village_hub.tscn",
+    }
+    scene_path_by_region.update({
+        region_id: scene_data[0]
+        for region_id, scene_data in REGIONS.items()
+        if region_id.startswith("A")
+    })
+    topology_for_route_audit = topology
+    runtime_route_source = dict(route_blocks)
+    runtime_route_source["A0"] = prologue_route_script
+    runtime_route_source["A1"] = village_route_script
+    for edge in topology_for_route_audit.get("connections", []):
+        edge_id = edge.get("id", "<missing>")
+        source_region = str(edge.get("from", ""))
+        target_region = str(edge.get("to", ""))
+        source_block = runtime_route_source.get(source_region, "")
+        target_block = runtime_route_source.get(target_region, "")
+        target_path = scene_path_by_region.get(target_region, "")
+        source_path = scene_path_by_region.get(source_region, "")
+        if not source_block:
+            errors.append(f"{edge_id} has no isolated runtime source block for {source_region}.")
+        elif edge_id == "C15":
+            require(source_block, "_spawn_a11_maintenance_gate(", "C15 A8-side gate wiring", errors)
+        elif edge_id == "C19":
+            require(source_block, "_spawn_a11_chapel_gate(", "C19 A10-side gate wiring", errors)
+        elif not target_path:
+            errors.append(f"{edge_id} has no scene-path mapping for target region {target_region}.")
+        else:
+            require(source_block, f'res://{target_path}', f"{edge_id} {source_region}-to-{target_region} transition", errors)
+        if edge.get("final_direction") == "both":
+            if not target_block:
+                errors.append(f"{edge_id} has no isolated runtime reverse block for {target_region}.")
+            elif not source_path:
+                errors.append(f"{edge_id} has no scene-path mapping for reverse target region {source_region}.")
+            else:
+                require(target_block, f'res://{source_path}', f"{edge_id} reverse {target_region}-to-{source_region} transition", errors)
+
+    main_route_contracts = [
+        ("A2", '"E  沿树冠高路进入被遗忘的城区"', "C03 A2-to-A3"),
+        ("A3", '"E  返回旧朝圣路"', "C03 A3-to-A2"),
+        ("A3", '"E  沿残墙高路前往战场"', "C08 A3-to-A5"),
+        ("A5", '"E  返回被遗忘的城区"', "C08 A5-to-A3"),
+        ("A5", '"E  沿残墙高路进入修道院"', "C09 A5-to-A6"),
+        ("A6", '"E  返回边境战场"', "C09 A6-to-A5"),
+        ("A6", '"E  深入监牢"', "C11 A6-to-A7"),
+        ("A7", '"E  返回修道院"', "C11 A7-to-A6"),
+        ("A7", '"E  进入旧王墓"', "C13 A7-to-A8"),
+        ("A8", '"E  返回监牢"', "C13 A8-to-A7"),
+        ("A8", '"E  进入王城外环"', "C14 A8-to-A9"),
+        ("A9", '"E  返回旧王墓"', "C14 A9-to-A8"),
+    ]
+    for source_region, contract, connection_label in main_route_contracts:
+        require(route_blocks.get(source_region, ""), contract, connection_label, errors)
+
+    # C13 must be elevated at both ends; its authored vertical route must not collapse into a ground-level door pair.
+    # C13 两端必须保持高位；维护竖井主线不能退化为地面门对门。
+    c13_route = route_blocks.get("A7", "")
+    c13_return_route = route_blocks.get("A8", "")
+    for required, label in [
+        ('"maintenance_shaft_entry"', "C13 A7-to-A8 target side"),
+        ('floor_y - 120.0', "C13 A7 elevated door height"),
+    ]:
+        require(c13_route, required, label, errors)
+    for required, label in [
+        ('"maintenance_shaft_return"', "C13 A8-to-A7 target side"),
+        ('floor_y - 120.0', "C13 A8 elevated door height"),
+    ]:
+        require(c13_return_route, required, label, errors)
+    for required, label in [
+        ('_add_platform(Rect2(2140, 460, 110, 18))', "C13 prison approach step"),
+        ('_add_platform(Rect2(2200, 420, 170, 18))', "C13 prison upper exit ledge"),
+        ('_add_platform(Rect2(80, 420, 150, 18))', "C13 tomb upper arrival ledge"),
+        ('_add_platform(Rect2(240, 420, 170, 18))', "C13 tomb route connection"),
+    ]:
+        require(region_script, required, label, errors)
+
+    # C19's A11 return is paired to the C19 opened state, not a generic A10 progression flag.
+    require(region_script, 'var can_return_to_cathedral := WorldState.is_hidden_path_opened("C19")', "C19 paired return gate", errors)
+
+    # C08/C09 high-road transitions must land on collision-backed ledges in both directions.
+    # C08/C09 高路转场的双向落点都必须由真实碰撞平台承托。
+    for contract, label in [
+        ('_add_platform(Rect2(2180, 410, 250, 18))', "C08 A3 upper return ledge"),
+        ('_add_platform(Rect2(100, 410, 300, 18))', "C08 A5 upper arrival ledge"),
+        ('_add_platform(Rect2(2190, 450, 140, 18))', "C09 A5 upper exit ledge"),
+        ('_add_platform(Rect2(2150, 485, 150, 18))', "C09 A5 lower return approach"),
+        ('_add_platform(Rect2(100, 450, 140, 18))', "C09 A6 west bridge arrival"),
+        ('if region_id == "A6" and side == "battlefield_entry":\n\t\treturn floor_y - 90.0', "C09 A6 bridge spawn height"),
+        ('if region_id == "A5" and side == "monastery_return":\n\t\treturn floor_y - 55.0', "C09 A5 return spawn height"),
+        ('if region_id == "A6" and side == "battlefield_entry":\n\t\treturn 160.0', "C09 A6 bridge spawn X"),
+        ('if region_id == "A5" and side == "monastery_return":\n\t\treturn 2165.0', "C09 A5 return spawn X"),
+    ]:
+        require(region_script, contract, label, errors)
+
+    # C04 is a paired upper-route shortcut: both door heights, platform support, and arrival elevations must remain aligned.
+    # C04 是双侧高路捷径：两侧门高、承托平台与到达高度必须保持一致。
+    for contract in (
+        '1880.0, "E  返回边境战场", "old_battlefield"',
+        '"res://scenes/old_battlefield.tscn", "old_pilgrim_highroad",\n\t\t\t\t\ttrue, "", "", floor_y - 115.0',
+        '520.0, "E  打开旧朝圣高路", "ash_forest"',
+        '"reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",\n\t\t\t\tfloor_y - 140.0',
+        'if region_id == "A2" and side == "old_pilgrim_highroad":\n\t\treturn floor_y - 140.0',
+        'if region_id == "A5" and side == "old_pilgrim_highroad":\n\t\treturn floor_y - 85.0',
+        '_add_platform(Rect2(1840, 445, 130, 18))',
+        '_add_platform(Rect2(420, 420, 120, 18))',
+        '_add_platform(Rect2(560, 455, 160, 18))',
+        'if region_id == "A4" and side == "prison_tunnel":\n\t\t# C12 arrives on the low ledge 90px away from its own return door.\n\t\t# C12 出生在低位栈台上，距回程门 90px，避免落地立即重新触发。\n\t\treturn 960.0',
+        'if region_id == "A4" and side == "royal_drain":\n\t\t# C23 lands on the lower support lip at x=1540, leaving safer clearance from the x=1650 door.\n\t\t# C23 落在 x=1540 的承托边沿，与 x=1650 的门保持更充足净距。\n\t\treturn 1540.0',
+        '_add_platform(Rect2(1530, 420, 70, 18))',
+        '_add_platform(Rect2(620, 390, 180, 18))',
+        '740.0, "E  打开王城排水门"',
+    ):
+        require(region_script, contract, "C04 paired canopy route", errors)
+
+    # C17 and C20 are the intended public route through the cathedral; C18 must remain a later shortcut.
+    # C17/C20 是经过大圣堂的公开主线；C18 只能作为抵达内城后的后期开启捷径。
+    a9_start = region_script.find('        "A9":', exits_start)
+    a10_start = region_script.find('        "A10":', a9_start)
+    a12_start = region_script.find('        "A12":', a10_start)
+    h07_start = region_script.find('        "H07":', a12_start)
+    a9_route_block = region_script[a9_start:a10_start] if a9_start >= 0 and a10_start > a9_start else ""
+    a10_route_block = region_script[a10_start:a12_start] if a10_start >= 0 and a12_start > a10_start else ""
+    a12_route_block = region_script[a12_start:h07_start] if a12_start >= 0 and h07_start > a12_start else ""
+    for contract in [
+        '"E  沿外环屋顶阶梯登上大圣堂"',
+        'res://scenes/grand_cathedral.tscn", "west"',
+    ]:
+        require(a9_route_block, contract, "C17 outer-ring-to-cathedral main route", errors)
+    for contract in [
+        '"E  进入王室内城"',
+        'res://scenes/inner_city.tscn", "west"',
+    ]:
+        require(a10_route_block, contract, "C20 cathedral-to-inner-city main route", errors)
+    require(a12_route_block, '"E  返回大圣堂"', "C20 inner-city return route", errors)
+    require(a12_route_block, '"reached_A12_via_A10_then_opened_inner_city_side_gate"', "C18 main-route prerequisite", errors)
+    require(region_script, '900.0, "E  返回王室内城"', "C18 A9-side door anchor", errors)
+    require(region_script, '520.0, "E  打开内城侧门"', "C18 A12-side door anchor", errors)
+    require(region_script, 'if region_id == "A9" and side == "inner_city_side_gate":\n\t\t# C18 lands outside the x=900 door trigger and just beyond the x=1100 rest point\'s 110px focus radius.\n\t\t# C18 出生点避开 x=900 门触发区，并位于 x=1100 休整点的 110px 交互半径之外。\n\t\treturn 980.0', "C18 A9 safe arrival", errors)
+    if a9_route_block.find('"E  RETURN TO THE INNER CITY"') >= 0 and a9_route_block.find('"reached_A12_via_A10_then_opened_inner_city_side_gate"') < 0:
+        fail(errors, "C18 A9-side shortcut must remain gated by opening it from A12 after the main route.")
+
+    # C10 must be available independently of H05; its only persisted unlock is its own drop flag.
+    # C10 必须独立于 H05 可用；它只依赖自身的钟塔落差开门标记。
+    a6_start = region_script.find('        "A6":', region_script.find("func _spawn_region_exits"))
+    a7_start = region_script.find('        "A7":', a6_start)
+    a6_exit_block = region_script[a6_start:a7_start] if a6_start >= 0 and a7_start > a6_start else ""
+    if not a6_exit_block:
+        fail(errors, "C10 route audit: cannot isolate A6 exit block.")
+    else:
+        require(a6_exit_block, '"E  打开钟塔落差通路"', "C10 monastery shortcut", errors)
+        require(a6_exit_block, '"opened_bell_tower_drop"', "C10 monastery shortcut", errors)
+        if 'if WorldState.is_hidden_path_opened("H05")' in a6_exit_block:
+            fail(errors, "C10 monastery shortcut must not depend on the optional H05 secret path.")
+    if "1830.0, \"E  RETURN TO THE SILENT BELL WINDOW\"" in region_script:
+        fail(errors, "H05 return door at x=1830 is too close to the C10 door at x=1710.")
+    if "1950.0, \"E  RETURN TO THE SILENT BELL WINDOW\"" in region_script:
+        fail(errors, "H05 return door at x=1950 overlaps the A3 rest-point interaction radius.")
+    require(region_script, '1870.0, "E  返回无声之窗"', "H05/C10/C16 interaction spacing", errors)
+    require(region_script, '1250.0, "E  打开旧服务门"', "A9 H03/C18 interaction spacing", errors)
+    if '1020.0, "E  打开旧服务门"' in region_script:
+        fail(errors, "A9 H03 service door remains too close to the C18 inner-city side gate.")
+
+    # Each playable region must have its intended lightweight encounter roster.
+    # 每个可玩区域必须保留对应的轻量遭遇配置，A9 作为交通枢纽刻意不生成战斗敌人。
+    encounter_contracts = {
+        "A2": ["A2_PaleHound_01", "A2_Cultist_01"],
+        "A3": ["A3_Bandit_01", "A3_Cultist_01"],
+        "A4": ["A4_ResearchHusk_01"],
+        "A5": ["A5_Bandit_01"],
+        "A6": ["A6_Inquisitor_01"],
+        "A7": ["A7_ResearchHusk_01"],
+        "A8": ["A8_Cultist_01"],
+        "A10": ["A10_Inquisitor_01", "A10_BellWraith_01"],
+        "A11": ["A11_ResearchHusk_01"],
+        "A12": ["A12_Inquisitor_01", "A12_Cultist_01"],
+        "H01": ["H01_Cultist_01"],
+        "H02": ["H02_BellWraith_01"],
+        "H03": ["H03_Bandit_01"],
+        "H04": ["H04_PaleHound_01"],
+        "H05": ["H05_BellWraith_01"],
+        "H06": ["H06_Inquisitor_01"],
+        "H07": ["H07_PaleHound_01"],
+        "H08": ["H08_ResearchHusk_01"],
+    }
+    for region_id, enemy_names in encounter_contracts.items():
+        require(region_script, f'"{region_id}":', f"{region_id} encounter region", errors)
+        for enemy_name in enemy_names:
+            require(region_script, f'"{enemy_name}"', f"{region_id} encounter roster", errors)
+    require(region_script, "ENCOUNTER_ACTIVATE_RANGE := 420.0", "Encounter activation radius", errors)
+    require(region_script, "ENCOUNTER_DEACTIVATE_RANGE := 560.0", "Encounter deactivation hysteresis", errors)
+    require(region_script, 'enemy.set_physics_process(false)', "Dormant encounters do not chase across the whole region", errors)
+
+    # Hidden-region exits must preserve their intended return loops and second-side unlocks.
+    # 隐藏区域的出口必须保留预期回环，并且远侧出口只能在对应实体门开启后可用。
+    hidden_exit_contracts = {
+        "H01": [
+            '"E  返回边境村庄"',
+            '"reached_A4_via_A3" in WorldState.achievement_flags',
+            'WorldState.is_hidden_path_opened("H01")',
+            '"sewer_reservoir"',
+        ],
+        "H02": [
+            '"E  返回旧朝圣路"',
+            '"opened_old_bell_tower_connection" in WorldState.achievement_flags',
+            '"old_battlefield"',
+        ],
+        "H03": [
+            '"E  返回被遗忘的城区"',
+            '"opened_old_service_door" in WorldState.achievement_flags',
+            '"royal_outer_ring"',
+        ],
+        "H04": [
+            '"E  返回旧水库"',
+            '"opened_royal_tomb_side_door" in WorldState.achievement_flags',
+            '"royal_tomb"',
+        ],
+        "H05": [
+            '"E  返回修道院"',
+            '"opened_bell_tower_drop" in WorldState.achievement_flags',
+            '"forgotten_city"',
+        ],
+        "H06": [
+            '"E  返回旧王墓"',
+            '"opened_royal_transport_side_door" in WorldState.achievement_flags',
+            '"royal_outer_ring"',
+        ],
+        "H07": [
+            '"E  穿过积水返回"',
+            '"opened_mirror_street_side_gate" in WorldState.achievement_flags',
+            '"inner_city"',
+        ],
+        "H08": [
+            '"E  返回深层研究区"',
+            'if NereisEndingEvaluator.get_candidate() != "凡人之墓":',
+            '"terminal_anomaly"',
+            '"res://scenes/terminal_anomaly.tscn"',
+        ],
+    }
+    for hidden_id, contracts in hidden_exit_contracts.items():
+        # GDScript match branches are tab-indented; support either tabs or spaces so this
+        # source-level check does not silently fail when formatting changes.
+        branch_match = re.search(
+            rf'^[\t ]*"{re.escape(hidden_id)}":',
+            region_script[exits_start:],
+            re.MULTILINE,
+        )
+        block_start = exits_start + branch_match.start() if branch_match else -1
+        next_branch = re.search(
+            r'^[\t ]*"[A-Z]\d{1,2}":',
+            region_script[block_start + 1:] if block_start >= 0 else "",
+            re.MULTILINE,
+        )
+        block_end = block_start + 1 + next_branch.start() if block_start >= 0 and next_branch else -1
+        block = region_script[block_start:block_end] if block_start >= 0 and block_end > block_start else ""
+        if not block:
+            fail(errors, f"{hidden_id} hidden-region exit block is missing or malformed.")
+            continue
+        for contract in contracts:
+            require(block, contract, f"{hidden_id} hidden-region return contract", errors)
+
+    # A13 is a real terminal map layer, not merely an abstract topology node. Ending selection occurs after entering it.
+    # A13 必须是实际终局地图层，而不是只存在于拓扑中的抽象节点；进入后才选择结局。
+    a13_match = re.search(r'^[\t ]*"A13":', region_script[exits_start:], re.MULTILINE)
+    a13_start = exits_start + a13_match.start() if a13_match else -1
+    a13_next = re.search(
+        r'^[\t ]*"[A-Z]\d{1,2}":',
+        region_script[a13_start + 1:] if a13_start >= 0 else "",
+        re.MULTILINE,
+    )
+    a13_end = (
+        a13_start + 1 + a13_next.start()
+        if a13_start >= 0 and a13_next
+        else region_script.find("\nfunc ", a13_start) if a13_start >= 0 else -1
+    )
+    a13_block = region_script[a13_start:a13_end] if a13_start >= 0 and a13_end > a13_start else ""
+    if not a13_block:
+        fail(errors, "A13 terminal exit block is missing or malformed.")
+    else:
+        require(a13_block, 'ending_gate.call("route_candidate")', "A13 ending evaluator", errors)
+        require(a13_block, '"ending_fire_demo.tscn"', "A13 fire ending route", errors)
+        require(a13_block, '"ending_paradise_demo.tscn"', "A13 paradise ending route", errors)
+        require(a13_block, '"E  接受终局"', "A13 final threshold", errors)
+    require(region_script, '"terminal_anomaly"', "A13 runtime location id", errors)
+    require(world_state, '"terminal_anomaly":', "A13 save/resume mapping", errors)
+
+    # A3 exits must occupy distinct spatial lanes: raised sewer branch, street-level hidden clue,
+    # and elevated far-eastern lift. This prevents all major choices from collapsing into one doorway cluster.
+    # A3 出口必须分布在不同空间层：抬高的下水道支路、街面隐藏线索、东侧高位升降机。
+    # 这样可以避免主要路线全部挤在同一片门口区域。
+    require(region_script, '1600.0, "E  沿旧管线栈道下行至水库"', "A3 raised C05 branch", errors)
+    require(region_script, 'true, "", "", floor_y - 115.0', "A3 C05 elevation", errors)
+    require(region_script, '_add_platform(Rect2(80, 445, 220, 18))', "A4 C05 upper inspection landing", errors)
+    require(region_script, '"E  打开上层检修舱口"', "A4 C05 raised hatch label", errors)
+    require(region_script, '"E  返回城区", floor_y - 115.0', "A4 C05 hatch elevation", errors)
+    require(region_script, 'if region_id == "A4" and side == "sewer_upper":\n\t\t# The Hero origin is at the feet; align the spawn exactly with the landing y=445 collision top.\n\t\t# 主角坐标位于脚底；出生高度应与 y=445 的实体平台顶面精确对齐。\n\t\treturn floor_y - 95.0', "A4 C05 arrival height mapping", errors)
+    spawn_y_start = region_script.find("func _spawn_y_for_side(side: String) -> float:")
+    spawn_x_start = region_script.find("func _spawn_x_for_side(side: String) -> float:")
+    spawn_y_block = region_script[spawn_y_start:spawn_x_start] if spawn_y_start >= 0 and spawn_x_start > spawn_y_start else ""
+    c05_y_branch = 'if region_id == "A4" and side == "sewer_upper":\n\t\t# The Hero origin is at the feet; align the spawn exactly with the landing y=445 collision top.\n\t\t# 主角坐标位于脚底；出生高度应与 y=445 的实体平台顶面精确对齐。\n\t\treturn floor_y - 95.0'
+    if spawn_y_block.count(c05_y_branch) != 1:
+        fail(errors, "C05 A4 sewer_upper Y mapping must appear exactly once in _spawn_y_for_side.")
+    if 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn 180.0' in spawn_y_block:
+        fail(errors, "C05 A4 sewer_upper Y mapping must not use absolute y=180.0 above its supported landing.")
+    require(region_script, 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn 180.0', "A4 C05 arrival X mapping", errors)
+    require(region_script, '2040.0, "E  经东侧高位旧升降机返回王城外环"', "A3 elevated C16 branch", errors)
+    require(region_script, 'true, "", "", floor_y - 70.0', "A3 C16 elevation", errors)
+    require(region_script, '_register_debug_locked_route_hint(2040.0, "royal_outer_ring"', "A3 C16 debug marker", errors)
+
+    # A4's transport hub must distribute the three cross-region doors across separate ledges.
+    # A4 交通枢纽必须将三条跨区门分布在不同高度的栈台上。
+    require(region_script, '_add_platform(Rect2(930, 465, 180, 18))', "A4 low supply-tunnel ledge", errors)
+    require(region_script, '1050.0, "E  返回监牢"', "A4 C12 low ledge exit", errors)
+    require(region_script, 'if region_id == "A4" and side == "prison_tunnel":\n\t\t# C12 arrives on the low ledge 90px away from its own return door.\n\t\t# C12 出生在低位栈台上，距回程门 90px，避免落地立即重新触发。\n\t\treturn 960.0', "A4 C12 safe spawn", errors)
+    require(region_script, 'true, "", "", floor_y - 75.0', "A4 C12 elevation", errors)
+    require(region_script, '1320.0, "E  返回旧王墓"', "A4 C07 middle ledge exit", errors)
+    require(region_script, 'true, "", "", floor_y - 85.0', "A4 C07 elevation", errors)
+    require(region_script, '1650.0, "E  返回王城外环"', "A4 C23 upper pipe exit", errors)
+    require(region_script, 'true, "", "", floor_y - 105.0', "A4 C23 elevation", errors)
+    require(region_script, '2220.0, "E  打开村庄井道水闸"', "A4 C06 return lane", errors)
+    require(region_script, '2020, 450, 130, 18', "A6 C10 upper approach platform", errors)
+    require(region_script, '2230.0, "E  打开钟塔落差通路"', "A6 C10 elevated door", errors)
+    require(region_script, 'true, "opened_bell_tower_drop", "E  返回被遗忘的城区", floor_y - 55.0', "A6 C10 door height", errors)
+    require(region_script, '520.0, "E  打开旧升降梯"', "A9 C16 rooftop door", errors)
+    require(region_script, 'true, "reached_A9_via_A8_then_opened_old_lift_from_A9", "E  乘旧升降梯返回",\n\t\t\t\tfloor_y - 110.0', "A9 C16 door height", errors)
+    require(region_script, '_add_platform(Rect2(620, 390, 180, 18))', "A9 C23 supported upper service ledge", errors)
+    require(region_script, '740.0, "E  打开王城排水门"', "A9 C23 supported upper door", errors)
+    require(region_script, 'if region_id == "A9" and side == "royal_drain":\n\t\t# C23\'s door is at x=740; land at x=650 on the same supported ledge, clear of C16 and C18.\n\t\t# C23 门移至 x=740；落点 x=650 与门保持净距，并避开 C16 与 C18。\n\t\treturn 650.0', "A9 C23 safe spawn", errors)
+    require(region_script, '_add_platform(Rect2(1530, 420, 70, 18))', "A4 C23 return spawn support", errors)
+    require(region_script, 'return 1540.0', "A4 C23 safe return spawn", errors)
+    require(region_script, 'true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  沿王城排水道返回",\n\t\t\t\tfloor_y - 150.0', "A9 C23 door height", errors)
+    require(region_script, 'Vector2(850, floor_y - 18.0),\n\t\t\t\t"anomaly_old_stone_layer"', "A4 clue/door interaction spacing", errors)
+
+    # C03's canopy route and C07's middle tomb-waterway route must keep their authored elevation on both ends.
+    # C03 树冠高路与 C07 王墓中层水道必须在双向转场中保留设计高度。
+    for contract in [
+        'map_width - 160.0, "E  沿树冠高路进入被遗忘的城区"',
+        '"res://scenes/forgotten_city.tscn", "city_canopy_entry",',
+        'true, "", "", floor_y - 160.0',
+        '72.0, "E  返回旧朝圣路", "ash_forest"',
+        '_add_platform(Rect2(80, 410, 150, 18))',
+        'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn floor_y - 130.0',
+        'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn 180.0',
+        '_add_platform(Rect2(500, 375, 140, 18))',
+        '520.0, "E  打开王墓水道", "sewer_reservoir"',
+        'true, "reached_A8_via_A7_then_opened_royal_tomb_gate", "E  沿王室水道返回",\n\t\t\t\tfloor_y - 165.0',
+        'if region_id == "A8" and side == "royal_tomb_waterway":\n\t\treturn floor_y - 165.0',
+        'if region_id == "A8" and side == "royal_tomb_waterway":',
+        "C07 returns beside its A8 door",
+        "return 610.0",
+    ]:
+        require(region_script, contract, "C03/C07 vertical route contract", errors)
+    require(region_script, '_spawn_hero(_spawn_x_for_side(spawn_side), _spawn_y_for_side(spawn_side))', "Spawn uses both axes", errors)
+    for vertical_spawn_contract in [
+        'if region_id == "A2" and side == "east":\n\t\treturn floor_y - 140.0',
+        'if region_id == "A6" and side == "bell_drop":\n\t\treturn floor_y - 90.0',
+        'if region_id == "A3" and side == "sewer":\n\t\treturn floor_y - 115.0',
+        'if region_id == "A3" and side == "old_lift":\n\t\treturn floor_y - 70.0',
+        'if region_id == "A4" and side == "prison_tunnel":\n\t\treturn floor_y - 75.0',
+        'if region_id == "A4" and side == "royal_tomb_waterway":\n\t\treturn floor_y - 85.0',
+        'if region_id == "A4" and side == "royal_drain":\n\t\treturn floor_y - 120.0',
+        'if region_id == "A9" and side == "old_lift":\n\t\treturn floor_y - 110.0',
+        'if region_id == "A9" and side == "royal_drain":\n\t\treturn floor_y - 150.0',
+    ]:
+        require(region_script, vertical_spawn_contract, "Elevated route spawn height", errors)
+
+    # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
+    # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
+    spawn_contracts = [
+        ('if region_id == "A2" and side == "east":', "return 2120.0"),
+        ('if region_id == "A9" and side == "mirror":', "return 1680.0"),
+        ('if region_id == "A11" and side == "chapel_entry":', "return map_width - 700.0"),
+        ('if region_id == "H02" and side == "bell_tower_entry":', "return map_width - 360.0"),
+        ('if region_id == "H03" and side == "third_street_entry":', "return map_width - 360.0"),
+        ('if region_id == "H04" and side == "royal_tomb_side_entry":', "return map_width - 360.0"),
+        ('if region_id == "H05" and side == "bell_drop_entry":', "return map_width - 360.0"),
+        ('if region_id == "H06" and side == "royal_transport_entry":', "return map_width - 360.0"),
+        ('if region_id == "A3" and side == "sewer":', "return 1380.0"),
+        ('if region_id == "A3" and side == "village_city_cut":', "return 700.0"),
+        ('if region_id == "A2" and side == "bell_gate":', "return map_width - 450.0"),
+        ('if region_id == "A2" and side == "old_pilgrim_highroad":', "return 1750.0"),
+        ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 650.0"),
+        ('if region_id == "A3" and side == "bell_drop":', "return 1600.0"),
+        ('if region_id == "A3" and side == "old_lift":', "return 1960.0"),
+        ('if region_id == "A6" and side == "bell_drop":', "return 2100.0"),
+        ('if region_id == "A9" and side == "royal_drain":', "return 650.0"),
+        ('if region_id == "A9" and side == "old_lift":', "return 610.0"),
+        ('if region_id == "A9" and side == "inner_city_side_gate":', "return 980.0"),
+        ('if region_id == "A12" and side == "inner_city_side_gate":', "return 650.0"),
+        ('if region_id == "A3" and side == "third_street_gate":', "return map_width - 500.0"),
+        ('if region_id == "A4" and side == "water_reflection_gate":', "return 1550.0"),
+        ('if region_id == "A4" and side == "east":', "return map_width - 220.0"),
+        ('if region_id == "A4" and side == "prison_tunnel":', "return 960.0"),
+        ('if region_id == "A7" and side == "supply_tunnel":', "return 610.0"),
+        ('if region_id == "A4" and side == "royal_tomb_waterway":', "return 1410.0"),
+        ('if region_id == "A4" and side == "royal_drain":', "return 1540.0"),
+        ('if region_id == "A5" and side == "bell_tower":', "return 1900.0"),
+        ('if region_id == "A6" and side == "silent_window":', "return 1420.0"),
+        ('if region_id == "A8" and side == "royal_name_gate":', "return 1350.0"),
+        ('if region_id == "A8" and side == "royal_tomb_waterway":', "return 610.0"),
+        ('if region_id == "A8" and side == "royal_tomb_side":', "return 1020.0"),
+        ('if region_id == "A9" and side == "third_street_service":', "return 1600.0"),
+        ('if region_id == "A9" and side == "royal_transport":', "return 2050.0"),
+        ('if region_id == "H01" and side == "east":', "return map_width - 360.0"),
+    ]
+    for condition, expected_return in spawn_contracts:
+        start = region_script.find(condition)
+        if start < 0:
+            fail(errors, f"Graybox spawn mapping: missing {condition!r}")
+            continue
+        branch = region_script[start:]
+        next_branch = branch.find("\n    if ", len(condition))
+        if next_branch >= 0:
+            branch = branch[:next_branch]
+        require(branch, expected_return, f"Graybox spawn mapping {condition}", errors)
+
+    # Cross-check every spatial-contract spawn against its runtime side mapping and a real collision-backed landing.
+    # 将拓扑中所有出生点逐一对照运行时 side 映射，并确认高位落点有真实碰撞平台承托。
+    spawn_x_end = region_script.find("\nfunc ", spawn_x_start + 1)
+    spawn_x_block = region_script[spawn_x_start:spawn_x_end if spawn_x_end >= 0 else len(region_script)]
+
+    def _spawn_expression_value(expression: str, axis: str) -> float | None:
+        expression = expression.strip()
+        numeric = re.fullmatch(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)", expression)
+        if numeric:
+            value = float(expression)
+            return value if axis == "x" else (value - 540.0)
+        if axis == "x":
+            match = re.fullmatch(r"map_width\s*-\s*([\d.]+)", expression)
+            return 2600.0 - float(match.group(1)) if match else None
+        if expression == "floor_y":
+            return 0.0
+        match = re.fullmatch(r"floor_y\s*-\s*([\d.]+)", expression)
+        return -float(match.group(1)) if match else None
+
+    def _mapped_spawn_value(mapping_block: str, region_id: str, side: str, axis: str) -> float | None:
+        condition = re.compile(
+            rf'if region_id == "{re.escape(region_id)}" and side == "{re.escape(side)}":'
+            rf'(?P<body>(?:\n[ \t]*#.*)*\n[ \t]*return (?P<value>[^\n]+))'
+        )
+        match = condition.search(mapping_block)
+        if match:
+            return _spawn_expression_value(match.group("value"), axis)
+        # Match the shared fallback behavior only after confirming no region-specific branch exists.
+        # 仅在不存在区域专属映射时，才使用控制器的通用默认出生点。
+        if axis == "y":
+            return 0.0
+        if side == "east":
+            return 2420.0
+        if region_id == "H01":
+            return 700.0
+        return 180.0
+
+    topology_for_spawn_audit = topology
+    spawn_mapping_audit_count = 0
+    spawn_landing_audit_count = 0
+    for edge in topology_for_spawn_audit.get("connections", []):
+        edge_id = edge.get("id", "<missing>")
+        spatial = edge.get("spatial_contract", {})
+        for spawn_key in ("return_spawn", "from_region_spawn", "to_region_spawn"):
+            spawn = spatial.get(spawn_key)
+            if not isinstance(spawn, dict) or not spawn.get("region"):
+                continue
+            region_id = str(spawn.get("region"))
+            # A1 is a separate authored scene with its own spawn function and is checked above.
+            # A1 是独立场景，使用村庄脚本自己的出生映射并由前面的 C02/C24 断言覆盖。
+            if region_id == "A1":
+                continue
+            try:
+                spawn_x = float(spawn["x"])
+                spawn_y_offset = float(spawn.get("y_offset", 0.0))
+            except (KeyError, TypeError, ValueError):
+                errors.append(f"{edge_id} {spawn_key} has invalid spawn coordinates.")
+                continue
+            side = str(spawn.get("spawn_side", ""))
+            if side:
+                spawn_mapping_audit_count += 1
+                runtime_x = _mapped_spawn_value(spawn_x_block, region_id, side, "x")
+                runtime_y_offset = _mapped_spawn_value(spawn_y_block, region_id, side, "y")
+                if runtime_x is None or abs(runtime_x - spawn_x) > 0.1:
+                    errors.append(
+                        f"{edge_id} {spawn_key} X mapping mismatch for {region_id}/{side}: "
+                        f"topology={spawn_x}, runtime={runtime_x}."
+                    )
+                if runtime_y_offset is None or abs(runtime_y_offset - spawn_y_offset) > 0.1:
+                    errors.append(
+                        f"{edge_id} {spawn_key} Y mapping mismatch for {region_id}/{side}: "
+                        f"topology={spawn_y_offset}, runtime={runtime_y_offset}."
+                    )
+            spawn_landing_audit_count += 1
+            region_platforms = platforms_by_region.get(region_id, [])
+            supported = any(
+                abs(platform_y - (540.0 + spawn_y_offset)) <= 1.5
+                and spawn_x >= platform_x - 0.1
+                and spawn_x <= platform_x + platform_width + 0.1
+                for platform_x, platform_y, platform_width, _platform_height in region_platforms
+            )
+            if not supported:
+                errors.append(
+                    f"{edge_id} {spawn_key} is not directly supported by a collision platform: "
+                    f"{region_id} x={spawn_x:g}, y={540.0 + spawn_y_offset:g}."
+                )
+
+    # Death recovery must stay inside the current region and restore the Hero safely.
+    # 死亡恢复必须留在当前区域，并安全恢复主角状态。
+    spawn_hero_start = region_script.find("func _spawn_hero(")
+    spawn_hero_end = region_script.find("\nfunc ", spawn_hero_start + 1)
+    spawn_hero_block = region_script[spawn_hero_start:spawn_hero_end if spawn_hero_end >= 0 else len(region_script)]
+    for contract in [
+        "WorldState.set_checkpoint(hero.global_position)",
+        "hero.defeated.connect(_on_hero_defeated)",
+    ]:
+        require(spawn_hero_block, contract, "Region-local checkpoint setup", errors)
+
+    death_start = region_script.find("func _on_hero_defeated() -> void:")
+    death_end = region_script.find("\nfunc ", death_start + 1)
+    death_block = region_script[death_start:death_end if death_end >= 0 else len(region_script)]
+    for contract in [
+        "if respawning:",
+        "respawning = true",
+        "hero.velocity = Vector2.ZERO",
+        "hero.global_position = WorldState.checkpoint_position",
+        'hero.call("restore_full")',
+        "WorldState.input_locked = false",
+        "respawning = false",
+    ]:
+        require(death_block, contract, "Death recovery", errors)
+    if "SceneTransition.fade_to_scene(" in death_block or "change_scene_to_file(" in death_block:
+        fail(errors, "Death recovery must not transition to another region or reuse a previous scene checkpoint.")
+
+    source_clue = read("scripts/world/resonance_source_clue.gd", errors)
+    require(source_clue, "WorldState.record_resonance_milestone(", "Resonance source clue", errors)
+    require(source_clue, "func _milestone_needs_repair() -> bool:", "Legacy-save anomaly repair", errors)
+    require(source_clue, "func _refresh_consumed_state() -> void:", "Legacy-save anomaly repair", errors)
+    require(source_clue, "not WorldState.is_ability_unlocked(unlock_ability_id)", "Legacy-save ability repair", errors)
+    require(source_clue, "ancient_exposure_floor,", "Resonance source exposure floor", errors)
+    require(source_clue, "outer_exposure_floor", "Resonance source exposure floor", errors)
+    require(source_clue, "require_outer_god_resonance", "Resonance source story gate", errors)
+    require(source_clue, 'KEY_E', "Resonance source clue", errors)
+    require(source_clue, "INTERACTION_FOCUS_SCRIPT.is_focused(self)", "Resonance source clue", errors)
+
+    interaction_door = read("scripts/world/interaction_door.gd", errors)
+    for contract in [
+        'unlock_once_flag_id: String = ""',
+        'opened_prompt_text: String = ""',
+        'WorldState.record_achievement(unlock_once_flag_id)',
+        'prompt_text = opened_prompt_text',
+        'var available := enabled and not WorldState.input_locked and hero_nearby and cooldown <= 0.0',
+    ]:
+        require(interaction_door, contract, "One-time inspection hatch", errors)
+    if "if hero_nearby and WorldState.input_locked:" in interaction_door:
+        errors.append("Interaction doors must preserve physical proximity while dialogue locks world input.")
+
+    secret_gate = read("scripts/world/resonance_secret_gate.gd", errors)
+    for contract in [
+        'add_to_group("resonance_hidden_targets")',
+        "WorldState.is_hidden_path_opened(secret_id)",
+        "@export var region_record_id: String = \"\"",
+        "func _get_region_record_id() -> String:",
+        "WorldState.discover_hidden_region(_get_region_record_id())",
+        "WorldState.open_hidden_path(secret_id)",
+        "WorldState.mark_hidden_region_entered(_get_region_record_id())",
+        "WorldState.resonance_sight_active",
+        "KEY_E",
+        "SceneTransition.fade_to_scene(target_scene_path)",
+        'target_spawn_side: String = "west"',
+        "require_outer_god_resonance",
+        "WorldState.pending_region_spawn_side = target_spawn_side",
+        "match secret_id:",
+        "func _draw_well_marker() -> void:",
+        "func _draw_early_bell_marker() -> void:",
+        "func _draw_erased_street_marker() -> void:",
+        "func _draw_reflected_stairs_marker() -> void:",
+        "func _draw_silent_window_marker() -> void:",
+        "func _draw_mirror_street_marker() -> void:",
+        "func _draw_erased_royal_name_marker() -> void:",
+        "func _draw_silent_chapel_marker() -> void:",
+        "func _draw_breathing_wall_marker() -> void:",
+        "func _draw_generic_anomaly_marker() -> void:",
+    ]:
+        require(secret_gate, contract, "Resonance hidden gate", errors)
+
+    village_hub = read("scripts/levels/village_hub.gd", errors)
+    require(village_hub, "_spawn_resonance_well_gate()", "Village hub", errors)
+    require(village_hub, "resonance_well_gate.opened.connect(_on_resonance_well_opened)", "Village hub", errors)
+    require(village_hub, 'resonance_well_gate.secret_id = "H01"', "Village hidden gate ID", errors)
+    require(village_hub, 'resonance_well_gate.required_resonance = 12', "Village hidden gate threshold", errors)
+    require(village_hub, 'resonance_well_gate.target_location_id = "hidden_well"', "Village hidden gate destination", errors)
+    require(village_hub, 'var spawn_x := 1850.0 if spawn_side == "well_exit"', "Village watergate return spawn spacing", errors)
+    require(village_hub, 'var spawn_side := WorldState.pending_region_spawn_side\n    # Persist the incoming side before clearing the one-shot transition value.\n    # 必须先保存实际进入侧，再清理一次性切图方向，确保 Continue 能恢复正确落点。\n    WorldState.set_location("village")\n    WorldState.pending_region_spawn_side = "west"', "Village resume spawn-side save order", errors)
+    require(village_hub, '2310.0 if spawn_side == "north_gate"', "Village north-gate return spawn", errors)
+    require(region_spawn_script, '"res://scenes/village_hub.tscn", "north_gate"', "A2 village return side", errors)
+    require(village_hub, '"village_defense_survived"', "Village old-road unlock", errors)
+    require(village_hub, 'res://scenes/ash_forest.tscn', "Village old-road route", errors)
+
+    defense = read("scripts/levels/village_defense_demo.gd", errors)
+    require(defense, 'WorldState.record_achievement("village_defense_survived")', "Village defense", errors)
+
+    # Keep the hidden-region design table and its actual gate constructors in sync.
+    # 将隐藏区域设计表与运行时入口构造函数逐项对齐，避免门槛、来源或落点悄悄漂移。
+    topology_path = ROOT / "tools/world_map_topology.json"
+    if topology_path.is_file():
+        try:
+            hidden_topology = json.loads(topology_path.read_text(encoding="utf-8"))
+            hidden_gate_functions = {
+                "H01": ("village_hub", "_spawn_resonance_well_gate"),
+                "H02": ("region", "_spawn_h02_gate"),
+                "H03": ("region", "_spawn_h03_gate"),
+                "H04": ("region", "_spawn_h04_gate"),
+                "H05": ("region", "_spawn_h05_gate"),
+                "H06": ("region", "_spawn_h06_gate"),
+                "H07": ("region", "_spawn_a9_mirror_gate"),
+                "H08": ("region", "_spawn_h08_gate"),
+            }
+            source_by_kind = {"region": region_script, "village_hub": village_hub}
+            for hidden in hidden_topology.get("hidden_regions", []):
+                hidden_id = hidden.get("id", "")
+                if hidden_id not in hidden_gate_functions:
+                    continue
+                source_kind, function_name = hidden_gate_functions[hidden_id]
+                source_text = source_by_kind[source_kind]
+                match = re.search(
+                    rf"func {re.escape(function_name)}\([^)]*\).*?(?=\nfunc |\Z)",
+                    source_text,
+                    re.DOTALL,
+                )
+                if match is None:
+                    errors.append(f"{hidden_id} topology gate audit cannot find {function_name}().")
+                    continue
+                gate_block = match.group(0)
+
+                def gate_int(property_name: str, default: int = 0) -> int:
+                    value = re.search(rf"gate\.{re.escape(property_name)}\s*=\s*(\d+)", gate_block)
+                    return int(value.group(1)) if value else default
+
+                def gate_string(property_name: str) -> str:
+                    value = re.search(rf'gate\.{re.escape(property_name)}\s*=\s*"([^"]*)"', gate_block)
+                    return value.group(1) if value else ""
+
+                def gate_string_array(property_name: str) -> list[str]:
+                    value = re.search(
+                        rf"gate\.{re.escape(property_name)}\s*=\s*\[(.*?)\]",
+                        gate_block,
+                        re.DOTALL,
+                    )
+                    return re.findall(r'"([^"]+)"', value.group(1)) if value else []
+
+                for topology_key, runtime_key in (
+                    ("min_resonance", "required_resonance"),
+                    ("min_ancient_exposure", "required_ancient_exposure"),
+                    ("min_outer_exposure", "required_outer_exposure"),
+                ):
+                    expected = int(hidden.get(topology_key, 0))
+                    actual = gate_int(runtime_key)
+                    if actual != expected:
+                        errors.append(
+                            f"{hidden_id} gate threshold mismatch: topology {topology_key}={expected}, runtime {runtime_key}={actual}."
+                        )
+
+                expected_sources = sorted(hidden.get("required_source_ids", []))
+                actual_sources = sorted(gate_string_array("required_source_ids"))
+                if actual_sources != expected_sources:
+                    errors.append(
+                        f"{hidden_id} gate source mismatch: topology={expected_sources}, runtime={actual_sources}."
+                    )
+                minimum_distinct_sources = int(hidden.get("min_distinct_anomaly_sources", 0))
+                if minimum_distinct_sources > len(actual_sources):
+                    errors.append(
+                        f"{hidden_id} requires {minimum_distinct_sources} distinct anomaly sources, "
+                        f"but its runtime gate lists only {len(actual_sources)}."
+                    )
+
+                expected_outer_resonance = hidden.get("requires_outer_god_resonance", False)
+                actual_outer_resonance = bool(re.search(
+                    r"gate\.require_outer_god_resonance\s*=\s*true",
+                    gate_block,
+                ))
+                if actual_outer_resonance != expected_outer_resonance:
+                    errors.append(
+                        f"{hidden_id} outer-god resonance mismatch: topology={expected_outer_resonance}, runtime={actual_outer_resonance}."
+                    )
+
+                expected_scene = hidden.get("scene_path", "")
+                actual_scene = gate_string("target_scene_path")
+                if actual_scene and actual_scene != f"res://{expected_scene}":
+                    errors.append(
+                        f"{hidden_id} target scene mismatch: topology={expected_scene}, runtime={actual_scene}."
+                    )
+                expected_location = hidden.get("location_id", "")
+                actual_location = gate_string("target_location_id")
+                if actual_location != expected_location:
+                    errors.append(
+                        f"{hidden_id} target location mismatch: topology={expected_location}, runtime={actual_location}."
+                    )
+        except (json.JSONDecodeError, OSError) as exc:
+            errors.append(f"Hidden gate/topology consistency audit could not read topology: {exc}")
+
+    # Keep the topology's local Resonance routes aligned with their runtime construction.
+    # 确保拓扑中的局部鸣响路线与运行时构造参数一致。
+    try:
+        topology_for_local_routes = json.loads((ROOT / "tools/world_map_topology.json").read_text(encoding="utf-8"))
+        local_routes = topology_for_local_routes.get("local_resonance_routes", [])
+        local_route_count = len(local_routes)
+        local_route_ids = [route.get("id") for route in local_routes]
+        if len(local_route_ids) != len(set(local_route_ids)):
+            errors.append("Topology contains duplicate local Resonance route IDs.")
+        known_region_ids = {region.get("id") for region in topology_for_local_routes.get("regions", [])}
+        route_by_id = {route.get("id"): route for route in local_routes}
+        route_builder_start = region_script.find("func _spawn_local_resonance_routes()")
+        route_builder_end = region_script.find("func _on_local_resonance_route_opened", route_builder_start)
+        if route_builder_start < 0 or route_builder_end < 0:
+            route_builder = ""
+            errors.append("Could not isolate the local Resonance route builder for region/identity auditing.")
+        else:
+            route_builder = region_script[route_builder_start:route_builder_end]
+        runtime_route_ids = re.findall(r'route\.route_id\s*=\s*"([^"]+)"', route_builder)
+        if len(runtime_route_ids) != len(set(runtime_route_ids)):
+            errors.append("Runtime local Resonance route builder contains duplicate route IDs.")
+        topology_route_id_set = set(local_route_ids)
+        runtime_route_id_set = set(runtime_route_ids)
+        if runtime_route_id_set != topology_route_id_set:
+            errors.append(
+                "Runtime/topology local Resonance route ID mismatch: "
+                f"runtime-only={sorted(runtime_route_id_set - topology_route_id_set, key=str)}, "
+                f"topology-only={sorted(topology_route_id_set - runtime_route_id_set, key=str)}."
+            )
+        expected_local_route_ids = ("A2_BELLGRAVE_CANOPY_CROSSING", "A3_THIRD_STREET_ROOFLINE", "A4_OLD_STONE_AQUEDUCT", "A5_BURIED_STANDARD_CROSSING", "A6_SILENT_BELL_SERVICE_WALK", "A7_PRISON_MAINTENANCE_CROSSWALK", "A8_ERASED_REGENT_GALLERY", "A9_RAIN_REFLECTION_ROOFWALK", "A10_CHOIRLESS_UPPER_GALLERY", "A11_SECOND_OBSERVER_SPAN", "A12_CROWN_WALL_WALK")
+        if set(expected_local_route_ids) != topology_route_id_set:
+            errors.append(
+                "Validator/topology local Resonance route list drift: "
+                f"validator-only={sorted(set(expected_local_route_ids) - topology_route_id_set, key=str)}, "
+                f"topology-only={sorted(topology_route_id_set - set(expected_local_route_ids), key=str)}."
+            )
+        expected_local_route_prompts = {
+            "A2_BELLGRAVE_CANOPY_CROSSING": "E  ANCHOR THE BELLGRAVE CANOPY",
+            "A3_THIRD_STREET_ROOFLINE": "E  ANCHOR THE THIRD STREET",
+            "A4_OLD_STONE_AQUEDUCT": "E  ANCHOR THE DRY AQUEDUCT",
+            "A5_BURIED_STANDARD_CROSSING": "E  RAISE THE BURIED STANDARD",
+            "A6_SILENT_BELL_SERVICE_WALK": "E  ANCHOR THE SILENT BELL WALK",
+            "A7_PRISON_MAINTENANCE_CROSSWALK": "E  ANCHOR THE PRISON CROSSWALK",
+            "A8_ERASED_REGENT_GALLERY": "E  ANCHOR THE ERASED REGENT GALLERY",
+            "A9_RAIN_REFLECTION_ROOFWALK": "E  ANCHOR THE RAIN REFLECTION",
+            "A10_CHOIRLESS_UPPER_GALLERY": "E  ANCHOR THE CHOIRLESS GALLERY",
+            "A11_SECOND_OBSERVER_SPAN": "E  ANCHOR THE OBSERVER SPAN",
+            "A12_CROWN_WALL_WALK": "E  ANCHOR THE CROWN WALL",
+        }
+        expected_local_route_narratives = {
+            "A2_BELLGRAVE_CANOPY_CROSSING": "THE BELL'S SECOND SHADOW",
+            "A3_THIRD_STREET_ROOFLINE": "THE THIRD STREET HOLDS",
+            "A4_OLD_STONE_AQUEDUCT": "THE AQUEDUCT WITHOUT WATER",
+            "A5_BURIED_STANDARD_CROSSING": "THE STANDARD THAT OUTLIVED THE ARMY",
+            "A6_SILENT_BELL_SERVICE_WALK": "THE SERVICE WALK OF THE SILENT BELL",
+            "A7_PRISON_MAINTENANCE_CROSSWALK": "THE CROSSWALK OF UNNUMBERED CELLS",
+            "A8_ERASED_REGENT_GALLERY": "THE REGENT WHO NEVER REIGNED",
+            "A9_RAIN_REFLECTION_ROOFWALK": "THE HOMES THAT THE RAIN REMEMBERS",
+            "A10_CHOIRLESS_UPPER_GALLERY": "THE CHOIR THAT WAS NEVER RECORDED",
+            "A11_SECOND_OBSERVER_SPAN": "THE OBSERVER WHO LEFT NO FOOTPRINTS",
+            "A12_CROWN_WALL_WALK": "THE WALL BUILT FOR A KING'S ABSENCE",
+        }
+        for route_id in expected_local_route_ids:
+            route_design = route_by_id.get(route_id)
+            if route_design is None:
+                errors.append(f"Topology is missing local Resonance route {route_id}.")
+                continue
+            require(route_builder, f'route.route_id = "{route_id}"', f"{route_id} runtime identity", errors)
+            route_match = re.search(rf'route\.route_id\s*=\s*"{re.escape(route_id)}"', route_builder)
+            if route_match is not None:
+                region_branches = re.findall(r'^\s*"([^"]+)":\s*$', route_builder[:route_match.start()], re.MULTILINE)
+                runtime_region = region_branches[-1] if region_branches else None
+                expected_region = route_design.get("region_id")
+                if runtime_region != expected_region:
+                    errors.append(
+                        f"Local route {route_id} is built under runtime region {runtime_region!r}, "
+                        f"but topology assigns it to {expected_region!r}."
+                    )
+            prompt = expected_local_route_prompts.get(route_id)
+            if prompt:
+                require(region_script, f'route.prompt_text = "{prompt}"', f"{route_id} interaction prompt", errors)
+            narrative_title = expected_local_route_narratives.get(route_id)
+            if narrative_title:
+                require(region_script, f'"{narrative_title}"', f"{route_id} narrative title", errors)
+                require(localization_script, f'"{narrative_title}": {{', f"{route_id} localized narrative title", errors)
+                body_match = re.search(
+                    rf'"{re.escape(narrative_title)}",\s*"((?:[^"\\]|\\.)*)"',
+                    region_script,
+                )
+                if body_match is None:
+                    errors.append(f"{route_id} narrative body could not be located for localization audit.")
+                else:
+                    require(
+                        localization_script,
+                        f'"{body_match.group(1)}": {{',
+                        f"{route_id} localized narrative body",
+                        errors,
+                    )
+            if prompt:
+                require(localization_script, f'"{prompt}": {{', f"{route_id} localized interaction prompt", errors)
+            # Every authored route string must have all three non-English translations;
+            # English is the source text and remains the fallback.
+            # 每条路线的标题、正文和交互提示都必须有简中、繁中、日语译文。
+            localized_sources = [value for value in (prompt, narrative_title) if value]
+            narrative_section_start = region_script.find("func _on_local_resonance_route_opened")
+            if narrative_title and narrative_section_start >= 0:
+                body_match = re.search(
+                    rf'"{re.escape(narrative_title)}",\s*"((?:[^"\\]|\\.)*)"',
+                    region_script[narrative_section_start:],
+                )
+                if body_match is not None:
+                    localized_sources.append(body_match.group(1))
+            for source_text in localized_sources:
+                entry = re.search(rf'"{re.escape(source_text)}"\s*:\s*\{{([^}}]*)\}}', localization_script)
+                if entry is None:
+                    errors.append(f"{route_id} is missing a localization entry for {source_text[:70]!r}.")
+                    continue
+                for language in ("zh_cn", "zh_tw", "ja"):
+                    translation = re.search(rf'"{language}"\s*:\s*"([^"]+)"', entry.group(1))
+                    if translation is None or not translation.group(1).strip():
+                        errors.append(f"{route_id} has no non-empty {language} translation for {source_text[:70]!r}.")
+            for key, property_name in (
+                ("required_resonance", "required_resonance"),
+                ("bridge_start_x", "bridge_start_x"),
+                ("bridge_end_x", "bridge_end_x"),
+                ("bridge_y", "bridge_y"),
+            ):
+                expected_value = route_design.get(key)
+                if expected_value is None:
+                    errors.append(f"Topology local route {route_id} is missing {key}.")
+                    continue
+                if key == "required_resonance":
+                    literal = str(int(expected_value))
+                else:
+                    literal = f"{float(expected_value):.1f}"
+                require(
+                    region_script,
+                    f"route.{property_name} = {literal}",
+                    f"{route_id} {property_name} matches topology",
+                    errors,
+                )
+            if route_design.get("requires_resonance_sight") is not True:
+                errors.append(f"Topology local route {route_id} must require Resonance Sight.")
+            if route_design.get("persistent_on_open") is not True:
+                errors.append(f"Topology local route {route_id} must persist after opening.")
+            if route_design.get("region_id") not in known_region_ids:
+                errors.append(f"Topology local route {route_id} references unknown region {route_design.get('region_id')}.")
+            geometry_valid = True
+            try:
+                start_x = float(route_design.get("bridge_start_x"))
+                end_x = float(route_design.get("bridge_end_x"))
+                bridge_y = float(route_design.get("bridge_y"))
+                threshold = int(route_design.get("required_resonance"))
+                if end_x <= start_x:
+                    errors.append(f"Topology local route {route_id} must have bridge_end_x > bridge_start_x.")
+                    geometry_valid = False
+                if not 0 <= threshold <= 100:
+                    errors.append(f"Topology local route {route_id} has an invalid Resonance threshold.")
+                    geometry_valid = False
+                if not 0.0 <= bridge_y <= 540.0:
+                    errors.append(f"Topology local route {route_id} has a bridge elevation outside the graybox floor bounds.")
+                    geometry_valid = False
+            except (TypeError, ValueError):
+                errors.append(f"Topology local route {route_id} has non-numeric geometry or threshold values.")
+                geometry_valid = False
+            if not geometry_valid:
+                continue
+            route_platforms = platforms_by_region.get(route_design.get("region_id"), [])
+            if not route_platforms:
+                errors.append(f"Local route {route_id} has no parsed platform layout for {route_design.get('region_id')}.")
+            else:
+                bridge_y = float(route_design.get("bridge_y", 0.0))
+                for endpoint_key in ("bridge_start_x", "bridge_end_x"):
+                    endpoint_x = float(route_design.get(endpoint_key, 0.0))
+                    nearest = min(
+                        (
+                            (
+                                max(0.0, x - endpoint_x, endpoint_x - (x + width)),
+                                abs(y - bridge_y),
+                            )
+                            for x, y, width, _height in route_platforms
+                        ),
+                        key=lambda gap: gap[0] ** 2 + gap[1] ** 2,
+                    )
+                    if nearest[0] > 100.0 or nearest[1] > 45.0:
+                        errors.append(
+                            f"Local route {route_id} {endpoint_key} is detached from nearby platforms "
+                            f"(horizontal gap={nearest[0]:g}, vertical gap={nearest[1]:g})."
+                        )
+                # A bridge may touch a platform edge, but should not be embedded through its collision body.
+                # 桥体可以与平台边缘相接，但不应大面积穿进平台碰撞体。
+                for x, y, width, height in route_platforms:
+                    horizontal_overlap = min(end_x, x + width) - max(start_x, x)
+                    vertical_overlap = min(bridge_y + 18.0, y + height) - max(bridge_y, y)
+                    if horizontal_overlap > 0.0 and vertical_overlap > 2.0:
+                        errors.append(
+                            f"Local route {route_id} overlaps a platform collision body by "
+                            f"{vertical_overlap:g}px vertically across {horizontal_overlap:g}px."
+                        )
+    except (json.JSONDecodeError, OSError) as exc:
+        errors.append(f"Local Resonance route topology audit could not read topology: {exc}")
+
+    if errors:
+        print("GRAYBOX SCENE WIRING CHECK FAILED")
+        for error in errors:
+            print(f" - {error}")
+        return 1
+
+    print("GRAYBOX SCENE WIRING STATIC CHECK PASSED")
+    print(" - A2-A13 plus H01-H08 scenes have scripts and resume mappings.")
+    print(f" - Full-map inventory: {len(topology.get('regions', []))} regions, {len(topology.get('connections', []))} C-edges, {len(topology.get('subregions', []))} subregions, {len(topology.get('intra_region_connections', []))} intra-region edges, {len(topology.get('elevators', []))} elevator contracts.")
+    print(f" - Runtime C-edge wiring: {len(topology_for_route_audit.get('connections', []))} connections audited; reverse source wiring checked where final_direction=both.")
+    print(f" - Spatial spawn contracts: {spawn_mapping_audit_count} side mappings and {spawn_landing_audit_count} collision-backed landings checked.")
+    print(" - The R01-R08 anomaly source chain is present.")
+    print(" - H01-H08 plus C15/C19 gates use saved discovery/open/entry state and progression conditions.")
+    print(f" - Platform reachability estimate: {platform_audit_regions} regions, {platform_audit_count} platforms.")
+    print(f" - Local resonance route contract: {local_route_count} routes; IDs, prompts, narratives, endpoint proximity, collision overlap, sight gating, and persistence checked.")
+    print(" - C15/C19 enter A11 from separate sides; H08 and C21 terminal access follow the shared ending evaluator.")
+    print("NOTE: Godot runtime/collision/input validation is still required.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+, exits_source[current.end():])
+        block_end = current.end() + next_region.start() if next_region else len(exits_source)
+        return exits_source[current.start():block_end]
+
     # P2 Boss requirement: the A8 arena is an optional independent scene and cannot replace the C13/C14/C07/C15 routes.
     # P2 Boss 合同：A8 Boss 必须是独立可选场景，不能替代 C13/C14/C07/C15 既有路线。
     a8_exit_start = region_script.find('        "A8":', region_script.find("func _spawn_region_exits"))
