@@ -219,7 +219,34 @@
       "initial_access": "blocked",
       "final_direction": "both",
       "unlock_condition": "reached_A5_and_opened_old_pilgrim_highroad",
-      "opens_from": "A5"
+      "opens_from": "A5",
+      "spatial_contract": {
+        "route_layer": "old_pilgrim_canopy_highroad",
+        "from_region_anchor": {
+          "region": "A2",
+          "x": 1880,
+          "y_offset": -115
+        },
+        "to_region_anchor": {
+          "region": "A5",
+          "x": 520,
+          "y_offset": -140,
+          "spawn_side": "old_pilgrim_highroad"
+        },
+        "return_spawn": {
+          "region": "A2",
+          "x": 1750,
+          "y_offset": -160,
+          "spawn_side": "old_pilgrim_highroad"
+        },
+        "from_region_spawn": {
+          "region": "A5",
+          "x": 650,
+          "y_offset": -105,
+          "spawn_side": "old_pilgrim_highroad"
+        },
+        "intent": "C04 reconnects A2's canopy approach to A5's upper battlement. Both doors and arrival spawns must stay on their supporting ledges, not the continuous ground floor."
+      }
     },
     {
       "id": "C05",
