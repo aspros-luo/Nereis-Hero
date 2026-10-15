@@ -431,6 +431,17 @@ def main() -> int:
     require(village_route_script, 'WorldState.pending_region_spawn_side = "west"', "C02 A1-to-A2 spawn side", errors)
     require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/ash_forest.tscn")', "C02 A1-to-A2 transition", errors)
     require(region_script, '"res://scenes/village_hub.tscn", "north_gate"', "C02 A2-to-A1 reverse transition", errors)
+
+    # C03 must remain a genuinely supported two-way canopy route between A2 and A3.
+    require(region_script, '2240.0, "E  沿树冠高路进入被遗忘的城区"', "C03 A2 eastern canopy door anchor", errors)
+    require(region_script, '"res://scenes/forgotten_city.tscn", "city_canopy_entry",\n\t\t\t\ttrue, "", "", floor_y - 160.0', "C03 A2 door transition and elevation", errors)
+    require(region_script, "_add_platform(Rect2(2220, 380, 120, 18))", "C03 A2 exit support platform", errors)
+    require(region_script, 'if region_id == "A2" and side == "east":\n\t\treturn 2120.0', "C03 A2 return X landing", errors)
+    require(region_script, 'if region_id == "A2" and side == "east":\n\t\treturn floor_y - 140.0', "C03 A2 return height mapping", errors)
+    require(region_script, 'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn 180.0', "C03 A3 arrival X mapping", errors)
+    require(region_script, 'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn floor_y - 130.0', "C03 A3 arrival height mapping", errors)
+    require(region_script, "_add_platform(Rect2(80, 410, 150, 18))", "C03 A3 west arrival support platform", errors)
+
     require(village_route_script, 'city_cut.poi_id = "city_cut"', "A1 drainage route", errors)
     require(village_route_script, "city_cut.position = Vector2(100, 520)", "C24 A1 ground-level drainage anchor", errors)
     require(village_route_script, '350.0 if spawn_side == "city_cut_return"', "C24 village return spawn x=350", errors)
