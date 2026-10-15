@@ -235,6 +235,12 @@ func _spawn_y_for_side(side: String) -> float:
 		return floor_y - 130.0
 	if region_id == "A6" and side == "battlefield_entry":
 		return floor_y - 90.0
+	# C13 connects the prison maintenance shaft and the royal-tomb entry platform above floor level.
+	# C13 必须在监牢维护竖井与王墓入口平台之间保持高位双向转场。
+	if region_id == "A8" and side == "maintenance_shaft_entry":
+		return floor_y - 120.0
+	if region_id == "A7" and side == "maintenance_shaft_return":
+		return floor_y - 120.0
 	if region_id == "A5" and side == "monastery_return":
 		return floor_y - 55.0
 	if region_id == "A2" and side == "east":
@@ -301,6 +307,14 @@ func _spawn_x_for_side(side: String) -> float:
 		# C09 enters the monastery on the upper west bridge, matching the authored route layer.
 		# C09 从西侧上层廊桥进入修道院，与路线层合同保持一致。
 		return 160.0
+	if region_id == "A8" and side == "maintenance_shaft_entry":
+		# C13 arrives clear of A8's west-side return trigger on the supported upper tomb platform.
+		# C13 落在王墓西侧的实体高台上，并与返回门触发区保持净距。
+		return 190.0
+	if region_id == "A7" and side == "maintenance_shaft_return":
+		# C13 returns to the upper prison ledge, not the continuous ground lane.
+		# C13 回到监牢上层平台，而不是连续地面路线。
+		return map_width - 160.0
 	if region_id == "A5" and side == "monastery_return":
 		# C09 returns to the lower approach ledge, not the floor beneath the upper parapet door.
 		# C09 回到较低的接近栈台，而不是高位门下方的地面。
@@ -839,6 +853,10 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1420, 480, 190, 18))
 			_add_platform(Rect2(1740, 440, 150, 18))
 			_add_platform(Rect2(2040, 480, 180, 18))
+			# C13's upper exit is approached by two short, collision-backed steps from the prison floor route.
+			# C13 高位出口由两级实体碰撞台阶接入，避免监牢地面直通王墓。
+			_add_platform(Rect2(2140, 460, 110, 18))
+			_add_platform(Rect2(2200, 420, 170, 18))
 			_add_platform(Rect2(440, 420, 110, 18))
 			_add_platform(Rect2(560, 375, 110, 18))
 			_add_platform(Rect2(700, 330, 110, 18))
@@ -874,6 +892,10 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1800, 310, 110, 18))
 			_add_platform(Rect2(1940, 355, 110, 18))
 			_add_platform(Rect2(2080, 400, 110, 18))
+			# C13's west exit and arrival are supported on the upper royal-tomb entry platform.
+			# C13 王墓西侧出口与到达点均由上层入口平台承托。
+			_add_platform(Rect2(80, 420, 150, 18))
+			_add_platform(Rect2(240, 420, 170, 18))
 		"A9":
 			# Street-level ring remains the safe route; the roofline creates a loop through abandoned homes.
 			# 街面外环保持安全可走；屋顶路线穿过废弃民居，形成可选回环。
@@ -1665,9 +1687,12 @@ func _spawn_region_exits() -> void:
 				72.0, "E  返回修道院", "monastery_tower",
 				"res://scenes/monastery_tower.tscn", "east"
 			)
+			# C13 is deliberately elevated: the prison maintenance shaft must be climbed before the tomb.
+			# C13 刻意设置为高位出口：玩家必须先攀上监牢维护竖井，才能进入王墓。
 			_spawn_exit_door(
-				map_width - 72.0, "E  进入旧王墓", "royal_tomb",
-				"res://scenes/royal_tomb.tscn", "west"
+				map_width - 72.0, "E  沿维护竖井进入旧王墓", "royal_tomb",
+				"res://scenes/royal_tomb.tscn", "maintenance_shaft_entry",
+				true, "", "", floor_y - 120.0
 			)
 			# C12: unlock the supply tunnel from the prison side; the first E opens it, the second traverses.
 			# C12：从监牢侧开启补给隧道；第一次 E 开门，第二次 E 才转场。
@@ -1677,9 +1702,12 @@ func _spawn_region_exits() -> void:
 				true, "reached_A7_then_opened_supply_tunnel", "E  沿补给隧道返回"
 			)
 		"A8":
+			# C13's reverse door stays on the upper entry platform, preventing a ground-level bypass.
+			# C13 回程门仍位于上层入口平台，避免主线变成地面平移捷径。
 			_spawn_exit_door(
-				72.0, "E  返回监牢", "prison_depths",
-				"res://scenes/prison_depths.tscn", "east"
+				72.0, "E  沿维护竖井返回监牢", "prison_depths",
+				"res://scenes/prison_depths.tscn", "maintenance_shaft_return",
+				true, "", "", floor_y - 120.0
 			)
 			_spawn_exit_door(
 				map_width - 72.0, "E  进入王城外环", "royal_outer_ring",
@@ -1879,7 +1907,9 @@ func _spawn_region_exits() -> void:
 
 		"A11":
 			var can_return_to_tomb := WorldState.is_hidden_path_opened("C15")
-			var can_return_to_cathedral := "reached_A10_via_A9" in WorldState.achievement_flags
+			# The A11-to-A10 return is paired to C19 itself; reaching the cathedral on the main route alone must not open this hidden return.
+			# A11 返回大圣堂必须与 C19 本身成对；仅走过主线抵达大圣堂，不应自动开启这条隐藏回程。
+			var can_return_to_cathedral := WorldState.is_hidden_path_opened("C19")
 			_spawn_exit_door(
 				72.0, "E  沿王室竖井返回", "royal_tomb",
 				"res://scenes/royal_tomb.tscn", "east", can_return_to_tomb
