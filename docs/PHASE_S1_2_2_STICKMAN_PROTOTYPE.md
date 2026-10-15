@@ -360,6 +360,27 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 ## Rendering migration audit / 全项目绘制迁移盘点（2026-10-15）
 
 - Added [`docs/RENDERING_DRAW_AUDIT.md`](RENDERING_DRAW_AUDIT.md), a source-level inventory of all GDScript `_draw()` implementations.
-- Inventory result: 102 GDScript files total; 65 define `_draw()`. These are not 65 character scenes to replace: the inventory separates Hero/enemy/NPC placeholders, environment greyboxes, transient effects, debug visuals, UI, and world markers.
+- Inventory result: 103 GDScript files total; 65 define `_draw()`. These are not 65 character scenes to replace: the inventory separates Hero/enemy/NPC placeholders, environment greyboxes, transient effects, debug visuals, UI, and world markers.
 - Production Hero already uses the skeletal body by default. The legacy Hero body remains only as a rollback path until full local Godot 4.6.1 acceptance; its HUD/combat feedback must be preserved or extracted before the fallback is removed.
 - Source-level inventory only; no Godot runtime pass is claimed.
+
+
+## S1.2.3-A4 — Reusable humanoid presentation pilot / 可复用人形表现层试点（2026-10-15）
+
+### Implemented / 已实现
+- Added `scripts/characters/humanoid_character_visual.gd` and `scenes/characters/humanoid_character_visual.tscn`.
+- The component builds a small `Skeleton2D` / `Bone2D` rig and bone-attached `Line2D` / `Polygon2D` silhouette. It exposes presentation-only methods for facing, idle/run state, and hurt flash. It does not own gameplay state or collision.
+- Migrated the dynamically spawned route NPC in `scripts/npc/route_npc.gd` to the shared rig. Its `_draw()` now draws only the name and interaction prompt.
+- Migrated `scripts/enemies/bandit_raider.gd` to the same rig. Its `_draw()` now draws only the windup telegraph and label; movement, hitboxes, damage, knockback, and death remain in the enemy controller.
+- Updated `docs/RENDERING_DRAW_AUDIT.md` to reflect the new inventory and migration pilot.
+
+### Validation boundary / 验证边界
+- Source read-back confirms the new scene references the presentation script, both pilot scripts preload the scene, both body-silhouette draw blocks were removed, and the NPC interaction / bandit combat functions remain present.
+- This is not a Godot parser or runtime pass. Godot 4.6.1 local verification is still required before migrating additional character archetypes.
+
+### Local acceptance / 本地验收
+1. Pull `development` and run `res://scenes/boot.tscn` in Godot 4.6.1.
+2. Enter a route scene that spawns the route NPC. Confirm the NPC body is visible, faces Hero, displays its name and `E Speak` prompt, and still opens the same dialogue.
+3. Enter a combat scene containing a bandit raider. Confirm the rig faces and animates while moving, flashes on damage, and the windup telegraph remains visible.
+4. Confirm attack/hurtbox behavior, damage, knockback, enemy defeat, and route progression remain unchanged.
+5. Inspect Output for parse errors, invalid node/property errors, or missing resource paths. Do not migrate the next archetype until this pilot passes.
