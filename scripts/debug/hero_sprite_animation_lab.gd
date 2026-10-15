@@ -81,11 +81,30 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not (event is InputEventKey and event.pressed and not event.echo):
 		return
 	match event.keycode:
-		KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8:
-			animation_row = event.keycode - KEY_1
-			frame_index = 0
-			elapsed = 0.0
-			_update_frame()
+		KEY_1:
+			animation_row = 0
+			_select_row()
+		KEY_2:
+			animation_row = 1
+			_select_row()
+		KEY_3:
+			animation_row = 2
+			_select_row()
+		KEY_4:
+			animation_row = 3
+			_select_row()
+		KEY_5:
+			animation_row = 4
+			_select_row()
+		KEY_6:
+			animation_row = 5
+			_select_row()
+		KEY_7:
+			animation_row = 6
+			_select_row()
+		KEY_8:
+			animation_row = 7
+			_select_row()
 		KEY_SPACE:
 			playing = not playing
 		KEY_LEFT:
@@ -110,6 +129,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			playing = true
 		_update_label()
 		get_viewport().set_input_as_handled()
+
+
+func _select_row() -> void:
+	frame_index = 0
+	elapsed = 0.0
+	_update_frame()
 
 
 func _frame_count_for_row(row: int) -> int:
