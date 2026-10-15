@@ -74,6 +74,10 @@ Map-first content completion roadmap (Chinese):
 
 `docs/MAP_CONTENT_COMPLETION_ROADMAP_CN.md`
 
+P1–P4 full-map execution tracker (early mainline → full mainline → hidden routes → full-map acceptance):
+
+`docs/P1_P2_P3_P4_FULL_MAP_EXECUTION_CN.md`
+
 Map-first content completion roadmap (English):
 
 `docs/MAP_CONTENT_COMPLETION_ROADMAP_EN.md`
