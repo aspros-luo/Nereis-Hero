@@ -448,7 +448,7 @@ def validate(data: dict[str, Any]) -> list[str]:
         if spatial.get("route_layer") != route_layer or spatial.get(anchor_field) != expected_anchor:
             fail(errors, f"{connection_id} must match its declared A4 layered route anchor.")
     c07_spatial = next((edge for edge in connections if edge.get("id") == "C07"), {}).get("spatial_contract", {})
-    if c07_spatial.get("return_spawn") != {"region": "A4", "x": 1260, "y_offset": -85}:
+    if c07_spatial.get("return_spawn") != {"region": "A4", "x": 1410, "y_offset": -85}:
         fail(errors, "C07 return spawn must sit within interaction range of the middle ledge door.")
     for connection_id, expected_spawn in {
         "C05": {"region": "A3", "x": 1380, "y_offset": -115},
