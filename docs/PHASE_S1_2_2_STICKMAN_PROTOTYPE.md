@@ -355,3 +355,11 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 7. Test F weapon technique with each weapon and the debug skill inputs that trigger iaijutsu / judgment / crescent / eldritch actions. Each should have a distinct silhouette and return without a stuck knee, foot, or root rotation.
 8. Test grapple, wall-climb, hurt, death/respawn, UI, and F8 procedural fallback. Confirm the skeletal presentation does not change combat rules or cause two silhouettes to render at once.
 9. Check the Output panel for parser errors, missing animation/node paths, and runtime warnings. If a pose still looks wrong, send a short capture plus the exact action; tune the affected curve before deleting fallback code.
+
+
+## Rendering migration audit / 全项目绘制迁移盘点（2026-10-15）
+
+- Added [`docs/RENDERING_DRAW_AUDIT.md`](RENDERING_DRAW_AUDIT.md), a source-level inventory of all GDScript `_draw()` implementations.
+- Inventory result: 102 GDScript files total; 65 define `_draw()`. These are not 65 character scenes to replace: the inventory separates Hero/enemy/NPC placeholders, environment greyboxes, transient effects, debug visuals, UI, and world markers.
+- Production Hero already uses the skeletal body by default. The legacy Hero body remains only as a rollback path until full local Godot 4.6.1 acceptance; its HUD/combat feedback must be preserved or extracted before the fallback is removed.
+- Source-level inventory only; no Godot runtime pass is claimed.
