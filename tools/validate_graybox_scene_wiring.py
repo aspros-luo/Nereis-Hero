@@ -982,8 +982,23 @@ def main() -> int:
     require(region_script, 'true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  沿王城排水道返回",\n\t\t\t\tfloor_y - 150.0', "A9 C23 door height", errors)
     require(region_script, 'Vector2(850, floor_y - 18.0),\n\t\t\t\t"anomaly_old_stone_layer"', "A4 clue/door interaction spacing", errors)
 
-    # Elevated transitions must restore both horizontal position and platform height.
-    # 高位跨区连接必须同时恢复横坐标与栈台高度，避免落在门下方的连续地面。
+    # C03's canopy route and C07's middle tomb-waterway route must keep their authored elevation on both ends.
+    # C03 树冠高路与 C07 王墓中层水道必须在双向转场中保留设计高度。
+    for contract in [
+        'map_width - 160.0, "E  沿树冠高路进入被遗忘的城区"',
+        '"res://scenes/forgotten_city.tscn", "city_canopy_entry",',
+        'true, "", "", floor_y - 160.0',
+        '72.0, "E  返回旧朝圣路", "ash_forest"',
+        '_add_platform(Rect2(80, 410, 150, 18))',
+        'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn floor_y - 130.0',
+        'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn 180.0',
+        '_add_platform(Rect2(500, 375, 140, 18))',
+        '520.0, "E  打开王墓水道", "sewer_reservoir"',
+        'true, "reached_A8_via_A7_then_opened_royal_tomb_gate", "E  沿王室水道返回",\n\t\t\t\tfloor_y - 165.0',
+        'if region_id == "A8" and side == "royal_tomb_waterway":\n\t\treturn floor_y - 165.0',
+        'if region_id == "A8" and side == "royal_tomb_waterway":\n\t\treturn 610.0',
+    ]:
+        require(region_script, contract, "C03/C07 vertical route contract", errors)
     require(region_script, '_spawn_hero(_spawn_x_for_side(spawn_side), _spawn_y_for_side(spawn_side))', "Spawn uses both axes", errors)
     for vertical_spawn_contract in [
         'if region_id == "A2" and side == "east":\n\t\treturn floor_y - 140.0',
