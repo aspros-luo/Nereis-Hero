@@ -756,6 +756,31 @@ def main() -> int:
     for source_region, contract, connection_label in main_route_contracts:
         require(route_blocks.get(source_region, ""), contract, connection_label, errors)
 
+    # C13 must be elevated at both ends; its authored vertical route must not collapse into a ground-level door pair.
+    # C13 两端必须保持高位；维护竖井主线不能退化为地面门对门。
+    c13_route = route_blocks.get("A7", "")
+    c13_return_route = route_blocks.get("A8", "")
+    for required, label in [
+        ('"maintenance_shaft_entry"', "C13 A7-to-A8 target side"),
+        ('floor_y - 120.0', "C13 A7 elevated door height"),
+    ]:
+        require(c13_route, required, label, errors)
+    for required, label in [
+        ('"maintenance_shaft_return"', "C13 A8-to-A7 target side"),
+        ('floor_y - 120.0', "C13 A8 elevated door height"),
+    ]:
+        require(c13_return_route, required, label, errors)
+    for required, label in [
+        ('_add_platform(Rect2(2140, 460, 110, 18))', "C13 prison approach step"),
+        ('_add_platform(Rect2(2200, 420, 170, 18))', "C13 prison upper exit ledge"),
+        ('_add_platform(Rect2(80, 420, 150, 18))', "C13 tomb upper arrival ledge"),
+        ('_add_platform(Rect2(240, 420, 170, 18))', "C13 tomb route connection"),
+    ]:
+        require(region_script, required, label, errors)
+
+    # C19's A11 return is paired to the C19 opened state, not a generic A10 progression flag.
+    require(region_script, 'var can_return_to_cathedral := WorldState.is_hidden_path_opened("C19")', "C19 paired return gate", errors)
+
     # C08/C09 high-road transitions must land on collision-backed ledges in both directions.
     # C08/C09 高路转场的双向落点都必须由真实碰撞平台承托。
     for contract, label in [
