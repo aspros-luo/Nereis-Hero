@@ -391,6 +391,16 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C09 arrival must land on the supported upper west bridge in A6.")
     if c09_spatial.get("return_spawn") != {"region": "A5", "x": 2165, "y_offset": -55, "spawn_side": "monastery_return"}:
         fail(errors, "C09 reverse transition must return to A5's supported lower approach ledge, not the ground below the high door.")
+    c18 = next((edge for edge in connections if edge.get("id") == "C18"), None)
+    c18_spatial = c18.get("spatial_contract", {}) if c18 else {}
+    if c18_spatial.get("from_region_anchor") != {"region": "A9", "x": 900, "y_offset": 0, "spawn_side": "inner_city_side_gate"}:
+        fail(errors, "C18 A9 door must remain at its authored ground-level anchor.")
+    if c18_spatial.get("to_region_anchor") != {"region": "A12", "x": 520, "y_offset": 0, "spawn_side": "inner_city_side_gate"}:
+        fail(errors, "C18 A12 door must remain at its authored ground-level anchor.")
+    if c18_spatial.get("return_spawn") != {"region": "A9", "x": 1000, "y_offset": 0, "spawn_side": "inner_city_side_gate"}:
+        fail(errors, "C18 A9 return spawn must stay midway between its door and the rest point.")
+    if c18_spatial.get("from_region_spawn") != {"region": "A12", "x": 650, "y_offset": 0, "spawn_side": "inner_city_side_gate"}:
+        fail(errors, "C18 A12 arrival must remain clear of the cathedral entrance.")
     c17 = next((edge for edge in connections if edge.get("id") == "C17"), None)
     c17_spatial = c17.get("spatial_contract", {}) if c17 else {}
     if c17_spatial.get("from_region_anchor") != {"region": "A9", "x": 2350, "y_offset": -180}:
