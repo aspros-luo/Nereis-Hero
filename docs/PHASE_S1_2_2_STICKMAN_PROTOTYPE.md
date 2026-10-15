@@ -326,3 +326,32 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 4. Check health/stamina/combo indicators, hit-confirm feedback, hidden-resistance marker, and invulnerability feedback.
 5. Press F8 in a debug build to switch to the procedural fallback and back. This is a rollback/diagnostic control, not intended as a player-facing feature.
 6. Inspect Godot Output for script/parser errors. Source changes were committed through GitHub; the connected session cannot launch Godot, so runtime acceptance remains pending.
+
+
+## S1.2.3-A3 — Production stickman animation polish / 正式角色动作整修（2026-10-15）
+
+### Scope / 本次范围
+- Texture and dynamic-outline work is explicitly paused. The skeletal stickman remains the production presentation; no new character texture pipeline was introduced.
+- Keep `hero.gd` as the only owner of movement, combat, stamina, damage, invulnerability and hitbox timing. The skeletal controller consumes a read-only visual context.
+- Added knee and foot bones to the production rig so each leg has a thigh/calf/foot silhouette rather than a single long rotating segment.
+- Narrowed the run-cycle hip swing and staggered knee flexion/foot counter-rotation. The intent is to keep the feet separated and prevent the legs crossing under the body.
+- Reworked jump and fall silhouettes to differ: upward velocity controls the launch tuck, falling opens the arms and legs, and a short landing compression/recovery plays when ground contact resumes.
+- Replaced the static dodge pose with a compact, timed visual roll; quick dash now has a lean-to-recovery curve. These are presentation-only and do not alter travel distance, i-frames, stamina, collision, or action duration.
+- Long-sword attacks now use a readable load → cut → follow-through → recovery arc; short-blade attacks use a faster compact extension/recoil. Weapon techniques have distinct pose curves for `iaijutsu`, `judgment_slash`, `crescent_combo`, and `eldritch_echo`.
+- Hurt recoil now settles over time; death collapse remains visually eased. Grapple and wall-climb continue to use separate poses.
+
+### Validation boundary / 验证边界
+- Source-level checks confirmed the new pose enum, articulated rig paths, movement context keys, roll curve, and the four technique identifiers are present in the current branch.
+- The connected GitHub session cannot launch Godot 4.6.1. This is not a claim of parser, scene-load, or visual runtime success; local acceptance is required before removing the old procedural fallback.
+- The YouTube reference URL mentioned in conversation could not be recovered from the available conversation context during this pass. This animation pass is based on the game's silhouette-first / readable-action goals; the specific creator's video has not been claimed as a reviewed source.
+
+### Local acceptance / 本地验收
+1. Pull the latest `development` branch and open the project in Godot 4.6.1. Run `res://scenes/boot.tscn` (F5), not only the standalone stickman scene.
+2. Run left/right movement at a steady pace. Check that the legs remain visibly separated, knees alternate, feet do not scissor through one another, and idle restores a neutral stance.
+3. Jump repeatedly from a standstill and while moving. Confirm the ascent pose reads as a launch, descent opens the silhouette, and landing briefly compresses before returning to locomotion.
+4. Use the regular dodge input (K / Shift). Check the roll reads as one committed evasive action and settles cleanly; compare the visual timing against the unchanged gameplay movement.
+5. Test X quick dash separately. It should lean forward and recover without looking like the same action as the dodge roll.
+6. Test long-sword and short-blade attacks across combo steps. Check that the long sword has a clear load and follow-through while the short blade remains compact and faster.
+7. Test F weapon technique with each weapon and the debug skill inputs that trigger iaijutsu / judgment / crescent / eldritch actions. Each should have a distinct silhouette and return without a stuck knee, foot, or root rotation.
+8. Test grapple, wall-climb, hurt, death/respawn, UI, and F8 procedural fallback. Confirm the skeletal presentation does not change combat rules or cause two silhouettes to render at once.
+9. Check the Output panel for parser errors, missing animation/node paths, and runtime warnings. If a pose still looks wrong, send a short capture plus the exact action; tune the affected curve before deleting fallback code.
