@@ -299,11 +299,17 @@
           "y_offset": -115,
           "spawn_side": "sewer_upper"
         },
-        "intent": "The raised A3 pipe-walk transitions to a supported upper inspection landing in A4; the paired reservoir hatch and arrival spawn stay above the continuous ground lane.",
+        "intent": "The raised A3 pipe-walk transitions to a supported upper inspection landing in A4; the hatch stays at y_offset=-115 while the Hero arrival is aligned to the y=445 collision top.",
         "return_spawn": {
           "region": "A3",
           "x": 1380,
           "y_offset": -115
+        },
+        "to_region_spawn": {
+          "region": "A4",
+          "x": 180,
+          "y_offset": -95,
+          "spawn_side": "sewer_upper"
         }
       },
       "layer_contract": {
@@ -440,11 +446,17 @@
         },
         "to_region_anchor": {
           "region": "A6",
-          "x": 180,
-          "y_offset": 0,
-          "spawn_side": "west"
+          "x": 160,
+          "y_offset": -90,
+          "spawn_side": "battlefield_entry"
         },
-        "intent": "The main battlefield-to-monastery transition leaves from the broken upper parapet rather than the continuous ground boundary."
+        "intent": "The main battlefield-to-monastery transition leaves from A5's upper parapet and arrives on A6's supported west bridge; the reverse route lands on A5's lower approach ledge instead of the ground below the upper door.",
+        "return_spawn": {
+          "region": "A5",
+          "x": 2165,
+          "y_offset": -55,
+          "spawn_side": "monastery_return"
+        }
       },
       "layer_contract": {
         "from_subregion": "A5-S03",
