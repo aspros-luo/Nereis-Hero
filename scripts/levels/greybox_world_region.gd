@@ -377,13 +377,13 @@ func _spawn_x_for_side(side: String) -> float:
 		# C12 出生在低位栈台上，距回程门 90px，避免落地立即重新触发。
 		return 960.0
 	if region_id == "A4" and side == "royal_tomb_waterway":
-		# C07's middle platform door is at x=1320; land just before the platform within safe interaction range.
-		# C07 中层平台门位于 x=1320；出生在平台前方，距离足以交互且能看见支路。
-		return 1260.0
+		# C07's door is at x=1320; land on the far end of the same ledge, outside its trigger.
+		# C07 门位于 x=1320；出生在同一栈台远端，避开门的实体触发区。
+		return 1410.0
 	if region_id == "A4" and side == "royal_drain":
-		# C23 lands on the lower support lip at x=1570, then steps right to the pipe door.
-		# C23 落在 x=1570 的承托边沿，再向右走到管线门。
-		return 1570.0
+		# C23 lands on the lower support lip at x=1540, with extra clearance from the x=1650 door trigger.
+		# C23 落在 x=1540 的下层承托边沿，与 x=1650 的门触发区留出更充足净距。
+		return 1540.0
 	if region_id == "A9" and side == "old_lift":
 		# C16's upper door is at x=520; land on the same ledge without overlapping the door focus.
 		# C16 高位门位于 x=520；落在同一栈台并避开门的交互焦点。
@@ -393,9 +393,9 @@ func _spawn_x_for_side(side: String) -> float:
 		# C23 门移至 x=740；落点 x=650 与门保持净距，并避开 C16 与 C18。
 		return 650.0
 	if region_id == "A9" and side == "inner_city_side_gate":
-		# C18's x=900 door and x=1100 rest point flank this midpoint spawn with 100px clearance each.
-		# C18 的 x=900 门与 x=1100 休整点分列两侧；出生在中点，双方各留 100px 净距。
-		return 1000.0
+		# C18 lands outside the x=900 door trigger and just beyond the x=1100 rest point's 110px focus radius.
+		# C18 出生点避开 x=900 门触发区，并位于 x=1100 休整点的 110px 交互半径之外。
+		return 980.0
 	if region_id == "A12" and side == "inner_city_side_gate":
 		# C18's inner-city door is at x=520; arrive nearby rather than at the cathedral entrance.
 		# C18 内城侧门位于 x=520；返回时落在门附近，而不是大圣堂主入口。
