@@ -340,6 +340,8 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C05 spatial anchor must match the A3 raised sewer branch.")
     if c05_spatial.get("to_region_anchor") != {"region": "A4", "x": 180, "y_offset": -115, "spawn_side": "sewer_upper"}:
         fail(errors, "C05 must arrive on A4's supported upper inspection landing.")
+    if c05_spatial.get("to_region_spawn") != {"region": "A4", "x": 180, "y_offset": -95, "spawn_side": "sewer_upper"}:
+        fail(errors, "C05 Hero arrival must align with the A4 landing collision top, separately from the raised hatch anchor.")
     c21 = next((edge for edge in connections if edge.get("id") == "C21"), None)
     c22 = next((edge for edge in connections if edge.get("id") == "C22"), None)
     if not c21 or c21.get("to") != "A13" or c21.get("unlock_condition") != "physical_union_complete":
@@ -385,6 +387,10 @@ def validate(data: dict[str, Any]) -> list[str]:
     c09_spatial = c09.get("spatial_contract", {}) if c09 else {}
     if c09_spatial.get("from_region_anchor") != {"region": "A5", "x": 2250, "y_offset": -90}:
         fail(errors, "C09 main exit must leave A5 from the upper battlefield parapet.")
+    if c09_spatial.get("to_region_anchor") != {"region": "A6", "x": 160, "y_offset": -90, "spawn_side": "battlefield_entry"}:
+        fail(errors, "C09 arrival must land on the supported upper west bridge in A6.")
+    if c09_spatial.get("return_spawn") != {"region": "A5", "x": 2165, "y_offset": -55, "spawn_side": "monastery_return"}:
+        fail(errors, "C09 reverse transition must return to A5's supported lower approach ledge, not the ground below the high door.")
     c17 = next((edge for edge in connections if edge.get("id") == "C17"), None)
     c17_spatial = c17.get("spatial_contract", {}) if c17 else {}
     if c17_spatial.get("from_region_anchor") != {"region": "A9", "x": 2350, "y_offset": -180}:
