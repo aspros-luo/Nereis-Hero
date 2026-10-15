@@ -441,7 +441,8 @@ def main() -> int:
     require(ashen_knight_script, 'var boss_display_name := "灰烬骑士"', "Reusable Boss display name", errors)
     require(ashen_knight_script, "var persist_global_boss_defeat := true", "Reusable Boss legacy flag isolation", errors)
     require(ashen_knight_script, 'if persist_global_boss_defeat:', "Reusable Boss victory persistence switch", errors)
-    require(hud_script := read("scripts/ui/game_hud.gd", errors), 'int(boss.get("health")) <= 0', "Encounter-local Boss HUD visibility", errors)
+    hud_script = read("scripts/ui/game_hud.gd", errors)
+    require(hud_script, 'int(boss.get("health")) <= 0', "Encounter-local Boss HUD visibility", errors)
 
     require(world_state, "pending_region_spawn_side = \"west\"\n    resume_spawn_side = \"west\"", "WorldState new-game reset", errors)
     boot_script = read("scripts/core/boot.gd", errors)
