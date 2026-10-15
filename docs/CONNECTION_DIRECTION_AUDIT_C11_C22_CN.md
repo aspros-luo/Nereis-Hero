@@ -119,8 +119,9 @@ Run these in the project, using a debug save or controlled debug state as approp
    - Reload the scene/save and confirm the terminal direction remains unchanged.
 
 4. **Main-route ground bypass sweep**
-   - Walk along the ground floor of A6/A7, A7/A8, and A8/A9 without using their intended doors; confirm no transition happens merely by reaching a region edge.
-   - Repeat at each elevated main-route door and nearby ledge, checking jump reachability, landing collision, door focus distance, and transition destination.
+   - Walk along the ground floor of A6/A7 (C11), A7/A8 (C13), and A8/A9 (C14) without using their intended doors; confirm no transition happens merely by reaching a region edge.
+   - Repeat at elevated cross-region doors C03 (A2/A3 canopy), C08 (A3/A5 highroad), C09 (A5/A6 monastery approach), C10 (A6/A3 shortcut), C13 (A7/A8 maintenance shaft), and C17 (A9/A10 cathedral roof).
+   - At every elevated door and adjacent ledge, check jump reachability, landing collision, door focus distance, and the exact transition destination; specifically confirm the ground lane cannot trigger a door intended to be reached from above.
    - Also inspect any adjacent shortcut/secret door in the same area so its interaction radius does not accidentally capture the main-route prompt.
 
 ### Execution boundary
