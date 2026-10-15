@@ -355,8 +355,11 @@ def validate(data: dict[str, Any]) -> list[str]:
     if c13_spatial.get("return_spawn") != {"region": "A7", "x": 2440, "y_offset": -120, "spawn_side": "maintenance_shaft_return"}:
         fail(errors, "C13 reverse arrival must return to the upper prison ledge.")
     c02 = next((edge for edge in connections if edge.get("id") == "C02"), None)
+    c02_gate = c02.get("progression_gate", {}) if c02 else {}
     if not c02 or c02.get("from") != "A1" or c02.get("to") != "A2" or c02.get("unlock_condition") != "village_defense_survived" or c02.get("opens_from") != "A1":
         fail(errors, "C02 must record the village-defense progression gate before the A1 north gate enters A2.")
+    if c02_gate.get("interaction_id") != "north_gate" or c02_gate.get("before_unlock") != "enter_village_defense_demo_and_return_to_A1" or c02_gate.get("after_unlock") != "enter_A2_from_A1":
+        fail(errors, "C02 progression_gate must describe the actual north-gate defense-then-entry flow.")
     c21 = next((edge for edge in connections if edge.get("id") == "C21"), None)
     c22 = next((edge for edge in connections if edge.get("id") == "C22"), None)
     if not c21 or c21.get("to") != "A13" or c21.get("unlock_condition") != "ending_candidate_is_not_human_grave_based_on_resonance_truth_anchors_and_exploration":
