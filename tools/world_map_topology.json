@@ -705,6 +705,34 @@
         "route_form": "外环内城服务门→内城服务街",
         "readability_contract": "后期开启的低/中位回环，回程应落在门附近而非圣堂入口",
         "status": "design_contract_not_runtime_verified"
+      },
+      "spatial_contract": {
+        "route_layer": "inner_city_side_gate_ground_loop",
+        "from_region_anchor": {
+          "region": "A9",
+          "x": 900,
+          "y_offset": 0,
+          "spawn_side": "inner_city_side_gate"
+        },
+        "to_region_anchor": {
+          "region": "A12",
+          "x": 520,
+          "y_offset": 0,
+          "spawn_side": "inner_city_side_gate"
+        },
+        "from_region_spawn": {
+          "region": "A12",
+          "x": 650,
+          "y_offset": 0,
+          "spawn_side": "inner_city_side_gate"
+        },
+        "return_spawn": {
+          "region": "A9",
+          "x": 1000,
+          "y_offset": 0,
+          "spawn_side": "inner_city_side_gate"
+        },
+        "intent": "The late inner-city shortcut remains ground-level on both ends; A9 arrival lands midway between the x=900 door and x=1100 rest point to avoid overlapping either interaction focus."
       }
     },
     {
