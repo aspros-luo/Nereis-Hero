@@ -277,7 +277,7 @@ func _set_skeleton_visual_enabled(enabled: bool) -> void:
 			skeleton_visual.position = Vector2(0.0, -34.0)
 			# Hero can be spawned while its parent scene is still initializing. Attach after the
 			# current ready chain so Skeleton2D does not invert a transient singular transform.
-			add_child.call_deferred(skeleton_visual)
+			call_deferred("add_child", skeleton_visual)
 	else:
 		if is_instance_valid(skeleton_visual):
 			skeleton_visual.queue_free()
