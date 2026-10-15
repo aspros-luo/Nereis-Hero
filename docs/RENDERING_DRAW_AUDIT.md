@@ -55,3 +55,8 @@ The counts above sum to 65 scripts with `_draw()`.
 
 - The reusable rig now assigns each generated `Bone2D` an explicit `rest` transform and disables automatic bone-length/angle calculation. This rig animates through ordinary `Node2D` transforms and does not consume bone-length metadata; disabling auto-calculation avoids warnings for terminal joints that intentionally have no child `Bone2D`.
 - This is a source-level hardening change only. Confirm the Godot 4.6.1 Output panel locally; no engine runtime has been run by this change.
+
+## Follow-up hardening — typed visual adapters / 强类型表现层适配
+
+- Route NPC and Bandit Raider now hold the reusable rig as `HumanoidCharacterVisual` and call its public methods/properties directly instead of using string-based `Object.set()` / `Object.call()`. This makes the integration contract clearer and reduces runtime-only method-name mistakes.
+- Their interaction, combat, hitbox, telegraph and label responsibilities remain unchanged. Godot parser/runtime verification is still required locally.
