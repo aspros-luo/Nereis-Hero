@@ -384,3 +384,10 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 3. Enter a combat scene containing a bandit raider. Confirm the rig faces and animates while moving, flashes on damage, and the windup telegraph remains visible.
 4. Confirm attack/hurtbox behavior, damage, knockback, enemy defeat, and route progression remain unchanged.
 5. Inspect Output for parse errors, invalid node/property errors, or missing resource paths. Do not migrate the next archetype until this pilot passes.
+
+
+### S1.2.3-A5 — Reusable rig bone metadata hardening
+
+- Generated `Bone2D` nodes now receive an explicit rest transform at creation and have automatic bone-length/angle calculation disabled. The presentation rig animates via node transforms and does not rely on editor bone-length metadata, so this avoids expected auto-calculation warnings on leaf joints.
+- Source read-back confirms the change is limited to `_make_bone()`; movement, animation timing, color palette, NPC interaction, and enemy combat logic are unchanged.
+- Godot 4.6.1 runtime validation remains a local acceptance gate; this source change is not reported as an engine test pass.
