@@ -3681,6 +3681,7 @@
   "layer_contracts_note": "Every macro connection carries an explicit source/destination subregion and route-form contract. This is a spatial design traceability layer, not proof of scene geometry or runtime traversal.",
   "latest_spatial_fixes": [
     "C05 A4 Hero arrival is now x=180, y_offset=-95 on the y=445 collision top; the hatch itself remains at y_offset=-115.",
-    "C09 now enters A6 at x=160, y_offset=-90 on a supported west bridge and returns to A5 at x=2165, y_offset=-55 on the lower approach ledge."
+    "C09 now enters A6 at x=160, y_offset=-90 on a supported west bridge and returns to A5 at x=2165, y_offset=-55 on the lower approach ledge.",
+    "C18 A9 return spawn is centered at x=1000 between the x=900 inner-city door and x=1100 rest point, keeping 100px center spacing to each."
   ]
 }
