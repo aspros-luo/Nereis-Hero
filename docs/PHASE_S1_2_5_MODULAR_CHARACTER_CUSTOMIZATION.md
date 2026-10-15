@@ -82,3 +82,10 @@ The atlas inspector can help select rectangular bounds, but it cannot infer sema
 Source files have been committed and read back from GitHub. The connected session cannot run the user's Godot 4.6.1 editor, so local F6 runtime acceptance is still required. The actual third-party atlas is not committed, and this implementation intentionally does not fabricate crop coordinates.
 
 源码已提交并通过 GitHub 回读；当前会话不能运行用户本地 Godot 4.6.1，因此仍需本地 F6 验收。第三方图集未提交，代码没有伪造素材坐标。
+
+
+## Empty-preview fallback / 空预览占位人形
+
+When no real part resources are configured, the character preview now shows a simple rig-following mannequin silhouette. This is intentionally a construction guide, not final art. Placeholder atlas regions are not drawn, so random pixels from the atlas should not appear. After real parts are applied, their Sprite2D textures become visible while the mannequin remains a subtle alignment reference until refined.
+
+尚未配置真实部件资源时，预览会显示跟随骨骼的简易人形，用于确认场景位置和动画确实可见。占位裁切区域不会直接绘制，避免把图集左上角的随机像素误当成角色。该人形不是最终美术。
