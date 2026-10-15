@@ -13,9 +13,9 @@ const DEBUG_WALL_SCRIPT = preload("res://scripts/systems/debug_traversal_wall.gd
 
 const HERO_SKELETON_SCENE = preload("res://scenes/player/hero_skeleton.tscn")
 
-## Opt-in presentation switch for the isolated A3 preview. False in normal gameplay.
-## A3 独立预览专用的可选表现开关；正常游戏默认关闭。
-@export var use_skeleton_visual := false
+## The skeletal character is now the default production presentation.
+## 骨骼角色现为默认正式表现；保留 F8/WorldState 回退开关，供本地验收期间快速回滚。
+@export var use_skeleton_visual := true
 var skeleton_visual: Node2D
 var skeleton_visual_enabled := false
 
