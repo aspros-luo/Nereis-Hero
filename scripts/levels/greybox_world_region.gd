@@ -856,7 +856,7 @@ func _configure_platforms() -> void:
 			# C13's upper exit is approached by two short, collision-backed steps from the prison floor route.
 			# C13 高位出口由两级实体碰撞台阶接入，避免监牢地面直通王墓。
 			_add_platform(Rect2(2140, 460, 110, 18))
-			_add_platform(Rect2(2200, 420, 170, 18))
+			_add_platform(Rect2(2200, 420, 370, 18))
 			_add_platform(Rect2(440, 420, 110, 18))
 			_add_platform(Rect2(560, 375, 110, 18))
 			_add_platform(Rect2(700, 330, 110, 18))
