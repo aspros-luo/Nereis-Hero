@@ -1807,12 +1807,17 @@ func _spawn_region_exits() -> void:
 					true, "opened_mirror_street_side_gate", "E  进入镜街"
 				)
 
-			# C22 enters the real A13 terminal layer; the ending evaluator is invoked there.
-			# C22 先进入真正的 A13 终局层，再由该层调用现有结局评估器。
-			_spawn_exit_door(
-				map_width - 72.0, "E  进入王座区", "terminal_anomaly",
-				"res://scenes/terminal_anomaly.tscn", "west"
-			)
+			# C22 is available only after the mainline A10 -> A12 arrival has been recorded.
+			# C22 仅在记录了 A10 主线抵达 A12 后开放，不能从 H07 镜街侧门绕过终局门槛。
+			if "reached_A12_via_A10" in WorldState.achievement_flags:
+				_spawn_exit_door(
+					map_width - 72.0, "E  进入王座区", "terminal_anomaly",
+					"res://scenes/terminal_anomaly.tscn", "west"
+				)
+			else:
+				_register_debug_locked_route_hint(
+					map_width - 72.0, "terminal_anomaly", "需要从大圣堂主线抵达 A12（C22）"
+				)
 		"H07":
 			_spawn_exit_door(
 				72.0, "E  穿过积水返回", "royal_outer_ring",
