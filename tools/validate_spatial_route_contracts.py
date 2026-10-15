@@ -64,7 +64,8 @@ def main() -> int:
         ("C07", "A4", "royal_tomb_waterway", 1260.0, -85.0),
         ("C08", "A3", "city_highroad_return", 2360.0, -130.0),
         ("C10", "A6", "bell_drop", 2100.0, -90.0),
-        ("C12", "A4", "prison_tunnel", 1090.0, -75.0),
+        ("C12", "A4", "prison_tunnel", 960.0, -75.0),
+        ("C13", "A7", "maintenance_shaft_return", 2340.0, -120.0),
         ("C16", "A3", "old_lift", 1960.0, -70.0),
         ("C23", "A4", "royal_drain", 1620.0, -120.0),
     ]
@@ -81,10 +82,19 @@ def main() -> int:
             and float(spawn.get("y_offset", float("nan"))) == expected_y_offset,
             f"{edge_id}: topology return_spawn must be {region} x={expected_x:g}, y_offset={expected_y_offset:g}.",
         )
+        x_mapping_matches = has_side_return(x_body, region, side, f"{expected_x:.1f}")
+        if edge_id == "C13":
+            x_mapping_matches = (
+                x_mapping_matches
+                or re.search(
+                    r'if region_id == "A7" and side == "maintenance_shaft_return":\\s*(?:#.*\\n\\s*)*return map_width - 260\\.0',
+                    x_body,
+                ) is not None
+            )
         require(
             errors,
-            has_side_return(x_body, region, side, f"{expected_x:.1f}"),
-            f"{edge_id}: _spawn_x_for_side lacks {region}/{side} -> {expected_x:g}.",
+            x_mapping_matches,
+            f"{edge_id}: _spawn_x_for_side lacks {region}/{side} -> {expected_x:g} (or the authored map_width-relative expression).",
         )
         require(
             errors,
@@ -93,6 +103,41 @@ def main() -> int:
             else has_side_return(y_body, region, side, "floor_y"),
             f"{edge_id}: _spawn_y_for_side lacks the matching vertical offset for {region}/{side}.",
         )
+
+    # C13's door anchors and safe return spawn must match the topology; the two door
+    # nodes are at y=-140 while the Hero lands on the y=-120 ledge top.
+    # C13 的门锚点与安全回程出生点必须和拓扑一致；门节点为 y=-140，主角落在 y=-120 的平台顶。
+    c13 = edges.get("C13", {}).get("spatial_contract", {})
+    c13_from = c13.get("from_region_anchor", {})
+    c13_to = c13.get("to_region_anchor", {})
+    c13_return = c13.get("return_spawn", {})
+    c13_arrival = c13.get("to_region_spawn", {})
+    require(
+        errors,
+        c13_from.get("region") == "A7" and c13_from.get("x") == 2528
+        and c13_from.get("y_offset") == -140,
+        "C13: A7 door anchor must be x=2528 / y_offset=-140.",
+    )
+    require(
+        errors,
+        c13_to.get("region") == "A8" and c13_to.get("x") == 72
+        and c13_to.get("y_offset") == -140,
+        "C13: A8 door anchor must be x=72 / y_offset=-140.",
+    )
+    require(
+        errors,
+        c13_return.get("region") == "A7" and c13_return.get("x") == 2340
+        and c13_return.get("y_offset") == -120
+        and c13_return.get("spawn_side") == "maintenance_shaft_return",
+        "C13: A7 return spawn must be x=2340 / y_offset=-120, clear of the east door focus.",
+    )
+    require(
+        errors,
+        c13_arrival.get("region") == "A8" and c13_arrival.get("x") == 190
+        and c13_arrival.get("y_offset") == -120
+        and c13_arrival.get("spawn_side") == "maintenance_shaft_entry",
+        "C13: A8 arrival spawn must be x=190 / y_offset=-120 on the supported entry platform.",
+    )
 
     # C08 must remain a paired elevated route with matching destination and return spawn metadata.
     c08 = edges.get("C08", {}).get("spatial_contract", {})
@@ -218,6 +263,8 @@ def main() -> int:
     # (connection, region, x, y_offset); y is derived from the shared floor_y=540.
     elevated_doors = [
         ("C03", "A2", 2240.0, -160.0),
+        ("C13", "A7", 2528.0, -140.0),
+        ("C13", "A8", 72.0, -140.0),
         ("C08", "A3", 2240.0, -130.0),
         ("C08", "A5", 180.0, -130.0),
         ("C05", "A3", 1600.0, -115.0),
