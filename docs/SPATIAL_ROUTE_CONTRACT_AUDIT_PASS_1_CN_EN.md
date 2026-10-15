@@ -20,9 +20,9 @@ python3 tools/validate_spatial_route_contracts.py
 | C05 | A3 城区 | sewer | x=1380 | -115 |
 | C07 | A4 水库 | royal_tomb_waterway | x=1260 | -85 |
 | C10 | A6 修道院 | bell_drop | x=2100 | -90 |
-| C12 | A4 水库 | prison_tunnel | x=1090 | -75 |
+| C12 | A4 水库 | prison_tunnel | x=960 | -75 |
 | C16 | A3 城区 | old_lift | x=1960 | -70 |
-| C23 | A4 水库 | royal_drain | x=1620 | -120 |
+| C23 | A4 水库 | royal_drain | x=1540 | -120 |
 | C24 | A3 城区 | village_city_cut | x=700 | 0 |
 | C24 | A1 村庄 | city_cut_return | x=350 | 0 |
 | C17 | A9 → A10 | west | 高位屋顶接近点 x=2350 | -180 |
@@ -92,3 +92,32 @@ C22 原先在 A12 使用 `map_width - 72` 的地面门点，与拓扑中的“�
 | C19 A10→A11 | 大圣堂侧门要求鸣响≥68、外神暴露≥12、外神共鸣事实及镜街回声线索；永久开启后，A11 的大圣堂回门才启用。目标出生侧为 A11 的 chapel_entry。 | 静态核对一致 |
 
 以上结论来自源码与拓扑的静态对照。它们没有证明两条隐藏入口在实际游玩时都容易发现，也没有证明角色碰撞、灵视显示、按 E 开门、第二次按 E 转场和存档持久化已经通过实机验收。
+
+
+### 死亡恢复、休整点与相邻交互焦点复核（2026-10-15）
+
+本轮发现并修正三处出生点净距问题，并收紧休整点记录检查点的条件：
+
+- **C07：A8 → A4 王墓水道。** A4 出生点原为 x=1260，距离 x=1320 门中心仅 60px。门的 Area2D 水平半宽为 55px，主角碰撞半径为 18px，因此出生时会与门触发区重叠。现在将落点移至 x=1410、y_offset=-85，仍在 A4 的 x=1260–1450、顶面 y=455 平台上，并留出 17px 的水平净距。
+- **C23：A9 → A4 王城排水道。** A4 出生点原为 x=1570，距离 x=1650 门中心 80px，按当前门触发区与主角碰撞体计算只剩 7px 净距。现在移至 x=1540、y_offset=-120，仍由 x=1530–1600、顶面 y=420 的平台承托，水平净距增加到 37px。
+- **C18：A12 → A9 内城侧门。** A9 出生点原为 x=1000，虽未进入 x=900 门的 Area2D，但距 x=1100 休整点只有 100px；休整点会在 110px 内获得交互焦点，导致刚落地就显示休整提示。现在移至 x=980，门触发区净距为 7px，且在休整点交互半径之外 10px。
+- **休整点安全门槛。** 之前只按主角与休整点的直线距离判断可交互，可能在跳跃中或临近高台时保存空中/高层坐标作为检查点。现在要求主角处于 CharacterBody2D.is_on_floor() 状态、水平距离不超过 90px、垂直差不超过 32px 后，才允许休整和保存当前出生位置。
+- **死亡恢复。** 共享区域控制器在死亡后锁定输入、清除旧交互焦点、恢复到当前区域的检查点，再清除焦点并解锁输入；每次进入共享区域时也会将入口出生点设为该区域检查点，避免复用上个区域的坐标。
+
+验证器新增检查：C07/C23 出生点是否与实际平台顶面对齐、C07/C18/C23 与门触发区/休整焦点的净距、休整点是否要求落地，以及死亡恢复是否清理焦点并使用区域检查点。
+
+**验收边界：** 本次修改与文档/验证器已提交，但此环境尚未实际执行 python3 tools/validate_spatial_route_contracts.py，也未运行 Godot 4.6.x。上述是源码和拓扑的静态审计结论；仍需实机确认角色胶囊与 Area2D 的实际重叠、落地帧的 is_on_floor() 状态、死亡后焦点刷新和双向转场。
+
+### Death Recovery, Rest Points, and Interaction Focus Review (2026-10-15)
+
+This pass fixes three arrival-clearance issues and tightens checkpoint activation:
+
+- **C07, A8 → A4:** the old A4 arrival at x=1260 overlapped the x=1320 door trigger (60px center distance versus a 73px combined half-width). It now lands at x=1410 / y_offset=-85 on the same y=455 platform, leaving 17px of horizontal clearance.
+- **C23, A9 → A4:** the old x=1570 arrival had only 7px of horizontal clearance from the x=1650 door trigger. It now lands at x=1540 / y_offset=-120 on the y=420 support lip, increasing clearance to 37px.
+- **C18, A12 → A9:** the old x=1000 arrival was inside the x=1100 rest point's 110px focus radius. It now lands at x=980, outside the rest focus radius and outside the x=900 door trigger.
+- **Rest-point checkpoint safety:** rest interaction now requires a grounded CharacterBody2D, within 90px horizontally and 32px vertically. This prevents saving an airborne or nearby upper-platform position as a death checkpoint.
+- **Death recovery:** the shared-region controller locks input and clears stale focus before recovery, restores the Hero at the region-local checkpoint, then clears focus again before unlocking input. Entering each shared region initializes its checkpoint at the incoming spawn.
+
+The static validator now checks platform support, the three arrival clearances, grounded rest-point activation, and the death-recovery focus/checkpoint path.
+
+**Acceptance boundary:** The changes and checks are committed, but python3 tools/validate_spatial_route_contracts.py has not been executed in this environment, and Godot 4.6.x has not been run. These are source/topology audit results only; in-engine acceptance must still verify capsule/Area2D overlap, is_on_floor() timing on landing, post-death focus refresh, and bidirectional transitions.
