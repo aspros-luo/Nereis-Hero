@@ -763,11 +763,16 @@ def main() -> int:
         '"res://scenes/old_battlefield.tscn", "old_pilgrim_highroad",\n\t\t\t\t\ttrue, "", "", floor_y - 115.0',
         '520.0, "E  打开旧朝圣高路", "ash_forest"',
         '"reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",\n\t\t\t\tfloor_y - 140.0',
-        'if region_id == "A2" and side == "old_pilgrim_highroad":\n\t\treturn floor_y - 160.0',
-        'if region_id == "A5" and side == "old_pilgrim_highroad":\n\t\treturn floor_y - 105.0',
+        'if region_id == "A2" and side == "old_pilgrim_highroad":\n\t\treturn floor_y - 140.0',
+        'if region_id == "A5" and side == "old_pilgrim_highroad":\n\t\treturn floor_y - 85.0',
         '_add_platform(Rect2(1840, 445, 130, 18))',
         '_add_platform(Rect2(420, 420, 120, 18))',
         '_add_platform(Rect2(560, 455, 160, 18))',
+        'if region_id == "A4" and side == "prison_tunnel":\n\t\t# C12 arrives on the low ledge 90px away from its own return door.\n\t\t# C12 出生在低位栈台上，距回程门 90px，避免落地立即重新触发。\n\t\treturn 960.0',
+        'if region_id == "A4" and side == "royal_drain":\n\t\t# C23 lands on the lower support lip at x=1570, then steps right to the pipe door.\n\t\t# C23 落在 x=1570 的承托边沿，再向右走到管线门。\n\t\treturn 1570.0',
+        '_add_platform(Rect2(1530, 420, 70, 18))',
+        '_add_platform(Rect2(620, 390, 180, 18))',
+        '740.0, "E  打开王城排水门"',
     ):
         require(region_script, contract, "C04 paired canopy route", errors)
 
@@ -966,6 +971,7 @@ def main() -> int:
     # A4 交通枢纽必须将三条跨区门分布在不同高度的栈台上。
     require(region_script, '_add_platform(Rect2(930, 465, 180, 18))', "A4 low supply-tunnel ledge", errors)
     require(region_script, '1050.0, "E  返回监牢"', "A4 C12 low ledge exit", errors)
+    require(region_script, 'if region_id == "A4" and side == "prison_tunnel":\n\t\t# C12 arrives on the low ledge 90px away from its own return door.\n\t\t# C12 出生在低位栈台上，距回程门 90px，避免落地立即重新触发。\n\t\treturn 960.0', "A4 C12 safe spawn", errors)
     require(region_script, 'true, "", "", floor_y - 75.0', "A4 C12 elevation", errors)
     require(region_script, '1320.0, "E  返回旧王墓"', "A4 C07 middle ledge exit", errors)
     require(region_script, 'true, "", "", floor_y - 85.0', "A4 C07 elevation", errors)
@@ -977,8 +983,11 @@ def main() -> int:
     require(region_script, 'true, "opened_bell_tower_drop", "E  返回被遗忘的城区", floor_y - 55.0', "A6 C10 door height", errors)
     require(region_script, '520.0, "E  打开旧升降梯"', "A9 C16 rooftop door", errors)
     require(region_script, 'true, "reached_A9_via_A8_then_opened_old_lift_from_A9", "E  乘旧升降梯返回",\n\t\t\t\tfloor_y - 110.0', "A9 C16 door height", errors)
-    require(region_script, '_add_platform(Rect2(680, 390, 120, 18))', "A9 C23 upper service ledge", errors)
-    require(region_script, '850.0, "E  打开王城排水门"', "A9 C23 upper door", errors)
+    require(region_script, '_add_platform(Rect2(620, 390, 180, 18))', "A9 C23 supported upper service ledge", errors)
+    require(region_script, '740.0, "E  打开王城排水门"', "A9 C23 supported upper door", errors)
+    require(region_script, 'if region_id == "A9" and side == "royal_drain":\n\t\t# C23\'s door is at x=740; land at x=650 on the same supported ledge, clear of C16 and C18.\n\t\t# C23 门移至 x=740；落点 x=650 与门保持净距，并避开 C16 与 C18。\n\t\treturn 650.0', "A9 C23 safe spawn", errors)
+    require(region_script, '_add_platform(Rect2(1530, 420, 70, 18))', "A4 C23 return spawn support", errors)
+    require(region_script, 'return 1570.0', "A4 C23 safe return spawn", errors)
     require(region_script, 'true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  沿王城排水道返回",\n\t\t\t\tfloor_y - 150.0', "A9 C23 door height", errors)
     require(region_script, 'Vector2(850, floor_y - 18.0),\n\t\t\t\t"anomaly_old_stone_layer"', "A4 clue/door interaction spacing", errors)
 
