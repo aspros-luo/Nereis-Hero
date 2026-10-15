@@ -1363,19 +1363,18 @@ def main() -> int:
                         f"{edge_id} {spawn_key} Y mapping mismatch for {region_id}/{side}: "
                         f"topology={spawn_y_offset}, runtime={runtime_y_offset}."
                     )
-            if spawn_y_offset < -1.0:
-                region_platforms = platforms_by_region.get(region_id, [])
-                supported = any(
-                    abs(platform_y - (540.0 + spawn_y_offset)) <= 1.5
-                    and spawn_x >= platform_x - 0.1
-                    and spawn_x <= platform_x + platform_width + 0.1
-                    for platform_x, platform_y, platform_width, _platform_height in region_platforms
+            region_platforms = platforms_by_region.get(region_id, [])
+            supported = any(
+                abs(platform_y - (540.0 + spawn_y_offset)) <= 1.5
+                and spawn_x >= platform_x - 0.1
+                and spawn_x <= platform_x + platform_width + 0.1
+                for platform_x, platform_y, platform_width, _platform_height in region_platforms
+            )
+            if not supported:
+                errors.append(
+                    f"{edge_id} {spawn_key} is not directly supported by a collision platform: "
+                    f"{region_id} x={spawn_x:g}, y={540.0 + spawn_y_offset:g}."
                 )
-                if not supported:
-                    errors.append(
-                        f"{edge_id} {spawn_key} is not directly supported by a collision platform: "
-                        f"{region_id} x={spawn_x:g}, y={540.0 + spawn_y_offset:g}."
-                    )
 
     # Death recovery must stay inside the current region and restore the Hero safely.
     # 死亡恢复必须留在当前区域，并安全恢复主角状态。
