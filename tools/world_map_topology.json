@@ -214,15 +214,16 @@
         "to_region_anchor": {
           "region": "A3",
           "x": 180,
-          "y_offset": 0,
-          "spawn_side": "west"
+          "y_offset": -130,
+          "spawn_side": "city_canopy_entry"
         },
         "return_spawn": {
           "region": "A2",
           "x": 2120,
-          "y_offset": -140
+          "y_offset": -140,
+          "spawn_side": "east"
         },
-        "intent": "The main A2-to-A3 connection is reached from the canopy high road; returning from A3 lands on the preceding canopy ledge rather than on the lower floor or beside H02."
+        "intent": "C03 is a two-way canopy-highroad connection. The A2 door aligns with the eastern canopy platform; entering A3 and returning to A2 must preserve the upper route rather than dropping to either ground floor."
       },
       "layer_contract": {
         "from_subregion": "A2-S04",
@@ -357,13 +358,16 @@
         },
         "to_region_anchor": {
           "region": "A8",
-          "x": 520
+          "x": 520,
+          "y_offset": -165,
+          "spawn_side": "royal_tomb_waterway"
         },
-        "intent": "Royal tomb return branches from the middle ledge, distinct from the low prison supply tunnel and the higher royal drain.",
+        "intent": "The royal tomb return branches from the middle ledge, distinct from the low prison supply tunnel and the higher royal drain. Both endpoints use supported middle-level landings and must not fall back to ground-level spawns.",
         "return_spawn": {
           "region": "A4",
           "x": 1260,
-          "y_offset": -85
+          "y_offset": -85,
+          "spawn_side": "royal_tomb_waterway"
         }
       },
       "layer_contract": {
