@@ -955,7 +955,7 @@ func record_natural_test_region(region_id: String, location_id: String = "") -> 
         return
     debug_natural_test_visited_regions.append(region_id)
     var location_label := location_id if not location_id.is_empty() else current_location
-    print("[NEREIS][MAP][NATURAL_TEST] Visited %s (%s) [%d/22]" % [
+    print("[NEREIS][MAP][NATURAL_TEST] Visited %s (%s) [%d/23]" % [
         region_id, location_label, debug_natural_test_visited_regions.size()
     ])
 
@@ -970,6 +970,7 @@ func _record_natural_test_scene(scene_path: String) -> void:
         "res://scenes/monastery_tower.tscn": "A6",
         "res://scenes/prison_depths.tscn": "A7",
         "res://scenes/royal_tomb.tscn": "A8",
+        "res://scenes/royal_tomb_boss.tscn": "OB01",
         "res://scenes/royal_outer_ring.tscn": "A9",
         "res://scenes/grand_cathedral.tscn": "A10",
         "res://scenes/deep_research_depths.tscn": "A11",
