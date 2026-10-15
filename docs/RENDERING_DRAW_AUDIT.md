@@ -50,3 +50,8 @@ The counts above sum to 65 scripts with `_draw()`.
 - HP/stamina/combo display, hit-confirm feedback, resonance marker and swing feedback remain visible.
 - The old procedural body can be removed only after the above has been confirmed locally; no source-only check should be reported as a runtime pass.
 - The audit count is source-based. A script may be used by multiple scenes, so it is not a count of unique runtime scene instances.
+
+## Follow-up hardening — bone rest metadata / 骨骼元数据加固
+
+- The reusable rig now assigns each generated `Bone2D` an explicit `rest` transform and disables automatic bone-length/angle calculation. This rig animates through ordinary `Node2D` transforms and does not consume bone-length metadata; disabling auto-calculation avoids warnings for terminal joints that intentionally have no child `Bone2D`.
+- This is a source-level hardening change only. Confirm the Godot 4.6.1 Output panel locally; no engine runtime has been run by this change.
