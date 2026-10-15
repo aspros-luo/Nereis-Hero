@@ -64,8 +64,8 @@ def main() -> int:
 
     # Hidden gates must share persistent path state, require their intended evidence,
     # and only generate A11 return doors when that exact gate was opened.
-    a11_split = region.split('\\n\\t\\t"A11":', 1)
-    a11_branch = a11_split[1].split('\\n\\t\\t"', 1)[0] if len(a11_split) > 1 else ""
+    a11_split = region.split('\n\t\t"A11":', 1)
+    a11_branch = a11_split[1].split('\n\t\t"', 1)[0] if len(a11_split) > 1 else ""
     for gate_id in ("C15", "C19"):
         if f'gate.secret_id = "{gate_id}"' not in region:
             errors.append(f"{gate_id}: runtime secret gate ID missing")
