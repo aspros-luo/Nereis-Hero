@@ -873,7 +873,7 @@ def main() -> int:
     require(a12_route_block, '"reached_A12_via_A10_then_opened_inner_city_side_gate"', "C18 main-route prerequisite", errors)
     require(region_script, '900.0, "E  返回王室内城"', "C18 A9-side door anchor", errors)
     require(region_script, '520.0, "E  打开内城侧门"', "C18 A12-side door anchor", errors)
-    require(region_script, 'if region_id == "A9" and side == "inner_city_side_gate":\n\t\t# C18\'s x=900 door and x=1100 rest point flank this midpoint spawn with 100px clearance each.\n\t\t# C18 的 x=900 门与 x=1100 休整点分列两侧；出生在中点，双方各留 100px 净距。\n\t\treturn 1000.0', "C18 A9 midpoint arrival", errors)
+    require(region_script, 'if region_id == "A9" and side == "inner_city_side_gate":\n\t\t# C18 lands outside the x=900 door trigger and just beyond the x=1100 rest point\'s 110px focus radius.\n\t\t# C18 出生点避开 x=900 门触发区，并位于 x=1100 休整点的 110px 交互半径之外。\n\t\treturn 980.0', "C18 A9 safe arrival", errors)
     if a9_route_block.find('"E  RETURN TO THE INNER CITY"') >= 0 and a9_route_block.find('"reached_A12_via_A10_then_opened_inner_city_side_gate"') < 0:
         fail(errors, "C18 A9-side shortcut must remain gated by opening it from A12 after the main route.")
 
@@ -1064,7 +1064,7 @@ def main() -> int:
     require(region_script, '740.0, "E  打开王城排水门"', "A9 C23 supported upper door", errors)
     require(region_script, 'if region_id == "A9" and side == "royal_drain":\n\t\t# C23\'s door is at x=740; land at x=650 on the same supported ledge, clear of C16 and C18.\n\t\t# C23 门移至 x=740；落点 x=650 与门保持净距，并避开 C16 与 C18。\n\t\treturn 650.0', "A9 C23 safe spawn", errors)
     require(region_script, '_add_platform(Rect2(1530, 420, 70, 18))', "A4 C23 return spawn support", errors)
-    require(region_script, 'return 1570.0', "A4 C23 safe return spawn", errors)
+    require(region_script, 'return 1540.0', "A4 C23 safe return spawn", errors)
     require(region_script, 'true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  沿王城排水道返回",\n\t\t\t\tfloor_y - 150.0', "A9 C23 door height", errors)
     require(region_script, 'Vector2(850, floor_y - 18.0),\n\t\t\t\t"anomaly_old_stone_layer"', "A4 clue/door interaction spacing", errors)
 
@@ -1122,17 +1122,17 @@ def main() -> int:
         ('if region_id == "A6" and side == "bell_drop":', "return 2100.0"),
         ('if region_id == "A9" and side == "royal_drain":', "return 650.0"),
         ('if region_id == "A9" and side == "old_lift":', "return 610.0"),
-        ('if region_id == "A9" and side == "inner_city_side_gate":', "return 1000.0"),
+        ('if region_id == "A9" and side == "inner_city_side_gate":', "return 980.0"),
         ('if region_id == "A12" and side == "inner_city_side_gate":', "return 650.0"),
         ('if region_id == "A3" and side == "third_street_gate":', "return map_width - 500.0"),
         ('if region_id == "A4" and side == "water_reflection_gate":', "return 1550.0"),
-        ('if region_id == "A4" and side == "east":', "return map_width - 360.0"),
+        ('if region_id == "A4" and side == "east":', "return map_width - 220.0"),
         ('if region_id == "A4" and side == "prison_tunnel":', "return 960.0"),
         ('if region_id == "A7" and side == "supply_tunnel":', "return 610.0"),
-        ('if region_id == "A4" and side == "royal_tomb_waterway":', "return 1260.0"),
-        ('if region_id == "A4" and side == "royal_drain":', "return 1570.0"),
+        ('if region_id == "A4" and side == "royal_tomb_waterway":', "return 1410.0"),
+        ('if region_id == "A4" and side == "royal_drain":', "return 1540.0"),
         ('if region_id == "A5" and side == "bell_tower":', "return 1900.0"),
-        ('if region_id == "A6" and side == "silent_window":', "return 1400.0"),
+        ('if region_id == "A6" and side == "silent_window":', "return 1420.0"),
         ('if region_id == "A8" and side == "royal_name_gate":', "return 1350.0"),
         ('if region_id == "A8" and side == "royal_tomb_waterway":', "return 610.0"),
         ('if region_id == "A8" and side == "royal_tomb_side":', "return 1020.0"),
