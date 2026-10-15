@@ -64,7 +64,9 @@ def main() -> int:
 
     # Hidden gates must share persistent path state, require their intended evidence,
     # and only generate A11 return doors when that exact gate was opened.
-    a11_split = region.split('\n\t\t"A11":', 1)
+    exit_start = region.find("func _spawn_region_exits()")
+    exit_source = region[exit_start:] if exit_start >= 0 else ""
+    a11_split = exit_source.split('\n\t\t"A11":', 1)
     a11_branch = a11_split[1].split('\n\t\t"', 1)[0] if len(a11_split) > 1 else ""
     for gate_id in ("C15", "C19"):
         if f'gate.secret_id = "{gate_id}"' not in region:
@@ -121,9 +123,9 @@ def main() -> int:
 
     # Endgame entry must be one-way in topology and A13 must not spawn an ordinary
     # return door to A11/A12. The exit from A13 is only the ending-evaluator route.
-    if 'region_id == "A13"' not in region:
-        errors.append("A13 runtime branch missing")
-    a13 = region.split('\n\t\t"A13":', 1)
+    if exit_start < 0:
+        errors.append("A13 runtime exit function missing")
+    a13 = exit_source.split('\n\t\t"A13":', 1)
     if len(a13) < 2:
         errors.append("A13 exit branch could not be located")
     else:
