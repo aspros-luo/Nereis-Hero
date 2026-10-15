@@ -294,9 +294,11 @@
         },
         "to_region_anchor": {
           "region": "A4",
-          "spawn_side": "west"
+          "x": 180,
+          "y_offset": -115,
+          "spawn_side": "sewer_upper"
         },
-        "intent": "Underground hub entrance branches off the upper pipe-walk rather than the continuous street floor.",
+        "intent": "The raised A3 pipe-walk transitions to a supported upper inspection landing in A4; the paired reservoir hatch and arrival spawn stay above the continuous ground lane.",
         "return_spawn": {
           "region": "A3",
           "x": 1380,
