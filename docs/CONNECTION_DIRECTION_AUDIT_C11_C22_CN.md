@@ -91,7 +91,7 @@ This pass reviewed the current `development` source and added a focused static r
 - [x] C21 is only spawned when WorldState.physical_union_complete is true; C22 enters A13 from A12.
 - [x] A13's ordinary exit is the shared ending-evaluator candidate; no A11/A12 return door is authored in the A13 branch.
 - [x] Removed redundant ending-candidate calculation from A12; A13 remains the single ending-evaluation layer.
-- [x] The focused source checker was strengthened to assert the full C15/C19 conditions and C13/C21/C22 wiring.
+- [x] The focused source checker now compares C15/C19/C21/C22 topology unlock conditions with runtime gate markers, checks full C15/C19 requirements and per-gate returns, verifies C13's authored upper platforms, and scopes A13 checks to the actual exit-wiring function.
 
 ### Required Godot 4.6.1 runtime acceptance — still pending
 
