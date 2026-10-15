@@ -128,7 +128,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			elapsed = 0.0
 			playing = true
 			_update_label()
-		get_viewport().set_input_as_handled()
+	get_viewport().set_input_as_handled()
 
 
 func _select_row() -> void:
