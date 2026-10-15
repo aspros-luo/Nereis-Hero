@@ -6,6 +6,11 @@ const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
 
 var health := 240
+var max_health := 240
+var boss_display_name := "灰烬骑士"
+var phase := 1
+var persist_global_boss_defeat := true
+var visual_theme := "ashen"
 var attack_cooldown := 0.0
 var windup := 0.0
 var hit_flash := 0.0
@@ -56,6 +61,7 @@ func _physics_process(delta: float) -> void:
 
     if not phase_two and health <= 120:
         phase_two = true
+        phase = 2
         attack_cooldown = 0.2
         windup = 0.0
         _log("BOSS", "Ashen Knight entered Phase 2")
@@ -122,7 +128,8 @@ func receive_damage(amount: int, source: Node = null) -> void:
     if health <= 0:
         _spawn_death_burst()
         _log("BOSS", "Ashen Knight defeated")
-        WorldState.mark_boss_defeated()
+        if persist_global_boss_defeat:
+            WorldState.mark_boss_defeated()
         defeated.emit()
         queue_free()
 
@@ -147,8 +154,12 @@ func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
 
 func _draw() -> void:
-    var base := Color("#7b3944") if phase_two else Color("#2c2932")
-    var c := Color("#d35a62") if hit_flash > 0.0 else base
+    var base: Color
+    if visual_theme == "royal_tomb":
+        base = Color("#9a8060") if phase_two else Color("#343039")
+    else:
+        base = Color("#7b3944") if phase_two else Color("#2c2932")
+    var c := Color("#d9c8a2") if hit_flash > 0.0 and visual_theme == "royal_tomb" else (Color("#d35a62") if hit_flash > 0.0 else base)
     var pulse: float = sin(animation_time * 4.0) * 2.0
     draw_circle(Vector2(0, -61 + pulse), 22, Color("#141218"))
     draw_circle(Vector2(0, -61 + pulse), 19, c)
@@ -156,7 +167,7 @@ func _draw() -> void:
         Vector2(-26, -40 + pulse), Vector2(26, -40 + pulse),
         Vector2(32, 8), Vector2(-32, 8)
     ]), c)
-    draw_arc(Vector2(0, -55 + pulse), 30.0 if phase_two else 26.0, PI * 0.1, PI * 0.9, 20, Color("#9f806f"), 4.0)
+    draw_arc(Vector2(0, -55 + pulse), 30.0 if phase_two else 26.0, PI * 0.1, PI * 0.9, 20, Color("#b8a47f") if visual_theme == "royal_tomb" else Color("#9f806f"), 4.0)
     draw_line(Vector2(-18, -4 + pulse), Vector2(-62, 10), c, 12.0)
     draw_line(Vector2(18, -4 + pulse), Vector2(62, 10), c, 12.0)
     draw_line(Vector2(facing * 8.0, -18 + pulse), Vector2(facing * 92.0, -44 + pulse), Color("#c9baa0"), 10.0)
@@ -164,7 +175,8 @@ func _draw() -> void:
         var telegraph_color := Color("#c44e5a") if phase_two else Color("#9e5961")
         draw_arc(Vector2(0, -34), 68.0 if phase_two else 58.0, 0, TAU, 28, telegraph_color, 5.0)
         draw_line(Vector2(facing * 34.0, -34), Vector2(facing * 102.0, -34), telegraph_color, 4.0)
-    draw_string(ThemeDB.fallback_font, Vector2(-72, -94), NereisLocalization.translate_text("ASHEN KNIGHT %d") % max(0, health), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
+    var label := "%s %d/%d" % [boss_display_name, max(0, health), max_health]
+    draw_string(ThemeDB.fallback_font, Vector2(-86, -94), NereisLocalization.translate_text(label), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
 
 func _move_and_slide_scaled() -> void:
     # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
