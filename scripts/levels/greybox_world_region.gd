@@ -238,9 +238,9 @@ func _spawn_y_for_side(side: String) -> float:
 	# C04 must return to the actual old-pilgrim upper route on both sides.
 	# C04 双向回程都必须落在旧朝圣高路的实际上层平台。
 	if region_id == "A2" and side == "old_pilgrim_highroad":
-		return floor_y - 160.0
+		return floor_y - 140.0
 	if region_id == "A5" and side == "old_pilgrim_highroad":
-		return floor_y - 105.0
+		return floor_y - 85.0
 	if region_id == "A6" and side == "bell_drop":
 		return floor_y - 90.0
 	if region_id == "A9" and side == "old_lift":
@@ -312,8 +312,8 @@ func _spawn_x_for_side(side: String) -> float:
 	if region_id == "H06" and side == "royal_transport_entry":
 		return map_width - 360.0
 	if region_id == "A2" and side == "old_pilgrim_highroad":
-		# C04's return door is at x=1880; keep the arrival outside its interaction trigger.
-		# C04 回程门位于 x=1880；出生点必须避开其交互触发范围。
+		# C04 arrives exactly on the x=1740-1850 platform top and remains outside the return-door trigger.
+		# C04 精确出生在 x=1740–1850 平台顶面，并避开回程门触发区。
 		return 1750.0
 	if region_id == "A5" and side == "old_pilgrim_highroad":
 		# C04's battlefield door is at x=520; land nearby without overlapping its trigger.
@@ -344,25 +344,25 @@ func _spawn_x_for_side(side: String) -> float:
 		# A4 东侧井门靠近地图边界；返回时避开其 80px 交互范围，防止落地就重新聚焦。
 		return map_width - 360.0
 	if region_id == "A4" and side == "prison_tunnel":
-		# C12's low ledge is at x=1050; arrive below it within one short jump of the door.
-		# C12 低位栈台门位于 x=1050；出生在门下方，短跳即可抵达。
-		return 1090.0
+		# C12 arrives on the low ledge 90px away from its own return door.
+		# C12 出生在低位栈台上，距回程门 90px，避免落地立即重新触发。
+		return 960.0
 	if region_id == "A4" and side == "royal_tomb_waterway":
 		# C07's middle platform door is at x=1320; land just before the platform within safe interaction range.
 		# C07 中层平台门位于 x=1320；出生在平台前方，距离足以交互且能看见支路。
 		return 1260.0
 	if region_id == "A4" and side == "royal_drain":
-		# C23's raised pipe door is at x=1650; arrive directly below its ledge, clear of H04 at x=1780.
-		# C23 高位管线门位于 x=1650；出生在平台下方，并与 x=1780 的 H04 保持距离。
-		return 1620.0
+		# C23 lands on the lower support lip at x=1570, then steps right to the pipe door.
+		# C23 落在 x=1570 的承托边沿，再向右走到管线门。
+		return 1570.0
 	if region_id == "A9" and side == "old_lift":
 		# C16's upper door is at x=520; land on the same ledge without overlapping the door focus.
 		# C16 高位门位于 x=520；落在同一栈台并避开门的交互焦点。
 		return 610.0
 	if region_id == "A9" and side == "royal_drain":
-		# C23's upper door is at x=850; land on the approach ledge at x=770, outside the door focus.
-		# C23 高位门位于 x=850；落在 x=770 的接近栈道，避开门的交互焦点。
-		return 770.0
+		# C23's door is at x=740; land at x=650 on the same supported ledge, clear of C16 and C18.
+		# C23 门移至 x=740；落点 x=650 与门保持净距，并避开 C16 与 C18。
+		return 650.0
 	if region_id == "A9" and side == "inner_city_side_gate":
 		# C18 opens at x=900; land just beyond its trigger and clear of the rest point at x=1100.
 		# C18 门位于 x=900；落点避开门的触发区与 x=1100 的休整点。
@@ -758,6 +758,8 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(930, 465, 180, 18))
 			_add_platform(Rect2(1260, 455, 190, 18))
 			_add_platform(Rect2(1600, 420, 150, 18))
+			# C23 return arrival is supported just left of the pipe door, not suspended over a gap.
+			# C23 回程出生点由管线门左侧的实体栈台承托，避免悬空出生。
 			_add_platform(Rect2(1980, 470, 170, 18))
 			_add_platform(Rect2(470, 400, 115, 18))
 			_add_platform(Rect2(600, 355, 120, 18))
@@ -873,9 +875,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(390, 395, 115, 18))
 			_add_platform(Rect2(520, 355, 120, 18))
 			_add_platform(Rect2(665, 320, 120, 18))
-			# The royal drain branches from a continuous upper service ledge, separate from the street-level inner-city gate.
-			# 王城排水门从连续的上层检修栈道分出，与街面内城侧门分离。
-			_add_platform(Rect2(680, 390, 120, 18))
+			# The royal drain door and its arrival spawn must both sit on a real upper service ledge.
+			# 王城排水门与到达出生点必须同时落在实体上层检修栈台。
+			_add_platform(Rect2(620, 390, 180, 18))
 			_add_platform(Rect2(815, 340, 125, 18))
 			_add_platform(Rect2(960, 385, 120, 18))
 			_add_platform(Rect2(1110, 395, 120, 18))
@@ -1719,10 +1721,10 @@ func _spawn_region_exits() -> void:
 				true, "reached_A9_via_A8_then_opened_old_lift_from_A9", "E  乘旧升降梯返回",
 				floor_y - 110.0
 			)
-			# C23: the royal drain is a separate A9-to-A4 shortcut.
-			# C23：王城排水道是另一条 A9 至 A4 的独立捷径。
+			# C23: keep the high drain door on the supported service ledge and clear of C18 at x=900.
+			# C23：高位排水门必须落在承托栈台上，并与 x=900 的 C18 保持净距。
 			_spawn_exit_door(
-				850.0, "E  打开王城排水门", "sewer_reservoir",
+				740.0, "E  打开王城排水门", "sewer_reservoir",
 				"res://scenes/sewer_reservoir.tscn", "royal_drain",
 				true, "reached_A9_then_opened_royal_drain_from_outer_ring", "E  沿王城排水道返回",
 				floor_y - 150.0
