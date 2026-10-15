@@ -391,3 +391,10 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 - Generated `Bone2D` nodes now receive an explicit rest transform at creation and have automatic bone-length/angle calculation disabled. The presentation rig animates via node transforms and does not rely on editor bone-length metadata, so this avoids expected auto-calculation warnings on leaf joints.
 - Source read-back confirms the change is limited to `_make_bone()`; movement, animation timing, color palette, NPC interaction, and enemy combat logic are unchanged.
 - Godot 4.6.1 runtime validation remains a local acceptance gate; this source change is not reported as an engine test pass.
+
+
+### S1.2.3-A6 — Typed reusable visual adapters
+
+- `route_npc.gd` and `bandit_raider.gd` now type their visual reference as `HumanoidCharacterVisual` and call `set_facing()`, `set_motion_state()`, and `set_hurt_flash()` directly. Color configuration uses typed properties instead of string-based `set()` calls.
+- Source read-back confirms the adapter calls are typed and the shared rig keeps its explicit rest-pose/disabled auto-calculation settings.
+- This reduces dynamic-call risk but is not a substitute for opening the project in Godot 4.6.1 and running the two pilot scenes.
