@@ -2,7 +2,7 @@
   "schema_version": 1,
   "title": "Nereis Hero World Topology",
   "status": "design_baseline_not_runtime_verified",
-  "validation_note": "This data validates abstract region connectivity only. Godot graybox movement, collisions, doors, save/resume, death recovery, and runtime transitions require in-engine acceptance. Hierarchical macro-region/subregion/connection/elevator contracts are design data and are not evidence of runtime implementation.",
+  "validation_note": "This data validates abstract region connectivity only. Godot graybox movement, collisions, doors, save/resume, death recovery, and runtime transitions require in-engine acceptance. Hierarchical macro-region/subregion/connection/elevator contracts are design data and are not evidence of runtime implementation. Optional encounter OB01 is described in optional_encounters and is not counted as a C-edge because it is a side encounter rather than a new world-map region.",
   "regions": [
     {
       "id": "A0",
@@ -3775,6 +3775,41 @@
         "C19"
       ],
       "summary": "C13 moved to a supported upper maintenance-shaft transition in both directions; A11's cathedral return now requires C19 to be opened, not merely prior main-route access to A10."
+    }
+  ],
+  "optional_encounters": [
+    {
+      "id": "OB01",
+      "name": "无名之墓｜王墓守墓者",
+      "region": "A8",
+      "scene_path": "scenes/royal_tomb_boss.tscn",
+      "controller_path": "scripts/levels/royal_tomb_boss.gd",
+      "boss_script_path": "scripts/enemies/ashen_knight.gd",
+      "entry": {
+        "target_location": "royal_tomb_boss",
+        "target_spawn_side": "west",
+        "source_door_x": 1540,
+        "unlock_condition": "defeated_royal_tomb_guardian not in achievement_flags"
+      },
+      "combat_contract": {
+        "boss_name": "王墓守墓者",
+        "phases": 2,
+        "max_health": 240,
+        "phase_transition_health": 120,
+        "victory_flag": "defeated_royal_tomb_guardian",
+        "victory_persists_in_achievement_flags": true,
+        "uses_global_ashen_knight_defeat_flag": false,
+        "death_behavior": "return_hero_to_arena_checkpoint_and_respawn_boss"
+      },
+      "return_route": {
+        "target_region": "A8",
+        "target_scene": "scenes/royal_tomb.tscn",
+        "target_location": "royal_tomb",
+        "spawn_side": "boss_return",
+        "spawn_x": 1700
+      },
+      "main_route_blocked_by_optional_encounter": false,
+      "status": "static_contract_added_runtime_not_verified"
     }
   ]
 }
