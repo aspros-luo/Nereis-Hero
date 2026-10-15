@@ -621,6 +621,33 @@
       "final_direction": "both",
       "unlock_condition": "",
       "opens_from": "",
+      "spatial_contract": {
+        "route_layer": "outer_ring_ground_gate",
+        "from_region_anchor": {
+          "region": "A8",
+          "x": 2528,
+          "y_offset": 0
+        },
+        "to_region_anchor": {
+          "region": "A9",
+          "x": 72,
+          "y_offset": 0,
+          "spawn_side": "west"
+        },
+        "return_spawn": {
+          "region": "A8",
+          "x": 2420,
+          "y_offset": 0,
+          "spawn_side": "east"
+        },
+        "from_region_spawn": {
+          "region": "A9",
+          "x": 180,
+          "y_offset": 0,
+          "spawn_side": "west"
+        },
+        "intent": "C14 is the ground-level bidirectional main gate between the royal tomb and outer ring. Source doors sit at A8 x=map_width-72 and A9 x=72; arrivals use the opposite-side default safe spawns, away from the door triggers."
+      },
       "layer_contract": {
         "from_subregion": "A8-S01",
         "to_subregion": "A9-S01",
