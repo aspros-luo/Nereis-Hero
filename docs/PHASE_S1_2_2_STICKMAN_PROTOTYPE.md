@@ -308,3 +308,21 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 - **Combat scene open but HUD/dummy missing:** check the Scene dock's runtime root is `StickmanCombatTest`, with `TrainingDummy` and `HUD/Panel/Instructions` beneath it; then inspect Godot Output for parse/resource errors.
 - **HUD/dummy visible but attacks do not register:** move Hero toward the dummy before attacking; F4's outline is only a debug drawing and does not itself prove physics hit detection.
 - **U-key feedback:** tap U while the combat test window has focus, then inspect Godot Output for the `[CombatTest]` line. During dodge's invulnerability window it should report `BLOCKED (invulnerable)`; outside that window it should normally report `APPLIED` unless already in hitstun.
+
+
+## Production presentation handoff — 2026-10-15 / 正式角色表现接入
+
+### Decision / 决策
+- `scripts/player/hero.gd` remains the single source of gameplay rules. The standalone `StickmanSkeletonController` owns a separate prototype movement/combat loop and must not be installed as the production Hero controller.
+- The production Hero now enables its existing visual-only `HeroSkeletonController` presentation by default. This bypasses the large legacy `hero.gd::_draw()` character illustration during normal play while keeping the gameplay state, collision, hitboxes, stamina, weapon switching, traversal, resonance, and save/progression logic on the existing controller.
+- The legacy drawing code is deliberately retained as a rollback path until local Godot acceptance confirms the skeletal character covers the production scenes and states. Do not delete it before the new presentation is validated.
+- `F8` remains a debug-only visual fallback toggle. The existing `scenes/characters/stickman_hero.tscn` remains an isolated animation/combat prototype and is not substituted wholesale for the production `CharacterBody2D` because that would duplicate movement and combat ownership.
+- This is an integration checkpoint, not a claim that the newer standalone stickman rig, texture binding, or dynamic-outline workflow has already been merged into the production rig. The next validation should confirm the current production skeletal presentation in the real game before removing fallback code or consolidating duplicate prototype files.
+
+### Local acceptance / 本地验收
+1. Open the project in Godot 4.6.1 and run the project (F5) through `scenes/boot.tscn`.
+2. Confirm the Hero is rendered by the skeletal presentation on initial spawn, without the old polygon-drawn armor body appearing underneath it.
+3. Test movement left/right, idle, jump/fall, all standard attacks and weapon techniques, dodge, quick dash, grapple, wall climb, hurt, and respawn. Verify the skeleton follows each state and the existing hitboxes/gameplay still behave as before.
+4. Check health/stamina/combo indicators, hit-confirm feedback, hidden-resistance marker, and invulnerability feedback.
+5. Press F8 in a debug build to switch to the procedural fallback and back. This is a rollback/diagnostic control, not intended as a player-facing feature.
+6. Inspect Godot Output for script/parser errors. Source changes were committed through GitHub; the connected session cannot launch Godot, so runtime acceptance remains pending.
