@@ -64,11 +64,15 @@ def main() -> int:
 
     # Hidden gates must share persistent path state, require their intended evidence,
     # and only generate A11 return doors when that exact gate was opened.
+    a11_split = region.split('\\n\\t\\t"A11":', 1)
+    a11_branch = a11_split[1].split('\\n\\t\\t"', 1)[0] if len(a11_split) > 1 else ""
     for gate_id in ("C15", "C19"):
         if f'gate.secret_id = "{gate_id}"' not in region:
             errors.append(f"{gate_id}: runtime secret gate ID missing")
-        if f'WorldState.is_hidden_path_opened("{gate_id}")' not in region:
-            errors.append(f"{gate_id}: A11 return must be gated by its own persistent open state")
+    if 'var can_return_to_tomb := WorldState.is_hidden_path_opened("C15")' not in a11_branch:
+        errors.append("C15: A11 tomb return must be gated by C15's own persistent open state")
+    if 'var can_return_to_cathedral := WorldState.is_hidden_path_opened("C19")' not in a11_branch:
+        errors.append("C19: A11 cathedral return must be gated by C19's own persistent open state")
     c15_contract = (
         'gate.required_resonance = 55',
         'gate.required_ancient_exposure = 2',
