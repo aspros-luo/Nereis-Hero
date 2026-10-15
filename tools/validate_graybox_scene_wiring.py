@@ -426,7 +426,7 @@ def main() -> int:
     require(region_script, "_add_platform(Rect2(420, 420, 120, 18))", "A5 battlefield parapet route", errors)
     require(region_script, "_add_platform(Rect2(2190, 450, 140, 18))", "A5 elevated monastery approach", errors)
     require(region_script, "2250.0, \"E  沿残墙高路进入修道院\"", "A5 raised main exit", errors)
-    require(region_script, '"res://scenes/monastery_tower.tscn", "west", true, "", "", floor_y - 90.0', "C09 elevated door height contract", errors)
+    require(region_script, '"res://scenes/monastery_tower.tscn", "battlefield_entry", true, "", "", floor_y - 90.0', "C09 elevated door height contract", errors)
     require(region_script, '2350.0, "E  沿外环屋顶阶梯登上大圣堂"', "C17 A9 rooftop exit anchor", errors)
     require(region_script, '"res://scenes/grand_cathedral.tscn", "cathedral_roof", true, "", "", floor_y - 180.0', "C17 elevated destination spawn side", errors)
     require(region_script, '_add_platform(Rect2(80, 360, 150, 18))', "A10 C17 west upper landing platform", errors)
@@ -756,6 +756,21 @@ def main() -> int:
     for source_region, contract, connection_label in main_route_contracts:
         require(route_blocks.get(source_region, ""), contract, connection_label, errors)
 
+    # C08/C09 high-road transitions must land on collision-backed ledges in both directions.
+    # C08/C09 高路转场的双向落点都必须由真实碰撞平台承托。
+    for contract, label in [
+        ('_add_platform(Rect2(2180, 410, 250, 18))', "C08 A3 upper return ledge"),
+        ('_add_platform(Rect2(100, 410, 300, 18))', "C08 A5 upper arrival ledge"),
+        ('_add_platform(Rect2(2190, 450, 140, 18))', "C09 A5 upper exit ledge"),
+        ('_add_platform(Rect2(2150, 485, 150, 18))', "C09 A5 lower return approach"),
+        ('_add_platform(Rect2(100, 450, 140, 18))', "C09 A6 west bridge arrival"),
+        ('if region_id == "A6" and side == "battlefield_entry":\\n\\t\\treturn floor_y - 90.0', "C09 A6 bridge spawn height"),
+        ('if region_id == "A5" and side == "monastery_return":\\n\\t\\treturn floor_y - 55.0', "C09 A5 return spawn height"),
+        ('if region_id == "A6" and side == "battlefield_entry":\\n\\t\\treturn 160.0', "C09 A6 bridge spawn X"),
+        ('if region_id == "A5" and side == "monastery_return":\\n\\t\\treturn 2165.0', "C09 A5 return spawn X"),
+    ]:
+        require(region_script, contract, label, errors)
+
     # C04 is a paired upper-route shortcut: both door heights, platform support, and arrival elevations must remain aligned.
     # C04 是双侧高路捷径：两侧门高、承托平台与到达高度必须保持一致。
     for contract in (
@@ -953,7 +968,7 @@ def main() -> int:
     require(region_script, '_add_platform(Rect2(80, 445, 220, 18))', "A4 C05 upper inspection landing", errors)
     require(region_script, '"E  打开上层检修舱口"', "A4 C05 raised hatch label", errors)
     require(region_script, '"E  返回城区", floor_y - 115.0', "A4 C05 hatch elevation", errors)
-    require(region_script, 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn floor_y - 115.0', "A4 C05 arrival height mapping", errors)
+    require(region_script, 'if region_id == "A4" and side == "sewer_upper":\n\t\t# The Hero origin is at the feet; align the spawn exactly with the landing y=445 collision top.\n\t\t# 主角坐标位于脚底；出生高度应与 y=445 的实体平台顶面精确对齐。\n\t\treturn floor_y - 95.0', "A4 C05 arrival height mapping", errors)
     spawn_y_start = region_script.find("func _spawn_y_for_side(side: String) -> float:")
     spawn_x_start = region_script.find("func _spawn_x_for_side(side: String) -> float:")
     spawn_y_block = region_script[spawn_y_start:spawn_x_start] if spawn_y_start >= 0 and spawn_x_start > spawn_y_start else ""
