@@ -235,3 +235,26 @@ Open `res://scenes/player/hero_sprite_animation_lab.tscn` and press F6. This is 
 
 Godot has not been run in this connected session; runtime acceptance remains local.
 本轮连接环境没有实际运行 Godot；运行验收仍需本地完成。
+
+
+### S1.2.4-B — Skeletal texture assembly lab / 骨骼纹理拼装实验
+
+Status: isolated preview committed; local Godot runtime validation pending. This is a rough atlas-region prototype, not a production art replacement.
+
+状态：独立预览已提交，等待本地 Godot 运行验收。这是粗略图集切片原型，不是正式美术替换。
+
+- Reuses the existing `HeroSkeletonController` and its Bone2D pose rig; it does not use the sprite animation sheet.
+- Adds `res://scenes/player/hero_skeleton_texture_lab.tscn` and `scripts/player/hero_skeleton_texture_lab.gd`.
+- The atlas remains local-only at `res://assets/art/hero_sprite_lab/muramasa_texture_atlas.png`. Create the directory and copy the user's 2048×2048 texture atlas there for private testing. Do not commit the third-party art asset until distribution rights are confirmed.
+- If the atlas is missing, the scene reports the expected path and restores the existing line-art rig. Production Hero scenes are untouched.
+- Initial region rectangles and scale are provisional. Expect to adjust crop coordinates, pivots, size and layer ordering after inspecting the local result. The current atlas includes many separated parts, and rough crops may not yet align cleanly.
+
+本轮复用现有 `HeroSkeletonController` 与 Bone2D 姿势骨架，不使用动作序列图。新增独立场景和脚本。图集只在本地放入指定路径；未确认发行授权前不提交第三方美术。缺少图集时会提示路径并恢复线稿。当前切片坐标、缩放、轴心与图层均为初始估值，需要本地观察后逐步校准。
+
+Local acceptance:
+1. Copy the 2048×2048 atlas to `res://assets/art/hero_sprite_lab/muramasa_texture_atlas.png`.
+2. Open `res://scenes/player/hero_skeleton_texture_lab.tscn` and press F6.
+3. Confirm the scene loads, the texture pieces follow the existing head/body/arm/leg/weapon bones, and the pose-gallery controls still work.
+4. If crops look incorrect or the parser reports an error, send the exact Godot Output text and a screenshot. Do not switch the production Hero to this lab yet.
+
+本地验收：将图集放入指定路径，打开新场景按 F6，检查纹理是否跟随头部/躯干/四肢/武器骨骼运动，以及原有姿势控制是否有效。切片可能需要继续校准；出现报错时请提供完整 Output 与截图。当前不要将实验场景切换为正式 Hero。
