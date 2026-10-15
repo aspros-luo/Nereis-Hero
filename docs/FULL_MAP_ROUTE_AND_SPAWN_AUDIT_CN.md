@@ -133,3 +133,8 @@
 后续任务记录见 [P1–P4 全任务推进与整图验收记录](P1_P2_P3_P4_FULL_TASK_EXECUTION_AUDIT_CN.md)。本轮新增独立场景 `scenes/royal_tomb_boss.tscn` 与控制器 `scripts/levels/royal_tomb_boss.gd`，将王墓守墓者作为可选遭遇注册到 `tools/world_map_topology.json` 的 `optional_encounters`，不新增 C 跨区边，也不阻断 A8→A9 主线。自然路线访问跟踪现将该场景记为 OB01，覆盖总数从 22 调整为 23；测试菜单另有 OB01 调试入口，但不能代替连续自然流程验收。
 
 对新增 Boss 接线完成了 16 项独立源码交叉断言，结果 16/16；这不是 Python 验证器执行结果，也不是 Godot 运行时结果。Godot 4.6.1 连续整图测试仍待实际运行。
+
+
+## 8. 整图访问覆盖摘要
+
+验收模式现在会把 14 个主线区域、8 个正式隐藏区与可选遭遇 OB01 作为 23 个独立访问标识。在测试菜单退出时，`WorldState.finish_natural_test_session()` 会输出已访问序列和缺失标识；23/23 时为 `PASS`，否则为 `INCOMPLETE` 并列出缺失项。此结果只衡量场景访问覆盖，不替代 C 边往返、隐藏条件、碰撞/出生点、存档继续或 Godot 实机通关验收。
