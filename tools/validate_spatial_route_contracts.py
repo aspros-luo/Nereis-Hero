@@ -132,6 +132,17 @@ def main() -> int:
         "C08: reverse arrival in A5 must use the matching upper landing at x=330 / y_offset=-130.",
     )
 
+    require(
+        errors,
+        has_side_return(x_body, "A5", "city_highroad", "330.0"),
+        "C08: _spawn_x_for_side must map A5/city_highroad to x=330.",
+    )
+    require(
+        errors,
+        has_side_return(y_body, "A5", "city_highroad", "floor_y - 130.0"),
+        "C08: _spawn_y_for_side must place A5/city_highroad on the raised landing.",
+    )
+
     # C24 is authored across two different controllers, so validate both sides explicitly.
     c24 = edges.get("C24", {}).get("spatial_contract", {})
     to_spawn = c24.get("to_region_spawn", {})
