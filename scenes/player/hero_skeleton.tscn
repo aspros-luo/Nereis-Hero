@@ -8,38 +8,50 @@ script = ExtResource("1")
 [node name="Skeleton2D" type="Skeleton2D" parent="."]
 
 [node name="RootBone" type="Bone2D" parent="Skeleton2D"]
+rest = Transform2D(1, 0, 0, 1, 0, 0)
 
 [node name="BodyBone" type="Bone2D" parent="Skeleton2D/RootBone"]
+rest = Transform2D(1, 0, 0, 1, 0, -20)
 position = Vector2(0, -20)
 
 [node name="HeadBone" type="Bone2D" parent="Skeleton2D/RootBone/BodyBone"]
+rest = Transform2D(1, 0, 0, 1, 0, -20)
 position = Vector2(0, -20)
 
 [node name="ArmLeftBone" type="Bone2D" parent="Skeleton2D/RootBone/BodyBone"]
+rest = Transform2D(1, 0, 0, 1, -12, 0)
 position = Vector2(-12, 0)
 
 [node name="ArmRightBone" type="Bone2D" parent="Skeleton2D/RootBone/BodyBone"]
+rest = Transform2D(1, 0, 0, 1, 12, 0)
 position = Vector2(12, 0)
 
 [node name="HandRightBone" type="Bone2D" parent="Skeleton2D/RootBone/BodyBone/ArmRightBone"]
+rest = Transform2D(1, 0, 0, 1, 8, 16)
 position = Vector2(8, 16)
 
 [node name="WeaponPoint" type="Marker2D" parent="Skeleton2D/RootBone/BodyBone/ArmRightBone/HandRightBone"]
 
 [node name="LegLeftBone" type="Bone2D" parent="Skeleton2D/RootBone"]
+rest = Transform2D(1, 0, 0, 1, -8, 24)
 position = Vector2(-8, 24)
 
 [node name="LegRightBone" type="Bone2D" parent="Skeleton2D/RootBone"]
+rest = Transform2D(1, 0, 0, 1, 8, 24)
 position = Vector2(8, 24)
 
 [node name="KneeLeftBone" type="Bone2D" parent="Skeleton2D/RootBone/LegLeftBone"]
+rest = Transform2D(1, 0, 0, 1, 0, 12)
 position = Vector2(0, 12)
 
 [node name="FootLeftBone" type="Bone2D" parent="Skeleton2D/RootBone/LegLeftBone/KneeLeftBone"]
+rest = Transform2D(1, 0, 0, 1, 1, 12)
 position = Vector2(1, 12)
 
 [node name="KneeRightBone" type="Bone2D" parent="Skeleton2D/RootBone/LegRightBone"]
+rest = Transform2D(1, 0, 0, 1, 0, 12)
 position = Vector2(0, 12)
 
 [node name="FootRightBone" type="Bone2D" parent="Skeleton2D/RootBone/LegRightBone/KneeRightBone"]
+rest = Transform2D(1, 0, 0, 1, -1, 12)
 position = Vector2(-1, 12)
