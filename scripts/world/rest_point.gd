@@ -25,7 +25,7 @@ func _process(delta: float) -> void:
 func _hero_can_rest(hero: Node2D) -> bool:
     # A rest interaction must not record an airborne checkpoint or one from a nearby upper ledge.
     # 休整必须发生在地面承托处，不能把空中坐标或附近高层平台记录成死亡出生点。
-    if hero == null or not hero is CharacterBody2D:
+    if hero == null or not (hero is CharacterBody2D):
         return false
     var body := hero as CharacterBody2D
     return (
