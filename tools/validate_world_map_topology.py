@@ -453,7 +453,7 @@ def validate(data: dict[str, Any]) -> list[str]:
     for connection_id, expected_spawn in {
         "C05": {"region": "A3", "x": 1380, "y_offset": -115},
         "C12": {"region": "A4", "x": 960, "y_offset": -75},
-        "C23": {"region": "A4", "x": 1570, "y_offset": -120},
+        "C23": {"region": "A4", "x": 1540, "y_offset": -120},
     }.items():
         edge = next((item for item in connections if item.get("id") == connection_id), None)
         spatial = edge.get("spatial_contract", {}) if edge else {}
@@ -468,7 +468,7 @@ def validate(data: dict[str, Any]) -> list[str]:
     c12_spatial = next((edge for edge in connections if edge.get("id") == "C12"), {}).get("spatial_contract", {})
     if c12_spatial.get("from_region_spawn") != {"region": "A7", "x": 610, "y_offset": 0, "spawn_side": "supply_tunnel"}:
         fail(errors, "C12 return to A7 must preserve its authored prison-side landing.")
-    if c23_spatial.get("return_spawn") != {"region": "A4", "x": 1570, "y_offset": -120}:
+    if c23_spatial.get("return_spawn") != {"region": "A4", "x": 1540, "y_offset": -120}:
         fail(errors, "C23 return spawn must land on the supported lip, clear of the A4 door trigger.")
 
     # C24 is the alternate A1-to-A3 route added after the village defense.
