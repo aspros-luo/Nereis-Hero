@@ -57,3 +57,10 @@ This pass adds `tools/validate_spatial_route_contracts.py`, a repeatable static 
 It covers C03, C05, C07, C10, C12, C16, C17, C23, and both ends of C24. The check protects the intended x/y landing points, the elevated A9-to-A10 approach, and the post-defense-only village drainage shortcut.
 
 This is not a Godot runtime test. Local acceptance must still confirm jump reachability, collision, interaction focus, scene transitions, death recovery, and save/resume behavior.
+
+
+### Debug 出口标识与交互锚点对齐（2026-10-15）
+
+出口/隐藏门的调试标识原本把箭头尖端放在交互锚点上方约 118px，视觉上容易被误读成“门就在箭头尖端”。现在改为箭头向下指向门节点的真实锚点，并在锚点绘制小圆点；文字仍显示在上方。普通出口标记仍直接读取门节点位置，避免另设一份会漂移的坐标。该标识仅用于灰盒调试，正式美术与地图导航完善后应整体移除或替换，不作为正式 UI 设计。
+
+同时修正静态路线检查对 C03 高位门的支撑容差：门节点锚点位于 y=380，树冠平台顶面位于 y=410，门的交互形状向下偏移，因此这 30px 的高度差是当前门体布局的预期值，不应误报为未承托。验证器源码已调整，但本次环境没有执行 Godot 场景运行；请将静态脚本检查与引擎实测分开记录。
