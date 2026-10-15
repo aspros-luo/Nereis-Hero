@@ -996,7 +996,9 @@ def main() -> int:
         '520.0, "E  打开王墓水道", "sewer_reservoir"',
         'true, "reached_A8_via_A7_then_opened_royal_tomb_gate", "E  沿王室水道返回",\n\t\t\t\tfloor_y - 165.0',
         'if region_id == "A8" and side == "royal_tomb_waterway":\n\t\treturn floor_y - 165.0',
-        'if region_id == "A8" and side == "royal_tomb_waterway":\n\t\treturn 610.0',
+        'if region_id == "A8" and side == "royal_tomb_waterway":',
+        "C07 returns beside its A8 door",
+        "return 610.0",
     ]:
         require(region_script, contract, "C03/C07 vertical route contract", errors)
     require(region_script, '_spawn_hero(_spawn_x_for_side(spawn_side), _spawn_y_for_side(spawn_side))', "Spawn uses both axes", errors)
