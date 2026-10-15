@@ -398,3 +398,10 @@ Priority note: keep these items in the backlog until basic locomotion, standard 
 - `route_npc.gd` and `bandit_raider.gd` now type their visual reference as `HumanoidCharacterVisual` and call `set_facing()`, `set_motion_state()`, and `set_hurt_flash()` directly. Color configuration uses typed properties instead of string-based `set()` calls.
 - Source read-back confirms the adapter calls are typed and the shared rig keeps its explicit rest-pose/disabled auto-calculation settings.
 - This reduces dynamic-call risk but is not a substitute for opening the project in Godot 4.6.1 and running the two pilot scenes.
+
+
+### Runtime report follow-up — singular transform warning on Hero spawn
+
+- User reported repeated `Condition "det == 0" is true` / `Transform2D.affine_invert()` warnings with stack frames in `Hero._set_skeleton_visual_enabled()` during village Hero spawn; gameplay itself appeared normal.
+- The Hero presentation root is now explicitly assigned unit scale and attached through `call_deferred("add_child", skeleton_visual)` so Skeleton2D initializes after the current scene-ready chain rather than during dynamic Hero spawning.
+- This is a targeted mitigation based on the reported stack trace. It has been committed, but must be confirmed by relaunching the village scene in Godot 4.6.1; do not consider the warning fixed until Output stays clean.
