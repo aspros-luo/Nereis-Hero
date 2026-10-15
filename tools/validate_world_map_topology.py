@@ -342,12 +342,27 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C05 must arrive on A4's supported upper inspection landing.")
     if c05_spatial.get("to_region_spawn") != {"region": "A4", "x": 180, "y_offset": -95, "spawn_side": "sewer_upper"}:
         fail(errors, "C05 Hero arrival must align with the A4 landing collision top, separately from the raised hatch anchor.")
+    c13 = next((edge for edge in connections if edge.get("id") == "C13"), None)
+    c13_spatial = c13.get("spatial_contract", {}) if c13 else {}
+    if c13_spatial.get("route_layer") != "prison_maintenance_shaft_upper_entry":
+        fail(errors, "C13 must remain on the prison maintenance-shaft upper route.")
+    if c13_spatial.get("from_region_anchor") != {"region": "A7", "x": 2328, "y_offset": -120, "spawn_side": "maintenance_shaft_return"}:
+        fail(errors, "C13 A7 door anchor must remain on the elevated maintenance-shaft platform.")
+    if c13_spatial.get("to_region_anchor") != {"region": "A8", "x": 72, "y_offset": -120, "spawn_side": "maintenance_shaft_entry"}:
+        fail(errors, "C13 A8 reverse door anchor must remain on the elevated tomb entry platform.")
+    if c13_spatial.get("to_region_spawn") != {"region": "A8", "x": 190, "y_offset": -120, "spawn_side": "maintenance_shaft_entry"}:
+        fail(errors, "C13 A8 arrival must be supported and clear of the return-door trigger.")
+    if c13_spatial.get("return_spawn") != {"region": "A7", "x": 2240, "y_offset": -120, "spawn_side": "maintenance_shaft_return"}:
+        fail(errors, "C13 reverse arrival must return to the upper prison ledge.")
     c21 = next((edge for edge in connections if edge.get("id") == "C21"), None)
     c22 = next((edge for edge in connections if edge.get("id") == "C22"), None)
     if not c21 or c21.get("to") != "A13" or c21.get("unlock_condition") != "physical_union_complete":
         fail(errors, "C21 must be a physical-union-gated entrance into A13.")
     if not c22 or c22.get("to") != "A13" or c22.get("initial_access") != "from_to" or c22.get("unlock_condition") != "reached_A12_via_A10":
         fail(errors, "C22 must route the main A12 path into A13 after reaching A12 via A10.")
+    c19 = next((edge for edge in connections if edge.get("id") == "C19"), None)
+    if not c19 or c19.get("from") != "A10" or c19.get("to") != "A11" or c19.get("final_direction") != "both":
+        fail(errors, "C19 must remain a bidirectional hidden connection between A10 and A11.")
     h08 = next((region for region in hidden if region.get("id") == "H08"), None)
     h08_exit = h08.get("secondary_exit", {}) if h08 else {}
     if h08_exit.get("to") != "A13" or h08_exit.get("unlock_condition") != "physical_union_complete_then_enter_A13_terminal_layer":
