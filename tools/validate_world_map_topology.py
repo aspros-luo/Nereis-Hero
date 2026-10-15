@@ -354,10 +354,13 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C13 A8 arrival must be supported and clear of the return-door trigger.")
     if c13_spatial.get("return_spawn") != {"region": "A7", "x": 2440, "y_offset": -120, "spawn_side": "maintenance_shaft_return"}:
         fail(errors, "C13 reverse arrival must return to the upper prison ledge.")
+    c02 = next((edge for edge in connections if edge.get("id") == "C02"), None)
+    if not c02 or c02.get("from") != "A1" or c02.get("to") != "A2" or c02.get("unlock_condition") != "village_defense_survived" or c02.get("opens_from") != "A1":
+        fail(errors, "C02 must record the village-defense progression gate before the A1 north gate enters A2.")
     c21 = next((edge for edge in connections if edge.get("id") == "C21"), None)
     c22 = next((edge for edge in connections if edge.get("id") == "C22"), None)
-    if not c21 or c21.get("to") != "A13" or c21.get("unlock_condition") != "physical_union_complete":
-        fail(errors, "C21 must be a physical-union-gated entrance into A13.")
+    if not c21 or c21.get("to") != "A13" or c21.get("unlock_condition") != "ending_candidate_is_not_human_grave_based_on_resonance_truth_anchors_and_exploration":
+        fail(errors, "C21 must follow the resonance/truth-anchor/exploration ending evaluator, not a relationship flag.")
     if not c22 or c22.get("to") != "A13" or c22.get("initial_access") != "from_to" or c22.get("unlock_condition") != "reached_A12_via_A10":
         fail(errors, "C22 must route the main A12 path into A13 after reaching A12 via A10.")
     c19 = next((edge for edge in connections if edge.get("id") == "C19"), None)
@@ -365,8 +368,8 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C19 must remain a bidirectional hidden connection between A10 and A11.")
     h08 = next((region for region in hidden if region.get("id") == "H08"), None)
     h08_exit = h08.get("secondary_exit", {}) if h08 else {}
-    if h08_exit.get("to") != "A13" or h08_exit.get("unlock_condition") != "physical_union_complete_then_enter_A13_terminal_layer":
-        fail(errors, "H08 must converge on A13 instead of bypassing the terminal layer.")
+    if h08_exit.get("to") != "A13" or h08_exit.get("unlock_condition") != "ending_candidate_is_not_human_grave_based_on_resonance_truth_anchors_and_exploration":
+        fail(errors, "H08 must converge on A13 only when the shared ending evaluator selects a non-human-grave candidate.")
     c04 = next((edge for edge in connections if edge.get("id") == "C04"), None)
     c04_spatial = c04.get("spatial_contract", {}) if c04 else {}
     if c04_spatial.get("route_layer") != "old_pilgrim_canopy_highroad":
