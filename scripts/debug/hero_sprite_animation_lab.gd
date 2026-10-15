@@ -80,56 +80,35 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not (event is InputEventKey and event.pressed and not event.echo):
 		return
-	match event.keycode:
-		KEY_1:
-			animation_row = 0
-			_select_row()
-		KEY_2:
-			animation_row = 1
-			_select_row()
-		KEY_3:
-			animation_row = 2
-			_select_row()
-		KEY_4:
-			animation_row = 3
-			_select_row()
-		KEY_5:
-			animation_row = 4
-			_select_row()
-		KEY_6:
-			animation_row = 5
-			_select_row()
-		KEY_7:
-			animation_row = 6
-			_select_row()
-		KEY_8:
-			animation_row = 7
-			_select_row()
-		KEY_SPACE:
-			playing = not playing
-		KEY_LEFT:
-			frame_index = posmod(frame_index - 1, _frame_count_for_row(animation_row))
-			playing = false
-			_update_frame()
-		KEY_RIGHT:
-			frame_index = (frame_index + 1) % _frame_count_for_row(animation_row)
-			playing = false
-			_update_frame()
-		KEY_UP:
-			animation_row = posmod(animation_row - 1, ROW_COUNT)
-			frame_index = 0
-			_update_frame()
-		KEY_DOWN:
-			animation_row = (animation_row + 1) % ROW_COUNT
-			frame_index = 0
-			_update_frame()
-		KEY_R:
-			frame_index = 0
-			elapsed = 0.0
-			playing = true
-			_update_label()
-	get_viewport().set_input_as_handled()
 
+	var key := event.keycode
+	if key >= KEY_1 and key <= KEY_8:
+		animation_row = key - KEY_1
+		_select_row()
+	elif key == KEY_SPACE:
+		playing = not playing
+		_update_label()
+	elif key == KEY_LEFT:
+		frame_index = posmod(frame_index - 1, _frame_count_for_row(animation_row))
+		playing = false
+		_update_frame()
+	elif key == KEY_RIGHT:
+		frame_index = (frame_index + 1) % _frame_count_for_row(animation_row)
+		playing = false
+		_update_frame()
+	elif key == KEY_UP:
+		animation_row = posmod(animation_row - 1, ROW_COUNT)
+		_select_row()
+	elif key == KEY_DOWN:
+		animation_row = (animation_row + 1) % ROW_COUNT
+		_select_row()
+	elif key == KEY_R:
+		frame_index = 0
+		elapsed = 0.0
+		playing = true
+		_update_frame()
+
+	get_viewport().set_input_as_handled()
 
 func _select_row() -> void:
 	frame_index = 0
