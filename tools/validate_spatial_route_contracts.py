@@ -263,6 +263,7 @@ def main() -> int:
     # (connection, region, x, y_offset); y is derived from the shared floor_y=540.
     elevated_doors = [
         ("C03", "A2", 2240.0, -160.0),
+        ("C22", "A12", 2130.0, -65.0),
         ("C13", "A7", 2528.0, -140.0),
         ("C13", "A8", 72.0, -140.0),
         ("C08", "A3", 2240.0, -130.0),
@@ -315,6 +316,30 @@ def main() -> int:
         region_source.count('NereisEndingEvaluator.get_candidate() != "凡人之墓"') >= 2
         and "physical_union_complete" not in region_source,
         "C21/H08: terminal routes must use the ending evaluator, not physical_union_complete.",
+    )
+
+    # C22 must leave from the upper throne platform and stay distinct from H07 below.
+    # C22 必须从王座厅上层平台离开，并与下方的 H07 镜街入口保持净距。
+    c22 = edges.get("C22", {}).get("spatial_contract", {})
+    c22_from = c22.get("from_region_anchor", {})
+    c22_to = c22.get("to_region_anchor", {})
+    require(
+        errors,
+        c22_from.get("region") == "A12" and c22_from.get("x") == 2130
+        and c22_from.get("y_offset") == -65,
+        "C22: A12 exit must use the supported upper approach at x=2130 / y_offset=-65.",
+    )
+    require(
+        errors,
+        c22_to.get("region") == "A13" and c22_to.get("x") == 180
+        and c22_to.get("spawn_side") == "west",
+        "C22: A13 arrival must remain on the west-side terminal-layer entry.",
+    )
+    c22_exit = exit_blocks.get("A12", "")
+    require(
+        errors,
+        "2130.0" in c22_exit and "floor_y - 65.0" in c22_exit,
+        "C22: A12 exit code must match the upper-throne spatial contract.",
     )
 
     # C17 has no explicit return_spawn field, but its high approach and target spawn side are important.
