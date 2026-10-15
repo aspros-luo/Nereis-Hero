@@ -312,9 +312,9 @@ func _spawn_x_for_side(side: String) -> float:
 		# C13 落在王墓西侧的实体高台上，并与返回门触发区保持净距。
 		return 190.0
 	if region_id == "A7" and side == "maintenance_shaft_return":
-		# C13 returns to the upper prison ledge, not the continuous ground lane.
-		# C13 回到监牢上层平台，而不是连续地面路线。
-		return map_width - 160.0
+		# Keep the return landing on the upper prison ledge and at least 160px from the east door center.
+		# 回程出生在监牢上层平台，并与东侧门中心保持至少 160px 距离，避免切图后立即获得门焦点。
+		return map_width - 260.0
 	if region_id == "A5" and side == "monastery_return":
 		# C09 returns to the lower approach ledge, not the floor beneath the upper parapet door.
 		# C09 回到较低的接近栈台，而不是高位门下方的地面。
@@ -2496,6 +2496,9 @@ func _on_exit_interacted(target_location: String, target_scene: String, spawn_si
 			WorldState.discover_hidden_region("H06")
 			WorldState.mark_hidden_region_entered("H06")
 
+	# Clear old-scene focus before transition so no interactable retains stale availability during the fade.
+	# 切图前清理旧场景交互焦点，避免淡出期间残留可交互状态。
+	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
 	WorldState.pending_region_spawn_side = spawn_side
 	WorldState.set_location(target_location)
 	print("[NEREIS][MAP][EXIT] from=%s to=%s location=%s spawn_side=%s" % [region_id, target_scene, target_location, spawn_side])
@@ -2505,12 +2508,15 @@ func _on_hero_defeated() -> void:
 	if respawning:
 		return
 	respawning = true
+	WorldState.input_locked = true
+	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
 	await get_tree().create_timer(0.75).timeout
 	if is_instance_valid(hero):
 		hero.velocity = Vector2.ZERO
 		hero.global_position = WorldState.checkpoint_position
 		if hero.has_method("restore_full"):
 			hero.call("restore_full")
+	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
 	WorldState.input_locked = false
 	respawning = false
 
