@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/customizable_character.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/ui/character_customization_ui.tscn" id="2"]
+
+[node name="CharacterCustomizationPreview" type="Node2D"]
+
+[node name="FloorLine" type="Line2D" parent="."]
+z_index = -5
+points = PackedVector2Array(-180, 45, 180, 45)
+width = 2.0
+default_color = Color(0.38, 0.34, 0.4, 1)
+
+[node name="CustomizableCharacter" parent="." instance=ExtResource("1")]
+position = Vector2(0, 10)
+
+[node name="CustomizationUI" parent="." instance=ExtResource("2")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -5)
+zoom = Vector2(2, 2)
+position_smoothing_enabled = false
