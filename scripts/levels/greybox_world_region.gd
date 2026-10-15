@@ -1918,13 +1918,15 @@ func _spawn_region_exits() -> void:
 				"res://scenes/grand_cathedral.tscn", "east", can_return_to_cathedral
 			)
 			_spawn_h08_gate(map_width - 300.0)
-			# C21 is an optional deep-dream entrance, available only after the physical-union story fact.
-			# C21 是可选的深层梦境入口，只有身体交融这一剧情事实成立后才出现。
-			if WorldState.physical_union_complete:
+			# C21 follows the ending evaluator: resonance, truth anchors, and exploration—not intimacy—open the optional ending route.
+			# C21 遵循结局评估器：由鸣响、真相锚点与探索决定是否开放，不以亲密关系作为门槛。
+			if NereisEndingEvaluator.get_candidate() != "凡人之墓":
 				_spawn_exit_door(
 					2050.0, "E  追随深层梦境", "terminal_anomaly",
 					"res://scenes/terminal_anomaly.tscn", "west"
 				)
+			else:
+				_register_debug_locked_route_hint(2050.0, "terminal_anomaly", "需满足结局路线条件：鸣响、真相锚点与隐藏探索")
 
 		"H09":
 			_spawn_exit_door(
@@ -1936,13 +1938,15 @@ func _spawn_region_exits() -> void:
 				72.0, "E  返回深层研究区", "deep_research_depths",
 				"res://scenes/deep_research_depths.tscn", "east"
 			)
-			if WorldState.physical_union_complete:
-				# The hidden route converges on A13 instead of skipping the terminal map layer.
-				# 隐藏路线汇入 A13，不再跳过终局地图层直接进入结局演示。
+			# The hidden route converges on A13 when the evaluator has selected a non-human ending candidate.
+			# 结局评估器选出非“凡人之墓”路线后，隐藏通路才汇入 A13。
+			if NereisEndingEvaluator.get_candidate() != "凡人之墓":
 				_spawn_exit_door(
 					map_width - 72.0, "E  追随最后的梦境", "terminal_anomaly",
 					"res://scenes/terminal_anomaly.tscn", "west"
 				)
+			else:
+				_register_debug_locked_route_hint(map_width - 72.0, "terminal_anomaly", "需满足结局路线条件：鸣响、真相锚点与隐藏探索")
 
 		"A13":
 			var ending_gate := ENDGAME_GATE_SCRIPT.new()
