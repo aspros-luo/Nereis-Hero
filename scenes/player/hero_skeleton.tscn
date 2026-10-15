@@ -31,3 +31,15 @@ position = Vector2(-8, 24)
 
 [node name="LegRightBone" type="Bone2D" parent="Skeleton2D/RootBone"]
 position = Vector2(8, 24)
+
+[node name="KneeLeftBone" type="Bone2D" parent="Skeleton2D/RootBone/LegLeftBone"]
+position = Vector2(0, 12)
+
+[node name="FootLeftBone" type="Bone2D" parent="Skeleton2D/RootBone/LegLeftBone/KneeLeftBone"]
+position = Vector2(1, 12)
+
+[node name="KneeRightBone" type="Bone2D" parent="Skeleton2D/RootBone/LegRightBone"]
+position = Vector2(0, 12)
+
+[node name="FootRightBone" type="Bone2D" parent="Skeleton2D/RootBone/LegRightBone/KneeRightBone"]
+position = Vector2(-1, 12)
