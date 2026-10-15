@@ -331,6 +331,7 @@ def main() -> int:
     require(
         errors,
         c23_spawn.get("region") == "A4"
+        and c23_spawn.get("spawn_side") == "royal_drain"
         and float(c23_spawn.get("x", float("nan"))) == 1540.0
         and float(c23_spawn.get("y_offset", float("nan"))) == -120.0
         and has_side_return(x_body, "A4", "royal_drain", "1540.0")
@@ -465,7 +466,8 @@ def main() -> int:
         return 1
 
     print("Spatial route contract check passed.")
-    print("Checked C03/C05/C07/C10/C12/C16/C17/C23/C24 spawn and elevation contracts.")
+    print("Checked C03/C05/C07/C10/C12/C13/C16/C17/C18/C22/C23/C24 route and spawn contracts.")
+    print("Checked arrival clearance, platform support, rest-point safety, and death-recovery focus reset.")
     print("Note: run the Godot project for collision, jump reachability, and transition acceptance.")
     return 0
 
