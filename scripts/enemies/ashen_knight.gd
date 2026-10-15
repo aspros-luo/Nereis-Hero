@@ -159,7 +159,9 @@ func _draw() -> void:
         base = Color("#9a8060") if phase_two else Color("#343039")
     else:
         base = Color("#7b3944") if phase_two else Color("#2c2932")
-    var c := Color("#d9c8a2") if hit_flash > 0.0 and visual_theme == "royal_tomb" else (Color("#d35a62") if hit_flash > 0.0 else base)
+    var c: Color = base
+    if hit_flash > 0.0:
+        c = Color("#d9c8a2") if visual_theme == "royal_tomb" else Color("#d35a62")
     var pulse: float = sin(animation_time * 4.0) * 2.0
     draw_circle(Vector2(0, -61 + pulse), 22, Color("#141218"))
     draw_circle(Vector2(0, -61 + pulse), 19, c)
