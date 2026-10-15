@@ -81,7 +81,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not (event is InputEventKey and event.pressed and not event.echo):
 		return
 
-	var key := event.keycode
+	var key: int = (event as InputEventKey).keycode
 	if key >= KEY_1 and key <= KEY_8:
 		animation_row = key - KEY_1
 		_select_row()
