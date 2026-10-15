@@ -73,7 +73,7 @@ func _spawn_hero() -> void:
     hero.position = Vector2(220.0, FLOOR_Y)
     _add_character_collision(hero, 18.0, 48.0)
     add_child(hero)
-    hero.defeated.connect(_on_hero_defeated)
+    hero.connect("defeated", Callable(self, "_on_hero_defeated"))
     WorldState.set_checkpoint(hero.global_position)
 
     var camera := Camera2D.new()
@@ -98,20 +98,20 @@ func _spawn_boss() -> void:
     boss.position = Vector2(1390.0, FLOOR_Y)
     _add_character_collision(boss, 26.0, 60.0)
     add_child(boss)
-    boss.defeated.connect(_on_boss_defeated)
-    boss.phase_changed.connect(_on_boss_phase_changed)
-    boss.attack_telegraphed.connect(_on_boss_attack_telegraphed)
+    boss.connect("defeated", Callable(self, "_on_boss_defeated"))
+    boss.connect("phase_changed", Callable(self, "_on_boss_phase_changed"))
+    boss.connect("attack_telegraphed", Callable(self, "_on_boss_attack_telegraphed"))
     if is_instance_valid(hud):
-        hud.bind_boss(boss)
+        hud.call("bind_boss", boss)
     print("[NEREIS][BOSS][START] id=royal_tomb_guardian hp=%d" % int(boss.get("health")))
 
 func _spawn_hud() -> void:
     hud = CanvasLayer.new()
     hud.set_script(HUD_SCRIPT)
     add_child(hud)
-    hud.bind_hero(hero)
-    hud.set_story_mode("旧王墓｜王墓内殿", "击败守墓者，离开内殿后返回王墓主路。")
-    hud.set_debug_visible(false)
+    hud.call("bind_hero", hero)
+    hud.call("set_story_mode", "旧王墓｜王墓内殿", "击败守墓者，离开内殿后返回王墓主路。")
+    hud.call("set_debug_visible", false)
 
 func _spawn_narrative() -> void:
     narrative = CanvasLayer.new()
@@ -179,7 +179,7 @@ func _respawn_boss_after_death() -> void:
 
 func _on_boss_phase_changed(phase: int) -> void:
     if phase >= 2 and is_instance_valid(hud):
-        hud.show_phase_two()
+        hud.call("show_phase_two")
     print("[NEREIS][BOSS][PHASE] id=royal_tomb_guardian phase=%d" % phase)
 
 func _on_boss_attack_telegraphed() -> void:
