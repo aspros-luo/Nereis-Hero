@@ -45,6 +45,29 @@ The rig uses Skeleton2D and Bone2D anchors. `scripts/character/character_animati
 
 场景预置 Skeleton2D/Bone2D 层级，并创建 idle、run、attack、dodge 关键帧动画示例。它们只控制视觉，不负责战斗。
 
+
+## Configure the first part resources / 配置第一批部件资源
+
+1. Open `scenes/debug/character_customization_preview.tscn`.
+2. Select the `CustomizableCharacter` instance.
+3. In Inspector, expand `hair_options` and set its size to 1 (or more).
+4. For each element choose **New CharacterPartData**. Expand the resource and set:
+   - `display_name`: e.g. `Short Hair`
+   - `atlas_region`: the exact `Rect2(x, y, width, height)` copied from the atlas inspector Output
+   - `local_position`: anchor adjustment relative to the head bone
+   - `local_offset`: small pixel-level drawing correction only
+   - `z_index`: layer ordering
+5. Repeat for `clothes_options`, `face_options`, and `accessory_options`.
+6. If a part will be reused across characters, save the resource as a `.tres` file under `res://resources/character_parts/` and assign that resource to the array.
+
+建议先只配置一个头发、一个衣服、一个表情和一个配件，确认每个裁切矩形没有带入相邻素材后，再增加选项。不要使用大幅 offset 来补偿错误的裁切边界。
+
+## What is intentionally not auto-guessed / 不自动猜测的内容
+
+The atlas inspector can help select rectangular bounds, but it cannot infer semantic identity, matching character sets, or a correct bone pivot automatically. The project deliberately does not include guessed default crop coordinates or the third-party image. Correct art alignment depends on the local atlas and measured part regions.
+
+图集检查器能辅助选择矩形边界，但无法自动判断素材语义、同一角色的匹配套装或正确的骨骼枢轴。因此项目不伪造默认裁切坐标，也不提交第三方图片。最终对齐需要依据本地素材校准。
+
 ## Local test / 本地测试
 
 1. Pull `development`.
