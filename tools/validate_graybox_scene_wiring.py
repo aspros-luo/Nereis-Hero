@@ -750,6 +750,21 @@ def main() -> int:
     for source_region, contract, connection_label in main_route_contracts:
         require(route_blocks.get(source_region, ""), contract, connection_label, errors)
 
+    # C04 is a paired upper-route shortcut: both door heights, platform support, and arrival elevations must remain aligned.
+    # C04 是双侧高路捷径：两侧门高、承托平台与到达高度必须保持一致。
+    for contract in (
+        '1880.0, "E  返回边境战场", "old_battlefield"',
+        '"res://scenes/old_battlefield.tscn", "old_pilgrim_highroad",\n\t\t\t\t\ttrue, "", "", floor_y - 115.0',
+        '520.0, "E  打开旧朝圣高路", "ash_forest"',
+        '"reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",\n\t\t\t\tfloor_y - 140.0',
+        'if region_id == "A2" and side == "old_pilgrim_highroad":\n\t\treturn floor_y - 160.0',
+        'if region_id == "A5" and side == "old_pilgrim_highroad":\n\t\treturn floor_y - 105.0',
+        '_add_platform(Rect2(1840, 445, 130, 18))',
+        '_add_platform(Rect2(420, 420, 120, 18))',
+        '_add_platform(Rect2(560, 455, 160, 18))',
+    ):
+        require(region_script, contract, "C04 paired canopy route", errors)
+
     # C17 and C20 are the intended public route through the cathedral; C18 must remain a later shortcut.
     # C17/C20 是经过大圣堂的公开主线；C18 只能作为抵达内城后的后期开启捷径。
     a9_start = region_script.find('        "A9":', exits_start)
