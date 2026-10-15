@@ -378,9 +378,9 @@ func _spawn_x_for_side(side: String) -> float:
 		# C23 门移至 x=740；落点 x=650 与门保持净距，并避开 C16 与 C18。
 		return 650.0
 	if region_id == "A9" and side == "inner_city_side_gate":
-		# C18 opens at x=900; land just beyond its trigger and clear of the rest point at x=1100.
-		# C18 门位于 x=900；落点避开门的触发区与 x=1100 的休整点。
-		return 980.0
+		# C18's x=900 door and x=1100 rest point flank this midpoint spawn with 100px clearance each.
+		# C18 的 x=900 门与 x=1100 休整点分列两侧；出生在中点，双方各留 100px 净距。
+		return 1000.0
 	if region_id == "A12" and side == "inner_city_side_gate":
 		# C18's inner-city door is at x=520; arrive nearby rather than at the cathedral entrance.
 		# C18 内城侧门位于 x=520；返回时落在门附近，而不是大圣堂主入口。
