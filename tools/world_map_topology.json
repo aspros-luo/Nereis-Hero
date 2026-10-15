@@ -169,7 +169,14 @@
       "initial_access": "from_to",
       "final_direction": "forward",
       "unlock_condition": "",
-      "opens_from": ""
+      "opens_from": "",
+      "layer_contract": {
+        "from_subregion": "A0-S03",
+        "to_subregion": "A1-S01",
+        "route_form": "封闭排污出口→村庄地面入口",
+        "readability_contract": "单向逃脱；出口方向由封锁与序章流程决定",
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "C02",
@@ -179,7 +186,14 @@
       "initial_access": "both",
       "final_direction": "both",
       "unlock_condition": "",
-      "opens_from": ""
+      "opens_from": "",
+      "layer_contract": {
+        "from_subregion": "A1-S01",
+        "to_subregion": "A2-S01",
+        "route_form": "村道→雾林地面",
+        "readability_contract": "双向地面主路，作为首个稳定回访路径",
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "C03",
@@ -209,6 +223,13 @@
           "y_offset": -140
         },
         "intent": "The main A2-to-A3 connection is reached from the canopy high road; returning from A3 lands on the preceding canopy ledge rather than on the lower floor or beside H02."
+      },
+      "layer_contract": {
+        "from_subregion": "A2-S04",
+        "to_subregion": "A3-S04",
+        "route_form": "树冠栈道→城区屋顶连廊",
+        "readability_contract": "双向高位连接；返回点必须保留树冠高度",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -246,6 +267,13 @@
           "spawn_side": "old_pilgrim_highroad"
         },
         "intent": "C04 reconnects A2's canopy approach to A5's upper battlement. Both doors and arrival spawns must stay on their supporting ledges, not the continuous ground floor."
+      },
+      "layer_contract": {
+        "from_subregion": "A2-S05",
+        "to_subregion": "A5-S03",
+        "route_form": "旧朝圣高路→堡垒城墙",
+        "readability_contract": "远端开启的高架捷径，不能退化成地面门",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -274,6 +302,13 @@
           "x": 1380,
           "y_offset": -115
         }
+      },
+      "layer_contract": {
+        "from_subregion": "A3-S05",
+        "to_subregion": "A4-S01",
+        "route_form": "抬高管线→上层检查廊",
+        "readability_contract": "由城市高架进入地下枢纽上层",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -293,6 +328,13 @@
           "y_offset": 0
         },
         "intent": "Village well return remains on the safe ground lane, separated from H01 near the far-east well."
+      },
+      "layer_contract": {
+        "from_subregion": "A4-S06",
+        "to_subregion": "A1-S04",
+        "route_form": "水库底层井道→村庄老井平台",
+        "readability_contract": "后期解锁的低位回村捷径，避免落到普通村道",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -321,6 +363,13 @@
           "x": 1260,
           "y_offset": -85
         }
+      },
+      "layer_contract": {
+        "from_subregion": "A4-S03",
+        "to_subregion": "A8-S03",
+        "route_form": "中层水道→中层墓道水渠",
+        "readability_contract": "中层横向连接；不得与低位补给隧道共用落点",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -358,6 +407,13 @@
           "spawn_side": "city_highroad"
         },
         "intent": "C08 is a paired elevated transition: A3's eastern parapet door and A5's return door share supported upper landings. It must not silently transition from an upper doorway to a ground-level spawn."
+      },
+      "layer_contract": {
+        "from_subregion": "A3-S04",
+        "to_subregion": "A5-S02",
+        "route_form": "城区高架残墙→战场坍塌城墙",
+        "readability_contract": "双侧高位主路，入口和回程出生点应处于相近高度",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -383,6 +439,13 @@
           "spawn_side": "west"
         },
         "intent": "The main battlefield-to-monastery transition leaves from the broken upper parapet rather than the continuous ground boundary."
+      },
+      "layer_contract": {
+        "from_subregion": "A5-S03",
+        "to_subregion": "A6-S03",
+        "route_form": "堡垒城墙→修道院上层廊桥",
+        "readability_contract": "由战场高处进入建筑上层，之后才可向庭院下行",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -412,6 +475,13 @@
           "y_offset": -90
         },
         "intent": "C10 is an actual elevated monastery branch leading down into the city, and returns to the upper landing instead of placing the Hero on the ground beneath the door."
+      },
+      "layer_contract": {
+        "from_subregion": "A6-S05",
+        "to_subregion": "A3-S06",
+        "route_form": "钟塔顶→城区钟塔落差平台",
+        "readability_contract": "高位落差捷径，回程从修道院高层恢复",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -422,7 +492,14 @@
       "initial_access": "both",
       "final_direction": "both",
       "unlock_condition": "",
-      "opens_from": ""
+      "opens_from": "",
+      "layer_contract": {
+        "from_subregion": "A6-S01",
+        "to_subregion": "A7-S01",
+        "route_form": "修道院下层回廊→监牢走廊",
+        "readability_contract": "建筑内部主线连接，空间语义从宗教空间转入拘禁空间",
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "C12",
@@ -450,6 +527,13 @@
           "x": 1090,
           "y_offset": -75
         }
+      },
+      "layer_contract": {
+        "from_subregion": "A7-S06",
+        "to_subregion": "A4-S05",
+        "route_form": "供给隧道闸门→低位淹水沟",
+        "readability_contract": "低位窄路，区别于 C07 中层水道与 C23 高位排水",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -460,7 +544,14 @@
       "initial_access": "both",
       "final_direction": "both",
       "unlock_condition": "",
-      "opens_from": ""
+      "opens_from": "",
+      "layer_contract": {
+        "from_subregion": "A7-S04",
+        "to_subregion": "A8-S01",
+        "route_form": "维护竖井上缘→王墓入口平台",
+        "readability_contract": "竖井上行后进入墓门平台，不能从监牢地面平移到墓室",
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "C14",
@@ -470,7 +561,14 @@
       "initial_access": "both",
       "final_direction": "both",
       "unlock_condition": "",
-      "opens_from": ""
+      "opens_from": "",
+      "layer_contract": {
+        "from_subregion": "A8-S01",
+        "to_subregion": "A9-S01",
+        "route_form": "王墓入口平台→外环下层街巷",
+        "readability_contract": "主线从封闭墓区回到王城外环低层",
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "C15",
@@ -480,7 +578,14 @@
       "initial_access": "blocked",
       "final_direction": "both",
       "unlock_condition": "discovered_royal_tomb_maintenance_shaft_after_reaching_A8",
-      "opens_from": "A8"
+      "opens_from": "A8",
+      "layer_contract": {
+        "from_subregion": "A8-S05",
+        "to_subregion": "A11-S01",
+        "route_form": "王室维护井→研究区维护井出口",
+        "readability_contract": "隐藏入口从王墓深层进入 A11 的维护侧，区别于 C19",
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "C16",
@@ -514,6 +619,13 @@
           "x": 610,
           "y_offset": -110
         }
+      },
+      "layer_contract": {
+        "from_subregion": "A3-S04",
+        "to_subregion": "A9-S03",
+        "route_form": "城区东侧屋顶连廊→外环屋顶步道",
+        "readability_contract": "后期升降机连接两端高层，回访改变区域与高度",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -539,6 +651,13 @@
           "spawn_side": "west"
         },
         "intent": "The cathedral entrance is reached by climbing two short upper roof steps, separated from the ground-level royal service doors."
+      },
+      "layer_contract": {
+        "from_subregion": "A9-S03",
+        "to_subregion": "A10-S04",
+        "route_form": "外环屋顶步道→大圣堂唱诗席高廊",
+        "readability_contract": "圣堂高位接近路线，不能与地面主堂入口重合",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -549,7 +668,14 @@
       "initial_access": "blocked",
       "final_direction": "both",
       "unlock_condition": "reached_A12_via_A10_then_opened_inner_city_side_gate",
-      "opens_from": "A12"
+      "opens_from": "A12",
+      "layer_contract": {
+        "from_subregion": "A9-S06",
+        "to_subregion": "A12-S01",
+        "route_form": "外环内城服务门→内城服务街",
+        "readability_contract": "后期开启的低/中位回环，回程应落在门附近而非圣堂入口",
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "C19",
@@ -559,7 +685,14 @@
       "initial_access": "blocked",
       "final_direction": "both",
       "unlock_condition": "discovered_and_opened_silent_side_chapel_in_A10",
-      "opens_from": "A10"
+      "opens_from": "A10",
+      "layer_contract": {
+        "from_subregion": "A10-S05",
+        "to_subregion": "A11-S02",
+        "route_form": "静默侧礼拜堂→教会实验层",
+        "readability_contract": "第二条隐藏入口从圣堂深侧进入，与 C15 形成不同进场侧",
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "C20",
@@ -569,7 +702,14 @@
       "initial_access": "both",
       "final_direction": "both",
       "unlock_condition": "",
-      "opens_from": ""
+      "opens_from": "",
+      "layer_contract": {
+        "from_subregion": "A10-S02",
+        "to_subregion": "A12-S02",
+        "route_form": "大圣堂主堂→王室庭院",
+        "readability_contract": "主线地面/内廷推进，与 C17 高廊入口分层",
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "C21",
@@ -579,7 +719,14 @@
       "initial_access": "blocked",
       "final_direction": "forward",
       "unlock_condition": "physical_union_complete",
-      "opens_from": "A11"
+      "opens_from": "A11",
+      "layer_contract": {
+        "from_subregion": "A11-S05",
+        "to_subregion": "A13-S01",
+        "route_form": "原初空腔→梦境边界",
+        "readability_contract": "终局条件门；空间转换允许违背常规地理，但不得跳过终局层",
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "C22",
@@ -589,7 +736,14 @@
       "initial_access": "from_to",
       "final_direction": "forward",
       "unlock_condition": "reached_A12_via_A10",
-      "opens_from": "A12"
+      "opens_from": "A12",
+      "layer_contract": {
+        "from_subregion": "A12-S04",
+        "to_subregion": "A13-S01",
+        "route_form": "王座厅上层→梦境边界",
+        "readability_contract": "王权主线终局入口，与 A11 深层入口保持语义差异",
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "C23",
@@ -623,6 +777,13 @@
           "x": 770,
           "y_offset": -150
         }
+      },
+      "layer_contract": {
+        "from_subregion": "A9-S04",
+        "to_subregion": "A4-S01",
+        "route_form": "王室高位排水道→上层检查廊",
+        "readability_contract": "高位排水捷径，不能与 C12/C07 共用同一高度层",
+        "status": "design_contract_not_runtime_verified"
       }
     },
     {
@@ -659,6 +820,13 @@
           "y_offset": 0,
           "spawn_side": "city_cut_return"
         }
+      },
+      "layer_contract": {
+        "from_subregion": "A1-S01",
+        "to_subregion": "A3-S03",
+        "route_form": "村庄地面旧排水口→城区东侧街巷",
+        "readability_contract": "村庄防卫后开放的低位旧排水路线；独立于屋顶与高架路线",
+        "status": "design_contract_not_runtime_verified"
       }
     }
   ],
@@ -3451,5 +3619,6 @@
       "narrative_result": "The ending depends on accumulated relationships and evidence, not a single key item."
     }
   ],
-  "exploration_gate_contracts_note": "These contracts connect narrative locations to ability, Resonance, story, and physical gates. They are design data only; do not treat them as runtime implementation evidence."
+  "exploration_gate_contracts_note": "These contracts connect narrative locations to ability, Resonance, story, and physical gates. They are design data only; do not treat them as runtime implementation evidence.",
+  "layer_contracts_note": "Every macro connection carries an explicit source/destination subregion and route-form contract. This is a spatial design traceability layer, not proof of scene geometry or runtime traversal."
 }
