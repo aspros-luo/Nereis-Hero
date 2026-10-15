@@ -37,6 +37,7 @@ var current_hair := -1
 var current_clothes := -1
 var current_face := -1
 var current_accessory := -1
+var _fallback_nodes: Array[Polygon2D] = []
 
 
 func _ready() -> void:
@@ -50,6 +51,7 @@ func _ready() -> void:
 		sprite.texture = atlas_texture
 		sprite.region_enabled = true
 		sprite.centered = true
+	_build_fallback_silhouette()
 	_apply_default_regions()
 	if not hair_options.is_empty():
 		change_hair(0)
@@ -77,7 +79,7 @@ func _apply_default_regions() -> void:
 	_apply_region(right_arm_sprite, default_arm_region, Vector2(0, 8), 1)
 	_apply_region(left_leg_sprite, default_leg_region, Vector2(0, 10), 0)
 	_apply_region(right_leg_sprite, default_leg_region, Vector2(0, 10), 0)
-	# Placeholder regions are intentionally hidden until real atlas bounds are configured.
+	# Placeholder atlas regions are hidden; a rig-following silhouette remains visible until real parts are configured.
 	for sprite in _all_slots():
 		if sprite != null:
 			sprite.visible = false
@@ -119,6 +121,7 @@ func _apply_part(sprite: Sprite2D, options: Array[CharacterPartData], index: int
 	sprite.rotation = part.local_rotation
 	sprite.z_index = part.z_index
 	sprite.visible = part.enabled
+	_set_fallback_visible_for_slot(sprite, false)
 	return true
 
 
@@ -154,3 +157,51 @@ func change_accessory(index: int) -> void:
 func set_accessory_visible(enabled: bool) -> void:
 	if accessory_sprite != null:
 		accessory_sprite.visible = enabled and current_accessory >= 0
+
+func _build_fallback_silhouette() -> void:
+	# Clearly visible construction mannequin while no real atlas parts have been configured.
+	# 真实图集部件尚未配置时，显示跟随骨骼运动的简易人形。
+	_add_fallback_polygon("Rig/RootBone/BodyBone/BodySprite", PackedVector2Array([
+		Vector2(-9, -13), Vector2(9, -13), Vector2(11, 10), Vector2(-11, 10)
+	]), Color("#777985"))
+	_add_fallback_polygon("Rig/RootBone/BodyBone/HeadBone/HeadSprite", PackedVector2Array([
+		Vector2(-9, -10), Vector2(9, -10), Vector2(10, 1), Vector2(5, 10), Vector2(-5, 10), Vector2(-10, 1)
+	]), Color("#c7a58b"))
+	_add_fallback_polygon("Rig/RootBone/BodyBone/LeftArmBone/ArmSprite", PackedVector2Array([
+		Vector2(-4, -2), Vector2(4, -2), Vector2(4, 17), Vector2(-4, 17)
+	]), Color("#b9a18f"))
+	_add_fallback_polygon("Rig/RootBone/BodyBone/RightArmBone/ArmSprite", PackedVector2Array([
+		Vector2(-4, -2), Vector2(4, -2), Vector2(4, 17), Vector2(-4, 17)
+	]), Color("#b9a18f"))
+	_add_fallback_polygon("Rig/RootBone/LeftLegBone/LegSprite", PackedVector2Array([
+		Vector2(-4, 0), Vector2(4, 0), Vector2(5, 20), Vector2(-5, 20)
+	]), Color("#575963"))
+	_add_fallback_polygon("Rig/RootBone/RightLegBone/LegSprite", PackedVector2Array([
+		Vector2(-4, 0), Vector2(4, 0), Vector2(5, 20), Vector2(-5, 20)
+	]), Color("#575963"))
+	# Simple front hair and tunic silhouettes make the mannequin readable.
+	_add_fallback_polygon("Rig/RootBone/BodyBone/HeadBone/HairFrontSprite", PackedVector2Array([
+		Vector2(-10, -9), Vector2(8, -10), Vector2(10, -2), Vector2(2, -5), Vector2(-4, 0), Vector2(-10, -1)
+	]), Color("#28232d"))
+	_add_fallback_polygon("Rig/RootBone/BodyBone/ClothesSprite", PackedVector2Array([
+		Vector2(-10, -12), Vector2(10, -12), Vector2(13, 9), Vector2(8, 13), Vector2(-8, 13), Vector2(-13, 9)
+	]), Color("#762f3b"))
+
+
+func _add_fallback_polygon(node_path: NodePath, points: PackedVector2Array, color: Color) -> void:
+	var parent := get_node_or_null(node_path)
+	if parent == null:
+		return
+	var polygon := Polygon2D.new()
+	polygon.name = "FallbackSilhouette"
+	polygon.polygon = points
+	polygon.color = color
+	polygon.z_index = -1
+	parent.add_child(polygon)
+	_fallback_nodes.append(polygon)
+
+
+func _set_fallback_visible_for_slot(_sprite: Sprite2D, _enabled: bool) -> void:
+	# Keep the mannequin behind configured atlas parts for now; it is useful for alignment.
+	# 后续可按部件槽精确隐藏对应占位轮廓。
+	pass
