@@ -283,7 +283,9 @@ func _spawn_x_for_side(side: String) -> float:
 	if region_id == "A3" and side == "city_canopy_entry":
 		return 180.0
 	if region_id == "A9" and side == "cathedral_roof_return":
-		return 2320.0
+		# C17 returns beyond the roof door's trigger on an extended upper landing.
+		# C17 回程落在延长后的上层平台远端，避开屋顶门的触发区。
+		return 2450.0
 	if region_id == "A6" and side == "bell_drop":
 		# C10 returns to the upper landing before the final step down to the elevated shortcut door.
 		# C10 回程落在高位落脚平台，再走到低一级的捷径门。
@@ -369,9 +371,9 @@ func _spawn_x_for_side(side: String) -> float:
 		# 旧水库侧的 H04 入口位于 x=1780，返回点与其保持明显距离。
 		return 1550.0
 	if region_id == "A4" and side == "east":
-		# H01's A4-side well gate sits near the east boundary; avoid spawning inside its 80px interaction radius.
-		# A4 东侧井门靠近地图边界；返回时避开其 80px 交互范围，防止落地就重新聚焦。
-		return map_width - 360.0
+		# H01 returns between the C06 watergate at x=2220 and the hidden-well gate at map_width-90.
+		# H01 回程落在 x=2220 的 C06 水闸与 map_width-90 的隐藏井门之间，避开两端交互区。
+		return map_width - 220.0
 	if region_id == "A4" and side == "prison_tunnel":
 		# C12 arrives on the low ledge 90px away from its own return door.
 		# C12 出生在低位栈台上，距回程门 90px，避免落地立即重新触发。
@@ -405,9 +407,9 @@ func _spawn_x_for_side(side: String) -> float:
 		# H02 远侧门位于 x=2060；落点靠近门，但不进入其触发区。
 		return 1900.0
 	if region_id == "A6" and side == "silent_window":
-		# H05 sits at x=1660. Keep this arrival away from its interaction radius.
-		# H05 入口位于 x=1660，返回修道院后不应立即重新聚焦该入口。
-		return 1400.0
+		# Keep the H05 return more than 110px from the monastery rest point at x=1300.
+		# H05 回程点与修道院 x=1300 休整点保持超过 110px 的净距。
+		return 1420.0
 	if region_id == "A7" and side == "supply_tunnel":
 		# C12's prison-side door is at x=520; return near it, away from the royal-tomb entrance at the east edge.
 		# C12 监牢侧门位于 x=520；回程落在门附近，避开东侧王墓主入口。
@@ -910,7 +912,7 @@ func _configure_platforms() -> void:
 			# The cathedral approach climbs above the outer-ring service doors and uses two short roof steps.
 			# 大圣堂入口从外环服务门上方攀过两级屋顶，避免所有连接都落在同一地面线上。
 			_add_platform(Rect2(2190, 390, 140, 18))
-			_add_platform(Rect2(2300, 360, 140, 18))
+			_add_platform(Rect2(2300, 360, 220, 18))
 			_add_platform(Rect2(390, 395, 115, 18))
 			_add_platform(Rect2(520, 355, 120, 18))
 			_add_platform(Rect2(665, 320, 120, 18))
