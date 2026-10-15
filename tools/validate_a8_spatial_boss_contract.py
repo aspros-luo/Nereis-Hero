@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Focused static audit for A8's spatial routes and future encounter placeholder.
+"""Static source/data audit for A8 spatial routes and encounter/recovery boundaries.
 
-This validates source/data consistency only. It does not prove collision, jumps,
-interaction radii, death recovery, or scene transitions in Godot.
+This checks authored source markers only; it does not simulate Godot collision,
+jump trajectories, Area2D focus, scene transitions, or death recovery.
 Run: python3 tools/validate_a8_spatial_boss_contract.py
 """
 from __future__ import annotations
@@ -17,6 +17,7 @@ TOPOLOGY = ROOT / "tools/world_map_topology.json"
 REGION = ROOT / "scripts/levels/greybox_world_region.gd"
 A8_SCENE = ROOT / "scenes/royal_tomb.tscn"
 WORLD_STATE = ROOT / "scripts/core/world_state.gd"
+DOOR = ROOT / "scripts/world/interaction_door.gd"
 
 
 def require(errors: list[str], condition: bool, message: str) -> None:
@@ -25,22 +26,11 @@ def require(errors: list[str], condition: bool, message: str) -> None:
 
 
 def function_body(source: str, name: str) -> str:
-    match = re.search(
-        rf"^func {re.escape(name)}\([^\n]*\).*?:\n(.*?)(?=^func |\Z)",
-        source,
-        re.MULTILINE | re.DOTALL,
-    )
-    if not match:
+    pattern = rf"^func {re.escape(name)}\([^\n]*\).*?:\n(.*?)(?=^func |\Z)"
+    match = re.search(pattern, source, re.MULTILINE | re.DOTALL)
+    if match is None:
         raise ValueError(f"Missing function: {name}")
     return match.group(1)
-
-
-def has_spawn(body: str, region: str, side: str, value: str) -> bool:
-    return re.search(
-        rf'if region_id == "{re.escape(region)}" and side == "{re.escape(side)}":'
-        rf"\s*(?:#.*\n\s*)*return {re.escape(value)}(?:\s|$)",
-        body,
-    ) is not None
 
 
 def main() -> int:
@@ -50,79 +40,104 @@ def main() -> int:
         source = REGION.read_text(encoding="utf-8")
         scene = A8_SCENE.read_text(encoding="utf-8")
         world_state = WORLD_STATE.read_text(encoding="utf-8")
+        door = DOOR.read_text(encoding="utf-8")
         spawn_x = function_body(source, "_spawn_x_for_side")
         spawn_y = function_body(source, "_spawn_y_for_side")
         exits = function_body(source, "_spawn_region_exits")
         platforms = function_body(source, "_configure_platforms")
         encounters = function_body(source, "_spawn_region_encounters")
+        hero_spawn = function_body(source, "_spawn_hero")
     except (OSError, json.JSONDecodeError, ValueError) as exc:
-        print(f"[FAIL] Could not load A8 contract inputs: {exc}")
+        print(f"A8 SPATIAL/RECOVERY AUDIT FAILED TO LOAD INPUTS: {exc}")
         return 1
 
     edges = {edge.get("id"): edge for edge in topology.get("connections", [])}
     require(errors, 'region_id = "A8"' in scene and 'location_id = "royal_tomb"' in scene,
-            "A8 scene must continue to bind the shared graybox to region A8 / royal_tomb.")
+            "A8 scene must bind the shared graybox to region A8 / royal_tomb.")
+    require(errors, "map_width = 2600.0" in scene,
+            "A8 scene width must remain 2600px unless the route contract is revised.")
 
-    # C13: elevated, bidirectional A7/A8 maintenance-shaft route.
+    # C13: source-level match between A8 arrival, A7 return, and authored support ledges.
     c13 = edges.get("C13", {})
     c13s = c13.get("spatial_contract", {})
-    require(errors, c13.get("from") == "A7" and c13.get("to") == "A8"
-            and c13.get("initial_access") == "both" and c13.get("final_direction") == "both",
+    require(errors, (c13.get("from"), c13.get("to"), c13.get("initial_access"), c13.get("final_direction"))
+            == ("A7", "A8", "both", "both"),
             "C13 topology must remain bidirectional A7 <-> A8.")
     require(errors, c13s.get("to_region_spawn", {}).get("spawn_side") == "maintenance_shaft_entry"
             and c13s.get("to_region_spawn", {}).get("y_offset") == -120,
-            "C13 A8 arrival must preserve the elevated maintenance_shaft_entry contract.")
-    require(errors, has_spawn(spawn_x, "A8", "maintenance_shaft_entry", "190.0"),
+            "C13 A8 arrival must retain its elevated maintenance_shaft_entry contract.")
+    require(errors, 'if region_id == "A8" and side == "maintenance_shaft_entry":' in spawn_x
+            and "return 190.0" in spawn_x,
             "C13 A8 arrival x must remain 190.")
-    require(errors, has_spawn(spawn_y, "A8", "maintenance_shaft_entry", "floor_y - 120.0"),
+    require(errors, 'if region_id == "A8" and side == "maintenance_shaft_entry":' in spawn_y
+            and "return floor_y - 120.0" in spawn_y,
             "C13 A8 arrival must remain 120px above the floor.")
-    for marker in ('_add_platform(Rect2(2140, 460, 110, 18))',
-                   '_add_platform(Rect2(2200, 420, 370, 18))'):
-        require(errors, marker in platforms, f"C13 elevated approach is missing platform marker: {marker}")
+    for marker in ("_add_platform(Rect2(80, 420, 150, 18))",
+                   "_add_platform(Rect2(240, 420, 170, 18))"):
+        require(errors, marker in platforms,
+                f"C13 A8 arrival support ledge is missing: {marker}")
+    require(errors, 'if region_id == "A7" and side == "maintenance_shaft_return":' in spawn_x
+            and "return map_width - 160.0" in spawn_x,
+            "C13 return spawn must stay on A7's east-side upper ledge.")
+    require(errors, 'if region_id == "A7" and side == "maintenance_shaft_return":' in spawn_y
+            and "return floor_y - 120.0" in spawn_y,
+            "C13 return spawn must stay at floor_y - 120.")
 
-    # C14: the ordinary A8/A9 main route must exist in both directions.
+    # C14: topology and scene transition wiring must agree in both directions.
     c14 = edges.get("C14", {})
-    require(errors, c14.get("from") == "A8" and c14.get("to") == "A9"
-            and c14.get("initial_access") == "both" and c14.get("final_direction") == "both",
+    require(errors, (c14.get("from"), c14.get("to"), c14.get("initial_access"), c14.get("final_direction"))
+            == ("A8", "A9", "both", "both"),
             "C14 topology must remain bidirectional A8 <-> A9.")
     require(errors, '"A8":' in exits and '"res://scenes/royal_outer_ring.tscn", "west"' in exits,
-            "C14 must keep the A8 -> A9 transition wired.")
+            "C14 A8 -> A9 transition wiring is missing.")
     require(errors, '"A9":' in exits and '"res://scenes/royal_tomb.tscn"' in exits,
-            "C14 must keep the A9 -> A8 return transition wired.")
+            "C14 A9 -> A8 return wiring is missing.")
 
-    # C15 and H06 must stay separate; static checks protect gate requirements, not physical reachability.
+    # C15 is distinct from H06 and C19; source checks are not a reachability proof.
     c15 = edges.get("C15", {})
-    require(errors, c15.get("from") == "A8" and c15.get("to") == "A11"
-            and c15.get("initial_access") == "blocked" and c15.get("final_direction") == "both",
-            "C15 must remain a blocked-by-default, conditionally bidirectional A8/A11 secret route.")
-    a8_branch = source.split('"A8":', 1)[1].split('\n\t\t"', 1)[0] if '"A8":' in source else ""
-    require(errors, 'secret_id = "C15"' in a8_branch or '"C15"' in a8_branch,
-            "A8 region source must retain an explicit C15 gate binding.")
-    for token in ("resonance", "55", "ancient_exposure", "anomaly_bell_retiming", "anomaly_erased_royal_name"):
-        require(errors, token in source, f"C15 source contract is missing required gate token {token!r}.")
-    require(errors, "H06" in source and "C15" in source,
-            "H06 and C15 must both remain represented; do not collapse the distinct hidden route and gate.")
+    require(errors, (c15.get("from"), c15.get("to"), c15.get("initial_access"), c15.get("final_direction"))
+            == ("A8", "A11", "blocked", "both"),
+            "C15 must remain a conditionally bidirectional A8/A11 route.")
+    for marker in ('gate.secret_id = "C15"', "gate.required_resonance = 55",
+                   "gate.required_ancient_exposure = 2",
+                   '["anomaly_bell_retiming", "anomaly_erased_royal_name"]'):
+        require(errors, marker in source, f"C15 gate binding/requirements missing: {marker}")
+    require(errors, "H06" in source and "royal_name_gate" in source,
+            "H06 must remain a separate royal-name route, not merged into C15.")
 
-    # A8 combat is deliberately a map marker/placeholder at this stage, not a fabricated Boss implementation.
+    # Door interaction is an Area2D + shared focus contract; physical range needs runtime testing.
+    for marker in ("extends Area2D", "body_entered.connect(_on_body_entered)",
+                   "body_exited.connect(_on_body_exited)", "INTERACTION_FOCUS_SCRIPT.is_focused(self)",
+                   "event.keycode == KEY_E"):
+        require(errors, marker in door, f"Door interaction contract marker missing: {marker}")
+    require(errors, "func _create_floor()" in source
+            and "rectangle.size = Vector2(map_width, 40.0)" in source,
+            "Shared continuous floor was not found; ground-bypass review must be revisited.")
+    require(errors, "shape.one_way_collision = true" in source,
+            "Platform one-way collision setup is missing.")
+
+    # Map-phase combat/recovery boundary: retain placeholder encounter and existing checkpoint path.
     require(errors, '"A8_Cultist_01"' in encounters,
-            "A8 must retain its explicit placeholder encounter marker while the map is validated.")
-    require(errors, "boss_defeated" in world_state and "mark_boss_defeated" in world_state,
-            "WorldState's existing Boss completion state/API must not silently disappear.")
-    require(errors, "func _spawn_hero" in source and "respawning" in source,
-            "Shared graybox must retain the current-region Hero spawn/death-recovery path.")
+            "A8's existing ordinary placeholder encounter marker is missing.")
+    require(errors, "WorldState.set_checkpoint(hero.global_position)" in hero_spawn,
+            "Hero spawn must initialize a region checkpoint.")
+    require(errors, "func _on_hero_defeated" in source and "respawning" in source,
+            "Shared Hero death/recovery handler markers are missing.")
+    require(errors, "var boss_defeated := false" in world_state
+            and "func mark_boss_defeated()" in world_state,
+            "Existing global Boss state API was not found; do not infer an A8 Boss implementation from it.")
 
     if errors:
-        print("A8 SPATIAL/BOSS CONTRACT AUDIT FAILED")
+        print("A8 SPATIAL/RECOVERY SOURCE AUDIT FAILED")
         for error in errors:
             print(f" - {error}")
         return 1
 
-    print("A8 SPATIAL/BOSS CONTRACT AUDIT: STATIC CHECKS PASSED")
-    print(" - C13 elevated arrival and support-platform source markers checked.")
-    print(" - C14 bidirectional topology and scene wiring checked.")
-    print(" - C15 conditional gate tokens and H06 separation checked.")
-    print(" - A8 encounter placeholder and existing WorldState Boss flags checked.")
-    print(" - Runtime jump reachability, collision, door focus/range, death reset and return behavior remain unverified.")
+    print("A8 SPATIAL/RECOVERY SOURCE AUDIT PASSED")
+    print(" - A8 scene binding, C13 elevated spawn/support ledges, and C14 two-way wiring checked.")
+    print(" - C15 gate requirements, H06 separation, door focus source markers, and platform setup checked.")
+    print(" - Existing placeholder encounter and checkpoint/death-handler markers checked.")
+    print("LIMITATION: interaction radius, jump reachability, collision, ground bypass, death/reload and return behavior are NOT runtime-verified.")
     return 0
 
 
