@@ -233,6 +233,10 @@ func _spawn_y_for_side(side: String) -> float:
 		return floor_y - 130.0
 	if region_id == "A5" and side == "city_highroad":
 		return floor_y - 130.0
+	if region_id == "A6" and side == "battlefield_entry":
+		return floor_y - 90.0
+	if region_id == "A5" and side == "monastery_return":
+		return floor_y - 55.0
 	if region_id == "A2" and side == "east":
 		return floor_y - 140.0
 	# C04 must return to the actual old-pilgrim upper route on both sides.
@@ -250,7 +254,9 @@ func _spawn_y_for_side(side: String) -> float:
 	if region_id == "A3" and side == "sewer":
 		return floor_y - 115.0
 	if region_id == "A4" and side == "sewer_upper":
-		return floor_y - 115.0
+		# The Hero origin is at the feet; align the spawn exactly with the landing y=445 collision top.
+		# 主角坐标位于脚底；出生高度应与 y=445 的实体平台顶面精确对齐。
+		return floor_y - 95.0
 	if region_id == "A3" and side == "old_lift":
 		return floor_y - 70.0
 	if region_id == "A4" and side == "prison_tunnel":
@@ -291,6 +297,14 @@ func _spawn_x_for_side(side: String) -> float:
 		# C08 enters the battlefield on its paired upper landing, not on the ground below the door.
 		# C08 从城区进入战场时落在对应高台，而不是门下方的地面。
 		return 330.0
+	if region_id == "A6" and side == "battlefield_entry":
+		# C09 enters the monastery on the upper west bridge, matching the authored route layer.
+		# C09 从西侧上层廊桥进入修道院，与路线层合同保持一致。
+		return 160.0
+	if region_id == "A5" and side == "monastery_return":
+		# C09 returns to the lower approach ledge, not the floor beneath the upper parapet door.
+		# C09 回到较低的接近栈台，而不是高位门下方的地面。
+		return 2165.0
 	if region_id == "A3" and side == "village_city_cut":
 		# C24's return door is at x=520; balance the landing between it and the anomaly at x=900.
 		# C24 回程门位于 x=520；出生点在回程门与 x=900 异常源之间保持安全距离。
@@ -799,6 +813,7 @@ func _configure_platforms() -> void:
 		"A6":
 			# Main stair climbs the bell tower; the side cloister balcony loops around its outer wall.
 			# 主阶梯攀上钟塔；侧边回廊阳台绕塔外墙形成另一条路线。
+			_add_platform(Rect2(100, 450, 140, 18))
 			_add_platform(Rect2(300, 475, 155, 18))
 			_add_platform(Rect2(525, 430, 125, 18))
 			_add_platform(Rect2(720, 385, 125, 18))
@@ -1612,7 +1627,7 @@ func _spawn_region_exits() -> void:
 			)
 			_spawn_exit_door(
 				2250.0, "E  沿残墙高路进入修道院", "monastery_tower",
-				"res://scenes/monastery_tower.tscn", "west", true, "", "", floor_y - 90.0
+				"res://scenes/monastery_tower.tscn", "battlefield_entry", true, "", "", floor_y - 90.0
 			)
 			if WorldState.is_hidden_path_opened("H02"):
 				_spawn_exit_door(
@@ -1631,7 +1646,7 @@ func _spawn_region_exits() -> void:
 		"A6":
 			_spawn_exit_door(
 				72.0, "E  返回边境战场", "old_battlefield",
-				"res://scenes/old_battlefield.tscn", "east"
+				"res://scenes/old_battlefield.tscn", "monastery_return"
 			)
 			_spawn_exit_door(
 				map_width - 72.0, "E  深入监牢", "prison_depths",
