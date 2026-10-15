@@ -114,6 +114,7 @@ def main() -> int:
     # The topology metadata must agree with the playable C10 shortcut.
     # 世界拓扑元数据必须与实际可玩的 C10 钟塔捷径保持一致。
     topology_path = ROOT / "tools/world_map_topology.json"
+    topology: dict = {}
     if not topology_path.is_file():
         errors.append("Missing file: tools/world_map_topology.json")
     else:
@@ -927,7 +928,7 @@ def main() -> int:
         for region_id, scene_data in REGIONS.items()
         if region_id.startswith("A")
     })
-    topology_for_route_audit = json.loads(topology_path.read_text(encoding="utf-8"))
+    topology_for_route_audit = topology
     runtime_route_source = dict(route_blocks)
     runtime_route_source["A0"] = prologue_route_script
     runtime_route_source["A1"] = village_route_script
@@ -1372,7 +1373,7 @@ def main() -> int:
             return 700.0
         return 180.0
 
-    topology_for_spawn_audit = json.loads(topology_path.read_text(encoding="utf-8"))
+    topology_for_spawn_audit = topology
     for edge in topology_for_spawn_audit.get("connections", []):
         edge_id = edge.get("id", "<missing>")
         spatial = edge.get("spatial_contract", {})
