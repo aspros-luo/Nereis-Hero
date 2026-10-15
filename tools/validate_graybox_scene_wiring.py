@@ -491,6 +491,41 @@ def main() -> int:
         require(world_state, f'"{location_id}":', "WorldState resume mapping", errors)
         require(world_state, f'res://{scene_path}', "WorldState resume mapping", errors)
 
+    # Optional boss encounters are not C-edges, but still require a traceable entry, victory, death-reset, and return contract.
+    # 可选 Boss 遭遇不计入跨区 C 边，但入口、胜利、死亡重置和回程必须可追踪。
+    encounter_contracts = topology.get("optional_encounters", [])
+    royal_encounter = next((item for item in encounter_contracts if item.get("id") == "OB01"), None)
+    if royal_encounter is None:
+        errors.append("Topology must register optional encounter OB01 for the royal tomb guardian.")
+    else:
+        require(str(royal_encounter), "defeated_royal_tomb_guardian", "Topology OB01 victory contract", errors)
+        require(str(royal_encounter), "boss_return", "Topology OB01 return contract", errors)
+        require(str(royal_encounter), "static_contract_added_runtime_not_verified", "Topology OB01 verification status", errors)
+        if royal_encounter.get("main_route_blocked_by_optional_encounter") is not False:
+            errors.append("OB01 must remain optional and must not block the A8 to A9 main route.")
+
+    boss_scene = read("scenes/royal_tomb_boss.tscn", errors)
+    boss_controller = read("scripts/levels/royal_tomb_boss.gd", errors)
+    boss_script = read("scripts/enemies/ashen_knight.gd", errors)
+    hud_script = read("scripts/ui/game_hud.gd", errors)
+    require(boss_scene, 'path="res://scripts/levels/royal_tomb_boss.gd"', "Royal tomb boss scene", errors)
+    require(region_script, '"res://scenes/royal_tomb_boss.tscn", "west"', "A8 optional boss entrance", errors)
+    require(region_script, '"defeated_royal_tomb_guardian" not in WorldState.achievement_flags', "A8 boss entrance persistence gate", errors)
+    require(region_script, 'if region_id == "A8" and side == "boss_return":', "A8 boss return spawn mapping", errors)
+    require(world_state, '"royal_tomb_boss":', "WorldState boss-arena resume mapping", errors)
+    require(world_state, 'res://scenes/royal_tomb_boss.tscn', "WorldState boss-arena resume scene", errors)
+    require(boss_controller, 'boss.set("persist_global_boss_defeat", false)', "Royal tomb boss isolation from the global combat demo", errors)
+    require(boss_controller, 'boss.connect("phase_changed"', "Royal tomb boss phase signal", errors)
+    require(boss_controller, 'WorldState.record_achievement(BOSS_FLAG)', "Royal tomb boss victory persistence", errors)
+    require(boss_controller, 'WorldState.pending_region_spawn_side = "boss_return"', "Royal tomb boss return spawn side", errors)
+    require(boss_controller, 'SceneTransition.fade_to_scene("res://scenes/royal_tomb.tscn")', "Royal tomb boss return transition", errors)
+    require(boss_controller, '_respawn_boss_after_death', "Royal tomb boss death-reset route", errors)
+    require(boss_script, 'var boss_display_name := "灰烬骑士"', "Reusable boss display-name contract", errors)
+    require(boss_script, "var persist_global_boss_defeat := true", "Reusable boss global-defeat isolation switch", errors)
+    require(boss_script, "phase = 2", "Reusable boss second-phase state", errors)
+    require(hud_script, 'var phase_variant = boss.get("phase")', "Boss HUD phase display", errors)
+    require(hud_script, 'int(boss.get("health")) <= 0', "Boss HUD active-instance visibility guard", errors)
+
     prologue_script = read("scripts/levels/escape_prologue.gd", errors)
     require(prologue_script, "func _create_surgical_catwalks() -> void:", "A0 surgical catwalk builder", errors)
     require(prologue_script, "Rect2(430, 455, 100, 16)", "A0 surgical first ledge", errors)
