@@ -148,6 +148,40 @@ def main() -> int:
         if "route_candidate" not in a13_branch:
             errors.append("A13 must delegate ending selection to the shared evaluator")
 
+    # C13 return spawn must stay on the upper prison ledge with a safer door-focus margin.
+    c13_spawn_start = region.find('if region_id == "A7" and side == "maintenance_shaft_return":', region.find("func _spawn_x_for_side"))
+    c13_spawn_block = region[c13_spawn_start:c13_spawn_start + 360] if c13_spawn_start >= 0 else ""
+    if "return map_width - 260.0" not in c13_spawn_block:
+        errors.append("C13: A7 return spawn must be offset to map_width - 260.0 to avoid immediate door focus")
+    if 'const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")' not in region:
+        errors.append("Recovery/transition: shared interaction focus script is not loaded")
+    if "INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())" not in region:
+        errors.append("Recovery/transition: must clear interaction focus before transition and after respawn")
+    defeat_start = region.find("func _on_hero_defeated()")
+    defeat_block = region[defeat_start:defeat_start + 850] if defeat_start >= 0 else ""
+    if "WorldState.input_locked = true" not in defeat_block or "WorldState.input_locked = false" not in defeat_block:
+        errors.append("Death recovery: input must remain locked during the two-stage checkpoint restore")
+    if defeat_block.find("WorldState.input_locked = true") > defeat_block.find("await get_tree().create_timer(0.75).timeout"):
+        errors.append("Death recovery: input lock must be set before the recovery delay")
+
+    # Verify every runtime transition to A13 retains its own intended prerequisite.
+    a12_split = exit_source.split('\\n\\t\\t"A12":', 1)
+    a12_branch = a12_split[1].split('\\n\\t\\t"', 1)[0] if len(a12_split) > 1 else ""
+    if 'if "reached_A12_via_A10" in WorldState.achievement_flags:' not in a12_branch:
+        errors.append("C22: A12-to-A13 door must require reached_A12_via_A10")
+    if '_register_debug_locked_route_hint(' not in a12_branch or "需要从大圣堂主线抵达 A12（C22）" not in a12_branch:
+        errors.append("C22: locked mainline prerequisite should be visible when its door is unavailable")
+    a11_split = exit_source.split('\\n\\t\\t"A11":', 1)
+    a11_branch_for_c21 = a11_split[1].split('\\n\\t\\t"', 1)[0] if len(a11_split) > 1 else ""
+    if "if WorldState.physical_union_complete:" not in a11_branch_for_c21 or '"res://scenes/terminal_anomaly.tscn"' not in a11_branch_for_c21:
+        errors.append("C21: A11-to-A13 transition must be gated by physical_union_complete")
+    h08_split = exit_source.split('\\n\\t\\t"H08":', 1)
+    h08_branch = h08_split[1].split('\\n\\t\\t"', 1)[0] if len(h08_split) > 1 else ""
+    if "if WorldState.physical_union_complete:" not in h08_branch or '"res://scenes/terminal_anomaly.tscn"' not in h08_branch:
+        errors.append("A13 alternate entry: H08 route must retain physical_union_complete prerequisite")
+    if region.count('"res://scenes/terminal_anomaly.tscn"') != 3:
+        errors.append("A13 entry audit: expected exactly three runtime entry points (C21, C22, H08)")
+
     # Floor geometry is continuous by design; a trigger door is not a physical wall.
     # Flag this explicitly as a manual runtime acceptance item, never as a passing claim.
     if "func _create_floor()" not in region or "rectangle.size = Vector2(map_width, 40.0)" not in region:
