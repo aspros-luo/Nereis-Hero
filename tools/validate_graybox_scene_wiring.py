@@ -898,8 +898,13 @@ def main() -> int:
     require(a8_exit_block, '"defeated_royal_tomb_guardian" not in WorldState.achievement_flags', "A8 optional Boss entrance gate", errors)
     require(a8_exit_block, '"res://scenes/royal_tomb_boss.tscn"', "A8 Boss scene transition", errors)
     require(a8_exit_block, '1540.0, "E  进入王墓内殿"', "A8 Boss door anchor", errors)
+    require(a8_exit_block, 'map_width - 72.0, "E  进入王城外环"', "A8→A9 main route remains open beside optional Boss", errors)
     require(region_script, 'if region_id == "A8" and side == "boss_return":', "A8 Boss return spawn mapping", errors)
     require(region_script, "return 1700.0", "A8 Boss return spawn clearance", errors)
+    # Keep the victory return away from both the arena entrance and the adjacent H06 gate's focus volume.
+    # 胜利回程点必须同时避开 Boss 入口与相邻 H06 的交互焦点。
+    if min(abs(1700.0 - 1540.0), abs(1870.0 - 1700.0)) < 130.0:
+        errors.append("A8 Boss return spawn is too close to the arena entrance or H06 gate.")
 
     # Catch accidental line-join syntax defects in spawn mapping and ensure C04 is wired on both ends.
     # 检查出生点映射中意外粘连的语法错误，并确保 C04 两端都接线。
