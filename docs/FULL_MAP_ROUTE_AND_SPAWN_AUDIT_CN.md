@@ -126,3 +126,10 @@
 - [ ] 进入 A13 后分别验证普通主线终局与满足条件后的可选终局路由。
 
 这份待验收清单按全地图连续流程编排，不再把地图审计拆成多轮 A2–A3、A3–A5 小段结论。
+
+
+## 7. P1–P4 后续推进：可选王墓 Boss 遭遇 OB01
+
+后续任务记录见 [P1–P4 全任务推进与整图验收记录](P1_P2_P3_P4_FULL_TASK_EXECUTION_AUDIT_CN.md)。本轮新增独立场景 `scenes/royal_tomb_boss.tscn` 与控制器 `scripts/levels/royal_tomb_boss.gd`，将王墓守墓者作为可选遭遇注册到 `tools/world_map_topology.json` 的 `optional_encounters`，不新增 C 跨区边，也不阻断 A8→A9 主线。自然路线访问跟踪现将该场景记为 OB01，覆盖总数从 22 调整为 23；测试菜单另有 OB01 调试入口，但不能代替连续自然流程验收。
+
+对新增 Boss 接线完成了 16 项独立源码交叉断言，结果 16/16；这不是 Python 验证器执行结果，也不是 Godot 运行时结果。Godot 4.6.1 连续整图测试仍待实际运行。
