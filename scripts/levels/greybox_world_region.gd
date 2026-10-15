@@ -221,6 +221,10 @@ func _on_cord_fragment_collected() -> void:
 
 
 func _spawn_y_for_side(side: String) -> float:
+	if region_id == "A10" and side == "cathedral_roof":
+		return floor_y - 180.0
+	if region_id == "A9" and side == "cathedral_roof_return":
+		return floor_y - 180.0
 	# Elevated cross-region doors must land on their matching ledge, not underneath it on the continuous floor.
 	# 高位跨区门应将主角送到对应栈台，而不是落在连续地面上、再要求玩家反向跳回门口。
 	if region_id == "A3" and side == "city_highroad_return":
@@ -257,6 +261,10 @@ func _spawn_y_for_side(side: String) -> float:
 
 
 func _spawn_x_for_side(side: String) -> float:
+	if region_id == "A10" and side == "cathedral_roof":
+		return 180.0
+	if region_id == "A9" and side == "cathedral_roof_return":
+		return 2320.0
 	if region_id == "A6" and side == "bell_drop":
 		# C10 returns to the upper landing before the final step down to the elevated shortcut door.
 		# C10 回程落在高位落脚平台，再走到低一级的捷径门。
@@ -869,6 +877,9 @@ func _configure_platforms() -> void:
 		"A10":
 			# The pilgrim stair is the direct route; side chapels and the choir gallery offer a parallel traversal.
 			# 朝圣阶梯是直接主路；侧礼拜堂与唱诗席高廊提供并行路线。
+			# C17 arrives on a dedicated upper landing matching A9's rooftop door height.
+			# C17 从 A9 屋顶门进入时，先落在独立高位平台，而不是圣堂地面。
+			_add_platform(Rect2(80, 360, 150, 18))
 			_add_platform(Rect2(260, 485, 185, 18))
 			_add_platform(Rect2(520, 440, 155, 18))
 			_add_platform(Rect2(760, 395, 160, 18))
@@ -1669,7 +1680,7 @@ func _spawn_region_exits() -> void:
 			)
 			_spawn_exit_door(
 				2350.0, "E  沿外环屋顶阶梯登上大圣堂", "grand_cathedral",
-				"res://scenes/grand_cathedral.tscn", "west", true, "", "", floor_y - 180.0
+				"res://scenes/grand_cathedral.tscn", "cathedral_roof", true, "", "", floor_y - 180.0
 			)
 			if WorldState.is_hidden_path_opened("H03"):
 				_spawn_exit_door(
@@ -1708,7 +1719,8 @@ func _spawn_region_exits() -> void:
 		"A10":
 			_spawn_exit_door(
 				72.0, "E  返回王城外环", "royal_outer_ring",
-				"res://scenes/royal_outer_ring.tscn", "east"
+				"res://scenes/royal_outer_ring.tscn", "cathedral_roof_return",
+				true, "", "", floor_y - 180.0
 			)
 			_spawn_exit_door(
 				map_width - 72.0, "E  进入王室内城", "inner_city",
