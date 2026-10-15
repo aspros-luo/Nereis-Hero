@@ -132,7 +132,7 @@ func _show_victory_text() -> void:
     if is_instance_valid(narrative):
         narrative.show_message(
             "无名之墓",
-            "守墓者终于倒下。盔甲内没有王的遗骨，只有被反复凿空的铭牌。\n\n道路重新安静下来；那些被抹去的名字仍未得到答案。",
+            "守墓者终于倒下。盔甲上的铭文被反复凿空，只剩无法辨认的痕迹。\n\n道路重新安静下来；那些被抹去的名字仍未得到答案。",
             5.5
         )
 
