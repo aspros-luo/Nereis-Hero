@@ -270,9 +270,14 @@ func _set_skeleton_visual_enabled(enabled: bool) -> void:
 		if not is_instance_valid(skeleton_visual):
 			skeleton_visual = HERO_SKELETON_SCENE.instantiate() as Node2D
 			skeleton_visual.name = "HeroSkeletonVisual"
+			# Keep the presentation rig's local transform nonsingular before it enters Skeleton2D's
+			# transform synchronization. Its geometry is authored at unit scale.
+			skeleton_visual.scale = Vector2.ONE
 			# The rig's feet extend below its root; align them to the production Hero's floor origin.
 			skeleton_visual.position = Vector2(0.0, -34.0)
-			add_child(skeleton_visual)
+			# Hero can be spawned while its parent scene is still initializing. Attach after the
+			# current ready chain so Skeleton2D does not invert a transient singular transform.
+			add_child.call_deferred(skeleton_visual)
 	else:
 		if is_instance_valid(skeleton_visual):
 			skeleton_visual.queue_free()
