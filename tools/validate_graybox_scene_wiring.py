@@ -211,6 +211,148 @@ def main() -> int:
                     if endpoint not in region_id_set:
                         errors.append(f"Connection {connection_id} references unknown {endpoint_key} region: {endpoint}")
 
+            # Full-map structural audit: validate the hierarchy, every inter-region edge,
+            # and the final directed graph in one pass (not a hand-picked route subset).
+            # 全地图结构审计：一次性检查层级、全部跨区连接与最终有向可达图，而非只抽查部分路线。
+            macro_regions = topology.get("macro_regions", [])
+            macro_ids = [item.get("id") for item in macro_regions]
+            if len(macro_ids) != len(set(macro_ids)):
+                errors.append("World map topology contains duplicate macro-region IDs.")
+            macro_memberships: dict[str, list[str]] = {region_id: [] for region_id in region_id_set}
+            for macro in macro_regions:
+                for member in macro.get("regions", []):
+                    if member not in region_id_set:
+                        errors.append(f"Macro-region {macro.get('id', '<missing>')} references unknown region {member}.")
+                    else:
+                        macro_memberships[member].append(str(macro.get("id", "<missing>")))
+            unassigned_regions = sorted(region_id for region_id, owners in macro_memberships.items() if len(owners) == 0)
+            multiply_assigned_regions = sorted(region_id for region_id, owners in macro_memberships.items() if len(owners) > 1)
+            if unassigned_regions:
+                errors.append(f"Regions missing macro-region ownership: {unassigned_regions}.")
+            if multiply_assigned_regions:
+                errors.append(f"Regions assigned to multiple macro-regions: {multiply_assigned_regions}.")
+
+            subregions = topology.get("subregions", [])
+            subregion_ids = [item.get("id") for item in subregions]
+            if len(subregion_ids) != len(set(subregion_ids)):
+                errors.append("World map topology contains duplicate subregion IDs.")
+            subregion_by_id = {item.get("id"): item for item in subregions}
+            for subregion in subregions:
+                parent = subregion.get("parent_region")
+                if parent not in region_id_set:
+                    errors.append(f"Subregion {subregion.get('id', '<missing>')} references unknown parent region {parent}.")
+            intra_connections = topology.get("intra_region_connections", [])
+            intra_ids = [item.get("id") for item in intra_connections]
+            if len(intra_ids) != len(set(intra_ids)):
+                errors.append("World map topology contains duplicate intra-region connection IDs.")
+            for edge in intra_connections:
+                edge_id = edge.get("id", "<missing>")
+                source = subregion_by_id.get(edge.get("from"))
+                target = subregion_by_id.get(edge.get("to"))
+                if source is None or target is None:
+                    errors.append(f"Intra-region connection {edge_id} references an unknown subregion.")
+                    continue
+                if source.get("parent_region") != target.get("parent_region"):
+                    errors.append(
+                        f"Intra-region connection {edge_id} crosses region parents "
+                        f"{source.get('parent_region')} -> {target.get('parent_region')}."
+                    )
+                if edge.get("travel") not in ("both", "one_way"):
+                    errors.append(f"Intra-region connection {edge_id} has invalid travel direction {edge.get('travel')!r}.")
+                if edge.get("initial_state") not in ("open", "blocked", "locked", "sealed", "unpowered", "broken"):
+                    errors.append(f"Intra-region connection {edge_id} has unknown initial state {edge.get('initial_state')!r}.")
+
+            elevator_contracts = topology.get("elevators", [])
+            elevator_ids = [item.get("id") for item in elevator_contracts]
+            if len(elevator_ids) != len(set(elevator_ids)):
+                errors.append("World map topology contains duplicate elevator IDs.")
+            for elevator in elevator_contracts:
+                elevator_id = elevator.get("id", "<missing>")
+                for endpoint in ("from", "to"):
+                    if elevator.get(endpoint) not in subregion_by_id:
+                        errors.append(f"Elevator {elevator_id} references unknown {endpoint} subregion {elevator.get(endpoint)!r}.")
+                if elevator.get("from") == elevator.get("to"):
+                    errors.append(f"Elevator {elevator_id} must connect two distinct subregions.")
+                if not elevator.get("unlock_condition") or not elevator.get("safety"):
+                    errors.append(f"Elevator {elevator_id} is missing its unlock or safety contract.")
+
+            # Every edge must have valid access semantics and a meaningful source for any locked route.
+            # 每条跨区边都必须有合法方向；锁定路线必须写明解锁条件与开启侧。
+            allowed_initial_access = {"from_to", "both", "blocked"}
+            allowed_final_direction = {"forward", "both"}
+            for edge in connections:
+                edge_id = edge.get("id", "<missing>")
+                initial_access = edge.get("initial_access")
+                final_direction = edge.get("final_direction")
+                if initial_access not in allowed_initial_access:
+                    errors.append(f"Connection {edge_id} has invalid initial_access {initial_access!r}.")
+                if final_direction not in allowed_final_direction:
+                    errors.append(f"Connection {edge_id} has invalid final_direction {final_direction!r}.")
+                if initial_access == "blocked" and not edge.get("unlock_condition"):
+                    errors.append(f"Blocked connection {edge_id} has no unlock_condition.")
+                opens_from = edge.get("opens_from", "")
+                if opens_from and opens_from not in (edge.get("from"), edge.get("to")):
+                    errors.append(f"Connection {edge_id} opens_from={opens_from} is not one of its endpoints.")
+                spatial = edge.get("spatial_contract", {})
+                for anchor_key in ("from_region_anchor", "to_region_anchor", "return_spawn", "from_region_spawn", "to_region_spawn"):
+                    anchor = spatial.get(anchor_key)
+                    if not isinstance(anchor, dict):
+                        continue
+                    anchor_region = anchor.get("region")
+                    if anchor_region and anchor_region not in region_id_set:
+                        errors.append(f"Connection {edge_id} {anchor_key} references unknown region {anchor_region}.")
+                    for coordinate_key in ("x", "y_offset"):
+                        if coordinate_key not in anchor:
+                            continue
+                        try:
+                            coordinate = float(anchor[coordinate_key])
+                        except (TypeError, ValueError):
+                            errors.append(f"Connection {edge_id} {anchor_key}.{coordinate_key} is not numeric.")
+                            continue
+                        if coordinate_key == "x" and not 0.0 <= coordinate <= 2600.0:
+                            errors.append(f"Connection {edge_id} {anchor_key}.x={coordinate:g} is outside the 2600px map width.")
+                        if coordinate_key == "y_offset" and not -300.0 <= coordinate <= 0.0:
+                            errors.append(f"Connection {edge_id} {anchor_key}.y_offset={coordinate:g} is outside the supported vertical contract.")
+
+            # Treat all unlocks as available and verify the final directed map is navigable from the prologue.
+            # 仅在最终图检查中假定所有门槛已解锁，确认从序章出发可沿最终方向到达全部 A0-A13 区域。
+            final_reachable = {"A0"} if "A0" in region_id_set else set()
+            changed = True
+            while changed:
+                changed = False
+                for edge in connections:
+                    source, target = edge.get("from"), edge.get("to")
+                    direction = edge.get("final_direction")
+                    if source in final_reachable and target not in final_reachable:
+                        final_reachable.add(target)
+                        changed = True
+                    if direction == "both" and target in final_reachable and source not in final_reachable:
+                        final_reachable.add(source)
+                        changed = True
+            final_unreachable = sorted(region_id_set - final_reachable)
+            if final_unreachable:
+                errors.append(f"Final directed world map is unreachable from A0: {final_unreachable}.")
+
+            canonical_hidden_ids = {item.get("id") for item in hidden_regions}
+            if canonical_hidden_ids != {f"H{index:02d}" for index in range(1, 9)}:
+                errors.append(
+                    "Canonical hidden-region inventory must remain exactly H01-H08; "
+                    f"found {sorted(str(item) for item in canonical_hidden_ids)}."
+                )
+            provisional_ids = {item.get("id") for item in topology.get("provisional_regions", [])}
+            if "H09" in canonical_hidden_ids or ("H09" in provisional_ids and any(
+                item.get("id") == "H09" and item.get("story_canon") is True
+                for item in topology.get("provisional_regions", [])
+            )):
+                errors.append("H09 must remain provisional and non-canonical until narrative approval.")
+            if len(regions) != 14 or len(connections) != 24 or len(subregions) != 76 or len(intra_connections) != 71 or len(elevator_contracts) != 8:
+                errors.append(
+                    "World map inventory drift: expected 14 regions / 24 C-connections / "
+                    "76 subregions / 71 intra-region connections / 8 elevator contracts, got "
+                    f"{len(regions)} / {len(connections)} / {len(subregions)} / "
+                    f"{len(intra_connections)} / {len(elevator_contracts)}."
+                )
+
             loops = topology.get("loops", [])
             loop_ids = [loop.get("id") for loop in loops]
             if len(loop_ids) != len(set(loop_ids)):
