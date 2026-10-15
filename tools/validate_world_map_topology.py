@@ -346,13 +346,13 @@ def validate(data: dict[str, Any]) -> list[str]:
     c13_spatial = c13.get("spatial_contract", {}) if c13 else {}
     if c13_spatial.get("route_layer") != "prison_maintenance_shaft_upper_entry":
         fail(errors, "C13 must remain on the prison maintenance-shaft upper route.")
-    if c13_spatial.get("from_region_anchor") != {"region": "A7", "x": 2328, "y_offset": -120, "spawn_side": "maintenance_shaft_return"}:
+    if c13_spatial.get("from_region_anchor") != {"region": "A7", "x": 2528, "y_offset": -120, "spawn_side": "maintenance_shaft_entry"}:
         fail(errors, "C13 A7 door anchor must remain on the elevated maintenance-shaft platform.")
-    if c13_spatial.get("to_region_anchor") != {"region": "A8", "x": 72, "y_offset": -120, "spawn_side": "maintenance_shaft_entry"}:
+    if c13_spatial.get("to_region_anchor") != {"region": "A8", "x": 72, "y_offset": -120, "spawn_side": "maintenance_shaft_return"}:
         fail(errors, "C13 A8 reverse door anchor must remain on the elevated tomb entry platform.")
     if c13_spatial.get("to_region_spawn") != {"region": "A8", "x": 190, "y_offset": -120, "spawn_side": "maintenance_shaft_entry"}:
         fail(errors, "C13 A8 arrival must be supported and clear of the return-door trigger.")
-    if c13_spatial.get("return_spawn") != {"region": "A7", "x": 2240, "y_offset": -120, "spawn_side": "maintenance_shaft_return"}:
+    if c13_spatial.get("return_spawn") != {"region": "A7", "x": 2440, "y_offset": -120, "spawn_side": "maintenance_shaft_return"}:
         fail(errors, "C13 reverse arrival must return to the upper prison ledge.")
     c21 = next((edge for edge in connections if edge.get("id") == "C21"), None)
     c22 = next((edge for edge in connections if edge.get("id") == "C22"), None)
