@@ -69,6 +69,7 @@ def main() -> int:
         ("C12", "A4", "prison_tunnel", 960.0, -75.0),
         ("C13", "A7", "maintenance_shaft_return", 2340.0, -120.0),
         ("C16", "A3", "old_lift", 1960.0, -70.0),
+        ("C17", "A9", "cathedral_roof_return", 2450.0, -180.0),
         ("C23", "A4", "royal_drain", 1620.0, -120.0),
     ]
 
@@ -370,6 +371,7 @@ def main() -> int:
 
     for connection_id, region, spawn_x, spawn_y in [
         ("C07 arrival", "A4", 1410.0, 455.0),
+        ("C17 return", "A9", 2450.0, 360.0),
         ("C23 arrival", "A4", 1540.0, 420.0),
     ]:
         supported = any(
@@ -381,6 +383,47 @@ def main() -> int:
             supported,
             f"{connection_id}: arrival x={spawn_x:g}, y={spawn_y:g} must stand on an authored platform top.",
         )
+
+    # C17's return used to respawn 30px from the same door and immediately re-enter its trigger.
+    # C17 旧回程点距同一扇门仅 30px，转场后会立即再次进入门触发区。
+    c17_return = edges.get("C17", {}).get("spatial_contract", {}).get("return_spawn", {})
+    require(
+        errors,
+        c17_return.get("region") == "A9"
+        and c17_return.get("spawn_side") == "cathedral_roof_return"
+        and float(c17_return.get("x", float("nan"))) == 2450.0
+        and float(c17_return.get("y_offset", float("nan"))) == -180.0
+        and has_side_return(x_body, "A9", "cathedral_roof_return", "2450.0"),
+        "C17: A9 return must land at x=2450 / y_offset=-180, clear of the x=2350 door.",
+    )
+    c17_clearance = abs(2450.0 - 2350.0) - 55.0 - 18.0
+    require(errors, c17_clearance > 0.0, "C17: rooftop return must remain outside its door trigger.")
+
+    # Hidden-well return must stay between the east-side C06 door and the H01 gate.
+    # 隐藏水井回程必须落在东侧 C06 门与 H01 隐藏井门之间。
+    require(
+        errors,
+        has_side_return(x_body, "A4", "east", "map_width - 220.0")
+        and "_spawn_a4_hidden_well_gate(map_width - 90.0)" in region_source,
+        "H01 -> A4: arrival must avoid the x=2220 C06 watergate and the east-side hidden-well gate.",
+    )
+    a4_east_x = 2600.0 - 220.0
+    require(
+        errors,
+        abs(a4_east_x - 2220.0) - 55.0 - 18.0 > 0.0
+        and abs(a4_east_x - (2600.0 - 90.0)) > 80.0,
+        "H01 -> A4: arrival must clear both the C06 door trigger and the H01 gate radius.",
+    )
+
+    # H05's return must not activate the A6 rest point as soon as the Hero arrives.
+    # H05 返回 A6 时不能一落地就激活该区域的休整点。
+    require(
+        errors,
+        has_side_return(x_body, "A6", "silent_window", "1420.0")
+        and "rest_x = 1300.0" in region_source
+        and abs(1420.0 - 1300.0) > 110.0,
+        "H05 -> A6: arrival must stay outside the rest point's 110px interaction radius.",
+    )
 
     # Rest points must only save grounded floor-level coordinates. A proximity-only check can
     # otherwise save an airborne or upper-platform checkpoint and respawn the Hero unsupported.
