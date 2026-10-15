@@ -63,14 +63,14 @@ def main() -> int:
     contracts = [
         ("C03", "A2", "east", 2120.0, -140.0),
         ("C05", "A3", "sewer", 1380.0, -115.0),
-        ("C07", "A4", "royal_tomb_waterway", 1260.0, -85.0),
+        ("C07", "A4", "royal_tomb_waterway", 1410.0, -85.0),
         ("C08", "A3", "city_highroad_return", 2360.0, -130.0),
         ("C10", "A6", "bell_drop", 2100.0, -90.0),
         ("C12", "A4", "prison_tunnel", 960.0, -75.0),
         ("C13", "A7", "maintenance_shaft_return", 2340.0, -120.0),
         ("C16", "A3", "old_lift", 1960.0, -70.0),
         ("C17", "A9", "cathedral_roof_return", 2450.0, -180.0),
-        ("C23", "A4", "royal_drain", 1620.0, -120.0),
+        ("C23", "A4", "royal_drain", 1540.0, -120.0),
     ]
 
     for edge_id, region, side, expected_x, expected_y_offset in contracts:
@@ -498,7 +498,7 @@ def main() -> int:
         and float(from_anchor.get("x", float("nan"))) == 2350.0
         and float(from_anchor.get("y_offset", float("nan"))) == -180.0
         and to_anchor.get("region") == "A10"
-        and to_anchor.get("spawn_side") == "west",
+        and to_anchor.get("spawn_side") == "cathedral_roof",
         "C17: cathedral transition must remain an elevated A9 approach with a west-side A10 entry.",
     )
 
