@@ -105,6 +105,8 @@ def main() -> int:
         errors.append("C21: missing A11-to-A13 terminal transition")
     if '"E  进入王座区", "terminal_anomaly"' not in region:
         errors.append("C22: missing A12-to-A13 terminal transition")
+    if region.count("var ending_gate := ENDGAME_GATE_SCRIPT.new()") != 1:
+        errors.append("Terminal route: ending candidate must be evaluated once, in A13 only")
     for needle in (
         "and _has_required_sources()",
         "and (not require_outer_god_resonance or WorldState.outer_god_resonance)",
