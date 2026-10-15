@@ -129,7 +129,7 @@ def main() -> int:
     if len(a13) < 2:
         errors.append("A13 exit branch could not be located")
     else:
-        a13_branch = a13[1].split('\n\t\t"', 1)[0]
+        a13_branch = a13[1].split('\n\n\nfunc _spawn_a11_maintenance_gate', 1)[0]
         if '"deep_research_depths.tscn"' in a13_branch or '"inner_city.tscn"' in a13_branch:
             errors.append("A13 must not expose a return transition to A11/A12")
         if "route_candidate" not in a13_branch:
