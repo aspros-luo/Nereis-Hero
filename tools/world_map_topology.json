@@ -829,6 +829,27 @@
         "route_form": "王座厅上层→梦境边界",
         "readability_contract": "王权主线终局入口，与 A11 深层入口保持语义差异",
         "status": "design_contract_not_runtime_verified"
+      },
+      "spatial_contract": {
+        "route_layer": "upper_throne_approach",
+        "from_region_anchor": {
+          "region": "A12",
+          "x": 2130,
+          "y_offset": -65
+        },
+        "to_region_anchor": {
+          "region": "A13",
+          "x": 180,
+          "y_offset": 0,
+          "spawn_side": "west"
+        },
+        "to_region_spawn": {
+          "region": "A13",
+          "x": 180,
+          "y_offset": 0,
+          "spawn_side": "west"
+        },
+        "intent": "C22 leaves from the supported upper throne approach. Keep it separated from the H07 mirror-street gate at x=2250 on the ground route, and enter the terminal layer from its west ground landing."
       }
     },
     {
