@@ -277,3 +277,23 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - Second spatial pass: C09 (A5→A6) now leaves from the upper battlefield parapet; C17 (A9→A10) now uses a two-step upper roof approach. F10 route hints, topology anchors, and static regression contracts were updated together. Runtime reachability is still unverified.
 
 - H09 provisional loot is now decoupled from ending progression. New pickups only record `provisional_h09_relic_collected`; legacy `third_umbilical_cord` source entries from this candidate route are removed during load and the correction is saved. The third-cord motif remains undecided story material, not a finalized H09 requirement.
+
+## 2026-10-15 — P1–P4 full-map continuation and A8 Boss
+
+### Implemented / static contracts updated
+
+- Added the independent optional A8 Boss arena: `scenes/royal_tomb_boss.tscn` and `scripts/levels/royal_tomb_boss.gd`.
+- The A8 entrance uses its own persistent flag `defeated_royal_tomb_guardian`; it does not change C13/C14/C07/C15 or the ending evaluator. The C14 route to A9 remains available whether the Boss is fought or not.
+- Boss death resets the arena encounter at the local checkpoint. Victory records the dedicated flag and opens the return door; returning to A8 uses the `boss_return` spawn at x=1700, between the x=1540 arena entrance and x=1870 H06 gate.
+- Continue can resume `royal_tomb_boss`. The shared Ashen Knight script now supports a display name, phase property, visual theme and opt-out from the legacy global `boss_defeated` flag; the Boss HUD follows the currently bound encounter instance.
+- Added B01–B08 runtime acceptance cases to `docs/MAP_GATE_ACCEPTANCE_MATRIX_CN.md` and the P1–P4 execution ledger at `docs/P1_P2_P3_P4_FULL_MAP_EXECUTION_CN.md`.
+- Fixed the static map validator's region-exit extraction: it previously searched for eight literal spaces although the GDScript `match` blocks use tabs. The new whitespace-agnostic extractor covers the actual A2–A12 and H01–H08 exit blocks. Updated stale C08/C13 prompt assertions to match the authored door text.
+
+### Remote source cross-check
+
+- Confirmed inventory: 14 formal regions, 24 C-edges, 3 macro loops, 8 formal hidden regions, 6 macro regions, 76 subregions, 71 intra-region edges, and 8 elevator contracts.
+- Confirmed final abstract topology reachability from A0 to all A0–A13 regions.
+- Confirmed runtime hidden-gate IDs H01–H08 match topology; all 11 local Resonance route IDs match between topology and runtime.
+- Confirmed P1 prologue / village-defense / C02 source contracts and P2 Boss entry / death reset / victory / return / Continue wiring.
+- **Verification boundary:** These are remote source and topology cross-checks, not execution of the Python validators. Godot 4.6.1 parsing, collision, combat, save/Continue, and continuous natural-exploration acceptance remain pending. No GitHub Actions were triggered.
+
