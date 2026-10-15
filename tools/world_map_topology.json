@@ -702,10 +702,10 @@
           "y_offset": -180,
           "spawn_side": "cathedral_roof"
         },
-        "intent": "The cathedral roof approach is a supported high-level two-way transition: A9's upper rooftop door lands on A10's dedicated west landing at the same height, and the A10 return door restores the Hero to A9's upper step rather than the ground-level royal service lane.",
+        "intent": "The cathedral roof approach is a supported high-level two-way transition. A9's x=2350 door lands on A10's west platform; the A10 return now lands at x=2450 on A9's extended upper platform, beyond the door trigger rather than inside it.",
         "return_spawn": {
           "region": "A9",
-          "x": 2320,
+          "x": 2450,
           "y_offset": -180,
           "spawn_side": "cathedral_roof_return"
         }
