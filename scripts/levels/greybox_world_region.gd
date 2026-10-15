@@ -1693,7 +1693,7 @@ func _spawn_region_exits() -> void:
 			_spawn_exit_door(
 				map_width - 72.0, "E  沿维护竖井进入旧王墓", "royal_tomb",
 				"res://scenes/royal_tomb.tscn", "maintenance_shaft_entry",
-				true, "", "", floor_y - 120.0
+				true, "", "", floor_y - 140.0
 			)
 			# C12: unlock the supply tunnel from the prison side; the first E opens it, the second traverses.
 			# C12：从监牢侧开启补给隧道；第一次 E 开门，第二次 E 才转场。
@@ -1708,7 +1708,7 @@ func _spawn_region_exits() -> void:
 			_spawn_exit_door(
 				72.0, "E  沿维护竖井返回监牢", "prison_depths",
 				"res://scenes/prison_depths.tscn", "maintenance_shaft_return",
-				true, "", "", floor_y - 120.0
+				true, "", "", floor_y - 140.0
 			)
 			_spawn_exit_door(
 				map_width - 72.0, "E  进入王城外环", "royal_outer_ring",
