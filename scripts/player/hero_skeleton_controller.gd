@@ -80,7 +80,6 @@ var _cape_outline: Line2D
 
 func _ready() -> void:
 	# Normalize the presentation root before Skeleton2D computes any inverse transforms.
-	# Normalize the presentation root before Skeleton2D computes any inverse transforms.
 	scale = Vector2.ONE
 	_capture_neutral_pose()
 	_build_visuals()
