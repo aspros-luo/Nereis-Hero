@@ -229,6 +229,8 @@ func _spawn_y_for_side(side: String) -> float:
 	# 高位跨区门应将主角送到对应栈台，而不是落在连续地面上、再要求玩家反向跳回门口。
 	if region_id == "A3" and side == "city_highroad_return":
 		return floor_y - 130.0
+	if region_id == "A3" and side == "city_canopy_entry":
+		return floor_y - 130.0
 	if region_id == "A5" and side == "city_highroad":
 		return floor_y - 130.0
 	if region_id == "A2" and side == "east":
@@ -255,6 +257,8 @@ func _spawn_y_for_side(side: String) -> float:
 		return floor_y - 75.0
 	if region_id == "A4" and side == "royal_tomb_waterway":
 		return floor_y - 85.0
+	if region_id == "A8" and side == "royal_tomb_waterway":
+		return floor_y - 165.0
 	if region_id == "A4" and side == "royal_drain":
 		return floor_y - 120.0
 	return floor_y
@@ -262,6 +266,8 @@ func _spawn_y_for_side(side: String) -> float:
 
 func _spawn_x_for_side(side: String) -> float:
 	if region_id == "A10" and side == "cathedral_roof":
+		return 180.0
+	if region_id == "A3" and side == "city_canopy_entry":
 		return 180.0
 	if region_id == "A9" and side == "cathedral_roof_return":
 		return 2320.0
@@ -726,6 +732,9 @@ func _configure_platforms() -> void:
 			# Extend the C08 landing so its reverse spawn has a safe, continuous upper ledge.
 			# 延长 C08 落脚平台，确保反向回程出生点落在连续高台上。
 			_add_platform(Rect2(2180, 410, 250, 18))
+			# C03's west arrival/return is a real canopy landing, not a ground-level spawn below the route.
+			# C03 西侧进出点使用实体树冠平台，避免高路转场后落回地面。
+			_add_platform(Rect2(80, 410, 150, 18))
 			# Optional rooftop loop rises above the erased third street, then descends to the sewer-side route.
 			# 可选屋顶环路爬过被抹除的第三街，再下降接回下水道一侧的主路。
 			_add_platform(Rect2(450, 400, 110, 18))
@@ -835,7 +844,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1670, 445, 150, 18))
 			_add_platform(Rect2(1960, 480, 180, 18))
 			_add_platform(Rect2(400, 420, 110, 18))
-			_add_platform(Rect2(530, 375, 110, 18))
+			_add_platform(Rect2(500, 375, 140, 18))
 			_add_platform(Rect2(670, 330, 110, 18))
 			_add_platform(Rect2(820, 350, 110, 18))
 			_add_platform(Rect2(960, 395, 110, 18))
@@ -1486,8 +1495,8 @@ func _spawn_region_exits() -> void:
 			# The main route to A3 sits on the eastern canopy ledge; the ground-level bell anomaly remains a separate choice.
 			# 通往 A3 的主线出口位于东侧树冠高台；地面的钟墓异常入口保留为另一种探索选择。
 			_spawn_exit_door(
-				map_width - 360.0, "E  沿树冠高路进入被遗忘的城区", "forgotten_city",
-				"res://scenes/forgotten_city.tscn", "west",
+				map_width - 160.0, "E  沿树冠高路进入被遗忘的城区", "forgotten_city",
+				"res://scenes/forgotten_city.tscn", "city_canopy_entry",
 				true, "", "", floor_y - 160.0
 			)
 			_spawn_h02_gate(map_width - 300.0)
@@ -1509,7 +1518,8 @@ func _spawn_region_exits() -> void:
 				)
 			_spawn_exit_door(
 				72.0, "E  返回旧朝圣路", "ash_forest",
-				"res://scenes/ash_forest.tscn", "east"
+				"res://scenes/ash_forest.tscn", "east",
+				true, "", "", floor_y - 130.0
 			)
 			# The sewer descent branches off mid-market; the main road continues to A5.
 			# 下水道入口位于市场中段，城区东侧主路继续通往 A5。
@@ -1662,7 +1672,8 @@ func _spawn_region_exits() -> void:
 			_spawn_exit_door(
 				520.0, "E  打开王墓水道", "sewer_reservoir",
 				"res://scenes/sewer_reservoir.tscn", "royal_tomb_waterway",
-				true, "reached_A8_via_A7_then_opened_royal_tomb_gate", "E  沿王室水道返回"
+				true, "reached_A8_via_A7_then_opened_royal_tomb_gate", "E  沿王室水道返回",
+				floor_y - 165.0
 			)
 			_spawn_h06_gate(1870.0)
 			if WorldState.is_hidden_path_opened("H04"):
