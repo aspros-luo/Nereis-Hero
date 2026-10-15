@@ -136,12 +136,12 @@ def main() -> int:
                 errors.append("Runtime must keep H06 tied to the royal inscription while the erased-street clue remains a separate source.")
             h08 = next((region for region in hidden_regions if region.get("id") == "H08"), None)
             h08_exit = h08.get("secondary_exit", {}) if h08 else {}
-            if h08_exit.get("unlock_condition") != "physical_union_complete_then_enter_A13_terminal_layer":
-                errors.append("Topology H08 exit must converge on A13 after physical union rather than skip the terminal layer.")
+            if h08_exit.get("unlock_condition") != "ending_candidate_is_not_human_grave_based_on_resonance_truth_anchors_and_exploration":
+                errors.append("Topology H08 exit must use the shared ending evaluator, not physical-union state.")
             c21 = next((edge for edge in topology.get("connections", []) if edge.get("id") == "C21"), None)
             c22 = next((edge for edge in topology.get("connections", []) if edge.get("id") == "C22"), None)
-            if not c21 or c21.get("unlock_condition") != "physical_union_complete" or c21.get("to") != "A13":
-                errors.append("C21 must gate the A11 deep-dream entrance on physical_union_complete.")
+            if not c21 or c21.get("unlock_condition") != "ending_candidate_is_not_human_grave_based_on_resonance_truth_anchors_and_exploration" or c21.get("to") != "A13":
+                errors.append("C21 must use the shared resonance/truth-anchor/exploration ending evaluator.")
             if not c22 or c22.get("initial_access") != "from_to" or c22.get("unlock_condition") != "reached_A12_via_A10" or c22.get("to") != "A13":
                 errors.append("C22 must route the main A12 path into A13 after reaching the inner city.")
             regions = topology.get("regions", [])
