@@ -1084,6 +1084,8 @@ func get_visual_context() -> Dictionary:
 		"weapon": "short_blade" if hero_system != null and hero_system.is_short_blade() else "long_sword",
 		"action_kind": active_action_kind,
 		"action_elapsed": action_elapsed,
+		"vertical_velocity": velocity.y,
+		"grounded": is_on_floor(),
 		"attack_time_remaining": attack_time,
 		"attack_windup_remaining": attack_windup,
 		"invulnerable": invulnerable,
