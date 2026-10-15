@@ -426,7 +426,10 @@ def main() -> int:
         'boss.set("boss_display_name", "王墓守墓者")',
         'boss.set("persist_global_boss_defeat", false)',
         'boss.defeated.connect(_on_boss_defeated)',
+        'boss.phase_changed.connect(_on_boss_phase_changed)',
         'WorldState.record_achievement(BOSS_FLAG)',
+        'func _on_boss_phase_changed(phase: int)',
+        'hud.show_phase_two()',
         'func _on_hero_defeated()',
         'func _respawn_boss_after_death()',
         'WorldState.pending_region_spawn_side = "boss_return"',
@@ -439,6 +442,10 @@ def main() -> int:
     require(boss_scene, 'path="res://scripts/levels/royal_tomb_boss.gd"', "Royal tomb Boss scene script", errors)
     ashen_knight_script = read("scripts/enemies/ashen_knight.gd", errors)
     require(ashen_knight_script, 'var boss_display_name := "灰烬骑士"', "Reusable Boss display name", errors)
+    require(ashen_knight_script, "var max_health := 240", "Reusable Boss max-health contract", errors)
+    require(ashen_knight_script, "var phase := 1", "Reusable Boss phase HUD contract", errors)
+    require(ashen_knight_script, "phase = 2", "Reusable Boss second phase contract", errors)
+    require(ashen_knight_script, 'var visual_theme := "ashen"', "Reusable Boss visual theme contract", errors)
     require(ashen_knight_script, "var persist_global_boss_defeat := true", "Reusable Boss legacy flag isolation", errors)
     require(ashen_knight_script, 'if persist_global_boss_defeat:', "Reusable Boss victory persistence switch", errors)
     hud_script = read("scripts/ui/game_hud.gd", errors)
