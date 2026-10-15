@@ -1374,6 +1374,8 @@ def main() -> int:
         return 180.0
 
     topology_for_spawn_audit = topology
+    spawn_mapping_audit_count = 0
+    spawn_landing_audit_count = 0
     for edge in topology_for_spawn_audit.get("connections", []):
         edge_id = edge.get("id", "<missing>")
         spatial = edge.get("spatial_contract", {})
@@ -1394,6 +1396,7 @@ def main() -> int:
                 continue
             side = str(spawn.get("spawn_side", ""))
             if side:
+                spawn_mapping_audit_count += 1
                 runtime_x = _mapped_spawn_value(spawn_x_block, region_id, side, "x")
                 runtime_y_offset = _mapped_spawn_value(spawn_y_block, region_id, side, "y")
                 if runtime_x is None or abs(runtime_x - spawn_x) > 0.1:
@@ -1406,6 +1409,7 @@ def main() -> int:
                         f"{edge_id} {spawn_key} Y mapping mismatch for {region_id}/{side}: "
                         f"topology={spawn_y_offset}, runtime={runtime_y_offset}."
                     )
+            spawn_landing_audit_count += 1
             region_platforms = platforms_by_region.get(region_id, [])
             supported = any(
                 abs(platform_y - (540.0 + spawn_y_offset)) <= 1.5
@@ -1823,6 +1827,9 @@ def main() -> int:
 
     print("GRAYBOX SCENE WIRING STATIC CHECK PASSED")
     print(" - A2-A13 plus H01-H08 scenes have scripts and resume mappings.")
+    print(f" - Full-map inventory: {len(topology.get('regions', []))} regions, {len(topology.get('connections', []))} C-edges, {len(topology.get('subregions', []))} subregions, {len(topology.get('intra_region_connections', []))} intra-region edges, {len(topology.get('elevators', []))} elevator contracts.")
+    print(f" - Runtime C-edge wiring: {len(topology_for_route_audit.get('connections', []))} connections audited; reverse source wiring checked where final_direction=both.")
+    print(f" - Spatial spawn contracts: {spawn_mapping_audit_count} side mappings and {spawn_landing_audit_count} collision-backed landings checked.")
     print(" - The R01-R08 anomaly source chain is present.")
     print(" - H01-H08 plus C15/C19 gates use saved discovery/open/entry state and progression conditions.")
     print(f" - Platform reachability estimate: {platform_audit_regions} regions, {platform_audit_count} platforms.")
