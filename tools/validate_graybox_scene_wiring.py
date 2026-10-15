@@ -1300,22 +1300,22 @@ def main() -> int:
 
     def _spawn_expression_value(expression: str, axis: str) -> float | None:
         expression = expression.strip()
-        numeric = re.fullmatch(r"[-+]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)", expression)
+        numeric = re.fullmatch(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)", expression)
         if numeric:
             value = float(expression)
             return value if axis == "x" else (value - 540.0)
         if axis == "x":
-            match = re.fullmatch(r"map_width\\s*-\\s*([\\d.]+)", expression)
+            match = re.fullmatch(r"map_width\s*-\s*([\d.]+)", expression)
             return 2600.0 - float(match.group(1)) if match else None
         if expression == "floor_y":
             return 0.0
-        match = re.fullmatch(r"floor_y\\s*-\\s*([\\d.]+)", expression)
+        match = re.fullmatch(r"floor_y\s*-\s*([\d.]+)", expression)
         return -float(match.group(1)) if match else None
 
     def _mapped_spawn_value(mapping_block: str, region_id: str, side: str, axis: str) -> float | None:
         condition = re.compile(
             rf'if region_id == "{re.escape(region_id)}" and side == "{re.escape(side)}":'
-            rf'(?P<body>(?:\\n[ \\t]*#.*)*\\n[ \\t]*return (?P<value>[^\\n]+))'
+            rf'(?P<body>(?:\n[ \t]*#.*)*\n[ \t]*return (?P<value>[^\n]+))'
         )
         match = condition.search(mapping_block)
         if match:
