@@ -1461,16 +1461,16 @@ func _register_debug_locked_route_hints() -> void:
 		return
 	match region_id:
 		"A2":
-			_register_debug_locked_route_hint(1880.0, "old_battlefield", "旧朝圣高路需从 A5 开启")
+			_register_debug_locked_route_hint(1880.0, "old_battlefield", "旧朝圣高路需从 A5 开启", floor_y - 115.0)
 		"A3":
 			_register_debug_locked_route_hint(520.0, "village", "村庄防卫章节完成后开放")
-			_register_debug_locked_route_hint(2040.0, "royal_outer_ring", "东侧高位旧升降机：需从 A9 开启")
+			_register_debug_locked_route_hint(2040.0, "royal_outer_ring", "东侧高位旧升降机：需从 A9 开启", floor_y - 70.0)
 			_register_debug_locked_route_hint(1710.0, "monastery_tower", "需先从 A6 开启钟塔落差")
 			_register_debug_locked_route_hint(1870.0, "silent_bell_room", "需先发现并开启 H05")
 		"A4":
-			_register_debug_locked_route_hint(1050.0, "prison_depths", "低位栈台：需从 A7 开启补给隧道")
-			_register_debug_locked_route_hint(1320.0, "royal_tomb", "中层平台：需从 A8 开启王墓水道")
-			_register_debug_locked_route_hint(1650.0, "royal_outer_ring", "高位管线：需从 A9 开启王城排水道")
+			_register_debug_locked_route_hint(1050.0, "prison_depths", "低位栈台：需从 A7 开启补给隧道", floor_y - 75.0)
+			_register_debug_locked_route_hint(1320.0, "royal_tomb", "中层平台：需从 A8 开启王墓水道", floor_y - 85.0)
+			_register_debug_locked_route_hint(1650.0, "royal_outer_ring", "高位管线：需从 A9 开启王城排水道", floor_y - 105.0)
 			_register_debug_locked_route_hint(map_width - 90.0, "hidden_well", "需先实际抵达 A4，再以灵视发现 H01")
 		"A5":
 			_register_debug_locked_route_hint(2060.0, "hidden_bell_chamber", "需先发现并开启 H02")
@@ -1513,13 +1513,15 @@ func _debug_route_label(target_location: String) -> String:
 	return str(labels.get(target_location, target_location))
 
 
-func _register_debug_locked_route_hint(x: float, target: String, condition: String) -> void:
+func _register_debug_locked_route_hint(x: float, target: String, condition: String, marker_y: float = -1.0) -> void:
 	for marker in debug_exit_markers:
 		var marker_position: Vector2 = marker.get("position", Vector2.ZERO)
 		if is_equal_approx(marker_position.x, x) and str(marker.get("label", "")) == _debug_route_label(target):
 			return
+	# High-route ghost markers must use the same vertical anchor as the door they represent.
+	# 高位虚拟标识必须使用对应实体门的垂直锚点，不能一律画在地面。
 	debug_exit_markers.append({
-		"position": Vector2(x, floor_y),
+		"position": Vector2(x, floor_y if marker_y < 0.0 else marker_y),
 		"label": _debug_route_label(target),
 		"kind": "locked",
 		"condition": condition
@@ -1813,12 +1815,12 @@ func _spawn_region_exits() -> void:
 			# C22 仅在记录了 A10 主线抵达 A12 后开放，不能从 H07 镜街侧门绕过终局门槛。
 			if "reached_A12_via_A10" in WorldState.achievement_flags:
 				_spawn_exit_door(
-					map_width - 72.0, "E  进入王座区", "terminal_anomaly",
-					"res://scenes/terminal_anomaly.tscn", "west"
+					2130.0, "E  进入王座区", "terminal_anomaly",
+					"res://scenes/terminal_anomaly.tscn", "west", true, "", "", floor_y - 65.0
 				)
 			else:
 				_register_debug_locked_route_hint(
-					map_width - 72.0, "terminal_anomaly", "需要从大圣堂主线抵达 A12（C22）"
+					2130.0, "terminal_anomaly", "需要从大圣堂主线抵达 A12（C22）", floor_y - 65.0
 				)
 		"H07":
 			_spawn_exit_door(
