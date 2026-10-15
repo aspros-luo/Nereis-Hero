@@ -368,10 +368,10 @@
           "y_offset": -165,
           "spawn_side": "royal_tomb_waterway"
         },
-        "intent": "The royal tomb return branches from the middle ledge, distinct from the low prison supply tunnel and the higher royal drain. Both endpoints use supported middle-level landings and must not fall back to ground-level spawns.",
+        "intent": "The royal tomb return branches from the middle ledge, distinct from the low prison supply tunnel and the higher royal drain. The A4 arrival lands at x=1410 on the far end of the supported ledge, outside the x=1320 door trigger; both endpoints must not fall back to ground-level spawns.",
         "return_spawn": {
           "region": "A4",
-          "x": 1260,
+          "x": 1410,
           "y_offset": -85,
           "spawn_side": "royal_tomb_waterway"
         }
@@ -756,11 +756,11 @@
         },
         "return_spawn": {
           "region": "A9",
-          "x": 1000,
+          "x": 980,
           "y_offset": 0,
           "spawn_side": "inner_city_side_gate"
         },
-        "intent": "The late inner-city shortcut remains ground-level on both ends; A9 arrival lands midway between the x=900 door and x=1100 rest point to avoid overlapping either interaction focus."
+        "intent": "The late inner-city shortcut remains ground-level on both ends. A9 arrival at x=980 stays outside the x=900 door trigger and just beyond the x=1100 rest point's 110px focus radius."
       }
     },
     {
@@ -875,10 +875,10 @@
         },
         "return_spawn": {
           "region": "A4",
-          "x": 1570,
+          "x": 1540,
           "y_offset": -120
         },
-        "intent": "Royal drain uses the upper pipe ledge, separate from H04's water reflection entrance and the ground-level village watergate.",
+        "intent": "Royal drain uses the upper pipe ledge, separate from H04's water reflection entrance and the ground-level village watergate. The A4 return landing at x=1540 is supported by the lower lip and leaves wider horizontal clearance from the x=1650 door trigger.",
         "from_region_spawn": {
           "region": "A9",
           "x": 650,
