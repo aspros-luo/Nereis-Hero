@@ -876,7 +876,8 @@
         "return_spawn": {
           "region": "A4",
           "x": 1540,
-          "y_offset": -120
+          "y_offset": -120,
+          "spawn_side": "royal_drain"
         },
         "intent": "Royal drain uses the upper pipe ledge, separate from H04's water reflection entrance and the ground-level village watergate. The A4 return landing at x=1540 is supported by the lower lip and leaves wider horizontal clearance from the x=1650 door trigger.",
         "from_region_spawn": {
