@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/characters/customizable_character.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/character_customization_ui.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/debug/character_customization_preview.gd" id="3"]
 
 [node name="CharacterCustomizationPreview" type="Node2D"]
+script = ExtResource("3")
 
 [node name="FloorLine" type="Line2D" parent="."]
 z_index = -5
