@@ -897,7 +897,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(2080, 400, 110, 18))
 			# C13's west exit and arrival are supported on the upper royal-tomb entry platform.
 			# C13 王墓西侧出口与到达点均由上层入口平台承托。
-			_add_platform(Rect2(80, 420, 150, 18))
+			_add_platform(Rect2(60, 420, 170, 18))
 			_add_platform(Rect2(240, 420, 170, 18))
 		"A9":
 			# Street-level ring remains the safe route; the roofline creates a loop through abandoned homes.
