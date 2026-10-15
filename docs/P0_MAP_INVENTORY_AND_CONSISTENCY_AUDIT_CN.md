@@ -15,7 +15,7 @@
 - 额外候选：H09；候选区不替代 H01–H08 正式编号。
 - **H 与 C 没有新旧替代关系**：A/H 是区域，C 是区域间连接；L 是宏观环路，SC 是区域内连接，LFT 是升降机。
 - 发现并修正了终局条件验证器与实际剧情代码之间的过期约定；同时把 C02 的村庄防卫前置条件写回拓扑数据。
-- C14 已有双向源码出口，但拓扑缺少独立空间锚点，暂列为元数据缺口；需在后续空间审计补齐。
+- C14 的双向源码出口已与拓扑空间锚点对齐：A8 门 x=2528、A9 门 x=72，回程出生点分别为 A8 x=2420、A9 x=180；静态方向审计已补充相应检查。
 - 本轮没有声称任何跳跃、碰撞、门触发、存档恢复或全流程转场已在 Godot 运行通过。
 
 ## 2. 状态定义
@@ -75,7 +75,7 @@ A0 和 A1 由独立关卡脚本实现；A2–A13 共享 `scripts/levels/greybox_
 | C11 | A6 → A7 | main | both | both | 无额外解锁条件 | — | 未提供独立 spatial_contract；以 layer_contract 与源码门/出生点映射为准 | 源码存在对应转场分支；仅静态源码核对，未作 Godot 实机验收 |
 | C12 | A7 → A4 | shortcut | blocked | both | reached_A7_then_opened_supply_tunnel | A7 | 出：A7@(520, 0)；入：A4@(1050, -75)；返：A4@(960, -75)；反向到达：A7@(610, 0, supply_tunnel) | 源码存在对应转场分支；仅静态源码核对，未作 Godot 实机验收 |
 | C13 | A7 → A8 | main | both | both | 无额外解锁条件 | — | 出：A7@(2528, -140, maintenance_shaft_entry)；入：A8@(72, -140, maintenance_shaft_return)；返：A7@(2340, -120, maintenance_shaft_return)；到达：A8@(190, -120, maintenance_shaft_entry) | 源码存在对应转场分支；仅静态源码核对，未作 Godot 实机验收 |
-| C14 | A8 → A9 | main | both | both | 无额外解锁条件 | — | 未提供独立 spatial_contract；以 layer_contract 与源码门/出生点映射为准 | 源码有 A8/A9 双向门；拓扑缺少独立 spatial_contract，列为元数据缺口 |
+| C14 | A8 → A9 | main | both | both | 无额外解锁条件 | — | 出：A8@(2528, 0)；入：A9@(72, 0, west)；返：A8@(2420, 0, east)；反向到达：A9@(180, 0, west) | 已按源码边界门与安全出生点补齐 spatial_contract，并增加静态方向审计；仍需实机验收 |
 | C15 | A8 → A11 | secret | blocked | both | resonance_sight_active_and_resonance_at_least_55_and_ancient_exposure_at_least_2_and_sources_anomaly_bell_retiming_and_anomaly_erased_royal_name | A8 | 未提供独立 spatial_contract；以 layer_contract 与源码门/出生点映射为准 | 源码存在对应转场分支；仅静态源码核对，未作 Godot 实机验收 |
 | C16 | A3 → A9 | shortcut | blocked | both | reached_A9_via_A8_then_opened_old_lift_from_A9 | A9 | 出：A3@(2040, -70)；入：A9@(520, -110)；返：A3@(1960, -70)；到达：A9@(610, -110) | 源码存在对应转场分支；仅静态源码核对，未作 Godot 实机验收 |
 | C17 | A9 → A10 | main | both | both | 无额外解锁条件 | — | 出：A9@(2350, -180)；入：A10@(180, -180, cathedral_roof)；返：A9@(2450, -180, cathedral_roof_return) | 源码存在对应转场分支；仅静态源码核对，未作 Godot 实机验收 |
@@ -330,9 +330,9 @@ H09「崖下实验窟」当前是临时候选区域，代码已有灰盒场景�
 
 对齐到当前评估器语义。**验证器文件已修改，但本轮环境没有本地检出仓库，因此没有声称已执行并通过这些脚本。**
 
-### P0-03：C14 缺少独立空间契约（登记为后续待补）
+### P0-03：C14 空间契约已补齐（静态已对齐，实机待验收）
 
-拓扑中 C14 是 A8↔A9 的双向主线连接，源码也有两端门与反向出口；但它没有独立 `spatial_contract`，不像 C13/C08 等路线明确记录门锚点、回程出生点和高度层。P0 先将它登记为元数据缺口；后续应根据源码中的实际坐标补齐，不凭空猜测坐标。
+根据源码中的门创建与默认出生侧映射，C14 使用 A8 东侧边界门 `map_width - 72`（当前地图宽度下 x=2528）和 A9 西侧边界门 x=72。A8 的 `east` 到达点为 `map_width - 180`（x=2420），A9 的 `west` 到达点为 x=180。已将这些值写入 C14 的 `spatial_contract`，并在 `validate_connection_direction_audit.py` 中加入拓扑字段与源码映射检查。源码文本只能证明坐标约定，不能证明落地承托和交互净距在运行时一定正确。
 
 ### P0-04：宏观拓扑不等于可游玩验证（保留为待验收）
 
@@ -375,7 +375,7 @@ python3 tools/validate_graybox_scene_wiring.py
 - [ ] 验证 C15 与 C19 进入 A11 的条件独立。
 - [ ] 验证 C21、C22、H08 三条终局入口都进入 A13，再由终局评估器选择结局。
 - [ ] 检查高位门、低位门和连续地面之间不存在未设计的绕行。
-- [ ] 对 C14 补齐空间契约后，验收两端门和出生点的高度、承托与触发净距。
+- [ ] 验收 C14 两端门和出生点的高度、承托与触发净距。
 
 ## 15. P0 完成状态
 
@@ -385,6 +385,6 @@ python3 tools/validate_graybox_scene_wiring.py
 - [x] 6 个宏区、76 个子区域、71 条区域内连接、8 个升降机契约已纳入总账。
 - [x] C02 的村庄防卫门槛已写入拓扑数据。
 - [x] C21/H08 静态验证规则已对齐当前结局评估器。
-- [x] C14 空间元数据缺口已明确登记，不伪造坐标。
+- [x] C14 地面双向门的空间锚点已按源码坐标补齐，并加入静态方向审计。
 - [ ] 本地运行四个 Python 静态验证器（需在实际仓库工作区执行）。
 - [ ] Godot 4.6.1 实机验收（需运行游戏验证）。
