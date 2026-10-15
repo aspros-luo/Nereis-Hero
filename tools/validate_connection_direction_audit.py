@@ -165,17 +165,17 @@ def main() -> int:
         errors.append("Death recovery: input lock must be set before the recovery delay")
 
     # Verify every runtime transition to A13 retains its own intended prerequisite.
-    a12_split = exit_source.split('\\n\\t\\t"A12":', 1)
+    a12_split = exit_source.split('\n\t\t"A12":', 1)
     a12_branch = a12_split[1].split('\\n\\t\\t"', 1)[0] if len(a12_split) > 1 else ""
     if 'if "reached_A12_via_A10" in WorldState.achievement_flags:' not in a12_branch:
         errors.append("C22: A12-to-A13 door must require reached_A12_via_A10")
     if '_register_debug_locked_route_hint(' not in a12_branch or "需要从大圣堂主线抵达 A12（C22）" not in a12_branch:
         errors.append("C22: locked mainline prerequisite should be visible when its door is unavailable")
-    a11_split = exit_source.split('\\n\\t\\t"A11":', 1)
+    a11_split = exit_source.split('\n\t\t"A11":', 1)
     a11_branch_for_c21 = a11_split[1].split('\\n\\t\\t"', 1)[0] if len(a11_split) > 1 else ""
     if "if WorldState.physical_union_complete:" not in a11_branch_for_c21 or '"res://scenes/terminal_anomaly.tscn"' not in a11_branch_for_c21:
         errors.append("C21: A11-to-A13 transition must be gated by physical_union_complete")
-    h08_split = exit_source.split('\\n\\t\\t"H08":', 1)
+    h08_split = exit_source.split('\n\t\t"H08":', 1)
     h08_branch = h08_split[1].split('\\n\\t\\t"', 1)[0] if len(h08_split) > 1 else ""
     if "if WorldState.physical_union_complete:" not in h08_branch or '"res://scenes/terminal_anomaly.tscn"' not in h08_branch:
         errors.append("A13 alternate entry: H08 route must retain physical_union_complete prerequisite")
