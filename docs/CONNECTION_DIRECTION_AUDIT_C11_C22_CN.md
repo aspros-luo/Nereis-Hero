@@ -50,7 +50,7 @@
 - Topology marks C22 as initially forward-only (`from_to`) and finally forward-only.
 - A12's main route enters the A13 terminal scene; A13 then delegates ending selection to the shared ending evaluator.
 - A13 does not create an ordinary return door to A12.
-- The A12 branch contains legacy local variables that compute an ending scene/location before the actual C22 transition; the transition now targets A13, so those locals appear redundant. They are not a demonstrated routing failure and were not removed in this audit.
+- Removed the obsolete A12-local ending candidate/location calculation. A12 now only enters A13; A13 is the single place that calls the shared ending evaluator, avoiding duplicate and misleading routing logic.
 
 ## Ground bypass and platform findings
 
@@ -90,6 +90,7 @@ This pass reviewed the current `development` source and added a focused static r
 - [x] C15 and C19 each use their own persistent open flag for A11 return doors.
 - [x] C21 is only spawned when WorldState.physical_union_complete is true; C22 enters A13 from A12.
 - [x] A13's ordinary exit is the shared ending-evaluator candidate; no A11/A12 return door is authored in the A13 branch.
+- [x] Removed redundant ending-candidate calculation from A12; A13 remains the single ending-evaluation layer.
 - [x] The focused source checker was strengthened to assert the full C15/C19 conditions and C13/C21/C22 wiring.
 
 ### Required Godot 4.6.1 runtime acceptance — still pending
