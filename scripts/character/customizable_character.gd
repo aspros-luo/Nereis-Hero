@@ -18,6 +18,8 @@ const DEFAULT_ATLAS_PATH := "res://assets/art/hero_sprite_lab/muramasa_texture_a
 @export var default_clothes_region := Rect2(0, 0, 64, 96)
 @export var default_face_region := Rect2(0, 0, 64, 64)
 @export var default_accessory_region := Rect2(0, 0, 32, 32)
+@export var default_arm_region := Rect2(0, 0, 32, 64)
+@export var default_leg_region := Rect2(0, 0, 32, 64)
 
 @onready var body_sprite: Sprite2D = get_node_or_null("Rig/RootBone/BodyBone/BodySprite") as Sprite2D
 @onready var clothes_sprite: Sprite2D = get_node_or_null("Rig/RootBone/BodyBone/ClothesSprite") as Sprite2D
@@ -26,6 +28,10 @@ const DEFAULT_ATLAS_PATH := "res://assets/art/hero_sprite_lab/muramasa_texture_a
 @onready var hair_back_sprite: Sprite2D = get_node_or_null("Rig/RootBone/BodyBone/HeadBone/HairBackSprite") as Sprite2D
 @onready var hair_front_sprite: Sprite2D = get_node_or_null("Rig/RootBone/BodyBone/HeadBone/HairFrontSprite") as Sprite2D
 @onready var accessory_sprite: Sprite2D = get_node_or_null("Rig/RootBone/BodyBone/HeadBone/AccessorySprite") as Sprite2D
+@onready var left_arm_sprite: Sprite2D = get_node_or_null("Rig/RootBone/BodyBone/LeftArmBone/ArmSprite") as Sprite2D
+@onready var right_arm_sprite: Sprite2D = get_node_or_null("Rig/RootBone/BodyBone/RightArmBone/ArmSprite") as Sprite2D
+@onready var left_leg_sprite: Sprite2D = get_node_or_null("Rig/RootBone/LeftLegBone/LegSprite") as Sprite2D
+@onready var right_leg_sprite: Sprite2D = get_node_or_null("Rig/RootBone/RightLegBone/LegSprite") as Sprite2D
 
 var current_hair := -1
 var current_clothes := -1
@@ -56,7 +62,7 @@ func _ready() -> void:
 
 
 func _all_slots() -> Array[Sprite2D]:
-	return [body_sprite, clothes_sprite, head_sprite, face_sprite, hair_back_sprite, hair_front_sprite, accessory_sprite]
+	return [body_sprite, clothes_sprite, head_sprite, face_sprite, hair_back_sprite, hair_front_sprite, accessory_sprite, left_arm_sprite, right_arm_sprite, left_leg_sprite, right_leg_sprite]
 
 
 func _apply_default_regions() -> void:
@@ -67,6 +73,10 @@ func _apply_default_regions() -> void:
 	_apply_region(hair_back_sprite, default_hair_region, Vector2(0, -2), 1)
 	_apply_region(hair_front_sprite, default_hair_region, Vector2(0, -2), 4)
 	_apply_region(accessory_sprite, default_accessory_region, Vector2.ZERO, 5)
+	_apply_region(left_arm_sprite, default_arm_region, Vector2(0, 8), 1)
+	_apply_region(right_arm_sprite, default_arm_region, Vector2(0, 8), 1)
+	_apply_region(left_leg_sprite, default_leg_region, Vector2(0, 10), 0)
+	_apply_region(right_leg_sprite, default_leg_region, Vector2(0, 10), 0)
 	# Placeholder regions are intentionally hidden until real atlas bounds are configured.
 	for sprite in _all_slots():
 		if sprite != null:
