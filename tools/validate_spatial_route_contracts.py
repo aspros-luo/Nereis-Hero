@@ -367,6 +367,20 @@ def main() -> int:
         "Spawn-clearance contracts assume the current 110x80 door trigger and 18px Hero collision radius.",
     )
 
+    for connection_id, region, spawn_x, spawn_y in [
+        ("C07 arrival", "A4", 1410.0, 455.0),
+        ("C23 arrival", "A4", 1540.0, 420.0),
+    ]:
+        supported = any(
+            left <= spawn_x <= left + width and abs(platform_y - spawn_y) <= 1.0
+            for left, platform_y, width, _height in platform_rects.get(region, [])
+        )
+        require(
+            errors,
+            supported,
+            f"{connection_id}: arrival x={spawn_x:g}, y={spawn_y:g} must stand on an authored platform top.",
+        )
+
     # Rest points must only save grounded floor-level coordinates. A proximity-only check can
     # otherwise save an airborne or upper-platform checkpoint and respawn the Hero unsupported.
     # 休整点只能记录地面承托位置；单纯距离检测可能把空中或上层平台坐标存成死亡出生点。
