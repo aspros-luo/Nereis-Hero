@@ -16,10 +16,24 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     cooldown = max(0.0, cooldown - delta)
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
-    hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 110.0
+    hero_nearby = _hero_can_rest(hero)
     var available := not WorldState.input_locked and hero_nearby and cooldown <= 0.0
     INTERACTION_FOCUS_SCRIPT.sync(self, available)
     queue_redraw()
+
+
+func _hero_can_rest(hero: Node2D) -> bool:
+    # A rest interaction must not record an airborne checkpoint or one from a nearby upper ledge.
+    # 休整必须发生在地面承托处，不能把空中坐标或附近高层平台记录成死亡出生点。
+    if hero == null or not hero is CharacterBody2D:
+        return false
+    var body := hero as CharacterBody2D
+    return (
+        body.is_on_floor()
+        and absf(body.global_position.x - global_position.x) <= 90.0
+        and absf(body.global_position.y - global_position.y) <= 32.0
+    )
+
 
 func _unhandled_input(event: InputEvent) -> void:
     if WorldState.input_locked or not hero_nearby or cooldown > 0.0 or not INTERACTION_FOCUS_SCRIPT.is_focused(self):
