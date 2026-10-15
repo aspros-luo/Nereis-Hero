@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TOPOLOGY_PATH = ROOT / "tools/world_map_topology.json"
 REGION_SCRIPT_PATH = ROOT / "scripts/levels/greybox_world_region.gd"
 VILLAGE_SCRIPT_PATH = ROOT / "scripts/levels/village_hub.gd"
+REST_POINT_SCRIPT_PATH = ROOT / "scripts/world/rest_point.gd"
 
 
 def function_body(source: str, function_name: str) -> str:
@@ -48,6 +49,7 @@ def main() -> int:
         topology = json.loads(TOPOLOGY_PATH.read_text(encoding="utf-8"))
         region_source = REGION_SCRIPT_PATH.read_text(encoding="utf-8")
         village_source = VILLAGE_SCRIPT_PATH.read_text(encoding="utf-8")
+        rest_point_source = REST_POINT_SCRIPT_PATH.read_text(encoding="utf-8")
         x_body = function_body(region_source, "_spawn_x_for_side")
         y_body = function_body(region_source, "_spawn_y_for_side")
     except (OSError, json.JSONDecodeError, ValueError) as exc:
@@ -307,6 +309,92 @@ def main() -> int:
         and "72.0" in c13_a8_exit
         and "floor_y - 140.0" in c13_a8_exit,
         "C13: A8's west door must use x=72 and y_offset=-140.",
+    )
+
+    # Incoming spawn points must not overlap the destination door's Area2D trigger
+    # or activate a neighboring rest prompt immediately after the transition.
+    # 目标出生点不得与目的地门的 Area2D 触发区重叠，也不得一落地就激活相邻休整提示。
+    c07 = edges.get("C07", {}).get("spatial_contract", {})
+    c07_spawn = c07.get("return_spawn", {})
+    require(
+        errors,
+        c07_spawn.get("region") == "A4"
+        and c07_spawn.get("spawn_side") == "royal_tomb_waterway"
+        and float(c07_spawn.get("x", float("nan"))) == 1410.0
+        and float(c07_spawn.get("y_offset", float("nan"))) == -85.0
+        and has_side_return(x_body, "A4", "royal_tomb_waterway", "1410.0")
+        and has_side_return(y_body, "A4", "royal_tomb_waterway", "floor_y - 85.0"),
+        "C07: A4 arrival must use x=1410 / y_offset=-85, away from the x=1320 door trigger.",
+    )
+    c23 = edges.get("C23", {}).get("spatial_contract", {})
+    c23_spawn = c23.get("return_spawn", {})
+    require(
+        errors,
+        c23_spawn.get("region") == "A4"
+        and float(c23_spawn.get("x", float("nan"))) == 1540.0
+        and float(c23_spawn.get("y_offset", float("nan"))) == -120.0
+        and has_side_return(x_body, "A4", "royal_drain", "1540.0")
+        and has_side_return(y_body, "A4", "royal_drain", "floor_y - 120.0"),
+        "C23: A4 arrival must use the supported x=1540 lip, not the narrow-clearance x=1570 point.",
+    )
+    c18 = edges.get("C18", {}).get("spatial_contract", {})
+    c18_spawn = c18.get("return_spawn", {})
+    require(
+        errors,
+        c18_spawn.get("region") == "A9"
+        and c18_spawn.get("spawn_side") == "inner_city_side_gate"
+        and float(c18_spawn.get("x", float("nan"))) == 980.0
+        and has_side_return(x_body, "A9", "inner_city_side_gate", "980.0"),
+        "C18: A9 arrival must be outside both the x=900 door trigger and x=1100 rest focus radius.",
+    )
+    door_trigger_half_width = 55.0
+    hero_half_width = 18.0
+    c07_horizontal_clearance = abs(1410.0 - 1320.0) - door_trigger_half_width - hero_half_width
+    c23_horizontal_clearance = abs(1650.0 - 1540.0) - door_trigger_half_width - hero_half_width
+    c18_door_clearance = abs(980.0 - 900.0) - door_trigger_half_width - hero_half_width
+    c18_rest_clearance = abs(1100.0 - 980.0) - 110.0
+    require(
+        errors,
+        c07_horizontal_clearance > 0.0 and c23_horizontal_clearance > 0.0
+        and c18_door_clearance > 0.0 and c18_rest_clearance > 0.0,
+        "C07/C18/C23: spawn-to-trigger or spawn-to-rest-focus clearance must remain positive.",
+    )
+    require(
+        errors,
+        "rectangle.size = Vector2(110.0, 80.0)" in region_source
+        and "shape.position = Vector2(0.0, -35.0)" in region_source
+        and "capsule.radius = radius" in region_source,
+        "Spawn-clearance contracts assume the current 110x80 door trigger and 18px Hero collision radius.",
+    )
+
+    # Rest points must only save grounded floor-level coordinates. A proximity-only check can
+    # otherwise save an airborne or upper-platform checkpoint and respawn the Hero unsupported.
+    # 休整点只能记录地面承托位置；单纯距离检测可能把空中或上层平台坐标存成死亡出生点。
+    require(
+        errors,
+        "func _hero_can_rest(hero: Node2D) -> bool:" in rest_point_source
+        and "body.is_on_floor()" in rest_point_source
+        and "absf(body.global_position.x - global_position.x) <= 90.0" in rest_point_source
+        and "absf(body.global_position.y - global_position.y) <= 32.0" in rest_point_source,
+        "Rest points must require a grounded Hero within 90px horizontally and 32px vertically.",
+    )
+    require(
+        errors,
+        "WorldState.set_checkpoint(hero.global_position)" in rest_point_source,
+        "Rest points must persist the Hero's current supported position only after the grounded gate passes.",
+    )
+
+    # Death recovery must lock input, clear stale interaction focus, and restore at the region-local checkpoint.
+    # 死亡恢复必须锁定输入、清除过期交互焦点，并回到当前区域的检查点。
+    death_body = function_body(region_source, "_on_hero_defeated")
+    require(
+        errors,
+        "WorldState.input_locked = true" in death_body
+        and "INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())" in death_body
+        and "hero.global_position = WorldState.checkpoint_position" in death_body
+        and "WorldState.input_locked = false" in death_body
+        and "WorldState.set_checkpoint(hero.global_position)" in function_body(region_source, "_spawn_hero"),
+        "Death recovery must clear focus and use the current region's checkpoint before re-enabling interaction.",
     )
 
     # Ending access must follow the evaluator's resonance/item/exploration candidate,
