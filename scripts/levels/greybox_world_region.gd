@@ -2449,10 +2449,13 @@ func _draw_debug_exit_markers() -> void:
 			marker_color = Color("#c6a0f6")
 		elif marker_kind == "locked":
 			marker_color = Color("#ed8796")
+		# The arrow points down to the exact door/gate anchor; the label stays above it.
+		# 箭头尖端指向门/灵视入口的实际交互锚点，文字标签仍放在上方。
 		var marker_top := marker_position + Vector2(0.0, -118.0)
-		draw_line(marker_position + Vector2(0.0, -8.0), marker_top, marker_color, 3.0, true)
-		draw_line(marker_top + Vector2(-12.0, 12.0), marker_top, marker_color, 3.0)
-		draw_line(marker_top + Vector2(12.0, 12.0), marker_top, marker_color, 3.0)
+		draw_line(marker_top, marker_position + Vector2(0.0, -8.0), marker_color, 3.0, true)
+		draw_line(marker_position + Vector2(-12.0, -22.0), marker_position, marker_color, 3.0)
+		draw_line(marker_position + Vector2(12.0, -22.0), marker_position, marker_color, 3.0)
+		draw_circle(marker_position, 4.0, marker_color)
 		var marker_label := "[出口] "
 		if marker_kind == "shortcut":
 			marker_label = "[捷径] "
