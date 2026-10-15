@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/character/customizable_character.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/character/character_animation_setup.gd" id="2"]
+
+[node name="CustomizableCharacter" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Rig" type="Skeleton2D" parent="."]
+
+[node name="RootBone" type="Bone2D" parent="Rig"]
+
+[node name="BodyBone" type="Bone2D" parent="Rig/RootBone"]
+position = Vector2(0, -20)
+
+[node name="BodySprite" type="Sprite2D" parent="Rig/RootBone/BodyBone"]
+position = Vector2(0, 0)
+z_index = 0
+
+[node name="ClothesSprite" type="Sprite2D" parent="Rig/RootBone/BodyBone"]
+z_index = 1
+
+[node name="LeftArmBone" type="Bone2D" parent="Rig/RootBone/BodyBone"]
+position = Vector2(-12, 0)
+
+[node name="ArmSprite" type="Sprite2D" parent="Rig/RootBone/BodyBone/LeftArmBone"]
+position = Vector2(0, 8)
+
+[node name="RightArmBone" type="Bone2D" parent="Rig/RootBone/BodyBone"]
+position = Vector2(12, 0)
+
+[node name="ArmSprite" type="Sprite2D" parent="Rig/RootBone/BodyBone/RightArmBone"]
+position = Vector2(0, 8)
+
+[node name="HeadBone" type="Bone2D" parent="Rig/RootBone/BodyBone"]
+position = Vector2(0, -20)
+
+[node name="HairBackSprite" type="Sprite2D" parent="Rig/RootBone/BodyBone/HeadBone"]
+z_index = 0
+
+[node name="HeadSprite" type="Sprite2D" parent="Rig/RootBone/BodyBone/HeadBone"]
+z_index = 1
+
+[node name="FaceSprite" type="Sprite2D" parent="Rig/RootBone/BodyBone/HeadBone"]
+z_index = 2
+
+[node name="HairFrontSprite" type="Sprite2D" parent="Rig/RootBone/BodyBone/HeadBone"]
+z_index = 3
+
+[node name="AccessorySprite" type="Sprite2D" parent="Rig/RootBone/BodyBone/HeadBone"]
+z_index = 4
+
+[node name="LeftLegBone" type="Bone2D" parent="Rig/RootBone"]
+position = Vector2(-8, 24)
+
+[node name="LegSprite" type="Sprite2D" parent="Rig/RootBone/LeftLegBone"]
+position = Vector2(0, 10)
+
+[node name="RightLegBone" type="Bone2D" parent="Rig/RootBone"]
+position = Vector2(8, 24)
+
+[node name="LegSprite" type="Sprite2D" parent="Rig/RootBone/RightLegBone"]
+position = Vector2(0, 10)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="AnimationSetup" type="Node" parent="."]
+script = ExtResource("2")
