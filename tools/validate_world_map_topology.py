@@ -198,6 +198,56 @@ def validate(data: dict[str, Any]) -> list[str]:
         if not str(lift.get("unlock_condition", "")).strip():
             fail(errors, f"{lift.get('id')}: lift contract needs an unlock condition.")
 
+    # Fully unlocked local graphs must connect every subregion from that region's first-listed entry node.
+    # 全部机关开启后，每个区域都必须能从清单首个入口节点到达所有小区域。
+    subregions_by_parent: dict[str, list[dict[str, Any]]] = {}
+    for subregion in subregions:
+        subregions_by_parent.setdefault(subregion["parent_region"], []).append(subregion)
+
+    for parent, members in subregions_by_parent.items():
+        member_ids = {item["id"] for item in members}
+        local_graph = {item["id"]: set() for item in members}
+        for edge in local_connections:
+            source, target = edge.get("from"), edge.get("to")
+            if source not in member_ids or target not in member_ids:
+                continue
+            # Locked routes count in the fully unlocked graph; one-way drops remain directed.
+            # 完全开启图包含锁定路线；单向落差仍保留方向性。
+            local_graph[source].add(target)
+            if edge.get("travel") == "both":
+                local_graph[target].add(source)
+
+        entry_id = members[0]["id"]
+        visited = {entry_id}
+        queue = deque([entry_id])
+        while queue:
+            current = queue.popleft()
+            for target in local_graph[current] - visited:
+                visited.add(target)
+                queue.append(target)
+        unreachable = sorted(member_ids - visited)
+        if unreachable:
+            fail(errors, f"{parent}: subregions unreachable even after all local gates open: {unreachable}.")
+
+    # The five box-world hubs must preserve multiple vertical bands and real cross-layer links.
+    # 五个箱庭核心枢纽必须保留多条高度带，以及真实跨层连接。
+    layer_by_subregion = {item["id"]: item.get("layer", "") for item in subregions}
+    for parent in ("A3", "A4", "A6", "A8", "A9"):
+        members = subregions_by_parent.get(parent, [])
+        distinct_layers = {item.get("layer", "") for item in members if item.get("layer")}
+        cross_layer_edges = [
+            edge for edge in local_connections
+            if edge.get("from") in layer_by_subregion
+            and edge.get("to") in layer_by_subregion
+            and edge["from"].startswith(parent + "-")
+            and edge["to"].startswith(parent + "-")
+            and layer_by_subregion[edge["from"]] != layer_by_subregion[edge["to"]]
+        ]
+        if len(distinct_layers) < 3:
+            fail(errors, f"{parent}: core box-world hub needs at least 3 distinct vertical layers.")
+        if len(cross_layer_edges) < 2:
+            fail(errors, f"{parent}: core box-world hub needs at least 2 explicit cross-layer connections.")
+
     # Narrative exploration gates connect places to ability, Resonance, story, and physical mechanisms.
     # 剧情探索门槛将地点与能力、鸣响、支线和地理机关连接起来。
     gate_contracts = data.get("exploration_gate_contracts", [])
