@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/hero_skeleton.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/player/hero_skeleton_texture_lab.gd" id="2"]
+
+[node name="HeroSkeletonTextureLab" type="Node2D"]
+
+[node name="FloorLine" type="Line2D" parent="."]
+z_index = -2
+points = PackedVector2Array(-180, 45, 180, 45)
+width = 3.0
+default_color = Color(0.38, 0.34, 0.4, 1)
+
+[node name="HeroSkeleton" parent="." instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -5)
+zoom = Vector2(2, 2)
+position_smoothing_enabled = false
