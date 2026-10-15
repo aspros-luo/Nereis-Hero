@@ -60,3 +60,9 @@ The counts above sum to 65 scripts with `_draw()`.
 
 - Route NPC and Bandit Raider now hold the reusable rig as `HumanoidCharacterVisual` and call its public methods/properties directly instead of using string-based `Object.set()` / `Object.call()`. This makes the integration contract clearer and reduces runtime-only method-name mistakes.
 - Their interaction, combat, hitbox, telegraph and label responsibilities remain unchanged. Godot parser/runtime verification is still required locally.
+
+
+## Runtime warning follow-up / 运行时警告跟进
+
+- A local report identified `Transform2D.affine_invert()` with zero determinant during `Hero._set_skeleton_visual_enabled()` while the game otherwise remained playable.
+- The Hero skeleton visual now starts with explicit unit scale and is attached deferred to avoid initializing its Skeleton2D during the active scene-ready chain. This is a targeted mitigation, not a confirmed runtime fix; verify the Output panel in Godot 4.6.1.
