@@ -615,7 +615,7 @@ def main() -> int:
         'func _draw_silent_bell_room_landmarks',
         'func _draw_erased_royal_name_landmarks',
         'anomaly_observer_reaction',
-        'if WorldState.physical_union_complete:',
+        'if NereisEndingEvaluator.get_candidate() != "凡人之墓":',
         'ENDGAME_GATE_SCRIPT',
         'reached_A10_via_A9',
         'primordial_hollow',
@@ -935,7 +935,7 @@ def main() -> int:
         ],
         "H08": [
             '"E  返回深层研究区"',
-            'if WorldState.physical_union_complete:',
+            'if NereisEndingEvaluator.get_candidate() != "凡人之墓":',
             '"terminal_anomaly"',
             '"res://scenes/terminal_anomaly.tscn"',
         ],
