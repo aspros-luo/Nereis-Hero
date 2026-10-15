@@ -130,7 +130,7 @@ func _spawn_region_encounters() -> void:
 		"A7":
 			_spawn_encounter(RESEARCH_HUSK_SCRIPT, "A7_ResearchHusk_01", 1750.0, 14.0, 42.0)
 		"A8":
-			_spawn_encounter(CULTIST_SCRIPT, "A8_Cultist_01", 1800.0, 13.0, 38.0)
+			_spawn_encounter(CULTIST_SCRIPT, "A8_Cultist_01", 850.0, 13.0, 38.0)
 		"A10":
 			_spawn_encounter(CHURCH_INQUISITOR_SCRIPT, "A10_Inquisitor_01", 600.0, 14.0, 42.0)
 			_spawn_encounter(BELL_WRAITH_SCRIPT, "A10_BellWraith_01", 1700.0, 14.0, 40.0)
@@ -278,6 +278,10 @@ func _spawn_y_for_side(side: String) -> float:
 
 
 func _spawn_x_for_side(side: String) -> float:
+	if region_id == "A8" and side == "boss_return":
+		# Return from the optional arena between its entrance and H06, clear of both interaction volumes.
+		# 从可选 Boss 内殿返回时，落在入口与 H06 之间的安全走廊。
+		return 1700.0
 	if region_id == "A10" and side == "cathedral_roof":
 		return 180.0
 	if region_id == "A3" and side == "city_canopy_entry":
@@ -1709,6 +1713,13 @@ func _spawn_region_exits() -> void:
 				true, "reached_A7_then_opened_supply_tunnel", "E  沿补给隧道返回"
 			)
 		"A8":
+			# Optional dedicated Boss arena; the ordinary A8→A9 main route remains available either way.
+			# 独立 Boss 内殿是可选内容；无论是否挑战，A8→A9 主线都保持开放。
+			if "defeated_royal_tomb_guardian" not in WorldState.achievement_flags:
+				_spawn_exit_door(
+					1540.0, "E  进入王墓内殿", "royal_tomb_boss",
+					"res://scenes/royal_tomb_boss.tscn", "west"
+				)
 			# C13's reverse door stays on the upper entry platform, preventing a ground-level bypass.
 			# C13 回程门仍位于上层入口平台，避免主线变成地面平移捷径。
 			_spawn_exit_door(
