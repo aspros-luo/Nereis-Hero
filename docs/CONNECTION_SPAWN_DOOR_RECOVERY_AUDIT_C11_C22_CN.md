@@ -22,7 +22,7 @@
 | C15 A8→A11 | gate ID=C15；A11/west；要求灵视、resonance≥55、ancient exposure≥2、来源 anomaly_bell_retiming 与 anomaly_erased_royal_name。A11 回 A8 仅在 is_hidden_path_opened("C15") 时启用。 | A8 门 x=2310；A11 west 出生 x=180，A11 返回门 x=72。A11 回 A8 使用 east 出生 x=2420，距 C15 门中心 110px。 | 80px 径向门范围外约 30px。C15 与 A8 边界 C14 门中心相隔 218px，普通门矩形间约留 108px。与 H06 保持独立。 |
 | C19 A10→A11 | gate ID=C19；A11/chapel_entry；要求灵视、resonance≥68、outer exposure≥12、outer_god_resonance 与 anomaly_mirror_street_echo。A11 回 A10 仅由 C19 自身打开状态启用。 | A11 chapel_entry 出生 x=1900、地面；A11 东侧回程门 x=2528，相距 628px。 | 源码状态锁与 C15 独立；实际进入后仍需检查焦点、存档/读档和回程门状态。 |
 | C21 A11→A13 | topology 为 blocked→forward，要求 physical_union_complete；运行时仅在该标记为 true 时生成入口；A13 不创建普通 A11 回程门。 | A11 门 x=2050；A13 west 出生默认 x=180；A13 结局出口约 x=2510。 | 源码方向符合单向设计；需运行时确认 A13 没有意外回程或死亡/读档绕回。 |
-| C22 A12→A13 | topology 为 from_to→forward，要求 reached_A12_via_A10；A12 在东侧生成 A13 入口；A13 无普通 A12 回程门。 | A13 west 出生 x=180；A13 结局出口约 x=2510；A12 返回大圣堂门 x=72，与 C22 入口 x=2528 分离。 | 源码方向符合单向设计；需运行时验收终局门与结局评估器。 |
+| C22 A12→A13 | topology 为 from_to→forward；运行时只有 `reached_A12_via_A10` 已记录才生成 A13 入口，否则显示锁定路线提示；A13 无普通 A12 回程门。 | A13 west 出生 x=180；A13 结局出口约 x=2510；A12 返回大圣堂门 x=72，与 C22 入口 x=2528 分离。 | 现在同时落实拓扑与运行时前置条件；需运行时验证标记 false/true 两种状态与终局评估器。 |
 
 ## 死亡恢复与休整点
 
@@ -35,7 +35,7 @@
 
 ## 静态验证器执行状态
 
-本轮更新了 `tools/validate_connection_direction_audit.py`，新增 C13 出生净距、死亡恢复输入锁/焦点清理、C22 主线前置条件，以及 C21/C22/H08 三个 A13 入口的静态契约检查。当前会话仍未提供可执行仓库脚本的本地 checkout/Python 环境，因此本轮**尚未执行**以下脚本，不能将其报告为通过：
+本轮更新了 `tools/validate_connection_direction_audit.py`，新增 C13 出生净距、死亡恢复输入锁/焦点清理、C22 主线前置条件，以及 C21/C22/H08 三个 A13 入口的静态契约检查。随后对最新 GitHub 源码执行了 11 项等价的轻量 source-contract 检查，全部通过；但因当前执行环境无法解析 `github.com`（clone 失败：DNS 解析失败），**未能实际运行下列 Python 验证器**，因此不能将它们报告为通过：
 
 ```bash
 python3 tools/validate_connection_direction_audit.py
@@ -56,8 +56,8 @@ python3 tools/validate_world_map_topology.py
 ## Godot 4.6.1 运行时验收
 
 1. C11/C13/C14 两端从地面与设计路径分别接近；确认地面不能触发 C13 高位门，平台能承托出生，且切图后不会立刻聚焦第二个门。
-2. C13 特别检查 A7 的 x=2440 出生点与 x=2528 门的 88px 中心距、门触发范围、跳跃落地和地面绕行。
-3. 分别只满足 C15 或 C19 条件，测试阈值以下/刚达阈值、灵视开关、独立回程锁、切图与存档恢复。
-4. C21 在 physical_union_complete=false/true 两种状态下测试；C22 测试主线进 A13；确认 A13 没有普通回程门。
+2. C13 特别检查 A7 的 x=2340 出生点与 x=2528 门的 188px 中心距、门触发范围、跳跃落地和地面绕行。
+3. 构造四组状态：仅 C15 满足、仅 C19 满足、两者都不满足、两者都满足；分别测试阈值以下/刚达阈值、灵视开关、证据来源、独立回程锁、切图与存档恢复。
+4. C21 与 H08 入口分别在 `physical_union_complete=false/true` 下测试；C22 在 `reached_A12_via_A10` 缺失/存在时测试；确认 A13 没有普通回程门。
 5. 在 A6/A7/A8/A9/A10/A11/A12 分别休整后死亡，检查复活点不在门触发区内、不悬空；保存后重启继续，重复检查。
 6. 检查 Godot 输出中的焦点跳变、重复切图、碰撞告警，并将实际结果单独记录，不能把源代码审计当成运行时通过。
