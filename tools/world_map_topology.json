@@ -580,15 +580,15 @@
         "route_layer": "prison_maintenance_shaft_upper_entry",
         "from_region_anchor": {
           "region": "A7",
-          "x": 2328,
+          "x": 2528,
           "y_offset": -120,
-          "spawn_side": "maintenance_shaft_return"
+          "spawn_side": "maintenance_shaft_entry"
         },
         "to_region_anchor": {
           "region": "A8",
           "x": 72,
           "y_offset": -120,
-          "spawn_side": "maintenance_shaft_entry"
+          "spawn_side": "maintenance_shaft_return"
         },
         "to_region_spawn": {
           "region": "A8",
@@ -598,7 +598,7 @@
         },
         "return_spawn": {
           "region": "A7",
-          "x": 2240,
+          "x": 2440,
           "y_offset": -120,
           "spawn_side": "maintenance_shaft_return"
         },
