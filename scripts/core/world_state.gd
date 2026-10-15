@@ -1022,6 +1022,8 @@ func get_resume_scene_path() -> String:
             return "res://scenes/prison_depths.tscn"
         "royal_tomb":
             return "res://scenes/royal_tomb.tscn"
+        "royal_tomb_boss":
+            return "res://scenes/royal_tomb_boss.tscn"
         "royal_outer_ring":
             return "res://scenes/royal_outer_ring.tscn"
         "grand_cathedral":
