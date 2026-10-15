@@ -54,6 +54,7 @@
 - [x] 检查 ID 唯一性、父子引用、连接方向、解锁条件、最终有向图可达性和 H09 候选边界。
 - [x] 对 24 条 C 连接检查场景转场与适用的反向门；对空间合同出生点检查运行时映射与碰撞平台承托。
 - [x] 验证器新增 A8 Boss 场景、独立胜利旗标、死亡重置、返回门和 Continue 场景映射合同。
+- [x] 修复验证器按 8 个空格提取区域出口、而实际 GDScript 使用 Tab 导致的分支识别缺陷；现在按空白无关的正则提取 A2–A12 与 H01–H08 出口块，并将 C08/C13 主线提示断言与实际门文案对齐。
 - [ ] 在本地仓库根目录实际执行以下全部脚本并修复所有失败：
   - `python3 tools/validate_world_map_topology.py`
   - `python3 tools/validate_spatial_route_contracts.py`
