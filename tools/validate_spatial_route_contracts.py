@@ -87,7 +87,7 @@ def main() -> int:
             x_mapping_matches = (
                 x_mapping_matches
                 or re.search(
-                    r'if region_id == "A7" and side == "maintenance_shaft_return":\\s*(?:#.*\\n\\s*)*return map_width - 260\\.0',
+                    r'if region_id == "A7" and side == "maintenance_shaft_return":\s*(?:#.*\n\s*)*return map_width - 260\.0',
                     x_body,
                 ) is not None
             )
@@ -290,6 +290,32 @@ def main() -> int:
             supported,
             f"{edge_id}: elevated door anchor {region} x={x:g}, y={door_y:g} is not supported by a nearby authored platform.",
         )
+
+    c13_a7_exit = exit_blocks.get("A7", "")
+    c13_a8_exit = exit_blocks.get("A8", "")
+    require(
+        errors,
+        "maintenance_shaft_entry" in c13_a7_exit
+        and "map_width - 72.0" in c13_a7_exit
+        and "floor_y - 140.0" in c13_a7_exit,
+        "C13: A7's east door must use x=map_width-72 and y_offset=-140.",
+    )
+    require(
+        errors,
+        "maintenance_shaft_return" in c13_a8_exit
+        and "72.0" in c13_a8_exit
+        and "floor_y - 140.0" in c13_a8_exit,
+        "C13: A8's west door must use x=72 and y_offset=-140.",
+    )
+
+    # Ending access must follow the evaluator's resonance/item/exploration candidate,
+    # never physical intimacy.
+    require(
+        errors,
+        region_source.count('NereisEndingEvaluator.get_candidate() != "凡人之墓"') >= 2
+        and "physical_union_complete" not in region_source,
+        "C21/H08: terminal routes must use the ending evaluator, not physical_union_complete.",
+    )
 
     # C17 has no explicit return_spawn field, but its high approach and target spawn side are important.
     c17 = edges.get("C17", {}).get("spatial_contract", {})
