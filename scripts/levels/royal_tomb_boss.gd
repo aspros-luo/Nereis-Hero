@@ -33,7 +33,7 @@ func _ready() -> void:
     else:
         _spawn_boss()
         if is_instance_valid(narrative):
-            narrative.show_message(
+            narrative.call("show_message",
                 "被抹名的守墓者",
                 "石棺之后传来沉重的拖行声。守墓者没有名字，盔甲上所有铭文都被凿成了相同的空白。\n\n它仍然记得如何守门。",
                 5.5
@@ -130,7 +130,7 @@ func _on_boss_defeated() -> void:
 
 func _show_victory_text() -> void:
     if is_instance_valid(narrative):
-        narrative.show_message(
+        narrative.call("show_message",
             "无名之墓",
             "守墓者终于倒下。盔甲上的铭文被反复凿空，只剩无法辨认的痕迹。\n\n道路重新安静下来；那些被抹去的名字仍未得到答案。",
             5.5
