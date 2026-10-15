@@ -66,3 +66,11 @@ The counts above sum to 65 scripts with `_draw()`.
 
 - A local report identified `Transform2D.affine_invert()` with zero determinant during `Hero._set_skeleton_visual_enabled()` while the game otherwise remained playable.
 - The Hero skeleton visual now starts with explicit unit scale and is attached deferred to avoid initializing its Skeleton2D during the active scene-ready chain. This is a targeted mitigation, not a confirmed runtime fix; verify the Output panel in Godot 4.6.1.
+
+
+## Hero Skeleton transform follow-up / 主角骨骼变换跟进
+
+- The generic `affine_invert: Condition "det == 0"` warning persisted after deferred attachment, but the latest user report did not include a script stack, so the exact engine call site remains unconfirmed.
+- Hardened `HeroSkeletonController` so its presentation root starts at unit scale and facing changes assign an explicit `Vector2(facing, 1.0)` instead of multiplying the previous X scale. This prevents a zero X scale from persisting if one is ever introduced.
+- Serialized explicit `Bone2D.rest` transforms matching each bone's authored local position in `hero_skeleton.tscn`, consistent with the reusable humanoid rig's rest-pose setup.
+- Source-level mitigation only. Godot 4.6.1 runtime verification is still required; if the warning remains, capture the expanded stack trace to identify the exact inversion caller.
