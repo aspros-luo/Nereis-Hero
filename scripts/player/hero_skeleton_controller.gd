@@ -79,6 +79,9 @@ var _cape_outline: Line2D
 
 
 func _ready() -> void:
+	# Normalize the presentation root before Skeleton2D computes any inverse transforms.
+	# Normalize the presentation root before Skeleton2D computes any inverse transforms.
+	scale = Vector2.ONE
 	_capture_neutral_pose()
 	_build_visuals()
 	_apply_pose()
@@ -153,7 +156,8 @@ func set_pose(next_pose: PoseState, next_combo_step: int = 1, next_facing: float
 	current_pose = next_pose
 	combo_step = next_step
 	facing = next_direction
-	scale.x = absf(scale.x) * facing
+	# Reassert a non-zero unit magnitude every time facing changes; never inherit a zero scale.
+	scale = Vector2(facing, 1.0)
 	_apply_pose()
 
 
