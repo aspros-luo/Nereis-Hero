@@ -185,8 +185,15 @@
       "kind": "main",
       "initial_access": "both",
       "final_direction": "both",
-      "unlock_condition": "",
-      "opens_from": "",
+      "unlock_condition": "village_defense_survived",
+      "opens_from": "A1",
+      "progression_gate": {
+        "interaction_id": "north_gate",
+        "before_unlock": "enter_village_defense_demo_and_return_to_A1",
+        "after_unlock": "enter_A2_from_A1",
+        "reverse_route": "A2_to_A1_remains_available",
+        "note": "initial_access describes macro graph connectivity; the A1-side first-entry interaction launches the defense chapter before the route is unlocked."
+      },
       "layer_contract": {
         "from_subregion": "A1-S01",
         "to_subregion": "A2-S01",
