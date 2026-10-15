@@ -358,9 +358,9 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C04 A2 return door must align with the old-pilgrim canopy ledge.")
     if c04_spatial.get("to_region_anchor") != {"region": "A5", "x": 520, "y_offset": -140, "spawn_side": "old_pilgrim_highroad"}:
         fail(errors, "C04 A5 door must remain on the upper battlement approach.")
-    if c04_spatial.get("return_spawn") != {"region": "A2", "x": 1750, "y_offset": -160, "spawn_side": "old_pilgrim_highroad"}:
+    if c04_spatial.get("return_spawn") != {"region": "A2", "x": 1750, "y_offset": -140, "spawn_side": "old_pilgrim_highroad"}:
         fail(errors, "C04 A2 arrival must land on the canopy approach platform.")
-    if c04_spatial.get("from_region_spawn") != {"region": "A5", "x": 650, "y_offset": -105, "spawn_side": "old_pilgrim_highroad"}:
+    if c04_spatial.get("from_region_spawn") != {"region": "A5", "x": 650, "y_offset": -85, "spawn_side": "old_pilgrim_highroad"}:
         fail(errors, "C04 A5 arrival must land on the battlement approach platform.")
 
     c03 = next((edge for edge in connections if edge.get("id") == "C03"), None)
@@ -415,8 +415,8 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C07 return spawn must sit within interaction range of the middle ledge door.")
     for connection_id, expected_spawn in {
         "C05": {"region": "A3", "x": 1380, "y_offset": -115},
-        "C12": {"region": "A4", "x": 1090, "y_offset": -75},
-        "C23": {"region": "A4", "x": 1620, "y_offset": -120},
+        "C12": {"region": "A4", "x": 960, "y_offset": -75},
+        "C23": {"region": "A4", "x": 1570, "y_offset": -120},
     }.items():
         edge = next((item for item in connections if item.get("id") == connection_id), None)
         spatial = edge.get("spatial_contract", {}) if edge else {}
@@ -424,10 +424,15 @@ def validate(data: dict[str, Any]) -> list[str]:
             fail(errors, f"{connection_id} return spawn must match its elevated destination ledge.")
     c23 = next((edge for edge in connections if edge.get("id") == "C23"), None)
     c23_spatial = c23.get("spatial_contract", {}) if c23 else {}
-    if c23_spatial.get("from_region_anchor") != {"region": "A9", "x": 850, "y_offset": -150}:
+    if c23_spatial.get("from_region_anchor") != {"region": "A9", "x": 740, "y_offset": -150}:
         fail(errors, "C23 A9-side door must branch from the upper service ledge.")
-    if c23_spatial.get("from_region_spawn") != {"region": "A9", "x": 770, "y_offset": -150}:
+    if c23_spatial.get("from_region_spawn") != {"region": "A9", "x": 650, "y_offset": -150}:
         fail(errors, "C23 arrival in A9 must land on the upper service ledge.")
+    c12_spatial = next((edge for edge in connections if edge.get("id") == "C12"), {}).get("spatial_contract", {})
+    if c12_spatial.get("from_region_spawn") != {"region": "A7", "x": 610, "y_offset": 0, "spawn_side": "supply_tunnel"}:
+        fail(errors, "C12 return to A7 must preserve its authored prison-side landing.")
+    if c23_spatial.get("return_spawn") != {"region": "A4", "x": 1570, "y_offset": -120}:
+        fail(errors, "C23 return spawn must land on the supported lip, clear of the A4 door trigger.")
 
     # C24 is the alternate A1-to-A3 route added after the village defense.
     # C24 是村庄防卫后开放的 A1 → A3 替代路线。
