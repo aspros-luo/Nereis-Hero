@@ -16,6 +16,7 @@ var selecting := false
 var selection_start := Vector2.ZERO
 var selection_end := Vector2.ZERO
 var has_selection := false
+var atlas_size := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -37,11 +38,12 @@ func _ready() -> void:
 		_build_status("Failed to load atlas / 图集加载失败")
 		return
 
+	atlas_size = Vector2(atlas.get_width(), atlas.get_height())
 	atlas_sprite = Sprite2D.new()
 	atlas_sprite.name = "Atlas"
 	atlas_sprite.texture = atlas
 	atlas_sprite.centered = false
-	atlas_sprite.position = -ATLAS_SIZE * 0.5
+	atlas_sprite.position = -atlas_size * 0.5
 	atlas_sprite.z_index = -1
 	add_child(atlas_sprite)
 
@@ -65,12 +67,12 @@ func _build_status(message: String) -> void:
 func _draw() -> void:
 	if atlas_sprite == null:
 		return
-	var half := ATLAS_SIZE * 0.5
-	for coordinate in range(0, int(ATLAS_SIZE.x) + 1, GRID_STEP):
+	var half := atlas_size * 0.5
+	for coordinate in range(0, int(atlas_size.x) + 1, GRID_STEP):
 		var x := float(coordinate) - half.x
 		draw_line(Vector2(x, -half.y), Vector2(x, half.y), GRID_COLOR, 1.0)
 		draw_string(ThemeDB.fallback_font, Vector2(x + 4.0, -half.y + 18.0), str(coordinate), HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#fff0b3"))
-	for coordinate in range(0, int(ATLAS_SIZE.y) + 1, GRID_STEP):
+	for coordinate in range(0, int(atlas_size.y) + 1, GRID_STEP):
 		var y := float(coordinate) - half.y
 		draw_line(Vector2(-half.x, y), Vector2(half.x, y), GRID_COLOR, 1.0)
 		draw_string(ThemeDB.fallback_font, Vector2(-half.x + 4.0, y - 4.0), str(coordinate), HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#fff0b3"))
@@ -109,7 +111,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					selecting = false
 					has_selection = true
 					var rect := Rect2(selection_start, selection_end - selection_start).abs()
-					var atlas_rect := Rect2(rect.position + ATLAS_SIZE * 0.5, rect.size)
+					var atlas_rect := Rect2(rect.position + atlas_size * 0.5, rect.size)
 					print("Atlas crop / 图集裁切: Rect2(%d, %d, %d, %d)" % [roundi(atlas_rect.position.x), roundi(atlas_rect.position.y), roundi(atlas_rect.size.x), roundi(atlas_rect.size.y)])
 					if status_label:
 						status_label.text = "Selected crop / 已选区域: %d, %d — %d × %d\nDrag another region to replace / 再次拖框可重新选择" % [roundi(atlas_rect.position.x), roundi(atlas_rect.position.y), roundi(atlas_rect.size.x), roundi(atlas_rect.size.y)]
