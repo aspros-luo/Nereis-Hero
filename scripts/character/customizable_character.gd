@@ -79,10 +79,12 @@ func _apply_default_regions() -> void:
 	_apply_region(right_arm_sprite, default_arm_region, Vector2(0, 8), 1)
 	_apply_region(left_leg_sprite, default_leg_region, Vector2(0, 10), 0)
 	_apply_region(right_leg_sprite, default_leg_region, Vector2(0, 10), 0)
-	# Placeholder atlas regions are hidden; a rig-following silhouette remains visible until real parts are configured.
+	# Keep Sprite2D containers visible for their fallback Polygon2D children, but clear the
+	# texture so guessed placeholder rectangles are never rendered as character art.
 	for sprite in _all_slots():
 		if sprite != null:
-			sprite.visible = false
+			sprite.texture = null
+			sprite.visible = true
 
 
 func _apply_region(sprite: Sprite2D, region: Rect2, local_position: Vector2, layer: int) -> void:
