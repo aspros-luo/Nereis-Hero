@@ -760,6 +760,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1600, 420, 150, 18))
 			# C23 return arrival is supported just left of the pipe door, not suspended over a gap.
 			# C23 回程出生点由管线门左侧的实体栈台承托，避免悬空出生。
+			_add_platform(Rect2(1530, 420, 70, 18))
 			_add_platform(Rect2(1980, 470, 170, 18))
 			_add_platform(Rect2(470, 400, 115, 18))
 			_add_platform(Rect2(600, 355, 120, 18))
