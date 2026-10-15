@@ -79,3 +79,50 @@ python3 tools/validate_graybox_scene_wiring.py
 ## Acceptance boundary
 
 This pass reviewed the current `development` source and added a focused static regression checker. The checker has not been executed against a local checkout in this session, and Godot 4.6.x runtime tests have not been run. Do not mark collision, door focus, ground bypass, transition, save/resume, or terminal behavior as runtime-accepted until those checks are performed in-engine.
+
+## Phase A closure checklist — 2026-10-15
+
+### Static source review completed
+
+- [x] C13 endpoint targets, upper-platform markers, and floor_y - 120 arrival mappings are present on both sides.
+- [x] C15 requires Resonance Sight through the shared gate, resonance 55, ancient exposure 2, and both anomaly_bell_retiming and anomaly_erased_royal_name.
+- [x] C19 requires resonance 68, outer exposure 12, outer_god_resonance, and anomaly_mirror_street_echo.
+- [x] C15 and C19 each use their own persistent open flag for A11 return doors.
+- [x] C21 is only spawned when WorldState.physical_union_complete is true; C22 enters A13 from A12.
+- [x] A13's ordinary exit is the shared ending-evaluator candidate; no A11/A12 return door is authored in the A13 branch.
+- [x] The focused source checker was strengthened to assert the full C15/C19 conditions and C13/C21/C22 wiring.
+
+### Required Godot 4.6.1 runtime acceptance — still pending
+
+Run these in the project, using a debug save or controlled debug state as appropriate. Do not count a source-marker match as a runtime pass.
+
+1. **C13 traversal and bypass**
+   - Enter A7 from A6; walk to the C13 east side without jumping. The C13 interaction prompt must not be usable from the floor.
+   - Traverse the authored two-step/platform approach and confirm the Hero can stand on the upper landing and interact with the C13 door.
+   - Transition to A8; confirm the arrival is supported on the upper west platform and does not overlap the return-door focus radius.
+   - Return to A7; confirm the Hero arrives on the upper maintenance ledge.
+   - Repeat while deliberately staying on the ground lane to confirm there is no unintended ground-level transition around the high gate.
+
+2. **C15/C19 isolation and persistence**
+   - With all requirements absent, confirm neither gate reveals (unless the debug override is deliberately enabled for a separate debug-only test).
+   - Satisfy C15's requirements only; confirm C15 can be revealed/opened, the state survives a scene reload, and A11's tomb-side return appears.
+   - Confirm this does not enable the A10/cathedral return associated with C19.
+   - Satisfy C19's requirements only; confirm C19 can be revealed/opened and its return appears, without enabling the C15 return.
+   - Verify the evidence source IDs and outer-god fact independently; test the thresholds just below and at the required values.
+
+3. **C21/C22 terminal direction**
+   - With physical_union_complete = false, confirm A11 does not spawn C21.
+   - With it true, confirm C21 enters A13.
+   - Enter A13 through C22 from A12 and confirm it uses the same terminal layer.
+   - In A13, check both ends and the whole floor route: no ordinary door returns to A11 or A12; the only ordinary exit advances to the selected ending route.
+   - Reload the scene/save and confirm the terminal direction remains unchanged.
+
+4. **Main-route ground bypass sweep**
+   - Walk along the ground floor of A6/A7, A7/A8, and A8/A9 without using their intended doors; confirm no transition happens merely by reaching a region edge.
+   - Repeat at each elevated main-route door and nearby ledge, checking jump reachability, landing collision, door focus distance, and transition destination.
+   - Also inspect any adjacent shortcut/secret door in the same area so its interaction radius does not accidentally capture the main-route prompt.
+
+### Execution boundary
+
+The GitHub connector can inspect and commit source files but does not run the project in the user's local Godot editor. No Godot runtime acceptance is claimed here. Phase A is therefore **source-review complete, runtime acceptance outstanding**; the first small-map prototype may proceed with these connections marked as runtime-pending, but their geometry should not be frozen until the checks above are performed.
+
