@@ -130,6 +130,7 @@ func _enter_region(entry: Dictionary) -> void:
     get_tree().change_scene_to_file(str(entry.path))
 
 func _return_to_title() -> void:
+    WorldState.finish_natural_test_session()
     WorldState.debug_natural_test_active = false
     WorldState.debug_map_test_mode = false
     if FileAccess.file_exists("user://nereis_hero_save.json"):
