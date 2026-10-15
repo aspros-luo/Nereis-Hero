@@ -78,16 +78,16 @@ func _build_rig() -> void:
 	_foot_left = _make_bone(_knee_left, "FootLeft", Vector2(4.5, 10.0))
 	_foot_right = _make_bone(_knee_right, "FootRight", Vector2(-4.5, 10.0))
 
-	_add_segment(_spine, [Vector2.ZERO, Vector2(0.0, 18.0)], cloth_color, true)
+	_add_segment(_spine, PackedVector2Array([Vector2.ZERO, Vector2(0.0, 18.0)]), cloth_color, true)
 	_add_head_shape(_head)
-	_add_segment(_arm_left, [Vector2.ZERO, Vector2(0.0, 13.5)], cloth_color, true)
-	_add_segment(_arm_right, [Vector2.ZERO, Vector2(0.0, 13.5)], cloth_color, true)
-	_add_segment(_leg_left, [Vector2.ZERO, Vector2(0.0, 12.0)], cloth_color, true)
-	_add_segment(_leg_right, [Vector2.ZERO, Vector2(0.0, 12.0)], cloth_color, true)
-	_add_segment(_knee_left, [Vector2.ZERO, Vector2(0.0, 10.0)], cloth_color, true)
-	_add_segment(_knee_right, [Vector2.ZERO, Vector2(0.0, 10.0)], cloth_color, true)
-	_add_segment(_foot_left, [Vector2.ZERO, Vector2(6.0, 0.0)], cloth_color, true)
-	_add_segment(_foot_right, [Vector2.ZERO, Vector2(6.0, 0.0)], cloth_color, true)
+	_add_segment(_arm_left, PackedVector2Array([Vector2.ZERO, Vector2(0.0, 13.5)]), cloth_color, true)
+	_add_segment(_arm_right, PackedVector2Array([Vector2.ZERO, Vector2(0.0, 13.5)]), cloth_color, true)
+	_add_segment(_leg_left, PackedVector2Array([Vector2.ZERO, Vector2(0.0, 12.0)]), cloth_color, true)
+	_add_segment(_leg_right, PackedVector2Array([Vector2.ZERO, Vector2(0.0, 12.0)]), cloth_color, true)
+	_add_segment(_knee_left, PackedVector2Array([Vector2.ZERO, Vector2(0.0, 10.0)]), cloth_color, true)
+	_add_segment(_knee_right, PackedVector2Array([Vector2.ZERO, Vector2(0.0, 10.0)]), cloth_color, true)
+	_add_segment(_foot_left, PackedVector2Array([Vector2.ZERO, Vector2(6.0, 0.0)]), cloth_color, true)
+	_add_segment(_foot_right, PackedVector2Array([Vector2.ZERO, Vector2(6.0, 0.0)]), cloth_color, true)
 	_apply_cloth_palette()
 
 
@@ -99,10 +99,10 @@ func _make_bone(parent: Node, bone_name: String, bone_position: Vector2) -> Bone
 	return bone
 
 
-func _add_segment(parent: Node2D, points: Array[Vector2], color: Color, is_cloth: bool) -> void:
+func _add_segment(parent: Node2D, points: PackedVector2Array, color: Color, is_cloth: bool) -> void:
 	var outline := Line2D.new()
 	outline.name = "SegmentOutline"
-	outline.points = PackedVector2Array(points)
+	outline.points = points
 	outline.width = outline_width
 	outline.default_color = outline_color
 	outline.antialiased = true
@@ -113,7 +113,7 @@ func _add_segment(parent: Node2D, points: Array[Vector2], color: Color, is_cloth
 
 	var inner := Line2D.new()
 	inner.name = "SegmentFill"
-	inner.points = PackedVector2Array(points)
+	inner.points = points
 	inner.width = inner_width
 	inner.default_color = color
 	inner.antialiased = true
