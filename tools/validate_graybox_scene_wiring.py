@@ -764,10 +764,10 @@ def main() -> int:
         ('_add_platform(Rect2(2190, 450, 140, 18))', "C09 A5 upper exit ledge"),
         ('_add_platform(Rect2(2150, 485, 150, 18))', "C09 A5 lower return approach"),
         ('_add_platform(Rect2(100, 450, 140, 18))', "C09 A6 west bridge arrival"),
-        ('if region_id == "A6" and side == "battlefield_entry":\\n\\t\\treturn floor_y - 90.0', "C09 A6 bridge spawn height"),
-        ('if region_id == "A5" and side == "monastery_return":\\n\\t\\treturn floor_y - 55.0', "C09 A5 return spawn height"),
-        ('if region_id == "A6" and side == "battlefield_entry":\\n\\t\\treturn 160.0', "C09 A6 bridge spawn X"),
-        ('if region_id == "A5" and side == "monastery_return":\\n\\t\\treturn 2165.0', "C09 A5 return spawn X"),
+        ('if region_id == "A6" and side == "battlefield_entry":\n\t\treturn floor_y - 90.0', "C09 A6 bridge spawn height"),
+        ('if region_id == "A5" and side == "monastery_return":\n\t\treturn floor_y - 55.0', "C09 A5 return spawn height"),
+        ('if region_id == "A6" and side == "battlefield_entry":\n\t\treturn 160.0', "C09 A6 bridge spawn X"),
+        ('if region_id == "A5" and side == "monastery_return":\n\t\treturn 2165.0', "C09 A5 return spawn X"),
     ]:
         require(region_script, contract, label, errors)
 
