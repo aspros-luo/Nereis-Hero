@@ -939,6 +939,11 @@ def main() -> int:
     # 这样可以避免主要路线全部挤在同一片门口区域。
     require(region_script, '1600.0, "E  沿旧管线栈道下行至水库"', "A3 raised C05 branch", errors)
     require(region_script, 'true, "", "", floor_y - 115.0', "A3 C05 elevation", errors)
+    require(region_script, '_add_platform(Rect2(80, 445, 220, 18))', "A4 C05 upper inspection landing", errors)
+    require(region_script, '"E  打开上层检修舱口"', "A4 C05 raised hatch label", errors)
+    require(region_script, '"E  返回城区", floor_y - 115.0', "A4 C05 hatch elevation", errors)
+    require(region_script, 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn floor_y - 115.0', "A4 C05 arrival height mapping", errors)
+    require(region_script, 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn 180.0', "A4 C05 arrival X mapping", errors)
     require(region_script, '2040.0, "E  经东侧高位旧升降机返回王城外环"', "A3 elevated C16 branch", errors)
     require(region_script, 'true, "", "", floor_y - 70.0', "A3 C16 elevation", errors)
     require(region_script, '_register_debug_locked_route_hint(2040.0, "royal_outer_ring"', "A3 C16 debug marker", errors)
