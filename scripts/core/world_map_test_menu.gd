@@ -12,6 +12,7 @@ const REGION_ENTRIES: Array[Dictionary] = [
     {"id":"A6", "name":"修道院钟塔 / Monastery Tower", "path":"res://scenes/monastery_tower.tscn", "spawn":"west"},
     {"id":"A7", "name":"监牢深层 / Prison Depths", "path":"res://scenes/prison_depths.tscn", "spawn":"west"},
     {"id":"A8", "name":"王室墓穴 / Royal Tomb", "path":"res://scenes/royal_tomb.tscn", "spawn":"west"},
+    {"id":"OB01", "name":"王墓内殿 Boss / Royal Tomb Guardian", "path":"res://scenes/royal_tomb_boss.tscn", "spawn":"west"},
     {"id":"A9", "name":"王室外环 / Royal Outer Ring", "path":"res://scenes/royal_outer_ring.tscn", "spawn":"west"},
     {"id":"A10", "name":"大圣堂 / Grand Cathedral", "path":"res://scenes/grand_cathedral.tscn", "spawn":"west"},
     {"id":"A11", "name":"古神研究深层 / Deep Research Depths", "path":"res://scenes/deep_research_depths.tscn", "spawn":"west"},
