@@ -96,11 +96,14 @@ C22 原先在 A12 使用 `map_width - 72` 的地面门点，与拓扑中的“�
 
 ### 死亡恢复、休整点与相邻交互焦点复核（2026-10-15）
 
-本轮发现并修正三处出生点净距问题，并收紧休整点记录检查点的条件：
+本轮发现并修正六处出生点净距问题，并收紧休整点记录检查点的条件：
 
 - **C07：A8 → A4 王墓水道。** A4 出生点原为 x=1260，距离 x=1320 门中心仅 60px。门的 Area2D 水平半宽为 55px，主角碰撞半径为 18px，因此出生时会与门触发区重叠。现在将落点移至 x=1410、y_offset=-85，仍在 A4 的 x=1260–1450、顶面 y=455 平台上，并留出 17px 的水平净距。
 - **C23：A9 → A4 王城排水道。** A4 出生点原为 x=1570，距离 x=1650 门中心 80px，按当前门触发区与主角碰撞体计算只剩 7px 净距。现在移至 x=1540、y_offset=-120，仍由 x=1530–1600、顶面 y=420 的平台承托，水平净距增加到 37px。
 - **C18：A12 → A9 内城侧门。** A9 出生点原为 x=1000，虽未进入 x=900 门的 Area2D，但距 x=1100 休整点只有 100px；休整点会在 110px 内获得交互焦点，导致刚落地就显示休整提示。现在移至 x=980，门触发区净距为 7px，且在休整点交互半径之外 10px。
+- **C17：A10 → A9 屋顶回程。** A9 原出生点 x=2320，距同一扇 x=2350 高位门仅 30px，落地即进入门触发区，可能按一次 E 就折返。现在改为 x=2450、y_offset=-180，并将上层平台延长至 x=2520，确保仍有实体承托且不再与门触发区重叠。
+- **H01：隐藏水井 → A4。** A4 的 east 出生映射原为 x=2240，落入 x=2220 的 C06 水闸触发区；现改为 x=2380，处于 C06 与 x=2510 隐藏井门之间，并与两端交互区留出净距。
+- **H05：无声钟室 → A6。** A6 原出生点 x=1400，距离 x=1300 休整点 100px，落地即显示休整提示；现改为 x=1420，超出 110px 的休整交互半径。
 - **休整点安全门槛。** 之前只按主角与休整点的直线距离判断可交互，可能在跳跃中或临近高台时保存空中/高层坐标作为检查点。现在要求主角处于 CharacterBody2D.is_on_floor() 状态、水平距离不超过 90px、垂直差不超过 32px 后，才允许休整和保存当前出生位置。
 - **死亡恢复。** 共享区域控制器在死亡后锁定输入、清除旧交互焦点、恢复到当前区域的检查点，再清除焦点并解锁输入；每次进入共享区域时也会将入口出生点设为该区域检查点，避免复用上个区域的坐标。
 
@@ -115,6 +118,9 @@ This pass fixes three arrival-clearance issues and tightens checkpoint activatio
 - **C07, A8 → A4:** the old A4 arrival at x=1260 overlapped the x=1320 door trigger (60px center distance versus a 73px combined half-width). It now lands at x=1410 / y_offset=-85 on the same y=455 platform, leaving 17px of horizontal clearance.
 - **C23, A9 → A4:** the old x=1570 arrival had only 7px of horizontal clearance from the x=1650 door trigger. It now lands at x=1540 / y_offset=-120 on the y=420 support lip, increasing clearance to 37px.
 - **C18, A12 → A9:** the old x=1000 arrival was inside the x=1100 rest point's 110px focus radius. It now lands at x=980, outside the rest focus radius and outside the x=900 door trigger.
+- **C17, A10 → A9:** the old return at x=2320 was only 30px from the x=2350 rooftop door and spawned inside its trigger. It now lands at x=2450 / y_offset=-180; the supporting platform is extended to x=2520.
+- **H01 → A4:** the old A4 east arrival at x=2240 overlapped the x=2220 C06 watergate trigger. It now lands at x=2380, between that door and the x=2510 hidden-well gate.
+- **H05 → A6:** the old arrival at x=1400 was inside the x=1300 rest point's 110px focus radius. It now lands at x=1420.
 - **Rest-point checkpoint safety:** rest interaction now requires a grounded CharacterBody2D, within 90px horizontally and 32px vertically. This prevents saving an airborne or nearby upper-platform position as a death checkpoint.
 - **Death recovery:** the shared-region controller locks input and clears stale focus before recovery, restores the Hero at the region-local checkpoint, then clears focus again before unlocking input. Entering each shared region initializes its checkpoint at the incoming spawn.
 
