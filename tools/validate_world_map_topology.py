@@ -248,6 +248,59 @@ def validate(data: dict[str, Any]) -> list[str]:
         if len(cross_layer_edges) < 2:
             fail(errors, f"{parent}: core box-world hub needs at least 2 explicit cross-layer connections.")
 
+    # Every macro edge must name its actual source/destination subregions and route form.
+    # 每条宏观连接都必须映射到真实子区域，并明确空间路线形态；这是设计追踪合同，不代表实机通过。
+    layer_contracts = [edge.get("layer_contract") for edge in connections]
+    if len(layer_contracts) != len(connections) or any(not isinstance(item, dict) for item in layer_contracts):
+        fail(errors, "Every macro connection must provide a layer_contract.")
+    subregion_by_id = {item.get("id"): item for item in subregions}
+    for edge in connections:
+        connection_id = edge.get("id", "<missing-id>")
+        contract = edge.get("layer_contract")
+        if not isinstance(contract, dict):
+            continue
+        source_id = contract.get("from_subregion")
+        target_id = contract.get("to_subregion")
+        source_subregion = subregion_by_id.get(source_id)
+        target_subregion = subregion_by_id.get(target_id)
+        if not source_subregion or not target_subregion:
+            fail(errors, f"{connection_id}: layer contract references unknown subregion {source_id!r} -> {target_id!r}.")
+            continue
+        if source_subregion.get("parent_region") != edge.get("from"):
+            fail(errors, f"{connection_id}: source subregion {source_id} does not belong to {edge.get('from')}.")
+        if target_subregion.get("parent_region") != edge.get("to"):
+            fail(errors, f"{connection_id}: destination subregion {target_id} does not belong to {edge.get('to')}.")
+        if not str(contract.get("route_form", "")).strip():
+            fail(errors, f"{connection_id}: layer contract needs a route_form.")
+        if not str(contract.get("readability_contract", "")).strip():
+            fail(errors, f"{connection_id}: layer contract needs a readability_contract.")
+        if contract.get("status") != "design_contract_not_runtime_verified":
+            fail(errors, f"{connection_id}: layer contract must remain explicitly unverified at runtime.")
+
+    # Guard the connections whose vertical identity is essential to the box-world layout.
+    # 对高架、落差、竖井和独立排水路线设置语义锚点，避免后续误改成普通地面门。
+    expected_layer_pairs = {
+        "C03": ("A2-S04", "A3-S04"),
+        "C04": ("A2-S05", "A5-S03"),
+        "C05": ("A3-S05", "A4-S01"),
+        "C06": ("A4-S06", "A1-S04"),
+        "C10": ("A6-S05", "A3-S06"),
+        "C12": ("A7-S06", "A4-S05"),
+        "C13": ("A7-S04", "A8-S01"),
+        "C15": ("A8-S05", "A11-S01"),
+        "C16": ("A3-S04", "A9-S03"),
+        "C17": ("A9-S03", "A10-S04"),
+        "C19": ("A10-S05", "A11-S02"),
+        "C23": ("A9-S04", "A4-S01"),
+        "C24": ("A1-S01", "A3-S03"),
+    }
+    for connection_id, expected_pair in expected_layer_pairs.items():
+        edge = next((item for item in connections if item.get("id") == connection_id), None)
+        contract = edge.get("layer_contract", {}) if edge else {}
+        actual_pair = (contract.get("from_subregion"), contract.get("to_subregion"))
+        if actual_pair != expected_pair:
+            fail(errors, f"{connection_id}: critical route layer contract must remain {expected_pair}, found {actual_pair}.")
+
     # Narrative exploration gates connect places to ability, Resonance, story, and physical mechanisms.
     # 剧情探索门槛将地点与能力、鸣响、支线和地理机关连接起来。
     gate_contracts = data.get("exploration_gate_contracts", [])
