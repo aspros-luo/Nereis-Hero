@@ -575,6 +575,34 @@
         "route_form": "维护竖井上缘→王墓入口平台",
         "readability_contract": "竖井上行后进入墓门平台，不能从监牢地面平移到墓室",
         "status": "design_contract_not_runtime_verified"
+      },
+      "spatial_contract": {
+        "route_layer": "prison_maintenance_shaft_upper_entry",
+        "from_region_anchor": {
+          "region": "A7",
+          "x": 2328,
+          "y_offset": -120,
+          "spawn_side": "maintenance_shaft_return"
+        },
+        "to_region_anchor": {
+          "region": "A8",
+          "x": 72,
+          "y_offset": -120,
+          "spawn_side": "maintenance_shaft_entry"
+        },
+        "to_region_spawn": {
+          "region": "A8",
+          "x": 190,
+          "y_offset": -120,
+          "spawn_side": "maintenance_shaft_entry"
+        },
+        "return_spawn": {
+          "region": "A7",
+          "x": 2240,
+          "y_offset": -120,
+          "spawn_side": "maintenance_shaft_return"
+        },
+        "intent": "C13 must remain an elevated, bidirectional transition between the prison maintenance shaft and royal-tomb entry platform. Neither end may fall back to the continuous ground lane."
       }
     },
     {
@@ -3682,6 +3710,15 @@
   "latest_spatial_fixes": [
     "C05 A4 Hero arrival is now x=180, y_offset=-95 on the y=445 collision top; the hatch itself remains at y_offset=-115.",
     "C09 now enters A6 at x=160, y_offset=-90 on a supported west bridge and returns to A5 at x=2165, y_offset=-55 on the lower approach ledge.",
-    "C18 A9 return spawn is centered at x=1000 between the x=900 inner-city door and x=1100 rest point, keeping 100px center spacing to each."
+    "C18 A9 return spawn is centered at x=1000 between the x=900 inner-city door and x=1100 rest point, keeping 100px center spacing to each.",
+    {
+      "round": 15,
+      "date": "2026-10-15",
+      "connections": [
+        "C13",
+        "C19"
+      ],
+      "summary": "C13 moved to a supported upper maintenance-shaft transition in both directions; A11's cathedral return now requires C19 to be opened, not merely prior main-route access to A10."
+    }
   ]
 }
