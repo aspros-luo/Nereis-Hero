@@ -229,6 +229,12 @@ func _spawn_y_for_side(side: String) -> float:
 		return floor_y - 130.0
 	if region_id == "A2" and side == "east":
 		return floor_y - 140.0
+	# C04 must return to the actual old-pilgrim upper route on both sides.
+	# C04 双向回程都必须落在旧朝圣高路的实际上层平台。
+	if region_id == "A2" and side == "old_pilgrim_highroad":
+		return floor_y - 160.0
+	if region_id == "A5" and side == "old_pilgrim_highroad":
+		return floor_y - 105.0
 	if region_id == "A6" and side == "bell_drop":
 		return floor_y - 90.0
 	if region_id == "A9" and side == "old_lift":
@@ -1474,7 +1480,8 @@ func _spawn_region_exits() -> void:
 			if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
 				_spawn_exit_door(
 					1880.0, "E  返回边境战场", "old_battlefield",
-					"res://scenes/old_battlefield.tscn", "old_pilgrim_highroad"
+					"res://scenes/old_battlefield.tscn", "old_pilgrim_highroad",
+					true, "", "", floor_y - 115.0
 				)
 		"A3":
 			# C24 remains sealed on both ends until the village defense chapter is survived.
@@ -1587,7 +1594,8 @@ func _spawn_region_exits() -> void:
 			_spawn_exit_door(
 				520.0, "E  打开旧朝圣高路", "ash_forest",
 				"res://scenes/ash_forest.tscn", "old_pilgrim_highroad",
-				true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回"
+				true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",
+				floor_y - 140.0
 			)
 		"A6":
 			_spawn_exit_door(
