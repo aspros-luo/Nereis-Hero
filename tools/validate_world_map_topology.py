@@ -338,6 +338,8 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C05 must branch from the raised pipe-walk.")
     if c05_spatial.get("from_region_anchor") != {"region": "A3", "x": 1600, "y_offset": -115}:
         fail(errors, "C05 spatial anchor must match the A3 raised sewer branch.")
+    if c05_spatial.get("to_region_anchor") != {"region": "A4", "x": 180, "y_offset": -115, "spawn_side": "sewer_upper"}:
+        fail(errors, "C05 must arrive on A4's supported upper inspection landing.")
     c21 = next((edge for edge in connections if edge.get("id") == "C21"), None)
     c22 = next((edge for edge in connections if edge.get("id") == "C22"), None)
     if not c21 or c21.get("to") != "A13" or c21.get("unlock_condition") != "physical_union_complete":
