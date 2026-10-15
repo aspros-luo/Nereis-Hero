@@ -19,13 +19,13 @@ Do not commit the third-party atlas to GitHub. This helper intentionally referen
 1. Open `res://scenes/debug/hero_atlas_inspector.tscn`.
 2. Press **F6**.
 3. Use the mouse wheel to zoom; right-click resets the view.
-4. Left-click a point in the atlas. The Output panel prints the approximate original 2048×2048 atlas coordinate.
-5. Use the grid and click coordinates to identify candidate regions. Record which parts belong to one coherent character before editing the texture rig.
+4. Drag with the left mouse button around one part. The selection rectangle shows its bounds; the Output panel prints the original 2048×2048 crop as `Rect2(x, y, width, height)`.
+5. Use the grid and drag rectangles tightly around candidate parts. Record which pieces belong to one coherent character before editing the texture rig.
 
 ## Controls / 操作
 
 - Mouse wheel: zoom in/out / 滚轮缩放
-- Left click: print atlas coordinates / 左键输出图集坐标
+- Left drag: select a part and print crop bounds / 左键拖框选择零件并输出裁切边界
 - Right click: reset zoom / 右键重置缩放
 
 ## Next stage / 下一阶段
