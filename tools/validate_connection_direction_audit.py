@@ -42,6 +42,19 @@ def main() -> int:
         if actual != (source, target, initial, final):
             errors.append(f"{edge_id}: expected {(source, target, initial, final)}, got {actual}")
 
+    unlock_contracts = {
+        "C15": "resonance_sight_active_and_resonance_at_least_55_and_ancient_exposure_at_least_2_and_sources_anomaly_bell_retiming_and_anomaly_erased_royal_name",
+        "C19": "resonance_sight_active_and_resonance_at_least_68_and_outer_exposure_at_least_12_and_outer_god_resonance_and_source_anomaly_mirror_street_echo",
+        "C21": "physical_union_complete",
+        "C22": "reached_A12_via_A10",
+    }
+    for edge_id, expected_condition in unlock_contracts.items():
+        edge = edges.get(edge_id, {})
+        if edge.get("unlock_condition") != expected_condition:
+            errors.append(
+                f"{edge_id}: unlock condition must match runtime contract {expected_condition!r}"
+            )
+
     # Mainline C11/C13/C14 must be explicitly wired from both endpoint scenes.
     endpoint_contracts = {
         "C11": [
