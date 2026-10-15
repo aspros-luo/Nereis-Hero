@@ -1293,6 +1293,90 @@ def main() -> int:
             branch = branch[:next_branch]
         require(branch, expected_return, f"Graybox spawn mapping {condition}", errors)
 
+    # Cross-check every spatial-contract spawn against its runtime side mapping and a real collision-backed landing.
+    # 将拓扑中所有出生点逐一对照运行时 side 映射，并确认高位落点有真实碰撞平台承托。
+    spawn_x_end = region_script.find("\nfunc ", spawn_x_start + 1)
+    spawn_x_block = region_script[spawn_x_start:spawn_x_end if spawn_x_end >= 0 else len(region_script)]
+
+    def _spawn_expression_value(expression: str, axis: str) -> float | None:
+        expression = expression.strip()
+        numeric = re.fullmatch(r"[-+]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)", expression)
+        if numeric:
+            value = float(expression)
+            return value if axis == "x" else (value - 540.0)
+        if axis == "x":
+            match = re.fullmatch(r"map_width\\s*-\\s*([\\d.]+)", expression)
+            return 2600.0 - float(match.group(1)) if match else None
+        if expression == "floor_y":
+            return 0.0
+        match = re.fullmatch(r"floor_y\\s*-\\s*([\\d.]+)", expression)
+        return -float(match.group(1)) if match else None
+
+    def _mapped_spawn_value(mapping_block: str, region_id: str, side: str, axis: str) -> float | None:
+        condition = re.compile(
+            rf'if region_id == "{re.escape(region_id)}" and side == "{re.escape(side)}":'
+            rf'(?P<body>(?:\\n[ \\t]*#.*)*\\n[ \\t]*return (?P<value>[^\\n]+))'
+        )
+        match = condition.search(mapping_block)
+        if match:
+            return _spawn_expression_value(match.group("value"), axis)
+        # Match the shared fallback behavior only after confirming no region-specific branch exists.
+        # 仅在不存在区域专属映射时，才使用控制器的通用默认出生点。
+        if axis == "y":
+            return 0.0
+        if side == "east":
+            return 2420.0
+        if region_id == "H01":
+            return 700.0
+        return 180.0
+
+    topology_for_spawn_audit = json.loads(topology_path.read_text(encoding="utf-8"))
+    for edge in topology_for_spawn_audit.get("connections", []):
+        edge_id = edge.get("id", "<missing>")
+        spatial = edge.get("spatial_contract", {})
+        for spawn_key in ("return_spawn", "from_region_spawn", "to_region_spawn"):
+            spawn = spatial.get(spawn_key)
+            if not isinstance(spawn, dict) or not spawn.get("region"):
+                continue
+            region_id = str(spawn.get("region"))
+            # A1 is a separate authored scene with its own spawn function and is checked above.
+            # A1 是独立场景，使用村庄脚本自己的出生映射并由前面的 C02/C24 断言覆盖。
+            if region_id == "A1":
+                continue
+            try:
+                spawn_x = float(spawn["x"])
+                spawn_y_offset = float(spawn.get("y_offset", 0.0))
+            except (KeyError, TypeError, ValueError):
+                errors.append(f"{edge_id} {spawn_key} has invalid spawn coordinates.")
+                continue
+            side = str(spawn.get("spawn_side", ""))
+            if side:
+                runtime_x = _mapped_spawn_value(spawn_x_block, region_id, side, "x")
+                runtime_y_offset = _mapped_spawn_value(spawn_y_block, region_id, side, "y")
+                if runtime_x is None or abs(runtime_x - spawn_x) > 0.1:
+                    errors.append(
+                        f"{edge_id} {spawn_key} X mapping mismatch for {region_id}/{side}: "
+                        f"topology={spawn_x}, runtime={runtime_x}."
+                    )
+                if runtime_y_offset is None or abs(runtime_y_offset - spawn_y_offset) > 0.1:
+                    errors.append(
+                        f"{edge_id} {spawn_key} Y mapping mismatch for {region_id}/{side}: "
+                        f"topology={spawn_y_offset}, runtime={runtime_y_offset}."
+                    )
+            if spawn_y_offset < -1.0:
+                region_platforms = platforms_by_region.get(region_id, [])
+                supported = any(
+                    abs(platform_y - (540.0 + spawn_y_offset)) <= 1.5
+                    and spawn_x >= platform_x - 0.1
+                    and spawn_x <= platform_x + platform_width + 0.1
+                    for platform_x, platform_y, platform_width, _platform_height in region_platforms
+                )
+                if not supported:
+                    errors.append(
+                        f"{edge_id} {spawn_key} is not directly supported by a collision platform: "
+                        f"{region_id} x={spawn_x:g}, y={540.0 + spawn_y_offset:g}."
+                    )
+
     # Death recovery must stay inside the current region and restore the Hero safely.
     # 死亡恢复必须留在当前区域，并安全恢复主角状态。
     spawn_hero_start = region_script.find("func _spawn_hero(")
