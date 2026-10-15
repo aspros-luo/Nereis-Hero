@@ -21,15 +21,15 @@ var stun_time := 0.0
 var hit_flash := 0.0
 var animation_time := 0.0
 var attack_hitbox: Area2D
-var character_visual: Node2D
+var character_visual: HumanoidCharacterVisual
 
 func _ready() -> void:
-    character_visual = HUMANOID_VISUAL_SCENE.instantiate() as Node2D
+    character_visual = HUMANOID_VISUAL_SCENE.instantiate() as HumanoidCharacterVisual
     character_visual.name = "CharacterVisual"
     character_visual.position = Vector2(0.0, -20.0)
-    character_visual.set("skin_color", Color("#9c776f"))
-    character_visual.set("cloth_color", Color("#45333b"))
-    character_visual.set("hurt_color", Color("#c45d65"))
+    character_visual.skin_color = Color("#9c776f")
+    character_visual.cloth_color = Color("#45333b")
+    character_visual.hurt_color = Color("#c45d65")
     add_child(character_visual)
     add_to_group("combat_enemies")
     attack_hitbox = Area2D.new()
@@ -53,9 +53,9 @@ func _process(delta: float) -> void:
     stun_time = maxf(0.0, stun_time - delta)
     hit_flash = maxf(0.0, hit_flash - delta)
     if is_instance_valid(character_visual):
-        character_visual.call("set_facing", facing)
-        character_visual.call("set_motion_state", "run" if absf(velocity.x) > 8.0 else "idle")
-        character_visual.call("set_hurt_flash", hit_flash > 0.0)
+        character_visual.set_facing(facing)
+        character_visual.set_motion_state("run" if absf(velocity.x) > 8.0 else "idle")
+        character_visual.set_hurt_flash(hit_flash > 0.0)
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
