@@ -946,10 +946,10 @@ def main() -> int:
     spawn_y_start = region_script.find("func _spawn_y_for_side(side: String) -> float:")
     spawn_x_start = region_script.find("func _spawn_x_for_side(side: String) -> float:")
     spawn_y_block = region_script[spawn_y_start:spawn_x_start] if spawn_y_start >= 0 and spawn_x_start > spawn_y_start else ""
-    c05_y_branch = 'if region_id == "A4" and side == "sewer_upper":\\n\\t\\treturn floor_y - 115.0'
+    c05_y_branch = 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn floor_y - 115.0'
     if spawn_y_block.count(c05_y_branch) != 1:
         fail(errors, "C05 A4 sewer_upper Y mapping must appear exactly once in _spawn_y_for_side.")
-    if 'if region_id == "A4" and side == "sewer_upper":\\n\\t\\treturn 180.0' in spawn_y_block:
+    if 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn 180.0' in spawn_y_block:
         fail(errors, "C05 A4 sewer_upper Y mapping must not use absolute y=180.0 above its supported landing.")
     require(region_script, 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn 180.0', "A4 C05 arrival X mapping", errors)
     require(region_script, '2040.0, "E  经东侧高位旧升降机返回王城外环"', "A3 elevated C16 branch", errors)
