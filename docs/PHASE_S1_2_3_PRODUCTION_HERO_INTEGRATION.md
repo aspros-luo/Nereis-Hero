@@ -188,3 +188,50 @@ The user-referenced Muramasa: The Demon Blade heroine texture sheet was not avai
 胧村正女主纹理图在本轮可访问的仓库文件和文件载荷中未能定位到可读取的原始素材，因此没有猜测图片、没有导入不确定的纹理，也没有覆盖项目已有美术。待能读取确切原图后，再单独建立纹理/图集实验场景；当前优先把 Godot 原生骨骼表现做好。
 
 Source and documentation are committed and read back from GitHub. Godot runtime validation remains local; this connected session has not executed the Godot engine.
+
+## S1.2.4-A1 — Isolated sprite-sheet animation lab / 独立序列帧实验场景
+
+Status: **scene and script committed; runtime validation pending**. The production Hero is not replaced.
+
+状态：**独立场景和脚本已提交，等待本地运行验收**。正式 Hero 未被替换。
+
+### Asset inspection / 素材检查
+
+- The uploaded reference animation sheet is 2048×1945 RGBA PNG, with alpha values from 0–255. The uploaded texture atlas is 2048×2048 RGBA PNG.
+- A quick occupancy scan shows ten populated cells in rows 1–7 and four populated cells in row 8 when provisionally divided into 204×243 cells. This is a working hypothesis, not a final verified animation layout.
+- The actual uploaded image is not present in the Git repository yet. To keep repository source self-contained and avoid silently copying art with unverified distribution rights, place the provided sheet locally at `res://assets/art/hero_sprite_lab/muramasa_reference_sheet.png` only for private prototype testing. The lab will show a clear message if the file is absent.
+- The texture atlas is intentionally not wired as a character material: its UV/material mapping is unknown, and it may belong to a different rendering/rig setup.
+
+- 上传的动作序列图为 2048×1945 RGBA PNG，Alpha 范围为 0–255；纹理图集为 2048×2048 RGBA PNG。
+- 按 204×243 像素暂定网格扫描后，前七行各有十个非空格，第八行有四个非空格。这只是切片假设，尚未逐帧确认动作语义和边界。
+- 原始图片尚未加入 Git 仓库。为避免在授权不明时直接把第三方美术复制进项目，私下原型测试时可将你提供的序列帧放到 `res://assets/art/hero_sprite_lab/muramasa_reference_sheet.png`。图片缺失时，实验场景会显示明确提示。
+- 暂不将纹理图集直接接到角色材质上：当前未知其 UV/材质映射方式，也可能来自另一套模型或渲染管线。
+
+### Run and controls / 运行与操作
+
+Open `res://scenes/player/hero_sprite_animation_lab.tscn` and press F6. This is a standalone test and does not affect the production Hero.
+
+打开 `res://scenes/player/hero_sprite_animation_lab.tscn` 并按 F6。此场景独立运行，不会影响正式 Hero。
+
+- `1–8`: select a row; `↑/↓`: previous/next row.
+- `Space`: play/pause; `←/→`: step through frames (pauses playback); `R`: restart.
+- Grid assumption: 204×243 pixels, 10 columns × 8 rows, with 4 frames in the final row. Confirm visual alignment before building named animations.
+
+- `1–8`：选择行；`↑/↓`：切换上一行/下一行。
+- `Space`：播放/暂停；`←/→`：逐帧查看（自动暂停）；`R`：重播。
+- 暂定网格为 204×243 像素、10 列×8 行，最后一行 4 帧。需要先本地确认切片是否对齐，再建立正式命名动画。
+
+### Next acceptance gate / 下一验收门槛
+
+1. Verify frame alignment, especially action transitions in rows 3–7.
+2. Identify which rows correspond to idle, movement, attacks, dodge and recovery; do not assign names from guesses.
+3. Confirm character feet align consistently with the ground guide.
+4. Only after this lab passes should a separate opt-in adapter map production Hero visual states to sprite animations. Keep the existing procedural/skeleton path as fallback until production combat regression passes.
+
+1. 检查每帧边界，尤其是第 3–8 行中的动作切换。
+2. 确认各行对应待机、移动、攻击、闪避、收势等哪类动作，不凭猜测直接命名。
+3. 确认角色脚底与地面参考线对齐。
+4. 本实验通过后，再单独开发可选的正式 Hero 状态适配器。生产战斗回归通过前，原程序绘制/骨骼方案继续保留为回退路径。
+
+Godot has not been run in this connected session; runtime acceptance remains local.
+本轮连接环境没有实际运行 Godot；运行验收仍需本地完成。
