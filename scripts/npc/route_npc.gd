@@ -3,6 +3,7 @@ extends Node2D
 signal interacted
 
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
+const HUMANOID_VISUAL_SCENE = preload("res://scenes/characters/humanoid_character_visual.tscn")
 
 @export var npc_id: String = ""
 @export var display_name: String = ""
@@ -10,8 +11,15 @@ const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.g
 
 var cooldown := 0.0
 var hero_nearby := false
+var character_visual: Node2D
 
 func _ready() -> void:
+    character_visual = HUMANOID_VISUAL_SCENE.instantiate() as Node2D
+    character_visual.name = "CharacterVisual"
+    character_visual.position = Vector2(0.0, -20.0)
+    character_visual.set("skin_color", Color("#8d7566"))
+    character_visual.set("cloth_color", Color("#49424a"))
+    add_child(character_visual)
     set_meta("interaction_priority", 60)
     print("[NEREIS][NPC] %s initialized id=%s" % [display_name, npc_id])
     queue_redraw()
@@ -20,6 +28,8 @@ func _process(delta: float) -> void:
     cooldown = max(0.0, cooldown - delta)
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 100.0
+    if hero != null and not is_zero_approx(hero.global_position.x - global_position.x):
+        character_visual.call("set_facing", signf(hero.global_position.x - global_position.x))
     var available := not WorldState.input_locked and hero_nearby and cooldown <= 0.0 and not display_name.is_empty() and not dialogue.is_empty()
     INTERACTION_FOCUS_SCRIPT.sync(self, available, 60)
     queue_redraw()
@@ -46,8 +56,8 @@ func _unhandled_input(event: InputEvent) -> void:
             viewport.set_input_as_handled()
 
 func _draw() -> void:
-    draw_circle(Vector2(0, -50), 17.0, Color("#8d7566"))
-    draw_rect(Rect2(-18, -32, 36, 32), Color("#49424a"))
+    # The reusable rig owns the character silhouette; this node only draws interaction text.
+    # 角色轮廓由可复用骨架表现层负责；此节点仅绘制名称和交互提示。
     draw_string(ThemeDB.fallback_font, Vector2(-58, -76), NereisLocalization.translate_text(display_name), HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color("#b7a09b"))
     if can_interact():
         draw_string(ThemeDB.fallback_font, Vector2(-50, 28), NereisLocalization.translate_text("E  Speak"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
