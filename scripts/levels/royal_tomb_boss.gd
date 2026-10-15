@@ -92,9 +92,9 @@ func _spawn_boss() -> void:
     boss = CharacterBody2D.new()
     boss.set_script(BOSS_SCRIPT)
     boss.name = "RoyalTombGuardian"
-    boss.boss_display_name = "王墓守墓者"
-    boss.persist_global_boss_defeat = false
-    boss.visual_theme = "royal_tomb"
+    boss.set("boss_display_name", "王墓守墓者")
+    boss.set("persist_global_boss_defeat", false)
+    boss.set("visual_theme", "royal_tomb")
     boss.position = Vector2(1390.0, FLOOR_Y)
     _add_character_collision(boss, 26.0, 60.0)
     add_child(boss)
@@ -103,7 +103,7 @@ func _spawn_boss() -> void:
     boss.attack_telegraphed.connect(_on_boss_attack_telegraphed)
     if is_instance_valid(hud):
         hud.bind_boss(boss)
-    print("[NEREIS][BOSS][START] id=royal_tomb_guardian hp=%d" % int(boss.health))
+    print("[NEREIS][BOSS][START] id=royal_tomb_guardian hp=%d" % int(boss.get("health")))
 
 func _spawn_hud() -> void:
     hud = CanvasLayer.new()
