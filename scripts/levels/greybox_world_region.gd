@@ -223,6 +223,8 @@ func _on_cord_fragment_collected() -> void:
 func _spawn_y_for_side(side: String) -> float:
 	# Elevated cross-region doors must land on their matching ledge, not underneath it on the continuous floor.
 	# 高位跨区门应将主角送到对应栈台，而不是落在连续地面上、再要求玩家反向跳回门口。
+	if region_id == "A4" and side == "sewer_upper":
+		return 180.0
 	if region_id == "A3" and side == "city_highroad_return":
 		return floor_y - 130.0
 	if region_id == "A5" and side == "city_highroad":
@@ -242,6 +244,8 @@ func _spawn_y_for_side(side: String) -> float:
 	if region_id == "A9" and side == "royal_drain":
 		return floor_y - 150.0
 	if region_id == "A3" and side == "sewer":
+		return floor_y - 115.0
+	if region_id == "A4" and side == "sewer_upper":
 		return floor_y - 115.0
 	if region_id == "A3" and side == "old_lift":
 		return floor_y - 70.0
@@ -726,6 +730,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1130, 390, 120, 18))
 			_add_platform(Rect2(1320, 425, 130, 18))
 		"A4":
+			# C05 arrival ledge: the raised city pipe-walk must connect to a supported upper inspection landing.
+			# C05 到达平台：城区高架管线必须接入有实体承托的上层检查廊。
+			_add_platform(Rect2(80, 445, 220, 18))
 			# The floor remains the safe route; a raised pipe walk is an optional way through the old stonework.
 			# 地面保持安全主路；抬高的管线栈道提供穿越古老石殿的可选路线。
 			_add_platform(Rect2(360, 475, 140, 18))
@@ -1539,10 +1546,12 @@ func _spawn_region_exits() -> void:
 			# C10's destination is the monastery tower, so the return spawn must use the drop-side mapping.
 			# C10 的回程目的地是修道院塔，因此出生点必须使用钟塔落差侧的映射。
 		"A4":
+			# C05 is paired with A3's raised pipe-walk; the reservoir-side hatch must not fall back to ground level.
+			# C05 与 A3 高架管线配对；水库侧检修舱口不能退回地面高度。
 			_spawn_exit_door(
-				72.0, "E  打开检修舱口", "forgotten_city",
+				72.0, "E  打开上层检修舱口", "forgotten_city",
 				"res://scenes/forgotten_city.tscn", "sewer",
-				true, "opened_sewer_inspection_hatch_from_A4", "E  返回城区"
+				true, "opened_sewer_inspection_hatch_from_A4", "E  返回城区", floor_y - 115.0
 			)
 			# C06 is a one-way return shortcut from the reservoir to the village well.
 			# C06 是从旧水库返回村庄的单向捷径；首次互动开闸，再次互动才转场。
