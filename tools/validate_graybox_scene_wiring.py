@@ -402,9 +402,32 @@ def main() -> int:
     # M1 alternate route and vertical traversal contracts.
     # M1 替代路线与垂直探索的静态契约。
     prologue_route_script = read("scripts/levels/escape_prologue.gd", errors)
+    require(prologue_route_script, 'if WorldState.prologue_complete:', "C01 completed-prologue resume guard", errors)
+    require(prologue_route_script, 'wardens_defeated >= wardens.size()', "C01 escape opens only after all wardens are defeated", errors)
+    require(prologue_route_script, 'exit_area.enabled = true', "C01 escape door is enabled by prologue progression", errors)
+    require(prologue_route_script, 'WorldState.mark_prologue_complete()', "C01 completion persists before leaving A0", errors)
     require(prologue_route_script, 'SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")', "C01 A0-to-A1 transition", errors)
+
+    defense_route_script = read("scripts/levels/village_defense_demo.gd", errors)
+    require(defense_route_script, 'if defeated == 3 and stage == 1:', "A1 defense first wave completion", errors)
+    require(defense_route_script, 'elif defeated == 7 and stage == 2:', "A1 defense second wave completion", errors)
+    require(defense_route_script, 'WorldState.record_achievement("village_defense_survived")', "A1 defense victory persists progression flag", errors)
+    require(defense_route_script, 'SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")', "A1 defense victory returns to village", errors)
+    require(defense_route_script, 'defeated = 0', "A1 defense retry resets wave counter", errors)
+    require(defense_route_script, '_begin_attack()', "A1 defense retry restarts encounter", errors)
+
     village_route_script = read("scripts/levels/village_hub.gd", errors)
+    village_poi_script = read("scripts/world/village_poi.gd", errors)
     require(village_route_script, 'if location_id == "north_gate":', "C02 A1 north-gate route", errors)
+    require(village_route_script, 'north_gate.position = Vector2(2440, 520)', "C02 north-gate interaction anchor", errors)
+    require(village_route_script, '2310.0 if spawn_side == "north_gate"', "C02 A2 return spawn x=2310", errors)
+    require(village_poi_script, 'distance_to(hero.global_position) <= 110.0', "A1 POI interaction radius", errors)
+    # The A2 return spawn must remain outside the North Gate POI radius to prevent
+    # a transition loop or an immediate repeated interaction after returning.
+    if 2440.0 - 2310.0 <= 110.0:
+        errors.append("C02: A2 return spawn overlaps the North Gate POI interaction radius.")
+    require(village_route_script, 'if "village_defense_survived" in WorldState.achievement_flags:', "C02 defense flag gates A2 entry", errors)
+    require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/village_defense_demo.tscn")', "C02 first North Gate interaction starts defense", errors)
     require(village_route_script, 'WorldState.pending_region_spawn_side = "west"', "C02 A1-to-A2 spawn side", errors)
     require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/ash_forest.tscn")', "C02 A1-to-A2 transition", errors)
     require(region_script, '"res://scenes/village_hub.tscn", "north_gate"', "C02 A2-to-A1 reverse transition", errors)
@@ -1525,7 +1548,7 @@ def main() -> int:
     print(" - H01-H08 plus C15/C19 gates use saved discovery/open/entry state and progression conditions.")
     print(f" - Platform reachability estimate: {platform_audit_regions} regions, {platform_audit_count} platforms.")
     print(f" - Local resonance route contract: {local_route_count} routes; IDs, prompts, narratives, endpoint proximity, collision overlap, sight gating, and persistence checked.")
-    print(" - C15/C19 enter A11 from separate sides; H08 and the A11 deep-dream gate converge on A13 after physical union.")
+    print(" - C15/C19 enter A11 from separate sides; H08 and C21 terminal access follow the shared ending evaluator.")
     print("NOTE: Godot runtime/collision/input validation is still required.")
     return 0
 
