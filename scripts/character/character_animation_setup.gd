@@ -4,11 +4,11 @@ extends Node
 ## 运行时创建最小关键帧动画示例，骨骼层级仍可在场景中编辑。
 
 @export var animation_player_path: NodePath = ^"../AnimationPlayer"
-@export var body_bone_path: NodePath = ^"../Rig/RootBone/BodyBone"
-@export var left_arm_path: NodePath = ^"../Rig/RootBone/BodyBone/LeftArmBone"
-@export var right_arm_path: NodePath = ^"../Rig/RootBone/BodyBone/RightArmBone"
-@export var left_leg_path: NodePath = ^"../Rig/RootBone/LeftLegBone"
-@export var right_leg_path: NodePath = ^"../Rig/RootBone/RightLegBone"
+@export var body_bone_path: NodePath = ^"Rig/RootBone/BodyBone"
+@export var left_arm_path: NodePath = ^"Rig/RootBone/BodyBone/LeftArmBone"
+@export var right_arm_path: NodePath = ^"Rig/RootBone/BodyBone/RightArmBone"
+@export var left_leg_path: NodePath = ^"Rig/RootBone/LeftLegBone"
+@export var right_leg_path: NodePath = ^"Rig/RootBone/RightLegBone"
 
 var _player: AnimationPlayer
 
