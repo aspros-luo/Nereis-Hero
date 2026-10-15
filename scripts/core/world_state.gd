@@ -948,6 +948,28 @@ func begin_natural_test_session() -> void:
     if _last_natural_test_scene_path == "res://scenes/escape_prologue.tscn":
         record_natural_test_region("A0", "escape_prologue.tscn")
 
+func finish_natural_test_session() -> void:
+    if not debug_natural_test_active:
+        return
+    var required_regions := [
+        "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13",
+        "H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08", "OB01"
+    ]
+    var missing_regions: Array[String] = []
+    for region_id in required_regions:
+        if region_id not in debug_natural_test_visited_regions:
+            missing_regions.append(region_id)
+    var result := "PASS" if missing_regions.is_empty() else "INCOMPLETE"
+    print("[NEREIS][MAP][NATURAL_TEST][%s] visited=%d/%d sequence=%s missing=%s" % [
+        result,
+        debug_natural_test_visited_regions.size(),
+        required_regions.size(),
+        ",".join(debug_natural_test_visited_regions),
+        "none" if missing_regions.is_empty() else ",".join(missing_regions)
+    ])
+    debug_natural_test_active = false
+
+
 func record_natural_test_region(region_id: String, location_id: String = "") -> void:
     if not debug_natural_test_active:
         return
