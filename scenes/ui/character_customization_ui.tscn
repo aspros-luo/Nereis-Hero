@@ -1,0 +1,51 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/character_customization_ui.gd" id="1"]
+
+[node name="CustomizationUI" type="CanvasLayer"]
+script = ExtResource("1")
+character_path = NodePath("../CustomizableCharacter")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 300.0
+offset_bottom = 390.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="PanelContainer/VBoxContainer"]
+text = "Character Customization / 角色自定义"
+
+[node name="HairLabel" type="Label" parent="PanelContainer/VBoxContainer"]
+text = "Hair / 发型"
+
+[node name="HairOption" type="OptionButton" parent="PanelContainer/VBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="ClothesLabel" type="Label" parent="PanelContainer/VBoxContainer"]
+text = "Clothes / 服装"
+
+[node name="ClothesOption" type="OptionButton" parent="PanelContainer/VBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="FaceLabel" type="Label" parent="PanelContainer/VBoxContainer"]
+text = "Face / 表情"
+
+[node name="FaceOption" type="OptionButton" parent="PanelContainer/VBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="AccessoryLabel" type="Label" parent="PanelContainer/VBoxContainer"]
+text = "Accessory / 配件"
+
+[node name="AccessoryOption" type="OptionButton" parent="PanelContainer/VBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="AccessoryToggle" type="CheckButton" parent="PanelContainer/VBoxContainer"]
+text = "Show accessory / 显示配件"
+button_pressed = true
+
+[node name="StatusLabel" type="Label" parent="PanelContainer/VBoxContainer"]
+autowrap_mode = 2
+text = "Configure part resources in Inspector."
