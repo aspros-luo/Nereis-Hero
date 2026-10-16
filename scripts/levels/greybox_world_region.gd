@@ -1967,6 +1967,7 @@ func _spawn_region_exits() -> void:
 		"A13":
 			var ending_gate := ENDGAME_GATE_SCRIPT.new()
 			var ending_scene_path := str(ending_gate.call("route_candidate"))
+			ending_gate.free()
 			var ending_location := "church_final_demo"
 			if ending_scene_path.ends_with("ending_paradise_demo.tscn"):
 				ending_location = "ending_paradise_demo"
