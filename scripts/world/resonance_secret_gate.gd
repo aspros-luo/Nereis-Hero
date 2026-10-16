@@ -28,6 +28,10 @@ var cooldown := 0.0
 
 func _ready() -> void:
     set_meta("interaction_priority", 25)
+    set_meta("p5_1_exit_contract", true)
+    set_meta("p5_1_target_scene", target_scene_path)
+    set_meta("p5_1_target_region", _p5_1_region_for_location(target_location_id))
+    set_meta("p5_1_spawn_side", target_spawn_side)
     add_to_group("resonance_hidden_targets")
     opened_permanently = WorldState.is_hidden_path_opened(secret_id)
     update_reveal_state(
@@ -63,6 +67,15 @@ func _process(delta: float) -> void:
 
 func _is_debug_override_active() -> bool:
     return allow_debug_override and WorldState.debug_ability_override_active
+
+func _p5_1_region_for_location(target_location: String) -> String:
+    var mapping := {
+        "hidden_well":"H01", "hidden_bell_chamber":"H02", "erased_third_street":"H03",
+        "reflected_stairwell":"H04", "silent_bell_room":"H05", "erased_royal_name_corridor":"H06",
+        "mirror_street":"H07", "primordial_hollow":"H08", "deep_research_depths":"A11"
+    }
+    return str(mapping.get(target_location, secret_id))
+
 
 func _get_region_record_id() -> String:
     var normalized_id := region_record_id.strip_edges()
