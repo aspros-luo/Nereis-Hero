@@ -11,6 +11,7 @@ var hero_nearby := false
 var cooldown := 0.0
 
 func _ready() -> void:
+    set_meta("p5_1_rest_contract", true)
     queue_redraw()
 
 func _process(delta: float) -> void:
