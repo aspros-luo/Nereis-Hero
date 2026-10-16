@@ -170,6 +170,23 @@ def main() -> int:
         errors.append("C21: missing A11-to-A13 terminal transition")
     if '"E  进入王座区", "terminal_anomaly"' not in region:
         errors.append("C22: missing A12-to-A13 terminal transition")
+    # C21 must refresh while A11 remains loaded because its own observer source can change the candidate.
+    # C21 必须在 A11 场景内动态刷新，因为该区域的观测者异常本身就能改变结局候选。
+    process_body = function_body(region, "_process")
+    c21_refresh = function_body(region, "_refresh_a11_ending_route")
+    require(
+        errors,
+        "_refresh_a11_ending_route()" in process_body,
+        "C21: ending-route availability must be refreshed during A11 runtime, not only in _ready().",
+    )
+    require(
+        errors,
+        'NereisEndingEvaluator.get_candidate() == "凡人之墓"' in c21_refresh
+        and 'get_node_or_null("Exit_terminal_anomaly")' in c21_refresh
+        and 'debug_exit_markers.remove_at(index)' in c21_refresh
+        and '"res://scenes/terminal_anomaly.tscn", "west"' in c21_refresh,
+        "C21: dynamic refresh must remove the stale locked hint and spawn exactly one enabled A13/west door.",
+    )
     if region.count("var ending_gate := ENDGAME_GATE_SCRIPT.new()") != 1:
         errors.append("Terminal route: ending candidate must be evaluated once, in A13 only")
     for needle in (
