@@ -2111,7 +2111,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_start_x = 1380.0
 			route.bridge_end_x = 1610.0
 			route.bridge_y = 328.0
-			route.prompt_text = "E  固定钟墓上层通路"
+			route.prompt_text = "E  ANCHOR THE BELLGRAVE CANOPY"
 		"A3":
 			route = Node2D.new()
 			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
@@ -2121,7 +2121,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_start_x = 1320.0
 			route.bridge_end_x = 1690.0
 			route.bridge_y = 400.0
-			route.prompt_text = "E  固定第三街通路"
+			route.prompt_text = "E  ANCHOR THE THIRD STREET"
 		"A4":
 			# A dry aqueduct span appears above the old reservoir only after the buried stone answers.
 			# 旧水库上方的干涸渡槽只有在埋藏石层回应鸣响后才显现。
@@ -2133,7 +2133,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_start_x = 1650.0
 			route.bridge_end_x = 1935.0
 			route.bridge_y = 335.0
-			route.prompt_text = "E  固定干涸渡槽"
+			route.prompt_text = "E  ANCHOR THE DRY AQUEDUCT"
 		"A5":
 			# A buried standard marks a trench crossing erased from the fortress survey.
 			# 被埋没的军旗标记着堡垒测绘图中被删去的战壕横渡路线。
@@ -2145,7 +2145,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_start_x = 880.0
 			route.bridge_end_x = 1220.0
 			route.bridge_y = 390.0
-			route.prompt_text = "E  升起被埋葬的军旗"
+			route.prompt_text = "E  RAISE THE BURIED STANDARD"
 		"A6":
 			# The silent bell's upper service walk reconnects the tower stair to the outer cloister.
 			# 无声钟的高位检修道重新连接钟塔阶梯与外侧回廊。
@@ -2157,7 +2157,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_start_x = 1250.0
 			route.bridge_end_x = 1510.0
 			route.bridge_y = 290.0
-			route.prompt_text = "E  固定无声钟室通路"
+			route.prompt_text = "E  ANCHOR THE SILENT BELL WALK"
 		"A7":
 			# A maintenance catwalk bridges two cell-block levels without opening the royal tomb gate.
 			# 维修栈道横接两层牢房，但不会打开王墓主门。
@@ -2169,7 +2169,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_start_x = 1280.0
 			route.bridge_end_x = 1530.0
 			route.bridge_y = 340.0
-			route.prompt_text = "E  固定监牢维护通路"
+			route.prompt_text = "E  ANCHOR THE PRISON CROSSWALK"
 		"A8":
 			# The erased regent gallery spans the upper tomb passage, linking the name-wall ledge to the return gallery.
 			# 被抹去的摄政王墓廊横跨王墓上层，连接王名墙平台与回程廊道。
@@ -2181,7 +2181,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_start_x = 1240.0
 			route.bridge_end_x = 1490.0
 			route.bridge_y = 330.0
-			route.prompt_text = "E  固定被抹除的摄政长廊"
+			route.prompt_text = "E  ANCHOR THE ERASED REGENT GALLERY"
 		"A9":
 			# A rain-reflection roofwalk bridges the abandoned outer-ring homes without opening the royal transport gate.
 			# 雨中倒影屋顶道横接王城外环的废弃民居，但不会开启王室运输门。
@@ -2193,7 +2193,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_start_x = 1260.0
 			route.bridge_end_x = 1520.0
 			route.bridge_y = 332.0
-			route.prompt_text = "E  固定雨中倒影通路"
+			route.prompt_text = "E  ANCHOR THE RAIN REFLECTION"
 		"A10":
 			# The choir gallery bridges the staggered upper chapel ledges; it does not replace the cathedral exits or C19.
 			# 唱诗席高廊横接错层的礼拜堂高台，不替代大圣堂出口或 C19 深层入口。
@@ -2205,7 +2205,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_start_x = 675.0
 			route.bridge_end_x = 960.0
 			route.bridge_y = 307.0
-			route.prompt_text = "E  固定无唱诗班长廊"
+			route.prompt_text = "E  ANCHOR THE CHOIRLESS GALLERY"
 		"A11":
 			# An upper span reconnects two ancient observation ledges above the later Church laboratory.
 			# 高位横桥重连后建教会实验室上方的两处古老观测台。
@@ -2217,7 +2217,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_start_x = 1350.0
 			route.bridge_end_x = 1800.0
 			route.bridge_y = 285.0
-			route.prompt_text = "E  固定观测者桥廊"
+			route.prompt_text = "E  ANCHOR THE OBSERVER SPAN"
 		"A12":
 			# The crown wall offers a risky upper traverse but leaves the throne approach and ending gate untouched.
 			# 王冠城墙提供高风险上层横道，但不改变王座入口与结局门槛。
@@ -2229,7 +2229,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_start_x = 1400.0
 			route.bridge_end_x = 1940.0
 			route.bridge_y = 323.0
-			route.prompt_text = "E  固定王冠城墙通路"
+			route.prompt_text = "E  ANCHOR THE CROWN WALL"
 		_:
 			return
 	route.opened.connect(_on_local_resonance_route_opened)
@@ -2241,62 +2241,68 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
 	match route_id:
 		"A2_BELLGRAVE_CANOPY_CROSSING":
 			narrative.show_message(
-				"钟的第二道影子",
-				"这条树冠通路横跨一段被森林测绘图标记为完整岩层的空隙。上方的钟投下两道影子：一道落在塔上，另一道落在一条并不存在的道路上。第二道影子止于一扇封闭的门前。",
+				"THE BELL'S SECOND SHADOW",
+				"The canopy path crosses a gap that the forest survey marks as solid rock. The bell above casts two shadows: one on the tower, and one on a road that is not there. The second shadow ends at a sealed door.",
+				5.0
+			)
+		"A3_THIRD_STREET_ROOFLINE":
+			narrative.show_message(
+				"THE THIRD STREET HOLDS",
+				"A bridge appears where the city map was scraped clean. The road does not lead to another place; it reconnects two parts of the street you already knew.\\n\\nThe stone will remember this route.",
 				5.0
 			)
 		"A4_OLD_STONE_AQUEDUCT":
 			narrative.show_message(
-				"无水渡槽",
-				"管道止于一条比水库更古老的石渠。桥面落定时，封闭的岩层中竟传来水流向上涌动的声音。\n\n这条石渠仍记得一条早已消失的河流。",
+				"THE AQUEDUCT WITHOUT WATER",
+				"The pipes end at a stone channel older than the reservoir. When the bridge settles, water can be heard flowing upward through the sealed rock.\n\nThe channel remembers a river that no longer exists.",
 				5.0
 			)
 		"A5_BURIED_STANDARD_CROSSING":
 			narrative.show_message(
-				"比军队存续更久的军旗",
-				"旗布早已腐烂，影子却仍横越战壕。堡垒地图将此处标为绝对不可通行。那些死者曾奉命守住一条后来被教会从所有记录中抹去的道路。",
+				"THE STANDARD THAT OUTLIVED THE ARMY",
+				"The cloth has rotted away, but its shadow still points across the trench. The fortress map marks this gap as impassable. The dead were ordered to hold a road that the Church later removed from every record.",
 				5.0
 			)
 		"A6_SILENT_BELL_SERVICE_WALK":
 			narrative.show_message(
-				"无声之钟的维护通道",
-				"上层通道留有新鲜的维修痕迹，上方的钟却从未移动。维修账册中记载了一位钟手，而他的出生年份竟比修道院封闭晚了数十年。",
+				"THE SERVICE WALK OF THE SILENT BELL",
+				"The upper walkway bears fresh maintenance marks, but the bell above it has never moved. The repair ledger lists a bell-ringer who was born decades after the monastery was sealed.",
 				5.0
 			)
 		"A7_PRISON_MAINTENANCE_CROSSWALK":
 			narrative.show_message(
-				"没有编号牢房之间的通路",
-				"维护账册记录了每一枚铰链与每一道排水口，却唯独不给牢房编号。一条维修记录命令工人保留下层牢门，并从外部封死上层牢门。那些名字并非偶然遗漏。",
+				"THE CROSSWALK OF UNNUMBERED CELLS",
+				"The maintenance ledger counts every hinge and drain, but leaves the cells themselves unnumbered. A repair entry orders the crew to preserve the lower doors and seal the upper ones from the outside. The names were not omitted by accident.",
 				5.0
 			)
 		"A8_ERASED_REGENT_GALLERY":
 			narrative.show_message(
-				"从未执政的摄政者",
-				"这条长廊连接两处墓台，却不经过封闭的王室大门。一块石碑记载着摄政者，另一侧墙上对应的凹槽却已被凿去。王墓并非为了遗忘某位国王而建；它被改造过，好让王位继承的真相无法辨读。",
+				"THE REGENT WHO NEVER REIGNED",
+				"The gallery joins two burial ledges without passing the sealed royal gate. One stone names a regent; the matching socket on the opposite wall has been chiseled away. The tomb was not built to forget a king. It was altered to make the succession impossible to read.",
 				5.0
 			)
 		"A9_RAIN_REFLECTION_ROOFWALK":
 			narrative.show_message(
-				"雨水记得的家园",
-				"屋顶通路越过一排从街道侧封死门窗的房屋。雨水倒影中，空置多年的屋檐下却亮着温暖的窗。旧城的人并非一夜之间消失；有人教会了档案把他们称作从未出生。",
+				"THE HOMES THAT THE RAIN REMEMBERS",
+				"The roofline crosses houses whose doors were sealed from the street side. In the rainwater, warm windows appear beneath roofs that have stood empty for years. The old city did not lose its people all at once; someone taught the records to call them never-born.",
 				5.0
 			)
 		"A10_CHOIRLESS_UPPER_GALLERY":
 			narrative.show_message(
-				"从未被记录的唱诗班",
-				"长廊俯瞰大圣堂的唱诗席，下方却没有任何声音传来。地面被磨得光滑，尘土勾勒出一排跪姿人形。礼仪账册记录了每一首圣歌与每一口钟，却唯独没有记下曾在此歌唱之人的名字。",
+				"THE CHOIR THAT WAS NEVER RECORDED",
+				"The gallery overlooks the cathedral choir, but no sound rises from below. Dust outlines a row of kneeling figures where the floor has been worn smooth. The service ledger lists every hymn and every bell—except the names of those who sang here.",
 				5.0
 			)
 		"A11_SECOND_OBSERVER_SPAN":
 			narrative.show_message(
-				"没有留下脚印的观测者",
-				"古老的石台在实验室最新的仪器上方交汇。一块观测板记载着两道影子进入密室，却只有一具身体离开。后来有人将这个数字改写成了光线误差。",
+				"THE OBSERVER WHO LEFT NO FOOTPRINTS",
+				"The old ledges meet above the laboratory's newest instruments. One observation slate records two shadows entering the chamber and only one body leaving. A later hand has rewritten the count as a lighting error.",
 				5.0
 			)
 		"A12_CROWN_WALL_WALK":
 			narrative.show_message(
-				"为国王的缺席而建的墙",
-				"这道高墙是为了监视大道，而非抵御外敌。箭孔全部朝向内侧。王宫更害怕有东西从王座厅离开，而不是有什么东西靠近。",
+				"THE WALL BUILT FOR A KING'S ABSENCE",
+				"The upper wall was built to watch the avenue, not defend it. Its arrow slits face inward. The palace feared what might leave the throne room more than what might approach it.",
 				5.0
 			)
 		_:
