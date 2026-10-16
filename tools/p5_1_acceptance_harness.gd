@@ -240,8 +240,8 @@ func _validate_c22_upper_approach(instance: Node, exits: Array) -> void:
 
 	var floor_y := float(instance.get("floor_y")) if _has_property(instance, "floor_y") else 540.0
 	var door_height := floor_y - terminal_door.position.y
-	if absf(door_height - 140.0) > 0.5:
-		_fail("C22_DOOR_HEIGHT/A12", "expected=140px above floor actual=%.1f" % door_height)
+	if absf(door_height - 160.0) > 0.5:
+		_fail("C22_DOOR_HEIGHT/A12", "expected=160px above floor actual=%.1f" % door_height)
 	else:
 		_pass("C22_DOOR_HEIGHT/A12", "door is %.1fpx above continuous floor" % door_height)
 
