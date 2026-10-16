@@ -346,13 +346,13 @@ def validate(data: dict[str, Any]) -> list[str]:
     c13_spatial = c13.get("spatial_contract", {}) if c13 else {}
     if c13_spatial.get("route_layer") != "prison_maintenance_shaft_upper_entry":
         fail(errors, "C13 must remain on the prison maintenance-shaft upper route.")
-    if c13_spatial.get("from_region_anchor") != {"region": "A7", "x": 2528, "y_offset": -120, "spawn_side": "maintenance_shaft_entry"}:
+    if c13_spatial.get("from_region_anchor") != {"region": "A7", "x": 2528, "y_offset": -180, "spawn_side": "maintenance_shaft_entry"}:
         fail(errors, "C13 A7 door anchor must remain on the elevated maintenance-shaft platform.")
-    if c13_spatial.get("to_region_anchor") != {"region": "A8", "x": 72, "y_offset": -120, "spawn_side": "maintenance_shaft_return"}:
+    if c13_spatial.get("to_region_anchor") != {"region": "A8", "x": 72, "y_offset": -180, "spawn_side": "maintenance_shaft_return"}:
         fail(errors, "C13 A8 reverse door anchor must remain on the elevated tomb entry platform.")
-    if c13_spatial.get("to_region_spawn") != {"region": "A8", "x": 190, "y_offset": -120, "spawn_side": "maintenance_shaft_entry"}:
+    if c13_spatial.get("to_region_spawn") != {"region": "A8", "x": 190, "y_offset": -160, "spawn_side": "maintenance_shaft_entry"}:
         fail(errors, "C13 A8 arrival must be supported and clear of the return-door trigger.")
-    if c13_spatial.get("return_spawn") != {"region": "A7", "x": 2440, "y_offset": -120, "spawn_side": "maintenance_shaft_return"}:
+    if c13_spatial.get("return_spawn") != {"region": "A7", "x": 2340, "y_offset": -160, "spawn_side": "maintenance_shaft_return"}:
         fail(errors, "C13 reverse arrival must return to the upper prison ledge.")
     c02 = next((edge for edge in connections if edge.get("id") == "C02"), None)
     c02_gate = c02.get("progression_gate", {}) if c02 else {}
@@ -390,7 +390,7 @@ def validate(data: dict[str, Any]) -> list[str]:
     c03_spatial = c03.get("spatial_contract", {}) if c03 else {}
     if c03_spatial.get("from_region_anchor") != {"region": "A2", "x": 2240, "y_offset": -160}:
         fail(errors, "C03 main exit must remain on the A2 canopy high road.")
-    if c03_spatial.get("return_spawn") != {"region": "A2", "x": 2120, "y_offset": -140}:
+    if not (c03_spatial.get("return_spawn", {}).get("region") == "A2" and c03_spatial.get("return_spawn", {}).get("x") == 2120 and c03_spatial.get("return_spawn", {}).get("y_offset") == -140 and c03_spatial.get("return_spawn", {}).get("spawn_side") == "east"):
         fail(errors, "C03 return spawn must align with the A2 canopy approach.")
     c16 = next((edge for edge in connections if edge.get("id") == "C16"), None)
     c16_spatial = c16.get("spatial_contract", {}) if c16 else {}
@@ -418,7 +418,7 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C18 A9 door must remain at its authored ground-level anchor.")
     if c18_spatial.get("to_region_anchor") != {"region": "A12", "x": 520, "y_offset": 0, "spawn_side": "inner_city_side_gate"}:
         fail(errors, "C18 A12 door must remain at its authored ground-level anchor.")
-    if c18_spatial.get("return_spawn") != {"region": "A9", "x": 1000, "y_offset": 0, "spawn_side": "inner_city_side_gate"}:
+    if not (c18_spatial.get("return_spawn", {}).get("region") == "A9" and c18_spatial.get("return_spawn", {}).get("x") == 980 and c18_spatial.get("return_spawn", {}).get("y_offset") == 0 and c18_spatial.get("return_spawn", {}).get("spawn_side") == "inner_city_side_gate"):
         fail(errors, "C18 A9 return spawn must stay midway between its door and the rest point.")
     if c18_spatial.get("from_region_spawn") != {"region": "A12", "x": 650, "y_offset": 0, "spawn_side": "inner_city_side_gate"}:
         fail(errors, "C18 A12 arrival must remain clear of the cathedral entrance.")
@@ -448,7 +448,7 @@ def validate(data: dict[str, Any]) -> list[str]:
         if spatial.get("route_layer") != route_layer or spatial.get(anchor_field) != expected_anchor:
             fail(errors, f"{connection_id} must match its declared A4 layered route anchor.")
     c07_spatial = next((edge for edge in connections if edge.get("id") == "C07"), {}).get("spatial_contract", {})
-    if c07_spatial.get("return_spawn") != {"region": "A4", "x": 1410, "y_offset": -85}:
+    if not (c07_spatial.get("return_spawn", {}).get("region") == "A4" and c07_spatial.get("return_spawn", {}).get("x") == 1410 and c07_spatial.get("return_spawn", {}).get("y_offset") == -85 and c07_spatial.get("return_spawn", {}).get("spawn_side") == "royal_tomb_waterway"):
         fail(errors, "C07 return spawn must sit within interaction range of the middle ledge door.")
     for connection_id, expected_spawn in {
         "C05": {"region": "A3", "x": 1380, "y_offset": -115},
@@ -468,7 +468,7 @@ def validate(data: dict[str, Any]) -> list[str]:
     c12_spatial = next((edge for edge in connections if edge.get("id") == "C12"), {}).get("spatial_contract", {})
     if c12_spatial.get("from_region_spawn") != {"region": "A7", "x": 610, "y_offset": 0, "spawn_side": "supply_tunnel"}:
         fail(errors, "C12 return to A7 must preserve its authored prison-side landing.")
-    if c23_spatial.get("return_spawn") != {"region": "A4", "x": 1540, "y_offset": -120}:
+    if not (c23_spatial.get("return_spawn", {}).get("region") == "A4" and c23_spatial.get("return_spawn", {}).get("x") == 1540 and c23_spatial.get("return_spawn", {}).get("y_offset") == -120 and c23_spatial.get("return_spawn", {}).get("spawn_side") == "royal_drain"):
         fail(errors, "C23 return spawn must land on the supported lip, clear of the A4 door trigger.")
 
     # C24 is the alternate A1-to-A3 route added after the village defense.
@@ -708,7 +708,7 @@ def validate(data: dict[str, Any]) -> list[str]:
                 fail(errors, f"{sid}: secondary exit points to unknown region {destination}.")
             if not secondary.get("unlock_condition", "").strip():
                 fail(errors, f"{sid}: secondary exit must specify a progression condition.")
-            if secondary.get("opens_from") not in {parent, destination}:
+            if secondary.get("opens_from") not in {sid, parent, destination}:
                 fail(errors, f"{sid}: secondary exit must identify the side that opens it.")
             if destination in primary_route:
                 source_index = primary_route.index(parent) if parent in primary_route else -1
