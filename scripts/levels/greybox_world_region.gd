@@ -1836,7 +1836,7 @@ func _spawn_region_exits() -> void:
 				)
 			else:
 				_register_debug_locked_route_hint(
-					2130.0, "terminal_anomaly", "需要从大圣堂主线抵达 A12（C22）", floor_y - 65.0
+					2130.0, "terminal_anomaly", "需要从大圣堂主线抵达 A12（C22）", floor_y - 140.0
 				)
 		"H07":
 			_spawn_exit_door(
