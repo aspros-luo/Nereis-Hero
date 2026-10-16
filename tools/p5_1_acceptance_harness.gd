@@ -110,6 +110,7 @@ func _prime_acceptance_state() -> void:
 	WorldState.outer_exposure = 100
 	WorldState.outer_god_resonance = true
 	WorldState.ancient_residue_awakened = true
+	WorldState.hidden_artifact_pieces = 3
 	WorldState.discovered_hidden_regions.clear()
 	WorldState.opened_hidden_paths.clear()
 	WorldState.entered_hidden_regions.clear()
@@ -136,7 +137,8 @@ func _prime_acceptance_state() -> void:
 		"reached_A9_via_A8_then_opened_old_lift_from_A9",
 		"reached_A5_then_opened_old_bell_tower_connection",
 		"reached_A9_then_opened_old_service_door",
-		"defeated_mad_cleric"
+		"defeated_mad_cleric",
+		"defeated_royal_tomb_guardian"
 	]:
 		if flag not in WorldState.achievement_flags:
 			WorldState.achievement_flags.append(flag)
