@@ -348,6 +348,16 @@ func _resolve_spawn(target: Node, spawn_side: String) -> Variant:
 		return Vector2(x, y)
 	if str(target.get("region_id")) == "A0":
 		return Vector2(280.0, 540.0)
+	if str(target.get("region_id")) == "A1":
+		match spawn_side:
+			"well_exit", "cliff_cave_return":
+				return Vector2(1850.0, 520.0)
+			"city_cut_return":
+				return Vector2(350.0, 520.0)
+			"north_gate":
+				return Vector2(2310.0, 520.0)
+			_:
+				return Vector2(260.0, 520.0)
 	return null
 
 func _is_spawn_supported(instance: Node, spawn: Vector2) -> bool:
