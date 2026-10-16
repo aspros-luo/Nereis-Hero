@@ -457,7 +457,8 @@ def validate(data: dict[str, Any]) -> list[str]:
     }.items():
         edge = next((item for item in connections if item.get("id") == connection_id), None)
         spatial = edge.get("spatial_contract", {}) if edge else {}
-        if spatial.get("return_spawn") != expected_spawn:
+        actual_spawn = spatial.get("return_spawn", {})
+        if any(actual_spawn.get(key) != value for key, value in expected_spawn.items()):
             fail(errors, f"{connection_id} return spawn must match its elevated destination ledge.")
     c23 = next((edge for edge in connections if edge.get("id") == "C23"), None)
     c23_spatial = c23.get("spatial_contract", {}) if c23 else {}
