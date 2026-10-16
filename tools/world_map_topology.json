@@ -985,7 +985,8 @@
       ],
       "requires": [
         "opened_sewer_inspection_hatch_from_A4",
-        "opened_watergate_and_village_well_exit"
+        "opened_watergate_and_village_well_exit",
+        "village_defense_survived"
       ]
     },
     {
