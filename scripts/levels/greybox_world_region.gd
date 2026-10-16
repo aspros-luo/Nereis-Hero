@@ -964,7 +964,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1160, 435, 170, 18))
 			_add_platform(Rect2(1460, 390, 180, 18))
 			_add_platform(Rect2(1770, 435, 170, 18))
-			_add_platform(Rect2(2100, 475, 190, 18))
+			# C22 must be supported by the raised throne approach and stay outside a max-height ground jump.
+			# C22 必须由王座高路承托，并避开从连续地面起跳时的最大碰撞包络。
+			_add_platform(Rect2(2100, 420, 190, 18))
 			_add_platform(Rect2(410, 405, 115, 18))
 			_add_platform(Rect2(545, 365, 115, 18))
 			_add_platform(Rect2(680, 325, 120, 18))
@@ -1830,7 +1832,7 @@ func _spawn_region_exits() -> void:
 			if "reached_A12_via_A10" in WorldState.achievement_flags:
 				_spawn_exit_door(
 					2130.0, "E  进入王座区", "terminal_anomaly",
-					"res://scenes/terminal_anomaly.tscn", "west", true, "", "", floor_y - 65.0
+					"res://scenes/terminal_anomaly.tscn", "west", true, "", "", floor_y - 140.0
 				)
 			else:
 				_register_debug_locked_route_hint(
