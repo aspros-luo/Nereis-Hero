@@ -173,10 +173,10 @@ def main() -> int:
     # C21 must refresh while A11 remains loaded because its own observer source can change the candidate.
     # C21 必须在 A11 场景内动态刷新，因为该区域的观测者异常本身就能改变结局候选。
     process_start = region.find("func _process(_delta: float) -> void:")
-    process_end = region.find("\\nfunc ", process_start + 1) if process_start >= 0 else -1
+    process_end = region.find("\nfunc ", process_start + 1) if process_start >= 0 else -1
     process_body = region[process_start:process_end] if process_start >= 0 and process_end >= 0 else ""
     refresh_start = region.find("func _refresh_a11_ending_route() -> void:")
-    refresh_end = region.find("\\nfunc ", refresh_start + 1) if refresh_start >= 0 else -1
+    refresh_end = region.find("\nfunc ", refresh_start + 1) if refresh_start >= 0 else -1
     c21_refresh = region[refresh_start:refresh_end] if refresh_start >= 0 and refresh_end >= 0 else ""
     require(
         errors,
