@@ -83,9 +83,9 @@ func _run() -> void:
 	_finish()
 
 func _finish() -> void:
-	WorldState.debug_map_test_mode = false
-	WorldState.debug_natural_test_active = false
-	WorldState.debug_natural_test_visited_regions.clear()
+	world_state.debug_map_test_mode = false
+	world_state.debug_natural_test_active = false
+	world_state.debug_natural_test_visited_regions.clear()
 	quit(0 if failures == 0 else 1)
 
 func _load_topology() -> bool:
@@ -106,24 +106,24 @@ func _load_topology() -> bool:
 	return true
 
 func _prime_acceptance_state() -> void:
-	WorldState.debug_map_test_mode = true
-	WorldState.debug_natural_test_active = false
-	WorldState.boss_defeated = true
-	WorldState.first_choice_made = true
-	WorldState.physical_union_complete = true
-	WorldState.hero_resonance = 100
-	WorldState.ancient_exposure = 100
-	WorldState.outer_exposure = 100
-	WorldState.outer_god_resonance = true
-	WorldState.ancient_residue_awakened = true
-	WorldState.hidden_artifact_pieces = 3
-	WorldState.discovered_hidden_regions.clear()
-	WorldState.opened_hidden_paths.clear()
-	WorldState.entered_hidden_regions.clear()
+	world_state.debug_map_test_mode = true
+	world_state.debug_natural_test_active = false
+	world_state.boss_defeated = true
+	world_state.first_choice_made = true
+	world_state.physical_union_complete = true
+	world_state.hero_resonance = 100
+	world_state.ancient_exposure = 100
+	world_state.outer_exposure = 100
+	world_state.outer_god_resonance = true
+	world_state.ancient_residue_awakened = true
+	world_state.hidden_artifact_pieces = 3
+	world_state.discovered_hidden_regions.clear()
+	world_state.opened_hidden_paths.clear()
+	world_state.entered_hidden_regions.clear()
 	for hidden_id in ["H01","H02","H03","H04","H05","H06","H07","H08"]:
-		WorldState.discovered_hidden_regions.append(hidden_id)
-		WorldState.opened_hidden_paths.append(hidden_id)
-		WorldState.entered_hidden_regions.append(hidden_id)
+		world_state.discovered_hidden_regions.append(hidden_id)
+		world_state.opened_hidden_paths.append(hidden_id)
+		world_state.entered_hidden_regions.append(hidden_id)
 	for flag in [
 		"village_defense_survived",
 		"opened_bell_tower_drop",
@@ -146,9 +146,9 @@ func _prime_acceptance_state() -> void:
 		"defeated_mad_cleric",
 		"defeated_royal_tomb_guardian"
 	]:
-		if flag not in WorldState.achievement_flags:
-			WorldState.achievement_flags.append(flag)
-	WorldState.resonance_sources.clear()
+		if flag not in world_state.achievement_flags:
+			world_state.achievement_flags.append(flag)
+	world_state.resonance_sources.clear()
 	for source_id in [
 		"anomaly_bell_retiming",
 		"anomaly_old_pilgrim_echo",
@@ -158,10 +158,10 @@ func _prime_acceptance_state() -> void:
 		"anomaly_mirror_street_echo",
 		"anomaly_observer_reaction"
 	]:
-		WorldState.resonance_sources.append(source_id)
-	WorldState.unlocked_abilities["resonance_sight"] = {"source_type":"debug","source_id":"p5_1_harness"}
-	WorldState.pending_region_spawn_side = "west"
-	WorldState.resume_spawn_side = "west"
+		world_state.resonance_sources.append(source_id)
+	world_state.unlocked_abilities["resonance_sight"] = {"source_type":"debug","source_id":"p5_1_harness"}
+	world_state.pending_region_spawn_side = "west"
+	world_state.resume_spawn_side = "west"
 	print("[PASS] Acceptance state primed in memory; normal save writes disabled.")
 
 func _validate_scene_inventory_and_runtime() -> void:
