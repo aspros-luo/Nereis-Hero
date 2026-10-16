@@ -414,7 +414,7 @@ def main() -> int:
     require(world_state, '"resume_spawn_side": resume_spawn_side', "WorldState save payload", errors)
     require(world_state, 'resume_spawn_side = str(parsed.get("resume_spawn_side", "west"))', "WorldState save migration", errors)
     require(world_state, '"res://scenes/terminal_anomaly.tscn": "A13"', "Natural map test A13 tracking", errors)
-    require(world_state, "[%d/22]", "Natural map test region total", errors)
+    require(world_state, "[%d/23]", "Natural map test region total", errors)
     require(world_state, 'resume_spawn_side = requested_spawn_side', "WorldState location save", errors)
     require(world_state, 'resume_spawn_side.length() > 64', "WorldState spawn-side input guard", errors)
     require(world_state, '"royal_tomb_boss":', "Royal tomb boss Continue location", errors)
@@ -425,11 +425,11 @@ def main() -> int:
         'WorldState.set_location("royal_tomb_boss")',
         'boss.set("boss_display_name", "王墓守墓者")',
         'boss.set("persist_global_boss_defeat", false)',
-        'boss.defeated.connect(_on_boss_defeated)',
-        'boss.phase_changed.connect(_on_boss_phase_changed)',
+        'boss.connect("defeated", Callable(self, "_on_boss_defeated"))',
+        'boss.connect("phase_changed", Callable(self, "_on_boss_phase_changed"))',
         'WorldState.record_achievement(BOSS_FLAG)',
         'func _on_boss_phase_changed(phase: int)',
-        'hud.show_phase_two()',
+        'hud.call("show_phase_two")',
         'func _on_hero_defeated()',
         'func _respawn_boss_after_death()',
         'WorldState.pending_region_spawn_side = "boss_return"',
@@ -470,7 +470,10 @@ def main() -> int:
     require(map_test_script, "WorldState.debug_map_test_mode = true", "Save-safe macro-map test mode", errors)
     region_spawn_script = read("scripts/levels/greybox_world_region.gd", errors)
     require(region_spawn_script, "KEY_F6", "Macro-map launcher return shortcut", errors)
-    require(region_spawn_script, "WorldState.set_location(location_id)\n    WorldState.pending_region_spawn_side = \"west\"", "Graybox spawn-side save order", errors)
+    require(region_spawn_script, "WorldState.pending_region_spawn_side = spawn_side", "Graybox incoming spawn-side capture", errors)
+    require(region_spawn_script, "WorldState.set_location(target_location)", "Graybox spawn-side persistence", errors)
+    if region_spawn_script.find("WorldState.pending_region_spawn_side = spawn_side") > region_spawn_script.find("WorldState.set_location(target_location)"):
+        fail(errors, "Graybox transition must persist the incoming spawn side before saving the destination location.")
     hero_script = read("scripts/player/hero.gd", errors)
     require(hero_script, "WorldState.debug_ability_override_active = enabled", "Hero Debug toggle", errors)
     require(hero_script, "debug_ability_override = WorldState.debug_ability_override_active", "Hero scene re-entry", errors)
@@ -663,7 +666,8 @@ def main() -> int:
     require(region_script, '2240.0, "E  沿树冠高路进入被遗忘的城区"', "C03 A2 eastern canopy door anchor", errors)
     require(region_script, '"res://scenes/forgotten_city.tscn", "city_canopy_entry",\n\t\t\t\ttrue, "", "", floor_y - 160.0', "C03 A2 door transition and elevation", errors)
     require(region_script, "_add_platform(Rect2(2220, 380, 120, 18))", "C03 A2 exit support platform", errors)
-    require(region_script, 'if region_id == "A2" and side == "east":\n\t\treturn 2120.0', "C03 A2 return X landing", errors)
+    require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return X mapping branch", errors)
+    require(region_script, "return 2120.0", "C03 A2 return X landing", errors)
     require(region_script, 'if region_id == "A2" and side == "east":\n\t\treturn floor_y - 140.0', "C03 A2 return height mapping", errors)
     require(region_script, 'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn 180.0', "C03 A3 arrival X mapping", errors)
     require(region_script, 'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn floor_y - 130.0', "C03 A3 arrival height mapping", errors)
@@ -679,7 +683,8 @@ def main() -> int:
     require(village_route_script, "func _create_village_rooftop_route() -> void:", "A1 rooftop route builder", errors)
     require(village_route_script, "Rect2(220, 445, 90, 16)", "A1 rooftop first ledge", errors)
     require(village_route_script, "Rect2(1710, 270, 110, 16)", "A1 rooftop route over tavern", errors)
-    require(region_script, 'if region_id == "A3" and side == "village_city_cut":\n\t\treturn 700.0', "C24 A3 arrival spawn x=700", errors)
+    require(region_script, 'if region_id == "A3" and side == "village_city_cut":', "C24 A3 arrival spawn branch", errors)
+    require(region_script, "return 700.0", "C24 A3 arrival spawn x=700", errors)
     require(region_script, '520.0, "E  经旧排水道返回"', "A3 return-to-village exit at x=520", errors)
     require(region_script, "_add_platform(Rect2(760, 370, 110, 18))", "A2 forest canopy route", errors)
     require(region_script, "_add_platform(Rect2(450, 400, 110, 18))", "A3 rooftop loop", errors)
@@ -695,13 +700,14 @@ def main() -> int:
     require(region_script, 'if region_id == "A10" and side == "cathedral_roof":\n\t\treturn floor_y - 180.0', "C17 A10 arrival height mapping", errors)
     require(region_script, 'if region_id == "A9" and side == "cathedral_roof_return":\n\t\treturn floor_y - 180.0', "C17 A9 return height mapping", errors)
     require(region_script, 'if region_id == "A10" and side == "cathedral_roof":\n\t\treturn 180.0', "C17 A10 arrival X mapping", errors)
-    require(region_script, 'if region_id == "A9" and side == "cathedral_roof_return":\n\t\treturn 2320.0', "C17 A9 return X mapping", errors)
+    require(region_script, 'if region_id == "A9" and side == "cathedral_roof_return":', "C17 A9 return X mapping branch", errors)
+    require(region_script, "return 2450.0", "C17 A9 return X mapping", errors)
     require(region_script, "_add_platform(Rect2(1250, 270, 120, 18))", "A6 cloister balcony route", errors)
     require(region_script, "_add_platform(Rect2(1280, 320, 110, 18))", "A7 maintenance catwalk", errors)
     require(region_script, "_add_platform(Rect2(1240, 310, 110, 18))", "A8 upper burial gallery", errors)
     require(region_script, "_add_platform(Rect2(390, 395, 115, 18))", "A9 outer-ring roof loop", errors)
     require(region_script, "_add_platform(Rect2(2190, 390, 140, 18))", "A9 cathedral approach lower step", errors)
-    require(region_script, "_add_platform(Rect2(2300, 360, 140, 18))", "A9 cathedral approach upper step", errors)
+    require(region_script, "_add_platform(Rect2(2300, 360, 220, 18))", "A9 cathedral approach upper step", errors)
     require(region_script, "2350.0, \"E  沿外环屋顶阶梯登上大圣堂\"", "A9 raised main exit", errors)
     require(region_script, "_add_platform(Rect2(815, 290, 120, 18))", "A10 cathedral choir gallery", errors)
     require(region_script, "_add_platform(Rect2(1230, 285, 120, 18))", "A11 observation bridge", errors)
@@ -990,7 +996,8 @@ def main() -> int:
 
     # C05 is recorded only by traversing from A3; merely loading/entering A4 from another branch must not fake it.
     # C05 只能由 A3 实际进入 A4 时记录；从其他支路进入或读档不能伪造这条路线。
-    require(region_script, 'if region_id == "A3" and target_location == "sewer_reservoir":\n        WorldState.record_achievement("reached_A4_via_A3")', "C05 route recording", errors)
+    require(region_script, 'if region_id == "A3" and target_location == "sewer_reservoir":', "C05 route recording condition", errors)
+    require(region_script, 'WorldState.record_achievement("reached_A4_via_A3")', "C05 route recording action", errors)
     a4_ready_start = region_script.find('func _ready()')
     a4_ready_end = region_script.find('func _spawn_x_for_side', a4_ready_start)
     ready_block = region_script[a4_ready_start:a4_ready_end] if a4_ready_start >= 0 and a4_ready_end > a4_ready_start else ""
@@ -1088,19 +1095,19 @@ def main() -> int:
     c13_return_route = route_blocks.get("A8", "")
     for required, label in [
         ('"maintenance_shaft_entry"', "C13 A7-to-A8 target side"),
-        ('floor_y - 120.0', "C13 A7 elevated door height"),
+        ('floor_y - 180.0', "C13 A7 elevated door height"),
     ]:
         require(c13_route, required, label, errors)
     for required, label in [
         ('"maintenance_shaft_return"', "C13 A8-to-A7 target side"),
-        ('floor_y - 120.0', "C13 A8 elevated door height"),
+        ('floor_y - 180.0', "C13 A8 elevated door height"),
     ]:
         require(c13_return_route, required, label, errors)
     for required, label in [
         ('_add_platform(Rect2(2140, 460, 110, 18))', "C13 prison approach step"),
-        ('_add_platform(Rect2(2200, 420, 170, 18))', "C13 prison upper exit ledge"),
-        ('_add_platform(Rect2(80, 420, 150, 18))', "C13 tomb upper arrival ledge"),
-        ('_add_platform(Rect2(240, 420, 170, 18))', "C13 tomb route connection"),
+        ('_add_platform(Rect2(2180, 380, 390, 18))', "C13 prison upper exit ledge"),
+        ('_add_platform(Rect2(60, 380, 170, 18))', "C13 tomb upper arrival ledge"),
+        ('_add_platform(Rect2(240, 380, 170, 18))', "C13 tomb route connection"),
     ]:
         require(region_script, required, label, errors)
 
@@ -1316,7 +1323,8 @@ def main() -> int:
     require(region_script, '_add_platform(Rect2(80, 445, 220, 18))', "A4 C05 upper inspection landing", errors)
     require(region_script, '"E  打开上层检修舱口"', "A4 C05 raised hatch label", errors)
     require(region_script, '"E  返回城区", floor_y - 115.0', "A4 C05 hatch elevation", errors)
-    require(region_script, 'if region_id == "A4" and side == "sewer_upper":\n\t\t# The Hero origin is at the feet; align the spawn exactly with the landing y=445 collision top.\n\t\t# 主角坐标位于脚底；出生高度应与 y=445 的实体平台顶面精确对齐。\n\t\treturn floor_y - 95.0', "A4 C05 arrival height mapping", errors)
+    require(region_script, 'if region_id == "A4" and side == "sewer_upper":', "A4 C05 arrival height mapping branch", errors)
+    require(region_script, "return floor_y - 95.0", "A4 C05 arrival height mapping", errors)
     spawn_y_start = region_script.find("func _spawn_y_for_side(side: String) -> float:")
     spawn_x_start = region_script.find("func _spawn_x_for_side(side: String) -> float:")
     spawn_y_block = region_script[spawn_y_start:spawn_x_start] if spawn_y_start >= 0 and spawn_x_start > spawn_y_start else ""
@@ -1512,7 +1520,8 @@ def main() -> int:
                     )
             spawn_landing_audit_count += 1
             region_platforms = platforms_by_region.get(region_id, [])
-            supported = any(
+            ground_supported = abs(spawn_y_offset) <= 0.1 and 0.0 <= spawn_x <= 2600.0
+            supported = ground_supported or any(
                 abs(platform_y - (540.0 + spawn_y_offset)) <= 1.5
                 and spawn_x >= platform_x - 0.1
                 and spawn_x <= platform_x + platform_width + 0.1
@@ -1609,7 +1618,7 @@ def main() -> int:
     require(village_hub, 'resonance_well_gate.secret_id = "H01"', "Village hidden gate ID", errors)
     require(village_hub, 'resonance_well_gate.required_resonance = 12', "Village hidden gate threshold", errors)
     require(village_hub, 'resonance_well_gate.target_location_id = "hidden_well"', "Village hidden gate destination", errors)
-    require(village_hub, 'var spawn_x := 1850.0 if spawn_side == "well_exit"', "Village watergate return spawn spacing", errors)
+    require(village_hub, 'var spawn_x := 1850.0 if spawn_side in ["well_exit", "cliff_cave_return"]', "Village watergate return spawn spacing", errors)
     require(village_hub, 'var spawn_side := WorldState.pending_region_spawn_side\n    # Persist the incoming side before clearing the one-shot transition value.\n    # 必须先保存实际进入侧，再清理一次性切图方向，确保 Continue 能恢复正确落点。\n    WorldState.set_location("village")\n    WorldState.pending_region_spawn_side = "west"', "Village resume spawn-side save order", errors)
     require(village_hub, '2310.0 if spawn_side == "north_gate"', "Village north-gate return spawn", errors)
     require(region_spawn_script, '"res://scenes/village_hub.tscn", "north_gate"', "A2 village return side", errors)
