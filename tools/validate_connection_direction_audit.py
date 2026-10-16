@@ -301,8 +301,11 @@ def main() -> int:
     h08_branch = h08_split[1].split('\n\t\t"', 1)[0] if len(h08_split) > 1 else ""
     if 'if NereisEndingEvaluator.get_candidate() != "凡人之墓":' not in h08_branch or '"res://scenes/terminal_anomaly.tscn"' not in h08_branch:
         errors.append("H08: alternate A13 entry must use the shared ending evaluator")
-    if region.count('"res://scenes/terminal_anomaly.tscn"') != 3:
-        errors.append("A13 entry audit: expected exactly three runtime entry points (C21, C22, H08)")
+    # Four source literals represent three runtime entries: C21 is authored once in the
+    # initial A11 branch and once in its dynamic in-place refresh helper; C22 and H08
+    # each contribute one additional route. The runtime helper guard prevents duplicates.
+    if region.count('"res://scenes/terminal_anomaly.tscn"') != 4:
+        errors.append("A13 entry audit: expected C21 initial/dynamic wiring plus C22 and H08 (three runtime entries)")
 
     # Floor geometry is continuous by design; a trigger door is not a physical wall.
     # Flag this explicitly as a manual runtime acceptance item, never as a passing claim.
