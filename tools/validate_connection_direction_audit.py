@@ -280,6 +280,7 @@ def main() -> int:
     print(" - C11/C13/C14 endpoint wiring and intended bidirectional topology checked.")
     print(" - C15/C19 hidden-gate thresholds, evidence, persistence, and per-gate return locks checked.")
     print(" - C21/C22 one-way terminal topology and A13 ending-only exit checked.")
+    print(" - C13/C22 high-door trigger heights are compared with Hero jump geometry and landing support.")
     print("LIMITATION: continuous ground/fall/jump bypass, collision support, interaction focus, and transitions require Godot runtime acceptance.")
     return 0
 
