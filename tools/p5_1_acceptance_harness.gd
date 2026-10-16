@@ -214,6 +214,8 @@ func _validate_scene_inventory_and_runtime() -> void:
 			_fail("EXITS/%s" % region_id, "No runtime P5.1 exit/gate contracts")
 		else:
 			_pass("EXITS/%s" % region_id, "contracts=%d" % exits.size())
+		if region_id in ["A7", "A8"]:
+			_validate_c13_upper_approach(instance, exits)
 		if region_id == "A12":
 			_validate_c22_upper_approach(instance, exits)
 		var expected_rest: bool = region_id in ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12"]
@@ -227,6 +229,42 @@ func _validate_scene_inventory_and_runtime() -> void:
 			_pass("REST/%s" % region_id, "rest point present")
 		instance.queue_free()
 		await process_frame
+
+func _validate_c13_upper_approach(instance: Node, exits: Array) -> void:
+	var expected_target := "A8" if str(instance.get("region_id")) == "A7" else "A7"
+	var door: Node2D
+	for exit_node in exits:
+		if _contract_target_region(exit_node) == expected_target:
+			door = exit_node as Node2D
+			break
+	var region_id := str(instance.get("region_id"))
+	if door == null:
+		_fail("C13_DOOR/%s" % region_id, "C13 endpoint door targeting %s is missing" % expected_target)
+		return
+
+	var floor_y := float(instance.get("floor_y")) if _has_property(instance, "floor_y") else 540.0
+	var door_height := floor_y - door.position.y
+	if absf(door_height - 180.0) > 0.5:
+		_fail("C13_DOOR_HEIGHT/%s" % region_id, "expected=180px above floor actual=%.1f" % door_height)
+	else:
+		_pass("C13_DOOR_HEIGHT/%s" % region_id, "door is %.1fpx above continuous floor" % door_height)
+
+	var supported_by_upper_landing := false
+	if _has_property(instance, "platforms"):
+		var platforms = instance.get("platforms")
+		if platforms is Array:
+			for rect in platforms:
+				if not (rect is Rect2):
+					continue
+				if door.position.x < rect.position.x or door.position.x > rect.end.x:
+					continue
+				if absf(rect.position.y - (door.position.y + 20.0)) <= 3.0:
+					supported_by_upper_landing = true
+					break
+	if supported_by_upper_landing:
+		_pass("C13_LANDING_SUPPORT/%s" % region_id, "upper landing supports the door at y=%.1f" % (door.position.y + 20.0))
+	else:
+		_fail("C13_LANDING_SUPPORT/%s" % region_id, "no upper platform supports the C13 door")
 
 func _validate_c22_upper_approach(instance: Node, exits: Array) -> void:
 	var terminal_door: Node2D
