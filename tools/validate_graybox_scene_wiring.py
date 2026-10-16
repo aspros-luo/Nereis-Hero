@@ -545,7 +545,8 @@ def main() -> int:
     prologue_script = read("scripts/levels/escape_prologue.gd", errors)
     require(prologue_script, "func _create_surgical_catwalks() -> void:", "A0 surgical catwalk builder", errors)
     require(prologue_script, "Rect2(430, 455, 100, 16)", "A0 surgical first ledge", errors)
-    if "MAINTENANCE ACCESS ONLY" not in prologue_script and "仅供维护人员通行" not in prologue_script:\n        errors.append("A0 catwalk landmark: missing the maintenance-only label in either source or localized form.")
+    if "MAINTENANCE ACCESS ONLY" not in prologue_script and "仅供维护人员通行" not in prologue_script:
+        errors.append("A0 catwalk landmark: missing the maintenance-only label in either source or localized form.")
     require(prologue_script, "Cold surgical shafts and suspended cables", "A0 environmental lighting layer", errors)
     require(prologue_script, "Sparse surgical floor seams", "A0 floor material layer", errors)
 
@@ -668,8 +669,10 @@ def main() -> int:
     require(region_script, "_add_platform(Rect2(2220, 380, 120, 18))", "C03 A2 exit support platform", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return X mapping branch", errors)
     require(region_script, "return 2120.0", "C03 A2 return X landing", errors)
-    require(region_script, 'if region_id == "A2" and side == "east":\n\t\treturn floor_y - 140.0', "C03 A2 return height mapping", errors)
-    require(region_script, 'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn 180.0', "C03 A3 arrival X mapping", errors)
+    require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return height mapping branch", errors)
+    require(region_script, "return floor_y - 140.0", "C03 A2 return height mapping", errors)
+    require(region_script, 'if region_id == "A3" and side == "city_canopy_entry":', "C03 A3 arrival X mapping branch", errors)
+    require(region_script, "return 180.0", "C03 A3 arrival X mapping", errors)
     require(region_script, 'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn floor_y - 130.0', "C03 A3 arrival height mapping", errors)
     require(region_script, "_add_platform(Rect2(80, 410, 150, 18))", "C03 A3 west arrival support platform", errors)
 
@@ -697,9 +700,12 @@ def main() -> int:
     require(region_script, '"res://scenes/grand_cathedral.tscn", "cathedral_roof", true, "", "", floor_y - 180.0', "C17 elevated destination spawn side", errors)
     require(region_script, '_add_platform(Rect2(80, 360, 150, 18))', "A10 C17 west upper landing platform", errors)
     require(region_script, '"res://scenes/royal_outer_ring.tscn", "cathedral_roof_return",\n\t\t\t\ttrue, "", "", floor_y - 180.0', "C17 elevated return door", errors)
-    require(region_script, 'if region_id == "A10" and side == "cathedral_roof":\n\t\treturn floor_y - 180.0', "C17 A10 arrival height mapping", errors)
-    require(region_script, 'if region_id == "A9" and side == "cathedral_roof_return":\n\t\treturn floor_y - 180.0', "C17 A9 return height mapping", errors)
-    require(region_script, 'if region_id == "A10" and side == "cathedral_roof":\n\t\treturn 180.0', "C17 A10 arrival X mapping", errors)
+    require(region_script, 'if region_id == "A10" and side == "cathedral_roof":', "C17 A10 arrival height mapping branch", errors)
+    require(region_script, "return floor_y - 180.0", "C17 A10 arrival height mapping", errors)
+    require(region_script, 'if region_id == "A9" and side == "cathedral_roof_return":', "C17 A9 return height mapping branch", errors)
+    require(region_script, "return floor_y - 180.0", "C17 A9 return height mapping", errors)
+    require(region_script, 'if region_id == "A10" and side == "cathedral_roof":', "C17 A10 arrival X mapping branch", errors)
+    require(region_script, "return 180.0", "C17 A10 arrival X mapping", errors)
     require(region_script, 'if region_id == "A9" and side == "cathedral_roof_return":', "C17 A9 return X mapping branch", errors)
     require(region_script, "return 2450.0", "C17 A9 return X mapping", errors)
     require(region_script, "_add_platform(Rect2(1250, 270, 120, 18))", "A6 cloister balcony route", errors)
@@ -1287,7 +1293,7 @@ def main() -> int:
         if next_branch:
             block_end = branch_match.end() + next_branch.start()
         else:
-            block_end = exits_source.find("\\nfunc ", branch_match.end())
+            block_end = exits_source.find("\nfunc ", branch_match.end())
             if block_end < 0:
                 block_end = len(exits_source)
         block = exits_source[branch_match.start():block_end]
@@ -1310,7 +1316,7 @@ def main() -> int:
         if a13_next:
             a13_end = exits_start + a13_match.end() + a13_next.start()
         else:
-            a13_end = region_script.find("\\nfunc ", a13_start)
+            a13_end = region_script.find("\nfunc ", a13_start)
             if a13_end < 0:
                 a13_end = len(region_script)
         a13_block = region_script[a13_start:a13_end]
@@ -1338,12 +1344,14 @@ def main() -> int:
     spawn_y_start = region_script.find("func _spawn_y_for_side(side: String) -> float:")
     spawn_x_start = region_script.find("func _spawn_x_for_side(side: String) -> float:")
     spawn_y_block = region_script[spawn_y_start:spawn_x_start] if spawn_y_start >= 0 and spawn_x_start > spawn_y_start else ""
-    c05_y_branch = 'if region_id == "A4" and side == "sewer_upper":\n\t\t# The Hero origin is at the feet; align the spawn exactly with the landing y=445 collision top.\n\t\t# 主角坐标位于脚底；出生高度应与 y=445 的实体平台顶面精确对齐。\n\t\treturn floor_y - 95.0'
+    c05_y_branch = 'if region_id == "A4" and side == "sewer_upper":'
+    c05_y_branch += '\n\t\treturn floor_y - 95.0'
     if spawn_y_block.count(c05_y_branch) != 1:
         fail(errors, "C05 A4 sewer_upper Y mapping must appear exactly once in _spawn_y_for_side.")
     if 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn 180.0' in spawn_y_block:
         fail(errors, "C05 A4 sewer_upper Y mapping must not use absolute y=180.0 above its supported landing.")
-    require(region_script, 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn 180.0', "A4 C05 arrival X mapping", errors)
+    require(region_script, 'if region_id == "A4" and side == "sewer_upper":', "A4 C05 arrival X mapping branch", errors)
+    require(region_script, "return 180.0", "A4 C05 arrival X mapping", errors)
     require(region_script, '2040.0, "E  经东侧高位旧升降机返回王城外环"', "A3 elevated C16 branch", errors)
     require(region_script, 'true, "", "", floor_y - 70.0', "A3 C16 elevation", errors)
     require(region_script, '_register_debug_locked_route_hint(2040.0, "royal_outer_ring"', "A3 C16 debug marker", errors)
@@ -1681,14 +1689,14 @@ def main() -> int:
 
                 def gate_string_array(property_name: str) -> list[str]:
                     value = re.search(
-                        rf"gate\\.{re.escape(property_name)}\\s*=\\s*\\[(.*?)\\]",
+                        rf"gate\.{re.escape(property_name)}\s*=\s*\[(.*?)\]",
                         gate_block,
                         re.DOTALL,
                     )
                     if value is None and property_name == "required_source_ids":
                         # Gate constructors may assign a typed local array to the exported field.
                         value = re.search(
-                            r"var\\s+required_source_ids(?:\\s*:\\s*Array\\[String\\])?\\s*:=?\\s*\\[(.*?)\\]",
+                            r"var\s+required_source_ids(?:\s*:\s*Array\[String\])?\s*(?::=|=)\s*\[(.*?)\]",
                             gate_block,
                             re.DOTALL,
                         )
