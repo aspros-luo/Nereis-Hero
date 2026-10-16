@@ -100,8 +100,14 @@ var prologue_complete := false
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
-    load_game()
-    _migrate_third_cord_anchor()
+    # P5.1 headless acceptance starts with a clean in-memory state. This guard runs
+    # before load/migration so the user's normal save is never read or rewritten.
+    if "--p5-1-harness" in OS.get_cmdline_user_args():
+        debug_map_test_mode = true
+        print("[NEREIS][P5.1] Isolated acceptance mode: save load/write disabled.")
+    else:
+        load_game()
+        _migrate_third_cord_anchor()
 
 # Normalize legacy ending-anchor saves after load. Older builds stored relic aliases
 # and a provisional third-cord item that is not part of the approved ending design.
