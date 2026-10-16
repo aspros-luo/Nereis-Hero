@@ -869,7 +869,7 @@
         "from_region_anchor": {
           "region": "A12",
           "x": 2130,
-          "y_offset": -65
+          "y_offset": -140
         },
         "to_region_anchor": {
           "region": "A13",
