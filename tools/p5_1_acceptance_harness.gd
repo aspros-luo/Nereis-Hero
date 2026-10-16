@@ -191,7 +191,8 @@ func _validate_scene_inventory_and_runtime() -> void:
 		if hero == null or not (hero is CharacterBody2D):
 			_fail("HERO/%s" % region_id, "Missing CharacterBody2D Hero")
 		else:
-			var collision := hero.get_node_or_null("CollisionShape2D")
+			var collisions := hero.find_children("CollisionShape2D", "CollisionShape2D", true, false)
+			var collision: CollisionShape2D = collisions[0] if not collisions.is_empty() else null
 			if collision == null or collision.shape == null:
 				_fail("HERO_COLLISION/%s" % region_id, "Hero CollisionShape2D/shape missing")
 			else:
@@ -351,7 +352,8 @@ func _resolve_spawn(target: Node, spawn_side: String) -> Variant:
 
 func _is_spawn_supported(instance: Node, spawn: Vector2) -> bool:
 	var floor_y := float(instance.get("floor_y")) if _has_property(instance, "floor_y") else 540.0
-	if absf(spawn.y - floor_y) <= 2.0:
+	var support_y := spawn.y + 24.0
+	if absf(support_y - floor_y) <= 3.0:
 		if _has_property(instance, "map_width"):
 			return spawn.x >= 0.0 and spawn.x <= float(instance.get("map_width"))
 		return true
@@ -359,7 +361,7 @@ func _is_spawn_supported(instance: Node, spawn: Vector2) -> bool:
 		var platforms = instance.get("platforms")
 		if platforms is Array:
 			for rect in platforms:
-				if rect is Rect2 and spawn.x >= rect.position.x and spawn.x <= rect.end.x and absf(spawn.y - rect.position.y) <= 2.0:
+				if rect is Rect2 and spawn.x >= rect.position.x and spawn.x <= rect.end.x and absf(support_y - rect.position.y) <= 3.0:
 					return true
 	return false
 
