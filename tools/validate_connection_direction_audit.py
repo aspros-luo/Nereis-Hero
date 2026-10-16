@@ -77,6 +77,24 @@ def main() -> int:
             if needle not in region:
                 errors.append(f"{edge_id}: missing endpoint wiring marker {needle!r}")
 
+    # C13 topology anchors, landing spawns, and authored collision platforms must agree.
+    c13_contract = edges.get("C13", {}).get("spatial_contract", {})
+    c13_from = c13_contract.get("from_region_anchor", {})
+    c13_to = c13_contract.get("to_region_anchor", {})
+    c13_arrival = c13_contract.get("to_region_spawn", {})
+    c13_return = c13_contract.get("return_spawn", {})
+    if not (
+        c13_from.get("region") == "A7" and c13_from.get("x") == 2528
+        and c13_from.get("y_offset") == -180
+        and c13_to.get("region") == "A8" and c13_to.get("x") == 72
+        and c13_to.get("y_offset") == -180
+        and c13_arrival.get("region") == "A8" and c13_arrival.get("x") == 190
+        and c13_arrival.get("y_offset") == -160
+        and c13_return.get("region") == "A7" and c13_return.get("x") == 2340
+        and c13_return.get("y_offset") == -160
+    ):
+        errors.append("C13: topology door anchors and both upper landing spawns must match current runtime geometry")
+
     # C14 has paired ground-level doors. Keep topology anchors aligned with the actual
     # boundary doors and the shared safe-spawn defaults.
     c14 = edges.get("C14", {}).get("spatial_contract", {})
@@ -134,6 +152,7 @@ def main() -> int:
     # C13 must be authored as a genuinely elevated, bidirectional route on both ends.
     for needle in (
         '_add_platform(Rect2(2140, 460, 110, 18))',
+        '_add_platform(Rect2(2160, 420, 120, 18))',
         '_add_platform(Rect2(2180, 380, 390, 18))',
         '_add_platform(Rect2(60, 380, 170, 18))',
         '_add_platform(Rect2(240, 380, 170, 18))',
