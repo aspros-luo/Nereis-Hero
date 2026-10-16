@@ -178,19 +178,15 @@ def main() -> int:
     refresh_start = region.find("func _refresh_a11_ending_route() -> void:")
     refresh_end = region.find("\nfunc ", refresh_start + 1) if refresh_start >= 0 else -1
     c21_refresh = region[refresh_start:refresh_end] if refresh_start >= 0 and refresh_end >= 0 else ""
-    require(
-        errors,
-        "_refresh_a11_ending_route()" in process_body,
-        "C21: ending-route availability must be refreshed during A11 runtime, not only in _ready().",
-    )
-    require(
-        errors,
+    if "_refresh_a11_ending_route()" not in process_body:
+        errors.append("C21: ending-route availability must be refreshed during A11 runtime, not only in _ready().")
+    if not (
         'NereisEndingEvaluator.get_candidate() == "凡人之墓"' in c21_refresh
         and 'get_node_or_null("Exit_terminal_anomaly")' in c21_refresh
         and 'debug_exit_markers.remove_at(index)' in c21_refresh
-        and '"res://scenes/terminal_anomaly.tscn", "west"' in c21_refresh,
-        "C21: dynamic refresh must remove the stale locked hint and spawn exactly one enabled A13/west door.",
-    )
+        and '"res://scenes/terminal_anomaly.tscn", "west"' in c21_refresh
+    ):
+        errors.append("C21: dynamic refresh must remove the stale locked hint and spawn exactly one enabled A13/west door.")
     if region.count("var ending_gate := ENDGAME_GATE_SCRIPT.new()") != 1:
         errors.append("Terminal route: ending candidate must be evaluated once, in A13 only")
     for needle in (
