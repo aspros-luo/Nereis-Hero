@@ -240,9 +240,9 @@ func _spawn_y_for_side(side: String) -> float:
 	# C13 connects the prison maintenance shaft and the royal-tomb entry platform above floor level.
 	# C13 必须在监牢维护竖井与王墓入口平台之间保持高位双向转场。
 	if region_id == "A8" and side == "maintenance_shaft_entry":
-		return floor_y - 120.0
+		return floor_y - 140.0
 	if region_id == "A7" and side == "maintenance_shaft_return":
-		return floor_y - 120.0
+		return floor_y - 140.0
 	if region_id == "A5" and side == "monastery_return":
 		return floor_y - 55.0
 	if region_id == "A2" and side == "east":
@@ -864,7 +864,7 @@ func _configure_platforms() -> void:
 			# C13's upper exit is approached by two short, collision-backed steps from the prison floor route.
 			# C13 高位出口由两级实体碰撞台阶接入，避免监牢地面直通王墓。
 			_add_platform(Rect2(2140, 460, 110, 18))
-			_add_platform(Rect2(2200, 420, 370, 18))
+			_add_platform(Rect2(2200, 400, 370, 18))
 			_add_platform(Rect2(440, 420, 110, 18))
 			_add_platform(Rect2(560, 375, 110, 18))
 			_add_platform(Rect2(700, 330, 110, 18))
@@ -902,8 +902,8 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(2080, 400, 110, 18))
 			# C13's west exit and arrival are supported on the upper royal-tomb entry platform.
 			# C13 王墓西侧出口与到达点均由上层入口平台承托。
-			_add_platform(Rect2(60, 420, 170, 18))
-			_add_platform(Rect2(240, 420, 170, 18))
+			_add_platform(Rect2(60, 400, 170, 18))
+			_add_platform(Rect2(240, 400, 170, 18))
 		"A9":
 			# Street-level ring remains the safe route; the roofline creates a loop through abandoned homes.
 			# 街面外环保持安全可走；屋顶路线穿过废弃民居，形成可选回环。
@@ -966,7 +966,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1770, 435, 170, 18))
 			# C22 must be supported by the raised throne approach and stay outside a max-height ground jump.
 			# C22 必须由王座高路承托，并避开从连续地面起跳时的最大碰撞包络。
-			_add_platform(Rect2(2100, 420, 190, 18))
+			_add_platform(Rect2(2100, 400, 190, 18))
 			_add_platform(Rect2(410, 405, 115, 18))
 			_add_platform(Rect2(545, 365, 115, 18))
 			_add_platform(Rect2(680, 325, 120, 18))
@@ -1706,7 +1706,7 @@ func _spawn_region_exits() -> void:
 			_spawn_exit_door(
 				map_width - 72.0, "E  沿维护竖井进入旧王墓", "royal_tomb",
 				"res://scenes/royal_tomb.tscn", "maintenance_shaft_entry",
-				true, "", "", floor_y - 140.0
+				true, "", "", floor_y - 160.0
 			)
 			# C12: unlock the supply tunnel from the prison side; the first E opens it, the second traverses.
 			# C12：从监牢侧开启补给隧道；第一次 E 开门，第二次 E 才转场。
@@ -1728,7 +1728,7 @@ func _spawn_region_exits() -> void:
 			_spawn_exit_door(
 				72.0, "E  沿维护竖井返回监牢", "prison_depths",
 				"res://scenes/prison_depths.tscn", "maintenance_shaft_return",
-				true, "", "", floor_y - 140.0
+				true, "", "", floor_y - 160.0
 			)
 			_spawn_exit_door(
 				map_width - 72.0, "E  进入王城外环", "royal_outer_ring",
@@ -1832,11 +1832,11 @@ func _spawn_region_exits() -> void:
 			if "reached_A12_via_A10" in WorldState.achievement_flags:
 				_spawn_exit_door(
 					2130.0, "E  进入王座区", "terminal_anomaly",
-					"res://scenes/terminal_anomaly.tscn", "west", true, "", "", floor_y - 140.0
+					"res://scenes/terminal_anomaly.tscn", "west", true, "", "", floor_y - 160.0
 				)
 			else:
 				_register_debug_locked_route_hint(
-					2130.0, "terminal_anomaly", "需要从大圣堂主线抵达 A12（C22）", floor_y - 140.0
+					2130.0, "terminal_anomaly", "需要从大圣堂主线抵达 A12（C22）", floor_y - 160.0
 				)
 		"H07":
 			_spawn_exit_door(
