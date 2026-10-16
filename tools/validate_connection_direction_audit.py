@@ -226,6 +226,35 @@ def main() -> int:
         errors.append("C22: A12-to-A13 door must require reached_A12_via_A10")
     if '_register_debug_locked_route_hint(' not in a12_branch or "需要从大圣堂主线抵达 A12（C22）" not in a12_branch:
         errors.append("C22: locked mainline prerequisite should be visible when its door is unavailable")
+
+    # C22 must be genuinely elevated: its trigger bottom stays above the maximum
+    # vertical envelope of a ground jump, while a grounded Hero on the raised landing overlaps it.
+    c22_contract = edges.get("C22", {}).get("spatial_contract", {})
+    c22_anchor = c22_contract.get("from_region_anchor", {})
+    if c22_anchor.get("region") != "A12" or c22_anchor.get("x") != 2130 or c22_anchor.get("y_offset") != -140:
+        errors.append("C22: topology anchor must match the raised throne approach at A12 x=2130/y_offset=-140")
+    if 'true, "", "", floor_y - 140.0' not in a12_branch:
+        errors.append("C22: A12-to-A13 trigger must remain at floor_y - 140.0")
+    if '_add_platform(Rect2(2100, 420, 190, 18))' not in region:
+        errors.append("C22: the raised throne landing at x=2100/y=420 must support the terminal entrance")
+    jump_match = re.search(r"const JUMP_VELOCITY := (-?[0-9.]+)", hero)
+    gravity_match = re.search(r"const GRAVITY := ([0-9.]+)", hero)
+    if jump_match and gravity_match:
+        jump_height = float(jump_match.group(1)) ** 2 / (2.0 * float(gravity_match.group(1)))
+        hero_half_height = 24.0
+        c22_trigger_bottom_offset = -140.0 - 35.0 + 40.0
+        c22_ground_jump_top_offset = -jump_height - hero_half_height
+        if c22_ground_jump_top_offset <= c22_trigger_bottom_offset:
+            errors.append(
+                f"C22: ground jump can reach terminal trigger (jump top {c22_ground_jump_top_offset:.1f}px, "
+                f"trigger bottom {c22_trigger_bottom_offset:.1f}px relative to floor)"
+            )
+        c22_landing_top_offset = -120.0 - hero_half_height
+        if c22_landing_top_offset >= c22_trigger_bottom_offset:
+            errors.append("C22: the raised landing no longer overlaps the terminal trigger vertically")
+    else:
+        errors.append("C22: could not derive Hero jump envelope from hero.gd")
+
     a11_split = exit_source.split('\n\t\t"A11":', 1)
     a11_branch_for_c21 = a11_split[1].split('\n\t\t"', 1)[0] if len(a11_split) > 1 else ""
     if 'if NereisEndingEvaluator.get_candidate() != "凡人之墓":' not in a11_branch_for_c21 or '"res://scenes/terminal_anomaly.tscn"' not in a11_branch_for_c21:
