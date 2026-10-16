@@ -15,6 +15,7 @@ const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 const FIREFLY_SCRIPT = preload("res://scripts/effects/village_fireflies.gd")
 const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")
 const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"
+const FLOOR_Y := 520.0
 
 var hero: CharacterBody2D
 var camera: Camera2D
