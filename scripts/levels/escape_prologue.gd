@@ -22,6 +22,12 @@ var exit_open := false
 var wardens_defeated := 0
 
 func _ready() -> void:
+	# P5.1 runtime contract for the prologue-to-village transition.
+	set_meta("p5_1_exit_contract", true)
+	set_meta("p5_1_target_location", "village")
+	set_meta("p5_1_target_region", "A1")
+	set_meta("p5_1_target_scene", "res://scenes/village_hub.tscn")
+	set_meta("p5_1_spawn_side", "west")
 	if WorldState.prologue_complete:
 		get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
 		return
