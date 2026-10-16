@@ -588,25 +588,25 @@
         "from_region_anchor": {
           "region": "A7",
           "x": 2528,
-          "y_offset": -160,
+          "y_offset": -180,
           "spawn_side": "maintenance_shaft_entry"
         },
         "to_region_anchor": {
           "region": "A8",
           "x": 72,
-          "y_offset": -160,
+          "y_offset": -180,
           "spawn_side": "maintenance_shaft_return"
         },
         "to_region_spawn": {
           "region": "A8",
           "x": 190,
-          "y_offset": -140,
+          "y_offset": -160,
           "spawn_side": "maintenance_shaft_entry"
         },
         "return_spawn": {
           "region": "A7",
           "x": 2340,
-          "y_offset": -140,
+          "y_offset": -160,
           "spawn_side": "maintenance_shaft_return"
         },
         "intent": "C13 must remain an elevated, bidirectional transition between the prison maintenance shaft and royal-tomb entry platform. Door anchors sit 20px above the ledge tops; the A7 return spawn stays 188px from the east door and avoids immediate re-focus."
@@ -869,7 +869,7 @@
         "from_region_anchor": {
           "region": "A12",
           "x": 2130,
-          "y_offset": -160
+          "y_offset": -180
         },
         "to_region_anchor": {
           "region": "A13",
