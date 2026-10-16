@@ -45,7 +45,8 @@ func _ready() -> void:
 	_spawn_rest()
 	_spawn_exit()
 	_spawn_ui()
-	get_tree().create_timer(0.6).timeout.connect(_show_intro)
+	if not WorldState.debug_map_test_mode:
+		get_tree().create_timer(0.6).timeout.connect(_show_intro)
 	queue_redraw()
 
 func _spawn_hero() -> void:
