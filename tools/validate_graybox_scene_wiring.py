@@ -920,20 +920,20 @@ def main() -> int:
         '"anomaly_erased_royal_name"',
         'opened_sewer_inspection_hatch_from_A4',
         'reached_A5_and_opened_old_pilgrim_highroad',
-        'E  OPEN THE OLD PILGRIM HIGHROAD',
-        'E  RETURN TO THE BATTLEFIELD',
+        'E  打开旧朝圣高路',
+        'E  返回边境战场',
         'opened_bell_tower_drop',
-        'E  RETURN TO THE MONASTERY DROP',
+        'E  返回修道院落差口',
         'reached_A7_then_opened_supply_tunnel',
         'reached_A8_via_A7_then_opened_royal_tomb_gate',
         'reached_A9_via_A8_then_opened_old_lift_from_A9',
         'reached_A12_via_A10_then_opened_inner_city_side_gate',
         'reached_A9_then_opened_royal_drain_from_outer_ring',
-        'E  OPEN THE SUPPLY TUNNEL',
-        'E  OPEN THE ROYAL TOMB WATERWAY',
-        'E  OPEN THE OLD LIFT',
-        'E  OPEN THE INNER-CITY SIDE GATE',
-        'E  OPEN THE ROYAL DRAIN',
+        'E  打开补给隧道',
+        'E  打开王墓水道',
+        'E  打开旧升降梯',
+        'E  打开内城侧门',
+        'E  打开王城排水门',
         'opened_old_bell_tower_connection',
         'opened_old_service_door',
         'opened_royal_tomb_side_door',
@@ -951,7 +951,7 @@ def main() -> int:
         '"monastery_tower"',
         '"prison_depths"',
         '"royal_tomb"',
-        'E  打开检修舱口',
+        'E  打开上层检修舱口',
         'opened_sewer_inspection_hatch_from_A4',
         'SceneTransition.fade_to_scene(target_scene)',
         "clue.ancient_exposure_floor = ancient_floor",
@@ -1131,10 +1131,23 @@ def main() -> int:
         ('_add_platform(Rect2(100, 450, 140, 18))', "C09 A6 west bridge arrival"),
         ('if region_id == "A6" and side == "battlefield_entry":\n\t\treturn floor_y - 90.0', "C09 A6 bridge spawn height"),
         ('if region_id == "A5" and side == "monastery_return":\n\t\treturn floor_y - 55.0', "C09 A5 return spawn height"),
-        ('if region_id == "A6" and side == "battlefield_entry":\n\t\treturn 160.0', "C09 A6 bridge spawn X"),
-        ('if region_id == "A5" and side == "monastery_return":\n\t\treturn 2165.0', "C09 A5 return spawn X"),
+        
+        
     ]:
         require(region_script, contract, label, errors)
+
+    # Branch bodies may include explanatory comments; assert that each C09 X mapping returns from its own side branch.
+    # 出生映射允许分支内包含说明注释，但返回值必须仍属于对应区域和进入侧。
+    for region_id, side, expected_x, label in [
+        ("A6", "battlefield_entry", "160.0", "C09 A6 bridge spawn X"),
+        ("A5", "monastery_return", "2165.0", "C09 A5 return spawn X"),
+    ]:
+        branch_pattern = (
+            rf'if region_id == "{re.escape(region_id)}" and side == "{re.escape(side)}":'
+            rf'\s*(?:#.*\n\s*)*return {re.escape(expected_x)}(?:\s|$)'
+        )
+        if re.search(branch_pattern, region_script) is None:
+            errors.append(f"{label}: missing branch mapping {region_id}/{side} -> {expected_x}.")
 
     # C04 is a paired upper-route shortcut: both door heights, platform support, and arrival elevations must remain aligned.
     # C04 是双侧高路捷径：两侧门高、承托平台与到达高度必须保持一致。
@@ -1649,7 +1662,15 @@ def main() -> int:
     require(village_hub, 'resonance_well_gate.required_resonance = 12', "Village hidden gate threshold", errors)
     require(village_hub, 'resonance_well_gate.target_location_id = "hidden_well"', "Village hidden gate destination", errors)
     require(village_hub, 'var spawn_x := 1850.0 if spawn_side in ["well_exit", "cliff_cave_return"]', "Village watergate return spawn spacing", errors)
-    require(village_hub, 'var spawn_side := WorldState.pending_region_spawn_side\n    # Persist the incoming side before clearing the one-shot transition value.\n    # 必须先保存实际进入侧，再清理一次性切图方向，确保 Continue 能恢复正确落点。\n    WorldState.set_location("village")\n    WorldState.pending_region_spawn_side = "west"', "Village resume spawn-side save order", errors)
+    village_spawn_capture = village_hub.find("var spawn_side := WorldState.pending_region_spawn_side")
+    village_location_save = village_hub.find('WorldState.set_location("village")', village_spawn_capture)
+    village_spawn_clear = village_hub.find('WorldState.pending_region_spawn_side = "west"', village_spawn_capture)
+    if not (
+        village_spawn_capture >= 0
+        and village_location_save > village_spawn_capture
+        and village_spawn_clear > village_location_save
+    ):
+        errors.append("Village resume spawn-side save order: capture incoming side, save destination, then clear one-shot side.")
     require(village_hub, '2310.0 if spawn_side == "north_gate"', "Village north-gate return spawn", errors)
     require(region_spawn_script, '"res://scenes/village_hub.tscn", "north_gate"', "A2 village return side", errors)
     require(village_hub, '"village_defense_survived"', "Village old-road unlock", errors)
