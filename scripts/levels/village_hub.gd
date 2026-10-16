@@ -61,7 +61,8 @@ func _ready() -> void:
 	_spawn_fireflies()
 	if "returned_to_village_after_mad_cleric" in WorldState.achievement_flags and "cliff_cave_hint_seen" not in WorldState.achievement_flags:
 		WorldState.record_achievement("cliff_cave_hint_seen")
-		get_tree().create_timer(1.1).timeout.connect(_show_cliff_cave_hint)
+		if not WorldState.debug_map_test_mode:
+			get_tree().create_timer(1.1).timeout.connect(_show_cliff_cave_hint)
 	queue_redraw()
 
 func _spawn_hero(spawn_x: float = 260.0) -> void:
@@ -146,10 +147,11 @@ func _spawn_narrative_audio() -> void:
 	narrative_audio.set_script(NARRATIVE_AUDIO_SCRIPT)
 	narrative_audio.name = "NarrativeAudio"
 	add_child(narrative_audio)
-	get_tree().create_timer(1.0).timeout.connect(func() -> void:
-		if narrative_audio and narrative_audio.has_method("play_lullaby"):
-			narrative_audio.play_lullaby()
-	)
+	if not WorldState.debug_map_test_mode:
+		get_tree().create_timer(1.0).timeout.connect(func() -> void:
+			if narrative_audio and narrative_audio.has_method("play_lullaby"):
+				narrative_audio.play_lullaby()
+		)
 
 func _spawn_mite_house_door() -> void:
 	mite_house_door = Area2D.new()
@@ -433,7 +435,8 @@ func _spawn_ui() -> void:
 
 	if "village_intro_seen" not in WorldState.achievement_flags:
 		WorldState.record_achievement("village_intro_seen")
-		get_tree().create_timer(0.7).timeout.connect(_show_village_intro)
+		if not WorldState.debug_map_test_mode:
+			get_tree().create_timer(0.7).timeout.connect(_show_village_intro)
 
 func _show_village_intro() -> void:
 	narrative.show_message(
