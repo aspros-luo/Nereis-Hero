@@ -191,8 +191,12 @@ func _validate_scene_inventory_and_runtime() -> void:
 		if hero == null or not (hero is CharacterBody2D):
 			_fail("HERO/%s" % region_id, "Missing CharacterBody2D Hero")
 		else:
-			var collisions := hero.find_children("CollisionShape2D", "CollisionShape2D", true, false)
-			var collision: CollisionShape2D = collisions[0] if not collisions.is_empty() else null
+			var collision := hero.get_node_or_null("CollisionShape2D") as CollisionShape2D
+			if collision == null:
+				for child in hero.get_children():
+					if child is CollisionShape2D:
+						collision = child
+						break
 			if collision == null or collision.shape == null:
 				_fail("HERO_COLLISION/%s" % region_id, "Hero CollisionShape2D/shape missing")
 			else:
@@ -305,6 +309,9 @@ func _load_runtime_region(region_id: String) -> Node:
 
 func _collect_exit_contracts(instance: Node) -> Array:
 	var contracts: Array = []
+	# Some scene roots (notably A0) carry a complete transition contract themselves.
+	if instance.has_meta("p5_1_exit_contract"):
+		contracts.append(instance)
 	for node in instance.find_children("*", "Node", true, false):
 		# P5.1 contract metadata is the preferred explicit interface. Existing runtime
 		# gates also expose the same target fields directly; accept those as runtime
@@ -363,7 +370,7 @@ func _validate_exit_target_spawn(connection_id: String, from_region: String, exi
 		if expected_scene != target_path:
 			_fail("TARGET/%s/%s" % [connection_id, target_region], "expected=%s actual=%s" % [target_path, expected_scene])
 		else:
-			var spawn: Variant = _resolve_spawn(target, spawn_side)
+			var spawn: Variant = _resolve_spawn(target, target_region, spawn_side)
 			if spawn is Vector2 and _is_spawn_supported(target, spawn):
 				_pass("SPAWN/%s/%s" % [connection_id, target_region], "side=%s supported=(%.1f,%.1f)" % [spawn_side, spawn.x, spawn.y])
 			elif spawn is Vector2:
@@ -373,14 +380,14 @@ func _validate_exit_target_spawn(connection_id: String, from_region: String, exi
 	target.queue_free()
 	await process_frame
 
-func _resolve_spawn(target: Node, spawn_side: String) -> Variant:
+func _resolve_spawn(target: Node, target_region: String, spawn_side: String) -> Variant:
 	if target.has_method("_spawn_x_for_side") and target.has_method("_spawn_y_for_side"):
 		var x: float = float(target.call("_spawn_x_for_side", spawn_side))
 		var y: float = float(target.call("_spawn_y_for_side", spawn_side))
 		return Vector2(x, y)
-	if str(target.get("region_id")) == "A0":
+	if target_region == "A0":
 		return Vector2(280.0, 540.0)
-	if str(target.get("region_id")) == "A1":
+	if target_region == "A1":
 		match spawn_side:
 			"well_exit", "cliff_cave_return":
 				return Vector2(1850.0, 520.0)
@@ -394,7 +401,9 @@ func _resolve_spawn(target: Node, spawn_side: String) -> Variant:
 
 func _is_spawn_supported(instance: Node, spawn: Vector2) -> bool:
 	var floor_y := float(instance.get("floor_y")) if _has_property(instance, "floor_y") else 540.0
-	var support_y := spawn.y + 24.0
+	# Hero spawn coordinates are authored at the character's foot origin.
+	# Compare the foot origin directly with the authored support surface.
+	var support_y := spawn.y
 	if absf(support_y - floor_y) <= 3.0:
 		if _has_property(instance, "map_width"):
 			return spawn.x >= 0.0 and spawn.x <= float(instance.get("map_width"))
