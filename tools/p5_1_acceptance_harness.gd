@@ -62,7 +62,7 @@ func _run() -> void:
 	await _validate_loop_contracts()
 	await _validate_ground_jump_high_door_clearance()
 	await _validate_dynamic_c21_ending_route()
-	var report :=
+	var report := {
 		"schema_version": 1,
 		"engine": Engine.get_version_info().string,
 		"topology_schema_version": topology.get("schema_version", "unknown"),
