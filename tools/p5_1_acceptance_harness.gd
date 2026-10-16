@@ -60,6 +60,7 @@ func _run() -> void:
 	await _validate_topology_connections()
 	await _validate_hidden_regions()
 	await _validate_loop_contracts()
+	await _validate_ground_jump_high_door_clearance()
 	var report := {
 		"schema_version": 1,
 		"engine": Engine.get_version_info().string,
@@ -299,6 +300,82 @@ func _validate_c22_upper_approach(instance: Node, exits: Array) -> void:
 		_pass("C22_LANDING_SUPPORT/A12", "terminal door overlaps the upper landing at y=%.1f" % (terminal_door.position.y + 20.0))
 	else:
 		_fail("C22_LANDING_SUPPORT/A12", "no platform supports the terminal door at its authored landing height")
+
+func _validate_ground_jump_high_door_clearance() -> void:
+	# Exercise the real CharacterBody2D and Area2D overlap behavior, not only static jump-height math.
+	# 实际推进物理帧，检查真实 CharacterBody2D 是否能从高门正下方触发门的 Area2D。
+	var test_cases: Array[Dictionary] = [
+		{"region": "A7", "target": "A8", "id": "C13_GROUND_JUMP/A7"},
+		{"region": "A8", "target": "A7", "id": "C13_GROUND_JUMP/A8"},
+		{"region": "A12", "target": "A13", "id": "C22_GROUND_JUMP/A12"}
+	]
+	for test_case in test_cases:
+		var region_id := str(test_case["region"])
+		var target_id := str(test_case["target"])
+		var check_id := str(test_case["id"])
+		var region := await _load_runtime_region(region_id)
+		if region == null:
+			_fail("%s/SCENE" % check_id, "Cannot instantiate %s" % region_id)
+			continue
+
+		var hero := region.get_node_or_null("Hero") as CharacterBody2D
+		var door: Area2D
+		for exit_node in _collect_exit_contracts(region):
+			if _contract_target_region(exit_node) == target_id:
+				door = exit_node as Area2D
+				break
+		if hero == null or door == null:
+			_fail("%s/SETUP" % check_id, "Hero or target Area2D door is missing")
+			region.queue_free()
+			await process_frame
+			continue
+
+		var floor_y := float(region.get("floor_y")) if _has_property(region, "floor_y") else 540.0
+		hero.global_position = Vector2(door.global_position.x, floor_y)
+		hero.velocity = Vector2.ZERO
+		for settle_frame in range(4):
+			await physics_frame
+		if not hero.is_on_floor():
+			_fail("%s/GROUND_START" % check_id, "Hero did not settle on the continuous floor")
+			region.queue_free()
+			await process_frame
+			continue
+		_pass("%s/GROUND_START" % check_id, "Hero grounded directly below door at x=%.1f" % door.global_position.x)
+
+		var start_y := hero.global_position.y
+		hero.velocity = Vector2(0.0, -520.0)
+		var highest_y := start_y
+		var entered_door_trigger := false
+		var focus_became_available := false
+		var returned_to_floor := false
+		for tick in range(72):
+			await physics_frame
+			highest_y = minf(highest_y, hero.global_position.y)
+			entered_door_trigger = entered_door_trigger or bool(door.get("hero_nearby"))
+			focus_became_available = focus_became_available or bool(door.get_meta("interaction_available", false))
+			if tick > 6 and hero.is_on_floor():
+				returned_to_floor = true
+				break
+
+		var rise := start_y - highest_y
+		if rise >= 75.0 and rise <= 110.0:
+			_pass("%s/PHYSICS_JUMP" % check_id, "simulated rise=%.1fpx within the expected ground-jump envelope" % rise)
+		else:
+			_fail("%s/PHYSICS_JUMP" % check_id, "expected a real jump rise of 75-110px; observed %.1fpx" % rise)
+
+		if not entered_door_trigger and not focus_became_available:
+			_pass("%s/NO_GROUND_BYPASS" % check_id, "ground jump did not overlap or focus the elevated door")
+		else:
+			_fail("%s/NO_GROUND_BYPASS" % check_id, "ground jump unexpectedly entered/focused the elevated door Area2D")
+
+		if returned_to_floor:
+			_pass("%s/RECOVERY" % check_id, "Hero returned to the continuous floor after the jump")
+		else:
+			_fail("%s/RECOVERY" % check_id, "Hero did not return to the continuous floor within 72 physics frames")
+
+		region.queue_free()
+		await process_frame
+
 
 func _validate_topology_connections() -> void:
 	for connection in topology.get("connections", []):
