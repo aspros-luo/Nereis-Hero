@@ -172,10 +172,10 @@ func _validate_scene_inventory_and_runtime() -> void:
 		if instance == null:
 			_fail("SCENE_INSTANTIATE/%s" % region_id, "instantiate() returned null")
 			continue
-		add_child(instance)
+		get_root().add_child(instance)
 		await process_frame
 		await process_frame
-		var actual_region := region_id
+		var actual_region: String = region_id
 		if _has_property(instance, "region_id"):
 			actual_region = str(instance.get("region_id"))
 		if actual_region != region_id:
@@ -201,7 +201,7 @@ func _validate_scene_inventory_and_runtime() -> void:
 			_fail("EXITS/%s" % region_id, "No runtime P5.1 exit/gate contracts")
 		else:
 			_pass("EXITS/%s" % region_id, "contracts=%d" % exits.size())
-		var expected_rest := region_id in ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12"]
+		var expected_rest: bool = region_id in ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12"]
 		var rest_count := 0
 		for node in instance.find_children("*", "Node2D", true, false):
 			if node.has_meta("p5_1_rest_contract"):
@@ -292,7 +292,7 @@ func _load_runtime_region(region_id: String) -> Node:
 	var instance := packed.instantiate()
 	if instance == null:
 		return null
-	add_child(instance)
+	get_root().add_child(instance)
 	await process_frame
 	await process_frame
 	return instance
@@ -337,8 +337,8 @@ func _validate_exit_target_spawn(connection_id: String, from_region: String, exi
 
 func _resolve_spawn(target: Node, spawn_side: String) -> Variant:
 	if target.has_method("_spawn_x_for_side") and target.has_method("_spawn_y_for_side"):
-		var x := float(target.call("_spawn_x_for_side", spawn_side))
-		var y := float(target.call("_spawn_y_for_side", spawn_side))
+		var x: float = float(target.call("_spawn_x_for_side", spawn_side))
+		var y: float = float(target.call("_spawn_y_for_side", spawn_side))
 		return Vector2(x, y)
 	if str(target.get("region_id")) == "A0":
 		return Vector2(280.0, 540.0)
