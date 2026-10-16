@@ -38,12 +38,12 @@ var failures := 0
 var passes := 0
 var started_at: int = 0
 var world_state: Node
-const WORLD_STATE_SCRIPT: Script = preload("res://scripts/core/world_state.gd")
 
-func _init() -> void:
+func _initialize() -> void:
 	started_at = Time.get_ticks_msec()
-	# Instantiate off-tree in --script mode; this avoids Autoload/save side effects.
-	world_state = WORLD_STATE_SCRIPT.new() as Node
+	# In SceneTree --script mode, _initialize runs after project Autoloads are installed.
+	# Use the real WorldState singleton so runtime scene scripts and the harness share state.
+	world_state = get_root().get_node_or_null("WorldState")
 	call_deferred("_run")
 
 func _run() -> void:
@@ -85,7 +85,6 @@ func _finish() -> void:
 		world_state.debug_map_test_mode = false
 		world_state.debug_natural_test_active = false
 		world_state.debug_natural_test_visited_regions.clear()
-		world_state.free()
 	quit(0 if failures == 0 else 1)
 
 func _load_topology() -> bool:
