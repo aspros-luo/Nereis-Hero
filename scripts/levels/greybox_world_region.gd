@@ -90,6 +90,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().change_scene_to_file("res://scenes/world_map_test_menu.tscn")
 
 func _process(_delta: float) -> void:
+	# C21 can become valid after examining A11's own observer anomaly; do not freeze its state at scene entry.
+	_refresh_a11_ending_route()
 	# Encounters wake only when the Hero is nearby, so distant enemies do not cross the entire region.
 	# 敌人只在主角接近时启动 AI，避免远处敌人横穿整张地图追击。
 	if hero == null or not is_instance_valid(hero):
@@ -1536,6 +1538,32 @@ func _register_debug_locked_route_hint(x: float, target: String, condition: Stri
 		"kind": "locked",
 		"condition": condition
 	})
+
+
+func _refresh_a11_ending_route() -> void:
+	if region_id != "A11" or NereisEndingEvaluator.get_candidate() == "凡人之墓":
+		return
+	if get_node_or_null("Exit_terminal_anomaly") != null:
+		return
+
+	# The candidate can change after a source or truth anchor is collected in A11.
+	# Remove the locked hint and create the real C21 door as soon as the evaluator allows it.
+	for index in range(debug_exit_markers.size() - 1, -1, -1):
+		var marker: Dictionary = debug_exit_markers[index]
+		var marker_position: Vector2 = marker.get("position", Vector2.ZERO)
+		if (
+			is_equal_approx(marker_position.x, 2050.0)
+			and str(marker.get("label", "")) == _debug_route_label("terminal_anomaly")
+			and str(marker.get("kind", "")) == "locked"
+		):
+			debug_exit_markers.remove_at(index)
+
+	_spawn_exit_door(
+		2050.0, "E  追随深层梦境", "terminal_anomaly",
+		"res://scenes/terminal_anomaly.tscn", "west"
+	)
+	print("[NEREIS][MAP][GATE] C21 dynamically unlocked candidate=%s" % NereisEndingEvaluator.get_candidate())
+	queue_redraw()
 
 
 func _spawn_region_exits() -> void:
