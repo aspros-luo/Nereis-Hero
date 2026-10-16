@@ -214,6 +214,8 @@ func _validate_scene_inventory_and_runtime() -> void:
 			_fail("EXITS/%s" % region_id, "No runtime P5.1 exit/gate contracts")
 		else:
 			_pass("EXITS/%s" % region_id, "contracts=%d" % exits.size())
+		if region_id == "A12":
+			_validate_c22_upper_approach(instance, exits)
 		var expected_rest: bool = region_id in ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12"]
 		var rest_count := 0
 		for node in instance.find_children("*", "Node2D", true, false):
@@ -225,6 +227,40 @@ func _validate_scene_inventory_and_runtime() -> void:
 			_pass("REST/%s" % region_id, "rest point present")
 		instance.queue_free()
 		await process_frame
+
+func _validate_c22_upper_approach(instance: Node, exits: Array) -> void:
+	var terminal_door: Node2D
+	for exit_node in exits:
+		if _contract_target_scene(exit_node) == str(REGION_SCENES.get("A13", "")):
+			terminal_door = exit_node as Node2D
+			break
+	if terminal_door == null:
+		_fail("C22_DOOR/A12", "A12 -> A13 terminal door is missing")
+		return
+
+	var floor_y := float(instance.get("floor_y")) if _has_property(instance, "floor_y") else 540.0
+	var door_height := floor_y - terminal_door.position.y
+	if absf(door_height - 140.0) > 0.5:
+		_fail("C22_DOOR_HEIGHT/A12", "expected=140px above floor actual=%.1f" % door_height)
+	else:
+		_pass("C22_DOOR_HEIGHT/A12", "door is %.1fpx above continuous floor" % door_height)
+
+	var supported_by_upper_landing := false
+	if _has_property(instance, "platforms"):
+		var platforms = instance.get("platforms")
+		if platforms is Array:
+			for rect in platforms:
+				if not (rect is Rect2):
+					continue
+				if terminal_door.position.x < rect.position.x or terminal_door.position.x > rect.end.x:
+					continue
+				if absf(rect.position.y - (terminal_door.position.y + 20.0)) <= 3.0:
+					supported_by_upper_landing = true
+					break
+	if supported_by_upper_landing:
+		_pass("C22_LANDING_SUPPORT/A12", "terminal door overlaps the upper landing at y=%.1f" % (terminal_door.position.y + 20.0))
+	else:
+		_fail("C22_LANDING_SUPPORT/A12", "no platform supports the terminal door at its authored landing height")
 
 func _validate_topology_connections() -> void:
 	for connection in topology.get("connections", []):
