@@ -265,6 +265,12 @@ func _spawn_village_pois() -> void:
 	north_gate.set_script(VILLAGE_POI_SCRIPT)
 	north_gate.position = Vector2(2440, 520)
 	north_gate.poi_id = "north_gate"
+	# P5.1 runtime contract for the north route.
+	north_gate.set_meta("p5_1_exit_contract", true)
+	north_gate.set_meta("p5_1_target_location", "ash_forest")
+	north_gate.set_meta("p5_1_target_region", "A2")
+	north_gate.set_meta("p5_1_target_scene", "res://scenes/ash_forest.tscn")
+	north_gate.set_meta("p5_1_spawn_side", "west")
 	var old_pilgrim_road_open := "village_defense_survived" in WorldState.achievement_flags
 	north_gate.display_name = "旧朝圣路" if old_pilgrim_road_open else "北门"
 	if old_pilgrim_road_open:
@@ -280,6 +286,12 @@ func _spawn_village_pois() -> void:
 	city_cut.set_script(VILLAGE_POI_SCRIPT)
 	city_cut.position = Vector2(100, 520)
 	city_cut.poi_id = "city_cut"
+	# P5.1 runtime contract for the post-defense shortcut.
+	city_cut.set_meta("p5_1_exit_contract", true)
+	city_cut.set_meta("p5_1_target_location", "forgotten_city")
+	city_cut.set_meta("p5_1_target_region", "A3")
+	city_cut.set_meta("p5_1_target_scene", "res://scenes/forgotten_city.tscn")
+	city_cut.set_meta("p5_1_spawn_side", "village_city_cut")
 	var city_cut_open := "village_defense_survived" in WorldState.achievement_flags
 	city_cut.display_name = "旧排水通道" if city_cut_open else "封闭的排水通道"
 	if city_cut_open:
