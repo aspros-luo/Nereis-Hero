@@ -1453,7 +1453,7 @@ def main() -> int:
         ('if region_id == "H01" and side == "east":', "return map_width - 360.0"),
     ]
     spawn_x_start_for_contracts = region_script.find("func _spawn_x_for_side(side: String) -> float:")
-    spawn_x_end_for_contracts = region_script.find("\\nfunc ", spawn_x_start_for_contracts + 1)
+    spawn_x_end_for_contracts = region_script.find("\nfunc ", spawn_x_start_for_contracts + 1)
     spawn_x_contract_block = (
         region_script[spawn_x_start_for_contracts:spawn_x_end_for_contracts]
         if spawn_x_start_for_contracts >= 0 and spawn_x_end_for_contracts > spawn_x_start_for_contracts
@@ -1465,7 +1465,7 @@ def main() -> int:
             fail(errors, f"Graybox spawn mapping: missing {condition!r} in _spawn_x_for_side().")
             continue
         branch = spawn_x_contract_block[start:]
-        next_branch = branch.find("\\n\\tif ", len(condition))
+        next_branch = branch.find("\n\tif ", len(condition))
         if next_branch >= 0:
             branch = branch[:next_branch]
         require(branch, expected_return, f"Graybox spawn mapping {condition}", errors)
