@@ -320,12 +320,12 @@ func _validate_exit_target_spawn(connection_id: String, from_region: String, exi
 	if spawn_side.is_empty():
 		_fail("SPAWN/%s/%s" % [connection_id, target_region], "spawn_side missing")
 	else:
-		var expected_scene := str(exit_node.get_meta("p5_1_target_scene", ""))
-		var target_path := str(REGION_SCENES.get(target_region, ""))
+		var expected_scene: String = str(exit_node.get_meta("p5_1_target_scene", ""))
+		var target_path: String = str(REGION_SCENES.get(target_region, ""))
 		if expected_scene != target_path:
 			_fail("TARGET/%s/%s" % [connection_id, target_region], "expected=%s actual=%s" % [target_path, expected_scene])
 		else:
-			var spawn := _resolve_spawn(target, spawn_side)
+			var spawn: Variant = _resolve_spawn(target, spawn_side)
 			if spawn is Vector2 and _is_spawn_supported(target, spawn):
 				_pass("SPAWN/%s/%s" % [connection_id, target_region], "side=%s supported=(%.1f,%.1f)" % [spawn_side, spawn.x, spawn.y])
 			elif spawn is Vector2:
