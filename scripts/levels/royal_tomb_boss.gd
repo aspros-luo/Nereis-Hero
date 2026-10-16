@@ -142,6 +142,11 @@ func _spawn_return_door() -> void:
     return_door = Area2D.new()
     return_door.set_script(DOOR_SCRIPT)
     return_door.name = "ReturnToRoyalTomb"
+    return_door.set_meta("p5_1_exit_contract", true)
+    return_door.set_meta("p5_1_target_location", "royal_tomb")
+    return_door.set_meta("p5_1_target_region", "A8")
+    return_door.set_meta("p5_1_target_scene", "res://scenes/royal_tomb.tscn")
+    return_door.set_meta("p5_1_spawn_side", "boss_return")
     return_door.position = Vector2(1650.0, FLOOR_Y)
     return_door.prompt_text = "E  返回旧王墓主路"
     return_door.enabled = true
