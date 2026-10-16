@@ -426,5 +426,5 @@ func _fail(check_id: String, detail: String) -> void:
 func _write_report(report: Dictionary) -> void:
 	var file := FileAccess.open(REPORT_PATH, FileAccess.WRITE)
 	if file:
-		file.store_string(JSON.stringify(report, "\\t", false))
+		file.store_string(JSON.stringify(report, "\t", false))
 		file.close()
