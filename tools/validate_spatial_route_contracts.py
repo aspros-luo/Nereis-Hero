@@ -67,7 +67,7 @@ def main() -> int:
         ("C08", "A3", "city_highroad_return", 2360.0, -130.0),
         ("C10", "A6", "bell_drop", 2100.0, -90.0),
         ("C12", "A4", "prison_tunnel", 960.0, -75.0),
-        ("C13", "A7", "maintenance_shaft_return", 2340.0, -120.0),
+        ("C13", "A7", "maintenance_shaft_return", 2340.0, -160.0),
         ("C16", "A3", "old_lift", 1960.0, -70.0),
         ("C17", "A9", "cathedral_roof_return", 2450.0, -180.0),
         ("C23", "A4", "royal_drain", 1540.0, -120.0),
@@ -107,9 +107,8 @@ def main() -> int:
             f"{edge_id}: _spawn_y_for_side lacks the matching vertical offset for {region}/{side}.",
         )
 
-    # C13's door anchors and safe return spawn must match the topology; the two door
-    # nodes are at y=-140 while the Hero lands on the y=-120 ledge top.
-    # C13 的门锚点与安全回程出生点必须和拓扑一致；门节点为 y=-140，主角落在 y=-120 的平台顶。
+    # C13's door anchors and safe return spawn must match the topology; door roots are y=-180 and Hero landings are y=-160.
+    # C13 门锚点与安全出生点必须和拓扑一致；门节点为 y=-180，主角落在 y=-160 的平台顶。
     c13 = edges.get("C13", {}).get("spatial_contract", {})
     c13_from = c13.get("from_region_anchor", {})
     c13_to = c13.get("to_region_anchor", {})
@@ -118,28 +117,28 @@ def main() -> int:
     require(
         errors,
         c13_from.get("region") == "A7" and c13_from.get("x") == 2528
-        and c13_from.get("y_offset") == -140,
-        "C13: A7 door anchor must be x=2528 / y_offset=-140.",
+        and c13_from.get("y_offset") == -180,
+        "C13: A7 door anchor must be x=2528 / y_offset=-180.",
     )
     require(
         errors,
         c13_to.get("region") == "A8" and c13_to.get("x") == 72
-        and c13_to.get("y_offset") == -140,
-        "C13: A8 door anchor must be x=72 / y_offset=-140.",
+        and c13_to.get("y_offset") == -180,
+        "C13: A8 door anchor must be x=72 / y_offset=-180.",
     )
     require(
         errors,
         c13_return.get("region") == "A7" and c13_return.get("x") == 2340
-        and c13_return.get("y_offset") == -120
+        and c13_return.get("y_offset") == -160
         and c13_return.get("spawn_side") == "maintenance_shaft_return",
-        "C13: A7 return spawn must be x=2340 / y_offset=-120, clear of the east door focus.",
+        "C13: A7 return spawn must be x=2340 / y_offset=-160, clear of the east door focus.",
     )
     require(
         errors,
         c13_arrival.get("region") == "A8" and c13_arrival.get("x") == 190
-        and c13_arrival.get("y_offset") == -120
+        and c13_arrival.get("y_offset") == -160
         and c13_arrival.get("spawn_side") == "maintenance_shaft_entry",
-        "C13: A8 arrival spawn must be x=190 / y_offset=-120 on the supported entry platform.",
+        "C13: A8 arrival spawn must be x=190 / y_offset=-160 on the supported entry platform.",
     )
 
     # C08 must remain a paired elevated route with matching destination and return spawn metadata.
@@ -266,9 +265,9 @@ def main() -> int:
     # (connection, region, x, y_offset); y is derived from the shared floor_y=540.
     elevated_doors = [
         ("C03", "A2", 2240.0, -160.0),
-        ("C22", "A12", 2130.0, -65.0),
-        ("C13", "A7", 2528.0, -140.0),
-        ("C13", "A8", 72.0, -140.0),
+        ("C22", "A12", 2130.0, -180.0),
+        ("C13", "A7", 2528.0, -180.0),
+        ("C13", "A8", 72.0, -180.0),
         ("C08", "A3", 2240.0, -130.0),
         ("C08", "A5", 180.0, -130.0),
         ("C05", "A3", 1600.0, -115.0),
@@ -301,15 +300,15 @@ def main() -> int:
         errors,
         "maintenance_shaft_entry" in c13_a7_exit
         and "map_width - 72.0" in c13_a7_exit
-        and "floor_y - 140.0" in c13_a7_exit,
-        "C13: A7's east door must use x=map_width-72 and y_offset=-140.",
+        and "floor_y - 180.0" in c13_a7_exit,
+        "C13: A7's east door must use x=map_width-72 and y_offset=-180.",
     )
     require(
         errors,
         "maintenance_shaft_return" in c13_a8_exit
         and "72.0" in c13_a8_exit
-        and "floor_y - 140.0" in c13_a8_exit,
-        "C13: A8's west door must use x=72 and y_offset=-140.",
+        and "floor_y - 180.0" in c13_a8_exit,
+        "C13: A8's west door must use x=72 and y_offset=-180.",
     )
 
     # Incoming spawn points must not overlap the destination door's Area2D trigger
@@ -472,8 +471,8 @@ def main() -> int:
     require(
         errors,
         c22_from.get("region") == "A12" and c22_from.get("x") == 2130
-        and c22_from.get("y_offset") == -65,
-        "C22: A12 exit must use the supported upper approach at x=2130 / y_offset=-65.",
+        and c22_from.get("y_offset") == -180,
+        "C22: A12 exit must use the supported upper approach at x=2130 / y_offset=-180.",
     )
     require(
         errors,
@@ -484,7 +483,7 @@ def main() -> int:
     c22_exit = exit_blocks.get("A12", "")
     require(
         errors,
-        "2130.0" in c22_exit and "floor_y - 65.0" in c22_exit,
+        "2130.0" in c22_exit and "floor_y - 180.0" in c22_exit,
         "C22: A12 exit code must match the upper-throne spatial contract.",
     )
 
