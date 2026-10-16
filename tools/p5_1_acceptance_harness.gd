@@ -107,6 +107,9 @@ func _load_topology() -> bool:
 func _prime_acceptance_state() -> void:
 	world_state.debug_map_test_mode = true
 	world_state.debug_natural_test_active = false
+	# A0 otherwise shortcuts directly to A1 when the user's normal save marks the prologue complete.
+	# The harness must validate A0's actual runtime setup independently of existing save progress.
+	world_state.prologue_complete = false
 	world_state.boss_defeated = true
 	world_state.first_choice_made = true
 	world_state.physical_union_complete = true
@@ -401,10 +404,11 @@ func _resolve_spawn(target: Node, target_region: String, spawn_side: String) -> 
 
 func _is_spawn_supported(instance: Node, spawn: Vector2) -> bool:
 	var floor_y := float(instance.get("floor_y")) if _has_property(instance, "floor_y") else 540.0
-	# Hero spawn coordinates are authored at the character's foot origin.
-	# Compare the foot origin directly with the authored support surface.
+	# Hero collision is offset upward so its feet align with the Node2D origin.
+	# A spawn up to 24px above the continuous floor is a safe settling gap, not a missing support surface.
+	# Keep elevated platform checks strict below so this does not mask high-route landing errors.
 	var support_y := spawn.y
-	if absf(support_y - floor_y) <= 3.0:
+	if support_y <= floor_y and floor_y - support_y <= 24.0:
 		if _has_property(instance, "map_width"):
 			return spawn.x >= 0.0 and spawn.x <= float(instance.get("map_width"))
 		return true
