@@ -1,7 +1,7 @@
 extends SceneTree
 ## P5.1 automated acceptance harness.
 ## Instantiates the real graybox scenes in Godot and validates runtime contracts.
-## WorldState.debug_map_test_mode protects the normal save.
+## world_state.debug_map_test_mode protects the normal save.
 
 const TOPOLOGY_PATH := "res://tools/world_map_topology.json"
 const REPORT_PATH := "user://p5_1_automated_acceptance_report.json"
@@ -36,10 +36,12 @@ var topology: Dictionary = {}
 var results: Array[Dictionary] = []
 var failures := 0
 var passes := 0
-var started_at := 0
+var started_at: int = 0
+var world_state: Node
 
 func _init() -> void:
 	started_at = Time.get_ticks_msec()
+	world_state = get_root().get_node_or_null("WorldState")
 	call_deferred("_run")
 
 func _run() -> void:
@@ -48,6 +50,10 @@ func _run() -> void:
 	print(" P5.1 AUTOMATED ACCEPTANCE HARNESS")
 	print(" Godot %s" % Engine.get_version_info().string)
 	print("============================================================")
+	if world_state == null:
+		_fail("WORLD_STATE", "Autoload WorldState not available; run with project autoloads enabled.")
+		_finish()
+		return
 	if not _load_topology():
 		_finish()
 		return
