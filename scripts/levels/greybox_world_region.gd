@@ -2419,6 +2419,19 @@ func _on_hidden_well_gate_opened(secret_id: String) -> void:
 		4.0
 	)
 
+func _region_id_for_location(target_location: String) -> String:
+	var mapping := {
+		"church_escape":"A0", "village":"A1", "ash_forest":"A2", "forgotten_city":"A3",
+		"sewer_reservoir":"A4", "old_battlefield":"A5", "monastery_tower":"A6", "prison_depths":"A7",
+		"royal_tomb":"A8", "royal_outer_ring":"A9", "grand_cathedral":"A10",
+		"deep_research_depths":"A11", "inner_city":"A12", "terminal_anomaly":"A13",
+		"royal_tomb_boss":"OB01", "hidden_well":"H01", "hidden_bell_chamber":"H02",
+		"erased_third_street":"H03", "reflected_stairwell":"H04", "silent_bell_room":"H05",
+		"erased_royal_name_corridor":"H06", "mirror_street":"H07", "primordial_hollow":"H08"
+	}
+	return str(mapping.get(target_location, ""))
+
+
 func _spawn_exit_door(
 	x: float,
 	prompt_text: String,
@@ -2438,6 +2451,13 @@ func _spawn_exit_door(
 	door.enabled = enabled
 	door.unlock_once_flag_id = unlock_once_flag_id
 	door.opened_prompt_text = opened_prompt_text
+	# Runtime contract metadata for P5.1 automated acceptance; no gameplay behavior change.
+	door.set_meta("p5_1_exit_contract", true)
+	door.set_meta("p5_1_target_location", target_location)
+	door.set_meta("p5_1_target_region", _region_id_for_location(target_location))
+	door.set_meta("p5_1_target_scene", target_scene)
+	door.set_meta("p5_1_spawn_side", spawn_side)
+	door.set_meta("p5_1_enabled", enabled)
 
 	var shape := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
