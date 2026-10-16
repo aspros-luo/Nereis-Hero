@@ -306,14 +306,46 @@ func _load_runtime_region(region_id: String) -> Node:
 func _collect_exit_contracts(instance: Node) -> Array:
 	var contracts: Array = []
 	for node in instance.find_children("*", "Node", true, false):
+		# P5.1 contract metadata is the preferred explicit interface. Existing runtime
+		# gates also expose the same target fields directly; accept those as runtime
+		# contracts so the harness verifies the shipped gate implementation rather than
+		# requiring every gate to be rewritten only for the test.
 		if node.has_meta("p5_1_exit_contract"):
 			contracts.append(node)
+		elif _has_property(node, "target_scene_path") and _has_property(node, "target_spawn_side"):
+			var target_scene := str(node.get("target_scene_path"))
+			var spawn_side := str(node.get("target_spawn_side"))
+			if not target_scene.is_empty() and not spawn_side.is_empty():
+				contracts.append(node)
 	return contracts
+
+func _contract_target_scene(node: Node) -> String:
+	if node.has_meta("p5_1_target_scene"):
+		return str(node.get_meta("p5_1_target_scene", ""))
+	if _has_property(node, "target_scene_path"):
+		return str(node.get("target_scene_path"))
+	return ""
+
+func _contract_target_region(node: Node) -> String:
+	if node.has_meta("p5_1_target_region"):
+		return str(node.get_meta("p5_1_target_region", ""))
+	var target_scene := _contract_target_scene(node)
+	for region_id in REGION_SCENES.keys():
+		if REGION_SCENES[region_id] == target_scene:
+			return str(region_id)
+	return ""
+
+func _contract_spawn_side(node: Node) -> String:
+	if node.has_meta("p5_1_spawn_side"):
+		return str(node.get_meta("p5_1_spawn_side", ""))
+	if _has_property(node, "target_spawn_side"):
+		return str(node.get("target_spawn_side"))
+	return ""
 
 func _find_exit_matches(instance: Node, target_scene: String, target_region: String) -> Array:
 	var matches: Array = []
 	for node in _collect_exit_contracts(instance):
-		if str(node.get_meta("p5_1_target_scene", "")) == target_scene or str(node.get_meta("p5_1_target_region", "")) == target_region:
+		if _contract_target_scene(node) == target_scene or _contract_target_region(node) == target_region:
 			matches.append(node)
 	return matches
 
@@ -322,11 +354,11 @@ func _validate_exit_target_spawn(connection_id: String, from_region: String, exi
 	if target == null:
 		_fail("SPAWN/%s/%s" % [connection_id, target_region], "Cannot load target")
 		return
-	var spawn_side := str(exit_node.get_meta("p5_1_spawn_side", ""))
+	var spawn_side := _contract_spawn_side(exit_node)
 	if spawn_side.is_empty():
 		_fail("SPAWN/%s/%s" % [connection_id, target_region], "spawn_side missing")
 	else:
-		var expected_scene: String = str(exit_node.get_meta("p5_1_target_scene", ""))
+		var expected_scene: String = _contract_target_scene(exit_node)
 		var target_path: String = str(REGION_SCENES.get(target_region, ""))
 		if expected_scene != target_path:
 			_fail("TARGET/%s/%s" % [connection_id, target_region], "expected=%s actual=%s" % [target_path, expected_scene])
