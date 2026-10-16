@@ -545,7 +545,7 @@ def main() -> int:
     prologue_script = read("scripts/levels/escape_prologue.gd", errors)
     require(prologue_script, "func _create_surgical_catwalks() -> void:", "A0 surgical catwalk builder", errors)
     require(prologue_script, "Rect2(430, 455, 100, 16)", "A0 surgical first ledge", errors)
-    require(prologue_script, "MAINTENANCE ACCESS ONLY", "A0 catwalk landmark", errors)
+    if "MAINTENANCE ACCESS ONLY" not in prologue_script and "仅供维护人员通行" not in prologue_script:\n        errors.append("A0 catwalk landmark: missing the maintenance-only label in either source or localized form.")
     require(prologue_script, "Cold surgical shafts and suspended cables", "A0 environmental lighting layer", errors)
     require(prologue_script, "Sparse surgical floor seams", "A0 floor material layer", errors)
 
@@ -1267,43 +1267,53 @@ def main() -> int:
             '"res://scenes/terminal_anomaly.tscn"',
         ],
     }
+    exits_source = region_script[exits_start:]
     for hidden_id, contracts in hidden_exit_contracts.items():
-        # GDScript match branches are tab-indented; support either tabs or spaces so this
-        # source-level check does not silently fail when formatting changes.
+        # Start the next-branch search after the current header; searching at block_start + 1
+        # accidentally matched the same header and reduced this block to one character.
         branch_match = re.search(
-            rf'^[\t ]*"{re.escape(hidden_id)}":',
-            region_script[exits_start:],
+            rf'^[\\t ]*"{re.escape(hidden_id)}":[\\t ]*$',
+            exits_source,
             re.MULTILINE,
         )
-        block_start = exits_start + branch_match.start() if branch_match else -1
-        next_branch = re.search(
-            r'^[\t ]*"[A-Z]\d{1,2}":',
-            region_script[block_start + 1:] if block_start >= 0 else "",
-            re.MULTILINE,
-        )
-        block_end = block_start + 1 + next_branch.start() if block_start >= 0 and next_branch else -1
-        block = region_script[block_start:block_end] if block_start >= 0 and block_end > block_start else ""
-        if not block:
+        if branch_match is None:
             fail(errors, f"{hidden_id} hidden-region exit block is missing or malformed.")
             continue
+        next_branch = re.search(
+            r'^[\\t ]*"(?:A(?:[0-9]|1[0-3])|H(?:0[1-9]))":[\\t ]*$',
+            exits_source[branch_match.end():],
+            re.MULTILINE,
+        )
+        if next_branch:
+            block_end = branch_match.end() + next_branch.start()
+        else:
+            block_end = exits_source.find("\\nfunc ", branch_match.end())
+            if block_end < 0:
+                block_end = len(exits_source)
+        block = exits_source[branch_match.start():block_end]
         for contract in contracts:
             require(block, contract, f"{hidden_id} hidden-region return contract", errors)
 
     # A13 is a real terminal map layer, not merely an abstract topology node. Ending selection occurs after entering it.
     # A13 必须是实际终局地图层，而不是只存在于拓扑中的抽象节点；进入后才选择结局。
-    a13_match = re.search(r'^[\t ]*"A13":', region_script[exits_start:], re.MULTILINE)
+    exits_source = region_script[exits_start:]
+    a13_match = re.search(r'^[\\t ]*"A13":[\\t ]*$', exits_source, re.MULTILINE)
     a13_start = exits_start + a13_match.start() if a13_match else -1
-    a13_next = re.search(
-        r'^[\t ]*"[A-Z]\d{1,2}":',
-        region_script[a13_start + 1:] if a13_start >= 0 else "",
-        re.MULTILINE,
-    )
-    a13_end = (
-        a13_start + 1 + a13_next.start()
-        if a13_start >= 0 and a13_next
-        else region_script.find("\nfunc ", a13_start) if a13_start >= 0 else -1
-    )
-    a13_block = region_script[a13_start:a13_end] if a13_start >= 0 and a13_end > a13_start else ""
+    if a13_match is None:
+        a13_block = ""
+    else:
+        a13_next = re.search(
+            r'^[\\t ]*"(?:A(?:[0-9]|1[0-3])|H(?:0[1-9]))":[\\t ]*$',
+            exits_source[a13_match.end():],
+            re.MULTILINE,
+        )
+        if a13_next:
+            a13_end = exits_start + a13_match.end() + a13_next.start()
+        else:
+            a13_end = region_script.find("\\nfunc ", a13_start)
+            if a13_end < 0:
+                a13_end = len(region_script)
+        a13_block = region_script[a13_start:a13_end]
     if not a13_block:
         fail(errors, "A13 terminal exit block is missing or malformed.")
     else:
@@ -1671,10 +1681,17 @@ def main() -> int:
 
                 def gate_string_array(property_name: str) -> list[str]:
                     value = re.search(
-                        rf"gate\.{re.escape(property_name)}\s*=\s*\[(.*?)\]",
+                        rf"gate\\.{re.escape(property_name)}\\s*=\\s*\\[(.*?)\\]",
                         gate_block,
                         re.DOTALL,
                     )
+                    if value is None and property_name == "required_source_ids":
+                        # Gate constructors may assign a typed local array to the exported field.
+                        value = re.search(
+                            r"var\\s+required_source_ids(?:\\s*:\\s*Array\\[String\\])?\\s*:=?\\s*\\[(.*?)\\]",
+                            gate_block,
+                            re.DOTALL,
+                        )
                     return re.findall(r'"([^"]+)"', value.group(1)) if value else []
 
                 for topology_key, runtime_key in (
