@@ -2248,7 +2248,7 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
 		"A3_THIRD_STREET_ROOFLINE":
 			narrative.show_message(
 				"THE THIRD STREET HOLDS",
-				"A bridge appears where the city map was scraped clean. The road does not lead to another place; it reconnects two parts of the street you already knew.\\n\\nThe stone will remember this route.",
+				"A bridge appears where the city map was scraped clean. The road does not lead to another place; it reconnects two parts of the street you already knew.\n\nThe stone will remember this route.",
 				5.0
 			)
 		"A4_OLD_STONE_AQUEDUCT":
