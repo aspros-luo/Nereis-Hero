@@ -135,6 +135,8 @@ def main() -> int:
     for needle in (
         '_add_platform(Rect2(2140, 460, 110, 18))',
         '_add_platform(Rect2(2200, 400, 370, 18))',
+        '_add_platform(Rect2(60, 400, 170, 18))',
+        '_add_platform(Rect2(240, 400, 170, 18))',
         'if region_id == "A8" and side == "maintenance_shaft_entry":',
         'if region_id == "A7" and side == "maintenance_shaft_return":',
         'return floor_y - 140.0',
