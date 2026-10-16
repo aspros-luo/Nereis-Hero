@@ -896,7 +896,8 @@ def main() -> int:
         'gate.required_resonance = 68',
         'gate.required_outer_exposure = 12',
         'gate.require_outer_god_resonance = true',
-        'gate.required_source_ids = ["anomaly_mirror_street_echo"]',
+        'var required_source_ids: Array[String] = ["anomaly_mirror_street_echo"]',
+        "gate.required_source_ids = required_source_ids",
         'opened_mirror_street_side_gate',
         'reached_A12_via_A10',
         'anomaly_mirror_street_echo',
@@ -1162,7 +1163,7 @@ def main() -> int:
     a12_route_block = _region_exit_block("A12")
     for contract in [
         '"E  沿外环屋顶阶梯登上大圣堂"',
-        'res://scenes/grand_cathedral.tscn", "west"',
+        'res://scenes/grand_cathedral.tscn", "cathedral_roof"',
     ]:
         require(a9_route_block, contract, "C17 outer-ring-to-cathedral main route", errors)
     for contract in [
@@ -1204,7 +1205,7 @@ def main() -> int:
         "A3": ["A3_Bandit_01", "A3_Cultist_01"],
         "A4": ["A4_ResearchHusk_01"],
         "A5": ["A5_Bandit_01"],
-        "A6": ["A6_Inquisitor_01"],
+        "A6": ["A6_MadCleric_01"],
         "A7": ["A7_ResearchHusk_01"],
         "A8": ["A8_Cultist_01"],
         "A10": ["A10_Inquisitor_01", "A10_BellWraith_01"],
@@ -1278,7 +1279,7 @@ def main() -> int:
         # Start the next-branch search after the current header; searching at block_start + 1
         # accidentally matched the same header and reduced this block to one character.
         branch_match = re.search(
-            rf'^[\\t ]*"{re.escape(hidden_id)}":[\\t ]*$',
+            rf'^[\t ]*"{re.escape(hidden_id)}":[\t ]*$',
             exits_source,
             re.MULTILINE,
         )
@@ -1286,7 +1287,7 @@ def main() -> int:
             fail(errors, f"{hidden_id} hidden-region exit block is missing or malformed.")
             continue
         next_branch = re.search(
-            r'^[\\t ]*"(?:A(?:[0-9]|1[0-3])|H(?:0[1-9]))":[\\t ]*$',
+            r'^[\t ]*"(?:A(?:[0-9]|1[0-3])|H(?:0[1-9]))":[\t ]*$',
             exits_source[branch_match.end():],
             re.MULTILINE,
         )
@@ -1303,13 +1304,13 @@ def main() -> int:
     # A13 is a real terminal map layer, not merely an abstract topology node. Ending selection occurs after entering it.
     # A13 必须是实际终局地图层，而不是只存在于拓扑中的抽象节点；进入后才选择结局。
     exits_source = region_script[exits_start:]
-    a13_match = re.search(r'^[\\t ]*"A13":[\\t ]*$', exits_source, re.MULTILINE)
+    a13_match = re.search(r'^[\t ]*"A13":[\t ]*$', exits_source, re.MULTILINE)
     a13_start = exits_start + a13_match.start() if a13_match else -1
     if a13_match is None:
         a13_block = ""
     else:
         a13_next = re.search(
-            r'^[\\t ]*"(?:A(?:[0-9]|1[0-3])|H(?:0[1-9]))":[\\t ]*$',
+            r'^[\t ]*"(?:A(?:[0-9]|1[0-3])|H(?:0[1-9]))":[\t ]*$',
             exits_source[a13_match.end():],
             re.MULTILINE,
         )
@@ -1344,8 +1345,7 @@ def main() -> int:
     spawn_y_start = region_script.find("func _spawn_y_for_side(side: String) -> float:")
     spawn_x_start = region_script.find("func _spawn_x_for_side(side: String) -> float:")
     spawn_y_block = region_script[spawn_y_start:spawn_x_start] if spawn_y_start >= 0 and spawn_x_start > spawn_y_start else ""
-    c05_y_branch = 'if region_id == "A4" and side == "sewer_upper":'
-    c05_y_branch += '\n\t\treturn floor_y - 95.0'
+    c05_y_branch = 'if region_id == "A4" and side == "sewer_upper":\n\t\t# The Hero origin is at the feet; align the spawn exactly with the landing y=445 collision top.\n\t\t# 主角坐标位于脚底；出生高度应与 y=445 的实体平台顶面精确对齐。\n\t\treturn floor_y - 95.0'
     if spawn_y_block.count(c05_y_branch) != 1:
         fail(errors, "C05 A4 sewer_upper Y mapping must appear exactly once in _spawn_y_for_side.")
     if 'if region_id == "A4" and side == "sewer_upper":\n\t\treturn 180.0' in spawn_y_block:
@@ -1383,7 +1383,7 @@ def main() -> int:
     # C03's canopy route and C07's middle tomb-waterway route must keep their authored elevation on both ends.
     # C03 树冠高路与 C07 王墓中层水道必须在双向转场中保留设计高度。
     for contract in [
-        'map_width - 160.0, "E  沿树冠高路进入被遗忘的城区"',
+        '2240.0, "E  沿树冠高路进入被遗忘的城区"',
         '"res://scenes/forgotten_city.tscn", "city_canopy_entry",',
         'true, "", "", floor_y - 160.0',
         '72.0, "E  返回旧朝圣路", "ash_forest"',
@@ -1452,13 +1452,20 @@ def main() -> int:
         ('if region_id == "A9" and side == "royal_transport":', "return 2050.0"),
         ('if region_id == "H01" and side == "east":', "return map_width - 360.0"),
     ]
+    spawn_x_start_for_contracts = region_script.find("func _spawn_x_for_side(side: String) -> float:")
+    spawn_x_end_for_contracts = region_script.find("\\nfunc ", spawn_x_start_for_contracts + 1)
+    spawn_x_contract_block = (
+        region_script[spawn_x_start_for_contracts:spawn_x_end_for_contracts]
+        if spawn_x_start_for_contracts >= 0 and spawn_x_end_for_contracts > spawn_x_start_for_contracts
+        else ""
+    )
     for condition, expected_return in spawn_contracts:
-        start = region_script.find(condition)
+        start = spawn_x_contract_block.find(condition)
         if start < 0:
-            fail(errors, f"Graybox spawn mapping: missing {condition!r}")
+            fail(errors, f"Graybox spawn mapping: missing {condition!r} in _spawn_x_for_side().")
             continue
-        branch = region_script[start:]
-        next_branch = branch.find("\n    if ", len(condition))
+        branch = spawn_x_contract_block[start:]
+        next_branch = branch.find("\\n\\tif ", len(condition))
         if next_branch >= 0:
             branch = branch[:next_branch]
         require(branch, expected_return, f"Graybox spawn mapping {condition}", errors)
