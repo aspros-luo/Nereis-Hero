@@ -134,10 +134,10 @@ def main() -> int:
     # C13 must be authored as a genuinely elevated, bidirectional route on both ends.
     for needle in (
         '_add_platform(Rect2(2140, 460, 110, 18))',
-        '_add_platform(Rect2(2200, 420, 370, 18))',
+        '_add_platform(Rect2(2200, 400, 370, 18))',
         'if region_id == "A8" and side == "maintenance_shaft_entry":',
         'if region_id == "A7" and side == "maintenance_shaft_return":',
-        'return floor_y - 120.0',
+        'return floor_y - 140.0',
     ):
         if needle not in region:
             errors.append(f"C13: missing elevated-route source marker {needle!r}")
@@ -181,8 +181,8 @@ def main() -> int:
     c13_a8_split = exit_source.split('\n\t\t"A8":', 1)
     c13_a8_branch = c13_a8_split[1].split('\n\t\t"', 1)[0] if len(c13_a8_split) > 1 else ""
     for endpoint, branch in (("A7", c13_a7_branch), ("A8", c13_a8_branch)):
-        if 'true, "", "", floor_y - 140.0' not in branch:
-            errors.append(f"C13: {endpoint} high-door trigger must be positioned at floor_y - 140.0")
+        if 'true, "", "", floor_y - 160.0' not in branch:
+            errors.append(f"C13: {endpoint} high-door trigger must be positioned at floor_y - 160.0")
     import re
     jump_match = re.search(r"const JUMP_VELOCITY := (-?[0-9.]+)", hero)
     gravity_match = re.search(r"const GRAVITY := ([0-9.]+)", hero)
@@ -190,16 +190,16 @@ def main() -> int:
         errors.append("C13: could not derive Hero jump envelope from hero.gd")
     else:
         jump_height = float(jump_match.group(1)) ** 2 / (2.0 * float(gravity_match.group(1)))
-        hero_half_height = 24.0
-        trigger_bottom_offset = -140.0 - 35.0 + 40.0
-        jump_top_offset = -jump_height - hero_half_height
+        hero_collision_height = 48.0  # Capsule is centered 24px above the foot-origin, so its top is 48px above the origin.
+        trigger_bottom_offset = -160.0 - 35.0 + 40.0
+        jump_top_offset = -jump_height - hero_collision_height
         if jump_top_offset <= trigger_bottom_offset:
             errors.append(
                 f"C13: ground jump can reach high-door trigger (jump top {jump_top_offset:.1f}px, "
                 f"trigger bottom {trigger_bottom_offset:.1f}px relative to floor)"
             )
-        platform_top_offset = -120.0
-        standing_hero_top_offset = platform_top_offset - hero_half_height
+        platform_top_offset = -140.0
+        standing_hero_top_offset = platform_top_offset - hero_collision_height
         if standing_hero_top_offset >= trigger_bottom_offset:
             errors.append("C13: upper-platform spawn no longer overlaps the high-door trigger vertically")
 
@@ -231,25 +231,25 @@ def main() -> int:
     # vertical envelope of a ground jump, while a grounded Hero on the raised landing overlaps it.
     c22_contract = edges.get("C22", {}).get("spatial_contract", {})
     c22_anchor = c22_contract.get("from_region_anchor", {})
-    if c22_anchor.get("region") != "A12" or c22_anchor.get("x") != 2130 or c22_anchor.get("y_offset") != -140:
-        errors.append("C22: topology anchor must match the raised throne approach at A12 x=2130/y_offset=-140")
-    if 'true, "", "", floor_y - 140.0' not in a12_branch:
-        errors.append("C22: A12-to-A13 trigger must remain at floor_y - 140.0")
-    if '_add_platform(Rect2(2100, 420, 190, 18))' not in region:
-        errors.append("C22: the raised throne landing at x=2100/y=420 must support the terminal entrance")
+    if c22_anchor.get("region") != "A12" or c22_anchor.get("x") != 2130 or c22_anchor.get("y_offset") != -160:
+        errors.append("C22: topology anchor must match the raised throne approach at A12 x=2130/y_offset=-160")
+    if 'true, "", "", floor_y - 160.0' not in a12_branch:
+        errors.append("C22: A12-to-A13 trigger must remain at floor_y - 160.0")
+    if '_add_platform(Rect2(2100, 400, 190, 18))' not in region:
+        errors.append("C22: the raised throne landing at x=2100/y=400 must support the terminal entrance")
     jump_match = re.search(r"const JUMP_VELOCITY := (-?[0-9.]+)", hero)
     gravity_match = re.search(r"const GRAVITY := ([0-9.]+)", hero)
     if jump_match and gravity_match:
         jump_height = float(jump_match.group(1)) ** 2 / (2.0 * float(gravity_match.group(1)))
-        hero_half_height = 24.0
-        c22_trigger_bottom_offset = -140.0 - 35.0 + 40.0
-        c22_ground_jump_top_offset = -jump_height - hero_half_height
+        hero_collision_height = 48.0
+        c22_trigger_bottom_offset = -160.0 - 35.0 + 40.0
+        c22_ground_jump_top_offset = -jump_height - hero_collision_height
         if c22_ground_jump_top_offset <= c22_trigger_bottom_offset:
             errors.append(
                 f"C22: ground jump can reach terminal trigger (jump top {c22_ground_jump_top_offset:.1f}px, "
                 f"trigger bottom {c22_trigger_bottom_offset:.1f}px relative to floor)"
             )
-        c22_landing_top_offset = -120.0 - hero_half_height
+        c22_landing_top_offset = -140.0 - hero_collision_height
         if c22_landing_top_offset >= c22_trigger_bottom_offset:
             errors.append("C22: the raised landing no longer overlaps the terminal trigger vertically")
     else:
@@ -280,6 +280,7 @@ def main() -> int:
     print(" - C11/C13/C14 endpoint wiring and intended bidirectional topology checked.")
     print(" - C15/C19 hidden-gate thresholds, evidence, persistence, and per-gate return locks checked.")
     print(" - C21/C22 one-way terminal topology and A13 ending-only exit checked.")
+    print(" - C13/C22 high-door geometry uses the full 48px foot-origin collision envelope.")
     print(" - C13/C22 high-door trigger heights are compared with Hero jump geometry and landing support.")
     print("LIMITATION: continuous ground/fall/jump bypass, collision support, interaction focus, and transitions require Godot runtime acceptance.")
     return 0
