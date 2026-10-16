@@ -41,16 +41,15 @@
 
 ### C21 — A11 → A13 terminal entrance
 
-- Topology marks C21 initially blocked and finally forward-only, unlocked by `physical_union_complete`.
-- Runtime creates the A11→A13 door only when that story fact is true.
+- Topology marks C21 initially blocked and finally forward-only. Runtime creates the A11→A13 door only when `NereisEndingEvaluator.get_candidate()` returns a non-human ending candidate, based on resonance, truth anchors, and exploration. Intimacy/union state is not the gate.
 - A13 does not create an ordinary return door to A11.
 
 ### C22 — A12 → A13 terminal entrance
 
-- Topology marks C22 as initially forward-only (`from_to`) and finally forward-only.
-- A12's main route enters the A13 terminal scene; A13 then delegates ending selection to the shared ending evaluator.
-- A13 does not create an ordinary return door to A12.
-- Removed the obsolete A12-local ending candidate/location calculation. A12 now only enters A13; A13 is the single place that calls the shared ending evaluator, avoiding duplicate and misleading routing logic.
+- Topology marks C22 as initially forward-only (`from_to`) and finally forward-only; the door still requires `reached_A12_via_A10`.
+- The previous door/landing at y_offset=-65 sat within the Hero's maximum ground-jump collision envelope, so a jump from the continuous floor could overlap its Area2D trigger without using the upper approach.
+- The door now sits at y_offset=-140, with its supported landing moved to y_offset=-120. With the current JUMP_VELOCITY=-520 and GRAVITY=1400, the maximum jump height is about 96.6px; including the 24px half-height, the Hero's top is about y_offset=-120.6. The trigger bottom is y_offset=-135, leaving about 14px of vertical clearance from a ground jump while a Hero on the raised landing overlaps the trigger.
+- A12 now enters A13; A13 delegates ending selection to the shared ending evaluator and does not create an ordinary return door to A12. This remains a geometric source check until verified in Godot.
 
 ## Ground bypass and platform findings
 
@@ -88,10 +87,10 @@ This pass reviewed the current `development` source and added a focused static r
 - [x] C15 requires Resonance Sight through the shared gate, resonance 55, ancient exposure 2, and both anomaly_bell_retiming and anomaly_erased_royal_name.
 - [x] C19 requires resonance 68, outer exposure 12, outer_god_resonance, and anomaly_mirror_street_echo.
 - [x] C15 and C19 each use their own persistent open flag for A11 return doors.
-- [x] C21 is only spawned when WorldState.physical_union_complete is true; C22 enters A13 from A12.
+- [x] C21 is only spawned when the shared ending evaluator selects a non-human route from resonance, truth anchors, and exploration; C22 enters A13 only after the A10→A12 main-route flag is recorded.
 - [x] A13's ordinary exit is the shared ending-evaluator candidate; no A11/A12 return door is authored in the A13 branch.
 - [x] Removed redundant ending-candidate calculation from A12; A13 remains the single ending-evaluation layer.
-- [x] The focused source checker now compares C15/C19/C21/C22 topology unlock conditions with runtime gate markers, checks full C15/C19 requirements and per-gate returns, verifies C13's authored upper platforms, and scopes A13 checks to the actual exit-wiring function.
+- [x] The focused source checker compares C15/C19/C21/C22 topology unlock conditions with runtime markers, checks gate-specific requirements/returns, verifies C13 and C22 upper-platform geometry against the Hero's jump envelope, and scopes A13 checks to the actual exit-wiring function.
 
 ### Required Godot 4.6.1 runtime acceptance — still pending
 
@@ -112,8 +111,8 @@ Run these in the project, using a debug save or controlled debug state as approp
    - Verify the evidence source IDs and outer-god fact independently; test the thresholds just below and at the required values.
 
 3. **C21/C22 terminal direction**
-   - With physical_union_complete = false, confirm A11 does not spawn C21.
-   - With it true, confirm C21 enters A13.
+   - With the ending evaluator selecting the human ending candidate, confirm A11 does not spawn C21.
+   - With enough resonance/truth anchors/exploration for a non-human candidate, confirm C21 enters A13.
    - Enter A13 through C22 from A12 and confirm it uses the same terminal layer.
    - In A13, check both ends and the whole floor route: no ordinary door returns to A11 or A12; the only ordinary exit advances to the selected ending route.
    - Reload the scene/save and confirm the terminal direction remains unchanged.
