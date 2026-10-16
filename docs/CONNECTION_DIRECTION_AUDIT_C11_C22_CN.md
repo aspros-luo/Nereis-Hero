@@ -48,7 +48,7 @@
 
 - Topology marks C22 as initially forward-only (`from_to`) and finally forward-only; the door still requires `reached_A12_via_A10`.
 - The previous door/landing at y_offset=-65 sat within the Hero's maximum ground-jump collision envelope, so a jump from the continuous floor could overlap its Area2D trigger without using the upper approach.
-- The door now sits at y_offset=-160, with its supported landing moved to y_offset=-140. The Hero's 48px capsule is centered 24px above the foot-origin, so its top is 48px above that origin. With JUMP_VELOCITY=-520 and GRAVITY=1400, maximum jump height is about 96.6px and the ground-jump collision top reaches y_offset≈-144.6. The trigger bottom is y_offset=-155, leaving about 10px of vertical clearance; the landing at y_offset=-140 places the Hero's collision top at -188, overlapping the trigger vertically by about 33px.
+- The door now sits at y_offset=-180, with its supported landing moved to y_offset=-160. The Hero's 48px capsule is centered 24px above the foot-origin, so its top is 48px above that origin. With JUMP_VELOCITY=-520 and GRAVITY=1400, maximum jump height is about 96.6px and the ground-jump collision top reaches y_offset≈-144.6. The trigger bottom is y_offset=-175, leaving about 30px of vertical clearance; the landing at y_offset=-160 places the Hero's collision top at -208, overlapping the trigger vertically by about 33px.
 - A12 now enters A13; A13 delegates ending selection to the shared ending evaluator and does not create an ordinary return door to A12. This remains a geometric source check until verified in Godot.
 
 ## Ground bypass and platform findings
@@ -83,7 +83,7 @@ This pass reviewed the current `development` source and added a focused static r
 
 ### Static source review completed
 
-- [x] C13 endpoint targets, both y=400 upper landing platforms, door roots at floor_y - 160, and floor_y - 140 arrival mappings are present on both sides.
+- [x] C13 endpoint targets, A7's staged y=460/y=420/y=380 approach, A8's y=380 upper landing platforms, door roots at floor_y - 180, and floor_y - 160 arrival mappings are present on both sides.
 - [x] C15 requires Resonance Sight through the shared gate, resonance 55, ancient exposure 2, and both anomaly_bell_retiming and anomaly_erased_royal_name.
 - [x] C19 requires resonance 68, outer exposure 12, outer_god_resonance, and anomaly_mirror_street_echo.
 - [x] C15 and C19 each use their own persistent open flag for A11 return doors.
