@@ -61,7 +61,8 @@ func _run() -> void:
 	await _validate_hidden_regions()
 	await _validate_loop_contracts()
 	await _validate_ground_jump_high_door_clearance()
-	var report := {
+	await _validate_dynamic_c21_ending_route()
+	var report :=
 		"schema_version": 1,
 		"engine": Engine.get_version_info().string,
 		"topology_schema_version": topology.get("schema_version", "unknown"),
@@ -300,6 +301,70 @@ func _validate_c22_upper_approach(instance: Node, exits: Array) -> void:
 		_pass("C22_LANDING_SUPPORT/A12", "terminal door overlaps the upper landing at y=%.1f" % (terminal_door.position.y + 20.0))
 	else:
 		_fail("C22_LANDING_SUPPORT/A12", "no platform supports the terminal door at its authored landing height")
+
+func _validate_dynamic_c21_ending_route() -> void:
+	# C21 must appear in the same A11 session when local progression changes the ending candidate.
+	# C21 条件可能在 A11 内通过异常调查达成，不能要求玩家离开并重新进入场景。
+	var original_resonance: int = world_state.hero_resonance
+	var original_artifact_pieces: int = world_state.hidden_artifact_pieces
+	var original_entered_regions: Array[String] = world_state.entered_hidden_regions.duplicate()
+	var original_sources: Array[String] = world_state.resonance_sources.duplicate()
+
+	world_state.hero_resonance = 55
+	world_state.hidden_artifact_pieces = 0
+	world_state.entered_hidden_regions.clear()
+	world_state.entered_hidden_regions.append("A11")
+	world_state.resonance_sources.erase("anomaly_observer_reaction")
+
+	var region := await _load_runtime_region("A11")
+	if region == null:
+		_fail("C21_DYNAMIC/SCENE", "Cannot instantiate A11 for ending-candidate refresh check")
+		world_state.hero_resonance = original_resonance
+		world_state.hidden_artifact_pieces = original_artifact_pieces
+		world_state.entered_hidden_regions.assign(original_entered_regions)
+		world_state.resonance_sources.assign(original_sources)
+		return
+
+	var candidate_before := NereisEndingEvaluator.get_candidate()
+	var door_before := region.get_node_or_null("Exit_terminal_anomaly")
+	if candidate_before == "凡人之墓" and door_before == null:
+		_pass("C21_DYNAMIC/INITIAL_LOCKED", "C21 remains unavailable while the candidate is 凡人之墓")
+	else:
+		_fail("C21_DYNAMIC/INITIAL_LOCKED", "Expected no C21 door for the initial human-grave candidate")
+
+	# This mirrors the A11 observer-anomaly milestone: resonance rises and the candidate source is recorded.
+	world_state.hero_resonance = 78
+	if "anomaly_observer_reaction" not in world_state.resonance_sources:
+		world_state.resonance_sources.append("anomaly_observer_reaction")
+	var candidate_after := NereisEndingEvaluator.get_candidate()
+	for tick in range(3):
+		await process_frame
+
+	if candidate_after != "凡人之墓":
+		_pass("C21_DYNAMIC/CANDIDATE_UPDATE", "A11 progression changed candidate to %s" % candidate_after)
+	else:
+		_fail("C21_DYNAMIC/CANDIDATE_UPDATE", "Observer milestone did not produce a non-human ending candidate")
+
+	var ending_door := region.get_node_or_null("Exit_terminal_anomaly") as Area2D
+	var contract_ok := (
+		ending_door != null
+		and bool(ending_door.get("enabled"))
+		and str(ending_door.get_meta("p5_1_target_region", "")) == "A13"
+		and str(ending_door.get_meta("p5_1_target_scene", "")) == "res://scenes/terminal_anomaly.tscn"
+		and str(ending_door.get_meta("p5_1_spawn_side", "")) == "west"
+	)
+	if contract_ok:
+		_pass("C21_DYNAMIC/ROUTE_CREATED", "C21 door appeared in-place with the A13/west transition contract")
+	else:
+		_fail("C21_DYNAMIC/ROUTE_CREATED", "C21 door did not appear with the expected enabled A13/west contract")
+
+	region.queue_free()
+	await process_frame
+	world_state.hero_resonance = original_resonance
+	world_state.hidden_artifact_pieces = original_artifact_pieces
+	world_state.entered_hidden_regions.assign(original_entered_regions)
+	world_state.resonance_sources.assign(original_sources)
+
 
 func _validate_ground_jump_high_door_clearance() -> void:
 	# Exercise the real CharacterBody2D and Area2D overlap behavior, not only static jump-height math.
