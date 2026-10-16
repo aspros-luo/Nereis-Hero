@@ -81,7 +81,8 @@ func _ready() -> void:
 	var intro_id := "graybox_intro_%s" % location_id
 	if intro_id not in WorldState.achievement_flags:
 		WorldState.record_achievement(intro_id)
-		get_tree().create_timer(0.55).timeout.connect(_show_intro)
+		if not WorldState.debug_map_test_mode:
+			get_tree().create_timer(0.55).timeout.connect(_show_intro)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if WorldState.debug_map_test_mode and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F6:
