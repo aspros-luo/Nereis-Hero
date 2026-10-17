@@ -36,6 +36,7 @@ Latest narrative design documents (Chinese; current opening / character-arc dire
 
 - `docs/PROTAGONIST_OPENING_NARRATIVE_V1_CN.md` — amnesiac opening, forest Boss, pilgrim knight, Jinzheng's short-blade trade, fever/dreams, elderly woman's exploration leads.
 - `docs/CORE_CHARACTER_ARCS_V1_CN.md` — independent arcs for the protagonist, Mite, Jinzheng, pilgrim knight, blacksmith, elderly woman, rest/guidance NPC, hunter candidate, and Restoration Army soldier.
+- `docs/OPENING_STORY_MAP_INTEGRATION_V1_CN.md` — first-pass audit aligning the new opening with A0–A3, C01/C02/C24, and unresolved scene/trigger conflicts.
 
 World map master plan (Chinese draft):
 
