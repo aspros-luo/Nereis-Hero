@@ -32,6 +32,11 @@ Canonical story memory:
 
 `docs/DEVELOPER_STORY_MEMORY.md`
 
+Latest narrative design documents (Chinese; current opening / character-arc direction):
+
+- `docs/PROTAGONIST_OPENING_NARRATIVE_V1_CN.md` — amnesiac opening, forest Boss, pilgrim knight, Jinzheng's short-blade trade, fever/dreams, elderly woman's exploration leads.
+- `docs/CORE_CHARACTER_ARCS_V1_CN.md` — independent arcs for the protagonist, Mite, Jinzheng, pilgrim knight, blacksmith, elderly woman, rest/guidance NPC, hunter candidate, and Restoration Army soldier.
+
 World map master plan (Chinese draft):
 
 `docs/WORLD_MAP_MASTER_PLAN_CN.md`
