@@ -85,29 +85,28 @@ func _spawn_clue() -> void:
 	clue.clue_id = "escape_surgical_mark"
 	clue.humanity_delta = -1
 	clue.display_name = "手术托盘"
-	clue.description = "金属托盘上覆着一层血，下面凝结着干涸的黑色残留物。\n\n英雄伸手触碰。\n\n他手臂深处的某种东西作出了回应。\n\n这种感觉尚未成为记忆，便突然中断。"
+	clue.description = "金属托盘上覆着一层血。托盘底部凝结着干涸的黑色残留物，边缘留有几道浅浅的刮痕。器械编号已被刮去，只剩模糊的痕迹。"
 	add_child(clue)
 	var examined_callback := _on_clue_examined.bind(clue)
 	clue.examined.connect(examined_callback)
 
 func _spawn_item_pickups() -> void:
-    var pickup_script = preload("res://scripts/world/world_item_pickup.gd")
-    var bandage := Node2D.new()
-    bandage.set_script(pickup_script)
-    bandage.position = Vector2(760, FLOOR_Y)
-    bandage.pickup_id = "a0_bandage_pickup"
-    bandage.item_id = "church_bandage"
-    bandage.amount = 1
-    add_child(bandage)
+	var pickup_script = preload("res://scripts/world/world_item_pickup.gd")
+	var bandage := Node2D.new()
+	bandage.set_script(pickup_script)
+	bandage.position = Vector2(760, FLOOR_Y)
+	bandage.pickup_id = "a0_bandage_pickup"
+	bandage.item_id = "church_bandage"
+	bandage.amount = 1
+	add_child(bandage)
 
-    var record := Node2D.new()
-    record.set_script(pickup_script)
-    record.position = Vector2(840, FLOOR_Y)
-    record.pickup_id = "a0_surgery_record_pickup"
-    record.item_id = "surgery_record_fragment"
-    record.amount = 1
-    add_child(record)
-
+	var record := Node2D.new()
+	record.set_script(pickup_script)
+	record.position = Vector2(840, FLOOR_Y)
+	record.pickup_id = "a0_surgery_record_pickup"
+	record.item_id = "surgery_record_fragment"
+	record.amount = 1
+	add_child(record)
 func _on_clue_examined(clue: Node) -> void:
 	WorldState.mark_ancient_residue_awakened()
 	item_inspection.show_description(clue.display_name, clue.description)
