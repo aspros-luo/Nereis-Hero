@@ -33,6 +33,7 @@ func _ready() -> void:
 	_create_floor()
 	_create_surgical_catwalks()
 	_create_boundaries()
+	_create_surgery_table()
 	_spawn_hero()
 	_spawn_wardens()
 	_spawn_progress_barriers()
@@ -52,10 +53,21 @@ func _process(_delta: float) -> void:
 		if is_instance_valid(hud):
 			hud.set_story_mode("A0｜教会手术所", "守卫挡住去路。按 J 攻击，观察攻击前摇并适时闪避。")
 
+func _create_surgery_table() -> void:
+	var table := StaticBody2D.new()
+	table.name = "BrokenSurgeryTable"
+	table.position = Vector2(280.0, 500.0)
+	var shape := CollisionShape2D.new()
+	var rectangle := RectangleShape2D.new()
+	rectangle.size = Vector2(180.0, 12.0)
+	shape.shape = rectangle
+	table.add_child(shape)
+	add_child(table)
+
 func _spawn_hero() -> void:
 	hero = CharacterBody2D.new()
 	hero.set_script(HERO_SCRIPT)
-	hero.position = Vector2(280, FLOOR_Y)
+	hero.position = Vector2(280, 492.0)
 	hero.name = "Hero"
 	_add_character_collision(hero, 18.0, 48.0)
 	add_child(hero)
@@ -314,6 +326,14 @@ func _draw() -> void:
 		draw_line(Vector2(tile_x + 34.0, FLOOR_Y + 68.0), Vector2(tile_x + 66.0, FLOOR_Y + 64.0), Color("#57434d", 0.22), 1.0)
 
 	draw_rect(Rect2(120, 280, 420, 240), Color("#29222c"))
+	# The Hero begins on the operating table; snapped restraints imply an interrupted procedure without narration.
+	draw_rect(Rect2(190, 480, 180, 12), Color("#66545d"))
+	draw_rect(Rect2(200, 492, 10, 48), Color("#30262f"))
+	draw_rect(Rect2(350, 492, 10, 48), Color("#30262f"))
+	draw_line(Vector2(225, 481), Vector2(246, 486), Color("#b1a0a1"), 4.0)
+	draw_line(Vector2(246, 486), Vector2(260, 478), Color("#b1a0a1"), 4.0)
+	draw_line(Vector2(305, 480), Vector2(325, 486), Color("#b1a0a1"), 4.0)
+	draw_line(Vector2(325, 486), Vector2(339, 479), Color("#b1a0a1"), 4.0)
 	draw_rect(Rect2(180, 240, 300, 40), Color("#352d38"))
 	draw_string(ThemeDB.fallback_font, Vector2(210, 215), NereisLocalization.translate_text("教会手术所"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
 
