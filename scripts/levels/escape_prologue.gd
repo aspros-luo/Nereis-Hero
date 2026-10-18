@@ -203,15 +203,12 @@ func _spawn_exit() -> void:
 
 func _on_warden_defeated() -> void:
 	wardens_defeated += 1
-	if wardens_defeated == 1:
-		_open_progress_barrier(0)
-		if is_instance_valid(hud):
-			hud.set_story_mode("A0｜教会手术所", "第一道闸门已打开。前方仍有守卫，继续寻找离开的路。")
-	elif wardens_defeated == 2:
-		_open_progress_barrier(1)
-		if is_instance_valid(hud):
-			hud.set_story_mode("A0｜教会手术所", "最后一道闸门已打开。继续前进，寻找出口。")
+	var remaining := maxi(0, wardens.size() - wardens_defeated)
+	if remaining > 0 and is_instance_valid(hud):
+		hud.set_story_mode("A0｜教会手术所", "守卫倒下了。还有 %d 名敌人挡在出口前。" % remaining)
 	if wardens_defeated >= wardens.size():
+		for index in range(progress_barriers.size()):
+			_open_progress_barrier(index)
 		_open_exit()
 
 func _open_exit() -> void:
@@ -373,11 +370,10 @@ func _draw() -> void:
 	)
 	draw_string(ThemeDB.fallback_font, Vector2(1810, 250), NereisLocalization.translate_text("逃脱之路"), HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#6d5c64"))
 
-	# Closed security shutters remain visible until the previous encounter is cleared.
-	if wardens_defeated < 1:
-		_draw_security_shutter(1100.0)
-	if wardens_defeated < 2:
-		_draw_security_shutter(1450.0)
+	# The arena shutters appear only after the exit ambush begins.
+	if ambush_started and wardens_defeated < wardens.size():
+		_draw_security_shutter(1540.0)
+		_draw_security_shutter(2000.0)
 
 	if not exit_open:
 		draw_rect(Rect2(2000, 300, 90, 220), Color("#18151b"))
