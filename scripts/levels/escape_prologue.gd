@@ -99,7 +99,8 @@ func _spawn_clue() -> void:
 	clue.display_name = "手术托盘"
 	clue.description = "金属托盘上覆着一层血，下面凝结着干涸的黑色残留物。\n\n英雄伸手触碰。\n\n他手臂深处的某种东西作出了回应。\n\n这种感觉尚未成为记忆，便突然中断。"
 	add_child(clue)
-	clue.examined.connect(_on_clue_examined.bind(clue))
+	var examined_callback := _on_clue_examined.bind(clue)
+	clue.examined.connect(examined_callback)
 
 func _on_clue_examined(clue: Node) -> void:
 	WorldState.mark_ancient_residue_awakened()
