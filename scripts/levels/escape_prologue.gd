@@ -2,6 +2,7 @@ extends Node2D
 
 const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const WARDEN_SCRIPT = preload("res://scripts/enemies/experiment_warden.gd")
+const PROLOGUE_BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
@@ -10,7 +11,8 @@ const SURGERY_BACKDROP = preload("res://assets/art/backdrops/surgery_ward_backdr
 const SURGERY_FLOOR_STRIP = preload("res://assets/art/backdrops/surgery_floor_strip.svg")
 
 const FLOOR_Y := 540.0
-const LEVEL_WIDTH := 2200.0
+const LEVEL_WIDTH := 2500.0
+const CLIFF_EDGE_X := 2220.0
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -20,6 +22,10 @@ var wardens: Array[CharacterBody2D] = []
 var exit_area: Area2D
 var exit_open := false
 var wardens_defeated := 0
+var cliff_barrier: StaticBody2D
+var prologue_boss: CharacterBody2D
+var prologue_boss_active := false
+var prologue_fall_in_progress := false
 
 func _ready() -> void:
 	# P5.1 runtime contract for the prologue-to-village transition.
@@ -143,22 +149,37 @@ func _open_exit() -> void:
 	queue_redraw()
 
 func _on_exit_interacted() -> void:
-	if not exit_open or WorldState.input_locked:
+	if not exit_open or WorldState.input_locked or prologue_boss_active or prologue_fall_in_progress:
 		return
+	_start_prologue_boss()
 
-	WorldState.mark_prologue_complete()
-	WorldState.current_location = "village"
-	WorldState.input_locked = true
+func _start_prologue_boss() -> void:
+	prologue_boss_active = true
+	exit_area.enabled = false
+	if is_instance_valid(cliff_barrier):
+		cliff_barrier.queue_free()
+		cliff_barrier = null
+
+	prologue_boss = CharacterBody2D.new()
+	prologue_boss.set_script(PROLOGUE_BOSS_SCRIPT)
+	prologue_boss.name = "A0_ChurchExecutioner"
+	prologue_boss.position = Vector2(1900.0, FLOOR_Y)
+	prologue_boss.set("boss_display_name", "教会执行者")
+	prologue_boss.set("damage_immune", true)
+	prologue_boss.set("persist_global_boss_defeat", false)
+	_add_character_collision(prologue_boss, 26.0, 58.0)
+	add_child(prologue_boss)
 	narrative.show_message(
-		"边境村庄",
-		"冷冽的空气。一条道路。远处聚集着几簇灯火。\n\n英雄继续向前走。",
-		4.5
+		"出口之外",
+		"通道尽头站着一个没有追赶的理由、却始终挡在前方的人。\n\n他没有回答。刀锋已经抬起。",
+		4.0
 	)
-	await narrative.message_finished
-	WorldState.input_locked = false
-	SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+	print("[NEREIS][PROLOGUE] Scripted executioner encounter started")
 
 func _on_hero_defeated() -> void:
+	if prologue_boss_active and not prologue_fall_in_progress:
+		call_deferred("_play_forced_cliff_fall")
+		return
 	for warden in wardens:
 		if is_instance_valid(warden) and not warden.is_queued_for_deletion():
 			warden.queue_free()
@@ -166,6 +187,48 @@ func _on_hero_defeated() -> void:
 	wardens_defeated = 0
 	call_deferred("_spawn_wardens")
 	print("[NEREIS][PROLOGUE] Hero defeated; wardens reset")
+
+func _play_forced_cliff_fall() -> void:
+	if prologue_fall_in_progress:
+		return
+	prologue_fall_in_progress = true
+	prologue_boss_active = false
+	WorldState.input_locked = true
+	if is_instance_valid(prologue_boss):
+		prologue_boss.queue_free()
+	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
+
+	# Hero.receive_damage() performs its ordinary checkpoint reset after emitting defeated.
+	# Wait one frame, then take control for the one-time narrative fall instead of respawning.
+	await get_tree().process_frame
+	if is_instance_valid(hero):
+		hero.global_position = Vector2(CLIFF_EDGE_X + 24.0, FLOOR_Y - 38.0)
+		hero.velocity = Vector2.ZERO
+		hero.invulnerable = true
+		narrative.show_message(
+			"无法战胜的对手",
+			"身体已经不再听从指令。那个人没有追来。\n\n脚下的石沿断裂，河谷在视野中翻转。",
+			3.2
+		)
+		var fall_tween := create_tween()
+		fall_tween.tween_property(hero, "global_position", Vector2(CLIFF_EDGE_X + 140.0, 760.0), 1.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		await fall_tween.finished
+		await narrative.message_finished
+
+	narrative.show_message(
+		"河水",
+		"冰冷的水吞没了最后一点光。\n\n很久以后，有人把昏迷的人从河岸拖了上去。",
+		4.0
+	)
+	await narrative.message_finished
+
+	WorldState.record_achievement("prologue_cliff_fall_rescue_pending")
+	WorldState.mark_prologue_complete()
+	WorldState.current_location = "village"
+	WorldState.pending_region_spawn_side = "west"
+	WorldState.save_game()
+	WorldState.input_locked = false
+	SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
 
 func _spawn_ui() -> void:
 	narrative = CanvasLayer.new()
@@ -176,7 +239,7 @@ func _spawn_ui() -> void:
 	hud.set_script(HUD_SCRIPT)
 	add_child(hud)
 	hud.bind_hero(hero)
-	hud.set_story_mode("A0｜教会手术所", "向右（D）推进；调查手术托盘。击败 3 名守卫后，前往最右侧出口（x≈2040）按 E 逃离。")
+	hud.set_story_mode("A0｜教会手术所", "向右（D）推进并调查手术托盘；击败 3 名守卫后，前往出口按 E。出口之后还有必须面对的敌人。")
 
 func _show_intro() -> void:
 	narrative.show_message(
@@ -186,14 +249,26 @@ func _show_intro() -> void:
 	)
 
 func _create_floor() -> void:
+	# The playable floor ends at the cliff lip. A temporary barrier prevents accidental falls
+	# before the exit encounter; it is removed when the executioner appears.
 	var floor := StaticBody2D.new()
 	var shape := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(LEVEL_WIDTH + 200.0, 40.0)
+	rectangle.size = Vector2(CLIFF_EDGE_X, 40.0)
 	shape.shape = rectangle
-	shape.position = Vector2(LEVEL_WIDTH * 0.5, FLOOR_Y + 20.0)
+	shape.position = Vector2(CLIFF_EDGE_X * 0.5, FLOOR_Y + 20.0)
 	floor.add_child(shape)
 	add_child(floor)
+
+	cliff_barrier = StaticBody2D.new()
+	cliff_barrier.name = "CliffLipBarrier"
+	cliff_barrier.position = Vector2(CLIFF_EDGE_X, FLOOR_Y - 72.0)
+	var barrier_shape := CollisionShape2D.new()
+	var barrier_rect := RectangleShape2D.new()
+	barrier_rect.size = Vector2(24.0, 176.0)
+	barrier_shape.shape = barrier_rect
+	cliff_barrier.add_child(barrier_shape)
+	add_child(cliff_barrier)
 
 func _create_surgical_catwalks() -> void:
 	# A short optional maintenance route crosses the first surgical rooms but cannot bypass the wardens or exit lock.
@@ -264,7 +339,11 @@ func _mark_input_handled() -> void:
 
 func _draw() -> void:
 	draw_texture_rect(SURGERY_BACKDROP, Rect2(0, 0, LEVEL_WIDTH, 720), false)
-	draw_texture_rect(SURGERY_FLOOR_STRIP, Rect2(0, FLOOR_Y, LEVEL_WIDTH, 180), false)
+	draw_texture_rect(SURGERY_FLOOR_STRIP, Rect2(0, FLOOR_Y, CLIFF_EDGE_X, 180), false)
+	# A dark river gorge marks the drop; the return route is intentionally unavailable in A0.\n	draw_rect(Rect2(CLIFF_EDGE_X, FLOOR_Y + 18.0, LEVEL_WIDTH - CLIFF_EDGE_X, 220.0), Color("#101c28"))
+	for ripple_x in range(int(CLIFF_EDGE_X + 18.0), int(LEVEL_WIDTH - 20.0), 54):
+		draw_line(Vector2(ripple_x, FLOOR_Y + 54.0 + sin(float(ripple_x) * 0.04) * 5.0), Vector2(ripple_x + 28.0, FLOOR_Y + 54.0), Color("#334a58", 0.62), 2.0)
+	draw_line(Vector2(CLIFF_EDGE_X, FLOOR_Y - 4.0), Vector2(CLIFF_EDGE_X, FLOOR_Y + 42.0), Color("#77717b"), 5.0)
 
 	# Cold surgical shafts and suspended cables establish depth before the room's props are drawn.
 	# 冷色手术灯柱与悬垂线缆先建立空间纵深，再绘制房间内的物件。
