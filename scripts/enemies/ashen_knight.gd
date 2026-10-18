@@ -22,6 +22,7 @@ var attack_released := false
 var phase_two := false
 var attack_hitbox: Area2D
 var animation_time := 0.0
+var attack_effect_time := 0.0
 signal defeated
 signal phase_changed(phase: int)
 signal attack_telegraphed
@@ -179,9 +180,16 @@ func _draw() -> void:
     draw_line(Vector2(18, -4 + pulse), Vector2(62, 10), c, 12.0)
     draw_line(Vector2(facing * 8.0, -18 + pulse), Vector2(facing * 92.0, -44 + pulse), Color("#c9baa0"), 10.0)
     if windup > 0.0:
-        var telegraph_color := Color("#c44e5a") if phase_two else Color("#9e5961")
-        draw_arc(Vector2(0, -34), 68.0 if phase_two else 58.0, 0, TAU, 28, telegraph_color, 5.0)
-        draw_line(Vector2(facing * 34.0, -34), Vector2(facing * 102.0, -34), telegraph_color, 4.0)
+        # High-contrast warning: a forward line and broad arc remain visible throughout the wind-up.
+        var telegraph_color := Color("#ffb0a2") if phase_two else Color("#e8a0a0")
+        draw_arc(Vector2(facing * 42.0, -34), 56.0, -1.0 if facing > 0 else 2.15, 1.0 if facing > 0 else 4.15, 24, telegraph_color, 6.0)
+        draw_line(Vector2(facing * 26.0, -28), Vector2(facing * 124.0, -28), telegraph_color, 5.0)
+        draw_circle(Vector2(facing * 124.0, -28), 5.0, Color("#fff0d8"))
+    if attack_effect_time > 0.0:
+        var slash_alpha := clampf(attack_effect_time / 0.24, 0.0, 1.0)
+        var slash_color := Color(1.0, 0.88, 0.72, slash_alpha)
+        draw_line(Vector2(facing * 24.0, -70.0), Vector2(facing * 118.0, -8.0), slash_color, 11.0)
+        draw_line(Vector2(facing * 36.0, -80.0), Vector2(facing * 132.0, -18.0), Color(1.0, 0.45, 0.43, slash_alpha * 0.9), 4.0)
     var label := boss_display_name
     if not damage_immune:
         label = "%s %d/%d" % [boss_display_name, max(0, health), max_health]
