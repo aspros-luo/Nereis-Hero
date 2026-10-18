@@ -1245,7 +1245,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
 		_spawn_death_burst()
 		_log("HERO", "Hero defeated; resetting vertical slice")
 		defeated.emit()
-		await _play_death_fade_and_wait()
+		var death_layer: CanvasLayer = await _play_death_fade_out_and_wait()
 		health = 100
 		global_position = WorldState.checkpoint_position
 		velocity = Vector2.ZERO
@@ -1292,16 +1292,21 @@ func receive_damage(amount: int, source: Node = null) -> void:
 		_reset_camera_shake()
 		hit_confirm_time = 0.0
 		_log("WORLD", "Hero respawned at checkpoint=%s" % WorldState.checkpoint_position)
-		get_tree().create_timer(0.75).timeout.connect(_clear_respawn_invulnerability)
+		# Restore the standing combat/visual state while the screen is still fully black.
+		# 在黑屏仍覆盖画面时恢复站立状态，避免复活后闪过倒地姿势。
 		_set_state(CombatState.IDLE)
+		await _fade_in_and_remove_death_overlay(death_layer)
+		get_tree().create_timer(0.75).timeout.connect(_clear_respawn_invulnerability)
 
-## Fade to black before returning to the checkpoint, then fade back into play.
-## This keeps the hero in DEAD state and input-locked while the transition runs.
-func _play_death_fade_and_wait() -> void:
+## Fade out and move to the checkpoint, returning the still-opaque overlay so gameplay
+## state can be fully restored before the fade-in begins.
+func _play_death_fade_out_and_wait() -> CanvasLayer:
 	var layer := CanvasLayer.new()
 	layer.name = "DeathTransition"
 	layer.layer = 100
-	get_tree().root.add_child(layer)
+	# Parent the overlay to the current scene, not the root. A scene change must clean it up.
+	var overlay_parent: Node = get_tree().current_scene if get_tree().current_scene != null else get_tree().root
+	overlay_parent.add_child(layer)
 	var overlay := ColorRect.new()
 	overlay.name = "Fade"
 	overlay.color = Color(0.0, 0.0, 0.0, 0.0)
@@ -1318,11 +1323,21 @@ func _play_death_fade_and_wait() -> void:
 	# The fade covers the teleport to checkpoint, avoiding a visible snap.
 	global_position = WorldState.checkpoint_position
 	velocity = Vector2.ZERO
+	return layer
+
+func _fade_in_and_remove_death_overlay(layer: CanvasLayer) -> void:
+	if not is_instance_valid(layer):
+		return
+	var overlay := layer.get_node_or_null("Fade") as ColorRect
+	if overlay == null:
+		layer.queue_free()
+		return
 	var fade_in := create_tween()
 	fade_in.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	fade_in.tween_property(overlay, "color:a", 0.0, 0.75).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	await fade_in.finished
-	layer.queue_free()
+	if is_instance_valid(layer):
+		layer.queue_free()
 
 func restore_full() -> void:
 	WorldState.clear_witch_time("rest point")
