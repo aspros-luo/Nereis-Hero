@@ -26,6 +26,10 @@ Development working charter (Chinese / English):
 
 `docs/DEVELOPMENT_WORKING_CHARTER_CN_EN.md`
 
+## Item collection and lore system
+
+- `docs/ITEM_COLLECTION_AND_LORE_SYSTEM_V1_CN.md` — item categories, save/read-state contract, and the explicit decision to exclude crafting materials and crafting loops.
+
 ## Current narrative foundation
 
 Canonical story memory:
