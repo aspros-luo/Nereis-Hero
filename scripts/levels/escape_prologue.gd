@@ -46,8 +46,7 @@ func _ready() -> void:
 	_create_boundaries()
 	_create_surgery_table()
 	_spawn_hero()
-	_spawn_wardens()
-	_spawn_progress_barriers()
+	# Keep the opening focused on exploration; the exit ambush creates enemies and shutters later.
 	_spawn_clue()
 	_spawn_item_pickups()
 	_spawn_rest()
@@ -78,7 +77,7 @@ func _create_surgery_table() -> void:
 func _spawn_hero() -> void:
 	hero = CharacterBody2D.new()
 	hero.set_script(HERO_SCRIPT)
-	hero.position = Vector2(280, 492.0)
+	hero.position = Vector2(420.0, FLOOR_Y)
 	hero.name = "Hero"
 	_add_character_collision(hero, 18.0, 48.0)
 	add_child(hero)
@@ -169,7 +168,7 @@ func _on_clue_examined(clue: Node) -> void:
 func _spawn_rest() -> void:
 	var rest := Node2D.new()
 	rest.set_script(REST_POINT_SCRIPT)
-	rest.position = Vector2(350, FLOOR_Y)
+	rest.position = Vector2(420.0, FLOOR_Y)
 	rest.rest_id = "escape_stool"
 	rest.display_name = "破损的凳子"
 	add_child(rest)
