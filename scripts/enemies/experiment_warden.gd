@@ -117,6 +117,8 @@ func _nearby_enemy_is_winding_up() -> bool:
     for candidate in get_tree().get_nodes_in_group("combat_enemies"):
         if candidate == self or not is_instance_valid(candidate) or not candidate is Node2D:
             continue
+        if candidate.get_script() != get_script():
+            continue
         var other := candidate as Node2D
         if absf(other.global_position.x - global_position.x) > 180.0:
             continue
