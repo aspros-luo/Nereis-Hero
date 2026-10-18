@@ -69,6 +69,7 @@ func _physics_process(delta: float) -> void:
             if windup <= 0.08 and not released:
                 attack_hitbox.position.x = facing * 52.0
                 attack_hitbox.activate(15, 0.13)
+                attack_effect_time = 0.22
                 released = true
         else:
             var distance := absf(dx)
