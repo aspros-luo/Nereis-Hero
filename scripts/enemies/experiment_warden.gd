@@ -21,6 +21,7 @@ var facing := -1.0
 var hit_flash := 0.0
 var stun_time := 0.0
 var animation_time := 0.0
+var attack_effect_time := 0.0
 var attack_hitbox: Area2D
 
 func _ready() -> void:
@@ -117,7 +118,13 @@ func _draw() -> void:
     draw_line(Vector2(14, -2 + sway), Vector2(46, 12 + sway), steel, 7.0)
 
     if windup > 0.0:
-        draw_arc(Vector2(facing * 26.0, -26), 40.0, -0.85 if facing > 0 else 3.99, 0.85 if facing > 0 else 5.42, 14, Color("#d18f8b"), 4.0)
+        var telegraph_color := Color("#ffd0b5")
+        draw_arc(Vector2(facing * 32.0, -27), 42.0, -0.95 if facing > 0 else 2.2, 0.95 if facing > 0 else 4.1, 18, telegraph_color, 5.0)
+        draw_line(Vector2(facing * 25.0, -26), Vector2(facing * 94.0, -26), telegraph_color, 4.0)
+    if attack_effect_time > 0.0:
+        var slash_alpha := clampf(attack_effect_time / 0.22, 0.0, 1.0)
+        draw_line(Vector2(facing * 22.0, -62.0), Vector2(facing * 94.0, -8.0), Color(1.0, 0.88, 0.72, slash_alpha), 9.0)
+        draw_line(Vector2(facing * 32.0, -70.0), Vector2(facing * 104.0, -18.0), Color(1.0, 0.46, 0.40, slash_alpha), 3.0)
 
     draw_string(ThemeDB.fallback_font, Vector2(-66, -82), "EXPERIMENT WARDEN", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
 
