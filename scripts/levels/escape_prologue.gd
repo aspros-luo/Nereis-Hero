@@ -12,16 +12,9 @@ const SURGERY_FOREGROUND_PROPS = preload("res://assets/art/backdrops/surgery_for
 
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 2200.0
-# Shared visual/physical layout for the optional maintenance route.
-# Keep rise steps modest and gaps wide enough for Hero's capsule to clear platform sides.
-const SURGICAL_CATWALK_RECTS := [
-	Rect2(430.0, 465.0, 120.0, 16.0),
-	Rect2(590.0, 435.0, 120.0, 16.0),
-	Rect2(750.0, 405.0, 120.0, 16.0),
-	Rect2(910.0, 420.0, 120.0, 16.0),
-	Rect2(1070.0, 440.0, 120.0, 16.0),
-	Rect2(1230.0, 415.0, 120.0, 16.0)
-]
+# A0 opening route stays on the floor. Do not create the old graybox maintenance ledges:
+# their collision surfaces visually blended into background seams and obstructed jumping.
+const SURGICAL_CATWALK_RECTS: Array[Rect2] = []
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -50,7 +43,7 @@ func _ready() -> void:
 	WorldState.set_checkpoint(Vector2(420.0, FLOOR_Y))
 
 	_create_floor()
-	_create_surgical_catwalks()
+	# The old optional catwalk collision ledges are disabled for the A0 opening route.
 	_create_boundaries()
 	_create_surgery_table()
 	_spawn_hero()
@@ -447,10 +440,7 @@ func _draw_editor_layout_overlay() -> void:
 	draw_rect(Rect2(190.0, 494.0, 180.0, 12.0), collision_color, false, 2.0)
 	draw_string(ThemeDB.fallback_font, Vector2(190.0, 486.0), "手术台碰撞 180×12", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, collision_color)
 
-	# Catwalk collision boxes mirror SURGICAL_CATWALK_RECTS.
-	for platform_rect: Rect2 in SURGICAL_CATWALK_RECTS:
-		draw_rect(platform_rect, Color(collision_color, 0.14), true)
-		draw_rect(platform_rect, collision_color, false, 2.0)
+	# No graybox catwalk collision ledges are active in A0.
 
 	# Hero spawn/checkpoint and rest point are intentionally separated for a clean opening silhouette.
 	draw_circle(Vector2(420.0, FLOOR_Y), 6.0, anchor_color)
