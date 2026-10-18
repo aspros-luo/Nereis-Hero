@@ -43,7 +43,7 @@ func _spawn_hero() -> void:
 	hero.position = Vector2(150.0, FLOOR_Y)
 	_add_character_collision(hero, 18.0, 48.0)
 	add_child(hero)
-	hero.defeated.connect(_on_hero_defeated)
+	hero.defeated.connect(Callable(self, "_on_hero_defeated"))
 	var camera := Camera2D.new()
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 5.0
