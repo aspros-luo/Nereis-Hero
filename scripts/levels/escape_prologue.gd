@@ -1,3 +1,4 @@
+@tool
 extends Node2D
 
 const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
@@ -36,6 +37,10 @@ var right_gate_closed := false
 var progress_barriers: Array[StaticBody2D] = []
 
 func _ready() -> void:
+	# Editor preview must never spawn runtime actors or mutate save/world state.
+	if Engine.is_editor_hint():
+		queue_redraw()
+		return
 	if WorldState.prologue_complete:
 		get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
 		return
@@ -413,3 +418,54 @@ func _draw() -> void:
 	else:
 		draw_rect(Rect2(2000, 300, 90, 220), Color("#33232a"))
 		draw_string(ThemeDB.fallback_font, Vector2(1995, 275), NereisLocalization.translate_text("开启"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
+
+	if Engine.is_editor_hint():
+		_draw_editor_layout_overlay()
+
+
+## Editor-only collision and interaction guides for checking the fixed A0 layout.
+## These outlines are guides, not extra physics bodies.
+func _draw_editor_layout_overlay() -> void:
+	var collision_color := Color("#4bd4ff", 0.88)
+	var focus_color := Color("#ffd166", 0.72)
+	var anchor_color := Color("#ff6b6b", 0.95)
+
+	# Floor and world boundaries.
+	draw_rect(Rect2(0.0, FLOOR_Y, LEVEL_WIDTH, 40.0), Color(collision_color, 0.10), false, 2.0)
+	draw_rect(Rect2(-40.0, 0.0, 40.0, 720.0), collision_color, false, 2.0)
+	draw_rect(Rect2(LEVEL_WIDTH, 0.0, 40.0, 720.0), collision_color, false, 2.0)
+
+	# Surgery table collision: center (280, 500), 180 x 12.
+	draw_rect(Rect2(190.0, 494.0, 180.0, 12.0), collision_color, false, 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(190.0, 486.0), "手术台碰撞 180×12", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, collision_color)
+
+	# Catwalk collision boxes mirror SURGICAL_CATWALK_RECTS.
+	for platform_rect: Rect2 in SURGICAL_CATWALK_RECTS:
+		draw_rect(platform_rect, Color(collision_color, 0.14), true)
+		draw_rect(platform_rect, collision_color, false, 2.0)
+
+	# Hero/checkpoint and rest point share x=420; their overlap is intentional but worth seeing.
+	draw_circle(Vector2(420.0, FLOOR_Y), 6.0, anchor_color)
+	draw_line(Vector2(420.0, FLOOR_Y - 48.0), Vector2(420.0, FLOOR_Y), anchor_color, 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(430.0, FLOOR_Y - 34.0), "Hero / 初始检查点 (420, 540)", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, anchor_color)
+	draw_circle(Vector2(420.0, FLOOR_Y), 90.0, Color(focus_color, 0.42), false, 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(430.0, FLOOR_Y + 18.0), "休整点：横向90 / 高差32 / 必须落地", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, focus_color)
+
+	# Clue and pickups use distance-based interaction, not physical Area2D shapes.
+	draw_circle(Vector2(620.0, 520.0), 5.0, focus_color)
+	draw_circle(Vector2(620.0, 520.0), 120.0, Color(focus_color, 0.40), false, 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(625.0, 508.0), "调查点：手术托盘 (620, 520) / 半径120", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, focus_color)
+
+	draw_circle(Vector2(460.0, 492.0), 5.0, Color("#a7f3d0"))
+	draw_circle(Vector2(460.0, 492.0), 100.0, Color("#a7f3d0", 0.42), false, 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(465.0, 480.0), "绷带 (460, 492) / 半径100", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#a7f3d0"))
+
+	draw_circle(Vector2(740.0, 450.0), 5.0, Color("#a7f3d0"))
+	draw_circle(Vector2(740.0, 450.0), 100.0, Color("#a7f3d0", 0.42), false, 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(745.0, 438.0), "手术记录 (740, 450) / 半径100", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#a7f3d0"))
+
+	# Exit trigger area: center (2040, 470), 110 x 140.
+	draw_rect(Rect2(1985.0, 400.0, 110.0, 140.0), Color("#ff9f43", 0.12), true)
+	draw_rect(Rect2(1985.0, 400.0, 110.0, 140.0), Color("#ff9f43", 0.95), false, 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(1980.0, 390.0), "出口交互区 110×140", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#ff9f43"))
+
