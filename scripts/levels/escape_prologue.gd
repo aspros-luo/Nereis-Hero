@@ -30,6 +30,7 @@ var exit_area: Area2D
 var exit_open := false
 var wardens_defeated := 0
 var first_combat_prompt_shown := false
+var ambush_started := false
 var progress_barriers: Array[StaticBody2D] = []
 
 func _ready() -> void:
