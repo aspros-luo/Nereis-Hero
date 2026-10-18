@@ -94,6 +94,7 @@ var attack_hit_registered := false
 var combo_step := 0
 var combo_window := 0.0
 var dodge_time := 0.0
+var dodge_collision_exceptions: Array[PhysicsBody2D] = []
 var quick_dash_time := 0.0
 var quick_dash_cooldown_remaining := 0.0
 var grapple_requested := false
@@ -323,6 +324,7 @@ func _physics_process(delta: float) -> void:
 		jump_buffer = 0.0
 		_cancel_attack_action()
 		dodge_time = 0.0
+		_set_dodge_enemy_collision_ignored(false)
 		quick_dash_time = 0.0
 		wall_climb_active = false
 		perfect_dodge_window_remaining = 0.0
@@ -475,9 +477,12 @@ func _physics_process(delta: float) -> void:
 
 	if dodge_time > 0.0:
 		dodge_time = max(0.0, dodge_time - delta)
+		_set_dodge_enemy_collision_ignored(true)
 		velocity.x = facing * DODGE_SPEED
 		_set_state(CombatState.DODGE)
 		move_and_slide()
+		if dodge_time <= 0.0:
+			_set_dodge_enemy_collision_ignored(false)
 		queue_redraw()
 		return
 	elif invulnerable:
@@ -992,12 +997,32 @@ func _perform_iaijutsu() -> void:
 	_set_state(CombatState.ATTACK)
 	_log("COMBAT", "%s used; hidden abnormal load increased" % str(profile.get("variant", "blood")))
 
+
+func _set_dodge_enemy_collision_ignored(ignored: bool) -> void:
+	# Dodge may pass through ordinary enemy bodies, but never changes collision with terrain,
+	# doors, shutters, or level boundaries. Keep this independent from invulnerability frames.
+	# 翻滚只忽略普通敌人的物理身体，不修改墙壁、地面、门、封锁障碍或关卡边界碰撞。
+	if ignored:
+		for candidate in get_tree().get_nodes_in_group("combat_enemies"):
+			if not is_instance_valid(candidate) or not candidate is PhysicsBody2D or candidate == self:
+				continue
+			var enemy := candidate as PhysicsBody2D
+			if not dodge_collision_exceptions.has(enemy):
+				add_collision_exception_with(enemy)
+				dodge_collision_exceptions.append(enemy)
+		return
+	for enemy in dodge_collision_exceptions:
+		if is_instance_valid(enemy):
+			remove_collision_exception_with(enemy)
+	dodge_collision_exceptions.clear()
+
 func _start_dodge() -> void:
 	if stamina < DODGE_STAMINA_COST:
 		return
 	stamina -= DODGE_STAMINA_COST
 	stamina_regen_delay = STAMINA_REGEN_DELAY
 	dodge_time = DODGE_DURATION
+	_set_dodge_enemy_collision_ignored(true)
 	perfect_dodge_window_remaining = PERFECT_DODGE_WINDOW
 	invulnerable = true
 	_set_state(CombatState.DODGE)
@@ -1203,6 +1228,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
 	combo_step = 0
 	combo_window = 0.0
 	dodge_time = 0.0
+	_set_dodge_enemy_collision_ignored(false)
 	invulnerable = false
 	hurt_time = HURT_DURATION
 	velocity.y = -120.0
@@ -1289,6 +1315,7 @@ func restore_full() -> void:
 	iaijutsu_active = false
 	eldritch_cooldown_remaining = 0.0
 	dodge_time = 0.0
+	_set_dodge_enemy_collision_ignored(false)
 	quick_dash_time = 0.0
 	quick_dash_cooldown_remaining = 0.0
 	quick_dash_requested = false
