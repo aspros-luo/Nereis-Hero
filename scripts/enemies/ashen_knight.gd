@@ -51,6 +51,7 @@ func _process(delta: float) -> void:
     if WorldState.input_locked:
         return
     animation_time += delta
+    attack_effect_time = maxf(0.0, attack_effect_time - delta)
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
@@ -80,7 +81,7 @@ func _physics_process(delta: float) -> void:
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
     if hero:
         var delta_x: float = hero.global_position.x - global_position.x
-        if abs(delta_x) > 165.0 and windup <= 0.0:
+        if abs(delta_x) > (132.0 if phase_two else 120.0) and windup <= 0.0:
             facing = sign(delta_x)
             velocity.x = facing * (98.0 if phase_two else 64.0)
         elif windup > 0.0:
