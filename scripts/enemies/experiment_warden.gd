@@ -42,6 +42,7 @@ func _process(delta: float) -> void:
     if WorldState.input_locked:
         return
     animation_time += delta
+    attack_effect_time = maxf(0.0, attack_effect_time - delta)
     cooldown = maxf(0.0, cooldown - delta)
     windup = maxf(0.0, windup - delta)
     hit_flash = maxf(0.0, hit_flash - delta)
