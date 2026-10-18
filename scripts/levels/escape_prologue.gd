@@ -85,6 +85,7 @@ func _spawn_hero() -> void:
 	add_child(hero)
 	# Hero handles checkpoint respawn internally; this interior scene has no defeated callback.
 	hero.attack_started.connect(func(_combo): pass)
+	hero.defeated.connect(_on_hero_defeated)
 
 	camera = Camera2D.new()
 	camera.position_smoothing_enabled = true
@@ -119,8 +120,8 @@ func _spawn_warden(position: Vector2, enemy_name: String) -> void:
 	wardens.append(warden)
 
 func _spawn_progress_barriers() -> void:
-	# The surgery ward unfolds in three combat beats rather than one uninterrupted corridor.
-	# 两道实体闸门把长走廊拆成三个有节奏的遭遇段。
+	# Close both ends of the arena only after the exit ambush starts.
+	# 仅在出口伏击触发后关闭战斗场地两端，避免开场就加载敌人。
 	for gate_x in [1540.0, 2000.0]:
 		var gate := StaticBody2D.new()
 		gate.name = "SurgeryProgressBarrier"
@@ -200,6 +201,12 @@ func _spawn_exit() -> void:
 	add_child(exit_area)
 	exit_area.interacted.connect(_on_exit_interacted)
 	queue_redraw()
+
+func _on_hero_defeated() -> void:
+	# Death respawns the Hero at the checkpoint behind the arena; reopen the entry shutter
+	# so the player can return to the unfinished encounter instead of being soft-locked.
+	if ambush_started and wardens_defeated < wardens.size():
+		_open_progress_barrier(0)
 
 func _on_warden_defeated() -> void:
 	wardens_defeated += 1
