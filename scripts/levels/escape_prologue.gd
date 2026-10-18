@@ -377,7 +377,7 @@ func _draw() -> void:
 	# 保留 SVG 中的玻璃实验舱和墙体；旧版不透明灰盒曾遮住开场镜头的大部分背景。
 	# Operating table, snapped restraints, instrument trolley and wall shelf are drawn by the SVG prop layer.
 	draw_rect(Rect2(180, 240, 300, 40), Color("#352d38"))
-	draw_string(ThemeDB.fallback_font, Vector2(210, 215), NereisLocalization.translate_text("教会手术所"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
+	draw_string(ThemeDB.fallback_font, Vector2(210, 215), _editor_safe_text("教会手术所"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
 
 	# Draw broken rails on each actual platform, not diagonal lines across non-colliding gaps.
 	# 护栏只画在真实平台段上，不再用斜线把无碰撞的间隙伪装成连续斜坡。
@@ -404,7 +404,7 @@ func _draw() -> void:
 		]),
 		Color("#241e27")
 	)
-	draw_string(ThemeDB.fallback_font, Vector2(1810, 250), NereisLocalization.translate_text("逃脱之路"), HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#6d5c64"))
+	draw_string(ThemeDB.fallback_font, Vector2(1810, 250), _editor_safe_text("逃脱之路"), HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#6d5c64"))
 
 	# The arena shutters appear only after the exit ambush begins.
 	if ambush_started and wardens_defeated < wardens.size():
@@ -419,10 +419,16 @@ func _draw() -> void:
 		draw_line(Vector2(2080, 320), Vector2(2080, 500), Color("#5d4c55"), 5.0)
 	else:
 		draw_rect(Rect2(2000, 300, 90, 220), Color("#33232a"))
-		draw_string(ThemeDB.fallback_font, Vector2(1995, 275), NereisLocalization.translate_text("开启"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
+		draw_string(ThemeDB.fallback_font, Vector2(1995, 275), _editor_safe_text("开启"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
 
 	if Engine.is_editor_hint():
 		_draw_editor_layout_overlay()
+
+
+func _editor_safe_text(fallback_text: String) -> String:
+	if Engine.is_editor_hint():
+		return fallback_text
+	return NereisLocalization.translate_text(fallback_text)
 
 
 ## Editor-only collision and interaction guides for checking the fixed A0 layout.
