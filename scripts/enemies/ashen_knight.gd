@@ -89,6 +89,7 @@ func _physics_process(delta: float) -> void:
             facing = sign(delta_x) if delta_x != 0.0 else facing
             if windup <= 0.06 and not attack_released:
                 attack_released = true
+                attack_effect_time = 0.24
                 attack_hitbox.position.x = facing * (72.0 if phase_two else 64.0)
                 var attack_damage := 36 if phase_two else 24
                 var attack_range := 132.0 if phase_two else 120.0
