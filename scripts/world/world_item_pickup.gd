@@ -35,6 +35,7 @@ func _unhandled_input(event: InputEvent) -> void:
         cooldown = 0.5
         if ITEM_CATALOG.has_item(item_id) and WorldState.record_world_item_pickup(pickup_id, item_id, amount):
             consumed = true
+            queue_redraw()
             var definition: Dictionary = ITEM_CATALOG.get_definition(item_id)
             var panel := get_tree().get_first_node_in_group("item_inspection_panels")
             if panel != null and panel.has_method("show_description"):
