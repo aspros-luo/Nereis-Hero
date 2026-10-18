@@ -18,6 +18,7 @@ var wardens: Array[CharacterBody2D] = []
 var exit_area: Area2D
 var exit_open := false
 var wardens_defeated := 0
+var first_combat_prompt_shown := false
 var progress_barriers: Array[StaticBody2D] = []
 
 func _ready() -> void:
@@ -41,6 +42,15 @@ func _ready() -> void:
 	_spawn_exit()
 	_spawn_ui()
 	queue_redraw()
+
+func _process(_delta: float) -> void:
+	if first_combat_prompt_shown or wardens_defeated > 0 or not is_instance_valid(hero) or wardens.is_empty():
+		return
+	var first_warden := wardens[0]
+	if is_instance_valid(first_warden) and hero.global_position.distance_to(first_warden.global_position) <= 260.0:
+		first_combat_prompt_shown = true
+		if is_instance_valid(hud):
+			hud.set_story_mode("A0｜教会手术所", "守卫挡住去路。按 J 攻击，观察攻击前摇并适时闪避。")
 
 func _spawn_hero() -> void:
 	hero = CharacterBody2D.new()
@@ -196,7 +206,7 @@ func _spawn_ui() -> void:
 	hud.set_script(HUD_SCRIPT)
 	add_child(hud)
 	hud.bind_hero(hero)
-	hud.set_story_mode("A0｜教会手术所", "向右推进，调查手术托盘并留意周边物品；击败 3 名守卫后，前往出口按 E。")
+	hud.set_story_mode("A0｜教会手术所", "查看手术托盘和周边物品，寻找离开的路。")
 
 func _create_floor() -> void:
 	var floor := StaticBody2D.new()
