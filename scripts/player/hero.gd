@@ -1245,6 +1245,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
 		_spawn_death_burst()
 		_log("HERO", "Hero defeated; resetting vertical slice")
 		defeated.emit()
+		await _play_death_fade_and_wait()
 		health = 100
 		global_position = WorldState.checkpoint_position
 		velocity = Vector2.ZERO
@@ -1293,6 +1294,35 @@ func receive_damage(amount: int, source: Node = null) -> void:
 		_log("WORLD", "Hero respawned at checkpoint=%s" % WorldState.checkpoint_position)
 		get_tree().create_timer(0.75).timeout.connect(_clear_respawn_invulnerability)
 		_set_state(CombatState.IDLE)
+
+## Fade to black before returning to the checkpoint, then fade back into play.
+## This keeps the hero in DEAD state and input-locked while the transition runs.
+func _play_death_fade_and_wait() -> void:
+	var layer := CanvasLayer.new()
+	layer.name = "DeathTransition"
+	layer.layer = 100
+	get_tree().root.add_child(layer)
+	var overlay := ColorRect.new()
+	overlay.name = "Fade"
+	overlay.color = Color(0.0, 0.0, 0.0, 0.0)
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(overlay)
+
+	var fade_out := create_tween()
+	fade_out.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	fade_out.tween_property(overlay, "color:a", 1.0, 0.65).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	await fade_out.finished
+	await get_tree().create_timer(0.35).timeout
+
+	# The fade covers the teleport to checkpoint, avoiding a visible snap.
+	global_position = WorldState.checkpoint_position
+	velocity = Vector2.ZERO
+	var fade_in := create_tween()
+	fade_in.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	fade_in.tween_property(overlay, "color:a", 0.0, 0.75).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	await fade_in.finished
+	layer.queue_free()
 
 func restore_full() -> void:
 	WorldState.clear_witch_time("rest point")
