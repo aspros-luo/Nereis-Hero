@@ -5,6 +5,7 @@ const WARDEN_SCRIPT = preload("res://scripts/enemies/experiment_warden.gd")
 const PROLOGUE_BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
+const ITEM_INSPECTION_SCRIPT = preload("res://scripts/ui/item_inspection_panel.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
@@ -18,6 +19,7 @@ var hero: CharacterBody2D
 var camera: Camera2D
 var hud: CanvasLayer
 var narrative: CanvasLayer
+var item_inspection: CanvasLayer
 var wardens: Array[CharacterBody2D] = []
 var exit_area: Area2D
 var exit_open := false
@@ -41,8 +43,6 @@ func _ready() -> void:
 	_spawn_rest()
 	_spawn_exit()
 	_spawn_ui()
-	if not WorldState.debug_map_test_mode:
-		get_tree().create_timer(0.6).timeout.connect(_show_intro)
 	queue_redraw()
 
 func _spawn_hero() -> void:
@@ -93,7 +93,7 @@ func _spawn_clue() -> void:
 
 func _on_clue_examined(clue: Node) -> void:
 	WorldState.mark_ancient_residue_awakened()
-	narrative.show_message(clue.display_name, clue.description, 7.0)
+	item_inspection.show_description(clue.display_name, clue.description)
 
 func _spawn_rest() -> void:
 	var rest := Node2D.new()
@@ -131,11 +131,8 @@ func _open_exit() -> void:
 		return
 	exit_open = true
 	exit_area.enabled = true
-	narrative.show_message(
-		"逃脱之路",
-		"最后一道锁终于松开。\n\n你不记得自己如何来到这里。\n\n你只记得，留下来就意味着死亡。",
-		5.0
-	)
+	if is_instance_valid(hud):
+		hud.set_story_mode("A0｜教会手术所", "出口已打开。前往右侧出口按 E，离开手术所。")
 	print("[NEREIS][PROLOGUE] Escape route opened")
 	queue_redraw()
 
@@ -152,6 +149,10 @@ func _spawn_ui() -> void:
 	narrative = CanvasLayer.new()
 	narrative.set_script(NARRATIVE_SCRIPT)
 	add_child(narrative)
+
+	item_inspection = CanvasLayer.new()
+	item_inspection.set_script(ITEM_INSPECTION_SCRIPT)
+	add_child(item_inspection)
 
 	hud = CanvasLayer.new()
 	hud.set_script(HUD_SCRIPT)
