@@ -32,3 +32,19 @@ These SVG assets were created specifically for Nereis-Hero and contain no third-
 License / 授权: original project-authored assets, no external asset license required.  
 Integration / 接入位置: `scripts/core/world.gd`, drawn at different camera-relative scroll factors.  
 Status / 状态: source files committed; Godot runtime visual acceptance still pending / 源文件已提交，仍待 Godot 实机视觉验收。
+
+### A0 Prologue Cliff — Painterly Backdrop
+- File: `assets/art/backdrops/prologue_cliff_backdrop.svg`
+- Creator: Nereis-Hero project artwork (original SVG authored for the A0 exterior scene).
+- License: Project original; intended for use and modification within Nereis-Hero.
+- Changes: Added layered mountain ridges, atmospheric gorge, subdued moon haze, distant ruined silhouettes, and low-contrast grain for the prologue cliff path.
+- Integration: `scripts/levels/prologue_exterior.gd`; replaces only the sky/ridge backdrop drawing. Cliff boundary, ground collision, encounter timer, boss spawn, and rescue transition remain logic-controlled.
+- Status: Source integration committed to `development`; Godot 4.6.1 runtime visual acceptance pending.
+
+### A0 序章悬崖——绘制感背景
+- 文件：`assets/art/backdrops/prologue_cliff_backdrop.svg`
+- 作者：Nereis-Hero 项目原创 SVG，为 A0 洞外场景绘制。
+- 授权：项目原创，供 Nereis-Hero 项目内使用和修改。
+- 内容：分层山脊、带空气透视的河谷、克制的月光雾、远处废墟剪影与低对比颗粒。
+- 接入：`scripts/levels/prologue_exterior.gd`；只替换天空/山脊背景绘制，悬崖边界、地面碰撞、遭遇计时、Boss 出生点与救援转场仍由逻辑控制。
+- 状态：已写入 `development`，仍待 Godot 4.6.1 实机视觉验收。
