@@ -62,7 +62,7 @@ func _process(_delta: float) -> void:
 		_start_exit_ambush()
 	if ambush_phase == 1 and not right_gate_closed:
 		var doorway_warden := get_node_or_null("Warden_Right") as CharacterBody2D
-		if is_instance_valid(doorway_warden) and doorway_warden.global_position.x <= 1990.0:
+		if is_instance_valid(doorway_warden) and doorway_warden.global_position.x <= 1960.0:
 			_spawn_single_progress_barrier(2000.0)
 			right_gate_closed = true
 	if first_combat_prompt_shown or wardens_defeated > 0 or not is_instance_valid(hero) or wardens.is_empty():
