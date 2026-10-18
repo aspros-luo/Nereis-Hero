@@ -7,6 +7,7 @@ const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
 const SURGERY_BACKDROP = preload("res://assets/art/backdrops/surgery_ward_backdrop.svg")
 const SURGERY_FLOOR_STRIP = preload("res://assets/art/backdrops/surgery_floor_strip.svg")
+const SURGERY_FOREGROUND_PROPS = preload("res://assets/art/backdrops/surgery_foreground_props.svg")
 
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 2200.0
@@ -307,6 +308,8 @@ func _draw_security_shutter(gate_x: float) -> void:
 func _draw() -> void:
 	draw_texture_rect(SURGERY_BACKDROP, Rect2(0, 0, LEVEL_WIDTH, 720), false)
 	draw_texture_rect(SURGERY_FLOOR_STRIP, Rect2(0, FLOOR_Y, LEVEL_WIDTH, 180), false)
+	# Illustrated prop pass replaces the flat geometric furniture while leaving gameplay bodies untouched.
+	draw_texture_rect(SURGERY_FOREGROUND_PROPS, Rect2(0, 0, LEVEL_WIDTH, 720), false)
 
 	# Cold surgical shafts and suspended cables establish depth before the room's props are drawn.
 	# 冷色手术灯柱与悬垂线缆先建立空间纵深，再绘制房间内的物件。
@@ -328,14 +331,7 @@ func _draw() -> void:
 	# Keep the illustrated glass tanks and wall structure from the SVG visible.
 	# Earlier opaque graybox blocks hid most of the backdrop in the opening camera view.
 	# 保留 SVG 中的玻璃实验舱和墙体；旧版不透明灰盒曾遮住开场镜头的大部分背景。
-	# The Hero begins on the operating table; snapped restraints imply an interrupted procedure without narration.
-	draw_rect(Rect2(190, 480, 180, 12), Color("#66545d"))
-	draw_rect(Rect2(200, 492, 10, 48), Color("#30262f"))
-	draw_rect(Rect2(350, 492, 10, 48), Color("#30262f"))
-	draw_line(Vector2(225, 481), Vector2(246, 486), Color("#b1a0a1"), 4.0)
-	draw_line(Vector2(246, 486), Vector2(260, 478), Color("#b1a0a1"), 4.0)
-	draw_line(Vector2(305, 480), Vector2(325, 486), Color("#b1a0a1"), 4.0)
-	draw_line(Vector2(325, 486), Vector2(339, 479), Color("#b1a0a1"), 4.0)
+	# Operating table, snapped restraints, instrument trolley and wall shelf are drawn by the SVG prop layer.
 	draw_rect(Rect2(180, 240, 300, 40), Color("#352d38"))
 	draw_string(ThemeDB.fallback_font, Vector2(210, 215), NereisLocalization.translate_text("教会手术所"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
 
@@ -348,16 +344,7 @@ func _draw() -> void:
 	draw_line(Vector2(1000, 440), Vector2(1130, 400), Color("#66515f"), 3.0)
 	draw_string(ThemeDB.fallback_font, Vector2(620, 295), "仅供维护人员通行", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#8b737e"))
 
-	# A tray table, treatment table and wall shelf make the first clues feel like physical objects.
-	draw_rect(Rect2(575, 520, 90, 8), Color("#51414a"))
-	draw_rect(Rect2(582, 528, 7, 12), Color("#30262f"))
-	draw_rect(Rect2(650, 528, 7, 12), Color("#30262f"))
-	draw_rect(Rect2(418, 500, 92, 10), Color("#51414a"))
-	draw_rect(Rect2(426, 510, 8, 30), Color("#30262f"))
-	draw_rect(Rect2(494, 510, 8, 30), Color("#30262f"))
-	draw_rect(Rect2(698, 458, 88, 8), Color("#51414a"))
-	draw_rect(Rect2(702, 420, 6, 38), Color("#40323c"))
-	draw_rect(Rect2(778, 420, 6, 38), Color("#40323c"))
+
 
 	# Background equipment is already illustrated in SURGERY_BACKDROP; do not cover it with
 	# opaque placeholder cabinets. Foreground props below remain separate from collision bodies.
