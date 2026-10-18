@@ -7,6 +7,7 @@ const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
+const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
 const SURGERY_BACKDROP = preload("res://assets/art/backdrops/surgery_ward_backdrop.svg")
 const SURGERY_FLOOR_STRIP = preload("res://assets/art/backdrops/surgery_floor_strip.svg")
 
