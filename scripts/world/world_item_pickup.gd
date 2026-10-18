@@ -45,7 +45,22 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _draw() -> void:
     var tint := Color("#d6c7b2") if not consumed else Color("#4d454d")
-    draw_rect(Rect2(-12, -12, 24, 24), Color("#332c34"))
-    draw_rect(Rect2(-8, -8, 16, 16), tint)
+    if item_id == "church_bandage":
+        draw_rect(Rect2(-17, -10, 34, 17), Color("#3a3034"))
+        draw_rect(Rect2(-14, -8, 28, 13), Color("#b6a99a") if not consumed else Color("#655b5b"))
+        draw_line(Vector2(-10, -8), Vector2(-5, 5), Color("#766a68"), 2.0)
+        draw_line(Vector2(0, -8), Vector2(5, 5), Color("#766a68"), 2.0)
+        draw_line(Vector2(9, -8), Vector2(12, 3), Color("#766a68"), 2.0)
+    elif item_id == "surgery_record_fragment":
+        draw_colored_polygon(PackedVector2Array([
+            Vector2(-13, -18), Vector2(9, -18), Vector2(14, -12),
+            Vector2(14, 8), Vector2(-13, 8)
+        ]), Color("#b7a48c") if not consumed else Color("#655b5b"))
+        for line_y in [-10.0, -4.0, 2.0]:
+            draw_line(Vector2(-8, line_y), Vector2(8, line_y), Color("#4d4142"), 1.0)
+        draw_line(Vector2(9, -18), Vector2(9, -12), Color("#75645b"), 1.0)
+    else:
+        draw_rect(Rect2(-12, -12, 24, 24), Color("#332c34"))
+        draw_rect(Rect2(-8, -8, 16, 16), tint)
     if hero_nearby and not consumed:
         draw_string(ThemeDB.fallback_font, Vector2(-42, 30), prompt_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 15, tint)
