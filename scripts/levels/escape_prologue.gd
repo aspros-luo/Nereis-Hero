@@ -14,7 +14,6 @@ const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 2200.0
 # A0 opening route stays on the floor. Do not create the old graybox maintenance ledges:
 # their collision surfaces visually blended into background seams and obstructed jumping.
-const SURGICAL_CATWALK_RECTS: Array[Rect2] = []
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -43,7 +42,6 @@ func _ready() -> void:
 	WorldState.set_checkpoint(Vector2(420.0, FLOOR_Y))
 
 	_create_floor()
-	# The old optional catwalk collision ledges are disabled for the A0 opening route.
 	_create_boundaries()
 	_create_surgery_table()
 	_spawn_hero()
@@ -277,19 +275,6 @@ func _create_floor() -> void:
 	floor.add_child(shape)
 	add_child(floor)
 
-func _create_surgical_catwalks() -> void:
-	# Optional maintenance route; gentler rises and wider gaps reduce capsule snagging.
-	# 可选维护高路：降低连续台阶高度，并扩大水平间隔，避免主角提前撞上平台侧面。
-	for platform_rect in SURGICAL_CATWALK_RECTS:
-		var body := StaticBody2D.new()
-		body.name = "SurgicalCatwalkPlatform"
-		body.position = platform_rect.position
-		var shape := CollisionShape2D.new()
-		var rectangle := RectangleShape2D.new()
-		rectangle.size = platform_rect.size
-		shape.shape = rectangle
-		shape.position = platform_rect.size * 0.5
-		body.add_child(shape)
 		add_child(body)
 
 
@@ -374,10 +359,6 @@ func _draw() -> void:
 
 	# Draw broken rails on each actual platform, not diagonal lines across non-colliding gaps.
 	# 护栏只画在真实平台段上，不再用斜线把无碰撞的间隙伪装成连续斜坡。
-	for platform_rect: Rect2 in SURGICAL_CATWALK_RECTS:
-		var left: float = platform_rect.position.x
-		var right: float = left + platform_rect.size.x
-		var rail_y: float = platform_rect.position.y - 10.0
 		draw_line(Vector2(left + 8.0, rail_y), Vector2(left + 42.0, rail_y), Color("#66515f"), 3.0)
 		draw_line(Vector2(left + 76.0, rail_y), Vector2(right - 8.0, rail_y), Color("#66515f"), 3.0)
 		for support_x in [left + 12.0, left + 42.0, left + 76.0, right - 10.0]:
@@ -440,7 +421,6 @@ func _draw_editor_layout_overlay() -> void:
 	draw_rect(Rect2(190.0, 494.0, 180.0, 12.0), collision_color, false, 2.0)
 	draw_string(ThemeDB.fallback_font, Vector2(190.0, 486.0), "手术台碰撞 180×12", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, collision_color)
 
-	# No graybox catwalk collision ledges are active in A0.
 
 	# Hero spawn/checkpoint and rest point are intentionally separated for a clean opening silhouette.
 	draw_circle(Vector2(420.0, FLOOR_Y), 6.0, anchor_color)
