@@ -32,6 +32,7 @@ var wardens_defeated := 0
 var first_combat_prompt_shown := false
 var ambush_started := false
 var ambush_phase := 0 # 0=not started, 1=two-entry wave, 2=falling ambusher, 3=cleared
+var right_gate_closed := false
 var progress_barriers: Array[StaticBody2D] = []
 
 func _ready() -> void:
@@ -59,6 +60,11 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not ambush_started and is_instance_valid(hero) and hero.global_position.x >= 1710.0:
 		_start_exit_ambush()
+	if ambush_phase == 1 and not right_gate_closed:
+		var doorway_warden := get_node_or_null("Warden_Right") as CharacterBody2D
+		if is_instance_valid(doorway_warden) and doorway_warden.global_position.x <= 1990.0:
+			_spawn_single_progress_barrier(2000.0)
+			right_gate_closed = true
 	if first_combat_prompt_shown or wardens_defeated > 0 or not is_instance_valid(hero) or wardens.is_empty():
 		return
 	var first_warden := wardens[0]
@@ -107,7 +113,7 @@ func _start_exit_ambush() -> void:
 	# 第一波只出现两名地面守卫，先给玩家时间读懂战斗节奏。
 	ambush_phase = 1
 	_spawn_warden(Vector2(1425.0, FLOOR_Y), "Warden_Left")
-	_spawn_warden(Vector2(1955.0, FLOOR_Y), "Warden_Right")
+	_spawn_warden(Vector2(2075.0, FLOOR_Y), "Warden_Right")
 	if is_instance_valid(hud):
 		hud.set_story_mode("A0｜教会手术所", "左侧传来沉重的脚步声，出口处的守卫也逼了进来！先解决他们。")
 	print("[NEREIS][PROLOGUE] Exit ambush wave 1 started")
@@ -125,17 +131,19 @@ func _spawn_warden(position: Vector2, enemy_name: String) -> void:
 func _spawn_progress_barriers() -> void:
 	# Close both ends of the arena only after the exit ambush starts.
 	# 仅在出口伏击触发后关闭战斗场地两端，避免开场就加载敌人。
-	for gate_x in [1320.0, 2000.0]:
-		var gate := StaticBody2D.new()
-		gate.name = "SurgeryProgressBarrier"
-		gate.position = Vector2(gate_x, 420.0)
-		var shape := CollisionShape2D.new()
-		var rectangle := RectangleShape2D.new()
-		rectangle.size = Vector2(24.0, 240.0)
-		shape.shape = rectangle
-		gate.add_child(shape)
-		add_child(gate)
-		progress_barriers.append(gate)
+	_spawn_single_progress_barrier(1320.0)
+
+func _spawn_single_progress_barrier(gate_x: float) -> void:
+	var gate := StaticBody2D.new()
+	gate.name = "SurgeryProgressBarrier"
+	gate.position = Vector2(gate_x, 420.0)
+	var shape := CollisionShape2D.new()
+	var rectangle := RectangleShape2D.new()
+	rectangle.size = Vector2(24.0, 240.0)
+	shape.shape = rectangle
+	gate.add_child(shape)
+	add_child(gate)
+	progress_barriers.append(gate)
 
 func _open_progress_barrier(index: int) -> void:
 	if index < 0 or index >= progress_barriers.size():
@@ -393,8 +401,10 @@ func _draw() -> void:
 
 	# The arena shutters appear only after the exit ambush begins.
 	if ambush_started and wardens_defeated < wardens.size():
-		_draw_security_shutter(1320.0)
-		_draw_security_shutter(2000.0)
+		if progress_barriers.size() > 0 and is_instance_valid(progress_barriers[0]):
+			_draw_security_shutter(1320.0)
+		if right_gate_closed:
+			_draw_security_shutter(2000.0)
 
 	if not exit_open:
 		draw_rect(Rect2(2000, 300, 90, 220), Color("#18151b"))
