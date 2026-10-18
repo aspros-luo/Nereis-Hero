@@ -45,7 +45,13 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _draw() -> void:
     var glow := Color("#d6c7b2") if not consumed else Color("#4d454d")
-    draw_rect(Rect2(-14, -18, 28, 18), Color("#332c34"))
-    draw_line(Vector2(-10, 0), Vector2(10, 0), glow, 3.0)
+    if clue_id == "escape_surgical_mark":
+        draw_rect(Rect2(-23, -12, 46, 12), Color("#6c6265"))
+        draw_rect(Rect2(-19, -10, 38, 8), Color("#38272d"))
+        draw_line(Vector2(-13, -7), Vector2(-2, -3), Color("#7f3d49") if not consumed else Color("#4d454d"), 3.0)
+        draw_circle(Vector2(9, -6), 3.0, Color("#17131b") if not consumed else Color("#4d454d"))
+    else:
+        draw_rect(Rect2(-14, -18, 28, 18), Color("#332c34"))
+        draw_line(Vector2(-10, 0), Vector2(10, 0), glow, 3.0)
     if hero_nearby and not consumed:
         draw_string(ThemeDB.fallback_font, Vector2(-45, 30), NereisLocalization.translate_text("E  Examine"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, glow)
