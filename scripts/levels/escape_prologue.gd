@@ -2,11 +2,9 @@ extends Node2D
 
 const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const WARDEN_SCRIPT = preload("res://scripts/enemies/experiment_warden.gd")
-const PROLOGUE_BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
-const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
 const SURGERY_BACKDROP = preload("res://assets/art/backdrops/surgery_ward_backdrop.svg")
 const SURGERY_FLOOR_STRIP = preload("res://assets/art/backdrops/surgery_floor_strip.svg")
 
@@ -20,6 +18,7 @@ var wardens: Array[CharacterBody2D] = []
 var exit_area: Area2D
 var exit_open := false
 var wardens_defeated := 0
+var progress_barriers: Array[StaticBody2D] = []
 
 func _ready() -> void:
 	if WorldState.prologue_complete:
@@ -35,6 +34,7 @@ func _ready() -> void:
 	_create_boundaries()
 	_spawn_hero()
 	_spawn_wardens()
+	_spawn_progress_barriers()
 	_spawn_clue()
 	_spawn_item_pickups()
 	_spawn_rest()
@@ -75,6 +75,29 @@ func _spawn_warden(position: Vector2, enemy_name: String) -> void:
 	add_child(warden)
 	warden.defeated.connect(_on_warden_defeated)
 	wardens.append(warden)
+
+func _spawn_progress_barriers() -> void:
+	# The surgery ward unfolds in three combat beats rather than one uninterrupted corridor.
+	# 两道实体闸门把长走廊拆成三个有节奏的遭遇段。
+	for gate_x in [1100.0, 1450.0]:
+		var gate := StaticBody2D.new()
+		gate.name = "SurgeryProgressBarrier"
+		gate.position = Vector2(gate_x, 420.0)
+		var shape := CollisionShape2D.new()
+		var rectangle := RectangleShape2D.new()
+		rectangle.size = Vector2(24.0, 240.0)
+		shape.shape = rectangle
+		gate.add_child(shape)
+		add_child(gate)
+		progress_barriers.append(gate)
+
+func _open_progress_barrier(index: int) -> void:
+	if index < 0 or index >= progress_barriers.size():
+		return
+	var gate := progress_barriers[index]
+	if is_instance_valid(gate):
+		gate.queue_free()
+	queue_redraw()
 
 func _spawn_clue() -> void:
 	var clue := Node2D.new()
@@ -138,6 +161,14 @@ func _spawn_exit() -> void:
 
 func _on_warden_defeated() -> void:
 	wardens_defeated += 1
+	if wardens_defeated == 1:
+		_open_progress_barrier(0)
+		if is_instance_valid(hud):
+			hud.set_story_mode("A0｜教会手术所", "第一道闸门已打开。前方仍有守卫，继续寻找离开的路。")
+	elif wardens_defeated == 2:
+		_open_progress_barrier(1)
+		if is_instance_valid(hud):
+			hud.set_story_mode("A0｜教会手术所", "最后一道闸门已打开。继续前进，寻找出口。")
 	if wardens_defeated >= wardens.size():
 		_open_exit()
 
@@ -245,6 +276,12 @@ func _mark_input_handled() -> void:
 	if viewport != null:
 		viewport.set_input_as_handled()
 
+func _draw_security_shutter(gate_x: float) -> void:
+	draw_rect(Rect2(gate_x - 13.0, 300.0, 26.0, 240.0), Color("#17141b"))
+	for bar_y in range(312, 536, 28):
+		draw_line(Vector2(gate_x - 10.0, float(bar_y)), Vector2(gate_x + 10.0, float(bar_y)), Color("#65505c"), 3.0)
+	draw_rect(Rect2(gate_x - 19.0, 292.0, 38.0, 8.0), Color("#8d5968"))
+
 func _draw() -> void:
 	draw_texture_rect(SURGERY_BACKDROP, Rect2(0, 0, LEVEL_WIDTH, 720), false)
 	draw_texture_rect(SURGERY_FLOOR_STRIP, Rect2(0, FLOOR_Y, LEVEL_WIDTH, 180), false)
@@ -304,6 +341,12 @@ func _draw() -> void:
 		Color("#241e27")
 	)
 	draw_string(ThemeDB.fallback_font, Vector2(1810, 250), NereisLocalization.translate_text("逃脱之路"), HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#6d5c64"))
+
+	# Closed security shutters remain visible until the previous encounter is cleared.
+	if wardens_defeated < 1:
+		_draw_security_shutter(1100.0)
+	if wardens_defeated < 2:
+		_draw_security_shutter(1450.0)
 
 	if not exit_open:
 		draw_rect(Rect2(2000, 300, 90, 220), Color("#18151b"))
