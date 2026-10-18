@@ -182,7 +182,9 @@ func _draw() -> void:
         var telegraph_color := Color("#c44e5a") if phase_two else Color("#9e5961")
         draw_arc(Vector2(0, -34), 68.0 if phase_two else 58.0, 0, TAU, 28, telegraph_color, 5.0)
         draw_line(Vector2(facing * 34.0, -34), Vector2(facing * 102.0, -34), telegraph_color, 4.0)
-    var label := "%s" % boss_display_name if damage_immune else "%s %d/%d" % [boss_display_name, max(0, health), max_health]
+    var label := boss_display_name
+    if not damage_immune:
+        label = "%s %d/%d" % [boss_display_name, max(0, health), max_health]
     draw_string(ThemeDB.fallback_font, Vector2(-86, -94), NereisLocalization.translate_text(label), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
 
 func _move_and_slide_scaled() -> void:
