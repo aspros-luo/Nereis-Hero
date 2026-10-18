@@ -24,12 +24,6 @@ var exit_open := false
 var wardens_defeated := 0
 
 func _ready() -> void:
-	# P5.1 runtime contract for the prologue-to-village transition.
-	set_meta("p5_1_exit_contract", true)
-	set_meta("p5_1_target_location", "village")
-	set_meta("p5_1_target_region", "A1")
-	set_meta("p5_1_target_scene", "res://scenes/village_hub.tscn")
-	set_meta("p5_1_spawn_side", "west")
 	if WorldState.prologue_complete:
 		get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
 		return
@@ -267,7 +261,7 @@ func _draw() -> void:
 
 	# Sparse surgical floor seams and a few broken tile marks replace the uninterrupted flat floor.
 	# 稀疏的手术室地砖缝与破损痕迹打破连续纯色地面。
-	for tile_x in range(90, int(CLIFF_EDGE_X), 210):
+	for tile_x in range(90, int(LEVEL_WIDTH), 210):
 		draw_line(Vector2(tile_x, FLOOR_Y + 12.0), Vector2(tile_x - 7.0, FLOOR_Y + 38.0), Color("#0b090f", 0.48), 1.0)
 		draw_line(Vector2(tile_x + 34.0, FLOOR_Y + 68.0), Vector2(tile_x + 66.0, FLOOR_Y + 64.0), Color("#57434d", 0.22), 1.0)
 
