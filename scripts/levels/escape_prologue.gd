@@ -63,6 +63,8 @@ func _ready() -> void:
 	queue_redraw()
 
 func _process(_delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
 	if not ambush_started and is_instance_valid(hero) and hero.global_position.x >= 1710.0:
 		_start_exit_ambush()
 	if ambush_phase == 1 and not right_gate_closed:
