@@ -95,10 +95,18 @@ func _spawn_hero() -> void:
 	camera.limit_bottom = 720
 	hero.add_child(camera)
 
-func _spawn_wardens() -> void:
-	_spawn_warden(Vector2(920, FLOOR_Y), "Warden_A")
-	_spawn_warden(Vector2(1260, FLOOR_Y), "Warden_B")
-	_spawn_warden(Vector2(1590, FLOOR_Y), "Warden_C")
+func _start_exit_ambush() -> void:
+	if ambush_started:
+		return
+	ambush_started = true
+	_spawn_progress_barriers()
+	# Two enemies enter from opposite sides; a third drops into the arena from above.
+	_spawn_warden(Vector2(1605.0, FLOOR_Y), "Warden_Left")
+	_spawn_warden(Vector2(1925.0, FLOOR_Y), "Warden_Right")
+	_spawn_warden(Vector2(1770.0, 120.0), "Warden_Drop")
+	if is_instance_valid(hud):
+		hud.set_story_mode("A0｜教会手术所", "出口附近传来脚步声……两侧的守卫封住退路，上方还有东西正在坠落。")
+	print("[NEREIS][PROLOGUE] Exit ambush triggered; enemies spawned")
 
 func _spawn_warden(position: Vector2, enemy_name: String) -> void:
 	var warden := CharacterBody2D.new()
@@ -113,7 +121,7 @@ func _spawn_warden(position: Vector2, enemy_name: String) -> void:
 func _spawn_progress_barriers() -> void:
 	# The surgery ward unfolds in three combat beats rather than one uninterrupted corridor.
 	# 两道实体闸门把长走廊拆成三个有节奏的遭遇段。
-	for gate_x in [1100.0, 1450.0]:
+	for gate_x in [1540.0, 2000.0]:
 		var gate := StaticBody2D.new()
 		gate.name = "SurgeryProgressBarrier"
 		gate.position = Vector2(gate_x, 420.0)
