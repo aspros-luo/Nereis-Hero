@@ -7,7 +7,6 @@ var panel: ColorRect
 var title_label: Label
 var list_container: VBoxContainer
 var detail_name: Label
-var detail_category: Label
 var detail_body: Label
 var close_hint: Label
 var _previous_input_locked := false
@@ -62,16 +61,9 @@ func _ready() -> void:
     detail_name.add_theme_color_override("font_color", Color("#d6c7b2"))
     panel.add_child(detail_name)
 
-    detail_category = Label.new()
-    detail_category.position = Vector2(410, 136)
-    detail_category.size = Vector2(590, 24)
-    detail_category.add_theme_font_size_override("font_size", 14)
-    detail_category.add_theme_color_override("font_color", Color("#9e8b72"))
-    panel.add_child(detail_category)
-
     detail_body = Label.new()
-    detail_body.position = Vector2(410, 176)
-    detail_body.size = Vector2(590, 390)
+    detail_body.position = Vector2(410, 145)
+    detail_body.size = Vector2(590, 420)
     detail_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     detail_body.add_theme_font_size_override("font_size", 18)
     detail_body.add_theme_color_override("font_color", Color("#c0b6b2"))
@@ -112,7 +104,6 @@ func _refresh_items() -> void:
     item_ids.sort()
     if item_ids.is_empty():
         detail_name.text = "尚无物品"
-        detail_category.text = ""
         detail_body.text = "探索时留意桌面、架子、遗落的物件与尸体。\n\n收集到的物品会保留在这里，方便之后重新查看。"
         return
 
@@ -138,26 +129,8 @@ func _select_item(item_id: String) -> void:
         return
     _selected_item_id = item_id
     detail_name.text = str(definition.get("display_name", item_id))
-    detail_category.text = _category_label(str(definition.get("category", "")))
     detail_body.text = str(definition.get("description", ""))
     WorldState.mark_item_read(item_id)
-
-func _category_label(category: String) -> String:
-    match category:
-        "consumable":
-            return "消耗品"
-        "key_item":
-            return "关键道具"
-        "lore":
-            return "记载与线索"
-        "badge":
-            return "徽章"
-        "crest":
-            return "纹章"
-        "equipment":
-            return "装备"
-        _:
-            return "物品"
 
 func _unhandled_input(event: InputEvent) -> void:
     if not background.visible:
