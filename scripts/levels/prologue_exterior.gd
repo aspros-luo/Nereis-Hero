@@ -12,7 +12,6 @@ var hero: CharacterBody2D
 var boss: CharacterBody2D
 var narrative: CanvasLayer
 var hud: CanvasLayer
-var encounter_started := false
 var ending_started := false
 
 func _ready() -> void:
@@ -93,7 +92,7 @@ func _begin_rescue_transition(reason: String) -> void:
 		return
 	ending_started = true
 	WorldState.input_locked = true
-	INTERACTION_FOCUS_CLEAR()
+	_clear_interaction_focus()
 	if is_instance_valid(boss):
 		boss.queue_free()
 	if is_instance_valid(hero):
@@ -110,7 +109,7 @@ func _begin_rescue_transition(reason: String) -> void:
 	WorldState.save_game()
 	SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
 
-func INTERACTION_FOCUS_CLEAR() -> void:
+func _clear_interaction_focus() -> void:
 	NereisInteractionFocus.clear_all(get_tree())
 
 func _create_ground() -> void:
