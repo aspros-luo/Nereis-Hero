@@ -4,6 +4,7 @@ const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
+const CLIFF_BACKDROP = preload("res://assets/art/backdrops/prologue_cliff_backdrop.svg")
 const CLIFF_X := 1120.0
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 1500.0
@@ -166,20 +167,9 @@ func _add_character_collision(character: CharacterBody2D, radius: float, height:
 	character.add_child(collision)
 
 func _draw() -> void:
-	# Outdoor palette and distant ridgelines clearly separate this space from the surgery interior.
-	draw_rect(Rect2(0, 0, LEVEL_WIDTH, 720), Color("#111923"))
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(0, 390), Vector2(170, 250), Vector2(330, 360),
-		Vector2(520, 205), Vector2(710, 360), Vector2(890, 230),
-		Vector2(1080, 355), Vector2(1280, 210), Vector2(1500, 370),
-		Vector2(1500, 540), Vector2(0, 540)
-	]), Color("#252d39"))
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(0, 455), Vector2(250, 350), Vector2(420, 445),
-		Vector2(650, 320), Vector2(850, 455), Vector2(1030, 350),
-		Vector2(1250, 430), Vector2(1500, 340), Vector2(1500, 540),
-		Vector2(0, 540)
-	]), Color("#1b252e"))
+	# Painted scenic layer is visual-only; collision, encounter bounds and cliff coordinates stay in code.
+	# 绘制感远景只负责视觉；碰撞、遭遇边界和悬崖坐标仍由逻辑代码控制。
+	draw_texture_rect(CLIFF_BACKDROP, Rect2(0.0, 0.0, LEVEL_WIDTH, 720.0), false)
 	# Cave mouth behind the player; the open path leads toward a broken cliff above the river.
 	draw_rect(Rect2(35, 300, 185, 240), Color("#090c12"))
 	draw_arc(Vector2(127, 315), 92.0, PI, TAU, 32, Color("#59606c"), 12.0)
