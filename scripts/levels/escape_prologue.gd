@@ -339,10 +339,10 @@ func _draw() -> void:
 
 	# Draw broken rails on each actual platform, not diagonal lines across non-colliding gaps.
 	# 护栏只画在真实平台段上，不再用斜线把无碰撞的间隙伪装成连续斜坡。
-	for platform_rect in SURGICAL_CATWALK_RECTS:
-		var left := platform_rect.position.x
-		var right := left + platform_rect.size.x
-		var rail_y := platform_rect.position.y - 10.0
+	for platform_rect: Rect2 in SURGICAL_CATWALK_RECTS:
+		var left: float = platform_rect.position.x
+		var right: float = left + platform_rect.size.x
+		var rail_y: float = platform_rect.position.y - 10.0
 		draw_line(Vector2(left + 8.0, rail_y), Vector2(left + 42.0, rail_y), Color("#66515f"), 3.0)
 		draw_line(Vector2(left + 76.0, rail_y), Vector2(right - 8.0, rail_y), Color("#66515f"), 3.0)
 		for support_x in [left + 12.0, left + 42.0, left + 76.0, right - 10.0]:
