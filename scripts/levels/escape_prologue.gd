@@ -355,13 +355,6 @@ func _draw() -> void:
 	draw_rect(Rect2(180, 240, 300, 40), Color("#352d38"))
 	draw_string(ThemeDB.fallback_font, Vector2(210, 215), _editor_safe_text("教会手术所"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
 
-	# Draw broken rails on each actual platform, not diagonal lines across non-colliding gaps.
-	# 护栏只画在真实平台段上，不再用斜线把无碰撞的间隙伪装成连续斜坡。
-		draw_line(Vector2(left + 8.0, rail_y), Vector2(left + 42.0, rail_y), Color("#66515f"), 3.0)
-		draw_line(Vector2(left + 76.0, rail_y), Vector2(right - 8.0, rail_y), Color("#66515f"), 3.0)
-		for support_x in [left + 12.0, left + 42.0, left + 76.0, right - 10.0]:
-			draw_line(Vector2(support_x, rail_y), Vector2(support_x, platform_rect.position.y - 1.0), Color("#51404d"), 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(620, 295), "仅供维护人员通行", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#8b737e"))
 
 
 
