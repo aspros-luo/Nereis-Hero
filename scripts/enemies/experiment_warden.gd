@@ -8,8 +8,10 @@ const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
 signal defeated
 signal attack_telegraphed
 
-const MOVE_SPEED := 70.0
+const MOVE_SPEED := 88.0
+const GRAVITY := 1400.0
 const ATTACK_RANGE := 118.0
+const VERTICAL_ATTACK_TOLERANCE := 62.0
 const ATTACK_COOLDOWN := 1.45
 const ATTACK_WINDUP := 0.42
 
@@ -44,7 +46,6 @@ func _process(delta: float) -> void:
     animation_time += delta
     attack_effect_time = maxf(0.0, attack_effect_time - delta)
     cooldown = maxf(0.0, cooldown - delta)
-    windup = maxf(0.0, windup - delta)
     hit_flash = maxf(0.0, hit_flash - delta)
     stun_time = maxf(0.0, stun_time - delta)
     queue_redraw()
@@ -53,34 +54,55 @@ func _physics_process(delta: float) -> void:
     delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
         return
-    if stun_time > 0.0:
-        velocity.x = move_toward(velocity.x, 0.0, 1000.0 * delta)
+
+    # Falling enemies must obey the same floor collision as the Hero.
+    # 坠落敌人使用正常重力与地面碰撞，避免悬停在生成点。
+    if not is_on_floor():
+        velocity.y += GRAVITY * delta
+    else:
+        velocity.y = 0.0
+
+    var hero := get_node_or_null("../Hero") as CharacterBody2D
+    if not is_instance_valid(hero):
+        velocity.x = move_toward(velocity.x, 0.0, 900.0 * delta)
         _move_and_slide_scaled()
         return
 
-    var hero := get_node_or_null("../Hero") as Node2D
-    if hero:
-        var dx := hero.global_position.x - global_position.x
-        if not is_zero_approx(dx):
-            facing = sign(dx)
+    var dx: float = hero.global_position.x - global_position.x
+    var dy: float = hero.global_position.y - global_position.y
+    var horizontal_distance: float = absf(dx)
+    var same_level: bool = absf(dy) <= VERTICAL_ATTACK_TOLERANCE
 
-        if windup > 0.0:
-            velocity.x = 0.0
-            if windup <= 0.08 and not released:
+    # Lock facing during a telegraphed strike; otherwise face the target without jitter.
+    # 攻击前摇期间锁定朝向，平时再追踪玩家，避免攻击判定临时转向。
+    if windup <= 0.0 and horizontal_distance > 10.0:
+        facing = signf(dx)
+
+    if stun_time > 0.0:
+        velocity.x = move_toward(velocity.x, 0.0, 1050.0 * delta)
+        _move_and_slide_scaled()
+        return
+
+    if windup > 0.0:
+        windup = maxf(0.0, windup - delta)
+        velocity.x = move_toward(velocity.x, 0.0, 1200.0 * delta)
+        if windup <= 0.08 and not released:
+            if horizontal_distance <= ATTACK_RANGE + 18.0 and same_level:
                 attack_hitbox.position.x = facing * 52.0
                 attack_hitbox.activate(15, 0.13)
                 attack_effect_time = 0.22
-                released = true
-        else:
-            var distance := absf(dx)
-            if distance > ATTACK_RANGE:
-                velocity.x = facing * MOVE_SPEED
-            elif cooldown <= 0.0:
-                velocity.x = 0.0
-                windup = ATTACK_WINDUP
-                cooldown = ATTACK_COOLDOWN
-                released = false
-                attack_telegraphed.emit()
+            released = true
+    elif not is_on_floor() or not same_level or horizontal_distance > ATTACK_RANGE:
+        # Approach only while grounded; the falling ambusher lands before engaging.
+        velocity.x = move_toward(velocity.x, facing * MOVE_SPEED, 700.0 * delta) if is_on_floor() else 0.0
+    else:
+        # Stop inside attack range even while the cooldown is running.
+        velocity.x = move_toward(velocity.x, 0.0, 1200.0 * delta)
+        if cooldown <= 0.0:
+            windup = ATTACK_WINDUP
+            cooldown = ATTACK_COOLDOWN
+            released = false
+            attack_telegraphed.emit()
 
     _move_and_slide_scaled()
 
