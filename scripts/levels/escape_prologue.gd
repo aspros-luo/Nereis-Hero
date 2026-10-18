@@ -212,10 +212,28 @@ func _spawn_exit() -> void:
 	queue_redraw()
 
 func _on_hero_defeated() -> void:
-	# Death respawns the Hero at the checkpoint behind the arena; reopen the entry shutter
-	# so the player can return to the unfinished encounter instead of being soft-locked.
-	if ambush_started and wardens_defeated < wardens.size():
-		_open_progress_barrier(0)
+	# A0 is a retryable encounter: reset the entire ambush immediately when death starts,
+	# while the Hero's fade-out hides the cleanup. The checkpoint is before the trigger,
+	# so enemies will only spawn again when the player deliberately re-enters the arena.
+	for warden in wardens:
+		if is_instance_valid(warden):
+			warden.queue_free()
+	wardens.clear()
+	for gate in progress_barriers:
+		if is_instance_valid(gate):
+			gate.queue_free()
+	progress_barriers.clear()
+	wardens_defeated = 0
+	ambush_started = false
+	ambush_phase = 0
+	right_gate_closed = false
+	first_combat_prompt_shown = false
+	exit_open = false
+	if is_instance_valid(exit_area):
+		exit_area.enabled = false
+	if is_instance_valid(hud):
+		hud.set_story_mode("A0｜教会手术所", "你在检查点恢复了意识。重新接近出口时，守卫会再次出现。")
+	queue_redraw()
 
 func _on_warden_defeated() -> void:
 	wardens_defeated += 1
