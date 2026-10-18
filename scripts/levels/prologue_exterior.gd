@@ -26,8 +26,6 @@ func _ready() -> void:
 	_spawn_hero()
 	_spawn_boss()
 	_spawn_ui()
-	if not WorldState.debug_map_test_mode:
-		get_tree().create_timer(0.45).timeout.connect(_show_intro)
 	queue_redraw()
 
 func _physics_process(_delta: float) -> void:
@@ -76,16 +74,6 @@ func _spawn_ui() -> void:
 	add_child(hud)
 	hud.bind_hero(hero)
 	hud.set_story_mode("A0｜洞外山路", "沿山路前进。眼前的人挡住了唯一的出口。")
-
-func _show_intro() -> void:
-	if ending_started or not is_instance_valid(narrative):
-		return
-	narrative.show_message(
-		"洞外山路",
-		"山风从狭窄的洞口灌进来。身后的铁门已经合拢。\n\n前方的山路通向河谷；一个教会的身影横在路中央。",
-		4.5
-	)
-
 
 func _begin_rescue_transition(reason: String) -> void:
 	if ending_started:
