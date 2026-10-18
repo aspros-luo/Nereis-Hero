@@ -101,6 +101,7 @@ func _begin_rescue_transition(reason: String) -> void:
 	if is_instance_valid(narrative):
 		var text := "刀锋落下，身体终于支撑不住。山路在眼前沉入黑暗。" if reason == "defeated" else "碎石从脚下崩落。你坠向被雾吞没的河谷。"
 		narrative.show_caption("失去意识", text, 1.0)
+		WorldState.input_locked = true
 		await get_tree().create_timer(0.85).timeout
 	WorldState.record_achievement("prologue_cliff_fall_rescue_pending")
 	WorldState.mark_prologue_complete()
