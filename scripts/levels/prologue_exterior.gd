@@ -7,12 +7,16 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const CLIFF_X := 1120.0
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 1500.0
+const FORCED_DEFEAT_DELAY := 12.0
+const CLIFF_APPROACH_LIMIT := CLIFF_X - 26.0
 
 var hero: CharacterBody2D
 var boss: CharacterBody2D
 var narrative: CanvasLayer
 var hud: CanvasLayer
 var ending_started := false
+var boss_encounter_started := false
+var boss_encounter_elapsed := 0.0
 
 func _ready() -> void:
 	set_meta("p5_1_exit_contract", true)
@@ -28,9 +32,28 @@ func _ready() -> void:
 	_spawn_ui()
 	queue_redraw()
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if ending_started or not is_instance_valid(hero):
 		return
+
+	# The cliff is a forced-loss boundary, not an alternate way to skip the executioner.
+	# 悬崖是必败演出的边界，不是绕过出口执行者的捷径。
+	if is_instance_valid(boss) and hero.global_position.x > CLIFF_APPROACH_LIMIT:
+		hero.global_position.x = CLIFF_APPROACH_LIMIT
+		hero.velocity.x = minf(hero.velocity.x, 0.0)
+
+	if not boss_encounter_started and is_instance_valid(boss):
+		if hero.global_position.distance_to(boss.global_position) <= 245.0:
+			boss_encounter_started = true
+			if is_instance_valid(hud):
+				hud.set_story_mode("A0｜洞外山路", "挡路者没有退让。观察他的动作，寻找离开的机会。")
+
+	if boss_encounter_started:
+		boss_encounter_elapsed += delta
+		if boss_encounter_elapsed >= FORCED_DEFEAT_DELAY:
+			call_deferred("_begin_rescue_transition", "defeated")
+			return
+
 	if hero.global_position.x >= CLIFF_X + 12.0 and hero.global_position.y >= FLOOR_Y + 48.0:
 		call_deferred("_begin_rescue_transition", "cliff")
 
@@ -87,7 +110,7 @@ func _begin_rescue_transition(reason: String) -> void:
 		hero.velocity = Vector2.ZERO
 		hero.invulnerable = true
 	if is_instance_valid(narrative):
-		var text := "刀锋落下，身体终于支撑不住。山路在眼前沉入黑暗。" if reason == "defeated" else "碎石从脚下崩落。你坠向被雾吞没的河谷。"
+		var text := "刀锋撞上护甲。碎石从脚下崩落，河谷在视野里翻转。" if reason == "defeated" else "碎石从脚下崩落。你坠向被雾吞没的河谷。"
 		narrative.show_caption("失去意识", text, 1.0)
 		WorldState.input_locked = true
 		await get_tree().create_timer(0.85).timeout
@@ -154,5 +177,14 @@ func _draw() -> void:
 	for ripple_x in range(int(CLIFF_X + 20.0), int(LEVEL_WIDTH - 20.0), 48):
 		draw_line(Vector2(ripple_x, FLOOR_Y + 62.0 + sin(float(ripple_x) * 0.04) * 4.0), Vector2(ripple_x + 24.0, FLOOR_Y + 62.0), Color("#344958", 0.65), 2.0)
 	draw_line(Vector2(CLIFF_X, FLOOR_Y - 12.0), Vector2(CLIFF_X, FLOOR_Y + 34.0), Color("#7b8189"), 4.0)
+	# Broken masonry and a collapsed path frame the edge; the player cannot bypass the scripted encounter.
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(CLIFF_X - 86.0, FLOOR_Y - 6.0),
+		Vector2(CLIFF_X - 72.0, FLOOR_Y - 52.0),
+		Vector2(CLIFF_X - 46.0, FLOOR_Y - 32.0),
+		Vector2(CLIFF_X - 22.0, FLOOR_Y - 68.0),
+		Vector2(CLIFF_X - 4.0, FLOOR_Y - 8.0)
+	]), Color("#3a3b43"))
+	draw_line(Vector2(CLIFF_X - 90.0, FLOOR_Y - 8.0), Vector2(CLIFF_X - 8.0, FLOOR_Y - 8.0), Color("#72717b"), 3.0)
 	draw_string(ThemeDB.fallback_font, Vector2(55, 265), "山洞出口", HORIZONTAL_ALIGNMENT_LEFT, -1, 17, Color("#9a9aa8"))
 	draw_string(ThemeDB.fallback_font, Vector2(565, 270), "通往河谷的山路", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#a7a6b0"))
