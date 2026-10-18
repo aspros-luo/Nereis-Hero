@@ -1096,6 +1096,8 @@ func get_resume_scene_path() -> String:
     match current_location:
         "church_escape":
             return "res://scenes/escape_prologue.tscn"
+        "church_escape_exterior":
+            return "res://scenes/prologue_exterior.tscn"
         "village":
             return "res://scenes/village_hub.tscn"
         "ash_forest":
