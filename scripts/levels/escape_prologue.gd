@@ -38,6 +38,7 @@ func _ready() -> void:
 	_spawn_hero()
 	_spawn_wardens()
 	_spawn_clue()
+	_spawn_item_pickups()
 	_spawn_rest()
 	_spawn_exit()
 	_spawn_ui()
@@ -88,6 +89,24 @@ func _spawn_clue() -> void:
 	add_child(clue)
 	var examined_callback := _on_clue_examined.bind(clue)
 	clue.examined.connect(examined_callback)
+
+func _spawn_item_pickups() -> void:
+    var pickup_script = preload("res://scripts/world/world_item_pickup.gd")
+    var bandage := Node2D.new()
+    bandage.set_script(pickup_script)
+    bandage.position = Vector2(760, FLOOR_Y)
+    bandage.pickup_id = "a0_bandage_pickup"
+    bandage.item_id = "church_bandage"
+    bandage.amount = 1
+    add_child(bandage)
+
+    var record := Node2D.new()
+    record.set_script(pickup_script)
+    record.position = Vector2(840, FLOOR_Y)
+    record.pickup_id = "a0_surgery_record_pickup"
+    record.item_id = "surgery_record_fragment"
+    record.amount = 1
+    add_child(record)
 
 func _on_clue_examined(clue: Node) -> void:
 	WorldState.mark_ancient_residue_awakened()
@@ -152,7 +171,7 @@ func _spawn_ui() -> void:
 	hud.set_script(HUD_SCRIPT)
 	add_child(hud)
 	hud.bind_hero(hero)
-	hud.set_story_mode("A0｜教会手术所", "向右（D）推进并调查手术托盘；击败 3 名守卫后，前往出口按 E，进入洞外山路。")
+	hud.set_story_mode("A0｜教会手术所", "向右推进，调查手术托盘并留意周边物品；击败 3 名守卫后，前往出口按 E。")
 
 func _create_floor() -> void:
 	var floor := StaticBody2D.new()
