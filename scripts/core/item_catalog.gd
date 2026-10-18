@@ -4,7 +4,7 @@ const ITEMS: Dictionary = {
     "church_bandage": {
         "item_id": "church_bandage",
         "display_name": "染血的绷带",
-        "category": "lore",
+        "category": "consumable",
         "description": "一卷被血浸透的绷带。布料边缘残留着难以洗净的黑色污迹。污迹的来源无法仅凭外观判断。",
         "stackable": true,
         "max_stack": 5
