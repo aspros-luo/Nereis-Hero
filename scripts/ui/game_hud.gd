@@ -610,8 +610,6 @@ func _toggle_pause_menu() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_I:
-        if inventory_overlay and bool(inventory_overlay.get_node_or_null("Background")):
-            pass
         if not pause_open and not character_details_open and not WorldState.input_locked and not (world_map_overlay and world_map_overlay.visible):
             inventory_overlay.call("open_inventory")
             get_viewport().set_input_as_handled()
