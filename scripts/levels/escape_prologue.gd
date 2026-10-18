@@ -55,13 +55,15 @@ func _ready() -> void:
 	queue_redraw()
 
 func _process(_delta: float) -> void:
+	if not ambush_started and is_instance_valid(hero) and hero.global_position.x >= 1710.0:
+		_start_exit_ambush()
 	if first_combat_prompt_shown or wardens_defeated > 0 or not is_instance_valid(hero) or wardens.is_empty():
 		return
 	var first_warden := wardens[0]
 	if is_instance_valid(first_warden) and hero.global_position.distance_to(first_warden.global_position) <= 260.0:
 		first_combat_prompt_shown = true
 		if is_instance_valid(hud):
-			hud.set_story_mode("A0｜教会手术所", "守卫挡住去路。按 J 攻击，观察攻击前摇并适时闪避。")
+			hud.set_story_mode("A0｜教会手术所", "伏击开始！留意两侧来敌与上方坠落的守卫，利用攻击前摇进行闪避。")
 
 func _create_surgery_table() -> void:
 	var table := StaticBody2D.new()
