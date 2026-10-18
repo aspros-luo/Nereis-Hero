@@ -4,6 +4,7 @@ signal hidden_resistance_awakened_event
 
 const SAVE_PATH := "user://nereis_hero_save.json"
 const WITCH_TIME_OVERLAY_SCRIPT: Script = preload("res://scripts/effects/witch_time_overlay.gd")
+const ITEM_CATALOG_SCRIPT: Script = preload("res://scripts/core/item_catalog.gd")
 
 var hero_memory := 0
 var hero_humanity := 100
@@ -57,6 +58,10 @@ const ABILITY_SOURCE_TYPES := ["story", "exploration", "achievement", "resonance
 var unlocked_abilities: Dictionary = {}
 var achievement_flags: Array[String] = []
 var upgrade_materials: Dictionary = {}
+# Inventory contains owned item counts; collected pickup IDs prevent one-time world objects from respawning.
+var inventory_items: Dictionary = {}
+var read_item_ids: Array[String] = []
+var collected_world_item_ids: Array[String] = []
 var input_locked := false
 # Menu lock disables Hero input while the world and all gameplay timers keep running.
 var menu_input_locked := false
@@ -481,6 +486,9 @@ func save_game() -> void:
         "unlocked_abilities": unlocked_abilities,
         "achievement_flags": achievement_flags,
         "upgrade_materials": upgrade_materials,
+        "inventory_items": inventory_items,
+        "read_item_ids": read_item_ids,
+        "collected_world_item_ids": collected_world_item_ids,
         "mite_first_meeting": mite_first_meeting,
         "mite_interactions_seen": mite_interactions_seen,
         "mite_last_interaction_location": mite_last_interaction_location,
@@ -601,6 +609,20 @@ func load_game() -> void:
     if saved_materials is Dictionary:
         for material_id in saved_materials.keys():
             upgrade_materials[str(material_id)] = maxi(0, int(saved_materials[material_id]))
+    inventory_items.clear()
+    var saved_inventory = parsed.get("inventory_items", {})
+    if saved_inventory is Dictionary:
+        for raw_item_id in saved_inventory.keys():
+            var item_id := str(raw_item_id)
+            var item_definition: Dictionary = ITEM_CATALOG_SCRIPT.get_definition(item_id)
+            if item_definition.is_empty():
+                continue
+            var count := maxi(0, int(saved_inventory[raw_item_id]))
+            var max_stack := maxi(1, int(item_definition.get("max_stack", 1)))
+            if count > 0:
+                inventory_items[item_id] = mini(count, max_stack)
+    _restore_string_ids(read_item_ids, parsed.get("read_item_ids", []))
+    _restore_string_ids(collected_world_item_ids, parsed.get("collected_world_item_ids", []))
     resonance_sources.clear()
     var saved_resonance_sources = parsed.get("resonance_sources", [])
     if saved_resonance_sources is Array:
@@ -687,6 +709,42 @@ func record_achievement(achievement_id: String) -> bool:
     achievement_flags.append(normalized_id)
     save_game()
     return true
+
+func add_inventory_item(item_id: String, amount: int = 1, save_after: bool = true) -> bool:
+    var normalized_id := item_id.strip_edges()
+    if normalized_id.is_empty() or amount <= 0:
+        return false
+    var definition: Dictionary = ITEM_CATALOG_SCRIPT.get_definition(normalized_id)
+    if definition.is_empty():
+        return false
+    var current_count := maxi(0, int(inventory_items.get(normalized_id, 0)))
+    var max_stack := maxi(1, int(definition.get("max_stack", 1)))
+    if current_count >= max_stack:
+        return false
+    inventory_items[normalized_id] = mini(current_count + amount, max_stack)
+    if save_after:
+        save_game()
+    return true
+
+func record_world_item_pickup(pickup_id: String, item_id: String, amount: int = 1) -> bool:
+    var normalized_pickup_id := pickup_id.strip_edges()
+    if normalized_pickup_id.is_empty() or normalized_pickup_id in collected_world_item_ids:
+        return false
+    if not add_inventory_item(item_id, amount, false):
+        return false
+    collected_world_item_ids.append(normalized_pickup_id)
+    save_game()
+    return true
+
+func mark_item_read(item_id: String) -> void:
+    var normalized_id := item_id.strip_edges()
+    if normalized_id.is_empty() or not inventory_items.has(normalized_id) or normalized_id in read_item_ids:
+        return
+    read_item_ids.append(normalized_id)
+    save_game()
+
+func is_item_owned(item_id: String) -> bool:
+    return int(inventory_items.get(item_id, 0)) > 0
 
 func add_upgrade_material(material_id: String, amount: int = 1) -> int:
     var normalized_id := material_id.strip_edges()
@@ -874,6 +932,9 @@ func reset() -> void:
     unlocked_abilities.clear()
     achievement_flags.clear()
     upgrade_materials.clear()
+    inventory_items.clear()
+    read_item_ids.clear()
+    collected_world_item_ids.clear()
     mite_first_meeting = false
     mite_interactions_seen.clear()
     mite_last_interaction_location = ""
