@@ -3,6 +3,7 @@ extends CanvasLayer
 const MAP_TEST_PANEL_SCRIPT = preload("res://scripts/ui/map_test_panel.gd")
 const WORLD_MAP_OVERLAY_SCRIPT = preload("res://scripts/ui/world_map_overlay.gd")
 const INVENTORY_OVERLAY_SCRIPT = preload("res://scripts/ui/inventory_overlay.gd")
+const ITEM_INSPECTION_PANEL_SCRIPT = preload("res://scripts/ui/item_inspection_panel.gd")
 
 var hero: Node
 var debug_enabled := false
@@ -49,6 +50,7 @@ var pause_open := false
 var character_details_open := false
 var world_map_overlay: Control
 var inventory_overlay: CanvasLayer
+var item_inspection_panel: CanvasLayer
 var map_overlay_previous_input_locked := false
 
 func _ready() -> void:
@@ -205,10 +207,18 @@ func _ready() -> void:
     world_map_overlay.name = "WorldMapOverlay"
     add_child(world_map_overlay)
 
+    item_inspection_panel = ITEM_INSPECTION_PANEL_SCRIPT.new()
+    item_inspection_panel.name = "ItemInspectionPanel"
+    add_child(item_inspection_panel)
+
     inventory_overlay = INVENTORY_OVERLAY_SCRIPT.new()
     inventory_overlay.name = "InventoryOverlay"
     add_child(inventory_overlay)
     _refresh_localized_ui()
+
+func show_item_description(item_name: String, description: String) -> void:
+    if is_instance_valid(item_inspection_panel):
+        item_inspection_panel.call("show_description", item_name, description)
 
 func bind_hero(target: Node) -> void:
     hero = target
