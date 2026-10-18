@@ -2,6 +2,7 @@ extends CanvasLayer
 
 const MAP_TEST_PANEL_SCRIPT = preload("res://scripts/ui/map_test_panel.gd")
 const WORLD_MAP_OVERLAY_SCRIPT = preload("res://scripts/ui/world_map_overlay.gd")
+const INVENTORY_OVERLAY_SCRIPT = preload("res://scripts/ui/inventory_overlay.gd")
 
 var hero: Node
 var debug_enabled := false
@@ -47,6 +48,7 @@ var story_objective_source := ""
 var pause_open := false
 var character_details_open := false
 var world_map_overlay: Control
+var inventory_overlay: CanvasLayer
 var map_overlay_previous_input_locked := false
 
 func _ready() -> void:
@@ -70,7 +72,7 @@ func _ready() -> void:
 
     controls_label = Label.new()
     controls_label.position = Vector2(38, 62)
-    controls_label.text = "A/D 移动    空格 跳跃    J 攻击    K 闪避    Q 切换武器    M 世界路线图"
+    controls_label.text = "A/D 移动    空格 跳跃    J 攻击    K 闪避    Q 切换武器    I 物品    M 世界路线图"
     controls_label.add_theme_font_size_override("font_size", 13)
     controls_label.add_theme_color_override("font_color", Color("#8f8586"))
     add_child(controls_label)
@@ -202,6 +204,10 @@ func _ready() -> void:
     world_map_overlay = WORLD_MAP_OVERLAY_SCRIPT.new()
     world_map_overlay.name = "WorldMapOverlay"
     add_child(world_map_overlay)
+
+    inventory_overlay = INVENTORY_OVERLAY_SCRIPT.new()
+    inventory_overlay.name = "InventoryOverlay"
+    add_child(inventory_overlay)
     _refresh_localized_ui()
 
 func bind_hero(target: Node) -> void:
@@ -505,7 +511,7 @@ func _refresh_localized_ui() -> void:
     if not is_instance_valid(title_label):
         return
     title_label.text = NereisLocalization.t("hud.title")
-    controls_label.text = "A/D 移动    空格 跳跃    J 攻击    K 闪避    Q 切换武器" if WorldState.language == "zh_cn" else NereisLocalization.t("hud.controls")
+    controls_label.text = "A/D 移动    空格 跳跃    J 攻击    K 闪避    Q 切换武器    I 物品    M 世界路线图" if WorldState.language == "zh_cn" else NereisLocalization.t("hud.controls")
     if not story_region_source.is_empty():
         region_label.text = _localize_region(story_region_source)
     if not story_objective_source.is_empty():
@@ -603,6 +609,13 @@ func _toggle_pause_menu() -> void:
         _open_pause_menu()
 
 func _unhandled_input(event: InputEvent) -> void:
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_I:
+        if inventory_overlay and bool(inventory_overlay.get_node_or_null("Background")):
+            pass
+        if not pause_open and not character_details_open and not WorldState.input_locked and not (world_map_overlay and world_map_overlay.visible):
+            inventory_overlay.call("open_inventory")
+            get_viewport().set_input_as_handled()
+        return
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_M:
         if world_map_overlay and world_map_overlay.visible:
             _close_world_map()
