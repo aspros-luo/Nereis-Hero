@@ -275,8 +275,6 @@ func _create_floor() -> void:
 	floor.add_child(shape)
 	add_child(floor)
 
-		add_child(body)
-
 
 func _create_boundaries() -> void:
 	var left := StaticBody2D.new()
