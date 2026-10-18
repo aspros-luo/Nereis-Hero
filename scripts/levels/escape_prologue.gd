@@ -341,7 +341,8 @@ func _mark_input_handled() -> void:
 func _draw() -> void:
 	draw_texture_rect(SURGERY_BACKDROP, Rect2(0, 0, LEVEL_WIDTH, 720), false)
 	draw_texture_rect(SURGERY_FLOOR_STRIP, Rect2(0, FLOOR_Y, CLIFF_EDGE_X, 180), false)
-	# A dark river gorge marks the drop; the return route is intentionally unavailable in A0.\n	draw_rect(Rect2(CLIFF_EDGE_X, FLOOR_Y + 18.0, LEVEL_WIDTH - CLIFF_EDGE_X, 220.0), Color("#101c28"))
+	# A dark river gorge marks the drop; the return route is intentionally unavailable in A0.
+	draw_rect(Rect2(CLIFF_EDGE_X, FLOOR_Y + 18.0, LEVEL_WIDTH - CLIFF_EDGE_X, 220.0), Color("#101c28"))
 	for ripple_x in range(int(CLIFF_EDGE_X + 18.0), int(LEVEL_WIDTH - 20.0), 54):
 		draw_line(Vector2(ripple_x, FLOOR_Y + 54.0 + sin(float(ripple_x) * 0.04) * 5.0), Vector2(ripple_x + 28.0, FLOOR_Y + 54.0), Color("#334a58", 0.62), 2.0)
 	draw_line(Vector2(CLIFF_EDGE_X, FLOOR_Y - 4.0), Vector2(CLIFF_EDGE_X, FLOOR_Y + 42.0), Color("#77717b"), 5.0)
