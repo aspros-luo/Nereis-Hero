@@ -59,11 +59,23 @@ func _ready() -> void:
 	_spawn_ui()
 	_spawn_narrative_audio()
 	_spawn_fireflies()
+	if "prologue_cliff_fall_rescue_pending" in WorldState.achievement_flags and "prologue_cliff_rescue_seen" not in WorldState.achievement_flags and not WorldState.debug_map_test_mode:
+		get_tree().create_timer(0.9).timeout.connect(_show_prologue_rescue)
 	if "returned_to_village_after_mad_cleric" in WorldState.achievement_flags and "cliff_cave_hint_seen" not in WorldState.achievement_flags:
 		WorldState.record_achievement("cliff_cave_hint_seen")
 		if not WorldState.debug_map_test_mode:
 			get_tree().create_timer(1.1).timeout.connect(_show_cliff_cave_hint)
 	queue_redraw()
+
+func _show_prologue_rescue() -> void:
+	if "prologue_cliff_rescue_seen" in WorldState.achievement_flags or not is_instance_valid(narrative):
+		return
+	WorldState.record_achievement("prologue_cliff_rescue_seen")
+	narrative.show_message(
+		"河岸之后",
+		"醒来时，身上的湿衣已经换下，伤口被粗糙地包扎起来。\n\nMite 和村民把你从河里救了上来。她守在旁边，反复确认你的呼吸与体温。\n\n没人认得你。你的身体却仍在发烫。",
+		6.0
+	)
 
 func _spawn_hero(spawn_x: float = 260.0) -> void:
 	hero = CharacterBody2D.new()
