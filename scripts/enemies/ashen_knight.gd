@@ -10,6 +10,8 @@ var max_health := 240
 var boss_display_name := "灰烬骑士"
 var phase := 1
 var persist_global_boss_defeat := true
+# Prologue-only executioner cannot be defeated; ordinary bosses remain damageable by default.
+var damage_immune := false
 var visual_theme := "ashen"
 var attack_cooldown := 0.0
 var windup := 0.0
@@ -117,6 +119,9 @@ func _spawn_hit_spark() -> void:
     get_parent().add_child(effect)
 
 func receive_damage(amount: int, source: Node = null) -> void:
+    if damage_immune:
+        _log("BOSS", "%s ignored damage during scripted prologue encounter" % boss_display_name)
+        return
     health = max(0, health - amount)
     _spawn_hit_spark()
     hit_flash = 0.12
@@ -177,7 +182,7 @@ func _draw() -> void:
         var telegraph_color := Color("#c44e5a") if phase_two else Color("#9e5961")
         draw_arc(Vector2(0, -34), 68.0 if phase_two else 58.0, 0, TAU, 28, telegraph_color, 5.0)
         draw_line(Vector2(facing * 34.0, -34), Vector2(facing * 102.0, -34), telegraph_color, 4.0)
-    var label := "%s %d/%d" % [boss_display_name, max(0, health), max_health]
+    var label := "%s" % boss_display_name if damage_immune else "%s %d/%d" % [boss_display_name, max(0, health), max_health]
     draw_string(ThemeDB.fallback_font, Vector2(-86, -94), NereisLocalization.translate_text(label), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
 
 func _move_and_slide_scaled() -> void:
