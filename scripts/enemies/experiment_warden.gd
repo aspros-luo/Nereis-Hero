@@ -28,6 +28,12 @@ var attack_hitbox: Area2D
 
 func _ready() -> void:
     add_to_group("combat_enemies")
+    # Stagger the ambush so the player can read attacks instead of facing a synchronized volley.
+    # 错开伏击者的首轮攻击，避免三名敌人同时出招。
+    if name == "Warden_Right":
+        cooldown = 0.65
+    elif name == "Warden_Drop":
+        cooldown = 1.15
     attack_hitbox = Area2D.new()
     attack_hitbox.set_script(HITBOX_SCRIPT)
     add_child(attack_hitbox)
@@ -98,13 +104,28 @@ func _physics_process(delta: float) -> void:
     else:
         # Stop inside attack range even while the cooldown is running.
         velocity.x = move_toward(velocity.x, 0.0, 1200.0 * delta)
-        if cooldown <= 0.0:
+        if cooldown <= 0.0 and not _nearby_enemy_is_winding_up():
             windup = ATTACK_WINDUP
             cooldown = ATTACK_COOLDOWN
             released = false
             attack_telegraphed.emit()
 
     _move_and_slide_scaled()
+
+
+func _nearby_enemy_is_winding_up() -> bool:
+    for candidate in get_tree().get_nodes_in_group("combat_enemies"):
+        if candidate == self or not is_instance_valid(candidate) or not candidate is Node2D:
+            continue
+        var other := candidate as Node2D
+        if absf(other.global_position.x - global_position.x) > 180.0:
+            continue
+        if absf(other.global_position.y - global_position.y) > VERTICAL_ATTACK_TOLERANCE:
+            continue
+        var other_windup: Variant = candidate.get("windup")
+        if (other_windup is float or other_windup is int) and float(other_windup) > 0.0:
+            return true
+    return false
 
 func receive_damage(amount: int, source: Node = null) -> void:
     health = max(0, health - amount)
