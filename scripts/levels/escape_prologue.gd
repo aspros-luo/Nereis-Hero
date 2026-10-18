@@ -52,7 +52,7 @@ func _spawn_hero() -> void:
 	hero.name = "Hero"
 	_add_character_collision(hero, 18.0, 48.0)
 	add_child(hero)
-	hero.defeated.connect(_on_hero_defeated)
+	# Hero handles checkpoint respawn internally; this interior scene has no defeated callback.
 	hero.attack_started.connect(func(_combo): pass)
 
 	camera = Camera2D.new()
