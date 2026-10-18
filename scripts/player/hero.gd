@@ -940,6 +940,7 @@ func debug_refill_combat_resources() -> void:
 	invulnerable = false
 	hurt_time = 0.0
 	dodge_time = 0.0
+	_set_dodge_enemy_collision_ignored(false)
 	perfect_dodge_window_remaining = 0.0
 	riposte_bonus_active = false
 	attack_requested = false
@@ -1262,6 +1263,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
 		technique_hit_index = 0
 		eldritch_cooldown_remaining = 0.0
 		dodge_time = 0.0
+		_set_dodge_enemy_collision_ignored(false)
 		quick_dash_time = 0.0
 		quick_dash_cooldown_remaining = 0.0
 		quick_dash_requested = false
