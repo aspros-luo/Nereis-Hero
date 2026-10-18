@@ -31,6 +31,7 @@ var exit_open := false
 var wardens_defeated := 0
 var first_combat_prompt_shown := false
 var ambush_started := false
+var ambush_phase := 0 # 0=not started, 1=two-entry wave, 2=falling ambusher, 3=cleared
 var progress_barriers: Array[StaticBody2D] = []
 
 func _ready() -> void:
@@ -102,13 +103,14 @@ func _start_exit_ambush() -> void:
 		return
 	ambush_started = true
 	_spawn_progress_barriers()
-	# Two enemies enter from opposite sides; a third drops into the arena from above.
-	_spawn_warden(Vector2(1605.0, FLOOR_Y), "Warden_Left")
-	_spawn_warden(Vector2(1925.0, FLOOR_Y), "Warden_Right")
-	_spawn_warden(Vector2(1770.0, 120.0), "Warden_Drop")
+	# Wave 1: the left warden walks in from the left; the second enters from the doorway.
+	# 第一波只出现两名地面守卫，先给玩家时间读懂战斗节奏。
+	ambush_phase = 1
+	_spawn_warden(Vector2(1425.0, FLOOR_Y), "Warden_Left")
+	_spawn_warden(Vector2(1955.0, FLOOR_Y), "Warden_Right")
 	if is_instance_valid(hud):
-		hud.set_story_mode("A0｜教会手术所", "出口附近传来脚步声……两侧的守卫封住退路，上方还有东西正在坠落。")
-	print("[NEREIS][PROLOGUE] Exit ambush triggered; enemies spawned")
+		hud.set_story_mode("A0｜教会手术所", "左侧传来沉重的脚步声，出口处的守卫也逼了进来！先解决他们。")
+	print("[NEREIS][PROLOGUE] Exit ambush wave 1 started")
 
 func _spawn_warden(position: Vector2, enemy_name: String) -> void:
 	var warden := CharacterBody2D.new()
@@ -123,7 +125,7 @@ func _spawn_warden(position: Vector2, enemy_name: String) -> void:
 func _spawn_progress_barriers() -> void:
 	# Close both ends of the arena only after the exit ambush starts.
 	# 仅在出口伏击触发后关闭战斗场地两端，避免开场就加载敌人。
-	for gate_x in [1540.0, 2000.0]:
+	for gate_x in [1320.0, 2000.0]:
 		var gate := StaticBody2D.new()
 		gate.name = "SurgeryProgressBarrier"
 		gate.position = Vector2(gate_x, 420.0)
@@ -211,13 +213,24 @@ func _on_hero_defeated() -> void:
 
 func _on_warden_defeated() -> void:
 	wardens_defeated += 1
-	var remaining := maxi(0, wardens.size() - wardens_defeated)
-	if remaining > 0 and is_instance_valid(hud):
-		hud.set_story_mode("A0｜教会手术所", "守卫倒下了。还有 %d 名敌人挡在出口前。" % remaining)
-	if wardens_defeated >= wardens.size():
+	if ambush_phase == 1 and wardens_defeated >= 2:
+		# Wave 2 only begins after both ground wardens are defeated.
+		# 第二波必须等两名地面守卫全部倒下后才触发。
+		ambush_phase = 2
+		_spawn_warden(Vector2(1480.0, 95.0), "Warden_Drop")
+		if is_instance_valid(hud):
+			hud.set_story_mode("A0｜教会手术所", "上方传来金属断裂声……第三名守卫从左侧高处坠落！")
+		return
+	if ambush_phase == 2 and wardens_defeated >= 3:
+		ambush_phase = 3
 		for index in range(progress_barriers.size()):
 			_open_progress_barrier(index)
 		_open_exit()
+		return
+	var total_in_phase := 2 if ambush_phase == 1 else 3
+	var remaining := maxi(0, total_in_phase - wardens_defeated)
+	if remaining > 0 and is_instance_valid(hud):
+		hud.set_story_mode("A0｜教会手术所", "守卫倒下了。还剩 %d 名敌人。" % remaining)
 
 func _open_exit() -> void:
 	if exit_open:
@@ -380,7 +393,7 @@ func _draw() -> void:
 
 	# The arena shutters appear only after the exit ambush begins.
 	if ambush_started and wardens_defeated < wardens.size():
-		_draw_security_shutter(1540.0)
+		_draw_security_shutter(1320.0)
 		_draw_security_shutter(2000.0)
 
 	if not exit_open:
