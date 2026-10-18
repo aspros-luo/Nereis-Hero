@@ -13,6 +13,7 @@ var _previous_input_locked := false
 func _ready() -> void:
     layer = 22
     process_mode = Node.PROCESS_MODE_ALWAYS
+    add_to_group("item_inspection_panels")
 
     panel = ColorRect.new()
     panel.position = Vector2(170, 468)
