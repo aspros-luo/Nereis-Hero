@@ -176,7 +176,7 @@ func _spawn_item_pickups() -> void:
 	var pickup_script = preload("res://scripts/world/world_item_pickup.gd")
 	var bandage := Node2D.new()
 	bandage.set_script(pickup_script)
-	bandage.position = Vector2(460, 492)
+	bandage.position = Vector2(320, 482)
 	bandage.pickup_id = "a0_bandage_pickup"
 	bandage.item_id = "church_bandage"
 	bandage.amount = 1
@@ -184,7 +184,7 @@ func _spawn_item_pickups() -> void:
 
 	var record := Node2D.new()
 	record.set_script(pickup_script)
-	record.position = Vector2(740, 450)
+	record.position = Vector2(810, 393)
 	record.pickup_id = "a0_surgery_record_pickup"
 	record.item_id = "surgery_record_fragment"
 	record.amount = 1
@@ -197,7 +197,7 @@ func _on_clue_examined(clue: Node) -> void:
 func _spawn_rest() -> void:
 	var rest := Node2D.new()
 	rest.set_script(REST_POINT_SCRIPT)
-	rest.position = Vector2(420.0, FLOOR_Y)
+	rest.position = Vector2(540.0, FLOOR_Y)
 	rest.rest_id = "escape_stool"
 	rest.display_name = "破损的凳子"
 	add_child(rest)
@@ -446,25 +446,26 @@ func _draw_editor_layout_overlay() -> void:
 		draw_rect(platform_rect, Color(collision_color, 0.14), true)
 		draw_rect(platform_rect, collision_color, false, 2.0)
 
-	# Hero/checkpoint and rest point share x=420; their overlap is intentional but worth seeing.
+	# Hero spawn/checkpoint and rest point are intentionally separated for a clean opening silhouette.
 	draw_circle(Vector2(420.0, FLOOR_Y), 6.0, anchor_color)
 	draw_line(Vector2(420.0, FLOOR_Y - 48.0), Vector2(420.0, FLOOR_Y), anchor_color, 2.0)
 	draw_string(ThemeDB.fallback_font, Vector2(430.0, FLOOR_Y - 34.0), "Hero / 初始检查点 (420, 540)", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, anchor_color)
-	draw_circle(Vector2(420.0, FLOOR_Y), 90.0, Color(focus_color, 0.42), false, 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(430.0, FLOOR_Y + 18.0), "休整点：横向90 / 高差32 / 必须落地", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, focus_color)
+	draw_circle(Vector2(540.0, FLOOR_Y), 6.0, focus_color)
+	draw_circle(Vector2(540.0, FLOOR_Y), 90.0, Color(focus_color, 0.42), false, 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(545.0, FLOOR_Y + 18.0), "休整点 (540, 540)：横向90 / 高差32 / 必须落地", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, focus_color)
 
 	# Clue and pickups use distance-based interaction, not physical Area2D shapes.
 	draw_circle(Vector2(620.0, 520.0), 5.0, focus_color)
 	draw_circle(Vector2(620.0, 520.0), 120.0, Color(focus_color, 0.40), false, 2.0)
 	draw_string(ThemeDB.fallback_font, Vector2(625.0, 508.0), "调查点：手术托盘 (620, 520) / 半径120", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, focus_color)
 
-	draw_circle(Vector2(460.0, 492.0), 5.0, Color("#a7f3d0"))
-	draw_circle(Vector2(460.0, 492.0), 100.0, Color("#a7f3d0", 0.42), false, 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(465.0, 480.0), "绷带 (460, 492) / 半径100", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#a7f3d0"))
+	draw_circle(Vector2(320.0, 482.0), 5.0, Color("#a7f3d0"))
+	draw_circle(Vector2(320.0, 482.0), 100.0, Color("#a7f3d0", 0.42), false, 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(325.0, 470.0), "绷带 (320, 482) / 半径100；置于手术台上", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#a7f3d0"))
 
-	draw_circle(Vector2(740.0, 450.0), 5.0, Color("#a7f3d0"))
-	draw_circle(Vector2(740.0, 450.0), 100.0, Color("#a7f3d0", 0.42), false, 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(745.0, 438.0), "手术记录 (740, 450) / 半径100", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#a7f3d0"))
+	draw_circle(Vector2(810.0, 393.0), 5.0, Color("#a7f3d0"))
+	draw_circle(Vector2(810.0, 393.0), 100.0, Color("#a7f3d0", 0.42), false, 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(815.0, 381.0), "手术记录 (810, 393) / 半径100；置于维护平台", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#a7f3d0"))
 
 	# Exit trigger area: center (2040, 470), 110 x 140.
 	draw_rect(Rect2(1985.0, 400.0, 110.0, 140.0), Color("#ff9f43", 0.12), true)
