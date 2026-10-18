@@ -457,7 +457,8 @@ func _draw_editor_layout_overlay() -> void:
 	draw_line(Vector2(420.0, FLOOR_Y - 48.0), Vector2(420.0, FLOOR_Y), anchor_color, 2.0)
 	draw_string(ThemeDB.fallback_font, Vector2(430.0, FLOOR_Y - 34.0), "Hero / 初始检查点 (420, 540)", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, anchor_color)
 	draw_circle(Vector2(540.0, FLOOR_Y), 6.0, focus_color)
-	draw_circle(Vector2(540.0, FLOOR_Y), 90.0, Color(focus_color, 0.42), false, 2.0)
+	# Rest eligibility uses independent horizontal/vertical thresholds, not a radial distance.
+	draw_rect(Rect2(450.0, FLOOR_Y - 32.0, 180.0, 64.0), Color(focus_color, 0.42), false, 2.0)
 	draw_string(ThemeDB.fallback_font, Vector2(545.0, FLOOR_Y + 18.0), "休整点 (540, 540)：横向90 / 高差32 / 必须落地", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, focus_color)
 
 	# Clue and pickups use distance-based interaction, not physical Area2D shapes.
