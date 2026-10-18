@@ -48,3 +48,19 @@ Status / 状态: source files committed; Godot runtime visual acceptance still p
 - 内容：分层山脊、带空气透视的河谷、克制的月光雾、远处废墟剪影与低对比颗粒。
 - 接入：`scripts/levels/prologue_exterior.gd`；只替换天空/山脊背景绘制，悬崖边界、地面碰撞、遭遇计时、Boss 出生点与救援转场仍由逻辑控制。
 - 状态：已写入 `development`，仍待 Godot 4.6.1 实机视觉验收。
+
+### A0 Surgery Foreground Props
+- File: `assets/art/backdrops/surgery_foreground_props.svg`
+- Creator: Nereis-Hero project artwork (original SVG authored for the A0 surgery ward).
+- License: Project original; intended for use and modification within Nereis-Hero.
+- Contents: Operating table, snapped restraint straps, instrument trolley, wall-mounted tools, suspended lamp, specimen jars, and cracked tile chips.
+- Integration: `scripts/levels/escape_prologue.gd`; visual-only texture layer. Existing CharacterBody2D/StaticBody2D collision, pickup locations, interaction focus, catwalks, and progress barriers remain separately controlled.
+- Status: Source integration committed to `development`; Godot 4.6.1 runtime visual and import acceptance pending.
+
+### A0 手术室前景道具
+- 文件：`assets/art/backdrops/surgery_foreground_props.svg`
+- 作者：Nereis-Hero 项目原创 SVG。
+- 授权：项目原创，供 Nereis-Hero 项目内使用和修改。
+- 内容：手术台、断裂束缚带、器械推车、墙面工具架、悬挂灯、标本瓶与碎裂地砖。
+- 接入：`scripts/levels/escape_prologue.gd`；仅作为视觉纹理层。现有角色/静态物理碰撞、拾取点、交互焦点、高路平台与进度闸门仍独立控制。
+- 状态：已写入 `development`；仍待 Godot 4.6.1 实机视觉与导入验收。
