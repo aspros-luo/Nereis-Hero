@@ -4,7 +4,6 @@ const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const WARDEN_SCRIPT = preload("res://scripts/enemies/experiment_warden.gd")
 const PROLOGUE_BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const ITEM_INSPECTION_SCRIPT = preload("res://scripts/ui/item_inspection_panel.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
@@ -17,7 +16,6 @@ const LEVEL_WIDTH := 2200.0
 var hero: CharacterBody2D
 var camera: Camera2D
 var hud: CanvasLayer
-var item_inspection: CanvasLayer
 var wardens: Array[CharacterBody2D] = []
 var exit_area: Area2D
 var exit_open := false
@@ -110,7 +108,7 @@ func _spawn_item_pickups() -> void:
 
 func _on_clue_examined(clue: Node) -> void:
 	WorldState.mark_ancient_residue_awakened()
-	item_inspection.show_description(clue.display_name, clue.description)
+	hud.call("show_item_description", clue.display_name, clue.description)
 
 func _spawn_rest() -> void:
 	var rest := Node2D.new()
@@ -163,10 +161,6 @@ func _on_exit_interacted() -> void:
 	SceneTransition.fade_to_scene("res://scenes/prologue_exterior.tscn")
 
 func _spawn_ui() -> void:
-	item_inspection = CanvasLayer.new()
-	item_inspection.set_script(ITEM_INSPECTION_SCRIPT)
-	add_child(item_inspection)
-
 	hud = CanvasLayer.new()
 	hud.set_script(HUD_SCRIPT)
 	add_child(hud)
