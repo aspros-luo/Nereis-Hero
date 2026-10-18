@@ -325,7 +325,9 @@ func _draw() -> void:
 		draw_line(Vector2(tile_x, FLOOR_Y + 12.0), Vector2(tile_x - 7.0, FLOOR_Y + 38.0), Color("#0b090f", 0.48), 1.0)
 		draw_line(Vector2(tile_x + 34.0, FLOOR_Y + 68.0), Vector2(tile_x + 66.0, FLOOR_Y + 64.0), Color("#57434d", 0.22), 1.0)
 
-	draw_rect(Rect2(120, 280, 420, 240), Color("#29222c"))
+	# Keep the illustrated glass tanks and wall structure from the SVG visible.
+	# Earlier opaque graybox blocks hid most of the backdrop in the opening camera view.
+	# 保留 SVG 中的玻璃实验舱和墙体；旧版不透明灰盒曾遮住开场镜头的大部分背景。
 	# The Hero begins on the operating table; snapped restraints imply an interrupted procedure without narration.
 	draw_rect(Rect2(190, 480, 180, 12), Color("#66545d"))
 	draw_rect(Rect2(200, 492, 10, 48), Color("#30262f"))
@@ -357,10 +359,8 @@ func _draw() -> void:
 	draw_rect(Rect2(702, 420, 6, 38), Color("#40323c"))
 	draw_rect(Rect2(778, 420, 6, 38), Color("#40323c"))
 
-	for x in [700.0, 1120.0, 1500.0]:
-		draw_rect(Rect2(x - 55, 310, 110, 210), Color("#1f1a22"))
-		draw_rect(Rect2(x - 44, 330, 88, 12), Color("#46343b"))
-		draw_circle(Vector2(x, 320), 9, Color("#9b5c64"))
+	# Background equipment is already illustrated in SURGERY_BACKDROP; do not cover it with
+	# opaque placeholder cabinets. Foreground props below remain separate from collision bodies.
 
 	draw_colored_polygon(
 		PackedVector2Array([
