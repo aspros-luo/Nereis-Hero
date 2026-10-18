@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="720" viewBox="0 0 2200 720">
+<defs>
+ <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8b7b82"/><stop offset=".22" stop-color="#47414c"/><stop offset=".65" stop-color="#25232d"/><stop offset="1" stop-color="#13151d"/></linearGradient>
+ <linearGradient id="cloth" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6d5662"/><stop offset=".5" stop-color="#342b36"/><stop offset="1" stop-color="#1b1b25"/></linearGradient>
+ <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a6c4c8" stop-opacity=".45"/><stop offset=".45" stop-color="#7e9ba5" stop-opacity=".1"/><stop offset="1" stop-color="#b66b7d" stop-opacity=".24"/></linearGradient>
+ <filter id="shadow"><feGaussianBlur stdDeviation="8"/></filter>
+</defs>
+<!-- Operating table and its shadow -->
+<ellipse cx="286" cy="535" rx="155" ry="18" fill="#05070c" opacity=".62" filter="url(#shadow)"/>
+<path d="M205 501L226 493H367L383 501L371 513H210Z" fill="#14151d" stroke="#8c737e" stroke-width="2"/>
+<path d="M196 476Q194 469 204 467H361Q373 469 371 478L364 495H204Z" fill="url(#steel)" stroke="#a28c95" stroke-width="3"/>
+<path d="M211 476H356L350 487H216Z" fill="#877580" opacity=".65"/>
+<path d="M224 478Q249 472 274 481T324 479L342 484Q310 494 281 485T224 488Z" fill="#5c2938" opacity=".8"/>
+<path d="M225 486L237 481M299 483L314 488M329 480L337 484" stroke="#b96c7b" stroke-width="2" opacity=".75"/>
+<path d="M224 508L219 545H235L244 510M346 508L355 545H370L363 506" fill="url(#steel)" stroke="#62515e" stroke-width="3"/>
+<path d="M215 544H242M350 544H374" stroke="#9d8b92" stroke-width="4"/>
+<!-- Broken restraint straps -->
+<path d="M244 469L260 485L272 475" fill="none" stroke="#c2b1b1" stroke-width="5" stroke-linecap="round"/>
+<path d="M318 468L304 481L292 473" fill="none" stroke="#c2b1b1" stroke-width="5" stroke-linecap="round"/>
+<path d="M258 485L251 492M304 481L311 489" stroke="#7f5c67" stroke-width="3"/>
+<!-- Instrument trolley -->
+<ellipse cx="620" cy="541" rx="64" ry="10" fill="#05070c" opacity=".6"/>
+<path d="M565 499L578 490H662L675 499L666 508H572Z" fill="url(#steel)" stroke="#9b8994" stroke-width="3"/>
+<path d="M572 499H668L661 505H579Z" fill="#b2a0a5" opacity=".35"/>
+<path d="M580 508L576 533M659 508L664 533" stroke="#655763" stroke-width="5"/>
+<circle cx="576" cy="536" r="7" fill="#1a1b24" stroke="#8e7c89" stroke-width="3"/><circle cx="664" cy="536" r="7" fill="#1a1b24" stroke="#8e7c89" stroke-width="3"/>
+<path d="M587 488L591 476L600 478L598 489M612 488L619 472L626 474L624 489M638 488L646 479L653 482L650 490" fill="none" stroke="#c3b8b9" stroke-width="4" stroke-linecap="round"/>
+<path d="M591 478L585 470M619 473L616 463M646 480L652 470" stroke="#aab9bb" stroke-width="3"/>
+<!-- Wall-mounted tool shelf foreground -->
+<path d="M705 456H795L788 465H709Z" fill="url(#steel)" stroke="#85717d" stroke-width="2"/>
+<path d="M714 465V486M786 465V486" stroke="#50444f" stroke-width="5"/>
+<path d="M724 455V438Q724 430 731 430H740V455M750 455V426H759V455M770 455V440Q770 432 778 432H783V455" fill="none" stroke="#aab7b9" stroke-width="4"/>
+<!-- Suspended lamp silhouette, kept away from combat silhouettes -->
+<path d="M1030 0V98L1015 119H1071L1056 98V0" fill="none" stroke="#5e5361" stroke-width="5"/>
+<path d="M1000 120Q1043 100 1086 120L1074 137H1012Z" fill="url(#steel)" stroke="#a18a95" stroke-width="3"/>
+<ellipse cx="1043" cy="136" rx="32" ry="8" fill="#bd8290" opacity=".22"/>
+<!-- Glass specimen jars on far workbench -->
+<g stroke="#9bb7bd" stroke-width="3" fill="url(#glass)">
+ <path d="M1685 460H1714V470L1721 481V514Q1721 520 1714 520H1685Q1678 520 1678 514V481L1685 470Z"/>
+ <path d="M1734 472H1757V482L1764 490V516Q1764 521 1757 521H1734Q1727 521 1727 516V490L1734 482Z"/>
+ <path d="M1771 451H1803V464L1810 476V513Q1810 520 1803 520H1771Q1764 520 1764 513V476L1771 464Z"/>
+</g>
+<g fill="#a8566a" opacity=".6"><path d="M1682 500Q1699 493 1717 502V516H1682Z"/><path d="M1731 504Q1745 498 1760 505V517H1731Z"/><path d="M1768 491Q1787 485 1807 493V516H1768Z"/></g>
+<g stroke="#d4c2c2" stroke-width="2" opacity=".55"><path d="M1690 484V502M1740 491V504M1778 478V496"/></g>
+<!-- Cracked foreground tile chips -->
+<path d="M115 552l26 -9 17 8 -14 11 -24 -2Z M408 566l19 -6 12 9 -20 7Z M735 552l18 -7 12 9 -16 8Z M1535 570l24 -8 18 8 -22 8Z" fill="#b1a0a5" opacity=".18"/>
+</svg>
