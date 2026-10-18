@@ -94,7 +94,7 @@ func _spawn_item_pickups() -> void:
 	var pickup_script = preload("res://scripts/world/world_item_pickup.gd")
 	var bandage := Node2D.new()
 	bandage.set_script(pickup_script)
-	bandage.position = Vector2(760, FLOOR_Y)
+	bandage.position = Vector2(760, 492)
 	bandage.pickup_id = "a0_bandage_pickup"
 	bandage.item_id = "church_bandage"
 	bandage.amount = 1
@@ -102,11 +102,12 @@ func _spawn_item_pickups() -> void:
 
 	var record := Node2D.new()
 	record.set_script(pickup_script)
-	record.position = Vector2(840, FLOOR_Y)
+	record.position = Vector2(840, 450)
 	record.pickup_id = "a0_surgery_record_pickup"
 	record.item_id = "surgery_record_fragment"
 	record.amount = 1
 	add_child(record)
+
 func _on_clue_examined(clue: Node) -> void:
 	WorldState.mark_ancient_residue_awakened()
 	item_inspection.show_description(clue.display_name, clue.description)
@@ -283,6 +284,14 @@ func _draw() -> void:
 	draw_line(Vector2(850, 400), Vector2(1000, 440), Color("#66515f"), 3.0)
 	draw_line(Vector2(1000, 440), Vector2(1130, 400), Color("#66515f"), 3.0)
 	draw_string(ThemeDB.fallback_font, Vector2(620, 295), "仅供维护人员通行", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#8b737e"))
+
+	# Small treatment table and wall shelf give the first collectible items a believable place in the room.
+	draw_rect(Rect2(718, 500, 92, 10), Color("#51414a"))
+	draw_rect(Rect2(726, 510, 8, 30), Color("#30262f"))
+	draw_rect(Rect2(794, 510, 8, 30), Color("#30262f"))
+	draw_rect(Rect2(798, 458, 88, 8), Color("#51414a"))
+	draw_rect(Rect2(802, 420, 6, 38), Color("#40323c"))
+	draw_rect(Rect2(878, 420, 6, 38), Color("#40323c"))
 
 	for x in [700.0, 1120.0, 1500.0]:
 		draw_rect(Rect2(x - 55, 310, 110, 210), Color("#1f1a22"))
