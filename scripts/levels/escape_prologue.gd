@@ -39,7 +39,7 @@ func _ready() -> void:
 
 	WorldState.current_location = "church_escape"
 	WorldState.record_natural_test_region("A0", "church_escape")
-	WorldState.set_checkpoint(Vector2(300, FLOOR_Y))
+	WorldState.set_checkpoint(Vector2(420.0, FLOOR_Y))
 
 	_create_floor()
 	_create_surgical_catwalks()
