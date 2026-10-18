@@ -106,14 +106,27 @@ func _begin_rescue_transition(reason: String) -> void:
 	_clear_interaction_focus()
 	if is_instance_valid(boss):
 		boss.queue_free()
+
+	var fall_tween: Tween
 	if is_instance_valid(hero):
-		hero.velocity = Vector2.ZERO
 		hero.invulnerable = true
+		hero.velocity = Vector2.ZERO
+		# Suspend physics for this short authored beat so a defeated/dead Hero can still be carried over the edge.
+		hero.set_physics_process(false)
+		fall_tween = create_tween()
+		fall_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		if reason == "defeated":
+			fall_tween.tween_property(hero, "global_position", Vector2(CLIFF_X - 20.0, FLOOR_Y - 18.0), 0.24)
+		fall_tween.tween_property(hero, "global_position", Vector2(CLIFF_X + 42.0, FLOOR_Y + 165.0), 0.55)
+
 	if is_instance_valid(narrative):
-		var text := "刀锋撞上护甲。碎石从脚下崩落，河谷在视野里翻转。" if reason == "defeated" else "碎石从脚下崩落。你坠向被雾吞没的河谷。"
+		var text := "刀锋撞上护甲。脚下碎石崩落，河谷在视野里翻转。" if reason == "defeated" else "碎石从脚下崩落。你坠向被雾吞没的河谷。"
 		narrative.show_caption("失去意识", text, 1.0)
 		WorldState.input_locked = true
-		await get_tree().create_timer(0.85).timeout
+
+	if fall_tween != null:
+		await fall_tween.finished
+	await get_tree().create_timer(0.18).timeout
 	WorldState.record_achievement("prologue_cliff_fall_rescue_pending")
 	WorldState.mark_prologue_complete()
 	WorldState.current_location = "village"
