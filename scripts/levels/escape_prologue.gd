@@ -56,6 +56,13 @@ func _ready() -> void:
 		get_tree().create_timer(0.6).timeout.connect(_show_intro)
 	queue_redraw()
 
+func _physics_process(_delta: float) -> void:
+	if prologue_fall_in_progress or not is_instance_valid(hero):
+		return
+	# A player who jumps past the temporary lip barrier must enter the same fall/rescue sequence.
+	if hero.global_position.x >= CLIFF_EDGE_X + 12.0 and hero.global_position.y >= FLOOR_Y + 72.0:
+		call_deferred("_play_forced_cliff_fall")
+
 func _spawn_hero() -> void:
 	hero = CharacterBody2D.new()
 	hero.set_script(HERO_SCRIPT)
@@ -207,7 +214,7 @@ func _play_forced_cliff_fall() -> void:
 		hero.global_position = Vector2(CLIFF_EDGE_X + 24.0, FLOOR_Y - 38.0)
 		hero.velocity = Vector2.ZERO
 		hero.invulnerable = true
-		narrative.show_message(
+		narrative.show_caption(
 			"无法战胜的对手",
 			"身体已经不再听从指令。那个人没有追来。\n\n脚下的石沿断裂，河谷在视野中翻转。",
 			3.2
@@ -217,7 +224,7 @@ func _play_forced_cliff_fall() -> void:
 		await fall_tween.finished
 		await narrative.message_finished
 
-	narrative.show_message(
+	narrative.show_caption(
 		"河水",
 		"冰冷的水吞没了最后一点光。\n\n很久以后，有人把昏迷的人从河岸拖了上去。",
 		4.0
