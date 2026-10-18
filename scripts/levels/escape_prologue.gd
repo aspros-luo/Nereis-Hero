@@ -11,6 +11,16 @@ const SURGERY_FOREGROUND_PROPS = preload("res://assets/art/backdrops/surgery_for
 
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 2200.0
+# Shared visual/physical layout for the optional maintenance route.
+# Keep rise steps modest and gaps wide enough for Hero's capsule to clear platform sides.
+const SURGICAL_CATWALK_RECTS := [
+	Rect2(430.0, 465.0, 120.0, 16.0),
+	Rect2(590.0, 435.0, 120.0, 16.0),
+	Rect2(750.0, 405.0, 120.0, 16.0),
+	Rect2(910.0, 420.0, 120.0, 16.0),
+	Rect2(1070.0, 440.0, 120.0, 16.0),
+	Rect2(1230.0, 415.0, 120.0, 16.0)
+]
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -233,17 +243,9 @@ func _create_floor() -> void:
 	add_child(floor)
 
 func _create_surgical_catwalks() -> void:
-	# A short optional maintenance route crosses the first surgical rooms but cannot bypass the wardens or exit lock.
-	# 可选维护高路穿过前段手术室，但不能绕过守卫战或出口锁。
-	var route := [
-		Rect2(430, 455, 100, 16),
-		Rect2(560, 410, 110, 16),
-		Rect2(700, 365, 110, 16),
-		Rect2(850, 400, 110, 16),
-		Rect2(1000, 440, 110, 16),
-		Rect2(1130, 400, 110, 16)
-	]
-	for platform_rect in route:
+	# Optional maintenance route; gentler rises and wider gaps reduce capsule snagging.
+	# 可选维护高路：降低连续台阶高度，并扩大水平间隔，避免主角提前撞上平台侧面。
+	for platform_rect in SURGICAL_CATWALK_RECTS:
 		var body := StaticBody2D.new()
 		body.name = "SurgicalCatwalkPlatform"
 		body.position = platform_rect.position
@@ -335,13 +337,16 @@ func _draw() -> void:
 	draw_rect(Rect2(180, 240, 300, 40), Color("#352d38"))
 	draw_string(ThemeDB.fallback_font, Vector2(210, 215), NereisLocalization.translate_text("教会手术所"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
 
-	# Broken rails mark the optional maintenance catwalk above the surgical tables.
-	# 断裂护栏标出手术台上方的可选维护高路。
-	draw_line(Vector2(430, 455), Vector2(560, 410), Color("#66515f"), 3.0)
-	draw_line(Vector2(560, 410), Vector2(700, 365), Color("#66515f"), 3.0)
-	draw_line(Vector2(700, 365), Vector2(850, 400), Color("#66515f"), 3.0)
-	draw_line(Vector2(850, 400), Vector2(1000, 440), Color("#66515f"), 3.0)
-	draw_line(Vector2(1000, 440), Vector2(1130, 400), Color("#66515f"), 3.0)
+	# Draw broken rails on each actual platform, not diagonal lines across non-colliding gaps.
+	# 护栏只画在真实平台段上，不再用斜线把无碰撞的间隙伪装成连续斜坡。
+	for platform_rect in SURGICAL_CATWALK_RECTS:
+		var left := platform_rect.position.x
+		var right := left + platform_rect.size.x
+		var rail_y := platform_rect.position.y - 10.0
+		draw_line(Vector2(left + 8.0, rail_y), Vector2(left + 42.0, rail_y), Color("#66515f"), 3.0)
+		draw_line(Vector2(left + 76.0, rail_y), Vector2(right - 8.0, rail_y), Color("#66515f"), 3.0)
+		for support_x in [left + 12.0, left + 42.0, left + 76.0, right - 10.0]:
+			draw_line(Vector2(support_x, rail_y), Vector2(support_x, platform_rect.position.y - 1.0), Color("#51404d"), 2.0)
 	draw_string(ThemeDB.fallback_font, Vector2(620, 295), "仅供维护人员通行", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#8b737e"))
 
 
