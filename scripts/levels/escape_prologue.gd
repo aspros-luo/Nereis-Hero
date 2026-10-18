@@ -3,7 +3,6 @@ extends Node2D
 const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const WARDEN_SCRIPT = preload("res://scripts/enemies/experiment_warden.gd")
 const PROLOGUE_BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ITEM_INSPECTION_SCRIPT = preload("res://scripts/ui/item_inspection_panel.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
@@ -18,7 +17,6 @@ const LEVEL_WIDTH := 2200.0
 var hero: CharacterBody2D
 var camera: Camera2D
 var hud: CanvasLayer
-var narrative: CanvasLayer
 var item_inspection: CanvasLayer
 var wardens: Array[CharacterBody2D] = []
 var exit_area: Area2D
@@ -146,10 +144,6 @@ func _on_exit_interacted() -> void:
 	SceneTransition.fade_to_scene("res://scenes/prologue_exterior.tscn")
 
 func _spawn_ui() -> void:
-	narrative = CanvasLayer.new()
-	narrative.set_script(NARRATIVE_SCRIPT)
-	add_child(narrative)
-
 	item_inspection = CanvasLayer.new()
 	item_inspection.set_script(ITEM_INSPECTION_SCRIPT)
 	add_child(item_inspection)
@@ -159,13 +153,6 @@ func _spawn_ui() -> void:
 	add_child(hud)
 	hud.bind_hero(hero)
 	hud.set_story_mode("A0｜教会手术所", "向右（D）推进并调查手术托盘；击败 3 名守卫后，前往出口按 E，进入洞外山路。")
-
-func _show_intro() -> void:
-	narrative.show_message(
-		"教会手术所",
-		"束缚带已经断裂。房间里弥漫着铁锈与焚香的气味。\n\n墙壁深处，有一口钟始终响个不停。",
-		5.5
-	)
 
 func _create_floor() -> void:
 	var floor := StaticBody2D.new()
