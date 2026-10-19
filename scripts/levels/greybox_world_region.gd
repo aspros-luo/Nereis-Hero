@@ -333,6 +333,10 @@ func _spawn_x_for_side(side: String) -> float:
 		# C24's return door is at x=520; balance the landing between it and the anomaly at x=900.
 		# C24 回程门位于 x=520；出生点在回程门与 x=900 异常源之间保持安全距离。
 		return 700.0
+	if region_id == "A4" and side == "old_drain_link":
+		# Return from the new low-side drain gate to a clear stretch of the reservoir floor.
+		# 从新增低位排水闸门返回时，落在远离 C05 与闸门触发区的水库地面。
+		return 820.0
 	if region_id == "A11" and side == "chapel_entry":
 		# C19 enters from the cathedral-facing side, but must not overlap A11's return door at the east boundary.
 		# C19 从大圣堂侧进入 A11，但出生点不能与 A11 东侧边界的返回门重叠。
