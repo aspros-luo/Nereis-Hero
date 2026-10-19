@@ -1,49 +1,30 @@
-# Momohime Texture Rig Prototype
+# Texture-Driven Hero Rig Plan
 
-## Committed source assets
+## Primary source of development
 
-The source files are now committed in `assets/characters/hero/` on `feature/hero-animation-system`:
+The primary source for character assembly is the committed texture atlas:
 
-- `153143.png` — Momohime animation sprite sheet (2048×1945).
-- `tex1_512x512_4d6c36bcbd5d9ddc_423915aa39e773f2_9.png` — packed body-part texture atlas.
-- `tex1_512x512_544f6621d3d7aae2_f32cd14fd4d9e265_9.dds` — original DDS texture.
+- `assets/characters/hero/tex1_512x512_4d6c36bcbd5d9ddc_423915aa39e773f2_9.png`
+- `assets/characters/hero/tex1_512x512_544f6621d3d7aae2_f32cd14fd4d9e265_9.dds`
 
-These are source assets, not yet a completed rig. Keep original filenames so texture provenance and future comparisons remain clear.
+The image `assets/characters/hero/153143.png` is reference material for visual style and motion only. It must not drive development frame selection, animation playback, rig assembly, or acceptance tests.
 
-## Current implementation
+## Current implementation state
 
-- The sprite-sheet lab now loads `res://assets/characters/hero/153143.png`.
-- Current frame grid (204×243, 10 columns) is provisional; the frame boundaries and action labels still require visual verification.
-- The existing Bone2D prototype is still a procedural placeholder and has not yet been converted to texture parts.
+- `scenes/labs/momohime_bone_prototype.tscn` is the isolated bone-motion experiment, but its current body parts are procedural Polygon2D/Line2D placeholders. It is not the desired final implementation.
+- `scenes/player/hero_skeleton_texture_lab.tscn` and `scripts/character/character_atlas_texture_factory.gd` are existing atlas inspection / texture-part infrastructure and should be reused rather than duplicated.
+- `scripts/character/character_part_data.gd` already stores atlas region, local pivot offsets, scale, rotation, draw order and enable state.
+- The redundant sprite-sheet playback prototype and its alpha-band analyzer were removed. The sprite sheet remains reference-only; it is not a development dependency.
 
-## Next steps
+## Next implementation path
 
-1. Analyze the PNG sprite sheet's alpha bounds and identify exact frame rectangles; don't assume equal-width cells without checking.
-2. Inspect the PNG atlas and map candidate rectangles for head/hair, torso, sleeves, hands, skirt, legs, footwear, and weapons.
-3. Determine whether the DDS is the same atlas in another format/resolution and inspect alpha/compression before choosing it as runtime source. Prefer PNG for the first Godot iteration.
-4. Create atlas-backed `Sprite2D`/region textures and attach parts to bones with intentional pivots, draw order, and overlap.
-5. Keep a source-pose sprite animation available as a visual reference for checking the rig.
-6. Run the standalone lab in Godot and verify idle, walk, slash, mirroring, and resource loading before integrating into the production Hero.
+1. Inspect the PNG atlas dimensions, alpha channel, color regions and candidate texture islands directly. Check whether the DDS is the same texture and whether Godot can load it reliably.
+2. Build an atlas-first analysis report for the texture atlas, not the reference sprite sheet. Detect candidate connected regions where alpha separation makes this meaningful; retain a confidence/ambiguity note for touching islands.
+3. Visually identify compatible pieces and record exact source rectangles. Do not label arbitrary rectangles as complete limbs without evidence.
+4. Use `CharacterPartData` and `CharacterAtlasTextureFactory` to render selected regions on bone-attached Sprite2D nodes. Set pivots and draw order deliberately.
+5. Keep the existing skeleton motion study as a rig test, replacing procedural body-color shapes incrementally with atlas-backed parts. Avoid replacing all parts at once before checking silhouette and pivot alignment.
+6. Run the isolated scene in Godot 4.6.1 and inspect idle, walk, slash, facing direction, texture loading and draw order before considering production integration.
 
 ## Acceptance boundary
 
-Asset presence and script path have been verified from GitHub. No Godot runtime validation or final frame-segmentation validation is claimed yet. Production Hero scenes and combat logic remain unchanged.
-
-
-## Texture prototype added
-
-A separate texture-backed scene now exists at `res://scenes/labs/momohime_texture_prototype.tscn` with script `scripts/labs/momohime_texture_prototype.gd`. It loads the committed `assets/characters/hero/153143.png` directly and provides keyboard-selectable idle, walk, and slash test sequences. It does not depend on the polygon silhouette rig and does not modify production Hero.
-
-Run this scene with F6. Controls: 1 idle, 2 walk, 3 slash, Space pause/resume, Left/Right facing, R restart.
-
-Important: this is an interim source-texture animation viewer, not yet the requested part-by-part texture bone rig. The equal-cell grid and sequence mapping are still provisional. The next stage is exact alpha-bound segmentation and atlas-part mapping, then replace the placeholder polygon visuals in the bone prototype with texture-backed parts. Godot runtime validation has not been performed by the remote connector.
-
-
-## Prototype cleanup and automatic analysis
-
-- Removed the duplicate `momohime_sprite_prototype`; `momohime_texture_prototype` is the single sprite-sheet playback preview.
-- Removed the duplicate `momohime_atlas_inspector`; use the existing `hero_atlas_inspector` / `hero_skeleton_texture_lab` for atlas inspection.
-- Added `tools/analyze_sprite_sheet_alpha.gd`. It scans alpha occupancy and writes a JSON report containing occupied bounds and candidate row/column bands. Run it from the project root with:
-  `godot --headless --path . --script res://tools/analyze_sprite_sheet_alpha.gd`
-- The analyzer is a measurement aid, not a magical frame recognizer: connected poses and overlapping opaque pixels can merge bands, and it does not assign action labels. The output must be compared with the actual sheet before changing animation regions.
-- No Godot runtime execution has been performed through the GitHub connector; the new script still needs a local Godot 4.6.1 run before it is considered validated.
+No claim is made that the atlas has already been semantically segmented or that a texture-driven rig has passed runtime validation. Production Hero scenes and combat logic remain unchanged until the isolated texture rig is visually accepted.
