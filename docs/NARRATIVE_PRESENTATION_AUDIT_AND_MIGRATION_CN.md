@@ -123,6 +123,13 @@
 - `WorldState.make_first_choice()` 会设置 `first_choice_made` 与 `selected_route`，并改变 `church_alignment` 或 `lullaby_resonance`；这些状态被存档 / 读档，并被后续区域 NPC 与路线系统读取。
 - 因此，旧选择面板很可能是遗留入口，但仅凭 A0 脚本未发现调用，不足以断定它在整个项目中完全无人调用。GitHub 代码搜索没有返回该符号结果，也不能替代对当前分支完整引用的确认。
 
+### 进一步状态核对
+
+- `scripts/levels/route_scene.gd::_ready()` 会在进入路线场景时直接把 `WorldState.selected_route` 设为场景导出的 `route_id`。因此路线场景本身可建立路线状态，不依赖旧选择面板。
+- `WorldState.get_resume_scene_path()` 在 `slice_complete` 且 `selected_route` 非空时才恢复路线场景；否则回到 A0。读档默认值会把缺失的 `first_choice_made` 设为 `false`，把缺失的 `selected_route` 设为空字符串。
+- 当前实际 A0 主流程是教会手术所 / 逃离 → 洞外强制败北演出 → 蜜忒的家；该流程没有在上述入口中呈现“印记 / 摇篮曲”分支。因此旧面板文本和现行开场路线之间存在明显的叙事设计脱节。
+- `church_alignment` 与 `lullaby_resonance` 不仅是展示字段：旧选择函数会分别修改它们，路线记忆 / 结局评价也可能依赖这些值。若废弃旧选择，不应机械地将旧选择结果补写给所有新档；需要先定义开场到 A1 的正式状态语义，再确认各评价条件。
+
 ### 本轮处理决定
 
 暂不删除 `begin_first_choice()`、`_select_choice()` 或 `WorldState.make_first_choice()`。删除展示层却不处理路线状态，可能让新档的路线值为空，或令旧存档 / 路线场景行为不一致。
