@@ -2,9 +2,8 @@ extends Node2D
 ## Local-only atlas inspection helper. The third-party atlas is never committed.
 ## 本地纹理图集检查器；第三方图集本身不会提交到仓库。
 
-const ATLAS_PATH := "res://assets/art/hero_sprite_lab/muramasa_texture_atlas.png"
-const ATLAS_SIZE := Vector2(2048.0, 2048.0)
-const GRID_STEP := 128
+const ATLAS_PATH := "res://assets/characters/hero/tex1_512x512_4d6c36bcbd5d9ddc_423915aa39e773f2_9.png"
+const GRID_STEP := 32
 const GRID_COLOR := Color(0.9, 0.85, 0.65, 0.38)
 const SELECTION_COLOR := Color(0.25, 0.95, 0.65, 0.95)
 
@@ -48,8 +47,8 @@ func _ready() -> void:
 	add_child(atlas_sprite)
 
 	camera.position = Vector2.ZERO
-	camera.zoom = Vector2(0.42, 0.42)
-	_build_status("Atlas inspector / 图集检查器\nWheel: zoom · Drag left mouse: select crop · Right click: reset zoom\n滚轮缩放 · 左键拖框选择零件 · 右键重置缩放")
+	camera.zoom = Vector2(0.8, 0.8)
+	_build_status("Texture atlas inspector / 纹理图集检查器\nSource: committed PNG atlas · Wheel: zoom · Drag: measure crop · Right click: reset\n使用仓库内 PNG 纹理；滚轮缩放 · 拖框测量区域 · 右键重置")
 	queue_redraw()
 
 
@@ -97,7 +96,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		elif mouse_event.button_index == MOUSE_BUTTON_RIGHT and mouse_event.pressed:
 			camera.position = Vector2.ZERO
-			camera.zoom = Vector2(0.42, 0.42)
+			camera.zoom = Vector2(0.8, 0.8)
 			get_viewport().set_input_as_handled()
 		elif mouse_event.button_index == MOUSE_BUTTON_LEFT and atlas_sprite != null:
 			if mouse_event.pressed:
