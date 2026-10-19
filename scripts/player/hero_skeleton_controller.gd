@@ -211,7 +211,7 @@ func request_presentation_action(action_name: String, duration: float = 0.65, pr
 	_presentation_action_name = normalized
 	_presentation_action_priority = resolved_priority
 	_presentation_action_remaining = maxf(0.0, duration)
-	_presentation_action_duration = maxf(0.65, duration)
+	_presentation_action_duration = maxf(0.01, duration) if duration > 0.0 else 0.65
 	_presentation_action_persistent = duration <= 0.0
 	_presentation_action_elapsed = 0.0
 	current_pose = pose
