@@ -149,7 +149,7 @@ func apply_visual_context(context: Dictionary) -> void:
 		_received_context = true
 		_was_grounded = _grounded
 	elif _grounded and not _was_grounded:
-		_landing_time = 0.12
+		_landing_time = 0.18
 	_was_grounded = _grounded
 	var state_name := str(context.get("state", "idle"))
 	var next_pose := PoseState.IDLE
@@ -486,8 +486,10 @@ func _apply_pose() -> void:
 			foot_right_bone.rotation = 0.18
 		PoseState.LAND:
 			# Brief impact compression and recovery; no gameplay or collision timing is changed.
-			var land := clampf(_landing_time / 0.12, 0.0, 1.0)
-			var impact := sin((1.0 - land) * PI) if land > 0.0 else 0.0
+			var land := clampf(_landing_time / 0.18, 0.0, 1.0)
+			# Maximum compression occurs on contact, then eases out during recovery.
+			# 落地接触瞬间压缩最大，随后在恢复阶段逐渐释放。
+			var impact := land * land
 			root_bone.position.y += impact * 2.0
 			body_bone.rotation = impact * 0.12
 			head_bone.rotation = impact * -0.08
