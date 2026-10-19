@@ -9,6 +9,8 @@ const HUMANOID_VISUAL_SCENE = preload("res://scenes/characters/humanoid_characte
 @export var display_name: String = ""
 @export_multiline var dialogue: String = ""
 @export_range(40.0, 140.0, 5.0) var interaction_range: float = 100.0
+@export var skin_color: Color = Color("#8d7566")
+@export var cloth_color: Color = Color("#49424a")
 
 var cooldown := 0.0
 var hero_nearby := false
@@ -18,8 +20,8 @@ func _ready() -> void:
     character_visual = HUMANOID_VISUAL_SCENE.instantiate() as HumanoidCharacterVisual
     character_visual.name = "CharacterVisual"
     character_visual.position = Vector2(0.0, -20.0)
-    character_visual.skin_color = Color("#8d7566")
-    character_visual.cloth_color = Color("#49424a")
+    character_visual.skin_color = skin_color
+    character_visual.cloth_color = cloth_color
     add_child(character_visual)
     set_meta("interaction_priority", 60)
     print("[NEREIS][NPC] %s initialized id=%s" % [display_name, npc_id])
