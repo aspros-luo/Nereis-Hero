@@ -104,16 +104,18 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func play_first_memory() -> void:
     if WorldState.first_memory_unlocked:
-        show_message("老猎人", "这段记忆，你已经听过了。")
+        show_message("老猎人", "那首歌……你以前总要问我，它还在不在。")
         return
 
     WorldState.unlock_first_memory()
+    # Keep this as the old hunter's own recollection. Do not narrate his facial reaction
+    # or use an off-screen lullaby as an omniscient explanation.
     show_message(
-        "一段不属于你的记忆",
-        "老猎人看清你的脸后，瞬间失去血色。\n\n\"教会带走你之前，你常来这里。你每次都会问，那首歌是否还在继续。\"\n\n村庄之外，某处传来摇篮曲的回应。",
-        8.0
+        "老猎人",
+        "教会带走你之前，你常来这里。你每次都会问，那首歌是否还在继续。",
+        5.0
     )
-    print("[NEREIS][STORY] First memory event displayed")
+    print("[NEREIS][STORY] First memory dialogue displayed")
 
 func show_message(title: String, message: String, duration: float = 4.0) -> void:
     NereisInteractionFocus.clear_all(get_tree())
@@ -183,5 +185,5 @@ func play_weapon_upgrade() -> void:
         show_message("老猎人", "这把刀暂时已经足够锋利。")
         return
     WorldState.upgrade_weapon()
-    show_message("更稳的握法", "老猎人纠正了你的架势。\n\n“你一直像记得自己如何死去一样战斗。”\n\n如今，你的剑刃更加致命。")
+    show_message("老猎人", "手腕放松。肩膀别先送出去。", 3.0)
     print("[NEREIS][STORY] First weapon upgrade delivered")
