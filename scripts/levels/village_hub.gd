@@ -265,6 +265,10 @@ func _spawn_shared_world_npcs() -> void:
 	merchant.display_name = "旅行商人"
 	if WorldState.get_humanity_state() == "hollow":
 		merchant.dialogue = "商人收起了笑容，悄悄把货箱往身边拉近。\n\n“今天先不谈价。你看起来比路上的风雨更难应付。”"
+	elif "graybox_intro_forgotten_city" in WorldState.achievement_flags:
+		merchant.dialogue = "商人注意到你靴边的旧灰，没追问你在城墙下看见了什么。\n\n“旧城区的路不适合闭着眼走。记住自己从哪一侧进来，比记住传闻更有用。”"
+	elif "graybox_intro_ash_forest" in WorldState.achievement_flags:
+		merchant.dialogue = "商人把一枚磨损的路标放回箱中。\n\n“北边的旧路能走，不代表每条岔路都值得追。回来时，先记清楚自己看见了什么。”"
 	elif "village_defense_survived" in WorldState.achievement_flags:
 		merchant.dialogue = "商人重新整理着货物。\n\n“北门恢复通行后，来往的人会多起来。真要买东西，先想清楚下一段路缺什么。”"
 	else:
