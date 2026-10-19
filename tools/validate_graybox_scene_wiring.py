@@ -667,7 +667,7 @@ def main() -> int:
     require(mite_house_script, 'WorldState.pending_region_spawn_side = "mite_house_return"', "Mite's house return declares its village entry side", errors)
     require(mite_house_script, '"YOU WAKE IN A SMALL ROOM"', "A0 arrival uses quiet wake-up framing instead of rescue exposition", errors)
     world_state_script = read("scripts/core/world_state.gd", errors)
-    require(world_state_script, '"mite_house":\n            return "res://scenes/mite_house.tscn"', "Continue can resume the one-time A0 arrival scene", errors)
+    require(world_state_script, 'return "res://scenes/mite_house.tscn"', "Continue can resume the one-time A0 arrival scene", errors)
 
     defense_route_script = read("scripts/levels/village_defense_demo.gd", errors)
     require(defense_route_script, 'if defeated == 3 and stage == 1:', "A1 defense first wave completion", errors)
