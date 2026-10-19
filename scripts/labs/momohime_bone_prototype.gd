@@ -200,16 +200,16 @@ func _apply_motion() -> void:
 			hair.rotation = -0.04 + wave * 0.05
 			skirt.rotation = wave * 0.035
 		Motion.SLASH:
-			var phase := fposmod(elapsed, 0.72) / 0.72
+			var phase: float = fposmod(elapsed, 0.72) / 0.72
 			if phase < 0.28:
-				var load := smoothstep(0.0, 0.28, phase)
+				var load: float = smoothstep(0.0, 0.28, phase)
 				torso.rotation = lerpf(-0.08, -0.48, load)
 				arm_near.rotation = lerpf(-0.18, -1.35, load)
 				arm_far.rotation = lerpf(0.16, -0.7, load)
 				leg_near.rotation = -0.12
 				leg_far.rotation = 0.16
 			elif phase < 0.48:
-				var cut := smoothstep(0.28, 0.48, phase)
+				var cut: float = smoothstep(0.28, 0.48, phase)
 				torso.rotation = lerpf(-0.48, 0.34, cut)
 				arm_near.rotation = lerpf(-1.35, 0.85, cut)
 				arm_far.rotation = lerpf(-0.7, -0.25, cut)
@@ -217,7 +217,7 @@ func _apply_motion() -> void:
 				leg_near.rotation = -0.24
 				leg_far.rotation = 0.3
 			else:
-				var recover := smoothstep(0.48, 1.0, phase)
+				var recover: float = smoothstep(0.48, 1.0, phase)
 				torso.rotation = lerpf(0.34, 0.0, recover)
 				arm_near.rotation = lerpf(0.85, -0.18, recover)
 				arm_far.rotation = lerpf(-0.25, 0.16, recover)
@@ -230,5 +230,6 @@ func _apply_motion() -> void:
 func _update_status() -> void:
 	if status == null:
 		return
-	var label := ["待机 Idle", "行走 Walk", "挥刀 Slash"][motion]
+	var labels: Array[String] = ["待机 Idle", "行走 Walk", "挥刀 Slash"]
+	var label: String = labels[int(motion)]
 	status.text = "百姬风格骨骼原型 | %s\n1 待机  2 行走  3 挥刀  Space 暂停/继续  ←/→ 朝向  R 重播\n分层部件由 Bone2D 驱动；独立实验，不替换正式 Hero。" % label
