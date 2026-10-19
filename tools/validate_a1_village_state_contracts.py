@@ -58,6 +58,26 @@ def main() -> int:
         "A1: village church exterior should remain an explorable empty church.",
     )
 
+    # Camp arrival is a separate, explicitly confirmed later story fact.
+    # Never infer the Restoration Army's arrival from surviving the village defense.
+    camp_poi_start = village.find('if "restoration_camp_established" in WorldState.achievement_flags:')
+    camp_poi_end = village.find('var north_gate := Node2D.new()', camp_poi_start)
+    camp_visual_start = village.find('# Hide the camp\'s distinctive fire and label')
+    camp_visual_end = village.find('draw_rect(Rect2(2780, 330, 120, 190)', camp_visual_start)
+    require(
+        camp_poi_start >= 0
+        and camp_poi_end > camp_poi_start
+        and 'rebel_camp.poi_id = "rebel_camp"' in village[camp_poi_start:camp_poi_end]
+        and 'if "village_defense_survived" in WorldState.achievement_flags' not in village[camp_poi_start:camp_poi_end],
+        "A1: Restoration Army camp POI must use its own explicit arrival flag, not the defense milestone.",
+    )
+    require(
+        camp_visual_start >= 0
+        and camp_visual_end > camp_visual_start
+        and 'if "restoration_camp_established" in WorldState.achievement_flags:' in village[camp_visual_start:camp_visual_end],
+        "A1: camp fire/label visuals must share the explicit camp-arrival gate.",
+    )
+
     # Keep the actual map-branch drain transition, rather than the stale direct A3 transition.
     require(
         'city_cut.poi_id = "city_cut"' in village
@@ -96,6 +116,7 @@ def main() -> int:
 
     print("[PASS] Church NPC/clue/route/research content remains gated until occupation")
     print("[PASS] A1 old-drain entrance targets the phased exploration scene")
+    print("[PASS] Restoration Army camp appearance is gated by its own later-story flag")
     print("[PASS] Village-defense milestone, H01 well, cliff cave and C24 contracts are preserved")
     print("A1 VILLAGE STATE CONTRACTS: PASS")
     return 0
