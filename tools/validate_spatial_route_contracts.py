@@ -194,13 +194,23 @@ def main() -> int:
     c24 = edges.get("C24", {}).get("spatial_contract", {})
     to_spawn = c24.get("to_region_spawn", {})
     return_spawn = c24.get("return_spawn", {})
+    intermediate = c24.get("intermediate_scene", {})
+    require(
+        errors,
+        intermediate.get("scene_path") == "scenes/old_drain_exploration.tscn"
+        and intermediate.get("first_visit_spawn_side") == "village_entry"
+        and intermediate.get("a3_return_spawn_side") == "city_side_entry"
+        and intermediate.get("reservoir_return_spawn_side") == "reservoir_link"
+        and intermediate.get("a3_link_unlock_flag") == "opened_old_drainage_link_from_A4",
+        "C24: topology must document the phased old-drain scene and all three spawn sides.",
+    )
     require(
         errors,
         to_spawn.get("region") == "A3"
         and to_spawn.get("spawn_side") == "village_city_cut"
         and float(to_spawn.get("x", float("nan"))) == 700.0
         and float(to_spawn.get("y_offset", float("nan"))) == 0.0,
-        "C24: topology must keep the A3 landing at x=700 on the ground-level drainage route.",
+        "C24: topology must keep the final A3 landing at x=700 after traversing the old-drain segment.",
     )
     require(
         errors,
