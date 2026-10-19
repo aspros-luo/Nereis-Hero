@@ -199,7 +199,7 @@ def main() -> int:
         errors,
         intermediate.get("scene_path") == "scenes/old_drain_exploration.tscn"
         and intermediate.get("first_visit_spawn_side") == "village_entry"
-        and intermediate.get("a3_return_spawn_side") == "city_side_entry"
+        and intermediate.get("a3_entry_spawn_side") == "city_side_entry"
         and intermediate.get("reservoir_return_spawn_side") == "reservoir_link"
         and intermediate.get("a3_link_unlock_flag") == "opened_old_drainage_link_from_A4",
         "C24: topology must document the phased old-drain scene and all three spawn sides.",
