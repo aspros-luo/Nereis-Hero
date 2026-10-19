@@ -267,14 +267,17 @@ func _spawn_village_pois() -> void:
 	add_child(graveyard)
 	graveyard.interacted.connect(_on_village_poi_interacted.bind(graveyard))
 
-	var rebel_camp := Node2D.new()
-	rebel_camp.set_script(VILLAGE_POI_SCRIPT)
-	rebel_camp.position = Vector2(1990, 520)
-	rebel_camp.poi_id = "rebel_camp"
-	rebel_camp.display_name = "复国军营地"
-	rebel_camp.dialogue = "山丘后燃着一小堆篝火。\n\n有人在这里扎营，却没有竖起旗帜。\n\n你听见士兵们正在争论王座。"
-	add_child(rebel_camp)
-	rebel_camp.interacted.connect(_on_village_poi_interacted.bind(rebel_camp))
+	# The restoration camp appears only after the village-defense milestone and remains thereafter.
+	# 复国军营地只在村庄防卫节点后出现，并在后续回访中常驻。
+	if "village_defense_survived" in WorldState.achievement_flags:
+		var rebel_camp := Node2D.new()
+		rebel_camp.set_script(VILLAGE_POI_SCRIPT)
+		rebel_camp.position = Vector2(1990, 520)
+		rebel_camp.poi_id = "rebel_camp"
+		rebel_camp.display_name = "复国军营地"
+		rebel_camp.dialogue = "山丘后燃着一小堆篝火。\n\n有人在这里扎营，却没有竖起旗帜。\n\n你听见士兵们正在争论王座。"
+		add_child(rebel_camp)
+		rebel_camp.interacted.connect(_on_village_poi_interacted.bind(rebel_camp))
 
 	var north_gate := Node2D.new()
 	north_gate.set_script(VILLAGE_POI_SCRIPT)
@@ -322,8 +325,8 @@ func _spawn_village_pois() -> void:
 	# 教堂交互点与北门之间保留无交互提示的回程落脚区。
 	church.position = Vector2(2180, 520)
 	church.poi_id = "church"
-	church.display_name = "教会"
-	church.dialogue = "教会大门的层层新漆之下，隐约露出你的名字。\n\n有人曾多次试图将它抹去。"
+	church.display_name = "教堂"
+	church.dialogue = "教堂大门紧闭着。\n\n里面没有祈祷声，也没有人影。现在这里只是一座空教堂。"
 	add_child(church)
 	church.interacted.connect(_on_village_poi_interacted.bind(church))
 
@@ -657,17 +660,18 @@ func _draw() -> void:
 	draw_rect(Rect2(900, 390, 120, 130), Color("#28212a"))
 	draw_string(ThemeDB.fallback_font, Vector2(885, 365), NereisLocalization.translate_text("墓地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
 
-	draw_rect(Rect2(1940, 360, 150, 160), Color("#27212a"))
-	draw_colored_polygon(
-		PackedVector2Array([
-			Vector2(1915, 360),
-			Vector2(2015, 270),
-			Vector2(2115, 360)
-		]),
-		Color("#312934")
-	)
-	draw_circle(Vector2(2015, 455), 34.0, Color("#63322f"))
-	draw_string(ThemeDB.fallback_font, Vector2(1900, 335), NereisLocalization.translate_text("复国军营地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
+	if "village_defense_survived" in WorldState.achievement_flags:
+		draw_rect(Rect2(1940, 360, 150, 160), Color("#27212a"))
+		draw_colored_polygon(
+			PackedVector2Array([
+				Vector2(1915, 360),
+				Vector2(2015, 270),
+				Vector2(2115, 360)
+			]),
+			Color("#312934")
+		)
+		draw_circle(Vector2(2015, 455), 34.0, Color("#63322f"))
+		draw_string(ThemeDB.fallback_font, Vector2(1900, 335), NereisLocalization.translate_text("复国军营地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
 
 	draw_rect(Rect2(2380, 330, 120, 190), Color("#241e27"))
 	draw_rect(Rect2(2410, 350, 18, 170), Color("#4a3439"))
@@ -700,7 +704,7 @@ func _draw() -> void:
 		]),
 		Color("#312934")
 	)
-	draw_string(ThemeDB.fallback_font, Vector2(2135, 200), NereisLocalization.translate_text("教会"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#796d67"))
+	draw_string(ThemeDB.fallback_font, Vector2(2135, 200), NereisLocalization.translate_text("教堂"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#796d67"))
 
 	# New art pass: broken stonework, amber window-light, and low fog separate the safe village from the old wall.
 	# 美术细化：破损石构、琥珀窗光与贴地薄雾，区分安全村庄与古老城墙。
