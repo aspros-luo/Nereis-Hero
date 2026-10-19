@@ -265,7 +265,7 @@ func _show_intro() -> void:
     if location_id == "tavern":
         narrative.show_message("THE TAVERN", "The room is warmer than the road.\n\nSomewhere behind the bar, a glass is placed down by a hand you cannot see.", 6.0)
     else:
-        narrative.show_message("THE CHURCH", "Incense clings to the stone.\n\nThe Hero's footsteps are familiar to the room.", 6.0)
+        narrative.show_message("教堂", "旧木椅整齐地排在空旷的长厅里。\n\n没有人回应你的脚步，只有灰尘在高窗下缓慢浮动。", 6.0)
 
 func _on_npc_interacted(npc: Node) -> void:
     narrative.show_message(npc.display_name, npc.dialogue, 6.0)
