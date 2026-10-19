@@ -507,6 +507,11 @@
         "route_form": "钟塔顶→城区钟塔落差平台",
         "readability_contract": "高位落差捷径，回程从修道院高层恢复",
         "status": "design_contract_not_runtime_verified"
+      },
+      "access_prerequisite": {
+        "combat_flag": "defeated_A6_BellWarden_01",
+        "item_id": "bell_tower_winch_key",
+        "intent": "Defeat the bell warden, recover the persistent winch key, then interact twice to open and traverse C10. This prerequisite does not alter the A6-to-A7 main route."
       }
     },
     {
