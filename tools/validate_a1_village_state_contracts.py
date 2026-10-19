@@ -115,6 +115,31 @@ def main() -> int:
         "A1: merchant revisit dialogue must prioritize actual A3/A2 exploration facts before generic defense feedback.",
     )
 
+    # The tavern sound event is a one-time, persisted world fact; dialogue is resolved on re-entry.
+    director = read("scripts/core/world_event_director.gd")
+    require(
+        '"id": "A1_tavern_sound_notice"' in director
+        and '"trigger": "interaction"' in director
+        and '"interaction_id": "tavern"' in director
+        and '"once": true' in director
+        and '{"type": "flag_absent", "value": "A1_tavern_sound_noticed"}' in director
+        and '{"type": "add_flag", "value": "A1_tavern_sound_noticed"}' in director,
+        "A1: tavern sound notice must be an idempotent one-time event gated by the missing fact.",
+    )
+    require(
+        'world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": String(poi.poi_id)' in village
+        and 'world_event_director.dispatch("region_entered", {"region": "A1", "location": "village"' in village
+        and 'if "A1_tavern_sound_noticed" in WorldState.achievement_flags' in interior,
+        "A1: tavern notice must dispatch from the real POI interaction and resolve the follow-up on interior re-entry.",
+    )
+    require(
+        'func _apply_effects(effects: Array)' in director
+        and '_world_state.save_game()' in director
+        and 'func _mark_fired(event_id: String)' in director
+        and '_world_state.save_game()' in director[director.find('func _mark_fired(event_id: String)'):],
+        "A1: one-time event effects and fired markers must persist across scene changes and Continue.",
+    )
+
     # Protect already established optional routes from unrelated A1 changes.
     require(
         'resonance_well_gate.secret_id = "H01"' in village
