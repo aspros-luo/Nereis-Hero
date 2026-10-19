@@ -1764,9 +1764,18 @@ def main() -> int:
     ):
         errors.append("Village resume spawn-side save order: capture incoming side, save destination, then clear one-shot side.")
     require(village_hub, '2310.0 if spawn_side == "north_gate"', "Village north-gate return spawn", errors)
+    require(village_hub, '350.0 if spawn_side == "city_cut_return"', "Village old-drain return spawn", errors)
+    require(village_hub, '1850.0 if spawn_side in ["well_exit", "cliff_cave_return"]', "Village lower east return spawn", errors)
+    require(village_hub, '530.0 if spawn_side == "mite_house_return"', "Village house return spawn", errors)
     require(region_spawn_script, '"res://scenes/village_hub.tscn", "north_gate"', "A2 village return side", errors)
+    require(region_spawn_script, '"res://scenes/village_hub.tscn", "city_cut_return"', "A3 old-drain return side", errors)
+    require(region_spawn_script, '"res://scenes/village_hub.tscn", "well_exit"', "Watergate return side", errors)
+    require(village_hub, 'WorldState.set_checkpoint(Vector2(360, 520))', "A1 checkpoint is restored on entering the hub", errors)
     require(village_hub, '"village_defense_survived"', "Village old-road unlock", errors)
     require(village_hub, 'res://scenes/ash_forest.tscn', "Village old-road route", errors)
+    require(village_hub, 'if "village_defense_survived" in WorldState.achievement_flags:', "A1 north gate and old drain both require completed village defense", errors)
+    require(village_hub, 'body.is_on_floor()', "A1 rest point rejects airborne use", errors)
+    require(village_hub, 'WorldState.save_game()', "A1 rest point saves after restoring the Hero", errors)
 
     defense = read("scripts/levels/village_defense_demo.gd", errors)
     require(defense, 'WorldState.record_achievement("village_defense_survived")', "Village defense", errors)
