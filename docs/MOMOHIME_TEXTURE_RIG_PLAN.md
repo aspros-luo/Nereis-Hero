@@ -28,3 +28,12 @@ These are source assets, not yet a completed rig. Keep original filenames so tex
 ## Acceptance boundary
 
 Asset presence and script path have been verified from GitHub. No Godot runtime validation or final frame-segmentation validation is claimed yet. Production Hero scenes and combat logic remain unchanged.
+
+
+## Texture prototype added
+
+A separate texture-backed scene now exists at `res://scenes/labs/momohime_texture_prototype.tscn` with script `scripts/labs/momohime_texture_prototype.gd`. It loads the committed `assets/characters/hero/153143.png` directly and provides keyboard-selectable idle, walk, and slash test sequences. It does not depend on the polygon silhouette rig and does not modify production Hero.
+
+Run this scene with F6. Controls: 1 idle, 2 walk, 3 slash, Space pause/resume, Left/Right facing, R restart.
+
+Important: this is an interim source-texture animation viewer, not yet the requested part-by-part texture bone rig. The equal-cell grid and sequence mapping are still provisional. The next stage is exact alpha-bound segmentation and atlas-part mapping, then replace the placeholder polygon visuals in the bone prototype with texture-backed parts. Godot runtime validation has not been performed by the remote connector.
