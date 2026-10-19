@@ -284,14 +284,17 @@ func _spawn_village_pois() -> void:
 	add_child(graveyard)
 	graveyard.interacted.connect(_on_village_poi_interacted.bind(graveyard))
 
-	var rebel_camp := Node2D.new()
-	rebel_camp.set_script(VILLAGE_POI_SCRIPT)
-	rebel_camp.position = Vector2(1990, 520)
-	rebel_camp.poi_id = "rebel_camp"
-	rebel_camp.display_name = "复国军营地"
-	rebel_camp.dialogue = "山丘后燃着一小堆篝火。\n\n有人在这里扎营，却没有竖起旗帜。\n\n你听见士兵们正在争论王座。"
-	add_child(rebel_camp)
-	rebel_camp.interacted.connect(_on_village_poi_interacted.bind(rebel_camp))
+	# The Restoration Army is a later story arrival, not part of the first village visit.
+	# 复国军是后续剧情阶段才进入村庄的势力，初次到达 A1 时不生成营地。
+	if "restoration_camp_established" in WorldState.achievement_flags:
+		var rebel_camp := Node2D.new()
+		rebel_camp.set_script(VILLAGE_POI_SCRIPT)
+		rebel_camp.position = Vector2(1990, 520)
+		rebel_camp.poi_id = "rebel_camp"
+		rebel_camp.display_name = "复国军营地"
+		rebel_camp.dialogue = "营地已经扎稳。有人整理装备，有人低声讨论接下来的道路。\n\n这里不再是临时停留的地方。"
+		add_child(rebel_camp)
+		rebel_camp.interacted.connect(_on_village_poi_interacted.bind(rebel_camp))
 
 	var north_gate := Node2D.new()
 	north_gate.set_script(VILLAGE_POI_SCRIPT)
@@ -339,8 +342,8 @@ func _spawn_village_pois() -> void:
 	# 教堂交互点与北门之间保留无交互提示的回程落脚区。
 	church.position = Vector2(2180, 520)
 	church.poi_id = "church"
-	church.display_name = "教会"
-	church.dialogue = "教会大门的层层新漆之下，隐约露出你的名字。\n\n有人曾多次试图将它抹去。"
+	church.display_name = "教堂"
+	church.dialogue = "教堂的大门没有上锁。里面空荡而安静，只有旧木椅与未燃尽的蜡烛。\n\n暂时没有人回应你的脚步声。"
 	add_child(church)
 	church.interacted.connect(_on_village_poi_interacted.bind(church))
 
