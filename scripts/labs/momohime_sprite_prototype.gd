@@ -80,7 +80,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _build_stage() -> void:
 	var floor := Line2D.new()
 	floor.name = "PrototypeFloor"
-	floor.points = PackedVector2Array(Vector2(-420, 0), Vector2(420, 0))
+	floor.points = PackedVector2Array([Vector2(-420, 0), Vector2(420, 0)])
 	floor.width = 3.0
 	floor.default_color = Color("#8b7d70")
 	add_child(floor)
