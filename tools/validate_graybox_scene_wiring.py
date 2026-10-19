@@ -630,16 +630,16 @@ def main() -> int:
     require(world_state, 'for target in get_tree().get_nodes_in_group("resonance_hidden_targets"):', "WorldState refreshes resonance targets", errors)
     require(world_state, 'target.call("update_reveal_state", resonance_sight_active, hero_resonance, ancient_exposure, outer_exposure, debug_override)', "WorldState passes current sight state to map targets", errors)
 
-    # A0 exterior forced-loss sequence must be wired as a staged runtime flow, not only a topology edge.
-    # A0 洞外必败演出必须具备实际运行时阶段，而非仅依赖拓扑连通。
+    # A0 exterior forced-loss must progress through a short fade placeholder, not depend on unfinished animation.
+    # A0 洞外必败流程用短暂黑屏占位，不得依赖尚未完成的撤退/坠落动画。
     prologue_exterior_script = read("scripts/levels/prologue_exterior.gd", errors)
     executioner_script = read("scripts/enemies/ashen_knight.gd", errors)
     require(prologue_exterior_script, "const FORCED_DEFEAT_SECONDS := 12.0", "A0 exterior forced-loss timeout", errors)
     require(prologue_exterior_script, 'boss.set("damage_immune", true)', "A0 executioner cannot be defeated before rescue", errors)
-    require(prologue_exterior_script, "await retreat_tween.finished", "A0 cliff retreat completes before fall beat", errors)
-    require(prologue_exterior_script, '"无路可退"', "A0 cliff beat has authored narrative caption", errors)
-    require(prologue_exterior_script, "await fall_tween.finished", "A0 cliff fall completes before village transition", errors)
+    require(prologue_exterior_script, 'WorldState.record_achievement("prologue_cliff_fall_rescue_pending")', "A0 rescue pending flag is persisted", errors)
+    require(prologue_exterior_script, "WorldState.mark_prologue_complete()", "A0 prologue completion is committed before transition", errors)
     require(prologue_exterior_script, 'WorldState.pending_region_spawn_side = "west"', "A0 rescue selects safe west-side A1 spawn", errors)
+    require(prologue_exterior_script, 'SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")', "A0 uses fade transition to A1 instead of blocking on placeholder animation", errors)
     require(executioner_script, "if damage_immune:", "Boss runtime honors the prologue damage-immunity contract", errors)
 
     # M1 alternate route and vertical traversal contracts.
