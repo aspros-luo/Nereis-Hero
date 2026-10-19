@@ -19,6 +19,7 @@ const RESEARCH_HUSK_SCRIPT = preload("res://scripts/enemies/research_husk.gd")
 const CHURCH_INQUISITOR_SCRIPT = preload("res://scripts/enemies/church_inquisitor.gd")
 const BELL_WRAITH_SCRIPT = preload("res://scripts/enemies/bell_wraith.gd")
 const THIRD_CORD_FRAGMENT_SCRIPT = preload("res://scripts/world/third_cord_fragment.gd")
+const WORLD_ITEM_PICKUP_SCRIPT = preload("res://scripts/world/world_item_pickup.gd")
 const REGION_AMBIENCE_SCRIPT = preload("res://scripts/effects/region_ambience.gd")
 const FOREST_BACKDROP = preload("res://assets/art/backdrops/forest_backdrop.svg")
 const RUINS_BACKDROP = preload("res://assets/art/backdrops/ruins_backdrop.svg")
@@ -72,6 +73,7 @@ func _ready() -> void:
 	print("[NEREIS][MAP][SPAWN] region=%s location=%s side=%s x=%.1f y=%.1f resume_side=%s" % [region_id, location_id, spawn_side, hero.position.x, hero.position.y, WorldState.resume_spawn_side])
 	_spawn_ui()
 	_spawn_region_sources()
+	_spawn_region_item_pickups()
 	_spawn_region_exits()
 	_register_debug_locked_route_hints()
 	_spawn_region_rest_point()
@@ -695,6 +697,48 @@ func _show_intro() -> void:
 				"铭文并非被风雨磨损。\n\n凿痕是在墓穴封闭之后才留下的。",
 				5.0
 			)
+
+
+func _spawn_region_item_pickups() -> void:
+	# Exploration rewards are placed on existing upper-route landings; they do not block the safe ground route.
+	# 探索奖励放在现有上层路线的落脚点上，不封锁安全地面主路。
+	var placements: Array[Dictionary] = []
+	match region_id:
+		"A2":
+			placements.append({
+				"pickup_id": "map_reward_old_pilgrim_waybill",
+				"item_id": "old_pilgrim_waybill",
+				"node_name": "OldPilgrimWaybill",
+				"position": Vector2(1550.0, 282.0)
+			})
+		"A3":
+			placements.append({
+				"pickup_id": "map_reward_third_street_survey",
+				"item_id": "third_street_survey",
+				"node_name": "ThirdStreetSurvey",
+				"position": Vector2(740.0, 282.0)
+			})
+		"A8":
+			placements.append({
+				"pickup_id": "map_reward_royal_mortuary_register",
+				"item_id": "royal_mortuary_register",
+				"node_name": "RoyalMortuaryRegister",
+				"position": Vector2(1290.0, 282.0)
+			})
+
+	for placement in placements:
+		var pickup_id := str(placement.get("pickup_id", ""))
+		if pickup_id.is_empty() or pickup_id in WorldState.collected_world_item_ids:
+			continue
+		var pickup := Node2D.new()
+		pickup.set_script(WORLD_ITEM_PICKUP_SCRIPT)
+		pickup.name = str(placement.get("node_name", "RegionItemPickup"))
+		pickup.position = placement.get("position", Vector2.ZERO)
+		pickup.set("pickup_id", pickup_id)
+		pickup.set("item_id", str(placement.get("item_id", "")))
+		pickup.set("prompt_text", "E  拾取")
+		add_child(pickup)
+
 
 func _spawn_region_ambience() -> void:
 	# Add a tiny independent draw layer so ambient motion never redraws the whole level.
