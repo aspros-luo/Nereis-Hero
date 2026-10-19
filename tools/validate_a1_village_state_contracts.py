@@ -92,6 +92,19 @@ def main() -> int:
         "A1: village-defense milestone must be recorded and serialized.",
     )
 
+    # The cliff-cave consequence requires a real return to A1 after the boss defeat.
+    require(
+        'if "defeated_mad_cleric" in WorldState.achievement_flags:' in village
+        and 'WorldState.record_achievement("returned_to_village_after_mad_cleric")' in village
+        and 'if "returned_to_village_after_mad_cleric" not in WorldState.achievement_flags:' in village,
+        "A1: cliff-cave unlock must be recorded on physical return after defeating the mad cleric.",
+    )
+    require(
+        'WorldState.record_achievement("defeated_mad_cleric")' in read("scripts/levels/greybox_world_region.gd")
+        and '村庄的山崖似乎回应了这声低鸣。' not in read("scripts/levels/greybox_world_region.gd"),
+        "A6: mad-cleric defeat must not force an explanatory exposition panel.",
+    )
+
     # Protect already established optional routes from unrelated A1 changes.
     require(
         'resonance_well_gate.secret_id = "H01"' in village
