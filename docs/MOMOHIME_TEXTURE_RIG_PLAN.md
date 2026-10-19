@@ -1,23 +1,30 @@
 # Momohime Texture Rig Prototype
 
-## Source asset intake
+## Committed source assets
 
-The uploaded source set is intended for `assets/art/hero_sprite_lab/`:
+The source files are now committed in `assets/characters/hero/` on `feature/hero-animation-system`:
 
-- `153143.png` — full sprite sheet, 2048×1945 RGBA.
-- `momohime_texture_atlas.png` — packed body-part texture atlas, 2048×2048 RGBA.
-- `momohime_texture_atlas_original.dds` — original DDS texture, 1024×1024, DXT3.
+- `153143.png` — Momohime animation sprite sheet (2048×1945).
+- `tex1_512x512_4d6c36bcbd5d9ddc_423915aa39e773f2_9.png` — packed body-part texture atlas.
+- `tex1_512x512_544f6621d3d7aae2_f32cd14fd4d9e265_9.dds` — original DDS texture.
 
-The sprite animation lab now expects the true uploaded sprite-sheet dimensions and uses a provisional 204×243 grid. This is only a first-pass grid: row/column boundaries and the idle/walk/slash labels must be visually verified against the source art before being considered final.
+These are source assets, not yet a completed rig. Keep original filenames so texture provenance and future comparisons remain clear.
 
-## Rig strategy
+## Current implementation
 
-1. Use the sprite sheet to verify reference poses and timing for idle, walk, and slash.
-2. Inspect the packed atlas and map individual head/hair, torso, sleeve, hand, skirt, leg, footwear, and weapon pieces.
-3. Build a texture-backed rig in the isolated lab scene. Keep layers separate and set pivots/overlap deliberately.
-4. Compare the rig against source poses. If a body part cannot be isolated cleanly, prefer sprite-frame animation for that motion over stretching a badly cut texture.
-5. Do not replace the production Hero until the standalone scene has passed visual and runtime acceptance.
+- The sprite-sheet lab now loads `res://assets/characters/hero/153143.png`.
+- Current frame grid (204×243, 10 columns) is provisional; the frame boundaries and action labels still require visual verification.
+- The existing Bone2D prototype is still a procedural placeholder and has not yet been converted to texture parts.
 
-## Binary file status
+## Next steps
 
-The binary files were received in the conversation, but the available GitHub connector can only write UTF-8 text and cannot upload arbitrary binary blobs from those local attachments. Therefore, do not assume the three images are already committed. Copy the three files from the provided asset bundle into the directory above and commit them on `feature/hero-animation-system`. The original DDS is retained separately from the PNG because the dimensions and compression differ.
+1. Analyze the PNG sprite sheet's alpha bounds and identify exact frame rectangles; don't assume equal-width cells without checking.
+2. Inspect the PNG atlas and map candidate rectangles for head/hair, torso, sleeves, hands, skirt, legs, footwear, and weapons.
+3. Determine whether the DDS is the same atlas in another format/resolution and inspect alpha/compression before choosing it as runtime source. Prefer PNG for the first Godot iteration.
+4. Create atlas-backed `Sprite2D`/region textures and attach parts to bones with intentional pivots, draw order, and overlap.
+5. Keep a source-pose sprite animation available as a visual reference for checking the rig.
+6. Run the standalone lab in Godot and verify idle, walk, slash, mirroring, and resource loading before integrating into the production Hero.
+
+## Acceptance boundary
+
+Asset presence and script path have been verified from GitHub. No Godot runtime validation or final frame-segmentation validation is claimed yet. Production Hero scenes and combat logic remain unchanged.
