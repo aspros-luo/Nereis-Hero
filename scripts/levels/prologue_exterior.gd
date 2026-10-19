@@ -8,7 +8,6 @@ const CLIFF_BACKDROP = preload("res://assets/art/backdrops/prologue_cliff_backdr
 const CLIFF_X := 1120.0
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 1500.0
-const FORCED_DEFEAT_DELAY := 12.0
 const CLIFF_APPROACH_LIMIT := CLIFF_X - 26.0
 
 var hero: CharacterBody2D
@@ -17,7 +16,6 @@ var narrative: CanvasLayer
 var hud: CanvasLayer
 var ending_started := false
 var boss_encounter_started := false
-var boss_encounter_elapsed := 0.0
 
 func _ready() -> void:
 	set_meta("p5_1_exit_contract", true)
@@ -49,12 +47,6 @@ func _physics_process(delta: float) -> void:
 			if is_instance_valid(hud):
 				hud.set_story_mode("A0｜洞外山路", "挡路者没有退让。观察他的动作，寻找离开的机会。")
 
-	if boss_encounter_started:
-		boss_encounter_elapsed += delta
-		if boss_encounter_elapsed >= FORCED_DEFEAT_DELAY:
-			call_deferred("_begin_rescue_transition", "defeated")
-			return
-
 	if hero.global_position.x >= CLIFF_X + 12.0 and hero.global_position.y >= FLOOR_Y + 48.0:
 		call_deferred("_begin_rescue_transition", "cliff")
 
@@ -63,10 +55,12 @@ func _spawn_hero() -> void:
 	hero.set_script(HERO_SCRIPT)
 	hero.name = "Hero"
 	hero.position = Vector2(150.0, FLOOR_Y)
+	hero.set("defer_death_recovery", true)
 	_add_character_collision(hero, 18.0, 48.0)
 	add_child(hero)
 	hero.defeated.connect(func() -> void:
 		if not ending_started:
+			AchievementManager.unlock("prologue_knight_defeat")
 			call_deferred("_begin_rescue_transition", "defeated")
 	)
 	var camera := Camera2D.new()
@@ -84,10 +78,18 @@ func _spawn_boss() -> void:
 	boss.name = "A0_ChurchExecutioner"
 	boss.position = Vector2(760.0, FLOOR_Y)
 	boss.set("boss_display_name", "教会执行者")
-	boss.set("damage_immune", true)
+	boss.set("damage_immune", false)
+	boss.set("health", 900)
+	boss.set("max_health", 900)
+	boss.set("damage_taken_multiplier", 0.42)
 	boss.set("persist_global_boss_defeat", false)
 	_add_character_collision(boss, 26.0, 58.0)
 	add_child(boss)
+	boss.defeated.connect(func() -> void:
+		if not ending_started:
+			AchievementManager.unlock("prologue_knight_victory")
+			call_deferred("_begin_rescue_transition", "victory")
+	)
 
 func _spawn_ui() -> void:
 	narrative = CanvasLayer.new()
@@ -112,17 +114,21 @@ func _begin_rescue_transition(reason: String) -> void:
 	if is_instance_valid(hero):
 		hero.invulnerable = true
 		hero.velocity = Vector2.ZERO
-		# Suspend physics for this short authored beat so a defeated/dead Hero can still be carried over the edge.
+		# The level owns the authored ending; stop gameplay physics but preserve the real defeat position.
 		hero.set_physics_process(false)
 		fall_tween = create_tween()
 		fall_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		if reason == "defeated":
-			fall_tween.tween_property(hero, "global_position", Vector2(CLIFF_X - 20.0, FLOOR_Y - 18.0), 0.24)
+		# Retreat is continuous from the actual combat position; no visible snap to the cliff.
+		var retreat_target := Vector2(CLIFF_X - 20.0, FLOOR_Y - 18.0)
+		var retreat_distance := hero.global_position.distance_to(retreat_target)
+		var retreat_duration := clampf(retreat_distance / 430.0, 0.22, 1.15)
+		fall_tween.tween_property(hero, "global_position", retreat_target, retreat_duration)
 		fall_tween.tween_property(hero, "global_position", Vector2(CLIFF_X + 42.0, FLOOR_Y + 165.0), 0.55)
 
 	if is_instance_valid(narrative):
-		var text := "刀锋撞上护甲。脚下碎石崩落，河谷在视野里翻转。" if reason == "defeated" else "碎石从脚下崩落。你坠向被雾吞没的河谷。"
-		narrative.show_caption("失去意识", text, 1.0)
+		var title := "无路可退" if reason == "defeated" else "胜利之后"
+		var text := "你被逼到悬崖边。身后传来追兵的脚步声，前方只剩被雾吞没的河谷。" if reason == "defeated" else "骑士倒下了。你已筋疲力尽，教会追兵封死退路；河谷成了最后的选择。"
+		narrative.show_caption(title, text, 1.35)
 		WorldState.input_locked = true
 
 	if fall_tween != null:
