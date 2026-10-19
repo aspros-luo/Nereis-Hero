@@ -3,6 +3,7 @@ extends SceneTree
 ## 仅分析仓库内正式纹理图集，不读取仅供参考的精灵图。
 
 const ATLAS_PATH := "res://assets/characters/hero/tex1_512x512_4d6c36bcbd5d9ddc_423915aa39e773f2_9.png"
+const DDS_PATH := "res://assets/characters/hero/tex1_512x512_544f6621d3d7aae2_f32cd14fd4d9e265_9.dds"
 const REPORT_PATH := "user://hero_texture_atlas_analysis.json"
 const ALPHA_THRESHOLD := 0.10
 const MIN_COMPONENT_AREA := 8
@@ -47,6 +48,68 @@ func _analyze() -> void:
 				opaque_count += 1
 			if alpha > ALPHA_THRESHOLD:
 				active_pixels.append(index)
+
+	var dds_image := Image.new()
+	var dds_error := dds_image.load( DDS_PATH )
+	var dds_summary: Dictionary = {"path": DDS_PATH, "load_error": dds_error}
+	if dds_error == OK:
+		var dds_width := dds_image.get_width()
+		var dds_height := dds_image.get_height()
+		var dds_total := dds_width * dds_height
+		var dds_alpha_min := 1.0
+		var dds_alpha_max := 0.0
+		var dds_alpha_sum := 0.0
+		var dds_transparent := 0
+		var dds_partial := 0
+		var dds_opaque := 0
+		for dy in range(dds_height):
+			for dx in range(dds_width):
+				var da := dds_image.get_pixel(dx, dy).a
+				dds_alpha_min = minf(dds_alpha_min, da)
+				dds_alpha_max = maxf(dds_alpha_max, da)
+				dds_alpha_sum += da
+				if da <= 0.001:
+					dds_transparent += 1
+				elif da < 0.999:
+					dds_partial += 1
+				else:
+					dds_opaque += 1
+		dds_summary = {
+			"path": DDS_PATH,
+			"load_error": OK,
+			"dimensions": {"width": dds_width, "height": dds_height},
+			"alpha": {
+				"minimum": dds_alpha_min,
+				"maximum": dds_alpha_max,
+				"mean": dds_alpha_sum / float(dds_total),
+				"transparent_pixels": dds_transparent,
+				"partial_alpha_pixels": dds_partial,
+				"opaque_pixels": dds_opaque,
+				"transparent_ratio": float(dds_transparent) / float(dds_total)
+			}
+		}
+		if dds_width == width and dds_height == height:
+			var differing_pixels := 0
+			var max_channel_delta := 0.0
+			for cy in range(height):
+				for cx in range(width):
+					var png_pixel := image.get_pixel(cx, cy)
+					var dds_pixel := dds_image.get_pixel(cx, cy)
+					var delta := maxf(maxf(absf(png_pixel.r - dds_pixel.r), absf(png_pixel.g - dds_pixel.g)), maxf(absf(png_pixel.b - dds_pixel.b), absf(png_pixel.a - dds_pixel.a)))
+					if delta > 0.001:
+						differing_pixels += 1
+					max_channel_delta = maxf(max_channel_delta, delta)
+			dds_summary["same_size_pixel_comparison"] = {
+				"differing_pixels": differing_pixels,
+				"differing_ratio": float(differing_pixels) / float(total),
+				"max_channel_delta": max_channel_delta,
+				"note": "Decoded pixel comparison; format/compression metadata is not inferred from pixels."
+			}
+		else:
+			dds_summary["same_size_pixel_comparison"] = {
+				"available": false,
+				"reason": "PNG and DDS dimensions differ; no resampling-based equivalence claim is made."
+			}
 
 	var components: Array[Dictionary] = []
 	if transparent_count > 0:
@@ -99,6 +162,7 @@ func _analyze() -> void:
 		"source": ATLAS_PATH,
 		"analysis_scope": "committed texture atlas only; reference sprite sheet excluded",
 		"dimensions": {"width": width, "height": height},
+		"dds_comparison": dds_summary,
 		"alpha": {
 			"minimum": alpha_min,
 			"maximum": alpha_max,
@@ -125,5 +189,9 @@ func _analyze() -> void:
 	file.close()
 	print("Hero texture atlas analysis complete: %dx%d" % [width, height])
 	print("Alpha transparent=%d partial=%d opaque=%d; candidate components=%d" % [transparent_count, partial_alpha_count, opaque_count, components.size()])
+	if dds_error == OK:
+		print("DDS loaded: %dx%d" % [dds_image.get_width(), dds_image.get_height()])
+	else:
+		push_warning("DDS could not be decoded by this Godot build (error %d)." % dds_error)
 	print("Report: " + REPORT_PATH)
 	quit(0)
