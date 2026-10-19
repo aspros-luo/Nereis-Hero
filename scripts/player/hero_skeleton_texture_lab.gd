@@ -7,7 +7,7 @@ class_name HeroSkeletonTextureLab
 
 const ATLAS_PATH := "res://assets/art/hero_sprite_lab/muramasa_texture_atlas.png"
 const ATLAS_SIZE := Vector2(2048.0, 2048.0)
-const GRID_STEP := 128
+const GRID_STEP := 64
 const PREVIEW_SIZE := Vector2(512.0, 512.0)
 const PREVIEW_POSITION := Vector2(680.0, 72.0)
 
@@ -115,8 +115,8 @@ func _build_atlas_view() -> void:
 	_atlas_status.position = Vector2(16.0, 12.0)
 	_atlas_status.text = (
 		"Hero texture atlas inspection / 主角纹理图集检查\n"
-		+ "Click a grid cell to read its source coordinates (128 px grid).\n"
-		+ "点击网格读取原图坐标（每格 128 像素）。\n"
+		+ "Click a grid cell to read its source coordinates (64 px grid).\n"
+		+ "点击网格读取原图坐标（每格 64 像素）。\n"
 		+ "Rig line art stays visible for comparison; this atlas needs its source mesh/UV mapping "
 		+ "before its surface islands can be assembled faithfully.\n"
 		+ "保留骨骼线稿作对照；要准确还原表面纹理，需要原模型网格/UV 对应关系。"
