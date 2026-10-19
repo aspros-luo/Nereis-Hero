@@ -87,6 +87,8 @@ const ECHO_STAGGER_DURATION := 0.32
 enum CombatState { IDLE, MOVE, JUMP, FALL, ATTACK, DODGE, QUICK_DASH, GRAPPLE, WALL_CLIMB, HURT, DEAD }
 
 var health := 100
+## When true, the current level owns death resolution (e.g. a bespoke prologue ending).
+var defer_death_recovery := false
 var facing := 1.0
 var attack_time := 0.0
 var attack_windup := 0.0
@@ -1245,6 +1247,9 @@ func receive_damage(amount: int, source: Node = null) -> void:
 		_spawn_death_burst()
 		_log("HERO", "Hero defeated; resetting vertical slice")
 		defeated.emit()
+		if defer_death_recovery:
+			# The owning level handles this authored defeat; do not run checkpoint respawn in parallel.
+			return
 		var death_layer: CanvasLayer = await _play_death_fade_out_and_wait()
 		health = 100
 		global_position = WorldState.checkpoint_position
