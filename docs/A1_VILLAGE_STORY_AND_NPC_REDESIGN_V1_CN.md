@@ -175,7 +175,7 @@ A1 不是强制任务大厅。玩家第一次进入后即可自由探索地面�
 
 | 事件 ID（建议） | 触发 | 玩家可观察结果 | 状态事实 | 可逆性 |
 |---|---|---|---|---|
-| `A1_blacksmith_gate_repair_started` | 首次调查北门或首次回村 | 修门人开始工作 / 门体出现可见变化 | 已观察到门损坏 | 可重复查看 |
+| `A1_blacksmith_gate_repair_started` | 首次调查北门或首次回村 | 铁匠开始检查北门 / 门体出现可见变化 | 已观察到门损坏 | 可重复查看 |
 | `A1_defense_reaction` | `village_defense_survived` 成立后回村 | 守门人、铁匠和北门状态更新 | 防卫结果已发生 | 持久状态 |
 | `A1_city_cut_opened` | 防卫结果满足现有门槛 | 旧排水通道实体开放 | 既有防卫 flag + 通路状态 | 持久状态 |
 | `A1_grandmother_defense_reaction` | `village_defense_survived` 成立后回村或再次交谈 | 老婆婆回应村庄重新安静下来的变化 | 不揭示核心秘密 | 持久状态 |
