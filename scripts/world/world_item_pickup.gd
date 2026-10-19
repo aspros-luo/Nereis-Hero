@@ -36,10 +36,9 @@ func _unhandled_input(event: InputEvent) -> void:
         if ITEM_CATALOG.has_item(item_id) and WorldState.record_world_item_pickup(pickup_id, item_id, amount):
             consumed = true
             queue_redraw()
-            WorldState.mark_item_read(item_id)
             var definition: Dictionary = ITEM_CATALOG.get_definition(item_id)
             var panel := get_tree().get_first_node_in_group("item_inspection_panels")
-            if panel != null and panel.has_method("show_description"):
+            if panel != null and panel.has_method("show_pickup"):
                 panel.call("show_pickup", str(definition.get("display_name", item_id)))
             print("[NEREIS][ITEM] Picked up id=%s amount=%d" % [item_id, amount])
         get_viewport().set_input_as_handled()
