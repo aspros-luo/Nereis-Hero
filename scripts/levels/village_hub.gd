@@ -195,8 +195,8 @@ func _spawn_gatekeeper() -> void:
 	else:
 		npc.dialogue = "守门人打量着你，又看了看北门的方向。\n\n\"刚回来？村里有些路白天也不好走。先四处看看，别急着往外闯。\""
 	add_child(npc)
-	add_child(npc)
 	npc.interacted.connect(_on_village_npc_interacted.bind(npc))
+
 
 func _spawn_shared_world_npcs() -> void:
 	var youth := Node2D.new()
@@ -207,14 +207,30 @@ func _spawn_shared_world_npcs() -> void:
 	if WorldState.get_humanity_state() == "hollow":
 		youth.dialogue = "The young man takes one step back.\n\n\"我认得这种眼神。你身体里已经有某种东西离开了。\""
 	elif WorldState.selected_route == "church":
+		youth.dialogue = "The young man touches your church seal and goes pale.\n\n\"我记得你曾跪在那里。他们告诉我，不许记得这件事。\""
+	elif WorldState.selected_route == "lullaby":
+		youth.dialogue = "The young man stares toward the tavern.\n\n\"有一次你回来时，怀里抱着一个人。我不知道那是谁，只记得当时有人在唱歌。\""
+	else:
+		youth.dialogue = "年轻人像是想起了什么，却迟迟没有开口。\n\n\"抱歉……我总觉得我们以前见过。但我想不起是在什么地方。\""
+	add_child(youth)
+	youth.interacted.connect(_on_village_npc_interacted.bind(youth))
+
+	var merchant := Node2D.new()
+	merchant.set_script(ROUTE_NPC_SCRIPT)
+	merchant.position = Vector2(1380, 520)
+	merchant.npc_id = "traveling_merchant"
+	merchant.display_name = "旅行商人"
+	if WorldState.get_humanity_state() == "hollow":
+		merchant.dialogue = "The merchant stops smiling.\n\n\"你本不该再听见那首歌了。\""
+	elif WorldState.selected_route == "church":
 		merchant.dialogue = "The merchant turns a silver token between two fingers.\n\n\"教会的道路只在钟声响起前安全。钟声一响，连石头都会说谎。\""
 	elif WorldState.selected_route == "lullaby":
 		merchant.dialogue = "The merchant smiles without humor.\n\n\"七年前我来过这座村庄。那时你的脸就已经画在教会的门上了。\""
 	else:
 		merchant.dialogue = "商人把银币在指间转了一圈，打量着你的行囊。\n\n\"初来乍到，还是刚从远处回来？不管哪一种，先记住村里的路，买卖不急在这一刻。\""
 	add_child(merchant)
-	add_child(merchant)
 	merchant.interacted.connect(_on_village_npc_interacted.bind(merchant))
+
 
 func _on_village_npc_interacted(npc: Node) -> void:
 	if narrative == null or not is_instance_valid(npc):
