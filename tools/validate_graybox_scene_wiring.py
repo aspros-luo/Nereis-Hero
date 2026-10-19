@@ -136,6 +136,10 @@ def main() -> int:
         try:
             topology = json.loads(topology_path.read_text(encoding="utf-8"))
             hidden_regions = topology.get("hidden_regions", [])
+            c10 = next((connection for connection in topology.get("connections", []) if connection.get("id") == "C10"), None)
+            c10_access = c10.get("access_prerequisite", {}) if c10 else {}
+            if c10_access.get("combat_flag") != "defeated_A6_BellWarden_01" or c10_access.get("item_id") != "bell_tower_winch_key":
+                errors.append("Topology C10 must require the A6 bell warden and its winch key.")
             h05 = next((region for region in hidden_regions if region.get("id") == "H05"), None)
             if h05 is None or h05.get("secondary_exit", {}).get("requires_target_already_reached") is not True:
                 errors.append("Topology H05/C10 contract must record A3 as already reached before the shortcut.")
@@ -1242,13 +1246,15 @@ def main() -> int:
     if a9_route_block.find('"E  RETURN TO THE INNER CITY"') >= 0 and a9_route_block.find('"reached_A12_via_A10_then_opened_inner_city_side_gate"') < 0:
         fail(errors, "C18 A9-side shortcut must remain gated by opening it from A12 after the main route.")
 
-    # C10 must be available independently of H05; its only persisted unlock is its own drop flag.
-    # C10 必须独立于 H05 可用；它只依赖自身的钟塔落差开门标记。
+    # C10 remains independent of H05; the warden key is its access prerequisite, and the drop flag records the opened door.
+    # C10 与 H05 独立；钟塔守卫钥匙是进入条件，落差标记只记录门已开启。
     a6_exit_block = _region_exit_block("A6")
     if not a6_exit_block:
         fail(errors, "C10 route audit: cannot isolate A6 exit block.")
     else:
-        require(a6_exit_block, '"E  打开钟塔落差通路"', "C10 monastery shortcut", errors)
+        require(a6_exit_block, "C10 is created after the bell warden drops the winch key.", "C10 monastery shortcut", errors)
+        require(region_script, '"E  使用绞盘钥匙打开钟塔落差通路"', "C10 monastery shortcut", errors)
+        require(region_script, 'WorldState.is_item_owned("bell_tower_winch_key")', "C10 monastery shortcut", errors)
         require(a6_exit_block, '"opened_bell_tower_drop"', "C10 monastery shortcut", errors)
         if 'if WorldState.is_hidden_path_opened("H05")' in a6_exit_block:
             fail(errors, "C10 monastery shortcut must not depend on the optional H05 secret path.")
