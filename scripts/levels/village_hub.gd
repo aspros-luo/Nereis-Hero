@@ -60,7 +60,6 @@ func _ready() -> void:
 	_spawn_mite_house_door()
 	_spawn_gatekeeper()
 	_spawn_shared_world_npcs()
-	_spawn_progression_npcs()
 	_spawn_village_pois()
 	_spawn_resonance_well_gate()
 	_spawn_cliff_cave_door()
@@ -68,6 +67,7 @@ func _ready() -> void:
 	_spawn_narrative_audio()
 	_spawn_fireflies()
 	world_event_director.dispatch("region_entered", {"region": "A1", "location": "village", "spawn_side": spawn_side})
+	_spawn_progression_npcs()
 	# The newly revealed cave is presented by the changed world geometry and its entrance prompt, not a forced exposition panel.
 	queue_redraw()
 
@@ -194,7 +194,7 @@ func _spawn_fireflies() -> void:
 func _spawn_gatekeeper() -> void:
 	var npc := Node2D.new()
 	npc.set_script(ROUTE_NPC_SCRIPT)
-	npc.position = Vector2(760, 520)
+	npc.position = Vector2(660, 520)
 	npc.npc_id = "village_gatekeeper"
 	npc.display_name = "村庄守门人"
 	if WorldState.selected_route == "church":
@@ -255,11 +255,16 @@ func refresh_progression_content() -> void:
 		return
 	_spawn_progression_npcs()
 	world_event_director.dispatch("state_refresh", {"region": "A1", "location": "village"})
+	_spawn_progression_npcs()
 
 func _on_village_npc_interacted(npc: Node) -> void:
 	if narrative == null or not is_instance_valid(npc):
 		return
 	narrative.show_message(npc.display_name, npc.dialogue, 6.0)
+	await narrative.message_finished
+	if world_event_director != null:
+		world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": String(npc.npc_id), "npc_id": String(npc.npc_id)})
+		refresh_progression_content()
 
 func _spawn_village_pois() -> void:
 	var tavern := Node2D.new()
