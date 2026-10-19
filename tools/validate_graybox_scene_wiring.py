@@ -1747,6 +1747,7 @@ def main() -> int:
     require(interior_scene, '"pilgrim_knight_a1_arrived"', "Pilgrim Knight remains absent until explicit arrival state", errors)
     require(interior_scene, 'narrative.show_message("教堂", "旧木椅整齐地排在空旷的长厅里。', "Church interior remains empty and quiet until a story arrival", errors)
     require(interior_scene, 'npc.display_name = "酒馆值夜人"', "Tavern keeper uses localized Chinese dialogue/name", errors)
+    require(interior_scene, '"A1_tavern_sound_noticed" in WorldState.achievement_flags and "village_defense_survived" in WorldState.achievement_flags', "Tavern keeper prioritizes the combined state over single-state dialogue", errors)
     require(village_hub, '"restoration_camp_established" in WorldState.achievement_flags', "A1 Restoration Army camp only appears after its explicit story-arrival flag", errors)
     require(village_hub, 'church.display_name = "教堂"', "A1 religious POI is named 教堂", errors)
     require(village_hub, 'church.dialogue = "教堂的大门没有上锁。里面空荡而安静', "A1 church is initially presented as empty and quiet", errors)
