@@ -47,6 +47,7 @@ Latest narrative design documents (Chinese; current opening / character-arc dire
 - `docs/OPENING_STORY_MAP_INTEGRATION_V1_CN.md` — first-pass audit aligning the new opening with A0–A3, C01/C02/C24, and unresolved scene/trigger conflicts.
 - `docs/A1_VILLAGE_DESIGN_BASELINE_AUDIT_CN.md` — rebuilt A1 village baseline, NPC ledger, A1–A13 information responsibilities, code mismatch audit, and unresolved design gates.
 - `docs/NARRATIVE_PRESENTATION_AUDIT_AND_MIGRATION_CN.md` — project-wide rule against explanatory narration, first-pass source audit, and migration plan to environment, items/equipment, NPC dialogue, and world-state changes.
+- `docs/ENDING_CONDITION_DESIGN_CN.md` — **authoritative V2 ending rules** based on actual exploration paths, key-item acquisition/possession/use, and completed special events; explicitly records the legacy evaluator gaps.
 
 World map master plan (Chinese draft):
 
