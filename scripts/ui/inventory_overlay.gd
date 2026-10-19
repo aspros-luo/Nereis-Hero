@@ -121,7 +121,9 @@ func _refresh_items() -> void:
         button.pressed.connect(_select_item.bind(item_id))
         list_container.add_child(button)
 
-    _select_item(str(item_ids[0]))
+    _selected_item_id = ""
+    detail_name.text = "选择物品"
+    detail_body.text = "从左侧选择一件物品，查看它留下的记录或痕迹。"
 
 func _select_item(item_id: String) -> void:
     var definition: Dictionary = ITEM_CATALOG.get_definition(item_id)
