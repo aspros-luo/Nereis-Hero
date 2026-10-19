@@ -181,20 +181,6 @@ func _spawn_encounter(enemy_script: Script, enemy_name: String, spawn_x: float, 
 		enemy.connect("defeated", _on_region_enemy_defeated.bind(enemy_name, enemy))
 	if enemy_name == "A6_MadCleric_01":
 		enemy.set("health", 240)
-	elif enemy_name == "A2_Cultist_01":
-		if WorldState.record_achievement("defeated_A2_Cultist_01"):
-			_spawn_world_item_pickup(
-				"combat_reward_a2_cultist_seal",
-				"charred_church_seal",
-				"CharredChurchSeal",
-				enemy_node.global_position + Vector2(0.0, -40.0)
-			)
-			if is_instance_valid(narrative):
-				narrative.show_message(
-					"烧黑的封条",
-					"薄铜片上的教会印记已经烧黑。反面刻着一串编号，末尾的符号与林中路标上的刻痕相同。",
-					5.0
-				)
 	elif enemy_name == "H09_AncientExperiment":
 		enemy.set("health", 360)
 	enemy.set_physics_process(false)
@@ -209,6 +195,20 @@ func _on_region_enemy_defeated(enemy_name: String, enemy_node: Node2D) -> void:
 				"他倒下时，祷词仍在继续。你从他的衣襟里听见蜂群般的振翅声——不是昆虫，而是某种在石头内部移动的东西。\n\n村庄的山崖似乎回应了这声低鸣。",
 				6.0
 			)
+	elif enemy_name == "A2_Cultist_01":
+		if WorldState.record_achievement("defeated_A2_Cultist_01"):
+			_spawn_world_item_pickup(
+				"combat_reward_a2_cultist_seal",
+				"charred_church_seal",
+				"CharredChurchSeal",
+				enemy_node.global_position + Vector2(0.0, -40.0)
+			)
+			if is_instance_valid(narrative):
+				narrative.show_message(
+					"烧黑的封条",
+					"薄铜片上的教会印记已经烧黑。反面刻着一串编号，末尾的符号与林中路标上的刻痕相同。",
+					5.0
+				)
 	elif enemy_name == "H09_AncientExperiment":
 		if WorldState.record_achievement("cliff_cave_experiment_defeated"):
 			_spawn_cord_fragment_pickup(enemy_node.global_position + Vector2(0.0, -40.0))
