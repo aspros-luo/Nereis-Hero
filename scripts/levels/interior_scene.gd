@@ -85,6 +85,7 @@ func _spawn_npc() -> void:
         var npc := Node2D.new()
         npc.set_script(ROUTE_NPC_SCRIPT)
         npc.position = Vector2(900, 520)
+        npc.cloth_color = Color("#69404a")
         npc.npc_id = "tavern_keeper"
         npc.display_name = "酒馆值夜人"
         if "A1_tavern_sound_noticed" in WorldState.achievement_flags and "village_defense_survived" in WorldState.achievement_flags:
@@ -108,6 +109,8 @@ func _spawn_npc() -> void:
     var pilgrim := Node2D.new()
     pilgrim.set_script(ROUTE_NPC_SCRIPT)
     pilgrim.position = Vector2(500, 520)
+    pilgrim.cloth_color = Color("#77736d")
+    pilgrim.skin_color = Color("#9b8175")
     pilgrim.npc_id = "pilgrim_knight_a1"
     pilgrim.display_name = "朝圣骑士"
     if "village_defense_survived" in WorldState.achievement_flags:
