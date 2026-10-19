@@ -16,7 +16,7 @@
       "spatial_layers": [
         {
           "id": "old_drainage_threshold",
-          "purpose": "C24 ground-level alternative route to A3 after village defense",
+          "purpose": "C24 phased old-drain exploration: A1 entry opens after village defense; the A3 link opens from A4",
           "anchors": [
             {
               "id": "C24",
@@ -39,7 +39,7 @@
       "spatial_layers": [
         {
           "id": "old_drainage_return",
-          "purpose": "C24 ground-level return to the village",
+          "purpose": "C24 return through the old-drain exploration segment after the A4-side connection is opened; otherwise return directly to A1",
           "anchors": [
             {
               "id": "C24",
@@ -949,7 +949,7 @@
           "x": 520,
           "y_offset": 0
         },
-        "intent": "The post-defense shortcut uses the old low drainage passage at ground level. It is a second route into the city, not a rooftop connection and not a replacement for the A2 forest/bell-tomb route.",
+        "intent": "C24 is a phased low-level route: after village defense, A1 enters a short old-drain exploration segment with a visible blocked gate and low-threat rats. The A4-side gate later opens the persistent connection to A3; until then A3 keeps its original return-to-village behavior. This remains separate from the A2 forest/bell-tomb route.",
         "to_region_spawn": {
           "region": "A3",
           "x": 700,
@@ -966,8 +966,8 @@
       "layer_contract": {
         "from_subregion": "A1-S01",
         "to_subregion": "A3-S03",
-        "route_form": "村庄地面旧排水口→城区东侧街巷",
-        "readability_contract": "村庄防卫后开放的低位旧排水路线；独立于屋顶与高架路线",
+        "route_form": "村庄旧排水口→向下探索短段→（A4 侧开启后）城区旧排水回环",
+        "readability_contract": "村庄防卫后开放短段探索；A4 侧闸门开启后才与 A3 连通，独立于屋顶与高架路线",
         "status": "design_contract_not_runtime_verified"
       }
     }
