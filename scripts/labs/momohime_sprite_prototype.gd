@@ -3,8 +3,8 @@ extends Node2D
 ## 独立精灵表原型，不替换正式 Hero 场景。
 
 const SHEET_PATH := "res://assets/art/hero_sprite_lab/153143.png"
-const SOURCE_SIZE := Vector2i(2560, 2432)
-const CELL_SIZE := Vector2i(256, 304)
+const SOURCE_SIZE := Vector2i(2048, 1945)
+const CELL_SIZE := Vector2i(204, 243)
 const COLUMNS := 10
 const ROWS := 8
 const DISPLAY_HEIGHT := 210.0
@@ -133,6 +133,6 @@ func _update_frame() -> void:
 	_sprite.position.y = -DISPLAY_HEIGHT * 0.5 + 8.0
 
 func _help_text() -> String:
-	return "百姬精灵原型 | 动作：%s | 帧：%d/%d\n1 待机  2 移动(暂定)  3 挥刀(暂定)  Space 暂停/播放  ←/→ 翻转  R 重播\n网格：256×304；动作分类仍需按完整原图逐帧复核。" % [
+	return "百姬精灵原型 | 动作：%s | 帧：%d/%d\n1 待机  2 移动(暂定)  3 挥刀(暂定)  Space 暂停/播放  ←/→ 翻转  R 重播\n网格：204×243；动作分类仍需逐帧复核，纹理部件图集已纳入后续骨骼拆件计划。" % [
 		_sequence_name, _frame + 1, int(_sequence_data.get("count", 0))
 	]
