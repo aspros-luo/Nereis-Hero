@@ -87,8 +87,16 @@ func _ensure_toast() -> bool:
 
 	toast_panel = PanelContainer.new()
 	toast_panel.name = "AchievementToast"
-	toast_panel.position = Vector2(760.0, 32.0)
-	toast_panel.custom_minimum_size = Vector2(460.0, 100.0)
+	# Anchor to the viewport's top-right so the toast remains visible at smaller window sizes.
+	toast_panel.anchor_left = 1.0
+	toast_panel.anchor_top = 0.0
+	toast_panel.anchor_right = 1.0
+	toast_panel.anchor_bottom = 0.0
+	toast_panel.offset_left = -480.0
+	toast_panel.offset_top = 24.0
+	toast_panel.offset_right = -20.0
+	toast_panel.offset_bottom = 124.0
+	toast_panel.custom_minimum_size = Vector2(0.0, 100.0)
 	toast_panel.visible = false
 	toast_layer.add_child(toast_panel)
 
