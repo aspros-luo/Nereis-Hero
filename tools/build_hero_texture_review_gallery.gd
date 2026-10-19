@@ -5,9 +5,7 @@ extends SceneTree
 ## Writes user://hero_texture_parts/index.html; source assets are not modified.
 
 const OUTPUT_DIR := "user://hero_texture_parts"
-const MANIFEST_PATH := OUTPUT_DIR.path_join("manifest.json")
-const COMPONENTS_PER_PAGE := 100
-const GRID_PER_PAGE := 100
+const MANIFEST_PATH := "user://hero_texture_parts/manifest.json"
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -89,7 +87,7 @@ h1{font-size:20px;margin:0 0 8px}.controls{display:flex;gap:8px;flex-wrap:wrap;a
 input,select,button{background:#30343c;color:#f5f5f5;border:1px solid #555b66;border-radius:6px;padding:8px}
 #stats{color:#b9c0ca;margin:8px 0 0}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:14px}
 .card{min-width:0;background:#24272e;border:1px solid #414650;border-radius:8px;overflow:hidden}.thumb{height:130px;display:flex;align-items:center;justify-content:center;background-color:#353941;background-image:linear-gradient(45deg,#444 25%,transparent 25%),linear-gradient(-45deg,#444 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#444 75%),linear-gradient(-45deg,transparent 75%,#444 75%);background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0}
-.thumb img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:auto}.meta{padding:8px}.id{font-weight:700;font-size:14px}.coords{font-size:12px;color:#b9c0ca;overflow-wrap:anywhere}.actions{display:flex;gap:6px;margin-top:6px}.actions button{font-size:11px;padding:5px}.hidden{display:none}
+.thumb img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:auto}.meta{padding:8px}.id{font-weight:700;font-size:14px}.coords{font-size:12px;color:#b9c0ca;overflow-wrap:anywhere}.actions{display:flex;gap:6px;margin-top:6px}.actions button{font-size:11px;padding:5px}
 footer{padding:16px;text-align:center;color:#b9c0ca}
 </style></head><body>
 <header><h1>Nereis Hero · 纹理候选审查</h1>
