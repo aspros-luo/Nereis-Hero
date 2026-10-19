@@ -7,6 +7,7 @@ const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.g
 @export var poi_id: String = ""
 @export var display_name: String = ""
 @export_multiline var dialogue: String = ""
+@export_range(40.0, 140.0, 5.0) var interaction_range: float = 110.0
 
 var cooldown := 0.0
 var hero_nearby := false
@@ -18,7 +19,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     cooldown = max(0.0, cooldown - delta)
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
-    hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= 110.0
+    hero_nearby = hero != null and global_position.distance_to(hero.global_position) <= interaction_range
     var available := not WorldState.input_locked and hero_nearby and cooldown <= 0.0 and not display_name.is_empty() and not dialogue.is_empty()
     INTERACTION_FOCUS_SCRIPT.sync(self, available, 40)
     queue_redraw()
