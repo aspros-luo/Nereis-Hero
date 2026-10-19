@@ -1688,6 +1688,16 @@ def main() -> int:
     ]:
         require(secret_gate, contract, "Resonance hidden gate", errors)
 
+    world_state = read("scripts/core/world_state.gd", errors)
+    require(world_state, '"narrative_state_version": 2', "Narrative save schema version is persisted", errors)
+    require(world_state, 'int(parsed.get("narrative_state_version", 0)) < 2', "Legacy narrative saves are detected for relationship-state migration", errors)
+    require(world_state, 'mite_connection_missed = false', "Legacy church-visit false-miss lock is cleared", errors)
+
+    ending_evaluator = read("scripts/core/ending_evaluator.gd", errors)
+    require(ending_evaluator, 'COSMIC_RESONANCE_THRESHOLD: int = 68', "Ending candidate uses resonance threshold", errors)
+    require(ending_evaluator, 'REQUIRED_ARTIFACT_PIECES: int = 3', "Ending candidate uses truth-anchor threshold", errors)
+    require(ending_evaluator, 'REQUIRED_HIDDEN_REGIONS_FOR_FIRE: int = 2', "Ending candidate uses actual hidden-region exploration", errors)
+
     village_hub = read("scripts/levels/village_hub.gd", errors)
     require(village_hub, 'elif WorldState.selected_route == "lullaby":', "A1 NPC dialogue distinguishes an explicit lullaby route from an unchosen route", errors)
     require(village_hub, "守门人打量着你", "A1 gatekeeper has neutral dialogue before route selection", errors)
