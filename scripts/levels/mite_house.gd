@@ -118,6 +118,8 @@ func _spawn_exit() -> void:
     exit.add_child(shape)
     add_child(exit)
     exit.reached.connect(func() -> void:
+        # Return beside the matching exterior door, not at the A0 arrival point or inside its trigger.
+        WorldState.pending_region_spawn_side = "mite_house_return"
         WorldState.set_location("village")
         SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
     )
@@ -139,8 +141,8 @@ func _spawn_ui() -> void:
 
     get_tree().create_timer(0.6).timeout.connect(func() -> void:
         narrative.show_message(
-            "MITE'S HOUSE",
-            "The room is small.\n\nTwo places at the table.\n\nOne bed.",
+            "YOU WAKE IN A SMALL ROOM",
+            "Your wounds have been roughly bandaged. Your wet clothes are gone.\n\nTwo places at the table. One bed.\n\nBeyond the door, the village is quiet.",
             4.0
         )
     )
