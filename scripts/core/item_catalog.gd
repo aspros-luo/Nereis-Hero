@@ -17,6 +17,14 @@ const ITEMS: Dictionary = {
         "stackable": false,
         "max_stack": 1
     },
+    "bell_tower_winch_key": {
+        "item_id": "bell_tower_winch_key",
+        "display_name": "钟塔绞盘钥匙",
+        "category": "key_item",
+        "description": "沉重的铁钥匙，齿口沾着新鲜润滑脂。它不适配普通门锁；齿形与钟塔落差口旁的旧绞盘锁相合。",
+        "stackable": false,
+        "max_stack": 1
+    },
     "charred_church_seal": {
         "item_id": "charred_church_seal",
         "display_name": "烧黑的教会封条",
