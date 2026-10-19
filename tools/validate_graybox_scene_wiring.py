@@ -703,7 +703,7 @@ def main() -> int:
     require(village_route_script, 'if location_id == "north_gate":', "C02 A1 north-gate route", errors)
     require(village_route_script, 'north_gate.position = Vector2(2440, 520)', "C02 north-gate interaction anchor", errors)
     require(village_route_script, '2310.0 if spawn_side == "north_gate"', "C02 A2 return spawn x=2310", errors)
-    require(village_poi_script, 'distance_to(hero.global_position) <= 110.0', "A1 POI interaction radius", errors)
+    require(village_poi_script, 'distance_to(hero.global_position) <= interaction_range', "A1 POI interaction radius is configurable per point", errors)
     # The A2 return spawn must remain outside the North Gate POI radius to prevent
     # a transition loop or an immediate repeated interaction after returning.
     if 2440.0 - 2310.0 <= 110.0:
