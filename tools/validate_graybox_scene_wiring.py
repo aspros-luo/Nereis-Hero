@@ -1723,7 +1723,7 @@ def main() -> int:
     interior_scene = read("scripts/levels/interior_scene.gd", errors)
     require(village_hub, "守门人打量着你", "A1 gatekeeper has neutral dialogue before route selection", errors)
     require(village_hub, 'WorldState.set_location("village")', "A1 persists village location for Continue", errors)
-    require(village_hub, 'npc.position = Vector2(650, 520)', "A1 gatekeeper is moved away from Mite to reduce focus overlap", errors)
+    require(village_hub, 'npc.position = Vector2(2320, 520)', "A1 gatekeeper is stationed beside the north gate, away from the hearth and Mite", errors)
     require(village_hub, '守门人看了看你身上的教堂印记', "A1 gatekeeper route dialogue is localized to Chinese", errors)
     event_director = read("scripts/core/world_event_director.gd", errors)
     require(village_hub, 'const WORLD_EVENT_DIRECTOR_SCRIPT = preload("res://scripts/core/world_event_director.gd")', "A1 hub wires the shared progression event director", errors)
