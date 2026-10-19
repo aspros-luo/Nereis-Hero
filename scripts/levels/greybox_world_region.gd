@@ -1595,10 +1595,18 @@ func _spawn_region_exits() -> void:
 			# C24 remains sealed on both ends until the village defense chapter is survived.
 			# C24 两端都必须等到村庄防卫章节结束后才开放，避免城区侧提前绕过世界门槛。
 			if "village_defense_survived" in WorldState.achievement_flags:
-				_spawn_exit_door(
-					520.0, "E  经旧排水道返回", "village",
-					"res://scenes/village_hub.tscn", "city_cut_return"
-				)
+				# Before the A4-side gate is opened, C24 keeps its original return-to-village behavior.
+				# A4 侧闸门开启前，C24 仍按原逻辑直接返回村庄。
+				if "opened_old_drainage_link_from_A4" in WorldState.achievement_flags:
+					_spawn_exit_door(
+						520.0, "E  进入旧排水道回环", "old_drain_exploration",
+						"res://scenes/old_drain_exploration.tscn", "city_side_entry"
+					)
+				else:
+					_spawn_exit_door(
+						520.0, "E  经旧排水道返回", "village",
+						"res://scenes/village_hub.tscn", "city_cut_return"
+					)
 			_spawn_exit_door(
 				72.0, "E  返回旧朝圣路", "ash_forest",
 				"res://scenes/ash_forest.tscn", "east",
@@ -1655,6 +1663,14 @@ func _spawn_region_exits() -> void:
 				"res://scenes/forgotten_city.tscn", "sewer",
 				true, "opened_sewer_inspection_hatch_from_A4", "E  返回城区", floor_y - 115.0
 			)
+			# A separate low-side gate opens the old-drain loop without changing C05 or the H01 well.
+			# 独立低位闸门开启旧排水回环，不改变 C05 或 H01 井口逻辑。
+			if "reached_A4_via_A3" in WorldState.achievement_flags:
+				_spawn_exit_door(
+					600.0, "E  打开旧排水道连接", "old_drain_exploration",
+					"res://scenes/old_drain_exploration.tscn", "reservoir_link",
+					true, "opened_old_drainage_link_from_A4", "E  进入旧排水道"
+				)
 			# C06 is a one-way return shortcut from the reservoir to the village well.
 			# C06 是从旧水库返回村庄的单向捷径；首次互动开闸，再次互动才转场。
 			_spawn_exit_door(
