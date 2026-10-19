@@ -147,11 +147,7 @@ func _spawn_narrative_audio() -> void:
 	narrative_audio.set_script(NARRATIVE_AUDIO_SCRIPT)
 	narrative_audio.name = "NarrativeAudio"
 	add_child(narrative_audio)
-	if not WorldState.debug_map_test_mode:
-		get_tree().create_timer(1.0).timeout.connect(func() -> void:
-			if narrative_audio and narrative_audio.has_method("play_lullaby"):
-				narrative_audio.play_lullaby()
-		)
+	# No automatic lullaby on scene entry: the player should discover the sound through an in-world source.
 
 func _spawn_mite_house_door() -> void:
 	mite_house_door = Area2D.new()
