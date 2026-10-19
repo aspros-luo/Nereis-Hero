@@ -47,6 +47,18 @@ func _ready() -> void:
     hint_label.text = "E / Esc  关闭"
     panel.add_child(hint_label)
 
+func show_pickup(item_name: String) -> void:
+	if not is_instance_valid(panel):
+		return
+	NereisInteractionFocus.clear_all(get_tree())
+	_previous_input_locked = WorldState.input_locked
+	_was_paused = get_tree().paused
+	title_label.text = "获得物品"
+	body_label.text = NereisLocalization.translate_text(item_name)
+	panel.visible = true
+	WorldState.input_locked = true
+	get_tree().paused = true
+
 func show_description(item_name: String, description: String) -> void:
     if not is_instance_valid(panel):
         return
