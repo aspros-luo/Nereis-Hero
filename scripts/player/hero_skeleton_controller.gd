@@ -62,6 +62,7 @@ var _context_driven: bool = false
 var _vertical_velocity: float = 0.0
 var _horizontal_speed: float = 0.0
 var _stride_phase: float = 0.0
+var _stride_weight: float = 0.0
 var _grounded: bool = true
 var _received_context: bool = false
 var _was_grounded: bool = true
@@ -109,6 +110,7 @@ func _process(delta: float) -> void:
 	# Advance the gait from actual Hero velocity, not wall-clock time. A blocked or menu-held
 	# Hero should not keep cycling its legs at full speed.
 	var stride_ratio := clampf(absf(_horizontal_speed) / 260.0, 0.0, 1.0)
+	_stride_weight = move_toward(_stride_weight, 1.0 if stride_ratio > 0.05 else 0.0, delta * 8.0)
 	if stride_ratio > 0.05:
 		_stride_phase += delta * lerpf(5.0, 11.5, stride_ratio)
 
@@ -435,13 +437,13 @@ func _apply_pose() -> void:
 				leg_right_bone.rotation = -sin(animation_time * 1.6) * 0.018
 		PoseState.RUN:
 			# Keep the hip swing narrow; the separated knee/calf chains provide stride without legs crossing.
-			var swing := run_cycle * 0.34 if animate_run else 0.0
-			var left_knee := maxf(0.0, opposite_cycle) * 0.42
-			var right_knee := maxf(0.0, run_cycle) * 0.42
-			root_bone.position.y -= run_bounce
-			body_bone.rotation = -0.09 - absf(run_cycle) * 0.025
-			arm_left_bone.rotation = swing * 0.72 + 0.05
-			arm_right_bone.rotation = -swing * 0.72 - 0.16
+			var swing := run_cycle * 0.34 * _stride_weight if animate_run else 0.0
+			var left_knee := maxf(0.0, opposite_cycle) * 0.42 * _stride_weight
+			var right_knee := maxf(0.0, run_cycle) * 0.42 * _stride_weight
+			root_bone.position.y -= run_bounce * _stride_weight
+			body_bone.rotation = lerpf(0.0, -0.09 - absf(run_cycle) * 0.025, _stride_weight)
+			arm_left_bone.rotation = lerpf(-0.08, swing * 0.72 + 0.05, _stride_weight)
+			arm_right_bone.rotation = lerpf(0.12, -swing * 0.72 - 0.16, _stride_weight)
 			leg_left_bone.rotation = -swing
 			leg_right_bone.rotation = swing
 			knee_left_bone.rotation = left_knee
