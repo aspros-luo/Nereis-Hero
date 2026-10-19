@@ -176,7 +176,7 @@ func _enter_city() -> void:
 	if CONNECTION_FLAG not in WorldState.achievement_flags:
 		_inspect_blocked_gate()
 		return
-	WorldState.pending_region_spawn_side = "city_cut_return"
+	WorldState.pending_region_spawn_side = "village_city_cut"
 	WorldState.set_location("forgotten_city")
 	SceneTransition.fade_to_scene(CITY_SCENE)
 
