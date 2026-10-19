@@ -294,38 +294,38 @@ func _refresh_baseline_npc_dialogue(npc: Node) -> void:
 	match String(npc.npc_id):
 		"village_gatekeeper":
 			if "village_defense_survived" in WorldState.achievement_flags and WorldState.selected_route == "church":
-				npc.dialogue = "守门人看了看你身上的教堂印记，又朝已经恢复通行的北门望去。\\n\\n“路是重新打开了。但他们说过的话，我还没打算忘。”"
+				npc.dialogue = "守门人看了看你身上的教堂印记，又朝已经恢复通行的北门望去。\n\n“路是重新打开了。但他们说过的话，我还没打算忘。”"
 			elif "village_defense_survived" in WorldState.achievement_flags and WorldState.selected_route == "lullaby":
-				npc.dialogue = "守门人听见风里传来的旋律，手却没有再去掩酒馆的门。\\n\\n“北门暂时守住了。那首歌的事，还是别在街上唱。”"
+				npc.dialogue = "守门人听见风里传来的旋律，手却没有再去掩酒馆的门。\n\n“北门暂时守住了。那首歌的事，还是别在街上唱。”"
 			elif "village_defense_survived" in WorldState.achievement_flags:
-				npc.dialogue = "守门人朝北门点了点头，神情仍然疲惫。\\n\\n“路重新通了。可别把能走过去，当成那边已经安全。”"
+				npc.dialogue = "守门人朝北门点了点头，神情仍然疲惫。\n\n“路重新通了。可别把能走过去，当成那边已经安全。”"
 			elif WorldState.selected_route == "church":
-				npc.dialogue = "守门人看了看你身上的教堂印记，神情变得警惕。\\n\\n“他们说你不会再回来。现在却又把你送回来了？”"
+				npc.dialogue = "守门人看了看你身上的教堂印记，神情变得警惕。\n\n“他们说你不会再回来。现在却又把你送回来了？”"
 			elif WorldState.selected_route == "lullaby":
-				npc.dialogue = "风里传来一段模糊的摇篮曲，守门人随即把酒馆的门掩上了一半。\\n\\n“别在这里唱那首歌。除非你想让整座村庄都回想起来。”"
+				npc.dialogue = "风里传来一段模糊的摇篮曲，守门人随即把酒馆的门掩上了一半。\n\n“别在这里唱那首歌。除非你想让整座村庄都回想起来。”"
 			else:
-				npc.dialogue = "守门人打量着你，又看了看北门的方向。\\n\\n“刚回来？村里有些路白天也不好走。先四处看看，别急着往外闯。”"
+				npc.dialogue = "守门人打量着你，又看了看北门的方向。\n\n“刚回来？村里有些路白天也不好走。先四处看看，别急着往外闯。”"
 		"village_grandmother":
 			if "village_defense_survived" in WorldState.achievement_flags:
-				npc.dialogue = "老婆婆把门边的灯芯拨亮了一些。\\n\\n“路总算安静了些。人受了惊，得先吃口热的、睡一觉，别急着把自己逼得太紧。”"
+				npc.dialogue = "老婆婆把门边的灯芯拨亮了一些。\n\n“路总算安静了些。人受了惊，得先吃口热的、睡一觉，别急着把自己逼得太紧。”"
 			else:
-				npc.dialogue = "老婆婆坐在屋檐下理着旧布。\\n\\n“外头风大，进村就先歇歇。村里人各有各的烦心事，别什么都往自己身上揽。”"
+				npc.dialogue = "老婆婆坐在屋檐下理着旧布。\n\n“外头风大，进村就先歇歇。村里人各有各的烦心事，别什么都往自己身上揽。”"
 		"village_blacksmith":
 			if "village_defense_survived" in WorldState.achievement_flags:
-				npc.dialogue = "铁匠把锤子搁在砧边，检查着刚换上的门钉。\\n\\n“北门暂时撑得住。等我把手头这批活做完，再看看你的兵器。”"
+				npc.dialogue = "铁匠把锤子搁在砧边，检查着刚换上的门钉。\n\n“北门暂时撑得住。等我把手头这批活做完，再看看你的兵器。”"
 			else:
-				npc.dialogue = "铁匠正把一块发红的铁料翻了个面。\\n\\n“想修兵器就先让我看看。至于那扇北门——它比一把钝剑更急着修。”"
+				npc.dialogue = "铁匠正把一块发红的铁料翻了个面。\n\n“想修兵器就先让我看看。至于那扇北门——它比一把钝剑更急着修。”"
 		"traveling_merchant":
 			if WorldState.get_humanity_state() == "hollow":
-				npc.dialogue = "商人收起了笑容，悄悄把货箱往身边拉近。\\n\\n“今天先不谈价。你看起来比路上的风雨更难应付。”"
+				npc.dialogue = "商人收起了笑容，悄悄把货箱往身边拉近。\n\n“今天先不谈价。你看起来比路上的风雨更难应付。”"
 			elif "graybox_intro_forgotten_city" in WorldState.achievement_flags:
-				npc.dialogue = "商人注意到你靴边的旧灰，没追问你在城墙下看见了什么。\\n\\n“旧城区的路不适合闭着眼走。记住自己从哪一侧进来，比记住传闻更有用。”"
+				npc.dialogue = "商人注意到你靴边的旧灰，没追问你在城墙下看见了什么。\n\n“旧城区的路不适合闭着眼走。记住自己从哪一侧进来，比记住传闻更有用。”"
 			elif "graybox_intro_ash_forest" in WorldState.achievement_flags:
-				npc.dialogue = "商人把一枚磨损的路标放回箱中。\\n\\n“北边的旧路能走，不代表每条岔路都值得追。回来时，先记清楚自己看见了什么。”"
+				npc.dialogue = "商人把一枚磨损的路标放回箱中。\n\n“北边的旧路能走，不代表每条岔路都值得追。回来时，先记清楚自己看见了什么。”"
 			elif "village_defense_survived" in WorldState.achievement_flags:
-				npc.dialogue = "商人重新整理着货物。\\n\\n“北门恢复通行后，来往的人会多起来。真要买东西，先想清楚下一段路缺什么。”"
+				npc.dialogue = "商人重新整理着货物。\n\n“北门恢复通行后，来往的人会多起来。真要买东西，先想清楚下一段路缺什么。”"
 			else:
-				npc.dialogue = "商人把银币在指间转了一圈，打量着你的行囊。\\n\\n“我从外面来，也会往外面去。要问路况可以，传闻就得自己掂量。”"
+				npc.dialogue = "商人把银币在指间转了一圈，打量着你的行囊。\n\n“我从外面来，也会往外面去。要问路况可以，传闻就得自己掂量。”"
 
 func refresh_progression_content() -> void:
 	# Refresh baseline dialogue as well as director-managed progression content.
