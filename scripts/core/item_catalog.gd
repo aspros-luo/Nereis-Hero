@@ -16,6 +16,30 @@ const ITEMS: Dictionary = {
         "description": "纸页上只剩几行尚能辨认的记录：\n\n“受试者仍保有战斗本能。”\n\n其余文字被撕去，纸边沾着暗色污渍。记录没有写明受试者的姓名。",
         "stackable": false,
         "max_stack": 1
+    },
+    "old_pilgrim_waybill": {
+        "item_id": "old_pilgrim_waybill",
+        "display_name": "旧朝圣路程单",
+        "category": "lore",
+        "description": "一张被雨水浸硬的路程单。标注的钟楼与林中石碑都仍在原处，但路线终点被反复涂改；最后留下的方向，指向一条从未出现在村庄地图上的高路。",
+        "stackable": false,
+        "max_stack": 1
+    },
+    "third_street_survey": {
+        "item_id": "third_street_survey",
+        "display_name": "第三街测绘残页",
+        "category": "lore",
+        "description": "测绘线条显示第三街曾与两条主街相接。纸张背面却只有两组门牌编号；被撕去的部分留下三道相互平行的压痕。",
+        "stackable": false,
+        "max_stack": 1
+    },
+    "royal_mortuary_register": {
+        "item_id": "royal_mortuary_register",
+        "display_name": "王室墓葬登记册",
+        "category": "lore",
+        "description": "登记册列出了数代王室成员的安葬日期。几处姓名被刀刃刮去，刮痕却晚于墓穴封闭记录；纸页仍保留着被压在下方的笔画。",
+        "stackable": false,
+        "max_stack": 1
     }
 }
 
