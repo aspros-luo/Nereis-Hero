@@ -715,13 +715,13 @@ func _draw() -> void:
 		draw_rect(Rect2(1945, 360, 90, 160), Color("#27212a"))
 		draw_colored_polygon(
 			PackedVector2Array([
-				Vector2(1915, 360),
-				Vector2(2015, 270),
-				Vector2(2115, 360)
+				Vector2(1935, 360),
+				Vector2(1990, 300),
+				Vector2(2045, 360)
 			]),
 			Color("#312934")
 		)
-		draw_circle(Vector2(2015, 455), 34.0, Color("#63322f"))
+		draw_circle(Vector2(1990, 455), 28.0, Color("#63322f"))
 		draw_string(ThemeDB.fallback_font, Vector2(1935, 335), NereisLocalization.translate_text("复国军营地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
 
 	draw_rect(Rect2(2380, 330, 120, 190), Color("#241e27"))
