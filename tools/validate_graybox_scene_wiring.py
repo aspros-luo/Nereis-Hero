@@ -544,6 +544,12 @@ def main() -> int:
 
     prologue_script = read("scripts/levels/escape_prologue.gd", errors)
     require(prologue_script, "func _create_surgical_catwalks() -> void:", "A0 surgical catwalk builder", errors)
+    # Combat shutters must be visually legible; physics-only barriers are not acceptable.
+    # 战斗封锁必须有明确视觉反馈，禁止只有碰撞体而没有可见障碍。
+    require(prologue_script, "func _draw_security_shutter(gate_x: float) -> void:", "A0 visible combat shutter renderer", errors)
+    require(prologue_script, 'Color("#a54c62", 0.10)', "A0 shutter warning silhouette", errors)
+    require(prologue_script, 'Color("#f0b35c")', "A0 shutter active-state warning lamp", errors)
+    require(prologue_script, "Warning lamps communicate that the shutter is an active combat lock", "A0 shutter intent is documented in source", errors)
     require(prologue_script, "Rect2(430, 455, 100, 16)", "A0 surgical first ledge", errors)
     if "MAINTENANCE ACCESS ONLY" not in prologue_script and "仅供维护人员通行" not in prologue_script:
         errors.append("A0 catwalk landmark: missing the maintenance-only label in either source or localized form.")
