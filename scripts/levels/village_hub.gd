@@ -385,7 +385,6 @@ func _enter_village_location(location_id: String) -> void:
 		# Entering the church is exploration, not an irreversible relationship choice.
 		# The player may still return to Mite after visiting this location.
 		WorldState.set_location("church")
-		WorldState.set_location("church")
 		print("[NEREIS][VILLAGE] Entering Church Interior")
 		SceneTransition.fade_to_scene("res://scenes/locations/church_interior.tscn")
 	elif location_id == "rebel_camp":
