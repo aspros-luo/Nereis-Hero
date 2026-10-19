@@ -66,6 +66,7 @@ var _was_grounded: bool = true
 var _base_pose: PoseState = PoseState.IDLE
 var _presentation_action_name: String = ""
 var _presentation_action_remaining: float = 0.0
+var _presentation_action_duration: float = 0.65
 var _presentation_action_elapsed: float = 0.0
 var _presentation_action_priority: int = 0
 
@@ -103,10 +104,11 @@ func _process(delta: float) -> void:
 	animation_time += delta
 	_pose_time += delta
 	_landing_time = maxf(0.0, _landing_time - delta)
-	if not _presentation_action_name.is_empty() and _presentation_action_remaining > 0.0:
-		_presentation_action_remaining = maxf(0.0, _presentation_action_remaining - delta)
+	if not _presentation_action_name.is_empty():
 		_presentation_action_elapsed += delta
-		if _presentation_action_remaining <= 0.0:
+		if _presentation_action_remaining > 0.0:
+			_presentation_action_remaining = maxf(0.0, _presentation_action_remaining - delta)
+		if _presentation_action_remaining <= 0.0 and _presentation_action_duration > 0.0 and _presentation_action_remaining + delta > 0.0:
 			var completed_action := _presentation_action_name
 			_presentation_action_name = ""
 			_presentation_action_priority = 0
@@ -207,6 +209,7 @@ func request_presentation_action(action_name: String, duration: float = 0.65, pr
 	_presentation_action_name = normalized
 	_presentation_action_priority = resolved_priority
 	_presentation_action_remaining = maxf(0.0, duration)
+	_presentation_action_duration = maxf(0.65, duration)
 	_presentation_action_elapsed = 0.0
 	current_pose = pose
 	_pose_time = 0.0
@@ -217,6 +220,7 @@ func request_presentation_action(action_name: String, duration: float = 0.65, pr
 func clear_presentation_action() -> void:
 	_presentation_action_name = ""
 	_presentation_action_remaining = 0.0
+	_presentation_action_duration = 0.65
 	_presentation_action_elapsed = 0.0
 	_presentation_action_priority = 0
 	current_pose = _base_pose
@@ -654,7 +658,7 @@ func _apply_pose() -> void:
 			knee_left_bone.rotation = 0.92 * settle
 			knee_right_bone.rotation = 0.72 * settle
 		PoseState.LOOK_BACK:
-			var glance := sin(clampf(_presentation_action_elapsed / maxf(0.01, _presentation_action_remaining + _presentation_action_elapsed), 0.0, 1.0) * PI)
+			var glance := sin(clampf(_presentation_action_elapsed / _presentation_action_duration, 0.0, 1.0) * PI)
 			body_bone.rotation = -0.08 - 0.12 * glance
 			head_bone.rotation = 0.28 * glance
 			arm_left_bone.rotation = -0.18 - 0.12 * glance
