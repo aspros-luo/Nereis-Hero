@@ -6,21 +6,35 @@ extends Node
 signal event_triggered(event_id: String, payload: Dictionary)
 
 const NPC_DEFINITIONS: Array[Dictionary] = [
-	# Register approved, progression-specific NPCs here. Existing baseline NPCs remain in village_hub.gd.
-	# Each entry: id, position, display_name, dialogue, conditions, optional required_flag_absent.
+	{
+		"id": "a1_tavern_keeper",
+		"position": Vector2(1850, 520),
+		"display_name": "酒馆值夜人",
+		"dialogue": "值夜人把杯子擦干，目光却停在门缝上。\n\n“村里人白天说的话，到了夜里往往就不一样了。你想听哪一种？”",
+		"conditions": [],
+		"dialogue_variants": [
+			{
+				"conditions": [{"type": "flag", "value": "village_defense_survived"}],
+				"dialogue": "值夜人把门闩重新扣好。\n\n“北门那边安静了些，可安静不代表安全。今晚我会把灯留着。”"
+			},
+			{
+				"conditions": [{"type": "flag", "value": "A1_tavern_sound_noticed"}],
+				"dialogue": "值夜人认出你，先看了看门，再看向你。\n\n“你上次听见的声音，我也听见了。但我没说那是歌——你自己确定吗？”"
+			}
+		]
+	}
 ]
 
 const EVENT_DEFINITIONS: Array[Dictionary] = [
-	# Add confirmed A1 events here. Keep core-story events out until their conditions are approved.
-	# {
-	#   "id": "A1_example_event",
-	#   "trigger": "region_entered", # region_entered | interaction | state_refresh
-	#   "region": "A1",
-	#   "interaction_id": "",
-	#   "once": true,
-	#   "conditions": [{"type": "flag_absent", "value": "example_event_completed"}],
-	#   "effects": [{"type": "add_flag", "value": "example_event_seen"}]
-	# }
+	{
+		"id": "A1_tavern_sound_notice",
+		"trigger": "interaction",
+		"region": "A1",
+		"interaction_id": "tavern",
+		"once": true,
+		"conditions": [{"type": "flag_absent", "value": "A1_tavern_sound_noticed"}],
+		"effects": [{"type": "add_flag", "value": "A1_tavern_sound_noticed"}]
+	}
 ]
 
 var _world_state: Variant
