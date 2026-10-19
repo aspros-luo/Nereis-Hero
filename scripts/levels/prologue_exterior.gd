@@ -120,12 +120,13 @@ func _begin_rescue_transition(reason: String) -> void:
 
 	# Keep the story progression deterministic while the full cliff/fall animation is deferred.
 	# A short fade-to-black replaces the unfinished retreat/fall animation; it must not block map development.
-	WorldState.record_achievement("prologue_cliff_fall_rescue_pending")
+	# A0's one-time arrival is intentionally quiet: wake in Mite's house.
+	# This is a story arrival, not the village's reusable checkpoint or return spawn.
 	WorldState.mark_prologue_complete()
-	WorldState.current_location = "village"
+	WorldState.current_location = "mite_house"
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.save_game()
-	SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+	SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")
 
 func _spawn_pursuers() -> void:
 	# The chase is represented on-screen, not only described by the caption.
