@@ -1739,6 +1739,12 @@ def main() -> int:
     require(event_director, "const NPC_DEFINITIONS: Array[Dictionary]", "Progression NPCs are data-driven", errors)
     require(event_director, '"A1_tavern_sound_notice"', "A1 tavern visit has a persistent first-visit event", errors)
     require(village_hub, '"village_grandmother"', "A1 replaces the amnesiac youth with an ordinary grandmother NPC", errors)
+    require(village_hub, "camera.limit_right = 3000", "A1 camera follows the expanded 3000px hub", errors)
+    require(village_hub, "rectangle.size = Vector2(3000, 40)", "A1 ground collision spans the expanded hub", errors)
+    require(village_hub, "right_shape.position = Vector2(3020, 360)", "A1 right boundary matches the expanded hub width", errors)
+    require(village_hub, "Rect2(2760, 340, 110, 16)", "A1 rooftop route reaches the expanded eastern district", errors)
+    if 'npc_id = "amnesiac_youth"' in village_hub:
+        errors.append("A1 retired amnesiac youth must not be spawned; use the grandmother role instead.")
     require(village_poi, "@export_range(40.0, 140.0, 5.0) var interaction_range: float = 110.0", "A1 POI interaction radii can be tuned per location to avoid overlapping prompts", errors)
     require(village_hub, "grandmother.interaction_range = 60.0", "A1 grandmother focus radius is reduced near neighboring POIs", errors)
     require(village_hub, "blacksmith.interaction_range = 45.0", "A1 blacksmith focus radius is tuned for the workshop district", errors)
