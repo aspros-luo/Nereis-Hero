@@ -6,6 +6,7 @@ const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
+const WORLD_EVENT_DIRECTOR_SCRIPT = preload("res://scripts/core/world_event_director.gd")
 const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
 const INTERIOR_CLUE_SCRIPT = preload("res://scripts/world/interior_clue.gd")
@@ -25,11 +26,17 @@ var rest_point: Node2D
 var mite: Node2D
 var narrative_audio: Node
 var route_door: Area2D
+var world_event_director: Node
 var research_door: Area2D
 
 func _ready() -> void:
     WorldState.prepare_scene_runtime()
     WorldState.set_location(location_id)
+    world_event_director = Node.new()
+    world_event_director.set_script(WORLD_EVENT_DIRECTOR_SCRIPT)
+    world_event_director.name = "WorldEventDirector"
+    world_event_director.setup(WorldState, self)
+    add_child(world_event_director)
     print("[NEREIS][INTERIOR] Entered %s route=%s" % [location_id, WorldState.selected_route])
     _create_floor()
     _create_boundaries()
@@ -40,6 +47,7 @@ func _ready() -> void:
     var church_occupied := "church_village_occupied" in WorldState.achievement_flags
     if location_id != "church" or church_occupied:
         _spawn_npc()
+        world_event_director.spawn_npcs(self, ROUTE_NPC_SCRIPT, Callable(self, "_on_npc_interacted"))
         _spawn_clue()
         _spawn_route_door()
         _spawn_research_door()
@@ -102,27 +110,6 @@ func _spawn_npc() -> void:
             npc.dialogue = "值夜人把杯子擦干，朝门口点点头。\n\n“进来暖暖身子吧。村里白天说的话，到了夜里往往就不一样了。”"
         add_child(npc)
         npc.interacted.connect(_on_npc_interacted.bind(npc))
-
-    var pilgrim_arrived := "pilgrim_knight_a1_arrived" in WorldState.achievement_flags
-    if not pilgrim_arrived:
-        return
-    var pilgrim_at_tavern := "pilgrim_knight_at_tavern" in WorldState.achievement_flags
-    if (location_id == "tavern") != pilgrim_at_tavern:
-        return
-
-    var pilgrim := Node2D.new()
-    pilgrim.set_script(ROUTE_NPC_SCRIPT)
-    pilgrim.position = Vector2(500, 520)
-    pilgrim.cloth_color = Color("#77736d")
-    pilgrim.skin_color = Color("#9b8175")
-    pilgrim.npc_id = "pilgrim_knight_a1"
-    pilgrim.display_name = "朝圣骑士"
-    if "village_defense_survived" in WorldState.achievement_flags:
-        pilgrim.dialogue = "朝圣骑士没有立即看向你，只将目光停在门外的道路上。\n\n“路重新打开了。可通行，不代表值得前往。”"
-    else:
-        pilgrim.dialogue = "朝圣骑士站在光线照不到的地方，似乎在等一个不会准时到来的人。\n\n“这里还不是谈论那条路的时候。”"
-    add_child(pilgrim)
-    pilgrim.interacted.connect(_on_npc_interacted.bind(pilgrim))
 
 func _spawn_mite_if_present() -> void:
     if location_id != "tavern" or WorldState.mite_connection_missed or not WorldState.mite_first_meeting:
