@@ -6,6 +6,40 @@ extends Node
 signal event_triggered(event_id: String, payload: Dictionary)
 
 const NPC_DEFINITIONS: Array[Dictionary] = [
+	{
+		"id": "pilgrim_knight_a1",
+		"position": Vector2(500, 520),
+		"display_name": "朝圣骑士",
+		"conditions": [
+			{"type": "flag", "value": "pilgrim_knight_a1_arrived"},
+			{"type": "flag", "value": "pilgrim_knight_at_tavern"},
+			{"type": "location", "value": "tavern"}
+		],
+		"dialogue": "朝圣骑士站在光线照不到的地方，似乎在等一个不会准时到来的人。\\n\\n“这里还不是谈论那条路的时候。”",
+		"dialogue_variants": [
+			{
+				"conditions": [{"type": "flag", "value": "village_defense_survived"}],
+				"dialogue": "朝圣骑士没有立即看向你，只将目光停在门外的道路上。\\n\\n“路重新打开了。可通行，不代表值得前往。”"
+			}
+		]
+	},
+	{
+		"id": "pilgrim_knight_a1",
+		"position": Vector2(500, 520),
+		"display_name": "朝圣骑士",
+		"conditions": [
+			{"type": "flag", "value": "pilgrim_knight_a1_arrived"},
+			{"type": "flag_absent", "value": "pilgrim_knight_at_tavern"},
+			{"type": "location", "value": "church"}
+		],
+		"dialogue": "朝圣骑士站在光线照不到的地方，似乎在等一个不会准时到来的人。\\n\\n“这里还不是谈论那条路的时候。”",
+		"dialogue_variants": [
+			{
+				"conditions": [{"type": "flag", "value": "village_defense_survived"}],
+				"dialogue": "朝圣骑士没有立即看向你，只将目光停在门外的道路上。\\n\\n“路重新打开了。可通行，不代表值得前往。”"
+			}
+		]
+	}
 ]
 
 const EVENT_DEFINITIONS: Array[Dictionary] = [
