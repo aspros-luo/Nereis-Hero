@@ -1255,7 +1255,7 @@ def main() -> int:
         require(a6_exit_block, "C10 is created after the bell warden drops the winch key.", "C10 monastery shortcut", errors)
         require(region_script, '"E  使用绞盘钥匙打开钟塔落差通路"', "C10 monastery shortcut", errors)
         require(region_script, 'WorldState.is_item_owned("bell_tower_winch_key")', "C10 monastery shortcut", errors)
-        require(a6_exit_block, '"opened_bell_tower_drop"', "C10 monastery shortcut", errors)
+        require(region_script, '"opened_bell_tower_drop"', "C10 monastery shortcut", errors)
         if 'if WorldState.is_hidden_path_opened("H05")' in a6_exit_block:
             fail(errors, "C10 monastery shortcut must not depend on the optional H05 secret path.")
     if "1830.0, \"E  RETURN TO THE SILENT BELL WINDOW\"" in region_script:
