@@ -195,7 +195,7 @@ func _spawn_gatekeeper() -> void:
 	var npc := Node2D.new()
 	npc.set_script(ROUTE_NPC_SCRIPT)
 	npc.position = Vector2(650, 520)
-	npc.interaction_range = 80.0
+	npc.interaction_range = 60.0
 	npc.npc_id = "village_gatekeeper"
 	npc.display_name = "村庄守门人"
 	if "village_defense_survived" in WorldState.achievement_flags and WorldState.selected_route == "church":
@@ -220,7 +220,7 @@ func _spawn_shared_world_npcs() -> void:
 	var grandmother := Node2D.new()
 	grandmother.set_script(ROUTE_NPC_SCRIPT)
 	grandmother.position = Vector2(1120, 520)
-	grandmother.interaction_range = 80.0
+	grandmother.interaction_range = 60.0
 	grandmother.npc_id = "village_grandmother"
 	grandmother.display_name = "老婆婆"
 	if "village_defense_survived" in WorldState.achievement_flags:
@@ -235,7 +235,7 @@ func _spawn_shared_world_npcs() -> void:
 	var blacksmith := Node2D.new()
 	blacksmith.set_script(ROUTE_NPC_SCRIPT)
 	blacksmith.position = Vector2(1430, 520)
-	blacksmith.interaction_range = 80.0
+	blacksmith.interaction_range = 65.0
 	blacksmith.npc_id = "village_blacksmith"
 	blacksmith.display_name = "铁匠"
 	if "village_defense_survived" in WorldState.achievement_flags:
@@ -248,7 +248,7 @@ func _spawn_shared_world_npcs() -> void:
 	var merchant := Node2D.new()
 	merchant.set_script(ROUTE_NPC_SCRIPT)
 	merchant.position = Vector2(1250, 520)
-	merchant.interaction_range = 80.0
+	merchant.interaction_range = 60.0
 	merchant.npc_id = "traveling_merchant"
 	merchant.display_name = "旅行商人"
 	if WorldState.get_humanity_state() == "hollow":
@@ -289,6 +289,7 @@ func _spawn_village_pois() -> void:
 	var tavern := Node2D.new()
 	tavern.set_script(VILLAGE_POI_SCRIPT)
 	tavern.position = Vector2(1730, 520)
+	tavern.interaction_range = 80.0
 	tavern.poi_id = "tavern"
 	tavern.display_name = "酒馆"
 	tavern.dialogue = "酒馆的门在你掌下发暖。\n\n你短暂地听见里面传来摇篮曲；当你碰到门把时，歌声却停了。"
@@ -298,6 +299,7 @@ func _spawn_village_pois() -> void:
 	var graveyard := Node2D.new()
 	graveyard.set_script(VILLAGE_POI_SCRIPT)
 	graveyard.position = Vector2(950, 520)
+	graveyard.interaction_range = 80.0
 	graveyard.poi_id = "graveyard"
 	graveyard.display_name = "村庄墓地"
 	graveyard.dialogue = "墓园的大门敞开着。\n\n钟塔多年未曾鸣响，但当你呼唤时，里面仍有某种东西回应。"
@@ -310,6 +312,7 @@ func _spawn_village_pois() -> void:
 		var rebel_camp := Node2D.new()
 		rebel_camp.set_script(VILLAGE_POI_SCRIPT)
 		rebel_camp.position = Vector2(1990, 520)
+		rebel_camp.interaction_range = 70.0
 		rebel_camp.poi_id = "rebel_camp"
 		rebel_camp.display_name = "复国军营地"
 		rebel_camp.dialogue = "营地已经扎稳。有人整理装备，有人低声讨论接下来的道路。\n\n这里不再是临时停留的地方。"
@@ -319,6 +322,7 @@ func _spawn_village_pois() -> void:
 	var north_gate := Node2D.new()
 	north_gate.set_script(VILLAGE_POI_SCRIPT)
 	north_gate.position = Vector2(2440, 520)
+	north_gate.interaction_range = 80.0
 	north_gate.poi_id = "north_gate"
 	# P5.1 runtime contract for the north route.
 	north_gate.set_meta("p5_1_exit_contract", true)
@@ -340,6 +344,7 @@ func _spawn_village_pois() -> void:
 	var city_cut := Node2D.new()
 	city_cut.set_script(VILLAGE_POI_SCRIPT)
 	city_cut.position = Vector2(100, 520)
+	city_cut.interaction_range = 75.0
 	city_cut.poi_id = "city_cut"
 	# P5.1 runtime contract for the post-defense shortcut.
 	city_cut.set_meta("p5_1_exit_contract", true)
@@ -361,6 +366,7 @@ func _spawn_village_pois() -> void:
 	# Keep a clear landing corridor between the church and north-gate interaction zones.
 	# 教堂交互点与北门之间保留无交互提示的回程落脚区。
 	church.position = Vector2(2180, 520)
+	church.interaction_range = 60.0
 	church.poi_id = "church"
 	church.display_name = "教堂"
 	church.dialogue = "教堂的大门没有上锁。里面空荡而安静，只有旧木椅与未燃尽的蜡烛。\n\n暂时没有人回应你的脚步声。"
