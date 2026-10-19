@@ -313,7 +313,7 @@ func _spawn_village_pois() -> void:
 	var city_cut_open := "village_defense_survived" in WorldState.achievement_flags
 	city_cut.display_name = "旧排水通道" if city_cut_open else "封闭的排水通道"
 	if city_cut_open:
-		city_cut.dialogue = "旧排水道从城墙下穿过，其石构甚至早于村庄的房屋。\n\n一条狭窄通路通向被遗忘的街道。"
+		city_cut.dialogue = "旧排水道从城墙下方延伸。\n\n石阶通向更深处，远处似乎有水声；但里面的闸门看起来早已锈死。"
 	else:
 		city_cut.dialogue = "倒塌的横梁与新鲜碎石封住了通道。有人最近才堵上这里。\n\n裂缝另一侧的石头比村庄古老得多。"
 	add_child(city_cut)
