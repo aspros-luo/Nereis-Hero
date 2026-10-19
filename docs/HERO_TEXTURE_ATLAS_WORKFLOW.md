@@ -11,7 +11,7 @@
 - Reuses `scenes/player/hero_skeleton.tscn` and its current `Skeleton2D` hierarchy.
 - Keeps the procedural line-art visible by default, so atlas inspection never hides the only known character silhouette.
 - Displays the source atlas beside the rig with a 64-pixel coordinate grid.
-- Clicking a cell reports the exact source rectangle (`x`, `y`, `width`, `height`) in the original 2048×2048 atlas.
+- Clicking a cell reports the exact source rectangle (`x`, `y`, `width`, `height`) in the original 2048×2048 atlas and shows a nearest-filter magnified crop for inspection.
 - Is a development-only lab; it does not replace the production Hero scene or change gameplay.
 
 - 复用现有骨骼层级，默认保留线稿作视觉对照。
@@ -40,6 +40,7 @@ UV 图集中的纹理岛是为特定模型表面排布的。纹理岛与可见�
 - [x] Restore the atlas-based workflow; remove the incorrect requirement for separate `head.png`, `body.png`, and other guessed part files.
 - [x] Keep the existing line-art visible while inspecting the atlas by default.
 - [x] Provide a clickable source-coordinate grid.
+- [x] Show a magnified, nearest-filter preview of the selected atlas cell.
 - [ ] Verify the scene in Godot 4.6.1 on the local project.
 - [ ] Identify source mesh/UV files or approve a new hand-drawn 2D silhouette workflow.
 - [ ] Complete and visually accept the textured rig.
@@ -47,6 +48,7 @@ UV 图集中的纹理岛是为特定模型表面排布的。纹理岛与可见�
 - [x] 恢复图集工作流，移除对独立部件 PNG 的错误依赖。
 - [x] 默认保留现有线稿作对照。
 - [x] 提供可点击的原图坐标网格。
+- [x] 显示选中图集单元的最近邻放大预览。
 - [ ] 在本地 Godot 4.6.1 项目中实际运行验证。
 - [ ] 找到原模型/UV 文件，或确认改用重新绘制的 2D 轮廓。
 - [ ] 完成纹理骨骼拼装并通过视觉验收。
