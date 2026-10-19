@@ -138,7 +138,7 @@ A1 已接入 `scripts/core/world_event_director.gd`。后续进度内容通过�
 
 - `region_entered`：场景完成基础生成后触发，context 包含 A1、进入侧与位置；
 - `interaction`：POI 对话结束后触发，context 包含 POI ID；
-- `state_refresh`：供后续进度状态变化时主动重新评估。
+- `state_refresh`：供后续进度状态变化时主动重新评估；A1 暴露 `refresh_progression_content()`，可在主角仍处于村庄时重新生成进度 NPC 并重新评估事件。\n- 目前 POI 交互结束后会自动调用刷新入口；后续战斗奖励、物品获取或区域事件若在村庄内直接改变状态，也应调用同一入口。
 
 条件类型包括进度 flag、路线、空洞状态、已进入区域、物品持有数量、物品已收集、物品已阅读，以及可选的 WorldState 布尔查询方法。事件效果目前只允许安全地增删持久化 flag；NPC 生成、动画、场景变化等复杂效果应通过 `event_triggered` 信号由对应系统处理。
 
