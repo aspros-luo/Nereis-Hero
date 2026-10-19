@@ -426,10 +426,10 @@ func _enter_village_location(location_id: String) -> void:
 			SceneTransition.fade_to_scene("res://scenes/village_defense_demo.tscn")
 	elif location_id == "city_cut":
 		if "village_defense_survived" in WorldState.achievement_flags:
-			WorldState.pending_region_spawn_side = "village_city_cut"
-			WorldState.set_location("forgotten_city")
-			print("[NEREIS][MAP] Entering A3: Forgotten City via the old drainage passage")
-			SceneTransition.fade_to_scene("res://scenes/forgotten_city.tscn")
+			WorldState.pending_region_spawn_side = "village_entry"
+			WorldState.set_location("old_drain_exploration")
+			print("[NEREIS][MAP] Entering the first old-drain exploration segment")
+			SceneTransition.fade_to_scene("res://scenes/old_drain_exploration.tscn")
 		else:
 			print("[NEREIS][MAP] Old drainage passage remains sealed until the village attack is survived")
 	elif location_id == "graveyard":
