@@ -2,6 +2,7 @@ extends Node2D
 
 const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
+const WORLD_EVENT_DIRECTOR_SCRIPT = preload("res://scripts/core/world_event_director.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
@@ -27,6 +28,7 @@ var narrative_audio: Node
 var mite_house_door: Area2D
 var mite_house_transitioning := false
 var fireflies: Node2D
+var world_event_director: Node
 var resonance_well_gate: Node2D
 var cliff_cave_door: Area2D
 
@@ -37,6 +39,11 @@ func _ready() -> void:
 	# 必须先保存实际进入侧，再清理一次性切图方向，确保 Continue 能恢复正确落点。
 	WorldState.set_location("village")
 	WorldState.pending_region_spawn_side = "west"
+	world_event_director = Node.new()
+	world_event_director.set_script(WORLD_EVENT_DIRECTOR_SCRIPT)
+	world_event_director.name = "WorldEventDirector"
+	world_event_director.setup(WorldState, self)
+	add_child(world_event_director)
 	print("[NEREIS][VILLAGE] Entered Village Hub route=%s spawn_side=%s" % [WorldState.selected_route, spawn_side])
 	WorldState.set_checkpoint(Vector2(360, 520))
 	_create_floor()
@@ -53,12 +60,14 @@ func _ready() -> void:
 	_spawn_mite_house_door()
 	_spawn_gatekeeper()
 	_spawn_shared_world_npcs()
+	_spawn_progression_npcs()
 	_spawn_village_pois()
 	_spawn_resonance_well_gate()
 	_spawn_cliff_cave_door()
 	_spawn_ui()
 	_spawn_narrative_audio()
 	_spawn_fireflies()
+	world_event_director.dispatch("region_entered", {"region": "A1", "location": "village", "spawn_side": spawn_side})
 	# The newly revealed cave is presented by the changed world geometry and its entrance prompt, not a forced exposition panel.
 	queue_redraw()
 
@@ -232,6 +241,13 @@ func _spawn_shared_world_npcs() -> void:
 	merchant.interacted.connect(_on_village_npc_interacted.bind(merchant))
 
 
+func _spawn_progression_npcs() -> void:
+	# Progression-only NPCs are registered in world_event_director.gd; baseline villagers stay above.
+	# 进度专属 NPC 在 world_event_director.gd 注册；常驻村民仍由上方基础生成逻辑负责。
+	if world_event_director == null:
+		return
+	world_event_director.spawn_npcs(self, ROUTE_NPC_SCRIPT, Callable(self, "_on_village_npc_interacted"))
+
 func _on_village_npc_interacted(npc: Node) -> void:
 	if narrative == null or not is_instance_valid(npc):
 		return
@@ -319,6 +335,8 @@ func _spawn_village_pois() -> void:
 func _on_village_poi_interacted(poi: Node) -> void:
 	narrative.show_message(poi.display_name, poi.dialogue, 2.5)
 	await narrative.message_finished
+	if world_event_director != null:
+		world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": String(poi.poi_id), "poi": poi})
 	_enter_village_location(poi.poi_id)
 
 func _spawn_resonance_well_gate() -> void:
