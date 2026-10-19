@@ -260,8 +260,10 @@ func _show_intro() -> void:
         return
     if location_id == "tavern":
         narrative.show_message("THE TAVERN", "The room is warmer than the road.\n\nSomewhere behind the bar, a glass is placed down by a hand you cannot see.", 6.0)
-    else:
+    elif location_id == "church" and "church_village_occupied" not in WorldState.achievement_flags:
         narrative.show_message("教堂", "教堂里没有神职人员，也没有可供调查的物品。\n\n空荡的长椅朝向一座没有点燃蜡烛的祭台。\n\n这里要等到后续剧情节点才会有人到来。", 6.0)
+    else:
+        narrative.show_message("THE CHURCH", "Incense clings to the stone.\n\nThe Hero's footsteps are familiar to the room.", 6.0)
 
 func _on_npc_interacted(npc: Node) -> void:
     narrative.show_message(npc.display_name, npc.dialogue, 6.0)
