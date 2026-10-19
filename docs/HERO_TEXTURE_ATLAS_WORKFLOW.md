@@ -35,6 +35,20 @@ UV 图集中的纹理岛是为特定模型表面排布的。纹理岛与可见�
 2. 若没有可用模型，则重新绘制适合 2D 的角色轮廓和关键帧，把图集作为配色与材质参考，而不是猜测完整身体精灵。
 3. 将经过确认的 2D 部件绑定到现有骨骼轴点，并在 Godot 中检查站立、走跑、跳跃、攻击、闪避和死亡后，再考虑接入正式角色。
 
+## Sprite-sheet reference / 动画精灵表参考
+
+The user-provided reference page is [Momohime (2/2) on The Spriters Resource](https://www.spriters-resource.com/wii/muramasathedemonblade/asset/153143/). The page identifies the asset as a PNG sprite sheet from *Muramasa: The Demon Blade*, 2560×2432 pixels, uploaded 24 April 2021, with no animation metadata listed. Visual inspection shows character poses arranged in rows on a transparent background, including locomotion and sword-action poses. This is a different kind of source from the UV texture atlas above: individual sprite poses can be selected as animation frames, provided their actual cell bounds and transparent padding are measured rather than guessed.
+
+该链接页面标注的素材是《胧村正》中的 **Momohime (2/2)**，PNG 尺寸为 2560×2432，页面没有提供动画元数据；从图像可见，多个角色姿势按行排列，包含移动和刀剑动作。这与上文的 UV 纹理图集是两种不同素材：精灵表可以提取为动画帧，但必须先实测每帧边界和透明留白，不能仅凭猜测套用统一裁切尺寸。
+
+**Character direction / 角色方向:** treat this sheet as a *motion and visual-style reference*, not as the final identity of Nereis-Hero's male Chinese swordsman. Preserve the project's own character identity and avoid silently replacing the protagonist with Momohime.
+
+**Implementation gate / 实装前置条件:**
+- [ ] Confirm the downloaded source image is present in the project and record its exact path and dimensions.
+- [ ] Measure row/column frame bounds from the actual image; do not assume a uniform 256×256 grid.
+- [ ] Group verified frames into idle, walk/run, sword attack, and recovery sequences.
+- [ ] Preview each sequence at runtime and correct foot-origin alignment before binding it to the current rig or replacing the rig's visual layer.
+
 ## Acceptance status / 验收状态
 
 - [x] Restore the atlas-based workflow; remove the incorrect requirement for separate `head.png`, `body.png`, and other guessed part files.
