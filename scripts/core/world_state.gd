@@ -492,6 +492,7 @@ func save_game() -> void:
         "mite_first_meeting": mite_first_meeting,
         "mite_interactions_seen": mite_interactions_seen,
         "mite_last_interaction_location": mite_last_interaction_location,
+        "narrative_state_version": 2,
         "mite_connection_missed": mite_connection_missed,
         "ancient_residue_awakened": ancient_residue_awakened,
         "outer_god_resonance": outer_god_resonance,
@@ -642,6 +643,10 @@ func load_game() -> void:
             mite_interactions_seen.append(str(interaction_id))
     mite_last_interaction_location = str(parsed.get("mite_last_interaction_location", ""))
     mite_connection_missed = bool(parsed.get("mite_connection_missed", false))
+    # Before narrative_state_version 2, this flag was set merely by entering the church.
+    # That was not a true missed relationship window; preserve the old save but clear the false lock.
+    if int(parsed.get("narrative_state_version", 0)) < 2:
+        mite_connection_missed = false
     ancient_residue_awakened = bool(parsed.get("ancient_residue_awakened", false))
     # Migrate older saves where this story flag existed before protagonist progression was wired in.
     if ancient_residue_awakened:
