@@ -338,10 +338,22 @@ func _mark_input_handled() -> void:
 		viewport.set_input_as_handled()
 
 func _draw_security_shutter(gate_x: float) -> void:
-	draw_rect(Rect2(gate_x - 13.0, 300.0, 26.0, 240.0), Color("#17141b"))
-	for bar_y in range(312, 536, 28):
-		draw_line(Vector2(gate_x - 10.0, float(bar_y)), Vector2(gate_x + 10.0, float(bar_y)), Color("#65505c"), 3.0)
-	draw_rect(Rect2(gate_x - 19.0, 292.0, 38.0, 8.0), Color("#8d5968"))
+	# Make the temporary collision boundary legible before the player reaches it.
+	# 临时碰撞边界必须在玩家撞上之前就能被清楚识别，不能只靠物理体表达。
+	draw_rect(Rect2(gate_x - 34.0, 292.0, 68.0, 252.0), Color("#a54c62", 0.10))
+	draw_rect(Rect2(gate_x - 16.0, 300.0, 32.0, 240.0), Color("#17141b"))
+	draw_rect(Rect2(gate_x - 21.0, 296.0, 42.0, 8.0), Color("#b87583"))
+	draw_rect(Rect2(gate_x - 21.0, 536.0, 42.0, 7.0), Color("#8d5968"))
+	# Thick side rails visually align with the StaticBody2D collision footprint.
+	draw_line(Vector2(gate_x - 13.0, 302.0), Vector2(gate_x - 13.0, 536.0), Color("#a87580"), 3.0)
+	draw_line(Vector2(gate_x + 13.0, 302.0), Vector2(gate_x + 13.0, 536.0), Color("#a87580"), 3.0)
+	for bar_y in range(312, 536, 24):
+		draw_line(Vector2(gate_x - 10.0, float(bar_y)), Vector2(gate_x + 10.0, float(bar_y)), Color("#8c6873"), 3.0)
+	# Warning lamps communicate that the shutter is an active combat lock, not an invisible wall.
+	draw_circle(Vector2(gate_x, 284.0), 8.0, Color("#f0b35c", 0.22))
+	draw_circle(Vector2(gate_x, 284.0), 4.0, Color("#f0b35c"))
+	draw_line(Vector2(gate_x - 28.0, 284.0), Vector2(gate_x - 17.0, 284.0), Color("#c58b62"), 2.0)
+	draw_line(Vector2(gate_x + 17.0, 284.0), Vector2(gate_x + 28.0, 284.0), Color("#c58b62"), 2.0)
 
 func _draw() -> void:
 	draw_texture_rect(SURGERY_BACKDROP, Rect2(0, 0, LEVEL_WIDTH, 720), false)
