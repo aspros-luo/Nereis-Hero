@@ -22,9 +22,19 @@ Do not add another manual atlas inspector unless a concrete missing capability i
 
 An atlas rectangle is only a crop, not automatically a semantically complete body part. The correct interpretation must be based on the actual pixels, transparency, repeated visual patterns, and compatibility between parts. If the atlas is a UV/material atlas rather than a packed 2D parts atlas, its islands may require the source mesh/UV mapping. Do not fabricate limb shapes by blindly attaching arbitrary rectangles to bones.
 
+## Atlas analysis tool / 图集分析工具
+
+Run the following from the repository root with the project's Godot 4.6.1 executable:
+
+```sh
+godot --headless --path . --script tools/analyze_hero_texture_atlas.gd
+```
+
+The tool reads only the committed PNG texture atlas and writes `user://hero_texture_atlas_analysis.json`. It records dimensions and alpha statistics, and reports 4-neighbor connected alpha regions only when transparent pixels exist. These regions are geometric candidates, not semantic labels such as head, arm, or leg. If the texture is fully opaque or its islands touch, this report cannot segment body parts reliably.
+
 ## Implementation sequence / 实施顺序
 
-1. Inspect the PNG atlas itself and record true dimensions and alpha properties.
+1. Run the atlas-only analyzer against the PNG and record true dimensions and alpha properties.
 2. Compare the DDS variant for matching dimensions/content and choose a runtime-supported source.
 3. Detect candidate opaque islands and bounds; flag merged/touching regions rather than pretending they are cleanly separated.
 4. Identify a coherent character set and record exact atlas rectangles and pivots.
