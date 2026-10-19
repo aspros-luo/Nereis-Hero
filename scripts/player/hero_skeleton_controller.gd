@@ -421,6 +421,7 @@ func _add_circle(parent: Node2D, radius: float, width: float, color: Color) -> L
 
 func _apply_pose() -> void:
 	_reset_pose()
+	var stride_ratio := clampf(absf(_horizontal_speed) / 260.0, 0.0, 1.0)
 	var run_phase := _stride_phase
 	var run_cycle := sin(run_phase)
 	var opposite_cycle := sin(run_phase + PI)
