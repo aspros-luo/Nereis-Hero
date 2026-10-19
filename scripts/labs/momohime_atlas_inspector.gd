@@ -26,6 +26,7 @@ func _ready() -> void:
 	if _atlas == null:
 		_status.text = "无法加载 PNG 纹理图集。"
 		return
+	_zoom = DISPLAY_WIDTH / float(_atlas.get_width())
 	_atlas_sprite = Sprite2D.new()
 	_atlas_sprite.texture = _atlas
 	_atlas_sprite.centered = false
@@ -35,6 +36,7 @@ func _ready() -> void:
 	_overlay = Node2D.new()
 	_overlay.position = _atlas_sprite.position
 	add_child(_overlay)
+	_redraw_overlay()
 	_update_status()
 
 
