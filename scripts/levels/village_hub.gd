@@ -197,12 +197,18 @@ func _spawn_gatekeeper() -> void:
 	npc.position = Vector2(650, 520)
 	npc.npc_id = "village_gatekeeper"
 	npc.display_name = "村庄守门人"
-	if WorldState.selected_route == "church":
+	if "village_defense_survived" in WorldState.achievement_flags and WorldState.selected_route == "church":
+		npc.dialogue = "守门人看了看你身上的教堂印记，又朝已经恢复通行的北门望去。\n\n“路是重新打开了。但他们说过的话，我还没打算忘。”"
+	elif "village_defense_survived" in WorldState.achievement_flags and WorldState.selected_route == "lullaby":
+		npc.dialogue = "守门人听见风里传来的旋律，手却没有再去掩酒馆的门。\n\n“北门暂时守住了。那首歌的事，还是别在街上唱。”"
+	elif "village_defense_survived" in WorldState.achievement_flags:
+		npc.dialogue = "守门人朝北门点了点头，神情仍然疲惫。\n\n“路重新通了。可别把能走过去，当成那边已经安全。”"
+	elif WorldState.selected_route == "church":
 		npc.dialogue = "守门人看了看你身上的教堂印记，神情变得警惕。\n\n“他们说你不会再回来。现在却又把你送回来了？”"
 	elif WorldState.selected_route == "lullaby":
 		npc.dialogue = "风里传来一段模糊的摇篮曲，守门人随即把酒馆的门掩上了一半。\n\n“别在这里唱那首歌。除非你想让整座村庄都回想起来。”"
 	else:
-		npc.dialogue = "守门人打量着你，又看了看北门的方向。\n\n\"刚回来？村里有些路白天也不好走。先四处看看，别急着往外闯。\""
+		npc.dialogue = "守门人打量着你，又看了看北门的方向。\n\n“刚回来？村里有些路白天也不好走。先四处看看，别急着往外闯。”"
 	add_child(npc)
 	npc.interacted.connect(_on_village_npc_interacted.bind(npc))
 
@@ -687,6 +693,14 @@ func _draw() -> void:
 	draw_rect(Rect2(2380, 330, 120, 190), Color("#241e27"))
 	draw_rect(Rect2(2410, 350, 18, 170), Color("#4a3439"))
 	draw_rect(Rect2(2460, 350, 18, 170), Color("#4a3439"))
+	if "village_defense_survived" in WorldState.achievement_flags:
+		# The gate is visibly passable after the defense; keep the opening readable from the hub.
+		draw_line(Vector2(2418, 360), Vector2(2394, 405), Color("#79656a"), 6.0)
+		draw_line(Vector2(2468, 360), Vector2(2490, 405), Color("#79656a"), 6.0)
+	else:
+		# Before the defense, crossbars communicate that the route is physically blocked.
+		draw_rect(Rect2(2418, 385, 50, 12), Color("#79656a"))
+		draw_rect(Rect2(2418, 430, 50, 12), Color("#79656a"))
 	draw_string(ThemeDB.fallback_font, Vector2(2370, 310), NereisLocalization.translate_text("北门"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
 
 	# Broken roof beams mark an optional high route across the village; they are not a required path.
