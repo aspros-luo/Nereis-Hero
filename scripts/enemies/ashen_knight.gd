@@ -12,6 +12,9 @@ var phase := 1
 var persist_global_boss_defeat := true
 # Prologue-only executioner cannot be defeated; ordinary bosses remain damageable by default.
 var damage_immune := false
+## Per-instance damage scaling; lower values make a boss more resilient without making it invulnerable.
+var damage_taken_multiplier := 1.0
+var is_defeated := false
 var visual_theme := "ashen"
 var attack_cooldown := 0.0
 var windup := 0.0
@@ -122,18 +125,22 @@ func _spawn_hit_spark() -> void:
     get_parent().add_child(effect)
 
 func receive_damage(amount: int, source: Node = null) -> void:
+    if is_defeated or is_queued_for_deletion():
+        return
     if damage_immune:
         _log("BOSS", "%s ignored damage during scripted prologue encounter" % boss_display_name)
         return
-    health = max(0, health - amount)
+    var scaled_damage := maxi(1, roundi(float(maxi(1, amount)) * clampf(damage_taken_multiplier, 0.05, 1.0)))
+    health = max(0, health - scaled_damage)
     _spawn_hit_spark()
     hit_flash = 0.12
     stun_time = 0.08 if phase_two else 0.12
     if source and source is Node2D:
         velocity.x = sign(global_position.x - source.global_position.x) * (95.0 if phase_two else 75.0)
     var source_name: String = source.name if source else "Unknown"
-    _log("BOSS", "%s -> Ashen Knight damage=%d hp=%d" % [source_name, amount, health])
+    _log("BOSS", "%s -> Ashen Knight damage=%d (raw=%d) hp=%d" % [source_name, scaled_damage, amount, health])
     if health <= 0:
+        is_defeated = true
         _spawn_death_burst()
         _log("BOSS", "Ashen Knight defeated")
         if persist_global_boss_defeat:
