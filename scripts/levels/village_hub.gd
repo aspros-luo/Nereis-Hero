@@ -194,7 +194,7 @@ func _spawn_fireflies() -> void:
 func _spawn_gatekeeper() -> void:
 	var npc := Node2D.new()
 	npc.set_script(ROUTE_NPC_SCRIPT)
-	npc.position = Vector2(660, 520)
+	npc.position = Vector2(760, 520)
 	npc.npc_id = "village_gatekeeper"
 	npc.display_name = "村庄守门人"
 	if WorldState.selected_route == "church":
@@ -253,7 +253,6 @@ func refresh_progression_content() -> void:
 	# 主角仍在 A1 时若任务、物品或区域事实发生变化，应调用此入口刷新进度内容。
 	if world_event_director == null:
 		return
-	_spawn_progression_npcs()
 	world_event_director.dispatch("state_refresh", {"region": "A1", "location": "village"})
 	_spawn_progression_npcs()
 
