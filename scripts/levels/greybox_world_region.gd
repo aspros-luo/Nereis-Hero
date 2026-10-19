@@ -121,7 +121,8 @@ func _spawn_region_encounters() -> void:
 	match region_id:
 		"A2":
 			_spawn_encounter(PALE_HOUND_SCRIPT, "A2_PaleHound_01", 500.0, 14.0, 32.0)
-			_spawn_encounter(CULTIST_SCRIPT, "A2_Cultist_01", 1750.0, 13.0, 38.0)
+			if "defeated_A2_Cultist_01" not in WorldState.achievement_flags:
+				_spawn_encounter(CULTIST_SCRIPT, "A2_Cultist_01", 1750.0, 13.0, 38.0)
 		"A3":
 			_spawn_encounter(BANDIT_RAIDER_SCRIPT, "A3_Bandit_01", 350.0, 14.0, 40.0)
 			_spawn_encounter(CULTIST_SCRIPT, "A3_Cultist_01", 1320.0, 13.0, 38.0)
@@ -180,6 +181,20 @@ func _spawn_encounter(enemy_script: Script, enemy_name: String, spawn_x: float, 
 		enemy.connect("defeated", _on_region_enemy_defeated.bind(enemy_name, enemy))
 	if enemy_name == "A6_MadCleric_01":
 		enemy.set("health", 240)
+	elif enemy_name == "A2_Cultist_01":
+		if WorldState.record_achievement("defeated_A2_Cultist_01"):
+			_spawn_world_item_pickup(
+				"combat_reward_a2_cultist_seal",
+				"charred_church_seal",
+				"CharredChurchSeal",
+				enemy_node.global_position + Vector2(0.0, -40.0)
+			)
+			if is_instance_valid(narrative):
+				narrative.show_message(
+					"烧黑的封条",
+					"薄铜片上的教会印记已经烧黑。反面刻着一串编号，末尾的符号与林中路标上的刻痕相同。",
+					5.0
+				)
 	elif enemy_name == "H09_AncientExperiment":
 		enemy.set("health", 360)
 	enemy.set_physics_process(false)
@@ -711,6 +726,13 @@ func _spawn_region_item_pickups() -> void:
 				"node_name": "OldPilgrimWaybill",
 				"position": Vector2(1550.0, 282.0)
 			})
+			if "defeated_A2_Cultist_01" in WorldState.achievement_flags:
+				placements.append({
+					"pickup_id": "combat_reward_a2_cultist_seal",
+					"item_id": "charred_church_seal",
+					"node_name": "CharredChurchSeal",
+					"position": Vector2(1750.0, floor_y - 40.0)
+				})
 		"A3":
 			placements.append({
 				"pickup_id": "map_reward_third_street_survey",
@@ -727,17 +749,25 @@ func _spawn_region_item_pickups() -> void:
 			})
 
 	for placement in placements:
-		var pickup_id := str(placement.get("pickup_id", ""))
-		if pickup_id.is_empty() or pickup_id in WorldState.collected_world_item_ids:
-			continue
-		var pickup := Node2D.new()
-		pickup.set_script(WORLD_ITEM_PICKUP_SCRIPT)
-		pickup.name = str(placement.get("node_name", "RegionItemPickup"))
-		pickup.position = placement.get("position", Vector2.ZERO)
-		pickup.set("pickup_id", pickup_id)
-		pickup.set("item_id", str(placement.get("item_id", "")))
-		pickup.set("prompt_text", "E  拾取")
-		add_child(pickup)
+		_spawn_world_item_pickup(
+			str(placement.get("pickup_id", "")),
+			str(placement.get("item_id", "")),
+			str(placement.get("node_name", "RegionItemPickup")),
+			placement.get("position", Vector2.ZERO)
+		)
+
+
+func _spawn_world_item_pickup(pickup_id: String, item_id: String, node_name: String, pickup_position: Vector2) -> void:
+	if pickup_id.is_empty() or pickup_id in WorldState.collected_world_item_ids:
+		return
+	var pickup := Node2D.new()
+	pickup.set_script(WORLD_ITEM_PICKUP_SCRIPT)
+	pickup.name = node_name
+	pickup.position = pickup_position
+	pickup.set("pickup_id", pickup_id)
+	pickup.set("item_id", item_id)
+	pickup.set("prompt_text", "E  拾取")
+	add_child(pickup)
 
 
 func _spawn_region_ambience() -> void:
