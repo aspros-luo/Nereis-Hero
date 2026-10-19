@@ -196,6 +196,7 @@ func _spawn_gatekeeper() -> void:
 	npc.set_script(ROUTE_NPC_SCRIPT)
 	npc.position = Vector2(650, 520)
 	npc.interaction_range = 60.0
+	npc.cloth_color = Color("#51404a")
 	npc.npc_id = "village_gatekeeper"
 	npc.display_name = "村庄守门人"
 	if "village_defense_survived" in WorldState.achievement_flags and WorldState.selected_route == "church":
@@ -221,6 +222,8 @@ func _spawn_shared_world_npcs() -> void:
 	grandmother.set_script(ROUTE_NPC_SCRIPT)
 	grandmother.position = Vector2(1120, 520)
 	grandmother.interaction_range = 60.0
+	grandmother.cloth_color = Color("#65594a")
+	grandmother.skin_color = Color("#a58b7a")
 	grandmother.npc_id = "village_grandmother"
 	grandmother.display_name = "老婆婆"
 	if "village_defense_survived" in WorldState.achievement_flags:
@@ -236,6 +239,8 @@ func _spawn_shared_world_npcs() -> void:
 	blacksmith.set_script(ROUTE_NPC_SCRIPT)
 	blacksmith.position = Vector2(1430, 520)
 	blacksmith.interaction_range = 65.0
+	blacksmith.cloth_color = Color("#594038")
+	blacksmith.skin_color = Color("#9b735e")
 	blacksmith.npc_id = "village_blacksmith"
 	blacksmith.display_name = "铁匠"
 	if "village_defense_survived" in WorldState.achievement_flags:
@@ -249,6 +254,8 @@ func _spawn_shared_world_npcs() -> void:
 	merchant.set_script(ROUTE_NPC_SCRIPT)
 	merchant.position = Vector2(1250, 520)
 	merchant.interaction_range = 60.0
+	merchant.cloth_color = Color("#43564c")
+	merchant.skin_color = Color("#a17e68")
 	merchant.npc_id = "traveling_merchant"
 	merchant.display_name = "旅行商人"
 	if WorldState.get_humanity_state() == "hollow":
