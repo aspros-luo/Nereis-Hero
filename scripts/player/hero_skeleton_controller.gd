@@ -112,7 +112,8 @@ func _process(delta: float) -> void:
 	var stride_ratio := clampf(absf(_horizontal_speed) / 260.0, 0.0, 1.0)
 	_stride_weight = move_toward(_stride_weight, 1.0 if stride_ratio > 0.05 else 0.0, delta * 8.0)
 	if stride_ratio > 0.05:
-		_stride_phase += delta * lerpf(5.0, 11.5, stride_ratio)
+		# A gentle walk uses short, slow steps; sustained input naturally grows into a run.
+		_stride_phase += delta * lerpf(4.2, 11.5, stride_ratio)
 
 	_landing_time = maxf(0.0, _landing_time - delta)
 	if not _presentation_action_name.is_empty():
@@ -444,13 +445,15 @@ func _apply_pose() -> void:
 				foot_right_bone.rotation = -leg_right_bone.rotation * 0.4 - knee_right_bone.rotation * 0.25
 		PoseState.RUN:
 			# Keep the hip swing narrow; the separated knee/calf chains provide stride without legs crossing.
-			var swing := run_cycle * 0.34 * _stride_weight if animate_run else 0.0
-			var left_knee := maxf(0.0, opposite_cycle) * 0.42 * _stride_weight
-			var right_knee := maxf(0.0, run_cycle) * 0.42 * _stride_weight
-			root_bone.position.y -= run_bounce * _stride_weight
-			body_bone.rotation = lerpf(0.0, -0.09 - absf(run_cycle) * 0.025, _stride_weight)
-			arm_left_bone.rotation = lerpf(-0.08, swing * 0.72 + 0.05, _stride_weight)
-			arm_right_bone.rotation = lerpf(0.12, -swing * 0.72 - 0.16, _stride_weight)
+			var stride_amplitude := lerpf(0.12, 0.34, stride_ratio)
+			var swing := run_cycle * stride_amplitude * _stride_weight if animate_run else 0.0
+			var knee_amplitude := lerpf(0.16, 0.42, stride_ratio)
+			var left_knee := maxf(0.0, opposite_cycle) * knee_amplitude * _stride_weight
+			var right_knee := maxf(0.0, run_cycle) * knee_amplitude * _stride_weight
+			root_bone.position.y -= run_bounce * stride_ratio * _stride_weight
+			body_bone.rotation = lerpf(0.0, (-0.025 - absf(run_cycle) * 0.025 - 0.04) * stride_ratio, _stride_weight)
+			arm_left_bone.rotation = lerpf(-0.08, swing * 0.72 + 0.025 * stride_ratio, _stride_weight)
+			arm_right_bone.rotation = lerpf(0.12, -swing * 0.72 - 0.08 * stride_ratio, _stride_weight)
 			leg_left_bone.rotation = -swing
 			leg_right_bone.rotation = swing
 			knee_left_bone.rotation = left_knee
