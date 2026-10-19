@@ -1,22 +1,25 @@
-# Momohime-inspired Bone Animation Prototype / 百姬风格骨骼动画原型
+# Texture-Driven Bone Rig Prototype / 纹理驱动骨骼原型
 
 Branch: `feature/hero-animation-system`
 
 ## Purpose
-An isolated `Skeleton2D` / `Bone2D` study to move toward a Momohime-like silhouette and readable sword action. It does not replace the production Hero or alter combat logic.
 
-## Implemented in source
-- Bone hierarchy for root, torso, head, long hair, both arms, sword hand, both legs and knees.
-- Bone-attached layered Polygon2D/Line2D parts for hair, face, kimono, sleeves, skirt, socks and katana.
-- Procedural Idle, Walk and Slash motion curves, including delayed hair/skirt/sleeve motion.
-- Slash timing separates anticipation, committed cut, and recovery.
-- Keyboard controls: 1 idle, 2 walk, 3 slash, Space pause/resume, Left/Right facing, R restart.
+Use the existing Skeleton2D/Bone2D hierarchy as a motion rig, with the committed texture atlas as the primary source for visible character parts. The Momohime sprite sheet is visual reference only and must not be used to build the character or animation frames.
 
-## Scene
-Run `res://scenes/labs/momohime_bone_prototype.tscn` with Godot's Run Current Scene (F6).
+## Current state
 
-## Important limits
-- This is a hand-authored layered silhouette, not a claim that the source sprite sheet has been automatically rigged.
-- It is an isolated visual prototype. Production `hero.gd`, hitboxes, stamina, damage and the rollback path are untouched.
-- Godot runtime/parser and visual acceptance must be performed locally before this prototype is considered accepted. If the engine reports a property/API mismatch, fix that before further animation polish.
-- The next quality pass should replace rough polygon proportions with approved, properly sliced character parts or a deliberately authored bone-weighted mesh; do not warp the whole sprite-sheet cell as one sprite.
+- The scene `res://scenes/labs/momohime_bone_prototype.tscn` contains a hand-authored procedural placeholder using Polygon2D and Line2D.
+- It demonstrates rough idle, walk and slash motion timing, but it is not a texture-backed character and should not be treated as final art.
+- Existing atlas support is available through `CharacterPartData`, `CharacterAtlasTextureFactory`, and `hero_skeleton_texture_lab.tscn`.
+
+## Next work
+
+1. Analyze the actual atlas PNG and DDS rather than the sprite-sheet reference.
+2. Determine whether the atlas contains separable 2D character parts or requires original mesh/UV data.
+3. Record verified texture regions and pivots.
+4. Replace placeholder visuals progressively with atlas-backed Sprite2D parts attached to the appropriate bones.
+5. Validate silhouette, overlap, pivots and idle/walk/slash motion in Godot before considering production integration.
+
+## Safety boundary
+
+This prototype is isolated. Production Hero scenes, combat, hitboxes, stamina and damage logic remain unchanged. Godot runtime validation and visual acceptance have not yet been performed.
