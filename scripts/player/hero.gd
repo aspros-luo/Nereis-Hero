@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal presentation_action_finished(action_name: String)
+
 const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
 const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
@@ -273,6 +275,7 @@ func _set_skeleton_visual_enabled(enabled: bool) -> void:
 		if not is_instance_valid(skeleton_visual):
 			skeleton_visual = HERO_SKELETON_SCENE.instantiate() as Node2D
 			skeleton_visual.name = "HeroSkeletonVisual"
+			skeleton_visual.connect("presentation_action_finished", _on_skeleton_presentation_action_finished)
 			# Keep the presentation rig's local transform nonsingular before it enters Skeleton2D's
 			# transform synchronization. Its geometry is authored at unit scale.
 			skeleton_visual.scale = Vector2.ONE
@@ -286,6 +289,23 @@ func _set_skeleton_visual_enabled(enabled: bool) -> void:
 			skeleton_visual.queue_free()
 		skeleton_visual = null
 	queue_redraw()
+
+## Public presentation-only action request for story beats. Does not lock input or alter gameplay.
+## duration <= 0 keeps the visual action active until clear_hero_presentation_action().
+func request_hero_presentation_action(action_name: String, duration: float = 0.65, priority: int = -1) -> bool:
+	if not is_instance_valid(skeleton_visual) or not skeleton_visual.has_method("request_presentation_action"):
+		return false
+	return bool(skeleton_visual.call("request_presentation_action", action_name, duration, priority))
+
+
+func clear_hero_presentation_action() -> void:
+	if is_instance_valid(skeleton_visual) and skeleton_visual.has_method("clear_presentation_action"):
+		skeleton_visual.call("clear_presentation_action")
+
+
+func _on_skeleton_presentation_action_finished(action_name: String) -> void:
+	presentation_action_finished.emit(action_name)
+
 
 func _physics_process(delta: float) -> void:
 	if state == CombatState.DEAD:
