@@ -24,6 +24,8 @@ A1「边境村庄」不是一次性新手村、任务大厅或必须先打完一
 
 设计参照是 Dark Souls 的篝火据点 / Hollow Knight 的 Dirtmouth 式枢纽：安全感、人物记忆和路线意义随探索逐步改变，而不是持续派发任务。
 
+> 全项目叙事呈现规则与旁白迁移台账：[`NARRATIVE_PRESENTATION_AUDIT_AND_MIGRATION_CN.md`](./NARRATIVE_PRESENTATION_AUDIT_AND_MIGRATION_CN.md)。A1 的任何剧情改动均须遵守：不使用解释性旁白；优先以环境、可检查物品 / 装备、NPC 有依据的对话和玩家行动后的世界变化承载信息。
+
 ## 2. 不可被实现覆盖的叙事原则
 
 - NPC 首先是独立生活的人，其次才与玩家的路径发生交集。
