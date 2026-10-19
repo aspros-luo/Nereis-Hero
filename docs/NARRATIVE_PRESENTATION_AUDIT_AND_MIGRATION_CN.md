@@ -113,3 +113,25 @@
 当前问题不是单纯“旁白太多”，而是叙事系统没有区分**角色说话、玩家检查、环境反馈与全知解释**。第一步是统一规则并建立内容台账；随后逐场景迁移信息，再移除解释性文本。
 
 本轮已移除 A0→A1 的几处自动旁白 / 自动音频提示，并将首批信息转为环境细节；`play_first_memory()` 与 `play_weapon_upgrade()` 也已改为更符合人物身份的短对白。`begin_first_choice()` 仍保留旧的解释性选择面板，因其引用入口和状态依赖尚未确认，暂不盲目删除。全项目文本台账、其余 NPC / POI 文案迁移、物品描述承接，以及 Godot 实机验收仍未完成。
+
+## 6. 首次路线选择：调用入口与状态依赖复核（本轮）
+
+### 已确认
+
+- 当前 A0 主流程脚本 `scripts/levels/escape_prologue.gd` 的初始化、探索、出口伏击与离场逻辑中，没有发现对 `NarrativeManager.begin_first_choice()` 的直接调用。
+- `scripts/core/narrative_manager.gd` 仍保留旧选择面板；选择后会调用 `WorldState.make_first_choice(choice)`，并继续显示“有人早已料到你会回来”或主角自行回忆过去的解释性文字。
+- `WorldState.make_first_choice()` 会设置 `first_choice_made` 与 `selected_route`，并改变 `church_alignment` 或 `lullaby_resonance`；这些状态被存档 / 读档，并被后续区域 NPC 与路线系统读取。
+- 因此，旧选择面板很可能是遗留入口，但仅凭 A0 脚本未发现调用，不足以断定它在整个项目中完全无人调用。GitHub 代码搜索没有返回该符号结果，也不能替代对当前分支完整引用的确认。
+
+### 本轮处理决定
+
+暂不删除 `begin_first_choice()`、`_select_choice()` 或 `WorldState.make_first_choice()`。删除展示层却不处理路线状态，可能让新档的路线值为空，或令旧存档 / 路线场景行为不一致。
+
+### 下一步验收项
+
+1. 在当前分支完整检索所有脚本、场景与动态调用，确定是否存在间接入口。
+2. 梳理 `first_choice_made`、`selected_route`、`church_alignment`、`lullaby_resonance` 的首次赋值、读档默认值与全部读取点。
+3. 若确认选择流程已经废弃，制定兼容方案：保留旧存档状态；为没有选择状态的新档定义符合故事的首次状态来源；不再使用解释性选择弹窗。
+4. 若选择仍是现行机制，将其迁移为世界内可主动发现的线索 / 交互，不通过弹窗替玩家解释印记与摇篮曲的含义。
+5. 静态核查完成后，再运行 Godot 场景与存档回归；目前尚未执行运行时验收。
+
