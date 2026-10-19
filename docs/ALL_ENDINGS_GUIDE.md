@@ -1,60 +1,41 @@
 # ALL ENDINGS GUIDE
 
-Current contract: endings are determined by Resonance, truth-anchor items and exploration. Physical intimacy with Mite is not an ending condition.
+> **Authoritative design contract:** [ENDING_CONDITION_DESIGN_CN.md](./ENDING_CONDITION_DESIGN_CN.md). The threshold rules below are historical prototype behavior, not the final story contract.
 
-## Rules
+Endings must be resolved from facts the player actually establishes: explored routes, key-item acquisition / current possession / use, and completed special story or combat events. Mite relationship interactions may be prerequisites for obtaining certain items or scenes, but relationship state itself is not an ending switch. Physical intimacy is never required.
 
-The evaluator in scripts/core/ending_evaluator.gd uses these prototype thresholds:
+## Intended routes
 
-- Cosmic Resonance: hero_resonance >= 68.
-- Eternal Paradise: Resonance >= 68, the anomaly_observer_reaction source is recorded, at least one hidden region is entered, and Blazing Judgment requirements are not met.
-- Blazing Judgment: Resonance >= 68, at least 3 unique truth-anchor sources, and at least 2 hidden regions entered.
-- Mortal's Grave: all other combinations.
+- **凡人之墓 — Mortal's Grave:** The player mainly follows the normal route, does not discover / enter critical hidden areas, and consequently misses the key items and special scenes that expose the cosmic route.
+- **永恒乐园 — Eternal Paradise:** The player explores enough to obtain some key items and trigger some special scenes, but does not complete the deeper exploration or the full resistance chain. One example is missing the third umbilical cord or a later required event.
+- **烈火天罚 — Blazing Judgment:** The player completes the deep hidden route, the required key-item state, and designated story / co-op events. Examples include defeating the Church monster with the Pilgrim Knight and defeating the cult ritual leader deep in the forest together.
 
-The evaluator does not read physical_union_complete, mite_connection_missed, Mite interaction count, or outer_god_resonance.
+These are route intentions, not a claim that every condition is already implemented. The final mapping must identify real item IDs, whether each item must be acquired / currently held / used, and the actual event flags in source. Topological connectivity, seeing an entrance, or loading a scene does not count as completed exploration.
 
-## 凡人之墓 — Mortal's Grave
+## Relationship dependency
 
-Hero defeats the Church's leadership and the King. The Restoration Army removes the Church's immediate control and claims victory. The epilogue shows the army later reproducing the same patterns of authority and corruption.
+A Mite interaction can open the only or one of several paths to a key item. Its effect on ending selection is indirect: the player may or may not obtain the item and complete its follow-up event. Do not use romance scores, meeting status, missed-relationship status, or physical intimacy as direct ending criteria. Ending presentation may adapt to the relationship events actually recorded.
 
-Keep Resonance below 68, or reach high Resonance without the exploration / exposure facts required for either cosmic ending. Mite relationship scenes can be present or absent.
+## Legacy prototype behavior — not authoritative
 
-## 永恒乐园 — Eternal Paradise
+The current `scripts/core/ending_evaluator.gd` still checks:
 
-Hero's Resonance becomes a signal the Outer God can answer. Exploration exposes him to an Outer-God trace, but he has not assembled enough truth anchors and explored enough hidden regions to preserve his individuality.
+- `hero_resonance >= 68`;
+- Blazing Judgment: at least 3 anchor sources and at least 2 hidden regions entered;
+- Eternal Paradise: `anomaly_observer_reaction` plus at least 1 hidden region entered, unless Blazing Judgment matches;
+- otherwise Mortal's Grave.
 
-Required: hero_resonance >= 68, anomaly_observer_reaction is present in resonance_sources, entered_hidden_regions.size() >= 1, and Blazing Judgment requirements not both met.
-
-Physical intimacy with Mite is not required. The ending theater must not mark physical_union_complete as a side effect.
-
-## 烈火天罚 — Blazing Judgment
-
-Hero has enough Resonance to draw the cosmic threat near, and has assembled a multi-part truth anchor while exploring deeply enough to preserve agency.
-
-Required: hero_resonance >= 68, hidden_artifact_pieces >= 3, entered_hidden_regions.size() >= 2.
-
-Four canonical sources: ancient_lab, graveyard_bell, rebel_order, memory_echo. Three unique sources are sufficient; the fourth provides additional context. The ending remains tragic and does not promise that Hero can save Mite or the city.
-
-## Acceptance matrix
-
-| Resonance | Observer Reaction recorded | Truth anchors | Hidden regions entered | Expected ending |
-|---:|---:|---:|---:|---|
-| 0–67 | Any | Any | Any | 凡人之墓 |
-| 68+ | Yes | 0–2 | 1+ | 永恒乐园 |
-| 68+ | Any | 3+ | 2+ | 烈火天罚 |
-| 68+ | No | 0–2 | Any | 凡人之墓 |
-
-Blazing Judgment has priority when both cosmic routes appear plausible.
+This prototype does not explicitly check the third umbilical cord, inventory possession / item use, the Pilgrim Knight co-op fights, or completion of the relevant special scenes. It must be replaced only after mapping the actual content flags and building positive / negative regression cases; do not guess identifiers or treat the prototype as V2-compliant.
 
 ## Developer shortcuts
 
-- F1: evaluate current state and open the candidate ending theater.
-- F2: open Eternal Paradise theater directly.
-- F4: open Ancient Research Ward.
-- F5: open Village Defense theater.
-- F6: open Mite Resonance theater.
-- F7: open Church final boss theater.
-- F8: open Blazing Judgment director theater.
-- F9: delete the current save and restart the prologue.
+- F1: evaluate the current state
+- F2: Eternal Paradise director test
+- F4: Ancient Research Ward
+- F5: Village Defense theater
+- F6: Mite Resonance theater
+- F7: Church final boss theater
+- F8: Blazing Judgment director test
+- F9: delete save and restart
 
-These are developer shortcuts, not shipping player-facing features.
+These are developer tools, not player-facing features or proof of full-route acceptance.
