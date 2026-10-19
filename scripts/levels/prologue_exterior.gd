@@ -128,8 +128,8 @@ func _begin_rescue_transition(reason: String) -> void:
 		fall_tween.tween_property(hero, "global_position", Vector2(CLIFF_X + 42.0, FLOOR_Y + 165.0), 0.55)
 
 	if is_instance_valid(narrative):
-		var title := "无路可退" if reason == "defeated" else "胜利之后"
-		var text := "你被逼到悬崖边。身后传来追兵的脚步声，前方只剩被雾吞没的河谷。" if reason == "defeated" else "骑士倒下了。你已筋疲力尽，教会追兵封死退路；河谷成了最后的选择。"
+		var title := "无路可退" if reason != "victory" else "胜利之后"
+		var text := "你被逼到悬崖边。身后传来追兵的脚步声，前方只剩被雾吞没的河谷。" if reason != "victory" else "骑士倒下了。你已筋疲力尽，教会追兵封死退路；河谷成了最后的选择。"
 		narrative.show_caption(title, text, 1.35)
 		WorldState.input_locked = true
 
