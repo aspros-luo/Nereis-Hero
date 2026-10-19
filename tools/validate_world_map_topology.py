@@ -500,7 +500,7 @@ def validate(data: dict[str, Any]) -> list[str]:
             "intermediate_scene": {
                 "scene_path": "scenes/old_drain_exploration.tscn",
                 "first_visit_spawn_side": "village_entry",
-                "a3_return_spawn_side": "city_side_entry",
+                "a3_entry_spawn_side": "city_side_entry",
                 "reservoir_return_spawn_side": "reservoir_link",
                 "a3_link_unlock_flag": "opened_old_drainage_link_from_A4",
             },
