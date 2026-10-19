@@ -59,6 +59,10 @@ func _draw() -> void:
         for line_y in [-10.0, -4.0, 2.0]:
             draw_line(Vector2(-8, line_y), Vector2(8, line_y), Color("#4d4142"), 1.0)
         draw_line(Vector2(9, -18), Vector2(9, -12), Color("#75645b"), 1.0)
+    elif item_id == "charred_church_seal":
+        draw_colored_polygon(PackedVector2Array([Vector2(-14, -9), Vector2(10, -12), Vector2(15, 4), Vector2(-9, 12)]), Color("#796a5e") if not consumed else Color("#51494a"))
+        draw_rect(Rect2(-5, -5, 9, 9), Color("#342a31"))
+        draw_line(Vector2(-10, 5), Vector2(10, -7), Color("#342a31"), 2.0)
     elif item_id == "old_pilgrim_waybill":
         draw_colored_polygon(PackedVector2Array([Vector2(-15, -16), Vector2(11, -16), Vector2(15, -10), Vector2(12, 13), Vector2(-15, 10)]), Color("#b7a184") if not consumed else Color("#655b5b"))
         draw_line(Vector2(-9, -7), Vector2(7, -7), Color("#4f4140"), 1.5)
