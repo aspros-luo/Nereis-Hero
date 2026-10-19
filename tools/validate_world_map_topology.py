@@ -497,6 +497,13 @@ def validate(data: dict[str, Any]) -> list[str]:
             "to_region_anchor": {"region": "A3", "x": 520, "y_offset": 0},
             "to_region_spawn": {"region": "A3", "x": 700, "y_offset": 0, "spawn_side": "village_city_cut"},
             "return_spawn": {"region": "A1", "x": 350, "y_offset": 0, "spawn_side": "city_cut_return"},
+            "intermediate_scene": {
+                "scene_path": "scenes/old_drain_exploration.tscn",
+                "first_visit_spawn_side": "village_entry",
+                "a3_return_spawn_side": "city_side_entry",
+                "reservoir_return_spawn_side": "reservoir_link",
+                "a3_link_unlock_flag": "opened_old_drainage_link_from_A4",
+            },
         }
         c24_spatial = c24.get("spatial_contract", {})
         for key, value in expected_c24_spatial.items():
