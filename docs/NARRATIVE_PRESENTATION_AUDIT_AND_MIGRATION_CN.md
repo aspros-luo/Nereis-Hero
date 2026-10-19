@@ -142,3 +142,48 @@
 4. 若选择仍是现行机制，将其迁移为世界内可主动发现的线索 / 交互，不通过弹窗替玩家解释印记与摇篮曲的含义。
 5. 静态核查完成后，再运行 Godot 场景与存档回归；目前尚未执行运行时验收。
 
+## 7. 叙事状态与实际交互入口：全链路静态核查
+
+> 范围：当前分支中已读取的 A0 主流程、A1 村庄、蜜忒家、叙事管理器、物品目录、世界线索交互、WorldState 存档 / 路线恢复与结局评价。此处是源码静态审计，不等于已完成全仓库运行时验证。
+
+### 7.1 状态流向
+
+1. **A0 手术所入口**（scripts/levels/escape_prologue.gd）
+   - _spawn_clue() 放置 escape_surgical_mark；玩家主动按 E 检查后，_on_clue_examined() 调用 WorldState.mark_ancient_residue_awakened()，并展示托盘描述。
+   - _spawn_item_pickups() 放置 church_bandage 与 surgery_record_fragment。拾取脚本会入包并立即调用 mark_item_read()，随后弹出物品说明。因此“已读”实际等于“拾取时自动展示”，不是玩家主动从物品栏阅读。
+   - A0 出口要求击败出口伏击的三名守卫才开启，属于实际战斗门槛，而非叙事状态选择。
+2. **A0 洞外 → 蜜忒家**（scripts/levels/prologue_exterior.gd）
+   - 强制败北演出直接调用 mark_prologue_complete()，将位置保存为 mite_house 并切换到蜜忒家。
+   - 已检查的当前 A0 主流程中，没有调用 NarrativeManager.begin_first_choice()，也没有通过 WorldState.make_first_choice() 选择教会 / 摇篮曲路线。
+3. **A1 村庄 NPC**（scripts/levels/village_hub.gd）
+   - 守门人、失忆青年、旅行商人的台词由 WorldState.selected_route 与人性状态分支决定。
+   - 新档 selected_route 默认空字符串，而守门人 / 青年 / 商人代码对空值走 else 分支，实际上把“未选路线”当成摇篮曲路线口径。这是明确的状态语义缺陷：空值不是玩家作出的摇篮曲选择。
+   - 北门前往 A2 依赖 village_defense_survived 成就标记；它与旧路线选择不是同一状态。
+4. **旧路线选择与恢复**（scripts/core/narrative_manager.gd、scripts/core/world_state.gd、scripts/levels/route_scene.gd）
+   - begin_first_choice() 是旧面板入口；_select_choice() 调用 make_first_choice()，写入 first_choice_made、selected_route，并增加教会倾向或摇篮曲共鸣。
+   - 当前已检查的 A0 主流程没有调用该入口；route_scene.gd 进入路线场景时又会按 route_id 直接覆写 selected_route。
+   - 存档保存这些状态；读档缺失字段时 first_choice_made 默认为 false、selected_route 默认为空。不能把默认空值冒充路线选择，也不应给所有旧存档强行补写某条路线。
+5. **线索与隐藏抵抗**（scripts/world/world_clue.gd、scripts/core/world_state.gd）
+   - 世界线索被检查后写入 world_clues_seen、增加记忆并保存；墓地墓碑线索另行登记 graveyard_bell 锚点来源。
+   - 隐藏抵抗由四类规范来源去重计数，达到三份后唤醒；这条链路与旧 church_alignment / lullaby_resonance 不是同一套系统。
+6. **结局**（scripts/core/ending_evaluator.gd）
+   - 结局候选依据隐藏共鸣、真相锚点、隐藏区域探索数与特定观察者反应来源判定；代码注释明确身体结合不是结局门槛。
+   - 因此不能把身体结合或旧的首次路线选择直接当作结局必要条件。
+
+### 7.2 发现的问题与风险级别
+
+- **P0：新档路线状态为空，却被 NPC 当成摇篮曲分支。** 当前 A0 流程未建立该选择，但 A1 多个 NPC 直接使用 selected_route == church，否则进入另一套台词。建议采用显式三态语义（未定 / 教会 / 摇篮曲）；未定状态使用中性且符合 NPC 认知的台词。不得静默映射为摇篮曲。
+- **P0：A1 教会入口会提前判定蜜忒关系错过。** _enter_village_location("church") 在玩家尚未记录 mite_stay_a_while 时直接调用 mark_mite_connection_missed()。这是不可逆的关系状态写入，与自由探索村庄的设计冲突，也可能让玩家因探索顺序永久失去关系线。改动前应先审计该标记所有写入点与关系线依赖，再定义明确、可理解且有补救窗口的错过条件。
+- **P1：A0 物品说明在拾取时自动标记已读。** 这混淆“获得”和“主动阅读”；若后续提示依赖 read_item_ids，会造成玩家未实际查看背包仍被视为读过。应先盘点所有读状态消费者，再分开 collected 与 read 状态。
+- **P1：叙事管理器把 NPC 台词、物品检查与场景旁白放在同一个消息面板。** 现有调用可运行，但接口没有表达信息来源类型，增加误写旁白、直接把线索结论告诉玩家的风险。后续应按 NPC 对话 / 物品检查 / 短促系统反馈分层，并保留现有输入锁和暂停行为。
+- **P1：A0 托盘线索同时承担“检查手术痕迹”与唤醒古老残留的状态效果。** 当前文案只证明物体有血与黑色残留，检查动作却直接改变隐藏世界状态。需确认这是设计意图；若是，应由细微音效或视觉变化反馈，不额外解释残留来源。
+- **P2：多个 NPC 台词直接断言主角七年前的经历、死亡与教会秘密。** 需为每句台词建立 NPC 知识来源（亲历、文件、传闻、猜测）；没有来源的断言应降为个人观察或不确定表达，不能只因为是 NPC 台词就视为合格叙事。
+
+### 7.3 下一步执行顺序
+
+1. 追踪 mite_connection_missed 的全部写入 / 读取点、selected_route 的分支与首次赋值点，以及 read_item_ids 的所有消费者。
+2. 修复“未定路线被当作摇篮曲”的分支语义，并补充静态断言；保留旧存档已有路线值。
+3. 修复蜜忒错过状态的触发时机前，先定义明确的错过条件与补救窗口，不直接删除状态。
+4. 审计 NPC 台词的知识来源与物品说明；逐条区分玩家能观察到什么、必须主动检查什么、哪些事实只能推断。
+5. 最后运行 Godot 静态验证、A0→A1→A2 流程和存档恢复回归。当前未执行运行时测试。
+
