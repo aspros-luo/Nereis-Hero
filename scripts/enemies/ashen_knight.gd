@@ -66,7 +66,7 @@ func _physics_process(delta: float) -> void:
     windup = max(0.0, windup - delta)
     stun_time = max(0.0, stun_time - delta)
 
-    if not phase_two and health <= 120:
+    if not phase_two and health <= maxi(1, max_health / 2):
         phase_two = true
         phase = 2
         attack_cooldown = 0.2
