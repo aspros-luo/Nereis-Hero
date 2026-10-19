@@ -2,6 +2,7 @@ extends Node2D
 
 const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
+const PURSUER_SCRIPT = preload("res://scripts/levels/prologue_pursuer.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const CLIFF_BACKDROP = preload("res://assets/art/backdrops/prologue_cliff_backdrop.svg")
@@ -109,6 +110,7 @@ func _begin_rescue_transition(reason: String) -> void:
 	_clear_interaction_focus()
 	if is_instance_valid(boss):
 		boss.queue_free()
+	_spawn_pursuers()
 
 	var fall_tween: Tween
 	if is_instance_valid(hero):
@@ -140,6 +142,19 @@ func _begin_rescue_transition(reason: String) -> void:
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.save_game()
 	SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+
+func _spawn_pursuers() -> void:
+	# The chase is represented on-screen, not only described by the caption.
+	# 追兵实际出现在画面中，封住退路；这组剪影仅服务于演出，不介入战斗逻辑。
+	var positions := [Vector2(630.0, FLOOR_Y), Vector2(770.0, FLOOR_Y), Vector2(910.0, FLOOR_Y)]
+	for i in range(positions.size()):
+		var pursuer := Node2D.new()
+		pursuer.set_script(PURSUER_SCRIPT)
+		pursuer.name = "ChurchPursuer_%02d" % (i + 1)
+		pursuer.set("variant", i)
+		pursuer.set("lantern", i == 0)
+		pursuer.position = positions[i]
+		add_child(pursuer)
 
 func _clear_interaction_focus() -> void:
 	NereisInteractionFocus.clear_all(get_tree())
