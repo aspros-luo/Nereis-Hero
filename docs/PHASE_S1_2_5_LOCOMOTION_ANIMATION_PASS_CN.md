@@ -5,7 +5,7 @@ Branch: `feature/hero-animation-system`
 
 ## Scope
 
-This pass improves the existing procedural skeleton gait without changing gameplay movement:
+This pass introduces a deliberate two-stage ordinary movement speed and matches the procedural skeleton gait to it:
 - The Hero supplies its live horizontal velocity to the presentation adapter.
 - Direction input begins with a short, low-speed walk (`118 px/s`); holding it for `0.22 s` targets the existing run speed (`260 px/s`).
 - Run-cycle phase advances according to actual horizontal speed, using a slower cadence and smaller limb range during walking, then a faster cadence, longer stride, and stronger body lean while running.
@@ -18,7 +18,7 @@ This pass improves the existing procedural skeleton gait without changing gamepl
 
 - `hero.gd` remains authoritative for CharacterBody2D velocity, floor contact, jump physics, combat timing, and hitboxes.
 - `hero_skeleton_controller.gd` reads a context snapshot and changes only visual bones/lines.
-- This change does not add input locks, alter movement constants, change attack hit windows, or replace the F8 visual fallback.
+- This change does not add input locks or change attack hit windows, and it preserves the F8 visual fallback. Ordinary directional movement intentionally changes from immediate full-speed movement to a brief walk followed by running; combat movement, dodge, and dash retain their separate speeds.
 - Do not let AnimationPlayer/AnimationTree and the procedural controller write the same bone transforms concurrently. The current rig remains procedural until a clip-driven migration is separately implemented and runtime-accepted.
 
 ## In-game acceptance checklist
