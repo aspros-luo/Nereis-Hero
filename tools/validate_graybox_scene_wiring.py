@@ -1773,9 +1773,10 @@ def main() -> int:
     require(village_hub, 'WorldState.set_checkpoint(Vector2(360, 520))', "A1 checkpoint is restored on entering the hub", errors)
     require(village_hub, '"village_defense_survived"', "Village old-road unlock", errors)
     require(village_hub, 'res://scenes/ash_forest.tscn', "Village old-road route", errors)
-    require(village_hub, 'if "village_defense_survived" in WorldState.achievement_flags:', "A1 north gate and old drain both require completed village defense", errors)
-    require(village_hub, 'body.is_on_floor()', "A1 rest point rejects airborne use", errors)
-    require(village_hub, 'WorldState.save_game()', "A1 rest point saves after restoring the Hero", errors)
+    require(village_hub, 'if "village_defense_survived" in WorldState.achievement_flags:', "A1 north gate and old drain share the village-defense progression flag", errors)
+    rest_point_script = read("scripts/world/rest_point.gd", errors)
+    require(rest_point_script, 'body.is_on_floor()', "A1 rest point rejects airborne use", errors)
+    require(rest_point_script, 'WorldState.save_game()', "A1 rest point saves after restoring the Hero", errors)
 
     defense = read("scripts/levels/village_defense_demo.gd", errors)
     require(defense, 'WorldState.record_achievement("village_defense_survived")', "Village defense", errors)
