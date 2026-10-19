@@ -118,39 +118,8 @@ func _begin_rescue_transition(reason: String) -> void:
 		boss.queue_free()
 	_spawn_pursuers()
 
-	var retreat_tween: Tween
-	var fall_tween: Tween
-	if is_instance_valid(hero):
-		hero.invulnerable = true
-		hero.velocity = Vector2.ZERO
-		# The level owns the authored ending; stop gameplay physics but preserve the real defeat position.
-		hero.set_physics_process(false)
-		# Retreat is continuous from the actual combat position; no visible snap to the cliff.
-		var retreat_target := Vector2(CLIFF_X - 20.0, FLOOR_Y - 18.0)
-		var retreat_distance := hero.global_position.distance_to(retreat_target)
-		var retreat_duration := clampf(retreat_distance / 430.0, 0.22, 1.15)
-		retreat_tween = create_tween()
-		retreat_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-		retreat_tween.tween_property(hero, "global_position", retreat_target, retreat_duration)
-		await retreat_tween.finished
-
-	# Hold the cliff beat before the fall; keep the caption visible through the drop itself.
-	if is_instance_valid(narrative):
-		narrative.show_caption(
-			"无路可退",
-			"你被逼到悬崖边。身后传来追兵的脚步声，前方只剩被雾吞没的河谷。",
-			1.05
-		)
-		WorldState.input_locked = true
-	await get_tree().create_timer(0.20).timeout
-
-	if is_instance_valid(hero):
-		fall_tween = create_tween()
-		fall_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		fall_tween.tween_property(hero, "global_position", Vector2(CLIFF_X + 42.0, FLOOR_Y + 165.0), 0.62)
-	if fall_tween != null:
-		await fall_tween.finished
-	await get_tree().create_timer(0.12).timeout
+	# Keep the story progression deterministic while the full cliff/fall animation is deferred.
+	# A short fade-to-black replaces the unfinished retreat/fall animation; it must not block map development.
 	WorldState.record_achievement("prologue_cliff_fall_rescue_pending")
 	WorldState.mark_prologue_complete()
 	WorldState.current_location = "village"
