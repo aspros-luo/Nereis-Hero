@@ -675,6 +675,23 @@ func _draw() -> void:
 	draw_rect(Rect2(900, 390, 120, 130), Color("#28212a"))
 	draw_string(ThemeDB.fallback_font, Vector2(885, 365), NereisLocalization.translate_text("墓地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
 
+	# Give the blacksmith a readable workshop silhouette instead of leaving the role as a floating label.
+	# 为铁匠铺提供明确的灰盒轮廓，避免功能角色看起来只是站在路边的普通 NPC。
+	draw_rect(Rect2(1350, 385, 150, 135), Color("#29232a"))
+	draw_colored_polygon(
+		PackedVector2Array([
+			Vector2(1335, 385),
+			Vector2(1425, 315),
+			Vector2(1515, 385)
+		]),
+		Color("#3a3036")
+	)
+	draw_rect(Rect2(1370, 425, 30, 95), Color("#17141b"))
+	draw_rect(Rect2(1440, 445, 35, 20), Color("#4c3a3b"))
+	draw_circle(Vector2(1457, 443), 12.0, Color("#a85e45"))
+	draw_circle(Vector2(1457, 443), 6.0, Color("#d49b68"))
+	draw_string(ThemeDB.fallback_font, Vector2(1370, 365), NereisLocalization.translate_text("铁匠铺"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#b7a09b"))
+
 	# Hide the camp's distinctive fire and label until the later story-arrival flag is set.
 	# 初期只保留普通建筑轮廓；复国军的营火与营地标识必须等剧情节点后才出现。
 	if "restoration_camp_established" in WorldState.achievement_flags:
