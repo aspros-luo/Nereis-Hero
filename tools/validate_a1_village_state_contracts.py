@@ -33,6 +33,7 @@ def main() -> int:
     world_state = read("scripts/core/world_state.gd")
     defense = read("scripts/levels/village_defense_demo.gd")
     topology = json.loads(read("tools/world_map_topology.json"))
+    director = read("scripts/core/world_event_director.gd")
 
     # The church remains a quiet exploration space until an explicit story milestone.
     require(
@@ -134,7 +135,6 @@ def main() -> int:
     )
 
     # The tavern sound event is a one-time, persisted world fact; dialogue is resolved on re-entry.
-    director = read("scripts/core/world_event_director.gd")
     require(
         '"id": "A1_tavern_sound_notice"' in director
         and '"trigger": "interaction"' in director
