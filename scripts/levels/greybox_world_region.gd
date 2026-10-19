@@ -45,6 +45,7 @@ var platforms: Array[Rect2] = []
 # 灰盒开发阶段专用的路线标记：明确显示每个实体出口与灵视入口，正式导出版本不绘制。
 var debug_exit_markers: Array[Dictionary] = []
 var respawning := false
+var a6_bell_shortcut_spawned := false
 
 func _ready() -> void:
 	WorldState.prepare_scene_runtime()
@@ -92,6 +93,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().change_scene_to_file("res://scenes/world_map_test_menu.tscn")
 
 func _process(_delta: float) -> void:
+	_refresh_a6_bell_shortcut()
 	# C21 can become valid after examining A11's own observer anomaly; do not freeze its state at scene entry.
 	_refresh_a11_ending_route()
 	# Encounters wake only when the Hero is nearby, so distant enemies do not cross the entire region.
@@ -133,6 +135,8 @@ func _spawn_region_encounters() -> void:
 		"A6":
 			if "defeated_mad_cleric" not in WorldState.achievement_flags:
 				_spawn_encounter(CHURCH_INQUISITOR_SCRIPT, "A6_MadCleric_01", 850.0, 17.0, 48.0)
+			if "defeated_A6_BellWarden_01" not in WorldState.achievement_flags:
+				_spawn_encounter(CHURCH_INQUISITOR_SCRIPT, "A6_BellWarden_01", 1940.0, 17.0, 48.0)
 		"A7":
 			_spawn_encounter(RESEARCH_HUSK_SCRIPT, "A7_ResearchHusk_01", 1750.0, 14.0, 42.0)
 		"A8":
@@ -195,6 +199,20 @@ func _on_region_enemy_defeated(enemy_name: String, enemy_node: Node2D) -> void:
 				"他倒下时，祷词仍在继续。你从他的衣襟里听见蜂群般的振翅声——不是昆虫，而是某种在石头内部移动的东西。\n\n村庄的山崖似乎回应了这声低鸣。",
 				6.0
 			)
+	elif enemy_name == "A6_BellWarden_01":
+		if WorldState.record_achievement("defeated_A6_BellWarden_01"):
+			_spawn_world_item_pickup(
+				"combat_reward_a6_bell_winch_key",
+				"bell_tower_winch_key",
+				"BellTowerWinchKey",
+				enemy_node.global_position + Vector2(0.0, -40.0)
+			)
+			if is_instance_valid(narrative):
+				narrative.show_message(
+					"钟塔绞盘钥匙",
+					"守卫身上的钥匙没有对应任何牢门。它的齿口沾着新鲜的润滑脂，形状与钟塔落差口旁的绞盘锁完全吻合。",
+					5.5
+				)
 	elif enemy_name == "A2_Cultist_01":
 		if WorldState.record_achievement("defeated_A2_Cultist_01"):
 			_spawn_world_item_pickup(
@@ -740,6 +758,14 @@ func _spawn_region_item_pickups() -> void:
 				"node_name": "ThirdStreetSurvey",
 				"position": Vector2(740.0, 282.0)
 			})
+		"A6":
+			if "defeated_A6_BellWarden_01" in WorldState.achievement_flags:
+				placements.append({
+					"pickup_id": "combat_reward_a6_bell_winch_key",
+					"item_id": "bell_tower_winch_key",
+					"node_name": "BellTowerWinchKey",
+					"position": Vector2(1940.0, floor_y - 40.0)
+				})
 		"A8":
 			placements.append({
 				"pickup_id": "map_reward_royal_mortuary_register",
@@ -1640,6 +1666,19 @@ func _refresh_a11_ending_route() -> void:
 	queue_redraw()
 
 
+func _refresh_a6_bell_shortcut() -> void:
+	if region_id != "A6" or a6_bell_shortcut_spawned:
+		return
+	if not WorldState.is_item_owned("bell_tower_winch_key") and "opened_bell_tower_drop" not in WorldState.achievement_flags:
+		return
+	_spawn_exit_door(
+		2230.0, "E  使用绞盘钥匙打开钟塔落差通路", "forgotten_city",
+		"res://scenes/forgotten_city.tscn", "bell_drop",
+		true, "opened_bell_tower_drop", "E  返回被遗忘的城区", floor_y - 55.0
+	)
+	a6_bell_shortcut_spawned = true
+
+
 func _spawn_region_exits() -> void:
 	match region_id:
 		"A2":
@@ -1794,11 +1833,8 @@ func _spawn_region_exits() -> void:
 			_spawn_h05_gate(1660.0)
 			# C10 is a physical monastery shortcut, independent of the optional H05 secret room.
 			# C10 是修道院的实体捷径，不应被可选隐藏区 H05 的发现状态锁死。
-			_spawn_exit_door(
-				2230.0, "E  打开钟塔落差通路", "forgotten_city",
-				"res://scenes/forgotten_city.tscn", "bell_drop",
-				true, "opened_bell_tower_drop", "E  返回被遗忘的城区", floor_y - 55.0
-			)
+			# C10 is created after the bell warden drops the winch key.
+			# C10 只有在钟塔守卫掉落绞盘钥匙后才出现。
 		"A7":
 			_spawn_exit_door(
 				72.0, "E  返回修道院", "monastery_tower",
