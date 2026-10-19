@@ -139,13 +139,7 @@ func _spawn_ui() -> void:
     narrative_audio.set_script(NARRATIVE_AUDIO_SCRIPT)
     add_child(narrative_audio)
 
-    get_tree().create_timer(0.6).timeout.connect(func() -> void:
-        narrative.show_message(
-            "YOU WAKE IN A SMALL ROOM",
-            "Your wounds have been roughly bandaged. Your wet clothes are gone.\n\nTwo places at the table. One bed.\n\nBeyond the door, the village is quiet.",
-            4.0
-        )
-    )
+    # Opening story is carried by room details and player observation, not an automatic narration panel.
 
 func _create_floor() -> void:
     var floor := StaticBody2D.new()
@@ -199,4 +193,24 @@ func _draw() -> void:
     )
     draw_rect(Rect2(960, 370, 180, 150), Color("#211a22"))
     draw_rect(Rect2(995, 420, 110, 12), Color("#4b3940"))
-    draw_string(ThemeDB.fallback_font, Vector2(360, 245), NereisLocalization.translate_text("A ROOM WITH TWO PLACES"), HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color("#72646b"))
+    # A spare set of clothes hangs to dry; the bandage roll and two place settings imply recent care without explaining it.
+    draw_line(Vector2(330, 300), Vector2(410, 300), Color("#6a5960"), 4.0)
+    draw_line(Vector2(345, 300), Vector2(345, 322), Color("#6a5960"), 2.0)
+    draw_line(Vector2(395, 300), Vector2(395, 322), Color("#6a5960"), 2.0)
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(337, 322), Vector2(353, 322), Vector2(359, 370),
+        Vector2(332, 370)
+    ]), Color("#38434a"))
+    draw_colored_polygon(PackedVector2Array([
+        Vector2(387, 322), Vector2(403, 322), Vector2(409, 370),
+        Vector2(382, 370)
+    ]), Color("#38434a"))
+    # Table settings: two bowls, but only one bed is visible in the room.
+    draw_rect(Rect2(570, 405, 24, 12), Color("#9a8170"))
+    draw_circle(Vector2(582, 410), 8.0, Color("#c1a68b"))
+    draw_rect(Rect2(675, 405, 24, 12), Color("#9a8170"))
+    draw_circle(Vector2(687, 410), 8.0, Color("#c1a68b"))
+    # A folded bandage and stained cloth rest near the bed.
+    draw_rect(Rect2(1010, 445, 30, 7), Color("#b6a99b"))
+    draw_rect(Rect2(1014, 452, 20, 5), Color("#8b6667"))
+    draw_line(Vector2(995, 420), Vector2(1105, 420), Color("#6a5556"), 2.0)
