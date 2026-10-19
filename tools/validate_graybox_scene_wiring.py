@@ -108,6 +108,13 @@ def main() -> int:
     # Load the shared controller before topology checks that inspect its clue wiring.
     # 拓扑检查会读取共享控制器中的线索 ID，因此必须先加载，避免局部变量尚未赋值。
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
+    item_catalog = read("scripts/core/item_catalog.gd", errors)
+    for item_id in ("old_pilgrim_waybill", "third_street_survey", "royal_mortuary_register"):
+        require(item_catalog, f'"{item_id}"', "scripts/core/item_catalog.gd", errors)
+        require(region_script, f'"item_id": "{item_id}"', "scripts/levels/greybox_world_region.gd", errors)
+    require(region_script, "func _spawn_region_item_pickups() -> void:", "scripts/levels/greybox_world_region.gd", errors)
+    require(region_script, "\t_spawn_region_item_pickups()", "scripts/levels/greybox_world_region.gd", errors)
+
     platform_audit_regions = 0
     platform_audit_count = 0
     local_route_count = 0
