@@ -1719,6 +1719,7 @@ def main() -> int:
     require(ending_evaluator, 'REQUIRED_HIDDEN_REGIONS_FOR_FIRE: int = 2', "Ending candidate uses actual hidden-region exploration", errors)
 
     village_hub = read("scripts/levels/village_hub.gd", errors)
+    village_poi = read("scripts/world/village_poi.gd", errors)
     interior_scene = read("scripts/levels/interior_scene.gd", errors)
     require(village_hub, "守门人打量着你", "A1 gatekeeper has neutral dialogue before route selection", errors)
     require(village_hub, 'WorldState.set_location("village")', "A1 persists village location for Continue", errors)
@@ -1738,6 +1739,10 @@ def main() -> int:
     require(event_director, "const NPC_DEFINITIONS: Array[Dictionary]", "Progression NPCs are data-driven", errors)
     require(event_director, '"A1_tavern_sound_notice"', "A1 tavern visit has a persistent first-visit event", errors)
     require(village_hub, '"village_grandmother"', "A1 replaces the amnesiac youth with an ordinary grandmother NPC", errors)
+    require(village_poi, "@export_range(40.0, 140.0, 5.0) var interaction_range: float = 110.0", "A1 POI interaction radii can be tuned per location to avoid overlapping prompts", errors)
+    require(village_hub, "grandmother.interaction_range = 60.0", "A1 grandmother focus radius is reduced near neighboring POIs", errors)
+    require(village_hub, "blacksmith.interaction_range = 65.0", "A1 blacksmith focus radius is tuned for the workshop district", errors)
+    require(village_hub, "merchant.interaction_range = 60.0", "A1 traveling merchant focus radius is tuned for the market district", errors)
     require(village_hub, '"village_blacksmith"', "A1 blacksmith is registered as a functional NPC", errors)
     require(village_hub, 'NereisLocalization.translate_text("铁匠铺")', "A1 blacksmith has a distinct workshop visual landmark", errors)
     require(village_hub, 'blacksmith.dialogue = "铁匠把锤子搁在砧边', "A1 blacksmith dialogue responds to village-defense state", errors)
