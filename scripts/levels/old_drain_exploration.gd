@@ -43,7 +43,7 @@ func _ready() -> void:
 
 func _build_floor_and_descent() -> void:
 	_add_floor_segment(0.0, 280.0, 540.0)
-	_add_floor_segment(600.0, 2400.0, 690.0)
+	_add_floor_segment(600.0, 1800.0, 690.0)
 	_add_platform(Rect2(300.0, 555.0, 95.0, 16.0))
 	_add_platform(Rect2(390.0, 600.0, 95.0, 16.0))
 	_add_platform(Rect2(485.0, 645.0, 110.0, 16.0))
@@ -58,7 +58,7 @@ func _build_floor_and_descent() -> void:
 func _add_floor_segment(x: float, width: float, top_y: float) -> void:
 	var body := StaticBody2D.new()
 	body.name = "DrainFloor"
-	body.position = Vector2(x, top_y + 20.0)
+	body.position = Vector2(x + width * 0.5, top_y + 20.0)
 	var shape := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
 	rectangle.size = Vector2(width, 40.0)
@@ -214,7 +214,7 @@ func _draw() -> void:
 		draw_rect(Rect2(float(x), 140.0 + float((x / 160) % 3) * 26.0, 150.0, 130.0), Color("#1a2a30", 0.65))
 		draw_line(Vector2(float(x) + 14.0, 520.0), Vector2(float(x) + 38.0, 540.0), Color("#37444a"), 2.0)
 	for x in [60.0, 250.0, 640.0, 990.0, 1330.0, 1710.0, 2070.0]:
-		draw_arc(Vector2(x, 510.0 + (20.0 if x > 300.0 else 0.0), 42.0, PI, TAU, 18, Color("#46545b"), 5.0)
+		draw_arc(Vector2(x, 510.0 + (20.0 if x > 300.0 else 0.0)), 42.0, PI, TAU, 18, Color("#46545b"), 5.0)
 		draw_line(Vector2(x - 38.0, 520.0), Vector2(x - 38.0, 690.0), Color("#2d3c43"), 4.0)
 		draw_line(Vector2(x + 38.0, 520.0), Vector2(x + 38.0, 690.0), Color("#2d3c43"), 4.0)
 	draw_rect(Rect2(2118.0, 568.0, 110.0, 122.0), Color("#1c1d24"))
