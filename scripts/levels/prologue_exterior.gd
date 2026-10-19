@@ -10,6 +10,7 @@ const CLIFF_X := 1120.0
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 1500.0
 const CLIFF_APPROACH_LIMIT := CLIFF_X - 26.0
+const FORCED_DEFEAT_SECONDS := 12.0
 
 var hero: CharacterBody2D
 var boss: CharacterBody2D
@@ -17,6 +18,7 @@ var narrative: CanvasLayer
 var hud: CanvasLayer
 var ending_started := false
 var boss_encounter_started := false
+var boss_encounter_elapsed := 0.0
 
 func _ready() -> void:
 	set_meta("p5_1_exit_contract", true)
@@ -45,11 +47,15 @@ func _physics_process(delta: float) -> void:
 	if not boss_encounter_started and is_instance_valid(boss):
 		if hero.global_position.distance_to(boss.global_position) <= 245.0:
 			boss_encounter_started = true
+			boss_encounter_elapsed = 0.0
 			if is_instance_valid(hud):
 				hud.set_story_mode("A0｜洞外山路", "挡路者没有退让。观察他的动作，寻找离开的机会。")
 
-	if hero.global_position.x >= CLIFF_X + 12.0 and hero.global_position.y >= FLOOR_Y + 48.0:
-		call_deferred("_begin_rescue_transition", "cliff")
+	# Mandatory-loss story gate: combat remains interactive, but cannot skip the authored defeat and rescue.
+	if boss_encounter_started:
+		boss_encounter_elapsed += delta
+		if boss_encounter_elapsed >= FORCED_DEFEAT_SECONDS:
+			call_deferred("_begin_rescue_transition", "defeated")
 
 func _spawn_hero() -> void:
 	hero = CharacterBody2D.new()
@@ -79,17 +85,17 @@ func _spawn_boss() -> void:
 	boss.name = "A0_ChurchExecutioner"
 	boss.position = Vector2(760.0, FLOOR_Y)
 	boss.set("boss_display_name", "教会执行者")
-	boss.set("damage_immune", false)
+	boss.set("damage_immune", true)
 	boss.set("health", 900)
 	boss.set("max_health", 900)
 	boss.set("damage_taken_multiplier", 0.42)
 	boss.set("persist_global_boss_defeat", false)
 	_add_character_collision(boss, 26.0, 58.0)
 	add_child(boss)
+	# Defensive fallback in case a future combat change bypasses damage immunity.
 	boss.defeated.connect(func() -> void:
 		if not ending_started:
-			AchievementManager.unlock("prologue_knight_victory")
-			call_deferred("_begin_rescue_transition", "victory")
+			call_deferred("_begin_rescue_transition", "defeated")
 	)
 
 func _spawn_ui() -> void:
@@ -128,8 +134,8 @@ func _begin_rescue_transition(reason: String) -> void:
 		fall_tween.tween_property(hero, "global_position", Vector2(CLIFF_X + 42.0, FLOOR_Y + 165.0), 0.55)
 
 	if is_instance_valid(narrative):
-		var title := "无路可退" if reason != "victory" else "胜利之后"
-		var text := "你被逼到悬崖边。身后传来追兵的脚步声，前方只剩被雾吞没的河谷。" if reason != "victory" else "骑士倒下了。你已筋疲力尽，教会追兵封死退路；河谷成了最后的选择。"
+		var title := "无路可退"
+		var text := "你被逼到悬崖边。身后传来追兵的脚步声，前方只剩被雾吞没的河谷。"
 		narrative.show_caption(title, text, 1.35)
 		WorldState.input_locked = true
 
