@@ -1696,6 +1696,17 @@ def main() -> int:
     if "mark_mite_connection_missed()" in village_hub:
         errors.append("A1 church exploration must not irreversibly mark the Mite connection missed.")
 
+    pickup_script = read("scripts/world/world_item_pickup.gd", errors)
+    require(pickup_script, 'panel.call("show_pickup"', "Item pickup shows acquisition feedback without displaying lore as already read", errors)
+    if "WorldState.mark_item_read(item_id)" in pickup_script:
+        errors.append("Picking up an item must not automatically mark its description as read.")
+
+    inventory_script = read("scripts/ui/inventory_overlay.gd", errors)
+    require(inventory_script, "WorldState.mark_item_read(item_id)", "Explicit inventory item selection records reading state", errors)
+    if "_select_item(str(item_ids[0]))" in inventory_script:
+        errors.append("Opening inventory must not silently mark the first item as read.")
+
+
     require(village_hub, "_spawn_resonance_well_gate()", "Village hub", errors)
     require(village_hub, "resonance_well_gate.opened.connect(_on_resonance_well_opened)", "Village hub", errors)
     require(village_hub, 'resonance_well_gate.secret_id = "H01"', "Village hidden gate ID", errors)
