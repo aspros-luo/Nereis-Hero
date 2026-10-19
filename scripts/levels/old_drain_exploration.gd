@@ -54,6 +54,8 @@ func _build_floor_and_descent() -> void:
 	_add_platform(Rect2(1770.0, 625.0, 130.0, 16.0))
 	_add_wall(-20.0)
 	_add_wall(2420.0)
+	if CONNECTION_FLAG not in WorldState.achievement_flags:
+		_add_gate_blocker()
 
 func _add_floor_segment(x: float, width: float, top_y: float) -> void:
 	var body := StaticBody2D.new()
@@ -84,6 +86,19 @@ func _add_wall(x: float) -> void:
 	var shape := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
 	rectangle.size = Vector2(40.0, 900.0)
+	shape.shape = rectangle
+	body.add_child(shape)
+	add_child(body)
+
+func _add_gate_blocker() -> void:
+	# The sealed gate is a real collider, not only a drawn hint or interaction prompt.
+	# 封闭闸门必须有真实碰撞体，不能只画出外观却允许主角穿过。
+	var body := StaticBody2D.new()
+	body.name = "SealedOldDrainGate"
+	body.position = Vector2(2170.0, 600.0)
+	var shape := CollisionShape2D.new()
+	var rectangle := RectangleShape2D.new()
+	rectangle.size = Vector2(38.0, 190.0)
 	shape.shape = rectangle
 	body.add_child(shape)
 	add_child(body)
@@ -217,12 +232,15 @@ func _draw() -> void:
 		draw_arc(Vector2(x, 510.0 + (20.0 if x > 300.0 else 0.0)), 42.0, PI, TAU, 18, Color("#46545b"), 5.0)
 		draw_line(Vector2(x - 38.0, 520.0), Vector2(x - 38.0, 690.0), Color("#2d3c43"), 4.0)
 		draw_line(Vector2(x + 38.0, 520.0), Vector2(x + 38.0, 690.0), Color("#2d3c43"), 4.0)
-	draw_rect(Rect2(2118.0, 568.0, 110.0, 122.0), Color("#1c1d24"))
-	draw_rect(Rect2(2128.0, 579.0, 90.0, 111.0), Color("#090d12"))
-	for x in range(2125, 2220, 18):
-		draw_line(Vector2(float(x), 580.0), Vector2(float(x - 5), 686.0), Color("#615b60"), 4.0)
-	draw_string(ThemeDB.fallback_font, Vector2(2020.0, 548.0), "SEALED GATE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 15, Color("#9b8587"))
 	draw_string(ThemeDB.fallback_font, Vector2(80.0, 450.0), "OLD DRAIN", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 15, Color("#9b8587"))
 	if CONNECTION_FLAG in WorldState.achievement_flags:
-		draw_rect(Rect2(2118.0, 568.0, 110.0, 122.0), Color("#1b302e", 0.5))
+		# The opened gate leaves a visible gap; the collision blocker is not spawned in this state.
+		draw_rect(Rect2(2100.0, 568.0, 18.0, 122.0), Color("#3c4248"))
+		draw_rect(Rect2(2220.0, 568.0, 18.0, 122.0), Color("#3c4248"))
 		draw_string(ThemeDB.fallback_font, Vector2(2010.0, 548.0), "GATE OPEN", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 15, Color("#84c4ad"))
+	else:
+		draw_rect(Rect2(2118.0, 568.0, 110.0, 122.0), Color("#1c1d24"))
+		draw_rect(Rect2(2128.0, 579.0, 90.0, 111.0), Color("#090d12"))
+		for x in range(2125, 2220, 18):
+			draw_line(Vector2(float(x), 580.0), Vector2(float(x - 5), 686.0), Color("#615b60"), 4.0)
+		draw_string(ThemeDB.fallback_font, Vector2(2020.0, 548.0), "SEALED GATE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 15, Color("#9b8587"))
