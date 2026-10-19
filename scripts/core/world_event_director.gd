@@ -6,23 +6,6 @@ extends Node
 signal event_triggered(event_id: String, payload: Dictionary)
 
 const NPC_DEFINITIONS: Array[Dictionary] = [
-	{
-		"id": "a1_tavern_keeper",
-		"position": Vector2(1850, 520),
-		"display_name": "酒馆值夜人",
-		"dialogue": "值夜人把杯子擦干，目光却停在门缝上。\n\n“村里人白天说的话，到了夜里往往就不一样了。你想听哪一种？”",
-		"conditions": [],
-		"dialogue_variants": [
-			{
-				"conditions": [{"type": "flag", "value": "village_defense_survived"}],
-				"dialogue": "值夜人把门闩重新扣好。\n\n“北门那边安静了些，可安静不代表安全。今晚我会把灯留着。”"
-			},
-			{
-				"conditions": [{"type": "flag", "value": "A1_tavern_sound_noticed"}],
-				"dialogue": "值夜人认出你，先看了看门，再看向你。\n\n“你上次听见的声音，我也听见了。但我没说那是歌——你自己确定吗？”"
-			}
-		]
-	}
 ]
 
 const EVENT_DEFINITIONS: Array[Dictionary] = [
