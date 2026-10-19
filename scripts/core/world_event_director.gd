@@ -23,12 +23,12 @@ const EVENT_DEFINITIONS: Array[Dictionary] = [
 	# }
 ]
 
-var _world_state: Node
+var _world_state: Variant
 var _host: Node
 var _dispatching := false
 var _managed_npcs: Array[Node] = []
 
-func setup(world_state: Node, host: Node) -> void:
+func setup(world_state: Variant, host: Node) -> void:
 	_world_state = world_state
 	_host = host
 
