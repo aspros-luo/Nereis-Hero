@@ -87,10 +87,12 @@ func _spawn_npc() -> void:
         npc.position = Vector2(900, 520)
         npc.npc_id = "tavern_keeper"
         npc.display_name = "酒馆值夜人"
-        if "village_defense_survived" in WorldState.achievement_flags:
-            npc.dialogue = "值夜人把杯子放回架上。\n\n“北门那边总算安静了些。今晚的灯会一直亮着，但我可不保证每个故事都是真的。”"
+        if "A1_tavern_sound_noticed" in WorldState.achievement_flags and "village_defense_survived" in WorldState.achievement_flags:
+            npc.dialogue = "值夜人看了看你，又瞥向已经安静下来的北门方向。\n\n“你听见过那声音，也看见过北门外的事。两件事不一定有关——至少我没打算替你把它们连起来。”"
         elif "A1_tavern_sound_noticed" in WorldState.achievement_flags:
             npc.dialogue = "值夜人看了你一眼，又低头擦杯子。\n\n“你上次听见的声音？我没说那是歌。你自己确定就好。”"
+        elif "village_defense_survived" in WorldState.achievement_flags:
+            npc.dialogue = "值夜人把杯子放回架上。\n\n“北门那边总算安静了些。今晚的灯会一直亮着，但我可不保证每个故事都是真的。”"
         else:
             npc.dialogue = "值夜人把杯子擦干，朝门口点点头。\n\n“进来暖暖身子吧。村里白天说的话，到了夜里往往就不一样了。”"
         add_child(npc)
