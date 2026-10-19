@@ -17,6 +17,14 @@ const ITEMS: Dictionary = {
         "stackable": false,
         "max_stack": 1
     },
+    "charred_church_seal": {
+        "item_id": "charred_church_seal",
+        "display_name": "烧黑的教会封条",
+        "category": "lore",
+        "description": "薄铜片上的教会印记已经烧黑。反面刻着一串编号，末尾的符号与林中路标上的刻痕相同。",
+        "stackable": false,
+        "max_stack": 1
+    },
     "old_pilgrim_waybill": {
         "item_id": "old_pilgrim_waybill",
         "display_name": "旧朝圣路程单",
