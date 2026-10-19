@@ -194,8 +194,8 @@ func _spawn_fireflies() -> void:
 func _spawn_gatekeeper() -> void:
 	var npc := Node2D.new()
 	npc.set_script(ROUTE_NPC_SCRIPT)
-	npc.position = Vector2(2320, 520)
-	npc.interaction_range = 60.0
+	npc.position = Vector2(2360, 520)
+	npc.interaction_range = 40.0
 	npc.cloth_color = Color("#51404a")
 	npc.npc_id = "village_gatekeeper"
 	npc.display_name = "村庄守门人"
@@ -329,7 +329,7 @@ func _spawn_village_pois() -> void:
 	var north_gate := Node2D.new()
 	north_gate.set_script(VILLAGE_POI_SCRIPT)
 	north_gate.position = Vector2(2440, 520)
-	north_gate.interaction_range = 50.0
+	north_gate.interaction_range = 40.0
 	north_gate.poi_id = "north_gate"
 	# P5.1 runtime contract for the north route.
 	north_gate.set_meta("p5_1_exit_contract", true)
@@ -372,8 +372,8 @@ func _spawn_village_pois() -> void:
 	church.set_script(VILLAGE_POI_SCRIPT)
 	# Keep a clear landing corridor between the church and north-gate interaction zones.
 	# 教堂交互点与北门之间保留无交互提示的回程落脚区。
-	church.position = Vector2(2180, 520)
-	church.interaction_range = 60.0
+	church.position = Vector2(2120, 520)
+	church.interaction_range = 50.0
 	church.poi_id = "church"
 	church.display_name = "教堂"
 	church.dialogue = "教堂的大门没有上锁。里面空荡而安静，只有旧木椅与未燃尽的蜡烛。\n\n暂时没有人回应你的脚步声。"
@@ -663,7 +663,7 @@ func _draw() -> void:
 
 	# Leave the western edge open for the old drainage passage; houses begin beyond its arch.
 	# 西侧为旧排水通路保留空间，民居从拱门以东开始排列。
-	for x in range(600, 2300, 480):
+	for x in range(600, 1900, 480):
 		draw_rect(Rect2(x - 90, 360, 180, 160), Color("#29232b"))
 		draw_colored_polygon(
 			PackedVector2Array([
@@ -712,7 +712,7 @@ func _draw() -> void:
 	# Hide the camp's distinctive fire and label until the later story-arrival flag is set.
 	# 初期只保留普通建筑轮廓；复国军的营火与营地标识必须等剧情节点后才出现。
 	if "restoration_camp_established" in WorldState.achievement_flags:
-		draw_rect(Rect2(1940, 360, 150, 160), Color("#27212a"))
+		draw_rect(Rect2(1945, 360, 90, 160), Color("#27212a"))
 		draw_colored_polygon(
 			PackedVector2Array([
 				Vector2(1915, 360),
@@ -722,7 +722,7 @@ func _draw() -> void:
 			Color("#312934")
 		)
 		draw_circle(Vector2(2015, 455), 34.0, Color("#63322f"))
-		draw_string(ThemeDB.fallback_font, Vector2(1900, 335), NereisLocalization.translate_text("复国军营地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
+		draw_string(ThemeDB.fallback_font, Vector2(1935, 335), NereisLocalization.translate_text("复国军营地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
 
 	draw_rect(Rect2(2380, 330, 120, 190), Color("#241e27"))
 	draw_rect(Rect2(2410, 350, 18, 170), Color("#4a3439"))
@@ -754,16 +754,16 @@ func _draw() -> void:
 	draw_line(Vector2(1980, 360), Vector2(2110, 320), Color("#514652"), 3.0)
 	draw_string(ThemeDB.fallback_font, Vector2(1060, 285), "屋顶捷径", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#796b7c"))
 
-	draw_rect(Rect2(2180, 320, 80, 200), Color("#26202a"))
+	draw_rect(Rect2(2080, 320, 80, 200), Color("#26202a"))
 	draw_colored_polygon(
 		PackedVector2Array([
-			Vector2(2150, 320),
-			Vector2(2220, 220),
-			Vector2(2290, 320)
+			Vector2(2050, 320),
+			Vector2(2120, 240),
+			Vector2(2190, 320)
 		]),
 		Color("#312934")
 	)
-	draw_string(ThemeDB.fallback_font, Vector2(2135, 200), NereisLocalization.translate_text("教会"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#796d67"))
+	draw_string(ThemeDB.fallback_font, Vector2(2075, 200), NereisLocalization.translate_text("教堂"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#796d67"))
 
 	# New art pass: broken stonework, amber window-light, and low fog separate the safe village from the old wall.
 	# 美术细化：破损石构、琥珀窗光与贴地薄雾，区分安全村庄与古老城墙。
