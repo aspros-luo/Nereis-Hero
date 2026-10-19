@@ -16,6 +16,8 @@
 8. **GitHub 工作流约束。** 按既有开发分支推进；未经明确要求，不主动触发 GitHub Actions 或其他可能产生通知的工作流。文档修改应与实现状态一致，并保留中文 Markdown 文档。
 9. **优先级。** 先修复阻断启动、通关、存档或交互的缺陷，再做回归验证，然后推进玩法与内容，最后处理表现层打磨。不得为追求新增功能而掩盖未验证的核心流程。
 
+10. **叙事呈现硬规则。** 所有故事、剧情、人物动机、世界观与线索解释，必须优先通过环境、可检查的物品 / 装备、NPC 对话及玩家行动后的世界变化呈现。禁止用全知旁白、主角内心总结或自动弹出的长段文字替玩家解释剧情。仅保留必要的操作提示、无障碍提示与不承载剧情信息的短反馈；过场也应以可见行动、声音、环境变化和角色行为为主，尽量不使用解释性旁白。删除旁白前必须先迁移其承载的信息，不能为了“无旁白”而丢失线索。
+
 ## English
 
 1. **Evaluate user proposals through a pro/con decision process.** Weigh benefits, counterarguments, risks, and alternatives internally, then report the verdict and only the essential rationale unless the user asks for the full debate.
@@ -27,3 +29,5 @@
 7. **Report verification honestly.** A commit is not a runtime test; a source-contract check is not proof that a script ran; static map connectivity does not prove playable Godot scenes. State methods, results, and uncovered areas.
 8. **GitHub workflow constraints.** Work on the established development branch. Do not intentionally trigger GitHub Actions or notification-generating workflows unless explicitly requested. Keep Chinese Markdown documentation aligned with implementation status.
 9. **Priority order.** Fix blockers to startup, progression, saving, and interaction first; then regressions, gameplay/content, and presentation polish. Do not hide unverified core flows behind new features.
+
+10. **Narrative presentation rule.** Stories, plot, character motives, world lore, and clue interpretation must be conveyed primarily through environments, inspectable items / equipment, NPC dialogue, and changes caused by player actions. Do not use omniscient narration, Hero’s internal summaries, or auto-displayed blocks of prose to explain the story to the player. Keep only necessary controls/accessibility prompts and brief non-narrative feedback; even cutscenes should prioritize visible actions, sound, environmental changes, and character behavior over explanatory narration. Before removing narration, migrate its information into appropriate in-world carriers so clues are not lost.
