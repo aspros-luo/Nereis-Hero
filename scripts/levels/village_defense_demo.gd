@@ -39,6 +39,8 @@ func _spawn_hero() -> void:
     hero.set_script(HERO_SCRIPT)
     hero.position = Vector2(420, FLOOR_Y)
     hero.name = "Hero"
+    # This scene owns recovery so it cannot race the generic checkpoint respawn.
+    hero.defer_death_recovery = true
     _add_character_collision(hero, 18.0, 48.0)
     add_child(hero)
     hero.defeated.connect(_on_hero_defeated)
@@ -131,6 +133,8 @@ func _finish_defense() -> void:
     SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
 
 func _on_hero_defeated() -> void:
+    if stage == 0 and not wave_started:
+        return
     for attacker in attackers:
         if is_instance_valid(attacker) and not attacker.is_queued_for_deletion():
             attacker.queue_free()
@@ -138,6 +142,11 @@ func _on_hero_defeated() -> void:
     defeated = 0
     stage = 0
     wave_started = false
+    # Restore at this chapter's spawn rather than the village hub checkpoint.
+    await get_tree().create_timer(0.75).timeout
+    if is_instance_valid(hero):
+        hero.global_position = Vector2(420.0, FLOOR_Y)
+        hero.restore_full()
     narrative.show_message("THE VILLAGE FALLS QUIET", "The Hero rises again.\n\nThe attack has not ended.", 3.0)
     await narrative.message_finished
     _begin_attack()
