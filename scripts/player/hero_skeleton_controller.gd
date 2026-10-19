@@ -19,7 +19,13 @@ enum PoseState {
 	GRAPPLE,
 	WALL_CLIMB,
 	HURT,
-	DEATH
+	DEATH,
+	STAGGER,
+	KNEEL,
+	LOOK_BACK,
+	STUMBLE,
+	KNOCKDOWN,
+	GET_UP
 }
 
 @export var line_width: float = 6.0
@@ -57,6 +63,13 @@ var _vertical_velocity: float = 0.0
 var _grounded: bool = true
 var _received_context: bool = false
 var _was_grounded: bool = true
+var _base_pose: PoseState = PoseState.IDLE
+var _presentation_action_name: String = ""
+var _presentation_action_remaining: float = 0.0
+var _presentation_action_elapsed: float = 0.0
+var _presentation_action_priority: int = 0
+
+signal presentation_action_finished(action_name: String)
 var _landing_time: float = 0.0
 var _action_elapsed: float = 0.0
 var _action_remaining: float = 0.0
@@ -90,8 +103,19 @@ func _process(delta: float) -> void:
 	animation_time += delta
 	_pose_time += delta
 	_landing_time = maxf(0.0, _landing_time - delta)
-	# Standalone pose gallery drives itself; the production Hero supplies context every frame.
-	if not _context_driven:
+	if not _presentation_action_name.is_empty() and _presentation_action_remaining > 0.0:
+		_presentation_action_remaining = maxf(0.0, _presentation_action_remaining - delta)
+		_presentation_action_elapsed += delta
+		if _presentation_action_remaining <= 0.0:
+			var completed_action := _presentation_action_name
+			_presentation_action_name = ""
+			_presentation_action_priority = 0
+			current_pose = _base_pose
+			_pose_time = 0.0
+			_apply_pose()
+			presentation_action_finished.emit(completed_action)
+	# Standalone pose gallery drives itself; production context remains authoritative beneath any action overlay.
+	if not _context_driven and _presentation_action_name.is_empty():
 		_apply_pose()
 
 
@@ -144,7 +168,16 @@ func apply_visual_context(context: Dictionary) -> void:
 		next_pose = PoseState.WEAPON_TECHNIQUE
 	if _landing_time > 0.0 and next_pose in [PoseState.IDLE, PoseState.RUN]:
 		next_pose = PoseState.LAND
-	set_pose(next_pose, int(context.get("combo_step", 1)), float(context.get("facing", 1.0)))
+	_base_pose = next_pose
+	combo_step = clampi(int(context.get("combo_step", 1)), 1, 3)
+	facing = -1.0 if float(context.get("facing", 1.0)) < 0.0 else 1.0
+	# The Hero's live context is the base layer. A requested presentation action temporarily overlays it.
+	var displayed_pose := _get_presentation_pose() if not _presentation_action_name.is_empty() else _base_pose
+	if current_pose != displayed_pose:
+		_pose_time = 0.0
+	current_pose = displayed_pose
+	scale = Vector2(facing, 1.0)
+	_apply_pose()
 
 
 func set_pose(next_pose: PoseState, next_combo_step: int = 1, next_facing: float = 1.0) -> void:
@@ -152,12 +185,85 @@ func set_pose(next_pose: PoseState, next_combo_step: int = 1, next_facing: float
 	var next_direction := -1.0 if next_facing < 0.0 else 1.0
 	if current_pose != next_pose or combo_step != next_step or not is_equal_approx(facing, next_direction):
 		_pose_time = 0.0
-	current_pose = next_pose
+	_base_pose = next_pose
+	current_pose = _get_presentation_pose() if not _presentation_action_name.is_empty() else next_pose
 	combo_step = next_step
 	facing = next_direction
 	# Reassert a non-zero unit magnitude every time facing changes; never inherit a zero scale.
 	scale = Vector2(facing, 1.0)
 	_apply_pose()
+
+
+## Requests a visual-only action. It never locks input or changes physics/gameplay state.
+## duration <= 0 makes the action persistent until clear_presentation_action() is called.
+func request_presentation_action(action_name: String, duration: float = 0.65, priority: int = -1) -> bool:
+	var normalized := action_name.strip_edges().to_lower()
+	var pose := _pose_for_presentation_action(normalized)
+	if pose == PoseState.IDLE:
+		return false
+	var resolved_priority := priority if priority >= 0 else _priority_for_presentation_action(normalized)
+	if not _presentation_action_name.is_empty() and resolved_priority < _presentation_action_priority:
+		return false
+	_presentation_action_name = normalized
+	_presentation_action_priority = resolved_priority
+	_presentation_action_remaining = maxf(0.0, duration)
+	_presentation_action_elapsed = 0.0
+	current_pose = pose
+	_pose_time = 0.0
+	_apply_pose()
+	return true
+
+
+func clear_presentation_action() -> void:
+	_presentation_action_name = ""
+	_presentation_action_remaining = 0.0
+	_presentation_action_elapsed = 0.0
+	_presentation_action_priority = 0
+	current_pose = _base_pose
+	_pose_time = 0.0
+	_apply_pose()
+
+
+func _get_presentation_pose() -> PoseState:
+	return _pose_for_presentation_action(_presentation_action_name)
+
+
+func _pose_for_presentation_action(action_name: String) -> PoseState:
+	match action_name:
+		"stagger":
+			return PoseState.STAGGER
+		"exhausted_kneel", "kneel":
+			return PoseState.KNEEL
+		"look_back":
+			return PoseState.LOOK_BACK
+		"stumble":
+			return PoseState.STUMBLE
+		"knockdown", "fall_down":
+			return PoseState.KNOCKDOWN
+		"get_up":
+			return PoseState.GET_UP
+		"death":
+			return PoseState.DEATH
+	return PoseState.IDLE
+
+
+func _priority_for_presentation_action(action_name: String) -> int:
+	match action_name:
+		"death":
+			return 100
+		"knockdown", "fall_down":
+			return 80
+		"get_up":
+			return 70
+		"stagger":
+			return 50
+		"stumble":
+			return 40
+		"exhausted_kneel", "kneel":
+			return 30
+		"look_back":
+			return 10
+	return 0
 
 
 func play_idle() -> void:
@@ -513,7 +619,7 @@ func _apply_pose() -> void:
 			_head_line.default_color = HURT_COLOR
 			_left_arm_line.default_color = HURT_COLOR
 			_right_arm_line.default_color = HURT_COLOR
-		PoseState.DEATH:
+		PoseState.DEATH, PoseState.KNOCKDOWN:
 			var collapse := smoothstep(0.0, 0.48, _pose_time)
 			root_bone.rotation = 1.15 * collapse
 			body_bone.rotation = 0.65 * collapse
@@ -526,6 +632,52 @@ func _apply_pose() -> void:
 			knee_right_bone.rotation = 0.3 * collapse
 			_body_line.default_color = CLOTH
 			_head_line.default_color = HURT_COLOR
+		PoseState.STAGGER:
+			var recoil := exp(-_presentation_action_elapsed * 5.5)
+			body_bone.rotation = 0.55 * recoil
+			head_bone.rotation = -0.24 * recoil
+			arm_left_bone.rotation = -0.95 * recoil
+			arm_right_bone.rotation = 0.82 * recoil
+			leg_left_bone.rotation = -0.08
+			leg_right_bone.rotation = 0.16
+			_body_line.default_color = HURT_COLOR
+			_head_line.default_color = HURT_COLOR
+		PoseState.KNEEL:
+			var settle := smoothstep(0.0, 0.32, _presentation_action_elapsed)
+			root_bone.position.y += 4.0 * settle
+			body_bone.rotation = lerpf(-0.08, 0.32, settle)
+			head_bone.rotation = 0.12
+			arm_left_bone.rotation = lerpf(-0.08, -0.72, settle)
+			arm_right_bone.rotation = lerpf(0.12, 0.78, settle)
+			leg_left_bone.rotation = lerpf(-0.08, -1.05, settle)
+			leg_right_bone.rotation = lerpf(0.12, 0.72, settle)
+			knee_left_bone.rotation = 0.92 * settle
+			knee_right_bone.rotation = 0.72 * settle
+		PoseState.LOOK_BACK:
+			var glance := sin(clampf(_presentation_action_elapsed / maxf(0.01, _presentation_action_remaining + _presentation_action_elapsed), 0.0, 1.0) * PI)
+			body_bone.rotation = -0.08 - 0.12 * glance
+			head_bone.rotation = 0.28 * glance
+			arm_left_bone.rotation = -0.18 - 0.12 * glance
+			arm_right_bone.rotation = 0.18 + 0.12 * glance
+		PoseState.STUMBLE:
+			var recover := smoothstep(0.0, 0.45, _presentation_action_elapsed)
+			body_bone.rotation = lerpf(0.62, -0.06, recover)
+			head_bone.rotation = lerpf(-0.28, 0.0, recover)
+			arm_left_bone.rotation = lerpf(-1.1, -0.08, recover)
+			arm_right_bone.rotation = lerpf(0.95, 0.12, recover)
+			leg_left_bone.rotation = -0.24 * (1.0 - recover)
+			leg_right_bone.rotation = 0.32 * (1.0 - recover)
+		PoseState.GET_UP:
+			var rise := smoothstep(0.0, 0.8, _presentation_action_elapsed)
+			root_bone.rotation = lerpf(1.0, 0.0, rise)
+			body_bone.rotation = lerpf(0.58, 0.0, rise)
+			head_bone.rotation = lerpf(-0.35, 0.0, rise)
+			arm_left_bone.rotation = lerpf(-0.92, -0.08, rise)
+			arm_right_bone.rotation = lerpf(1.0, 0.12, rise)
+			leg_left_bone.rotation = lerpf(0.58, -0.08, rise)
+			leg_right_bone.rotation = lerpf(-0.62, 0.12, rise)
+			knee_left_bone.rotation = lerpf(0.28, 0.0, rise)
+			knee_right_bone.rotation = lerpf(0.32, 0.0, rise)
 
 	# Small overshoot and recoil are presentation-only; gameplay timing stays in hero.gd.
 	var action_arc := sin(clampf(_pose_time / 0.32, 0.0, 1.0) * PI)
