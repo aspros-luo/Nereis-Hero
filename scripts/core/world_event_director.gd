@@ -26,12 +26,20 @@ const EVENT_DEFINITIONS: Array[Dictionary] = [
 var _world_state: Node
 var _host: Node
 var _dispatching := false
+var _managed_npcs: Array[Node] = []
 
 func setup(world_state: Node, host: Node) -> void:
 	_world_state = world_state
 	_host = host
 
 func spawn_npcs(host: Node, npc_script: Script, interaction_callback: Callable) -> Array[Node]:
+	# Refresh only director-managed NPCs; baseline NPCs are owned by the scene controller.
+	for old_npc in _managed_npcs:
+		if is_instance_valid(old_npc):
+			if old_npc.get_parent() != null:
+				old_npc.get_parent().remove_child(old_npc)
+			old_npc.queue_free()
+	_managed_npcs.clear()
 	var spawned: Array[Node] = []
 	for definition in NPC_DEFINITIONS:
 		var npc_id := String(definition.get("id", ""))
@@ -50,6 +58,7 @@ func spawn_npcs(host: Node, npc_script: Script, interaction_callback: Callable) 
 		host.add_child(npc)
 		npc.interacted.connect(interaction_callback.bind(npc))
 		spawned.append(npc)
+		_managed_npcs.append(npc)
 	return spawned
 
 func dispatch(trigger: String, context: Dictionary = {}) -> Array[String]:
