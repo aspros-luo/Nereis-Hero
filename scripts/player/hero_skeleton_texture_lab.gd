@@ -2,21 +2,21 @@ extends "res://scripts/player/hero_skeleton_controller.gd"
 class_name HeroSkeletonTextureLab
 
 ## Atlas inspection lab for the existing Bone2D rig.
-## This UV atlas is not a sprite sheet: never treat arbitrary rectangles as finished body parts.
+## The committed texture atlas is the primary development asset. Do not treat arbitrary rectangles as finished body parts.
 ## 该图是 UV 纹理图集而非完整精灵表；禁止把未经识别的矩形裁片伪装成完整身体部件。
 
-const ATLAS_PATH := "res://assets/art/hero_sprite_lab/muramasa_texture_atlas.png"
-const ATLAS_SIZE := Vector2(2048.0, 2048.0)
-const GRID_STEP := 64
-const SELECTED_CROP_POSITION := Vector2(680.0, 600.0)
+const ATLAS_PATH := "res://assets/characters/hero/tex1_512x512_4d6c36bcbd5d9ddc_423915aa39e773f2_9.png"
+const GRID_STEP := 16
+const SELECTED_CROP_POSITION := Vector2(180.0, 210.0)
 const SELECTED_CROP_SIZE := Vector2(128.0, 128.0)
-const PREVIEW_POSITION := Vector2(680.0, 72.0)
+const PREVIEW_POSITION := Vector2(180.0, 72.0)
 
 @export var show_atlas_inspector: bool = true
 @export var keep_rig_line_art: bool = true
 @export_range(0.01, 1.0, 0.01) var atlas_preview_scale: float = 0.25
 
 var _atlas: Texture2D
+var _atlas_size := Vector2.ZERO
 var _atlas_status: Label
 var _atlas_view: TextureRect
 var _grid_overlay: AtlasGridOverlay
@@ -26,7 +26,7 @@ var _selected_crop_view: TextureRect
 class AtlasGridOverlay extends Control:
 	signal cell_selected(source_rect: Rect2i)
 
-	var source_size := Vector2(2048.0, 2048.0)
+	var source_size := Vector2(512.0, 512.0)
 	var grid_step := 64
 	var selected_cell := Vector2i(-1, -1)
 
@@ -75,6 +75,7 @@ func _ready() -> void:
 	if _atlas == null:
 		_atlas_status.text = "Atlas failed to load / 图集加载失败：" + ATLAS_PATH
 		return
+	_atlas_size = Vector2(_atlas.get_width(), _atlas.get_height())
 	_build_atlas_view()
 
 
@@ -94,7 +95,7 @@ func _build_atlas_view() -> void:
 	if layer == null:
 		return
 	var scale_factor := clampf(atlas_preview_scale, 0.01, 1.0)
-	var preview_size := ATLAS_SIZE * scale_factor
+	var preview_size := _atlas_size * scale_factor
 	_atlas_view = TextureRect.new()
 	_atlas_view.name = "AtlasPreview"
 	_atlas_view.texture = _atlas
@@ -109,7 +110,7 @@ func _build_atlas_view() -> void:
 	_grid_overlay.name = "AtlasCoordinateGrid"
 	_grid_overlay.position = PREVIEW_POSITION
 	_grid_overlay.size = preview_size
-	_grid_overlay.source_size = ATLAS_SIZE
+	_grid_overlay.source_size = _atlas_size
 	_grid_overlay.grid_step = GRID_STEP
 	_grid_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	_grid_overlay.cell_selected.connect(_on_atlas_cell_selected)
@@ -127,9 +128,9 @@ func _build_atlas_view() -> void:
 	_atlas_status.position = Vector2(16.0, 12.0)
 	_atlas_status.text = (
 		"Hero texture atlas inspection / 主角纹理图集检查\n"
-		+ "Click a grid cell to read its source coordinates (64 px grid).\n"
-		+ "点击网格读取原图坐标（每格 64 像素）。\n"
-		+ "Rig line art stays visible for comparison; this atlas needs its source mesh/UV mapping "
+		+ "Click a grid cell to read its source coordinates (16 px grid).\n"
+		+ "点击网格读取原图坐标（每格 16 像素）。\n"
+		+ "Rig line art stays visible for comparison; this atlas may need its source mesh/UV mapping "
 		+ "before its surface islands can be assembled faithfully.\n"
 		+ "保留骨骼线稿作对照；要准确还原表面纹理，需要原模型网格/UV 对应关系。"
 	)
