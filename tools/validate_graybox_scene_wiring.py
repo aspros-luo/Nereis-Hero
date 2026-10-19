@@ -663,6 +663,9 @@ def main() -> int:
     require(defense_route_script, 'WorldState.record_achievement("village_defense_survived")', "A1 defense victory persists progression flag", errors)
     require(defense_route_script, 'SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")', "A1 defense victory returns to village", errors)
     require(defense_route_script, 'defeated = 0', "A1 defense retry resets wave counter", errors)
+    require(defense_route_script, "hero.defer_death_recovery = true", "A1 defense uses its authored Hero lifecycle", errors)
+    require(defense_route_script, "hero.global_position = Vector2(420.0, FLOOR_Y)", "A1 defeat returns to its local start point", errors)
+    require(defense_route_script, "hero.restore_full()", "A1 defeat restores combat state", errors)
     require(defense_route_script, '_begin_attack()', "A1 defense retry restarts encounter", errors)
 
     village_route_script = read("scripts/levels/village_hub.gd", errors)
