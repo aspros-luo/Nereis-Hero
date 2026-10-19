@@ -195,6 +195,7 @@ func _spawn_gatekeeper() -> void:
 	var npc := Node2D.new()
 	npc.set_script(ROUTE_NPC_SCRIPT)
 	npc.position = Vector2(650, 520)
+	npc.interaction_range = 80.0
 	npc.npc_id = "village_gatekeeper"
 	npc.display_name = "村庄守门人"
 	if "village_defense_survived" in WorldState.achievement_flags and WorldState.selected_route == "church":
@@ -219,6 +220,7 @@ func _spawn_shared_world_npcs() -> void:
 	var grandmother := Node2D.new()
 	grandmother.set_script(ROUTE_NPC_SCRIPT)
 	grandmother.position = Vector2(1120, 520)
+	grandmother.interaction_range = 80.0
 	grandmother.npc_id = "village_grandmother"
 	grandmother.display_name = "老婆婆"
 	if "village_defense_survived" in WorldState.achievement_flags:
@@ -233,6 +235,7 @@ func _spawn_shared_world_npcs() -> void:
 	var blacksmith := Node2D.new()
 	blacksmith.set_script(ROUTE_NPC_SCRIPT)
 	blacksmith.position = Vector2(1430, 520)
+	blacksmith.interaction_range = 80.0
 	blacksmith.npc_id = "village_blacksmith"
 	blacksmith.display_name = "铁匠"
 	if "village_defense_survived" in WorldState.achievement_flags:
@@ -245,6 +248,7 @@ func _spawn_shared_world_npcs() -> void:
 	var merchant := Node2D.new()
 	merchant.set_script(ROUTE_NPC_SCRIPT)
 	merchant.position = Vector2(1250, 520)
+	merchant.interaction_range = 80.0
 	merchant.npc_id = "traveling_merchant"
 	merchant.display_name = "旅行商人"
 	if WorldState.get_humanity_state() == "hollow":
