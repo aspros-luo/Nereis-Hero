@@ -42,6 +42,32 @@ A positive duration expires automatically and restores the latest live Hero-deri
 - This first pass uses scripted bone poses, not AnimationPlayer clips. Do not drive the same bones through an AnimationPlayer at the same time.
 - The production Hero retains the F8 legacy visual fallback until local runtime acceptance.
 
+## Local debug testing
+
+Run the project with a debug/editor build and enter a scene containing the production Hero. These shortcuts are handled by the Hero script only when `OS.is_debug_build()` is true:
+
+| Key | Action |
+|---|---|
+| F9 | Stagger, 0.8 s |
+| F10 | Exhausted kneel, 1.2 s |
+| F11 | Look back, 1.0 s |
+| F12 | Stumble, 0.8 s |
+| F13 | Knockdown pose (persistent visual overlay) |
+| F14 | Get-up pose, priority 90 |
+| F15 | Death pose (visual only; does not set gameplay state to DEAD) |
+| Delete | Clear persistent/current presentation overlay |
+
+F13/F15 are visual-only pose tests; they do not change health, collision, death state, or physics. Delete clears the presentation overlay. F8 still switches between skeletal and legacy procedural visuals, so use it to compare silhouette and verify the fallback.
+
+Suggested sequence:
+1. Press F9, wait for automatic restoration, then walk/run/jump to check that the live pose resumes.
+2. Press F13, then F14 to test higher-priority replacement; press Delete to cancel and restore live context.
+3. Press F15, then Delete. Confirm that the gameplay character is not actually dead.
+4. Repeat while facing left and right, then repeat during movement/attack to observe interruption behavior.
+5. Toggle F8 before and after the same tests to compare skeletal presentation against the fallback.
+
+If WorldState input locking is active, the existing early return in `_input()` prevents these debug shortcuts from firing. Unlock the scene/gameplay input before testing.
+
 ## Verification status
 
 Source was committed to `feature/hero-animation-system`. This session did not have a Godot runtime attached to the remote repository operations, so parser/import, scene startup, action completion timing, visual quality, and combat interruption remain **not run**. Do not treat this interface as runtime-accepted until tested in the local Godot 4.6.1 project.
