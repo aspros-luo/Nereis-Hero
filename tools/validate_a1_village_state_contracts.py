@@ -140,6 +140,23 @@ def main() -> int:
         "A1: one-time event effects and fired markers must persist across scene changes and Continue.",
     )
 
+    # Baseline villagers must recalculate dialogue from current facts, not only at scene creation.
+    require(
+        'npc.add_to_group("a1_baseline_npcs")' in village
+        and 'grandmother.add_to_group("a1_baseline_npcs")' in village
+        and 'blacksmith.add_to_group("a1_baseline_npcs")' in village
+        and 'merchant.add_to_group("a1_baseline_npcs")' in village
+        and 'for npc in get_tree().get_nodes_in_group("a1_baseline_npcs"):' in village
+        and '_refresh_baseline_npc_dialogue(npc)' in village,
+        "A1: gatekeeper, grandmother, blacksmith and merchant dialogue must refresh from current world facts.",
+    )
+    require(
+        'func _refresh_baseline_npc_dialogue(npc: Node)' in village
+        and '"graybox_intro_forgotten_city" in WorldState.achievement_flags' in village
+        and '"graybox_intro_ash_forest" in WorldState.achievement_flags' in village,
+        "A1: refreshed merchant dialogue must preserve actual A3/A2 exploration priority.",
+    )
+
     # Protect already established optional routes from unrelated A1 changes.
     require(
         'resonance_well_gate.secret_id = "H01"' in village
