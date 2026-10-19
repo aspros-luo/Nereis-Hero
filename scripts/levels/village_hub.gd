@@ -52,7 +52,7 @@ func _ready() -> void:
 	# Each village return route uses a safe landing zone clear of unrelated interaction prompts.
 	# 村庄各条回程路线使用独立安全落点，避免刚切图就显示无关的 E 交互提示。
 	# Spawn after the watergate outside the well gate, tavern, and restoration-camp interaction radii.
-	var spawn_x := 1850.0 if spawn_side in ["well_exit", "cliff_cave_return"] else (350.0 if spawn_side == "city_cut_return" else (2310.0 if spawn_side == "north_gate" else (530.0 if spawn_side == "mite_house_return" else 260.0)))
+	var spawn_x := 1850.0 if spawn_side in ["well_exit", "cliff_cave_return"] else (350.0 if spawn_side == "city_cut_return" else (2630.0 if spawn_side == "north_gate" else (530.0 if spawn_side == "mite_house_return" else 260.0)))
 	_spawn_hero(spawn_x)
 	_spawn_checkpoint()
 	_spawn_village_rest_point()
@@ -85,7 +85,7 @@ func _spawn_hero(spawn_x: float = 260.0) -> void:
 	camera.position_smoothing_speed = 6.0
 	camera.limit_left = 0
 	camera.limit_top = 0
-	camera.limit_right = 2600
+	camera.limit_right = 3000
 	camera.limit_bottom = 720
 	camera.position = Vector2.ZERO
 	hero.add_child(camera)
@@ -194,7 +194,7 @@ func _spawn_fireflies() -> void:
 func _spawn_gatekeeper() -> void:
 	var npc := Node2D.new()
 	npc.set_script(ROUTE_NPC_SCRIPT)
-	npc.position = Vector2(2360, 520)
+	npc.position = Vector2(2740, 520)
 	npc.interaction_range = 40.0
 	npc.cloth_color = Color("#51404a")
 	npc.npc_id = "village_gatekeeper"
@@ -328,7 +328,7 @@ func _spawn_village_pois() -> void:
 
 	var north_gate := Node2D.new()
 	north_gate.set_script(VILLAGE_POI_SCRIPT)
-	north_gate.position = Vector2(2440, 520)
+	north_gate.position = Vector2(2840, 520)
 	north_gate.interaction_range = 40.0
 	north_gate.poi_id = "north_gate"
 	# P5.1 runtime contract for the north route.
@@ -497,9 +497,9 @@ func _create_floor() -> void:
 	floor.name = "Ground"
 	var shape := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(2600, 40)
+	rectangle.size = Vector2(3000, 40)
 	shape.shape = rectangle
-	shape.position = Vector2(1300, 540)
+	shape.position = Vector2(1500, 540)
 	floor.add_child(shape)
 	add_child(floor)
 
@@ -523,7 +523,11 @@ func _create_village_rooftop_route() -> void:
 		Rect2(1840, 310, 110, 16),
 		Rect2(1980, 350, 110, 16),
 		Rect2(2110, 310, 110, 16),
-		Rect2(2240, 340, 110, 16)
+		Rect2(2240, 340, 110, 16),
+		Rect2(2370, 360, 110, 16),
+		Rect2(2500, 340, 110, 16),
+		Rect2(2630, 360, 110, 16),
+		Rect2(2760, 340, 110, 16)
 	]
 	for platform_rect in route:
 		var body := StaticBody2D.new()
@@ -556,7 +560,7 @@ func _create_boundaries() -> void:
 	var right_rect := RectangleShape2D.new()
 	right_rect.size = Vector2(40, 720)
 	right_shape.shape = right_rect
-	right_shape.position = Vector2(2620, 360)
+	right_shape.position = Vector2(3020, 360)
 	right.add_child(right_shape)
 	add_child(right)
 
@@ -622,9 +626,9 @@ func _mark_input_handled() -> void:
 		viewport.set_input_as_handled()
 
 func _draw() -> void:
-	draw_texture_rect(VILLAGE_BACKDROP, Rect2(0, 0, 2600, 720), false)
-	draw_texture_rect(VILLAGE_GROUND_STRIP, Rect2(0, 520, 2600, 200), false)
-	for x in range(0, 2600, 64):
+	draw_texture_rect(VILLAGE_BACKDROP, Rect2(0, 0, 3000, 720), false)
+	draw_texture_rect(VILLAGE_GROUND_STRIP, Rect2(0, 520, 3000, 200), false)
+	for x in range(0, 3000, 64):
 		draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
 
 	draw_string(ThemeDB.fallback_font, Vector2(100, 230), NereisLocalization.translate_text("边境村庄"), HORIZONTAL_ALIGNMENT_LEFT, -1, 30, Color("#4d454d"))
@@ -733,18 +737,18 @@ func _draw() -> void:
 		draw_circle(Vector2(1990, 455), 28.0, Color("#63322f"))
 		draw_string(ThemeDB.fallback_font, Vector2(1935, 335), NereisLocalization.translate_text("复国军营地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
 
-	draw_rect(Rect2(2380, 330, 120, 190), Color("#241e27"))
-	draw_rect(Rect2(2410, 350, 18, 170), Color("#4a3439"))
-	draw_rect(Rect2(2460, 350, 18, 170), Color("#4a3439"))
+	draw_rect(Rect2(2780, 330, 120, 190), Color("#241e27"))
+	draw_rect(Rect2(2810, 350, 18, 170), Color("#4a3439"))
+	draw_rect(Rect2(2860, 350, 18, 170), Color("#4a3439"))
 	if "village_defense_survived" in WorldState.achievement_flags:
 		# The gate is visibly passable after the defense; keep the opening readable from the hub.
-		draw_line(Vector2(2418, 360), Vector2(2394, 405), Color("#79656a"), 6.0)
-		draw_line(Vector2(2468, 360), Vector2(2490, 405), Color("#79656a"), 6.0)
+		draw_line(Vector2(2818, 360), Vector2(2794, 405), Color("#79656a"), 6.0)
+		draw_line(Vector2(2868, 360), Vector2(2890, 405), Color("#79656a"), 6.0)
 	else:
 		# Before the defense, crossbars communicate that the route is physically blocked.
-		draw_rect(Rect2(2418, 385, 50, 12), Color("#79656a"))
-		draw_rect(Rect2(2418, 430, 50, 12), Color("#79656a"))
-	draw_string(ThemeDB.fallback_font, Vector2(2370, 310), NereisLocalization.translate_text("北门"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
+		draw_rect(Rect2(2818, 385, 50, 12), Color("#79656a"))
+		draw_rect(Rect2(2818, 430, 50, 12), Color("#79656a"))
+	draw_string(ThemeDB.fallback_font, Vector2(2770, 310), NereisLocalization.translate_text("北门"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
 
 	# Broken roof beams mark an optional high route across the village; they are not a required path.
 	# 断裂屋脊标记穿越村庄的可选高路，不是主线必经路线。
@@ -761,6 +765,11 @@ func _draw() -> void:
 	draw_line(Vector2(1710, 280), Vector2(1840, 320), Color("#514652"), 3.0)
 	draw_line(Vector2(1840, 320), Vector2(1980, 360), Color("#514652"), 3.0)
 	draw_line(Vector2(1980, 360), Vector2(2110, 320), Color("#514652"), 3.0)
+	draw_line(Vector2(2110, 320), Vector2(2240, 350), Color("#514652"), 3.0)
+	draw_line(Vector2(2240, 350), Vector2(2370, 370), Color("#514652"), 3.0)
+	draw_line(Vector2(2370, 370), Vector2(2500, 350), Color("#514652"), 3.0)
+	draw_line(Vector2(2500, 350), Vector2(2630, 370), Color("#514652"), 3.0)
+	draw_line(Vector2(2630, 370), Vector2(2760, 350), Color("#514652"), 3.0)
 	draw_string(ThemeDB.fallback_font, Vector2(1060, 285), "屋顶捷径", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#796b7c"))
 
 	draw_rect(Rect2(2080, 320, 80, 200), Color("#26202a"))
