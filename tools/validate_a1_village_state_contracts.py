@@ -115,6 +115,24 @@ def main() -> int:
         "A1: merchant revisit dialogue must prioritize actual A3/A2 exploration facts before generic defense feedback.",
     )
 
+    # The pilgrim knight is manifest-managed in exactly one interior selected by explicit story facts.
+    require(
+        director.count('"id": "pilgrim_knight_a1"') == 2
+        and '"value": "pilgrim_knight_a1_arrived"' in director
+        and '"value": "pilgrim_knight_at_tavern"' in director
+        and '{"type": "location", "value": "tavern"}' in director
+        and '{"type": "location", "value": "church"}' in director
+        and '"dialogue_variants"' in director,
+        "A1: pilgrim knight must be manifest-managed, arrival-gated, and assigned to only one interior by the location flag.",
+    )
+    require(
+        'const WORLD_EVENT_DIRECTOR_SCRIPT = preload("res://scripts/core/world_event_director.gd")' in interior
+        and 'world_event_director.setup(WorldState, self)' in interior
+        and 'world_event_director.spawn_npcs(self, ROUTE_NPC_SCRIPT, Callable(self, "_on_npc_interacted"))' in interior
+        and 'var pilgrim_arrived :=' not in interior,
+        "A1: interior progression NPCs must spawn through the director rather than duplicate hand-written branches.",
+    )
+
     # The tavern sound event is a one-time, persisted world fact; dialogue is resolved on re-entry.
     director = read("scripts/core/world_event_director.gd")
     require(
