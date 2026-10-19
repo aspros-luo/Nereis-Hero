@@ -1,37 +1,32 @@
-# Hero Temporary Visual Pipeline
+# Hero Character Art Pipeline
 
-## Purpose
+## Source priority
 
-Temporary character presentation before final art production.
+The committed texture assets are the primary development source:
 
-The project uses a stick-figure style placeholder to validate:
+- `tex1_512x512_4d6c36bcbd5d9ddc_423915aa39e773f2_9.png` — preferred inspection/runtime candidate.
+- `tex1_512x512_544f6621d3d7aae2_f32cd14fd4d9e265_9.dds` — alternate source to compare for dimensions and visual/content equivalence.
+- `153143.png` — reference image only. It must not become the animation frame source or substitute for the texture atlas.
 
-- movement
-- combat timing
-- weapon readability
-- dodge animation
-- hit reaction
+## Current state
 
-## Planned Structure
+The current Hero skeleton controller still draws a temporary line-art character. The atlas inspector and texture lab help inspect the source texture, but they do not yet constitute a texture-backed character rig.
 
-```
-hero/
-├── idle/
-├── run/
-├── jump/
-├── attack_long_sword/
-├── attack_short_blade/
-├── dodge/
-├── hurt/
-└── death/
-```
+The shared helpers are available:
 
-## Migration Goal
+- `CharacterPartData` describes a validated atlas rectangle and its local transform.
+- `CharacterAtlasTextureFactory` creates an `AtlasTexture` and applies it to a `Sprite2D`, rejecting regions that fall outside the source texture.
 
-Current prototype rendering will be replaced by:
+No semantic atlas regions have been approved yet. Do not label arbitrary rectangles as head, torso, arm, or leg without inspecting the actual texture and confirming their intended meaning.
 
-- AnimatedSprite2D
-- AnimationTree
-- Skeleton2D (future)
+## Migration acceptance
 
-Gameplay code must not depend on visual implementation.
+The texture-backed rig is considered ready only when all of these are true:
+
+1. The PNG and DDS sources have been compared and the chosen source is documented.
+2. Exact regions and pivots are identified from the actual texture/source data.
+3. Real atlas-backed `Sprite2D` parts are attached to the existing `Bone2D` hierarchy.
+4. An isolated Godot 4.6.1 scene visibly validates idle, movement, and an attack without placeholder line art standing in for the textured body.
+5. Runtime validation results are recorded honestly; a successful script edit alone is not visual acceptance.
+
+Gameplay code must remain independent of the visual implementation.
