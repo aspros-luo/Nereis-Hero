@@ -15,7 +15,7 @@
 | 审计项 | 当前源码证据 | 当前结论 |
 |---|---|---|
 | 结局求值 | `scripts/core/ending_evaluator.gd` | 只读 `hero_resonance`、`hidden_artifact_pieces`、`entered_hidden_regions`、`resonance_sources`；不检查用户确认的具体条件链 |
-| 正式物品目录 | `scripts/core/item_catalog.gd` | 当前只有 `church_bandage`、`surgery_record_fragment` 两项定义；未定义回复酒、朝圣骑士徽章、金正遗物徽章、染血笔记、复仇女神赐福火种、第三根脐带相关道具 |
+| 正式物品目录 | `scripts/core/item_catalog.gd` | 当前只有 `church_bandage`、`surgery_record_fragment` 两项定义；未定义回复酒、朝圣骑士徽章、金正遗物徽章、染血笔记、复仇女神赐福火种等正式剧情道具。H09 有单独的临时拾取脚本，但它只记录测试成就，不是正式库存道具，也不代表脐带的正式设计已确定 |
 | 背包持有状态 | `scripts/core/world_state.gd` | 有 `inventory_items`、`is_item_owned()`、`add_inventory_item()`；目前无法持有目录中不存在的上述剧情道具 |
 | 世界拾取状态 | `scripts/core/world_state.gd`、`scripts/world/world_item_pickup.gd` | 支持一次性拾取 ID 与库存写入，但“曾取得 / 当前持有 / 已使用”尚未形成适用于目标剧情链的完整独立状态 |
 | 阅读状态 | `scripts/core/world_state.gd` | 有 `read_item_ids` / `mark_item_read()`，仅表示阅读，不等同于使用 |
