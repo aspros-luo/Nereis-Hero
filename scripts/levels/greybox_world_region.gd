@@ -193,12 +193,10 @@ func _spawn_encounter(enemy_script: Script, enemy_name: String, spawn_x: float, 
 
 func _on_region_enemy_defeated(enemy_name: String, enemy_node: Node2D) -> void:
 	if enemy_name == "A6_MadCleric_01":
-		if WorldState.record_achievement("defeated_mad_cleric") and is_instance_valid(narrative):
-			narrative.show_message(
-				"疯狂神职人员",
-				"他倒下时，祷词仍在继续。你从他的衣襟里听见蜂群般的振翅声——不是昆虫，而是某种在石头内部移动的东西。\n\n村庄的山崖似乎回应了这声低鸣。",
-				6.0
-			)
+		# Record the combat fact only. The meaning of the sound is left to environmental discovery
+		# and the later physical return to A1; do not force an explanatory narrative panel here.
+		# 这里只记录战斗事实；异常含义交给环境探索和之后实际回村的变化，不强制弹出解释面板。
+		WorldState.record_achievement("defeated_mad_cleric")
 	elif enemy_name == "A6_BellWarden_01":
 		if WorldState.record_achievement("defeated_A6_BellWarden_01"):
 			_spawn_world_item_pickup(
