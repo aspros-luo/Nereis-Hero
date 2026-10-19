@@ -7,7 +7,8 @@ Branch: `feature/hero-animation-system`
 
 This pass improves the existing procedural skeleton gait without changing gameplay movement:
 - The Hero supplies its live horizontal velocity to the presentation adapter.
-- Run-cycle phase advances according to actual horizontal speed, using a slower cadence during reduced-speed movement and a faster cadence near full speed.
+- Direction input begins with a short, low-speed walk (`118 px/s`); holding it for `0.22 s` targets the existing run speed (`260 px/s`).
+- Run-cycle phase advances according to actual horizontal speed, using a slower cadence and smaller limb range during walking, then a faster cadence, longer stride, and stronger body lean while running.
 - When the Hero has effectively stopped, the gait phase stops advancing instead of continuing to run in place.
 - The run-to-idle transition reuses a decaying gait weight for residual leg, knee, foot, arm, and torso motion, reducing a hard snap to the neutral pose.
 - Landing compression now peaks at floor contact and eases out over a short 0.18-second visual recovery window, rather than reaching its maximum halfway through recovery.
@@ -23,12 +24,13 @@ This pass improves the existing procedural skeleton gait without changing gamepl
 ## In-game acceptance checklist
 
 Run the project in Godot 4.6.1 and test the production Hero in a scene with walkable ground and a wall:
-1. Hold left/right at normal speed: leg cadence should follow movement speed, not a fixed wall-clock loop.
-2. Push against a wall: the Hero should not keep cycling its legs at full running cadence while horizontal velocity is zero.
-3. Start and release movement repeatedly: the gait should ease into and out of idle without a hard leg/arm snap; inspect whether the current procedural easing feels too soft or too stiff.
-4. Jump, reach the apex, fall, and land: check that jump/fall poses align with velocity and floor contact, and that landing compression begins on contact and recovers without visible foot penetration.
-5. Attack while moving, switch weapon, dodge, and use F8 to compare the skeletal rig with the legacy fallback.
-6. Confirm collision, position, stamina, damage, and hitbox timing are unchanged.
+1. Tap left/right briefly: the Hero should make a small, controlled walking step. Hold the direction for more than 0.22 seconds: movement should transition to the existing 260 px/s run speed, with a visibly longer stride and stronger lean.
+2. Check that attacking still uses the existing slower attack-movement speed and does not accelerate into a run.
+3. Push against a wall: the Hero should not keep cycling its legs at full running cadence while horizontal velocity is zero.
+4. Start and release movement repeatedly: the gait should ease into and out of idle without a hard leg/arm snap; inspect whether the current procedural easing feels too soft or too stiff.
+5. Jump, reach the apex, fall, and land: check that jump/fall poses align with velocity and floor contact, and that landing compression begins on contact and recovers without visible foot penetration.
+6. Attack while moving, switch weapon, dodge, and use F8 to compare the skeletal rig with the legacy fallback.
+7. Confirm collision, stamina, damage, and hitbox timing are unchanged. Movement speed is intentionally changed only for ordinary directional movement.
 
 ## Verification status
 
