@@ -16,7 +16,7 @@ The published preview suggests 10 columns × 8 rows with 256×304 cells (2560×2
 ## Provisional sequence mapping / 暂定动作分类
 - Idle: row 0, columns 0–9.
 - Walk/motion: row 2, columns 0–5.
-- Sword slash: row 3, columns 4–9.
+- Sword slash: row 4, columns 0–9 (the row visibly containing slash/effect poses).
 
 These are provisional visual groupings from the page preview. Verify the full-resolution source and alpha bounds before treating them as accepted final sequences. If inspection shows different bounds, update the sequence table; do not silently stretch the cells into a false animation.
 
