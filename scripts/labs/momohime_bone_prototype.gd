@@ -135,7 +135,7 @@ func _bone(parent: Node2D, node_name: String, at: Vector2) -> Bone2D:
 	bone.name = node_name
 	bone.position = at
 	bone.rest = Transform2D(0.0, at)
-	bone.autocalculate_length_and_angle = false
+	bone.auto_calculate_length_and_angle = false
 	parent.add_child(bone)
 	return bone
 
