@@ -14,7 +14,7 @@ const DISPLAY_HEIGHT := 210.0
 const SEQUENCES := {
 	"idle": {"row": 0, "start": 0, "count": 10, "fps": 7.0, "loop": true},
 	"walk": {"row": 2, "start": 0, "count": 6, "fps": 9.0, "loop": true},
-	"slash": {"row": 3, "start": 4, "count": 6, "fps": 14.0, "loop": false},
+	"slash": {"row": 4, "start": 0, "count": 10, "fps": 14.0, "loop": false},
 }
 
 var _sheet: Texture2D
