@@ -1774,7 +1774,7 @@ def main() -> int:
     require(event_director, '"world_event_fired:" + event_id', "One-shot world events persist their fired marker", errors)
     require(event_director, "event_triggered.emit(event_id, payload)", "World event director emits an event signal for listeners", errors)
     require(village_hub, 'rest.rest_id = "rest_A1_village_hearth"', "A1 hearth rest point has a stable save ID", errors)
-    require(village_hub, 'north_gate.position = Vector2(2440, 520)', "A1 north gate is placed at the expanded east end of the village", errors)
+    require(village_hub, 'north_gate.position = Vector2(2840, 520)', "A1 north gate is placed at the expanded east end of the village", errors)
     require(village_hub, 'city_cut.position = Vector2(100, 520)', "A1 drainage shortcut is placed at the west end", errors)
     require(village_hub, 'func _create_village_rooftop_route() -> void:', "A1 optional rooftop exploration route exists", errors)
     require(village_hub, 'mite_house_door.position = Vector2(455, 520)', "A1 Mite house door interaction anchor", errors)
@@ -1819,7 +1819,7 @@ def main() -> int:
         and village_spawn_clear > village_location_save
     ):
         errors.append("Village resume spawn-side save order: capture incoming side, save destination, then clear one-shot side.")
-    require(village_hub, '2310.0 if spawn_side == "north_gate"', "Village north-gate return spawn", errors)
+    require(village_hub, '2630.0 if spawn_side == "north_gate"', "Village north-gate return spawn", errors)
     require(village_hub, '350.0 if spawn_side == "city_cut_return"', "Village old-drain return spawn", errors)
     require(village_hub, '1850.0 if spawn_side in ["well_exit", "cliff_cave_return"]', "Village lower east return spawn", errors)
     require(village_hub, '530.0 if spawn_side == "mite_house_return"', "Village house return spawn", errors)
