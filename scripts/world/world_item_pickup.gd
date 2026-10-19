@@ -40,7 +40,7 @@ func _unhandled_input(event: InputEvent) -> void:
             var definition: Dictionary = ITEM_CATALOG.get_definition(item_id)
             var panel := get_tree().get_first_node_in_group("item_inspection_panels")
             if panel != null and panel.has_method("show_description"):
-                panel.call("show_description", str(definition.get("display_name", item_id)), str(definition.get("description", "")))
+                panel.call("show_pickup", str(definition.get("display_name", item_id)))
             print("[NEREIS][ITEM] Picked up id=%s amount=%d" % [item_id, amount])
         get_viewport().set_input_as_handled()
 
