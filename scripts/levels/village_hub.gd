@@ -194,13 +194,13 @@ func _spawn_fireflies() -> void:
 func _spawn_gatekeeper() -> void:
 	var npc := Node2D.new()
 	npc.set_script(ROUTE_NPC_SCRIPT)
-	npc.position = Vector2(760, 520)
+	npc.position = Vector2(650, 520)
 	npc.npc_id = "village_gatekeeper"
 	npc.display_name = "村庄守门人"
 	if WorldState.selected_route == "church":
-		npc.dialogue = "The gatekeeper studies the church seal.\n\n\"他们告诉我们，你再也不会回来。为什么他们又把同一个人送了回来？\""
+		npc.dialogue = "守门人看了看你身上的教堂印记，神情变得警惕。\n\n“他们说你不会再回来。现在却又把你送回来了？”"
 	elif WorldState.selected_route == "lullaby":
-		npc.dialogue = "The gatekeeper hears the lullaby on the wind and shuts the tavern door halfway.\n\n\"别在这里唱那首歌。除非你想让整座村庄都回想起来。\""
+		npc.dialogue = "风里传来一段模糊的摇篮曲，守门人随即把酒馆的门掩上了一半。\n\n“别在这里唱那首歌。除非你想让整座村庄都回想起来。”"
 	else:
 		npc.dialogue = "守门人打量着你，又看了看北门的方向。\n\n\"刚回来？村里有些路白天也不好走。先四处看看，别急着往外闯。\""
 	add_child(npc)
