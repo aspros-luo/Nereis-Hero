@@ -21,7 +21,9 @@ const HERO_SKELETON_SCENE = preload("res://scenes/player/hero_skeleton.tscn")
 var skeleton_visual: Node2D
 var skeleton_visual_enabled := false
 
-const SPEED := 260.0
+const SPEED := 260.0 # Running speed; retained as the upper movement cap.
+const WALK_SPEED := 118.0
+const RUN_HOLD_THRESHOLD := 0.22
 const ATTACK_MOVE_SPEED := 92.0
 const JUMP_VELOCITY := -520.0
 const GRAVITY := 1400.0
@@ -92,6 +94,7 @@ var health := 100
 ## When true, the current level owns death resolution (e.g. a bespoke prologue ending).
 var defer_death_recovery := false
 var facing := 1.0
+var movement_hold_time := 0.0
 var attack_time := 0.0
 var attack_windup := 0.0
 var attack_hit_registered := false
@@ -545,9 +548,11 @@ func _physics_process(delta: float) -> void:
 
 	if direction != 0.0:
 		facing = sign(direction)
-		var move_speed := ATTACK_MOVE_SPEED if attack_time > 0.0 else SPEED
+		movement_hold_time += delta
+		var move_speed := ATTACK_MOVE_SPEED if attack_time > 0.0 else (SPEED if movement_hold_time >= RUN_HOLD_THRESHOLD else WALK_SPEED)
 		velocity.x = move_toward(velocity.x, direction * move_speed, 2200.0 * delta)
 	else:
+		movement_hold_time = 0.0
 		var friction := 1250.0 if attack_time > 0.0 else 2200.0
 		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 
@@ -1161,6 +1166,7 @@ func get_visual_context() -> Dictionary:
 		"action_elapsed": action_elapsed,
 		"vertical_velocity": velocity.y,
 		"horizontal_speed": velocity.x,
+		"movement_mode": "run" if absf(velocity.x) >= WALK_SPEED + 20.0 and movement_hold_time >= RUN_HOLD_THRESHOLD else ("walk" if absf(velocity.x) > 8.0 else "idle"),
 		"grounded": is_on_floor(),
 		"attack_time_remaining": attack_time,
 		"attack_windup_remaining": attack_windup,
