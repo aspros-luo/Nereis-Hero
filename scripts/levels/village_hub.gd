@@ -45,7 +45,7 @@ func _ready() -> void:
 	# Each village return route uses a safe landing zone clear of unrelated interaction prompts.
 	# 村庄各条回程路线使用独立安全落点，避免刚切图就显示无关的 E 交互提示。
 	# Spawn after the watergate outside the well gate, tavern, and restoration-camp interaction radii.
-	var spawn_x := 1850.0 if spawn_side in ["well_exit", "cliff_cave_return"] else (350.0 if spawn_side == "city_cut_return" else (2310.0 if spawn_side == "north_gate" else 260.0))
+	var spawn_x := 1850.0 if spawn_side in ["well_exit", "cliff_cave_return"] else (350.0 if spawn_side == "city_cut_return" else (2310.0 if spawn_side == "north_gate" else (530.0 if spawn_side == "mite_house_return" else 260.0)))
 	_spawn_hero(spawn_x)
 	_spawn_checkpoint()
 	_spawn_village_rest_point()
@@ -59,23 +59,11 @@ func _ready() -> void:
 	_spawn_ui()
 	_spawn_narrative_audio()
 	_spawn_fireflies()
-	if "prologue_cliff_fall_rescue_pending" in WorldState.achievement_flags and "prologue_cliff_rescue_seen" not in WorldState.achievement_flags and not WorldState.debug_map_test_mode:
-		get_tree().create_timer(0.9).timeout.connect(_show_prologue_rescue)
 	if "returned_to_village_after_mad_cleric" in WorldState.achievement_flags and "cliff_cave_hint_seen" not in WorldState.achievement_flags:
 		WorldState.record_achievement("cliff_cave_hint_seen")
 		if not WorldState.debug_map_test_mode:
 			get_tree().create_timer(1.1).timeout.connect(_show_cliff_cave_hint)
 	queue_redraw()
-
-func _show_prologue_rescue() -> void:
-	if "prologue_cliff_rescue_seen" in WorldState.achievement_flags or not is_instance_valid(narrative):
-		return
-	WorldState.record_achievement("prologue_cliff_rescue_seen")
-	narrative.show_message(
-		"河岸之后",
-		"醒来时，身上的湿衣已经换下，伤口被粗糙地包扎起来。\n\nMite 和村民把你从河里救了上来。她守在旁边，反复确认你的呼吸与体温。\n\n没人认得你。你的身体却仍在发烫。",
-		6.0
-	)
 
 func _spawn_hero(spawn_x: float = 260.0) -> void:
 	hero = CharacterBody2D.new()
