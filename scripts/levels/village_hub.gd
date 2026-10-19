@@ -208,21 +208,19 @@ func _spawn_gatekeeper() -> void:
 
 
 func _spawn_shared_world_npcs() -> void:
-	var youth := Node2D.new()
-	youth.set_script(ROUTE_NPC_SCRIPT)
-	youth.position = Vector2(1120, 520)
-	youth.npc_id = "amnesiac_youth"
-	youth.display_name = "失忆的年轻人"
-	if WorldState.get_humanity_state() == "hollow":
-		youth.dialogue = "The young man takes one step back.\n\n\"我认得这种眼神。你身体里已经有某种东西离开了。\""
-	elif WorldState.selected_route == "church":
-		youth.dialogue = "The young man touches your church seal and goes pale.\n\n\"我记得你曾跪在那里。他们告诉我，不许记得这件事。\""
-	elif WorldState.selected_route == "lullaby":
-		youth.dialogue = "The young man stares toward the tavern.\n\n\"有一次你回来时，怀里抱着一个人。我不知道那是谁，只记得当时有人在唱歌。\""
+	# The amnesiac youth was removed from A1. This space now belongs to an ordinary elder.
+	# 失忆的年轻人已从 A1 移除；此处改为普通村民老婆婆，不承载主角身世谜题。
+	var grandmother := Node2D.new()
+	grandmother.set_script(ROUTE_NPC_SCRIPT)
+	grandmother.position = Vector2(1120, 520)
+	grandmother.npc_id = "village_grandmother"
+	grandmother.display_name = "老婆婆"
+	if "village_defense_survived" in WorldState.achievement_flags:
+		grandmother.dialogue = "老婆婆把门边的灯芯拨亮了一些。\n\n“路总算安静了些。人受了惊，得先吃口热的、睡一觉，别急着把自己逼得太紧。”"
 	else:
-		youth.dialogue = "年轻人像是想起了什么，却迟迟没有开口。\n\n\"抱歉……我总觉得我们以前见过。但我想不起是在什么地方。\""
-	add_child(youth)
-	youth.interacted.connect(_on_village_npc_interacted.bind(youth))
+		grandmother.dialogue = "老婆婆坐在屋檐下理着旧布。\n\n“外头风大，进村就先歇歇。村里人各有各的烦心事，别什么都往自己身上揽。”"
+	add_child(grandmother)
+	grandmother.interacted.connect(_on_village_npc_interacted.bind(grandmother))
 
 	var merchant := Node2D.new()
 	merchant.set_script(ROUTE_NPC_SCRIPT)
@@ -230,13 +228,11 @@ func _spawn_shared_world_npcs() -> void:
 	merchant.npc_id = "traveling_merchant"
 	merchant.display_name = "旅行商人"
 	if WorldState.get_humanity_state() == "hollow":
-		merchant.dialogue = "The merchant stops smiling.\n\n\"你本不该再听见那首歌了。\""
-	elif WorldState.selected_route == "church":
-		merchant.dialogue = "The merchant turns a silver token between two fingers.\n\n\"教会的道路只在钟声响起前安全。钟声一响，连石头都会说谎。\""
-	elif WorldState.selected_route == "lullaby":
-		merchant.dialogue = "The merchant smiles without humor.\n\n\"七年前我来过这座村庄。那时你的脸就已经画在教会的门上了。\""
+		merchant.dialogue = "商人收起了笑容，悄悄把货箱往身边拉近。\n\n“今天先不谈价。你看起来比路上的风雨更难应付。”"
+	elif "village_defense_survived" in WorldState.achievement_flags:
+		merchant.dialogue = "商人重新整理着货物。\n\n“北门恢复通行后，来往的人会多起来。真要买东西，先想清楚下一段路缺什么。”"
 	else:
-		merchant.dialogue = "商人把银币在指间转了一圈，打量着你的行囊。\n\n\"初来乍到，还是刚从远处回来？不管哪一种，先记住村里的路，买卖不急在这一刻。\""
+		merchant.dialogue = "商人把银币在指间转了一圈，打量着你的行囊。\n\n“我从外面来，也会往外面去。要问路况可以，传闻就得自己掂量。”"
 	add_child(merchant)
 	merchant.interacted.connect(_on_village_npc_interacted.bind(merchant))
 
