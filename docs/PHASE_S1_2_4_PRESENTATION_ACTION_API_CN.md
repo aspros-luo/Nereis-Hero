@@ -44,25 +44,25 @@ A positive duration expires automatically and restores the latest live Hero-deri
 
 ## Local debug testing
 
-Run the project with a debug/editor build and enter a scene containing the production Hero. These shortcuts are handled by the Hero script only when `OS.is_debug_build()` is true:
+Run the project with a debug/editor build and enter a scene containing the production Hero. Use **Control + number row 1–8** (hold Control and press the number key; do not use the numeric keypad if its key events differ):
 
-| Key | Action |
+| Shortcut | Action |
 |---|---|
-| F9 | Stagger, 0.8 s |
-| F10 | Exhausted kneel, 1.2 s |
-| F11 | Look back, 1.0 s |
-| F12 | Stumble, 0.8 s |
-| F13 | Knockdown pose (persistent visual overlay) |
-| F14 | Get-up pose, priority 90 |
-| F15 | Death pose (visual only; does not set gameplay state to DEAD) |
-| Delete | Clear persistent/current presentation overlay |
+| Ctrl+1 | Stagger, 0.8 s |
+| Ctrl+2 | Exhausted kneel, 1.2 s |
+| Ctrl+3 | Look back, 1.0 s |
+| Ctrl+4 | Stumble, 0.8 s |
+| Ctrl+5 | Knockdown pose (persistent visual overlay) |
+| Ctrl+6 | Get-up pose, priority 90 |
+| Ctrl+7 | Death pose (visual only; does not set gameplay state to DEAD) |
+| Ctrl+8 | Clear presentation overlay and restore live context |
 
-F13/F15 are visual-only pose tests; they do not change health, collision, death state, or physics. Delete clears the presentation overlay. F8 still switches between skeletal and legacy procedural visuals, so use it to compare silhouette and verify the fallback.
+These shortcuts are only enabled when `OS.is_debug_build()` is true. Ctrl+5/Ctrl+7 are visual-only pose tests; they do not change health, collision, death state, or physics. F8 still switches between skeletal and legacy procedural visuals, so use it to compare silhouette and verify the fallback.
 
 Suggested sequence:
-1. Press F9, wait for automatic restoration, then walk/run/jump to check that the live pose resumes.
-2. Press F13, then F14 to test higher-priority replacement; press Delete to cancel and restore live context.
-3. Press F15, then Delete. Confirm that the gameplay character is not actually dead.
+1. Press Ctrl+1, wait for automatic restoration, then walk/run/jump to check that the live pose resumes.
+2. Press Ctrl+5, then Ctrl+6 to test higher-priority replacement; press Ctrl+8 to clear and restore live context.
+3. Press Ctrl+7, then Ctrl+8. Confirm that the gameplay character is not actually dead.
 4. Repeat while facing left and right, then repeat during movement/attack to observe interruption behavior.
 5. Toggle F8 before and after the same tests to compare skeletal presentation against the fallback.
 
