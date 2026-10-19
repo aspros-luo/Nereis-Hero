@@ -358,7 +358,7 @@ func _spawn_village_pois() -> void:
 	city_cut.set_meta("p5_1_target_location", "old_drain_exploration")
 	city_cut.set_meta("p5_1_target_region", "A1")
 	city_cut.set_meta("p5_1_target_scene", "res://scenes/old_drain_exploration.tscn")
-	city_cut.set_meta("p5_1_spawn_side", "village_city_cut")
+	city_cut.set_meta("p5_1_spawn_side", "village_entry")
 	var city_cut_open := "village_defense_survived" in WorldState.achievement_flags
 	city_cut.display_name = "旧排水通道" if city_cut_open else "封闭的排水通道"
 	if city_cut_open:
