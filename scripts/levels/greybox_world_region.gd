@@ -368,6 +368,10 @@ func _spawn_x_for_side(side: String) -> float:
 		# C24's return door is at x=520; balance the landing between it and the anomaly at x=900.
 		# C24 回程门位于 x=520；出生点在回程门与 x=900 异常源之间保持安全距离。
 		return 700.0
+	if region_id == "A4" and side == "old_drain_link":
+		# The return from the drain gate lands on a clear reservoir-floor stretch.
+		# 从旧排水闸门返回时，落在远离 C05 与其他门触发区的水库地面。
+		return 820.0
 	if region_id == "A11" and side == "chapel_entry":
 		# C19 enters from the cathedral-facing side, but must not overlap A11's return door at the east boundary.
 		# C19 从大圣堂侧进入 A11，但出生点不能与 A11 东侧边界的返回门重叠。
@@ -1705,13 +1709,19 @@ func _spawn_region_exits() -> void:
 					true, "", "", floor_y - 115.0
 				)
 		"A3":
-			# C24 remains sealed on both ends until the village defense chapter is survived.
-			# C24 两端都必须等到村庄防卫章节结束后才开放，避免城区侧提前绕过世界门槛。
+			# C24 enters the shared exploration segment only after the A4-side gate is opened.
+			# A4 侧闸门开启后，C24 才经共享探索段连通；此前仍保持原有村庄回程。
 			if "village_defense_survived" in WorldState.achievement_flags:
-				_spawn_exit_door(
-					520.0, "E  经旧排水道返回", "village",
-					"res://scenes/village_hub.tscn", "city_cut_return"
-				)
+				if "opened_old_drainage_link_from_A4" in WorldState.achievement_flags:
+					_spawn_exit_door(
+						520.0, "E  进入旧排水道回环", "old_drain_exploration",
+						"res://scenes/old_drain_exploration.tscn", "city_side_entry"
+					)
+				else:
+					_spawn_exit_door(
+						520.0, "E  经旧排水道返回", "village",
+						"res://scenes/village_hub.tscn", "city_cut_return"
+					)
 			_spawn_exit_door(
 				72.0, "E  返回旧朝圣路", "ash_forest",
 				"res://scenes/ash_forest.tscn", "east",
@@ -1796,6 +1806,13 @@ func _spawn_region_exits() -> void:
 				)
 			if "reached_A4_via_A3" in WorldState.achievement_flags:
 				_spawn_a4_hidden_well_gate(map_width - 90.0)
+				# C24's A4-side gate unlocks the persistent route through the exploration segment.
+				# C24 的 A4 侧闸门负责开启经探索段连接 A1 与 A3 的持久路线。
+				_spawn_exit_door(
+					600.0, "E  打开旧排水道连接", "old_drain_exploration",
+					"res://scenes/old_drain_exploration.tscn", "reservoir_link",
+					true, "opened_old_drainage_link_from_A4", "E  进入旧排水道"
+				)
 
 		"A5":
 			_spawn_exit_door(
