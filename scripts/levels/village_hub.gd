@@ -38,6 +38,10 @@ func _ready() -> void:
 	# Persist the incoming side before clearing the one-shot transition value.
 	# 必须先保存实际进入侧，再清理一次性切图方向，确保 Continue 能恢复正确落点。
 	WorldState.set_location("village")
+	# The cliff-cave entrance is a return consequence, not a boss-defeat reward popup.
+	# 只有击败疯狂神职人员后实际重新进入 A1，才持久记录“已回村”事实。
+	if "defeated_mad_cleric" in WorldState.achievement_flags:
+		WorldState.record_achievement("returned_to_village_after_mad_cleric")
 	WorldState.pending_region_spawn_side = "west"
 	world_event_director = Node.new()
 	world_event_director.set_script(WORLD_EVENT_DIRECTOR_SCRIPT)
