@@ -1748,6 +1748,8 @@ def main() -> int:
     require(village_hub, 'blacksmith.cloth_color = Color("#594038")', "A1 blacksmith has a distinct visual palette", errors)
     require(village_hub, 'grandmother.cloth_color = Color("#65594a")', "A1 grandmother has a distinct visual palette", errors)
     require(village_hub, 'NereisLocalization.translate_text("铁匠铺")', "A1 blacksmith has a distinct workshop visual landmark", errors)
+    require(village_hub, 'NereisLocalization.translate_text("行商摊位")', "A1 merchant has a recognizable stall without a crafting system", errors)
+    require(village_hub, 'NereisLocalization.translate_text("老屋")', "A1 grandmother has a recognizable village-home anchor", errors)
     require(village_hub, 'blacksmith.dialogue = "铁匠把锤子搁在砧边', "A1 blacksmith dialogue responds to village-defense state", errors)
     require(village_hub, 'grandmother.dialogue = "老婆婆把门边的灯芯拨亮了一些', "A1 grandmother dialogue responds to village-defense state", errors)
     require(village_hub, '"traveling_merchant"', "A1 traveling merchant has a stable functional NPC ID", errors)
