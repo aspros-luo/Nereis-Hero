@@ -642,10 +642,11 @@ def main() -> int:
     executioner_script = read("scripts/enemies/ashen_knight.gd", errors)
     require(prologue_exterior_script, "const FORCED_DEFEAT_SECONDS := 12.0", "A0 exterior forced-loss timeout", errors)
     require(prologue_exterior_script, 'boss.set("damage_immune", true)', "A0 executioner cannot be defeated before rescue", errors)
-    require(prologue_exterior_script, 'WorldState.record_achievement("prologue_cliff_fall_rescue_pending")', "A0 rescue pending flag is persisted", errors)
     require(prologue_exterior_script, "WorldState.mark_prologue_complete()", "A0 prologue completion is committed before transition", errors)
-    require(prologue_exterior_script, 'WorldState.pending_region_spawn_side = "west"', "A0 rescue selects safe west-side A1 spawn", errors)
-    require(prologue_exterior_script, 'SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")', "A0 uses fade transition to A1 instead of blocking on placeholder animation", errors)
+    require(prologue_exterior_script, 'WorldState.current_location = "mite_house"', "A0 first arrival resumes in Mite's house", errors)
+    require(prologue_exterior_script, 'SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")', "A0 uses fade transition directly to Mite's house", errors)
+    if "prologue_cliff_fall_rescue_pending" in prologue_exterior_script:
+        errors.append("A0 first-arrival narrative: redundant rescue-narrative flag must not be written.")
     require(executioner_script, "if damage_immune:", "Boss runtime honors the prologue damage-immunity contract", errors)
 
     # M1 alternate route and vertical traversal contracts.
@@ -656,6 +657,17 @@ def main() -> int:
     require(prologue_route_script, 'exit_area.enabled = true', "C01 escape door is enabled by prologue progression", errors)
     require(prologue_route_script, 'WorldState.mark_prologue_complete()', "C01 completion persists before leaving A0", errors)
     require(prologue_route_script, 'SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")', "C01 A0-to-A1 transition", errors)
+
+    village_hub_script = read("scripts/levels/village_hub.gd", errors)
+    if "prologue_cliff_fall_rescue_pending" in village_hub_script or "_show_prologue_rescue" in village_hub_script:
+        errors.append("A1 arrival: redundant forced rescue narration must not be present.")
+    require(village_hub_script, 'spawn_side == "mite_house_return"', "A1 return from Mite's house declares its own entry side", errors)
+    require(village_hub_script, '530.0 if spawn_side == "mite_house_return"', "A1 return from Mite's house lands beside, but outside, its door trigger", errors)
+    mite_house_script = read("scripts/levels/mite_house.gd", errors)
+    require(mite_house_script, 'WorldState.pending_region_spawn_side = "mite_house_return"', "Mite's house return declares its village entry side", errors)
+    require(mite_house_script, '"YOU WAKE IN A SMALL ROOM"', "A0 arrival uses quiet wake-up framing instead of rescue exposition", errors)
+    world_state_script = read("scripts/core/world_state.gd", errors)
+    require(world_state_script, '"mite_house":\n            return "res://scenes/mite_house.tscn"', "Continue can resume the one-time A0 arrival scene", errors)
 
     defense_route_script = read("scripts/levels/village_defense_demo.gd", errors)
     require(defense_route_script, 'if defeated == 3 and stage == 1:', "A1 defense first wave completion", errors)
