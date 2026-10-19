@@ -60,7 +60,7 @@ func _ready() -> void:
 	if not missing.is_empty():
 		_show_fallback(
 			"Missing required character parts / 缺少必要角色部件：\n"
-			+ "\n".join(missing)
+			+ PackedStringArray(missing).join("\n")
 			+ "\nAdd licensed or original PNGs under assets/art/hero_sprite_lab/parts/.")
 		return
 
