@@ -24,6 +24,7 @@
 | 禁忌森林 | `scenes/ash_forest.tscn`、`scripts/levels/greybox_world_region.gd` | 当前实际区域名称是“雾林、钟墓与旧朝圣路”，区域 ID 为 A2、位置 ID 为 `ash_forest`；脚本中有旧朝圣高路连接和普通遭遇，但没有“禁忌森林二次相遇与合作”的专属事件。不能直接把 A2 等同于最终设计中的禁忌森林，需在地图内容设计阶段确认 |
 | 王墓 | `scenes/royal_tomb.tscn` | 当前绑定通用 `greybox_world_region.gd`，区域 ID 为 A8、位置 ID 为 `royal_tomb`，场景本身没有表达朝圣骑士协战与徽章奖励的专属脚本 |
 | 王墓战斗 | `scripts/levels/greybox_world_region.gd`、`scenes/royal_tomb_boss.tscn`、`scripts/levels/royal_tomb_boss.gd` | A8 普通区域当前生成的是 `A8_Cultist_01`；另有可选的王墓内殿 Boss 门及 `defeated_royal_tomb_guardian` 记录。源码未证明其中任一个就是用户指定的“教会怪物”，也未见朝圣骑士参与协战的事件记录 |
+| H09 临时候选遗物 | `scripts/levels/greybox_world_region.gd`、`scripts/world/third_cord_fragment.gd` | H09 会在击败 `H09_AncientExperiment` 后生成临时候选遗物；拾取只写入 `provisional_h09_relic_collected` 成就标记，不加入正式库存，也不写入结局条件。脚本注释明确说明它仅用于验证可选区域拾取持久性 |
 | 烈火天罚演出测试场景 | `scripts/levels/ending_fire_demo.gd` | 明确标注为 Director Test；启动时直接把 `ancient_residue_awakened` 设为 true、`hidden_artifact_pieces` 设为 3，并允许演出后设置结局。这是演出测试入口，不是正式条件链，不应拿来证明正式结局资格已验证 |
 | 旧存档迁移 | `scripts/core/world_state.gd` | 会清理临时 `third_umbilical_cord` 锚点来源，表明旧临时脐带标记已被明确排除；本次不重新引入该临时来源 |
 
