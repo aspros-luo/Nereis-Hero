@@ -428,13 +428,20 @@ func _apply_pose() -> void:
 		PoseState.IDLE:
 			if animate_idle:
 				var breath := sin(animation_time * 2.4)
-				root_bone.position.y -= absf(breath) * 0.35
-				body_bone.rotation = breath * 0.035
+				# Blend the last fraction of the gait into idle instead of snapping straight to neutral.
+				# 停步时保留少量残余步态，再平滑收回站姿，避免腿部瞬间归零。
+				var settle := _stride_weight
+				root_bone.position.y -= absf(breath) * 0.35 + run_bounce * settle * 0.35
+				body_bone.rotation = breath * 0.035 - settle * (0.035 + absf(run_cycle) * 0.02)
 				head_bone.rotation = sin(animation_time * 2.4 + 0.55) * 0.025
-				arm_right_bone.rotation = 0.12 + breath * 0.025
-				arm_left_bone.rotation = -0.08 - breath * 0.02
-				leg_left_bone.rotation = sin(animation_time * 1.6) * 0.018
-				leg_right_bone.rotation = -sin(animation_time * 1.6) * 0.018
+				arm_right_bone.rotation = lerpf(0.12 + breath * 0.025, -run_cycle * 0.12 - 0.16, settle)
+				arm_left_bone.rotation = lerpf(-0.08 - breath * 0.02, run_cycle * 0.12 + 0.05, settle)
+				leg_left_bone.rotation = lerpf(sin(animation_time * 1.6) * 0.018, -run_cycle * 0.34 * settle, settle)
+				leg_right_bone.rotation = lerpf(-sin(animation_time * 1.6) * 0.018, run_cycle * 0.34 * settle, settle)
+				knee_left_bone.rotation = maxf(0.0, opposite_cycle) * 0.20 * settle
+				knee_right_bone.rotation = maxf(0.0, run_cycle) * 0.20 * settle
+				foot_left_bone.rotation = -leg_left_bone.rotation * 0.4 - knee_left_bone.rotation * 0.25
+				foot_right_bone.rotation = -leg_right_bone.rotation * 0.4 - knee_right_bone.rotation * 0.25
 		PoseState.RUN:
 			# Keep the hip swing narrow; the separated knee/calf chains provide stride without legs crossing.
 			var swing := run_cycle * 0.34 * _stride_weight if animate_run else 0.0
