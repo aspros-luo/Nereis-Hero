@@ -1722,6 +1722,18 @@ def main() -> int:
     require(village_hub, "守门人打量着你", "A1 gatekeeper has neutral dialogue before route selection", errors)
     require(village_hub, "总觉得我们以前见过", "A1 amnesiac youth has neutral dialogue before route selection", errors)
     require(village_hub, "买卖不急在这一刻", "A1 traveling merchant has neutral dialogue before route selection", errors)
+    require(village_hub, 'WorldState.set_location("village")', "A1 persists village location for Continue", errors)
+    require(village_hub, 'rest.rest_id = "rest_A1_village_hearth"', "A1 hearth rest point has a stable save ID", errors)
+    require(village_hub, 'north_gate.position = Vector2(2440, 520)', "A1 north gate is placed at the east end of the village", errors)
+    require(village_hub, 'city_cut.position = Vector2(100, 520)', "A1 drainage shortcut is placed at the west end", errors)
+    require(village_hub, 'func _create_village_rooftop_route() -> void:', "A1 optional rooftop exploration route exists", errors)
+    require(village_hub, 'mite_house_door.position = Vector2(455, 520)', "A1 Mite house door interaction anchor", errors)
+    mite_script = read("scripts/npc/mite.gd", errors)
+    require(mite_script, 'const VILLAGE_HOUSE_DOOR_POSITION := Vector2(455, 520)', "A1 Mite interaction excludes the house-door focus zone", errors)
+    require(mite_script, 'const VILLAGE_HOUSE_DOOR_EXCLUSION_RANGE := 105.0', "A1 house-door exclusion radius prevents competing E prompts", errors)
+    require(mite_script, 'not _blocked_by_village_house_door(hero)', "A1 Mite prompt is suppressed beside the house door", errors)
+    require(mite_script, 'INTERACTION_FOCUS_SCRIPT.is_focused(self)', "A1 Mite only draws and accepts input when it owns interaction focus", errors)
+    require(village_poi_script, 'INTERACTION_FOCUS_SCRIPT.is_focused(self)', "A1 POIs only draw and accept input when focused", errors)
     if "mark_mite_connection_missed()" in village_hub:
         errors.append("A1 church exploration must not irreversibly mark the Mite connection missed.")
 
