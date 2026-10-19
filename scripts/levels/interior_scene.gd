@@ -35,13 +35,17 @@ func _ready() -> void:
     _create_boundaries()
     _spawn_hero()
     _spawn_checkpoint()
-    _spawn_npc()
+    # Keep the church empty until a story node explicitly occupies it.
+    # 教堂在剧情节点明确启用前保持空置。
+    var church_occupied := "church_village_occupied" in WorldState.achievement_flags
+    if location_id != "church" or church_occupied:
+        _spawn_npc()
+        _spawn_clue()
+        _spawn_route_door()
+        _spawn_research_door()
     _spawn_mite_if_present()
-    _spawn_clue()
     _spawn_rest_point()
     _spawn_exit()
-    _spawn_route_door()
-    _spawn_research_door()
     _spawn_ui()
     queue_redraw()
 
@@ -188,6 +192,8 @@ func _spawn_exit() -> void:
     exit.reached.connect(_on_exit_reached)
 
 func _spawn_route_door() -> void:
+    if location_id == "church" and "church_village_occupied" not in WorldState.achievement_flags:
+        return
     route_door = Area2D.new()
     route_door.set_script(INTERACTION_DOOR_SCRIPT)
     route_door.position = Vector2(1350, 520)
@@ -219,7 +225,7 @@ func _on_route_door_interacted() -> void:
         SceneTransition.fade_to_scene("res://scenes/routes/lullaby_path.tscn")
 
 func _spawn_research_door() -> void:
-    if location_id != "church":
+    if location_id != "church" or "church_village_occupied" not in WorldState.achievement_flags:
         return
     research_door = Area2D.new()
     research_door.set_script(INTERACTION_DOOR_SCRIPT)
@@ -269,6 +275,8 @@ func _show_intro() -> void:
         return
     if location_id == "tavern":
         narrative.show_message("THE TAVERN", "The room is warmer than the road.\n\nSomewhere behind the bar, a glass is placed down by a hand you cannot see.", 6.0)
+    elif location_id == "church" and "church_village_occupied" not in WorldState.achievement_flags:
+        narrative.show_message("教堂", "教堂里没有神职人员，也没有可供调查的物品。\n\n空荡的长椅朝向一座没有点燃蜡烛的祭台。\n\n这里要等到后续剧情节点才会有人到来。", 6.0)
     else:
         narrative.show_message("教堂", "旧木椅整齐地排在空旷的长厅里。\n\n没有人回应你的脚步，只有灰尘在高窗下缓慢浮动。", 6.0)
 
