@@ -199,3 +199,36 @@
 - 已回读 GitHub 上的最新 `scripts/levels/village_hub.gd`，核对三个 NPC 的路线分支、教会入口及重复赋值。
 - 本轮是静态代码审查与提交，尚未运行本地 Godot 场景、自动验收脚本或实际存档兼容测试；不能将其标记为运行时 PASS。
 - **物品获得与阅读状态已拆开**：拾取时只显示物品获得反馈，不再调用 `mark_item_read()` 或直接弹出物品叙事描述；背包打开时不再自动选中第一件物品，只有玩家主动选择某件物品、查看描述时才记录为已读。现有存档中的 `read_item_ids` 保持原样，不做猜测性迁移，因为旧版本无法判断玩家是否确实读过对应描述。
+
+## 9. 路线选择、蜜忒关系与结局判定：依赖链追踪
+
+### 9.1 `first_choice_made` 与 `selected_route` 不是同一个事实
+
+- `first_choice_made` 仅由 `WorldState.make_first_choice()` 写入；`NarrativeManager.begin_first_choice()` 通过 `_select_choice()` 调用它。
+- 对当前 A0 入口 `escape_prologue.gd`、A0 外部演出 `prologue_exterior.gd`、A1 `village_hub.gd` 的静态检查，没有发现它们调用 `begin_first_choice()`。因此不能把“第一选择面板”当作当前主流程一定会触发的节点。
+- 当前明确的 `selected_route` 写入点还包括 `scripts/levels/route_scene.gd::_ready()`，它会在进入教会路或摇篮曲路场景时直接写入 `route_id`，却不会同步设置 `first_choice_made` 或相应的 `church_alignment/lullaby_resonance`。
+- 所以目前 `selected_route` 更像“当前进入的路线”，而 `first_choice_made` 更像旧的“明确作出第一选择”标记。它们可能合法地不一致。**不得用其中一个字段自动补写另一个字段，也不得把空路线存档强行迁移到某条路线。** 后续应决定是否保留这套旧选择面板，或将字段改名/拆分为“当前路线”和“玩家明确选择”。
+
+### 9.2 蜜忒关系事实与路线事实彼此独立
+
+- 蜜忒互动通过 `mite_interactions_seen` 去重记录；`mite_last_interaction_location` 限制同一地点连续重复触发；`mite_first_meeting` 由首次相遇事件设置。
+- A1 蜜忒出现与否、蜜忒房门能否进入，以及 `mite_house.gd` 的可选亲密场景，曾读取 `mite_connection_missed`。在移除“进入教会即错过”的写入后，旧存档仍可能携带此前被错误写入的 `true`，继续让蜜忒消失并锁住房门。
+- 因为旧版本唯一已确认的剧情写入点就是教会地点入口，这个旧值没有足够证据证明是真正错过了剧情窗口。因此 WorldState 增加叙事状态版本号：旧版本存档加载时清除此错误锁，新版本保存为版本 2。以后若设计真正的限时错过事件，必须新增明确事件来源，不能复用“进入某地点”这种隐式副作用。
+
+### 9.3 当前结局判定刻意不依赖路线选择或蜜忒关系
+
+`NereisEndingEvaluator.get_candidate()` 只读取：
+
+- `hero_resonance` 是否达到 68；
+- `hidden_artifact_pieces` 是否达到 3；
+- `entered_hidden_regions` 是否达到 2；
+- `resonance_sources` 是否包含 `anomaly_observer_reaction`。
+
+它不读取 `first_choice_made`、`selected_route`、`church_alignment`、`lullaby_resonance`、`mite_interactions_seen`、`mite_connection_missed`、`physical_union_complete` 或 `outer_god_resonance`。这与《结局攻略》的现有契约一致：结局候选由主角鸣响、真相锚点与实际探索决定，蜜忒关系可以发展或错过，身体结合不是门槛。
+
+### 9.4 当前依赖链中的风险与未决项
+
+1. **旧选择入口未接入当前主流程**：第一选择 UI 存在，但本轮核查的 A0/A1 主流程没有调用者；需由剧情设计决定是否恢复明确选择，而不是直接把它塞回序章。
+2. **路线字段语义混合**：路线场景进入时写入 `selected_route`，会让它同时承担“当前区域路线”和“玩家选择结果”两种含义。建议后续拆分为 `active_route_id` 与 `chosen_route`，并提供旧存档兼容映射；本轮不擅自重命名，避免破坏大量引用。
+3. **关系状态不参与结局候选是设计约束，不是遗漏**：但最终结局演出若要根据蜜忒是否相识、关系进展或是否错过来调整语境，应使用独立的表现分支，不改变结局候选的核心门槛，也不能伪造关系里程碑。
+4. **运行时验收仍未执行**：本轮为代码读取、静态依赖追踪与存档迁移提交；旧存档加载、Continue 恢复、路线场景往返和三个结局候选仍需在本地 Godot 运行验证。
