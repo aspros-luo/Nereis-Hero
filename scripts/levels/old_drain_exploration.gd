@@ -34,7 +34,7 @@ func _ready() -> void:
 	else:
 		_spawn_door(2260.0, 690.0, "E  检查被堵住的闸门", _inspect_blocked_gate)
 	_spawn_rat(900.0)
-	_spawn_rat(1540.0)
+	_spawn_rat(1100.0)
 	_spawn_ui()
 	queue_redraw()
 	if "old_drain_first_visit_seen" not in WorldState.achievement_flags and not WorldState.debug_map_test_mode:
