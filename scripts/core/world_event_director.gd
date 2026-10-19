@@ -54,12 +54,21 @@ func spawn_npcs(host: Node, npc_script: Script, interaction_callback: Callable) 
 		npc.npc_id = npc_id
 		npc.position = definition.get("position", Vector2.ZERO)
 		npc.display_name = String(definition.get("display_name", npc_id))
-		npc.dialogue = String(definition.get("dialogue", ""))
+		npc.dialogue = _resolve_dialogue(definition)
 		host.add_child(npc)
 		npc.interacted.connect(interaction_callback.bind(npc))
 		spawned.append(npc)
 		_managed_npcs.append(npc)
 	return spawned
+
+func _resolve_dialogue(definition: Dictionary) -> String:
+	# Variants are ordered from most specific to least specific; first match wins.
+	for variant in definition.get("dialogue_variants", []):
+		if variant is Dictionary and _conditions_met(variant.get("conditions", [])):
+			var text := String(variant.get("dialogue", ""))
+			if not text.is_empty():
+				return text
+	return String(definition.get("dialogue", ""))
 
 func dispatch(trigger: String, context: Dictionary = {}) -> Array[String]:
 	var fired: Array[String] = []
@@ -112,6 +121,14 @@ func _condition_met(condition: Dictionary) -> bool:
 			return String(_world_state.get_humanity_state()) == value
 		"region_entered":
 			return value in _world_state.entered_hidden_regions or String(_world_state.current_location) == value
+		"location":
+			return String(_world_state.current_location) == value
+		"flag_count_at_least":
+			var count := 0
+			for flag in _world_state.achievement_flags:
+				if String(flag).begins_with(value):
+					count += 1
+			return count >= int(condition.get("count", 1))
 		"item_count_at_least":
 			return int(_world_state.inventory_items.get(value, 0)) >= int(condition.get("count", 1))
 		"item_collected":
