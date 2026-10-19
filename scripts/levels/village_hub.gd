@@ -689,8 +689,17 @@ func _draw() -> void:
 	draw_rect(Rect2(1690, 400, 80, 120), Color("#17141b"))
 	draw_string(ThemeDB.fallback_font, Vector2(1630, 275), NereisLocalization.translate_text("酒馆"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
 
-	draw_rect(Rect2(900, 390, 120, 130), Color("#28212a"))
+	draw_rect(Rect2(900, 390, 90, 130), Color("#28212a"))
 	draw_string(ThemeDB.fallback_font, Vector2(885, 365), NereisLocalization.translate_text("墓地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
+	draw_string(ThemeDB.fallback_font, Vector2(1025, 335), NereisLocalization.translate_text("老屋"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
+
+	# A compact traveling stall gives the merchant a recognizable place without turning it into a crafting hub.
+	# 小型行商摊位提供明确的空间辨识，但不引入制作台或材料循环。
+	draw_rect(Rect2(1205, 465, 90, 18), Color("#4b3b3d"))
+	draw_rect(Rect2(1215, 425, 8, 40), Color("#59454a"))
+	draw_rect(Rect2(1277, 425, 8, 40), Color("#59454a"))
+	draw_colored_polygon(PackedVector2Array([Vector2(1200, 425), Vector2(1248, 395), Vector2(1300, 425)]), Color("#5a454e"))
+	draw_string(ThemeDB.fallback_font, Vector2(1195, 385), NereisLocalization.translate_text("行商摊位"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
 
 	# Give the blacksmith a readable workshop silhouette instead of leaving the role as a floating label.
 	# 为铁匠铺提供明确的灰盒轮廓，避免功能角色看起来只是站在路边的普通 NPC。
