@@ -47,8 +47,10 @@ def main() -> int:
     require(
         'CONNECTION_FLAG := "opened_old_drainage_link_from_A4"' in drain
         and '_spawn_door(2260.0, 690.0, "E  沿旧排水道进入城区", _enter_city)' in drain
-        and '_spawn_door(2260.0, 690.0, "E  检查被堵住的闸门", _inspect_blocked_gate)' in drain,
-        "The eastern gate must remain blocked until the persistent A4-side unlock flag exists.",
+        and '_spawn_door(2260.0, 690.0, "E  检查被堵住的闸门", _inspect_blocked_gate)' in drain
+        and 'func _add_gate_blocker() -> void:' in drain
+        and 'if CONNECTION_FLAG not in WorldState.achievement_flags:' in drain,
+        "The eastern gate must have a real collider until the persistent A4-side unlock flag exists.",
     )
     require(
         '_spawn_rat(900.0)' in drain and '_spawn_rat(1100.0)' in drain
