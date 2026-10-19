@@ -1689,6 +1689,13 @@ def main() -> int:
         require(secret_gate, contract, "Resonance hidden gate", errors)
 
     village_hub = read("scripts/levels/village_hub.gd", errors)
+    require(village_hub, 'elif WorldState.selected_route == "lullaby":', "A1 NPC dialogue distinguishes an explicit lullaby route from an unchosen route", errors)
+    require(village_hub, "守门人打量着你", "A1 gatekeeper has neutral dialogue before route selection", errors)
+    require(village_hub, "总觉得我们以前见过", "A1 amnesiac youth has neutral dialogue before route selection", errors)
+    require(village_hub, "买卖不急在这一刻", "A1 traveling merchant has neutral dialogue before route selection", errors)
+    if "mark_mite_connection_missed()" in village_hub:
+        errors.append("A1 church exploration must not irreversibly mark the Mite connection missed.")
+
     require(village_hub, "_spawn_resonance_well_gate()", "Village hub", errors)
     require(village_hub, "resonance_well_gate.opened.connect(_on_resonance_well_opened)", "Village hub", errors)
     require(village_hub, 'resonance_well_gate.secret_id = "H01"', "Village hidden gate ID", errors)
