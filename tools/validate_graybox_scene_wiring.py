@@ -1739,6 +1739,7 @@ def main() -> int:
     require(event_director, '"A1_tavern_sound_notice"', "A1 tavern visit has a persistent first-visit event", errors)
     require(village_hub, '"village_grandmother"', "A1 replaces the amnesiac youth with an ordinary grandmother NPC", errors)
     require(village_hub, '"village_blacksmith"', "A1 blacksmith is registered as a functional NPC", errors)
+    require(village_hub, 'NereisLocalization.translate_text("铁匠铺")', "A1 blacksmith has a distinct workshop visual landmark", errors)
     require(village_hub, 'blacksmith.dialogue = "铁匠把锤子搁在砧边', "A1 blacksmith dialogue responds to village-defense state", errors)
     require(village_hub, 'grandmother.dialogue = "老婆婆把门边的灯芯拨亮了一些', "A1 grandmother dialogue responds to village-defense state", errors)
     require(village_hub, '"traveling_merchant"', "A1 traveling merchant has a stable functional NPC ID", errors)
