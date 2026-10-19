@@ -136,6 +136,11 @@ func _build_atlas_view() -> void:
 
 
 func _on_atlas_cell_selected(source_rect: Rect2i) -> void:
+	if _selected_crop_view != null and _atlas != null:
+		var crop := AtlasTexture.new()
+		crop.atlas = _atlas
+		crop.region = Rect2(source_rect)
+		_selected_crop_view.texture = crop
 	_atlas_status.text = (
 		"Selected atlas region / 已选图集区域：x=%d, y=%d, w=%d, h=%d\n"
 		% [source_rect.position.x, source_rect.position.y, source_rect.size.x, source_rect.size.y]
