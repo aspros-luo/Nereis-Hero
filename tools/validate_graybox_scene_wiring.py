@@ -604,8 +604,8 @@ def main() -> int:
     village_script = read("scripts/levels/village_hub.gd", errors)
     require(village_script, 'const VILLAGE_BACKDROP = preload("res://assets/art/backdrops/village_backdrop.svg")', "Village backdrop preload", errors)
     require(village_script, 'const VILLAGE_GROUND_STRIP = preload("res://assets/art/backdrops/village_ground_strip.svg")', "Village ground preload", errors)
-    require(village_script, "draw_texture_rect(VILLAGE_BACKDROP, Rect2(0, 0, 2600, 720), false)", "Village illustrated backdrop", errors)
-    require(village_script, "draw_texture_rect(VILLAGE_GROUND_STRIP, Rect2(0, 520, 2600, 200), false)", "Village textured ground", errors)
+    require(village_script, "draw_texture_rect(VILLAGE_BACKDROP, Rect2(0, 0, 3000, 720), false)", "Village illustrated backdrop", errors)
+    require(village_script, "draw_texture_rect(VILLAGE_GROUND_STRIP, Rect2(0, 520, 3000, 200), false)", "Village textured ground", errors)
     # Elevated exits must not remain interactable from the uninterrupted ground floor.
     # 高位出口不能从连续地面直接交互，避免平台只成为装饰路线。
     require(region_script, "rectangle.size = Vector2(110.0, 80.0)", "Door interaction volume height", errors)
@@ -701,12 +701,12 @@ def main() -> int:
     village_route_script = read("scripts/levels/village_hub.gd", errors)
     village_poi_script = read("scripts/world/village_poi.gd", errors)
     require(village_route_script, 'if location_id == "north_gate":', "C02 A1 north-gate route", errors)
-    require(village_route_script, 'north_gate.position = Vector2(2440, 520)', "C02 north-gate interaction anchor", errors)
-    require(village_route_script, '2310.0 if spawn_side == "north_gate"', "C02 A2 return spawn x=2310", errors)
+    require(village_route_script, 'north_gate.position = Vector2(2840, 520)', "C02 north-gate interaction anchor at expanded A1 east edge", errors)
+    require(village_route_script, '2630.0 if spawn_side == "north_gate"', "C02 A2 return spawn x=2630", errors)
     require(village_poi_script, 'distance_to(hero.global_position) <= interaction_range', "A1 POI interaction radius is configurable per point", errors)
     # The A2 return spawn must remain outside the North Gate POI radius to prevent
     # a transition loop or an immediate repeated interaction after returning.
-    if 2440.0 - 2310.0 <= 110.0:
+    if 2840.0 - 2630.0 <= 110.0:
         errors.append("C02: A2 return spawn overlaps the North Gate POI interaction radius.")
     require(village_route_script, 'if "village_defense_survived" in WorldState.achievement_flags:', "C02 defense flag gates A2 entry", errors)
     require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/village_defense_demo.tscn")', "C02 first North Gate interaction starts defense", errors)
@@ -836,7 +836,7 @@ def main() -> int:
                 platform_audit_count += len(platforms)
                 platforms_by_region[region_id] = platforms
                 # Node zero is the continuous ground floor. Platform tuples are x, y, width, height.
-                nodes = [(0.0, 540.0, 2600.0, 40.0, True)] + [
+                nodes = [(0.0, 540.0, 3000.0 if region_id == "A1" else 2600.0, 40.0, True)] + [
                     (x, y, width, height, False) for x, y, width, height in platforms
                 ]
                 adjacency: list[list[int]] = [[] for _ in nodes]
@@ -1774,7 +1774,7 @@ def main() -> int:
     require(event_director, '"world_event_fired:" + event_id', "One-shot world events persist their fired marker", errors)
     require(event_director, "event_triggered.emit(event_id, payload)", "World event director emits an event signal for listeners", errors)
     require(village_hub, 'rest.rest_id = "rest_A1_village_hearth"', "A1 hearth rest point has a stable save ID", errors)
-    require(village_hub, 'north_gate.position = Vector2(2440, 520)', "A1 north gate is placed at the east end of the village", errors)
+    require(village_hub, 'north_gate.position = Vector2(2440, 520)', "A1 north gate is placed at the expanded east end of the village", errors)
     require(village_hub, 'city_cut.position = Vector2(100, 520)', "A1 drainage shortcut is placed at the west end", errors)
     require(village_hub, 'func _create_village_rooftop_route() -> void:', "A1 optional rooftop exploration route exists", errors)
     require(village_hub, 'mite_house_door.position = Vector2(455, 520)', "A1 Mite house door interaction anchor", errors)
@@ -1830,8 +1830,8 @@ def main() -> int:
     require(village_hub, '"village_defense_survived"', "Village old-road unlock", errors)
     require(village_hub, 'res://scenes/ash_forest.tscn', "Village old-road route", errors)
     require(village_hub, 'if "village_defense_survived" in WorldState.achievement_flags:', "A1 north gate and old drain share the village-defense progression flag", errors)
-    require(village_hub, 'draw_rect(Rect2(2418, 385, 50, 12)', "A1 north gate has a visible blocked state before village defense", errors)
-    require(village_hub, 'draw_line(Vector2(2418, 360), Vector2(2394, 405)', "A1 north gate visibly opens after village defense", errors)
+    require(village_hub, 'draw_rect(Rect2(2818, 385, 50, 12)', "A1 north gate has a visible blocked state before village defense", errors)
+    require(village_hub, 'draw_line(Vector2(2818, 360), Vector2(2794, 405)', "A1 north gate visibly opens after village defense", errors)
     require(village_hub, '守门人朝北门点了点头', "A1 gatekeeper reacts to village-defense progress", errors)
     rest_point_script = read("scripts/world/rest_point.gd", errors)
     require(rest_point_script, 'body.is_on_floor()', "A1 rest point rejects airborne use", errors)
