@@ -248,6 +248,14 @@ func _spawn_progression_npcs() -> void:
 		return
 	world_event_director.spawn_npcs(self, ROUTE_NPC_SCRIPT, Callable(self, "_on_village_npc_interacted"))
 
+func refresh_progression_content() -> void:
+	# Call after any quest/item/region fact changes while the Hero remains in A1.
+	# 主角仍在 A1 时若任务、物品或区域事实发生变化，应调用此入口刷新进度内容。
+	if world_event_director == null:
+		return
+	_spawn_progression_npcs()
+	world_event_director.dispatch("state_refresh", {"region": "A1", "location": "village"})
+
 func _on_village_npc_interacted(npc: Node) -> void:
 	if narrative == null or not is_instance_valid(npc):
 		return
@@ -337,6 +345,7 @@ func _on_village_poi_interacted(poi: Node) -> void:
 	await narrative.message_finished
 	if world_event_director != null:
 		world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": String(poi.poi_id), "poi": poi})
+		refresh_progression_content()
 	_enter_village_location(poi.poi_id)
 
 func _spawn_resonance_well_gate() -> void:
