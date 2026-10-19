@@ -1160,6 +1160,7 @@ func get_visual_context() -> Dictionary:
 		"action_kind": active_action_kind,
 		"action_elapsed": action_elapsed,
 		"vertical_velocity": velocity.y,
+		"horizontal_speed": velocity.x,
 		"grounded": is_on_floor(),
 		"attack_time_remaining": attack_time,
 		"attack_windup_remaining": attack_windup,
