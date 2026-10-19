@@ -3,7 +3,7 @@ class_name HeroSkeletonTextureLab
 
 ## Atlas inspection lab for the existing Bone2D rig.
 ## The committed texture atlas is the primary development asset. Do not treat arbitrary rectangles as finished body parts.
-## 该图是 UV 纹理图集而非完整精灵表；禁止把未经识别的矩形裁片伪装成完整身体部件。
+## 纹理是否为 UV 材质图或独立部件图必须由像素与源数据确认；禁止把未经识别的矩形裁片伪装成完整身体部件。
 
 const ATLAS_PATH := "res://assets/characters/hero/tex1_512x512_4d6c36bcbd5d9ddc_423915aa39e773f2_9.png"
 const GRID_STEP := 16
@@ -27,7 +27,7 @@ class AtlasGridOverlay extends Control:
 	signal cell_selected(source_rect: Rect2i)
 
 	var source_size := Vector2(512.0, 512.0)
-	var grid_step := 64
+	var grid_step := 16
 	var selected_cell := Vector2i(-1, -1)
 
 	func _draw() -> void:
