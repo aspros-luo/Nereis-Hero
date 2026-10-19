@@ -53,6 +53,7 @@ REQUIRED_FILES = [
     "scripts/world/checkpoint.gd",
     "scripts/world/village_poi.gd",
     "scripts/core/world_state.gd",
+    "scripts/core/world_event_director.gd",
     "scripts/core/boot.gd",
     "scripts/core/world_map_test_menu.gd",
     "scripts/core/narrative_manager.gd",
@@ -1723,6 +1724,20 @@ def main() -> int:
     require(village_hub, "总觉得我们以前见过", "A1 amnesiac youth has neutral dialogue before route selection", errors)
     require(village_hub, "买卖不急在这一刻", "A1 traveling merchant has neutral dialogue before route selection", errors)
     require(village_hub, 'WorldState.set_location("village")', "A1 persists village location for Continue", errors)
+    event_director = read("scripts/core/world_event_director.gd", errors)
+    require(village_hub, 'const WORLD_EVENT_DIRECTOR_SCRIPT = preload("res://scripts/core/world_event_director.gd")', "A1 hub wires the shared progression event director", errors)
+    require(village_hub, 'world_event_director.dispatch("region_entered"', "A1 dispatches a region-entry event after hub setup", errors)
+    require(village_hub, 'world_event_director.dispatch("interaction"', "A1 dispatches POI interactions to the event director", errors)
+    require(village_hub, "func _spawn_progression_npcs() -> void:", "A1 has a separate progression-NPC spawn hook", errors)
+    require(village_hub, "world_event_director.spawn_npcs(self, ROUTE_NPC_SCRIPT", "A1 uses the data-driven NPC manifest", errors)
+    require(event_director, "const NPC_DEFINITIONS: Array[Dictionary]", "Progression NPCs are data-driven", errors)
+    require(event_director, "const EVENT_DEFINITIONS: Array[Dictionary]", "World events are data-driven", errors)
+    require(event_director, "func dispatch(trigger: String, context: Dictionary = {}) -> Array[String]:", "World event trigger entry point", errors)
+    require(event_director, "func _conditions_met(conditions: Array) -> bool:", "World events support condition lists", errors)
+    require(event_director, '"flag_absent"', "World events can require a flag to be absent", errors)
+    require(event_director, '"item_count_at_least"', "World events can require item counts", errors)
+    require(event_director, '"world_event_fired:" + event_id', "One-shot world events persist their fired marker", errors)
+    require(event_director, "event_triggered.emit(event_id, payload)", "World event director emits an event signal for listeners", errors)
     require(village_hub, 'rest.rest_id = "rest_A1_village_hearth"', "A1 hearth rest point has a stable save ID", errors)
     require(village_hub, 'north_gate.position = Vector2(2440, 520)', "A1 north gate is placed at the east end of the village", errors)
     require(village_hub, 'city_cut.position = Vector2(100, 520)', "A1 drainage shortcut is placed at the west end", errors)
