@@ -5,6 +5,11 @@ extends Node
 
 signal event_triggered(event_id: String, payload: Dictionary)
 
+const NPC_DEFINITIONS: Array[Dictionary] = [
+	# Register approved, progression-specific NPCs here. Existing baseline NPCs remain in village_hub.gd.
+	# Each entry: id, position, display_name, dialogue, conditions, optional required_flag_absent.
+]
+
 const EVENT_DEFINITIONS: Array[Dictionary] = [
 	# Add confirmed A1 events here. Keep core-story events out until their conditions are approved.
 	# {
@@ -25,6 +30,27 @@ var _dispatching := false
 func setup(world_state: Node, host: Node) -> void:
 	_world_state = world_state
 	_host = host
+
+func spawn_npcs(host: Node, npc_script: Script, interaction_callback: Callable) -> Array[Node]:
+	var spawned: Array[Node] = []
+	for definition in NPC_DEFINITIONS:
+		var npc_id := String(definition.get("id", ""))
+		if npc_id.is_empty() or not _conditions_met(definition.get("conditions", [])):
+			continue
+		var absent_flag := String(definition.get("required_flag_absent", ""))
+		if not absent_flag.is_empty() and absent_flag in _world_state.achievement_flags:
+			continue
+		var npc := Node2D.new()
+		npc.set_script(npc_script)
+		npc.name = npc_id
+		npc.npc_id = npc_id
+		npc.position = definition.get("position", Vector2.ZERO)
+		npc.display_name = String(definition.get("display_name", npc_id))
+		npc.dialogue = String(definition.get("dialogue", ""))
+		host.add_child(npc)
+		npc.interacted.connect(interaction_callback.bind(npc))
+		spawned.append(npc)
+	return spawned
 
 func dispatch(trigger: String, context: Dictionary = {}) -> Array[String]:
 	var fired: Array[String] = []
