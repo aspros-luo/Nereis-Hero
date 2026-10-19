@@ -194,7 +194,7 @@ func _spawn_fireflies() -> void:
 func _spawn_gatekeeper() -> void:
 	var npc := Node2D.new()
 	npc.set_script(ROUTE_NPC_SCRIPT)
-	npc.position = Vector2(650, 520)
+	npc.position = Vector2(2320, 520)
 	npc.interaction_range = 60.0
 	npc.cloth_color = Color("#51404a")
 	npc.npc_id = "village_gatekeeper"
@@ -238,7 +238,7 @@ func _spawn_shared_world_npcs() -> void:
 	var blacksmith := Node2D.new()
 	blacksmith.set_script(ROUTE_NPC_SCRIPT)
 	blacksmith.position = Vector2(1430, 520)
-	blacksmith.interaction_range = 65.0
+	blacksmith.interaction_range = 45.0
 	blacksmith.cloth_color = Color("#594038")
 	blacksmith.skin_color = Color("#9b735e")
 	blacksmith.npc_id = "village_blacksmith"
@@ -329,7 +329,7 @@ func _spawn_village_pois() -> void:
 	var north_gate := Node2D.new()
 	north_gate.set_script(VILLAGE_POI_SCRIPT)
 	north_gate.position = Vector2(2440, 520)
-	north_gate.interaction_range = 80.0
+	north_gate.interaction_range = 50.0
 	north_gate.poi_id = "north_gate"
 	# P5.1 runtime contract for the north route.
 	north_gate.set_meta("p5_1_exit_contract", true)
