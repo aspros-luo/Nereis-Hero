@@ -190,8 +190,11 @@ func _spawn_gatekeeper() -> void:
 	npc.display_name = "村庄守门人"
 	if WorldState.selected_route == "church":
 		npc.dialogue = "The gatekeeper studies the church seal.\n\n\"他们告诉我们，你再也不会回来。为什么他们又把同一个人送了回来？\""
-	else:
+	elif WorldState.selected_route == "lullaby":
 		npc.dialogue = "The gatekeeper hears the lullaby on the wind and shuts the tavern door halfway.\n\n\"别在这里唱那首歌。除非你想让整座村庄都回想起来。\""
+	else:
+		npc.dialogue = "守门人打量着你，又看了看北门的方向。\n\n\"刚回来？村里有些路白天也不好走。先四处看看，别急着往外闯。\""
+	add_child(npc)
 	add_child(npc)
 	npc.interacted.connect(_on_village_npc_interacted.bind(npc))
 
@@ -204,23 +207,12 @@ func _spawn_shared_world_npcs() -> void:
 	if WorldState.get_humanity_state() == "hollow":
 		youth.dialogue = "The young man takes one step back.\n\n\"我认得这种眼神。你身体里已经有某种东西离开了。\""
 	elif WorldState.selected_route == "church":
-		youth.dialogue = "The young man touches your church seal and goes pale.\n\n\"我记得你曾跪在那里。他们告诉我，不许记得这件事。\""
-	else:
-		youth.dialogue = "The young man stares toward the tavern.\n\n\"有一次你回来时，怀里抱着一个人。我不知道那是谁，只记得当时有人在唱歌。\""
-	add_child(youth)
-	youth.interacted.connect(_on_village_npc_interacted.bind(youth))
-
-	var merchant := Node2D.new()
-	merchant.set_script(ROUTE_NPC_SCRIPT)
-	merchant.position = Vector2(1380, 520)
-	merchant.npc_id = "traveling_merchant"
-	merchant.display_name = "旅行商人"
-	if WorldState.get_humanity_state() == "hollow":
-		merchant.dialogue = "The merchant stops smiling.\n\n\"你本不该再听见那首歌了。\""
-	elif WorldState.selected_route == "church":
 		merchant.dialogue = "The merchant turns a silver token between two fingers.\n\n\"教会的道路只在钟声响起前安全。钟声一响，连石头都会说谎。\""
-	else:
+	elif WorldState.selected_route == "lullaby":
 		merchant.dialogue = "The merchant smiles without humor.\n\n\"七年前我来过这座村庄。那时你的脸就已经画在教会的门上了。\""
+	else:
+		merchant.dialogue = "商人把银币在指间转了一圈，打量着你的行囊。\n\n\"初来乍到，还是刚从远处回来？不管哪一种，先记住村里的路，买卖不急在这一刻。\""
+	add_child(merchant)
 	add_child(merchant)
 	merchant.interacted.connect(_on_village_npc_interacted.bind(merchant))
 
@@ -374,8 +366,9 @@ func _enter_village_location(location_id: String) -> void:
 		print("[NEREIS][VILLAGE] Entering Tavern Interior")
 		SceneTransition.fade_to_scene("res://scenes/locations/tavern_interior.tscn")
 	elif location_id == "church":
-		if not WorldState.has_mite_interaction("mite_stay_a_while"):
-			WorldState.mark_mite_connection_missed()
+		# Entering the church is exploration, not an irreversible relationship choice.
+		# The player may still return to Mite after visiting this location.
+		WorldState.set_location("church")
 		WorldState.set_location("church")
 		print("[NEREIS][VILLAGE] Entering Church Interior")
 		SceneTransition.fade_to_scene("res://scenes/locations/church_interior.tscn")
