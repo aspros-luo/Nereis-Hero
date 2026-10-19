@@ -222,9 +222,23 @@ func _spawn_shared_world_npcs() -> void:
 	add_child(grandmother)
 	grandmother.interacted.connect(_on_village_npc_interacted.bind(grandmother))
 
+	# The blacksmith provides a world-facing service role; full weapon upgrades remain a later system.
+	# 铁匠先作为功能型 NPC 接入，不在本次引入制作材料或完整强化循环。
+	var blacksmith := Node2D.new()
+	blacksmith.set_script(ROUTE_NPC_SCRIPT)
+	blacksmith.position = Vector2(1430, 520)
+	blacksmith.npc_id = "village_blacksmith"
+	blacksmith.display_name = "铁匠"
+	if "village_defense_survived" in WorldState.achievement_flags:
+		blacksmith.dialogue = "铁匠把锤子搁在砧边，检查着刚换上的门钉。\n\n“北门暂时撑得住。等我把手头这批活做完，再看看你的兵器。”"
+	else:
+		blacksmith.dialogue = "铁匠正把一块发红的铁料翻了个面。\n\n“想修兵器就先让我看看。至于那扇北门——它比一把钝剑更急着修。”"
+	add_child(blacksmith)
+	blacksmith.interacted.connect(_on_village_npc_interacted.bind(blacksmith))
+
 	var merchant := Node2D.new()
 	merchant.set_script(ROUTE_NPC_SCRIPT)
-	merchant.position = Vector2(1380, 520)
+	merchant.position = Vector2(1250, 520)
 	merchant.npc_id = "traveling_merchant"
 	merchant.display_name = "旅行商人"
 	if WorldState.get_humanity_state() == "hollow":
