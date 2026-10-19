@@ -60,6 +60,8 @@ var _neutral_positions: Dictionary = {}
 var _pose_time: float = 0.0
 var _context_driven: bool = false
 var _vertical_velocity: float = 0.0
+var _horizontal_speed: float = 0.0
+var _stride_phase: float = 0.0
 var _grounded: bool = true
 var _received_context: bool = false
 var _was_grounded: bool = true
@@ -104,6 +106,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	animation_time += delta
 	_pose_time += delta
+	# Advance the gait from actual Hero velocity, not wall-clock time. A blocked or menu-held
+	# Hero should not keep cycling its legs at full speed.
+	var stride_ratio := clampf(absf(_horizontal_speed) / 260.0, 0.0, 1.0)
+	if stride_ratio > 0.05:
+		_stride_phase += delta * lerpf(5.0, 11.5, stride_ratio)
+
 	_landing_time = maxf(0.0, _landing_time - delta)
 	if not _presentation_action_name.is_empty():
 		_presentation_action_elapsed += delta
@@ -129,6 +137,7 @@ func apply_visual_context(context: Dictionary) -> void:
 	_context_driven = true
 	weapon_style = str(context.get("weapon", "long_sword"))
 	_vertical_velocity = float(context.get("vertical_velocity", 0.0))
+	_horizontal_speed = float(context.get("horizontal_speed", 0.0))
 	_grounded = bool(context.get("grounded", true))
 	_action_elapsed = float(context.get("action_elapsed", 0.0))
 	_action_remaining = float(context.get("attack_time_remaining", 0.0))
@@ -409,7 +418,7 @@ func _add_circle(parent: Node2D, radius: float, width: float, color: Color) -> L
 
 func _apply_pose() -> void:
 	_reset_pose()
-	var run_phase := animation_time * 11.5
+	var run_phase := _stride_phase
 	var run_cycle := sin(run_phase)
 	var opposite_cycle := sin(run_phase + PI)
 	var run_bounce := absf(sin(run_phase * 2.0)) * 1.5
