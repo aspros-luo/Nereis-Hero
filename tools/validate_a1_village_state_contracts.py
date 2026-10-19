@@ -105,6 +105,16 @@ def main() -> int:
         "A6: mad-cleric defeat must not force an explanatory exposition panel.",
     )
 
+    # Merchant route feedback must depend on actual scene-entry facts, not unlocked exits.
+    require(
+        '"graybox_intro_forgotten_city" in WorldState.achievement_flags' in village
+        and '"graybox_intro_ash_forest" in WorldState.achievement_flags' in village
+        and village.index('"graybox_intro_forgotten_city" in WorldState.achievement_flags')
+            < village.index('"graybox_intro_ash_forest" in WorldState.achievement_flags')
+        and 'elif "village_defense_survived" in WorldState.achievement_flags:' in village,
+        "A1: merchant revisit dialogue must prioritize actual A3/A2 exploration facts before generic defense feedback.",
+    )
+
     # Protect already established optional routes from unrelated A1 changes.
     require(
         'resonance_well_gate.secret_id = "H01"' in village
