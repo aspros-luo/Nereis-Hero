@@ -9,6 +9,7 @@ This pass improves the existing procedural skeleton gait without changing gamepl
 - The Hero supplies its live horizontal velocity to the presentation adapter.
 - Run-cycle phase advances according to actual horizontal speed, using a slower cadence during reduced-speed movement and a faster cadence near full speed.
 - When the Hero has effectively stopped, the gait phase stops advancing instead of continuing to run in place.
+- The run-to-idle transition reuses a decaying gait weight for residual leg, knee, foot, arm, and torso motion, reducing a hard snap to the neutral pose.
 - The existing live grounded/vertical-velocity context continues to select jump, fall, and landing poses.
 
 ## Ownership boundaries
@@ -23,11 +24,11 @@ This pass improves the existing procedural skeleton gait without changing gamepl
 Run the project in Godot 4.6.1 and test the production Hero in a scene with walkable ground and a wall:
 1. Hold left/right at normal speed: leg cadence should follow movement speed, not a fixed wall-clock loop.
 2. Push against a wall: the Hero should not keep cycling its legs at full running cadence while horizontal velocity is zero.
-3. Start and release movement repeatedly: check for visually harsh gait stopping or leg snapping.
+3. Start and release movement repeatedly: the gait should ease into and out of idle without a hard leg/arm snap; inspect whether the current procedural easing feels too soft or too stiff.
 4. Jump, reach the apex, fall, and land: check that existing jump/fall/landing poses align with real floor contact.
 5. Attack while moving, switch weapon, dodge, and use F8 to compare the skeletal rig with the legacy fallback.
 6. Confirm collision, position, stamina, damage, and hitbox timing are unchanged.
 
 ## Verification status
 
-The branch source edits were committed through GitHub. No Godot parser/import, scene startup, or in-game animation test was run in this session. This pass is source-reviewed only and is not yet runtime-accepted. If the gait appears too stiff, the next pass should add an explicit locomotion blend (start/stop/turn) before converting the rig to AnimationPlayer/AnimationTree clips.
+The branch source edits were committed through GitHub. No Godot parser/import, scene startup, or in-game animation test was run in this session. This pass is source-reviewed only and is not yet runtime-accepted. Next pass: implement distinct start/stop/turn anticipation and recovery, then tune jump takeoff/apex/fall/landing transitions. Only after those are stable should the rig migrate to editable AnimationPlayer/AnimationTree clips.
