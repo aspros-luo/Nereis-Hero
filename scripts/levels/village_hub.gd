@@ -306,7 +306,7 @@ func _spawn_village_pois() -> void:
 	var graveyard := Node2D.new()
 	graveyard.set_script(VILLAGE_POI_SCRIPT)
 	graveyard.position = Vector2(950, 520)
-	graveyard.interaction_range = 80.0
+	graveyard.interaction_range = 50.0
 	graveyard.poi_id = "graveyard"
 	graveyard.display_name = "村庄墓地"
 	graveyard.dialogue = "墓园的大门敞开着。\n\n钟塔多年未曾鸣响，但当你呼唤时，里面仍有某种东西回应。"
