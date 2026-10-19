@@ -616,7 +616,7 @@ func _draw() -> void:
 		draw_rect(Rect2(24, 425, 84, 88), Color("#514149"))
 		for rubble_x in [34, 55, 77, 94]:
 			draw_line(Vector2(rubble_x, 435), Vector2(rubble_x - 5, 500), Color("#79656a"), 5.0)
-	draw_string(ThemeDB.fallback_font, Vector2(20, 400), "OLD DRAIN", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#8d7776"))
+	draw_string(ThemeDB.fallback_font, Vector2(20, 400), "旧排水道", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#8d7776"))
 
 	# Small house where the Hero first recovers.
 	draw_rect(Rect2(350, 360, 210, 160), Color("#27222b"))
@@ -636,7 +636,7 @@ func _draw() -> void:
 	draw_rect(Rect2(590, 492, 62, 28), Color("#3a2d35"))
 	draw_circle(Vector2(620, 492), 11.0, Color("#a85e45"))
 	draw_circle(Vector2(620, 487), 6.0, Color("#d49b68"))
-	draw_string(ThemeDB.fallback_font, Vector2(584, 475), "HEARTH", HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color("#8d7776"))
+	draw_string(ThemeDB.fallback_font, Vector2(584, 475), "炉火", HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color("#8d7776"))
 
 	# Leave the western edge open for the old drainage passage; houses begin beyond its arch.
 	# 西侧为旧排水通路保留空间，民居从拱门以东开始排列。
@@ -669,17 +669,20 @@ func _draw() -> void:
 	draw_rect(Rect2(900, 390, 120, 130), Color("#28212a"))
 	draw_string(ThemeDB.fallback_font, Vector2(885, 365), NereisLocalization.translate_text("墓地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
 
-	draw_rect(Rect2(1940, 360, 150, 160), Color("#27212a"))
-	draw_colored_polygon(
-		PackedVector2Array([
-			Vector2(1915, 360),
-			Vector2(2015, 270),
-			Vector2(2115, 360)
-		]),
-		Color("#312934")
-	)
-	draw_circle(Vector2(2015, 455), 34.0, Color("#63322f"))
-	draw_string(ThemeDB.fallback_font, Vector2(1900, 335), NereisLocalization.translate_text("复国军营地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
+	# Hide the camp's distinctive fire and label until the later story-arrival flag is set.
+	# 初期只保留普通建筑轮廓；复国军的营火与营地标识必须等剧情节点后才出现。
+	if "restoration_camp_established" in WorldState.achievement_flags:
+		draw_rect(Rect2(1940, 360, 150, 160), Color("#27212a"))
+		draw_colored_polygon(
+			PackedVector2Array([
+				Vector2(1915, 360),
+				Vector2(2015, 270),
+				Vector2(2115, 360)
+			]),
+			Color("#312934")
+		)
+		draw_circle(Vector2(2015, 455), 34.0, Color("#63322f"))
+		draw_string(ThemeDB.fallback_font, Vector2(1900, 335), NereisLocalization.translate_text("复国军营地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
 
 	draw_rect(Rect2(2380, 330, 120, 190), Color("#241e27"))
 	draw_rect(Rect2(2410, 350, 18, 170), Color("#4a3439"))
@@ -701,7 +704,7 @@ func _draw() -> void:
 	draw_line(Vector2(1710, 280), Vector2(1840, 320), Color("#514652"), 3.0)
 	draw_line(Vector2(1840, 320), Vector2(1980, 360), Color("#514652"), 3.0)
 	draw_line(Vector2(1980, 360), Vector2(2110, 320), Color("#514652"), 3.0)
-	draw_string(ThemeDB.fallback_font, Vector2(1060, 285), "THE ROOFS REMEMBER THE WAY", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#796b7c"))
+	draw_string(ThemeDB.fallback_font, Vector2(1060, 285), "屋顶捷径", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#796b7c"))
 
 	draw_rect(Rect2(2180, 320, 80, 200), Color("#26202a"))
 	draw_colored_polygon(
