@@ -1,4 +1,4 @@
-# Nereis Hero — Story Foundation
+# Nereis Hero — Story Foundation\n\n> **结局条件权威规则已更新：** 以 [结局条件设计基准 V2](./ENDING_CONDITION_DESIGN_CN.md) 为准。本文后续旧版阈值仅保留为历史原型记录；结局必须核对实际探索路径、关键道具取得 / 持有 / 使用状态和特殊事件记录。蜜忒关系仅在其实际开放道具 / 剧情的链路中间接影响结局，身体结合不是结局条件。
 
 > Canonical developer memory: [DEVELOPER_STORY_MEMORY.md](./DEVELOPER_STORY_MEMORY.md)  
 > Shared-world canon: [CROSS_GAME_STORY_CANON_CN.md](./CROSS_GAME_STORY_CANON_CN.md) / [CROSS_GAME_STORY_CANON_EN.md](./CROSS_GAME_STORY_CANON_EN.md)
@@ -15,7 +15,7 @@ Hero's ancient-god residue, growing Resonance, and the Outer-God trace connected
 
 The Outer God does not depend on one romantic event or one vessel. It can answer a sufficiently strong Resonance signal, exploit accumulated exposure, and continue searching for another vessel if one attempt fails. Mite's early affection is not a planned deception.
 
-## Ending evaluation contract
+## Ending evaluation contract (V2 authority: see ENDING_CONDITION_DESIGN_CN.md)\n\nThe following earlier prototype-threshold description is superseded by the V2 condition baseline. Do not treat the thresholds below as final ending rules.
 
 The ending is chosen from the Hero's accumulated **Resonance, truth-anchor items, and exploration record**. Relationship scenes remain meaningful story content, but never gate the three endings. Prototype thresholds live in scripts/core/ending_evaluator.gd:
 
@@ -23,7 +23,7 @@ The ending is chosen from the Hero's accumulated **Resonance, truth-anchor items
 - **永恒乐园 / Eternal Paradise** — Resonance reaches the cosmic threshold and exploration exposes Hero to an Outer-God trace, but he has not assembled enough truth anchors and explored enough hidden regions to preserve his individuality. The Outer God turns him into a vessel and draws the world into an eternal dream. A physical relationship with Mite is not required.
 - **烈火天罚 / Blazing Judgment** — Resonance reaches the cosmic threshold, Hero finds at least three truth-anchor sources, and explores at least two hidden regions. The assembled anchor preserves enough agency to resist the Outer God's completion. Resistance still comes at a catastrophic cost.
 
-### Prototype thresholds
+### Legacy prototype thresholds (not authoritative)
 
 - Cosmic Resonance threshold: 68.
 - Eternal Paradise: Resonance >= 68, the Observer Reaction source is recorded, and at least one hidden region is entered, unless Blazing Judgment requirements are met.
@@ -61,3 +61,4 @@ This continues rather than retcons the RPG's victory: Hero can win the battle an
 - Resonance reveals evidence but does not guarantee understanding.
 - Hidden sources should initially appear unrelated and later form a larger explanation.
 - No ending is a clean happy ending.
+\n\n## Ending-condition revision note\n\nThe earlier simplified evaluator was useful for prototype ending verification, but did not encode the complete route/item/event chain. The authoritative design now requires real exploration records, distinct item acquired / held / used states, and explicit special-event completion. Relationship interactions can unlock a required item path but are not themselves ending criteria. See [ENDING_CONDITION_DESIGN_CN.md](./ENDING_CONDITION_DESIGN_CN.md).\n
