@@ -79,31 +79,41 @@ func _spawn_checkpoint() -> void:
     add_child(checkpoint)
 
 func _spawn_npc() -> void:
-    var npc := Node2D.new()
-    npc.set_script(ROUTE_NPC_SCRIPT)
-    npc.position = Vector2(900, 520)
-
+    # The tavern keeper is an ordinary resident and is always present inside the tavern.
+    # 教堂初始保持空置；朝圣骑士只由明确的后续剧情状态召来。
     if location_id == "tavern":
+        var npc := Node2D.new()
+        npc.set_script(ROUTE_NPC_SCRIPT)
+        npc.position = Vector2(900, 520)
         npc.npc_id = "tavern_keeper"
-        npc.display_name = "TAVERN KEEPER"
-        if WorldState.get_humanity_state() == "hollow":
-            npc.dialogue = "The keeper studies your eyes.\n\n\"You look like someone who has forgotten what warmth feels like.\""
-        elif WorldState.selected_route == "lullaby":
-            npc.dialogue = "The keeper watches you enter.\n\n\"You heard the song too. Don't pretend you didn't.\""
+        npc.display_name = "酒馆值夜人"
+        if "village_defense_survived" in WorldState.achievement_flags:
+            npc.dialogue = "值夜人把杯子放回架上。\n\n“北门那边总算安静了些。今晚的灯会一直亮着，但我可不保证每个故事都是真的。”"
+        elif "A1_tavern_sound_noticed" in WorldState.achievement_flags:
+            npc.dialogue = "值夜人看了你一眼，又低头擦杯子。\n\n“你上次听见的声音？我没说那是歌。你自己确定就好。”"
         else:
-            npc.dialogue = "The keeper notices the church seal and stops polishing the glass.\n\n\"We don't serve church messengers here. Not after what happened last winter.\""
-    else:
-        npc.npc_id = "church_confessor"
-        npc.display_name = "CHURCH CONFESSOR"
-        if WorldState.get_humanity_state() == "hollow":
-            npc.dialogue = "The confessor looks at you for a long time.\n\n\"There is very little left to confess.\""
-        elif WorldState.get_humanity_state() == "frayed":
-            npc.dialogue = "The confessor recognizes the Hero before the Hero recognizes him.\n\n\"Your confession was never finished. Neither were you.\""
-        else:
-            npc.dialogue = "The confessor recognizes the Hero before the Hero recognizes him.\n\n\"Your confession was never finished.\""
+            npc.dialogue = "值夜人把杯子擦干，朝门口点点头。\n\n“进来暖暖身子吧。村里白天说的话，到了夜里往往就不一样了。”"
+        add_child(npc)
+        npc.interacted.connect(_on_npc_interacted.bind(npc))
 
-    add_child(npc)
-    npc.interacted.connect(_on_npc_interacted.bind(npc))
+    var pilgrim_arrived := "pilgrim_knight_a1_arrived" in WorldState.achievement_flags
+    if not pilgrim_arrived:
+        return
+    var pilgrim_at_tavern := "pilgrim_knight_at_tavern" in WorldState.achievement_flags
+    if (location_id == "tavern") != pilgrim_at_tavern:
+        return
+
+    var pilgrim := Node2D.new()
+    pilgrim.set_script(ROUTE_NPC_SCRIPT)
+    pilgrim.position = Vector2(500, 520)
+    pilgrim.npc_id = "pilgrim_knight_a1"
+    pilgrim.display_name = "朝圣骑士"
+    if "village_defense_survived" in WorldState.achievement_flags:
+        pilgrim.dialogue = "朝圣骑士没有立即看向你，只将目光停在门外的道路上。\n\n“路重新打开了。可通行，不代表值得前往。”"
+    else:
+        pilgrim.dialogue = "朝圣骑士站在光线照不到的地方，似乎在等一个不会准时到来的人。\n\n“这里还不是谈论那条路的时候。”"
+    add_child(pilgrim)
+    pilgrim.interacted.connect(_on_npc_interacted.bind(pilgrim))
 
 func _spawn_mite_if_present() -> void:
     if location_id != "tavern" or WorldState.mite_connection_missed or not WorldState.mite_first_meeting:
