@@ -182,25 +182,25 @@ func _input(event: InputEvent) -> void:
 			_set_skeleton_visual_enabled(WorldState.hero_skeleton_visual_enabled)
 			_log("VISUAL", "Skeletal Hero %s (F8 toggles procedural fallback)" % ("ON" if skeleton_visual_enabled else "OFF"))
 			get_viewport().set_input_as_handled()
-		elif OS.is_debug_build() and event.keycode in [KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_F13, KEY_F14, KEY_F15, KEY_DELETE]:
-			# Temporary presentation-action test shortcuts; these affect visuals only.
-			# F9 stagger, F10 kneel, F11 look back, F12 stumble, F13 knockdown, F14 get up, F15 death pose, Delete clear.
+		elif OS.is_debug_build() and event.ctrl_pressed and event.keycode in [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8]:
+			# Ctrl+1..8 are portable debug-only shortcuts; all actions are presentation-only.
+			# Ctrl+1 踉跄，2 跪地，3 回头，4 失足，5 倒地，6 起身，7 死亡姿势，8 清除动作。
 			match event.keycode:
-				KEY_F9:
+				KEY_1:
 					request_hero_presentation_action("stagger", 0.8)
-				KEY_F10:
+				KEY_2:
 					request_hero_presentation_action("exhausted_kneel", 1.2)
-				KEY_F11:
+				KEY_3:
 					request_hero_presentation_action("look_back", 1.0)
-				KEY_F12:
+				KEY_4:
 					request_hero_presentation_action("stumble", 0.8)
-				KEY_F13:
+				KEY_5:
 					request_hero_presentation_action("knockdown", 0.0)
-				KEY_F14:
+				KEY_6:
 					request_hero_presentation_action("get_up", 1.0, 90)
-				KEY_F15:
+				KEY_7:
 					request_hero_presentation_action("death", 0.0)
-				KEY_DELETE:
+				KEY_8:
 					clear_hero_presentation_action()
 			queue_redraw()
 			get_viewport().set_input_as_handled()
