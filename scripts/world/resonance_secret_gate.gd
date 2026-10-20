@@ -150,9 +150,9 @@ func _unhandled_input(event: InputEvent) -> void:
             return
 
         var region_record_id := _get_region_record_id()
-        if region_record_id not in WorldState.discovered_hidden_regions:
-            # Discovery is a persisted fact of its own; the next interaction opens the route.
-            # 发现入口与永久开启是两个不同事实：首次交互只记录发现，第二次才开启。
+        if secret_id == "H01" and region_record_id not in WorldState.discovered_hidden_regions:
+            # H01's discovery is a persisted fact of its own; the next interaction opens the route.
+            # H01 的发现与永久开启分开记录：首次交互只记录发现，第二次才开启。
             WorldState.discover_hidden_region(region_record_id)
             cooldown = 0.7
             print("[NEREIS][SECRET] Resonance gate discovered id=%s; interact again to open" % secret_id)
@@ -161,6 +161,9 @@ func _unhandled_input(event: InputEvent) -> void:
             return
 
         if not WorldState.is_hidden_path_opened(secret_id):
+            # Preserve the existing one-interaction discover+open behavior for other hidden gates.
+            if region_record_id not in WorldState.discovered_hidden_regions:
+                WorldState.discover_hidden_region(region_record_id)
             WorldState.open_hidden_path(secret_id)
             opened_permanently = true
             revealed = true
