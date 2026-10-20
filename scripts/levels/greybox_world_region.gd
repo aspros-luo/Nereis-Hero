@@ -83,8 +83,13 @@ func _ready() -> void:
 
 	var intro_id := "graybox_intro_%s" % location_id
 	if intro_id not in WorldState.achievement_flags:
+		# Keep this persisted marker as proof of actual region entry for A1 return dialogue.
+		# 保留真实进入标记，供 A1 回访对白使用；它不再强制等同于“首次进入就弹剧情”。
 		WorldState.record_achievement(intro_id)
-		if not WorldState.debug_map_test_mode:
+		# A2/A3 already contain inspectable bell/street evidence and route items. Let players discover them in-world
+		# instead of pausing the first traversal with text that merely describes visible scenery.
+		# A2/A3 已有可调查的钟、路牌与路线物品；不再用首次进入弹窗替代玩家主动发现。
+		if not WorldState.debug_map_test_mode and region_id not in ["A2", "A3"]:
 			get_tree().create_timer(0.55).timeout.connect(_show_intro)
 
 func _unhandled_input(event: InputEvent) -> void:
