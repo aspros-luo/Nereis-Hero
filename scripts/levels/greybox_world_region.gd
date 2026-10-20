@@ -817,14 +817,33 @@ func _spawn_region_ambience() -> void:
 
 
 func _create_floor() -> void:
+	# A2's Bell Grave is a real opening in the ground collision, not just a label or background drawing.
+	# A2 钟墓必须是真正切开地面碰撞的坑口，而不只是地图标签或背景图案。
+	if region_id == "A2":
+		_add_ground_segment("GreyboxGround_West", 0.0, 860.0)
+		_add_ground_segment("GreyboxGround_East", 1060.0, map_width - 1060.0)
+		# The lower floor sits 92px below the main ground. The opening is traversable from above,
+		# and the two short step ledges make a deliberate jump-back route possible.
+		# 坑底比主地面低 92px；玩家可从上方落入，坑内两级短台阶提供明确的跳回路线。
+		_add_platform(Rect2(860.0, 610.0, 200.0, 18.0))
+		_add_platform(Rect2(850.0, 580.0, 70.0, 12.0))
+		_add_platform(Rect2(1000.0, 580.0, 70.0, 12.0))
+		return
+	_add_ground_segment("GreyboxGround", 0.0, map_width)
+
+
+func _add_ground_segment(segment_name: String, start_x: float, segment_width: float) -> void:
+	if segment_width <= 0.0:
+		return
 	var floor := StaticBody2D.new()
-	floor.name = "GreyboxGround"
+	floor.name = segment_name
 	var shape := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(map_width, 40.0)
+	rectangle.size = Vector2(segment_width, 40.0)
 	shape.shape = rectangle
-	shape.position = Vector2(map_width * 0.5, floor_y + 20.0)
+	shape.position = Vector2(segment_width * 0.5, floor_y + 20.0)
 	floor.add_child(shape)
+	floor.position.x = start_x
 	add_child(floor)
 
 func _create_boundaries() -> void:
@@ -847,7 +866,8 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(430, 485, 105, 20))
 			_add_platform(Rect2(535, 450, 110, 20))
 			_add_platform(Rect2(645, 415, 130, 20))
-			_add_platform(Rect2(930, 475, 180, 18))
+			# Keep the ground-level Bell Grave opening clear; the pit itself is built in _create_floor().
+			# 钟墓坑口上方不再放置横跨坑口的低台；真实坑体由 _create_floor() 建立。
 			_add_platform(Rect2(1200, 435, 150, 18))
 			_add_platform(Rect2(1500, 480, 160, 18))
 			_add_platform(Rect2(1840, 445, 130, 18))
@@ -2767,6 +2787,12 @@ func _draw() -> void:
 	_draw_atmospheric_layers()
 	_draw_midground_accents()
 	draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
+	if region_id == "A2":
+		# Dark vertical cut makes the physical pit legible against the continuous graybox floor texture.
+		# 深色竖向断面让真实坑口从连续灰盒地面纹理中清晰显现。
+		draw_rect(Rect2(860.0, floor_y - 1.0, 200.0, 180.0), Color("#171820"))
+		draw_rect(Rect2(860.0, floor_y - 1.0, 10.0, 82.0), Color("#51434a"))
+		draw_rect(Rect2(1050.0, floor_y - 1.0, 10.0, 82.0), Color("#51434a"))
 	_draw_ground_detail()
 
 	# Replace the old repetitive ground slashes with sparse, broken stone cracks and low atmospheric haze.
