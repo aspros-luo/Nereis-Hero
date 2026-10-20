@@ -3872,7 +3872,7 @@
     }
   ],
   "a2_spatial_acceptance_contract": {
-    "status": "design_contract_not_runtime_verified",
+    "status": "partial_runtime_code_added_not_engine_verified",
     "decision_basis": {
       "D1": "C04 owns the A2-A5 highroad shortcut. H02 defaults to return-to-A2 only; a second A5 exit is deferred unless independently justified.",
       "D2": "At least one grounded viewpoint should visually relate the canopy route to the ground bell-grave. This is a spatial readability requirement, not a new lore reveal.",
@@ -3907,9 +3907,12 @@
         "travel": "both",
         "initial_state": "open",
         "acceptance": [
-          "下行入口有清楚的地形提示",
-          "回返路径在物理上可用；若是单向落差则必须修正拓扑travel或提供替代回路"
-        ]
+          "地面主碰撞在 x=860..1060 断开",
+          "坑底承托位于 y=610",
+          "两侧辅助回返台位于 y=580",
+          "Godot 实机验证落下与双向跳回后才可验收通过"
+        ],
+        "implementation_status": "code_added_runtime_unverified"
       },
       {
         "id": "SC009",
@@ -4047,6 +4050,14 @@
       "A2_BELLGRAVE_CANOPY_CROSSING 的运行时描述是连接钟墓高位平台；其 x=1380..1610、y=328 尚不能证明连接 S02↔S04。SC011 当前仍为待核实连接，不得验收为已实现。",
       "SC008：当前 A2 使用整段 map_width 的连续地板，源码中未见钟墓坑口的地面断口，也未见专属坑底平台组；“钟墓坑底”目前是拓扑命名，不能据此声称有实际下落与回程路线。",
       "C04：A2 侧出生点 x=1750、y=floor_y-140，与平台 Rect2(1740,400,110,18) 的设计意图基本吻合；A5 侧出生点 x=650、y=floor_y-85，但附近高位平台为 Rect2(560,455,160,18)，需要确认 Hero 脚底坐标、碰撞形状与单向平台落地时序后再做实机验收。"
+    ],
+    "runtime_findings": [
+      {
+        "id": "SC008_first_implementation",
+        "status": "code_added_runtime_unverified",
+        "source": "scripts/levels/greybox_world_region.gd",
+        "details": "A2 ground collision split at x=860..1060; lower support at y=610 and two return step ledges at y=580. The former platform spanning x=930..1110 at y=475 was removed. Visual pit face added. No Godot runtime acceptance has been performed."
+      }
     ]
   }
 }
