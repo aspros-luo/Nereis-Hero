@@ -329,14 +329,24 @@ func _refresh_baseline_npc_dialogue(npc: Node) -> void:
 				npc.dialogue = "商人把银币在指间转了一圈，打量着你的行囊。\n\n“我从外面来，也会往外面去。要问路况可以，传闻就得自己掂量。”"
 
 func refresh_progression_content() -> void:
-	# Refresh baseline dialogue as well as director-managed progression content.
-	# 基础常驻 NPC 与事件管理 NPC 都应读取最新事实，避免场景内状态变化后对白滞后。
+	# Refresh resident dialogue and stateful POI feedback from persisted world facts.
+	# 常驻 NPC 与带状态的 POI 都读取持久化事实，避免事件发生后场景内反馈滞后。
 	for npc in get_tree().get_nodes_in_group("a1_baseline_npcs"):
 		_refresh_baseline_npc_dialogue(npc)
+	_refresh_tavern_poi_dialogue()
 	if world_event_director == null:
 		return
 	world_event_director.dispatch("state_refresh", {"region": "A1", "location": "village"})
 	_spawn_progression_npcs()
+
+func _refresh_tavern_poi_dialogue() -> void:
+	for poi in get_tree().get_nodes_in_group("a1_tavern_poi"):
+		if not is_instance_valid(poi):
+			continue
+		if "A1_tavern_sound_noticed" in WorldState.achievement_flags:
+			poi.dialogue = "你再次靠近酒馆。门内没有歌声，只有杯碟轻碰。\n\n值夜人似乎一直留意着门外，却没有主动提起那一瞬间的旋律。"
+		else:
+			poi.dialogue = "酒馆的门在你掌下发暖。\n\n你短暂地听见里面传来摇篮曲；当你碰到门把时，歌声却停了。"
 
 func _on_village_npc_interacted(npc: Node) -> void:
 	if narrative == null or not is_instance_valid(npc):
@@ -372,9 +382,10 @@ func _spawn_village_pois() -> void:
 	tavern.position = Vector2(1730, 520)
 	tavern.interaction_range = 80.0
 	tavern.poi_id = "tavern"
+	tavern.add_to_group("a1_tavern_poi")
 	tavern.display_name = "酒馆"
-	tavern.dialogue = "酒馆的门在你掌下发暖。\n\n你短暂地听见里面传来摇篮曲；当你碰到门把时，歌声却停了。"
 	add_child(tavern)
+	_refresh_tavern_poi_dialogue()
 	tavern.interacted.connect(_on_village_poi_interacted.bind(tavern))
 
 	var graveyard := Node2D.new()
