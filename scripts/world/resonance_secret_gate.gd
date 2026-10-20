@@ -148,14 +148,27 @@ func _unhandled_input(event: InputEvent) -> void:
 
         if not revealed:
             return
-        WorldState.discover_hidden_region(_get_region_record_id())
-        WorldState.open_hidden_path(secret_id)
-        opened_permanently = true
-        revealed = true
-        opened.emit(secret_id)
-        print("[NEREIS][SECRET] Resonance gate opened id=%s" % secret_id)
-        queue_redraw()
-        get_viewport().set_input_as_handled()
+
+        var region_record_id := _get_region_record_id()
+        if region_record_id not in WorldState.discovered_hidden_regions:
+            # Discovery is a persisted fact of its own; the next interaction opens the route.
+            # 发现入口与永久开启是两个不同事实：首次交互只记录发现，第二次才开启。
+            WorldState.discover_hidden_region(region_record_id)
+            cooldown = 0.7
+            print("[NEREIS][SECRET] Resonance gate discovered id=%s; interact again to open" % secret_id)
+            queue_redraw()
+            get_viewport().set_input_as_handled()
+            return
+
+        if not WorldState.is_hidden_path_opened(secret_id):
+            WorldState.open_hidden_path(secret_id)
+            opened_permanently = true
+            revealed = true
+            opened.emit(secret_id)
+            print("[NEREIS][SECRET] Resonance gate opened id=%s" % secret_id)
+            queue_redraw()
+            get_viewport().set_input_as_handled()
+            return
 
 func _draw() -> void:
     # Draw the anomaly using the motif of its parent region. A mirror-street entrance
@@ -212,6 +225,8 @@ func _draw_well_marker() -> void:
         if opened_permanently:
             draw_line(Vector2(-14.0, -1.0), Vector2(-32.0, 45.0), tint, 3.0)
             draw_line(Vector2(14.0, -1.0), Vector2(32.0, 45.0), tint, 3.0)
+        elif secret_id == "H01" and _get_region_record_id() in WorldState.discovered_hidden_regions:
+            draw_string(ThemeDB.fallback_font, Vector2(-64.0, 62.0), "已发现 · 再按 E 开启", HORIZONTAL_ALIGNMENT_LEFT, 150.0, 12, Color("#9ce0ce"))
 
 func _draw_mirror_street_marker() -> void:
     # The clue is a puddle first; a door only appears after the player resonates with it.
