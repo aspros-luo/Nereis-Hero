@@ -116,6 +116,14 @@ def main() -> int:
         "A1: tavern sound event must be one-shot and persist its event marker.",
     )
     require(
+        'tavern.add_to_group("a1_tavern_poi")' in village
+        and 'func _refresh_tavern_poi_dialogue() -> void:' in village
+        and '_refresh_tavern_poi_dialogue()' in village
+        and '"A1_tavern_sound_noticed" in WorldState.achievement_flags' in village
+        and '你再次靠近酒馆。门内没有歌声' in village,
+        "A1: the first tavern sound discovery must change the outdoor POI dialogue on revisit.",
+    )
+    require(
         'npc.add_to_group("a1_baseline_npcs")' in village
         and 'grandmother.add_to_group("a1_baseline_npcs")' in village
         and 'blacksmith.add_to_group("a1_baseline_npcs")' in village
