@@ -1073,7 +1073,7 @@
       "secondary_exit": {
         "status": "deferred_pending_independent_route_justification",
         "decision": "本轮默认不将H02设计为A5的第二出口；H02保持返回A2。只有证明它提供独立空间/玩法价值后才恢复A5出口合同。",
-        "note": "当前拓扑旧值曾描述H02经A5侧钟塔连接通往A5。此条在空间定稿中标记为延期，不等于已验证或已从运行时场景移除。"
+        "note": "旧拓扑曾描述 H02 经 A5 侧钟塔门返回 A5；2026-10-20 已从 greybox_world_region.gd 的 H02 出口创建逻辑中移除该门。代码改动已提交但未进行 Godot 运行时验证。若未来恢复，必须先证明它提供独立空间/玩法价值，并同步更新运行时代码、拓扑与验收。"
       },
       "scene_path": "scenes/hidden_bell_chamber.tscn",
       "location_id": "hidden_bell_chamber",
