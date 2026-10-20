@@ -1071,11 +1071,9 @@
       "persistent_on_open": true,
       "return_to_parent": true,
       "secondary_exit": {
-        "to": "A5",
-        "unlock_condition": "reached_A5_then_opened_old_bell_tower_connection",
-        "opens_from": "A5",
-        "requires_target_already_reached": true,
-        "requires_ending_state": false
+        "status": "deferred_pending_independent_route_justification",
+        "decision": "本轮默认不将H02设计为A5的第二出口；H02保持返回A2。只有证明它提供独立空间/玩法价值后才恢复A5出口合同。",
+        "note": "当前拓扑旧值曾描述H02经A5侧钟塔连接通往A5。此条在空间定稿中标记为延期，不等于已验证或已从运行时场景移除。"
       },
       "scene_path": "scenes/hidden_bell_chamber.tscn",
       "location_id": "hidden_bell_chamber",
@@ -2057,35 +2055,80 @@
       "parent_region": "A2",
       "name": "雾林地面",
       "layer": "ground",
-      "role": "主路与狭窄遭遇"
+      "role": "主路与狭窄遭遇",
+      "design_contract": {
+        "purpose": "地面主入口、区域方向识别与通往钟墓外圈/树冠栈道的分叉",
+        "required_readability": [
+          "从A1进入后能辨认地面主路",
+          "不依赖目标弹窗也能看出树冠高路方向",
+          "钟墓入口可被发现但不强制进入"
+        ],
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "A2-S02",
       "parent_region": "A2",
       "name": "钟墓外圈",
       "layer": "ground",
-      "role": "绕行和墓坑入口"
+      "role": "绕行和墓坑入口",
+      "design_contract": {
+        "purpose": "地面绕行、钟墓坑底入口与树冠层的可读联系",
+        "required_readability": [
+          "从地面主路可找到外圈入口",
+          "坑底入口不使用共鸣门槛",
+          "至少一个位置能观察到树冠高路或其支撑结构"
+        ],
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "A2-S03",
       "parent_region": "A2",
       "name": "钟墓坑底",
       "layer": "underground",
-      "role": "H02关联的低位空间"
+      "role": "H02关联的低位空间",
+      "design_contract": {
+        "purpose": "低位探索空间，连接H02入口体系",
+        "required_readability": [
+          "从钟墓外圈可进入与返回",
+          "H02入口与普通坑底通路在视觉/交互上可区分",
+          "H02不是C03主线的必经条件"
+        ],
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "A2-S04",
       "parent_region": "A2",
       "name": "树冠栈道",
       "layer": "upper",
-      "role": "C03高路"
+      "role": "C03高路",
+      "design_contract": {
+        "purpose": "A2至A3的双向高位主连接，并与地面钟墓形成可读的空间关系",
+        "required_readability": [
+          "C03两端均有碰撞承托的高位落点",
+          "A3返回A2后仍位于树冠高度",
+          "至少一个地面观察点可辨认高路走向"
+        ],
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "A2-S05",
       "parent_region": "A2",
       "name": "旧朝圣高路",
       "layer": "upper",
-      "role": "C04远端捷径"
+      "role": "C04远端捷径",
+      "design_contract": {
+        "purpose": "C04的A2侧高位接近段；抵达A5并从远端开启后形成双向捷径",
+        "required_readability": [
+          "首次经过时能辨认道路延伸但不能提前通过锁定门",
+          "开启后双向门与出生点都在受支撑的平台上",
+          "不与H02的隐藏探索出口重复"
+        ],
+        "status": "design_contract_not_runtime_verified"
+      }
     },
     {
       "id": "A3-S01",
@@ -2598,7 +2641,7 @@
       "travel": "both",
       "initial_state": "open",
       "unlock_condition": "",
-      "design_note": ""
+      "design_note": "A2地面主入口至钟墓外圈的常规双向路线；不得把普通钟墓探索绑定到H02共鸣门槛。"
     },
     {
       "id": "SC008",
@@ -2608,7 +2651,7 @@
       "travel": "both",
       "initial_state": "open",
       "unlock_condition": "",
-      "design_note": ""
+      "design_note": "钟墓外圈与坑底的双向高差连接；拓扑写作both，运行时必须验证上攀回返真实可行，不能仅因标注both就视为可回爬。"
     },
     {
       "id": "SC009",
@@ -2618,7 +2661,7 @@
       "travel": "both",
       "initial_state": "open",
       "unlock_condition": "",
-      "design_note": ""
+      "design_note": "地面至树冠栈道的双向主爬升路线；在反向回返时须有可用落点/攀爬设施，不可只存在上行平台链。"
     },
     {
       "id": "SC010",
@@ -2628,7 +2671,7 @@
       "travel": "both",
       "initial_state": "open",
       "unlock_condition": "",
-      "design_note": ""
+      "design_note": "树冠栈道延伸至旧朝圣高路接近段；不等于C04已解锁，C04仍由A5远端开启。"
     },
     {
       "id": "SC011",
@@ -2638,7 +2681,7 @@
       "travel": "both",
       "initial_state": "locked",
       "unlock_condition": "opened_forest_rope_bridge",
-      "design_note": ""
+      "design_note": "钟墓外圈与树冠栈道之间的延迟回环；opened_forest_rope_bridge应持久化，开启后可缩短两层间的往返，不应替代SC009主爬升路线。"
     },
     {
       "id": "SC012",
@@ -3824,5 +3867,172 @@
       "main_route_blocked_by_optional_encounter": false,
       "status": "static_contract_added_runtime_not_verified"
     }
-  ]
+  ],
+  "a2_spatial_acceptance_contract": {
+    "status": "design_contract_not_runtime_verified",
+    "decision_basis": {
+      "D1": "C04 owns the A2-A5 highroad shortcut. H02 defaults to return-to-A2 only; a second A5 exit is deferred unless independently justified.",
+      "D2": "At least one grounded viewpoint should visually relate the canopy route to the ground bell-grave. This is a spatial readability requirement, not a new lore reveal.",
+      "D3": "S02/S03 ordinary bell-grave exploration has no extra resonance gate. Existing H02 conditions remain separate.",
+      "D4": "No new resident NPC is added during topology pass."
+    },
+    "region_sequence": [
+      "A2-S01",
+      "A2-S02",
+      "A2-S03",
+      "A2-S02",
+      "A2-S01",
+      "A2-S04",
+      "A2-S05"
+    ],
+    "connections": [
+      {
+        "id": "SC007",
+        "from": "A2-S01",
+        "to": "A2-S02",
+        "travel": "both",
+        "initial_state": "open",
+        "acceptance": [
+          "地面主路可辨认钟墓外圈入口",
+          "不需要隐藏区域条件"
+        ]
+      },
+      {
+        "id": "SC008",
+        "from": "A2-S02",
+        "to": "A2-S03",
+        "travel": "both",
+        "initial_state": "open",
+        "acceptance": [
+          "下行入口有清楚的地形提示",
+          "回返路径在物理上可用；若是单向落差则必须修正拓扑travel或提供替代回路"
+        ]
+      },
+      {
+        "id": "SC009",
+        "from": "A2-S01",
+        "to": "A2-S04",
+        "travel": "both",
+        "initial_state": "open",
+        "acceptance": [
+          "树冠路线可从地面入口区识别",
+          "上下行均有真实可达路径"
+        ]
+      },
+      {
+        "id": "SC010",
+        "from": "A2-S04",
+        "to": "A2-S05",
+        "travel": "both",
+        "initial_state": "open",
+        "acceptance": [
+          "S05可作为C04的A2侧接近段",
+          "C04仍保持初始锁定"
+        ]
+      },
+      {
+        "id": "SC011",
+        "from": "A2-S02",
+        "to": "A2-S04",
+        "travel": "both",
+        "initial_state": "locked",
+        "unlock_condition": "opened_forest_rope_bridge",
+        "acceptance": [
+          "初始状态不阻断主路",
+          "开启后形成可重复使用的地面/高路回环",
+          "持久状态与门状态一致"
+        ]
+      },
+      {
+        "id": "C02",
+        "from": "A1-S01",
+        "to": "A2-S01",
+        "travel": "both",
+        "acceptance": [
+          "A1进入A2落在地面主路",
+          "A2返回A1不需要经过高路"
+        ]
+      },
+      {
+        "id": "C03",
+        "from": "A2-S04",
+        "to": "A3-S04",
+        "travel": "both",
+        "acceptance": [
+          "双端门与出生点均落在受支撑高位平台",
+          "从A3返回A2仍在树冠层"
+        ]
+      },
+      {
+        "id": "C04",
+        "from": "A2-S05",
+        "to": "A5-S03",
+        "travel": "both_after_A5_unlock",
+        "acceptance": [
+          "A5侧首次开启后A2侧门持久开放",
+          "两端出生点都在高位承托平台",
+          "不得与H02出口重复承担同一连接"
+        ]
+      },
+      {
+        "id": "H02",
+        "from": "A2-S03",
+        "to": "hidden_bell_chamber",
+        "travel": "both",
+        "acceptance": [
+          "仅隐藏入口使用既有共鸣/视域条件",
+          "进入后可返回A2",
+          "不作为C03推进前置",
+          "默认不配置A5次级出口"
+        ]
+      }
+    ],
+    "loop_contracts": [
+      {
+        "id": "L-A2-01",
+        "path": [
+          "A2-S01",
+          "A2-S02",
+          "A2-S04",
+          "A2-S01"
+        ],
+        "mechanism": "SC011 opened_forest_rope_bridge",
+        "purpose": "把地面探索与树冠路线连成可复用回环",
+        "state": "proposed_not_runtime_verified"
+      },
+      {
+        "id": "L-A2-02",
+        "path": [
+          "A2-S04",
+          "A3-S04",
+          "A3",
+          "A2-S04"
+        ],
+        "mechanism": "C03 two-way canopy connection",
+        "purpose": "A2/A3之间的高位往返",
+        "state": "existing_topology_contract_not_runtime_verified"
+      },
+      {
+        "id": "L-A2-03",
+        "path": [
+          "A2-S05",
+          "A5-S03",
+          "A5",
+          "A2-S05"
+        ],
+        "mechanism": "C04 opened from A5",
+        "purpose": "中后期高路捷径",
+        "state": "existing_topology_contract_not_runtime_verified"
+      }
+    ],
+    "runtime_acceptance_checks": [
+      "Godot内逐个检查SC007-SC011的真实入口、出口、碰撞、落差和回返可达性",
+      "从A1进入A2、从A2返回A1，出生点始终对应地面主路",
+      "通过C03往返A3时保持树冠高度，不掉到地面层",
+      "C04未开启时不可穿过；从A5开启后重进A2仍保持开放",
+      "未解锁SC011时主路依然连通；解锁后从两端都能使用回环",
+      "H02可选、可返回A2，不阻断C03，也不要求新增NPC或新剧情",
+      "检验A2目标提示是否与无旁白探索方向冲突；本轮不修改核心秘密或新增叙事事实"
+    ]
+  }
 }
