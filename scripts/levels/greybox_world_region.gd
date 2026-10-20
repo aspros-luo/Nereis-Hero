@@ -2394,15 +2394,15 @@ func _spawn_local_resonance_routes() -> void:
 	add_child(route)
 
 func _on_local_resonance_route_opened(route_id: String) -> void:
+	# A2's environmental narrative must not be delivered as narrator-style popup text.
+	# Keep the route activation itself as world feedback; place any future story fragments in
+	# diegetic objects/descriptions or NPC dialogue after the map layout is approved.
+	if route_id == "A2_BELLGRAVE_CANOPY_CROSSING":
+		print("[NEREIS][MAP][LOCAL_ROUTE] opened id=%s" % route_id)
+		return
 	if not is_instance_valid(narrative):
 		return
 	match route_id:
-		"A2_BELLGRAVE_CANOPY_CROSSING":
-			narrative.show_message(
-				"THE BELL'S SECOND SHADOW",
-				"The canopy path crosses a gap that the forest survey marks as solid rock. The bell above casts two shadows: one on the tower, and one on a road that is not there. The second shadow ends at a sealed door.",
-				5.0
-			)
 		"A3_THIRD_STREET_ROOFLINE":
 			narrative.show_message(
 				"THE THIRD STREET HOLDS",
