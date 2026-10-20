@@ -66,6 +66,7 @@ func _ready() -> void:
 	_spawn_gatekeeper()
 	_spawn_shared_world_npcs()
 	_spawn_village_pois()
+	_spawn_rooftop_waybill()
 	_spawn_resonance_well_gate()
 	_spawn_cliff_cave_door()
 	_spawn_ui()
@@ -346,6 +347,25 @@ func _on_village_npc_interacted(npc: Node) -> void:
 		world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": String(npc.npc_id), "npc_id": String(npc.npc_id)})
 		refresh_progression_content()
 
+func _spawn_rooftop_waybill() -> void:
+	# Optional high-route reward: a real catalog item, collected once and persisted in the existing inventory.
+	# 屋顶高路的可选奖励：使用现有物品目录与背包存档，不新增制作或线索标签系统。
+	var waybill := Node2D.new()
+	waybill.set_script(VILLAGE_POI_SCRIPT)
+	waybill.position = Vector2(1095, 350)
+	waybill.name = "A1RooftopWaybill"
+	waybill.interaction_range = 55.0
+	waybill.poi_id = "rooftop_waybill"
+	if "A1_rooftop_waybill_found" in WorldState.achievement_flags:
+		waybill.display_name = "空纸夹"
+		waybill.dialogue = "屋脊缝隙里只剩下一道压痕。你已经收起那张旧朝圣路程单。"
+	else:
+		waybill.display_name = "旧朝圣路程单"
+		waybill.dialogue = "一张被雨水浸硬的路程单卡在断裂的屋脊下。纸上标注着钟楼与林中石碑，终点却被反复涂改；最后留下的方向，指向一条地图上没有标出的高路。"
+	add_child(waybill)
+	waybill.interacted.connect(_on_village_poi_interacted.bind(waybill))
+
+
 func _spawn_village_pois() -> void:
 	var tavern := Node2D.new()
 	tavern.set_script(VILLAGE_POI_SCRIPT)
@@ -437,6 +457,17 @@ func _spawn_village_pois() -> void:
 func _on_village_poi_interacted(poi: Node) -> void:
 	narrative.show_message(poi.display_name, poi.dialogue, 2.5)
 	await narrative.message_finished
+	if String(poi.poi_id) == "rooftop_waybill" and "A1_rooftop_waybill_found" not in WorldState.achievement_flags:
+		# Record discovery and the actual inventory item as separate persisted data, but never grant it twice.
+		WorldState.inventory_items["old_pilgrim_waybill"] = maxi(1, int(WorldState.inventory_items.get("old_pilgrim_waybill", 0)))
+		if "A1_rooftop_old_pilgrim_waybill" not in WorldState.collected_world_item_ids:
+			WorldState.collected_world_item_ids.append("A1_rooftop_old_pilgrim_waybill")
+		WorldState.record_achievement("A1_rooftop_waybill_found")
+		WorldState.save_game()
+		poi.display_name = "空纸夹"
+		poi.dialogue = "屋脊缝隙里只剩下一道压痕。你已经收起那张旧朝圣路程单。"
+		narrative.show_message("已收起旧朝圣路程单", "物品已记入行囊。屋顶高路的这处发现不会因离开村庄、死亡或继续游戏而重复发放。", 3.0)
+		await narrative.message_finished
 	if world_event_director != null:
 		world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": String(poi.poi_id), "poi": poi})
 		refresh_progression_content()
@@ -795,9 +826,14 @@ func _draw() -> void:
 	draw_rect(Rect2(2810, 350, 18, 170), Color("#4a3439"))
 	draw_rect(Rect2(2860, 350, 18, 170), Color("#4a3439"))
 	if "village_defense_survived" in WorldState.achievement_flags:
-		# The gate is visibly passable after the defense; keep the opening readable from the hub.
+		# Visible repair state: replacement cross-braces, fresh fasteners, and an open travel gap.
+		# 防卫后不仅改变 POI 文本，也显示新加固的门框、门钉与可通行缺口。
 		draw_line(Vector2(2818, 360), Vector2(2794, 405), Color("#79656a"), 6.0)
 		draw_line(Vector2(2868, 360), Vector2(2890, 405), Color("#79656a"), 6.0)
+		draw_line(Vector2(2808, 378), Vector2(2825, 392), Color("#b58a65"), 3.0)
+		draw_line(Vector2(2860, 392), Vector2(2878, 378), Color("#b58a65"), 3.0)
+		for nail in [Vector2(2810, 374), Vector2(2820, 388), Vector2(2867, 388), Vector2(2877, 374)]:
+			draw_circle(nail, 3.0, Color("#d1b08a"))
 	else:
 		# Before the defense, crossbars communicate that the route is physically blocked.
 		draw_rect(Rect2(2818, 385, 50, 12), Color("#79656a"))
