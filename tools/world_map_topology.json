@@ -2677,11 +2677,11 @@
       "id": "SC011",
       "from": "A2-S02",
       "to": "A2-S04",
-      "kind": "loop",
+      "kind": "resonance",
       "travel": "both",
       "initial_state": "locked",
-      "unlock_condition": "opened_forest_rope_bridge",
-      "design_note": "钟墓外圈与树冠栈道之间的延迟回环；opened_forest_rope_bridge应持久化，开启后可缩短两层间的往返，不应替代SC009主爬升路线。"
+      "unlock_condition": "resonance_20_and_sight",
+      "design_note": "本轮不新增绳桥机关；优先审视复用现有 A2_BELLGRAVE_CANOPY_CROSSING（鸣响值20、灵视、持久开启）能否承担 S02↔S04 的回环。必须先核对桥体端点与子区域边界；若现有桥只重连高层平台，不得把它虚报为地面—树冠回环。"
     },
     {
       "id": "SC012",
@@ -3936,7 +3936,7 @@
         "to": "A2-S04",
         "travel": "both",
         "initial_state": "locked",
-        "unlock_condition": "opened_forest_rope_bridge",
+        "unlock_condition": "resonance_20_and_sight",
         "acceptance": [
           "初始状态不阻断主路",
           "开启后形成可重复使用的地面/高路回环",
@@ -3996,9 +3996,9 @@
           "A2-S04",
           "A2-S01"
         ],
-        "mechanism": "SC011 opened_forest_rope_bridge",
+        "mechanism": "候选：复用 A2_BELLGRAVE_CANOPY_CROSSING（鸣响值20+灵视）；先验证桥体是否真实连接 S02 与 S04",
         "purpose": "把地面探索与树冠路线连成可复用回环",
-        "state": "proposed_not_runtime_verified"
+        "state": "candidate_reuse_existing_runtime_route_not_verified"
       },
       {
         "id": "L-A2-02",
@@ -4032,7 +4032,14 @@
       "C04未开启时不可穿过；从A5开启后重进A2仍保持开放",
       "未解锁SC011时主路依然连通；解锁后从两端都能使用回环",
       "H02可选、可返回A2，不阻断C03，也不要求新增NPC或新剧情",
-      "检验A2目标提示是否与无旁白探索方向冲突；本轮不修改核心秘密或新增叙事事实"
+      "检验A2目标提示是否与无旁白探索方向冲突；本轮不修改核心秘密或新增叙事事实",
+      "核对 SC011 与 SC068 是否描述重复/冲突的 S01↔S04 连接；当前拓扑包含 SC068 升降机合同，但 elevators 数组为空。"
+    ],
+    "known_gaps": [
+      "SC011 的旧 opened_forest_rope_bridge 在灰盒控制器中没有运行时引用；已改为候选复用现有局部共鸣路线，但桥体端点是否连接 S02↔S04 尚未证明。",
+      "SC068 引用 repaired_forest_counterweight 且称对应实体升降机合同，但当前 elevators 数组为空；需明确它是未来备选、删除的重复连接，或补齐完整电梯合同。",
+      "当前代码存在 A2_BELLGRAVE_CANOPY_CROSSING，端点为 x=1380..1610、y=328；不得在未核对平台和子区域边界前声称它已经实现地面—树冠回环。",
+      "H02 运行时出口与拓扑中旧 secondary_exit 的实际一致性尚未完成核查；本轮仅将 A5 次级出口标为延期，不声称已移除。"
     ]
   }
 }
