@@ -2027,14 +2027,11 @@ func _spawn_region_exits() -> void:
 			)
 
 		"H02":
+			# H02 is an optional detour that returns to A2; do not add a second A5 exit.
+			# H02 是返回 A2 的可选探索支路；不额外设置通往 A5 的第二出口。
 			_spawn_exit_door(
 				72.0, "E  返回旧朝圣路", "ash_forest",
 				"res://scenes/ash_forest.tscn", "bell_gate"
-			)
-			_spawn_exit_door(
-				map_width - 105.0, "E  穿过钟塔返回",
-				"old_battlefield", "res://scenes/old_battlefield.tscn", "bell_tower",
-				"opened_old_bell_tower_connection" in WorldState.achievement_flags
 			)
 
 		"H03":
