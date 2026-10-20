@@ -151,6 +151,13 @@ def main() -> int:
         "A1: tavern notice must dispatch from the real POI interaction and resolve the follow-up on interior re-entry.",
     )
     require(
+        'tavern.add_to_group("a1_tavern_poi")' in village
+        and 'func _refresh_tavern_poi_dialogue() -> void:' in village
+        and '你再次靠近酒馆。门内没有歌声' in village
+        and 'if "A1_tavern_sound_noticed" in WorldState.achievement_flags:' in village,
+        "A1: the outdoor tavern POI must react to the persisted first-visit sound fact on subsequent interactions.",
+    )
+    require(
         'func _apply_effects(effects: Array)' in director
         and '_world_state.save_game()' in director
         and 'func _mark_fired(event_id: String)' in director
