@@ -42,6 +42,7 @@ func _ready() -> void:
 	WorldState.set_checkpoint(Vector2(420.0, FLOOR_Y))
 
 	_create_floor()
+	_create_prologue_traversal_route()
 	_create_boundaries()
 	_create_surgery_table()
 	_spawn_hero()
@@ -298,6 +299,29 @@ func _create_floor() -> void:
 	add_child(floor)
 
 
+func _create_prologue_traversal_route() -> void:
+	# A short optional catwalk teaches jump-through ledges and returns to the ground before the mandatory ambush.
+	# 一条短的可选高架路线用于教学单向平台跳跃，并在必经伏击前回到地面。
+	var route := [
+		Rect2(500.0, FLOOR_Y - 80.0, 110.0, 16.0),
+		Rect2(630.0, FLOOR_Y - 120.0, 110.0, 16.0),
+		Rect2(760.0, FLOOR_Y - 155.0, 120.0, 16.0),
+		Rect2(900.0, FLOOR_Y - 120.0, 110.0, 16.0),
+		Rect2(1030.0, FLOOR_Y - 80.0, 110.0, 16.0),
+	]
+	for platform_rect in route:
+		var body := StaticBody2D.new()
+		body.name = "PrologueTraversalPlatform"
+		body.position = platform_rect.position
+		var shape := CollisionShape2D.new()
+		var rectangle := RectangleShape2D.new()
+		rectangle.size = platform_rect.size
+		shape.shape = rectangle
+		shape.position = platform_rect.size * 0.5
+		shape.one_way_collision = true
+		body.add_child(shape)
+		add_child(body)
+
 func _create_boundaries() -> void:
 	var left := StaticBody2D.new()
 	var ls := CollisionShape2D.new()
@@ -364,6 +388,17 @@ func _draw() -> void:
 	draw_texture_rect(SURGERY_FLOOR_STRIP, Rect2(0, FLOOR_Y, LEVEL_WIDTH, 180), false)
 	# Illustrated prop pass replaces the flat geometric furniture while leaving gameplay bodies untouched.
 	draw_texture_rect(SURGERY_FOREGROUND_PROPS, Rect2(0, 0, LEVEL_WIDTH, 720), false)
+	# Collision-backed tutorial ledges are also drawn so the optional route reads clearly.
+	# 将具有真实碰撞的教学平台同步绘制出来，让可选路线清晰可读。
+	for ledge in [
+		Rect2(500.0, FLOOR_Y - 80.0, 110.0, 16.0),
+		Rect2(630.0, FLOOR_Y - 120.0, 110.0, 16.0),
+		Rect2(760.0, FLOOR_Y - 155.0, 120.0, 16.0),
+		Rect2(900.0, FLOOR_Y - 120.0, 110.0, 16.0),
+		Rect2(1030.0, FLOOR_Y - 80.0, 110.0, 16.0),
+	]:
+		draw_rect(ledge, Color("#40323d"))
+		draw_line(ledge.position, Vector2(ledge.end.x, ledge.position.y), Color("#947984"), 2.0)
 
 	# Cold surgical shafts and suspended cables establish depth before the room's props are drawn.
 	# 冷色手术灯柱与悬垂线缆先建立空间纵深，再绘制房间内的物件。
