@@ -75,10 +75,10 @@ func _add_platform(rect: Rect2) -> void:
 func _spawn_room_exits() -> void:
 	match room_id:
 		"R_SURFACE":
-			_add_exit(Vector2(90.0, 690.0), "E  进入树冠高路", "R_CANOPY", "res://scenes/rooms/canopy_crossing.tscn", "west", "upper")
+			_add_exit(Vector2(90.0, 690.0), "E  进入树冠高路", "R_CANOPY", "res://scenes/rooms/canopy_crossing.tscn", "west", "west")
 			_add_exit(Vector2(760.0, 820.0), "E  下潜至旧城区", "R_UNDERCITY", "res://scenes/rooms/undercity_descent.tscn", "lower", "lower")
 		"R_CANOPY":
-			_add_exit(Vector2(80.0, 760.0), "E  返回村庄高台", "R_SURFACE", "res://scenes/rooms/surface_hub.tscn", "upper", "west")
+			_add_exit(Vector2(80.0, 760.0), "E  返回村庄高台", "R_SURFACE", "res://scenes/rooms/surface_hub.tscn", "upper", "upper")
 			_add_exit(Vector2(1400.0, 330.0), "E  前往遗忘城区", "R_UNDERCITY", "res://scenes/rooms/undercity_descent.tscn", "upper", "upper")
 		"R_UNDERCITY":
 			_add_exit(Vector2(90.0, 250.0), "E  返回村庄井道", "R_SURFACE", "res://scenes/rooms/surface_hub.tscn", "lower", "lower")
@@ -111,13 +111,25 @@ func _on_exit_interacted(target_scene: String, spawn_out: String, spawn_in: Stri
 func _spawn_position(incoming: String) -> Vector2:
 	match incoming:
 		"upper":
-			return Vector2(120.0, 275.0 if room_id == "R_UNDERCITY" else 300.0)
+			match room_id:
+				"R_CANOPY":
+					return Vector2(1320.0, 295.0)
+				"R_UNDERCITY":
+					return Vector2(150.0, 205.0)
+				_:
+					return Vector2(1150.0, 365.0)
 		"lower":
-			return Vector2(1350.0, 650.0 if room_id == "R_UNDERCITY" else 650.0)
+			match room_id:
+				"R_CANOPY":
+					return Vector2(1120.0, 725.0)
+				"R_UNDERCITY":
+					return Vector2(1350.0, 725.0)
+				_:
+					return Vector2(760.0, 785.0)
 		"east":
-			return Vector2(room_size.x - 140.0, 640.0)
+			return Vector2(room_size.x - 150.0, 640.0)
 		_:
-			return Vector2(150.0, 640.0 if room_id != "R_UNDERCITY" else 210.0)
+			return Vector2(150.0, 640.0 if room_id != "R_UNDERCITY" else 205.0)
 
 func _spawn_hero(spawn_at: Vector2) -> void:
 	hero = CharacterBody2D.new()
