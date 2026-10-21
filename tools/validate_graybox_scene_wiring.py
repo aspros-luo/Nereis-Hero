@@ -736,9 +736,12 @@ def main() -> int:
     require(village_route_script, '"village_defense_survived" in WorldState.achievement_flags', "A1 drainage gate", errors)
     old_drain_route_script = read("scripts/levels/old_drain_exploration.gd", errors)
     require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/old_drain_exploration.tscn")', "C24 A1 enters the shared old-drain exploration segment", errors)
-    require(old_drain_route_script, 'const CITY_SCENE := "res://scenes/forgotten_city.tscn"', "C24 old-drain segment targets A3", errors)
+    # C24 intentionally uses a two-scene route: village -> old drain -> A3.
+    # Validate target, arrival-side persistence, and transition independently;
+    # do not require an incorrect direct village-to-city jump.
+    require(old_drain_route_script, 'const CITY_SCENE := "res://scenes/forgotten_city.tscn"', "C24 old-drain destination scene", errors)
     require(old_drain_route_script, 'WorldState.pending_region_spawn_side = "village_city_cut"', "C24 old-drain-to-A3 spawn mapping", errors)
-    require(old_drain_route_script, "SceneTransition.fade_to_scene(CITY_SCENE)", "C24 old-drain segment transitions into A3", errors)
+    require(old_drain_route_script, "SceneTransition.fade_to_scene(CITY_SCENE)", "C24 old-drain-to-A3 transition call", errors)
     require(village_route_script, "func _create_village_rooftop_route() -> void:", "A1 rooftop route builder", errors)
     require(village_route_script, "Rect2(220, 445, 90, 16)", "A1 rooftop first ledge", errors)
     require(village_route_script, "Rect2(1710, 270, 110, 16)", "A1 rooftop route over tavern", errors)
@@ -1444,10 +1447,15 @@ def main() -> int:
     require(region_script, '2020, 450, 130, 18', "A6 C10 upper approach platform", errors)
     require(region_script, '2230.0, "E  使用绞盘钥匙打开钟塔落差通路"', "A6 C10 elevated door", errors)
     require(region_script, 'true, "opened_bell_tower_drop", "E  返回被遗忘的城区", floor_y - 55.0', "A6 C10 door height", errors)
-    a6_shortcut_start = region_script.find("func _refresh_a6_bell_shortcut() -> void:")
-    a6_shortcut_end = region_script.find("\nfunc ", a6_shortcut_start + 1) if a6_shortcut_start >= 0 else -1
-    a6_shortcut_body = region_script[a6_shortcut_start:a6_shortcut_end] if a6_shortcut_start >= 0 and a6_shortcut_end > a6_shortcut_start else ""
-    require(a6_shortcut_body, '"res://scenes/forgotten_city.tscn", "bell_drop"', "C10 A6-to-A3 transition", errors)
+    # Extract the C10 function by declaration and validate destination and arrival-side
+    # independently, avoiding a brittle multi-argument substring.
+    a6_shortcut_match = re.search(
+        r"(?ms)^func _refresh_a6_bell_shortcut\(\) -> void:\n(.*?)(?=^func |\Z)",
+        region_script,
+    )
+    a6_shortcut_body = a6_shortcut_match.group(1) if a6_shortcut_match else ""
+    require(a6_shortcut_body, 'res://scenes/forgotten_city.tscn', "C10 A6-to-A3 destination scene", errors)
+    require(a6_shortcut_body, '"bell_drop"', "C10 A6-to-A3 arrival side", errors)
     require(a6_shortcut_body, 'WorldState.is_item_owned("bell_tower_winch_key")', "C10 key-gated shortcut creation", errors)
     require(a6_shortcut_body, '"opened_bell_tower_drop"', "C10 persistent shortcut-open flag", errors)
     require(region_script, '520.0, "E  打开旧升降梯"', "A9 C16 rooftop door", errors)
