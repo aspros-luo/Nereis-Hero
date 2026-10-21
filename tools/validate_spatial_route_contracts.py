@@ -17,6 +17,7 @@ TOPOLOGY_PATH = ROOT / "tools/world_map_topology.json"
 REGION_SCRIPT_PATH = ROOT / "scripts/levels/greybox_world_region.gd"
 VILLAGE_SCRIPT_PATH = ROOT / "scripts/levels/village_hub.gd"
 REST_POINT_SCRIPT_PATH = ROOT / "scripts/world/rest_point.gd"
+LOCAL_ROUTE_SCRIPT_PATH = ROOT / "scripts/world/resonance_local_route.gd"
 
 
 def function_body(source: str, function_name: str) -> str:
@@ -50,6 +51,7 @@ def main() -> int:
         region_source = REGION_SCRIPT_PATH.read_text(encoding="utf-8")
         village_source = VILLAGE_SCRIPT_PATH.read_text(encoding="utf-8")
         rest_point_source = REST_POINT_SCRIPT_PATH.read_text(encoding="utf-8")
+        local_route_source = LOCAL_ROUTE_SCRIPT_PATH.read_text(encoding="utf-8")
         x_body = function_body(region_source, "_spawn_x_for_side")
         y_body = function_body(region_source, "_spawn_y_for_side")
     except (OSError, json.JSONDecodeError, ValueError) as exc:
@@ -598,6 +600,13 @@ def main() -> int:
         and "route.bridge_end_x = 1610.0" in local_routes_body
         and "route.bridge_y = 328.0" in local_routes_body,
         "A2 SC011: runtime resonance bridge coordinates and unlock threshold must match the canopy contract.",
+    )
+    require(
+        errors,
+        "var should_exist := revealed or opened_permanently or _hero_over_bridge()" in local_route_source
+        and "Keep a temporary bridge solid while the Hero is standing on it" in local_route_source
+        and "collision.one_way_collision = true" in local_route_source,
+        "SC011: a temporary resonance bridge must not disappear under the Hero when Sight expires.",
     )
 
     # Elevated A2 arrivals must be statically supported by authored platform tops.
