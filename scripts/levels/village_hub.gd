@@ -768,6 +768,8 @@ func _draw() -> void:
 		draw_rect(ledge, Color("#493b43"))
 		draw_line(ledge.position, Vector2(ledge.end.x, ledge.position.y), Color("#8d747d"), 2.0)
 	for x in range(0, 3000, 64):
+		if (x + 32 > 1180 and x < 1260) or (x + 32 > 1660 and x < 1740):
+			continue
 		draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
 
 	draw_string(ThemeDB.fallback_font, Vector2(100, 230), NereisLocalization.translate_text("边境村庄"), HORIZONTAL_ALIGNMENT_LEFT, -1, 30, Color("#4d454d"))
