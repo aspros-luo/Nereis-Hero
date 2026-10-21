@@ -59,10 +59,32 @@ func _build_ui() -> void:
     description.add_theme_color_override("font_color", Color("#9b9099"))
     root.add_child(description)
 
+    # Show the original macro topology beside the region launch list so map acceptance starts from spatial context.
+    # 在区域启动列表旁展示原创宏观拓扑图，让地图验收从空间关系出发。
+    var map_and_regions := HBoxContainer.new()
+    map_and_regions.size_flags_vertical = Control.SIZE_EXPAND_FILL
+    map_and_regions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    map_and_regions.add_theme_constant_override("separation", 18)
+    root.add_child(map_and_regions)
+
+    var map_panel := PanelContainer.new()
+    map_panel.custom_minimum_size = Vector2(470, 0)
+    map_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+    map_and_regions.add_child(map_panel)
+
+    var map_preview := TextureRect.new()
+    map_preview.texture = load("res://assets/art/maps/nereis_world_topology.svg")
+    map_preview.custom_minimum_size = Vector2(450, 330)
+    map_preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    map_preview.size_flags_vertical = Control.SIZE_EXPAND_FILL
+    map_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+    map_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+    map_panel.add_child(map_preview)
+
     var scroll := ScrollContainer.new()
     scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
     scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-    root.add_child(scroll)
+    map_and_regions.add_child(scroll)
 
     var grid := GridContainer.new()
     grid.columns = 2
