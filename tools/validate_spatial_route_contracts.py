@@ -524,6 +524,8 @@ def main() -> int:
     sc009 = intra_edges.get("SC009", {})
     sc010 = intra_edges.get("SC010", {})
     sc011 = intra_edges.get("SC011", {})
+    sc072 = intra_edges.get("SC072", {})
+    sc073 = intra_edges.get("SC073", {})
     a2_subregions = {
         item.get("id"): item
         for item in topology.get("subregions", [])
@@ -567,7 +569,19 @@ def main() -> int:
         and sc010.get("unlock_condition") == "",
         "A2 SC010: the canopy-to-old-pilgrim approach must remain open, independently of C04's lock.",
     )
-    sc068 = next((item for item in topology.get("elevators", []) if item.get("id") == "LFT01"), {})
+    require(
+        errors,
+        sc072.get("from") == "A2-S04" and sc072.get("to") == "A2-S06"
+        and sc072.get("travel") == "both" and sc072.get("initial_state") == "open",
+        "A2 SC072: eastern ravine must connect canopy to a bidirectional lower bypass.",
+    )
+    require(
+        errors,
+        sc073.get("from") == "A2-S06" and sc073.get("to") == "A2-S07"
+        and sc073.get("travel") == "both" and sc073.get("initial_state") == "open",
+        "A2 SC073: lower bypass must rejoin the expanded eastern canopy route.",
+    )
+        sc068 = next((item for item in topology.get("elevators", []) if item.get("id") == "LFT01"), {})
     require(
         errors,
         sc008.get("from") == "A2-S02" and sc008.get("to") == "A2-S03"
