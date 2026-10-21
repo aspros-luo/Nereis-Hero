@@ -22,38 +22,38 @@
 <line class="grid" x1="0" y1="0" x2="0" y2="980"/><line class="grid" x1="52" y1="0" x2="52" y2="980"/><line class="grid" x1="104" y1="0" x2="104" y2="980"/><line class="grid" x1="156" y1="0" x2="156" y2="980"/><line class="grid" x1="208" y1="0" x2="208" y2="980"/><line class="grid" x1="260" y1="0" x2="260" y2="980"/><line class="grid" x1="312" y1="0" x2="312" y2="980"/><line class="grid" x1="364" y1="0" x2="364" y2="980"/><line class="grid" x1="416" y1="0" x2="416" y2="980"/><line class="grid" x1="468" y1="0" x2="468" y2="980"/><line class="grid" x1="520" y1="0" x2="520" y2="980"/><line class="grid" x1="572" y1="0" x2="572" y2="980"/><line class="grid" x1="624" y1="0" x2="624" y2="980"/><line class="grid" x1="676" y1="0" x2="676" y2="980"/><line class="grid" x1="728" y1="0" x2="728" y2="980"/><line class="grid" x1="780" y1="0" x2="780" y2="980"/><line class="grid" x1="832" y1="0" x2="832" y2="980"/><line class="grid" x1="884" y1="0" x2="884" y2="980"/><line class="grid" x1="936" y1="0" x2="936" y2="980"/><line class="grid" x1="988" y1="0" x2="988" y2="980"/><line class="grid" x1="1040" y1="0" x2="1040" y2="980"/><line class="grid" x1="1092" y1="0" x2="1092" y2="980"/><line class="grid" x1="1144" y1="0" x2="1144" y2="980"/><line class="grid" x1="1196" y1="0" x2="1196" y2="980"/><line class="grid" x1="1248" y1="0" x2="1248" y2="980"/><line class="grid" x1="1300" y1="0" x2="1300" y2="980"/><line class="grid" x1="1352" y1="0" x2="1352" y2="980"/><line class="grid" x1="1404" y1="0" x2="1404" y2="980"/><line class="grid" x1="1456" y1="0" x2="1456" y2="980"/><line class="grid" x1="1508" y1="0" x2="1508" y2="980"/>
 <line class="grid" x1="0" y1="0" x2="1500" y2="0"/><line class="grid" x1="0" y1="52" x2="1500" y2="52"/><line class="grid" x1="0" y1="104" x2="1500" y2="104"/><line class="grid" x1="0" y1="156" x2="1500" y2="156"/><line class="grid" x1="0" y1="208" x2="1500" y2="208"/><line class="grid" x1="0" y1="260" x2="1500" y2="260"/><line class="grid" x1="0" y1="312" x2="1500" y2="312"/><line class="grid" x1="0" y1="364" x2="1500" y2="364"/><line class="grid" x1="0" y1="416" x2="1500" y2="416"/><line class="grid" x1="0" y1="468" x2="1500" y2="468"/><line class="grid" x1="0" y1="520" x2="1500" y2="520"/><line class="grid" x1="0" y1="572" x2="1500" y2="572"/><line class="grid" x1="0" y1="624" x2="1500" y2="624"/><line class="grid" x1="0" y1="676" x2="1500" y2="676"/><line class="grid" x1="0" y1="728" x2="1500" y2="728"/><line class="grid" x1="0" y1="780" x2="1500" y2="780"/><line class="grid" x1="0" y1="832" x2="1500" y2="832"/><line class="grid" x1="0" y1="884" x2="1500" y2="884"/><line class="grid" x1="0" y1="936" x2="1500" y2="936"/><line class="grid" x1="0" y1="988" x2="1500" y2="988"/>
 <text class="title" x="54" y="55">NEREIS HERO · WORLD TOPOLOGY ATLAS</text>
-<text class="subtitle" x="56" y="82">全世界区域连接草图 · 设计拓扑，不代表地形/门/跳跃已在 Godot 实机通过</text>
+<text class="subtitle" x="56" y="82">连接线按 tools/world_map_topology.json 生成；节点位置仅作排布，不代表场景坐标或实机验证</text>
 <text class="macro" x="65" y="132">M1 · 边境与荒野</text>
 <text class="macro" x="420" y="132">M2 · 废弃城区与地下水系</text>
 <text class="macro" x="780" y="132">M3 · 教会边陲与圣堂</text>
 <text class="macro" x="1100" y="132">M4 · 王城与王室墓地</text>
 <text class="macro" x="770" y="870">M5 · 深层研究区与古神遗迹</text>
 <text class="macro" x="1120" y="870">M6 · 深层梦境与终局</text>
-<!-- connection edges -->
-<path class="edge" d="M130 250 L160 360"/><text class="edgeid" x="128" y="305">C01</text>
-<path class="edge" d="M210 380 L340 275"/><text class="edgeid" x="258" y="315">C02</text>
-<path class="edge" d="M405 260 L545 260"/><text class="edgeid" x="470" y="245">C03</text>
-<path class="shortcut" d="M375 285 Q360 410 500 465"/><text class="edgeid" x="377" y="389">C04</text>
-<path class="edge" d="M585 285 L600 435"/><text class="edgeid" x="592" y="360">C05</text>
-<path class="shortcut" d="M570 480 Q390 570 200 410"/><text class="edgeid" x="367" y="515">C06</text>
-<path class="shortcut" d="M620 480 Q680 530 700 615"/><text class="edgeid" x="661" y="548">C07</text>
-<path class="edge" d="M580 270 Q520 360 500 440"/><text class="edgeid" x="514" y="350">C08</text>
-<path class="edge" d="M535 455 L700 310"/><text class="edgeid" x="620" y="375">C09</text>
-<path class="shortcut" d="M740 275 Q690 220 575 245"/><text class="edgeid" x="670" y="228">C10</text>
-<path class="edge" d="M730 325 L760 425"/><text class="edgeid" x="748" y="380">C11</text>
-<path class="shortcut" d="M765 460 Q690 500 625 470"/><text class="edgeid" x="697" y="485">C12</text>
-<path class="edge" d="M800 455 L850 590"/><text class="edgeid" x="825" y="520">C13</text>
-<path class="edge" d="M900 610 L1050 570"/><text class="edgeid" x="972" y="580">C14</text>
-<path class="secret" d="M880 635 Q860 760 790 810"/><text class="edgeid" x="828" y="724">C15</text>
-<path class="shortcut" d="M600 250 Q830 160 1050 540"/><text class="edgeid" x="846" y="290">C16</text>
-<path class="edge" d="M1090 540 L1090 330"/><text class="edgeid" x="1104" y="440">C17</text>
-<path class="shortcut" d="M1100 535 Q1210 430 1300 330"/><text class="edgeid" x="1202" y="423">C18</text>
-<path class="secret" d="M1120 290 Q1040 500 830 790"/><text class="edgeid" x="1015" y="545">C19</text>
-<path class="edge" d="M1125 300 L1300 300"/><text class="edgeid" x="1200" y="285">C20</text>
-<path class="ending" d="M850 820 Q1050 900 1270 820"/><text class="edgeid" x="1050" y="865">C21</text>
-<path class="ending" d="M1330 335 L1300 785"/><text class="edgeid" x="1343" y="570">C22</text>
-<path class="shortcut" d="M1050 565 Q850 545 630 465"/><text class="edgeid" x="846" y="530">C23</text>
-<path class="shortcut" d="M200 375 Q365 500 535 260"/><text class="edgeid" x="344" y="435">C24</text>
+<!-- connection edges generated from tools/world_map_topology.json; node positions are schematic, edge endpoints/kinds/access are data-driven -->
+<path class="edge" d="M130 221 Q123.4 307.4 160 386"/><text class="edgeid" x="134.2" y="297.5">C01</text>
+<path class="edge" d="M160 386 Q250.4 294.1 375 261"/><text class="edgeid" x="259.0" y="300.8">C02</text>
+<path class="edge" d="M375 261 Q475.0 307.0 575 261"/><text class="edgeid" x="475.0" y="276.0">C03</text>
+<path class="shortcut" d="M375 261 Q456.3 352.0 500 466"/><text class="edgeid" x="446.9" y="349.8">C04</text>
+<path class="edge" d="M575 261 Q556.4 368.4 605 466"/><text class="edgeid" x="573.2" y="358.0">C05</text>
+<path class="shortcut" d="M605 466 Q374.4 471.3 160 386"/><text class="edgeid" x="378.4" y="440.6">C06</text>
+<path class="shortcut" d="M605 466 Q715.7 562.1 850 621"/><text class="edgeid" x="721.6" y="544.8">C07</text>
+<path class="edge" d="M575 261 Q569.4 375.2 500 466"/><text class="edgeid" x="553.5" y="361.3">C08</text>
+<path class="edge" d="M500 466 Q642.9 415.1 730 291"/><text class="edgeid" x="628.9" y="388.8">C09</text>
+<path class="shortcut" d="M730 291 Q648.3 297.6 575 261"/><text class="edgeid" x="650.4" y="278.8">C10</text>
+<path class="edge" d="M730 291 Q714.2 380.6 765 456"/><text class="edgeid" x="730.9" y="369.0">C11</text>
+<path class="shortcut" d="M765 456 Q687.9 506.9 605 466"/><text class="edgeid" x="686.4" y="476.0">C12</text>
+<path class="edge" d="M765 456 Q787.9 548.6 850 621"/><text class="edgeid" x="797.7" y="535.5">C13</text>
+<path class="edge" d="M850 621 Q941.0 560.7 1050 566"/><text class="edgeid" x="945.5" y="569.1">C14</text>
+<path class="secret" d="M850 621 Q794.2 713.8 830 816"/><text class="edgeid" x="817.1" y="708.2">C15</text>
+<path class="shortcut" d="M575 261 Q824.4 395.0 1050 566"/><text class="edgeid" x="818.4" y="396.2">C16</text>
+<path class="edge" d="M1050 566 Q1103.7 428.2 1090 281"/><text class="edgeid" x="1086.8" y="417.9">C17</text>
+<path class="shortcut" d="M1050 566 Q1158.4 400.1 1330 301"/><text class="edgeid" x="1174.2" y="408.8">C18</text>
+<path class="secret" d="M1090 281 Q940.2 538.9 830 816"/><text class="edgeid" x="950.1" y="535.7">C19</text>
+<path class="edge" d="M1090 281 Q1212.8 257.1 1330 301"/><text class="edgeid" x="1211.4" y="266.1">C20</text>
+<path class="ending" d="M830 816 Q1065.0 862.0 1300 816"/><text class="edgeid" x="1065.0" y="831.0">C21</text>
+<path class="ending" d="M1330 301 Q1337.0 559.8 1300 816"/><text class="edgeid" x="1326.0" y="551.1">C22</text>
+<path class="shortcut" d="M1050 566 Q835.0 482.8 605 466"/><text class="edgeid" x="831.2" y="491.4">C23</text>
+<path class="shortcut" d="M160 386 Q354.2 279.5 575 261"/><text class="edgeid" x="360.9" y="293.5">C24</text>
 <!-- nodes -->
 <g><rect class="node" x="55" y="190" width="150" height="62" rx="13" fill="#6d747e"/><text class="id" x="130" y="211">A0</text><text class="label" x="130" y="236">边境手术所</text></g>
 <g><rect class="node" x="85" y="355" width="150" height="62" rx="13" fill="#718b68"/><text class="id" x="160" y="376">A1</text><text class="label" x="160" y="401">边境村庄</text></g>
