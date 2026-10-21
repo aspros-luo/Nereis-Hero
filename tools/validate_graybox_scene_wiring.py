@@ -1120,6 +1120,26 @@ def main() -> int:
         source_path = scene_path_by_region.get(source_region, "")
         if not source_block:
             errors.append(f"{edge_id} has no isolated runtime source block for {source_region}.")
+        elif edge_id == "C10":
+            # C10's transition is created by a dedicated refresh function, outside
+            # the generic A6 exit block; its detailed key/side/persistence contract
+            # is audited below.
+            shortcut_match = re.search(
+                r"(?ms)^func _refresh_a6_bell_shortcut\\(\\) -> void:\\n(.*?)(?=^func |\\Z)",
+                region_script,
+            )
+            shortcut_body = shortcut_match.group(1) if shortcut_match else ""
+            require(shortcut_body, f'res://{target_path}', "C10 A6-to-A3 destination scene", errors)
+        elif edge_id == "C24":
+            # C24 is deliberately two-stage: A1 -> old drain -> A3. The first
+            # transition is checked here; the drain-to-A3 transition is checked
+            # by the dedicated C24 assertions above.
+            require(
+                source_block,
+                'res://scenes/old_drain_exploration.tscn',
+                "C24 A1-to-old-drain transition",
+                errors,
+            )
         elif edge_id == "C15":
             require(source_block, "_spawn_a11_maintenance_gate(", "C15 A8-side gate wiring", errors)
         elif edge_id == "C19":
