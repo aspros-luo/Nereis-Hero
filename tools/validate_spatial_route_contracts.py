@@ -657,7 +657,7 @@ def main() -> int:
         return 1
 
     print("Spatial route contract check passed.")
-    print("Checked C03/C05/C07/C10/C12/C13/C16/C17/C18/C22/C23/C24 route and spawn contracts.")
+    print("Checked A2 pit/canopy/H02/C03/C04 plus C03/C05/C07/C08/C10/C12/C13/C16/C17/C18/C22/C23/C24 route and spawn contracts.")
     print("Checked arrival clearance, platform support, rest-point safety, and death-recovery focus reset.")
     print("Note: run the Godot project for collision, jump reachability, and transition acceptance.")
     return 0
