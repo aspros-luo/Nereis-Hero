@@ -141,10 +141,10 @@ def validate(data: dict[str, Any]) -> list[str]:
     elevators = data.get("elevators", [])
     if len(macro_regions) != 6:
         fail(errors, f"Expected 6 narrative macro regions, found {len(macro_regions)}.")
-    if len(subregions) != 76:
-        fail(errors, f"Expected 76 subregions, found {len(subregions)}.")
-    if len(local_connections) != 71:
-        fail(errors, f"Expected 71 intra-region connections, found {len(local_connections)}.")
+    if len(subregions) != 78:
+        fail(errors, f"Expected 78 subregions, found {len(subregions)}.")
+    if len(local_connections) != 73:
+        fail(errors, f"Expected 73 intra-region connections, found {len(local_connections)}.")
     if len(elevators) != 8:
         fail(errors, f"Expected 8 elevator contracts, found {len(elevators)}.")
 
@@ -713,11 +713,15 @@ def validate(data: dict[str, Any]) -> list[str]:
         if secret.get("return_to_parent") is not True:
             fail(errors, f"{sid}: hidden area must have a reliable return to its parent.")
         secondary = secret.get("secondary_exit")
-        if secondary:
+        if isinstance(secondary, dict) and secondary.get("status") == "deferred_pending_independent_route_justification":
+            # Explicitly deferred design note, not an active exit contract.
+            if not str(secondary.get("decision", "")).strip() or not str(secondary.get("note", "")).strip():
+                fail(errors, f"{sid}: deferred secondary exit needs a decision and rationale.")
+        elif secondary:
             destination = secondary.get("to")
             if destination not in region_ids:
                 fail(errors, f"{sid}: secondary exit points to unknown region {destination}.")
-            if not secondary.get("unlock_condition", "").strip():
+            if not str(secondary.get("unlock_condition", "")).strip():
                 fail(errors, f"{sid}: secondary exit must specify a progression condition.")
             if secondary.get("opens_from") not in {sid, parent, destination}:
                 fail(errors, f"{sid}: secondary exit must identify the side that opens it.")
@@ -728,7 +732,6 @@ def validate(data: dict[str, Any]) -> list[str]:
                     fail(errors, f"{sid}: secondary exit could bypass main progression to {destination}.")
         else:
             fail(errors, f"{sid}: a hidden area needs a safe secondary exit or an explicit single-entry return design.")
-
 
     # Keep resonance thresholds reachable from a documented, one-time source path.
     progression = data.get("resonance_progression_contract", [])
