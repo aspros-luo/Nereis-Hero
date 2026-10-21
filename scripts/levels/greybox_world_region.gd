@@ -519,7 +519,7 @@ func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 	camera.limit_left = 0
 	camera.limit_top = 0
 	camera.limit_right = int(map_width)
-	camera.limit_bottom = 720
+	camera.limit_bottom = 1000 if region_id == "A2" else 720
 	hero.add_child(camera)
 
 func _spawn_ui() -> void:
@@ -828,14 +828,16 @@ func _create_floor() -> void:
 		# The eastern ravine separates the expanded forest from the remote canopy exit.
 		# 东部沟壑将扩建林地与远端树冠出口分开。
 		_add_ground_segment("GreyboxGround_East", 2660.0, map_width - 2660.0)
-		# Bell Grave: lower floor and two ledges preserve a deliberate jump-back route.
-		_add_platform(Rect2(860.0, 610.0, 200.0, 18.0))
-		_add_platform(Rect2(850.0, 580.0, 70.0, 12.0))
-		_add_platform(Rect2(1000.0, 580.0, 70.0, 12.0))
-		# Second lower basin: the route can be crossed overhead or explored below, with ledges on both sides.
-		_add_platform(Rect2(2420.0, 610.0, 240.0, 18.0))
-		_add_platform(Rect2(2400.0, 580.0, 70.0, 12.0))
-		_add_platform(Rect2(2590.0, 580.0, 70.0, 12.0))
+		# Bell Grave descends below the surface into a real undercroft with staggered exit shelves.
+		_add_platform(Rect2(860.0, floor_y + 125.0, 200.0, 18.0))
+		_add_platform(Rect2(850.0, floor_y + 78.0, 70.0, 12.0))
+		_add_platform(Rect2(1000.0, floor_y + 45.0, 70.0, 12.0))
+		_add_platform(Rect2(900.0, floor_y + 5.0, 75.0, 12.0))
+		# The eastern ravine is a deep cut: lower shelves make a second route under the high bridge.
+		_add_platform(Rect2(2420.0, floor_y + 125.0, 240.0, 18.0))
+		_add_platform(Rect2(2400.0, floor_y + 78.0, 70.0, 12.0))
+		_add_platform(Rect2(2590.0, floor_y + 45.0, 70.0, 12.0))
+		_add_platform(Rect2(2490.0, floor_y + 5.0, 80.0, 12.0))
 		return
 	_add_ground_segment("GreyboxGround", 0.0, map_width)
 
@@ -859,9 +861,9 @@ func _create_boundaries() -> void:
 		var wall := StaticBody2D.new()
 		var shape := CollisionShape2D.new()
 		var rectangle := RectangleShape2D.new()
-		rectangle.size = Vector2(40.0, 720.0)
+		rectangle.size = Vector2(40.0, 1100.0)
 		shape.shape = rectangle
-		shape.position = Vector2(x, 360.0)
+		shape.position = Vector2(x, 500.0)
 		wall.add_child(shape)
 		add_child(wall)
 
@@ -869,50 +871,76 @@ func _configure_platforms() -> void:
 	platforms.clear()
 	match region_id:
 		"A2":
-			# Landmark-led spaces replace the repetitive platform ladder.
-			# 以地标组织路线，移除重复的平台梯子。
-			# R01 forest entry: one short climb introduces the canopy.
-			_add_platform(Rect2(360, 485, 145, 20))
-			_add_platform(Rect2(535, 445, 125, 18))
-			_add_platform(Rect2(685, 405, 110, 18))
-			_add_platform(Rect2(760, 370, 110, 18))
-			# R02 broken gallery circles the Bell Grave and leaves its descent readable.
-			_add_platform(Rect2(1080, 455, 150, 18))
-			_add_platform(Rect2(1260, 415, 145, 18))
-			_add_platform(Rect2(1435, 465, 165, 18))
-			# R04 canopy: broad landings create a route with pauses and changing elevation.
-			_add_platform(Rect2(850, 315, 150, 20))
-			_add_platform(Rect2(1040, 275, 170, 20))
-			_add_platform(Rect2(1250, 310, 145, 18))
-			_add_platform(Rect2(1430, 350, 150, 18))
-			_add_platform(Rect2(1610, 395, 140, 18))
-			# Preserve C04's paired arrival shelf at the authored highroad elevation.
-			_add_platform(Rect2(1840, 445, 130, 18))
-			_add_platform(Rect2(1740, 400, 110, 18))
-			# R05 pilgrim bridge: separated approaches communicate a broken crossing.
-			_add_platform(Rect2(1690, 315, 145, 18))
-			_add_platform(Rect2(1880, 350, 145, 18))
-			_add_platform(Rect2(2040, 395, 135, 18))
-			# R06 tower ribs descend back toward the floor and close the first loop.
-			_add_platform(Rect2(1800, 445, 135, 18))
-			_add_platform(Rect2(1980, 475, 130, 18))
-			# R07/R08 eastern ravine: lower bypass and upper risky bridge approach.
-			_add_platform(Rect2(2260, 475, 140, 18))
-			_add_platform(Rect2(2390, 430, 110, 18))
-			_add_platform(Rect2(2510, 465, 125, 18))
-			_add_platform(Rect2(2645, 430, 125, 18))
-			_add_platform(Rect2(2785, 475, 135, 18))
-			_add_platform(Rect2(2935, 435, 135, 18))
-			_add_platform(Rect2(3080, 390, 135, 18))
-			_add_platform(Rect2(3180, 400, 130, 18))
-			_add_platform(Rect2(3215, 420, 115, 18))
-			# C03 door anchor at x=3400 must be backed by a collision platform at y=380.
-			_add_platform(Rect2(3340, 380, 140, 18))
-			# The final rise reaches C03 through a distinct eastern bridge silhouette.
-			_add_platform(Rect2(2740, 330, 130, 18))
-			_add_platform(Rect2(2900, 300, 130, 18))
-			_add_platform(Rect2(3060, 330, 130, 18))
-			_add_platform(Rect2(3220, 365, 130, 18))
+			# A2 is a vertically interlocked region, not a longer flat corridor.
+			# A2 采用犬牙交错的上下层：主路会攀升、回落，再从另一侧绕回同一地标。
+			# West root climb: jagged shelves climb into the first canopy.
+			_add_platform(Rect2(300, 585, 120, 18))
+			_add_platform(Rect2(430, 530, 110, 18))
+			_add_platform(Rect2(555, 465, 115, 18))
+			_add_platform(Rect2(690, 410, 105, 18))
+			_add_platform(Rect2(770, 345, 105, 18))
+			_add_platform(Rect2(900, 290, 120, 18))
+			_add_platform(Rect2(1035, 235, 130, 18))
+			_add_platform(Rect2(1175, 275, 115, 18))
+			_add_platform(Rect2(1265, 345, 120, 18))
+			_add_platform(Rect2(1385, 405, 125, 18))
+			_add_platform(Rect2(1510, 465, 120, 18))
+			_add_platform(Rect2(1630, 520, 135, 18))
+			# Bell Grave outer gallery: an upper rim and a lower return skirt overlap vertically.
+			_add_platform(Rect2(820, 470, 105, 18))
+			_add_platform(Rect2(935, 420, 115, 18))
+			_add_platform(Rect2(1060, 385, 120, 18))
+			_add_platform(Rect2(1180, 430, 115, 18))
+			_add_platform(Rect2(1290, 490, 125, 18))
+			_add_platform(Rect2(760, 535, 100, 18))
+			_add_platform(Rect2(910, 560, 110, 18))
+			_add_platform(Rect2(1050, 535, 110, 18))
+			_add_platform(Rect2(1190, 555, 115, 18))
+			# A broken canopy bridge rises over the gallery, then descends behind its ribs.
+			_add_platform(Rect2(850, 185, 115, 18))
+			_add_platform(Rect2(985, 145, 125, 18))
+			_add_platform(Rect2(1125, 175, 115, 18))
+			_add_platform(Rect2(1245, 220, 115, 18))
+			_add_platform(Rect2(1360, 285, 115, 18))
+			_add_platform(Rect2(1475, 330, 120, 18))
+			# Central pilgrim ribs: upper crossing and lower shelves weave around one another.
+			_add_platform(Rect2(1585, 365, 115, 18))
+			_add_platform(Rect2(1710, 310, 120, 18))
+			_add_platform(Rect2(1840, 270, 120, 18))
+			_add_platform(Rect2(1970, 315, 115, 18))
+			_add_platform(Rect2(2085, 375, 120, 18))
+			_add_platform(Rect2(2185, 440, 115, 18))
+			_add_platform(Rect2(1735, 430, 115, 18))
+			_add_platform(Rect2(1850, 485, 115, 18))
+			_add_platform(Rect2(1975, 525, 125, 18))
+			_add_platform(Rect2(2100, 565, 120, 18))
+			# C04 remains on a supported highroad shelf; the lower path can pass beneath it.
+			_add_platform(Rect2(1740, 515, 125, 18))
+			_add_platform(Rect2(1840, 535, 140, 18))
+			_add_platform(Rect2(1975, 465, 115, 18))
+			# Eastern ravine: an upper bridge and a deep underpass share the same footprint.
+			_add_platform(Rect2(2250, 490, 115, 18))
+			_add_platform(Rect2(2355, 425, 110, 18))
+			_add_platform(Rect2(2465, 350, 115, 18))
+			_add_platform(Rect2(2580, 300, 120, 18))
+			_add_platform(Rect2(2695, 345, 115, 18))
+			_add_platform(Rect2(2795, 410, 115, 18))
+			_add_platform(Rect2(2895, 465, 115, 18))
+			_add_platform(Rect2(2985, 400, 115, 18))
+			_add_platform(Rect2(3075, 335, 115, 18))
+			_add_platform(Rect2(3165, 390, 115, 18))
+			_add_platform(Rect2(3220, 500, 130, 18))
+			# C03's remote canopy exit has a real landing at the authored anchor height.
+			_add_platform(Rect2(3335, 490, 145, 18))
+			# A second, higher route crosses above the ravine and rejoins the exit approach.
+			_add_platform(Rect2(2310, 250, 115, 18))
+			_add_platform(Rect2(2435, 205, 115, 18))
+			_add_platform(Rect2(2560, 165, 120, 18))
+			_add_platform(Rect2(2685, 205, 115, 18))
+			_add_platform(Rect2(2805, 260, 115, 18))
+			_add_platform(Rect2(2925, 305, 115, 18))
+			_add_platform(Rect2(3045, 270, 115, 18))
+			_add_platform(Rect2(3155, 315, 115, 18))
 		"A3":
 			# Street-level route: rubble, market, sewer descent, and the battlefield road.
 			# 地面主路连接碎墙、市场、下水道入口与战场方向。
@@ -2815,9 +2843,9 @@ func _region_backdrop_texture() -> Texture2D:
 func _draw() -> void:
 	var backdrop: Texture2D = _region_backdrop_texture()
 	if backdrop != null:
-		draw_texture_rect(backdrop, Rect2(0.0, 0.0, map_width, 720.0), false)
+		draw_texture_rect(backdrop, Rect2(0.0, 0.0, map_width, 1000.0 if region_id == "A2" else 720.0), false)
 	else:
-		draw_rect(Rect2(0.0, 0.0, map_width, 720.0), _background_color())
+		draw_rect(Rect2(0.0, 0.0, map_width, 1000.0 if region_id == "A2" else 720.0), _background_color())
 	_draw_biome_color_wash()
 	_draw_atmospheric_layers()
 	_draw_midground_accents()
@@ -2826,9 +2854,9 @@ func _draw() -> void:
 	if region_id == "A2":
 		# Draw the pit cut after floor stains/seams so no decorative line falsely bridges the opening.
 		# 坑口断面必须画在地面污渍/接缝之后，避免装饰线把真实断口视觉上连成地面。
-		draw_rect(Rect2(860.0, floor_y - 1.0, 200.0, 180.0), Color("#171820"))
-		draw_rect(Rect2(860.0, floor_y - 1.0, 10.0, 82.0), Color("#51434a"))
-		draw_rect(Rect2(1050.0, floor_y - 1.0, 10.0, 82.0), Color("#51434a"))
+		draw_rect(Rect2(860.0, floor_y - 1.0, 200.0, 260.0), Color("#171820"))
+		draw_rect(Rect2(860.0, floor_y - 1.0, 10.0, 150.0), Color("#51434a"))
+		draw_rect(Rect2(1050.0, floor_y - 1.0, 10.0, 150.0), Color("#51434a"))
 
 	# Replace the old repetitive ground slashes with sparse, broken stone cracks and low atmospheric haze.
 	# 将重复的地面斜线改为稀疏断裂石纹与贴地薄雾，降低灰盒画面的噪声感。
