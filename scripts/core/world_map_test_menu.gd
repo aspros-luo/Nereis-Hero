@@ -5,7 +5,7 @@ extends Control
 const REGION_ENTRIES: Array[Dictionary] = [
     {"id":"A0", "name":"边境手术所 / Escape Prologue", "path":"res://scenes/escape_prologue.tscn", "spawn":"west"},
     {"id":"A1", "name":"边境村庄 / Village Hub", "path":"res://scenes/village_hub.tscn", "spawn":"west"},
-    {"id":"ROOM_WORLD", "name":"新地图原型：地表 / 树冠 / 深层竖井", "path":"res://scenes/rooms/surface_hub.tscn", "spawn":"west"},
+    {"id":"ROOM_WORLD", "name":"新地图施工版：村庄 / 雾林 / 废弃城区（9 房间）", "path":"res://scenes/rooms/a1_village_streets.tscn", "spawn":"west"},
     {"id":"A2", "name":"雾林与旧朝圣路 / Ash Forest", "path":"res://scenes/ash_forest.tscn", "spawn":"west"},
     {"id":"A3", "name":"废弃城区 / Forgotten City", "path":"res://scenes/forgotten_city.tscn", "spawn":"west"},
     {"id":"A4", "name":"沉积大厅与水库 / Sewer Reservoir", "path":"res://scenes/sewer_reservoir.tscn", "spawn":"west"},
@@ -54,7 +54,7 @@ func _build_ui() -> void:
     root.add_child(title)
 
     var description := Label.new()
-    description.text = "选择旧区域进行兼容性验收，或进入 ROOM_WORLD 体验新的房间式地图原型。原型包含地表、树冠高路与深层竖井的实际场景切换。测试模式不覆盖正式存档。\nChoose a legacy region or ROOM_WORLD to test the new room-based prototype: surface, canopy route and deep shaft are separate playable scenes. Normal saves are protected.\n操作：方向键/A-D 移动，Space 跳跃，E 交互，F6 返回本选择页。"
+    description.text = "选择旧区域进行兼容性验收，或进入 ROOM_WORLD 测试 A1-A3 的 9 个合同驱动房间。该版本将空间规格生成真实碰撞与场景出口，仍属施工版，视觉与运行时路线尚需验收。测试模式不覆盖正式存档。\nChoose a legacy region or ROOM_WORLD to test the 9 contract-driven A1-A3 rooms. This is a construction build; visuals and traversal still require runtime acceptance. Normal saves are protected.\n操作：方向键/A-D 移动，Space 跳跃，E 交互，F6 返回本选择页。"
     description.custom_minimum_size.y = 58
     description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     description.add_theme_color_override("font_color", Color("#9b9099"))
