@@ -2350,7 +2350,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.required_resonance = 20
 			route.bridge_start_x = 1380.0
 			route.bridge_end_x = 1610.0
-			route.bridge_y = 405.0
+			route.bridge_y = 386.0
 			route.prompt_text = "E  ANCHOR THE BELLGRAVE CANOPY"
 		"A3":
 			route = Node2D.new()
