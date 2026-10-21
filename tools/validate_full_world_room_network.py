@@ -63,6 +63,9 @@ def main() -> int:
         if not spawn.get("support"):
             errors.append(f"{rid}: spawn lacks support contract")
         terrain = room.get("terrain", [])
+        terrain_ids_for_spawn = {str(part.get("id", "")) for part in terrain}
+        if str(spawn.get("support", "")) not in terrain_ids_for_spawn:
+            errors.append(f"{rid}: spawn support does not match a terrain segment")
         exits = room.get("exits", [])
         landmarks = room.get("landmarks", [])
         terrain_count += len(terrain)
