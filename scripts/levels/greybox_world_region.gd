@@ -869,12 +869,24 @@ func _create_floor() -> void:
 			floor_gap = Vector2(780.0, 1280.0) # Reservoir undercroft.
 		"A5":
 			floor_gap = Vector2(820.0, 1320.0) # Battlefield trench.
+		"A6":
+			floor_gap = Vector2(1380.0, 1770.0) # Bell tower lower cloister.
 		"A7":
 			floor_gap = Vector2(800.0, 1300.0) # Prison maintenance drop.
+		"A8":
+			floor_gap = Vector2(1350.0, 1780.0) # Royal tomb lower crypt.
+		"A9":
+			floor_gap = Vector2(1350.0, 1780.0) # Outer ring undercroft.
+		"A10":
+			floor_gap = Vector2(1350.0, 1770.0) # Cathedral lower gallery.
+		"A11":
+			floor_gap = Vector2(1350.0, 1770.0) # Ancient ruin undercroft.
 		"A12":
 			floor_gap = Vector2(800.0, 1300.0) # Foundations beneath the crown wall.
 		"A13":
 			floor_gap = Vector2(850.0, 1350.0) # Final descent beneath the ending ascent.
+		"H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08", "H09":
+			floor_gap = Vector2(760.0, 1160.0) # Hidden-region lower route beneath the secret chamber.
 	if floor_gap.x >= 0.0 and floor_gap.y > floor_gap.x and floor_gap.y < map_width:
 		_add_ground_segment("GreyboxGround_West", 0.0, floor_gap.x)
 		_add_ground_segment("GreyboxGround_East", floor_gap.y, map_width - floor_gap.y)
@@ -1450,6 +1462,24 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(880.0, floor_y + 100.0, 145.0, 18.0))
 			_add_platform(Rect2(1045.0, floor_y + 145.0, 145.0, 18.0))
 			_add_platform(Rect2(1210.0, floor_y + 100.0, 145.0, 18.0))
+	_configure_additional_lower_route_platforms()
+
+func _configure_additional_lower_route_platforms() -> void:
+	# The remaining tall regions get lower passages under their existing upper loops.
+	# 其余高层区域在既有上层环路下方补齐低位通道。
+	var shelf_start := -1.0
+	match region_id:
+		"A6":
+			shelf_start = 1410.0
+		"A8", "A9", "A10", "A11":
+			shelf_start = 1380.0
+		"H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08", "H09":
+			shelf_start = 790.0
+	if shelf_start < 0.0:
+		return
+	_add_platform(Rect2(shelf_start, floor_y + 100.0, 145.0, 18.0))
+	_add_platform(Rect2(shelf_start + 165.0, floor_y + 145.0, 145.0, 18.0))
+	_add_platform(Rect2(shelf_start + 330.0, floor_y + 100.0, 145.0, 18.0))
 
 func _add_platform(rect: Rect2) -> void:
 	platforms.append(rect)
