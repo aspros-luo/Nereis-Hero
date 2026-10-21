@@ -280,7 +280,7 @@ def validate(data: dict[str, Any]) -> list[str]:
     # Guard the connections whose vertical identity is essential to the box-world layout.
     # 对高架、落差、竖井和独立排水路线设置语义锚点，避免后续误改成普通地面门。
     expected_layer_pairs = {
-        "C03": ("A2-S04", "A3-S04"),
+        "C03": ("A2-S07", "A3-S04"),
         "C04": ("A2-S05", "A5-S03"),
         "C05": ("A3-S05", "A4-S01"),
         "C06": ("A4-S06", "A1-S04"),
