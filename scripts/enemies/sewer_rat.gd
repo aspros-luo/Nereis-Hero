@@ -95,7 +95,7 @@ func take_damage(amount: int) -> void:
 func _draw() -> void:
 	var body_color := Color("#d1aaa0") if hit_flash > 0.0 else Color("#4a3c3d")
 	var bob := sin(animation_time * 11.0) * 1.4 if absf(velocity.x) > 4.0 else 0.0
-	draw_ellipse(Vector2(0.0, -12.0 + bob), Vector2(18.0, 10.0), body_color)
+	_draw_ellipse(Vector2(0.0, -12.0 + bob), Vector2(18.0, 10.0), body_color)
 	draw_circle(Vector2(facing * 14.0, -20.0 + bob), 7.0, body_color)
 	draw_circle(Vector2(facing * 17.0, -22.0 + bob), 1.8, Color("#d97870"))
 	draw_colored_polygon(PackedVector2Array([
@@ -107,7 +107,7 @@ func _draw() -> void:
 	draw_line(Vector2(8.0, -6.0 + bob), Vector2(12.0, 1.0), body_color, 3.0)
 	draw_line(Vector2(-12.0, -16.0 + bob), Vector2(-20.0, -10.0 + bob), body_color, 2.0)
 
-func draw_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
+func _draw_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
 	var points := PackedVector2Array()
 	for index in range(20):
 		var angle := TAU * float(index) / 20.0
