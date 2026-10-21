@@ -2651,7 +2651,7 @@
       "travel": "both",
       "initial_state": "open",
       "unlock_condition": "",
-      "design_note": "A2 运行时代码已添加真实地面断口 x=860..1060、y=610 坑底承托与 y=580 两侧回返台；普通探索无共鸣门槛。代码已实现但必须在 Godot 中验证下落、两侧跳回、死亡恢复与碰撞，不得标记为实机通过。",
+      "design_note": "A2 运行时代码已添加真实地面断口 x=860..1060、y=610 坑底承托与 y=580 两侧回返台；普通探索无共鸣门槛。平台初始化顺序已修正以保留绘制登记。代码已实现但必须在 Godot 中验证下落、两侧跳回、死亡恢复与碰撞。",
       "implementation_status": "code_added_runtime_unverified"
     },
     {
@@ -4075,6 +4075,16 @@
         "id": "SC068_LFT01",
         "status": "deferred_not_in_a2_baseline_acceptance",
         "details": "No runtime lift instance found; SC009 is baseline route. LFT01 remains a future option, not a validated route."
+      },
+      {
+        "id": "H02_A2_entrance_alignment",
+        "status": "code_added_runtime_unverified",
+        "details": "H02 gate now spawns at x=960,y=610 on the Bell Grave pit floor, retains resonance 18 + sight and persistent opening. H02 gate-open narrator popup suppressed; entering and returning still need engine validation."
+      },
+      {
+        "id": "platform_render_registration",
+        "status": "static_source_fix",
+        "details": "Initialization now calls _configure_platforms before _create_floor, so pit ledges appended by _add_platform remain in the shared platform array used by the renderer."
       }
     ]
   }
