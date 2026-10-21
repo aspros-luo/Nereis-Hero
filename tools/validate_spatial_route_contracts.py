@@ -693,19 +693,19 @@ def main() -> int:
     # SC009's authored climb chain must exist in source. This is a coordinate inventory,
     # not a proof that the Hero can jump between the platforms in Godot.
     a2_climb_chain = [
-        (430.0, 485.0, 105.0, 20.0),
-        (535.0, 450.0, 110.0, 20.0),
-        (645.0, 415.0, 130.0, 20.0),
+        (360.0, 485.0, 145.0, 20.0),
+        (535.0, 445.0, 125.0, 18.0),
+        (685.0, 405.0, 110.0, 18.0),
         (760.0, 370.0, 110.0, 18.0),
-        (870.0, 330.0, 110.0, 18.0),
-        (1000.0, 360.0, 110.0, 18.0),
-        (1120.0, 405.0, 110.0, 18.0),
-        (1260.0, 390.0, 110.0, 18.0),
+        (850.0, 315.0, 150.0, 20.0),
+        (1040.0, 275.0, 170.0, 20.0),
+        (1250.0, 310.0, 145.0, 18.0),
+        (1430.0, 350.0, 150.0, 18.0),
     ]
     require(
         errors,
         all(rect in platform_rects.get("A2", []) for rect in a2_climb_chain),
-        "A2 SC009: expected ground-to-canopy authored platform chain is incomplete or has drifted.",
+        "A2 SC009: expected landmark-led ground-to-canopy climb chain is incomplete or has drifted.",
     )
 
     # Elevated A2 arrivals must be statically supported by authored platform tops.
