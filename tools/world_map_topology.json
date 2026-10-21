@@ -2731,6 +2731,28 @@
       "implementation_status": "runtime_bridge_exists_engine_not_verified"
     },
     {
+      "id": "SC072",
+      "from": "A2-S04",
+      "to": "A2-S06",
+      "kind": "drop_and_return",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": "扩建后的东部沟壑可从树冠层下探至低位绕行路线；沟底必须保留可回跳承托，不能成为单向软锁。",
+      "implementation_status": "geometry_added_engine_not_verified"
+    },
+    {
+      "id": "SC073",
+      "from": "A2-S06",
+      "to": "A2-S07",
+      "kind": "climb_and_rejoin",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": "低位林下绕行在沟壑东侧重新接回扩建树冠路线；与高路并行但不替代 C03。",
+      "implementation_status": "geometry_added_engine_not_verified"
+    },
+    {
       "id": "SC012",
       "from": "A3-S01",
       "to": "A3-S02",
