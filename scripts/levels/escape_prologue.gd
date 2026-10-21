@@ -200,6 +200,10 @@ func _spawn_exit() -> void:
 	exit_area.name = "VillageRoadExit"
 	exit_area.prompt_text = "E  逃离"
 	exit_area.enabled = false
+	exit_area.set_meta("p5_1_exit_contract", true)
+	exit_area.set_meta("p5_1_target_scene", "res://scenes/prologue_exterior.tscn")
+	exit_area.set_meta("p5_1_target_region", "A0_TRANSITION")
+	exit_area.set_meta("p5_1_spawn_side", "west")
 
 	var shape := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
