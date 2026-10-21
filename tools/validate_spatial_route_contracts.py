@@ -690,7 +690,7 @@ def main() -> int:
         and "route.required_resonance = 20" in local_routes_body
         and "route.bridge_start_x = 1380.0" in local_routes_body
         and "route.bridge_end_x = 1610.0" in local_routes_body
-        and "route.bridge_y = 405.0" in local_routes_body,
+        and "route.bridge_y = 386.0" in local_routes_body,
         "A2 SC011: runtime resonance bridge coordinates and unlock threshold must match the canopy contract.",
     )
     require(
