@@ -84,6 +84,21 @@ func _draw() -> void:
         draw_rect(Rect2(-10, -12, 20, 23), Color("#a89b8d") if not consumed else Color("#766b6b"))
         for line_y in [-7.0, -1.0, 5.0]:
             draw_line(Vector2(-7, line_y), Vector2(7, line_y), Color("#51464a"), 1.5)
+    elif item_id == "bellgrave_burial_token":
+        draw_colored_polygon(PackedVector2Array([
+            Vector2(-13, -12), Vector2(10, -14), Vector2(15, 2),
+            Vector2(4, 13), Vector2(-12, 8)
+        ]), Color("#b9a88b") if not consumed else Color("#655b5b"))
+        draw_line(Vector2(-8, -6), Vector2(7, 6), Color("#51464a"), 2.0)
+        draw_line(Vector2(-7, 6), Vector2(8, -7), Color("#51464a"), 2.0)
+    elif item_id == "canopy_waymarker_fragment":
+        draw_colored_polygon(PackedVector2Array([
+            Vector2(-15, -13), Vector2(12, -15), Vector2(10, 12),
+            Vector2(-12, 14)
+        ]), Color("#8f9b83") if not consumed else Color("#655b5b"))
+        draw_line(Vector2(-8, -7), Vector2(7, -7), Color("#3e4540"), 1.5)
+        draw_line(Vector2(-8, -1), Vector2(2, -1), Color("#3e4540"), 1.5)
+        draw_line(Vector2(-8, 5), Vector2(7, 5), Color("#3e4540"), 1.5)
         draw_line(Vector2(-5, -10), Vector2(5, 8), Color("#4f3339"), 1.5)
     else:
         draw_rect(Rect2(-12, -12, 24, 24), Color("#332c34"))
