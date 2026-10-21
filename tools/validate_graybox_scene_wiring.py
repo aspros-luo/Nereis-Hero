@@ -644,6 +644,13 @@ def main() -> int:
     require(village_script, 'const VILLAGE_GROUND_STRIP = preload("res://assets/art/backdrops/village_ground_strip.svg")', "Village ground preload", errors)
     require(village_script, "draw_texture_rect(VILLAGE_BACKDROP, Rect2(0, 0, 3000, 720), false)", "Village illustrated backdrop", errors)
     require(village_script, "draw_texture_rect(VILLAGE_GROUND_STRIP, Rect2(0, 520, 3000, 200), false)", "Village textured ground", errors)
+    require(village_script, "Vector2(0.0, 1180.0)", "Village west floor segment before lower route", errors)
+    require(village_script, "Vector2(1260.0, 400.0)", "Village middle floor segment after first shaft", errors)
+    require(village_script, "Vector2(1740.0, 1260.0)", "Village east floor segment after return hatch", errors)
+    require(village_script, "func _create_village_lower_route() -> void:", "Village lower route collision builder", errors)
+    require(village_script, "Rect2(1200.0, floor_y + 90.0, 145.0, 18.0)", "Village lower entry shelf", errors)
+    require(village_script, "Rect2(1365.0, floor_y + 135.0, 145.0, 18.0)", "Village lower middle shelf", errors)
+    require(village_script, "Rect2(1530.0, floor_y + 90.0, 145.0, 18.0)", "Village lower return shelf", errors)
     # Elevated exits must not remain interactable from the uninterrupted ground floor.
     # 高位出口不能从连续地面直接交互，避免平台只成为装饰路线。
     require(region_script, "rectangle.size = Vector2(110.0, 80.0)", "Door interaction volume height", errors)
