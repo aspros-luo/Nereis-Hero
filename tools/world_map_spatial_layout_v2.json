@@ -526,15 +526,6 @@
         "A9"
       ],
       "purpose": "inner city loop after the side gate is opened"
-    },
-    {
-      "id": "L05",
-      "regions": [
-        "A8",
-        "A11",
-        "A13"
-      ],
-      "purpose": "optional deep-truth route to one terminal ending"
     }
   ],
   "room_budget": {
@@ -565,5 +556,16 @@
       "visual-only shortcuts with no traversal effect",
       "graybox rectangles treated as final art"
     ]
-  }
+  },
+  "optional_routes": [
+    {
+      "id": "O01",
+      "regions": [
+        "A8",
+        "A11",
+        "A13"
+      ],
+      "purpose": "optional deep-truth route; optional branch ending path, not counted as a closed loop"
+    }
+  ]
 }
