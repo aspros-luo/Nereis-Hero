@@ -110,9 +110,19 @@ def main() -> int:
     # 拓扑检查会读取共享控制器中的线索 ID，因此必须先加载，避免局部变量尚未赋值。
     region_script = read("scripts/levels/greybox_world_region.gd", errors)
     item_catalog = read("scripts/core/item_catalog.gd", errors)
-    for item_id in ("bell_tower_winch_key", "charred_church_seal", "old_pilgrim_waybill", "third_street_survey", "royal_mortuary_register"):
+    for item_id in (
+        "bell_tower_winch_key",
+        "charred_church_seal",
+        "old_pilgrim_waybill",
+        "third_street_survey",
+        "royal_mortuary_register",
+        "bellgrave_burial_token",
+        "canopy_waymarker_fragment",
+    ):
         require(item_catalog, f'"{item_id}"', "scripts/core/item_catalog.gd", errors)
         require(region_script, f'"item_id": "{item_id}"', "scripts/levels/greybox_world_region.gd", errors)
+    require(region_script, '"exploration_reward_bellgrave_burial_token"', "A2 Bell Grave exploration reward", errors)
+    require(region_script, '"exploration_reward_canopy_waymarker_fragment"', "A2 far-canopy exploration reward", errors)
     require(region_script, "func _spawn_region_item_pickups() -> void:", "scripts/levels/greybox_world_region.gd", errors)
     require(region_script, 'region_id not in ["A2", "A3"]', "A2/A3 first-entry popups are replaced by in-world discovery", errors)
     require(region_script, '"anomaly_bell_retiming"', "A2 retains its inspectable bell evidence", errors)
