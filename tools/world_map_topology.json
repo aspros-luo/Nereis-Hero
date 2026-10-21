@@ -176,7 +176,14 @@
         "route_form": "封闭排污出口→村庄地面入口",
         "readability_contract": "单向逃脱；出口方向由封锁与序章流程决定",
         "status": "design_contract_not_runtime_verified"
-      }
+      },
+      "route_chain": [
+        "res://scenes/escape_prologue.tscn",
+        "res://scenes/prologue_exterior.tscn",
+        "res://scenes/mite_house.tscn",
+        "res://scenes/village_hub.tscn"
+      ],
+      "route_chain_note": "C01 is a staged prologue route: surgery interior → exterior mountain path → Mite's house → village. This is not a direct A0-to-A1 door."
     },
     {
       "id": "C02",
@@ -973,7 +980,13 @@
           "x": 350,
           "y_offset": 0,
           "spawn_side": "city_cut_return"
-        }
+        },
+        "route_chain": [
+          "res://scenes/village_hub.tscn",
+          "res://scenes/old_drain_exploration.tscn",
+          "res://scenes/forgotten_city.tscn"
+        ],
+        "route_chain_note": "The final old-drain → A3 hop exists only after opened_old_drainage_link_from_A4; the intermediate scene and its phased gate are part of the route contract."
       },
       "layer_contract": {
         "from_subregion": "A1-S01",
