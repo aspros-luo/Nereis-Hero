@@ -5,6 +5,7 @@ extends Control
 const REGION_ENTRIES: Array[Dictionary] = [
     {"id":"A0", "name":"边境手术所 / Escape Prologue", "path":"res://scenes/escape_prologue.tscn", "spawn":"west"},
     {"id":"A1", "name":"边境村庄 / Village Hub", "path":"res://scenes/village_hub.tscn", "spawn":"west"},
+    {"id":"ROOM_WORLD", "name":"新地图原型：地表 / 树冠 / 深层竖井", "path":"res://scenes/rooms/surface_hub.tscn", "spawn":"west"},
     {"id":"A2", "name":"雾林与旧朝圣路 / Ash Forest", "path":"res://scenes/ash_forest.tscn", "spawn":"west"},
     {"id":"A3", "name":"废弃城区 / Forgotten City", "path":"res://scenes/forgotten_city.tscn", "spawn":"west"},
     {"id":"A4", "name":"沉积大厅与水库 / Sewer Reservoir", "path":"res://scenes/sewer_reservoir.tscn", "spawn":"west"},
@@ -53,7 +54,7 @@ func _build_ui() -> void:
     root.add_child(title)
 
     var description := Label.new()
-    description.text = "选择任意区域直接进入。测试模式预置跨区与隐藏路线条件，不覆盖正式存档。\nSelect any region directly. Route gates are primed for traversal checks; your normal save is protected.\n操作：方向键/A-D 移动，Space 跳跃，E 交互，F6 返回本选择页。"
+    description.text = "选择旧区域进行兼容性验收，或进入 ROOM_WORLD 体验新的房间式地图原型。原型包含地表、树冠高路与深层竖井的实际场景切换。测试模式不覆盖正式存档。\nChoose a legacy region or ROOM_WORLD to test the new room-based prototype: surface, canopy route and deep shaft are separate playable scenes. Normal saves are protected.\n操作：方向键/A-D 移动，Space 跳跃，E 交互，F6 返回本选择页。"
     description.custom_minimum_size.y = 58
     description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     description.add_theme_color_override("font_color", Color("#9b9099"))
