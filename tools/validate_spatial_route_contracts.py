@@ -593,6 +593,7 @@ def main() -> int:
     floor_body = function_body(region_source, "_create_floor")
     local_routes_body = function_body(region_source, "_spawn_local_resonance_routes")
     hidden_gate_feedback = function_body(region_source, "_on_optional_hidden_gate_opened")
+    local_route_feedback = function_body(region_source, "_on_local_resonance_route_opened")
     require(
         errors,
         ready_body.find("_configure_platforms()") >= 0
@@ -630,6 +631,14 @@ def main() -> int:
         and hidden_gate_feedback.find('if secret_id == "H02":') < hidden_gate_feedback.find("return")
         and "feedback=environmental_only" in hidden_gate_feedback,
         "H02: opening feedback must stay environmental and must not invoke narrator-style exposition.",
+    )
+    require(
+        errors,
+        'if route_id == "A2_BELLGRAVE_CANOPY_CROSSING":' in local_route_feedback
+        and local_route_feedback.find('if route_id == "A2_BELLGRAVE_CANOPY_CROSSING":')
+        < local_route_feedback.find("if not is_instance_valid(narrative):")
+        and 'print("[NEREIS][MAP][LOCAL_ROUTE] opened id=%s" % route_id)' in local_route_feedback,
+        "A2 SC011: route activation must remain environmental-only and must not show narrator-style popup text.",
     )
     require(
         errors,
