@@ -1,0 +1,569 @@
+{
+  "schema_version": 2,
+  "title": "Nereis-Hero original world macro layout — dual-reference synthesis",
+  "status": "macro_design_baseline_not_runtime_verified",
+  "branch": "feature/story-map-progression",
+  "reference_method": {
+    "hollow_knight": [
+      "world-scale interconnected regions",
+      "vertical depth and elevation contrast",
+      "multiple loops and return routes",
+      "discoverable shortcuts",
+      "optional hidden regions that affect endings without blocking the main route"
+    ],
+    "blasphemous_2": [
+      "irregular dense room clusters",
+      "strong vertical landmarks and towers",
+      "varied region footprints",
+      "layered room networks with distinct local identities",
+      "long traversals connected by narrow vertical passages"
+    ],
+    "originality_boundary": "Use high-level exploration and spatial-design principles only. Do not reproduce either game's exact map image, room-by-room geometry, names, or art assets."
+  },
+  "layout_axes": {
+    "x": "west/east macro geography",
+    "y": "surface-to-depth planning coordinate; larger positive values are deeper",
+    "note": "These are schematic layout coordinates, not pixels or Godot world units."
+  },
+  "regions": [
+    {
+      "id": "A0",
+      "name": "手术所与逃脱井",
+      "center": [
+        -180,
+        40
+      ],
+      "extent": [
+        220,
+        260
+      ],
+      "elevation": "surface_to_shaft",
+      "density": "compact",
+      "influence": [
+        "HK:紧凑入口与向下引导",
+        "B2:明确的起始仪式空间"
+      ]
+    },
+    {
+      "id": "A1",
+      "name": "边境村庄",
+      "center": [
+        -40,
+        10
+      ],
+      "extent": [
+        420,
+        280
+      ],
+      "elevation": "surface",
+      "density": "medium",
+      "influence": [
+        "HK:初始枢纽与多方向预告",
+        "B2:村庄街区的高低层和建筑边缘"
+      ]
+    },
+    {
+      "id": "A2",
+      "name": "雾林与旧朝圣路",
+      "center": [
+        -10,
+        -220
+      ],
+      "extent": [
+        520,
+        350
+      ],
+      "elevation": "upper_forest",
+      "density": "high",
+      "influence": [
+        "HK:林地垂直分支与隐蔽回路",
+        "B2:不规则房间群与高路地标"
+      ]
+    },
+    {
+      "id": "A3",
+      "name": "废弃城区",
+      "center": [
+        -350,
+        -100
+      ],
+      "extent": [
+        620,
+        400
+      ],
+      "elevation": "surface_to_substreet",
+      "density": "very_high",
+      "influence": [
+        "HK:交错路线和早期捷径",
+        "B2:密集房间网与街区高低错层"
+      ]
+    },
+    {
+      "id": "A4",
+      "name": "旧水库与沉积深层",
+      "center": [
+        -330,
+        250
+      ],
+      "extent": [
+        500,
+        430
+      ],
+      "elevation": "lower",
+      "density": "high",
+      "influence": [
+        "HK:水域下方的深层回环",
+        "B2:竖井连接多个横向房间群"
+      ]
+    },
+    {
+      "id": "A5",
+      "name": "旧战场与边境堡垒",
+      "center": [
+        -600,
+        -90
+      ],
+      "extent": [
+        430,
+        320
+      ],
+      "elevation": "upper_west",
+      "density": "medium",
+      "influence": [
+        "HK:边缘区域与远景目标",
+        "B2:堡垒纵向穿越与高位入口"
+      ]
+    },
+    {
+      "id": "A6",
+      "name": "修道院与钟塔",
+      "center": [
+        -440,
+        -410
+      ],
+      "extent": [
+        320,
+        500
+      ],
+      "elevation": "high_vertical",
+      "density": "high",
+      "influence": [
+        "HK:高位区域与落差捷径",
+        "B2:塔楼多层房间和环绕式爬升"
+      ]
+    },
+    {
+      "id": "A7",
+      "name": "监牢与维护竖井",
+      "center": [
+        -120,
+        -440
+      ],
+      "extent": [
+        300,
+        460
+      ],
+      "elevation": "mid_to_deep",
+      "density": "high",
+      "influence": [
+        "HK:狭窄通路、单向落差和重返路线",
+        "B2:竖井串接横向囚室"
+      ]
+    },
+    {
+      "id": "A8",
+      "name": "旧王墓与地下迷宫",
+      "center": [
+        100,
+        -410
+      ],
+      "extent": [
+        420,
+        430
+      ],
+      "elevation": "deep",
+      "density": "very_high",
+      "influence": [
+        "HK:迷宫分支和隐藏回环",
+        "B2:错层墓室、狭廊、纵向墓井"
+      ]
+    },
+    {
+      "id": "A9",
+      "name": "王城外环",
+      "center": [
+        430,
+        -160
+      ],
+      "extent": [
+        520,
+        420
+      ],
+      "elevation": "mid_to_high",
+      "density": "very_high",
+      "influence": [
+        "HK:中后期多向枢纽",
+        "B2:多个密集区域在外环汇合"
+      ]
+    },
+    {
+      "id": "A10",
+      "name": "大圣堂与内廷",
+      "center": [
+        650,
+        -390
+      ],
+      "extent": [
+        320,
+        460
+      ],
+      "elevation": "high_vertical",
+      "density": "high",
+      "influence": [
+        "HK:高位终局前区域与返程捷径",
+        "B2:大空间地标与垂直内部结构"
+      ]
+    },
+    {
+      "id": "A11",
+      "name": "古神遗迹与研究区",
+      "center": [
+        260,
+        190
+      ],
+      "extent": [
+        420,
+        520
+      ],
+      "elevation": "deepest_side",
+      "density": "high",
+      "influence": [
+        "HK:深层可选区域与异质地貌",
+        "B2:层叠遗迹、研究空间与深坑"
+      ]
+    },
+    {
+      "id": "A12",
+      "name": "王室内城与王座区",
+      "center": [
+        470,
+        140
+      ],
+      "extent": [
+        400,
+        340
+      ],
+      "elevation": "inner_city",
+      "density": "high",
+      "influence": [
+        "HK:最终主线前的复杂回路",
+        "B2:宫殿群与紧凑连通房间"
+      ]
+    },
+    {
+      "id": "A13",
+      "name": "深层梦境与终局异象",
+      "center": [
+        80,
+        520
+      ],
+      "extent": [
+        360,
+        300
+      ],
+      "elevation": "terminal_below",
+      "density": "compact",
+      "influence": [
+        "HK:深层终局与单向深入",
+        "B2:仪式性终局空间与分段下沉"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "C01",
+      "from": "A0",
+      "to": "A1",
+      "kind": "main",
+      "unlock": "two_way_after_escape",
+      "design_intent": "序章逃脱后回村"
+    },
+    {
+      "id": "C02",
+      "from": "A1",
+      "to": "A2",
+      "kind": "main",
+      "unlock": "gated",
+      "design_intent": "北门/朝圣高路"
+    },
+    {
+      "id": "C03",
+      "from": "A2",
+      "to": "A3",
+      "kind": "main",
+      "unlock": "two_way",
+      "design_intent": "林地与城区交界"
+    },
+    {
+      "id": "C04",
+      "from": "A2",
+      "to": "A5",
+      "kind": "shortcut",
+      "unlock": "remote_unlock",
+      "design_intent": "旧朝圣高路，远端开启后缩短回程"
+    },
+    {
+      "id": "C05",
+      "from": "A3",
+      "to": "A4",
+      "kind": "vertical",
+      "unlock": "gated",
+      "design_intent": "城区排水口下沉至水库"
+    },
+    {
+      "id": "C06",
+      "from": "A4",
+      "to": "A1",
+      "kind": "shortcut",
+      "unlock": "remote_unlock",
+      "design_intent": "水闸开启后直通村庄老井"
+    },
+    {
+      "id": "C07",
+      "from": "A4",
+      "to": "A8",
+      "kind": "shortcut",
+      "unlock": "progression_gated",
+      "design_intent": "深层维护路连接王墓"
+    },
+    {
+      "id": "C08",
+      "from": "A3",
+      "to": "A5",
+      "kind": "main",
+      "unlock": "two_way",
+      "design_intent": "城区西侧通往边境战场"
+    },
+    {
+      "id": "C09",
+      "from": "A5",
+      "to": "A6",
+      "kind": "main",
+      "unlock": "two_way",
+      "design_intent": "堡垒高路进入修道院"
+    },
+    {
+      "id": "C10",
+      "from": "A6",
+      "to": "A3",
+      "kind": "shortcut",
+      "unlock": "drop_unlock",
+      "design_intent": "钟塔单向落差开启城区返路"
+    },
+    {
+      "id": "C11",
+      "from": "A6",
+      "to": "A7",
+      "kind": "main",
+      "unlock": "two_way",
+      "design_intent": "修道院进入监牢竖井"
+    },
+    {
+      "id": "C12",
+      "from": "A7",
+      "to": "A4",
+      "kind": "shortcut",
+      "unlock": "remote_unlock",
+      "design_intent": "维护通道回接旧水库"
+    },
+    {
+      "id": "C13",
+      "from": "A7",
+      "to": "A8",
+      "kind": "main",
+      "unlock": "two_way",
+      "design_intent": "监牢深层进入王墓"
+    },
+    {
+      "id": "C14",
+      "from": "A8",
+      "to": "A9",
+      "kind": "main",
+      "unlock": "two_way",
+      "design_intent": "王墓上行抵达王城外环"
+    },
+    {
+      "id": "C15",
+      "from": "A8",
+      "to": "A11",
+      "kind": "secret",
+      "unlock": "optional_gate",
+      "design_intent": "古老真相支路，非主线必需"
+    },
+    {
+      "id": "C16",
+      "from": "A3",
+      "to": "A9",
+      "kind": "shortcut",
+      "unlock": "remote_unlock",
+      "design_intent": "旧升降机把城区接入王城外环"
+    },
+    {
+      "id": "C17",
+      "from": "A9",
+      "to": "A10",
+      "kind": "main",
+      "unlock": "two_way",
+      "design_intent": "外环进入大圣堂"
+    },
+    {
+      "id": "C18",
+      "from": "A9",
+      "to": "A12",
+      "kind": "shortcut",
+      "unlock": "remote_unlock",
+      "design_intent": "内城侧门缩短宫城路线"
+    },
+    {
+      "id": "C19",
+      "from": "A10",
+      "to": "A11",
+      "kind": "secret",
+      "unlock": "optional_gate",
+      "design_intent": "外神共鸣与镜像回声支路"
+    },
+    {
+      "id": "C20",
+      "from": "A10",
+      "to": "A12",
+      "kind": "main",
+      "unlock": "two_way",
+      "design_intent": "大圣堂进入王室内城"
+    },
+    {
+      "id": "C21",
+      "from": "A11",
+      "to": "A13",
+      "kind": "ending",
+      "unlock": "one_way",
+      "design_intent": "深层异象终局入口"
+    },
+    {
+      "id": "C22",
+      "from": "A12",
+      "to": "A13",
+      "kind": "ending",
+      "unlock": "one_way",
+      "design_intent": "王座线终局入口"
+    },
+    {
+      "id": "C23",
+      "from": "A9",
+      "to": "A4",
+      "kind": "shortcut",
+      "unlock": "remote_unlock",
+      "design_intent": "王城排水道回接水库深层"
+    },
+    {
+      "id": "C24",
+      "from": "A1",
+      "to": "A3",
+      "kind": "shortcut",
+      "unlock": "story_gated",
+      "design_intent": "村庄防线稳定后开启旧排水捷径"
+    }
+  ],
+  "global_spatial_rules": [
+    "Do not force every region into a similar rectangular footprint; extent and room density follow local identity.",
+    "Build at least three distinct vertical strata: upper forest/monastery, central settlement/city, and lower reservoir/tomb/relic layers.",
+    "Every hub should have visually distinct exits whose spatial positions communicate direction and elevation.",
+    "Every major shortcut must change actual traversal cost or route options after activation.",
+    "Locked vistas should be visible from a reachable viewpoint before the route is opened.",
+    "Optional hidden regions H01-H08 must not block ordinary completion; discoveries may alter ending conditions.",
+    "Use room clusters, vertical connectors and multi-region loops instead of one long corridor or a chain of isolated test rooms.",
+    "Mainline and shortcut graph must be validated against real collision, jump reach, death recovery and save/load."
+  ],
+  "loops": [
+    {
+      "id": "L01",
+      "regions": [
+        "A1",
+        "A2",
+        "A3",
+        "A1"
+      ],
+      "purpose": "early world loop after the village-side drain is unlocked"
+    },
+    {
+      "id": "L02",
+      "regions": [
+        "A3",
+        "A5",
+        "A6",
+        "A7",
+        "A4",
+        "A3"
+      ],
+      "purpose": "west-central vertical loop; tower drop and maintenance tunnel shorten return"
+    },
+    {
+      "id": "L03",
+      "regions": [
+        "A3",
+        "A4",
+        "A8",
+        "A9",
+        "A3"
+      ],
+      "purpose": "deep-to-city loop via tomb, outer ring and old lift"
+    },
+    {
+      "id": "L04",
+      "regions": [
+        "A9",
+        "A10",
+        "A12",
+        "A9"
+      ],
+      "purpose": "inner city loop after the side gate is opened"
+    },
+    {
+      "id": "L05",
+      "regions": [
+        "A8",
+        "A11",
+        "A13"
+      ],
+      "purpose": "optional deep-truth route to one terminal ending"
+    }
+  ],
+  "room_budget": {
+    "initial_production_target": 65,
+    "range": [
+      55,
+      80
+    ],
+    "rule": "Room count is a budget, not a constraint. Add rooms where a traversal, landmark, loop or meaningful choice needs them; merge empty filler rooms."
+  },
+  "acceptance": {
+    "macro_regions": 14,
+    "macro_connections": 24,
+    "loops": 5,
+    "must_have": [
+      "one central multi-exit hub",
+      "two or more meaningful vertical shafts",
+      "three or more shortcut loops that change return routes",
+      "one-way terminal descents",
+      "optional hidden routes",
+      "distant visible goals",
+      "distinct region footprints and room density"
+    ],
+    "must_not_have": [
+      "uniform 1500x900 rooms",
+      "long uninterrupted flat corridors",
+      "door-to-door room chain without loops",
+      "visual-only shortcuts with no traversal effect",
+      "graybox rectangles treated as final art"
+    ]
+  }
+}
