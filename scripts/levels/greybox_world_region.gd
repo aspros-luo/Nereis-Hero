@@ -940,9 +940,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1150, 325, 120, 18))
 			_add_platform(Rect2(1270, 370, 115, 18))
 			# A lower return shelf lets players recover from the well-side drop and rejoin the hub route.
-			_add_platform(Rect2(650, 610, 150, 18))
-			_add_platform(Rect2(820, 655, 150, 18))
-			_add_platform(Rect2(990, 610, 145, 18))
+			_add_platform(Rect2(650, floor_y + 100.0, 150, 18))
+			_add_platform(Rect2(820, floor_y + 145.0, 150, 18))
+			_add_platform(Rect2(990, floor_y + 100.0, 145, 18))
 		"A2":
 			# A2 is a vertically interlocked region, not a longer flat corridor.
 			# A2 采用犬牙交错的上下层：主路会攀升、回落，再从另一侧绕回同一地标。
@@ -1041,9 +1041,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1320, 425, 130, 18))
 			# The sewer descent is a real lower route beneath the rooftop loop, with shelves to climb back out.
 			# 下水道入口下方存在真实下层通路，错层石沿可攀回屋顶环路。
-			_add_platform(Rect2(850.0, floor_y + 70.0, 145.0, 18.0))
-			_add_platform(Rect2(1015.0, floor_y + 112.0, 145.0, 18.0))
-			_add_platform(Rect2(1180.0, floor_y + 70.0, 145.0, 18.0))
+			_add_platform(Rect2(850.0, floor_y + 100.0, 145.0, 18.0))
+			_add_platform(Rect2(1015.0, floor_y + 145.0, 145.0, 18.0))
+			_add_platform(Rect2(1180.0, floor_y + 100.0, 145.0, 18.0))
 		"A4":
 			# C05 arrival ledge: the raised city pipe-walk must connect to a supported upper inspection landing.
 			# C05 到达平台：城区高架管线必须接入有实体承托的上层检查廊。
@@ -1073,9 +1073,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1810, 355, 125, 18))
 			# The reservoir floor breaks into a stepped undercroft while the pipe-walk remains the high route.
 			# 水库地面下切为错层地下廊，管线栈道仍是高位路线。
-			_add_platform(Rect2(810.0, floor_y + 70.0, 140.0, 18.0))
-			_add_platform(Rect2(970.0, floor_y + 112.0, 140.0, 18.0))
-			_add_platform(Rect2(1130.0, floor_y + 70.0, 140.0, 18.0))
+			_add_platform(Rect2(810.0, floor_y + 100.0, 140.0, 18.0))
+			_add_platform(Rect2(970.0, floor_y + 145.0, 140.0, 18.0))
+			_add_platform(Rect2(1130.0, floor_y + 100.0, 140.0, 18.0))
 		"A5":
 			# The ground trench route remains open; a broken parapet line provides an optional high crossing.
 			# 地面战壕主路保持开放；断裂的城墙高路提供可选的上层穿越。
@@ -1103,9 +1103,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1730, 430, 110, 18))
 			# A broken trench floor adds a lower crossing under the parapet route.
 			# 断裂战壕地面在城墙高路下方增加一条低位横穿路线。
-			_add_platform(Rect2(850.0, floor_y + 70.0, 145.0, 18.0))
-			_add_platform(Rect2(1015.0, floor_y + 112.0, 145.0, 18.0))
-			_add_platform(Rect2(1180.0, floor_y + 70.0, 145.0, 18.0))
+			_add_platform(Rect2(850.0, floor_y + 100.0, 145.0, 18.0))
+			_add_platform(Rect2(1015.0, floor_y + 145.0, 145.0, 18.0))
+			_add_platform(Rect2(1180.0, floor_y + 100.0, 145.0, 18.0))
 		"A6":
 			# Main stair climbs the bell tower; the side cloister balcony loops around its outer wall.
 			# 主阶梯攀上钟塔；侧边回廊阳台绕塔外墙形成另一条路线。
@@ -1154,9 +1154,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1980, 365, 110, 18))
 			# The maintenance drop connects the prison cells to a lower crosswalk and two climb-out shelves.
 			# 维修井道把牢房接入下层横道，并用两侧石沿保留回攀路线。
-			_add_platform(Rect2(830.0, floor_y + 70.0, 145.0, 18.0))
-			_add_platform(Rect2(995.0, floor_y + 112.0, 145.0, 18.0))
-			_add_platform(Rect2(1160.0, floor_y + 70.0, 145.0, 18.0))
+			_add_platform(Rect2(830.0, floor_y + 100.0, 145.0, 18.0))
+			_add_platform(Rect2(995.0, floor_y + 145.0, 145.0, 18.0))
+			_add_platform(Rect2(1160.0, floor_y + 100.0, 145.0, 18.0))
 		"A8":
 			# The floor route passes the sarcophagi; the upper burial gallery reveals the erased royal names from above.
 			# 地面路线经过石棺；上层墓廊让玩家从高处观察被抹去的王室姓名。
@@ -1261,9 +1261,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1960, 390, 120, 18))
 			# A lower foundation passage runs beneath the crown-wall walk and rejoins the avenue.
 			# 王冠城墙高路下方增加基础层通道，并重新接回大道。
-			_add_platform(Rect2(830.0, floor_y + 70.0, 145.0, 18.0))
-			_add_platform(Rect2(995.0, floor_y + 112.0, 145.0, 18.0))
-			_add_platform(Rect2(1160.0, floor_y + 70.0, 145.0, 18.0))
+			_add_platform(Rect2(830.0, floor_y + 100.0, 145.0, 18.0))
+			_add_platform(Rect2(995.0, floor_y + 145.0, 145.0, 18.0))
+			_add_platform(Rect2(1160.0, floor_y + 100.0, 145.0, 18.0))
 		"H07":
 			# The reflected avenue has a lower waterline and an upper lamp-bridge route.
 			# 倒影大道同时具有低位水线与高位灯桥路线。
@@ -1447,9 +1447,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1830, 420, 180, 18))
 			# The final ascent has a lower chasm route, then returns to the central climb via staggered shelves.
 			# 终局攀升下方增设深坑路线，再通过错层石沿回到中央上升段。
-			_add_platform(Rect2(880.0, floor_y + 70.0, 145.0, 18.0))
-			_add_platform(Rect2(1045.0, floor_y + 112.0, 145.0, 18.0))
-			_add_platform(Rect2(1210.0, floor_y + 70.0, 145.0, 18.0))
+			_add_platform(Rect2(880.0, floor_y + 100.0, 145.0, 18.0))
+			_add_platform(Rect2(1045.0, floor_y + 145.0, 145.0, 18.0))
+			_add_platform(Rect2(1210.0, floor_y + 100.0, 145.0, 18.0))
 
 func _add_platform(rect: Rect2) -> void:
 	platforms.append(rect)
