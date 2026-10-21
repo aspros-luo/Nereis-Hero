@@ -41,6 +41,14 @@ func _ready() -> void:
 		WorldState.record_achievement("old_drain_first_visit_seen")
 		get_tree().create_timer(0.55).timeout.connect(_show_intro)
 
+
+func _physics_process(_delta: float) -> void:
+	# The drainage shaft has descending ledges but no lethal bottom collider.
+	# Recover the Hero if they fall below the playable space, rather than leaving
+	# them in an endless FALL/MOVE loop with no way to return.
+	if not respawning and is_instance_valid(hero) and hero.global_position.y > 820.0:
+		_recover_from_fall()
+
 func _build_floor_and_descent() -> void:
 	_add_floor_segment(0.0, 280.0, 540.0)
 	_add_floor_segment(600.0, 1800.0, 690.0)
@@ -219,6 +227,23 @@ func _on_hero_defeated() -> void:
 	WorldState.input_locked = true
 	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
 	await get_tree().create_timer(0.75).timeout
+	if is_instance_valid(hero):
+		hero.velocity = Vector2.ZERO
+		hero.global_position = WorldState.checkpoint_position
+		if hero.has_method("restore_full"):
+			hero.call("restore_full")
+	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
+	WorldState.input_locked = false
+	respawning = false
+
+
+func _recover_from_fall() -> void:
+	if respawning:
+		return
+	respawning = true
+	WorldState.input_locked = true
+	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
+	await get_tree().create_timer(0.2).timeout
 	if is_instance_valid(hero):
 		hero.velocity = Vector2.ZERO
 		hero.global_position = WorldState.checkpoint_position
