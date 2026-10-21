@@ -240,7 +240,7 @@
         "intent": "C03 is a two-way canopy-highroad connection. The A2 door sits at the remote eastern canopy exit after the expanded forest/ravine route; returning to A2 must preserve the upper route rather than dropping to either ground floor."
       },
       "layer_contract": {
-        "from_subregion": "A2-S04",
+        "from_subregion": "A2-S07",
         "to_subregion": "A3-S04",
         "route_form": "树冠栈道→城区屋顶连廊",
         "readability_contract": "双向高位连接；返回点必须保留树冠高度",
