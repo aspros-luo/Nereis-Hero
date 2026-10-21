@@ -552,7 +552,7 @@ def main() -> int:
     require(boss_controller, 'SceneTransition.fade_to_scene("res://scenes/royal_tomb.tscn")', "Royal tomb boss return transition", errors)
     require(boss_controller, '_respawn_boss_after_death', "Royal tomb boss death-reset route", errors)
     require(boss_controller, 'if BOSS_FLAG in WorldState.achievement_flags:', "Royal tomb boss Continue-state recovery", errors)
-    require(boss_script, 'if not phase_two and health <= 120:', "Boss phase-two threshold", errors)
+    require(boss_script, 'if not phase_two and health <= maxi(1, max_health / 2):', "Boss phase-two threshold", errors)
     require(boss_controller, 'boss.queue_free()', "Royal tomb boss death reset", errors)
     require(boss_controller, 'victory = true', "Royal tomb boss victory latch", errors)
     require(boss_controller, 'return_door.interacted.connect(_return_to_tomb)', "Royal tomb boss exit interaction", errors)
@@ -564,16 +564,13 @@ def main() -> int:
     require(hud_script, 'int(boss.get("health")) <= 0', "Boss HUD active-instance visibility guard", errors)
 
     prologue_script = read("scripts/levels/escape_prologue.gd", errors)
-    require(prologue_script, "func _create_surgical_catwalks() -> void:", "A0 surgical catwalk builder", errors)
     # Combat shutters must be visually legible; physics-only barriers are not acceptable.
     # 战斗封锁必须有明确视觉反馈，禁止只有碰撞体而没有可见障碍。
     require(prologue_script, "func _draw_security_shutter(gate_x: float) -> void:", "A0 visible combat shutter renderer", errors)
     require(prologue_script, 'Color("#a54c62", 0.10)', "A0 shutter warning silhouette", errors)
     require(prologue_script, 'Color("#f0b35c")', "A0 shutter active-state warning lamp", errors)
     require(prologue_script, "Warning lamps communicate that the shutter is an active combat lock", "A0 shutter intent is documented in source", errors)
-    require(prologue_script, "Rect2(430, 455, 100, 16)", "A0 surgical first ledge", errors)
-    if "MAINTENANCE ACCESS ONLY" not in prologue_script and "仅供维护人员通行" not in prologue_script:
-        errors.append("A0 catwalk landmark: missing the maintenance-only label in either source or localized form.")
+    require(prologue_script, "Do not create the old graybox maintenance ledges", "A0 stays on the floor instead of reviving obsolete catwalks", errors)
     require(prologue_script, "Cold surgical shafts and suspended cables", "A0 environmental lighting layer", errors)
     require(prologue_script, "Sparse surgical floor seams", "A0 floor material layer", errors)
 
@@ -674,10 +671,10 @@ def main() -> int:
     # M1 替代路线与垂直探索的静态契约。
     prologue_route_script = read("scripts/levels/escape_prologue.gd", errors)
     require(prologue_route_script, 'if WorldState.prologue_complete:', "C01 completed-prologue resume guard", errors)
-    require(prologue_route_script, 'wardens_defeated >= wardens.size()', "C01 escape opens only after all wardens are defeated", errors)
+    require(prologue_route_script, "if ambush_phase == 2 and wardens_defeated >= 3:", "C01 escape opens only after the two ground wardens and falling warden are defeated", errors)
     require(prologue_route_script, 'exit_area.enabled = true', "C01 escape door is enabled by prologue progression", errors)
-    require(prologue_route_script, 'WorldState.mark_prologue_complete()', "C01 completion persists before leaving A0", errors)
-    require(prologue_route_script, 'SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")', "C01 A0-to-A1 transition", errors)
+    require(prologue_exterior_script, "WorldState.mark_prologue_complete()", "C01 completion persists after the authored exterior defeat/rescue", errors)
+    require(prologue_route_script, 'SceneTransition.fade_to_scene("res://scenes/prologue_exterior.tscn")', "C01 A0-to-exterior transition", errors)
 
     village_hub_script = read("scripts/levels/village_hub.gd", errors)
     if "prologue_cliff_fall_rescue_pending" in village_hub_script or "_show_prologue_rescue" in village_hub_script:
@@ -743,7 +740,7 @@ def main() -> int:
     require(region_script, 'if region_id == "A3" and side == "village_city_cut":', "C24 A3 arrival spawn branch", errors)
     require(region_script, "return 700.0", "C24 A3 arrival spawn x=700", errors)
     require(region_script, '520.0, "E  经旧排水道返回"', "A3 return-to-village exit at x=520", errors)
-    require(region_script, "_add_platform(Rect2(760, 370, 110, 18))", "A2 forest canopy route", errors)
+    require(region_script, "_add_platform(Rect2(770, 345, 105, 18))", "A2 forest canopy route", errors)
     require(region_script, "_add_platform(Rect2(450, 400, 110, 18))", "A3 rooftop loop", errors)
     require(region_script, "_add_platform(Rect2(1650, 310, 130, 18))", "A4 pipe-walk route", errors)
     require(region_script, "_add_platform(Rect2(420, 420, 120, 18))", "A5 battlefield parapet route", errors)
@@ -1731,7 +1728,7 @@ def main() -> int:
     interior_scene = read("scripts/levels/interior_scene.gd", errors)
     require(village_hub, "守门人打量着你", "A1 gatekeeper has neutral dialogue before route selection", errors)
     require(village_hub, 'WorldState.set_location("village")', "A1 persists village location for Continue", errors)
-    require(village_hub, 'npc.position = Vector2(2360, 520)', "A1 gatekeeper is stationed beside the north gate, away from the hearth and Mite", errors)
+    require(village_hub, 'npc.position = Vector2(2740, 520)', "A1 gatekeeper is stationed beside the north gate, away from the hearth and Mite", errors)
     require(village_hub, '守门人看了看你身上的教堂印记', "A1 gatekeeper route dialogue is localized to Chinese", errors)
     event_director = read("scripts/core/world_event_director.gd", errors)
     require(village_hub, 'const WORLD_EVENT_DIRECTOR_SCRIPT = preload("res://scripts/core/world_event_director.gd")', "A1 hub wires the shared progression event director", errors)
