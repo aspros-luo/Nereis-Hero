@@ -873,9 +873,6 @@ func _configure_platforms() -> void:
 			# 钟墓坑口上方不再放置横跨坑口的低台；真实坑体由 _create_floor() 建立。
 			_add_platform(Rect2(1200, 435, 150, 18))
 			_add_platform(Rect2(1500, 480, 160, 18))
-			# C04's A2 return spawn is x=1750, y=floor_y-140; this landing must physically support it.
-			# C04 的 A2 回程出生点为 x=1750、y=floor_y-140；必须有实体平台承托。
-			_add_platform(Rect2(1680, 425, 150, 18))
 			_add_platform(Rect2(1840, 445, 130, 18))
 			# The eastbound route climbs back onto the canopy instead of continuing along the uninterrupted floor.
 			# 向东的主路重新爬上树冠高台，不再沿着无间断的地面直线通行。
