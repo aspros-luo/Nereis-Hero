@@ -888,6 +888,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1610, 395, 140, 18))
 			# Preserve C04's paired arrival shelf at the authored highroad elevation.
 			_add_platform(Rect2(1840, 445, 130, 18))
+			_add_platform(Rect2(1740, 400, 110, 18))
 			# R05 pilgrim bridge: separated approaches communicate a broken crossing.
 			_add_platform(Rect2(1690, 315, 145, 18))
 			_add_platform(Rect2(1880, 350, 145, 18))
