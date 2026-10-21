@@ -148,37 +148,70 @@ func _build_exits() -> void:
 		shape_node.position = Vector2(0, -44)
 		door.add_child(shape_node)
 		add_child(door)
-		door.interacted.connect(_on_exit_interacted.bind(target_scene, _spawn_side_for_target(target_id), str(item.get("condition", "none"))))
+		door.interacted.connect(_on_exit_interacted.bind(target_scene, target_id, str(item.get("id", "")), str(item.get("condition", "none"))))
 		exits.append({"id": item.id, "position": anchor, "target": target_id, "condition": item.get("condition", "none")})
 
 func _route_condition_met(condition: String) -> bool:
 	if condition.is_empty() or condition == "none":
 		return true
+	if condition == "prologue_escape":
+		return WorldState.prologue_complete or WorldState.debug_map_test_mode or condition in WorldState.achievement_flags
 	if condition == "village_defense_survived":
-		return WorldState.prologue_complete or condition in WorldState.achievement_flags
-	return condition in WorldState.achievement_flags or condition in WorldState.opened_hidden_paths or condition in WorldState.unlocked_abilities
+		return WorldState.prologue_complete or WorldState.debug_map_test_mode or condition in WorldState.achievement_flags
+	if condition.begins_with("resonance_sight_and_"):
+		return "resonance_sight" in WorldState.unlocked_abilities or condition in WorldState.achievement_flags or WorldState.debug_map_test_mode
+	if condition.ends_with("_contract") or condition.ends_with("_discovery_contract") or condition.ends_with("_secondary_route_contract"):
+		var token := condition.replace("_contract", "").replace("_discovery", "").replace("_secondary_route", "")
+		return condition in WorldState.achievement_flags or token in WorldState.opened_hidden_paths or WorldState.debug_map_test_mode
+	return condition in WorldState.achievement_flags or condition in WorldState.opened_hidden_paths or condition in WorldState.unlocked_abilities or WorldState.debug_map_test_mode
 
-func _spawn_side_for_target(target_id: String) -> String:
-	var region := target_id.split("-")[0]
-	if region == "A1":
-		return "east"
-	if region == "A2":
-		return "upper"
-	if region == "A3":
-		return "lower"
-	return "west"
+func _target_entry_position(target_id: String, connection_id: String) -> Vector2:
+	var file := FileAccess.open(CONTRACT_PATH, FileAccess.READ)
+	if file == null:
+		return Vector2(150.0, 400.0)
+	var parsed = JSON.parse_string(file.get_as_text())
+	if not parsed is Dictionary:
+		return Vector2(150.0, 400.0)
+	for candidate in parsed.get("rooms", []):
+		if candidate.get("room_id", "") != target_id:
+			continue
+		for target_exit in candidate.get("exits", []):
+			if str(target_exit.get("target", "")) != room_id:
+				continue
+			if not connection_id.is_empty() and str(target_exit.get("id", "")) != connection_id:
+				continue
+			var p: Array = target_exit.get("at", [150, 400])
+			var entry := Vector2(p[0], p[1])
+			var target_size: Array = candidate.get("size", [1600, 900])
+			if entry.x < float(target_size[0]) * 0.25:
+				entry.x += 100.0
+			elif entry.x > float(target_size[0]) * 0.75:
+				entry.x -= 100.0
+			if entry.y < float(target_size[1]) * 0.25:
+				entry.y += 90.0
+			elif entry.y > float(target_size[1]) * 0.75:
+				entry.y -= 90.0
+			return entry
+		var fallback: Array = candidate.get("spawn", {}).get("at", [150, 400])
+		return Vector2(fallback[0], fallback[1])
+	return Vector2(150.0, 400.0)
 
-func _on_exit_interacted(target_scene: String, spawn_side: String, condition: String) -> void:
+func _on_exit_interacted(target_scene: String, target_id: String, connection_id: String, condition: String) -> void:
 	if not _route_condition_met(condition):
-		print("[NEREIS][ROOM_NETWORK][LOCKED] room=%s condition=%s" % [room_id, condition])
+		print("[NEREIS][ROOM_NETWORK][LOCKED] room=%s connection=%s condition=%s" % [room_id, connection_id, condition])
 		return
 	FOCUS_SCRIPT.clear_all(get_tree())
-	WorldState.pending_region_spawn_side = spawn_side
-	WorldState.set_location(target_scene.get_file().get_basename())
-	print("[NEREIS][ROOM_NETWORK][EXIT] %s -> %s" % [room_id, target_scene])
+	var entry := _target_entry_position(target_id, connection_id)
+	WorldState.pending_region_spawn_side = "point|%d|%d" % [roundi(entry.x), roundi(entry.y)]
+	WorldState.set_location(target_id.to_lower())
+	print("[NEREIS][ROOM_NETWORK][EXIT] %s -> %s at=%s" % [room_id, target_id, str(entry)])
 	SceneTransition.fade_to_scene(target_scene)
 
 func _entry_position(incoming: String) -> Vector2:
+	if incoming.begins_with("point|"):
+		var parts := incoming.split("|")
+		if parts.size() == 3:
+			return Vector2(clampf(float(parts[1]), 40.0, room_size.x - 40.0), clampf(float(parts[2]), 40.0, room_size.y - 40.0))
 	var spawn: Array = room_data.get("spawn", {}).get("at", [120, 400])
 	var point := Vector2(spawn[0], spawn[1])
 	if incoming == "east":
