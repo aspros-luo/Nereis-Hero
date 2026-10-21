@@ -822,9 +822,9 @@ func _create_floor() -> void:
 	if region_id == "A2":
 		_add_ground_segment("GreyboxGround_West", 0.0, 860.0)
 		_add_ground_segment("GreyboxGround_East", 1060.0, map_width - 1060.0)
-		# The lower floor sits 92px below the main ground. The opening is traversable from above,
+		# The lower floor sits 70px below the main ground. The opening is traversable from above,
 		# and the two short step ledges make a deliberate jump-back route possible.
-		# 坑底比主地面低 92px；玩家可从上方落入，坑内两级短台阶提供明确的跳回路线。
+		# 坑底比主地面低 70px；玩家可从上方落入，坑内两级短台阶提供明确的跳回路线。
 		_add_platform(Rect2(860.0, 610.0, 200.0, 18.0))
 		_add_platform(Rect2(850.0, 580.0, 70.0, 12.0))
 		_add_platform(Rect2(1000.0, 580.0, 70.0, 12.0))
@@ -870,6 +870,9 @@ func _configure_platforms() -> void:
 			# 钟墓坑口上方不再放置横跨坑口的低台；真实坑体由 _create_floor() 建立。
 			_add_platform(Rect2(1200, 435, 150, 18))
 			_add_platform(Rect2(1500, 480, 160, 18))
+			# C04's A2 return spawn is x=1750, y=floor_y-140; this landing must physically support it.
+			# C04 的 A2 回程出生点为 x=1750、y=floor_y-140；必须有实体平台承托。
+			_add_platform(Rect2(1680, 425, 150, 18))
 			_add_platform(Rect2(1840, 445, 130, 18))
 			# The eastbound route climbs back onto the canopy instead of continuing along the uninterrupted floor.
 			# 向东的主路重新爬上树冠高台，不再沿着无间断的地面直线通行。
