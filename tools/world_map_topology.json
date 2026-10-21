@@ -4290,7 +4290,7 @@
   },
   "macro_map_layout": {
     "version": 1,
-    "status": "original_project_layout_reference_not_runtime_ui",
+    "status": "original_project_layout_reference_shown_in_acceptance_menu_not_player_map",
     "canvas": {
       "width": 1200,
       "height": 820,
@@ -4734,7 +4734,7 @@
     "notes": [
       "Macro layout is an original Nereis Hero arrangement; it does not reproduce Hollow Knight map pixels or room geometry.",
       "All C01-C24 connections are drawn as world links; unlock conditions affect availability in game, not whether the layout can show the potential route.",
-      "The SVG companion is a planning visualization and is not yet wired into a runtime map UI."
+      "The SVG companion is shown in the debug world-map acceptance menu; it is not yet a player-facing map UI."
     ]
   }
 }
