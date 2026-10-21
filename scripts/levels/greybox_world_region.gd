@@ -35,6 +35,9 @@ const ENCOUNTER_DEACTIVATE_RANGE := 560.0
 @export var region_title: String = "旧朝圣路"
 @export var map_width: float = 2600.0
 @export var floor_y: float = 540.0
+# Keep combat out of graybox traversal until the world routes have passed map acceptance.
+# 世界路线完成实机验收前，灰盒探索默认不生成敌人。
+@export var enable_region_encounters: bool = false
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -81,7 +84,10 @@ func _ready() -> void:
 	_spawn_region_exits()
 	_register_debug_locked_route_hints()
 	_spawn_region_rest_point()
-	_spawn_region_encounters()
+	if enable_region_encounters:
+		_spawn_region_encounters()
+	else:
+		print("[NEREIS][MAP][GRAYBOX] encounters disabled until map layout acceptance region=%s" % region_id)
 	queue_redraw()
 
 	var intro_id := "graybox_intro_%s" % location_id
