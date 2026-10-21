@@ -56,6 +56,22 @@ const ITEMS: Dictionary = {
         "description": "登记册列出了数代王室成员的安葬日期。几处姓名被刀刃刮去，刮痕却晚于墓穴封闭记录；纸页仍保留着被压在下方的笔画。",
         "stackable": false,
         "max_stack": 1
+    },
+    "bellgrave_burial_token": {
+        "item_id": "bellgrave_burial_token",
+        "display_name": "钟墓守路人的骨牌",
+        "category": "lore",
+        "description": "一枚磨平的骨牌，边缘刻着两条互相交错的道路。一条指向钟墓坑底，另一条指向树冠高路；两条线在地图上本不应相交。",
+        "stackable": false,
+        "max_stack": 1
+    },
+    "canopy_waymarker_fragment": {
+        "item_id": "canopy_waymarker_fragment",
+        "display_name": "树冠路标残片",
+        "category": "lore",
+        "description": "残片背面留有一串旧路标编号。编号从林地地面一路延伸到高处，最后几笔却被刻意刮去，像是有人不愿让后来者知道高路的终点。",
+        "stackable": false,
+        "max_stack": 1
     }
 }
 
