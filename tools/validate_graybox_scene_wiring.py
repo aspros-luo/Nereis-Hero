@@ -683,7 +683,8 @@ def main() -> int:
     require(village_hub_script, '530.0 if spawn_side == "mite_house_return"', "A1 return from Mite's house lands beside, but outside, its door trigger", errors)
     mite_house_script = read("scripts/levels/mite_house.gd", errors)
     require(mite_house_script, 'WorldState.pending_region_spawn_side = "mite_house_return"', "Mite's house return declares its village entry side", errors)
-    require(mite_house_script, '"YOU WAKE IN A SMALL ROOM"', "A0 arrival uses quiet wake-up framing instead of rescue exposition", errors)
+    require(mite_house_script, "Opening story is carried by room details and player observation, not an automatic narration panel.", "A0 arrival uses environmental framing instead of forced rescue exposition", errors)
+    require(mite_house_script, 'hud.set_story_mode("MITE\'S HOUSE", "STAY A LITTLE LONGER")', "A0 first-arrival scene is framed as Mite's house", errors)
     world_state_script = read("scripts/core/world_state.gd", errors)
     require(world_state_script, 'return "res://scenes/mite_house.tscn"', "Continue can resume the one-time A0 arrival scene", errors)
 
@@ -733,7 +734,11 @@ def main() -> int:
     require(village_route_script, "func _spawn_village_rest_point() -> void:", "A1 hearth rest point", errors)
     require(village_route_script, 'rest.rest_id = "rest_A1_village_hearth"', "A1 rest point persistence ID", errors)
     require(village_route_script, '"village_defense_survived" in WorldState.achievement_flags', "A1 drainage gate", errors)
-    require(village_route_script, 'WorldState.pending_region_spawn_side = "village_city_cut"', "A1 to A3 spawn mapping", errors)
+    old_drain_route_script = read("scripts/levels/old_drain_exploration.gd", errors)
+    require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/old_drain_exploration.tscn")', "C24 A1 enters the shared old-drain exploration segment", errors)
+    require(old_drain_route_script, 'const CITY_SCENE := "res://scenes/forgotten_city.tscn"', "C24 old-drain segment targets A3", errors)
+    require(old_drain_route_script, 'WorldState.pending_region_spawn_side = "village_city_cut"', "C24 old-drain-to-A3 spawn mapping", errors)
+    require(old_drain_route_script, "SceneTransition.fade_to_scene(CITY_SCENE)", "C24 old-drain segment transitions into A3", errors)
     require(village_route_script, "func _create_village_rooftop_route() -> void:", "A1 rooftop route builder", errors)
     require(village_route_script, "Rect2(220, 445, 90, 16)", "A1 rooftop first ledge", errors)
     require(village_route_script, "Rect2(1710, 270, 110, 16)", "A1 rooftop route over tavern", errors)
@@ -1307,8 +1312,7 @@ def main() -> int:
         ],
         "H02": [
             '"E  返回旧朝圣路"',
-            '"opened_old_bell_tower_connection" in WorldState.achievement_flags',
-            '"old_battlefield"',
+            '"ash_forest"',
         ],
         "H03": [
             '"E  返回被遗忘的城区"',
@@ -1368,6 +1372,8 @@ def main() -> int:
         block = exits_source[branch_match.start():block_end]
         for contract in contracts:
             require(block, contract, f"{hidden_id} hidden-region return contract", errors)
+        if hidden_id == "H02" and '"old_battlefield"' in block:
+            fail(errors, "H02 must not expose the deferred second exit to A5; its current return is A2 only.")
 
     # A13 is a real terminal map layer, not merely an abstract topology node. Ending selection occurs after entering it.
     # A13 必须是实际终局地图层，而不是只存在于拓扑中的抽象节点；进入后才选择结局。
@@ -1436,8 +1442,14 @@ def main() -> int:
     require(region_script, 'true, "", "", floor_y - 105.0', "A4 C23 elevation", errors)
     require(region_script, '2220.0, "E  打开村庄井道水闸"', "A4 C06 return lane", errors)
     require(region_script, '2020, 450, 130, 18', "A6 C10 upper approach platform", errors)
-    require(region_script, '2230.0, "E  打开钟塔落差通路"', "A6 C10 elevated door", errors)
+    require(region_script, '2230.0, "E  使用绞盘钥匙打开钟塔落差通路"', "A6 C10 elevated door", errors)
     require(region_script, 'true, "opened_bell_tower_drop", "E  返回被遗忘的城区", floor_y - 55.0', "A6 C10 door height", errors)
+    a6_shortcut_start = region_script.find("func _refresh_a6_bell_shortcut() -> void:")
+    a6_shortcut_end = region_script.find("\nfunc ", a6_shortcut_start + 1) if a6_shortcut_start >= 0 else -1
+    a6_shortcut_body = region_script[a6_shortcut_start:a6_shortcut_end] if a6_shortcut_start >= 0 and a6_shortcut_end > a6_shortcut_start else ""
+    require(a6_shortcut_body, '"res://scenes/forgotten_city.tscn", "bell_drop"', "C10 A6-to-A3 transition", errors)
+    require(a6_shortcut_body, 'WorldState.is_item_owned("bell_tower_winch_key")', "C10 key-gated shortcut creation", errors)
+    require(a6_shortcut_body, '"opened_bell_tower_drop"', "C10 persistent shortcut-open flag", errors)
     require(region_script, '520.0, "E  打开旧升降梯"', "A9 C16 rooftop door", errors)
     require(region_script, 'true, "reached_A9_via_A8_then_opened_old_lift_from_A9", "E  乘旧升降梯返回",\n\t\t\t\tfloor_y - 110.0', "A9 C16 door height", errors)
     require(region_script, '_add_platform(Rect2(620, 390, 180, 18))', "A9 C23 supported upper service ledge", errors)
@@ -1688,7 +1700,8 @@ def main() -> int:
         "WorldState.is_hidden_path_opened(secret_id)",
         "@export var region_record_id: String = \"\"",
         "func _get_region_record_id() -> String:",
-        "WorldState.discover_hidden_region(_get_region_record_id())",
+        "var region_record_id := _get_region_record_id()",
+        "WorldState.discover_hidden_region(region_record_id)",
         "WorldState.open_hidden_path(secret_id)",
         "WorldState.mark_hidden_region_entered(_get_region_record_id())",
         "WorldState.resonance_sight_active",
@@ -1761,9 +1774,11 @@ def main() -> int:
     require(village_hub, 'blacksmith.dialogue = "铁匠把锤子搁在砧边', "A1 blacksmith dialogue responds to village-defense state", errors)
     require(village_hub, 'grandmother.dialogue = "老婆婆把门边的灯芯拨亮了一些', "A1 grandmother dialogue responds to village-defense state", errors)
     require(village_hub, '"traveling_merchant"', "A1 traveling merchant has a stable functional NPC ID", errors)
-    require(interior_scene, '"pilgrim_knight_a1_arrived"', "Pilgrim Knight is gated behind an explicit story arrival flag", errors)
-    require(interior_scene, '"pilgrim_knight_at_tavern"', "Pilgrim Knight appears in either the tavern or church, not both", errors)
-    require(interior_scene, '"pilgrim_knight_a1_arrived"', "Pilgrim Knight remains absent until explicit arrival state", errors)
+    require(event_director, '{"type": "flag", "value": "pilgrim_knight_a1_arrived"}', "Pilgrim Knight is gated behind an explicit story arrival flag", errors)
+    require(event_director, '{"type": "flag", "value": "pilgrim_knight_at_tavern"}', "Pilgrim Knight tavern placement uses an explicit state flag", errors)
+    require(event_director, '{"type": "flag_absent", "value": "pilgrim_knight_at_tavern"}', "Pilgrim Knight church placement excludes the tavern placement state", errors)
+    require(event_director, '{"type": "location", "value": "tavern"}', "Pilgrim Knight tavern placement is location-gated", errors)
+    require(event_director, '{"type": "location", "value": "church"}', "Pilgrim Knight church placement is location-gated", errors)
     require(interior_scene, 'narrative.show_message("教堂", "旧木椅整齐地排在空旷的长厅里。', "Church interior remains empty and quiet until a story arrival", errors)
     require(interior_scene, 'npc.display_name = "酒馆值夜人"', "Tavern keeper uses localized Chinese dialogue/name", errors)
     require(interior_scene, '"A1_tavern_sound_noticed" in WorldState.achievement_flags and "village_defense_survived" in WorldState.achievement_flags', "Tavern keeper prioritizes the combined state over single-state dialogue", errors)
