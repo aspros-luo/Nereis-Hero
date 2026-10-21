@@ -18,6 +18,7 @@ REGION_SCRIPT_PATH = ROOT / "scripts/levels/greybox_world_region.gd"
 VILLAGE_SCRIPT_PATH = ROOT / "scripts/levels/village_hub.gd"
 REST_POINT_SCRIPT_PATH = ROOT / "scripts/world/rest_point.gd"
 LOCAL_ROUTE_SCRIPT_PATH = ROOT / "scripts/world/resonance_local_route.gd"
+HIDDEN_GATE_SCRIPT_PATH = ROOT / "scripts/world/resonance_secret_gate.gd"
 
 
 def function_body(source: str, function_name: str) -> str:
@@ -52,6 +53,7 @@ def main() -> int:
         village_source = VILLAGE_SCRIPT_PATH.read_text(encoding="utf-8")
         rest_point_source = REST_POINT_SCRIPT_PATH.read_text(encoding="utf-8")
         local_route_source = LOCAL_ROUTE_SCRIPT_PATH.read_text(encoding="utf-8")
+        hidden_gate_source = HIDDEN_GATE_SCRIPT_PATH.read_text(encoding="utf-8")
         x_body = function_body(region_source, "_spawn_x_for_side")
         y_body = function_body(region_source, "_spawn_y_for_side")
     except (OSError, json.JSONDecodeError, ValueError) as exc:
@@ -608,6 +610,12 @@ def main() -> int:
         and "_add_platform(Rect2(850.0, 580.0, 70.0, 12.0))" in floor_body
         and "_add_platform(Rect2(1000.0, 580.0, 70.0, 12.0))" in floor_body,
         "A2 SC008: ground gap, pit floor, and both return ledges must remain in runtime source.",
+    )
+    require(
+        errors,
+        "resonance >= required_resonance" in hidden_gate_source
+        and "var next_revealed := opened_permanently or (active and (meets_thresholds or allow_override))" in hidden_gate_source,
+        "H02: the shared hidden-gate logic must still require active Resonance Sight plus the authored resonance threshold before first reveal.",
     )
     require(
         errors,
