@@ -708,6 +708,30 @@ def main() -> int:
         "A2 SC009: expected landmark-led ground-to-canopy climb chain is incomplete or has drifted.",
     )
 
+    # The eastern ravine needs two visually distinct approaches and a supported C03 landing.
+    # 东部沟壑必须保留高低两种接近路线及 C03 实体承托；这仍是坐标检查，不等于实机可达。
+    a2_eastern_route = [
+        (2260.0, 475.0, 140.0, 18.0),
+        (2390.0, 430.0, 110.0, 18.0),
+        (2510.0, 465.0, 125.0, 18.0),
+        (2645.0, 430.0, 125.0, 18.0),
+        (2740.0, 330.0, 130.0, 18.0),
+        (2900.0, 300.0, 130.0, 18.0),
+        (3060.0, 330.0, 130.0, 18.0),
+        (3180.0, 400.0, 130.0, 18.0),
+        (3340.0, 380.0, 140.0, 18.0),
+    ]
+    require(
+        errors,
+        all(rect in platform_rects.get("A2", []) for rect in a2_eastern_route),
+        "A2 eastern ravine: upper/lower route platforms or C03 support landing are missing.",
+    )
+    require(
+        errors,
+        all(label in function_body(region_source, "_draw_forest_landmarks") for label in ["钟墓外廊", "东侧残桥"]),
+        "A2 landmark pass must visibly identify the Bell Grave gallery and eastern bridge.",
+    )
+
     # Elevated A2 arrivals must be statically supported by authored platform tops.
     # This is a coordinate cross-check only; the Hero's actual feet/collision still needs engine testing.
     a2_supported_arrivals = [
