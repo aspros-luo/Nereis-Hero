@@ -7,4 +7,4 @@ script = ExtResource("1")
 region_id = "A2"
 location_id = "ash_forest"
 region_title = "THE OLD PILGRIM ROAD"
-map_width = 2600.0
+map_width = 3600.0
