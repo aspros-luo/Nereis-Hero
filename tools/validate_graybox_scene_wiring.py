@@ -1832,7 +1832,8 @@ def main() -> int:
     require(event_director, '"A1_tavern_sound_notice"', "A1 tavern visit has a persistent first-visit event", errors)
     require(village_hub, '"village_grandmother"', "A1 replaces the amnesiac youth with an ordinary grandmother NPC", errors)
     require(village_hub, "camera.limit_right = 3000", "A1 camera follows the expanded 3000px hub", errors)
-    require(village_hub, "rectangle.size = Vector2(3000, 40)", "A1 ground collision spans the expanded hub", errors)
+    require(village_hub, "var floor_segments: Array[Vector2] = [", "A1 ground collision uses segmented spans around traversable shafts", errors)
+    require(village_hub, "rectangle.size = Vector2(segment.y, 40.0)", "A1 ground collision builds each segment at its declared width", errors)
     require(village_hub, "right_shape.position = Vector2(3020, 360)", "A1 right boundary matches the expanded hub width", errors)
     require(village_hub, "Rect2(2760, 340, 110, 16)", "A1 rooftop route reaches the expanded eastern district", errors)
     if 'npc_id = "amnesiac_youth"' in village_hub:
