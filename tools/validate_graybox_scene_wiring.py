@@ -720,7 +720,7 @@ def main() -> int:
     # C03 must remain a genuinely supported two-way canopy route between A2 and A3.
     require(region_script, '3400.0, "E  沿树冠高路进入被遗忘的城区"', "C03 A2 eastern canopy door anchor", errors)
     require(region_script, '"res://scenes/forgotten_city.tscn", "city_canopy_entry",\n\t\t\t\ttrue, "", "", floor_y - 160.0', "C03 A2 door transition and elevation", errors)
-    require(region_script, "_add_platform(Rect2(3340, 380, 140, 18))", "C03 A2 exit support platform", errors)
+    require(region_script, "_add_platform(Rect2(3335, 490, 145, 18))", "C03 A2 exit support platform", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return X mapping branch", errors)
     require(region_script, "return 3220.0", "C03 A2 return X landing", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return height mapping branch", errors)
@@ -1619,9 +1619,14 @@ def main() -> int:
                     )
             spawn_landing_audit_count += 1
             region_platforms = platforms_by_region.get(region_id, [])
+            scene_path = ROOT / REGIONS.get(region_id, ("", "", ""))[0]
+            scene_text = scene_path.read_text(encoding="utf-8") if scene_path.is_file() else ""
+            floor_match = re.search(r'^floor_y\s*=\s*([0-9.]+)', scene_text, re.MULTILINE)
+            floor_y = float(floor_match.group(1)) if floor_match else 540.0
             ground_supported = abs(spawn_y_offset) <= 0.1 and 0.0 <= spawn_x <= (3600.0 if region_id == "A2" else 2600.0)
+            expected_spawn_y = floor_y + spawn_y_offset
             supported = ground_supported or any(
-                abs(platform_y - (540.0 + spawn_y_offset)) <= 1.5
+                abs(platform_y - expected_spawn_y) <= 1.5
                 and spawn_x >= platform_x - 0.1
                 and spawn_x <= platform_x + platform_width + 0.1
                 for platform_x, platform_y, platform_width, _platform_height in region_platforms
@@ -1629,7 +1634,7 @@ def main() -> int:
             if not supported:
                 errors.append(
                     f"{edge_id} {spawn_key} is not directly supported by a collision platform: "
-                    f"{region_id} x={spawn_x:g}, y={540.0 + spawn_y_offset:g}."
+                    f"{region_id} x={spawn_x:g}, y={expected_spawn_y:g}."
                 )
 
     # Death recovery must stay inside the current region and restore the Hero safely.
