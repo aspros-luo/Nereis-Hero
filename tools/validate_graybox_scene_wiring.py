@@ -136,6 +136,13 @@ def main() -> int:
     require(region_script, '"A6_BellWarden_01"', "scripts/levels/greybox_world_region.gd", errors)
     require(region_script, '"combat_reward_a6_bell_winch_key"', "scripts/levels/greybox_world_region.gd", errors)
     require(region_script, "func _refresh_a6_bell_shortcut() -> void:", "scripts/levels/greybox_world_region.gd", errors)
+    # These route flags must correspond to actual scene transitions, not diagram-only edges.
+    # 这些路线状态必须对应真实场景转场，不能只存在于地图连线中。
+    require(region_script, '"reached_A5_and_opened_old_pilgrim_highroad"', "C04 persistent cross-region shortcut", errors)
+    require(region_script, '"opened_watergate_and_village_well_exit"', "C06 one-way watergate return shortcut", errors)
+    require(region_script, '"opened_bell_tower_drop"', "C10 opened bell-tower drop and return door", errors)
+    require(region_script, '"opened_old_drainage_link_from_A4"', "C24 persistent old-drain exploration loop", errors)
+    require(region_script, '"old_drain_exploration"', "C24 traverses the shared exploration segment", errors)
     require(region_script, '"bell_tower_winch_key"', "scripts/levels/greybox_world_region.gd", errors)
     require(region_script, "\t_spawn_region_item_pickups()", "scripts/levels/greybox_world_region.gd", errors)
 
