@@ -261,43 +261,129 @@ func _on_hero_defeated() -> void:
 		hero.global_position = WorldState.checkpoint_position
 		hero.velocity = Vector2.ZERO
 
+func _theme() -> Dictionary:
+	var region := room_id.split("-")[0]
+	match region:
+		"A0": return {"name":"surgery","sky":Color("#11151d"),"far":Color("#292b38"),"mid":Color("#45404a"),"stone":Color("#34333c"),"ledge":Color("#b3a2a0"),"glow":Color("#e0a56d"),"detail":Color("#5e404a")}
+		"A1": return {"name":"village","sky":Color("#121a20"),"far":Color("#263a3b"),"mid":Color("#3d5146"),"stone":Color("#45443a"),"ledge":Color("#c4b38b"),"glow":Color("#e8bd78"),"detail":Color("#78634a")}
+		"A2": return {"name":"forest","sky":Color("#0d1b1c"),"far":Color("#1c3934"),"mid":Color("#2d5145"),"stone":Color("#34463b"),"ledge":Color("#9bbd8d"),"glow":Color("#c8db8a"),"detail":Color("#426e54")}
+		"A3": return {"name":"ruins","sky":Color("#11131d"),"far":Color("#292b3b"),"mid":Color("#40394a"),"stone":Color("#3a3743"),"ledge":Color("#b0a4b9"),"glow":Color("#d18e8c"),"detail":Color("#6d536d")}
+		"A4": return {"name":"reservoir","sky":Color("#0c1925"),"far":Color("#19344a"),"mid":Color("#27506a"),"stone":Color("#2e4653"),"ledge":Color("#8bc5d1"),"glow":Color("#6ed5d2"),"detail":Color("#34758a")}
+		"A5": return {"name":"battlefield","sky":Color("#201716"),"far":Color("#44302a"),"mid":Color("#61423a"),"stone":Color("#51413a"),"ledge":Color("#c9a77d"),"glow":Color("#f0b36c"),"detail":Color("#865447")}
+		"A6": return {"name":"monastery","sky":Color("#1b1823"),"far":Color("#393043"),"mid":Color("#5a465b"),"stone":Color("#4a3d4e"),"ledge":Color("#d6c39b"),"glow":Color("#f2d48c"),"detail":Color("#85677e")}
+		"A7": return {"name":"prison","sky":Color("#11131c"),"far":Color("#252c3b"),"mid":Color("#384253"),"stone":Color("#343b49"),"ledge":Color("#a4b2bd"),"glow":Color("#d1a2c5"),"detail":Color("#596d80")}
+		"A8": return {"name":"tomb","sky":Color("#17111d"),"far":Color("#33233e"),"mid":Color("#4b3155"),"stone":Color("#443549"),"ledge":Color("#c3a7cf"),"glow":Color("#dba7f0"),"detail":Color("#78548c")}
+		"A9": return {"name":"outer_city","sky":Color("#151822"),"far":Color("#2b3440"),"mid":Color("#48505b"),"stone":Color("#41444a"),"ledge":Color("#c0c4c2"),"glow":Color("#e4c889"),"detail":Color("#707985")}
+		"A10": return {"name":"cathedral","sky":Color("#171621"),"far":Color("#373248"),"mid":Color("#5a4e6b"),"stone":Color("#51495b"),"ledge":Color("#d7d0b6"),"glow":Color("#f5e2aa"),"detail":Color("#8e7aa4")}
+		"A11": return {"name":"relic","sky":Color("#0c1a20"),"far":Color("#1b3b42"),"mid":Color("#2d5b5d"),"stone":Color("#30484b"),"ledge":Color("#9fd2c3"),"glow":Color("#75f0d0"),"detail":Color("#347e7c")}
+		"A12": return {"name":"inner_city","sky":Color("#20141b"),"far":Color("#442532"),"mid":Color("#673647"),"stone":Color("#4d3540"),"ledge":Color("#d6b3a3"),"glow":Color("#f2b1a0"),"detail":Color("#9a4d5e")}
+		"A13": return {"name":"anomaly","sky":Color("#0b0b16"),"far":Color("#21152f"),"mid":Color("#38214c"),"stone":Color("#30243b"),"ledge":Color("#c2a5ef"),"glow":Color("#fa8de6"),"detail":Color("#713b91")}
+		"H01": return {"name":"hidden_well","sky":Color("#090f17"),"far":Color("#192634"),"mid":Color("#263c4d"),"stone":Color("#283846"),"ledge":Color("#86bac9"),"glow":Color("#9be9ed"),"detail":Color("#356b82")}
+		"H02": return {"name":"hidden_bell","sky":Color("#15121b"),"far":Color("#30263a"),"mid":Color("#4a3551"),"stone":Color("#3b3047"),"ledge":Color("#c7b5a2"),"glow":Color("#f3d8a2"),"detail":Color("#886c8f")}
+		"H03": return {"name":"erased_street","sky":Color("#12131b"),"far":Color("#292b37"),"mid":Color("#41414c"),"stone":Color("#373740"),"ledge":Color("#b6b2bd"),"glow":Color("#a4e8db"),"detail":Color("#5f7780")}
+		"H04": return {"name":"reflection","sky":Color("#0b1721"),"far":Color("#1c3342"),"mid":Color("#2b4c5b"),"stone":Color("#30454e"),"ledge":Color("#9dc8d5"),"glow":Color("#b4f3ff"),"detail":Color("#4d8ca0")}
+		"H05": return {"name":"silent_bell","sky":Color("#15121a"),"far":Color("#2b2533"),"mid":Color("#403649"),"stone":Color("#38313f"),"ledge":Color("#c7b5bd"),"glow":Color("#f0c5d5"),"detail":Color("#76596e")}
+		"H06": return {"name":"erased_name","sky":Color("#1b1119"),"far":Color("#38202b"),"mid":Color("#56313f"),"stone":Color("#47313c"),"ledge":Color("#d7b5b7"),"glow":Color("#ff9fbd"),"detail":Color("#8b4c61")}
+		"H07": return {"name":"mirror","sky":Color("#101721"),"far":Color("#233342"),"mid":Color("#34505c"),"stone":Color("#35454d"),"ledge":Color("#b1d5d9"),"glow":Color("#a8fff0"),"detail":Color("#477c8b")}
+		_: return {"name":"primordial","sky":Color("#0c0915"),"far":Color("#25142d"),"mid":Color("#40204b"),"stone":Color("#34233d"),"ledge":Color("#d0a6e5"),"glow":Color("#ff8ddd"),"detail":Color("#81428b")}
+
 func _draw() -> void:
 	var title: String = room_data.get("title", room_id)
-	var deep := room_id.begins_with("A3") or room_id == "A1-R02"
-	var base := Color("#10151b") if not deep else Color("#100d17")
-	draw_rect(Rect2(Vector2.ZERO, room_size), base, true)
-	var far := Color("#273941") if not deep else Color("#30243b")
-	var mid := Color("#35484a") if not deep else Color("#49334d")
+	var palette := _theme()
+	draw_rect(Rect2(Vector2.ZERO, room_size), palette.sky, true)
 	for layer in range(5):
-		var y := room_size.y * (0.15 + layer * 0.13)
-		var step := 190.0 + layer * 23.0
+		var y := room_size.y * (0.13 + layer * 0.135)
+		var step := 175.0 + layer * 31.0
 		var x := -step
 		while x < room_size.x + step:
-			var peak := y + sin((x / step) + layer * 1.7) * (24.0 + layer * 7.0)
-			var ridge := PackedVector2Array([Vector2(x, room_size.y), Vector2(x, peak + 80), Vector2(x + step * 0.4, peak), Vector2(x + step * 0.72, peak + 42), Vector2(x + step, room_size.y)])
-			draw_colored_polygon(ridge, far if layer < 3 else mid)
-			x += step * 0.76
+			var peak := y + sin((x / step) + layer * 1.73) * (30.0 + layer * 8.0)
+			var ridge := PackedVector2Array([Vector2(x, room_size.y), Vector2(x, peak + 90), Vector2(x + step * 0.36, peak), Vector2(x + step * 0.71, peak + 54), Vector2(x + step, room_size.y)])
+			draw_colored_polygon(ridge, palette.far if layer < 3 else palette.mid)
+			x += step * 0.74
+	_draw_region_silhouette(palette)
 	for item in platforms:
 		var rect: Rect2 = item.rect
 		var top := rect.position
 		var is_ground := item.type == "ground"
-		var fill := Color("#292d31") if is_ground else Color("#343b3c")
-		draw_rect(Rect2(top + Vector2(0, 7), rect.size), Color("#080a0d"), true)
-		draw_rect(rect, fill, true)
-		draw_line(top, top + Vector2(rect.size.x, 0), Color("#a4a88d") if is_ground else Color("#8dada3"), 3.0, true)
-		draw_line(top + Vector2(0, 4), top + Vector2(rect.size.x, 4), Color("#626b61"), 1.0, true)
-		for seam_x in range(36, int(rect.size.x), 72):
-			draw_line(top + Vector2(seam_x, 8), top + Vector2(seam_x + 16, minf(rect.size.y, 20)), Color("#20262a"), 1.0, true)
+		draw_rect(Rect2(top + Vector2(0, 8), rect.size), Color("#08090d"), true)
+		draw_rect(rect, palette.stone if is_ground else palette.detail, true)
+		draw_line(top, top + Vector2(rect.size.x, 0), palette.ledge if is_ground else palette.glow, 3.0, true)
+		draw_line(top + Vector2(0, 5), top + Vector2(rect.size.x, 5), palette.detail, 1.0, true)
+		for seam_x in range(30, int(rect.size.x), 78):
+			draw_line(top + Vector2(seam_x, 8), top + Vector2(seam_x + 15, minf(rect.size.y, 21)), palette.sky, 1.0, true)
 	for landmark in landmarks:
 		var p := Vector2(landmark.at[0], landmark.at[1])
-		draw_circle(p, 26, Color("#101114"))
-		draw_arc(p, 30, 0, TAU, 24, Color("#c3a879"), 2.0, true)
-		draw_line(p + Vector2(0, -18), p + Vector2(0, 18), Color("#d7c7a2"), 2.0, true)
-		draw_line(p + Vector2(-12, 0), p + Vector2(12, 0), Color("#d7c7a2"), 2.0, true)
+		draw_circle(p, 34, palette.sky)
+		draw_arc(p, 31, 0, TAU, 32, palette.glow, 2.0, true)
+		draw_arc(p, 21, 0, TAU, 24, palette.detail, 1.0, true)
+		draw_line(p + Vector2(0, -19), p + Vector2(0, 19), palette.ledge, 2.0, true)
+		draw_line(p + Vector2(-13, 0), p + Vector2(13, 0), palette.ledge, 2.0, true)
 	for exit in exits:
 		var p: Vector2 = exit.position
-		var glow := Color("#cfb57c") if exit.condition == "none" else Color("#8a6b76")
-		draw_arc(p + Vector2(0, -30), 28, PI, TAU, 24, glow, 2.0, true)
+		var glow: Color = palette.glow if exit.condition == "none" else palette.detail
+		draw_arc(p + Vector2(0, -30), 29, PI, TAU, 28, glow, 3.0, true)
 		draw_line(p + Vector2(-28, 0), p + Vector2(-28, -30), glow, 3.0, true)
 		draw_line(p + Vector2(28, 0), p + Vector2(28, -30), glow, 3.0, true)
-	draw_string(ThemeDB.fallback_font, Vector2(42, 58), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color("#e0d4bb"))
+		draw_line(p + Vector2(-28, -15), p + Vector2(28, -15), glow, 1.0, true)
+	draw_rect(Rect2(24, 24, minf(room_size.x - 48.0, 650.0), 52), Color("#090b10"), true)
+	draw_string(ThemeDB.fallback_font, Vector2(42, 58), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, palette.ledge)
+
+func _draw_region_silhouette(palette: Dictionary) -> void:
+	var kind: String = palette.name
+	var span := int(room_size.x / 250.0)
+	match kind:
+		"village", "outer_city", "inner_city", "ruins":
+			for i in range(span):
+				var x := float(i) * 250.0 + 45.0
+				var base_y := room_size.y * (0.66 + float(i % 3) * 0.045)
+				var building_h := 100.0 + float((i * 37) % 170)
+				var w := 82.0 + float((i * 19) % 65)
+				draw_rect(Rect2(x, base_y - building_h, w, building_h), palette.sky.lightened(0.055), true)
+				var roof := PackedVector2Array([Vector2(x - 12, base_y - building_h), Vector2(x + w * 0.5, base_y - building_h - 28), Vector2(x + w + 12, base_y - building_h)])
+				draw_colored_polygon(roof, palette.detail)
+				for window_i in range(2):
+					draw_rect(Rect2(x + 15 + window_i * 30, base_y - building_h + 24, 11, 20), palette.glow.darkened(0.35), true)
+		"forest":
+			for i in range(span + 3):
+				var x := float(i) * 215.0 + 25.0
+				var trunk_h := 160.0 + float((i * 53) % 240)
+				draw_rect(Rect2(x, room_size.y * 0.56 - trunk_h, 22.0 + float(i % 3) * 8.0, trunk_h), palette.detail, true)
+				draw_line(Vector2(x + 12, room_size.y * 0.56 - trunk_h + 90), Vector2(x - 36, room_size.y * 0.56 - trunk_h + 35), palette.detail, 8.0, true)
+				draw_line(Vector2(x + 15, room_size.y * 0.56 - trunk_h + 130), Vector2(x + 62, room_size.y * 0.56 - trunk_h + 75), palette.detail, 7.0, true)
+		"reservoir", "reflection", "hidden_well":
+			for band in range(5):
+				var y := room_size.y * (0.52 + band * 0.075)
+				draw_line(Vector2(0, y), Vector2(room_size.x, y + sin(float(band)) * 8.0), palette.glow.darkened(0.55), 2.0, true)
+		"monastery", "cathedral", "tomb", "hidden_bell", "silent_bell":
+			for i in range(span + 1):
+				var x := float(i) * 250.0 + 90.0
+				var top_y := room_size.y * 0.22 + float(i % 2) * 70.0
+				draw_rect(Rect2(x, top_y, 20, room_size.y * 0.58), palette.detail, true)
+				draw_arc(Vector2(x + 10, top_y + 15), 54.0, PI, TAU, 24, palette.glow.darkened(0.4), 4.0, true)
+				draw_rect(Rect2(x - 8, top_y + 80, 36, 56), palette.sky, true)
+		"prison":
+			for x in range(80, int(room_size.x), 110):
+				draw_line(Vector2(x, room_size.y * 0.2), Vector2(x, room_size.y * 0.76), palette.detail, 4.0, true)
+			for y in range(int(room_size.y * 0.28), int(room_size.y * 0.72), 120):
+				draw_line(Vector2(40, y), Vector2(room_size.x - 40, y), palette.detail.darkened(0.25), 2.0, true)
+		"battlefield":
+			for i in range(span):
+				var x := float(i) * 270.0 + 70.0
+				var y := room_size.y * (0.62 - float(i % 4) * 0.07)
+				draw_line(Vector2(x, y), Vector2(x + 12, y - 150), palette.detail, 5.0, true)
+				draw_line(Vector2(x - 28, y - 112), Vector2(x + 42, y - 102), palette.glow.darkened(0.4), 3.0, true)
+		"relic", "anomaly", "primordial", "erased_name":
+			for i in range(span):
+				var p := Vector2(float(i) * 260.0 + 130.0, room_size.y * (0.26 + float(i % 3) * 0.17))
+				draw_arc(p, 42.0 + float(i % 2) * 18.0, 0, TAU, 36, palette.glow.darkened(0.3), 2.0, true)
+				draw_arc(p, 24.0, 0, TAU, 24, palette.detail, 1.0, true)
+				draw_circle(p, 4.0, palette.glow)
+		"erased_street", "mirror":
+			for i in range(span):
+				var x := float(i) * 260.0 + 90.0
+				draw_line(Vector2(x, room_size.y * 0.18), Vector2(x, room_size.y * 0.78), palette.glow.darkened(0.55), 2.0, true)
+				draw_line(Vector2(x - 34, room_size.y * 0.32), Vector2(x + 34, room_size.y * 0.32), palette.glow, 2.0, true)
+		_:
+			for i in range(span):
+				var x := float(i) * 260.0 + 100.0
+				draw_circle(Vector2(x, room_size.y * 0.4), 3.0 + float(i % 3), palette.glow)
