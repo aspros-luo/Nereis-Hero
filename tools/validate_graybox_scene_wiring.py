@@ -2237,6 +2237,38 @@ def main() -> int:
     except (json.JSONDecodeError, OSError) as exc:
         errors.append(f"Local Resonance route topology audit could not read topology: {exc}")
 
+    # Full-world lower-terrain contracts: a declared pit must be backed by a real floor split
+    # and the route helper must provide walkable lower shelves below the existing upper loops.
+    # 全地图下层地形合同：声明的深坑必须切开真实地面碰撞，并由实体错层平台承托。
+    floor_builder_start = region_script.find("func _create_floor()")
+    floor_builder_end = region_script.find("func _add_ground_segment", floor_builder_start)
+    floor_builder = region_script[floor_builder_start:floor_builder_end] if floor_builder_start >= 0 and floor_builder_end > floor_builder_start else ""
+    required_floor_gaps = (
+        'floor_gap = Vector2(620.0, 1140.0)',
+        'floor_gap = Vector2(820.0, 1240.0)',
+        'floor_gap = Vector2(780.0, 1280.0)',
+        'floor_gap = Vector2(820.0, 1320.0)',
+        'floor_gap = Vector2(1380.0, 1770.0)',
+        'floor_gap = Vector2(800.0, 1300.0)',
+        'floor_gap = Vector2(1350.0, 1780.0)',
+        'floor_gap = Vector2(1350.0, 1770.0)',
+        'floor_gap = Vector2(850.0, 1350.0)',
+        '"H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08", "H09"',
+    )
+    for contract in required_floor_gaps:
+        require(floor_builder, contract, f"world lower-floor contract {contract}", errors)
+    lower_route_start = region_script.find("func _configure_additional_lower_route_platforms()")
+    lower_route_end = region_script.find("func _add_platform", lower_route_start)
+    lower_route_builder = region_script[lower_route_start:lower_route_end] if lower_route_start >= 0 and lower_route_end > lower_route_start else ""
+    for contract in (
+        'shelf_start = 1410.0',
+        'shelf_start = 1380.0',
+        'shelf_start = 790.0',
+        'floor_y + 100.0',
+        'floor_y + 145.0',
+    ):
+        require(lower_route_builder, contract, f"additional lower-route shelf contract {contract}", errors)
+
     if errors:
         print("GRAYBOX SCENE WIRING CHECK FAILED")
         for error in errors:
