@@ -1,0 +1,1519 @@
+{
+  "schema_version": 1,
+  "title": "Nereis Hero — Room-Level Exploration World Graph",
+  "status": "design_baseline_not_runtime_verified",
+  "branch": "feature/story-map-progression",
+  "design_principles": [
+    "original world inspired by layered metroidvania exploration",
+    "each region contains rooms of varied size and vertical role",
+    "macro connections must resolve to concrete room anchors",
+    "shortcuts must change route options, not merely add map lines",
+    "hidden regions are optional and must not block the main ending route"
+  ],
+  "room_shape_legend": {
+    "compact": "tight room, junction, or landmark chamber",
+    "wide": "broad horizontal exploration space",
+    "tall": "vertical shaft, layered cavern, or tower"
+  },
+  "regions": [
+    {
+      "id": "A0",
+      "name": "手术所逃脱",
+      "role": "intro",
+      "room_ids": [
+        "A0-R01",
+        "A0-R02",
+        "A0-R03"
+      ]
+    },
+    {
+      "id": "A1",
+      "name": "边境村庄",
+      "role": "hub",
+      "room_ids": [
+        "A1-R01",
+        "A1-R02",
+        "A1-R03"
+      ]
+    },
+    {
+      "id": "A2",
+      "name": "雾林与旧朝圣路",
+      "role": "nature",
+      "room_ids": [
+        "A2-R01",
+        "A2-R02",
+        "A2-R03"
+      ]
+    },
+    {
+      "id": "A3",
+      "name": "废弃城区",
+      "role": "hub",
+      "room_ids": [
+        "A3-R01",
+        "A3-R02",
+        "A3-R03"
+      ]
+    },
+    {
+      "id": "A4",
+      "name": "沉积大厅与旧水库",
+      "role": "underground",
+      "room_ids": [
+        "A4-R01",
+        "A4-R02",
+        "A4-R03"
+      ]
+    },
+    {
+      "id": "A5",
+      "name": "旧战场与边境堡垒",
+      "role": "frontier",
+      "room_ids": [
+        "A5-R01",
+        "A5-R02",
+        "A5-R03"
+      ]
+    },
+    {
+      "id": "A6",
+      "name": "修道院与钟塔",
+      "role": "vertical",
+      "room_ids": [
+        "A6-R01",
+        "A6-R02",
+        "A6-R03"
+      ]
+    },
+    {
+      "id": "A7",
+      "name": "监牢与维护竖井",
+      "role": "vertical",
+      "room_ids": [
+        "A7-R01",
+        "A7-R02",
+        "A7-R03"
+      ]
+    },
+    {
+      "id": "A8",
+      "name": "旧王墓与地下道",
+      "role": "labyrinth",
+      "room_ids": [
+        "A8-R01",
+        "A8-R02",
+        "A8-R03"
+      ]
+    },
+    {
+      "id": "A9",
+      "name": "王城外环",
+      "role": "hub",
+      "room_ids": [
+        "A9-R01",
+        "A9-R02",
+        "A9-R03"
+      ]
+    },
+    {
+      "id": "A10",
+      "name": "大圣堂与内廷",
+      "role": "vertical",
+      "room_ids": [
+        "A10-R01",
+        "A10-R02",
+        "A10-R03"
+      ]
+    },
+    {
+      "id": "A11",
+      "name": "古神遗迹与研究区",
+      "role": "deep",
+      "room_ids": [
+        "A11-R01",
+        "A11-R02",
+        "A11-R03"
+      ]
+    },
+    {
+      "id": "A12",
+      "name": "王室内城与王座区",
+      "role": "mainline",
+      "room_ids": [
+        "A12-R01",
+        "A12-R02",
+        "A12-R03"
+      ]
+    },
+    {
+      "id": "A13",
+      "name": "深层梦境与终局异象",
+      "role": "ending",
+      "room_ids": [
+        "A13-R01",
+        "A13-R02",
+        "A13-R03"
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "id": "A0-R01",
+      "region": "A0",
+      "name": "封闭手术廊",
+      "role": "entry",
+      "shape": "compact",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A0-R02",
+      "region": "A0",
+      "name": "排污垂井",
+      "role": "connector",
+      "shape": "wide",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A0-R03",
+      "region": "A0",
+      "name": "山壁出口",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A1-R01",
+      "region": "A1",
+      "name": "村庄街巷",
+      "role": "entry",
+      "shape": "compact",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A1-R02",
+      "region": "A1",
+      "name": "老井竖井",
+      "role": "connector",
+      "shape": "wide",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A1-R03",
+      "region": "A1",
+      "name": "北门高路",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A2-R01",
+      "region": "A2",
+      "name": "雾林下层",
+      "role": "entry",
+      "shape": "compact",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A2-R02",
+      "region": "A2",
+      "name": "钟墓回廊",
+      "role": "connector",
+      "shape": "wide",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A2-R03",
+      "region": "A2",
+      "name": "朝圣高路",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A3-R01",
+      "region": "A3",
+      "name": "坍塌街区",
+      "role": "entry",
+      "shape": "compact",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A3-R02",
+      "region": "A3",
+      "name": "旧市场上层",
+      "role": "connector",
+      "shape": "wide",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A3-R03",
+      "region": "A3",
+      "name": "排水暗巷",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A4-R01",
+      "region": "A4",
+      "name": "排污低道",
+      "role": "entry",
+      "shape": "compact",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A4-R02",
+      "region": "A4",
+      "name": "沉积大厅",
+      "role": "connector",
+      "shape": "wide",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A4-R03",
+      "region": "A4",
+      "name": "水闸竖井",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A5-R01",
+      "region": "A5",
+      "name": "战场沟壑",
+      "role": "entry",
+      "shape": "compact",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A5-R02",
+      "region": "A5",
+      "name": "断墙高台",
+      "role": "connector",
+      "shape": "wide",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A5-R03",
+      "region": "A5",
+      "name": "堡垒内环",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A6-R01",
+      "region": "A6",
+      "name": "修道院外廊",
+      "role": "entry",
+      "shape": "tall",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A6-R02",
+      "region": "A6",
+      "name": "钟塔中层",
+      "role": "connector",
+      "shape": "compact",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A6-R03",
+      "region": "A6",
+      "name": "钟塔高层",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A7-R01",
+      "region": "A7",
+      "name": "囚室下层",
+      "role": "entry",
+      "shape": "tall",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A7-R02",
+      "region": "A7",
+      "name": "绞盘竖井",
+      "role": "connector",
+      "shape": "compact",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A7-R03",
+      "region": "A7",
+      "name": "维护横道",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A8-R01",
+      "region": "A8",
+      "name": "墓道入口",
+      "role": "entry",
+      "shape": "compact",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A8-R02",
+      "region": "A8",
+      "name": "错层墓室",
+      "role": "connector",
+      "shape": "wide",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A8-R03",
+      "region": "A8",
+      "name": "王墓深井",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A9-R01",
+      "region": "A9",
+      "name": "外环街道",
+      "role": "entry",
+      "shape": "compact",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A9-R02",
+      "region": "A9",
+      "name": "高架运输道",
+      "role": "connector",
+      "shape": "wide",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A9-R03",
+      "region": "A9",
+      "name": "王城排水层",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A10-R01",
+      "region": "A10",
+      "name": "朝圣阶梯",
+      "role": "entry",
+      "shape": "tall",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A10-R02",
+      "region": "A10",
+      "name": "圣堂中殿",
+      "role": "connector",
+      "shape": "compact",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A10-R03",
+      "region": "A10",
+      "name": "内廷高廊",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A11-R01",
+      "region": "A11",
+      "name": "研究区前厅",
+      "role": "entry",
+      "shape": "tall",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A11-R02",
+      "region": "A11",
+      "name": "古神遗迹",
+      "role": "connector",
+      "shape": "compact",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A11-R03",
+      "region": "A11",
+      "name": "共鸣断层",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A12-R01",
+      "region": "A12",
+      "name": "内城下层",
+      "role": "entry",
+      "shape": "compact",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A12-R02",
+      "region": "A12",
+      "name": "王座阶梯",
+      "role": "connector",
+      "shape": "wide",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A12-R03",
+      "region": "A12",
+      "name": "王座外环",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "A13-R01",
+      "region": "A13",
+      "name": "梦境入口",
+      "role": "entry",
+      "shape": "compact",
+      "layer": "upper",
+      "purpose": "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+      "features": [
+        "safe_spawn",
+        "readable_exit"
+      ]
+    },
+    {
+      "id": "A13-R02",
+      "region": "A13",
+      "name": "异象回廊",
+      "role": "connector",
+      "shape": "wide",
+      "layer": "middle",
+      "purpose": "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+      "features": [
+        "cross_layer_route",
+        "visible_goal"
+      ]
+    },
+    {
+      "id": "A13-R03",
+      "region": "A13",
+      "name": "终局核心",
+      "role": "landmark",
+      "shape": "tall",
+      "layer": "lower",
+      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "features": [
+        "shortcut_or_drop",
+        "return_route"
+      ]
+    },
+    {
+      "id": "H01-R01",
+      "region": "H01",
+      "name": "井底回声层",
+      "role": "hidden",
+      "shape": "compact",
+      "layer": "hidden",
+      "purpose": "井壁背后的回声平台",
+      "features": [
+        "concealed_entry",
+        "unique_landmark",
+        "optional_lore",
+        "return_route"
+      ],
+      "parent_room": "A1-R02",
+      "secondary_room": "A4-R02"
+    },
+    {
+      "id": "H02-R01",
+      "region": "H02",
+      "name": "倒响钟室",
+      "role": "hidden",
+      "shape": "compact",
+      "layer": "hidden",
+      "purpose": "钟墓背后的反向钟室",
+      "features": [
+        "concealed_entry",
+        "unique_landmark",
+        "optional_lore",
+        "return_route"
+      ],
+      "parent_room": "A2-R02",
+      "secondary_room": null
+    },
+    {
+      "id": "H03-R01",
+      "region": "H03",
+      "name": "被删去的第三街",
+      "role": "hidden",
+      "shape": "compact",
+      "layer": "hidden",
+      "purpose": "旧市场被抹除的街区",
+      "features": [
+        "concealed_entry",
+        "unique_landmark",
+        "optional_lore",
+        "return_route"
+      ],
+      "parent_room": "A3-R02",
+      "secondary_room": "A9-R02"
+    },
+    {
+      "id": "H04-R01",
+      "region": "H04",
+      "name": "水面背后的楼梯",
+      "role": "hidden",
+      "shape": "compact",
+      "layer": "hidden",
+      "purpose": "水库镜面后的垂直楼梯",
+      "features": [
+        "concealed_entry",
+        "unique_landmark",
+        "optional_lore",
+        "return_route"
+      ],
+      "parent_room": "A4-R02",
+      "secondary_room": "A8-R02"
+    },
+    {
+      "id": "H05-R01",
+      "region": "H05",
+      "name": "无声钟室",
+      "role": "hidden",
+      "shape": "compact",
+      "layer": "hidden",
+      "purpose": "钟塔夹层与单向落差",
+      "features": [
+        "concealed_entry",
+        "unique_landmark",
+        "optional_lore",
+        "return_route"
+      ],
+      "parent_room": "A6-R02",
+      "secondary_room": "A3-R03"
+    },
+    {
+      "id": "H06-R01",
+      "region": "H06",
+      "name": "王名抹除廊",
+      "role": "hidden",
+      "shape": "compact",
+      "layer": "hidden",
+      "purpose": "王墓铭文后的狭长廊道",
+      "features": [
+        "concealed_entry",
+        "unique_landmark",
+        "optional_lore",
+        "return_route"
+      ],
+      "parent_room": "A8-R02",
+      "secondary_room": "A9-R02"
+    },
+    {
+      "id": "H07-R01",
+      "region": "H07",
+      "name": "镜街",
+      "role": "hidden",
+      "shape": "compact",
+      "layer": "hidden",
+      "purpose": "外环积水倒影中的镜像街区",
+      "features": [
+        "concealed_entry",
+        "unique_landmark",
+        "optional_lore",
+        "return_route"
+      ],
+      "parent_room": "A9-R02",
+      "secondary_room": "A12-R02"
+    },
+    {
+      "id": "H08-R01",
+      "region": "H08",
+      "name": "胎宫与原初空腔",
+      "role": "hidden",
+      "shape": "compact",
+      "layer": "hidden",
+      "purpose": "研究区背后的原初空腔",
+      "features": [
+        "concealed_entry",
+        "unique_landmark",
+        "optional_lore",
+        "return_route"
+      ],
+      "parent_room": "A11-R02",
+      "secondary_room": "A13-R02"
+    }
+  ],
+  "connections": [
+    {
+      "id": "I01",
+      "from": "A0-R01",
+      "to": "A0-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I02",
+      "from": "A0-R02",
+      "to": "A0-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I03",
+      "from": "A1-R01",
+      "to": "A1-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I04",
+      "from": "A1-R02",
+      "to": "A1-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I05",
+      "from": "A2-R01",
+      "to": "A2-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I06",
+      "from": "A2-R02",
+      "to": "A2-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I07",
+      "from": "A3-R01",
+      "to": "A3-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I08",
+      "from": "A3-R02",
+      "to": "A3-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I09",
+      "from": "A4-R01",
+      "to": "A4-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I10",
+      "from": "A4-R02",
+      "to": "A4-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I11",
+      "from": "A5-R01",
+      "to": "A5-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I12",
+      "from": "A5-R02",
+      "to": "A5-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I13",
+      "from": "A6-R01",
+      "to": "A6-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I14",
+      "from": "A6-R02",
+      "to": "A6-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I15",
+      "from": "A7-R01",
+      "to": "A7-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I16",
+      "from": "A7-R02",
+      "to": "A7-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I17",
+      "from": "A8-R01",
+      "to": "A8-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I18",
+      "from": "A8-R02",
+      "to": "A8-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I19",
+      "from": "A9-R01",
+      "to": "A9-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I20",
+      "from": "A9-R02",
+      "to": "A9-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I21",
+      "from": "A10-R01",
+      "to": "A10-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I22",
+      "from": "A10-R02",
+      "to": "A10-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I23",
+      "from": "A11-R01",
+      "to": "A11-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I24",
+      "from": "A11-R02",
+      "to": "A11-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I25",
+      "from": "A12-R01",
+      "to": "A12-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I26",
+      "from": "A12-R02",
+      "to": "A12-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "I27",
+      "from": "A13-R01",
+      "to": "A13-R02",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "uneven winding passage"
+    },
+    {
+      "id": "I28",
+      "from": "A13-R02",
+      "to": "A13-R03",
+      "kind": "internal",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "vertical connector or layered passage"
+    },
+    {
+      "id": "C01",
+      "from": "A0-R03",
+      "to": "A1-R01",
+      "kind": "main",
+      "direction": "forward",
+      "gate": "prologue_escape",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C02",
+      "from": "A1-R03",
+      "to": "A2-R01",
+      "kind": "main",
+      "direction": "both",
+      "gate": "village_defense_survived",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C03",
+      "from": "A2-R02",
+      "to": "A3-R01",
+      "kind": "main",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C04",
+      "from": "A2-R03",
+      "to": "A5-R02",
+      "kind": "shortcut",
+      "direction": "both",
+      "gate": "reached_A5_and_opened_old_pilgrim_highroad",
+      "route_form": "remote unlock changes return route",
+      "status": "design_contract"
+    },
+    {
+      "id": "C05",
+      "from": "A3-R03",
+      "to": "A4-R01",
+      "kind": "underground",
+      "direction": "both",
+      "gate": "opened_sewer_inspection_hatch_from_A4",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C06",
+      "from": "A4-R03",
+      "to": "A1-R02",
+      "kind": "shortcut",
+      "direction": "forward",
+      "gate": "opened_watergate_and_village_well_exit",
+      "route_form": "remote unlock changes return route",
+      "status": "design_contract"
+    },
+    {
+      "id": "C07",
+      "from": "A4-R03",
+      "to": "A8-R01",
+      "kind": "shortcut",
+      "direction": "both",
+      "gate": "reached_A8_via_A7_then_opened_royal_tomb_gate",
+      "route_form": "remote unlock changes return route",
+      "status": "design_contract"
+    },
+    {
+      "id": "C08",
+      "from": "A3-R02",
+      "to": "A5-R01",
+      "kind": "main",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C09",
+      "from": "A5-R03",
+      "to": "A6-R01",
+      "kind": "main",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C10",
+      "from": "A6-R03",
+      "to": "A3-R03",
+      "kind": "shortcut",
+      "direction": "both",
+      "gate": "opened_bell_tower_drop",
+      "route_form": "remote unlock changes return route",
+      "status": "design_contract"
+    },
+    {
+      "id": "C11",
+      "from": "A6-R03",
+      "to": "A7-R01",
+      "kind": "main",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C12",
+      "from": "A7-R03",
+      "to": "A4-R02",
+      "kind": "shortcut",
+      "direction": "both",
+      "gate": "reached_A7_then_opened_supply_tunnel",
+      "route_form": "remote unlock changes return route",
+      "status": "design_contract"
+    },
+    {
+      "id": "C13",
+      "from": "A7-R03",
+      "to": "A8-R01",
+      "kind": "main",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C14",
+      "from": "A8-R03",
+      "to": "A9-R01",
+      "kind": "main",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C15",
+      "from": "A8-R03",
+      "to": "A11-R01",
+      "kind": "secret",
+      "direction": "both",
+      "gate": "resonance_sight_and_ancient_truth",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C16",
+      "from": "A3-R03",
+      "to": "A9-R02",
+      "kind": "shortcut",
+      "direction": "both",
+      "gate": "opened_old_lift_from_A9",
+      "route_form": "remote unlock changes return route",
+      "status": "design_contract"
+    },
+    {
+      "id": "C17",
+      "from": "A9-R03",
+      "to": "A10-R01",
+      "kind": "main",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C18",
+      "from": "A9-R02",
+      "to": "A12-R01",
+      "kind": "shortcut",
+      "direction": "both",
+      "gate": "opened_inner_city_side_gate",
+      "route_form": "remote unlock changes return route",
+      "status": "design_contract"
+    },
+    {
+      "id": "C19",
+      "from": "A10-R03",
+      "to": "A11-R03",
+      "kind": "secret",
+      "direction": "both",
+      "gate": "outer_god_resonance_and_mirror_echo",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C20",
+      "from": "A10-R03",
+      "to": "A12-R02",
+      "kind": "main",
+      "direction": "both",
+      "gate": "none",
+      "route_form": "cross-region passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "C21",
+      "from": "A11-R03",
+      "to": "A13-R01",
+      "kind": "ending",
+      "direction": "forward",
+      "gate": "non_human_ending_candidate",
+      "route_form": "one-way descent to terminal layer",
+      "status": "design_contract"
+    },
+    {
+      "id": "C22",
+      "from": "A12-R03",
+      "to": "A13-R01",
+      "kind": "ending",
+      "direction": "forward",
+      "gate": "reached_A12_via_A10",
+      "route_form": "one-way descent to terminal layer",
+      "status": "design_contract"
+    },
+    {
+      "id": "C23",
+      "from": "A9-R03",
+      "to": "A4-R03",
+      "kind": "shortcut",
+      "direction": "both",
+      "gate": "opened_royal_drain",
+      "route_form": "remote unlock changes return route",
+      "status": "design_contract"
+    },
+    {
+      "id": "C24",
+      "from": "A1-R03",
+      "to": "A3-R01",
+      "kind": "shortcut",
+      "direction": "both",
+      "gate": "village_defense_survived",
+      "route_form": "remote unlock changes return route",
+      "status": "design_contract"
+    },
+    {
+      "id": "H01-ENTRY",
+      "from": "A1-R02",
+      "to": "H01-R01",
+      "kind": "hidden_entry",
+      "direction": "both",
+      "gate": "H01_discovery_contract",
+      "route_form": "concealed side passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "H01-RETURN",
+      "from": "H01-R01",
+      "to": "A4-R02",
+      "kind": "hidden_shortcut",
+      "direction": "both",
+      "gate": "H01_secondary_route_contract",
+      "route_form": "hidden loop or side return",
+      "status": "design_contract"
+    },
+    {
+      "id": "H02-ENTRY",
+      "from": "A2-R02",
+      "to": "H02-R01",
+      "kind": "hidden_entry",
+      "direction": "both",
+      "gate": "H02_discovery_contract",
+      "route_form": "concealed side passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "H03-ENTRY",
+      "from": "A3-R02",
+      "to": "H03-R01",
+      "kind": "hidden_entry",
+      "direction": "both",
+      "gate": "H03_discovery_contract",
+      "route_form": "concealed side passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "H03-RETURN",
+      "from": "H03-R01",
+      "to": "A9-R02",
+      "kind": "hidden_shortcut",
+      "direction": "both",
+      "gate": "H03_secondary_route_contract",
+      "route_form": "hidden loop or side return",
+      "status": "design_contract"
+    },
+    {
+      "id": "H04-ENTRY",
+      "from": "A4-R02",
+      "to": "H04-R01",
+      "kind": "hidden_entry",
+      "direction": "both",
+      "gate": "H04_discovery_contract",
+      "route_form": "concealed side passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "H04-RETURN",
+      "from": "H04-R01",
+      "to": "A8-R02",
+      "kind": "hidden_shortcut",
+      "direction": "both",
+      "gate": "H04_secondary_route_contract",
+      "route_form": "hidden loop or side return",
+      "status": "design_contract"
+    },
+    {
+      "id": "H05-ENTRY",
+      "from": "A6-R02",
+      "to": "H05-R01",
+      "kind": "hidden_entry",
+      "direction": "both",
+      "gate": "H05_discovery_contract",
+      "route_form": "concealed side passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "H05-RETURN",
+      "from": "H05-R01",
+      "to": "A3-R03",
+      "kind": "hidden_shortcut",
+      "direction": "both",
+      "gate": "H05_secondary_route_contract",
+      "route_form": "hidden loop or side return",
+      "status": "design_contract"
+    },
+    {
+      "id": "H06-ENTRY",
+      "from": "A8-R02",
+      "to": "H06-R01",
+      "kind": "hidden_entry",
+      "direction": "both",
+      "gate": "H06_discovery_contract",
+      "route_form": "concealed side passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "H06-RETURN",
+      "from": "H06-R01",
+      "to": "A9-R02",
+      "kind": "hidden_shortcut",
+      "direction": "both",
+      "gate": "H06_secondary_route_contract",
+      "route_form": "hidden loop or side return",
+      "status": "design_contract"
+    },
+    {
+      "id": "H07-ENTRY",
+      "from": "A9-R02",
+      "to": "H07-R01",
+      "kind": "hidden_entry",
+      "direction": "both",
+      "gate": "H07_discovery_contract",
+      "route_form": "concealed side passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "H07-RETURN",
+      "from": "H07-R01",
+      "to": "A12-R02",
+      "kind": "hidden_shortcut",
+      "direction": "both",
+      "gate": "H07_secondary_route_contract",
+      "route_form": "hidden loop or side return",
+      "status": "design_contract"
+    },
+    {
+      "id": "H08-ENTRY",
+      "from": "A11-R02",
+      "to": "H08-R01",
+      "kind": "hidden_entry",
+      "direction": "both",
+      "gate": "H08_discovery_contract",
+      "route_form": "concealed side passage",
+      "status": "design_contract"
+    },
+    {
+      "id": "H08-RETURN",
+      "from": "H08-R01",
+      "to": "A13-R02",
+      "kind": "hidden_shortcut",
+      "direction": "both",
+      "gate": "H08_secondary_route_contract",
+      "route_form": "hidden loop or side return",
+      "status": "design_contract"
+    }
+  ],
+  "acceptance_contract": {
+    "required_mainline": [
+      "A0",
+      "A1",
+      "A2",
+      "A3",
+      "A5",
+      "A6",
+      "A7",
+      "A8",
+      "A9",
+      "A10",
+      "A12",
+      "A13"
+    ],
+    "hidden_regions_optional": true,
+    "minimum_distinct_room_shapes": [
+      "compact",
+      "wide",
+      "tall"
+    ],
+    "required_route_features": [
+      "multi-exit hub",
+      "vertical loop",
+      "remote-opened shortcut",
+      "one-way ending descent",
+      "hidden side route",
+      "visible but gated landmark"
+    ],
+    "note": "Graph contract only. It does not assert that room scenes, collision, movement, transitions, art, or runtime progression are implemented."
+  }
+}
