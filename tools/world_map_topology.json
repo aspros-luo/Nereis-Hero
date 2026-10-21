@@ -222,7 +222,7 @@
         "route_layer": "eastern_canopy_exit",
         "from_region_anchor": {
           "region": "A2",
-          "x": 2240,
+          "x": 3400,
           "y_offset": -160
         },
         "to_region_anchor": {
@@ -233,11 +233,11 @@
         },
         "return_spawn": {
           "region": "A2",
-          "x": 2120,
+          "x": 3220,
           "y_offset": -140,
           "spawn_side": "east"
         },
-        "intent": "C03 is a two-way canopy-highroad connection. The A2 door aligns with the eastern canopy platform; entering A3 and returning to A2 must preserve the upper route rather than dropping to either ground floor."
+        "intent": "C03 is a two-way canopy-highroad connection. The A2 door sits at the remote eastern canopy exit after the expanded forest/ravine route; returning to A2 must preserve the upper route rather than dropping to either ground floor."
       },
       "layer_contract": {
         "from_subregion": "A2-S04",
@@ -2139,6 +2139,38 @@
           "首次经过时能辨认道路延伸但不能提前通过锁定门",
           "开启后双向门与出生点都在受支撑的平台上",
           "不与H02的隐藏探索出口重复"
+        ],
+        "status": "design_contract_not_runtime_verified"
+      }
+    },
+    {
+      "id": "A2-S06",
+      "parent_region": "A2",
+      "name": "东部沟壑与林下绕行",
+      "layer": "ground_and_lower",
+      "role": "第二道落差、可回跳坑底与低位绕行路线",
+      "design_contract": {
+        "purpose": "扩大 A2 东侧空间，提供跨越沟壑的树冠路线与较低绕行路线，两条路线在远端重新汇合",
+        "required_readability": [
+          "从西侧能看见沟壑和两种通行高度",
+          "落入坑底后可通过实体台阶跳回",
+          "低位绕行不取代树冠高路，也不改变 C03 主线出口身份"
+        ],
+        "status": "design_contract_not_runtime_verified"
+      }
+    },
+    {
+      "id": "A2-S07",
+      "parent_region": "A2",
+      "name": "东部树冠延伸段",
+      "layer": "upper",
+      "role": "扩建后的远端高路，连接 C03 并与林下绕行重新汇合",
+      "design_contract": {
+        "purpose": "把 C03 从地图中段移至 A2 东端，让玩家穿过新的分叉、落差与回合后再抵达城区",
+        "required_readability": [
+          "C03 仅位于远端树冠高路尽头",
+          "返回出生点有连续平台承托且远离门触发区",
+          "新平台链与低位绕行之间存在可读的空间关系"
         ],
         "status": "design_contract_not_runtime_verified"
       }
