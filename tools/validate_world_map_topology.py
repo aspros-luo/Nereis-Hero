@@ -58,11 +58,14 @@ def build_graph(
                 graph[parent].add(secret_id)
                 graph[secret_id].add(parent)
             secondary = secret.get("secondary_exit")
-            if secondary and secret_id in graph and secondary["to"] in graph:
-                graph[secret_id].add(secondary["to"])
+            # Some hidden regions intentionally defer their secondary exit. Treat
+            # those records as design notes, not as executable graph edges.
+            secondary_target = secondary.get("to") if isinstance(secondary, dict) else None
+            if secondary_target and secret_id in graph and secondary_target in graph:
+                graph[secret_id].add(secondary_target)
                 # Secondary exits may become bidirectional once the remote side
                 # has been reached and its progress gate has been opened.
-                graph[secondary["to"]].add(secret_id)
+                graph[secondary_target].add(secret_id)
     return graph
 
 
