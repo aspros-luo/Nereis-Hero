@@ -869,48 +869,44 @@ func _configure_platforms() -> void:
 	platforms.clear()
 	match region_id:
 		"A2":
-			# The ground route stays readable; the canopy route is a faster, riskier line across the forest.
-			# 地面主路保持清晰；树冠路线提供更快但更有风险的横穿方式。
-			_add_platform(Rect2(430, 485, 105, 20))
-			_add_platform(Rect2(535, 450, 110, 20))
-			_add_platform(Rect2(645, 415, 130, 20))
-			# Keep the ground-level Bell Grave opening clear; the pit itself is built in _create_floor().
-			# 钟墓坑口上方不再放置横跨坑口的低台；真实坑体由 _create_floor() 建立。
-			_add_platform(Rect2(1200, 435, 150, 18))
-			_add_platform(Rect2(1500, 480, 160, 18))
-			_add_platform(Rect2(1840, 445, 130, 18))
-			# The eastbound route climbs back onto the canopy instead of continuing along the uninterrupted floor.
-			# 向东的主路重新爬上树冠高台，不再沿着无间断的地面直线通行。
-			_add_platform(Rect2(1980, 425, 120, 18))
-			_add_platform(Rect2(2110, 400, 110, 18))
-			_add_platform(Rect2(2220, 380, 120, 18))
-			_add_platform(Rect2(760, 370, 110, 18))
-			_add_platform(Rect2(870, 330, 110, 18))
-			_add_platform(Rect2(1000, 360, 110, 18))
-			_add_platform(Rect2(1120, 405, 110, 18))
-			_add_platform(Rect2(1260, 390, 110, 18))
-			_add_platform(Rect2(1380, 345, 110, 18))
-			_add_platform(Rect2(1500, 310, 110, 18))
-			_add_platform(Rect2(1620, 350, 110, 18))
-			_add_platform(Rect2(1740, 400, 110, 18))
-			# Expanded eastern canopy: the upper route bends around the ravine before reaching C03.
-			_add_platform(Rect2(2370, 350, 115, 18))
-			_add_platform(Rect2(2500, 320, 115, 18))
-			_add_platform(Rect2(2630, 350, 115, 18))
-			_add_platform(Rect2(2760, 390, 115, 18))
-			_add_platform(Rect2(2890, 355, 115, 18))
-			_add_platform(Rect2(3020, 320, 115, 18))
-			_add_platform(Rect2(3145, 350, 125, 18))
-			_add_platform(Rect2(3180, 400, 130, 18))
-			_add_platform(Rect2(3340, 380, 140, 18))
-			# Lower bypass through the eastern forest; it rejoins the remote approach instead of becoming a new exit.
-			_add_platform(Rect2(2310, 475, 125, 18))
-			_add_platform(Rect2(2440, 445, 120, 18))
-			_add_platform(Rect2(2570, 455, 120, 18))
-			_add_platform(Rect2(2700, 475, 125, 18))
-			_add_platform(Rect2(2835, 450, 125, 18))
-			_add_platform(Rect2(2970, 425, 125, 18))
-			_add_platform(Rect2(3100, 430, 125, 18))
+			# Landmark-led spaces replace the repetitive platform ladder.
+			# 以地标组织路线，移除重复的平台梯子。
+			# R01 forest entry: one short climb introduces the canopy.
+			_add_platform(Rect2(360, 485, 145, 20))
+			_add_platform(Rect2(535, 445, 125, 18))
+			_add_platform(Rect2(685, 405, 110, 18))
+			_add_platform(Rect2(760, 365, 100, 18))
+			# R02 broken gallery circles the Bell Grave and leaves its descent readable.
+			_add_platform(Rect2(1080, 455, 150, 18))
+			_add_platform(Rect2(1260, 415, 145, 18))
+			_add_platform(Rect2(1435, 465, 165, 18))
+			# R04 canopy: broad landings create a route with pauses and changing elevation.
+			_add_platform(Rect2(850, 315, 150, 20))
+			_add_platform(Rect2(1040, 275, 170, 20))
+			_add_platform(Rect2(1250, 310, 145, 18))
+			_add_platform(Rect2(1430, 350, 150, 18))
+			_add_platform(Rect2(1610, 395, 140, 18))
+			# R05 pilgrim bridge: separated approaches communicate a broken crossing.
+			_add_platform(Rect2(1690, 315, 145, 18))
+			_add_platform(Rect2(1880, 350, 145, 18))
+			_add_platform(Rect2(2040, 395, 135, 18))
+			# R06 tower ribs descend back toward the floor and close the first loop.
+			_add_platform(Rect2(1800, 445, 135, 18))
+			_add_platform(Rect2(1980, 475, 130, 18))
+			# R07/R08 eastern ravine: lower bypass and upper risky bridge approach.
+			_add_platform(Rect2(2260, 475, 140, 18))
+			_add_platform(Rect2(2390, 430, 110, 18))
+			_add_platform(Rect2(2510, 465, 125, 18))
+			_add_platform(Rect2(2645, 430, 125, 18))
+			_add_platform(Rect2(2785, 475, 135, 18))
+			_add_platform(Rect2(2935, 435, 135, 18))
+			_add_platform(Rect2(3080, 390, 135, 18))
+			_add_platform(Rect2(3215, 420, 115, 18))
+			# The final rise reaches C03 through a distinct eastern bridge silhouette.
+			_add_platform(Rect2(2740, 330, 130, 18))
+			_add_platform(Rect2(2900, 300, 130, 18))
+			_add_platform(Rect2(3060, 330, 130, 18))
+			_add_platform(Rect2(3220, 365, 130, 18))
 		"A3":
 			# Street-level route: rubble, market, sewer descent, and the battlefield road.
 			# 地面主路连接碎墙、市场、下水道入口与战场方向。
@@ -3420,17 +3416,30 @@ func _draw_forest_landmarks() -> void:
 	draw_line(Vector2(704, 290), Vector2(765, 290), Color("#75666b"), 4.0)
 	draw_line(Vector2(735, 300), Vector2(735, 350), Color("#75666b"), 3.0)
 	draw_string(ThemeDB.fallback_font, Vector2(690, 260), "无风", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#75666b"))
-	# Canopy silhouettes guide the optional upper traversal without hiding the bell landmark.
-	# 树冠剪影提示上层可选路线，同时保留钟墓地标的可见性。
-	draw_line(Vector2(755, 360), Vector2(875, 320), Color("#514957"), 3.0)
-	draw_line(Vector2(875, 320), Vector2(1005, 350), Color("#514957"), 3.0)
-	draw_line(Vector2(1005, 350), Vector2(1125, 395), Color("#514957"), 3.0)
-	draw_line(Vector2(1125, 395), Vector2(1265, 380), Color("#514957"), 3.0)
-	draw_line(Vector2(1265, 380), Vector2(1385, 335), Color("#514957"), 3.0)
-	draw_line(Vector2(1385, 335), Vector2(1505, 300), Color("#514957"), 3.0)
-	draw_line(Vector2(1505, 300), Vector2(1625, 340), Color("#514957"), 3.0)
-	draw_line(Vector2(1625, 340), Vector2(1745, 390), Color("#514957"), 3.0)
-	draw_line(Vector2(1745, 390), Vector2(1845, 435), Color("#514957"), 3.0)
+	# Distinct silhouettes make the Bell Grave, canopy, tower ribs, and eastern bridge readable at a glance.
+	# 用不同轮廓区分钟墓、树冠、钟楼肋架和东侧残桥。
+	draw_rect(Rect2(805, 300, 46, 235), Color("#211f2a"))
+	draw_rect(Rect2(816, 315, 24, 176), Color("#11131a"))
+	draw_arc(Vector2(828, 300), 54.0, PI, TAU, 24, Color("#65545f"), 5.0)
+	draw_line(Vector2(828, 302), Vector2(828, 365), Color("#65545f"), 3.0)
+	draw_string(ThemeDB.fallback_font, Vector2(780, 278), "钟墓外廊", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 11, Color("#82727e"))
+	# A broad dead-tree canopy frames the upper loop.
+	draw_line(Vector2(850, 315), Vector2(1015, 235), Color("#34343f"), 18.0)
+	draw_line(Vector2(1015, 235), Vector2(1185, 265), Color("#34343f"), 15.0)
+	draw_line(Vector2(1185, 265), Vector2(1370, 305), Color("#34343f"), 12.0)
+	draw_line(Vector2(1015, 235), Vector2(1080, 195), Color("#34343f"), 9.0)
+	draw_line(Vector2(1080, 195), Vector2(1200, 210), Color("#34343f"), 7.0)
+	# Exposed masonry ribs signal the mid-level return path.
+	for rib_x in [1765.0, 1855.0, 1945.0, 2035.0]:
+		draw_line(Vector2(rib_x, 290), Vector2(rib_x - 28.0, 505), Color("#3b3540"), 8.0)
+	draw_line(Vector2(1745, 315), Vector2(1840, 285), Color("#5a4a57"), 4.0)
+	draw_line(Vector2(1840, 285), Vector2(1940, 315), Color("#5a4a57"), 4.0)
+	# The eastern bridge can be seen from below, but is reached by a separate climb.
+	draw_line(Vector2(2580, 285), Vector2(2750, 245), Color("#4a414d"), 8.0)
+	draw_line(Vector2(2750, 245), Vector2(2925, 260), Color("#4a414d"), 8.0)
+	draw_line(Vector2(2925, 260), Vector2(3100, 220), Color("#4a414d"), 8.0)
+	draw_line(Vector2(3100, 220), Vector2(3290, 255), Color("#4a414d"), 8.0)
+	draw_string(ThemeDB.fallback_font, Vector2(2860, 205), "东侧残桥", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#877887"))
 
 func _draw_city_landmarks() -> void:
 	for x in range(200, int(map_width), 390):
