@@ -511,6 +511,135 @@ def main() -> int:
         "C17: cathedral transition must remain an elevated A9 approach with a west-side A10 entry.",
     )
 
+    # A2 Bell Grave / canopy baseline contracts. These checks keep source and topology
+    # synchronized; they intentionally do not claim Godot physics or input acceptance.
+    intra_edges = {edge.get("id"): edge for edge in topology.get("intra_region_connections", [])}
+    a2_contract = topology.get("a2_spatial_acceptance_contract", {})
+    sc008 = intra_edges.get("SC008", {})
+    sc011 = intra_edges.get("SC011", {})
+    sc068 = next((item for item in topology.get("elevators", []) if item.get("id") == "LFT01"), {})
+    require(
+        errors,
+        sc008.get("from") == "A2-S02" and sc008.get("to") == "A2-S03"
+        and sc008.get("travel") == "both" and sc008.get("initial_state") == "open",
+        "A2 SC008: topology must keep the ordinary Bell Grave pit open and bidirectional.",
+    )
+    require(
+        errors,
+        sc011.get("from") == "A2-S04" and sc011.get("to") == "A2-S04"
+        and sc011.get("initial_state") == "locked"
+        and sc011.get("unlock_condition") == "resonance_20_and_sight",
+        "A2 SC011: the resonance bridge must remain a locked canopy-internal crossing, not a ground-to-canopy loop.",
+    )
+    require(
+        errors,
+        sc068.get("id") == "LFT01"
+        and sc068.get("implementation_status") == "deferred_not_in_a2_baseline_acceptance",
+        "A2 LFT01: the unimplemented lift must remain deferred and excluded from baseline acceptance.",
+    )
+    require(
+        errors,
+        a2_contract.get("status") == "partial_runtime_code_added_not_engine_verified",
+        "A2 spatial contract must not be marked engine-verified before Godot acceptance.",
+    )
+
+    ready_body = function_body(region_source, "_ready")
+    floor_body = function_body(region_source, "_create_floor")
+    local_routes_body = function_body(region_source, "_spawn_local_resonance_routes")
+    hidden_gate_feedback = function_body(region_source, "_on_optional_hidden_gate_opened")
+    require(
+        errors,
+        ready_body.find("_configure_platforms()") >= 0
+        and ready_body.find("_create_floor()") > ready_body.find("_configure_platforms()"),
+        "A2: _configure_platforms() must run before _create_floor() so pit ledges remain registered for drawing.",
+    )
+    require(
+        errors,
+        '_add_ground_segment("GreyboxGround_West", 0.0, 860.0)' in floor_body
+        and '_add_ground_segment("GreyboxGround_East", 1060.0, map_width - 1060.0)' in floor_body
+        and "_add_platform(Rect2(860.0, 610.0, 200.0, 18.0))" in floor_body
+        and "_add_platform(Rect2(850.0, 580.0, 70.0, 12.0))" in floor_body
+        and "_add_platform(Rect2(1000.0, 580.0, 70.0, 12.0))" in floor_body,
+        "A2 SC008: ground gap, pit floor, and both return ledges must remain in runtime source.",
+    )
+    require(
+        errors,
+        '_spawn_h02_gate(960.0, 610.0)' in exit_blocks.get("A2", "")
+        and "gate.required_resonance = 18" in region_source
+        and 'gate.target_scene_path = "res://scenes/hidden_bell_chamber.tscn"' in region_source,
+        "A2 H02: hidden gate must remain on the pit floor and keep its existing 18-resonance condition.",
+    )
+    h02_exit_block = exit_blocks.get("H02", "")
+    require(
+        errors,
+        h02_exit_block.count("_spawn_exit_door(") == 1
+        and '"res://scenes/ash_forest.tscn", "bell_gate"' in h02_exit_block
+        and "old_battlefield" not in h02_exit_block
+        and "old_pilgrim_highroad" not in h02_exit_block,
+        "H02: retain one return door to A2 only; do not add a second A5 exit.",
+    )
+    require(
+        errors,
+        'if secret_id == "H02":' in hidden_gate_feedback
+        and hidden_gate_feedback.find('if secret_id == "H02":') < hidden_gate_feedback.find("return")
+        and "feedback=environmental_only" in hidden_gate_feedback,
+        "H02: opening feedback must stay environmental and must not invoke narrator-style exposition.",
+    )
+    require(
+        errors,
+        'if not WorldState.debug_map_test_mode and region_id not in ["A2", "A3"]:' in ready_body,
+        "A2/A3: first-entry text popups must not replace in-world discovery.",
+    )
+    require(
+        errors,
+        "A2_BELLGRAVE_CANOPY_CROSSING" in local_routes_body
+        and "route.required_resonance = 20" in local_routes_body
+        and "route.bridge_start_x = 1380.0" in local_routes_body
+        and "route.bridge_end_x = 1610.0" in local_routes_body
+        and "route.bridge_y = 328.0" in local_routes_body,
+        "A2 SC011: runtime resonance bridge coordinates and unlock threshold must match the canopy contract.",
+    )
+
+    # Elevated A2 arrivals must be statically supported by authored platform tops.
+    # This is a coordinate cross-check only; the Hero's actual feet/collision still needs engine testing.
+    a2_supported_arrivals = [
+        ("C03 A2 east return", 2120.0, 400.0),
+        ("C03 A2 exit", 2240.0, 380.0),
+        ("C04 A2 old pilgrim return", 1750.0, 400.0),
+    ]
+    for label, spawn_x, spawn_y in a2_supported_arrivals:
+        supported = any(
+            left <= spawn_x <= left + width and abs(platform_y - spawn_y) <= 1.0
+            for left, platform_y, width, _height in platform_rects.get("A2", [])
+        )
+        require(errors, supported, f"{label}: expected support platform at x={spawn_x:g}, y={spawn_y:g}.")
+    c04 = edges.get("C04", {}).get("spatial_contract", {})
+    c04_return = c04.get("return_spawn", {})
+    c04_from = c04.get("from_region_anchor", {})
+    c04_to = c04.get("to_region_anchor", {})
+    require(
+        errors,
+        c04.get("initial_access") == "blocked"
+        and c04.get("opens_from") == "A5"
+        and c04.get("unlock_condition") == "reached_A5_and_opened_old_pilgrim_highroad"
+        and c04_from.get("region") == "A2" and c04_from.get("x") == 1880
+        and c04_to.get("region") == "A5" and c04_to.get("x") == 520
+        and c04_return.get("region") == "A2" and c04_return.get("x") == 1750
+        and has_side_return(x_body, "A2", "old_pilgrim_highroad", "1750.0")
+        and has_side_return(y_body, "A2", "old_pilgrim_highroad", "floor_y - 140.0"),
+        "A2 C04: keep the A5-side unlock and supported A2 upper-route return spawn synchronized.",
+    )
+    require(
+        errors,
+        any(
+            left <= 650.0 <= left + width and abs(platform_y - 455.0) <= 1.0
+            for left, platform_y, width, _height in platform_rects.get("A5", [])
+        )
+        and has_side_return(x_body, "A5", "old_pilgrim_highroad", "650.0")
+        and has_side_return(y_body, "A5", "old_pilgrim_highroad", "floor_y - 85.0"),
+        "A2 C04: A5-side return spawn must remain on its authored upper platform.",
+    )
+
     if errors:
         for error in errors:
             print(f"[FAIL] {error}")
