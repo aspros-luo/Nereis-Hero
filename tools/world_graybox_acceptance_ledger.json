@@ -1,0 +1,2344 @@
+{
+  "schema_version": 1,
+  "title": "World-wide Graybox Design and Acceptance Ledger",
+  "branch": "feature/story-map-progression",
+  "status": "design_ledger_not_runtime_verified",
+  "rule": "A2 is the reference workflow, not the only region being developed. Every region uses the same acceptance method but gets a distinct spatial identity. No topology record counts as playable until Godot player traversal proves it.",
+  "global_acceptance": [
+    "scene mapping and subregion ownership documented",
+    "actual collision geometry for every required route",
+    "at least one deliberate branch and one return path where region role allows",
+    "vertical layers connected by walkable/jumpable/drop/elevator route, not diagram lines alone",
+    "cross-region entrance and return spawn supported and outside trigger overlap",
+    "locked/hidden routes visibly hinted and conditionally correct",
+    "enemy/loot/story filling deferred until graybox traversal passes",
+    "Godot runtime traversal evidence recorded separately from static checks"
+  ],
+  "regions": [
+    {
+      "id": "A0",
+      "name": "边境手术所与逃脱通道",
+      "kind": "main_region",
+      "role": "prologue",
+      "archetype": "序章逃脱 / 受控单向空间",
+      "spatial_shape": "紧凑室内、观察廊、明确向下的排污井；以视线引导代替自由分叉",
+      "scenes": [
+        "scenes/escape_prologue.tscn",
+        "scenes/prologue_exterior.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A0-S01",
+          "name": "手术室",
+          "layer": "interior",
+          "role": "序章起点"
+        },
+        {
+          "id": "A0-S02",
+          "name": "观察廊",
+          "layer": "upper",
+          "role": "俯视实验区域"
+        },
+        {
+          "id": "A0-S03",
+          "name": "排污井",
+          "layer": "underground",
+          "role": "单向逃脱落差"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC001",
+          "from": "A0-S01",
+          "to": "A0-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC002",
+          "from": "A0-S02",
+          "to": "A0-S03",
+          "kind": "drop",
+          "travel": "one_way",
+          "initial_state": "open",
+          "unlock_condition": ""
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C01",
+          "from": "A0",
+          "to": "A1",
+          "kind": "main",
+          "initial_access": "from_to",
+          "unlock_condition": "",
+          "route_layer": "封闭排污出口→村庄地面入口"
+        }
+      ],
+      "required_traversal_beats": [
+        "出生点与第一条可读移动路线",
+        "观察廊让玩家看见危险区域或出口",
+        "单向下落后进入出口链，不能误做成普通回环"
+      ],
+      "loop_policy": "不强求区域内回环；确保 C01 staged route 的分段方向与返回语义清楚",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A1",
+      "name": "边境村庄",
+      "kind": "main_region",
+      "role": "hub",
+      "archetype": "村庄枢纽 / 安全地面与分层支路",
+      "spatial_shape": "主街作为认知骨架，墓地、村庄边缘、旧排水与防卫事件形成支路",
+      "scenes": [
+        "scenes/mite_house.tscn",
+        "scenes/village_hub.tscn",
+        "scenes/village_graveyard.tscn",
+        "scenes/village_defense_demo.tscn",
+        "scenes/old_drain_exploration.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A1-S01",
+          "name": "村庄主街",
+          "layer": "ground",
+          "role": "初始导航轴"
+        },
+        {
+          "id": "A1-S02",
+          "name": "民居后巷",
+          "layer": "ground",
+          "role": "NPC与支路"
+        },
+        {
+          "id": "A1-S03",
+          "name": "屋顶木栈道",
+          "layer": "upper",
+          "role": "可选屋顶探索路线；C24不经过此处"
+        },
+        {
+          "id": "A1-S04",
+          "name": "老井平台",
+          "layer": "ground",
+          "role": "井口与安全交互点"
+        },
+        {
+          "id": "A1-S05",
+          "name": "井底回声层入口",
+          "layer": "deep",
+          "role": "H01发现点"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC003",
+          "from": "A1-S01",
+          "to": "A1-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC004",
+          "from": "A1-S01",
+          "to": "A1-S03",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC005",
+          "from": "A1-S03",
+          "to": "A1-S04",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC006",
+          "from": "A1-S04",
+          "to": "A1-S05",
+          "kind": "resonance",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "resonance_12"
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C01",
+          "from": "A0",
+          "to": "A1",
+          "kind": "main",
+          "initial_access": "from_to",
+          "unlock_condition": "",
+          "route_layer": "封闭排污出口→村庄地面入口"
+        },
+        {
+          "id": "C02",
+          "from": "A1",
+          "to": "A2",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "village_defense_survived",
+          "route_layer": "村道→雾林地面"
+        },
+        {
+          "id": "C06",
+          "from": "A4",
+          "to": "A1",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "opened_watergate_and_village_well_exit",
+          "route_layer": "reservoir_ground_return"
+        },
+        {
+          "id": "C24",
+          "from": "A1",
+          "to": "A3",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "village_defense_survived",
+          "route_layer": "old_drainage_passage"
+        }
+      ],
+      "required_traversal_beats": [
+        "主街可重复识别且安全返回",
+        "墓地或边缘支路有回归主街的路径",
+        "防卫章节是事件场景，不误认成连续地理",
+        "旧排水入口按 C24 条件开放"
+      ],
+      "loop_policy": "至少形成一条可记忆的村内小环或回返链；事件场景可单独切换",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A2",
+      "name": "雾林、钟墓与旧朝圣路",
+      "kind": "main_region",
+      "role": "surface",
+      "archetype": "荒野探索样板 / 多层回环",
+      "spatial_shape": "地面、钟墓深井、树冠高路、旧朝圣高路、东部沟壑互相交织",
+      "scenes": [
+        "scenes/ash_forest.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A2-S01",
+          "name": "雾林地面",
+          "layer": "ground",
+          "role": "主路与狭窄遭遇"
+        },
+        {
+          "id": "A2-S02",
+          "name": "钟墓外圈",
+          "layer": "ground",
+          "role": "绕行和墓坑入口"
+        },
+        {
+          "id": "A2-S03",
+          "name": "钟墓坑底",
+          "layer": "underground",
+          "role": "H02关联的低位空间"
+        },
+        {
+          "id": "A2-S04",
+          "name": "树冠栈道",
+          "layer": "upper",
+          "role": "C03高路"
+        },
+        {
+          "id": "A2-S05",
+          "name": "旧朝圣高路",
+          "layer": "upper",
+          "role": "C04远端捷径"
+        },
+        {
+          "id": "A2-S06",
+          "name": "东部沟壑与林下绕行",
+          "layer": "ground_and_lower",
+          "role": "第二道落差、可回跳坑底与低位绕行路线"
+        },
+        {
+          "id": "A2-S07",
+          "name": "东部树冠延伸段",
+          "layer": "upper",
+          "role": "扩建后的远端高路，连接 C03 并与林下绕行重新汇合"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC007",
+          "from": "A2-S01",
+          "to": "A2-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC008",
+          "from": "A2-S02",
+          "to": "A2-S03",
+          "kind": "drop",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC009",
+          "from": "A2-S01",
+          "to": "A2-S04",
+          "kind": "climb",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC010",
+          "from": "A2-S04",
+          "to": "A2-S05",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC011",
+          "from": "A2-S04",
+          "to": "A2-S04",
+          "kind": "resonance",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "resonance_20_and_sight"
+        },
+        {
+          "id": "SC072",
+          "from": "A2-S04",
+          "to": "A2-S06",
+          "kind": "drop_and_return",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC073",
+          "from": "A2-S06",
+          "to": "A2-S07",
+          "kind": "climb_and_rejoin",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC068",
+          "from": "A2-S01",
+          "to": "A2-S04",
+          "kind": "lift",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "repaired_forest_counterweight"
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C02",
+          "from": "A1",
+          "to": "A2",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "village_defense_survived",
+          "route_layer": "村道→雾林地面"
+        },
+        {
+          "id": "C03",
+          "from": "A2",
+          "to": "A3",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "eastern_canopy_exit"
+        },
+        {
+          "id": "C04",
+          "from": "A2",
+          "to": "A5",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A5_and_opened_old_pilgrim_highroad",
+          "route_layer": "old_pilgrim_canopy_highroad"
+        }
+      ],
+      "required_traversal_beats": [
+        "入口多向分叉",
+        "钟墓下探且能回返，H02 可选",
+        "高路与地面有可辨认的上下关系",
+        "C04 从 A5 侧解锁为高位捷径",
+        "C03 只在远端树冠路线后出现"
+      ],
+      "loop_policy": "局部环、下探回返、远端开启捷径；按 A2 专项合同验收",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A3",
+      "name": "废弃城区",
+      "kind": "main_region",
+      "role": "hub",
+      "archetype": "城区枢纽 / 街巷与屋顶网络",
+      "spatial_shape": "地面街巷、屋顶连廊、抬高管线、旧升降机与侧街形成垂直街区",
+      "scenes": [
+        "scenes/forgotten_city.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A3-S01",
+          "name": "西侧城区入口",
+          "layer": "ground",
+          "role": "C03落点"
+        },
+        {
+          "id": "A3-S02",
+          "name": "旧市场街",
+          "layer": "ground",
+          "role": "H03线索锚点"
+        },
+        {
+          "id": "A3-S03",
+          "name": "东侧街巷",
+          "layer": "ground",
+          "role": "地面回环"
+        },
+        {
+          "id": "A3-S04",
+          "name": "屋顶连廊",
+          "layer": "upper",
+          "role": "C16高位落点与屋顶探索；C24不经过此处"
+        },
+        {
+          "id": "A3-S05",
+          "name": "抬高管线",
+          "layer": "upper",
+          "role": "C05入口"
+        },
+        {
+          "id": "A3-S06",
+          "name": "钟塔落差平台",
+          "layer": "upper",
+          "role": "C10落点"
+        },
+        {
+          "id": "A3-S07",
+          "name": "地下检查口",
+          "layer": "underground",
+          "role": "通往A4的下行口"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC012",
+          "from": "A3-S01",
+          "to": "A3-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC013",
+          "from": "A3-S02",
+          "to": "A3-S03",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC014",
+          "from": "A3-S01",
+          "to": "A3-S04",
+          "kind": "climb",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC015",
+          "from": "A3-S04",
+          "to": "A3-S05",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC016",
+          "from": "A3-S04",
+          "to": "A3-S06",
+          "kind": "drop",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_bell_tower_drop"
+        },
+        {
+          "id": "SC017",
+          "from": "A3-S03",
+          "to": "A3-S07",
+          "kind": "hatch",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C03",
+          "from": "A2",
+          "to": "A3",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "eastern_canopy_exit"
+        },
+        {
+          "id": "C05",
+          "from": "A3",
+          "to": "A4",
+          "kind": "underground_route",
+          "initial_access": "from_to",
+          "unlock_condition": "opened_sewer_inspection_hatch_from_A4",
+          "route_layer": "raised_pipe_walk"
+        },
+        {
+          "id": "C08",
+          "from": "A3",
+          "to": "A5",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "raised_city_parapet"
+        },
+        {
+          "id": "C10",
+          "from": "A6",
+          "to": "A3",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "opened_bell_tower_drop",
+          "route_layer": "bell_tower_drop_landing"
+        },
+        {
+          "id": "C16",
+          "from": "A3",
+          "to": "A9",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A9_via_A8_then_opened_old_lift_from_A9",
+          "route_layer": "eastern_rooftop_lift"
+        },
+        {
+          "id": "C24",
+          "from": "A1",
+          "to": "A3",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "village_defense_survived",
+          "route_layer": "old_drainage_passage"
+        }
+      ],
+      "required_traversal_beats": [
+        "街面至少一个分叉与短死路",
+        "屋顶可回落或经高路绕回街面",
+        "C05 高位进入 A4，C16 晚期开启到 A9",
+        "H03 隐藏第三街从常规路线旁被发现",
+        "C10/H05 的回程落点避开触发器"
+      ],
+      "loop_policy": "城区内部环与跨区后开捷径；不能退化为从西向东直通走廊",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A4",
+      "name": "下水道、沉积大厅与旧水库",
+      "kind": "main_region",
+      "role": "underground_hub",
+      "archetype": "地下水系枢纽 / 多层管廊与水库",
+      "spatial_shape": "上层检查廊、中层水道、低位淹水沟、深井/井边支路",
+      "scenes": [
+        "scenes/sewer_reservoir.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A4-S01",
+          "name": "上层检查廊",
+          "layer": "upper",
+          "role": "C05/C23高位交通"
+        },
+        {
+          "id": "A4-S02",
+          "name": "沉积大厅",
+          "layer": "ground",
+          "role": "主识别空间与战斗区"
+        },
+        {
+          "id": "A4-S03",
+          "name": "中层水道",
+          "layer": "underground",
+          "role": "C07王墓水道"
+        },
+        {
+          "id": "A4-S04",
+          "name": "旧水库边缘",
+          "layer": "ground",
+          "role": "水位机关"
+        },
+        {
+          "id": "A4-S05",
+          "name": "低位淹水沟",
+          "layer": "underground",
+          "role": "C12补给道"
+        },
+        {
+          "id": "A4-S06",
+          "name": "水库底层井道",
+          "layer": "deep",
+          "role": "C06回村与H04邻接"
+        },
+        {
+          "id": "A4-S07",
+          "name": "水闸机房",
+          "layer": "underground",
+          "role": "控制回村捷径"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC018",
+          "from": "A4-S01",
+          "to": "A4-S02",
+          "kind": "stairs",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC019",
+          "from": "A4-S02",
+          "to": "A4-S03",
+          "kind": "ladder",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC020",
+          "from": "A4-S03",
+          "to": "A4-S04",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC021",
+          "from": "A4-S04",
+          "to": "A4-S05",
+          "kind": "drop",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC022",
+          "from": "A4-S05",
+          "to": "A4-S06",
+          "kind": "shaft",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC023",
+          "from": "A4-S02",
+          "to": "A4-S07",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC024",
+          "from": "A4-S07",
+          "to": "A4-S06",
+          "kind": "gate",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_watergate"
+        },
+        {
+          "id": "SC069",
+          "from": "A4-S01",
+          "to": "A4-S06",
+          "kind": "lift",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "restored_reservoir_power"
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C05",
+          "from": "A3",
+          "to": "A4",
+          "kind": "underground_route",
+          "initial_access": "from_to",
+          "unlock_condition": "opened_sewer_inspection_hatch_from_A4",
+          "route_layer": "raised_pipe_walk"
+        },
+        {
+          "id": "C06",
+          "from": "A4",
+          "to": "A1",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "opened_watergate_and_village_well_exit",
+          "route_layer": "reservoir_ground_return"
+        },
+        {
+          "id": "C07",
+          "from": "A4",
+          "to": "A8",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A8_via_A7_then_opened_royal_tomb_gate",
+          "route_layer": "middle_tomb_waterway_ledge"
+        },
+        {
+          "id": "C12",
+          "from": "A7",
+          "to": "A4",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A7_then_opened_supply_tunnel",
+          "route_layer": "low_supply_tunnel_ledge"
+        },
+        {
+          "id": "C23",
+          "from": "A9",
+          "to": "A4",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A9_then_opened_royal_drain_from_outer_ring",
+          "route_layer": "upper_royal_drain_pipe"
+        }
+      ],
+      "required_traversal_beats": [
+        "C05 高位入口与地面主路空间区分",
+        "水库两侧能识别不同高度路线",
+        "C06 回村捷径与 H01 井口互不干扰",
+        "C12 监牢隧道落点可站立",
+        "H04/H01 等隐藏入口不阻断主路"
+      ],
+      "loop_policy": "水库两岸至少一条上下层回环；可从另一侧打开回程",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A5",
+      "name": "旧战场与边境堡垒",
+      "kind": "main_region",
+      "role": "surface",
+      "archetype": "战场与堡垒 / 横向战壕加高位城墙",
+      "spatial_shape": "战壕、破墙、堡垒高路、瞭望塔和 C04 朝圣高路入口",
+      "scenes": [
+        "scenes/old_battlefield.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A5-S01",
+          "name": "战壕地面",
+          "layer": "ground",
+          "role": "主战斗路径"
+        },
+        {
+          "id": "A5-S02",
+          "name": "坍塌城墙",
+          "layer": "upper",
+          "role": "可攀登的中间层"
+        },
+        {
+          "id": "A5-S03",
+          "name": "堡垒城墙",
+          "layer": "upper",
+          "role": "C09与C04连接点"
+        },
+        {
+          "id": "A5-S04",
+          "name": "瞭望箭楼",
+          "layer": "tower",
+          "role": "远景与高风险支路"
+        },
+        {
+          "id": "A5-S05",
+          "name": "断桥绞盘",
+          "layer": "upper",
+          "role": "开启A2高路回环"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC025",
+          "from": "A5-S01",
+          "to": "A5-S02",
+          "kind": "climb",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC026",
+          "from": "A5-S02",
+          "to": "A5-S03",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC027",
+          "from": "A5-S03",
+          "to": "A5-S04",
+          "kind": "ladder",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC028",
+          "from": "A5-S03",
+          "to": "A5-S05",
+          "kind": "winch",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_pilgrim_highroad"
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C04",
+          "from": "A2",
+          "to": "A5",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A5_and_opened_old_pilgrim_highroad",
+          "route_layer": "old_pilgrim_canopy_highroad"
+        },
+        {
+          "id": "C08",
+          "from": "A3",
+          "to": "A5",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "raised_city_parapet"
+        },
+        {
+          "id": "C09",
+          "from": "A5",
+          "to": "A6",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "battlefield_upper_parapet_exit"
+        }
+      ],
+      "required_traversal_beats": [
+        "战壕地面路线可绕过高墙",
+        "城墙上层能回接至少一处主路",
+        "C04 在 A5 侧可被发现并开启",
+        "A2 返回出生点留在高位支撑平台",
+        "战场有战术性短死路与观察点"
+      ],
+      "loop_policy": "战壕主路与城墙高路交叉回返，捷径开通后缩短往返",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A6",
+      "name": "修道院、回廊与钟塔",
+      "kind": "main_region",
+      "role": "vertical_building",
+      "archetype": "垂直修道院 / 回廊、庭院、钟塔",
+      "spatial_shape": "庭院底层、侧廊、钟塔中层与塔顶通过楼梯/坠落井连接",
+      "scenes": [
+        "scenes/monastery_tower.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A6-S01",
+          "name": "下层回廊",
+          "layer": "ground",
+          "role": "A7主线入口"
+        },
+        {
+          "id": "A6-S02",
+          "name": "修道院庭院",
+          "layer": "ground",
+          "role": "区域识别中心"
+        },
+        {
+          "id": "A6-S03",
+          "name": "上层廊桥",
+          "layer": "upper",
+          "role": "俯视庭院的侧路"
+        },
+        {
+          "id": "A6-S04",
+          "name": "钟塔中层",
+          "layer": "tower",
+          "role": "塔内垂直穿行"
+        },
+        {
+          "id": "A6-S05",
+          "name": "钟塔顶",
+          "layer": "tower",
+          "role": "C10落差起点"
+        },
+        {
+          "id": "A6-S06",
+          "name": "无声窗口",
+          "layer": "deep",
+          "role": "H05入口"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC029",
+          "from": "A6-S01",
+          "to": "A6-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC030",
+          "from": "A6-S02",
+          "to": "A6-S03",
+          "kind": "stairs",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC031",
+          "from": "A6-S03",
+          "to": "A6-S04",
+          "kind": "ladder",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC032",
+          "from": "A6-S04",
+          "to": "A6-S05",
+          "kind": "ladder",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC033",
+          "from": "A6-S05",
+          "to": "A6-S06",
+          "kind": "resonance",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "resonance_42"
+        },
+        {
+          "id": "SC070",
+          "from": "A6-S02",
+          "to": "A6-S05",
+          "kind": "lift",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_bell_tower_mechanism"
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C09",
+          "from": "A5",
+          "to": "A6",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "battlefield_upper_parapet_exit"
+        },
+        {
+          "id": "C10",
+          "from": "A6",
+          "to": "A3",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "opened_bell_tower_drop",
+          "route_layer": "bell_tower_drop_landing"
+        },
+        {
+          "id": "C11",
+          "from": "A6",
+          "to": "A7",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "修道院下层回廊→监牢走廊"
+        }
+      ],
+      "required_traversal_beats": [
+        "至少一条持续爬升路线与一条下行捷径",
+        "回廊能从多个高度看见庭院地标",
+        "钟塔出口/回程落点有实体承托",
+        "BOSS/战斗区不是唯一通路"
+      ],
+      "loop_policy": "上行探索与下落回返构成垂直环，允许中途切回低层",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A7",
+      "name": "监牢、忏悔井与维护竖井",
+      "kind": "main_region",
+      "role": "vertical_underground",
+      "archetype": "监牢与维护竖井 / 牢房迷宫",
+      "spatial_shape": "牢房短支路、忏悔井、维护梯井、底层排水路线",
+      "scenes": [
+        "scenes/prison_depths.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A7-S01",
+          "name": "监牢走廊",
+          "layer": "ground",
+          "role": "主线推进"
+        },
+        {
+          "id": "A7-S02",
+          "name": "下层囚室",
+          "layer": "underground",
+          "role": "高风险支路"
+        },
+        {
+          "id": "A7-S03",
+          "name": "忏悔井",
+          "layer": "deep",
+          "role": "垂直下降空间"
+        },
+        {
+          "id": "A7-S04",
+          "name": "维护竖井上缘",
+          "layer": "upper",
+          "role": "A8入口侧"
+        },
+        {
+          "id": "A7-S05",
+          "name": "维护竖井底部",
+          "layer": "underground",
+          "role": "C12低位补给口"
+        },
+        {
+          "id": "A7-S06",
+          "name": "供给隧道闸门",
+          "layer": "underground",
+          "role": "可从监牢侧开启"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC034",
+          "from": "A7-S01",
+          "to": "A7-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC035",
+          "from": "A7-S02",
+          "to": "A7-S03",
+          "kind": "drop",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC036",
+          "from": "A7-S03",
+          "to": "A7-S05",
+          "kind": "shaft",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC037",
+          "from": "A7-S01",
+          "to": "A7-S04",
+          "kind": "stairs",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC038",
+          "from": "A7-S05",
+          "to": "A7-S06",
+          "kind": "gate",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_supply_tunnel"
+        },
+        {
+          "id": "SC071",
+          "from": "A7-S01",
+          "to": "A7-S05",
+          "kind": "lift",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "released_prison_counterweight"
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C11",
+          "from": "A6",
+          "to": "A7",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "修道院下层回廊→监牢走廊"
+        },
+        {
+          "id": "C12",
+          "from": "A7",
+          "to": "A4",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A7_then_opened_supply_tunnel",
+          "route_layer": "low_supply_tunnel_ledge"
+        },
+        {
+          "id": "C13",
+          "from": "A7",
+          "to": "A8",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "prison_maintenance_shaft_upper_entry"
+        }
+      ],
+      "required_traversal_beats": [
+        "牢房支路有回主廊的路",
+        "竖井提供上下层快速移动但存在方向选择",
+        "至少一处看得见但暂时无法到达的区域",
+        "所有掉落点都能回返或明确为单向剧情门"
+      ],
+      "loop_policy": "牢房走廊与维护通道交叉，形成可学习的短环",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A8",
+      "name": "旧王墓与王室地下道",
+      "kind": "main_region",
+      "role": "underground_hub",
+      "archetype": "王墓地下枢纽 / 墓室与升降井",
+      "spatial_shape": "墓室、铭文廊、王室地下道、垂直升降井",
+      "scenes": [
+        "scenes/royal_tomb.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A8-S01",
+          "name": "王墓入口平台",
+          "layer": "ground",
+          "role": "A7进入点"
+        },
+        {
+          "id": "A8-S02",
+          "name": "王族墓室",
+          "layer": "ground",
+          "role": "主路与王权线索"
+        },
+        {
+          "id": "A8-S03",
+          "name": "中层墓道水渠",
+          "layer": "underground",
+          "role": "C07连接点"
+        },
+        {
+          "id": "A8-S04",
+          "name": "深层铭文廊",
+          "layer": "deep",
+          "role": "H06线索"
+        },
+        {
+          "id": "A8-S05",
+          "name": "王室维护井",
+          "layer": "deep",
+          "role": "C15秘密入口"
+        },
+        {
+          "id": "A8-S06",
+          "name": "升降平台井",
+          "layer": "vertical",
+          "role": "王墓内部垂直捷径"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC039",
+          "from": "A8-S01",
+          "to": "A8-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC040",
+          "from": "A8-S02",
+          "to": "A8-S03",
+          "kind": "stairs",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC041",
+          "from": "A8-S03",
+          "to": "A8-S04",
+          "kind": "ladder",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC042",
+          "from": "A8-S04",
+          "to": "A8-S05",
+          "kind": "hatch",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "discovered_royal_maintenance_shaft"
+        },
+        {
+          "id": "SC043",
+          "from": "A8-S02",
+          "to": "A8-S06",
+          "kind": "lift",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "powered_royal_tomb_lift"
+        },
+        {
+          "id": "SC044",
+          "from": "A8-S06",
+          "to": "A8-S03",
+          "kind": "loop",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_tomb_platform_loop"
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C07",
+          "from": "A4",
+          "to": "A8",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A8_via_A7_then_opened_royal_tomb_gate",
+          "route_layer": "middle_tomb_waterway_ledge"
+        },
+        {
+          "id": "C13",
+          "from": "A7",
+          "to": "A8",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "prison_maintenance_shaft_upper_entry"
+        },
+        {
+          "id": "C14",
+          "from": "A8",
+          "to": "A9",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "outer_ring_ground_gate"
+        },
+        {
+          "id": "C15",
+          "from": "A8",
+          "to": "A11",
+          "kind": "secret",
+          "initial_access": "blocked",
+          "unlock_condition": "resonance_sight_active_and_resonance_at_least_55_and_ancient_exposure_at_least_2_and_sources_anomaly_bell_retiming_and_anomaly_erased_royal_name",
+          "route_layer": "王室维护井→研究区维护井出口"
+        }
+      ],
+      "required_traversal_beats": [
+        "主墓室为方向参照点",
+        "铭文廊或墓室支路为短死路并提供叙事线索",
+        "升降井连接至少两个高度层",
+        "通往 A9 的主线与隐藏支路空间上可辨认"
+      ],
+      "loop_policy": "墓室环廊与升降井形成上下层回返，避免只沿地面穿行",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A9",
+      "name": "王城外环与废弃街区",
+      "kind": "main_region",
+      "role": "hub",
+      "archetype": "王城外环 / 城市交通枢纽",
+      "spatial_shape": "街巷、广场、屋顶、王室排水道、货梯和远端升降捷径",
+      "scenes": [
+        "scenes/royal_outer_ring.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A9-S01",
+          "name": "外环下层街巷",
+          "layer": "ground",
+          "role": "A8进入点"
+        },
+        {
+          "id": "A9-S02",
+          "name": "外环广场",
+          "layer": "ground",
+          "role": "导航中心"
+        },
+        {
+          "id": "A9-S03",
+          "name": "屋顶步道",
+          "layer": "upper",
+          "role": "C16/C17高路"
+        },
+        {
+          "id": "A9-S04",
+          "name": "王室高位排水道",
+          "layer": "upper",
+          "role": "C23入口"
+        },
+        {
+          "id": "A9-S05",
+          "name": "旧升降机下站",
+          "layer": "vertical",
+          "role": "C16升降机下站"
+        },
+        {
+          "id": "A9-S06",
+          "name": "内城服务门",
+          "layer": "ground",
+          "role": "C18回环点"
+        },
+        {
+          "id": "A9-S07",
+          "name": "积水镜街入口",
+          "layer": "deep",
+          "role": "H07入口"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC045",
+          "from": "A9-S01",
+          "to": "A9-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC046",
+          "from": "A9-S02",
+          "to": "A9-S03",
+          "kind": "climb",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC047",
+          "from": "A9-S03",
+          "to": "A9-S04",
+          "kind": "crawl",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC048",
+          "from": "A9-S01",
+          "to": "A9-S05",
+          "kind": "lift",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_old_lift"
+        },
+        {
+          "id": "SC049",
+          "from": "A9-S05",
+          "to": "A9-S03",
+          "kind": "lift",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_old_lift"
+        },
+        {
+          "id": "SC050",
+          "from": "A9-S01",
+          "to": "A9-S06",
+          "kind": "gate",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_inner_city_side_gate"
+        },
+        {
+          "id": "SC051",
+          "from": "A9-S01",
+          "to": "A9-S07",
+          "kind": "resonance",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "resonance_68"
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C14",
+          "from": "A8",
+          "to": "A9",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "outer_ring_ground_gate"
+        },
+        {
+          "id": "C16",
+          "from": "A3",
+          "to": "A9",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A9_via_A8_then_opened_old_lift_from_A9",
+          "route_layer": "eastern_rooftop_lift"
+        },
+        {
+          "id": "C17",
+          "from": "A9",
+          "to": "A10",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "outer_ring_cathedral_roof_approach"
+        },
+        {
+          "id": "C18",
+          "from": "A9",
+          "to": "A12",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A12_via_A10_then_opened_inner_city_side_gate",
+          "route_layer": "inner_city_side_gate_ground_loop"
+        },
+        {
+          "id": "C23",
+          "from": "A9",
+          "to": "A4",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A9_then_opened_royal_drain_from_outer_ring",
+          "route_layer": "upper_royal_drain_pipe"
+        }
+      ],
+      "required_traversal_beats": [
+        "低压力导航枢纽，路口有清楚的地标",
+        "街面、屋顶和地下排水至少两层互通",
+        "C16 从 A3 的远端捷径在空间上有独立落点",
+        "主路可辨认但允许多条支路回到广场"
+      ],
+      "loop_policy": "城市环路作为中后期回访中心，屋顶和地下形成旁路",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A10",
+      "name": "大圣堂、朝圣阶梯与教会内廷",
+      "kind": "main_region",
+      "role": "mainline",
+      "archetype": "大圣堂 / 仪式性垂直主线",
+      "spatial_shape": "主堂高挑空间、侧廊、上层唱诗廊、维护梯井与内廷",
+      "scenes": [
+        "scenes/grand_cathedral.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A10-S01",
+          "name": "朝圣阶梯",
+          "layer": "ground",
+          "role": "主路外部入口"
+        },
+        {
+          "id": "A10-S02",
+          "name": "大圣堂主堂",
+          "layer": "ground",
+          "role": "主要仪式空间"
+        },
+        {
+          "id": "A10-S03",
+          "name": "侧廊",
+          "layer": "ground",
+          "role": "环绕主堂的支路"
+        },
+        {
+          "id": "A10-S04",
+          "name": "唱诗席高廊",
+          "layer": "upper",
+          "role": "C17进入点"
+        },
+        {
+          "id": "A10-S05",
+          "name": "静默侧礼拜堂",
+          "layer": "deep",
+          "role": "C19秘密入口"
+        },
+        {
+          "id": "A10-S06",
+          "name": "教会维护梯井",
+          "layer": "vertical",
+          "role": "高廊与下层维护空间"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC052",
+          "from": "A10-S01",
+          "to": "A10-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC053",
+          "from": "A10-S02",
+          "to": "A10-S03",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC054",
+          "from": "A10-S03",
+          "to": "A10-S04",
+          "kind": "stairs",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC055",
+          "from": "A10-S04",
+          "to": "A10-S05",
+          "kind": "resonance",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "discovered_silent_side_chapel"
+        },
+        {
+          "id": "SC056",
+          "from": "A10-S03",
+          "to": "A10-S06",
+          "kind": "ladder",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C17",
+          "from": "A9",
+          "to": "A10",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "outer_ring_cathedral_roof_approach"
+        },
+        {
+          "id": "C19",
+          "from": "A10",
+          "to": "A11",
+          "kind": "secret",
+          "initial_access": "blocked",
+          "unlock_condition": "resonance_sight_active_and_resonance_at_least_68_and_outer_exposure_at_least_12_and_outer_god_resonance_and_source_anomaly_mirror_street_echo",
+          "route_layer": "静默侧礼拜堂→教会实验层"
+        },
+        {
+          "id": "C20",
+          "from": "A10",
+          "to": "A12",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "大圣堂主堂→王室庭院"
+        }
+      ],
+      "required_traversal_beats": [
+        "主堂视线轴让玩家理解垂直尺度",
+        "侧廊有可回接主堂的绕行路线",
+        "高廊和维护梯井连接不同高度",
+        "A12 主线出口清晰，但支路不被主线切断"
+      ],
+      "loop_policy": "围绕主堂的高低回廊构成一条主环与若干短支路",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A11",
+      "name": "古神遗迹与深层研究区",
+      "kind": "main_region",
+      "role": "optional_deep",
+      "archetype": "可选深层研究区 / 人工设施转古神遗迹",
+      "spatial_shape": "研究设施规整廊道逐渐过渡到不规则遗迹、多层下沉空间",
+      "scenes": [
+        "scenes/deep_research_depths.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A11-S01",
+          "name": "王室维护井出口",
+          "layer": "underground",
+          "role": "C15进入点"
+        },
+        {
+          "id": "A11-S02",
+          "name": "教会实验层",
+          "layer": "ground",
+          "role": "研究设施与线索"
+        },
+        {
+          "id": "A11-S03",
+          "name": "古神遗留层",
+          "layer": "deep",
+          "role": "空间异常加剧"
+        },
+        {
+          "id": "A11-S04",
+          "name": "胎宫外缘",
+          "layer": "deep",
+          "role": "H08前置空间"
+        },
+        {
+          "id": "A11-S05",
+          "name": "原初空腔",
+          "layer": "deep",
+          "role": "终局异象连接"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC057",
+          "from": "A11-S01",
+          "to": "A11-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC058",
+          "from": "A11-S02",
+          "to": "A11-S03",
+          "kind": "drop",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC059",
+          "from": "A11-S03",
+          "to": "A11-S04",
+          "kind": "hatch",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "resonance_78"
+        },
+        {
+          "id": "SC060",
+          "from": "A11-S04",
+          "to": "A11-S05",
+          "kind": "anomaly",
+          "travel": "one_way",
+          "initial_state": "locked",
+          "unlock_condition": "ending_state_allows_deep_dream_entry"
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C15",
+          "from": "A8",
+          "to": "A11",
+          "kind": "secret",
+          "initial_access": "blocked",
+          "unlock_condition": "resonance_sight_active_and_resonance_at_least_55_and_ancient_exposure_at_least_2_and_sources_anomaly_bell_retiming_and_anomaly_erased_royal_name",
+          "route_layer": "王室维护井→研究区维护井出口"
+        },
+        {
+          "id": "C19",
+          "from": "A10",
+          "to": "A11",
+          "kind": "secret",
+          "initial_access": "blocked",
+          "unlock_condition": "resonance_sight_active_and_resonance_at_least_68_and_outer_exposure_at_least_12_and_outer_god_resonance_and_source_anomaly_mirror_street_echo",
+          "route_layer": "静默侧礼拜堂→教会实验层"
+        },
+        {
+          "id": "C21",
+          "from": "A11",
+          "to": "A13",
+          "kind": "ending",
+          "initial_access": "blocked",
+          "unlock_condition": "ending_candidate_is_not_human_grave_based_on_resonance_truth_anchors_and_exploration",
+          "route_layer": "原初空腔→梦境边界"
+        }
+      ],
+      "required_traversal_beats": [
+        "前段人工设施与深处古神遗迹有明显空间对比",
+        "研究支路包含可调查的异常与可回返路线",
+        "C21 终局路线受自身观察异常/状态控制",
+        "H08 入口与返回不会把可选区误变成主线必经"
+      ],
+      "loop_policy": "设施走廊的可读小环逐渐转成非对称探索环",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A12",
+      "name": "王室内城与王座区",
+      "kind": "main_region",
+      "role": "mainline_ending",
+      "archetype": "王室内城 / 终章主线枢纽",
+      "spatial_shape": "服务街、内庭、城墙、王座厅上层与货运井",
+      "scenes": [
+        "scenes/inner_city.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A12-S01",
+          "name": "内城服务街",
+          "layer": "ground",
+          "role": "C18回返落点"
+        },
+        {
+          "id": "A12-S02",
+          "name": "王室庭院",
+          "layer": "ground",
+          "role": "王权主路线"
+        },
+        {
+          "id": "A12-S03",
+          "name": "城墙步道",
+          "layer": "upper",
+          "role": "侧向高路"
+        },
+        {
+          "id": "A12-S04",
+          "name": "王座厅上层",
+          "layer": "tower",
+          "role": "结局前空间"
+        },
+        {
+          "id": "A12-S05",
+          "name": "城墙货运井",
+          "layer": "vertical",
+          "role": "内城垂直运输点"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC061",
+          "from": "A12-S01",
+          "to": "A12-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC062",
+          "from": "A12-S02",
+          "to": "A12-S03",
+          "kind": "stairs",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC063",
+          "from": "A12-S03",
+          "to": "A12-S04",
+          "kind": "lift",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_throne_service_lift"
+        },
+        {
+          "id": "SC064",
+          "from": "A12-S01",
+          "to": "A12-S05",
+          "kind": "lift",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_inner_city_cargo_lift"
+        },
+        {
+          "id": "SC065",
+          "from": "A12-S05",
+          "to": "A12-S03",
+          "kind": "lift",
+          "travel": "both",
+          "initial_state": "locked",
+          "unlock_condition": "opened_inner_city_cargo_lift"
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C18",
+          "from": "A9",
+          "to": "A12",
+          "kind": "shortcut",
+          "initial_access": "blocked",
+          "unlock_condition": "reached_A12_via_A10_then_opened_inner_city_side_gate",
+          "route_layer": "inner_city_side_gate_ground_loop"
+        },
+        {
+          "id": "C20",
+          "from": "A10",
+          "to": "A12",
+          "kind": "main",
+          "initial_access": "both",
+          "unlock_condition": "",
+          "route_layer": "大圣堂主堂→王室庭院"
+        },
+        {
+          "id": "C22",
+          "from": "A12",
+          "to": "A13",
+          "kind": "ending",
+          "initial_access": "from_to",
+          "unlock_condition": "reached_A12_via_A10",
+          "route_layer": "upper_throne_approach"
+        }
+      ],
+      "required_traversal_beats": [
+        "内城主轴清楚但有侧向回路",
+        "王座厅上下层有真实连接而非背景装饰",
+        "H07 镜街回路有独立识别点",
+        "主线终点与返回/隐藏支路状态分明"
+      ],
+      "loop_policy": "终章前的最后一组可回访环路；结局门槛不可被旁路绕过",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "A13",
+      "name": "深层梦境与终局异象",
+      "kind": "main_region",
+      "role": "ending_layer",
+      "archetype": "终局异象 / 状态驱动空间",
+      "spatial_shape": "不稳定平台、折返走廊、上下颠倒的空间节奏，仍需保证可读导航",
+      "scenes": [
+        "scenes/terminal_anomaly.tscn"
+      ],
+      "subregions": [
+        {
+          "id": "A13-S01",
+          "name": "梦境边界",
+          "layer": "deep",
+          "role": "按结局改变入口"
+        },
+        {
+          "id": "A13-S02",
+          "name": "记忆回廊",
+          "layer": "deep",
+          "role": "结局专属空间"
+        },
+        {
+          "id": "A13-S03",
+          "name": "终局场域",
+          "layer": "deep",
+          "role": "不同结局的战斗/叙事结构"
+        }
+      ],
+      "internal_connections": [
+        {
+          "id": "SC066",
+          "from": "A13-S01",
+          "to": "A13-S02",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        },
+        {
+          "id": "SC067",
+          "from": "A13-S02",
+          "to": "A13-S03",
+          "kind": "walk",
+          "travel": "both",
+          "initial_state": "open",
+          "unlock_condition": ""
+        }
+      ],
+      "cross_region_connections": [
+        {
+          "id": "C21",
+          "from": "A11",
+          "to": "A13",
+          "kind": "ending",
+          "initial_access": "blocked",
+          "unlock_condition": "ending_candidate_is_not_human_grave_based_on_resonance_truth_anchors_and_exploration",
+          "route_layer": "原初空腔→梦境边界"
+        },
+        {
+          "id": "C22",
+          "from": "A12",
+          "to": "A13",
+          "kind": "ending",
+          "initial_access": "from_to",
+          "unlock_condition": "reached_A12_via_A10",
+          "route_layer": "upper_throne_approach"
+        }
+      ],
+      "required_traversal_beats": [
+        "入口状态与终局条件明确",
+        "异常视觉不能掩盖真实可行路线",
+        "检查点/失败恢复不让玩家丢失关键进度",
+        "出口/结局状态分支可区分"
+      ],
+      "loop_policy": "可使用短循环与空间错位，但必须保留可验证的实际通路",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "H01",
+      "name": "井底回声层",
+      "kind": "hidden_region",
+      "role": "hidden",
+      "archetype": "隐藏井底 / 可选深井",
+      "spatial_shape": "窄入口、深井下探、井底小空间与明确返回点",
+      "scenes": [
+        "scenes/hidden_well.tscn"
+      ],
+      "subregions": [],
+      "internal_connections": [],
+      "cross_region_connections": [],
+      "required_traversal_beats": [
+        "从 A4 发现入口后进入",
+        "井底有探索价值且能返回原水系",
+        "不与 C06 回村门的触发区冲突"
+      ],
+      "loop_policy": "短下探回返，不强求大环",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "H02",
+      "name": "倒响钟室",
+      "kind": "hidden_region",
+      "role": "hidden",
+      "archetype": "倒响钟室 / A2 可选隐藏空间",
+      "spatial_shape": "从钟墓下方进入，钟室有上下层或绕钟路径",
+      "scenes": [
+        "scenes/hidden_bell_chamber.tscn"
+      ],
+      "subregions": [],
+      "internal_connections": [],
+      "cross_region_connections": [],
+      "required_traversal_beats": [
+        "必须可选，不得成为 C03 主线前置",
+        "进入后有独立地标与探索回报",
+        "返回 A2 时远离入口交互半径"
+      ],
+      "loop_policy": "小型绕钟环或上层观察点+下层返回",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "H03",
+      "name": "被删去的第三街",
+      "kind": "hidden_region",
+      "role": "hidden",
+      "archetype": "被删去的第三街 / 城区隐藏支路",
+      "spatial_shape": "夹在常规街巷外侧的折叠街段",
+      "scenes": [
+        "scenes/erased_third_street.tscn"
+      ],
+      "subregions": [],
+      "internal_connections": [],
+      "cross_region_connections": [],
+      "required_traversal_beats": [
+        "入口提示需来自环境异常而非明显菜单门",
+        "街段有自己的折返与可解释出口",
+        "返回点不能和入口触发器重叠"
+      ],
+      "loop_policy": "短街环或折返支路",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "H04",
+      "name": "水面背后的楼梯",
+      "kind": "hidden_region",
+      "role": "hidden",
+      "archetype": "反射阶梯 / 空间错位支路",
+      "spatial_shape": "阶梯与镜像平台形成上下反转的路线",
+      "scenes": [
+        "scenes/reflected_stairwell.tscn"
+      ],
+      "subregions": [],
+      "internal_connections": [],
+      "cross_region_connections": [],
+      "required_traversal_beats": [
+        "上下关系通过地标/背景保持可理解",
+        "至少有一条真实可走的往返路线",
+        "回到 A4 后不与其他隐藏门重叠"
+      ],
+      "loop_policy": "小型垂直环",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "H05",
+      "name": "无声钟室",
+      "kind": "hidden_region",
+      "role": "hidden",
+      "archetype": "静默钟室 / 落差型隐藏空间",
+      "spatial_shape": "由高位坠入的房间与钟室边缘回返",
+      "scenes": [
+        "scenes/silent_bell_room.tscn"
+      ],
+      "subregions": [],
+      "internal_connections": [],
+      "cross_region_connections": [],
+      "required_traversal_beats": [
+        "入口的落差/单向性有视觉预告",
+        "回程点远离 A3 C10 与其他门",
+        "房间不只是空盒子，须有可读探索路径"
+      ],
+      "loop_policy": "坠落进入+侧边爬升或独立回程",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "H06",
+      "name": "王名抹除廊",
+      "kind": "hidden_region",
+      "role": "hidden",
+      "archetype": "被抹去的王名廊 / 王墓交通隐藏区",
+      "spatial_shape": "王室交通廊、隐蔽的上下层门与名字/记忆线索",
+      "scenes": [
+        "scenes/erased_royal_name_corridor.tscn"
+      ],
+      "subregions": [],
+      "internal_connections": [],
+      "cross_region_connections": [],
+      "required_traversal_beats": [
+        "入口与 A8/A9 的交通关系清楚",
+        "能回到可识别的王室地标",
+        "回程落点不与入口重叠"
+      ],
+      "loop_policy": "短交通环，提供跨层捷径感",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "H07",
+      "name": "镜街：雨幕背后",
+      "kind": "hidden_region",
+      "role": "hidden",
+      "archetype": "镜街 / 内城隐藏街区",
+      "spatial_shape": "与 A12 近似但空间次序被镜像重排的街道",
+      "scenes": [
+        "scenes/mirror_street.tscn"
+      ],
+      "subregions": [],
+      "internal_connections": [],
+      "cross_region_connections": [],
+      "required_traversal_beats": [
+        "镜像线索让玩家意识到空间被重排",
+        "有真实路线而非单纯视觉滤镜",
+        "A12 主线状态/侧门条件保持正确"
+      ],
+      "loop_policy": "镜像街与内城侧路构成短环",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    },
+    {
+      "id": "H08",
+      "name": "胎宫 / 原初空腔",
+      "kind": "hidden_region",
+      "role": "hidden",
+      "archetype": "原初空洞 / 深层隐藏空间",
+      "spatial_shape": "不规则深层洞穴、遗迹残片与纵向落差",
+      "scenes": [
+        "scenes/primordial_hollow.tscn"
+      ],
+      "subregions": [],
+      "internal_connections": [],
+      "cross_region_connections": [],
+      "required_traversal_beats": [
+        "作为可选深层空间，入口与返回路线明确",
+        "可视线索引导探索，不依赖敌人堵路",
+        "与 A11/A13 终局条件不产生意外软锁"
+      ],
+      "loop_policy": "非对称洞穴小环+可识别回返通道",
+      "implementation_state": "not_audited_for_full_graybox",
+      "runtime_acceptance_state": "not_run",
+      "blockers": [],
+      "checklist": {
+        "terrain_collision": false,
+        "all_internal_routes_walkable": false,
+        "all_cross_region_spawns_supported": false,
+        "dead_ends_and_returns_checked": false,
+        "locked_routes_checked": false,
+        "visual_landmarks_readable": false,
+        "player_runtime_walkthrough": false
+      }
+    }
+  ]
+}
