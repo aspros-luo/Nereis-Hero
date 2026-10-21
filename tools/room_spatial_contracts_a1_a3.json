@@ -1,11 +1,556 @@
 {
-  "schema_version": 1,
-  "title": "Nereis Hero — First Playable Network Spatial Contracts",
-  "status": "design_contract_not_runtime_verified",
+  "schema_version": 2,
+  "title": "Nereis Hero — Full World Room Spatial Contracts",
+  "status": "full_world_design_contract_not_runtime_verified",
   "branch": "feature/story-map-progression",
-  "scope": "A1-A3 initial build target; coordinates are design coordinates to be playtested and adjusted in Godot",
+  "scope": "All A0-A13 and H01-H08 room IDs; coordinates are construction specifications pending Godot traversal acceptance.",
   "coordinate_convention": "rect=[x,y,width,height], origin top-left; spawn/exit/landmark at=[x,y]",
   "rooms": [
+    {
+      "room_id": "A0-R01",
+      "title": "封闭手术廊",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "upper",
+        "手术所逃脱"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I01",
+          "target": "A0-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+        "Required feature: safe_spawn",
+        "Required feature: readable_exit"
+      ]
+    },
+    {
+      "room_id": "A0-R02",
+      "title": "排污垂井",
+      "size": [
+        2200,
+        1300
+      ],
+      "shape": "wide",
+      "layers": [
+        "middle",
+        "手术所逃脱"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          1095
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            1150,
+            594,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            748,
+            1150,
+            638,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1540,
+            1150,
+            660,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            264,
+            960,
+            484,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            1166,
+            850,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            594,
+            710,
+            462,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1496,
+            590,
+            396,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            176,
+            460,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            1056,
+            350,
+            374,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "roof_bridge",
+          "rect": [
+            792,
+            530,
+            572,
+            26
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "broken_crossing",
+          "rect": [
+            924,
+            770,
+            286,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I01",
+          "target": "A0-R01",
+          "at": [
+            2105,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I02",
+          "target": "A0-R03",
+          "at": [
+            95,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1716,
+            312
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            550,
+            728
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+        "Required feature: cross_layer_route",
+        "Required feature: visible_goal"
+      ]
+    },
+    {
+      "room_id": "A0-R03",
+      "title": "山壁出口",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "lower",
+        "手术所逃脱"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I02",
+          "target": "A0-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C01",
+          "target": "A1-R01",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "main",
+          "condition": "prologue_escape",
+          "direction": "forward"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+        "Required feature: shortcut_or_drop",
+        "Required feature: return_route"
+      ]
+    },
     {
       "room_id": "A1-R01",
       "title": "村庄街巷",
@@ -149,6 +694,17 @@
           ],
           "kind": "well_drop",
           "condition": "none"
+        },
+        {
+          "id": "I03",
+          "target": "A1-R02",
+          "at": [
+            2010,
+            864
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
         }
       ],
       "landmarks": [
@@ -300,6 +856,28 @@
           ],
           "kind": "watergate_tunnel",
           "condition": "opened_watergate_and_village_well_exit"
+        },
+        {
+          "id": "I03",
+          "target": "A1-R01",
+          "at": [
+            810,
+            1368
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I04",
+          "target": "A1-R03",
+          "at": [
+            90,
+            1368
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
         }
       ],
       "landmarks": [
@@ -441,6 +1019,28 @@
           ],
           "kind": "drop_return",
           "condition": "none"
+        },
+        {
+          "id": "I04",
+          "target": "A1-R02",
+          "at": [
+            1710,
+            1008
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C02",
+          "target": "A2-R01",
+          "at": [
+            90,
+            1008
+          ],
+          "kind": "main",
+          "condition": "village_defense_survived",
+          "direction": "both"
         }
       ],
       "landmarks": [
@@ -601,6 +1201,28 @@
           ],
           "kind": "buried_bell_tomb",
           "condition": "none"
+        },
+        {
+          "id": "I05",
+          "target": "A2-R02",
+          "at": [
+            1100,
+            450
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C02",
+          "target": "A1-R03",
+          "at": [
+            2110,
+            1080
+          ],
+          "kind": "main",
+          "condition": "village_defense_survived",
+          "direction": "both"
         }
       ],
       "landmarks": [
@@ -741,6 +1363,39 @@
           ],
           "kind": "pilgrim_stair",
           "condition": "none"
+        },
+        {
+          "id": "I05",
+          "target": "A2-R01",
+          "at": [
+            1060,
+            1260
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I06",
+          "target": "A2-R03",
+          "at": [
+            90,
+            1260
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C03",
+          "target": "A3-R01",
+          "at": [
+            575,
+            525
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
         }
       ],
       "landmarks": [
@@ -881,6 +1536,17 @@
           ],
           "kind": "old_pilgrim_highroad",
           "condition": "reached_A5_and_opened_old_pilgrim_highroad"
+        },
+        {
+          "id": "I06",
+          "target": "A2-R02",
+          "at": [
+            1810,
+            756
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
         }
       ],
       "landmarks": [
@@ -1071,6 +1737,39 @@
           ],
           "kind": "village_old_drain_return",
           "condition": "village_defense_survived"
+        },
+        {
+          "id": "I07",
+          "target": "A3-R02",
+          "at": [
+            90,
+            936
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C03",
+          "target": "A2-R02",
+          "at": [
+            1150,
+            390
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C24",
+          "target": "A1-R03",
+          "at": [
+            2210,
+            936
+          ],
+          "kind": "shortcut",
+          "condition": "village_defense_survived",
+          "direction": "both"
         }
       ],
       "landmarks": [
@@ -1212,6 +1911,28 @@
           ],
           "kind": "raised_battlefield_bridge",
           "condition": "none"
+        },
+        {
+          "id": "I07",
+          "target": "A3-R01",
+          "at": [
+            1510,
+            756
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I08",
+          "target": "A3-R03",
+          "at": [
+            90,
+            756
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
         }
       ],
       "landmarks": [
@@ -1362,6 +2083,28 @@
           ],
           "kind": "village_drain_return",
           "condition": "village_defense_survived"
+        },
+        {
+          "id": "I08",
+          "target": "A3-R02",
+          "at": [
+            90,
+            1080
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "H05-RETURN",
+          "target": "H05-R01",
+          "at": [
+            950,
+            450
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H05_secondary_route_contract",
+          "direction": "both"
         }
       ],
       "landmarks": [
@@ -1389,6 +2132,7240 @@
         "C10, C16 and C24 must use separate spatial anchors and preserve their existing progression flags.",
         "A shortcut opened here must materially reduce travel between A3 and its destination."
       ]
+    },
+    {
+      "room_id": "A4-R01",
+      "title": "排污低道",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "upper",
+        "沉积大厅与旧水库"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I09",
+          "target": "A4-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C05",
+          "target": "A3-R03",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "underground",
+          "condition": "opened_sewer_inspection_hatch_from_A4",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+        "Required feature: safe_spawn",
+        "Required feature: readable_exit"
+      ]
+    },
+    {
+      "room_id": "A4-R02",
+      "title": "沉积大厅",
+      "size": [
+        2200,
+        1300
+      ],
+      "shape": "wide",
+      "layers": [
+        "middle",
+        "沉积大厅与旧水库"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          1095
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            1150,
+            594,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            748,
+            1150,
+            638,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1540,
+            1150,
+            660,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            264,
+            960,
+            484,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            1166,
+            850,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            594,
+            710,
+            462,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1496,
+            590,
+            396,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            176,
+            460,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            1056,
+            350,
+            374,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "roof_bridge",
+          "rect": [
+            792,
+            530,
+            572,
+            26
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "broken_crossing",
+          "rect": [
+            924,
+            770,
+            286,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I09",
+          "target": "A4-R01",
+          "at": [
+            2105,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I10",
+          "target": "A4-R03",
+          "at": [
+            95,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C12",
+          "target": "A7-R03",
+          "at": [
+            1100,
+            416
+          ],
+          "kind": "shortcut",
+          "condition": "reached_A7_then_opened_supply_tunnel",
+          "direction": "both"
+        },
+        {
+          "id": "H01-RETURN",
+          "target": "H01-R01",
+          "at": [
+            1100,
+            1200
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H01_secondary_route_contract",
+          "direction": "both"
+        },
+        {
+          "id": "H04-ENTRY",
+          "target": "H04-R01",
+          "at": [
+            2105,
+            1150
+          ],
+          "kind": "hidden_entry",
+          "condition": "H04_discovery_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1716,
+            312
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            550,
+            728
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+        "Required feature: cross_layer_route",
+        "Required feature: visible_goal"
+      ]
+    },
+    {
+      "room_id": "A4-R03",
+      "title": "水闸竖井",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "lower",
+        "沉积大厅与旧水库"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I10",
+          "target": "A4-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C06",
+          "target": "A1-R02",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "shortcut",
+          "condition": "opened_watergate_and_village_well_exit",
+          "direction": "forward"
+        },
+        {
+          "id": "C07",
+          "target": "A8-R01",
+          "at": [
+            525,
+            170
+          ],
+          "kind": "shortcut",
+          "condition": "reached_A8_via_A7_then_opened_royal_tomb_gate",
+          "direction": "both"
+        },
+        {
+          "id": "C23",
+          "target": "A9-R03",
+          "at": [
+            525,
+            2000
+          ],
+          "kind": "shortcut",
+          "condition": "opened_royal_drain",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+        "Required feature: shortcut_or_drop",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "A5-R01",
+      "title": "战场沟壑",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "upper",
+        "旧战场与边境堡垒"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I11",
+          "target": "A5-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C08",
+          "target": "A3-R02",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+        "Required feature: safe_spawn",
+        "Required feature: readable_exit"
+      ]
+    },
+    {
+      "room_id": "A5-R02",
+      "title": "断墙高台",
+      "size": [
+        2200,
+        1300
+      ],
+      "shape": "wide",
+      "layers": [
+        "middle",
+        "旧战场与边境堡垒"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          1095
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            1150,
+            594,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            748,
+            1150,
+            638,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1540,
+            1150,
+            660,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            264,
+            960,
+            484,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            1166,
+            850,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            594,
+            710,
+            462,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1496,
+            590,
+            396,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            176,
+            460,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            1056,
+            350,
+            374,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "roof_bridge",
+          "rect": [
+            792,
+            530,
+            572,
+            26
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "broken_crossing",
+          "rect": [
+            924,
+            770,
+            286,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I11",
+          "target": "A5-R01",
+          "at": [
+            2105,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I12",
+          "target": "A5-R03",
+          "at": [
+            95,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C04",
+          "target": "A2-R03",
+          "at": [
+            1100,
+            416
+          ],
+          "kind": "shortcut",
+          "condition": "reached_A5_and_opened_old_pilgrim_highroad",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1716,
+            312
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            550,
+            728
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+        "Required feature: cross_layer_route",
+        "Required feature: visible_goal"
+      ]
+    },
+    {
+      "room_id": "A5-R03",
+      "title": "堡垒内环",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "lower",
+        "旧战场与边境堡垒"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I12",
+          "target": "A5-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C09",
+          "target": "A6-R01",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+        "Required feature: shortcut_or_drop",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "A6-R01",
+      "title": "修道院外廊",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "upper",
+        "修道院与钟塔"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I13",
+          "target": "A6-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C09",
+          "target": "A5-R03",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+        "Required feature: safe_spawn",
+        "Required feature: readable_exit"
+      ]
+    },
+    {
+      "room_id": "A6-R02",
+      "title": "钟塔中层",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "middle",
+        "修道院与钟塔"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I13",
+          "target": "A6-R01",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I14",
+          "target": "A6-R03",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "H05-ENTRY",
+          "target": "H05-R01",
+          "at": [
+            750,
+            352
+          ],
+          "kind": "hidden_entry",
+          "condition": "H05_discovery_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+        "Required feature: cross_layer_route",
+        "Required feature: visible_goal"
+      ]
+    },
+    {
+      "room_id": "A6-R03",
+      "title": "钟塔高层",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "lower",
+        "修道院与钟塔"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I14",
+          "target": "A6-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C10",
+          "target": "A3-R03",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "shortcut",
+          "condition": "opened_bell_tower_drop",
+          "direction": "both"
+        },
+        {
+          "id": "C11",
+          "target": "A7-R01",
+          "at": [
+            525,
+            170
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+        "Required feature: shortcut_or_drop",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "A7-R01",
+      "title": "囚室下层",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "upper",
+        "监牢与维护竖井"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I15",
+          "target": "A7-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C11",
+          "target": "A6-R03",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+        "Required feature: safe_spawn",
+        "Required feature: readable_exit"
+      ]
+    },
+    {
+      "room_id": "A7-R02",
+      "title": "绞盘竖井",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "middle",
+        "监牢与维护竖井"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I15",
+          "target": "A7-R01",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I16",
+          "target": "A7-R03",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+        "Required feature: cross_layer_route",
+        "Required feature: visible_goal"
+      ]
+    },
+    {
+      "room_id": "A7-R03",
+      "title": "维护横道",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "lower",
+        "监牢与维护竖井"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I16",
+          "target": "A7-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C12",
+          "target": "A4-R02",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "shortcut",
+          "condition": "reached_A7_then_opened_supply_tunnel",
+          "direction": "both"
+        },
+        {
+          "id": "C13",
+          "target": "A8-R01",
+          "at": [
+            525,
+            170
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+        "Required feature: shortcut_or_drop",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "A8-R01",
+      "title": "墓道入口",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "upper",
+        "旧王墓与地下道"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I17",
+          "target": "A8-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C07",
+          "target": "A4-R03",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "shortcut",
+          "condition": "reached_A8_via_A7_then_opened_royal_tomb_gate",
+          "direction": "both"
+        },
+        {
+          "id": "C13",
+          "target": "A7-R03",
+          "at": [
+            750,
+            352
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+        "Required feature: safe_spawn",
+        "Required feature: readable_exit"
+      ]
+    },
+    {
+      "room_id": "A8-R02",
+      "title": "错层墓室",
+      "size": [
+        2200,
+        1300
+      ],
+      "shape": "wide",
+      "layers": [
+        "middle",
+        "旧王墓与地下道"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          1095
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            1150,
+            594,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            748,
+            1150,
+            638,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1540,
+            1150,
+            660,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            264,
+            960,
+            484,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            1166,
+            850,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            594,
+            710,
+            462,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1496,
+            590,
+            396,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            176,
+            460,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            1056,
+            350,
+            374,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "roof_bridge",
+          "rect": [
+            792,
+            530,
+            572,
+            26
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "broken_crossing",
+          "rect": [
+            924,
+            770,
+            286,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I17",
+          "target": "A8-R01",
+          "at": [
+            2105,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I18",
+          "target": "A8-R03",
+          "at": [
+            95,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "H04-RETURN",
+          "target": "H04-R01",
+          "at": [
+            1100,
+            416
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H04_secondary_route_contract",
+          "direction": "both"
+        },
+        {
+          "id": "H06-ENTRY",
+          "target": "H06-R01",
+          "at": [
+            1100,
+            1200
+          ],
+          "kind": "hidden_entry",
+          "condition": "H06_discovery_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1716,
+            312
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            550,
+            728
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+        "Required feature: cross_layer_route",
+        "Required feature: visible_goal"
+      ]
+    },
+    {
+      "room_id": "A8-R03",
+      "title": "王墓深井",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "lower",
+        "旧王墓与地下道"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I18",
+          "target": "A8-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C14",
+          "target": "A9-R01",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C15",
+          "target": "A11-R01",
+          "at": [
+            525,
+            170
+          ],
+          "kind": "secret",
+          "condition": "resonance_sight_and_ancient_truth",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+        "Required feature: shortcut_or_drop",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "A9-R01",
+      "title": "外环街道",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "upper",
+        "王城外环"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I19",
+          "target": "A9-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C14",
+          "target": "A8-R03",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+        "Required feature: safe_spawn",
+        "Required feature: readable_exit"
+      ]
+    },
+    {
+      "room_id": "A9-R02",
+      "title": "高架运输道",
+      "size": [
+        2200,
+        1300
+      ],
+      "shape": "wide",
+      "layers": [
+        "middle",
+        "王城外环"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          1095
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            1150,
+            594,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            748,
+            1150,
+            638,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1540,
+            1150,
+            660,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            264,
+            960,
+            484,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            1166,
+            850,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            594,
+            710,
+            462,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1496,
+            590,
+            396,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            176,
+            460,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            1056,
+            350,
+            374,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "roof_bridge",
+          "rect": [
+            792,
+            530,
+            572,
+            26
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "broken_crossing",
+          "rect": [
+            924,
+            770,
+            286,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I19",
+          "target": "A9-R01",
+          "at": [
+            2105,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I20",
+          "target": "A9-R03",
+          "at": [
+            95,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C16",
+          "target": "A3-R03",
+          "at": [
+            1100,
+            416
+          ],
+          "kind": "shortcut",
+          "condition": "opened_old_lift_from_A9",
+          "direction": "both"
+        },
+        {
+          "id": "C18",
+          "target": "A12-R01",
+          "at": [
+            1100,
+            1200
+          ],
+          "kind": "shortcut",
+          "condition": "opened_inner_city_side_gate",
+          "direction": "both"
+        },
+        {
+          "id": "H03-RETURN",
+          "target": "H03-R01",
+          "at": [
+            2105,
+            1150
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H03_secondary_route_contract",
+          "direction": "both"
+        },
+        {
+          "id": "H06-RETURN",
+          "target": "H06-R01",
+          "at": [
+            95,
+            1150
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H06_secondary_route_contract",
+          "direction": "both"
+        },
+        {
+          "id": "H07-ENTRY",
+          "target": "H07-R01",
+          "at": [
+            1100,
+            416
+          ],
+          "kind": "hidden_entry",
+          "condition": "H07_discovery_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1716,
+            312
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            550,
+            728
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+        "Required feature: cross_layer_route",
+        "Required feature: visible_goal"
+      ]
+    },
+    {
+      "room_id": "A9-R03",
+      "title": "王城排水层",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "lower",
+        "王城外环"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I20",
+          "target": "A9-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C17",
+          "target": "A10-R01",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C23",
+          "target": "A4-R03",
+          "at": [
+            525,
+            170
+          ],
+          "kind": "shortcut",
+          "condition": "opened_royal_drain",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+        "Required feature: shortcut_or_drop",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "A10-R01",
+      "title": "朝圣阶梯",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "upper",
+        "大圣堂与内廷"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I21",
+          "target": "A10-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C17",
+          "target": "A9-R03",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+        "Required feature: safe_spawn",
+        "Required feature: readable_exit"
+      ]
+    },
+    {
+      "room_id": "A10-R02",
+      "title": "圣堂中殿",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "middle",
+        "大圣堂与内廷"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I21",
+          "target": "A10-R01",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I22",
+          "target": "A10-R03",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+        "Required feature: cross_layer_route",
+        "Required feature: visible_goal"
+      ]
+    },
+    {
+      "room_id": "A10-R03",
+      "title": "内廷高廊",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "lower",
+        "大圣堂与内廷"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I22",
+          "target": "A10-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C19",
+          "target": "A11-R03",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "secret",
+          "condition": "outer_god_resonance_and_mirror_echo",
+          "direction": "both"
+        },
+        {
+          "id": "C20",
+          "target": "A12-R02",
+          "at": [
+            525,
+            170
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+        "Required feature: shortcut_or_drop",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "A11-R01",
+      "title": "研究区前厅",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "upper",
+        "古神遗迹与研究区"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I23",
+          "target": "A11-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C15",
+          "target": "A8-R03",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "secret",
+          "condition": "resonance_sight_and_ancient_truth",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+        "Required feature: safe_spawn",
+        "Required feature: readable_exit"
+      ]
+    },
+    {
+      "room_id": "A11-R02",
+      "title": "古神遗迹",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "middle",
+        "古神遗迹与研究区"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I23",
+          "target": "A11-R01",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I24",
+          "target": "A11-R03",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "H08-ENTRY",
+          "target": "H08-R01",
+          "at": [
+            750,
+            352
+          ],
+          "kind": "hidden_entry",
+          "condition": "H08_discovery_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+        "Required feature: cross_layer_route",
+        "Required feature: visible_goal"
+      ]
+    },
+    {
+      "room_id": "A11-R03",
+      "title": "共鸣断层",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "lower",
+        "古神遗迹与研究区"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I24",
+          "target": "A11-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C19",
+          "target": "A10-R03",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "secret",
+          "condition": "outer_god_resonance_and_mirror_echo",
+          "direction": "both"
+        },
+        {
+          "id": "C21",
+          "target": "A13-R01",
+          "at": [
+            525,
+            170
+          ],
+          "kind": "ending",
+          "condition": "non_human_ending_candidate",
+          "direction": "forward"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+        "Required feature: shortcut_or_drop",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "A12-R01",
+      "title": "内城下层",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "upper",
+        "王室内城与王座区"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I25",
+          "target": "A12-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C18",
+          "target": "A9-R02",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "shortcut",
+          "condition": "opened_inner_city_side_gate",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+        "Required feature: safe_spawn",
+        "Required feature: readable_exit"
+      ]
+    },
+    {
+      "room_id": "A12-R02",
+      "title": "王座阶梯",
+      "size": [
+        2200,
+        1300
+      ],
+      "shape": "wide",
+      "layers": [
+        "middle",
+        "王室内城与王座区"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          1095
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            1150,
+            594,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            748,
+            1150,
+            638,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1540,
+            1150,
+            660,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            264,
+            960,
+            484,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            1166,
+            850,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            594,
+            710,
+            462,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1496,
+            590,
+            396,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            176,
+            460,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            1056,
+            350,
+            374,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "roof_bridge",
+          "rect": [
+            792,
+            530,
+            572,
+            26
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "broken_crossing",
+          "rect": [
+            924,
+            770,
+            286,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I25",
+          "target": "A12-R01",
+          "at": [
+            2105,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I26",
+          "target": "A12-R03",
+          "at": [
+            95,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C20",
+          "target": "A10-R03",
+          "at": [
+            1100,
+            416
+          ],
+          "kind": "main",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "H07-RETURN",
+          "target": "H07-R01",
+          "at": [
+            1100,
+            1200
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H07_secondary_route_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1716,
+            312
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            550,
+            728
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+        "Required feature: cross_layer_route",
+        "Required feature: visible_goal"
+      ]
+    },
+    {
+      "room_id": "A12-R03",
+      "title": "王座外环",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "lower",
+        "王室内城与王座区"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I26",
+          "target": "A12-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "C22",
+          "target": "A13-R01",
+          "at": [
+            95,
+            1950
+          ],
+          "kind": "ending",
+          "condition": "reached_A12_via_A10",
+          "direction": "forward"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+        "Required feature: shortcut_or_drop",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "A13-R01",
+      "title": "梦境入口",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "upper",
+        "深层梦境与终局异象"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I27",
+          "target": "A13-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "入口与第一方向判断；给玩家展示远处目标和至少一条暂时不可达路线",
+        "Required feature: safe_spawn",
+        "Required feature: readable_exit"
+      ]
+    },
+    {
+      "room_id": "A13-R02",
+      "title": "异象回廊",
+      "size": [
+        2200,
+        1300
+      ],
+      "shape": "wide",
+      "layers": [
+        "middle",
+        "深层梦境与终局异象"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          1095
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            1150,
+            594,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            748,
+            1150,
+            638,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1540,
+            1150,
+            660,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            264,
+            960,
+            484,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            1166,
+            850,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            594,
+            710,
+            462,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1496,
+            590,
+            396,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            176,
+            460,
+            418,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            1056,
+            350,
+            374,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "roof_bridge",
+          "rect": [
+            792,
+            530,
+            572,
+            26
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "broken_crossing",
+          "rect": [
+            924,
+            770,
+            286,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I27",
+          "target": "A13-R01",
+          "at": [
+            2105,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "I28",
+          "target": "A13-R03",
+          "at": [
+            95,
+            1150
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        },
+        {
+          "id": "H08-RETURN",
+          "target": "H08-R01",
+          "at": [
+            1100,
+            416
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H08_secondary_route_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1716,
+            312
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            550,
+            728
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "主要路线分叉；连接不同高度，并提供可回访的视觉地标",
+        "Required feature: cross_layer_route",
+        "Required feature: visible_goal"
+      ]
+    },
+    {
+      "room_id": "A13-R03",
+      "title": "终局核心",
+      "size": [
+        1050,
+        2100
+      ],
+      "shape": "tall",
+      "layers": [
+        "lower",
+        "深层梦境与终局异象"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          525,
+          240
+        ],
+        "support": "shaft_lip_west"
+      },
+      "terrain": [
+        {
+          "id": "shaft_lip_west",
+          "rect": [
+            0,
+            140,
+            378,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_lip_east",
+          "rect": [
+            683,
+            140,
+            368,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "shaft_floor",
+          "rect": [
+            0,
+            1980,
+            1050,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            126,
+            1760,
+            231,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            557,
+            1650,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            284,
+            1510,
+            221,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            714,
+            1390,
+            189,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            84,
+            1260,
+            200,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            504,
+            1150,
+            179,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_01",
+          "rect": [
+            63,
+            430,
+            368,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_02",
+          "rect": [
+            609,
+            700,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_03",
+          "rect": [
+            105,
+            980,
+            378,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_04",
+          "rect": [
+            588,
+            1260,
+            357,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "shaft_ledge_05",
+          "rect": [
+            84,
+            1540,
+            368,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I28",
+          "target": "A13-R02",
+          "at": [
+            955,
+            1950
+          ],
+          "kind": "internal",
+          "condition": "none",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            819,
+            504
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            263,
+            1176
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+        "Required feature: shortcut_or_drop",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "H01-R01",
+      "title": "井底回声层",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "hidden",
+        "H01"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "H01-ENTRY",
+          "target": "A1-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "hidden_entry",
+          "condition": "H01_discovery_contract",
+          "direction": "both"
+        },
+        {
+          "id": "H01-RETURN",
+          "target": "A4-R02",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H01_secondary_route_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "井壁背后的回声平台",
+        "Required feature: concealed_entry",
+        "Required feature: unique_landmark",
+        "Required feature: optional_lore",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "H02-R01",
+      "title": "倒响钟室",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "hidden",
+        "H02"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "H02-ENTRY",
+          "target": "A2-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "hidden_entry",
+          "condition": "H02_discovery_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "钟墓背后的反向钟室",
+        "Required feature: concealed_entry",
+        "Required feature: unique_landmark",
+        "Required feature: optional_lore",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "H03-R01",
+      "title": "被删去的第三街",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "hidden",
+        "H03"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "H03-ENTRY",
+          "target": "A3-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "hidden_entry",
+          "condition": "H03_discovery_contract",
+          "direction": "both"
+        },
+        {
+          "id": "H03-RETURN",
+          "target": "A9-R02",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H03_secondary_route_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "旧市场被抹除的街区",
+        "Required feature: concealed_entry",
+        "Required feature: unique_landmark",
+        "Required feature: optional_lore",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "H04-R01",
+      "title": "水面背后的楼梯",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "hidden",
+        "H04"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "H04-ENTRY",
+          "target": "A4-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "hidden_entry",
+          "condition": "H04_discovery_contract",
+          "direction": "both"
+        },
+        {
+          "id": "H04-RETURN",
+          "target": "A8-R02",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H04_secondary_route_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "水库镜面后的垂直楼梯",
+        "Required feature: concealed_entry",
+        "Required feature: unique_landmark",
+        "Required feature: optional_lore",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "H05-R01",
+      "title": "无声钟室",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "hidden",
+        "H05"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "H05-ENTRY",
+          "target": "A6-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "hidden_entry",
+          "condition": "H05_discovery_contract",
+          "direction": "both"
+        },
+        {
+          "id": "H05-RETURN",
+          "target": "A3-R03",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H05_secondary_route_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "钟塔夹层与单向落差",
+        "Required feature: concealed_entry",
+        "Required feature: unique_landmark",
+        "Required feature: optional_lore",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "H06-R01",
+      "title": "王名抹除廊",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "hidden",
+        "H06"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "H06-ENTRY",
+          "target": "A8-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "hidden_entry",
+          "condition": "H06_discovery_contract",
+          "direction": "both"
+        },
+        {
+          "id": "H06-RETURN",
+          "target": "A9-R02",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H06_secondary_route_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "王墓铭文后的狭长廊道",
+        "Required feature: concealed_entry",
+        "Required feature: unique_landmark",
+        "Required feature: optional_lore",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "H07-R01",
+      "title": "镜街",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "hidden",
+        "H07"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "H07-ENTRY",
+          "target": "A9-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "hidden_entry",
+          "condition": "H07_discovery_contract",
+          "direction": "both"
+        },
+        {
+          "id": "H07-RETURN",
+          "target": "A12-R02",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H07_secondary_route_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "外环积水倒影中的镜像街区",
+        "Required feature: concealed_entry",
+        "Required feature: unique_landmark",
+        "Required feature: optional_lore",
+        "Required feature: return_route"
+      ]
+    },
+    {
+      "room_id": "H08-R01",
+      "title": "胎宫与原初空腔",
+      "size": [
+        1500,
+        1100
+      ],
+      "shape": "compact",
+      "layers": [
+        "hidden",
+        "H08"
+      ],
+      "spawn": {
+        "id": "safe_entry",
+        "at": [
+          150,
+          895
+        ],
+        "support": "floor_west"
+      },
+      "terrain": [
+        {
+          "id": "floor_west",
+          "rect": [
+            0,
+            950,
+            405,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_mid",
+          "rect": [
+            510,
+            950,
+            435,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "floor_east",
+          "rect": [
+            1050,
+            950,
+            450,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_low_a",
+          "rect": [
+            180,
+            760,
+            330,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_low_b",
+          "rect": [
+            795,
+            650,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_a",
+          "rect": [
+            405,
+            510,
+            315,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_mid_b",
+          "rect": [
+            1020,
+            390,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_a",
+          "rect": [
+            120,
+            260,
+            285,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_high_b",
+          "rect": [
+            720,
+            150,
+            255,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "H08-ENTRY",
+          "target": "A11-R02",
+          "at": [
+            1405,
+            950
+          ],
+          "kind": "hidden_entry",
+          "condition": "H08_discovery_contract",
+          "direction": "both"
+        },
+        {
+          "id": "H08-RETURN",
+          "target": "A13-R02",
+          "at": [
+            95,
+            950
+          ],
+          "kind": "hidden_shortcut",
+          "condition": "H08_secondary_route_contract",
+          "direction": "both"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "far_goal",
+          "at": [
+            1170,
+            264
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "distant exploration goal; communicate next layer"
+        },
+        {
+          "id": "route_marker",
+          "at": [
+            375,
+            616
+          ],
+          "visibility": "visible",
+          "purpose": "orient player toward alternate elevation route"
+        }
+      ],
+      "route_contracts": [
+        "研究区背后的原初空腔",
+        "Required feature: concealed_entry",
+        "Required feature: unique_landmark",
+        "Required feature: optional_lore",
+        "Required feature: return_route"
+      ]
     }
   ],
   "acceptance": [
@@ -1398,5 +9375,7 @@
     "Visible locked routes are readable from the intended approach but cannot be entered before unlock.",
     "Test normal jump, fall, backtrack, checkpoint recovery, and scene transition with the real Hero controller.",
     "These contracts are not evidence of implemented scenes or runtime success."
-  ]
+  ],
+  "room_count": 50,
+  "connection_count": 67
 }
