@@ -107,8 +107,15 @@ func _build_exits() -> void:
 		shape_node.position = Vector2(0, -44)
 		door.add_child(shape_node)
 		add_child(door)
-		door.interacted.connect(_on_exit_interacted.bind(target_scene, _spawn_side_for_target(target_id)))
+		door.interacted.connect(_on_exit_interacted.bind(target_scene, _spawn_side_for_target(target_id), str(item.get("condition", "none"))))
 		exits.append({"id": item.id, "position": anchor, "target": target_id, "condition": item.get("condition", "none")})
+
+func _route_condition_met(condition: String) -> bool:
+	if condition.is_empty() or condition == "none":
+		return true
+	if condition == "village_defense_survived":
+		return WorldState.prologue_complete or condition in WorldState.achievement_flags
+	return condition in WorldState.achievement_flags or condition in WorldState.opened_hidden_paths or condition in WorldState.unlocked_abilities
 
 func _spawn_side_for_target(target_id: String) -> String:
 	var region := target_id.split("-")[0]
@@ -120,7 +127,10 @@ func _spawn_side_for_target(target_id: String) -> String:
 		return "lower"
 	return "west"
 
-func _on_exit_interacted(target_scene: String, spawn_side: String) -> void:
+func _on_exit_interacted(target_scene: String, spawn_side: String, condition: String) -> void:
+	if not _route_condition_met(condition):
+		print("[NEREIS][ROOM_NETWORK][LOCKED] room=%s condition=%s" % [room_id, condition])
+		return
 	FOCUS_SCRIPT.clear_all(get_tree())
 	WorldState.pending_region_spawn_side = spawn_side
 	WorldState.set_location(target_scene.get_file().get_basename())
