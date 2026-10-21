@@ -58,6 +58,7 @@ func _run() -> void:
 	_prime_acceptance_state()
 	await _validate_scene_inventory_and_runtime()
 	await _validate_topology_connections()
+	await _validate_c24_phase_gate()
 	await _validate_hidden_regions()
 	await _validate_loop_contracts()
 	await _validate_ground_jump_high_door_clearance()
@@ -457,13 +458,121 @@ func _validate_topology_connections() -> void:
 		var target_path := str(REGION_SCENES.get(to_id, ""))
 		var matches := _find_exit_matches(source, target_path, to_id)
 		if matches.is_empty():
-			_fail("CONNECTION/%s" % id, "No runtime edge %s -> %s" % [from_id, to_id])
+			var staged_detail := await _validate_staged_route(connection)
+			if staged_detail.is_empty():
+				_fail("CONNECTION/%s" % id, "No runtime edge %s -> %s and declared staged route did not validate" % [from_id, to_id])
+			else:
+				_pass("CONNECTION/%s" % id, "%s -> %s validated as staged route: %s" % [from_id, to_id, staged_detail])
 		else:
 			_pass("CONNECTION/%s" % id, "%s -> %s contracts=%d" % [from_id, to_id, matches.size()])
 			for match in matches:
 				await _validate_exit_target_spawn(id, from_id, match, to_id)
 		source.queue_free()
 		await process_frame
+
+
+func _validate_staged_route(connection: Dictionary) -> String:
+	# Some topology edges intentionally cross intermediate scenes instead of exposing
+	# a direct door from the source region to the final region (A0 prologue, C24 drain).
+	# Validate every authored runtime hop rather than inventing a direct connection.
+	var chain: Array = connection.get("route_chain", [])
+	if chain.is_empty():
+		var spatial: Dictionary = connection.get("spatial_contract", {})
+		chain = spatial.get("route_chain", [])
+	if chain.size() < 3:
+		return ""
+
+	var connection_id := str(connection.get("id", ""))
+	var had_drain_flag := "opened_old_drainage_link_from_A4" in world_state.achievement_flags
+	var validated_hops: Array[String] = []
+	for index in range(chain.size() - 1):
+		var source_path := str(chain[index])
+		var target_path := str(chain[index + 1])
+		if not source_path.begins_with("res://"):
+			source_path = "res://" + source_path
+		if not target_path.begins_with("res://"):
+			target_path = "res://" + target_path
+		if connection_id == "C24" and source_path.ends_with("/old_drain_exploration.tscn"):
+			if not had_drain_flag and "opened_old_drainage_link_from_A4" not in world_state.achievement_flags:
+				world_state.achievement_flags.append("opened_old_drainage_link_from_A4")
+
+		var packed := load(source_path) as PackedScene
+		if packed == null:
+			if not had_drain_flag:
+				world_state.achievement_flags.erase("opened_old_drainage_link_from_A4")
+			return "cannot load hop source=%s" % source_path
+		var instance := packed.instantiate()
+		if instance == null:
+			if not had_drain_flag:
+				world_state.achievement_flags.erase("opened_old_drainage_link_from_A4")
+			return "cannot instantiate hop source=%s" % source_path
+		get_root().add_child(instance)
+		await process_frame
+		await process_frame
+		var target_region := ""
+		for region_id in REGION_SCENES.keys():
+			if str(REGION_SCENES[region_id]) == target_path:
+				target_region = str(region_id)
+				break
+		var matches := _find_exit_matches(instance, target_path, target_region)
+		instance.queue_free()
+		await process_frame
+		if matches.is_empty():
+			if not had_drain_flag:
+				world_state.achievement_flags.erase("opened_old_drainage_link_from_A4")
+			return "missing hop %s -> %s" % [source_path, target_path]
+		validated_hops.append("%s→%s" % [source_path.get_file(), target_path.get_file()])
+	if not had_drain_flag:
+		world_state.achievement_flags.erase("opened_old_drainage_link_from_A4")
+	return "hops=%d (%s)" % [validated_hops.size(), "; ".join(validated_hops)]
+
+
+func _validate_c24_phase_gate() -> void:
+	# Verify both states of C24's real intermediate scene: closed before the A4-side
+	# interaction, and connected to A3 only after the persistent flag is present.
+	var had_flag := "opened_old_drainage_link_from_A4" in world_state.achievement_flags
+	world_state.achievement_flags.erase("opened_old_drainage_link_from_A4")
+	var locked := await _load_scene_path("res://scenes/old_drain_exploration.tscn")
+	if locked == null:
+		_fail("CONNECTION/C24/PHASE_LOCKED", "Cannot instantiate old-drain scene in locked state")
+	else:
+		var locked_matches := _find_exit_matches(locked, str(REGION_SCENES.get("A3", "")), "A3")
+		if locked_matches.is_empty():
+			_pass("CONNECTION/C24/PHASE_LOCKED", "A3 exit is absent while the old-drain gate is locked")
+		else:
+			_fail("CONNECTION/C24/PHASE_LOCKED", "A3 exit unexpectedly exists before the A4-side gate opens")
+		locked.queue_free()
+		await process_frame
+	world_state.achievement_flags.append("opened_old_drainage_link_from_A4")
+	var opened := await _load_scene_path("res://scenes/old_drain_exploration.tscn")
+	if opened == null:
+		_fail("CONNECTION/C24/PHASE_OPEN", "Cannot instantiate old-drain scene after gate unlock")
+	else:
+		var opened_matches := _find_exit_matches(opened, str(REGION_SCENES.get("A3", "")), "A3")
+		if not opened_matches.is_empty():
+			_pass("CONNECTION/C24/PHASE_OPEN", "A3 exit appears after the persistent A4-side gate flag")
+		else:
+			_fail("CONNECTION/C24/PHASE_OPEN", "A3 exit is missing after the A4-side gate flag")
+		opened.queue_free()
+		await process_frame
+	if not had_flag:
+		world_state.achievement_flags.erase("opened_old_drainage_link_from_A4")
+
+
+func _load_scene_path(scene_path: String) -> Node:
+	if not ResourceLoader.exists(scene_path):
+		return null
+	var packed := load(scene_path) as PackedScene
+	if packed == null:
+		return null
+	var instance := packed.instantiate()
+	if instance == null:
+		return null
+	get_root().add_child(instance)
+	await process_frame
+	await process_frame
+	return instance
+
 
 func _validate_hidden_regions() -> void:
 	for entry in topology.get("hidden_regions", []):
