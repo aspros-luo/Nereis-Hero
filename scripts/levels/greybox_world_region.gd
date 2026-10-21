@@ -3494,6 +3494,18 @@ func _draw_forest_landmarks() -> void:
 	draw_line(Vector2(3100, 220), Vector2(3290, 255), Color("#4a414d"), 8.0)
 	draw_string(ThemeDB.fallback_font, Vector2(2860, 205), "东侧残桥", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#877887"))
 
+	# Exploration tells: the bone-token site below the Bell Grave has crossed road marks,
+	# while the far canopy fragment is framed by old trail notches rather than a floating label.
+	# 探索线索：钟墓坑底的骨牌地点留下交错路痕；远端树冠残片由旧路标刻痕引导，不用悬浮标签直接告知。
+	draw_line(Vector2(928, 610), Vector2(948, 597), Color("#887b70", 0.72), 3.0)
+	draw_line(Vector2(948, 597), Vector2(968, 610), Color("#887b70", 0.72), 3.0)
+	draw_line(Vector2(968, 610), Vector2(988, 597), Color("#887b70", 0.72), 3.0)
+	draw_arc(Vector2(965, 625), 22.0, PI + 0.2, TAU - 0.2, 16, Color("#b2a28b", 0.58), 2.0)
+	for notch_x in [3020.0, 3052.0, 3084.0, 3116.0]:
+		draw_line(Vector2(notch_x, 322), Vector2(notch_x + 10.0, 309), Color("#b7c29b", 0.72), 2.0)
+	draw_line(Vector2(3085, 292), Vector2(3105, 278), Color("#b7c29b", 0.62), 2.0)
+	draw_line(Vector2(3105, 278), Vector2(3120, 291), Color("#b7c29b", 0.62), 2.0)
+
 	# Readable room silhouettes: stone masses and root arches create separate visual "rooms"
 	# behind the collision-backed ledges. These are intentionally decorative, so they cannot
 	# accidentally seal a traversal route while the graybox jump arcs are still being tuned.
