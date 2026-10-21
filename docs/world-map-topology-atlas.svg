@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="980" viewBox="0 0 1500 980">
+<defs>
+ <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity=".3"/></filter>
+ <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9da9b5"/></marker>
+ <style>
+ .bg{fill:#111923}.grid{stroke:#253242;stroke-width:1;opacity:.6}
+ .title{font:700 30px sans-serif;fill:#f4f2e9}.subtitle{font:15px sans-serif;fill:#aeb9c5}
+ .edge{fill:none;stroke:#9da9b5;stroke-width:2;opacity:.72;marker-end:url(#arrow)}
+ .shortcut{fill:none;stroke:#f4bd62;stroke-width:2.8;stroke-dasharray:8 6;opacity:.95}
+ .secret{fill:none;stroke:#cf9df2;stroke-width:2.8;stroke-dasharray:3 7;opacity:.95}
+ .ending{fill:none;stroke:#e7a5a5;stroke-width:2.5;stroke-dasharray:10 5}
+ .node{stroke:#e7e4dc;stroke-width:1.3;filter:url(#shadow)}
+ .label{font:700 17px sans-serif;fill:#f7f4eb;text-anchor:middle}
+ .id{font:12px monospace;fill:#e4e9ed;text-anchor:middle}
+ .small{font:12px sans-serif;fill:#d6dce3}
+ .macro{font:700 14px sans-serif;fill:#93a4b7;letter-spacing:2px}
+ .edgeid{font:11px monospace;fill:#c6d0da;paint-order:stroke;stroke:#111923;stroke-width:4px;stroke-linejoin:round}
+ </style>
+</defs>
+<rect class="bg" width="1500" height="980"/>
+<line class="grid" x1="0" y1="0" x2="0" y2="980"/><line class="grid" x1="52" y1="0" x2="52" y2="980"/><line class="grid" x1="104" y1="0" x2="104" y2="980"/><line class="grid" x1="156" y1="0" x2="156" y2="980"/><line class="grid" x1="208" y1="0" x2="208" y2="980"/><line class="grid" x1="260" y1="0" x2="260" y2="980"/><line class="grid" x1="312" y1="0" x2="312" y2="980"/><line class="grid" x1="364" y1="0" x2="364" y2="980"/><line class="grid" x1="416" y1="0" x2="416" y2="980"/><line class="grid" x1="468" y1="0" x2="468" y2="980"/><line class="grid" x1="520" y1="0" x2="520" y2="980"/><line class="grid" x1="572" y1="0" x2="572" y2="980"/><line class="grid" x1="624" y1="0" x2="624" y2="980"/><line class="grid" x1="676" y1="0" x2="676" y2="980"/><line class="grid" x1="728" y1="0" x2="728" y2="980"/><line class="grid" x1="780" y1="0" x2="780" y2="980"/><line class="grid" x1="832" y1="0" x2="832" y2="980"/><line class="grid" x1="884" y1="0" x2="884" y2="980"/><line class="grid" x1="936" y1="0" x2="936" y2="980"/><line class="grid" x1="988" y1="0" x2="988" y2="980"/><line class="grid" x1="1040" y1="0" x2="1040" y2="980"/><line class="grid" x1="1092" y1="0" x2="1092" y2="980"/><line class="grid" x1="1144" y1="0" x2="1144" y2="980"/><line class="grid" x1="1196" y1="0" x2="1196" y2="980"/><line class="grid" x1="1248" y1="0" x2="1248" y2="980"/><line class="grid" x1="1300" y1="0" x2="1300" y2="980"/><line class="grid" x1="1352" y1="0" x2="1352" y2="980"/><line class="grid" x1="1404" y1="0" x2="1404" y2="980"/><line class="grid" x1="1456" y1="0" x2="1456" y2="980"/><line class="grid" x1="1508" y1="0" x2="1508" y2="980"/>
+<line class="grid" x1="0" y1="0" x2="1500" y2="0"/><line class="grid" x1="0" y1="52" x2="1500" y2="52"/><line class="grid" x1="0" y1="104" x2="1500" y2="104"/><line class="grid" x1="0" y1="156" x2="1500" y2="156"/><line class="grid" x1="0" y1="208" x2="1500" y2="208"/><line class="grid" x1="0" y1="260" x2="1500" y2="260"/><line class="grid" x1="0" y1="312" x2="1500" y2="312"/><line class="grid" x1="0" y1="364" x2="1500" y2="364"/><line class="grid" x1="0" y1="416" x2="1500" y2="416"/><line class="grid" x1="0" y1="468" x2="1500" y2="468"/><line class="grid" x1="0" y1="520" x2="1500" y2="520"/><line class="grid" x1="0" y1="572" x2="1500" y2="572"/><line class="grid" x1="0" y1="624" x2="1500" y2="624"/><line class="grid" x1="0" y1="676" x2="1500" y2="676"/><line class="grid" x1="0" y1="728" x2="1500" y2="728"/><line class="grid" x1="0" y1="780" x2="1500" y2="780"/><line class="grid" x1="0" y1="832" x2="1500" y2="832"/><line class="grid" x1="0" y1="884" x2="1500" y2="884"/><line class="grid" x1="0" y1="936" x2="1500" y2="936"/><line class="grid" x1="0" y1="988" x2="1500" y2="988"/>
+<text class="title" x="54" y="55">NEREIS HERO · WORLD TOPOLOGY ATLAS</text>
+<text class="subtitle" x="56" y="82">全世界区域连接草图 · 设计拓扑，不代表地形/门/跳跃已在 Godot 实机通过</text>
+<text class="macro" x="65" y="132">M1 · 边境与荒野</text>
+<text class="macro" x="420" y="132">M2 · 废弃城区与地下水系</text>
+<text class="macro" x="780" y="132">M3 · 教会边陲与圣堂</text>
+<text class="macro" x="1100" y="132">M4 · 王城与王室墓地</text>
+<text class="macro" x="770" y="870">M5 · 深层研究区与古神遗迹</text>
+<text class="macro" x="1120" y="870">M6 · 深层梦境与终局</text>
+<!-- connection edges -->
+<path class="edge" d="M130 250 L160 360"/><text class="edgeid" x="128" y="305">C01</text>
+<path class="edge" d="M210 380 L340 275"/><text class="edgeid" x="258" y="315">C02</text>
+<path class="edge" d="M405 260 L545 260"/><text class="edgeid" x="470" y="245">C03</text>
+<path class="shortcut" d="M375 285 Q360 410 500 465"/><text class="edgeid" x="377" y="389">C04</text>
+<path class="edge" d="M585 285 L600 435"/><text class="edgeid" x="592" y="360">C05</text>
+<path class="shortcut" d="M570 480 Q390 570 200 410"/><text class="edgeid" x="367" y="515">C06</text>
+<path class="shortcut" d="M620 480 Q680 530 700 615"/><text class="edgeid" x="661" y="548">C07</text>
+<path class="edge" d="M580 270 Q520 360 500 440"/><text class="edgeid" x="514" y="350">C08</text>
+<path class="edge" d="M535 455 L700 310"/><text class="edgeid" x="620" y="375">C09</text>
+<path class="shortcut" d="M740 275 Q690 220 575 245"/><text class="edgeid" x="670" y="228">C10</text>
+<path class="edge" d="M730 325 L760 425"/><text class="edgeid" x="748" y="380">C11</text>
+<path class="shortcut" d="M765 460 Q690 500 625 470"/><text class="edgeid" x="697" y="485">C12</text>
+<path class="edge" d="M800 455 L850 590"/><text class="edgeid" x="825" y="520">C13</text>
+<path class="edge" d="M900 610 L1050 570"/><text class="edgeid" x="972" y="580">C14</text>
+<path class="secret" d="M880 635 Q860 760 790 810"/><text class="edgeid" x="828" y="724">C15</text>
+<path class="shortcut" d="M600 250 Q830 160 1050 540"/><text class="edgeid" x="846" y="290">C16</text>
+<path class="edge" d="M1090 540 L1090 330"/><text class="edgeid" x="1104" y="440">C17</text>
+<path class="shortcut" d="M1100 535 Q1210 430 1300 330"/><text class="edgeid" x="1202" y="423">C18</text>
+<path class="secret" d="M1120 290 Q1040 500 830 790"/><text class="edgeid" x="1015" y="545">C19</text>
+<path class="edge" d="M1125 300 L1300 300"/><text class="edgeid" x="1200" y="285">C20</text>
+<path class="ending" d="M850 820 Q1050 900 1270 820"/><text class="edgeid" x="1050" y="865">C21</text>
+<path class="ending" d="M1330 335 L1300 785"/><text class="edgeid" x="1343" y="570">C22</text>
+<path class="shortcut" d="M1050 565 Q850 545 630 465"/><text class="edgeid" x="846" y="530">C23</text>
+<path class="shortcut" d="M200 375 Q365 500 535 260"/><text class="edgeid" x="344" y="435">C24</text>
+<!-- nodes -->
+<g><rect class="node" x="55" y="190" width="150" height="62" rx="13" fill="#6d747e"/><text class="id" x="130" y="211">A0</text><text class="label" x="130" y="236">边境手术所</text></g>
+<g><rect class="node" x="85" y="355" width="150" height="62" rx="13" fill="#718b68"/><text class="id" x="160" y="376">A1</text><text class="label" x="160" y="401">边境村庄</text></g>
+<g><rect class="node" x="300" y="230" width="150" height="62" rx="13" fill="#718b68"/><text class="id" x="375" y="251">A2</text><text class="label" x="375" y="276">雾林 / 钟墓</text></g>
+<g><rect class="node" x="500" y="230" width="150" height="62" rx="13" fill="#738ba1"/><text class="id" x="575" y="251">A3</text><text class="label" x="575" y="276">废弃城区</text></g>
+<g><rect class="node" x="530" y="435" width="150" height="62" rx="13" fill="#547b91"/><text class="id" x="605" y="456">A4</text><text class="label" x="605" y="481">下水道 / 水库</text></g>
+<g><rect class="node" x="425" y="435" width="150" height="62" rx="13" fill="#87785f"/><text class="id" x="500" y="456">A5</text><text class="label" x="500" y="481">旧战场 / 堡垒</text></g>
+<g><rect class="node" x="655" y="260" width="150" height="62" rx="13" fill="#9b8268"/><text class="id" x="730" y="281">A6</text><text class="label" x="730" y="306">修道院 / 钟塔</text></g>
+<g><rect class="node" x="690" y="425" width="150" height="62" rx="13" fill="#756f83"/><text class="id" x="765" y="446">A7</text><text class="label" x="765" y="471">监牢 / 竖井</text></g>
+<g><rect class="node" x="775" y="590" width="150" height="62" rx="13" fill="#897e75"/><text class="id" x="850" y="611">A8</text><text class="label" x="850" y="636">旧王墓</text></g>
+<g><rect class="node" x="975" y="535" width="150" height="62" rx="13" fill="#8a8a92"/><text class="id" x="1050" y="556">A9</text><text class="label" x="1050" y="581">王城外环</text></g>
+<g><rect class="node" x="1015" y="250" width="150" height="62" rx="13" fill="#9b8268"/><text class="id" x="1090" y="271">A10</text><text class="label" x="1090" y="296">大圣堂</text></g>
+<g><rect class="node" x="755" y="785" width="150" height="62" rx="13" fill="#5d7d7b"/><text class="id" x="830" y="806">A11</text><text class="label" x="830" y="831">深层研究 / 古神</text></g>
+<g><rect class="node" x="1255" y="270" width="150" height="62" rx="13" fill="#8b7b9c"/><text class="id" x="1330" y="291">A12</text><text class="label" x="1330" y="316">王室内城</text></g>
+<g><rect class="node" x="1225" y="785" width="150" height="62" rx="13" fill="#a56f79"/><text class="id" x="1300" y="806">A13</text><text class="label" x="1300" y="831">终局异象</text></g>
+<!-- legend -->
+<rect x="55" y="900" width="1390" height="50" rx="12" fill="#1a2633" stroke="#334457"/>
+<line x1="80" y1="925" x2="130" y2="925" class="edge"/><text class="small" x="140" y="930">常规连接</text>
+<line x1="275" y1="925" x2="325" y2="925" class="shortcut"/><text class="small" x="335" y="930">远端开启捷径</text>
+<line x1="500" y1="925" x2="550" y2="925" class="secret"/><text class="small" x="560" y="930">隐藏/条件连接</text>
+<line x1="740" y1="925" x2="790" y2="925" class="ending"/><text class="small" x="800" y="930">终局连接</text>
+<text class="small" x="1040" y="930">C01–C24 = 跨区连接 ID；区域内 SC / 升降机未画在此总览</text>
+</svg>
