@@ -65,7 +65,7 @@ def main() -> int:
     # Each tuple is (edge ID, destination region, incoming side, x, y offset).
     # These are the ledges whose coordinates must remain synchronized with the map contract.
     contracts = [
-        ("C03", "A2", "east", 2120.0, -140.0),
+        ("C03", "A2", "east", 3220.0, -140.0),
         ("C05", "A3", "sewer", 1380.0, -115.0),
         ("C07", "A4", "royal_tomb_waterway", 1410.0, -85.0),
         ("C08", "A3", "city_highroad_return", 2360.0, -130.0),
@@ -278,7 +278,7 @@ def main() -> int:
 
     # (connection, region, x, y_offset); y is derived from the shared floor_y=540.
     elevated_doors = [
-        ("C03", "A2", 2240.0, -160.0),
+        ("C03", "A2", 3400.0, -160.0),
         ("C22", "A12", 2130.0, -180.0),
         ("C13", "A7", 2528.0, -180.0),
         ("C13", "A8", 72.0, -180.0),
@@ -535,6 +535,8 @@ def main() -> int:
         "A2-S03": "钟墓坑底",
         "A2-S04": "树冠栈道",
         "A2-S05": "旧朝圣高路",
+        "A2-S06": "东部沟壑与林下绕行",
+        "A2-S07": "东部树冠延伸段",
     }
     require(
         errors,
@@ -542,7 +544,7 @@ def main() -> int:
             a2_subregions.get(subregion_id, {}).get("name") == name
             for subregion_id, name in expected_a2_subregions.items()
         ) and len(a2_subregions) == len(expected_a2_subregions),
-        "A2 topology must contain exactly the five accepted subregions S01-S05 with their agreed names.",
+        "A2 topology must contain the five baseline subregions plus S06-S07 expansion spaces.",
     )
     require(
         errors,
@@ -605,10 +607,14 @@ def main() -> int:
     require(
         errors,
         '_add_ground_segment("GreyboxGround_West", 0.0, 860.0)' in floor_body
-        and '_add_ground_segment("GreyboxGround_East", 1060.0, map_width - 1060.0)' in floor_body
+        and '_add_ground_segment("GreyboxGround_Middle", 1060.0, 1360.0)' in floor_body
+        and '_add_ground_segment("GreyboxGround_East", 2660.0, map_width - 2660.0)' in floor_body
         and "_add_platform(Rect2(860.0, 610.0, 200.0, 18.0))" in floor_body
         and "_add_platform(Rect2(850.0, 580.0, 70.0, 12.0))" in floor_body
-        and "_add_platform(Rect2(1000.0, 580.0, 70.0, 12.0))" in floor_body,
+        and "_add_platform(Rect2(1000.0, 580.0, 70.0, 12.0))" in floor_body
+        and "_add_platform(Rect2(2420.0, 610.0, 240.0, 18.0))" in floor_body
+        and "_add_platform(Rect2(2400.0, 580.0, 70.0, 12.0))" in floor_body
+        and "_add_platform(Rect2(2590.0, 580.0, 70.0, 12.0))" in floor_body,
         "A2 SC008: ground gap, pit floor, and both return ledges must remain in runtime source.",
     )
     require(
@@ -691,8 +697,8 @@ def main() -> int:
     # Elevated A2 arrivals must be statically supported by authored platform tops.
     # This is a coordinate cross-check only; the Hero's actual feet/collision still needs engine testing.
     a2_supported_arrivals = [
-        ("C03 A2 east return", 2120.0, 400.0),
-        ("C03 A2 exit", 2240.0, 380.0),
+        ("C03 A2 east return", 3220.0, 400.0),
+        ("C03 A2 exit", 3400.0, 380.0),
         ("C04 A2 old pilgrim return", 1750.0, 400.0),
     ]
     for label, spawn_x, spawn_y in a2_supported_arrivals:
