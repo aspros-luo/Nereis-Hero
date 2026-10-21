@@ -603,7 +603,7 @@ def main() -> int:
     )
     require(
         errors,
-        a2_contract.get("status") == "partial_runtime_code_added_not_engine_verified",
+        a2_contract.get("status") in ["partial_runtime_code_added_not_engine_verified", "terrain_layout_reworked_code_committed_runtime_unverified"],
         "A2 spatial contract must not be marked engine-verified before Godot acceptance.",
     )
 
@@ -623,12 +623,12 @@ def main() -> int:
         '_add_ground_segment("GreyboxGround_West", 0.0, 860.0)' in floor_body
         and '_add_ground_segment("GreyboxGround_Middle", 1060.0, 1360.0)' in floor_body
         and '_add_ground_segment("GreyboxGround_East", 2660.0, map_width - 2660.0)' in floor_body
-        and "_add_platform(Rect2(860.0, 610.0, 200.0, 18.0))" in floor_body
-        and "_add_platform(Rect2(850.0, 580.0, 70.0, 12.0))" in floor_body
-        and "_add_platform(Rect2(1000.0, 580.0, 70.0, 12.0))" in floor_body
-        and "_add_platform(Rect2(2420.0, 610.0, 240.0, 18.0))" in floor_body
-        and "_add_platform(Rect2(2400.0, 580.0, 70.0, 12.0))" in floor_body
-        and "_add_platform(Rect2(2590.0, 580.0, 70.0, 12.0))" in floor_body,
+        and "_add_platform(Rect2(860.0, floor_y + 125.0, 200.0, 18.0))" in floor_body
+        and "_add_platform(Rect2(850.0, floor_y + 78.0, 70.0, 12.0))" in floor_body
+        and "_add_platform(Rect2(1000.0, floor_y + 45.0, 70.0, 12.0))" in floor_body
+        and "_add_platform(Rect2(2420.0, floor_y + 125.0, 240.0, 18.0))" in floor_body
+        and "_add_platform(Rect2(2400.0, floor_y + 78.0, 70.0, 12.0))" in floor_body
+        and "_add_platform(Rect2(2590.0, floor_y + 45.0, 70.0, 12.0))" in floor_body,
         "A2 SC008: ground gap, pit floor, and both return ledges must remain in runtime source.",
     )
     require(
@@ -639,7 +639,7 @@ def main() -> int:
     )
     require(
         errors,
-        '_spawn_h02_gate(960.0, 610.0)' in exit_blocks.get("A2", "")
+        '_spawn_h02_gate(960.0, floor_y + 125.0)' in exit_blocks.get("A2", "")
         and "gate.required_resonance = 18" in region_source
         and 'gate.target_scene_path = "res://scenes/hidden_bell_chamber.tscn"' in region_source,
         "A2 H02: hidden gate must remain on the pit floor and keep its existing 18-resonance condition.",
@@ -679,7 +679,7 @@ def main() -> int:
         and "route.required_resonance = 20" in local_routes_body
         and "route.bridge_start_x = 1380.0" in local_routes_body
         and "route.bridge_end_x = 1610.0" in local_routes_body
-        and "route.bridge_y = 328.0" in local_routes_body,
+        and "route.bridge_y = 405.0" in local_routes_body,
         "A2 SC011: runtime resonance bridge coordinates and unlock threshold must match the canopy contract.",
     )
     require(
