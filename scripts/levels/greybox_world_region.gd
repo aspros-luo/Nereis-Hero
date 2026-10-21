@@ -2800,13 +2800,13 @@ func _draw() -> void:
 	_draw_atmospheric_layers()
 	_draw_midground_accents()
 	draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
+	_draw_ground_detail()
 	if region_id == "A2":
-		# Dark vertical cut makes the physical pit legible against the continuous graybox floor texture.
-		# 深色竖向断面让真实坑口从连续灰盒地面纹理中清晰显现。
+		# Draw the pit cut after floor stains/seams so no decorative line falsely bridges the opening.
+		# 坑口断面必须画在地面污渍/接缝之后，避免装饰线把真实断口视觉上连成地面。
 		draw_rect(Rect2(860.0, floor_y - 1.0, 200.0, 180.0), Color("#171820"))
 		draw_rect(Rect2(860.0, floor_y - 1.0, 10.0, 82.0), Color("#51434a"))
 		draw_rect(Rect2(1050.0, floor_y - 1.0, 10.0, 82.0), Color("#51434a"))
-	_draw_ground_detail()
 
 	# Replace the old repetitive ground slashes with sparse, broken stone cracks and low atmospheric haze.
 	# 将重复的地面斜线改为稀疏断裂石纹与贴地薄雾，降低灰盒画面的噪声感。
