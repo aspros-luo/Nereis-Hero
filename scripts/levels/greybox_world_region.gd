@@ -2743,7 +2743,36 @@ func _spawn_exit_door(
 		"kind": "locked" if not enabled else ("shortcut" if not unlock_once_flag_id.is_empty() else "exit"),
 		"condition": unlock_once_flag_id if not unlock_once_flag_id.is_empty() else ("需从另一侧开启" if not enabled else "")
 	})
+	queue_redraw()
 	door.interacted.connect(_on_exit_interacted.bind(target_location, target_scene, spawn_side))
+
+# Draw distant, non-colliding silhouettes at authored exits so players can read route goals
+# before reaching them. These arches are visual landmarks only; Area2D doors own all interaction.
+# 在正式出口位置绘制远景门廊，让玩家抵达前就能读懂路线目标；门廊不参与碰撞，交互仍由 Area2D 出口负责。
+func _draw_route_goal_landmarks() -> void:
+	for marker in debug_exit_markers:
+		var marker_kind := str(marker.get("kind", "exit"))
+		# Hidden passages must be discovered through their intended clues, not a visible doorway silhouette.
+		if marker_kind == "secret":
+			continue
+		var anchor: Vector2 = marker.get("position", Vector2.ZERO)
+		var tint := Color("#8eaa9a")
+		if marker_kind == "shortcut":
+			tint = Color("#d5b36b")
+		elif marker_kind == "locked":
+			tint = Color("#a47d86")
+		tint.a = 0.38
+		var left := anchor + Vector2(-25.0, 0.0)
+		var right := anchor + Vector2(25.0, 0.0)
+		var crown := anchor + Vector2(0.0, -54.0)
+		# Broken side pillars and a shallow arch distinguish a doorway from a solid wall.
+		draw_line(left, left + Vector2(0.0, -45.0), tint, 4.0, true)
+		draw_line(right, right + Vector2(0.0, -45.0), tint, 4.0, true)
+		draw_arc(crown, 25.0, PI, TAU, 16, tint, 3.0, true)
+		draw_line(left + Vector2(0.0, -45.0), crown + Vector2(-16.0, -1.0), tint, 3.0, true)
+		draw_line(crown + Vector2(16.0, -1.0), right + Vector2(0.0, -45.0), tint, 3.0, true)
+		var inner := Color(tint.r, tint.g, tint.b, 0.055)
+		draw_rect(Rect2(anchor + Vector2(-17.0, -39.0), Vector2(34.0, 39.0)), inner, true)
 
 func _draw_debug_exit_markers() -> void:
 	for marker in debug_exit_markers:
@@ -2936,6 +2965,10 @@ func _draw() -> void:
 			_draw_primordial_hollow_landmarks()
 		"H09":
 			_draw_cliff_cave_landmarks()
+
+	# Exit architecture is visible in normal play; hidden resonance gates remain visually concealed.
+	# 正常游玩中可远眺实体出口建筑；灵视隐藏门不绘制，避免破坏发现感。
+	_draw_route_goal_landmarks()
 
 	for platform in platforms:
 		# A shallow tinted side face adds material depth while keeping the walkable top unmistakable.
