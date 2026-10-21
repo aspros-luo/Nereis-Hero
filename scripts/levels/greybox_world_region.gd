@@ -63,9 +63,12 @@ func _ready() -> void:
 		# 主线内城入口来自大圣堂；持久记录该事实，供 H07 的镜街侧门判断是否允许回程。
 		WorldState.record_achievement("reached_A12_via_A10")
 
+	# Configure authored ledges before creating the floor so A2's pit ledges remain in the
+	# shared platform list used by the renderer; _configure_platforms() clears that list.
+	# 先登记平台，再建立地面：_configure_platforms() 会清空绘制列表，顺序错误会让坑底碰撞存在但平台不绘制。
+	_configure_platforms()
 	_create_floor()
 	_create_boundaries()
-	_configure_platforms()
 	_spawn_region_ambience()
 	# Spawn the local bridge before the Hero so its visual is drawn behind the character.
 	# 局部桥先于主角生成，确保桥体绘制在角色后方。
