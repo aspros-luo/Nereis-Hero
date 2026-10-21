@@ -903,6 +903,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1245, 220, 115, 18))
 			_add_platform(Rect2(1360, 285, 115, 18))
 			_add_platform(Rect2(1475, 330, 120, 18))
+			_add_platform(Rect2(1490, 405, 130, 18))
 			# Central pilgrim ribs: upper crossing and lower shelves weave around one another.
 			_add_platform(Rect2(1585, 365, 115, 18))
 			_add_platform(Rect2(1710, 310, 120, 18))
@@ -915,7 +916,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1975, 525, 125, 18))
 			_add_platform(Rect2(2100, 565, 120, 18))
 			# C04 remains on a supported highroad shelf; the lower path can pass beneath it.
-			_add_platform(Rect2(1740, 515, 125, 18))
+			_add_platform(Rect2(1740, 510, 125, 18))
 			_add_platform(Rect2(1840, 535, 140, 18))
 			_add_platform(Rect2(1975, 465, 115, 18))
 			# Eastern ravine: an upper bridge and a deep underpass share the same footprint.
@@ -929,7 +930,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(2985, 400, 115, 18))
 			_add_platform(Rect2(3075, 335, 115, 18))
 			_add_platform(Rect2(3165, 390, 115, 18))
-			_add_platform(Rect2(3220, 500, 130, 18))
+			_add_platform(Rect2(3220, 510, 130, 18))
 			# C03's remote canopy exit has a real landing at the authored anchor height.
 			_add_platform(Rect2(3335, 490, 145, 18))
 			# A second, higher route crosses above the ravine and rejoins the exit approach.
@@ -1780,7 +1781,7 @@ func _spawn_region_exits() -> void:
 			)
 			# H02 belongs to the optional low Bell Grave space, not the far-eastern main-floor edge.
 			# H02 应位于钟墓坑底的可选低位空间，而不是地图最东侧的主地面。
-			_spawn_h02_gate(960.0, 610.0)
+			_spawn_h02_gate(960.0, floor_y + 125.0)
 			# C04 is opened from A5; once opened, keep the reverse entrance persistent on A2.
 			# C04 在 A5 侧开启；开启后，A2 侧永久生成对应回程门。
 			if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
@@ -2343,7 +2344,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.required_resonance = 20
 			route.bridge_start_x = 1380.0
 			route.bridge_end_x = 1610.0
-			route.bridge_y = 328.0
+			route.bridge_y = 405.0
 			route.prompt_text = "E  ANCHOR THE BELLGRAVE CANOPY"
 		"A3":
 			route = Node2D.new()
@@ -2984,7 +2985,7 @@ func _draw_biome_color_wash() -> void:
 			accent = Color("#d0a4ff")
 	# The wash is intentionally translucent; gameplay silhouettes and exit markers stay dominant.
 	# 色彩覆盖保持半透明，避免角色剪影与出口标记被淹没。
-	draw_rect(Rect2(0.0, 0.0, map_width, 720.0), Color(wash.r, wash.g, wash.b, 0.20))
+	draw_rect(Rect2(0.0, 0.0, map_width, 1000.0 if region_id == "A2" else 720.0), Color(wash.r, wash.g, wash.b, 0.20))
 	for band in range(4):
 		var band_y := 150.0 + float(band) * 118.0
 		var band_alpha := 0.025 + float(band % 2) * 0.012
