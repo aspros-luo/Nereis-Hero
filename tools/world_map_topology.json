@@ -4112,7 +4112,9 @@
       "未解锁SC011时主路依然连通；解锁后从两端都能使用回环",
       "H02可选、可返回A2，不阻断C03，也不要求新增NPC或新剧情",
       "检验A2目标提示是否与无旁白探索方向冲突；本轮不修改核心秘密或新增叙事事实",
-      "核对 SC011 与 SC068 是否描述重复/冲突的 S01↔S04 连接；当前拓扑包含 SC068 升降机合同，但 elevators 数组为空。"
+      "核对 SC011 与 SC068 是否描述重复/冲突的 S01↔S04 连接；当前拓扑包含 SC068 升降机合同，但 elevators 数组为空。",
+      "新增 A2-LA/A2-LB/A2-LC 均须实机逐段走通；若只能按坐标图推断可达，不得标记为真实回环。",
+      "分别从每条回环的两个方向进入，检查是否需要精确到像素的跳跃、是否有无法回返的落差、是否会误触 C03/C04/H02。"
     ],
     "known_gaps": [
       "SC011 的旧 opened_forest_rope_bridge 在灰盒控制器中没有运行时引用；已改为候选复用现有局部共鸣路线，但桥体端点是否连接 S02↔S04 尚未证明。",
@@ -4160,6 +4162,83 @@
         "status": "code_committed_runtime_unverified",
         "source": "scripts/levels/greybox_world_region.gd",
         "details": "Reorganized A2 into forest-entry climb, Bell Grave gallery, broad canopy landings, pilgrim-bridge approach, exposed tower ribs, and east-ravine upper/lower approaches. Added landmark silhouettes. Restored support shelves for C03 anchor x=3400/y=380, C03 return x=3220/y=400, and C04 return x=1750/y=400. Requires Godot runtime route/jump/transition acceptance."
+      }
+    ],
+    "local_loop_contracts": [
+      {
+        "id": "A2-LA",
+        "name": "雾林—树冠—钟墓外圈回环",
+        "path": [
+          "A2-S01",
+          "A2-S04",
+          "A2-S02",
+          "A2-S01"
+        ],
+        "mechanism": "SC009 地面至树冠攀升 + 钟墓外圈分支；检查共鸣桥是否为可选的捷径而非必经路线",
+        "purpose": "从地面进入高层后能绕回熟悉的钟墓外圈与入口",
+        "status": "geometry_reworked_runtime_connectivity_unverified"
+      },
+      {
+        "id": "A2-LB",
+        "name": "钟墓坑底—回返台—外圈回环",
+        "path": [
+          "A2-S02",
+          "A2-S03",
+          "A2-S02"
+        ],
+        "mechanism": "SC008 真实地面断口、坑底承托与两侧回返台；目前属于下探与回返的最小闭环，后续实机验证后再决定是否需要更深的横向支路",
+        "purpose": "坑底探索有风险但不形成软锁，H02 不作为主路前置",
+        "status": "geometry_present_runtime_jump_feasibility_unverified"
+      },
+      {
+        "id": "A2-LC",
+        "name": "东侧残桥—沟壑下路—东端出口回环",
+        "path": [
+          "A2-S06",
+          "A2-S07",
+          "A2-S06"
+        ],
+        "mechanism": "SC072 从树冠下探至低位绕行，SC073 在东侧重新接回树冠；两端落差必须实测",
+        "purpose": "玩家可以选择较低的安全绕行或较高的风险路线，并在东端汇合",
+        "status": "platforms_added_runtime_reachability_unverified"
+      }
+    ],
+    "cross_region_loop_contracts": [
+      {
+        "id": "L-A2-01",
+        "path": [
+          "A2-S01",
+          "A2-S02",
+          "A2-S04",
+          "A2-S01"
+        ],
+        "mechanism": "候选：复用 A2_BELLGRAVE_CANOPY_CROSSING（鸣响值20+灵视）；先验证桥体是否真实连接 S02 与 S04",
+        "purpose": "把地面探索与树冠路线连成可复用回环",
+        "state": "candidate_reuse_existing_runtime_route_not_verified"
+      },
+      {
+        "id": "L-A2-02",
+        "path": [
+          "A2-S04",
+          "A3-S04",
+          "A3",
+          "A2-S04"
+        ],
+        "mechanism": "C03 two-way canopy connection",
+        "purpose": "A2/A3之间的高位往返",
+        "state": "existing_topology_contract_not_runtime_verified"
+      },
+      {
+        "id": "L-A2-03",
+        "path": [
+          "A2-S05",
+          "A5-S03",
+          "A5",
+          "A2-S05"
+        ],
+        "mechanism": "C04 opened from A5",
+        "purpose": "中后期高路捷径",
+        "state": "existing_topology_contract_not_runtime_verified"
       }
     ]
   }
