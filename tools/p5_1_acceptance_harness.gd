@@ -483,7 +483,7 @@ func _validate_staged_route(connection: Dictionary) -> String:
 		return ""
 
 	var connection_id := str(connection.get("id", ""))
-	var had_drain_flag := "opened_old_drainage_link_from_A4" in world_state.achievement_flags
+	var had_drain_flag: bool = world_state.achievement_flags.has("opened_old_drainage_link_from_A4")
 	var validated_hops: Array[String] = []
 	for index in range(chain.size() - 1):
 		var source_path := str(chain[index])
@@ -530,7 +530,7 @@ func _validate_staged_route(connection: Dictionary) -> String:
 func _validate_c24_phase_gate() -> void:
 	# Verify both states of C24's real intermediate scene: closed before the A4-side
 	# interaction, and connected to A3 only after the persistent flag is present.
-	var had_flag := "opened_old_drainage_link_from_A4" in world_state.achievement_flags
+	var had_flag: bool = world_state.achievement_flags.has("opened_old_drainage_link_from_A4")
 	world_state.achievement_flags.erase("opened_old_drainage_link_from_A4")
 	var locked := await _load_scene_path("res://scenes/old_drain_exploration.tscn")
 	if locked == null:
