@@ -589,15 +589,47 @@ func _spawn_ui() -> void:
 	hud.set_story_mode("A1｜边境村庄", "自由探索村庄；按 E 与附近的人物和可调查物件互动。")
 
 func _create_floor() -> void:
-	var floor := StaticBody2D.new()
-	floor.name = "Ground"
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(3000, 40)
-	shape.shape = rectangle
-	shape.position = Vector2(1500, 540)
-	floor.add_child(shape)
-	add_child(floor)
+	# Two short openings form the well-side descent and the far-side return hatch.
+	# 两处短断口构成井侧下沉入口与远端回返出口。
+	var floor_segments: Array[Vector2] = [
+		Vector2(0.0, 1180.0),
+		Vector2(1260.0, 400.0),
+		Vector2(1740.0, 1260.0),
+	]
+	for index in range(floor_segments.size()):
+		var segment := floor_segments[index]
+		var floor := StaticBody2D.new()
+		floor.name = "Ground_%02d" % index
+		floor.position.x = segment.x
+		var shape := CollisionShape2D.new()
+		var rectangle := RectangleShape2D.new()
+		rectangle.size = Vector2(segment.y, 40.0)
+		shape.shape = rectangle
+		shape.position = Vector2(segment.y * 0.5, 540.0)
+		floor.add_child(shape)
+		add_child(floor)
+	_create_village_lower_route()
+
+func _create_village_lower_route() -> void:
+	# These shelves sit below the floor's underside and stay within one ordinary jump of the surface.
+	# 这些石沿位于地面底部以下，并保持在普通跳跃可回到地表的高度范围内。
+	var route := [
+		Rect2(1200.0, floor_y + 90.0, 145.0, 18.0),
+		Rect2(1365.0, floor_y + 135.0, 145.0, 18.0),
+		Rect2(1530.0, floor_y + 90.0, 145.0, 18.0),
+	]
+	for platform_rect in route:
+		var body := StaticBody2D.new()
+		body.name = "VillageLowerRoutePlatform"
+		body.position = platform_rect.position
+		var shape := CollisionShape2D.new()
+		var rectangle := RectangleShape2D.new()
+		rectangle.size = platform_rect.size
+		shape.shape = rectangle
+		shape.position = platform_rect.size * 0.5
+		shape.one_way_collision = true
+		body.add_child(shape)
+		add_child(body)
 
 func _create_village_rooftop_route() -> void:
 	# Optional rooftop route: each short ledge is within ordinary jump reach of the previous one.
@@ -724,6 +756,17 @@ func _mark_input_handled() -> void:
 func _draw() -> void:
 	draw_texture_rect(VILLAGE_BACKDROP, Rect2(0, 0, 3000, 720), false)
 	draw_texture_rect(VILLAGE_GROUND_STRIP, Rect2(0, 520, 3000, 200), false)
+	# Show the two floor cuts and their lower ledges so the collision route is legible in play.
+	# 绘出两处地面断口和下层石沿，确保可见地形与实际碰撞路线一致。
+	draw_rect(Rect2(1180.0, 520.0, 80.0, 200.0), Color("#10131b"))
+	draw_rect(Rect2(1660.0, 520.0, 80.0, 200.0), Color("#10131b"))
+	for ledge in [
+		Rect2(1200.0, floor_y + 90.0, 145.0, 18.0),
+		Rect2(1365.0, floor_y + 135.0, 145.0, 18.0),
+		Rect2(1530.0, floor_y + 90.0, 145.0, 18.0),
+	]:
+		draw_rect(ledge, Color("#493b43"))
+		draw_line(ledge.position, Vector2(ledge.end.x, ledge.position.y), Color("#8d747d"), 2.0)
 	for x in range(0, 3000, 64):
 		draw_line(Vector2(x, 520), Vector2(x + 32, 552), Color("#302a30"), 2.0)
 
