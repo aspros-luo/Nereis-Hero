@@ -388,9 +388,9 @@ def validate(data: dict[str, Any]) -> list[str]:
 
     c03 = next((edge for edge in connections if edge.get("id") == "C03"), None)
     c03_spatial = c03.get("spatial_contract", {}) if c03 else {}
-    if c03_spatial.get("from_region_anchor") != {"region": "A2", "x": 2240, "y_offset": -160}:
+    if c03_spatial.get("from_region_anchor") != {"region": "A2", "x": 3400, "y_offset": -160}:
         fail(errors, "C03 main exit must remain on the A2 canopy high road.")
-    if not (c03_spatial.get("return_spawn", {}).get("region") == "A2" and c03_spatial.get("return_spawn", {}).get("x") == 2120 and c03_spatial.get("return_spawn", {}).get("y_offset") == -140 and c03_spatial.get("return_spawn", {}).get("spawn_side") == "east"):
+    if not (c03_spatial.get("return_spawn", {}).get("region") == "A2" and c03_spatial.get("return_spawn", {}).get("x") == 3220 and c03_spatial.get("return_spawn", {}).get("y_offset") == -140 and c03_spatial.get("return_spawn", {}).get("spawn_side") == "east"):
         fail(errors, "C03 return spawn must align with the A2 canopy approach.")
     c16 = next((edge for edge in connections if edge.get("id") == "C16"), None)
     c16_spatial = c16.get("spatial_contract", {}) if c16 else {}
