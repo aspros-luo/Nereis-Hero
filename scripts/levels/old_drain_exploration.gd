@@ -27,10 +27,10 @@ func _ready() -> void:
 	WorldState.set_location("old_drain_exploration")
 	_build_floor_and_descent()
 	_spawn_hero(_spawn_x_for_side(entry_side), _spawn_y_for_side(entry_side))
-	_spawn_door(150.0, 540.0, "E  返回边境村庄", _return_to_village)
+	_spawn_door(150.0, 540.0, "E  返回边境村庄", _return_to_village, VILLAGE_SCENE, "city_cut_return")
 	if CONNECTION_FLAG in WorldState.achievement_flags:
-		_spawn_door(2260.0, 690.0, "E  沿旧排水道进入城区", _enter_city)
-		_spawn_door(1360.0, 690.0, "E  返回旧水库", _return_to_reservoir)
+		_spawn_door(2260.0, 690.0, "E  沿旧排水道进入城区", _enter_city, CITY_SCENE, "village_city_cut")
+		_spawn_door(1360.0, 690.0, "E  返回旧水库", _return_to_reservoir, RESERVOIR_SCENE, "old_drain_link")
 	else:
 		_spawn_door(2260.0, 690.0, "E  检查被堵住的闸门", _inspect_blocked_gate)
 	_spawn_rat(900.0)
@@ -137,7 +137,7 @@ func _spawn_ui() -> void:
 	hud.bind_hero(hero)
 	hud.set_story_mode("A1/A3/A4｜旧排水通道", "向下探索；东侧闸门暂时封闭，找到另一侧后再回来。")
 
-func _spawn_door(x: float, y: float, prompt: String, callback: Callable) -> void:
+func _spawn_door(x: float, y: float, prompt: String, callback: Callable, target_scene: String = "", spawn_side: String = "") -> void:
 	var door := Area2D.new()
 	door.set_script(DOOR_SCRIPT)
 	door.position = Vector2(x, y)
@@ -148,6 +148,11 @@ func _spawn_door(x: float, y: float, prompt: String, callback: Callable) -> void
 	shape.shape = rectangle
 	shape.position = Vector2(0.0, -56.0)
 	door.add_child(shape)
+	if not target_scene.is_empty() and not spawn_side.is_empty():
+		door.set_meta("p5_1_exit_contract", true)
+		door.set_meta("p5_1_target_scene", target_scene)
+		door.set_meta("p5_1_target_region", "A1" if target_scene == VILLAGE_SCENE else ("A3" if target_scene == CITY_SCENE else "A4"))
+		door.set_meta("p5_1_spawn_side", spawn_side)
 	add_child(door)
 	door.interacted.connect(callback)
 
