@@ -369,10 +369,10 @@ def main() -> int:
                 for item in topology.get("provisional_regions", [])
             )):
                 errors.append("H09 must remain provisional and non-canonical until narrative approval.")
-            if len(regions) != 14 or len(connections) != 24 or len(subregions) != 76 or len(intra_connections) != 71 or len(elevator_contracts) != 8:
+            if len(regions) != 14 or len(connections) != 24 or len(subregions) != 78 or len(intra_connections) != 73 or len(elevator_contracts) != 8:
                 errors.append(
                     "World map inventory drift: expected 14 regions / 24 C-connections / "
-                    "76 subregions / 71 intra-region connections / 8 elevator contracts, got "
+                    "78 subregions / 73 intra-region connections / 8 elevator contracts, got "
                     f"{len(regions)} / {len(connections)} / {len(subregions)} / "
                     f"{len(intra_connections)} / {len(elevator_contracts)}."
                 )
