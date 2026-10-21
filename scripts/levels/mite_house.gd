@@ -116,6 +116,10 @@ func _spawn_exit() -> void:
     shape.shape = rectangle
     shape.position = Vector2(0, -65)
     exit.add_child(shape)
+    exit.set_meta("p5_1_exit_contract", true)
+    exit.set_meta("p5_1_target_scene", "res://scenes/village_hub.tscn")
+    exit.set_meta("p5_1_target_region", "A1")
+    exit.set_meta("p5_1_spawn_side", "mite_house_return")
     add_child(exit)
     exit.reached.connect(func() -> void:
         # Return beside the matching exterior door, not at the A0 arrival point or inside its trigger.
