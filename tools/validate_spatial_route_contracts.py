@@ -622,15 +622,16 @@ def main() -> int:
             for left, platform_y, width, _height in platform_rects.get("A2", [])
         )
         require(errors, supported, f"{label}: expected support platform at x={spawn_x:g}, y={spawn_y:g}.")
-    c04 = edges.get("C04", {}).get("spatial_contract", {})
+    c04_edge = edges.get("C04", {})
+    c04 = c04_edge.get("spatial_contract", {})
     c04_return = c04.get("return_spawn", {})
     c04_from = c04.get("from_region_anchor", {})
     c04_to = c04.get("to_region_anchor", {})
     require(
         errors,
-        c04.get("initial_access") == "blocked"
-        and c04.get("opens_from") == "A5"
-        and c04.get("unlock_condition") == "reached_A5_and_opened_old_pilgrim_highroad"
+        c04_edge.get("initial_access") == "blocked"
+        and c04_edge.get("opens_from") == "A5"
+        and c04_edge.get("unlock_condition") == "reached_A5_and_opened_old_pilgrim_highroad"
         and c04_from.get("region") == "A2" and c04_from.get("x") == 1880
         and c04_to.get("region") == "A5" and c04_to.get("x") == 520
         and c04_return.get("region") == "A2" and c04_return.get("x") == 1750
