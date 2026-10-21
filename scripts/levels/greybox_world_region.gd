@@ -3003,6 +3003,38 @@ func _region_backdrop_texture() -> Texture2D:
 			return RUINS_BACKDROP
 
 
+func _draw_floor_gap_visuals() -> void:
+	var gaps: Array[Vector2] = []
+	match region_id:
+		"A1":
+			gaps.append(Vector2(620.0, 520.0))
+		"A2":
+			gaps.append(Vector2(860.0, 200.0))
+			gaps.append(Vector2(2420.0, 240.0))
+		"A3":
+			gaps.append(Vector2(820.0, 420.0))
+		"A4":
+			gaps.append(Vector2(780.0, 500.0))
+		"A5":
+			gaps.append(Vector2(820.0, 500.0))
+		"A6":
+			gaps.append(Vector2(1380.0, 390.0))
+		"A7", "A12":
+			gaps.append(Vector2(800.0, 500.0))
+		"A8", "A9":
+			gaps.append(Vector2(1350.0, 430.0))
+		"A10", "A11":
+			gaps.append(Vector2(1350.0, 420.0))
+		"A13":
+			gaps.append(Vector2(850.0, 500.0))
+		"H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08", "H09":
+			gaps.append(Vector2(760.0, 400.0))
+	for gap in gaps:
+		draw_rect(Rect2(gap.x, floor_y - 1.0, gap.y, 260.0), Color("#171820"))
+		draw_rect(Rect2(gap.x, floor_y - 1.0, 10.0, 150.0), Color("#51434a"))
+		draw_rect(Rect2(gap.x + gap.y - 10.0, floor_y - 1.0, 10.0, 150.0), Color("#51434a"))
+
+
 func _draw() -> void:
 	var backdrop: Texture2D = _region_backdrop_texture()
 	if backdrop != null:
@@ -3014,13 +3046,6 @@ func _draw() -> void:
 	_draw_midground_accents()
 	draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
 	_draw_ground_detail()
-	if region_id == "A2":
-		# Draw the pit cut after floor stains/seams so no decorative line falsely bridges the opening.
-		# 坑口断面必须画在地面污渍/接缝之后，避免装饰线把真实断口视觉上连成地面。
-		draw_rect(Rect2(860.0, floor_y - 1.0, 200.0, 260.0), Color("#171820"))
-		draw_rect(Rect2(860.0, floor_y - 1.0, 10.0, 150.0), Color("#51434a"))
-		draw_rect(Rect2(1050.0, floor_y - 1.0, 10.0, 150.0), Color("#51434a"))
-
 	# Replace the old repetitive ground slashes with sparse, broken stone cracks and low atmospheric haze.
 	# 将重复的地面斜线改为稀疏断裂石纹与贴地薄雾，降低灰盒画面的噪声感。
 	var atmosphere := _atmosphere_color()
@@ -3084,6 +3109,9 @@ func _draw() -> void:
 	# Exit architecture is visible in normal play; hidden resonance gates remain visually concealed.
 	# 正常游玩中可远眺实体出口建筑；灵视隐藏门不绘制，避免破坏发现感。
 	_draw_route_goal_landmarks()
+	# Draw all floor cuts after ground seams and landmarks so art never falsely bridges a collision gap.
+	# 在地面接缝和地标之后绘制全部断口，避免美术线条错误地把碰撞缺口连起来。
+	_draw_floor_gap_visuals()
 
 	for platform in platforms:
 		# A shallow tinted side face adds material depth while keeping the walkable top unmistakable.
