@@ -2264,8 +2264,8 @@ def main() -> int:
         'shelf_start = 1410.0',
         'shelf_start = 1380.0',
         'shelf_start = 790.0',
-        'floor_y + 100.0',
-        'floor_y + 145.0',
+        'floor_y + 85.0',
+        'floor_y + 130.0',
     ):
         require(lower_route_builder, contract, f"additional lower-route shelf contract {contract}", errors)
 
