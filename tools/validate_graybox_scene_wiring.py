@@ -333,8 +333,8 @@ def main() -> int:
                         except (TypeError, ValueError):
                             errors.append(f"Connection {edge_id} {anchor_key}.{coordinate_key} is not numeric.")
                             continue
-                        if coordinate_key == "x" and not 0.0 <= coordinate <= 2600.0:
-                            errors.append(f"Connection {edge_id} {anchor_key}.x={coordinate:g} is outside the 2600px map width.")
+                        if coordinate_key == "x" and not 0.0 <= coordinate <= (3600.0 if anchor.get("region") == "A2" else 2600.0):
+                            errors.append(f"Connection {edge_id} {anchor_key}.x={coordinate:g} is outside the authored map width for {anchor.get('region')}.")
                         if coordinate_key == "y_offset" and not -300.0 <= coordinate <= 0.0:
                             errors.append(f"Connection {edge_id} {anchor_key}.y_offset={coordinate:g} is outside the supported vertical contract.")
 
@@ -718,11 +718,11 @@ def main() -> int:
     require(region_script, '"res://scenes/village_hub.tscn", "north_gate"', "C02 A2-to-A1 reverse transition", errors)
 
     # C03 must remain a genuinely supported two-way canopy route between A2 and A3.
-    require(region_script, '2240.0, "E  沿树冠高路进入被遗忘的城区"', "C03 A2 eastern canopy door anchor", errors)
+    require(region_script, '3400.0, "E  沿树冠高路进入被遗忘的城区"', "C03 A2 eastern canopy door anchor", errors)
     require(region_script, '"res://scenes/forgotten_city.tscn", "city_canopy_entry",\n\t\t\t\ttrue, "", "", floor_y - 160.0', "C03 A2 door transition and elevation", errors)
-    require(region_script, "_add_platform(Rect2(2220, 380, 120, 18))", "C03 A2 exit support platform", errors)
+    require(region_script, "_add_platform(Rect2(3340, 380, 140, 18))", "C03 A2 exit support platform", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return X mapping branch", errors)
-    require(region_script, "return 2120.0", "C03 A2 return X landing", errors)
+    require(region_script, "return 3220.0", "C03 A2 return X landing", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return height mapping branch", errors)
     require(region_script, "return floor_y - 140.0", "C03 A2 return height mapping", errors)
     require(region_script, 'if region_id == "A3" and side == "city_canopy_entry":', "C03 A3 arrival X mapping branch", errors)
@@ -839,7 +839,7 @@ def main() -> int:
                 platform_audit_count += len(platforms)
                 platforms_by_region[region_id] = platforms
                 # Node zero is the continuous ground floor. Platform tuples are x, y, width, height.
-                nodes = [(0.0, 540.0, 3000.0 if region_id == "A1" else 2600.0, 40.0, True)] + [
+                nodes = [(0.0, 540.0, 3000.0 if region_id == "A1" else (3600.0 if region_id == "A2" else 2600.0), 40.0, True)] + [
                     (x, y, width, height, False) for x, y, width, height in platforms
                 ]
                 adjacency: list[list[int]] = [[] for _ in nodes]
@@ -1490,7 +1490,7 @@ def main() -> int:
     # Spawn-side contracts keep the Hero clear of the very door/gate used to enter a region.
     # 出口出生点必须避开刚刚使用的门与隐藏入口，防止落地即重新触发 E 交互。
     spawn_contracts = [
-        ('if region_id == "A2" and side == "east":', "return 2120.0"),
+        ('if region_id == "A2" and side == "east":', "return 3220.0"),
         ('if region_id == "A9" and side == "mirror":', "return 1680.0"),
         ('if region_id == "A11" and side == "chapel_entry":', "return map_width - 700.0"),
         ('if region_id == "H02" and side == "bell_tower_entry":', "return map_width - 360.0"),
@@ -1619,7 +1619,7 @@ def main() -> int:
                     )
             spawn_landing_audit_count += 1
             region_platforms = platforms_by_region.get(region_id, [])
-            ground_supported = abs(spawn_y_offset) <= 0.1 and 0.0 <= spawn_x <= 2600.0
+            ground_supported = abs(spawn_y_offset) <= 0.1 and 0.0 <= spawn_x <= (3600.0 if region_id == "A2" else 2600.0)
             supported = ground_supported or any(
                 abs(platform_y - (540.0 + spawn_y_offset)) <= 1.5
                 and spawn_x >= platform_x - 0.1
