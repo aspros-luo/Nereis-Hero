@@ -2267,6 +2267,10 @@ def main() -> int:
     )
     for contract in required_floor_gaps:
         require(floor_builder, contract, f"world lower-floor contract {contract}", errors)
+    require(region_script, "func _draw_floor_gap_visuals() -> void:", "visible lower-floor cut renderer", errors)
+    require(region_script, 'gaps.append(Vector2(860.0, 200.0))', "A2 Bell Grave visible cut", errors)
+    require(region_script, 'gaps.append(Vector2(2420.0, 240.0))', "A2 eastern ravine visible cut", errors)
+    require(region_script, 'gaps.append(Vector2(760.0, 400.0))', "hidden-region visible lower cut", errors)
     lower_route_start = region_script.find("func _configure_additional_lower_route_platforms()")
     lower_route_end = region_script.find("func _add_platform", lower_route_start)
     lower_route_builder = region_script[lower_route_start:lower_route_end] if lower_route_start >= 0 and lower_route_end > lower_route_start else ""
