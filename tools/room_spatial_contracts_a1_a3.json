@@ -1,0 +1,1402 @@
+{
+  "schema_version": 1,
+  "title": "Nereis Hero — First Playable Network Spatial Contracts",
+  "status": "design_contract_not_runtime_verified",
+  "branch": "feature/story-map-progression",
+  "scope": "A1-A3 initial build target; coordinates are design coordinates to be playtested and adjusted in Godot",
+  "coordinate_convention": "rect=[x,y,width,height], origin top-left; spawn/exit/landmark at=[x,y]",
+  "rooms": [
+    {
+      "room_id": "A1-R01",
+      "title": "村庄街巷",
+      "size": [
+        2100,
+        1200
+      ],
+      "shape": "wide",
+      "layers": [
+        "street",
+        "roofline",
+        "cellar_glimpses"
+      ],
+      "spawn": {
+        "id": "from_prologue",
+        "at": [
+          150,
+          850
+        ],
+        "support": "ground_01"
+      },
+      "terrain": [
+        {
+          "id": "ground_01",
+          "rect": [
+            0,
+            900,
+            480,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ground_02",
+          "rect": [
+            590,
+            900,
+            410,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ground_03",
+          "rect": [
+            1120,
+            900,
+            500,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ground_04",
+          "rect": [
+            1730,
+            900,
+            370,
+            80
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "roof_01",
+          "rect": [
+            270,
+            700,
+            230,
+            26
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "roof_02",
+          "rect": [
+            620,
+            600,
+            250,
+            26
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "roof_03",
+          "rect": [
+            1050,
+            690,
+            220,
+            26
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "roof_04",
+          "rect": [
+            1460,
+            560,
+            270,
+            26
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "well_lip",
+          "rect": [
+            820,
+            1030,
+            260,
+            26
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "C02",
+          "target": "A2-R01",
+          "at": [
+            1990,
+            900
+          ],
+          "kind": "north_gate",
+          "condition": "village_defense_survived"
+        },
+        {
+          "id": "C24",
+          "target": "A3-R01",
+          "at": [
+            1770,
+            900
+          ],
+          "kind": "concealed_shortcut",
+          "condition": "village_defense_survived"
+        },
+        {
+          "id": "I-A1-01",
+          "target": "A1-R02",
+          "at": [
+            950,
+            1040
+          ],
+          "kind": "well_drop",
+          "condition": "none"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "village_bell",
+          "at": [
+            1510,
+            500
+          ],
+          "visibility": "visible_from_street",
+          "purpose": "orient_player_to_north_east"
+        },
+        {
+          "id": "old_well",
+          "at": [
+            950,
+            1000
+          ],
+          "visibility": "visible",
+          "purpose": "deep_vertical_route"
+        }
+      ],
+      "route_contracts": [
+        "Street path must not be a flat uninterrupted corridor; use broken paving, house thresholds, low roof hops and a readable well mouth.",
+        "The well drop must be visually readable from the street but must not accidentally catch the player on decorative collision.",
+        "C02 and C24 must be distinct entrances with independent unlock behavior."
+      ]
+    },
+    {
+      "room_id": "A1-R02",
+      "title": "老井竖井",
+      "size": [
+        900,
+        1900
+      ],
+      "shape": "tall",
+      "layers": [
+        "well_shaft",
+        "buried_masonry",
+        "echo_chamber_sightline"
+      ],
+      "spawn": {
+        "id": "from_A1-R01",
+        "at": [
+          450,
+          140
+        ],
+        "support": "upper_rim"
+      },
+      "terrain": [
+        {
+          "id": "upper_rim",
+          "rect": [
+            120,
+            160,
+            660,
+            50
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "ledge_01",
+          "rect": [
+            80,
+            400,
+            300,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_02",
+          "rect": [
+            500,
+            620,
+            300,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_03",
+          "rect": [
+            100,
+            860,
+            290,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_04",
+          "rect": [
+            480,
+            1090,
+            320,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "ledge_05",
+          "rect": [
+            80,
+            1320,
+            310,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "bottom_floor",
+          "rect": [
+            0,
+            1670,
+            900,
+            80
+          ],
+          "type": "ground"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I-A1-01",
+          "target": "A1-R01",
+          "at": [
+            450,
+            160
+          ],
+          "kind": "return_ladder",
+          "condition": "none"
+        },
+        {
+          "id": "H01-ENTRY",
+          "target": "H01-R01",
+          "at": [
+            730,
+            1660
+          ],
+          "kind": "hidden_crack",
+          "condition": "resonance_sight_and_H01_contract"
+        },
+        {
+          "id": "C06",
+          "target": "A4-R03",
+          "at": [
+            450,
+            1670
+          ],
+          "kind": "watergate_tunnel",
+          "condition": "opened_watergate_and_village_well_exit"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "echo_light",
+          "at": [
+            730,
+            1510
+          ],
+          "visibility": "visible_from_upper_shaft",
+          "purpose": "tease_hidden_well_route"
+        },
+        {
+          "id": "water_gate",
+          "at": [
+            450,
+            1650
+          ],
+          "visibility": "visible_from_bottom",
+          "purpose": "downward_link_to_old_reservoir"
+        }
+      ],
+      "route_contracts": [
+        "The shaft must be traversable downward with safe landing pockets and visible ledges; do not make it a straight elevator corridor.",
+        "The bottom return to the village and the C06 watergate route must be spatially distinct.",
+        "H01 is optional and must not block reaching the bottom or returning."
+      ]
+    },
+    {
+      "room_id": "A1-R03",
+      "title": "北门高路",
+      "size": [
+        1800,
+        1400
+      ],
+      "shape": "tall",
+      "layers": [
+        "outer_wall",
+        "gate_walk",
+        "ravine_view"
+      ],
+      "spawn": {
+        "id": "from_A1-R01",
+        "at": [
+          130,
+          950
+        ],
+        "support": "gate_lower"
+      },
+      "terrain": [
+        {
+          "id": "gate_lower",
+          "rect": [
+            0,
+            1000,
+            450,
+            70
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "wall_ledge_01",
+          "rect": [
+            390,
+            820,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "wall_ledge_02",
+          "rect": [
+            690,
+            650,
+            260,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "wall_ledge_03",
+          "rect": [
+            990,
+            480,
+            300,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "gate_upper",
+          "rect": [
+            1310,
+            360,
+            490,
+            44
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "return_shelf",
+          "rect": [
+            0,
+            1260,
+            470,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "C02",
+          "target": "A2-R03",
+          "at": [
+            1670,
+            360
+          ],
+          "kind": "north_gate_highroad",
+          "condition": "village_defense_survived"
+        },
+        {
+          "id": "C24",
+          "target": "A3-R01",
+          "at": [
+            190,
+            1260
+          ],
+          "kind": "old_drain_drop",
+          "condition": "village_defense_survived"
+        },
+        {
+          "id": "I-A1-03",
+          "target": "A1-R01",
+          "at": [
+            130,
+            1000
+          ],
+          "kind": "drop_return",
+          "condition": "none"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "pilgrim_arch",
+          "at": [
+            1530,
+            280
+          ],
+          "visibility": "visible_from_village",
+          "purpose": "show_later_route_goal"
+        },
+        {
+          "id": "city_silhouette",
+          "at": [
+            1690,
+            160
+          ],
+          "visibility": "far_background",
+          "purpose": "long_term_exploration_goal"
+        }
+      ],
+      "route_contracts": [
+        "This is an elevated route with a controlled drop to the village/old drain, not another horizontal hallway.",
+        "The far city silhouette is background-only until the actual A3/A5 route is opened."
+      ]
+    },
+    {
+      "room_id": "A2-R01",
+      "title": "雾林下层",
+      "size": [
+        2200,
+        1500
+      ],
+      "shape": "wide",
+      "layers": [
+        "mist_floor",
+        "root_caves",
+        "canopy_silhouette"
+      ],
+      "spawn": {
+        "id": "from_A1-R01",
+        "at": [
+          120,
+          1060
+        ],
+        "support": "forest_floor_01"
+      },
+      "terrain": [
+        {
+          "id": "forest_floor_01",
+          "rect": [
+            0,
+            1100,
+            420,
+            70
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "forest_floor_02",
+          "rect": [
+            520,
+            1100,
+            420,
+            70
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "forest_floor_03",
+          "rect": [
+            1050,
+            1100,
+            380,
+            70
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "forest_floor_04",
+          "rect": [
+            1540,
+            1100,
+            660,
+            70
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "root_ledge_01",
+          "rect": [
+            250,
+            850,
+            260,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "root_ledge_02",
+          "rect": [
+            660,
+            690,
+            280,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "root_ledge_03",
+          "rect": [
+            1110,
+            790,
+            260,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "root_ledge_04",
+          "rect": [
+            1500,
+            600,
+            310,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "root_ledge_05",
+          "rect": [
+            1850,
+            850,
+            250,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "C03",
+          "target": "A3-R01",
+          "at": [
+            2150,
+            1100
+          ],
+          "kind": "main_east_pass",
+          "condition": "none"
+        },
+        {
+          "id": "I-A2-01",
+          "target": "A2-R02",
+          "at": [
+            1130,
+            1150
+          ],
+          "kind": "buried_bell_tomb",
+          "condition": "none"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "bell_tomb_roof",
+          "at": [
+            1130,
+            620
+          ],
+          "visibility": "visible_from_forest_floor",
+          "purpose": "attract_player_to_upper_route"
+        },
+        {
+          "id": "far_root_gate",
+          "at": [
+            1950,
+            500
+          ],
+          "visibility": "partially_occluded",
+          "purpose": "tease_later_ability_route"
+        }
+      ],
+      "route_contracts": [
+        "Use root arches and floor-height changes to create a winding path; the player should not see both exits as adjacent door markers.",
+        "The upper route should be visible from below but require a climb around the root mass."
+      ]
+    },
+    {
+      "room_id": "A2-R02",
+      "title": "钟墓回廊",
+      "size": [
+        1150,
+        1750
+      ],
+      "shape": "tall",
+      "layers": [
+        "burial_chambers",
+        "bell_mechanism",
+        "collapsed_lower_gallery"
+      ],
+      "spawn": {
+        "id": "from_A2-R01",
+        "at": [
+          130,
+          360
+        ],
+        "support": "tomb_entry"
+      },
+      "terrain": [
+        {
+          "id": "tomb_entry",
+          "rect": [
+            0,
+            400,
+            350,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "gallery_01",
+          "rect": [
+            420,
+            570,
+            300,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "gallery_02",
+          "rect": [
+            80,
+            760,
+            310,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "gallery_03",
+          "rect": [
+            500,
+            960,
+            300,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "gallery_04",
+          "rect": [
+            170,
+            1190,
+            300,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "tomb_floor",
+          "rect": [
+            0,
+            1510,
+            1150,
+            70
+          ],
+          "type": "ground"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I-A2-01",
+          "target": "A2-R01",
+          "at": [
+            120,
+            400
+          ],
+          "kind": "forest_return",
+          "condition": "none"
+        },
+        {
+          "id": "H02-ENTRY",
+          "target": "H02-R01",
+          "at": [
+            1000,
+            1490
+          ],
+          "kind": "reversed_bell_hidden_seam",
+          "condition": "resonance_sight_and_H02_contract"
+        },
+        {
+          "id": "I-A2-02",
+          "target": "A2-R03",
+          "at": [
+            1000,
+            1510
+          ],
+          "kind": "pilgrim_stair",
+          "condition": "none"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "suspended_bell",
+          "at": [
+            650,
+            700
+          ],
+          "visibility": "visible_from_entry",
+          "purpose": "central_vertical_landmark"
+        },
+        {
+          "id": "sealed_high_door",
+          "at": [
+            930,
+            300
+          ],
+          "visibility": "visible_but_unreachable",
+          "purpose": "future_return_target"
+        }
+      ],
+      "route_contracts": [
+        "The bell mechanism visually links the upper and lower chamber levels; the route bends around it.",
+        "H02 remains optional and returns to A2; it must not become a required C02/C03 gate."
+      ]
+    },
+    {
+      "room_id": "A2-R03",
+      "title": "旧朝圣高路",
+      "size": [
+        1900,
+        1050
+      ],
+      "shape": "wide",
+      "layers": [
+        "highroad",
+        "broken_bridge",
+        "distant_cathedral"
+      ],
+      "spawn": {
+        "id": "from_A2-R02",
+        "at": [
+          130,
+          760
+        ],
+        "support": "road_lower"
+      },
+      "terrain": [
+        {
+          "id": "road_lower",
+          "rect": [
+            0,
+            800,
+            420,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "road_step_01",
+          "rect": [
+            480,
+            690,
+            250,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "road_step_02",
+          "rect": [
+            780,
+            570,
+            260,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "road_step_03",
+          "rect": [
+            1110,
+            450,
+            250,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "road_upper",
+          "rect": [
+            1390,
+            360,
+            510,
+            50
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "broken_bridge_return",
+          "rect": [
+            0,
+            970,
+            400,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I-A2-02",
+          "target": "A2-R02",
+          "at": [
+            130,
+            800
+          ],
+          "kind": "tomb_return",
+          "condition": "none"
+        },
+        {
+          "id": "C02",
+          "target": "A1-R03",
+          "at": [
+            1740,
+            360
+          ],
+          "kind": "north_gate_return",
+          "condition": "village_defense_survived"
+        },
+        {
+          "id": "C04",
+          "target": "A5-R02",
+          "at": [
+            1880,
+            360
+          ],
+          "kind": "old_pilgrim_highroad",
+          "condition": "reached_A5_and_opened_old_pilgrim_highroad"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "battlefield_spires",
+          "at": [
+            1710,
+            250
+          ],
+          "visibility": "visible_from_upper_road",
+          "purpose": "show_C04_destination_before_unlock"
+        },
+        {
+          "id": "village_roofline",
+          "at": [
+            170,
+            660
+          ],
+          "visibility": "visible_below",
+          "purpose": "spatial_orientation"
+        }
+      ],
+      "route_contracts": [
+        "C04 should be a route opened from the far side or by progress; before opening, the destination is visible but not traversable.",
+        "The return route to A1 must remain distinct from the C04 path."
+      ]
+    },
+    {
+      "room_id": "A3-R01",
+      "title": "坍塌街区",
+      "size": [
+        2300,
+        1300
+      ],
+      "shape": "wide",
+      "layers": [
+        "street_level",
+        "collapsed_facades",
+        "substreet_voids"
+      ],
+      "spawn": {
+        "id": "from_A2-R01",
+        "at": [
+          120,
+          930
+        ],
+        "support": "street_01"
+      },
+      "terrain": [
+        {
+          "id": "street_01",
+          "rect": [
+            0,
+            980,
+            380,
+            70
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "street_02",
+          "rect": [
+            470,
+            980,
+            370,
+            70
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "street_03",
+          "rect": [
+            930,
+            980,
+            460,
+            70
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "street_04",
+          "rect": [
+            1510,
+            980,
+            350,
+            70
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "street_05",
+          "rect": [
+            1950,
+            980,
+            350,
+            70
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "facade_ledge_01",
+          "rect": [
+            250,
+            740,
+            260,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "facade_ledge_02",
+          "rect": [
+            640,
+            590,
+            250,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "facade_ledge_03",
+          "rect": [
+            1160,
+            720,
+            280,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "facade_ledge_04",
+          "rect": [
+            1600,
+            560,
+            300,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "substreet_lip",
+          "rect": [
+            930,
+            1190,
+            460,
+            24
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "C03",
+          "target": "A2-R01",
+          "at": [
+            100,
+            980
+          ],
+          "kind": "west_return",
+          "condition": "none"
+        },
+        {
+          "id": "C08",
+          "target": "A5-R01",
+          "at": [
+            2180,
+            980
+          ],
+          "kind": "east_battlefield_gate",
+          "condition": "none"
+        },
+        {
+          "id": "C05",
+          "target": "A4-R01",
+          "at": [
+            1160,
+            1210
+          ],
+          "kind": "drainage_drop",
+          "condition": "sewer_inspection_hatch_contract"
+        },
+        {
+          "id": "C24",
+          "target": "A1-R01",
+          "at": [
+            1920,
+            980
+          ],
+          "kind": "village_old_drain_return",
+          "condition": "village_defense_survived"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "third_street_gap",
+          "at": [
+            1160,
+            650
+          ],
+          "visibility": "visible_if_player_looks_down",
+          "purpose": "hint_H03_without_revealing_it"
+        },
+        {
+          "id": "outer_ring_lift",
+          "at": [
+            1740,
+            400
+          ],
+          "visibility": "distant_silhouette",
+          "purpose": "tease_C16_return_shortcut"
+        }
+      ],
+      "route_contracts": [
+        "This hub needs at least three spatially distinct routes: street, elevated facade walk and drainage drop.",
+        "The C24 return to A1 must not overlap C08's battlefield entrance trigger.",
+        "The old lift is a visible landmark, not an immediately usable door."
+      ]
+    },
+    {
+      "room_id": "A3-R02",
+      "title": "旧市场上层",
+      "size": [
+        1600,
+        1050
+      ],
+      "shape": "wide",
+      "layers": [
+        "market_roof",
+        "hanging_signs",
+        "broken_arcade"
+      ],
+      "spawn": {
+        "id": "from_A3-R01",
+        "at": [
+          100,
+          760
+        ],
+        "support": "market_roof_01"
+      },
+      "terrain": [
+        {
+          "id": "market_roof_01",
+          "rect": [
+            0,
+            800,
+            350,
+            50
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "market_roof_02",
+          "rect": [
+            430,
+            680,
+            280,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "market_roof_03",
+          "rect": [
+            800,
+            540,
+            280,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "market_roof_04",
+          "rect": [
+            1170,
+            420,
+            430,
+            50
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "stall_canopy_01",
+          "rect": [
+            270,
+            580,
+            180,
+            20
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "stall_canopy_02",
+          "rect": [
+            900,
+            360,
+            180,
+            20
+          ],
+          "type": "one_way"
+        }
+      ],
+      "exits": [
+        {
+          "id": "I-A3-02",
+          "target": "A3-R01",
+          "at": [
+            100,
+            800
+          ],
+          "kind": "street_drop",
+          "condition": "none"
+        },
+        {
+          "id": "H03-ENTRY",
+          "target": "H03-R01",
+          "at": [
+            1480,
+            420
+          ],
+          "kind": "erased_street_seam",
+          "condition": "resonance_sight_and_H03_contract"
+        },
+        {
+          "id": "C08",
+          "target": "A5-R01",
+          "at": [
+            1550,
+            420
+          ],
+          "kind": "raised_battlefield_bridge",
+          "condition": "none"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "erased_shopfront",
+          "at": [
+            1360,
+            370
+          ],
+          "visibility": "nearby",
+          "purpose": "hint_hidden_third_street"
+        },
+        {
+          "id": "watchtower",
+          "at": [
+            1520,
+            250
+          ],
+          "visibility": "visible_from_rooftops",
+          "purpose": "long_range_navigation"
+        }
+      ],
+      "route_contracts": [
+        "The market roof route reconnects to the street and gives a higher approach to the battlefield link.",
+        "H03 is a concealed seam embedded in the environment, not a glowing marker."
+      ]
+    },
+    {
+      "room_id": "A3-R03",
+      "title": "排水暗巷",
+      "size": [
+        1900,
+        1500
+      ],
+      "shape": "tall",
+      "layers": [
+        "street_underbelly",
+        "drain_tunnels",
+        "lift_counterweight"
+      ],
+      "spawn": {
+        "id": "from_A3-R01",
+        "at": [
+          130,
+          260
+        ],
+        "support": "drain_upper"
+      },
+      "terrain": [
+        {
+          "id": "drain_upper",
+          "rect": [
+            0,
+            300,
+            420,
+            60
+          ],
+          "type": "ground"
+        },
+        {
+          "id": "pipe_ledge_01",
+          "rect": [
+            490,
+            500,
+            260,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "pipe_ledge_02",
+          "rect": [
+            1000,
+            720,
+            280,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "pipe_ledge_03",
+          "rect": [
+            460,
+            950,
+            270,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "pipe_ledge_04",
+          "rect": [
+            1040,
+            1170,
+            300,
+            24
+          ],
+          "type": "one_way"
+        },
+        {
+          "id": "drain_bottom",
+          "rect": [
+            0,
+            1330,
+            1900,
+            70
+          ],
+          "type": "ground"
+        }
+      ],
+      "exits": [
+        {
+          "id": "C05",
+          "target": "A4-R01",
+          "at": [
+            1730,
+            1330
+          ],
+          "kind": "sewer_inspection_hatch",
+          "condition": "sewer_inspection_hatch_contract"
+        },
+        {
+          "id": "C10",
+          "target": "A6-R03",
+          "at": [
+            170,
+            300
+          ],
+          "kind": "bell_tower_drop_return",
+          "condition": "opened_bell_tower_drop"
+        },
+        {
+          "id": "C16",
+          "target": "A9-R02",
+          "at": [
+            1650,
+            300
+          ],
+          "kind": "old_lift_shaft",
+          "condition": "opened_old_lift_from_A9"
+        },
+        {
+          "id": "C24",
+          "target": "A1-R01",
+          "at": [
+            900,
+            1330
+          ],
+          "kind": "village_drain_return",
+          "condition": "village_defense_survived"
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "counterweight",
+          "at": [
+            1640,
+            450
+          ],
+          "visibility": "visible_from_upper_landing",
+          "purpose": "show_remote_lift_mechanism"
+        },
+        {
+          "id": "water_echo",
+          "at": [
+            1720,
+            1240
+          ],
+          "visibility": "visible_from_drain_floor",
+          "purpose": "connect_visual_language_to_A4"
+        }
+      ],
+      "route_contracts": [
+        "This is a vertical route network, not one uninterrupted sewer corridor.",
+        "C10, C16 and C24 must use separate spatial anchors and preserve their existing progression flags.",
+        "A shortcut opened here must materially reduce travel between A3 and its destination."
+      ]
+    }
+  ],
+  "acceptance": [
+    "Each room has at least one safe spawn support surface and an explicit return/forward route.",
+    "No exit trigger overlaps another exit trigger or a lethal fall zone.",
+    "All named one-way platforms have collision and visual edges aligned.",
+    "Visible locked routes are readable from the intended approach but cannot be entered before unlock.",
+    "Test normal jump, fall, backtrack, checkpoint recovery, and scene transition with the real Hero controller.",
+    "These contracts are not evidence of implemented scenes or runtime success."
+  ]
+}
