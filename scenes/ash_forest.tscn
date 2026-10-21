@@ -8,3 +8,4 @@ region_id = "A2"
 location_id = "ash_forest"
 region_title = "THE OLD PILGRIM ROAD"
 map_width = 3600.0
+floor_y = 650.0
