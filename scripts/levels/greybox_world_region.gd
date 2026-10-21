@@ -1728,7 +1728,9 @@ func _spawn_region_exits() -> void:
 				"res://scenes/forgotten_city.tscn", "city_canopy_entry",
 				true, "", "", floor_y - 160.0
 			)
-			_spawn_h02_gate(map_width - 300.0)
+			# H02 belongs to the optional low Bell Grave space, not the far-eastern main-floor edge.
+			# H02 应位于钟墓坑底的可选低位空间，而不是地图最东侧的主地面。
+			_spawn_h02_gate(960.0, 610.0)
 			# C04 is opened from A5; once opened, keep the reverse entrance persistent on A2.
 			# C04 在 A5 侧开启；开启后，A2 侧永久生成对应回程门。
 			if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
@@ -2494,11 +2496,11 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
 			)
 	print("[NEREIS][MAP][LOCAL_ROUTE] opened id=%s" % route_id)
 
-func _spawn_h02_gate(x: float) -> void:
+func _spawn_h02_gate(x: float, y: float = -1.0) -> void:
 	var gate := Node2D.new()
 	gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
 	gate.name = "HiddenBellChamberGate"
-	gate.position = Vector2(x, floor_y)
+	gate.position = Vector2(x, floor_y if y < 0.0 else y)
 	gate.secret_id = "H02"
 	gate.target_scene_path = "res://scenes/hidden_bell_chamber.tscn"
 	gate.target_location_id = "hidden_bell_chamber"
@@ -2572,6 +2574,11 @@ func _spawn_h06_gate(x: float) -> void:
 	debug_exit_markers.append({"position": gate.position, "label": "H06 王名抹除廊", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _on_optional_hidden_gate_opened(secret_id: String) -> void:
+	# H02's discovery must stay environmental; do not explain the bell through narrator-style popup text.
+	# H02 的发现应由环境承载，不用旁白式弹窗解释钟的异常。
+	if secret_id == "H02":
+		print("[NEREIS][MAP][GATE] opened id=H02 feedback=environmental_only")
+		return
 	if not is_instance_valid(narrative):
 		return
 	var details := {
