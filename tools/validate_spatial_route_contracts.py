@@ -276,7 +276,17 @@ def main() -> int:
             )
         ]
 
-    # (connection, region, x, y_offset); y is derived from the shared floor_y=540.
+    # (connection, region, x, y_offset); derive each region's floor from its actual scene.
+    # A2's floor was deliberately lowered for the multi-level forest graybox, so a
+    # global 540px baseline creates false negatives (e.g. C03 at y=380 instead of y=490).
+    scene_floor_y: dict[str, float] = {}
+    for scene_path in (ROOT / "scenes").glob("*.tscn"):
+        scene_text = scene_path.read_text(encoding="utf-8")
+        region_match = re.search(r'^region_id\s*=\s*"([A-Z]\d{1,2})"', scene_text, re.MULTILINE)
+        floor_match = re.search(r'^floor_y\s*=\s*([\d.]+)', scene_text, re.MULTILINE)
+        if region_match and floor_match:
+            scene_floor_y[region_match.group(1)] = float(floor_match.group(1))
+
     elevated_doors = [
         ("C03", "A2", 3400.0, -160.0),
         ("C22", "A12", 2130.0, -180.0),
@@ -293,7 +303,8 @@ def main() -> int:
         ("C23", "A4", 1650.0, -105.0),
     ]
     for edge_id, region, x, y_offset in elevated_doors:
-        door_y = 540.0 + y_offset
+        floor_y = scene_floor_y.get(region, 540.0)
+        door_y = floor_y + y_offset
         # C03's door origin sits 30px above the platform top by design; its
         # interaction shape is offset down from that origin and overlaps the ledge.
         # C03 门节点原点按设计高于平台顶 30px；交互碰撞形状向下偏移并覆盖栈台。
