@@ -985,7 +985,6 @@ def main() -> int:
         'E  打开旧升降梯',
         'E  打开内城侧门',
         'E  打开王城排水门',
-        'opened_old_bell_tower_connection',
         'opened_old_service_door',
         'opened_royal_tomb_side_door',
         'opened_bell_tower_drop',
@@ -998,7 +997,6 @@ def main() -> int:
         'unlock_once_flag_id: String = ""',
         'door.unlock_once_flag_id = unlock_once_flag_id',
         '"reached_A4_via_A3"',
-        '"old_battlefield"',
         '"monastery_tower"',
         '"prison_depths"',
         '"royal_tomb"',
@@ -1211,7 +1209,7 @@ def main() -> int:
         'if region_id == "A5" and side == "old_pilgrim_highroad":',
         'return floor_y - 140.0',
         'return floor_y - 85.0',
-        '_add_platform(Rect2(1840, 445, 130, 18))',
+        '_add_platform(Rect2(1740, 510, 125, 18))',
         '_add_platform(Rect2(420, 420, 120, 18))',
         '_add_platform(Rect2(560, 455, 160, 18))',
         'if region_id == "A4" and side == "prison_tunnel":',
@@ -2007,7 +2005,6 @@ def main() -> int:
             "A12_CROWN_WALL_WALK": "E  ANCHOR THE CROWN WALL",
         }
         expected_local_route_narratives = {
-            "A2_BELLGRAVE_CANOPY_CROSSING": "THE BELL'S SECOND SHADOW",
             "A3_THIRD_STREET_ROOFLINE": "THE THIRD STREET HOLDS",
             "A4_OLD_STONE_AQUEDUCT": "THE AQUEDUCT WITHOUT WATER",
             "A5_BURIED_STANDARD_CROSSING": "THE STANDARD THAT OUTLIVED THE ARMY",
