@@ -4128,7 +4128,7 @@
         "id": "SC008_first_implementation",
         "status": "code_added_runtime_unverified",
         "source": "scripts/levels/greybox_world_region.gd",
-        "details": "A2 ground collision split at x=860..1060; lower support at y=610 and two return step ledges at y=580. The former platform spanning x=930..1110 at y=475 was removed. Visual pit face added. No Godot runtime acceptance has been performed."
+        "details": "A2 ground collision remains split at x=860..1060; with the A2 surface floor at y=650, the undercroft floor is y=775 and staggered return shelves are placed at y=728, y=695, and y=655. No Godot runtime acceptance has been performed."
       },
       {
         "id": "SC011_endpoint_reclassified",
@@ -4143,7 +4143,7 @@
       {
         "id": "H02_A2_entrance_alignment",
         "status": "code_added_runtime_unverified",
-        "details": "H02 gate now spawns at x=960,y=610 on the Bell Grave pit floor, retains resonance 18 + sight and persistent opening. H02 gate-open narrator popup suppressed; entering and returning still need engine validation."
+        "details": "H02 gate is placed at x=960,y=775 on the Bell Grave undercroft floor, retains resonance 18 + sight and persistent opening. H02 gate-open narrator popup suppressed; entering and returning still need engine validation."
       },
       {
         "id": "platform_render_registration",
