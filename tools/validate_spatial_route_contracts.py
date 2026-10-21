@@ -517,8 +517,52 @@ def main() -> int:
     # synchronized; they intentionally do not claim Godot physics or input acceptance.
     intra_edges = {edge.get("id"): edge for edge in topology.get("intra_region_connections", [])}
     a2_contract = topology.get("a2_spatial_acceptance_contract", {})
+    sc007 = intra_edges.get("SC007", {})
     sc008 = intra_edges.get("SC008", {})
+    sc009 = intra_edges.get("SC009", {})
+    sc010 = intra_edges.get("SC010", {})
     sc011 = intra_edges.get("SC011", {})
+    a2_subregions = {
+        item.get("id"): item
+        for item in topology.get("subregions", [])
+        if item.get("parent_region") == "A2"
+    }
+    expected_a2_subregions = {
+        "A2-S01": "雾林地面",
+        "A2-S02": "钟墓外圈",
+        "A2-S03": "钟墓坑底",
+        "A2-S04": "树冠栈道",
+        "A2-S05": "旧朝圣高路",
+    }
+    require(
+        errors,
+        all(
+            a2_subregions.get(subregion_id, {}).get("name") == name
+            for subregion_id, name in expected_a2_subregions.items()
+        ) and len(a2_subregions) == len(expected_a2_subregions),
+        "A2 topology must contain exactly the five accepted subregions S01-S05 with their agreed names.",
+    )
+    require(
+        errors,
+        sc007.get("from") == "A2-S01" and sc007.get("to") == "A2-S02"
+        and sc007.get("travel") == "both" and sc007.get("initial_state") == "open"
+        and sc007.get("unlock_condition") == "",
+        "A2 SC007: ordinary ground access to the Bell Grave exterior must remain open and ungated.",
+    )
+    require(
+        errors,
+        sc009.get("from") == "A2-S01" and sc009.get("to") == "A2-S04"
+        and sc009.get("travel") == "both" and sc009.get("initial_state") == "open"
+        and sc009.get("unlock_condition") == "",
+        "A2 SC009: the baseline ground-canopy route must remain open and bidirectional.",
+    )
+    require(
+        errors,
+        sc010.get("from") == "A2-S04" and sc010.get("to") == "A2-S05"
+        and sc010.get("travel") == "both" and sc010.get("initial_state") == "open"
+        and sc010.get("unlock_condition") == "",
+        "A2 SC010: the canopy-to-old-pilgrim approach must remain open, independently of C04's lock.",
+    )
     sc068 = next((item for item in topology.get("elevators", []) if item.get("id") == "LFT01"), {})
     require(
         errors,
@@ -607,6 +651,24 @@ def main() -> int:
         and "Keep a temporary bridge solid while the Hero is standing on it" in local_route_source
         and "collision.one_way_collision = true" in local_route_source,
         "SC011: a temporary resonance bridge must not disappear under the Hero when Sight expires.",
+    )
+
+    # SC009's authored climb chain must exist in source. This is a coordinate inventory,
+    # not a proof that the Hero can jump between the platforms in Godot.
+    a2_climb_chain = [
+        (430.0, 485.0, 105.0, 20.0),
+        (535.0, 450.0, 110.0, 20.0),
+        (645.0, 415.0, 130.0, 20.0),
+        (760.0, 370.0, 110.0, 18.0),
+        (870.0, 330.0, 110.0, 18.0),
+        (1000.0, 360.0, 110.0, 18.0),
+        (1120.0, 405.0, 110.0, 18.0),
+        (1260.0, 390.0, 110.0, 18.0),
+    ]
+    require(
+        errors,
+        all(rect in platform_rects.get("A2", []) for rect in a2_climb_chain),
+        "A2 SC009: expected ground-to-canopy authored platform chain is incomplete or has drifted.",
     )
 
     # Elevated A2 arrivals must be statically supported by authored platform tops.
