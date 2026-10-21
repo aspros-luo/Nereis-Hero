@@ -1456,7 +1456,7 @@ def main() -> int:
     # C03's canopy route and C07's middle tomb-waterway route must keep their authored elevation on both ends.
     # C03 树冠高路与 C07 王墓中层水道必须在双向转场中保留设计高度。
     for contract in [
-        '2240.0, "E  沿树冠高路进入被遗忘的城区"',
+        '3400.0, "E  沿树冠高路进入被遗忘的城区"',
         '"res://scenes/forgotten_city.tscn", "city_canopy_entry",',
         'true, "", "", floor_y - 160.0',
         '72.0, "E  返回旧朝圣路", "ash_forest"',
