@@ -5,7 +5,7 @@ extends Control
 const REGION_ENTRIES: Array[Dictionary] = [
     {"id":"A0", "name":"边境手术所 / Escape Prologue", "path":"res://scenes/escape_prologue.tscn", "spawn":"west"},
     {"id":"A1", "name":"边境村庄 / Village Hub", "path":"res://scenes/village_hub.tscn", "spawn":"west"},
-    {"id":"ROOM_WORLD", "name":"新地图施工版：村庄 / 雾林 / 废弃城区（9 房间）", "path":"res://scenes/rooms/a1_village_streets.tscn", "spawn":"west"},
+    {"id":"ROOM_WORLD", "name":"完整世界地图施工版（A0-A13 + H01-H08 / 50 房间）", "path":"res://scenes/rooms/world_a0_r01.tscn", "spawn":"west"},
     {"id":"A2", "name":"雾林与旧朝圣路 / Ash Forest", "path":"res://scenes/ash_forest.tscn", "spawn":"west"},
     {"id":"A3", "name":"废弃城区 / Forgotten City", "path":"res://scenes/forgotten_city.tscn", "spawn":"west"},
     {"id":"A4", "name":"沉积大厅与水库 / Sewer Reservoir", "path":"res://scenes/sewer_reservoir.tscn", "spawn":"west"},
@@ -54,7 +54,7 @@ func _build_ui() -> void:
     root.add_child(title)
 
     var description := Label.new()
-    description.text = "选择旧区域进行兼容性验收，或进入 ROOM_WORLD 测试 A1-A3 的 9 个合同驱动房间。该版本将空间规格生成真实碰撞与场景出口，仍属施工版，视觉与运行时路线尚需验收。测试模式不覆盖正式存档。\nChoose a legacy region or ROOM_WORLD to test the 9 contract-driven A1-A3 rooms. This is a construction build; visuals and traversal still require runtime acceptance. Normal saves are protected.\n操作：方向键/A-D 移动，Space 跳跃，E 交互，F6 返回本选择页。"
+    description.text = "选择 ROOM_WORLD 从序章进入完整房间网络：A0-A13 主区域与 H01-H08 隐藏区域，共 50 个房间规格。场景出口由宏观连接图生成；地形碰撞、路线门槛与出生点仍需在 Godot 运行时逐项验收。测试模式不覆盖正式存档。\nEnter ROOM_WORLD to explore the complete room network: A0-A13 plus H01-H08, 50 room contracts. Scene exits are driven by the world graph; collision, route gates and spawn safety still require Godot runtime acceptance. Normal saves are protected.\n操作：方向键/A-D 移动，Space 跳跃，E 交互，F6 返回本选择页。"
     description.custom_minimum_size.y = 58
     description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     description.add_theme_color_override("font_color", Color("#9b9099"))
