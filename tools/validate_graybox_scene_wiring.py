@@ -149,6 +149,23 @@ def main() -> int:
     else:
         try:
             topology = json.loads(topology_path.read_text(encoding="utf-8"))
+            macro_layout = topology.get("macro_map_layout", {})
+            layout_nodes = macro_layout.get("nodes", [])
+            expected_ids = {region.get("id") for region in topology.get("regions", [])}
+            expected_ids.update(region.get("id") for region in topology.get("hidden_regions", []))
+            if {node.get("id") for node in layout_nodes} != expected_ids or len(layout_nodes) != len(expected_ids):
+                errors.append("Macro map layout must cover every A0-A13 and H01-H08 region exactly.")
+            if len(macro_layout.get("display_connections", [])) != len(topology.get("connections", [])):
+                errors.append("Macro map must visualize every C-edge.")
+            for node in layout_nodes:
+                try:
+                    if not (0 <= float(node["x"]) <= float(macro_layout["canvas"]["width"]) and 0 <= float(node["y"]) <= float(macro_layout["canvas"]["height"])):
+                        errors.append(f"Macro map node {node.get('id')} lies outside the canvas.")
+                except (KeyError, TypeError, ValueError):
+                    errors.append(f"Macro map node {node.get('id')} has invalid coordinates.")
+            svg_map = ROOT / "assets/art/maps/nereis_world_topology.svg"
+            if not svg_map.is_file():
+                errors.append("Missing original macro map SVG.")
             hidden_regions = topology.get("hidden_regions", [])
             c10 = next((connection for connection in topology.get("connections", []) if connection.get("id") == "C10"), None)
             c10_access = c10.get("access_prerequisite", {}) if c10 else {}
