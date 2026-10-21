@@ -4067,11 +4067,6 @@
         "details": "Bridge x=1380..1610 at y=328 aligns with high platforms around x=1380..1610; classify as S04 internal crossing, not S02↔S04 ground-canopy loop."
       },
       {
-        "id": "C04_A2_spawn_support",
-        "status": "code_added_runtime_unverified",
-        "details": "Added platform x=1680..1830 at y=425 to support A2 C04 spawn x=1750 y=400."
-      },
-      {
         "id": "SC068_LFT01",
         "status": "deferred_not_in_a2_baseline_acceptance",
         "details": "No runtime lift instance found; SC009 is baseline route. LFT01 remains a future option, not a validated route."
@@ -4085,6 +4080,11 @@
         "id": "platform_render_registration",
         "status": "static_source_fix",
         "details": "Initialization now calls _configure_platforms before _create_floor, so pit ledges appended by _add_platform remain in the shared platform array used by the renderer."
+      },
+      {
+        "id": "C04_A2_spawn_static_review",
+        "status": "static_source_review",
+        "details": "A2 spawn x=1750,y=400 is already supported by existing platform Rect2(1740,400,110,18); redundant lower platform was removed in commit e1b723f. Door/trigger remains engine-unverified."
       }
     ]
   }
