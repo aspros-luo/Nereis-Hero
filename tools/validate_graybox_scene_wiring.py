@@ -1125,7 +1125,7 @@ def main() -> int:
             # the generic A6 exit block; its detailed key/side/persistence contract
             # is audited below.
             shortcut_match = re.search(
-                r"(?ms)^func _refresh_a6_bell_shortcut\\(\\) -> void:\\n(.*?)(?=^func |\\Z)",
+                r"(?ms)^func _refresh_a6_bell_shortcut\(\) -> void:\n(.*?)(?=^func |\Z)",
                 region_script,
             )
             shortcut_body = shortcut_match.group(1) if shortcut_match else ""
