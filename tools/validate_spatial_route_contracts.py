@@ -581,7 +581,7 @@ def main() -> int:
         and sc073.get("travel") == "both" and sc073.get("initial_state") == "open",
         "A2 SC073: lower bypass must rejoin the expanded eastern canopy route.",
     )
-        sc068 = next((item for item in topology.get("elevators", []) if item.get("id") == "LFT01"), {})
+    sc068 = next((item for item in topology.get("elevators", []) if item.get("id") == "LFT01"), {})
     require(
         errors,
         sc008.get("from") == "A2-S02" and sc008.get("to") == "A2-S03"
