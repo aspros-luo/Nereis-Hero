@@ -1085,7 +1085,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1810, 355, 125, 18))
 			# The reservoir floor breaks into a stepped undercroft while the pipe-walk remains the high route.
 			# 水库地面下切为错层地下廊，管线栈道仍是高位路线。
-			_add_platform(Rect2(810.0, floor_y + 85.0, 140.0, 18.0))
+			_add_platform(Rect2(810.0, floor_y + 85.0, 170.0, 18.0))
 			_add_platform(Rect2(970.0, floor_y + 130.0, 140.0, 18.0))
 			_add_platform(Rect2(1130.0, floor_y + 85.0, 140.0, 18.0))
 		"A5":
