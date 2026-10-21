@@ -760,6 +760,18 @@ func _spawn_region_item_pickups() -> void:
 				"node_name": "OldPilgrimWaybill",
 				"position": Vector2(1550.0, 282.0)
 			})
+			placements.append({
+				"pickup_id": "exploration_reward_bellgrave_burial_token",
+				"item_id": "bellgrave_burial_token",
+				"node_name": "BellgraveBurialToken",
+				"position": Vector2(965.0, 625.0)
+			})
+			placements.append({
+				"pickup_id": "exploration_reward_canopy_waymarker_fragment",
+				"item_id": "canopy_waymarker_fragment",
+				"node_name": "CanopyWaymarkerFragment",
+				"position": Vector2(3105.0, 300.0)
+			})
 			if "defeated_A2_Cultist_01" in WorldState.achievement_flags:
 				placements.append({
 					"pickup_id": "combat_reward_a2_cultist_seal",
