@@ -883,7 +883,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1035, 235, 130, 18))
 			_add_platform(Rect2(1175, 275, 115, 18))
 			_add_platform(Rect2(1265, 345, 120, 18))
-			_add_platform(Rect2(1385, 405, 125, 18))
+			_add_platform(Rect2(1380, 405, 130, 18))
 			_add_platform(Rect2(1510, 465, 120, 18))
 			_add_platform(Rect2(1630, 520, 135, 18))
 			# Bell Grave outer gallery: an upper rim and a lower return skirt overlap vertically.
