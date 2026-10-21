@@ -44,7 +44,10 @@ def a2_configure_block(source: str) -> str:
     # Restrict indentation matching to spaces/tabs. \s also matches newlines,
     # which can consume the block boundary and silently truncate the parsed platform set.
     match = re.search(
-        r'^[ \t]*"A2":[ \t]*\r?\n(.*?)^[ \t]*"A3":[ \t]*
+        r'^[ \t]*"A2":[ \t]*\r?\n(.*?)^[ \t]*"A3":[ \t]*$',
+        source,
+        re.MULTILINE | re.DOTALL,
+    )
     if not match:
         raise ValueError("Could not isolate the A2 platform block.")
     return match.group(1)
