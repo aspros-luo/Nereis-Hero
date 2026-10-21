@@ -66,6 +66,7 @@ func _build_room_geometry() -> void:
 		shape.size = rect.size
 		collision.shape = shape
 		collision.position = rect.size * 0.5
+		collision.one_way_collision = true
 		body.add_child(collision)
 		add_child(body)
 
