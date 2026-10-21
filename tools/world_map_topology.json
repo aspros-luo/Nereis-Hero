@@ -2651,8 +2651,8 @@
       "travel": "both",
       "initial_state": "open",
       "unlock_condition": "",
-      "design_note": "拓扑意图为钟墓外圈 S02↔坑底 S03 双向探索；但当前灰盒 _create_floor() 为全宽连续地板，A2 未配置地面断口或坑底专属承托平台，故运行时尚未形成可验证的坑道/下落路线。需要先设计实际坑口、落底与回返结构，再将 travel=both 视为验收目标，而非现状。",
-      "implementation_status": "not_represented_as_pit_in_current_runtime"
+      "design_note": "A2 运行时代码已添加真实地面断口 x=860..1060、y=610 坑底承托与 y=580 两侧回返台；普通探索无共鸣门槛。代码已实现但必须在 Godot 中验证下落、两侧跳回、死亡恢复与碰撞，不得标记为实机通过。",
+      "implementation_status": "code_added_runtime_unverified"
     },
     {
       "id": "SC009",
@@ -2676,14 +2676,14 @@
     },
     {
       "id": "SC011",
-      "from": "A2-S02",
+      "from": "A2-S04",
       "to": "A2-S04",
       "kind": "resonance",
       "travel": "both",
       "initial_state": "locked",
       "unlock_condition": "resonance_20_and_sight",
-      "design_note": "运行时存在 A2_BELLGRAVE_CANOPY_CROSSING（x=1380..1610、y=328），但它目前只被描述为连接钟墓高位平台；尚无证据证明端点位于 S02 与 S04。禁止将它直接记作 SC011 已实现。先核对实体平台/子区域边界；若两端都在高层，则将其保留为 S04 内部捷径，并另行决定是否需要 S02↔S04 共鸣回环。",
-      "implementation_status": "endpoint_unverified_do_not_claim_implemented"
+      "design_note": "源码坐标显示 A2_BELLGRAVE_CANOPY_CROSSING（x=1380..1610、y=328）横跨 x=1380..1490/y=345 与 x=1500..1610/y=310 的高位平台序列，归类为 S04 内部共鸣跨越，不是 S02 地面到 S04 树冠回环。仍需 Godot 实机验证两端承托、走过桥体、开启持久状态与灵视结束时的碰撞安全。",
+      "implementation_status": "runtime_bridge_exists_engine_not_verified"
     },
     {
       "id": "SC012",
@@ -3253,8 +3253,8 @@
       "travel": "both",
       "initial_state": "locked",
       "unlock_condition": "repaired_forest_counterweight",
-      "design_note": "拓扑中规划的备选升降机路线；当前 greybox_world_region.gd 尚未找到对应 A2 升降机实例/交互实现。SC009 已承担基础双向爬升，因此 LFT01/SC068 暂按未实现的可选回环方案处理，不得作为现有可玩路线验收通过。",
-      "implementation_status": "topology_only_runtime_not_found"
+      "design_note": "LFT01/SC068 是未来可选升降机设计，当前运行时代码未发现对应实体；SC009 已承担基础地面—树冠连接，因此该升降机延期，不属于 A2 基线验收范围，不得算作已实现路线。",
+      "implementation_status": "deferred_not_in_a2_baseline_acceptance"
     },
     {
       "id": "SC069",
@@ -3297,7 +3297,9 @@
       "initial_state": "broken",
       "unlock_condition": "repaired_forest_counterweight",
       "operation": "上下站均有手动绞盘；第一次修复后永久可用",
-      "safety": "平台停靠时才允许上下；井道内设置可辨识的横梁和落差"
+      "safety": "平台停靠时才允许上下；井道内设置可辨识的横梁和落差",
+      "implementation_status": "deferred_not_in_a2_baseline_acceptance",
+      "design_note": "Deferred: no runtime lift instance found; SC009 is the baseline ground-to-canopy route. Do not count as implemented."
     },
     {
       "id": "LFT02",
@@ -3938,15 +3940,16 @@
       },
       {
         "id": "SC011",
-        "from": "A2-S02",
+        "from": "A2-S04",
         "to": "A2-S04",
         "travel": "both",
         "initial_state": "locked",
         "unlock_condition": "resonance_20_and_sight",
         "acceptance": [
-          "初始状态不阻断主路",
-          "开启后形成可重复使用的地面/高路回环",
-          "持久状态与门状态一致"
+          "两端与高位平台承托关系实测通过",
+          "开启后可安全往返",
+          "灵视结束时角色站在桥上不会掉落或被碰撞卡住",
+          "永久开启状态重进地图后保持一致"
         ]
       },
       {
@@ -4057,6 +4060,21 @@
         "status": "code_added_runtime_unverified",
         "source": "scripts/levels/greybox_world_region.gd",
         "details": "A2 ground collision split at x=860..1060; lower support at y=610 and two return step ledges at y=580. The former platform spanning x=930..1110 at y=475 was removed. Visual pit face added. No Godot runtime acceptance has been performed."
+      },
+      {
+        "id": "SC011_endpoint_reclassified",
+        "status": "static_source_review",
+        "details": "Bridge x=1380..1610 at y=328 aligns with high platforms around x=1380..1610; classify as S04 internal crossing, not S02↔S04 ground-canopy loop."
+      },
+      {
+        "id": "C04_A2_spawn_support",
+        "status": "code_added_runtime_unverified",
+        "details": "Added platform x=1680..1830 at y=425 to support A2 C04 spawn x=1750 y=400."
+      },
+      {
+        "id": "SC068_LFT01",
+        "status": "deferred_not_in_a2_baseline_acceptance",
+        "details": "No runtime lift instance found; SC009 is baseline route. LFT01 remains a future option, not a validated route."
       }
     ]
   }
