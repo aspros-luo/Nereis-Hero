@@ -3979,10 +3979,8 @@
         "travel": "both",
         "initial_state": "open",
         "acceptance": [
-          "地面主碰撞在 x=860..1060 断开",
-          "坑底承托位于 y=610",
-          "两侧辅助回返台位于 y=580",
-          "Godot 实机验证落下与双向跳回后才可验收通过"
+          "坑底承托随 floor_y 下沉至 y=775，地面两侧通过错层台阶回返",
+          "坑口内设置 y=695、y=728 与 y=655 的错层支撑台"
         ],
         "implementation_status": "code_added_runtime_unverified"
       },
@@ -4162,6 +4160,12 @@
         "status": "code_committed_runtime_unverified",
         "source": "scripts/levels/greybox_world_region.gd",
         "details": "Reorganized A2 into forest-entry climb, Bell Grave gallery, broad canopy landings, pilgrim-bridge approach, exposed tower ribs, and east-ravine upper/lower approaches. Added landmark silhouettes. Restored support shelves for C03 anchor x=3400/y=380, C03 return x=3220/y=400, and C04 return x=1750/y=400. Requires Godot runtime route/jump/transition acceptance."
+      },
+      {
+        "id": "A2_vertical_interlock_pass_2026_10_21",
+        "status": "code_committed_runtime_unverified",
+        "source": "scripts/levels/greybox_world_region.gd; scenes/ash_forest.tscn",
+        "details": "A2 floor_y is now 650, camera bottom limit is 1000, and terrain is distributed across a jagged canopy crown, middle return ribs, surface floor, and a lower Bell Grave/eastern-ravine undercroft. The canopy resonance crossing is aligned to y=405 and H02 is placed on the undercroft floor. Godot traversal, camera framing, collision, and loop closure remain unverified."
       }
     ],
     "local_loop_contracts": [
@@ -4240,6 +4244,48 @@
         "purpose": "中后期高路捷径",
         "state": "existing_topology_contract_not_runtime_verified"
       }
-    ]
+    ],
+    "vertical_map_contract": {
+      "status": "code_committed_runtime_unverified",
+      "map_width": 3600,
+      "surface_floor_y": 650,
+      "camera_bottom_limit": 1000,
+      "design_intent": "A2 is a vertically interlocked map with jagged climbs, descending return shelves, overlapping upper and lower routes, and a deep undercroft; width alone is not the acceptance metric.",
+      "layers": [
+        {
+          "id": "canopy_crown",
+          "approx_y_range": [
+            145,
+            350
+          ],
+          "purpose": "high crossing above the Bell Grave and eastern ravine"
+        },
+        {
+          "id": "mid_canopy_and_ribs",
+          "approx_y_range": [
+            270,
+            535
+          ],
+          "purpose": "interwoven main route, C04 shelf, and route merges"
+        },
+        {
+          "id": "forest_floor",
+          "approx_y_range": [
+            585,
+            650
+          ],
+          "purpose": "safe baseline traversal"
+        },
+        {
+          "id": "bell_grave_undercroft",
+          "approx_y_range": [
+            655,
+            775
+          ],
+          "purpose": "optional pit descent and return shelves"
+        }
+      ],
+      "acceptance": "Must be traversed in Godot; coordinates and static contracts do not prove jump feasibility or closed loops."
+    }
   }
 }
