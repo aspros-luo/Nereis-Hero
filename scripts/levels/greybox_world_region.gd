@@ -875,7 +875,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(360, 485, 145, 20))
 			_add_platform(Rect2(535, 445, 125, 18))
 			_add_platform(Rect2(685, 405, 110, 18))
-			_add_platform(Rect2(760, 365, 100, 18))
+			_add_platform(Rect2(760, 370, 110, 18))
 			# R02 broken gallery circles the Bell Grave and leaves its descent readable.
 			_add_platform(Rect2(1080, 455, 150, 18))
 			_add_platform(Rect2(1260, 415, 145, 18))
@@ -886,6 +886,8 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1250, 310, 145, 18))
 			_add_platform(Rect2(1430, 350, 150, 18))
 			_add_platform(Rect2(1610, 395, 140, 18))
+			# Preserve C04's paired arrival shelf at the authored highroad elevation.
+			_add_platform(Rect2(1840, 445, 130, 18))
 			# R05 pilgrim bridge: separated approaches communicate a broken crossing.
 			_add_platform(Rect2(1690, 315, 145, 18))
 			_add_platform(Rect2(1880, 350, 145, 18))
@@ -901,7 +903,10 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(2785, 475, 135, 18))
 			_add_platform(Rect2(2935, 435, 135, 18))
 			_add_platform(Rect2(3080, 390, 135, 18))
+			_add_platform(Rect2(3180, 400, 130, 18))
 			_add_platform(Rect2(3215, 420, 115, 18))
+			# C03 door anchor at x=3400 must be backed by a collision platform at y=380.
+			_add_platform(Rect2(3340, 380, 140, 18))
 			# The final rise reaches C03 through a distinct eastern bridge silhouette.
 			_add_platform(Rect2(2740, 330, 130, 18))
 			_add_platform(Rect2(2900, 300, 130, 18))
