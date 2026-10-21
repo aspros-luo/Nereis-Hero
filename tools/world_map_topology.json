@@ -4117,10 +4117,10 @@
     "known_gaps": [
       "SC011 的旧 opened_forest_rope_bridge 在灰盒控制器中没有运行时引用；已改为候选复用现有局部共鸣路线，但桥体端点是否连接 S02↔S04 尚未证明。",
       "SC068 引用 repaired_forest_counterweight 且称对应实体升降机合同，但当前 elevators 数组为空；需明确它是未来备选、删除的重复连接，或补齐完整电梯合同。",
-      "当前代码存在 A2_BELLGRAVE_CANOPY_CROSSING，端点为 x=1380..1610、y=328；不得在未核对平台和子区域边界前声称它已经实现地面—树冠回环。",
-      "H02 运行时出口与拓扑中旧 secondary_exit 的实际一致性尚未完成核查；本轮仅将 A5 次级出口标为延期，不声称已移除。",
+      "当前代码存在 A2_BELLGRAVE_CANOPY_CROSSING，端点为 x=1380..1610、y=386；静态布局将其归类为 S04 内部横渡，而非地面—树冠连接。桥端承托与实际回环仍需 Godot 验收。",
+      "当前运行时代码已移除 H02 通往 A5 的第二出口，H02 仅返回 A2；拓扑的 secondary_exit 保留为延期决策记录，仍需 Godot 实机验收回返路线。",
       "SC068/LFT01：world_map_topology.json 已有 LFT01（雾林绞盘升降台）定义，但在当前灰盒控制器中未找到对应 A2 升降机实例/交互；拓扑定义不等于运行时实现。SC009 已定义基础双向爬升，需在坐标布局阶段决定升降机是否提供足够不同的回环价值。",
-      "A2_BELLGRAVE_CANOPY_CROSSING 的运行时描述是连接钟墓高位平台；其 x=1380..1610、y=328 尚不能证明连接 S02↔S04。SC011 当前仍为待核实连接，不得验收为已实现。",
+      "A2_BELLGRAVE_CANOPY_CROSSING 的运行时描述为连接钟墓高位平台，当前端点 x=1380..1610、y=386；静态源码将其归类为 S04 内部横渡，是否形成预期回环仍需 Godot 物理验收。",
       "本轮已重排 A2 平台与地标剪影，但平台可达性、三条局部回环是否闭合、上下路线是否在实机中正确汇合仍未通过 Godot 物理验收。"
     ],
     "runtime_findings": [
@@ -4133,7 +4133,7 @@
       {
         "id": "SC011_endpoint_reclassified",
         "status": "static_source_review",
-        "details": "Bridge x=1380..1610 at y=328 aligns with high platforms around x=1380..1610; classify as S04 internal crossing, not S02↔S04 ground-canopy loop."
+        "details": "Bridge x=1380..1610 at y=386; static source classifies it as an S04 internal crossing, not an S02↔S04 ground-canopy loop. Verify collision support and traversal in Godot."
       },
       {
         "id": "SC068_LFT01",
@@ -4165,7 +4165,7 @@
         "id": "A2_vertical_interlock_pass_2026_10_21",
         "status": "code_committed_runtime_unverified",
         "source": "scripts/levels/greybox_world_region.gd; scenes/ash_forest.tscn",
-        "details": "A2 floor_y is now 650, camera bottom limit is 1000, and terrain is distributed across a jagged canopy crown, middle return ribs, surface floor, and a lower Bell Grave/eastern-ravine undercroft. The canopy resonance crossing is aligned to y=405 and H02 is placed on the undercroft floor. Godot traversal, camera framing, collision, and loop closure remain unverified."
+        "details": "A2 floor_y is 650, camera bottom limit is 1000, and terrain is distributed across a jagged canopy crown, middle return ribs, surface floor, and a lower Bell Grave/eastern-ravine undercroft. The canopy resonance crossing is aligned to y=386 and H02 is placed on the undercroft floor. Godot traversal, camera framing, collision, and loop closure remain unverified."
       }
     ],
     "local_loop_contracts": [
