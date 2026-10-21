@@ -1741,8 +1741,8 @@ func _spawn_region_exits() -> void:
 			)
 			# The main route to A3 sits on the eastern canopy ledge; the ground-level bell anomaly remains a separate choice.
 			# 通往 A3 的主线出口位于东侧树冠高台；地面的钟墓异常入口保留为另一种探索选择。
-			# C03's authored/topology anchor is x=2240, directly on the eastern canopy platform.
-			# C03 的正式路线锚点为 x=2240，必须落在东侧树冠实体平台上，不能漂到平台末端之外。
+			# C03's authored/topology anchor is x=3400, at the far eastern end of the expanded canopy.
+			# C03 的正式路线锚点为 x=3400，位于扩建后树冠高路的最东端。
 			_spawn_exit_door(
 				3400.0, "E  沿树冠高路进入被遗忘的城区", "forgotten_city",
 				"res://scenes/forgotten_city.tscn", "city_canopy_entry",
