@@ -339,9 +339,9 @@ func _spawn_x_for_side(side: String) -> float:
 		# C10 回程落在高位落脚平台，再走到低一级的捷径门。
 		return 2100.0
 	if region_id == "A2" and side == "east":
-		# Returning from A3 lands on the western approach platform below A2's elevated A3 exit.
-		# 从 A3 返回时落在森林西侧的高路接近平台，与城区出口处于同一空间层。
-		return 2120.0
+		# C03 returns near the remote eastern exit on a supported upper landing.
+		# C03 回程落在扩建森林东侧出口附近的实体高台。
+		return 3220.0
 	if region_id == "H09" and side == "east":
 		return map_width - 280.0
 	if region_id == "A9" and side == "mirror":
@@ -824,13 +824,18 @@ func _create_floor() -> void:
 	# A2 钟墓必须是真正切开地面碰撞的坑口，而不只是地图标签或背景图案。
 	if region_id == "A2":
 		_add_ground_segment("GreyboxGround_West", 0.0, 860.0)
-		_add_ground_segment("GreyboxGround_East", 1060.0, map_width - 1060.0)
-		# The lower floor sits 70px below the main ground. The opening is traversable from above,
-		# and the two short step ledges make a deliberate jump-back route possible.
-		# 坑底比主地面低 70px；玩家可从上方落入，坑内两级短台阶提供明确的跳回路线。
+		_add_ground_segment("GreyboxGround_Middle", 1060.0, 1360.0)
+		# The eastern ravine separates the expanded forest from the remote canopy exit.
+		# 东部沟壑将扩建林地与远端树冠出口分开。
+		_add_ground_segment("GreyboxGround_East", 2660.0, map_width - 2660.0)
+		# Bell Grave: lower floor and two ledges preserve a deliberate jump-back route.
 		_add_platform(Rect2(860.0, 610.0, 200.0, 18.0))
 		_add_platform(Rect2(850.0, 580.0, 70.0, 12.0))
 		_add_platform(Rect2(1000.0, 580.0, 70.0, 12.0))
+		# Second lower basin: the route can be crossed overhead or explored below, with ledges on both sides.
+		_add_platform(Rect2(2420.0, 610.0, 240.0, 18.0))
+		_add_platform(Rect2(2400.0, 580.0, 70.0, 12.0))
+		_add_platform(Rect2(2590.0, 580.0, 70.0, 12.0))
 		return
 	_add_ground_segment("GreyboxGround", 0.0, map_width)
 
@@ -888,6 +893,24 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(1500, 310, 110, 18))
 			_add_platform(Rect2(1620, 350, 110, 18))
 			_add_platform(Rect2(1740, 400, 110, 18))
+			# Expanded eastern canopy: the upper route bends around the ravine before reaching C03.
+			_add_platform(Rect2(2370, 350, 115, 18))
+			_add_platform(Rect2(2500, 320, 115, 18))
+			_add_platform(Rect2(2630, 350, 115, 18))
+			_add_platform(Rect2(2760, 390, 115, 18))
+			_add_platform(Rect2(2890, 355, 115, 18))
+			_add_platform(Rect2(3020, 320, 115, 18))
+			_add_platform(Rect2(3145, 350, 125, 18))
+			_add_platform(Rect2(3180, 400, 130, 18))
+			_add_platform(Rect2(3340, 380, 140, 18))
+			# Lower bypass through the eastern forest; it rejoins the remote approach instead of becoming a new exit.
+			_add_platform(Rect2(2310, 475, 125, 18))
+			_add_platform(Rect2(2440, 445, 120, 18))
+			_add_platform(Rect2(2570, 455, 120, 18))
+			_add_platform(Rect2(2700, 475, 125, 18))
+			_add_platform(Rect2(2835, 450, 125, 18))
+			_add_platform(Rect2(2970, 425, 125, 18))
+			_add_platform(Rect2(3100, 430, 125, 18))
 		"A3":
 			# Street-level route: rubble, market, sewer descent, and the battlefield road.
 			# 地面主路连接碎墙、市场、下水道入口与战场方向。
@@ -1721,7 +1744,7 @@ func _spawn_region_exits() -> void:
 			# C03's authored/topology anchor is x=2240, directly on the eastern canopy platform.
 			# C03 的正式路线锚点为 x=2240，必须落在东侧树冠实体平台上，不能漂到平台末端之外。
 			_spawn_exit_door(
-				2240.0, "E  沿树冠高路进入被遗忘的城区", "forgotten_city",
+				3400.0, "E  沿树冠高路进入被遗忘的城区", "forgotten_city",
 				"res://scenes/forgotten_city.tscn", "city_canopy_entry",
 				true, "", "", floor_y - 160.0
 			)
