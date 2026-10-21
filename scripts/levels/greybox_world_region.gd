@@ -888,6 +888,31 @@ func _create_boundaries() -> void:
 func _configure_platforms() -> void:
 	platforms.clear()
 	match region_id:
+		"A1":
+			# A1 is the persistent hub: a surface lane, a well-side descent, and a broken roof loop.
+			# A1 作为持续回访的枢纽：地表主路、井侧下沉路线与断裂屋顶回环并存。
+			_add_platform(Rect2(170, 475, 150, 18))
+			_add_platform(Rect2(390, 430, 130, 18))
+			_add_platform(Rect2(610, 385, 145, 18))
+			_add_platform(Rect2(840, 420, 135, 18))
+			_add_platform(Rect2(1060, 465, 150, 18))
+			_add_platform(Rect2(1320, 430, 145, 18))
+			_add_platform(Rect2(1560, 390, 150, 18))
+			_add_platform(Rect2(1800, 440, 150, 18))
+			# Upper roofline loops back toward the well instead of forming a single dead-end ladder.
+			_add_platform(Rect2(300, 395, 110, 18))
+			_add_platform(Rect2(415, 350, 115, 18))
+			_add_platform(Rect2(540, 310, 120, 18))
+			_add_platform(Rect2(675, 330, 115, 18))
+			_add_platform(Rect2(790, 370, 120, 18))
+			_add_platform(Rect2(910, 330, 115, 18))
+			_add_platform(Rect2(1030, 290, 120, 18))
+			_add_platform(Rect2(1150, 325, 120, 18))
+			_add_platform(Rect2(1270, 370, 115, 18))
+			# A lower return shelf lets players recover from the well-side drop and rejoin the hub route.
+			_add_platform(Rect2(650, 610, 150, 18))
+			_add_platform(Rect2(820, 655, 150, 18))
+			_add_platform(Rect2(990, 610, 145, 18))
 		"A2":
 			# A2 is a vertically interlocked region, not a longer flat corridor.
 			# A2 采用犬牙交错的上下层：主路会攀升、回落，再从另一侧绕回同一地标。
