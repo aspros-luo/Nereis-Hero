@@ -3476,6 +3476,119 @@ func _draw_forest_landmarks() -> void:
 	draw_line(Vector2(3100, 220), Vector2(3290, 255), Color("#4a414d"), 8.0)
 	draw_string(ThemeDB.fallback_font, Vector2(2860, 205), "东侧残桥", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color("#877887"))
 
+	# Readable room silhouettes: stone masses and root arches create separate visual "rooms"
+	# behind the collision-backed ledges. These are intentionally decorative, so they cannot
+	# accidentally seal a traversal route while the graybox jump arcs are still being tuned.
+	# 房间轮廓：用石壁体块与树根拱架在实体平台后方划分空间。当前只作装饰，
+	# 不擅自封死仍在调试中的跳跃通道。
+
+	# West entrance: a low, broken lintel makes the entry feel like a passage into the forest.
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(0, 410), Vector2(95, 410), Vector2(130, 438),
+		Vector2(185, 438), Vector2(218, 465), Vector2(218, 495),
+		Vector2(0, 495)
+	]), Color("#20232d"))
+	draw_line(Vector2(0, 410), Vector2(95, 410), Color("#5b515c"), 4.0)
+	draw_line(Vector2(130, 438), Vector2(185, 438), Color("#5b515c"), 3.0)
+	draw_rect(Rect2(30, 495, 16, 86), Color("#292630"))
+	draw_rect(Rect2(190, 485, 18, 72), Color("#292630"))
+
+	# Bell Grave is a deep, enclosed shaft; staggered broken masonry follows the actual pit.
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(842, 438), Vector2(866, 438), Vector2(866, 650),
+		Vector2(886, 720), Vector2(920, 770), Vector2(920, 790),
+		Vector2(878, 790), Vector2(844, 720)
+	]), Color("#302832"))
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(1048, 438), Vector2(1072, 438), Vector2(1072, 720),
+		Vector2(1040, 775), Vector2(1005, 790), Vector2(1005, 770),
+		Vector2(1030, 710)
+	]), Color("#302832"))
+	for seam_y in [492.0, 548.0, 610.0, 680.0, 735.0]:
+		draw_line(Vector2(846, seam_y), Vector2(862, seam_y + 7.0), Color("#66515b", 0.72), 2.0)
+		draw_line(Vector2(1053, seam_y + 8.0), Vector2(1068, seam_y), Color("#66515b", 0.72), 2.0)
+	# A broken chain and a suspended bell silhouette make the shaft readable from its rim.
+	draw_line(Vector2(985, 390), Vector2(985, 555), Color("#65545f"), 3.0)
+	for chain_y in range(405, 550, 18):
+		draw_arc(Vector2(985, float(chain_y)), 4.0, 0.0, TAU, 8, Color("#65545f"), 1.4)
+	draw_arc(Vector2(985, 568), 15.0, 0.0, TAU, 2, Color("#8b737e"), 3.0)
+	draw_line(Vector2(985, 568), Vector2(985, 592), Color("#8b737e"), 3.0)
+	draw_line(Vector2(972, 592), Vector2(998, 592), Color("#8b737e"), 3.0)
+
+	# The canopy is a hollow under-root, not merely a row of floating planks.
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(790, 258), Vector2(850, 220), Vector2(915, 222),
+		Vector2(970, 190), Vector2(1030, 195), Vector2(1088, 225),
+		Vector2(1160, 232), Vector2(1235, 265), Vector2(1320, 282),
+		Vector2(1395, 320), Vector2(1375, 338), Vector2(1290, 302),
+		Vector2(1215, 290), Vector2(1145, 256), Vector2(1075, 249),
+		Vector2(1020, 222), Vector2(975, 220), Vector2(920, 252),
+		Vector2(855, 250), Vector2(810, 280)
+	]), Color("#292a35"))
+	draw_line(Vector2(850, 220), Vector2(915, 222), Color("#4b4654"), 5.0)
+	draw_line(Vector2(970, 190), Vector2(1030, 195), Color("#4b4654"), 5.0)
+	draw_line(Vector2(1088, 225), Vector2(1160, 232), Color("#4b4654"), 4.0)
+	# Hanging roots descend between platforms but leave the jumping corridor open.
+	for root in [
+		PackedVector2Array([Vector2(940, 232), Vector2(950, 280), Vector2(940, 306), Vector2(932, 279)]),
+		PackedVector2Array([Vector2(1160, 248), Vector2(1178, 294), Vector2(1168, 315), Vector2(1158, 285)]),
+		PackedVector2Array([Vector2(1320, 291), Vector2(1338, 330), Vector2(1328, 346), Vector2(1318, 321)])
+	]:
+		draw_colored_polygon(root, Color("#3a303c"))
+
+	# Mid-region ruin ribs frame two elevations and a narrow return pocket.
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(1660, 255), Vector2(1690, 245), Vector2(1715, 420),
+		Vector2(1698, 458), Vector2(1680, 430)
+	]), Color("#292630"))
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(2030, 280), Vector2(2060, 292), Vector2(2048, 475),
+		Vector2(2028, 508), Vector2(2017, 475)
+	]), Color("#292630"))
+	draw_line(Vector2(1688, 276), Vector2(1705, 400), Color("#62515e"), 3.0)
+	draw_line(Vector2(2044, 310), Vector2(2035, 430), Color("#62515e"), 3.0)
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(1740, 390), Vector2(1800, 372), Vector2(1860, 390),
+		Vector2(1915, 382), Vector2(1985, 410), Vector2(1980, 424),
+		Vector2(1912, 402), Vector2(1858, 410), Vector2(1798, 393),
+		Vector2(1745, 410)
+	]), Color("#342c38"))
+
+	# Eastern ravine: opposing cliff faces and a high broken lintel frame the lower bypass.
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(2225, 455), Vector2(2250, 445), Vector2(2280, 520),
+		Vector2(2310, 585), Vector2(2350, 650), Vector2(2350, 780),
+		Vector2(2305, 780), Vector2(2288, 690), Vector2(2250, 610)
+	]), Color("#282832"))
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(2670, 500), Vector2(2700, 475), Vector2(2720, 555),
+		Vector2(2740, 625), Vector2(2740, 780), Vector2(2690, 780),
+		Vector2(2690, 690), Vector2(2660, 605)
+	]), Color("#282832"))
+	for crack in [
+		PackedVector2Array([Vector2(2250, 510), Vector2(2270, 535), Vector2(2260, 560)]),
+		PackedVector2Array([Vector2(2290, 600), Vector2(2310, 620), Vector2(2305, 650)]),
+		PackedVector2Array([Vector2(2690, 535), Vector2(2678, 560), Vector2(2695, 585)])
+	]:
+		draw_polyline(crack, Color("#66545f"), 2.0)
+	draw_line(Vector2(2350, 246), Vector2(2435, 205), Color("#514653"), 9.0)
+	draw_line(Vector2(2435, 205), Vector2(2560, 165), Color("#514653"), 9.0)
+	draw_line(Vector2(2560, 165), Vector2(2685, 205), Color("#514653"), 9.0)
+	draw_line(Vector2(2685, 205), Vector2(2805, 260), Color("#514653"), 9.0)
+
+	# Foreground roots at the bottom edge add parallax-like depth without obscuring the Hero.
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(0, 760), Vector2(180, 735), Vector2(285, 758),
+		Vector2(405, 742), Vector2(520, 770), Vector2(520, 820),
+		Vector2(0, 820)
+	]), Color("#171921", 0.78))
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(2760, 795), Vector2(2870, 760), Vector2(2995, 778),
+		Vector2(3090, 748), Vector2(3240, 772), Vector2(3370, 750),
+		Vector2(3600, 780), Vector2(3600, 850), Vector2(2760, 850)
+	]), Color("#171921", 0.72))
+
+
 func _draw_city_landmarks() -> void:
 	for x in range(200, int(map_width), 390):
 		draw_rect(Rect2(x, floor_y - 190, 150, 190), Color("#29252f"))
