@@ -950,7 +950,6 @@ func _ready_a5_assembly_child() -> void:
 	# Child rooms contribute only authored geometry and atmosphere drawing. The assembled root owns
 	# the single Hero, camera, HUD, region state, exits and save/respawn lifecycle.
 	# 组装子房间只提供合同定义的地形碰撞与绘制；主场景统一管理主角、镜头、HUD、出口和存档。
-	WorldState.prepare_scene_runtime()
 	a5_room_blocks.clear()
 	a5_room_floor_gaps.clear()
 	a5_room_floor_segments.clear()
@@ -962,7 +961,6 @@ func _ready_a5_assembly_child() -> void:
 
 
 func _ready_a5_assembled_region() -> void:
-	WorldState.prepare_scene_runtime()
 	var spawn_side := WorldState.pending_region_spawn_side
 	WorldState.set_location(location_id)
 	WorldState.pending_region_spawn_side = "west"
