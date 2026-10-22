@@ -44,6 +44,26 @@ def main() -> int:
     edge_ids = [e.get("id") for e in edges]
     if len(edge_ids) != len(set(edge_ids)):
         errors.append("duplicate connection IDs")
+    # Verify the intended open main route is traversable while respecting one-way drops.
+    adjacency = {rid: [] for rid in ids}
+    for edge in edges:
+        if edge.get("initial_state") != "open":
+            continue
+        src, dst = edge.get("from"), edge.get("to")
+        if src in ids and dst in ids:
+            adjacency[src].append(dst)
+            if edge.get("travel") != "one_way":
+                adjacency[dst].append(src)
+    reachable = set()
+    pending = ["A5-R01"] if "A5-R01" in ids else []
+    while pending:
+        node = pending.pop()
+        if node in reachable:
+            continue
+        reachable.add(node)
+        pending.extend(next_id for next_id in adjacency.get(node, []) if next_id not in reachable)
+    if "A5-R20" not in reachable:
+        errors.append("open main route cannot reach A5-R20 from A5-R01")
     for edge in edges:
         src, dst = edge.get("from"), edge.get("to")
         if src not in ids or dst not in ids:
@@ -105,7 +125,7 @@ def main() -> int:
         return 1
     print("A5 ROOM STREAMING STATIC CHECK: PASS")
     print(f"rooms={len(rooms)} connections={len(edges)} macro_bindings={len(expected)}")
-    print("Scene existence, edge endpoints, travel modes, locked-edge defaults and World adapter checked.")
+    print("Scene existence, edge endpoints, travel modes, open-route reachability, locked-edge defaults and World adapter checked.")
     print("This is a static check only; Godot parsing, collision, traversal and full-route playability remain runtime acceptance tasks.")
     return 0
 
