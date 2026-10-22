@@ -7,6 +7,7 @@ const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
 const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
+const MITE_HOUSE_BACKDROP = preload("res://assets/art/backdrops/mite_house_backdrop.svg")
 
 var hero: CharacterBody2D
 var camera: Camera2D
@@ -184,37 +185,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			viewport.set_input_as_handled()
 
 func _draw() -> void:
-	draw_rect(Rect2(0, 0, 1400, 720), Color("#151117"))
-	draw_rect(Rect2(0, 520, 1400, 200), Color("#211b22"))
-	draw_rect(Rect2(260, 320, 760, 200), Color("#2c252d"))
-	draw_colored_polygon(
-		PackedVector2Array([
-			Vector2(220, 320),
-			Vector2(640, 150),
-			Vector2(1060, 320)
-		]),
-		Color("#352c35")
-	)
-	draw_rect(Rect2(960, 370, 180, 150), Color("#211a22"))
-	draw_rect(Rect2(995, 420, 110, 12), Color("#4b3940"))
-	# A spare set of clothes hangs to dry; the bandage roll and two place settings imply recent care without explaining it.
-	draw_line(Vector2(330, 300), Vector2(410, 300), Color("#6a5960"), 4.0)
-	draw_line(Vector2(345, 300), Vector2(345, 322), Color("#6a5960"), 2.0)
-	draw_line(Vector2(395, 300), Vector2(395, 322), Color("#6a5960"), 2.0)
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(337, 322), Vector2(353, 322), Vector2(359, 370),
-		Vector2(332, 370)
-	]), Color("#38434a"))
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(387, 322), Vector2(403, 322), Vector2(409, 370),
-		Vector2(382, 370)
-	]), Color("#38434a"))
-	# Table settings: two bowls, but only one bed is visible in the room.
-	draw_rect(Rect2(570, 405, 24, 12), Color("#9a8170"))
-	draw_circle(Vector2(582, 410), 8.0, Color("#c1a68b"))
-	draw_rect(Rect2(675, 405, 24, 12), Color("#9a8170"))
-	draw_circle(Vector2(687, 410), 8.0, Color("#c1a68b"))
-	# A folded bandage and stained cloth rest near the bed.
-	draw_rect(Rect2(1010, 445, 30, 7), Color("#b6a99b"))
-	draw_rect(Rect2(1014, 452, 20, 5), Color("#8b6667"))
-	draw_line(Vector2(995, 420), Vector2(1105, 420), Color("#6a5556"), 2.0)
+	# The hand-painted background is visual-only. Collision and interaction remain separate runtime nodes.
+	# 手绘背景只负责视觉；地面碰撞、床边休息点、蜜忒交互与出口仍由独立节点控制。
+	draw_texture_rect(MITE_HOUSE_BACKDROP, Rect2(0.0, 0.0, 1400.0, 720.0), false)
