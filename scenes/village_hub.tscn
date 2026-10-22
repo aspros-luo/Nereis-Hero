@@ -87,3 +87,78 @@ script = ExtResource("2")
 poi_id = "backhill_path"
 display_name = "教堂与后山小径"
 dialogue = "从主街向东，坡道通往村庄边缘的教堂、酒馆与后山悬崖。"
+
+[node name="MiteHouse" type="Node2D" parent="."]
+position = Vector2(455, 360)
+
+[node name="Facade" type="Polygon2D" parent="MiteHouse"]
+polygon = PackedVector2Array(-105, 0, 105, 0, 105, 160, -105, 160)
+color = Color(0.15, 0.13, 0.17, 1)
+
+[node name="Roof" type="Polygon2D" parent="MiteHouse"]
+polygon = PackedVector2Array(-130, 0, 0, -115, 130, 0)
+color = Color(0.20, 0.16, 0.21, 1)
+
+[node name="Door" type="Polygon2D" parent="MiteHouse"]
+position = Vector2(-25, 70)
+polygon = PackedVector2Array(0, 0, 50, 0, 50, 90, 0, 90)
+color = Color(0.07, 0.06, 0.08, 1)
+
+[node name="VillageHouse01" type="Node2D" parent="."]
+position = Vector2(700, 360)
+
+[node name="Facade" type="Polygon2D" parent="VillageHouse01"]
+polygon = PackedVector2Array(-90, 0, 90, 0, 90, 160, -90, 160)
+color = Color(0.16, 0.14, 0.18, 1)
+
+[node name="Roof" type="Polygon2D" parent="VillageHouse01"]
+polygon = PackedVector2Array(-110, 0, 0, -100, 110, 0)
+color = Color(0.21, 0.18, 0.23, 1)
+
+[node name="Door" type="Polygon2D" parent="VillageHouse01"]
+position = Vector2(-12, 80)
+polygon = PackedVector2Array(0, 0, 24, 0, 24, 80, 0, 80)
+color = Color(0.07, 0.06, 0.08, 1)
+
+[node name="VillageHouse02" type="Node2D" parent="."]
+position = Vector2(1180, 360)
+
+[node name="Facade" type="Polygon2D" parent="VillageHouse02"]
+polygon = PackedVector2Array(-82, 0, 82, 0, 82, 160, -82, 160)
+color = Color(0.17, 0.14, 0.18, 1)
+
+[node name="Roof" type="Polygon2D" parent="VillageHouse02"]
+polygon = PackedVector2Array(-102, 0, 0, -78, 102, 0)
+color = Color(0.23, 0.18, 0.22, 1)
+
+[node name="Door" type="Polygon2D" parent="VillageHouse02"]
+position = Vector2(-13, 82)
+polygon = PackedVector2Array(0, 0, 26, 0, 26, 78, 0, 78)
+color = Color(0.07, 0.06, 0.08, 1)
+
+[node name="MerchantStall" type="Node2D" parent="."]
+position = Vector2(1250, 425)
+
+[node name="Counter" type="Polygon2D" parent="MerchantStall"]
+polygon = PackedVector2Array(-45, 40, 45, 40, 45, 58, -45, 58)
+color = Color(0.27, 0.20, 0.22, 1)
+
+[node name="Canopy" type="Polygon2D" parent="MerchantStall"]
+polygon = PackedVector2Array(-50, 0, 0, -30, 50, 0)
+color = Color(0.33, 0.24, 0.29, 1)
+
+[node name="BlacksmithWorkshop" type="Node2D" parent="."]
+position = Vector2(1425, 385)
+
+[node name="Facade" type="Polygon2D" parent="BlacksmithWorkshop"]
+polygon = PackedVector2Array(-75, 0, 75, 0, 75, 135, -75, 135)
+color = Color(0.16, 0.13, 0.17, 1)
+
+[node name="Roof" type="Polygon2D" parent="BlacksmithWorkshop"]
+polygon = PackedVector2Array(-90, 0, 0, -70, 90, 0)
+color = Color(0.22, 0.17, 0.20, 1)
+
+[node name="Door" type="Polygon2D" parent="BlacksmithWorkshop"]
+position = Vector2(-55, 40)
+polygon = PackedVector2Array(0, 0, 30, 0, 30, 95, 0, 95)
+color = Color(0.07, 0.06, 0.08, 1)
