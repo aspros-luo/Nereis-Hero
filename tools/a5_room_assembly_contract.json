@@ -626,6 +626,6 @@
     "room_scene_instantiation": "implemented_in_old_battlefield_scene_via_greybox_world_region",
     "transition_doors": "implemented_for_all_contract_connections; open_links_auto_transition_on_body_entered; blocked_shortcuts_hidden_routes_ability_gate_and_resonance_shortcut_require_interaction_and_persistent_unlock; Godot_runtime_validation_pending",
     "in_game_full_route": "requires_Godot_runtime_and_manual_playtest",
-    "note": "正式 old_battlefield.tscn 已启用 use_a5_room_assembly；运行时从本合同加载 22 个房间场景并生成 26 条连接的 51 个方向端点。开放连接在主角穿过门洞时自动转场，锁闭捷径/隐藏/能力/共鸣路线按条件交互开启。C08/C09/C04 仍由正式跨区出口负责。端点锚定在房间可接近的地面/连接位置；宏观房间未必物理贴边，镜头过渡、自然跳跃/落差、触发区与出生点仍须在 Godot 运行时和人工路线验收。"
+    "note": "正式 old_battlefield.tscn 已启用 use_a5_room_assembly；运行时从本合同加载 22 个房间并生成 26 条连接的 51 个端点。开放连接在主角穿过门洞时自动转场，锁闭路线按条件交互开启。C08/C09/C04 入场分别落在 R01/R20/R16 对应平台，隐藏钟塔回程落在 R14；离场仍由正式跨区出口负责。宏观房间未必物理贴边，镜头过渡、自然跳跃/落差、触发区与出生点仍须在 Godot 运行时和人工路线验收。"
   }
 }
