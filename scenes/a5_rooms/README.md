@@ -6,28 +6,28 @@
 
 | 房间 | 职责 | 尺寸 | 验收重点 | 场景 |
 |---|---|---:|---|---|
-| A5-R01 | entry | 1×1 屏 | C08高位入口；从城区残墙跃入战场 | [打开场景](../../scenes/a5_rooms/a5_r01.tscn) |
-| A5-R02 | route | 2×1 屏 | 沿断墙观察战壕、箭楼和远端绞盘 | [打开场景](../../scenes/a5_rooms/a5_r02.tscn) |
-| A5-R03 | junction | 2×1 屏 | 战壕岔口：选择地面主线或地下补给支路 | [打开场景](../../scenes/a5_rooms/a5_r03.tscn) |
-| A5-R04 | combat | 2×1 屏 | 在弹坑与残骸之间应对远近程交叉火力 | [打开场景](../../scenes/a5_rooms/a5_r04.tscn) |
-| A5-R05 | platform | 1×2 屏 | 攀登信号塔残架，俯瞰地面路线 | [打开场景](../../scenes/a5_rooms/a5_r05.tscn) |
-| A5-R06 | descent | 1×2 屏 | 沿塌陷坡道下降，寻找回到战壕的安全落点 | [打开场景](../../scenes/a5_rooms/a5_r06.tscn) |
-| A5-R07 | rest | 1×1 屏 | 废弃战地医疗所提供休整与战报线索 | [打开场景](../../scenes/a5_rooms/a5_r07.tscn) |
-| A5-R08 | combat_reward | 2×1 屏 | 夺回军需堡垒，战斗后获得补给 | [打开场景](../../scenes/a5_rooms/a5_r08.tscn) |
-| A5-R09 | optional_cache | 1×1 屏 | 从战壕侧面进入埋藏军需库寻找可选材料 | [打开场景](../../scenes/a5_rooms/a5_r09.tscn) |
-| A5-R10 | platform_challenge | 2×2 屏 | 穿越多层坍塌城墙，选择高风险上层路线 | [打开场景](../../scenes/a5_rooms/a5_r10.tscn) |
-| A5-R11 | mechanism | 2×1 屏 | 修复炮桥的活动支撑，观察机关节奏后通过 | [打开场景](../../scenes/a5_rooms/a5_r11.tscn) |
-| A5-R12 | hub_rest | 2×1 屏 | 中央指挥庭院作为区域地标、休息与路线分流点 | [打开场景](../../scenes/a5_rooms/a5_r12.tscn) |
-| A5-R13 | vertical_landmark | 1×3 屏 | 沿箭楼内部多层平台攀升并观察远方出口 | [打开场景](../../scenes/a5_rooms/a5_r13.tscn) |
-| A5-R14 | hidden_lore | 1×1 屏 | 发现被抹去的指挥记录，揭示战报矛盾 | [打开场景](../../scenes/a5_rooms/a5_r14.tscn) |
-| A5-R15 | upper_route | 2×1 屏 | 沿堡垒高墙回接主路并俯瞰地下维护区 | [打开场景](../../scenes/a5_rooms/a5_r15.tscn) |
-| A5-R16 | remote_shortcut | 1×2 屏 | 操作断桥绞盘，从A5侧开启C04旧朝圣高路 | [打开场景](../../scenes/a5_rooms/a5_r16.tscn) |
-| A5-R17 | undercroft | 2×2 屏 | 探索堡垒地下维护竖井并连接升降机 | [打开场景](../../scenes/a5_rooms/a5_r17.tscn) |
-| A5-R18 | lower_route | 2×1 屏 | 沿蓄水沟绕过一段高风险战壕 | [打开场景](../../scenes/a5_rooms/a5_r18.tscn) |
-| A5-R19 | loop_return | 1×1 屏 | 从地下回接战壕，打开后改变回程路线 | [打开场景](../../scenes/a5_rooms/a5_r19.tscn) |
-| A5-R20 | C09_exit | 1×1 屏 | 从高位城墙离开A5进入修道院上层廊桥 | [打开场景](../../scenes/a5_rooms/a5_r20.tscn) |
-| A5-R21 | late_ability_branch | 2×1 屏 | 用现有后期能力进入残墙侧翼并获得可选强化 | [打开场景](../../scenes/a5_rooms/a5_r21.tscn) |
-| A5-R22 | hidden_anomaly | 1×1 屏 | 找到地图外侧的隐秘观察室与终局相关异象 | [打开场景](../../scenes/a5_rooms/a5_r22.tscn) |
+| A5-R01 | entry | 1×1 屏 | C08高位入口；从城区残墙跃入战场 | [打开场景](a5_r01.tscn) |
+| A5-R02 | route | 2×1 屏 | 沿断墙观察战壕、箭楼和远端绞盘 | [打开场景](a5_r02.tscn) |
+| A5-R03 | junction | 2×1 屏 | 战壕岔口：选择地面主线或地下补给支路 | [打开场景](a5_r03.tscn) |
+| A5-R04 | combat | 2×1 屏 | 在弹坑与残骸之间应对远近程交叉火力 | [打开场景](a5_r04.tscn) |
+| A5-R05 | platform | 1×2 屏 | 攀登信号塔残架，俯瞰地面路线 | [打开场景](a5_r05.tscn) |
+| A5-R06 | descent | 1×2 屏 | 沿塌陷坡道下降，寻找回到战壕的安全落点 | [打开场景](a5_r06.tscn) |
+| A5-R07 | rest | 1×1 屏 | 废弃战地医疗所提供休整与战报线索 | [打开场景](a5_r07.tscn) |
+| A5-R08 | combat_reward | 2×1 屏 | 夺回军需堡垒，战斗后获得补给 | [打开场景](a5_r08.tscn) |
+| A5-R09 | optional_cache | 1×1 屏 | 从战壕侧面进入埋藏军需库寻找可选材料 | [打开场景](a5_r09.tscn) |
+| A5-R10 | platform_challenge | 2×2 屏 | 穿越多层坍塌城墙，选择高风险上层路线 | [打开场景](a5_r10.tscn) |
+| A5-R11 | mechanism | 2×1 屏 | 修复炮桥的活动支撑，观察机关节奏后通过 | [打开场景](a5_r11.tscn) |
+| A5-R12 | hub_rest | 2×1 屏 | 中央指挥庭院作为区域地标、休息与路线分流点 | [打开场景](a5_r12.tscn) |
+| A5-R13 | vertical_landmark | 1×3 屏 | 沿箭楼内部多层平台攀升并观察远方出口 | [打开场景](a5_r13.tscn) |
+| A5-R14 | hidden_lore | 1×1 屏 | 发现被抹去的指挥记录，揭示战报矛盾 | [打开场景](a5_r14.tscn) |
+| A5-R15 | upper_route | 2×1 屏 | 沿堡垒高墙回接主路并俯瞰地下维护区 | [打开场景](a5_r15.tscn) |
+| A5-R16 | remote_shortcut | 1×2 屏 | 操作断桥绞盘，从A5侧开启C04旧朝圣高路 | [打开场景](a5_r16.tscn) |
+| A5-R17 | undercroft | 2×2 屏 | 探索堡垒地下维护竖井并连接升降机 | [打开场景](a5_r17.tscn) |
+| A5-R18 | lower_route | 2×1 屏 | 沿蓄水沟绕过一段高风险战壕 | [打开场景](a5_r18.tscn) |
+| A5-R19 | loop_return | 1×1 屏 | 从地下回接战壕，打开后改变回程路线 | [打开场景](a5_r19.tscn) |
+| A5-R20 | C09_exit | 1×1 屏 | 从高位城墙离开A5进入修道院上层廊桥 | [打开场景](a5_r20.tscn) |
+| A5-R21 | late_ability_branch | 2×1 屏 | 用现有后期能力进入残墙侧翼并获得可选强化 | [打开场景](a5_r21.tscn) |
+| A5-R22 | hidden_anomaly | 1×1 屏 | 找到地图外侧的隐秘观察室与终局相关异象 | [打开场景](a5_r22.tscn) |
 
 ## 静态检查
 
