@@ -62,6 +62,7 @@ func _ready() -> void:
 	_spawn_gatekeeper()
 	_spawn_shared_world_npcs()
 	_spawn_village_pois()
+	$BackhillEntrance.interacted.connect(_on_village_poi_interacted.bind($BackhillEntrance))
 	_spawn_resonance_well_gate()
 	_spawn_ui()
 	_spawn_narrative_audio()
@@ -352,16 +353,6 @@ func _on_village_npc_interacted(npc: Node) -> void:
 		refresh_progression_content()
 
 func _spawn_village_pois() -> void:
-	var backhill := Node2D.new()
-	backhill.set_script(VILLAGE_POI_SCRIPT)
-	backhill.position = Vector2(2120, 520)
-	backhill.name = "BackhillEntrance"
-	backhill.interaction_range = 65.0
-	backhill.poi_id = "backhill_path"
-	backhill.display_name = "教堂与后山小径"
-	backhill.dialogue = "从主街向东，坡道通往村庄边缘的教堂、酒馆与后山悬崖。"
-	add_child(backhill)
-	backhill.interacted.connect(_on_village_poi_interacted.bind(backhill))
 
 	var graveyard := Node2D.new()
 	graveyard.set_script(VILLAGE_POI_SCRIPT)
