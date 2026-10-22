@@ -22,8 +22,8 @@ const SURGICAL_CATWALK_RECTS := [
 	Rect2(1000.0, FLOOR_Y - 110.0, 120.0, 16.0),
 	Rect2(1160.0, FLOOR_Y - 80.0, 120.0, 16.0),
 ]
-# A0 opening route stays on the floor. Do not create the old graybox maintenance ledges:
-# their collision surfaces visually blended into background seams and obstructed jumping.
+# The mandatory escape route stays on the main floor; this optional catwalk is a distinct,
+# visibly drawn side route with collision matching the same rectangle contract.
 
 var hero: CharacterBody2D
 var camera: Camera2D
