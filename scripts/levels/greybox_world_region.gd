@@ -1008,6 +1008,16 @@ func _ready_a5_assembled_region() -> void:
 	if room_by_id.size() != rooms.size():
 		push_error("[NEREIS][A5_ASSEMBLY] Not all room scenes were instantiated")
 		return
+	# The proposed screen grid deliberately uses negative Y for upper branches.
+	# Normalize every room into the assembled map's local positive coordinate space;
+	# otherwise upper rooms sit above camera.limit_top and can be clipped or unreachable.
+	# 房间合同用负 Y 表示高层；组装时统一平移到地图局部正坐标，避免高层跑到镜头上边界之外。
+	var vertical_offset := -min_top
+	if not is_zero_approx(vertical_offset):
+		for room_value in room_by_id.values():
+			var placed_room := room_value as Node2D
+			if placed_room != null:
+				placed_room.position.y += vertical_offset
 	map_width = max_right
 	room_height = max_bottom - min_top
 	floor_y = max_bottom - min_top - 180.0
