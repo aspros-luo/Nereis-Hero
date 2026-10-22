@@ -53,7 +53,7 @@ func _ready() -> void:
 	# Each village return route uses a safe landing zone clear of unrelated interaction prompts.
 	# 村庄各条回程路线使用独立安全落点，避免刚切图就显示无关的 E 交互提示。
 	# Spawn after the watergate outside the well gate, tavern, and restoration-camp interaction radii.
-	var spawn_x := 2120.0 if spawn_side == "backhill_return" else (1850.0 if spawn_side in ["well_exit", "cliff_cave_return"] else (350.0 if spawn_side == "city_cut_return" else (2630.0 if spawn_side == "north_gate" else (530.0 if spawn_side == "mite_house_return" else 260.0))))
+	var spawn_x := 2420.0 if spawn_side == "backhill_return" else (1850.0 if spawn_side in ["well_exit", "cliff_cave_return"] else (350.0 if spawn_side == "city_cut_return" else (2630.0 if spawn_side == "north_gate" else (530.0 if spawn_side == "mite_house_return" else 260.0))))
 	_spawn_hero(spawn_x)
 	_spawn_checkpoint()
 	_spawn_village_rest_point()
