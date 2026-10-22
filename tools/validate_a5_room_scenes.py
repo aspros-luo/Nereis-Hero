@@ -253,6 +253,7 @@ def main() -> int:
         "RUBBLE_COLLISIONS/%s",
         "GROUND_COLLISION_COVERAGE/%s",
         "CAMERA_LIMITS/%s",
+        "PHYSICS_GROUNDING/%s",
         "A5 ROOM RUNTIME ACCEPTANCE:",
     ):
         if needle not in harness:
