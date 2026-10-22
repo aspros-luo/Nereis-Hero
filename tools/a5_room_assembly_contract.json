@@ -75,7 +75,7 @@
       "role": "platform",
       "scene_path": "res://scenes/a5_rooms/a5_r05.tscn",
       "position_screens": [
-        6,
+        7,
         0
       ],
       "placement_status": "proposed"
@@ -622,7 +622,7 @@
     "preserve_world_topology": true
   },
   "acceptance": {
-    "static_contract": "pending_validator",
+    "static_contract": "validator_added_not_yet_run_in_repo",
     "room_scene_instantiation": "not_implemented",
     "transition_doors": "not_implemented",
     "in_game_full_route": "not_tested",
