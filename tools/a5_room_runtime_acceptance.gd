@@ -130,14 +130,14 @@ func _test_room(room: Dictionary) -> void:
 
 	var invalid_platforms := 0
 	for body in platform_bodies:
-		if not _has_rectangle_collision(body, true):
+		if not _has_rectangle_collision(body, true) or not _rectangle_collision_inside_room(body, map_width, room_height):
 			invalid_platforms += 1
 	_record(invalid_platforms == 0, "PLATFORM_COLLISIONS/%s" % room_id,
 		"invalid one-way rectangle collisions=%d of %d" % [invalid_platforms, platform_bodies.size()])
 
 	var invalid_blocks := 0
 	for body in rubble_bodies:
-		if not _has_rectangle_collision(body, false):
+		if not _has_rectangle_collision(body, false) or not _rectangle_collision_inside_room(body, map_width, room_height):
 			invalid_blocks += 1
 	_record(invalid_blocks == 0, "RUBBLE_COLLISIONS/%s" % room_id,
 		"invalid solid rectangle collisions=%d of %d" % [invalid_blocks, rubble_bodies.size()])
@@ -260,6 +260,19 @@ func _has_rectangle_collision(body: StaticBody2D, expected_one_way: bool) -> boo
 	if expected_one_way and not collision.one_way_collision:
 		return false
 	return true
+
+func _rectangle_collision_inside_room(body: StaticBody2D, map_width: float, room_height: float) -> bool:
+	var collision := _first_collision_shape(body)
+	if collision == null or collision.shape == null or not (collision.shape is RectangleShape2D):
+		return false
+	var rectangle := collision.shape as RectangleShape2D
+	var collision_rect := Rect2(body.position + collision.position - rectangle.size * 0.5, rectangle.size)
+	return (
+		collision_rect.position.x >= -0.5
+		and collision_rect.position.y >= -0.5
+		and collision_rect.end.x <= map_width + 0.5
+		and collision_rect.end.y <= room_height + 0.5
+	)
 
 func _record(ok: bool, name: String, detail: String) -> void:
 	checks.append({"name": name, "passed": ok, "detail": detail})
