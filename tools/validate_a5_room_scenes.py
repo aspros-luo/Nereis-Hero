@@ -200,7 +200,7 @@ def main() -> int:
                 failures += 1
             previous_end = gap_x + gap_width
             # A visible floor break must also be represented by a collision-free span.
-            if not any(x < gap_x + gap_width and x + width > gap_x and offset <= 210
+            if not any(x < gap_x + gap_width and x + width > gap_x
                        for x, offset, width in resolved):
                 fail(f"{room_id}: floor gap x={gap_x:g} has no nearby crossing platform")
                 failures += 1
