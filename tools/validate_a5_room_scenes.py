@@ -67,13 +67,13 @@ def main() -> int:
     # Validate every authored platform against its room bounds and flag gaps that likely
     # exceed the Hero's ordinary jump envelope. This is geometric triage, not physics proof.
     layout_start = runtime.find("func _configure_a5_room_platforms() -> void:")
-    layout_end = runtime.find("\\n\\nfunc _configure_platforms()", layout_start)
+    layout_end = runtime.find("\n\nfunc _configure_platforms()", layout_start)
     if layout_start < 0 or layout_end < 0:
         fail("could not isolate _configure_a5_room_platforms()")
         failures += 1
     else:
         layout = runtime[layout_start:layout_end]
-        room_layouts = re.findall(r'"(A5-R\\d{2})":\\n((?:\\t\\t\\t.*\\n)*)', layout)
+        room_layouts = re.findall(r'"(A5-R\d{2})":\n((?:\t\t\t.*\n)*)', layout)
         layout_by_id = {room_id: body for room_id, body in room_layouts}
         for room in rooms:
             room_id = room["id"]
@@ -90,7 +90,7 @@ def main() -> int:
                 continue
             room_width, room_height = float(width_match.group(1)), float(height_match.group(1))
             floor_y = max(540.0, room_height - 180.0)
-            rects = re.findall(r"_add_platform\\(Rect2\\(([^,]+),\\s*([^,]+),\\s*([^,]+),\\s*18\\)\\)", body)
+            rects = re.findall(r"_add_platform\(Rect2\(([^,]+),\s*([^,]+),\s*([^,]+),\s*18\)\)", body)
             if len(rects) < 3:
                 fail(f"{room_id}: expected at least 3 authored platforms, got {len(rects)}")
                 failures += 1
