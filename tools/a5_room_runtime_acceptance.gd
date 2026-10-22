@@ -463,6 +463,32 @@ func _test_assembled_region(connections: Array) -> void:
 					float(instance.get("map_width")), float(instance.get("room_height"))
 				])
 
+	var transition_smoke_ok := false
+	if hero != null:
+		for endpoint_variant in endpoint_nodes:
+			if not endpoint_variant is Area2D:
+				continue
+			var endpoint := endpoint_variant as Area2D
+			if str(endpoint.get_meta("a5_connection_id", "")) != "A5-I01" or str(endpoint.get_meta("a5_from_room", "")) != "A5-R01":
+				continue
+			var edge_record: Dictionary = {}
+			for connection_variant in connections:
+				if connection_variant is Dictionary and str(connection_variant.get("id", "")) == "A5-I01":
+					edge_record = connection_variant
+					break
+			var destination_anchor: Variant = endpoint.get_meta("a5_destination_anchor", Vector2.ZERO)
+			if not edge_record.is_empty() and destination_anchor is Vector2:
+				var expected_hero_position := instance.to_global(destination_anchor)
+				instance.call(
+					"_on_a5_internal_auto_transition_body_entered",
+					hero, edge_record, "A5-R01", "A5-R02", destination_anchor, endpoint
+				)
+				transition_smoke_ok = hero.global_position.distance_to(expected_hero_position) <= 1.0
+				instance.set("a5_internal_transition_cooldown", 0.0)
+			break
+	_record(transition_smoke_ok, "ASSEMBLY/AUTO_TRANSITION_SMOKE",
+		"crossing A5-I01 moves Hero to the authored R02 destination anchor=%s" % str(transition_smoke_ok))
+
 	for binding in [
 		{"door": "Exit_forgotten_city", "room": "A5_R01", "x": 180.0, "y": 410.0, "id": "C08"},
 		{"door": "Exit_monastery_tower", "room": "A5_R20", "x": 1200.0, "y": 410.0, "id": "C09"},
