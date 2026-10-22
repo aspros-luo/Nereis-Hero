@@ -1033,10 +1033,189 @@ func _ready_a5_assembled_region() -> void:
 	_spawn_hero(entry_room.position.x + 96.0, entry_room.position.y + maxf(540.0, 720.0 - 180.0) - 96.0)
 	_spawn_ui()
 	_spawn_region_exits()
+	_spawn_a5_internal_connections(parsed.get("connections", []))
 	_register_debug_locked_route_hints()
 	_spawn_region_rest_point()
 	queue_redraw()
-	print("[NEREIS][A5_ASSEMBLY] rooms=%d bounds=%.0fx%.0f contract=%s" % [room_by_id.size(), map_width, room_height, contract_path])
+	print("[NEREIS][A5_ASSEMBLY] rooms=%d internal_connections=%d bounds=%.0fx%.0f contract=%s" % [
+		room_by_id.size(), get_tree().get_nodes_in_group("a5_internal_connection_door").size(),
+		map_width, room_height, contract_path
+	])
+
+
+func _spawn_a5_internal_connections(raw_connections: Array) -> void:
+	# Each contract edge gets a real interaction portal at both ends. This keeps
+	# every authored room reachable without pretending that distant room rectangles
+	# physically touch in the macro grid.
+	# 合同中的每条边都生成真实交互门；即使宏观房间不直接相邻，也能在同一张地图内连续探索。
+	var spawned_endpoints := 0
+	for edge_variant in raw_connections:
+		if not edge_variant is Dictionary:
+			continue
+		var edge: Dictionary = edge_variant
+		var from_id := str(edge.get("from", ""))
+		var to_id := str(edge.get("to", ""))
+		var from_room := _get_a5_assembled_room(from_id)
+		var to_room := _get_a5_assembled_room(to_id)
+		if from_room == null or to_room == null:
+			push_error("[NEREIS][A5_ASSEMBLY] Connection %s references missing room %s -> %s" % [
+				str(edge.get("id", "?")), from_id, to_id
+			])
+			continue
+		var edge_id := str(edge.get("id", "A5-UNKNOWN"))
+		var from_anchor := _a5_connection_anchor(from_room, to_room)
+		_spawn_a5_internal_door(edge, from_id, to_id, from_room.position + from_anchor, false)
+		spawned_endpoints += 1
+		if str(edge.get("travel", "both")) != "one_way":
+			var to_anchor := _a5_connection_anchor(to_room, from_room)
+			_spawn_a5_internal_door(edge, to_id, from_id, to_room.position + to_anchor, true)
+			spawned_endpoints += 1
+		print("[NEREIS][A5_CONNECTION] id=%s %s -> %s kind=%s state=%s endpoints=%d" % [
+			edge_id, from_id, to_id, str(edge.get("kind", "walk")),
+			str(edge.get("initial_state", "open")), 1 if str(edge.get("travel", "both")) == "one_way" else 2
+		])
+	set_meta("a5_internal_connection_endpoint_count", spawned_endpoints)
+
+
+func _a5_connection_anchor(source_room: Node2D, target_room: Node2D) -> Vector2:
+	var source_width := float(source_room.get("map_width"))
+	var source_floor := float(source_room.get("floor_y"))
+	var source_center := source_room.position.x + source_width * 0.5
+	var target_center := target_room.position.x + float(target_room.get("map_width")) * 0.5
+	var anchor_x := source_width * 0.5
+	if target_center > source_center + 1.0:
+		anchor_x = source_width - 96.0
+	elif target_center < source_center - 1.0:
+		anchor_x = 96.0
+	# Portals sit just above the local ground line, so the Hero can approach them
+	# without requiring an ability jump merely to enter a room transition.
+	return Vector2(clampf(anchor_x, 72.0, maxf(72.0, source_width - 72.0)), source_floor - 36.0)
+
+
+func _spawn_a5_internal_door(edge: Dictionary, from_id: String, to_id: String, anchor: Vector2, reverse_endpoint: bool) -> void:
+	var edge_id := str(edge.get("id", "A5-UNKNOWN"))
+	var kind := str(edge.get("kind", "walk"))
+	var initial_state := str(edge.get("initial_state", "open"))
+	var door := Area2D.new()
+	door.set_script(INTERACTION_DOOR_SCRIPT)
+	door.name = "A5Door_%s_%s" % [edge_id.replace("-", "_"), from_id.replace("-", "_")]
+	door.position = anchor
+	door.prompt_text = _a5_connection_prompt(kind, initial_state, edge_id)
+	door.enabled = true
+	door.set_meta("a5_internal_connection_door", true)
+	door.set_meta("a5_connection_id", edge_id)
+	door.set_meta("a5_connection_kind", kind)
+	door.set_meta("a5_from_room", from_id)
+	door.set_meta("a5_to_room", to_id)
+	door.set_meta("a5_reverse_endpoint", reverse_endpoint)
+	var collision := CollisionShape2D.new()
+	var rectangle := RectangleShape2D.new()
+	rectangle.size = Vector2(108.0, 86.0)
+	collision.shape = rectangle
+	collision.position = Vector2(0.0, -34.0)
+	door.add_child(collision)
+	add_child(door)
+	door.add_to_group("a5_internal_connection_door")
+	door.interacted.connect(_on_a5_internal_door_interacted.bind(edge.duplicate(true), from_id, to_id, door))
+
+
+func _a5_connection_prompt(kind: String, initial_state: String, edge_id: String) -> String:
+	if kind == "hidden" or kind == "resonance_shortcut":
+		return "E  感知残响，探查隐藏通路"
+	if kind == "ability_gate":
+		return "E  检查封锁（需要特殊移动能力）"
+	if initial_state == "blocked":
+		return "E  检查并开启通路"
+	if kind == "elevator":
+		return "E  操作升降机"
+	if kind == "ladder" or kind == "climb":
+		return "E  攀上连接路线"
+	if kind == "drop":
+		return "E  沿落差进入相邻区域"
+	return "E  进入相邻区域"
+
+
+func _on_a5_internal_door_interacted(edge: Dictionary, from_id: String, to_id: String, door: Area2D) -> void:
+	if hero == null or not is_instance_valid(hero):
+		return
+	var edge_id := str(edge.get("id", "A5-UNKNOWN"))
+	var kind := str(edge.get("kind", "walk"))
+	var initial_state := str(edge.get("initial_state", "open"))
+	var unlock_condition := str(edge.get("unlock_condition", ""))
+	var opened := WorldState.is_hidden_path_opened(edge_id)
+	if initial_state == "blocked" and not opened:
+		if not _a5_internal_connection_requirement_met(edge_id, kind, unlock_condition):
+			if is_instance_valid(door):
+				door.prompt_text = _a5_connection_locked_prompt(edge_id, kind)
+			print("[NEREIS][A5_CONNECTION][LOCKED] id=%s kind=%s resonance=%d sight=%s" % [
+				edge_id, kind, WorldState.hero_resonance, str(WorldState.resonance_sight_active)
+			])
+			return
+		WorldState.open_hidden_path(edge_id)
+		if is_instance_valid(door):
+			door.prompt_text = "E  通路已开启，继续前进"
+		print("[NEREIS][A5_CONNECTION][OPEN] id=%s from=%s to=%s" % [edge_id, from_id, to_id])
+		return
+
+	# A resonance crossing is a persistent optional route, not a forced main-route gate.
+	if edge_id == "A5-RESONANCE-01" and not WorldState.is_hidden_path_opened(edge_id):
+		if not _a5_internal_connection_requirement_met(edge_id, kind, unlock_condition):
+			if is_instance_valid(door):
+				door.prompt_text = "需要灵视与 24 点共鸣"
+			return
+		WorldState.open_hidden_path(edge_id)
+		if is_instance_valid(door):
+			door.prompt_text = "E  进入已显现的残响通路"
+		return
+
+	var destination := _get_a5_assembled_room(to_id)
+	if destination == null:
+		push_error("[NEREIS][A5_ASSEMBLY] Internal destination disappeared: " + to_id)
+		return
+	var target_anchor := _a5_connection_anchor(destination, _get_a5_assembled_room(from_id))
+	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
+	hero.velocity = Vector2.ZERO
+	hero.global_position = to_global(destination.position + target_anchor)
+	# Ensure the respawn/checkpoint system retains a valid world coordinate after room teleport.
+	if hero.has_method("reset_physics_interpolation"):
+		hero.call("reset_physics_interpolation")
+	print("[NEREIS][A5_CONNECTION][TRAVERSE] id=%s from=%s to=%s position=(%.1f,%.1f)" % [
+		edge_id, from_id, to_id, hero.global_position.x, hero.global_position.y
+	])
+
+
+func _a5_internal_connection_requirement_met(edge_id: String, kind: String, unlock_condition: String) -> bool:
+	if kind == "resonance_shortcut" or edge_id == "A5-RESONANCE-01":
+		return WorldState.resonance_sight_active and WorldState.hero_resonance >= 24
+	if kind == "hidden":
+		if edge_id == "A5-B02":
+			return WorldState.resonance_sight_active
+		if edge_id == "A5-B03":
+			return WorldState.resonance_sight_active and WorldState.hero_resonance >= 24
+		return WorldState.resonance_sight_active and WorldState.hero_resonance >= 12
+	if kind == "ability_gate":
+		return (
+			WorldState.is_ability_unlocked("double_jump")
+			or WorldState.is_ability_unlocked("quick_dash")
+			or WorldState.is_ability_unlocked("grapple")
+			or WorldState.is_ability_unlocked("wall_climb")
+		)
+	# Other blocked edges are physical mechanisms / shortcuts: E persistently opens them.
+	return true
+
+
+func _a5_connection_locked_prompt(edge_id: String, kind: String) -> String:
+	if kind == "resonance_shortcut" or edge_id == "A5-RESONANCE-01":
+		return "需要灵视与 24 点共鸣"
+	if edge_id == "A5-B02":
+		return "需要开启灵视"
+	if edge_id == "A5-B03":
+		return "需要灵视与 24 点共鸣"
+	if edge_id == "A5-B01":
+		return "需要灵视与 12 点共鸣"
+	if kind == "ability_gate":
+		return "需要二段跳、快速闪避、抓钩或攀墙能力"
+	return "通路尚未开启"
 
 
 func _ready_a5_room_test() -> void:
