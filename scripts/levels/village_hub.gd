@@ -15,7 +15,6 @@ const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 const FIREFLY_SCRIPT = preload("res://scripts/effects/village_fireflies.gd")
 const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")
-const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"
 @export var floor_y: float = 520.0
 
 var hero: CharacterBody2D
@@ -64,7 +63,6 @@ func _ready() -> void:
 	_spawn_shared_world_npcs()
 	_spawn_village_pois()
 	_spawn_resonance_well_gate()
-	_spawn_cliff_cave_door()
 	_spawn_ui()
 	_spawn_narrative_audio()
 	_spawn_fireflies()
@@ -451,38 +449,6 @@ func _spawn_resonance_well_gate() -> void:
 	resonance_well_gate.required_outer_exposure = 0
 	resonance_well_gate.opened.connect(_on_resonance_well_opened)
 	add_child(resonance_well_gate)
-
-func _spawn_cliff_cave_door() -> void:
-	# This entrance only appears after the Hero defeats the mad cleric and physically returns to the village.
-	# 只有击败疯狂神职人员并实际返回村庄后，崖下洞窟入口才会出现。
-	if "returned_to_village_after_mad_cleric" not in WorldState.achievement_flags:
-		return
-	cliff_cave_door = Area2D.new()
-	cliff_cave_door.set_script(INTERACTION_DOOR_SCRIPT)
-	cliff_cave_door.name = "CliffCaveExperimentDoor"
-	cliff_cave_door.position = Vector2(2260.0, 390.0)
-	cliff_cave_door.prompt_text = "E  进入蜂巢后的洞穴"
-	cliff_cave_door.set_meta("interaction_priority", 95)
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(100.0, 138.0)
-	shape.shape = rectangle
-	shape.position = Vector2(0.0, -69.0)
-	cliff_cave_door.add_child(shape)
-	add_child(cliff_cave_door)
-	cliff_cave_door.interacted.connect(_on_cliff_cave_interacted)
-
-
-
-func _on_cliff_cave_interacted() -> void:
-	WorldState.discover_hidden_region("H09")
-	WorldState.open_hidden_path("H09")
-	WorldState.mark_hidden_region_entered("H09")
-	WorldState.pending_region_spawn_side = "west"
-	WorldState.set_location("cliff_cave_experiment")
-	print("[NEREIS][SECRET] Entering H09: cliff cave experiment site")
-	SceneTransition.fade_to_scene(CLIFF_CAVE_SCENE)
-
 
 func _on_resonance_well_opened(secret_id: String) -> void:
 	if narrative == null or not is_instance_valid(narrative):
