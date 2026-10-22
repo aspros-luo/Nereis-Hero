@@ -56,7 +56,7 @@ python3 tools/validate_a5_room_scenes.py
 "$HOME/Downloads/Godot.app/Contents/MacOS/Godot" --headless --path . --script tools/a5_room_runtime_acceptance.gd
 ```
 
-运行时脚本会逐一加载、实例化并释放房间，检查实际生成的平台碰撞体、残骸碰撞体、地面分段与缺口、Hero 碰撞形状、摄像机边界和出生位置。完整报告写入 Godot 的用户数据目录下的 `a5_room_runtime_acceptance_report.json`。如果 Godot 不在上述路径，请将命令替换为实际可执行文件路径。
+运行时脚本会逐一加载、实例化并释放 22 个独立房间，检查实际生成的平台碰撞体、残骸碰撞体、地面分段与缺口、Hero 碰撞形状、摄像机边界和出生位置；随后还会加载正式的 `scenes/a5_assembled_region.tscn`，检查 22 个房间是否全部实例化、上层房间是否已归一化到地图边界内、主角与摄像机是否唯一、C08/C09/C04 出口是否绑定到对应房间，以及休整点是否位于 R12 指挥庭院。完整报告写入 Godot 的用户数据目录下的 `a5_room_runtime_acceptance_report.json`。如果 Godot 不在上述路径，请将命令替换为实际可执行文件路径。
 
 这属于运行时 smoke test；它不会代替人工试玩，也不会自动证明所有跳跃路线都有良好手感。
 
