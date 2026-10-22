@@ -53,6 +53,10 @@ limit_bottom = 720
 polygon = PackedVector2Array(0, 0, 2200, 0, 2200, 720, 0, 720)
 color = Color(0.055, 0.067, 0.09, 1)
 
+[node name="GroundVisual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 540, 1840, 540, 1840, 720, 0, 720)
+color = Color(0.12, 0.11, 0.14, 1)
+
 [node name="FarCliff" type="Polygon2D" parent="."]
 position = Vector2(1160, 170)
 polygon = PackedVector2Array(0, 350, 140, 210, 260, 250, 390, 80, 560, 160, 760, 0, 980, 130, 1040, 550, 0, 550)
@@ -272,10 +276,6 @@ prompt_text = "E  进入蜂巢后的洞穴"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CliffCaveDoor"]
 position = Vector2(0, -69)
 shape = SubResource("CliffCaveDoorShape")
-
-[node name="GroundVisual" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(0, 540, 1840, 540, 1840, 720, 0, 720)
-color = Color(0.12, 0.11, 0.14, 1)
 
 [node name="GroundEdge" type="Line2D" parent="."]
 points = PackedVector2Array(0, 540, 180, 540, 360, 540, 540, 540, 720, 540, 900, 540, 1080, 540, 1260, 540, 1440, 540, 1620, 540, 1800, 540, 1840, 540)
