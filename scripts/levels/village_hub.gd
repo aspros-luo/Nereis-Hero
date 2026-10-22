@@ -605,7 +605,6 @@ func _draw() -> void:
 	draw_circle(Vector2(620, 487), 6.0, Color("#d49b68"))
 	draw_string(ThemeDB.fallback_font, Vector2(584, 475), "炉火", HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color("#8d7776"))
 
-	draw_rect(Rect2(900, 390, 90, 130), Color("#28212a"))
 	draw_string(ThemeDB.fallback_font, Vector2(885, 365), NereisLocalization.translate_text("墓地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
 	draw_string(ThemeDB.fallback_font, Vector2(1025, 335), NereisLocalization.translate_text("老屋"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
 
