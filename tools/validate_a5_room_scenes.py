@@ -75,7 +75,7 @@ def room_case_gaps(source: str) -> dict[str, list[tuple[float, float]]]:
         raise ValueError("cannot isolate _configure_a5_room_floor()")
     function = source[start:end]
     parsed: dict[str, list[tuple[float, float]]] = {}
-    pattern = r'"(A5-R\d{2})":\s*\n\s*gaps\s*=\s*\[(.*?)\]'
+    pattern = r'"(A5-R\d{2})":\s*\n(?:\s*#.*\n)*\s*gaps\s*=\s*\[(.*?)\]'
     for room_id, encoded in re.findall(pattern, function, re.S):
         parsed[room_id] = [(float(x), float(width))
                            for x, width in re.findall(r"Vector2\(([0-9.]+),\s*([0-9.]+)\)", encoded)]
