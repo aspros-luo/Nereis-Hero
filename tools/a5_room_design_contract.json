@@ -271,7 +271,7 @@
       "play_hook": "沿箭楼内部多层平台攀升并观察远方出口",
       "scene_path": "res://scenes/a5_rooms/a5_r13.tscn",
       "terrain_geometry": {
-        "platform_count": 28,
+        "platform_count": 33,
         "solid_rubble_count": 4,
         "floor_gap_count": 0,
         "layout_note": "23级箭楼主阶梯与连接到主塔的旁侧观察台"
@@ -322,7 +322,7 @@
       "play_hook": "操作断桥绞盘，从A5侧开启C04旧朝圣高路",
       "scene_path": "res://scenes/a5_rooms/a5_r16.tscn",
       "terrain_geometry": {
-        "platform_count": 18,
+        "platform_count": 21,
         "solid_rubble_count": 3,
         "floor_gap_count": 0,
         "layout_note": "15级绞盘塔主梯、低位回退平台与实体残骸"
@@ -729,7 +729,7 @@
     "platform_collision": "StaticBody2D with one_way RectangleShape2D per platform",
     "solid_rubble_collision": "StaticBody2D with RectangleShape2D; matching block visuals",
     "ground_collision": "per-room ground segments with real collision gaps",
-    "expected_platform_count": 232,
+    "expected_platform_count": 240,
     "expected_solid_block_count": 70,
     "expected_floor_gap_count": 16,
     "static_geometry_review": "platform bounds, room bounds, route step envelope, and floor-gap crossing reviewed",
