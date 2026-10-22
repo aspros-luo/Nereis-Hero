@@ -62,7 +62,7 @@ shape = SubResource("GroundShape")
 position = Vector2(-20, 360)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WestBoundary"]
-shape = SubResource("GroundShape")
+shape = SubResource("CliffBoundaryShape")
 
 [node name="CliffEdge" type="Polygon2D" parent="."]
 position = Vector2(1780, 470)
