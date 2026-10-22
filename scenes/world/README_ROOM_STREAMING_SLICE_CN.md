@@ -1,33 +1,46 @@
-# 房间流式加载最小切片（A5）
+# A5 房间流式加载（当前验收入口）
 
-本切片是新架构的独立验证入口，不替换项目现有启动场景。
+`world.tscn` 已从两个演示房间改为读取 `tools/a5_room_assembly_contract.json`，按需加载 A5 的 22 个既有房间场景。该场景仍是独立验收入口，尚未替换项目原启动场景，也不代表 C08/C09/C04 跨区域门已经迁移。
 
 ## 运行方式
 
-1. 使用 Godot 4.6.1 打开项目。
-2. 在文件系统中打开 `res://scenes/world/world.tscn`。
+1. 使用 Godot 4.6.1 打开项目，切换到 `feature/story-map-progression`。
+2. 打开 `res://scenes/world/world.tscn`。
 3. 按 **F6（运行当前场景）**。
-4. 使用现有主角控制方式移动到房间右侧边缘进入第二个房间，再向左返回。
+4. 从 A5-R01 开始沿房间边缘探索。主路连接应依合同加载房间；锁定捷径、隐藏支路、能力门和共鸣捷径在未解锁时不会生成通行触发区。
 
-## 本切片包含
+## 当前架构
 
-- 常驻 `World`、`Player`、`Camera2D`、HUD、`RoomContainer`、过渡管理器和淡入淡出层。
-- 两个独立房间场景：`A5-R01`、`A5-R02`。
-- 每个房间有 RoomBounds、west/east Marker2D 入口与 Area2D 过渡点。
-- `RoomData` Resource 注册房间场景路径与相邻房间。
-- 相邻房间使用 `ResourceLoader.load_threaded_request` 预加载。
-- `WorldState` 中的探索、捷径、拾取状态保存到独立 `user://room_world_state.json`，不改写旧主线存档结构。
+- `World` 持有唯一的 Player、Camera2D、HUD、RoomContainer、TransitionManager 与淡入淡出层。
+- 房间数据与内部连接读取 `tools/a5_room_assembly_contract.json`，不再把两个演示 `.tres` 作为 A5 房间清单。
+- 旧 A5 场景根节点仍使用 `greybox_world_region.gd`；World 在实例化前启用 `assembly_child_mode`，只建立房间地形，避免每个房间重复生成 Hero/HUD。
+- 房间连接使用合同中的 `from`、`to`、`travel` 与 `initial_state`；单向连接不生成反向边，初始锁定连接不生成可通行触发区。
+- 进入房间时更新相机边界、探索记录并预加载相邻场景。
+- 房间探索、捷径与拾取状态保存到独立的 `user://room_world_state.json`，不直接改变旧战役存档结构。
 
-## 验收清单
+## 实机验收清单
 
-- [ ] World 启动后只存在一个 Player、Camera2D 和 HUD。
-- [ ] 从 A5-R01 向右进入 A5-R02，角色出现在 west 入口。
-- [ ] 从 A5-R02 向左返回 A5-R01，角色出现在 east 入口。
-- [ ] 每次切换都有淡出、旧房间释放、新房间加载与淡入。
-- [ ] 相机边界随房间变化。
-- [ ] 运行期间检查 Remote 树：Player/HUD/Camera 不在 RoomContainer 下，只有当前房间在 RoomContainer 下。
-- [ ] 重启后 `WorldState.is_room_explored("A5-R01")` 与 `WorldState.is_room_explored("A5-R02")` 保留探索记录。
+- [ ] World 启动后只有一个 Player、Camera2D 和 HUD。
+- [ ] RoomContainer 下始终只有当前一个房间。
+- [ ] A5-R01 可以沿开放主路到达 A5-R20（C09 所在房间）。
+- [ ] 单向落差不能从反向触发器直接返回。
+- [ ] 锁定连接未解锁时不可通行。
+- [ ] 各房间出生点避开门触发区，不会切房间循环触发。
+- [ ] 房间切换有淡出/淡入，玩家与 HUD 不被销毁重建。
+- [ ] 宽房间与竖向房间的相机边界合理，玩家不会出生在无承托位置。
+- [ ] 离开并重新进入房间后，探索状态保留。
 
-## 范围说明
+## 静态检查
 
-这是两个房间的一条双向连接切片；尚未接入完整 A0–A13、C01–C24 拓扑，也没有迁移旧的 A5 地图。运行验证通过后再抽象 JSON 连接注册和全图 RoomData。
+从项目根目录执行：
+
+```bash
+python3 tools/validate_a5_room_streaming.py
+python3 tools/validate_a5_room_assembly_contract.py
+```
+
+静态检查只验证清单、路径、连接端点和代码接线；不能代替 Godot 4.6.1 的脚本解析、碰撞和整条路线实机测试。
+
+## 当前边界
+
+A5 22 个房间现在由新 World 流式加载器统一调度，但这仍是迁移阶段。C08 入口、C09 主线出口、C04 可选捷径必须在后续步骤接回现有跨区门逻辑；锁定边的实际解锁交互、快捷门的状态恢复以及全路线实机验收仍待完成。不要在未完成这些验收前把 World 切片设置为项目默认启动场景。
