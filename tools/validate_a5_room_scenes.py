@@ -172,19 +172,31 @@ def main() -> int:
                 failures += 1
             resolved.append((x, offset, width))
 
-        # Ordered platform data is authored as the intended traversal chain. Drops are allowed;
-        # horizontal gaps and upward steps are kept within a practical ordinary/double-jump envelope.
-        for index, (current, following) in enumerate(zip(resolved, resolved[1:]), start=1):
-            x1, offset1, width1 = current
-            x2, offset2, width2 = following
-            gap = max(0.0, x2 - (x1 + width1), x1 - (x2 + width2))
-            rise = max(0.0, offset2 - offset1)
-            if gap > 150:
-                fail(f"{room_id}: route platforms #{index}→#{index + 1} have {gap:.0f}px horizontal gap (target ≤150px)")
-                failures += 1
-            if rise > 90:
-                fail(f"{room_id}: route platforms #{index}→#{index + 1} rise {rise:.0f}px upward (target ≤90px)")
-                failures += 1
+        # Model the room as a traversal graph, not a single linear chain.
+        # Side branches are valid when reachable from the starter ledge within
+        # the same ordinary/double-jump envelope as the main route.
+        reachable = {0} if resolved else set()
+        frontier = [0] if resolved else []
+        while frontier:
+            current_index = frontier.pop()
+            x1, offset1, width1 = resolved[current_index]
+            for target_index, (x2, offset2, width2) in enumerate(resolved):
+                if target_index in reachable:
+                    continue
+                horizontal_gap = max(0.0, x2 - (x1 + width1), x1 - (x2 + width2))
+                upward_rise = max(0.0, offset2 - offset1)
+                if horizontal_gap <= 150 and upward_rise <= 90:
+                    reachable.add(target_index)
+                    frontier.append(target_index)
+        unreachable = sorted(set(range(len(resolved))) - reachable)
+        if unreachable:
+            labels = ", ".join(str(index + 1) for index in unreachable[:12])
+            suffix = "..." if len(unreachable) > 12 else ""
+            fail(
+                f"{room_id}: {len(unreachable)} platform(s) are unreachable from the starter ledge "
+                f"within the traversal envelope (platform indices {labels}{suffix})"
+            )
+            failures += 1
 
         if room_id != "A5-R06" and authored and min(row[1] for row in authored if len(row) == 3) > 100:
             fail(f"{room_id}: no low starter ledge reachable from the ground")
