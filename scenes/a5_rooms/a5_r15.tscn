@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+
+[node name="A5Room_R15" type="Node2D"]
+script = ExtResource("1")
+region_id = "A5"
+location_id = "a5_room_test_a5_r15"
+region_title = "upper_route - 沿堡垒高墙回接主路并俯瞰地下维护区"
+map_width = 2560.0
+floor_y = 540.0
+room_height = 720.0
+room_id = "A5-R15"
