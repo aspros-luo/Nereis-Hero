@@ -1160,7 +1160,7 @@ func _spawn_a5_internal_door(
 		))
 
 
-func _a5_connection_prompt(kind: String, initial_state: String, edge_id: String) -> String:
+func _a5_connection_prompt(kind: String, initial_state: String, _edge_id: String) -> String:
 	if kind == "hidden" or kind == "resonance_shortcut":
 		return "E  感知残响，探查隐藏通路"
 	if kind == "ability_gate":
@@ -1178,7 +1178,7 @@ func _a5_connection_prompt(kind: String, initial_state: String, edge_id: String)
 
 func _on_a5_internal_auto_transition_body_entered(
 	body: Node2D, edge: Dictionary, from_id: String, to_id: String,
-	destination_anchor: Vector2, door: Area2D
+	destination_anchor: Vector2, _door: Area2D
 ) -> void:
 	if body == hero and a5_internal_transition_cooldown <= 0.0:
 		_traverse_a5_connection(edge, from_id, to_id, destination_anchor)
@@ -1242,7 +1242,7 @@ func _traverse_a5_connection(edge: Dictionary, from_id: String, to_id: String, d
 	])
 
 
-func _a5_internal_connection_requirement_met(edge_id: String, kind: String, unlock_condition: String) -> bool:
+func _a5_internal_connection_requirement_met(edge_id: String, kind: String, _unlock_condition: String) -> bool:
 	if kind == "resonance_shortcut" or edge_id == "A5-RESONANCE-01":
 		return WorldState.resonance_sight_active and WorldState.hero_resonance >= 24
 	if kind == "hidden":
