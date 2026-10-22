@@ -144,8 +144,8 @@ func _test_room(room: Dictionary) -> void:
 
 	var gap_list: Variant = instance.get("a5_room_floor_gaps")
 	var segment_list: Variant = instance.get("a5_room_floor_segments")
-	var runtime_gap_count := gap_list.size() if gap_list is Array else -1
-	var runtime_segment_count := segment_list.size() if segment_list is Array else -1
+	var runtime_gap_count: int = gap_list.size() if gap_list is Array else -1
+	var runtime_segment_count: int = segment_list.size() if segment_list is Array else -1
 	var expected_gap_count := int(terrain.get("floor_gap_count", -1))
 	observed_platforms += platform_bodies.size()
 	observed_blocks += rubble_bodies.size()
