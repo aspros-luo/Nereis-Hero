@@ -100,7 +100,30 @@ func _load_a5_contract() -> bool:
 			source_data.adjacent_room_ids.append(StringName(dst))
 		if edge.get("travel", "both") != "one_way" and not target_data.adjacent_room_ids.has(StringName(src)):
 			target_data.adjacent_room_ids.append(StringName(src))
-	return room_data_by_id.has("A5-R01") and room_data_by_id.has("A5-R20")
+	var macro_bindings: Variant = parsed.get("macro_bindings", [])
+	if not macro_bindings is Array:
+		push_error("World: A5 合同缺少 macro_bindings 数组")
+		return false
+	var required_macro_rooms := {"C08": "A5-R01", "C04": "A5-R16", "C09": "A5-R20"}
+	var found_macro_ids: Dictionary = {}
+	for binding: Variant in macro_bindings:
+		if not binding is Dictionary:
+			continue
+		var macro_id := str(binding.get("id", ""))
+		if required_macro_rooms.has(macro_id):
+			if str(binding.get("room", "")) != str(required_macro_rooms[macro_id]):
+				push_error("World: 宏观连接房间绑定错误: " + macro_id)
+				return false
+			found_macro_ids[macro_id] = true
+	for macro_id: String in required_macro_rooms:
+		if not found_macro_ids.has(macro_id):
+			push_error("World: 缺少宏观连接绑定: " + macro_id)
+			return false
+	if not room_data_by_id.has("A5-R01") or not room_data_by_id.has("A5-R20"):
+		push_error("World: A5 主路入口或出口房间缺失")
+		return false
+	print("[NEREIS][ROOM_STREAM][CONTRACT] rooms=%d connections=%d macro_bindings=%d" % [room_data_by_id.size(), connections.size(), found_macro_ids.size()])
+	return true
 
 func _create_persistent_player() -> void:
 	player = CharacterBody2D.new()
