@@ -57,6 +57,7 @@ var debug_exit_markers: Array[Dictionary] = []
 var respawning := false
 var a6_bell_shortcut_spawned := false
 var a5_assembled_rooms: Dictionary = {}
+var a5_internal_transition_cooldown := 0.0
 
 func _ready() -> void:
 	if assembly_child_mode:
@@ -123,7 +124,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		get_tree().change_scene_to_file("res://scenes/world_map_test_menu.tscn")
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	a5_internal_transition_cooldown = maxf(0.0, a5_internal_transition_cooldown - delta)
 	_refresh_a6_bell_shortcut()
 	# C21 can become valid after examining A11's own observer anomaly; do not freeze its state at scene entry.
 	_refresh_a11_ending_route()
@@ -1120,11 +1122,20 @@ func _spawn_a5_internal_door(
 	var kind := str(edge.get("kind", "walk"))
 	var initial_state := str(edge.get("initial_state", "open"))
 	var door := Area2D.new()
-	door.set_script(INTERACTION_DOOR_SCRIPT)
+	var requires_interaction := initial_state == "blocked"
+	if requires_interaction:
+		door.set_script(INTERACTION_DOOR_SCRIPT)
+	else:
+		# Open room links trigger when the Hero crosses the doorway, like a room-based
+		# metroidvania; only locked shortcuts and secret gates require pressing E.
+		# 已开放的房间连接在主角穿过门洞时自动转场；只有锁闭捷径/隐藏门需要按 E。
+		door.collision_layer = 8
+		door.collision_mask = 1
+		door.monitoring = true
 	door.name = "A5Door_%s_%s" % [edge_id.replace("-", "_"), from_id.replace("-", "_")]
 	door.position = anchor
-	door.prompt_text = _a5_connection_prompt(kind, initial_state, edge_id)
-	door.enabled = true
+	if requires_interaction:
+		door.prompt_text = _a5_connection_prompt(kind, initial_state, edge_id)
 	door.set_meta("a5_internal_connection_door", true)
 	door.set_meta("a5_connection_id", edge_id)
 	door.set_meta("a5_connection_kind", kind)
@@ -1133,15 +1144,20 @@ func _spawn_a5_internal_door(
 	door.set_meta("a5_reverse_endpoint", reverse_endpoint)
 	var collision := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(108.0, 86.0)
+	rectangle.size = Vector2(108.0, 86.0) if requires_interaction else Vector2(76.0, 128.0)
 	collision.shape = rectangle
-	collision.position = Vector2(0.0, -34.0)
+	collision.position = Vector2(0.0, -34.0) if requires_interaction else Vector2(0.0, -64.0)
 	door.add_child(collision)
 	add_child(door)
 	door.add_to_group("a5_internal_connection_door")
-	door.interacted.connect(_on_a5_internal_door_interacted.bind(
-		edge.duplicate(true), from_id, to_id, destination_anchor, door
-	))
+	if requires_interaction:
+		door.interacted.connect(_on_a5_internal_door_interacted.bind(
+			edge.duplicate(true), from_id, to_id, destination_anchor, door
+		))
+	else:
+		door.body_entered.connect(_on_a5_internal_auto_transition_body_entered.bind(
+			edge.duplicate(true), from_id, to_id, destination_anchor, door
+		))
 
 
 func _a5_connection_prompt(kind: String, initial_state: String, edge_id: String) -> String:
@@ -1158,6 +1174,14 @@ func _a5_connection_prompt(kind: String, initial_state: String, edge_id: String)
 	if kind == "drop":
 		return "E  沿落差进入相邻区域"
 	return "E  进入相邻区域"
+
+
+func _on_a5_internal_auto_transition_body_entered(
+	body: Node2D, edge: Dictionary, from_id: String, to_id: String,
+	destination_anchor: Vector2, door: Area2D
+) -> void:
+	if body == hero and a5_internal_transition_cooldown <= 0.0:
+		_traverse_a5_connection(edge, from_id, to_id, destination_anchor)
 
 
 func _on_a5_internal_door_interacted(
@@ -1195,6 +1219,13 @@ func _on_a5_internal_door_interacted(
 			door.prompt_text = "E  进入已显现的残响通路"
 		return
 
+	_traverse_a5_connection(edge, from_id, to_id, destination_anchor)
+
+
+func _traverse_a5_connection(edge: Dictionary, from_id: String, to_id: String, destination_anchor: Vector2) -> void:
+	if hero == null or not is_instance_valid(hero) or a5_internal_transition_cooldown > 0.0:
+		return
+	var edge_id := str(edge.get("id", "A5-UNKNOWN"))
 	var destination := _get_a5_assembled_room(to_id)
 	if destination == null:
 		push_error("[NEREIS][A5_ASSEMBLY] Internal destination disappeared: " + to_id)
@@ -1202,7 +1233,8 @@ func _on_a5_internal_door_interacted(
 	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
 	hero.velocity = Vector2.ZERO
 	hero.global_position = to_global(destination_anchor)
-	# Ensure the respawn/checkpoint system retains a valid world coordinate after room teleport.
+	a5_internal_transition_cooldown = 0.45
+	# Ensure the respawn/checkpoint system retains a valid world coordinate after room transition.
 	if hero.has_method("reset_physics_interpolation"):
 		hero.call("reset_physics_interpolation")
 	print("[NEREIS][A5_CONNECTION][TRAVERSE] id=%s from=%s to=%s position=(%.1f,%.1f)" % [
