@@ -731,7 +731,7 @@
     "expected_platform_count": 232,
     "expected_solid_block_count": 70,
     "expected_floor_gap_count": 16,
-    "static_geometry_review": "connector-side geometry audit completed",
+    "static_geometry_review": "platform bounds, room bounds, route step envelope, and floor-gap crossing reviewed",
     "godot_runtime_test": "not_run"
   }
 }
