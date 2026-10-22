@@ -1748,6 +1748,8 @@ func _configure_additional_lower_route_platforms() -> void:
 func _add_platform(rect: Rect2) -> void:
 	platforms.append(rect)
 	var body := StaticBody2D.new()
+	if region_id == "A5" and not room_id.is_empty():
+		body.name = "A5RoomPlatform_%03d" % platforms.size()
 	body.position = rect.position
 	var shape := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
