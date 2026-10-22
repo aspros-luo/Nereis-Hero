@@ -162,3 +162,36 @@ color = Color(0.22, 0.17, 0.20, 1)
 position = Vector2(-55, 40)
 polygon = PackedVector2Array(0, 0, 30, 0, 30, 95, 0, 95)
 color = Color(0.07, 0.06, 0.08, 1)
+
+[node name="Graveyard" type="Node2D" parent="."]
+position = Vector2(945, 390)
+
+[node name="BoundaryWall" type="Polygon2D" parent="Graveyard"]
+polygon = PackedVector2Array(-45, 0, 45, 0, 45, 130, -45, 130)
+color = Color(0.13, 0.11, 0.15, 1)
+
+[node name="GraveMarker01" type="Polygon2D" parent="Graveyard"]
+position = Vector2(-20, 20)
+polygon = PackedVector2Array(-10, 0, 10, 0, 10, 35, -10, 35)
+color = Color(0.31, 0.28, 0.30, 1)
+
+[node name="GraveMarker02" type="Polygon2D" parent="Graveyard"]
+position = Vector2(15, 38)
+polygon = PackedVector2Array(-9, 0, 9, 0, 9, 28, -9, 28)
+color = Color(0.28, 0.25, 0.29, 1)
+
+[node name="OldHouse" type="Node2D" parent="."]
+position = Vector2(1045, 360)
+
+[node name="Facade" type="Polygon2D" parent="OldHouse"]
+polygon = PackedVector2Array(-45, 30, 45, 30, 45, 160, -45, 160)
+color = Color(0.15, 0.13, 0.17, 1)
+
+[node name="Roof" type="Polygon2D" parent="OldHouse"]
+polygon = PackedVector2Array(-60, 30, 0, -30, 60, 30)
+color = Color(0.20, 0.16, 0.20, 1)
+
+[node name="Door" type="Polygon2D" parent="OldHouse"]
+position = Vector2(-10, 90)
+polygon = PackedVector2Array(0, 0, 20, 0, 20, 70, 0, 70)
+color = Color(0.07, 0.06, 0.08, 1)
