@@ -265,7 +265,7 @@ polygon = PackedVector2Array(0, 0, 30, -14, 54, 0, 30, 14)
 color = Color(0.52, 0.37, 0.42, 1)
 
 [node name="CliffCaveDoor" type="Area2D" parent="."]
-position = Vector2(1940, 430)
+position = Vector2(1940, 500)
 script = ExtResource("4")
 prompt_text = "E  进入蜂巢后的洞穴"
 
