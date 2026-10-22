@@ -179,6 +179,7 @@ func _test_room(room: Dictionary) -> void:
 			ground_collision == null
 			or ground_collision.shape == null
 			or not (ground_collision.shape is RectangleShape2D)
+			or not _rectangle_collision_inside_room(body, map_width, room_height)
 		):
 			invalid_ground_shapes += 1
 		else:
