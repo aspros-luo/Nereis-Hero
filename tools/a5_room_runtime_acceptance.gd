@@ -309,6 +309,7 @@ func _test_assembled_region(connections: Array) -> void:
 
 	var malformed_endpoints := 0
 	var misplaced_endpoints := 0
+	var unsupported_endpoints := 0
 	var wrong_transition_modes := 0
 	var endpoint_positions: Array[Vector2] = []
 	for endpoint_variant in endpoint_nodes:
@@ -328,6 +329,21 @@ func _test_assembled_region(connections: Array) -> void:
 			var source_height := float(source_room.get("room_height"))
 			if local_anchor.x < 0.0 or local_anchor.x > source_width or local_anchor.y < 0.0 or local_anchor.y > source_height:
 				misplaced_endpoints += 1
+			var platforms_variant: Variant = source_room.get("platforms")
+			var supported := false
+			if platforms_variant is Array:
+				for platform_variant in platforms_variant:
+					if not platform_variant is Rect2:
+						continue
+					var platform: Rect2 = platform_variant
+					if (
+						absf(local_anchor.y - (platform.position.y - 36.0)) <= 1.0
+						and local_anchor.x >= platform.position.x + 47.0
+						and local_anchor.x <= platform.end.x - 47.0
+					):
+						supported = true
+			if not supported and absf(local_anchor.y - (float(source_room.get("floor_y")) - 36.0)) > 1.0:
+				unsupported_endpoints += 1
 		var connection_id := str(endpoint.get_meta("a5_connection_id", ""))
 		var connection_record: Dictionary = {}
 		for connection_variant in connections:
@@ -343,6 +359,8 @@ func _test_assembled_region(connections: Array) -> void:
 		"endpoints missing required metadata=%d" % malformed_endpoints)
 	_record(misplaced_endpoints == 0, "ASSEMBLY/CONNECTION_ANCHORS_IN_SOURCE_ROOM",
 		"endpoints outside their source room bounds=%d" % misplaced_endpoints)
+	_record(unsupported_endpoints == 0, "ASSEMBLY/CONNECTION_ANCHORS_ON_SUPPORT",
+		"endpoints not aligned to a real platform or safe floor fallback=%d" % unsupported_endpoints)
 	_record(wrong_transition_modes == 0, "ASSEMBLY/CONNECTION_TRANSITION_MODES",
 		"endpoints using the wrong auto/interact mode=%d" % wrong_transition_modes)
 
