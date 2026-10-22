@@ -2,7 +2,7 @@
   "schema_version": 1,
   "region_id": "A5",
   "region_name": "旧战场与边境堡垒",
-  "status": "standalone_room_scenes_created_runtime_not_verified",
+  "status": "terrain_designed_static_geometry_checked_runtime_not_verified",
   "viewport": {
     "width": 1280,
     "height": 720,
@@ -65,7 +65,12 @@
       "subregion": "A5-S02",
       "role": "entry",
       "play_hook": "C08高位入口；从城区残墙跃入战场",
-      "scene_path": "res://scenes/a5_rooms/a5_r01.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r01.tscn",
+      "terrain_geometry": {
+        "solid_rubble_count": 2,
+        "floor_gap_count": 1,
+        "layout_note": "残墙入口、短跨壕沟与入口教学平台"
+      }
     },
     {
       "id": "A5-R02",
@@ -76,7 +81,13 @@
       "subregion": "A5-S02",
       "role": "route",
       "play_hook": "沿断墙观察战壕、箭楼和远端绞盘",
-      "scene_path": "res://scenes/a5_rooms/a5_r02.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r02.tscn",
+      "terrain_geometry": {
+        "platform_count": 9,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 1,
+        "layout_note": "长战壕上缘、远距观察台与单段真缺口"
+      }
     },
     {
       "id": "A5-R03",
@@ -87,7 +98,13 @@
       "subregion": "A5-S01",
       "role": "junction",
       "play_hook": "战壕岔口：选择地面主线或地下补给支路",
-      "scene_path": "res://scenes/a5_rooms/a5_r03.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r03.tscn",
+      "terrain_geometry": {
+        "platform_count": 9,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 1,
+        "layout_note": "战壕岔口、低高路线切换与补给沟"
+      }
     },
     {
       "id": "A5-R04",
@@ -98,7 +115,13 @@
       "subregion": "A5-S01",
       "role": "combat",
       "play_hook": "在弹坑与残骸之间应对远近程交叉火力",
-      "scene_path": "res://scenes/a5_rooms/a5_r04.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r04.tscn",
+      "terrain_geometry": {
+        "platform_count": 9,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 2,
+        "layout_note": "双弹坑分割、连续掩体与交叉火线落脚点"
+      }
     },
     {
       "id": "A5-R05",
@@ -109,7 +132,13 @@
       "subregion": "A5-S04",
       "role": "platform",
       "play_hook": "攀登信号塔残架，俯瞰地面路线",
-      "scene_path": "res://scenes/a5_rooms/a5_r05.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r05.tscn",
+      "terrain_geometry": {
+        "platform_count": 15,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 0,
+        "layout_note": "15级信号塔阶梯，75px左右步幅"
+      }
     },
     {
       "id": "A5-R06",
@@ -120,7 +149,13 @@
       "subregion": "A5-S01",
       "role": "descent",
       "play_hook": "沿塌陷坡道下降，寻找回到战壕的安全落点",
-      "scene_path": "res://scenes/a5_rooms/a5_r06.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r06.tscn",
+      "terrain_geometry": {
+        "platform_count": 15,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 0,
+        "layout_note": "塌陷坡道倒序平台；从上端出生验收下降"
+      }
     },
     {
       "id": "A5-R07",
@@ -131,7 +166,13 @@
       "subregion": "A5-S01",
       "role": "rest",
       "play_hook": "废弃战地医疗所提供休整与战报线索",
-      "scene_path": "res://scenes/a5_rooms/a5_r07.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r07.tscn",
+      "terrain_geometry": {
+        "platform_count": 5,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 0,
+        "layout_note": "医疗所低矮碎石、短平台与安全落脚区"
+      }
     },
     {
       "id": "A5-R08",
@@ -142,7 +183,13 @@
       "subregion": "A5-S01",
       "role": "combat_reward",
       "play_hook": "夺回军需堡垒，战斗后获得补给",
-      "scene_path": "res://scenes/a5_rooms/a5_r08.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r08.tscn",
+      "terrain_geometry": {
+        "platform_count": 9,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 1,
+        "layout_note": "军需堡垒多段掩体、跨沟路线与奖励区域空间"
+      }
     },
     {
       "id": "A5-R09",
@@ -153,7 +200,13 @@
       "subregion": "A5-S01",
       "role": "optional_cache",
       "play_hook": "从战壕侧面进入埋藏军需库寻找可选材料",
-      "scene_path": "res://scenes/a5_rooms/a5_r09.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r09.tscn",
+      "terrain_geometry": {
+        "platform_count": 5,
+        "solid_rubble_count": 2,
+        "floor_gap_count": 1,
+        "layout_note": "侧向藏库、短裂缝与紧凑探索台"
+      }
     },
     {
       "id": "A5-R10",
@@ -164,7 +217,13 @@
       "subregion": "A5-S02",
       "role": "platform_challenge",
       "play_hook": "穿越多层坍塌城墙，选择高风险上层路线",
-      "scene_path": "res://scenes/a5_rooms/a5_r10.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r10.tscn",
+      "terrain_geometry": {
+        "platform_count": 20,
+        "solid_rubble_count": 6,
+        "floor_gap_count": 2,
+        "layout_note": "双层城墙阶梯、两段真缺口与上层折返路线"
+      }
     },
     {
       "id": "A5-R11",
@@ -175,7 +234,13 @@
       "subregion": "A5-S02",
       "role": "mechanism",
       "play_hook": "修复炮桥的活动支撑，观察机关节奏后通过",
-      "scene_path": "res://scenes/a5_rooms/a5_r11.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r11.tscn",
+      "terrain_geometry": {
+        "platform_count": 9,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 1,
+        "layout_note": "炮桥落脚节拍、交替高低台与主沟"
+      }
     },
     {
       "id": "A5-R12",
@@ -186,7 +251,13 @@
       "subregion": "A5-S03",
       "role": "hub_rest",
       "play_hook": "中央指挥庭院作为区域地标、休息与路线分流点",
-      "scene_path": "res://scenes/a5_rooms/a5_r12.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r12.tscn",
+      "terrain_geometry": {
+        "platform_count": 8,
+        "solid_rubble_count": 4,
+        "floor_gap_count": 0,
+        "layout_note": "指挥庭院环台；保持宽阔中心与侧向分流"
+      }
     },
     {
       "id": "A5-R13",
@@ -197,7 +268,13 @@
       "subregion": "A5-S04",
       "role": "vertical_landmark",
       "play_hook": "沿箭楼内部多层平台攀升并观察远方出口",
-      "scene_path": "res://scenes/a5_rooms/a5_r13.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r13.tscn",
+      "terrain_geometry": {
+        "platform_count": 28,
+        "solid_rubble_count": 4,
+        "floor_gap_count": 0,
+        "layout_note": "23级箭楼主阶梯与连接到主塔的旁侧观察台"
+      }
     },
     {
       "id": "A5-R14",
@@ -208,7 +285,13 @@
       "subregion": "A5-S04",
       "role": "hidden_lore",
       "play_hook": "发现被抹去的指挥记录，揭示战报矛盾",
-      "scene_path": "res://scenes/a5_rooms/a5_r14.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r14.tscn",
+      "terrain_geometry": {
+        "platform_count": 5,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 0,
+        "layout_note": "密室短阶、靠墙调查空间与低矮残骸"
+      }
     },
     {
       "id": "A5-R15",
@@ -219,7 +302,13 @@
       "subregion": "A5-S03",
       "role": "upper_route",
       "play_hook": "沿堡垒高墙回接主路并俯瞰地下维护区",
-      "scene_path": "res://scenes/a5_rooms/a5_r15.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r15.tscn",
+      "terrain_geometry": {
+        "platform_count": 9,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 1,
+        "layout_note": "堡垒高墙连续台、地面裂口及维护层回接"
+      }
     },
     {
       "id": "A5-R16",
@@ -230,7 +319,13 @@
       "subregion": "A5-S05",
       "role": "remote_shortcut",
       "play_hook": "操作断桥绞盘，从A5侧开启C04旧朝圣高路",
-      "scene_path": "res://scenes/a5_rooms/a5_r16.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r16.tscn",
+      "terrain_geometry": {
+        "platform_count": 18,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 0,
+        "layout_note": "15级绞盘塔主梯、低位回退平台与实体残骸"
+      }
     },
     {
       "id": "A5-R17",
@@ -241,7 +336,13 @@
       "subregion": "A5-S05",
       "role": "undercroft",
       "play_hook": "探索堡垒地下维护竖井并连接升降机",
-      "scene_path": "res://scenes/a5_rooms/a5_r17.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r17.tscn",
+      "terrain_geometry": {
+        "platform_count": 15,
+        "solid_rubble_count": 6,
+        "floor_gap_count": 1,
+        "layout_note": "地下竖井折返梯、深坑分割和分层实体结构"
+      }
     },
     {
       "id": "A5-R18",
@@ -252,7 +353,13 @@
       "subregion": "A5-S01",
       "role": "lower_route",
       "play_hook": "沿蓄水沟绕过一段高风险战壕",
-      "scene_path": "res://scenes/a5_rooms/a5_r18.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r18.tscn",
+      "terrain_geometry": {
+        "platform_count": 9,
+        "solid_rubble_count": 3,
+        "floor_gap_count": 1,
+        "layout_note": "蓄水沟绕行台、两侧安全地面与浅层掩体"
+      }
     },
     {
       "id": "A5-R19",
@@ -263,7 +370,13 @@
       "subregion": "A5-S01",
       "role": "loop_return",
       "play_hook": "从地下回接战壕，打开后改变回程路线",
-      "scene_path": "res://scenes/a5_rooms/a5_r19.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r19.tscn",
+      "terrain_geometry": {
+        "platform_count": 5,
+        "solid_rubble_count": 2,
+        "floor_gap_count": 1,
+        "layout_note": "小裂缝、回环平台与短距离落差"
+      }
     },
     {
       "id": "A5-R20",
@@ -274,7 +387,13 @@
       "subregion": "A5-S03",
       "role": "C09_exit",
       "play_hook": "从高位城墙离开A5进入修道院上层廊桥",
-      "scene_path": "res://scenes/a5_rooms/a5_r20.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r20.tscn",
+      "terrain_geometry": {
+        "platform_count": 5,
+        "solid_rubble_count": 2,
+        "floor_gap_count": 0,
+        "layout_note": "C09高墙出口测试空间与紧凑平台序列"
+      }
     },
     {
       "id": "A5-R21",
@@ -285,7 +404,13 @@
       "subregion": "A5-S04",
       "role": "late_ability_branch",
       "play_hook": "用现有后期能力进入残墙侧翼并获得可选强化",
-      "scene_path": "res://scenes/a5_rooms/a5_r21.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r21.tscn",
+      "terrain_geometry": {
+        "platform_count": 15,
+        "solid_rubble_count": 4,
+        "floor_gap_count": 1,
+        "layout_note": "后期能力支路的高低折返台；此阶段仅做几何灰盒"
+      }
     },
     {
       "id": "A5-R22",
@@ -296,7 +421,13 @@
       "subregion": "A5-S04",
       "role": "hidden_anomaly",
       "play_hook": "找到地图外侧的隐秘观察室与终局相关异象",
-      "scene_path": "res://scenes/a5_rooms/a5_r22.tscn"
+      "scene_path": "res://scenes/a5_rooms/a5_r22.tscn",
+      "terrain_geometry": {
+        "platform_count": 5,
+        "solid_rubble_count": 2,
+        "floor_gap_count": 1,
+        "layout_note": "隐秘观察室短台、浅裂缝与紧凑隐藏空间"
+      }
     }
   ],
   "connections": [
@@ -591,5 +722,16 @@
     "运行时地图扩展到5600px并加密实体平台；仍需本地Godot运行验证跳跃可达性、相机边界、碰撞和出口触发。",
     "埋旗共鸣桥保留原脚本契约，不得用SC01物理回环替代。",
     "每个A5房间均已生成独立.tscn，可从Godot编辑器直接打开验收；独立测试模式仅加载该房间的地面、平台、主角、HUD与环境节点，不生成跨区出口或遭遇战。"
-  ]
+  ],
+  "terrain_design": {
+    "visual_mode": "shape_based_graybox",
+    "platform_collision": "StaticBody2D with one_way RectangleShape2D per platform",
+    "solid_rubble_collision": "StaticBody2D with RectangleShape2D; matching block visuals",
+    "ground_collision": "per-room ground segments with real collision gaps",
+    "expected_platform_count": 232,
+    "expected_solid_block_count": 70,
+    "expected_floor_gap_count": 16,
+    "static_geometry_review": "connector-side geometry audit completed",
+    "godot_runtime_test": "not_run"
+  }
 }
