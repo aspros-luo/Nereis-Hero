@@ -172,11 +172,11 @@ def main() -> int:
             x2, offset2, width2 = following
             gap = max(0.0, x2 - (x1 + width1), x1 - (x2 + width2))
             rise = max(0.0, offset2 - offset1)
-            if gap > 210:
-                fail(f"{room_id}: route platforms #{index}→#{index + 1} have {gap:.0f}px horizontal gap")
+            if gap > 150:
+                fail(f"{room_id}: route platforms #{index}→#{index + 1} have {gap:.0f}px horizontal gap (target ≤150px)")
                 failures += 1
-            if rise > 100:
-                fail(f"{room_id}: route platforms #{index}→#{index + 1} rise {rise:.0f}px upward")
+            if rise > 90:
+                fail(f"{room_id}: route platforms #{index}→#{index + 1} rise {rise:.0f}px upward (target ≤90px)")
                 failures += 1
 
         if room_id != "A5-R06" and authored and min(row[1] for row in authored if len(row) == 3) > 100:
