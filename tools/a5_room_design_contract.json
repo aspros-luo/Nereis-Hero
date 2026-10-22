@@ -2,7 +2,7 @@
   "schema_version": 1,
   "region_id": "A5",
   "region_name": "旧战场与边境堡垒",
-  "status": "design_draft_not_runtime_verified",
+  "status": "implementation_in_progress_not_runtime_verified",
   "viewport": {
     "width": 1280,
     "height": 720,
@@ -389,11 +389,12 @@
     {
       "id": "A5-I13",
       "from": "A5-R15",
-      "to": "A5-R16",
-      "kind": "walk",
+      "to": "A5-R20",
+      "kind": "main_route",
       "travel": "both",
       "initial_state": "open",
-      "unlock_condition": ""
+      "unlock_condition": "",
+      "design_note": "主路直通C09，不能把可选C04绞盘变成主线瓶颈"
     },
     {
       "id": "A5-I14",
@@ -493,6 +494,26 @@
       "travel": "both",
       "initial_state": "open",
       "unlock_condition": ""
+    },
+    {
+      "id": "A5-I18",
+      "from": "A5-R15",
+      "to": "A5-R16",
+      "kind": "optional_branch",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": "通往旧朝圣高路绞盘的可选支路"
+    },
+    {
+      "id": "A5-RESONANCE-01",
+      "from": "A5-R03",
+      "to": "A5-R18",
+      "kind": "resonance_shortcut",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "A5_BURIED_STANDARD_CROSSING",
+      "design_note": "保留现有 required_resonance=24、灵视条件、x=880..1220、y=390；与SC01物理回环职责不同"
     }
   ],
   "subregion_edges": [
@@ -543,6 +564,9 @@
     "现有能力门条件是占位引用；实施前必须映射到项目内真实能力ID/状态标志。",
     "房间尺寸按1280x720逻辑视口倍数表示，Tile尺寸待确认。",
     "A5-R16的绞盘用于从A5侧开启C04；开启前高路必须物理阻挡或单向。",
-    "A5-SC01/SC02/LIFT01为区域内部新增设计，不属于跨区拓扑修改。"
+    "A5-SC01/SC02/LIFT01为区域内部新增设计，不属于跨区拓扑修改。",
+    "落地版：C09主路从A5-R15直达A5-R20；C04从A5-R15分支进入A5-R16，不能成为离开A5的必经节点。",
+    "运行时地图扩展到5600px并加密实体平台；仍需本地Godot运行验证跳跃可达性、相机边界、碰撞和出口触发。",
+    "埋旗共鸣桥保留原脚本契约，不得用SC01物理回环替代。"
   ]
 }
