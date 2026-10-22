@@ -305,6 +305,8 @@ func _test_assembled_region(connections: Array) -> void:
 		"runtime=%d contract_expected=%d" % [endpoint_nodes.size(), expected_endpoints])
 
 	var malformed_endpoints := 0
+	var misplaced_endpoints := 0
+	var wrong_transition_modes := 0
 	var endpoint_positions: Array[Vector2] = []
 	for endpoint_variant in endpoint_nodes:
 		if not (endpoint_variant is Area2D):
@@ -313,9 +315,33 @@ func _test_assembled_region(connections: Array) -> void:
 		var endpoint := endpoint_variant as Area2D
 		if not endpoint.has_meta("a5_connection_id") or not endpoint.has_meta("a5_from_room") or not endpoint.has_meta("a5_to_room"):
 			malformed_endpoints += 1
+		var from_id := str(endpoint.get_meta("a5_from_room", ""))
+		var source_room := instance.get_node_or_null(from_id.replace("-", "_")) as Node2D
+		if source_room == null:
+			misplaced_endpoints += 1
+		else:
+			var local_anchor := endpoint.position - source_room.position
+			var source_width := float(source_room.get("map_width"))
+			var source_height := float(source_room.get("room_height"))
+			if local_anchor.x < 0.0 or local_anchor.x > source_width or local_anchor.y < 0.0 or local_anchor.y > source_height:
+				misplaced_endpoints += 1
+		var connection_id := str(endpoint.get_meta("a5_connection_id", ""))
+		var connection_record: Dictionary = {}
+		for connection_variant in connections:
+			if connection_variant is Dictionary and str(connection_variant.get("id", "")) == connection_id:
+				connection_record = connection_variant
+				break
+		var should_interact := str(connection_record.get("initial_state", "open")) == "blocked"
+		var actual_mode := str(endpoint.get_meta("a5_transition_mode", ""))
+		if (should_interact and actual_mode != "interact") or (not should_interact and actual_mode != "auto"):
+			wrong_transition_modes += 1
 		endpoint_positions.append(endpoint.global_position)
 	_record(malformed_endpoints == 0, "ASSEMBLY/CONNECTION_ENDPOINT_METADATA",
 		"endpoints missing required metadata=%d" % malformed_endpoints)
+	_record(misplaced_endpoints == 0, "ASSEMBLY/CONNECTION_ANCHORS_IN_SOURCE_ROOM",
+		"endpoints outside their source room bounds=%d" % misplaced_endpoints)
+	_record(wrong_transition_modes == 0, "ASSEMBLY/CONNECTION_TRANSITION_MODES",
+		"endpoints using the wrong auto/interact mode=%d" % wrong_transition_modes)
 
 	var overlapping_endpoints := 0
 	for i in range(endpoint_positions.size()):
