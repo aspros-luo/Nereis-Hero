@@ -1174,8 +1174,10 @@ func _spawn_a5_internal_door(
 	var visual := _create_a5_door_arch(anchor, marker_kind, door.name)
 	if marker_kind == "secret":
 		visual.visible = WorldState.is_hidden_path_opened(edge_id) or _a5_internal_connection_requirement_met(edge_id, kind, "")
+		door.enabled = visual.visible
 	a5_internal_connection_visuals.append({
 		"visual": visual,
+		"door": door,
 		"connection_id": edge_id,
 		"connection_kind": kind,
 		"marker_kind": marker_kind
@@ -1236,7 +1238,11 @@ func _refresh_a5_internal_connection_visuals() -> void:
 			continue
 		var edge_id := str(visual_data.get("connection_id", ""))
 		var edge_kind := str(visual_data.get("connection_kind", "hidden"))
-		visual.visible = WorldState.is_hidden_path_opened(edge_id) or _a5_internal_connection_requirement_met(edge_id, edge_kind, "")
+		var revealed := WorldState.is_hidden_path_opened(edge_id) or _a5_internal_connection_requirement_met(edge_id, edge_kind, "")
+		visual.visible = revealed
+		var door := visual_data.get("door") as Area2D
+		if door != null and is_instance_valid(door):
+			door.enabled = revealed
 
 
 func _a5_connection_prompt(kind: String, initial_state: String, _edge_id: String) -> String:
