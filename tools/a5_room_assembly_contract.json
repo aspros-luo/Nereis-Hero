@@ -1,0 +1,631 @@
+{
+  "schema_version": 1,
+  "region_id": "A5",
+  "status": "proposed_assembly_contract_not_scene_instantiated",
+  "purpose": "把22个独立房间组织为有空间位置、有明确邻接与分支的A5地图。此文件仅是组装合同，直到运行时加载器/正式场景读取它之前，不代表已完成游戏内组装。",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "unit": "screen",
+    "coordinate_origin": "top_left"
+  },
+  "rooms": [
+    {
+      "id": "A5-R01",
+      "size_screens": [
+        1,
+        1
+      ],
+      "role": "entry",
+      "scene_path": "res://scenes/a5_rooms/a5_r01.tscn",
+      "position_screens": [
+        0,
+        1
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R02",
+      "size_screens": [
+        2,
+        1
+      ],
+      "role": "route",
+      "scene_path": "res://scenes/a5_rooms/a5_r02.tscn",
+      "position_screens": [
+        1,
+        1
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R03",
+      "size_screens": [
+        2,
+        1
+      ],
+      "role": "junction",
+      "scene_path": "res://scenes/a5_rooms/a5_r03.tscn",
+      "position_screens": [
+        3,
+        1
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R04",
+      "size_screens": [
+        2,
+        1
+      ],
+      "role": "combat",
+      "scene_path": "res://scenes/a5_rooms/a5_r04.tscn",
+      "position_screens": [
+        5,
+        1
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R05",
+      "size_screens": [
+        1,
+        2
+      ],
+      "role": "platform",
+      "scene_path": "res://scenes/a5_rooms/a5_r05.tscn",
+      "position_screens": [
+        6,
+        0
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R06",
+      "size_screens": [
+        1,
+        2
+      ],
+      "role": "descent",
+      "scene_path": "res://scenes/a5_rooms/a5_r06.tscn",
+      "position_screens": [
+        6,
+        2
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R07",
+      "size_screens": [
+        1,
+        1
+      ],
+      "role": "rest",
+      "scene_path": "res://scenes/a5_rooms/a5_r07.tscn",
+      "position_screens": [
+        7,
+        2
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R08",
+      "size_screens": [
+        2,
+        1
+      ],
+      "role": "combat_reward",
+      "scene_path": "res://scenes/a5_rooms/a5_r08.tscn",
+      "position_screens": [
+        9,
+        2
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R09",
+      "size_screens": [
+        1,
+        1
+      ],
+      "role": "optional_cache",
+      "scene_path": "res://scenes/a5_rooms/a5_r09.tscn",
+      "position_screens": [
+        3,
+        0
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R10",
+      "size_screens": [
+        2,
+        2
+      ],
+      "role": "platform_challenge",
+      "scene_path": "res://scenes/a5_rooms/a5_r10.tscn",
+      "position_screens": [
+        9,
+        0
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R11",
+      "size_screens": [
+        2,
+        1
+      ],
+      "role": "mechanism",
+      "scene_path": "res://scenes/a5_rooms/a5_r11.tscn",
+      "position_screens": [
+        11,
+        0
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R12",
+      "size_screens": [
+        2,
+        1
+      ],
+      "role": "hub_rest",
+      "scene_path": "res://scenes/a5_rooms/a5_r12.tscn",
+      "position_screens": [
+        13,
+        0
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R13",
+      "size_screens": [
+        1,
+        3
+      ],
+      "role": "vertical_landmark",
+      "scene_path": "res://scenes/a5_rooms/a5_r13.tscn",
+      "position_screens": [
+        13,
+        -3
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R14",
+      "size_screens": [
+        1,
+        1
+      ],
+      "role": "hidden_lore",
+      "scene_path": "res://scenes/a5_rooms/a5_r14.tscn",
+      "position_screens": [
+        14,
+        -3
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R15",
+      "size_screens": [
+        2,
+        1
+      ],
+      "role": "upper_route",
+      "scene_path": "res://scenes/a5_rooms/a5_r15.tscn",
+      "position_screens": [
+        15,
+        -1
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R16",
+      "size_screens": [
+        1,
+        2
+      ],
+      "role": "remote_shortcut",
+      "scene_path": "res://scenes/a5_rooms/a5_r16.tscn",
+      "position_screens": [
+        17,
+        -2
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R17",
+      "size_screens": [
+        2,
+        2
+      ],
+      "role": "undercroft",
+      "scene_path": "res://scenes/a5_rooms/a5_r17.tscn",
+      "position_screens": [
+        17,
+        0
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R18",
+      "size_screens": [
+        2,
+        1
+      ],
+      "role": "lower_route",
+      "scene_path": "res://scenes/a5_rooms/a5_r18.tscn",
+      "position_screens": [
+        19,
+        0
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R19",
+      "size_screens": [
+        1,
+        1
+      ],
+      "role": "loop_return",
+      "scene_path": "res://scenes/a5_rooms/a5_r19.tscn",
+      "position_screens": [
+        19,
+        1
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R20",
+      "size_screens": [
+        1,
+        1
+      ],
+      "role": "C09_exit",
+      "scene_path": "res://scenes/a5_rooms/a5_r20.tscn",
+      "position_screens": [
+        17,
+        -1
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R21",
+      "size_screens": [
+        2,
+        1
+      ],
+      "role": "late_ability_branch",
+      "scene_path": "res://scenes/a5_rooms/a5_r21.tscn",
+      "position_screens": [
+        15,
+        -3
+      ],
+      "placement_status": "proposed"
+    },
+    {
+      "id": "A5-R22",
+      "size_screens": [
+        1,
+        1
+      ],
+      "role": "hidden_anomaly",
+      "scene_path": "res://scenes/a5_rooms/a5_r22.tscn",
+      "position_screens": [
+        19,
+        -2
+      ],
+      "placement_status": "proposed"
+    }
+  ],
+  "connections": [
+    {
+      "id": "A5-I01",
+      "from": "A5-R01",
+      "to": "A5-R02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I02",
+      "from": "A5-R02",
+      "to": "A5-R03",
+      "kind": "drop",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I03",
+      "from": "A5-R03",
+      "to": "A5-R04",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I04",
+      "from": "A5-R04",
+      "to": "A5-R05",
+      "kind": "climb",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I05",
+      "from": "A5-R05",
+      "to": "A5-R06",
+      "kind": "drop",
+      "travel": "one_way",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I06",
+      "from": "A5-R06",
+      "to": "A5-R07",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I07",
+      "from": "A5-R07",
+      "to": "A5-R08",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I08",
+      "from": "A5-R08",
+      "to": "A5-R10",
+      "kind": "climb",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I09",
+      "from": "A5-R10",
+      "to": "A5-R11",
+      "kind": "platform",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I10",
+      "from": "A5-R11",
+      "to": "A5-R12",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I11",
+      "from": "A5-R12",
+      "to": "A5-R13",
+      "kind": "ladder",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I12",
+      "from": "A5-R13",
+      "to": "A5-R15",
+      "kind": "drop",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I13",
+      "from": "A5-R15",
+      "to": "A5-R20",
+      "kind": "main_route",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I14",
+      "from": "A5-R16",
+      "to": "A5-R17",
+      "kind": "ladder",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I15",
+      "from": "A5-R17",
+      "to": "A5-R18",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I16",
+      "from": "A5-R18",
+      "to": "A5-R19",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-SC01",
+      "from": "A5-R19",
+      "to": "A5-R03",
+      "kind": "shortcut",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "opened_A5_SC01"
+    },
+    {
+      "id": "A5-SC02",
+      "from": "A5-R08",
+      "to": "A5-R02",
+      "kind": "shortcut",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "opened_A5_SC02"
+    },
+    {
+      "id": "A5-LIFT01",
+      "from": "A5-R17",
+      "to": "A5-R12",
+      "kind": "elevator",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "opened_A5_LIFT01"
+    },
+    {
+      "id": "A5-B01",
+      "from": "A5-R03",
+      "to": "A5-R09",
+      "kind": "hidden",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "existing_hidden_entry_condition"
+    },
+    {
+      "id": "A5-B02",
+      "from": "A5-R13",
+      "to": "A5-R14",
+      "kind": "hidden",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "existing_resonance_sight_condition"
+    },
+    {
+      "id": "A5-B03",
+      "from": "A5-R17",
+      "to": "A5-R22",
+      "kind": "hidden",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "existing_hidden_anomaly_condition"
+    },
+    {
+      "id": "A5-B04",
+      "from": "A5-R13",
+      "to": "A5-R21",
+      "kind": "ability_gate",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "existing_late_game_ability"
+    },
+    {
+      "id": "A5-B05",
+      "from": "A5-R21",
+      "to": "A5-R15",
+      "kind": "loop",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I18",
+      "from": "A5-R15",
+      "to": "A5-R16",
+      "kind": "optional_branch",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-RESONANCE-01",
+      "from": "A5-R03",
+      "to": "A5-R18",
+      "kind": "resonance_shortcut",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "A5_BURIED_STANDARD_CROSSING"
+    }
+  ],
+  "macro_bindings": [
+    {
+      "id": "C08",
+      "room": "A5-R01",
+      "exit": "west_high_parapet",
+      "edge_role": "main_entry",
+      "required": true
+    },
+    {
+      "id": "C04",
+      "room": "A5-R16",
+      "exit": "old_pilgrim_highroad_winch_gate",
+      "edge_role": "optional_shortcut",
+      "required": false,
+      "initial_state": "blocked",
+      "opens_from": "A5"
+    },
+    {
+      "id": "C09",
+      "room": "A5-R20",
+      "exit": "east_upper_parapet",
+      "edge_role": "main_exit",
+      "required": true
+    }
+  ],
+  "invariants": {
+    "all_22_rooms_unique": true,
+    "all_room_scenes_exist": true,
+    "all_connection_endpoints_are_known_rooms": true,
+    "all_rooms_reachable_in_final_graph": true,
+    "main_route": [
+      "A5-R01",
+      "A5-R02",
+      "A5-R03",
+      "A5-R04",
+      "A5-R05",
+      "A5-R06",
+      "A5-R07",
+      "A5-R08",
+      "A5-R10",
+      "A5-R11",
+      "A5-R12",
+      "A5-R13",
+      "A5-R15",
+      "A5-R20"
+    ],
+    "optional_rooms": [
+      "A5-R09",
+      "A5-R14",
+      "A5-R21",
+      "A5-R22"
+    ],
+    "resonance_connection": {
+      "id": "A5-RESONANCE-01",
+      "from": "A5-R03",
+      "to": "A5-R18",
+      "unlock_condition": "A5_BURIED_STANDARD_CROSSING",
+      "required_resonance": 24,
+      "requires_resonance_sight": true,
+      "bridge_start_x": 880,
+      "bridge_end_x": 1220,
+      "y": 390,
+      "persistent_on_open": true
+    },
+    "preserve_world_topology": true
+  },
+  "acceptance": {
+    "static_contract": "pending_validator",
+    "room_scene_instantiation": "not_implemented",
+    "transition_doors": "not_implemented",
+    "in_game_full_route": "not_tested",
+    "note": "位置是屏幕网格级布局提案；垂直/水平门槛、地面支撑、落差与镜头需在实际组装后逐一校正。不得把此合同描述成已装配地图。"
+  }
+}
