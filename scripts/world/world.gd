@@ -3,8 +3,8 @@ extends Node2D
 
 const HERO_SCRIPT: Script = preload("res://scripts/player/hero.gd")
 const HUD_SCRIPT: Script = preload("res://scripts/ui/game_hud.gd")
-const ROOM_ONE: Resource = preload("res://resources/rooms/a5_room_01.tres")
-const ROOM_TWO: Resource = preload("res://resources/rooms/a5_room_02.tres")
+const ROOM_ONE: RoomData = preload("res://resources/rooms/a5_room_01.tres")
+const ROOM_TWO: RoomData = preload("res://resources/rooms/a5_room_02.tres")
 
 @onready var room_container: Node2D = $RoomContainer
 @onready var fade_rect: ColorRect = $FadeLayer/ColorRect
@@ -18,6 +18,7 @@ var room_data_by_id: Dictionary = {}
 var threaded_scene_paths: Dictionary = {}
 
 func _ready() -> void:
+	WorldState.load_room_state()
 	room_data_by_id[String(ROOM_ONE.room_id)] = ROOM_ONE
 	room_data_by_id[String(ROOM_TWO.room_id)] = ROOM_TWO
 	_create_persistent_player()
@@ -59,7 +60,7 @@ func _load_room(room_id: String, entry_id: StringName, use_fade: bool = true) ->
 		return
 	if use_fade:
 		await _fade_to(1.0)
-	var packed := load(data.scene_path) as PackedScene
+	var packed := _get_room_scene(data.scene_path)
 	if packed == null:
 		push_error("World: 无法加载房间场景: " + data.scene_path)
 		if use_fade:
@@ -88,6 +89,21 @@ func _load_room(room_id: String, entry_id: StringName, use_fade: bool = true) ->
 	_preload_adjacent_rooms(data)
 	if use_fade:
 		await _fade_to(0.0)
+
+func _get_room_scene(scene_path: String) -> PackedScene:
+	# Use a completed threaded preload when available; otherwise fall back to a normal load.
+	# 若相邻房间预加载完成则直接取缓存；否则安全回退到普通加载。
+	if threaded_scene_paths.has(scene_path):
+		var status := ResourceLoader.load_threaded_get_status(scene_path)
+		while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			await get_tree().process_frame
+			status = ResourceLoader.load_threaded_get_status(scene_path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var threaded_resource := ResourceLoader.load_threaded_get(scene_path) as PackedScene
+			threaded_scene_paths.erase(scene_path)
+			return threaded_resource
+		threaded_scene_paths.erase(scene_path)
+	return load(scene_path) as PackedScene
 
 func _connect_room_transitions(room: RoomBase) -> void:
 	for node: Node in room.find_children("*", "Area2D", true, false):
