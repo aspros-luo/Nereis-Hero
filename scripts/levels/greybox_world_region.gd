@@ -1172,6 +1172,8 @@ func _spawn_a5_internal_door(
 		"connection_kind": kind
 	})
 	var visual := _create_a5_door_arch(anchor, marker_kind, door.name)
+	if marker_kind == "secret":
+		visual.visible = WorldState.is_hidden_path_opened(edge_id) or _a5_internal_connection_requirement_met(edge_id, kind, "")
 	a5_internal_connection_visuals.append({
 		"visual": visual,
 		"connection_id": edge_id,
