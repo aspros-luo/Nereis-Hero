@@ -598,19 +598,6 @@ func _draw() -> void:
 			draw_line(Vector2(rubble_x, 435), Vector2(rubble_x - 5, 500), Color("#79656a"), 5.0)
 	draw_string(ThemeDB.fallback_font, Vector2(20, 400), "旧排水道", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#8d7776"))
 
-	# Small house where the Hero first recovers.
-	draw_rect(Rect2(350, 360, 210, 160), Color("#27222b"))
-	draw_colored_polygon(
-		PackedVector2Array([
-			Vector2(325, 360),
-			Vector2(455, 245),
-			Vector2(585, 360)
-		]),
-		Color("#302832")
-	)
-	draw_rect(Rect2(430, 430, 50, 90), Color("#17141b"))
-	draw_string(ThemeDB.fallback_font, Vector2(388, 332), NereisLocalization.translate_text("蜜忒的家"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
-
 	# A low hearth marks the safe hub and the point where survivors gather.
 	# 低矮炉火标记安全据点，也是村民聚集的地方。
 	draw_rect(Rect2(590, 492, 62, 28), Color("#3a2d35"))
@@ -618,50 +605,9 @@ func _draw() -> void:
 	draw_circle(Vector2(620, 487), 6.0, Color("#d49b68"))
 	draw_string(ThemeDB.fallback_font, Vector2(584, 475), "炉火", HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color("#8d7776"))
 
-	# Leave the western edge open for the old drainage passage; houses begin beyond its arch.
-	# 西侧为旧排水通路保留空间，民居从拱门以东开始排列。
-	for x in range(600, 1900, 480):
-		draw_rect(Rect2(x - 90, 360, 180, 160), Color("#29232b"))
-		draw_colored_polygon(
-			PackedVector2Array([
-				Vector2(x - 110, 360),
-				Vector2(x, 260),
-				Vector2(x + 110, 360)
-			]),
-			Color("#352d38")
-		)
-		draw_rect(Rect2(x - 12, 440, 24, 80), Color("#17141b"))
-		draw_circle(Vector2(x - 42, 430), 8, Color("#8e7777"))
-		draw_circle(Vector2(x + 42, 430), 8, Color("#66545c"))
-
 	draw_rect(Rect2(900, 390, 90, 130), Color("#28212a"))
 	draw_string(ThemeDB.fallback_font, Vector2(885, 365), NereisLocalization.translate_text("墓地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
 	draw_string(ThemeDB.fallback_font, Vector2(1025, 335), NereisLocalization.translate_text("老屋"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
-
-	# A compact traveling stall gives the merchant a recognizable place without turning it into a crafting hub.
-	# 小型行商摊位提供明确的空间辨识，但不引入制作台或材料循环。
-	draw_rect(Rect2(1205, 465, 90, 18), Color("#4b3b3d"))
-	draw_rect(Rect2(1215, 425, 8, 40), Color("#59454a"))
-	draw_rect(Rect2(1277, 425, 8, 40), Color("#59454a"))
-	draw_colored_polygon(PackedVector2Array([Vector2(1200, 425), Vector2(1248, 395), Vector2(1300, 425)]), Color("#5a454e"))
-	draw_string(ThemeDB.fallback_font, Vector2(1195, 385), NereisLocalization.translate_text("行商摊位"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
-
-	# Give the blacksmith a readable workshop silhouette instead of leaving the role as a floating label.
-	# 为铁匠铺提供明确的灰盒轮廓，避免功能角色看起来只是站在路边的普通 NPC。
-	draw_rect(Rect2(1350, 385, 150, 135), Color("#29232a"))
-	draw_colored_polygon(
-		PackedVector2Array([
-			Vector2(1335, 385),
-			Vector2(1425, 315),
-			Vector2(1515, 385)
-		]),
-		Color("#3a3036")
-	)
-	draw_rect(Rect2(1370, 425, 30, 95), Color("#17141b"))
-	draw_rect(Rect2(1440, 445, 35, 20), Color("#4c3a3b"))
-	draw_circle(Vector2(1457, 443), 12.0, Color("#a85e45"))
-	draw_circle(Vector2(1457, 443), 6.0, Color("#d49b68"))
-	draw_string(ThemeDB.fallback_font, Vector2(1370, 365), NereisLocalization.translate_text("铁匠铺"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#b7a09b"))
 
 	# Hide the camp's distinctive fire and label until the later story-arrival flag is set.
 	# 初期只保留普通建筑轮廓；复国军的营火与营地标识必须等剧情节点后才出现。
