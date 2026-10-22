@@ -15,12 +15,12 @@ const LEVEL_WIDTH := 2200.0
 # One source of truth for the optional surgery catwalk: collision and visible platforms must match.
 # 手术室可选高路只维护一份几何合同，物理碰撞与绘制必须使用同一组矩形。
 const SURGICAL_CATWALK_RECTS := [
-\tRect2(360.0, FLOOR_Y - 80.0, 120.0, 16.0),
-\tRect2(520.0, FLOOR_Y - 110.0, 120.0, 16.0),
-\tRect2(680.0, FLOOR_Y - 140.0, 120.0, 16.0),
-\tRect2(840.0, FLOOR_Y - 140.0, 120.0, 16.0),
-\tRect2(1000.0, FLOOR_Y - 110.0, 120.0, 16.0),
-\tRect2(1160.0, FLOOR_Y - 80.0, 120.0, 16.0),
+	Rect2(360.0, FLOOR_Y - 80.0, 120.0, 16.0),
+	Rect2(520.0, FLOOR_Y - 110.0, 120.0, 16.0),
+	Rect2(680.0, FLOOR_Y - 140.0, 120.0, 16.0),
+	Rect2(840.0, FLOOR_Y - 140.0, 120.0, 16.0),
+	Rect2(1000.0, FLOOR_Y - 110.0, 120.0, 16.0),
+	Rect2(1160.0, FLOOR_Y - 80.0, 120.0, 16.0),
 ]
 # A0 opening route stays on the floor. Do not create the old graybox maintenance ledges:
 # their collision surfaces visually blended into background seams and obstructed jumping.
