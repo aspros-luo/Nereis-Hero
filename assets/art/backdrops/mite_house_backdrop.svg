@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="720" viewBox="0 0 1400 720">
+<defs>
+ <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#211f2a"/><stop offset=".68" stop-color="#38303a"/><stop offset="1" stop-color="#4b3940"/></linearGradient>
+ <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#58434a"/><stop offset=".14" stop-color="#32252d"/><stop offset="1" stop-color="#17151d"/></linearGradient>
+ <linearGradient id="window" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#879ea2" stop-opacity=".8"/><stop offset=".45" stop-color="#455e6b" stop-opacity=".45"/><stop offset="1" stop-color="#a4a7a0" stop-opacity=".1"/></linearGradient>
+ <linearGradient id="linen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b4a69b"/><stop offset=".5" stop-color="#76646a"/><stop offset="1" stop-color="#493c48"/></linearGradient>
+ <pattern id="plaster" width="130" height="95" patternUnits="userSpaceOnUse"><path d="M9 18l20 -4M73 45l27 3M34 78l12 -5M111 15l8 2" stroke="#b7a1a3" stroke-opacity=".1" stroke-width="2"/><path d="M58 0l-6 23 8 9M100 61l-4 14" fill="none" stroke="#090c12" stroke-opacity=".22" stroke-width="3"/></pattern>
+ <filter id="soft"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<rect width="1400" height="720" fill="#15141c"/>
+<path d="M0 0H1400V530L1330 548H70L0 530Z" fill="url(#wall)"/>
+<path d="M0 0H1400V530L1330 548H70L0 530Z" fill="url(#plaster)"/>
+<!-- heavy timber frame -->
+<path d="M0 0H1400V40H0Z" fill="#17151c"/><path d="M0 38H1400" stroke="#6b5058" stroke-width="7" opacity=".65"/>
+<path d="M80 0V532 M1320 0V532" stroke="#17141b" stroke-width="42"/><path d="M98 0V532 M1338 0V532" stroke="#74545b" stroke-width="4" opacity=".5"/>
+<path d="M130 110L520 0 M860 0L1270 120" stroke="#100f16" stroke-width="26"/><path d="M130 110L520 0 M860 0L1270 120" stroke="#74565e" stroke-width="3" opacity=".55"/>
+<!-- cold window and sill, left of room -->
+<rect x="190" y="155" width="230" height="188" rx="4" fill="#11141b" stroke="#17141b" stroke-width="14"/>
+<rect x="202" y="167" width="206" height="164" fill="url(#window)" stroke="#806a70" stroke-width="4"/>
+<path d="M305 169V330 M204 248H406" stroke="#302b36" stroke-width="9"/>
+<path d="M208 320L294 170 M327 330L406 208" stroke="#b8c4bf" stroke-opacity=".18" stroke-width="5"/>
+<path d="M180 346H430L414 360H196Z" fill="#4b3940" stroke="#1a171f" stroke-width="5"/>
+<!-- rough wall shelf / hanging linen -->
+<path d="M480 210H640" stroke="#17141b" stroke-width="12"/><path d="M480 207H640" stroke="#80636a" stroke-width="3"/>
+<path d="M510 208V242 M607 208V242" stroke="#a08b8a" stroke-width="3"/>
+<path d="M495 240L526 240L538 332L490 332Z" fill="#36414a" stroke="#191b24" stroke-width="3"/>
+<path d="M590 240L620 240L630 325L578 325Z" fill="#4b3d49" stroke="#191b24" stroke-width="3"/>
+<path d="M495 245L521 257L530 321 M590 246L612 256L620 313" stroke="#99a3a0" stroke-opacity=".25" stroke-width="3"/>
+<!-- back wall niche / shelves -->
+<rect x="875" y="185" width="250" height="170" fill="#191720" stroke="#17141b" stroke-width="12"/>
+<rect x="888" y="198" width="224" height="144" fill="#302630" stroke="#68505a" stroke-width="3"/>
+<path d="M888 248H1112 M888 298H1112" stroke="#6d515b" stroke-width="8"/>
+<g fill="#8d7475" stroke="#19171f" stroke-width="3">
+ <path d="M914 225h22l4 19h-30Z"/><path d="M955 218h18l5 26h-28Z"/><path d="M1011 218h24l3 26h-30Z"/><path d="M1060 224h20l3 20h-26Z"/>
+ <path d="M915 265h28v24h-28Z"/><path d="M971 265h26v24h-26Z"/><path d="M1034 265h20v24h-20Z"/><path d="M1074 264h24v25h-24Z"/>
+</g>
+<!-- bed, visually placed behind rest-point location -->
+<ellipse cx="1045" cy="529" rx="175" ry="24" fill="#08090f" opacity=".7" filter="url(#soft)"/>
+<path d="M895 438H1178V524H895Z" fill="#201a24" stroke="#100f16" stroke-width="9"/>
+<path d="M908 421H1160L1188 453H888Z" fill="url(#linen)" stroke="#211a24" stroke-width="5"/>
+<path d="M912 424L1000 427L1025 451H890Z" fill="#b5a89d" opacity=".82"/>
+<path d="M1028 429L1155 429L1181 451H1037Z" fill="#6c535f"/>
+<path d="M895 456H1178V475H895Z" fill="#41303b"/>
+<path d="M915 475V540 M1157 475V540" stroke="#18141c" stroke-width="18"/>
+<path d="M910 477H1175" stroke="#94747b" stroke-width="3" opacity=".55"/>
+<!-- little stool/table with two bowls -->
+<path d="M540 437H728L713 455H555Z" fill="#70535a" stroke="#19151d" stroke-width="5"/>
+<path d="M562 455L570 511 M704 455L696 511" stroke="#30232c" stroke-width="12"/>
+<ellipse cx="594" cy="431" rx="18" ry="8" fill="#a38d7f" stroke="#2a222b" stroke-width="4"/>
+<ellipse cx="675" cy="431" rx="18" ry="8" fill="#b9a28c" stroke="#2a222b" stroke-width="4"/>
+<ellipse cx="594" cy="430" rx="8" ry="3" fill="#453740"/><ellipse cx="675" cy="430" rx="8" ry="3" fill="#453740"/>
+<!-- hanging lamp -->
+<path d="M760 0V100" stroke="#111018" stroke-width="5"/><path d="M728 102L744 75H778L794 102L780 117H742Z" fill="#211b25" stroke="#8d6e73" stroke-width="4"/>
+<ellipse cx="760" cy="119" rx="42" ry="14" fill="#c6a17c" opacity=".12" filter="url(#soft)"/><path d="M743 115H777" stroke="#d2b18b" stroke-width="5"/>
+<!-- floor and rough threshold -->
+<path d="M0 530Q250 524 480 536T940 532T1400 526V720H0Z" fill="url(#floor)"/>
+<path d="M0 534Q250 528 480 540T940 536T1400 530" fill="none" stroke="#a07a80" stroke-width="5" opacity=".75"/>
+<path d="M0 588H1400 M0 652H1400" stroke="#090b12" stroke-width="5" opacity=".8"/>
+<path d="M120 536L104 588 M278 536L291 588 M452 539L438 588 M735 536L748 588 M866 535L850 588 M1225 532L1240 588 M1328 530L1314 588" stroke="#100f16" stroke-width="4"/>
+<path d="M60 620l32 -8 19 6 M360 679l44 -8 18 4 M820 611l24 -6 15 8 M1115 682l48 -7" stroke="#b49a9a" stroke-opacity=".18" stroke-width="3" fill="none"/>
+<!-- warm light pool kept subtle so silhouettes remain readable -->
+<ellipse cx="750" cy="490" rx="260" ry="180" fill="#bd8e70" opacity=".055"/>
+<!-- threshold silhouette at far left -->
+<rect x="0" y="320" width="78" height="218" fill="#0a0b12" opacity=".9"/>
+<path d="M24 535V395Q24 350 58 350" stroke="#7c656c" stroke-width="7" fill="none" opacity=".6"/>
+</svg>
