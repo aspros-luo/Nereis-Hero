@@ -1,0 +1,100 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/village_backhill.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/world/village_poi.gd" id="2"]
+
+[sub_resource type="RectangleShape2D" id="GroundShape"]
+size = Vector2(2200, 40)
+
+[sub_resource type="RectangleShape2D" id="PlatformShape"]
+size = Vector2(180, 18)
+
+[node name="VillageBackhill" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Backdrop" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 0, 2200, 0, 2200, 720, 0, 720)
+color = Color(0.055, 0.067, 0.09, 1)
+
+[node name="FarCliff" type="Polygon2D" parent="."]
+position = Vector2(1160, 170)
+polygon = PackedVector2Array(0, 350, 140, 210, 260, 250, 390, 80, 560, 160, 760, 0, 980, 130, 1040, 550, 0, 550)
+color = Color(0.13, 0.14, 0.18, 1)
+
+[node name="MainGround" type="StaticBody2D" parent="."]
+position = Vector2(0, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MainGround"]
+position = Vector2(1100, 20)
+shape = SubResource("GroundShape")
+
+[node name="WestBoundary" type="StaticBody2D" parent="."]
+position = Vector2(-20, 360)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WestBoundary"]
+shape = SubResource("GroundShape")
+
+[node name="RidgePlatform01" type="StaticBody2D" parent="."]
+position = Vector2(360, 450)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RidgePlatform01"]
+position = Vector2(90, 0)
+shape = SubResource("PlatformShape")
+one_way_collision = true
+
+[node name="RidgePlatform02" type="StaticBody2D" parent="."]
+position = Vector2(590, 395)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RidgePlatform02"]
+position = Vector2(90, 0)
+shape = SubResource("PlatformShape")
+one_way_collision = true
+
+[node name="RidgePlatform03" type="StaticBody2D" parent="."]
+position = Vector2(830, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RidgePlatform03"]
+position = Vector2(90, 0)
+shape = SubResource("PlatformShape")
+one_way_collision = true
+
+[node name="ChurchSilhouette" type="Polygon2D" parent="."]
+position = Vector2(420, 330)
+polygon = PackedVector2Array(-110, 210, -110, 80, 0, 0, 110, 80, 110, 210)
+color = Color(0.23, 0.20, 0.25, 1)
+
+[node name="ChurchDoor" type="Polygon2D" parent="ChurchSilhouette"]
+position = Vector2(-14, 140)
+polygon = PackedVector2Array(0, 0, 28, 0, 28, 70, 0, 70)
+color = Color(0.07, 0.06, 0.08, 1)
+
+[node name="TavernSilhouette" type="Polygon2D" parent="."]
+position = Vector2(760, 390)
+polygon = PackedVector2Array(-100, 150, -100, 35, 0, 0, 100, 35, 100, 150)
+color = Color(0.29, 0.20, 0.18, 1)
+
+[node name="TavernDoor" type="Polygon2D" parent="TavernSilhouette"]
+position = Vector2(-14, 85)
+polygon = PackedVector2Array(0, 0, 28, 0, 28, 65, 0, 65)
+color = Color(0.07, 0.06, 0.08, 1)
+
+[node name="ChurchPOI" type="Node2D" parent="."]
+position = Vector2(420, 540)
+script = ExtResource("2")
+poi_id = "church"
+display_name = "教堂"
+dialogue = "教堂的大门没有上锁。里面空荡而安静，只有旧木椅与未燃尽的蜡烛。"
+
+[node name="TavernPOI" type="Node2D" parent="."]
+position = Vector2(760, 540)
+script = ExtResource("2")
+poi_id = "tavern"
+display_name = "酒馆"
+dialogue = "酒馆里有人压低声音谈论征兵、井水与北边森林的钟声。"
+
+[node name="BackToVillagePOI" type="Node2D" parent="."]
+position = Vector2(120, 540)
+script = ExtResource("2")
+poi_id = "back_to_village"
+display_name = "返回村庄主街"
+dialogue = "沿着坡道可以回到住宅区与工坊。"
