@@ -51,13 +51,10 @@ func _ready() -> void:
 	add_child(world_event_director)
 	print("[NEREIS][VILLAGE] Entered Village Hub route=%s spawn_side=%s" % [WorldState.selected_route, spawn_side])
 	WorldState.set_checkpoint(Vector2(360, 520))
-	_create_floor()
-	_create_village_rooftop_route()
-	_create_boundaries()
 	# Each village return route uses a safe landing zone clear of unrelated interaction prompts.
 	# 村庄各条回程路线使用独立安全落点，避免刚切图就显示无关的 E 交互提示。
 	# Spawn after the watergate outside the well gate, tavern, and restoration-camp interaction radii.
-	var spawn_x := 1850.0 if spawn_side in ["well_exit", "cliff_cave_return"] else (350.0 if spawn_side == "city_cut_return" else (2630.0 if spawn_side == "north_gate" else (530.0 if spawn_side == "mite_house_return" else 260.0)))
+	var spawn_x := 2120.0 if spawn_side == "backhill_return" else (1850.0 if spawn_side in ["well_exit", "cliff_cave_return"] else (350.0 if spawn_side == "city_cut_return" else (2630.0 if spawn_side == "north_gate" else (530.0 if spawn_side == "mite_house_return" else 260.0))))
 	_spawn_hero(spawn_x)
 	_spawn_checkpoint()
 	_spawn_village_rest_point()
@@ -66,7 +63,6 @@ func _ready() -> void:
 	_spawn_gatekeeper()
 	_spawn_shared_world_npcs()
 	_spawn_village_pois()
-	_spawn_rooftop_waybill()
 	_spawn_resonance_well_gate()
 	_spawn_cliff_cave_door()
 	_spawn_ui()
@@ -377,16 +373,16 @@ func _spawn_rooftop_waybill() -> void:
 
 
 func _spawn_village_pois() -> void:
-	var tavern := Node2D.new()
-	tavern.set_script(VILLAGE_POI_SCRIPT)
-	tavern.position = Vector2(1730, 520)
-	tavern.interaction_range = 80.0
-	tavern.poi_id = "tavern"
-	tavern.add_to_group("a1_tavern_poi")
-	tavern.display_name = "酒馆"
-	add_child(tavern)
-	_refresh_tavern_poi_dialogue()
-	tavern.interacted.connect(_on_village_poi_interacted.bind(tavern))
+	var backhill := Node2D.new()
+	backhill.set_script(VILLAGE_POI_SCRIPT)
+	backhill.position = Vector2(2120, 520)
+	backhill.name = "BackhillEntrance"
+	backhill.interaction_range = 65.0
+	backhill.poi_id = "backhill_path"
+	backhill.display_name = "教堂与后山小径"
+	backhill.dialogue = "从主街向东，坡道通往村庄边缘的教堂、酒馆与后山悬崖。"
+	add_child(backhill)
+	backhill.interacted.connect(_on_village_poi_interacted.bind(backhill))
 
 	var graveyard := Node2D.new()
 	graveyard.set_script(VILLAGE_POI_SCRIPT)
@@ -452,18 +448,6 @@ func _spawn_village_pois() -> void:
 		city_cut.dialogue = "倒塌的横梁与新鲜碎石封住了通道。有人最近才堵上这里。\n\n裂缝另一侧的石头比村庄古老得多。"
 	add_child(city_cut)
 	city_cut.interacted.connect(_on_village_poi_interacted.bind(city_cut))
-
-	var church := Node2D.new()
-	church.set_script(VILLAGE_POI_SCRIPT)
-	# Keep a clear landing corridor between the church and north-gate interaction zones.
-	# 教堂交互点与北门之间保留无交互提示的回程落脚区。
-	church.position = Vector2(2120, 520)
-	church.interaction_range = 50.0
-	church.poi_id = "church"
-	church.display_name = "教堂"
-	church.dialogue = "教堂的大门没有上锁。里面空荡而安静，只有旧木椅与未燃尽的蜡烛。\n\n暂时没有人回应你的脚步声。"
-	add_child(church)
-	church.interacted.connect(_on_village_poi_interacted.bind(church))
 
 func _on_village_poi_interacted(poi: Node) -> void:
 	narrative.show_message(poi.display_name, poi.dialogue, 2.5)
@@ -540,7 +524,12 @@ func _on_resonance_well_opened(secret_id: String) -> void:
 	)
 
 func _enter_village_location(location_id: String) -> void:
-	if location_id == "tavern":
+	if location_id == "backhill_path":
+		WorldState.pending_region_spawn_side = "backhill_return"
+		WorldState.set_location("village_backhill")
+		print("[NEREIS][VILLAGE] Entering A1.1: Church, Tavern and Backhill")
+		SceneTransition.fade_to_scene("res://scenes/village_backhill.tscn")
+	elif location_id == "tavern":
 		WorldState.set_location("tavern")
 		print("[NEREIS][VILLAGE] Entering Tavern Interior")
 		SceneTransition.fade_to_scene("res://scenes/locations/tavern_interior.tscn")
