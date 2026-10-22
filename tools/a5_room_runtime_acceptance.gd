@@ -171,6 +171,27 @@ func _test_room(room: Dictionary) -> void:
 		"GROUND_COVERAGE/%s" % room_id,
 		"solid_width=%.1f + gap_width=%.1f map_width=%.1f" % [ground_coverage, gap_coverage, map_width])
 
+	var invalid_ground_shapes := 0
+	var actual_ground_coverage := 0.0
+	for body in ground_bodies:
+		var ground_collision := _first_collision_shape(body)
+		if ground_collision == null or ground_collision.shape == null \
+			or not (ground_collision.shape is RectangleShape2D):
+			invalid_ground_shapes += 1
+		else:
+			actual_ground_coverage += (ground_collision.shape as RectangleShape2D).size.x
+	_record(ground_bodies.size() == expected_gap_count + 1,
+		"GROUND_COLLISION_COUNT/%s" % room_id,
+		"runtime=%d expected=%d" % [ground_bodies.size(), expected_gap_count + 1])
+	_record(invalid_ground_shapes == 0,
+		"GROUND_COLLISION_SHAPES/%s" % room_id,
+		"invalid ground rectangle collisions=%d" % invalid_ground_shapes)
+	_record(is_equal_approx(actual_ground_coverage + gap_coverage, map_width),
+		"GROUND_COLLISION_COVERAGE/%s" % room_id,
+		"collision_width=%.1f + gap_width=%.1f map_width=%.1f" % [
+			actual_ground_coverage, gap_coverage, map_width
+		])
+
 	var hero := instance.get_node_or_null("Hero") as CharacterBody2D
 	_record(hero != null, "HERO/%s" % room_id, "Hero CharacterBody2D exists=%s" % str(hero != null))
 	if hero != null:
