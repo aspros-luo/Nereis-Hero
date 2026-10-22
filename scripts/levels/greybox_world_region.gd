@@ -1127,7 +1127,9 @@ func _a5_connection_anchor(
 			if not platform_variant is Rect2:
 				continue
 			var platform: Rect2 = platform_variant
-			if platform.size.x < 100.0:
+			# Leave enough usable width for each additional exit on this side.
+			# 同侧出口越多，候选平台必须越宽，避免多个触发区挤在同一位置。
+			if platform.size.x < 100.0 + float(slot) * 150.0:
 				continue
 			var side_distance := 0.0
 			match side:
