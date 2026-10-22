@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+
+[node name="A5Room_R04" type="Node2D"]
+script = ExtResource("1")
+region_id = "A5"
+location_id = "a5_room_test_a5_r04"
+region_title = "combat - 在弹坑与残骸之间应对远近程交叉火力"
+map_width = 2560.0
+floor_y = 540.0
+room_height = 720.0
+room_id = "A5-R04"
