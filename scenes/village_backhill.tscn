@@ -1,17 +1,23 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/village_backhill.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/world/village_poi.gd" id="2"]
 [ext_resource type="Script" path="res://scripts/player/hero.gd" id="3"]
 
 [sub_resource type="RectangleShape2D" id="GroundShape"]
-size = Vector2(2200, 40)
+size = Vector2(1840, 40)
 
 [sub_resource type="RectangleShape2D" id="PlatformShape"]
 size = Vector2(180, 18)
 
 [sub_resource type="RectangleShape2D" id="StairStepShape"]
 size = Vector2(100, 20)
+
+[sub_resource type="RectangleShape2D" id="LookoutShape"]
+size = Vector2(180, 18)
+
+[sub_resource type="RectangleShape2D" id="CliffBoundaryShape"]
+size = Vector2(40, 720)
 
 [sub_resource type="CapsuleShape2D" id="HeroCapsule"]
 radius = 18.0
@@ -49,7 +55,7 @@ color = Color(0.13, 0.14, 0.18, 1)
 position = Vector2(0, 540)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MainGround"]
-position = Vector2(1100, 20)
+position = Vector2(920, 20)
 shape = SubResource("GroundShape")
 
 [node name="WestBoundary" type="StaticBody2D" parent="."]
@@ -57,6 +63,29 @@ position = Vector2(-20, 360)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WestBoundary"]
 shape = SubResource("GroundShape")
+
+[node name="CliffEdge" type="Polygon2D" parent="."]
+position = Vector2(1780, 470)
+polygon = PackedVector2Array(0, 0, 60, -90, 120, -45, 180, -160, 250, -210, 320, -170, 360, 250, 0, 250)
+color = Color(0.09, 0.10, 0.14, 1)
+
+[node name="CliffLookout" type="StaticBody2D" parent="."]
+position = Vector2(1660, 365)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CliffLookout"]
+position = Vector2(90, 0)
+shape = SubResource("LookoutShape")
+one_way_collision = true
+
+[node name="Visual" type="Polygon2D" parent="CliffLookout"]
+polygon = PackedVector2Array(0, -5, 180, -5, 180, 8, 0, 8)
+color = Color(0.40, 0.35, 0.39, 1)
+
+[node name="EastBoundary" type="StaticBody2D" parent="."]
+position = Vector2(2220, 360)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EastBoundary"]
+shape = SubResource("CliffBoundaryShape")
 
 [node name="RidgePlatform01" type="StaticBody2D" parent="."]
 position = Vector2(360, 450)
@@ -205,3 +234,13 @@ script = ExtResource("2")
 poi_id = "back_to_village"
 display_name = "返回村庄主街"
 dialogue = "沿着坡道可以回到住宅区与工坊。"
+
+[node name="CliffGrassLine" type="Line2D" parent="."]
+points = PackedVector2Array(1660, 355, 1700, 355, 1740, 355, 1780, 355, 1810, 355)
+width = 4.0
+default_color = Color(0.46, 0.43, 0.49, 1)
+
+[node name="CliffWarningMarker" type="Polygon2D" parent="."]
+position = Vector2(1845, 490)
+polygon = PackedVector2Array(0, 0, 30, -14, 54, 0, 30, 14)
+color = Color(0.52, 0.37, 0.42, 1)
