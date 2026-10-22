@@ -3,11 +3,12 @@ extends Area2D
 signal player_nearby_changed(shortcut_id: String, nearby: bool)
 
 @export var shortcut_id: String = ""
+@export var prompt_text: String = "按 E 开启捷径"
 
 func _ready() -> void:
 	var prompt := Label.new()
 	prompt.name = "InteractionPrompt"
-	prompt.text = "按 E 开启捷径"
+	prompt.text = prompt_text
 	prompt.position = Vector2(-64.0, -72.0)
 	prompt.add_theme_font_size_override("font_size", 18)
 	prompt.add_theme_color_override("font_color", Color(1.0, 0.9, 0.65))
