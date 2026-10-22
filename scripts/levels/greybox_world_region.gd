@@ -1045,6 +1045,13 @@ func _ready_a5_assembled_region() -> void:
 	_spawn_region_ambience()
 	var assembled_spawn := _a5_assembled_spawn_for_side(spawn_side, entry_room)
 	_spawn_hero(assembled_spawn.x, assembled_spawn.y)
+	# _spawn_hero() creates HeroCamera before the full A5 bounds are finalized.
+	# Reapply limits after assembling all 22 rooms so the camera can follow vertical routes.
+	if is_instance_valid(camera):
+		camera.limit_left = 0
+		camera.limit_top = 0
+		camera.limit_right = int(map_width)
+		camera.limit_bottom = int(room_height)
 	_spawn_ui()
 	_spawn_region_exits()
 	_spawn_a5_internal_connections(parsed.get("connections", []))
