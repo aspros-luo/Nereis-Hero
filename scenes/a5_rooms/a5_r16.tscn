@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+
+[node name="A5Room_R16" type="Node2D"]
+script = ExtResource("1")
+region_id = "A5"
+location_id = "a5_room_test_a5_r16"
+region_title = "remote_shortcut - 操作断桥绞盘，从A5侧开启C04旧朝圣高路"
+map_width = 1280.0
+floor_y = 540.0
+room_height = 1440.0
+room_id = "A5-R16"
