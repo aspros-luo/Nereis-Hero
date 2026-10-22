@@ -219,13 +219,11 @@ func _test_room(room: Dictionary) -> void:
 		var expected_spawn := Vector2(96.0, floor_y - 96.0)
 		if room_id == "A5-R06":
 			expected_spawn = Vector2(380.0, 96.0)
-		# The spawn assertion is evaluated after the scene's initial ready frames.
-		# Gravity may already have moved the Hero before the assertion, so validate
-		# the intended spawn column and the ground-relative starting envelope.
+		# The scene may advance a few physics ticks before this assertion.
+		# Allow limited gravity drift while keeping the authored spawn position exact.
 		var spawn_near_expected := (
 			absf(hero.position.x - expected_spawn.x) <= 1.0
-			and hero.position.y >= floor_y - 120.0
-			and hero.position.y <= floor_y - 48.0
+			and absf(hero.position.y - expected_spawn.y) <= 24.0
 		)
 		_record(spawn_near_expected,
 			"SPAWN/%s" % room_id,
