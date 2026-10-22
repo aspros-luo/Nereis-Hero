@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource path="res://scripts/levels/village_hub.gd" type="Script" id="1"]
+[ext_resource path="res://scripts/world/village_poi.gd" type="Script" id="2"]
 
 [sub_resource type="RectangleShape2D" id="GroundWest"]
 size = Vector2(1180, 40)
@@ -79,3 +80,10 @@ position = Vector2(3020, 360)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/EastBoundary"]
 shape = SubResource("Boundary")
+
+[node name="BackhillEntrance" type="Node2D" parent="."]
+position = Vector2(2120, 520)
+script = ExtResource("2")
+poi_id = "backhill_path"
+display_name = "教堂与后山小径"
+dialogue = "从主街向东，坡道通往村庄边缘的教堂、酒馆与后山悬崖。"
