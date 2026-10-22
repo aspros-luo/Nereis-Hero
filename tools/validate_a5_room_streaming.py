@@ -93,6 +93,11 @@ def main() -> int:
         errors.append("World must configure room dimensions before add_child() / _ready()")
     if 'instance.set("floor_y", maxf(540.0, height - 180.0))' not in world:
         errors.append("World does not derive streamed room floor_y from room height")
+    cleanup_start = world.find('for point in room_transition_nodes:')
+    cleanup_end = world.find('room_transition_nodes.clear()', cleanup_start)
+    cleanup = world[cleanup_start:cleanup_end] if cleanup_start >= 0 and cleanup_end >= 0 else ""
+    if 'point.free()' not in cleanup:
+        errors.append("World must synchronously clear old transition triggers before rebuilding them")
     for room in rooms:
         size = room.get("size_screens", [])
         if len(size) != 2 or not all(isinstance(v, (int, float)) and v > 0 for v in size):
