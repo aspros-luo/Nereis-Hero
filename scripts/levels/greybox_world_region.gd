@@ -1049,6 +1049,7 @@ func _spawn_a5_internal_connections(raw_connections: Array) -> void:
 	# physically touch in the macro grid.
 	# 合同中的每条边都生成真实交互门；即使宏观房间不直接相邻，也能在同一张地图内连续探索。
 	var spawned_endpoints := 0
+	var endpoint_slots: Dictionary = {}
 	for edge_variant in raw_connections:
 		if not edge_variant is Dictionary:
 			continue
@@ -1063,12 +1064,16 @@ func _spawn_a5_internal_connections(raw_connections: Array) -> void:
 			])
 			continue
 		var edge_id := str(edge.get("id", "A5-UNKNOWN"))
-		var from_anchor := _a5_connection_anchor(from_room, to_room)
-		_spawn_a5_internal_door(edge, from_id, to_id, from_room.position + from_anchor, false)
+		var from_anchor := _a5_connection_anchor(from_room, to_room, endpoint_slots, from_id)
+		var to_anchor := _a5_connection_anchor(to_room, from_room, endpoint_slots, to_id)
+		_spawn_a5_internal_door(
+			edge, from_id, to_id, from_room.position + from_anchor, to_room.position + to_anchor, false
+		)
 		spawned_endpoints += 1
 		if str(edge.get("travel", "both")) != "one_way":
-			var to_anchor := _a5_connection_anchor(to_room, from_room)
-			_spawn_a5_internal_door(edge, to_id, from_id, to_room.position + to_anchor, true)
+			_spawn_a5_internal_door(
+				edge, to_id, from_id, to_room.position + to_anchor, from_room.position + from_anchor, true
+			)
 			spawned_endpoints += 1
 		print("[NEREIS][A5_CONNECTION] id=%s %s -> %s kind=%s state=%s endpoints=%d" % [
 			edge_id, from_id, to_id, str(edge.get("kind", "walk")),
@@ -1077,22 +1082,40 @@ func _spawn_a5_internal_connections(raw_connections: Array) -> void:
 	set_meta("a5_internal_connection_endpoint_count", spawned_endpoints)
 
 
-func _a5_connection_anchor(source_room: Node2D, target_room: Node2D) -> Vector2:
+func _a5_connection_anchor(
+	source_room: Node2D, target_room: Node2D, endpoint_slots: Dictionary, source_id: String
+) -> Vector2:
 	var source_width := float(source_room.get("map_width"))
 	var source_floor := float(source_room.get("floor_y"))
 	var source_center := source_room.position.x + source_width * 0.5
 	var target_center := target_room.position.x + float(target_room.get("map_width")) * 0.5
+	var side := "center"
 	var anchor_x := source_width * 0.5
 	if target_center > source_center + 1.0:
-		anchor_x = source_width - 96.0
+		side = "right"
+		anchor_x = source_width - 120.0
 	elif target_center < source_center - 1.0:
-		anchor_x = 96.0
-	# Portals sit just above the local ground line, so the Hero can approach them
-	# without requiring an ability jump merely to enter a room transition.
-	return Vector2(clampf(anchor_x, 72.0, maxf(72.0, source_width - 72.0)), source_floor - 36.0)
+		side = "left"
+		anchor_x = 120.0
+	var slot_key := "%s:%s" % [source_id, side]
+	var slot := int(endpoint_slots.get(slot_key, 0))
+	endpoint_slots[slot_key] = slot + 1
+	if side == "right":
+		anchor_x -= float(slot) * 150.0
+	elif side == "left":
+		anchor_x += float(slot) * 150.0
+	elif slot > 0:
+		var offset := float((slot + 1) / 2) * 180.0
+		anchor_x += offset if slot % 2 == 1 else -offset
+	# Give exits on the same side separate physical anchors so overlapping interaction
+	# Areas cannot steal focus from one another.
+	return Vector2(clampf(anchor_x, 120.0, maxf(120.0, source_width - 120.0)), source_floor - 36.0)
 
 
-func _spawn_a5_internal_door(edge: Dictionary, from_id: String, to_id: String, anchor: Vector2, reverse_endpoint: bool) -> void:
+func _spawn_a5_internal_door(
+	edge: Dictionary, from_id: String, to_id: String, anchor: Vector2,
+	destination_anchor: Vector2, reverse_endpoint: bool
+) -> void:
 	var edge_id := str(edge.get("id", "A5-UNKNOWN"))
 	var kind := str(edge.get("kind", "walk"))
 	var initial_state := str(edge.get("initial_state", "open"))
@@ -1116,7 +1139,9 @@ func _spawn_a5_internal_door(edge: Dictionary, from_id: String, to_id: String, a
 	door.add_child(collision)
 	add_child(door)
 	door.add_to_group("a5_internal_connection_door")
-	door.interacted.connect(_on_a5_internal_door_interacted.bind(edge.duplicate(true), from_id, to_id, door))
+	door.interacted.connect(_on_a5_internal_door_interacted.bind(
+		edge.duplicate(true), from_id, to_id, destination_anchor, door
+	))
 
 
 func _a5_connection_prompt(kind: String, initial_state: String, edge_id: String) -> String:
@@ -1135,7 +1160,9 @@ func _a5_connection_prompt(kind: String, initial_state: String, edge_id: String)
 	return "E  进入相邻区域"
 
 
-func _on_a5_internal_door_interacted(edge: Dictionary, from_id: String, to_id: String, door: Area2D) -> void:
+func _on_a5_internal_door_interacted(
+	edge: Dictionary, from_id: String, to_id: String, destination_anchor: Vector2, door: Area2D
+) -> void:
 	if hero == null or not is_instance_valid(hero):
 		return
 	var edge_id := str(edge.get("id", "A5-UNKNOWN"))
@@ -1172,10 +1199,9 @@ func _on_a5_internal_door_interacted(edge: Dictionary, from_id: String, to_id: S
 	if destination == null:
 		push_error("[NEREIS][A5_ASSEMBLY] Internal destination disappeared: " + to_id)
 		return
-	var target_anchor := _a5_connection_anchor(destination, _get_a5_assembled_room(from_id))
 	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
 	hero.velocity = Vector2.ZERO
-	hero.global_position = to_global(destination.position + target_anchor)
+	hero.global_position = to_global(destination_anchor)
 	# Ensure the respawn/checkpoint system retains a valid world coordinate after room teleport.
 	if hero.has_method("reset_physics_interpolation"):
 		hero.call("reset_physics_interpolation")
