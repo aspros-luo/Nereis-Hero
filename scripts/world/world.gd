@@ -148,16 +148,27 @@ func _load_room(room_id: String, entry_id: StringName, use_fade: bool = true) ->
 	if instance == null:
 		push_error("World: 房间根节点必须是 Node2D: " + data.scene_path)
 		return
-	# Legacy A5 room scripts use this mode to build only the room geometry; the persistent World owns gameplay actors.
+	# Configure every exported value before add_child(): _ready() builds collision and platforms immediately.
+	# 必须在 add_child() 前写入导出属性，因为 _ready() 会立即创建碰撞与平台。
+	var room_contract: Dictionary = room_contract_by_id.get(room_id, {})
+	var room_size: Array = room_contract.get("size_screens", [1, 1])
+	var width := float(room_size[0]) * 1280.0 if room_size.size() == 2 else 1280.0
+	var height := float(room_size[1]) * 720.0 if room_size.size() == 2 else 720.0
 	if _has_property(instance, "assembly_child_mode"):
 		instance.set("assembly_child_mode", true)
-	room_container.add_child(instance)
-	current_room = instance
-	current_room_id = room_id
 	if _has_property(instance, "room_id"):
 		instance.set("room_id", room_id)
 	if _has_property(instance, "region_id"):
 		instance.set("region_id", "A5")
+	if _has_property(instance, "map_width"):
+		instance.set("map_width", width)
+	if _has_property(instance, "room_height"):
+		instance.set("room_height", height)
+	if _has_property(instance, "floor_y"):
+		instance.set("floor_y", maxf(540.0, height - 180.0))
+	room_container.add_child(instance)
+	current_room = instance
+	current_room_id = room_id
 	var bounds := _get_room_bounds(instance)
 	var entry_position := _entry_position(instance, entry_id, bounds)
 	player.global_position = instance.to_global(entry_position)
