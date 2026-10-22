@@ -57,7 +57,7 @@ def main() -> int:
         'A5_CONTRACT_PATH', '_load_a5_contract', 'assembly_child_mode',
         '_build_room_transitions', '_target_entry_id', '_edge_entry_id',
         'load_threaded_request', 'load_threaded_get', '_apply_camera_bounds',
-        'WorldState.mark_room_explored', 'edge_state != "open"',
+        'WorldState.mark_room_explored', 'edge_state == "open" or WorldState.opened_shortcut_ids.has(edge_id)',
     )
     for token in required_world_tokens:
         if token not in world:
@@ -73,9 +73,12 @@ def main() -> int:
     for token in ("_build_shortcut_unlock_point", "_unlock_shortcut", "opened_shortcut_ids", "KEY_E"):
         if token not in world:
             errors.append(f"World shortcut interaction missing {token}")
-    for token in ("player_nearby_changed", "body_entered", "body_exited", "InteractionPrompt", "按 E 开启捷径"):
+    for token in ("player_nearby_changed", "body_entered", "body_exited", "InteractionPrompt", "prompt_text"):
         if token not in shortcut:
             errors.append(f"Shortcut unlock point missing {token}")
+    for token in ('"shortcut", "elevator", "hidden"', "按 E 探查隐藏通路"):
+        if token not in world:
+            errors.append(f"Optional hidden-route interaction missing {token}")
     for token in ("_drop_exit_x", "_safe_entry_x", "floor_y + 30.0"):
         if token not in world:
             errors.append(f"World vertical traversal handling missing {token}")
