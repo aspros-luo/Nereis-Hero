@@ -180,8 +180,12 @@ func _test_room(room: Dictionary) -> void:
 		var camera := hero.get_node_or_null("HeroCamera") as Camera2D
 		_record(camera != null, "CAMERA/%s" % room_id, "HeroCamera exists=%s" % str(camera != null))
 		if camera != null:
-			var camera_ok := camera.limit_left == 0 and camera.limit_top == 0 \
-				and camera.limit_right == int(map_width) and camera.limit_bottom == int(room_height)
+			var camera_ok := (
+				camera.limit_left == 0
+				and camera.limit_top == 0
+				and camera.limit_right == int(map_width)
+				and camera.limit_bottom == int(room_height)
+			)
 			_record(camera_ok, "CAMERA_LIMITS/%s" % room_id,
 				"limits=(%d,%d,%d,%d) expected=(0,0,%d,%d)" % [
 					camera.limit_left, camera.limit_top, camera.limit_right, camera.limit_bottom,
@@ -190,9 +194,11 @@ func _test_room(room: Dictionary) -> void:
 		var expected_spawn := Vector2(96.0, floor_y - 96.0)
 		if room_id == "A5-R06":
 			expected_spawn = Vector2(380.0, 96.0)
-		var spawn_near_expected := absf(hero.position.x - expected_spawn.x) <= 1.0 \
-			and hero.position.y >= expected_spawn.y - 1.0 \
+		var spawn_near_expected := (
+			absf(hero.position.x - expected_spawn.x) <= 1.0
+			and hero.position.y >= expected_spawn.y - 1.0
 			and hero.position.y <= expected_spawn.y + 12.0
+		)
 		_record(spawn_near_expected,
 			"SPAWN/%s" % room_id,
 			"actual=(%.1f,%.1f) expected=(%.1f,%.1f)" % [
