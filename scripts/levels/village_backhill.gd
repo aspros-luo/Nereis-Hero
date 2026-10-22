@@ -1,10 +1,9 @@
 extends Node2D
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 
-var hero: CharacterBody2D
+@onready var hero: CharacterBody2D = $Hero
 var narrative: CanvasLayer
 var hud: CanvasLayer
 
@@ -13,34 +12,11 @@ func _ready() -> void:
 	get_tree().paused = false
 	WorldState.input_locked = false
 	WorldState.set_location("village_backhill")
-	_spawn_hero()
 	_spawn_ui()
 	$ChurchPOI.interacted.connect(_on_poi_interacted.bind($ChurchPOI))
 	$TavernPOI.interacted.connect(_on_poi_interacted.bind($TavernPOI))
 	$BackToVillagePOI.interacted.connect(_on_poi_interacted.bind($BackToVillagePOI))
 	queue_redraw()
-
-func _spawn_hero() -> void:
-	hero = CharacterBody2D.new()
-	hero.set_script(HERO_SCRIPT)
-	hero.name = "Hero"
-	hero.position = Vector2(180, 540)
-	var collision := CollisionShape2D.new()
-	var capsule := CapsuleShape2D.new()
-	capsule.radius = 18.0
-	capsule.height = 48.0
-	collision.shape = capsule
-	collision.position = Vector2(0, -24)
-	hero.add_child(collision)
-	add_child(hero)
-	var camera := Camera2D.new()
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 6.0
-	camera.limit_left = 0
-	camera.limit_top = 0
-	camera.limit_right = 2200
-	camera.limit_bottom = 720
-	hero.add_child(camera)
 
 func _spawn_ui() -> void:
 	narrative = CanvasLayer.new()
@@ -68,12 +44,9 @@ func _on_poi_interacted(poi: Node) -> void:
 		SceneTransition.fade_to_scene("res://scenes/locations/church_interior.tscn")
 
 func _draw() -> void:
+	# Buildings, platforms, and the collision-backed stair route are authored in village_backhill.tscn.
+	# 结构与地形由场景节点负责；这里只绘制可读标签，不在代码中伪造地形。
 	draw_string(ThemeDB.fallback_font, Vector2(365, 300), "教堂", HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color("#c8b9c5"))
 	draw_string(ThemeDB.fallback_font, Vector2(700, 370), "酒馆", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#c8a68b"))
 	draw_string(ThemeDB.fallback_font, Vector2(1320, 320), "后山小径", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#a5a1b0"))
-	draw_line(Vector2(1020, 520), Vector2(1190, 475), Color("#6f6874"), 5.0)
-	draw_line(Vector2(1190, 475), Vector2(1350, 420), Color("#6f6874"), 5.0)
-	draw_line(Vector2(1350, 420), Vector2(1530, 365), Color("#6f6874"), 5.0)
-	draw_line(Vector2(1530, 365), Vector2(1720, 335), Color("#6f6874"), 5.0)
-	draw_line(Vector2(1760, 335), Vector2(1900, 370), Color("#4b4653"), 4.0)
 	draw_string(ThemeDB.fallback_font, Vector2(1740, 310), "悬崖边缘", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#9993a6"))
