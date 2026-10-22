@@ -81,13 +81,13 @@
       ],
       "subregion": "A5-S02",
       "role": "route",
-      "play_hook": "沿断墙观察战壕、箭楼和远端绞盘",
+      "play_hook": "沿断墙建立远景视线，再穿过窄断口；避免均匀阶梯",
       "scene_path": "res://scenes/a5_rooms/a5_r02.tscn",
       "terrain_geometry": {
         "platform_count": 9,
         "solid_rubble_count": 3,
         "floor_gap_count": 1,
-        "layout_note": "长战壕上缘、远距观察台与单段真缺口"
+        "layout_note": "远景观察台与断墙交替，宽台停留、窄台跨越"
       }
     },
     {
@@ -98,13 +98,13 @@
       ],
       "subregion": "A5-S01",
       "role": "junction",
-      "play_hook": "战壕岔口：选择地面主线或地下补给支路",
+      "play_hook": "主线保持低位，侧支路经两块高台绕行后回到主路",
       "scene_path": "res://scenes/a5_rooms/a5_r03.tscn",
       "terrain_geometry": {
         "platform_count": 9,
         "solid_rubble_count": 3,
         "floor_gap_count": 1,
-        "layout_note": "战壕岔口、低高路线切换与补给沟"
+        "layout_note": "地面主线与高位补给支路在战壕岔口分流并回接"
       }
     },
     {
@@ -115,13 +115,13 @@
       ],
       "subregion": "A5-S01",
       "role": "combat",
-      "play_hook": "在弹坑与残骸之间应对远近程交叉火力",
+      "play_hook": "平台为掩体/坑沿占位，战斗站位不再按固定间距排列",
       "scene_path": "res://scenes/a5_rooms/a5_r04.tscn",
       "terrain_geometry": {
         "platform_count": 9,
         "solid_rubble_count": 3,
         "floor_gap_count": 2,
-        "layout_note": "双弹坑分割、连续掩体与交叉火线落脚点"
+        "layout_note": "弹坑低洼、掩体墙与跨火线落脚区"
       }
     },
     {
@@ -183,13 +183,13 @@
       ],
       "subregion": "A5-S01",
       "role": "combat_reward",
-      "play_hook": "夺回军需堡垒，战斗后获得补给",
+      "play_hook": "空间顺序表现进入、夺取与战后搜刮",
       "scene_path": "res://scenes/a5_rooms/a5_r08.tscn",
       "terrain_geometry": {
         "platform_count": 9,
         "solid_rubble_count": 3,
         "floor_gap_count": 1,
-        "layout_note": "军需堡垒多段掩体、跨沟路线与奖励区域空间"
+        "layout_note": "入口压缩、堡垒内部掩体、末端宽阔补给台"
       }
     },
     {
@@ -234,13 +234,13 @@
       ],
       "subregion": "A5-S02",
       "role": "mechanism",
-      "play_hook": "修复炮桥的活动支撑，观察机关节奏后通过",
+      "play_hook": "高台用于观察/等待，低台用于推进；后续接入机关节奏",
       "scene_path": "res://scenes/a5_rooms/a5_r11.tscn",
       "terrain_geometry": {
         "platform_count": 9,
         "solid_rubble_count": 3,
         "floor_gap_count": 1,
-        "layout_note": "炮桥落脚节拍、交替高低台与主沟"
+        "layout_note": "交替等待台与跨越台，形成机关通过节拍"
       }
     },
     {
@@ -302,13 +302,13 @@
       ],
       "subregion": "A5-S03",
       "role": "upper_route",
-      "play_hook": "沿堡垒高墙回接主路并俯瞰地下维护区",
+      "play_hook": "以高墙沿线、下视开口和出口落脚区区别于普通长廊",
       "scene_path": "res://scenes/a5_rooms/a5_r15.tscn",
       "terrain_geometry": {
         "platform_count": 9,
         "solid_rubble_count": 3,
         "floor_gap_count": 1,
-        "layout_note": "堡垒高墙连续台、地面裂口及维护层回接"
+        "layout_note": "高墙两段宽台、中央向下观察口与远端出口台"
       }
     },
     {
@@ -353,13 +353,13 @@
       ],
       "subregion": "A5-S01",
       "role": "lower_route",
-      "play_hook": "沿蓄水沟绕过一段高风险战壕",
+      "play_hook": "以低位绕行节奏和局部收窄形成不同于上层战壕的路线",
       "scene_path": "res://scenes/a5_rooms/a5_r18.tscn",
       "terrain_geometry": {
         "platform_count": 9,
         "solid_rubble_count": 3,
         "floor_gap_count": 1,
-        "layout_note": "蓄水沟绕行台、两侧安全地面与浅层掩体"
+        "layout_note": "低位蓄水沟的长安全段、狭窄跨越点与两处浅掩体"
       }
     },
     {
@@ -732,7 +732,7 @@
     "expected_platform_count": 240,
     "expected_solid_block_count": 70,
     "expected_floor_gap_count": 16,
-    "static_geometry_review": "platform bounds, room bounds, route step envelope, and floor-gap crossing reviewed",
+    "static_geometry_review": "room differentiation pass 1: R02/R03/R04/R08/R11/R15/R18 now have distinct platform silhouettes; static and runtime acceptance must be rerun",
     "godot_runtime_test": "not_run"
   }
 }
