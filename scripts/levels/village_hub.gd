@@ -707,18 +707,6 @@ func _draw() -> void:
 		draw_circle(Vector2(x - 42, 430), 8, Color("#8e7777"))
 		draw_circle(Vector2(x + 42, 430), 8, Color("#66545c"))
 
-	draw_rect(Rect2(1580, 300, 300, 220), Color("#2d2630"))
-	draw_colored_polygon(
-		PackedVector2Array([
-			Vector2(1530, 300),
-			Vector2(1730, 190),
-			Vector2(1930, 300)
-		]),
-		Color("#3a303a")
-	)
-	draw_rect(Rect2(1690, 400, 80, 120), Color("#17141b"))
-	draw_string(ThemeDB.fallback_font, Vector2(1630, 275), NereisLocalization.translate_text("酒馆"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
-
 	draw_rect(Rect2(900, 390, 90, 130), Color("#28212a"))
 	draw_string(ThemeDB.fallback_font, Vector2(885, 365), NereisLocalization.translate_text("墓地"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
 	draw_string(ThemeDB.fallback_font, Vector2(1025, 335), NereisLocalization.translate_text("老屋"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#b7a09b"))
@@ -781,77 +769,4 @@ func _draw() -> void:
 		draw_rect(Rect2(2818, 430, 50, 12), Color("#79656a"))
 	draw_string(ThemeDB.fallback_font, Vector2(2770, 310), NereisLocalization.translate_text("北门"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#796d67"))
 
-	# Broken roof beams mark an optional high route across the village; they are not a required path.
-	# 断裂屋脊标记穿越村庄的可选高路，不是主线必经路线。
-	draw_line(Vector2(220, 445), Vector2(310, 400), Color("#514652"), 3.0)
-	draw_line(Vector2(310, 400), Vector2(420, 355), Color("#514652"), 3.0)
-	draw_line(Vector2(420, 355), Vector2(600, 350), Color("#514652"), 3.0)
-	draw_line(Vector2(600, 350), Vector2(750, 390), Color("#514652"), 3.0)
-	draw_line(Vector2(750, 390), Vector2(900, 350), Color("#514652"), 3.0)
-	draw_line(Vector2(900, 350), Vector2(1040, 395), Color("#514652"), 3.0)
-	draw_line(Vector2(1040, 395), Vector2(1160, 350), Color("#514652"), 3.0)
-	draw_line(Vector2(1160, 350), Vector2(1300, 310), Color("#514652"), 3.0)
-	draw_line(Vector2(1300, 310), Vector2(1430, 350), Color("#514652"), 3.0)
-	draw_line(Vector2(1580, 310), Vector2(1710, 280), Color("#514652"), 3.0)
-	draw_line(Vector2(1710, 280), Vector2(1840, 320), Color("#514652"), 3.0)
-	draw_line(Vector2(1840, 320), Vector2(1980, 360), Color("#514652"), 3.0)
-	draw_line(Vector2(1980, 360), Vector2(2110, 320), Color("#514652"), 3.0)
-	draw_line(Vector2(2110, 320), Vector2(2240, 350), Color("#514652"), 3.0)
-	draw_line(Vector2(2240, 350), Vector2(2370, 370), Color("#514652"), 3.0)
-	draw_line(Vector2(2370, 370), Vector2(2500, 350), Color("#514652"), 3.0)
-	draw_line(Vector2(2500, 350), Vector2(2630, 370), Color("#514652"), 3.0)
-	draw_line(Vector2(2630, 370), Vector2(2760, 350), Color("#514652"), 3.0)
-	draw_string(ThemeDB.fallback_font, Vector2(1060, 285), "屋顶捷径", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#796b7c"))
-
-	draw_rect(Rect2(2080, 320, 80, 200), Color("#26202a"))
-	draw_colored_polygon(
-		PackedVector2Array([
-			Vector2(2050, 320),
-			Vector2(2120, 240),
-			Vector2(2190, 320)
-		]),
-		Color("#312934")
-	)
-	draw_string(ThemeDB.fallback_font, Vector2(2075, 200), NereisLocalization.translate_text("教堂"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#796d67"))
-
-	# New art pass: broken stonework, amber window-light, and low fog separate the safe village from the old wall.
-	# 美术细化：破损石构、琥珀窗光与贴地薄雾，区分安全村庄与古老城墙。
-	for crack_x in [680.0, 1015.0, 1460.0, 1870.0, 2075.0]:
-		draw_line(Vector2(crack_x, 516), Vector2(crack_x + 18, 508), Color("#4a3b47"), 2.0)
-		draw_line(Vector2(crack_x + 18, 508), Vector2(crack_x + 29, 519), Color("#4a3b47"), 1.5)
-	for window_x in [650.0, 1120.0, 1490.0, 1800.0, 2040.0]:
-		draw_rect(Rect2(window_x, 390, 18, 30), Color("#17141b"))
-		draw_rect(Rect2(window_x + 4, 395, 10, 20), Color("#9b7157", 0.72))
-		draw_line(Vector2(window_x + 9, 394), Vector2(window_x + 9, 416), Color("#3e2b31"), 2.0)
-	for fog_index in range(5):
-		var fog_x := 240.0 + float(fog_index) * 510.0
-		draw_arc(Vector2(fog_x, 498.0), 118.0, PI + 0.2, TAU - 0.2, 28, Color("#777080", 0.10), 9.0)
-		draw_arc(Vector2(fog_x + 55.0, 506.0), 72.0, PI + 0.4, TAU - 0.4, 20, Color("#b5a1b2", 0.07), 6.0)
-
-	# The cliff hive is a story-state landmark: sealed before the return, a sickly-lit cave afterward.
-	# 山崖蜂巢是剧情状态地标：回访前被蜂巢封住，满足条件后才显露幽暗洞口。
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(2190, 520), Vector2(2205, 445), Vector2(2240, 408),
-		Vector2(2280, 422), Vector2(2315, 460), Vector2(2340, 520)
-	]), Color("#39313c"))
-	var cave_open := "returned_to_village_after_mad_cleric" in WorldState.achievement_flags
-	if cave_open:
-		draw_arc(Vector2(2260, 455), 39.0, PI, TAU, 28, Color("#a77c91"), 5.0)
-		draw_rect(Rect2(2233, 450, 54, 70), Color("#100f18"))
-		draw_arc(Vector2(2260, 454), 28.0, PI, TAU, 22, Color("#6f91a0", 0.42), 8.0)
-		draw_circle(Vector2(2260, 485), 7.0, Color("#91a9b4", 0.42))
-		draw_string(ThemeDB.fallback_font, Vector2(2190, 392), "蜂群退入石壁", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#a5a1b9"))
-	else:
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(2220, 458), Vector2(2234, 435), Vector2(2250, 449),
-			Vector2(2262, 428), Vector2(2280, 445), Vector2(2294, 465),
-			Vector2(2275, 483), Vector2(2245, 482)
-		]), Color("#5d4b3a"))
-		for bee_index in range(9):
-			var bee_x := 2220.0 + float((bee_index * 17) % 70)
-			var bee_y := 425.0 + float((bee_index * 23) % 56)
-			draw_circle(Vector2(bee_x, bee_y), 2.5, Color("#c4a16b", 0.85))
-		draw_string(ThemeDB.fallback_font, Vector2(2180, 392), "蜂巢封住了旧石缝", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#9d8b7d"))
-		if OS.is_debug_build():
-			draw_line(Vector2(2260, 408), Vector2(2260, 300), Color("#ed8796"), 3.0, true)
-			draw_string(ThemeDB.fallback_font, Vector2(2110, 286), "[条件未满足] 崖下实验窟：击败疯狂神职人员并返回村庄", HORIZONTAL_ALIGNMENT_LEFT, 460.0, 13, Color("#ed8796"))
+	# A1.0 is the residential and workshop district. Church, tavern, and cliff landmarks live in A1.1.
