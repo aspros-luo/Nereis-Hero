@@ -84,6 +84,9 @@ def main() -> int:
             errors.append(f"World streaming implementation missing {token}")
     if 'as RoomBase' in world:
         errors.append("World still requires RoomBase root and cannot adapt the existing A5 room scenes")
+    for token in ('parsed.get("macro_bindings", [])', '"C08": "A5-R01"', '"C04": "A5-R16"', '"C09": "A5-R20"', "found_macro_ids.has(macro_id)"):
+        if token not in world:
+            errors.append(f"World startup macro-binding validation missing {token}")
     # Geometry dimensions must be applied before add_child(), because room _ready() creates floors/collision.
     if 'room_contract.get("size_screens", [1, 1])' not in world:
         errors.append("World does not size streamed rooms from size_screens")
