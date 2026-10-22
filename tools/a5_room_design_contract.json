@@ -137,7 +137,7 @@
       "terrain_geometry": {
         "platform_count": 15,
         "solid_rubble_count": 3,
-        "floor_gap_count": 0,
+        "floor_gap_count": 1,
         "layout_note": "塔外攀升、宽阔观察台与内侧折返段"
       }
     },
@@ -273,7 +273,7 @@
       "terrain_geometry": {
         "platform_count": 33,
         "solid_rubble_count": 4,
-        "floor_gap_count": 0,
+        "floor_gap_count": 1,
         "layout_note": "交错塔内阶梯、侧向观察层与多层回接"
       }
     },
@@ -731,7 +731,7 @@
     "ground_collision": "per-room ground segments with real collision gaps",
     "expected_platform_count": 240,
     "expected_solid_block_count": 70,
-    "expected_floor_gap_count": 16,
+    "expected_floor_gap_count": 18,
     "static_geometry_review": "room differentiation pass 3: all 22 rooms have authored role-specific platform silhouettes; rerun static and runtime acceptance before marking complete",
     "godot_runtime_test": "not_run"
   }
