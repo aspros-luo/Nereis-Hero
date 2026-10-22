@@ -1032,7 +1032,8 @@ func _ready_a5_assembled_region() -> void:
 		push_error("[NEREIS][A5_ASSEMBLY] Contract has no A5-R01 entry room")
 		return
 	_spawn_region_ambience()
-	_spawn_hero(entry_room.position.x + 96.0, entry_room.position.y + maxf(540.0, 720.0 - 180.0) - 96.0)
+	var assembled_spawn := _a5_assembled_spawn_for_side(spawn_side, entry_room)
+	_spawn_hero(assembled_spawn.x, assembled_spawn.y)
 	_spawn_ui()
 	_spawn_region_exits()
 	_spawn_a5_internal_connections(parsed.get("connections", []))
@@ -1267,6 +1268,31 @@ func _a5_connection_locked_prompt(edge_id: String, kind: String) -> String:
 	if kind == "ability_gate":
 		return "需要二段跳、快速闪避、抓钩或攀墙能力"
 	return "通路尚未开启"
+
+
+func _a5_assembled_spawn_for_side(side: String, entry_room: Node2D) -> Vector2:
+	# Cross-region doors must land on the matching room's supported ledge, not always
+	# at R01. These are the assembled equivalents of the legacy C08/C09/C04 spawns.
+	# 跨区回程必须落到对应房间的实体平台，不能无论从哪侧进入都送回 R01。
+	var fallback := entry_room.position + Vector2(96.0, maxf(540.0, float(entry_room.get("room_height")) - 180.0) - 96.0)
+	match side:
+		"city_highroad":
+			var entry := _get_a5_assembled_room("A5-R01")
+			if entry != null:
+				return entry.position + Vector2(330.0, 410.0)
+		"monastery_return":
+			var exit_room := _get_a5_assembled_room("A5-R20")
+			if exit_room != null:
+				return exit_room.position + Vector2(500.0, 365.0)
+		"old_pilgrim_highroad":
+			var winch_room := _get_a5_assembled_room("A5-R16")
+			if winch_room != null:
+				return winch_room.position + Vector2(820.0, 575.0)
+		"bell_gate", "bell_tower_return":
+			var hidden_room := _get_a5_assembled_room("A5-R14")
+			if hidden_room != null:
+				return hidden_room.position + Vector2(900.0, 430.0)
+	return fallback
 
 
 func _ready_a5_room_test() -> void:
