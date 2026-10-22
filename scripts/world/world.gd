@@ -223,6 +223,8 @@ func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> vo
 	var side_counts: Dictionary = {&"west": 0, &"east": 0, &"north": 0, &"south": 0}
 	for gate in shortcut_unlock_nodes:
 		if is_instance_valid(gate):
+			if gate.get_parent() != null:
+				gate.get_parent().remove_child(gate)
 			gate.queue_free()
 	shortcut_unlock_nodes.clear()
 	pending_shortcut_id = ""
