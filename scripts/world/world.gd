@@ -22,6 +22,7 @@ var current_room_id: String = ""
 var room_transition_nodes: Array[TransitionPoint] = []
 
 func _ready() -> void:
+	WorldState.prepare_scene_runtime()
 	WorldState.load_room_state()
 	if not _load_a5_contract():
 		return
@@ -208,6 +209,7 @@ func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> vo
 		if is_instance_valid(point):
 			point.queue_free()
 	room_transition_nodes.clear()
+	var side_counts: Dictionary = {&"west": 0, &"east": 0, &"north": 0, &"south": 0}
 	for edge: Variant in connections_by_room.get(room_id, []):
 		if not edge is Dictionary:
 			continue
@@ -222,7 +224,9 @@ func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> vo
 		point.target_room_id = StringName(edge.get("to", ""))
 		point.target_entry_id = _target_entry_id(edge, room_id)
 		var side := _edge_entry_id(edge, room_id)
-		point.position = _transition_position(side, bounds, room)
+		var side_index: int = int(side_counts.get(side, 0))
+		side_counts[side] = side_index + 1
+		point.position = _transition_position(side, bounds, room, side_index)
 		var shape := CollisionShape2D.new()
 		var rectangle := RectangleShape2D.new()
 		rectangle.size = Vector2(48.0, 112.0) if side == &"west" or side == &"east" else Vector2(112.0, 48.0)
@@ -232,17 +236,18 @@ func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> vo
 		point.transition_requested.connect(_on_transition_requested)
 		room_transition_nodes.append(point)
 
-func _transition_position(side: StringName, bounds: Rect2, room: Node2D) -> Vector2:
+func _transition_position(side: StringName, bounds: Rect2, room: Node2D, side_index: int) -> Vector2:
 	var floor_y := float(room.get("floor_y")) if _has_property(room, "floor_y") else bounds.end.y - 100.0
+	var lane_offset := float(side_index) * 104.0
 	match side:
 		&"east":
-			return Vector2(bounds.end.x - 24.0, floor_y - 56.0)
+			return Vector2(bounds.end.x - 24.0, clampf(floor_y - 56.0 + lane_offset, 90.0, bounds.end.y - 90.0))
 		&"west":
-			return Vector2(24.0, floor_y - 56.0)
+			return Vector2(24.0, clampf(floor_y - 56.0 + lane_offset, 90.0, bounds.end.y - 90.0))
 		&"north":
-			return Vector2(bounds.size.x * 0.5, 24.0)
+			return Vector2(clampf(bounds.size.x * 0.5 + lane_offset, 90.0, bounds.end.x - 90.0), 24.0)
 		_:
-			return Vector2(bounds.size.x * 0.5, bounds.end.y - 24.0)
+			return Vector2(clampf(bounds.size.x * 0.5 + lane_offset, 90.0, bounds.end.x - 90.0), bounds.end.y - 24.0)
 
 func _on_transition_requested(target_room_id: StringName, target_entry_id: StringName) -> void:
 	if not transition_manager.begin_transition():
