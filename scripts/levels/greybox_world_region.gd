@@ -1181,7 +1181,8 @@ func _configure_a5_room_floor() -> void:
 		"A5-R04":
 			gaps = [Vector2(590, 140), Vector2(1600, 120)]
 		"A5-R05":
-			gaps = []
+			# The one-way drop to R06 must pass through a real floor opening, not a trigger buried below solid ground.
+			gaps = [Vector2(600, 120)]
 		"A5-R06":
 			gaps = []
 		"A5-R07":
@@ -1197,7 +1198,8 @@ func _configure_a5_room_floor() -> void:
 		"A5-R12":
 			gaps = []
 		"A5-R13":
-			gaps = []
+			# The lower route to R15 exits through a real shaft opening.
+			gaps = [Vector2(560, 120)]
 		"A5-R14":
 			gaps = []
 		"A5-R15":
