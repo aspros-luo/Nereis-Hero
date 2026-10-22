@@ -84,6 +84,19 @@ def main() -> int:
             errors.append(f"World streaming implementation missing {token}")
     if 'as RoomBase' in world:
         errors.append("World still requires RoomBase root and cannot adapt the existing A5 room scenes")
+    # Geometry dimensions must be applied before add_child(), because room _ready() creates floors/collision.
+    if 'room_contract.get("size_screens", [1, 1])' not in world:
+        errors.append("World does not size streamed rooms from size_screens")
+    room_setup = world.find('instance.set("room_height", height)')
+    room_add = world.find('room_container.add_child(instance)')
+    if room_setup < 0 or room_add < 0 or room_setup > room_add:
+        errors.append("World must configure room dimensions before add_child() / _ready()")
+    if 'instance.set("floor_y", maxf(540.0, height - 180.0))' not in world:
+        errors.append("World does not derive streamed room floor_y from room height")
+    for room in rooms:
+        size = room.get("size_screens", [])
+        if len(size) != 2 or not all(isinstance(v, (int, float)) and v > 0 for v in size):
+            errors.append(f"{room.get('id')}: invalid size_screens {size!r}")
     for token in ("room_id", "area_id", "scene_path", "adjacent_room_ids"):
         if token not in room_data:
             errors.append(f"RoomData missing field {token}")
