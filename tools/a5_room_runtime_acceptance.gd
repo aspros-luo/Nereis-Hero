@@ -346,6 +346,24 @@ func _test_assembled_region(connections: Array) -> void:
 	_record(wrong_transition_modes == 0, "ASSEMBLY/CONNECTION_TRANSITION_MODES",
 		"endpoints using the wrong auto/interact mode=%d" % wrong_transition_modes)
 
+	var visual_data_variant: Variant = instance.get("a5_internal_connection_visuals")
+	var visual_count := visual_data_variant.size() if visual_data_variant is Array else -1
+	var hidden_state_mismatches := 0
+	if visual_data_variant is Array:
+		for visual_variant in visual_data_variant:
+			if not visual_variant is Dictionary or str(visual_variant.get("marker_kind", "")) != "secret":
+				continue
+			var visual := visual_variant.get("visual") as Line2D
+			var hidden_door := visual_variant.get("door") as Area2D
+			if visual == null or hidden_door == null:
+				hidden_state_mismatches += 1
+			elif visual.visible != bool(hidden_door.get("enabled")):
+				hidden_state_mismatches += 1
+	_record(visual_count == 51, "ASSEMBLY/CONNECTION_ARCH_COUNT",
+		"runtime connection arches=%d expected=51" % visual_count)
+	_record(hidden_state_mismatches == 0, "ASSEMBLY/HIDDEN_ROUTE_VISIBILITY",
+		"hidden arches/triggers with mismatched reveal state=%d" % hidden_state_mismatches)
+
 	var overlapping_endpoints := 0
 	for i in range(endpoint_positions.size()):
 		for j in range(i + 1, endpoint_positions.size()):
