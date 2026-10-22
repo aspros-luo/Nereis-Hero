@@ -59,6 +59,7 @@ var a6_bell_shortcut_spawned := false
 var a5_assembled_rooms: Dictionary = {}
 var a5_internal_transition_cooldown := 0.0
 var a5_last_route_visual_state := ""
+var a5_internal_connection_visuals: Array[Dictionary] = []
 
 func _ready() -> void:
 	if assembly_child_mode:
@@ -134,6 +135,7 @@ func _process(delta: float) -> void:
 		]
 		if visual_state != a5_last_route_visual_state:
 			a5_last_route_visual_state = visual_state
+			_refresh_a5_internal_connection_visuals()
 			queue_redraw()
 	_refresh_a6_bell_shortcut()
 	# C21 can become valid after examining A11's own observer anomaly; do not freeze its state at scene entry.
@@ -1169,6 +1171,13 @@ func _spawn_a5_internal_door(
 		"connection_id": edge_id,
 		"connection_kind": kind
 	})
+	var visual := _create_a5_door_arch(anchor, marker_kind, door.name)
+	a5_internal_connection_visuals.append({
+		"visual": visual,
+		"connection_id": edge_id,
+		"connection_kind": kind,
+		"marker_kind": marker_kind
+	})
 	var collision := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
 	rectangle.size = Vector2(108.0, 86.0) if requires_interaction else Vector2(76.0, 128.0)
@@ -1185,6 +1194,47 @@ func _spawn_a5_internal_door(
 		door.body_entered.connect(_on_a5_internal_auto_transition_body_entered.bind(
 			edge.duplicate(true), from_id, to_id, destination_anchor, door
 		))
+
+
+func _create_a5_door_arch(anchor: Vector2, marker_kind: String, visual_id: String) -> Line2D:
+	# This visual is a child of the assembled root, created after room scenes so it
+	# renders above room backdrops rather than being painted over by child rooms.
+	var arch := Line2D.new()
+	arch.name = "A5DoorArch_%s" % visual_id.replace("-", "_").replace(" ", "_")
+	arch.position = anchor + Vector2(0.0, 36.0)
+	arch.width = 4.0
+	arch.antialiased = true
+	var tint := Color("#8eaa9a")
+	if marker_kind == "shortcut":
+		tint = Color("#d5b36b")
+	elif marker_kind == "locked":
+		tint = Color("#a47d86")
+	elif marker_kind == "secret":
+		tint = Color("#c6a0f6")
+	tint.a = 0.72
+	arch.default_color = tint
+	for point in [
+		Vector2(-27.0, 0.0), Vector2(-27.0, -46.0), Vector2(-20.0, -62.0),
+		Vector2(-10.0, -72.0), Vector2(10.0, -72.0), Vector2(20.0, -62.0),
+		Vector2(27.0, -46.0), Vector2(27.0, 0.0)
+	]:
+		arch.add_point(point)
+	add_child(arch)
+	return arch
+
+
+func _refresh_a5_internal_connection_visuals() -> void:
+	for visual_data in a5_internal_connection_visuals:
+		var visual := visual_data.get("visual") as Line2D
+		if visual == null or not is_instance_valid(visual):
+			continue
+		var marker_kind := str(visual_data.get("marker_kind", "exit"))
+		if marker_kind != "secret":
+			visual.visible = true
+			continue
+		var edge_id := str(visual_data.get("connection_id", ""))
+		var edge_kind := str(visual_data.get("connection_kind", "hidden"))
+		visual.visible = WorldState.is_hidden_path_opened(edge_id) or _a5_internal_connection_requirement_met(edge_id, edge_kind, "")
 
 
 func _a5_connection_prompt(kind: String, initial_state: String, _edge_id: String) -> String:
@@ -3557,12 +3607,15 @@ func _spawn_exit_door(
 	shape.position = Vector2(0.0, -35.0)
 	door.add_child(shape)
 	add_child(door)
+	var exit_kind := "locked" if not enabled else ("shortcut" if not unlock_once_flag_id.is_empty() else "exit")
 	debug_exit_markers.append({
 		"position": door.position,
 		"label": _debug_route_label(target_location),
-		"kind": "locked" if not enabled else ("shortcut" if not unlock_once_flag_id.is_empty() else "exit"),
+		"kind": exit_kind,
 		"condition": unlock_once_flag_id if not unlock_once_flag_id.is_empty() else ("需从另一侧开启" if not enabled else "")
 	})
+	if use_a5_room_assembly:
+		_create_a5_door_arch(door.position, exit_kind, door.name)
 	queue_redraw()
 	door.interacted.connect(_on_exit_interacted.bind(target_location, target_scene, spawn_side))
 
