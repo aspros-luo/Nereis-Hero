@@ -244,7 +244,7 @@ func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> vo
 		var edge_kind := str(edge.get("kind", "walk"))
 		var unlocked := edge_state == "open" or WorldState.opened_shortcut_ids.has(edge_id)
 		if not unlocked:
-			if edge_kind in ["shortcut", "elevator"]:
+			if edge_kind in ["shortcut", "elevator", "hidden"]:
 				_build_shortcut_unlock_point(room, edge, room_id, bounds)
 			continue
 		var point := TransitionPoint.new()
@@ -271,6 +271,11 @@ func _build_shortcut_unlock_point(room: Node2D, edge: Dictionary, room_id: Strin
 	gate.set_script(SHORTCUT_UNLOCK_SCRIPT)
 	gate.name = "Unlock_" + str(edge.get("id", "shortcut"))
 	gate.set("shortcut_id", str(edge.get("id", "")))
+	var edge_kind := str(edge.get("kind", "shortcut"))
+	var prompt_text := "按 E 开启捷径"
+	if edge_kind == "hidden":
+		prompt_text = "按 E 探查隐藏通路"
+	gate.set("prompt_text", prompt_text)
 	var gate_position := _transition_position(side, bounds, room, 0)
 	match side:
 		&"west":
