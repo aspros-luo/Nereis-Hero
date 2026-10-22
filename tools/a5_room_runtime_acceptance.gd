@@ -175,8 +175,11 @@ func _test_room(room: Dictionary) -> void:
 	var actual_ground_coverage := 0.0
 	for body in ground_bodies:
 		var ground_collision := _first_collision_shape(body)
-		if ground_collision == null or ground_collision.shape == null \
-			or not (ground_collision.shape is RectangleShape2D):
+		if (
+			ground_collision == null
+			or ground_collision.shape == null
+			or not (ground_collision.shape is RectangleShape2D)
+		):
 			invalid_ground_shapes += 1
 		else:
 			actual_ground_coverage += (ground_collision.shape as RectangleShape2D).size.x
