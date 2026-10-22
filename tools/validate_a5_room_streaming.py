@@ -93,6 +93,8 @@ def main() -> int:
         errors.append("World must configure room dimensions before add_child() / _ready()")
     if 'instance.set("floor_y", maxf(540.0, height - 180.0))' not in world:
         errors.append("World does not derive streamed room floor_y from room height")
+    if world.count('var here_size: Array = here.get("size_screens", [1, 1])') != 2 or world.count('var delta := other_center - here_center') != 2:
+        errors.append("Transition side mapping must account for variable room sizes in both directions")
     cleanup_start = world.find('for point in room_transition_nodes:')
     cleanup_end = world.find('room_transition_nodes.clear()', cleanup_start)
     cleanup = world[cleanup_start:cleanup_end] if cleanup_start >= 0 and cleanup_end >= 0 else ""
