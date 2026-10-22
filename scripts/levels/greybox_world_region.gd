@@ -532,7 +532,7 @@ func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 	camera.limit_left = 0
 	camera.limit_top = 0
 	camera.limit_right = int(map_width)
-	camera.limit_bottom = 1000 if region_id == "A2" else 720
+	camera.limit_bottom = int(room_height) if region_id == "A5" and not room_id.is_empty() else (1000 if region_id == "A2" else 720)
 	hero.add_child(camera)
 
 func _spawn_ui() -> void:
@@ -920,15 +920,16 @@ func _create_boundaries() -> void:
 		var wall := StaticBody2D.new()
 		var shape := CollisionShape2D.new()
 		var rectangle := RectangleShape2D.new()
-		rectangle.size = Vector2(40.0, 1100.0)
+		rectangle.size = Vector2(40.0, maxf(1100.0, room_height + 400.0 if region_id == "A5" and not room_id.is_empty() else 1100.0))
 		shape.shape = rectangle
-		shape.position = Vector2(x, 500.0)
+		shape.position = Vector2(x, (room_height + 200.0) * 0.5 if region_id == "A5" and not room_id.is_empty() else 500.0)
 		wall.add_child(shape)
 		add_child(wall)
 
 
 func _ready_a5_room_test() -> void:
-	# Standalone room mode intentionally skips regional doors, pickups and encounters.
+	# Tall test rooms use a bottom-anchored floor and a matching camera range.
+	floor_y = maxf(540.0, room_height - 180.0)
 	WorldState.set_location(location_id)
 	WorldState.pending_region_spawn_side = "west"
 	_configure_platforms()
@@ -943,46 +944,139 @@ func _ready_a5_room_test() -> void:
 
 func _configure_a5_room_platforms() -> void:
 	var w := map_width
-	var h := floor_y
+	var floor := floor_y
 	match room_id:
 		"A5-R01":
-			_add_platform(Rect2(100, 410, 300, 18))
-			_add_platform(Rect2(430, 350, 220, 18))
-			_add_platform(Rect2(700, 290, 220, 18))
-		"A5-R02", "A5-R03", "A5-R04", "A5-R08", "A5-R10", "A5-R11", "A5-R12", "A5-R15", "A5-R20":
-			_add_platform(Rect2(w * 0.12, h * 0.68, w * 0.20, 18))
-			_add_platform(Rect2(w * 0.35, h * 0.56, w * 0.16, 18))
-			_add_platform(Rect2(w * 0.54, h * 0.68, w * 0.18, 18))
-			_add_platform(Rect2(w * 0.76, h * 0.55, w * 0.16, 18))
-		"A5-R05", "A5-R13":
-			_add_platform(Rect2(w * 0.16, h * 0.70, w * 0.24, 18))
-			_add_platform(Rect2(w * 0.31, h * 0.58, w * 0.20, 18))
-			_add_platform(Rect2(w * 0.43, h * 0.46, w * 0.20, 18))
-			_add_platform(Rect2(w * 0.55, h * 0.34, w * 0.20, 18))
-			_add_platform(Rect2(w * 0.69, h * 0.22, w * 0.18, 18))
-		"A5-R06", "A5-R17", "A5-R18":
-			_add_platform(Rect2(w * 0.10, h * 0.42, w * 0.18, 18))
-			_add_platform(Rect2(w * 0.31, h * 0.57, w * 0.18, 18))
-			_add_platform(Rect2(w * 0.52, h * 0.72, w * 0.18, 18))
-			_add_platform(Rect2(w * 0.73, h * 0.60, w * 0.18, 18))
-		"A5-R07", "A5-R09", "A5-R14", "A5-R19", "A5-R22":
-			_add_platform(Rect2(w * 0.12, h * 0.70, w * 0.25, 18))
-			_add_platform(Rect2(w * 0.43, h * 0.58, w * 0.20, 18))
-			_add_platform(Rect2(w * 0.68, h * 0.70, w * 0.20, 18))
+			_add_platform(Rect2(70, floor - 100, 210, 18))
+			_add_platform(Rect2(330, floor - 170, 170, 18))
+			_add_platform(Rect2(565, floor - 235, 220, 18))
+			_add_platform(Rect2(890, floor - 125, 230, 18))
+		"A5-R02":
+			_add_platform(Rect2(120, floor - 105, 280, 18))
+			_add_platform(Rect2(450, floor - 180, 200, 18))
+			_add_platform(Rect2(760, floor - 130, 270, 18))
+			_add_platform(Rect2(1190, floor - 215, 180, 18))
+			_add_platform(Rect2(1640, floor - 125, 450, 18))
+		"A5-R03":
+			_add_platform(Rect2(90, floor - 110, 330, 18))
+			_add_platform(Rect2(510, floor - 175, 220, 18))
+			_add_platform(Rect2(810, floor - 105, 250, 18))
+			_add_platform(Rect2(1190, floor - 230, 260, 18))
+			_add_platform(Rect2(1670, floor - 120, 360, 18))
+		"A5-R04":
+			_add_platform(Rect2(180, floor - 95, 190, 18))
+			_add_platform(Rect2(500, floor - 160, 240, 18))
+			_add_platform(Rect2(850, floor - 90, 160, 18))
+			_add_platform(Rect2(1110, floor - 205, 250, 18))
+			_add_platform(Rect2(1510, floor - 145, 220, 18))
+			_add_platform(Rect2(1930, floor - 100, 220, 18))
+		"A5-R05":
+			_add_platform(Rect2(130, floor - 220, 250, 18))
+			_add_platform(Rect2(360, floor - 420, 190, 18))
+			_add_platform(Rect2(160, floor - 620, 190, 18))
+			_add_platform(Rect2(440, floor - 820, 190, 18))
+			_add_platform(Rect2(190, floor - 1020, 230, 18))
+		"A5-R06":
+			_add_platform(Rect2(80, floor - 1040, 220, 18))
+			_add_platform(Rect2(350, floor - 850, 190, 18))
+			_add_platform(Rect2(150, floor - 670, 230, 18))
+			_add_platform(Rect2(420, floor - 480, 190, 18))
+			_add_platform(Rect2(210, floor - 300, 260, 18))
+		"A5-R07":
+			_add_platform(Rect2(120, floor - 110, 300, 18))
+			_add_platform(Rect2(500, floor - 165, 170, 18))
+			_add_platform(Rect2(760, floor - 110, 300, 18))
+		"A5-R08":
+			_add_platform(Rect2(100, floor - 95, 230, 18))
+			_add_platform(Rect2(420, floor - 165, 200, 18))
+			_add_platform(Rect2(710, floor - 105, 240, 18))
+			_add_platform(Rect2(1050, floor - 205, 210, 18))
+			_add_platform(Rect2(1420, floor - 135, 240, 18))
+			_add_platform(Rect2(1790, floor - 95, 350, 18))
+		"A5-R09":
+			_add_platform(Rect2(90, floor - 95, 240, 18))
+			_add_platform(Rect2(400, floor - 150, 170, 18))
+			_add_platform(Rect2(650, floor - 100, 240, 18))
+		"A5-R10":
+			_add_platform(Rect2(100, floor - 250, 260, 18))
+			_add_platform(Rect2(440, floor - 440, 200, 18))
+			_add_platform(Rect2(720, floor - 640, 220, 18))
+			_add_platform(Rect2(1050, floor - 820, 180, 18))
+			_add_platform(Rect2(1330, floor - 1010, 220, 18))
+			_add_platform(Rect2(1690, floor - 810, 250, 18))
+			_add_platform(Rect2(2040, floor - 600, 300, 18))
+		"A5-R11":
+			_add_platform(Rect2(90, floor - 100, 250, 18))
+			_add_platform(Rect2(420, floor - 165, 200, 18))
+			_add_platform(Rect2(730, floor - 100, 220, 18))
+			_add_platform(Rect2(1050, floor - 195, 200, 18))
+			_add_platform(Rect2(1370, floor - 130, 260, 18))
+			_add_platform(Rect2(1740, floor - 95, 300, 18))
+		"A5-R12":
+			_add_platform(Rect2(80, floor - 100, 360, 18))
+			_add_platform(Rect2(520, floor - 180, 250, 18))
+			_add_platform(Rect2(840, floor - 115, 300, 18))
+			_add_platform(Rect2(1210, floor - 180, 230, 18))
+			_add_platform(Rect2(1530, floor - 100, 480, 18))
+		"A5-R13":
+			_add_platform(Rect2(130, floor - 230, 220, 18))
+			_add_platform(Rect2(420, floor - 430, 190, 18))
+			_add_platform(Rect2(170, floor - 630, 190, 18))
+			_add_platform(Rect2(450, floor - 830, 190, 18))
+			_add_platform(Rect2(180, floor - 1030, 200, 18))
+			_add_platform(Rect2(470, floor - 1230, 200, 18))
+			_add_platform(Rect2(220, floor - 1430, 220, 18))
+		"A5-R14":
+			_add_platform(Rect2(80, floor - 95, 180, 18))
+			_add_platform(Rect2(340, floor - 170, 220, 18))
+			_add_platform(Rect2(650, floor - 105, 180, 18))
+		"A5-R15":
+			_add_platform(Rect2(90, floor - 170, 280, 18))
+			_add_platform(Rect2(430, floor - 230, 210, 18))
+			_add_platform(Rect2(730, floor - 170, 260, 18))
+			_add_platform(Rect2(1080, floor - 235, 230, 18))
+			_add_platform(Rect2(1430, floor - 165, 330, 18))
 		"A5-R16":
-			_add_platform(Rect2(w * 0.08, h * 0.62, w * 0.20, 18))
-			_add_platform(Rect2(w * 0.32, h * 0.48, w * 0.20, 18))
-			_add_platform(Rect2(w * 0.55, h * 0.34, w * 0.20, 18))
-			_add_platform(Rect2(w * 0.76, h * 0.22, w * 0.18, 18))
+			_add_platform(Rect2(120, floor - 250, 210, 18))
+			_add_platform(Rect2(390, floor - 450, 180, 18))
+			_add_platform(Rect2(650, floor - 650, 210, 18))
+			_add_platform(Rect2(930, floor - 850, 180, 18))
+			_add_platform(Rect2(600, floor - 1050, 260, 18))
+		"A5-R17":
+			_add_platform(Rect2(100, floor - 230, 230, 18))
+			_add_platform(Rect2(430, floor - 430, 200, 18))
+			_add_platform(Rect2(780, floor - 620, 220, 18))
+			_add_platform(Rect2(1130, floor - 800, 200, 18))
+			_add_platform(Rect2(1500, floor - 620, 260, 18))
+			_add_platform(Rect2(1900, floor - 430, 250, 18))
+		"A5-R18":
+			_add_platform(Rect2(100, floor - 105, 330, 18))
+			_add_platform(Rect2(510, floor - 170, 210, 18))
+			_add_platform(Rect2(820, floor - 115, 290, 18))
+			_add_platform(Rect2(1220, floor - 190, 210, 18))
+			_add_platform(Rect2(1570, floor - 125, 400, 18))
+		"A5-R19":
+			_add_platform(Rect2(90, floor - 100, 260, 18))
+			_add_platform(Rect2(420, floor - 180, 200, 18))
+			_add_platform(Rect2(690, floor - 115, 250, 18))
+		"A5-R20":
+			_add_platform(Rect2(90, floor - 170, 280, 18))
+			_add_platform(Rect2(430, floor - 230, 210, 18))
+			_add_platform(Rect2(730, floor - 165, 260, 18))
 		"A5-R21":
-			_add_platform(Rect2(w * 0.12, h * 0.70, w * 0.18, 18))
-			_add_platform(Rect2(w * 0.33, h * 0.58, w * 0.18, 18))
-			_add_platform(Rect2(w * 0.54, h * 0.46, w * 0.18, 18))
-			_add_platform(Rect2(w * 0.75, h * 0.34, w * 0.18, 18))
+			_add_platform(Rect2(180, floor - 140, 250, 18))
+			_add_platform(Rect2(540, floor - 270, 190, 18))
+			_add_platform(Rect2(850, floor - 390, 190, 18))
+			_add_platform(Rect2(1180, floor - 510, 190, 18))
+			_add_platform(Rect2(1550, floor - 390, 260, 18))
+			_add_platform(Rect2(1960, floor - 260, 250, 18))
+		"A5-R22":
+			_add_platform(Rect2(100, floor - 95, 200, 18))
+			_add_platform(Rect2(400, floor - 165, 170, 18))
+			_add_platform(Rect2(680, floor - 105, 220, 18))
 		_:
-			_add_platform(Rect2(w * 0.15, h * 0.68, w * 0.22, 18))
-			_add_platform(Rect2(w * 0.42, h * 0.55, w * 0.20, 18))
-			_add_platform(Rect2(w * 0.68, h * 0.68, w * 0.20, 18))
+			_add_platform(Rect2(150, floor - 120, 220, 18))
+			_add_platform(Rect2(450, floor - 180, 200, 18))
 
 
 func _configure_platforms() -> void:
@@ -3126,9 +3220,9 @@ func _draw_floor_gap_visuals() -> void:
 func _draw() -> void:
 	var backdrop: Texture2D = _region_backdrop_texture()
 	if backdrop != null:
-		draw_texture_rect(backdrop, Rect2(0.0, 0.0, map_width, 1000.0 if region_id == "A2" else 720.0), false)
+		draw_texture_rect(backdrop, Rect2(0.0, 0.0, map_width, room_height if region_id == "A5" and not room_id.is_empty() else (1000.0 if region_id == "A2" else 720.0)), false)
 	else:
-		draw_rect(Rect2(0.0, 0.0, map_width, 1000.0 if region_id == "A2" else 720.0), _background_color())
+		draw_rect(Rect2(0.0, 0.0, map_width, room_height if region_id == "A5" and not room_id.is_empty() else (1000.0 if region_id == "A2" else 720.0)), _background_color())
 	_draw_biome_color_wash()
 	_draw_atmospheric_layers()
 	_draw_midground_accents()
