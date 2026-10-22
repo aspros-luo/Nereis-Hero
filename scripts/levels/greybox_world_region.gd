@@ -58,6 +58,7 @@ var respawning := false
 var a6_bell_shortcut_spawned := false
 var a5_assembled_rooms: Dictionary = {}
 var a5_internal_transition_cooldown := 0.0
+var a5_last_route_visual_state := ""
 
 func _ready() -> void:
 	if assembly_child_mode:
@@ -126,6 +127,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	a5_internal_transition_cooldown = maxf(0.0, a5_internal_transition_cooldown - delta)
+	if use_a5_room_assembly:
+		var visual_state := "%s|%d|%s" % [
+			str(WorldState.resonance_sight_active), WorldState.hero_resonance,
+			str(WorldState.opened_hidden_paths)
+		]
+		if visual_state != a5_last_route_visual_state:
+			a5_last_route_visual_state = visual_state
+			queue_redraw()
 	_refresh_a6_bell_shortcut()
 	# C21 can become valid after examining A11's own observer anomaly; do not freeze its state at scene entry.
 	_refresh_a11_ending_route()
@@ -1144,6 +1153,22 @@ func _spawn_a5_internal_door(
 	door.set_meta("a5_from_room", from_id)
 	door.set_meta("a5_to_room", to_id)
 	door.set_meta("a5_reverse_endpoint", reverse_endpoint)
+	var marker_kind := "exit"
+	if kind == "hidden" or kind == "resonance_shortcut":
+		marker_kind = "secret"
+	elif kind == "shortcut" or kind == "elevator":
+		marker_kind = "shortcut"
+	elif initial_state == "blocked":
+		marker_kind = "locked"
+	debug_exit_markers.append({
+		"position": anchor,
+		"visual_position": anchor + Vector2(0.0, 36.0),
+		"label": "%s → %s" % [from_id, to_id],
+		"kind": marker_kind,
+		"condition": str(edge.get("unlock_condition", "")),
+		"connection_id": edge_id,
+		"connection_kind": kind
+	})
 	var collision := CollisionShape2D.new()
 	var rectangle := RectangleShape2D.new()
 	rectangle.size = Vector2(108.0, 86.0) if requires_interaction else Vector2(76.0, 128.0)
@@ -3547,10 +3572,16 @@ func _spawn_exit_door(
 func _draw_route_goal_landmarks() -> void:
 	for marker in debug_exit_markers:
 		var marker_kind := str(marker.get("kind", "exit"))
-		# Hidden passages must be discovered through their intended clues, not a visible doorway silhouette.
+		# Hidden room links appear only when their real resonance condition is met or the path was opened.
 		if marker_kind == "secret":
-			continue
-		var anchor: Vector2 = marker.get("position", Vector2.ZERO)
+			var connection_id := str(marker.get("connection_id", ""))
+			var connection_kind := str(marker.get("connection_kind", "hidden"))
+			if connection_id.is_empty() or (
+				not WorldState.is_hidden_path_opened(connection_id)
+				and not _a5_internal_connection_requirement_met(connection_id, connection_kind, "")
+			):
+				continue
+		var anchor: Vector2 = marker.get("visual_position", marker.get("position", Vector2.ZERO))
 		var tint := Color("#8eaa9a")
 		if marker_kind == "shortcut":
 			tint = Color("#d5b36b")
@@ -3717,6 +3748,9 @@ func _draw_floor_gap_visuals() -> void:
 
 func _draw() -> void:
 	if use_a5_room_assembly:
+		_draw_route_goal_landmarks()
+		if OS.is_debug_build():
+			_draw_debug_exit_markers()
 		return
 	var backdrop: Texture2D = _region_backdrop_texture()
 	if backdrop != null:
