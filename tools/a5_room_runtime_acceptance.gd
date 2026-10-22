@@ -271,6 +271,9 @@ func _test_assembled_region(connections: Array) -> void:
 	if instance == null:
 		_record(false, "ASSEMBLY/INSTANTIATE", "assembled A5 root is not Node2D")
 		return
+	var world_state := root.get_node_or_null("WorldState")
+	if world_state != null:
+		world_state.set("pending_region_spawn_side", "city_highroad")
 	root.add_child(instance)
 	await process_frame
 	await process_frame
@@ -384,6 +387,33 @@ func _test_assembled_region(connections: Array) -> void:
 
 	var hero := instance.get_node_or_null("Hero") as CharacterBody2D
 	_record(hero != null, "ASSEMBLY/SINGLE_HERO", "assembled Hero exists=%s" % str(hero != null))
+	var entry_room_for_spawn := instance.get_node_or_null("A5_R01") as Node2D
+	var c08_spawn_ok := hero != null and entry_room_for_spawn != null
+	if c08_spawn_ok:
+		var spawn_local := hero.position - entry_room_for_spawn.position
+		c08_spawn_ok = absf(spawn_local.x - 330.0) <= 1.0 and absf(spawn_local.y - 410.0) <= 8.0
+	_record(c08_spawn_ok, "ASSEMBLY/C08_INCOMING_SPAWN",
+		"city_highroad spawn is on R01 upper landing=%s" % str(c08_spawn_ok))
+
+	var incoming_spawn_specs := [
+		{"side": "city_highroad", "room": "A5_R01", "local": Vector2(330.0, 410.0), "id": "C08"},
+		{"side": "monastery_return", "room": "A5_R20", "local": Vector2(500.0, 365.0), "id": "C09"},
+		{"side": "old_pilgrim_highroad", "room": "A5_R16", "local": Vector2(820.0, 575.0), "id": "C04"},
+		{"side": "bell_gate", "room": "A5_R14", "local": Vector2(900.0, 430.0), "id": "H02"}
+	]
+	var incoming_spawn_errors := 0
+	for spawn_spec in incoming_spawn_specs:
+		var spawn_room := instance.get_node_or_null(str(spawn_spec["room"])) as Node2D
+		var spawn_result: Variant = instance.call(
+			"_a5_assembled_spawn_for_side", str(spawn_spec["side"]), entry_room_for_spawn
+		)
+		if spawn_room == null or not (spawn_result is Vector2):
+			incoming_spawn_errors += 1
+		elif (spawn_result as Vector2).distance_to(spawn_room.position + spawn_spec["local"]) > 1.0:
+			incoming_spawn_errors += 1
+	_record(incoming_spawn_errors == 0, "ASSEMBLY/CROSS_REGION_SPAWN_MATRIX",
+		"incorrect C04/C08/C09/H02 incoming spawn anchors=%d" % incoming_spawn_errors)
+
 	if hero != null:
 		var camera := hero.get_node_or_null("HeroCamera") as Camera2D
 		_record(camera != null, "ASSEMBLY/CAMERA", "assembled HeroCamera exists=%s" % str(camera != null))
