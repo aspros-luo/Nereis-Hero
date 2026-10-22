@@ -37,6 +37,19 @@
 - **R06 从高位开始验收**：出生点放在塌陷坡道上端，方便检查下降路线；其余房间默认从地面入口开始检查。
 - **当前限制**：这是无美术资源阶段的灰盒，尚未添加敌人、机关动画、拾取物与正式区域出口。脚本静态验收通过不等于 Godot 实机跳跃验收通过。
 
+## Godot 运行时验收
+
+在仓库根目录执行静态检查后，再用 Godot 4.6.x 运行全部 22 个独立房间：
+
+```bash
+python3 tools/validate_a5_room_scenes.py
+"$HOME/Downloads/Godot.app/Contents/MacOS/Godot" --headless --path . --script tools/a5_room_runtime_acceptance.gd
+```
+
+运行时脚本会逐一加载、实例化并释放房间，检查实际生成的平台碰撞体、残骸碰撞体、地面分段与缺口、Hero 碰撞形状、摄像机边界和出生位置。完整报告写入 Godot 的用户数据目录下的 `a5_room_runtime_acceptance_report.json`。如果 Godot 不在上述路径，请将命令替换为实际可执行文件路径。
+
+这属于运行时 smoke test；它不会代替人工试玩，也不会自动证明所有跳跃路线都有良好手感。
+
 ## 静态检查
 
 在仓库根目录运行：
