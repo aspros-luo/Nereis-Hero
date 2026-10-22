@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/village_backhill.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/world/village_poi.gd" id="2"]
@@ -8,6 +8,9 @@ size = Vector2(2200, 40)
 
 [sub_resource type="RectangleShape2D" id="PlatformShape"]
 size = Vector2(180, 18)
+
+[sub_resource type="RectangleShape2D" id="StairStepShape"]
+size = Vector2(100, 20)
 
 [node name="VillageBackhill" type="Node2D"]
 script = ExtResource("1")
@@ -77,6 +80,89 @@ color = Color(0.29, 0.20, 0.18, 1)
 position = Vector2(-14, 85)
 polygon = PackedVector2Array(0, 0, 28, 0, 28, 65, 0, 65)
 color = Color(0.07, 0.06, 0.08, 1)
+
+[node name="BackhillStairs" type="Node2D" parent="."]
+position = Vector2(0, 0)
+
+[node name="Step01" type="StaticBody2D" parent="BackhillStairs"]
+position = Vector2(1030, 520)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step01"]
+shape = SubResource("StairStepShape")
+
+[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step01"]
+polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
+color = Color(0.31, 0.28, 0.32, 1)
+
+[node name="Step02" type="StaticBody2D" parent="BackhillStairs"]
+position = Vector2(1125, 500)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step02"]
+shape = SubResource("StairStepShape")
+
+[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step02"]
+polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
+color = Color(0.34, 0.30, 0.35, 1)
+
+[node name="Step03" type="StaticBody2D" parent="BackhillStairs"]
+position = Vector2(1220, 480)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step03"]
+shape = SubResource("StairStepShape")
+
+[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step03"]
+polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
+color = Color(0.31, 0.28, 0.32, 1)
+
+[node name="Step04" type="StaticBody2D" parent="BackhillStairs"]
+position = Vector2(1315, 460)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step04"]
+shape = SubResource("StairStepShape")
+
+[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step04"]
+polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
+color = Color(0.34, 0.30, 0.35, 1)
+
+[node name="Step05" type="StaticBody2D" parent="BackhillStairs"]
+position = Vector2(1410, 440)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step05"]
+shape = SubResource("StairStepShape")
+
+[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step05"]
+polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
+color = Color(0.31, 0.28, 0.32, 1)
+
+[node name="Step06" type="StaticBody2D" parent="BackhillStairs"]
+position = Vector2(1505, 420)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step06"]
+shape = SubResource("StairStepShape")
+
+[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step06"]
+polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
+color = Color(0.34, 0.30, 0.35, 1)
+
+[node name="Step07" type="StaticBody2D" parent="BackhillStairs"]
+position = Vector2(1600, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step07"]
+shape = SubResource("StairStepShape")
+
+[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step07"]
+polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
+color = Color(0.31, 0.28, 0.32, 1)
+
+[node name="Step08" type="StaticBody2D" parent="BackhillStairs"]
+position = Vector2(1695, 380)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step08"]
+shape = SubResource("StairStepShape")
+
+[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step08"]
+polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
+color = Color(0.34, 0.30, 0.35, 1)
 
 [node name="ChurchPOI" type="Node2D" parent="."]
 position = Vector2(420, 540)
