@@ -5,13 +5,25 @@ signal player_nearby_changed(shortcut_id: String, nearby: bool)
 @export var shortcut_id: String = ""
 
 func _ready() -> void:
+	var prompt := Label.new()
+	prompt.name = "InteractionPrompt"
+	prompt.text = "按 E 开启捷径"
+	prompt.position = Vector2(-64.0, -72.0)
+	prompt.add_theme_font_size_override("font_size", 18)
+	prompt.add_theme_color_override("font_color", Color(1.0, 0.9, 0.65))
+	prompt.add_theme_color_override("font_outline_color", Color(0.05, 0.04, 0.08, 1.0))
+	prompt.add_theme_constant_override("outline_size", 4)
+	prompt.visible = false
+	add_child(prompt)
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
+		get_node("InteractionPrompt").visible = true
 		player_nearby_changed.emit(shortcut_id, true)
 
 func _on_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
+		get_node("InteractionPrompt").visible = false
 		player_nearby_changed.emit(shortcut_id, false)
