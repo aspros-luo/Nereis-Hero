@@ -37,6 +37,12 @@ def main() -> int:
     a11_script = read("scripts/levels/village_backhill.gd", errors)
 
     require(a10_scene, '[node name="BackhillEntrance" type="Node2D" parent="."]', "A1.0 authored A1.1 entrance", errors)
+    require(a10_scene, '[node name="MiteHouse" type="Node2D" parent="."]', "A1.0 authored Mite house", errors)
+    require(a10_scene, '[node name="VillageHouse01" type="Node2D" parent="."]', "A1.0 authored residential building", errors)
+    require(a10_scene, '[node name="MerchantStall" type="Node2D" parent="."]', "A1.0 authored merchant stall", errors)
+    require(a10_scene, '[node name="BlacksmithWorkshop" type="Node2D" parent="."]', "A1.0 authored workshop", errors)
+    require(a10_scene, '[node name="Graveyard" type="Node2D" parent="."]', "A1.0 authored graveyard", errors)
+    require(a10_scene, '[node name="OldHouse" type="Node2D" parent="."]', "A1.0 authored old house", errors)
     require(a10_script, '$BackhillEntrance.interacted.connect', "A1.0 authored entrance signal", errors)
     require(a10_script, 'location_id == "backhill_path"', "A1.0 to A1.1 transition", errors)
     require(a10_script, 'res://scenes/village_backhill.tscn', "A1.0 to A1.1 transition", errors)
