@@ -1220,6 +1220,7 @@ func _spawn_a5_internal_door(
 	door.set_meta("a5_transition_mode", "interact" if requires_interaction else "auto")
 	door.set_meta("a5_from_room", from_id)
 	door.set_meta("a5_to_room", to_id)
+	door.set_meta("a5_destination_anchor", destination_anchor)
 	door.set_meta("a5_reverse_endpoint", reverse_endpoint)
 	var marker_kind := "exit"
 	if kind == "hidden" or kind == "resonance_shortcut":
