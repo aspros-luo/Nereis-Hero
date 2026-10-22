@@ -307,8 +307,14 @@ func _transition_position(side: StringName, bounds: Rect2, room: Node2D, side_in
 		&"north":
 			return Vector2(clampf(bounds.size.x * 0.5 + lane_offset, 90.0, bounds.end.x - 90.0), 24.0)
 		_:
-			return Vector2(clampf(bounds.size.x * 0.5 + lane_offset, 90.0, bounds.end.x - 90.0), bounds.end.y - 24.0)
+			return Vector2(_drop_exit_x(room, bounds, lane_offset), floor_y + 30.0)
 
+func _drop_exit_x(room: Node2D, bounds: Rect2, lane_offset: float) -> float:
+	var gaps: Variant = room.get("a5_room_floor_gaps") if _has_property(room, "a5_room_floor_gaps") else []
+	if gaps is Array and not gaps.is_empty():
+		var gap: Vector2 = gaps[0]
+		return clampf(gap.x + gap.y * 0.5, 48.0, bounds.end.x - 48.0)
+	return clampf(bounds.size.x * 0.5 + lane_offset, 48.0, bounds.end.x - 48.0)
 func _on_transition_requested(target_room_id: StringName, target_entry_id: StringName) -> void:
 	if not transition_manager.begin_transition():
 		return
