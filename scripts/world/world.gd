@@ -5,6 +5,7 @@ extends Node2D
 const HERO_SCRIPT: Script = preload("res://scripts/player/hero.gd")
 const HUD_SCRIPT: Script = preload("res://scripts/ui/game_hud.gd")
 const A5_CONTRACT_PATH := "res://tools/a5_room_assembly_contract.json"
+const SHORTCUT_UNLOCK_SCRIPT: Script = preload("res://scripts/rooms/shortcut_unlock_point.gd")
 
 @onready var room_container: Node2D = $RoomContainer
 @onready var fade_rect: ColorRect = $FadeLayer/ColorRect
@@ -20,6 +21,16 @@ var connections_by_room: Dictionary = {}
 var threaded_scene_paths: Dictionary = {}
 var current_room_id: String = ""
 var room_transition_nodes: Array[TransitionPoint] = []
+var shortcut_unlock_nodes: Array[Area2D] = []
+var pending_shortcut_id: String = ""
+
+func _unhandled_input(event: InputEvent) -> void:
+	if pending_shortcut_id.is_empty() or not event is InputEventKey:
+		return
+	var key_event := event as InputEventKey
+	if key_event.pressed and not key_event.echo and key_event.keycode == KEY_E:
+		_unlock_shortcut(pending_shortcut_id)
+		get_viewport().set_input_as_handled()
 
 func _ready() -> void:
 	WorldState.prepare_scene_runtime()
@@ -210,13 +221,21 @@ func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> vo
 			point.queue_free()
 	room_transition_nodes.clear()
 	var side_counts: Dictionary = {&"west": 0, &"east": 0, &"north": 0, &"south": 0}
+	for gate in shortcut_unlock_nodes:
+		if is_instance_valid(gate):
+			gate.queue_free()
+	shortcut_unlock_nodes.clear()
+	pending_shortcut_id = ""
 	for edge: Variant in connections_by_room.get(room_id, []):
 		if not edge is Dictionary:
 			continue
 		var edge_id := str(edge.get("id", ""))
 		var edge_state := str(edge.get("initial_state", "open"))
-		# Keep locked shortcuts, hidden paths and ability gates physically unavailable until their state is implemented.
-		if edge_state != "open":
+		var edge_kind := str(edge.get("kind", "walk"))
+		var unlocked := edge_state == "open" or WorldState.opened_shortcut_ids.has(edge_id)
+		if not unlocked:
+			if edge_kind in ["shortcut", "elevator"]:
+				_build_shortcut_unlock_point(room, edge, room_id, bounds)
 			continue
 		var point := TransitionPoint.new()
 		point.name = "Transition_" + edge_id
@@ -236,6 +255,45 @@ func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> vo
 		point.transition_requested.connect(_on_transition_requested)
 		room_transition_nodes.append(point)
 
+func _build_shortcut_unlock_point(room: Node2D, edge: Dictionary, room_id: String, bounds: Rect2) -> void:
+	var side := _edge_entry_id(edge, room_id)
+	var gate := Area2D.new()
+	gate.set_script(SHORTCUT_UNLOCK_SCRIPT)
+	gate.name = "Unlock_" + str(edge.get("id", "shortcut"))
+	gate.set("shortcut_id", str(edge.get("id", "")))
+	var gate_position := _transition_position(side, bounds, room, 0)
+	match side:
+		&"west":
+			gate_position.x = 112.0
+		&"east":
+			gate_position.x = bounds.end.x - 112.0
+		&"north":
+			gate_position.y = 112.0
+		&"south":
+			gate_position.y = bounds.end.y - 112.0
+	gate.position = gate_position
+	var collision := CollisionShape2D.new()
+	var rectangle := RectangleShape2D.new()
+	rectangle.size = Vector2(116.0, 116.0)
+	collision.shape = rectangle
+	gate.add_child(collision)
+	room.add_child(gate)
+	gate.connect("player_nearby_changed", _on_shortcut_player_nearby_changed)
+	shortcut_unlock_nodes.append(gate)
+
+func _on_shortcut_player_nearby_changed(shortcut_id: String, nearby: bool) -> void:
+	if nearby:
+		pending_shortcut_id = shortcut_id
+		print("[NEREIS][ROOM_STREAM][SHORTCUT] 发现可开启捷径 %s，按 E 开启" % shortcut_id)
+	elif pending_shortcut_id == shortcut_id:
+		pending_shortcut_id = ""
+
+func _unlock_shortcut(shortcut_id: String) -> void:
+	if not WorldState.opened_shortcut_ids.has(shortcut_id):
+		WorldState.open_room_shortcut(shortcut_id)
+	print("[NEREIS][ROOM_STREAM][SHORTCUT] 已开启 %s" % shortcut_id)
+	if is_instance_valid(current_room):
+		_build_room_transitions(current_room, current_room_id, _get_room_bounds(current_room))
 func _transition_position(side: StringName, bounds: Rect2, room: Node2D, side_index: int) -> Vector2:
 	var floor_y := float(room.get("floor_y")) if _has_property(room, "floor_y") else bounds.end.y - 100.0
 	var lane_offset := float(side_index) * 104.0
