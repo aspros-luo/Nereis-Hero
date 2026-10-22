@@ -11,6 +11,7 @@ WORLD = ROOT / "scripts" / "world" / "world.gd"
 ROOM_DATA = ROOT / "scripts" / "resources" / "room_data.gd"
 ROOM_STATE = ROOT / "scripts" / "core" / "world_state.gd"
 SHORTCUT = ROOT / "scripts" / "rooms" / "shortcut_unlock_point.gd"
+REGION_SCRIPT = ROOT / "scripts" / "levels" / "greybox_world_region.gd"
 
 def main() -> int:
     errors = []
@@ -19,6 +20,7 @@ def main() -> int:
     room_data = ROOM_DATA.read_text(encoding="utf-8")
     room_state = ROOM_STATE.read_text(encoding="utf-8")
     shortcut = SHORTCUT.read_text(encoding="utf-8")
+    region_script = REGION_SCRIPT.read_text(encoding="utf-8")
     rooms = data.get("rooms", [])
     edges = data.get("connections", [])
     ids = {room.get("id") for room in rooms}
@@ -74,6 +76,12 @@ def main() -> int:
     for token in ("player_nearby_changed", "body_entered", "body_exited", "InteractionPrompt", "按 E 开启捷径"):
         if token not in shortcut:
             errors.append(f"Shortcut unlock point missing {token}")
+    for token in ("_drop_exit_x", "_safe_entry_x", "floor_y + 30.0"):
+        if token not in world:
+            errors.append(f"World vertical traversal handling missing {token}")
+    for token in ('"A5-R05":\n\t\t\t# The one-way drop', 'gaps = [Vector2(600, 120)]', 'gaps = [Vector2(560, 120)]'):
+        if token not in region_script:
+            errors.append(f"A5 drop shaft geometry missing {token}")
 
     # Existing macro contracts must remain attached to the intended rooms and exits.
     bindings = {item.get("id"): item for item in data.get("macro_bindings", [])}
