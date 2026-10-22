@@ -188,10 +188,18 @@ func _entry_position(room: Node2D, entry_id: StringName, bounds: Rect2) -> Vecto
 		&"north":
 			return Vector2(bounds.size.x * 0.5, 90.0)
 		&"south":
-			return Vector2(bounds.size.x * 0.5, bounds.end.y - 120.0)
+			return Vector2(_safe_entry_x(room, bounds), floor_y - 72.0)
 		_:
 			return Vector2(100.0, floor_y - 72.0)
 
+func _safe_entry_x(room: Node2D, bounds: Rect2) -> float:
+	var x := bounds.size.x * 0.5
+	var gaps: Variant = room.get("a5_room_floor_gaps") if _has_property(room, "a5_room_floor_gaps") else []
+	if gaps is Array:
+		for raw_gap: Variant in gaps:
+			if raw_gap is Vector2 and x >= raw_gap.x and x <= raw_gap.x + raw_gap.y:
+				return clampf(raw_gap.x - 64.0, 48.0, bounds.end.x - 48.0)
+	return x
 func _edge_entry_id(edge: Dictionary, room_id: String) -> StringName:
 	var other_id := str(edge.get("to", ""))
 	var here: Dictionary = room_contract_by_id.get(room_id, {})
