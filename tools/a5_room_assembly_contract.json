@@ -285,7 +285,7 @@
       "role": "C09_exit",
       "scene_path": "res://scenes/a5_rooms/a5_r20.tscn",
       "position_screens": [
-        17,
+        18,
         -1
       ],
       "placement_status": "proposed"
