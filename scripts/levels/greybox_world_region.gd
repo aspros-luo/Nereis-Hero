@@ -46,6 +46,9 @@ var camera: Camera2D
 var narrative: CanvasLayer
 var hud: CanvasLayer
 var platforms: Array[Rect2] = []
+var a5_room_blocks: Array[Rect2] = []
+var a5_room_floor_gaps: Array[Vector2] = []
+var a5_room_floor_segments: Array[Vector2] = []
 # Debug-only route markers make every authored exit and resonance gate obvious during graybox iteration.
 # 灰盒开发阶段专用的路线标记：明确显示每个实体出口与灵视入口，正式导出版本不绘制。
 var debug_exit_markers: Array[Dictionary] = []
@@ -845,6 +848,9 @@ func _spawn_region_ambience() -> void:
 
 
 func _create_floor() -> void:
+	if region_id == "A5" and not room_id.is_empty():
+		_configure_a5_room_floor()
+		return
 	# A2's Bell Grave is a real opening in the ground collision, not just a label or background drawing.
 	# A2 钟墓必须是真正切开地面碰撞的坑口，而不只是地图标签或背景图案。
 	if region_id == "A2":
@@ -928,6 +934,9 @@ func _create_boundaries() -> void:
 
 
 func _ready_a5_room_test() -> void:
+	a5_room_blocks.clear()
+	a5_room_floor_gaps.clear()
+	a5_room_floor_segments.clear()
 	# Tall test rooms use a bottom-anchored floor and a matching camera range.
 	floor_y = maxf(540.0, room_height - 180.0)
 	WorldState.set_location(location_id)
@@ -935,148 +944,219 @@ func _ready_a5_room_test() -> void:
 	_configure_platforms()
 	_create_floor()
 	_create_boundaries()
+	_configure_a5_room_blocks()
 	_spawn_region_ambience()
-	_spawn_hero(96.0, floor_y - 96.0)
+	var start_position := Vector2(96.0, floor_y - 96.0)
+	if room_id == "A5-R06":
+		start_position = Vector2(380.0, 96.0)
+	_spawn_hero(start_position.x, start_position.y)
 	_spawn_ui()
 	queue_redraw()
 	print("[NEREIS][A5_ROOM_TEST] room=%s width=%.0f height=%.0f" % [room_id, map_width, room_height])
 
 
 func _configure_a5_room_platforms() -> void:
-	var w := map_width
-	var floor := floor_y
-	match room_id:
-		"A5-R01":
-			_add_platform(Rect2(70, floor - 100, 210, 18))
-			_add_platform(Rect2(330, floor - 170, 170, 18))
-			_add_platform(Rect2(565, floor - 235, 220, 18))
-			_add_platform(Rect2(890, floor - 125, 230, 18))
-		"A5-R02":
-			_add_platform(Rect2(120, floor - 105, 280, 18))
-			_add_platform(Rect2(450, floor - 180, 200, 18))
-			_add_platform(Rect2(760, floor - 130, 270, 18))
-			_add_platform(Rect2(1190, floor - 215, 180, 18))
-			_add_platform(Rect2(1640, floor - 125, 450, 18))
-		"A5-R03":
-			_add_platform(Rect2(90, floor - 110, 330, 18))
-			_add_platform(Rect2(510, floor - 175, 220, 18))
-			_add_platform(Rect2(810, floor - 105, 250, 18))
-			_add_platform(Rect2(1190, floor - 230, 260, 18))
-			_add_platform(Rect2(1670, floor - 120, 360, 18))
-		"A5-R04":
-			_add_platform(Rect2(180, floor - 95, 190, 18))
-			_add_platform(Rect2(500, floor - 160, 240, 18))
-			_add_platform(Rect2(850, floor - 90, 160, 18))
-			_add_platform(Rect2(1110, floor - 205, 250, 18))
-			_add_platform(Rect2(1510, floor - 145, 220, 18))
-			_add_platform(Rect2(1930, floor - 100, 220, 18))
-		"A5-R05":
-			_add_platform(Rect2(130, floor - 220, 250, 18))
-			_add_platform(Rect2(360, floor - 420, 190, 18))
-			_add_platform(Rect2(160, floor - 620, 190, 18))
-			_add_platform(Rect2(440, floor - 820, 190, 18))
-			_add_platform(Rect2(190, floor - 1020, 230, 18))
-		"A5-R06":
-			_add_platform(Rect2(80, floor - 1040, 220, 18))
-			_add_platform(Rect2(350, floor - 850, 190, 18))
-			_add_platform(Rect2(150, floor - 670, 230, 18))
-			_add_platform(Rect2(420, floor - 480, 190, 18))
-			_add_platform(Rect2(210, floor - 300, 260, 18))
-		"A5-R07":
-			_add_platform(Rect2(120, floor - 110, 300, 18))
-			_add_platform(Rect2(500, floor - 165, 170, 18))
-			_add_platform(Rect2(760, floor - 110, 300, 18))
-		"A5-R08":
-			_add_platform(Rect2(100, floor - 95, 230, 18))
-			_add_platform(Rect2(420, floor - 165, 200, 18))
-			_add_platform(Rect2(710, floor - 105, 240, 18))
-			_add_platform(Rect2(1050, floor - 205, 210, 18))
-			_add_platform(Rect2(1420, floor - 135, 240, 18))
-			_add_platform(Rect2(1790, floor - 95, 350, 18))
-		"A5-R09":
-			_add_platform(Rect2(90, floor - 95, 240, 18))
-			_add_platform(Rect2(400, floor - 150, 170, 18))
-			_add_platform(Rect2(650, floor - 100, 240, 18))
-		"A5-R10":
-			_add_platform(Rect2(100, floor - 250, 260, 18))
-			_add_platform(Rect2(440, floor - 440, 200, 18))
-			_add_platform(Rect2(720, floor - 640, 220, 18))
-			_add_platform(Rect2(1050, floor - 820, 180, 18))
-			_add_platform(Rect2(1330, floor - 1010, 220, 18))
-			_add_platform(Rect2(1690, floor - 810, 250, 18))
-			_add_platform(Rect2(2040, floor - 600, 300, 18))
-		"A5-R11":
-			_add_platform(Rect2(90, floor - 100, 250, 18))
-			_add_platform(Rect2(420, floor - 165, 200, 18))
-			_add_platform(Rect2(730, floor - 100, 220, 18))
-			_add_platform(Rect2(1050, floor - 195, 200, 18))
-			_add_platform(Rect2(1370, floor - 130, 260, 18))
-			_add_platform(Rect2(1740, floor - 95, 300, 18))
-		"A5-R12":
-			_add_platform(Rect2(80, floor - 100, 360, 18))
-			_add_platform(Rect2(520, floor - 180, 250, 18))
-			_add_platform(Rect2(840, floor - 115, 300, 18))
-			_add_platform(Rect2(1210, floor - 180, 230, 18))
-			_add_platform(Rect2(1530, floor - 100, 480, 18))
-		"A5-R13":
-			_add_platform(Rect2(130, floor - 230, 220, 18))
-			_add_platform(Rect2(420, floor - 430, 190, 18))
-			_add_platform(Rect2(170, floor - 630, 190, 18))
-			_add_platform(Rect2(450, floor - 830, 190, 18))
-			_add_platform(Rect2(180, floor - 1030, 200, 18))
-			_add_platform(Rect2(470, floor - 1230, 200, 18))
-			_add_platform(Rect2(220, floor - 1430, 220, 18))
-		"A5-R14":
-			_add_platform(Rect2(80, floor - 95, 180, 18))
-			_add_platform(Rect2(340, floor - 170, 220, 18))
-			_add_platform(Rect2(650, floor - 105, 180, 18))
-		"A5-R15":
-			_add_platform(Rect2(90, floor - 170, 280, 18))
-			_add_platform(Rect2(430, floor - 230, 210, 18))
-			_add_platform(Rect2(730, floor - 170, 260, 18))
-			_add_platform(Rect2(1080, floor - 235, 230, 18))
-			_add_platform(Rect2(1430, floor - 165, 330, 18))
-		"A5-R16":
-			_add_platform(Rect2(120, floor - 250, 210, 18))
-			_add_platform(Rect2(390, floor - 450, 180, 18))
-			_add_platform(Rect2(650, floor - 650, 210, 18))
-			_add_platform(Rect2(930, floor - 850, 180, 18))
-			_add_platform(Rect2(600, floor - 1050, 260, 18))
-		"A5-R17":
-			_add_platform(Rect2(100, floor - 230, 230, 18))
-			_add_platform(Rect2(430, floor - 430, 200, 18))
-			_add_platform(Rect2(780, floor - 620, 220, 18))
-			_add_platform(Rect2(1130, floor - 800, 200, 18))
-			_add_platform(Rect2(1500, floor - 620, 260, 18))
-			_add_platform(Rect2(1900, floor - 430, 250, 18))
-		"A5-R18":
-			_add_platform(Rect2(100, floor - 105, 330, 18))
-			_add_platform(Rect2(510, floor - 170, 210, 18))
-			_add_platform(Rect2(820, floor - 115, 290, 18))
-			_add_platform(Rect2(1220, floor - 190, 210, 18))
-			_add_platform(Rect2(1570, floor - 125, 400, 18))
-		"A5-R19":
-			_add_platform(Rect2(90, floor - 100, 260, 18))
-			_add_platform(Rect2(420, floor - 180, 200, 18))
-			_add_platform(Rect2(690, floor - 115, 250, 18))
-		"A5-R20":
-			_add_platform(Rect2(90, floor - 170, 280, 18))
-			_add_platform(Rect2(430, floor - 230, 210, 18))
-			_add_platform(Rect2(730, floor - 165, 260, 18))
-		"A5-R21":
-			_add_platform(Rect2(180, floor - 140, 250, 18))
-			_add_platform(Rect2(540, floor - 270, 190, 18))
-			_add_platform(Rect2(850, floor - 390, 190, 18))
-			_add_platform(Rect2(1180, floor - 510, 190, 18))
-			_add_platform(Rect2(1550, floor - 390, 260, 18))
-			_add_platform(Rect2(1960, floor - 260, 250, 18))
-		"A5-R22":
-			_add_platform(Rect2(100, floor - 95, 200, 18))
-			_add_platform(Rect2(400, floor - 165, 170, 18))
-			_add_platform(Rect2(680, floor - 105, 220, 18))
-		_:
-			_add_platform(Rect2(150, floor - 120, 220, 18))
-			_add_platform(Rect2(450, floor - 180, 200, 18))
+    var specs: Array = []
+    match room_id:
+        "A5-R01":
+            specs = [[100, 75, 190], [310, 130, 180], [530, 180, 180], [760, 120, 180], [990, 70, 170]]
+        "A5-R02":
+            specs = [[90, 70, 230], [370, 120, 190], [610, 160, 210], [870, 115, 220], [1140, 170, 220], [1410, 120, 230], [1690, 75, 250], [1990, 130, 220], [2260, 90, 220]]
+        "A5-R03":
+            specs = [[90, 70, 250], [390, 125, 200], [640, 165, 210], [900, 110, 230], [1180, 165, 220], [1450, 125, 220], [1720, 75, 240], [2010, 130, 200], [2260, 90, 230]]
+        "A5-R04":
+            specs = [[90, 70, 200], [340, 130, 200], [590, 90, 190], [830, 155, 200], [1080, 110, 210], [1340, 170, 210], [1600, 115, 210], [1860, 70, 210], [2120, 130, 220]]
+        "A5-R05":
+            specs = [[100, 70, 240], [280, 145, 240], [100, 220, 240], [280, 295, 240], [100, 370, 240], [280, 445, 240], [100, 520, 240], [280, 595, 240], [100, 670, 240], [280, 745, 240], [100, 820, 240], [280, 895, 240], [100, 970, 240], [280, 1045, 240], [100, 1120, 240]]
+        "A5-R06":
+            specs = [[280, 1120, 240], [100, 1045, 240], [280, 970, 240], [100, 895, 240], [280, 820, 240], [100, 745, 240], [280, 670, 240], [100, 595, 240], [280, 520, 240], [100, 445, 240], [280, 370, 240], [100, 295, 240], [280, 220, 240], [100, 145, 240], [280, 70, 240]]
+        "A5-R07":
+            specs = [[90, 60, 220], [350, 120, 220], [610, 75, 200], [850, 145, 200], [1100, 90, 150]]
+        "A5-R08":
+            specs = [[90, 65, 220], [360, 100, 220], [630, 70, 200], [880, 140, 210], [1140, 85, 220], [1410, 150, 200], [1660, 100, 230], [1940, 65, 250], [2240, 120, 220]]
+        "A5-R09":
+            specs = [[90, 60, 180], [320, 120, 180], [550, 170, 160], [760, 110, 190], [1000, 65, 180]]
+        "A5-R10":
+            specs = [[80, 70, 230], [230, 140, 230], [380, 210, 230], [530, 280, 230], [680, 350, 230], [830, 420, 230], [980, 490, 230], [1130, 560, 230], [1280, 630, 230], [1430, 700, 230], [1580, 770, 230], [1730, 840, 230], [1880, 910, 230], [2030, 980, 230], [2180, 1050, 230], [1990, 820, 230], [1810, 890, 230], [1630, 960, 230], [1450, 1030, 230], [1270, 1100, 230]]
+        "A5-R11":
+            specs = [[90, 70, 230], [370, 140, 200], [620, 85, 220], [890, 150, 220], [1160, 95, 220], [1430, 165, 220], [1700, 110, 230], [1980, 70, 230], [2260, 130, 220]]
+        "A5-R12":
+            specs = [[80, 65, 300], [430, 110, 220], [720, 75, 250], [1020, 130, 220], [1300, 75, 260], [1610, 115, 220], [1880, 70, 250], [2170, 130, 250]]
+        "A5-R13":
+            specs = [[110, 70, 220], [270, 150, 220], [110, 230, 220], [270, 310, 220], [110, 390, 220], [270, 470, 220], [110, 550, 220], [270, 630, 220], [110, 710, 220], [270, 790, 220], [110, 870, 220], [270, 950, 220], [110, 1030, 220], [270, 1110, 220], [110, 1190, 220], [270, 1270, 220], [110, 1350, 220], [270, 1430, 220], [110, 1510, 220], [270, 1590, 220], [110, 1670, 220], [270, 1750, 220], [110, 1830, 220], [650, 550, 180], [690, 830, 180], [650, 1110, 180], [700, 1390, 180], [660, 1670, 180]]
+        "A5-R14":
+            specs = [[80, 60, 180], [300, 125, 200], [540, 80, 190], [770, 145, 190], [1000, 70, 190]]
+        "A5-R15":
+            specs = [[80, 70, 220], [350, 135, 220], [620, 85, 220], [890, 150, 220], [1160, 100, 220], [1430, 165, 220], [1700, 110, 230], [1980, 75, 230], [2260, 130, 220]]
+        "A5-R16":
+            specs = [[140, 70, 250], [290, 145, 250], [140, 220, 250], [290, 295, 250], [140, 370, 250], [290, 445, 250], [140, 520, 250], [290, 595, 250], [140, 670, 250], [290, 745, 250], [140, 820, 250], [290, 895, 250], [140, 970, 250], [290, 1045, 250], [140, 1120, 250], [800, 680, 250], [820, 755, 250], [780, 830, 260]]
+        "A5-R17":
+            specs = [[90, 70, 230], [260, 145, 230], [430, 220, 230], [600, 295, 230], [770, 370, 230], [940, 445, 230], [1110, 520, 230], [1280, 595, 230], [1450, 670, 230], [1620, 745, 230], [1790, 820, 230], [1960, 895, 230], [2130, 970, 230], [1960, 1045, 230], [1780, 1120, 230]]
+        "A5-R18":
+            specs = [[90, 60, 260], [390, 110, 220], [660, 75, 240], [940, 130, 220], [1210, 80, 240], [1490, 145, 220], [1760, 95, 250], [2050, 60, 250], [2330, 120, 180]]
+        "A5-R19":
+            specs = [[90, 60, 200], [330, 120, 200], [570, 75, 180], [790, 145, 180], [1010, 75, 180]]
+        "A5-R20":
+            specs = [[80, 70, 220], [350, 130, 220], [620, 85, 220], [890, 150, 220], [1160, 100, 100]]
+        "A5-R21":
+            specs = [[80, 60, 220], [350, 120, 220], [620, 75, 220], [890, 145, 220], [1160, 215, 220], [1430, 285, 220], [1700, 355, 220], [1970, 425, 220], [2240, 495, 220], [1970, 565, 220], [1700, 635, 220], [1430, 705, 220], [1160, 775, 220], [890, 845, 220], [620, 915, 220]]
+        "A5-R22":
+            specs = [[90, 60, 180], [310, 120, 180], [530, 170, 180], [750, 110, 180], [970, 65, 180]]
+        _:
+            specs = [[100, 75, 200], [360, 130, 200], [620, 85, 200]]
+    for spec in specs:
+        _add_platform(Rect2(float(spec[0]), floor_y - float(spec[1]), float(spec[2]), 18.0))
+
+
+func _configure_a5_room_blocks() -> void:
+    var block_specs: Array = []
+    match room_id:
+        "A5-R01":
+            block_specs = [[420, 32, 52, 32], [930, 48, 70, 48]]
+        "A5-R02":
+            block_specs = [[510, 36, 60, 36], [1510, 52, 75, 52], [2080, 30, 85, 30]]
+        "A5-R03":
+            block_specs = [[300, 42, 68, 42], [1320, 32, 58, 32], [2130, 50, 72, 50]]
+        "A5-R04":
+            block_specs = [[380, 55, 80, 55], [1370, 45, 90, 45], [2020, 58, 70, 58]]
+        "A5-R05":
+            block_specs = [[640, 180, 90, 85], [650, 590, 70, 75], [620, 950, 90, 80]]
+        "A5-R06":
+            block_specs = [[620, 250, 90, 80], [650, 610, 70, 75], [620, 930, 90, 80]]
+        "A5-R07":
+            block_specs = [[300, 32, 55, 32], [720, 48, 70, 48], [1000, 30, 45, 30]]
+        "A5-R08":
+            block_specs = [[500, 45, 78, 45], [1530, 56, 80, 56], [2130, 34, 60, 34]]
+        "A5-R09":
+            block_specs = [[290, 34, 56, 34], [900, 50, 68, 50]]
+        "A5-R10":
+            block_specs = [[500, 45, 75, 45], [1020, 56, 84, 56], [1740, 38, 90, 38], [2210, 50, 70, 50], [610, 470, 65, 70], [1890, 620, 60, 70]]
+        "A5-R11":
+            block_specs = [[520, 38, 65, 38], [1320, 55, 90, 55], [2100, 42, 75, 42]]
+        "A5-R12":
+            block_specs = [[370, 30, 60, 30], [910, 42, 70, 42], [1510, 34, 65, 34], [2080, 48, 72, 48]]
+        "A5-R13":
+            block_specs = [[600, 260, 55, 80], [590, 700, 55, 75], [600, 1180, 55, 80], [590, 1650, 55, 75]]
+        "A5-R14":
+            block_specs = [[270, 30, 52, 30], [650, 45, 66, 45], [900, 34, 55, 34]]
+        "A5-R15":
+            block_specs = [[490, 42, 70, 42], [1270, 53, 82, 53], [2050, 36, 68, 36]]
+        "A5-R16":
+            block_specs = [[600, 170, 80, 80], [620, 520, 75, 75], [610, 900, 80, 80]]
+        "A5-R17":
+            block_specs = [[520, 42, 75, 42], [1030, 54, 80, 54], [1540, 38, 90, 38], [2050, 50, 75, 50], [700, 510, 60, 70], [1860, 790, 65, 70]]
+        "A5-R18":
+            block_specs = [[320, 35, 70, 35], [1350, 52, 86, 52], [2110, 40, 75, 40]]
+        "A5-R19":
+            block_specs = [[280, 34, 60, 34], [730, 48, 72, 48]]
+        "A5-R20":
+            block_specs = [[300, 36, 70, 36], [850, 50, 70, 50]]
+        "A5-R21":
+            block_specs = [[500, 34, 70, 34], [1080, 54, 80, 54], [1830, 36, 72, 36], [1300, 440, 60, 60]]
+        "A5-R22":
+            block_specs = [[290, 32, 56, 32], [780, 45, 62, 45]]
+        _:
+            block_specs = [[420, 35, 60, 35]]
+    for spec in block_specs:
+        _add_a5_room_block(float(spec[0]), float(spec[1]), float(spec[2]), float(spec[3]))
+
+
+func _add_a5_room_block(x: float, top_offset: float, block_width: float, block_height: float) -> void:
+    var rect := Rect2(x, floor_y - top_offset, block_width, block_height)
+    a5_room_blocks.append(rect)
+    var body := StaticBody2D.new()
+    body.name = "A5RoomRubble_%03d" % a5_room_blocks.size()
+    body.position = rect.position
+    var shape := CollisionShape2D.new()
+    var collision := RectangleShape2D.new()
+    collision.size = rect.size
+    shape.shape = collision
+    shape.position = rect.size * 0.5
+    body.add_child(shape)
+    add_child(body)
+
+
+func _configure_a5_room_floor() -> void:
+    var gaps: Array[Vector2] = []
+    match room_id:
+        "A5-R01":
+            gaps = [Vector2(780, 80)]
+        "A5-R02":
+            gaps = [Vector2(850, 320)]
+        "A5-R03":
+            gaps = [Vector2(760, 240)]
+        "A5-R04":
+            gaps = [Vector2(590, 140), Vector2(1600, 120)]
+        "A5-R05":
+            gaps = []
+        "A5-R06":
+            gaps = []
+        "A5-R07":
+            gaps = []
+        "A5-R08":
+            gaps = [Vector2(980, 280)]
+        "A5-R09":
+            gaps = [Vector2(470, 100)]
+        "A5-R10":
+            gaps = [Vector2(800, 380), Vector2(1710, 130)]
+        "A5-R11":
+            gaps = [Vector2(900, 320)]
+        "A5-R12":
+            gaps = []
+        "A5-R13":
+            gaps = []
+        "A5-R14":
+            gaps = []
+        "A5-R15":
+            gaps = [Vector2(720, 240)]
+        "A5-R16":
+            gaps = []
+        "A5-R17":
+            gaps = [Vector2(780, 520)]
+        "A5-R18":
+            gaps = [Vector2(760, 420)]
+        "A5-R19":
+            gaps = [Vector2(430, 160)]
+        "A5-R20":
+            gaps = []
+        "A5-R21":
+            gaps = [Vector2(840, 220)]
+        "A5-R22":
+            gaps = [Vector2(560, 120)]
+        _:
+            gaps = []
+    a5_room_floor_gaps.clear()
+    a5_room_floor_segments.clear()
+    var cursor := 0.0
+    var segment_index := 0
+    for gap in gaps:
+        var start_x := maxf(cursor, gap.x)
+        if start_x > cursor:
+            _add_a5_room_floor_segment(cursor, start_x - cursor, segment_index)
+            segment_index += 1
+        var gap_start := maxf(cursor, gap.x)
+        var gap_end := minf(map_width, gap.x + gap.y)
+        if gap_end > gap_start:
+            a5_room_floor_gaps.append(Vector2(gap_start, gap_end - gap_start))
+            cursor = gap_end
+    if cursor < map_width:
+        _add_a5_room_floor_segment(cursor, map_width - cursor, segment_index)
+
+
+func _add_a5_room_floor_segment(start_x: float, segment_width: float, index: int) -> void:
+    if segment_width <= 0.0:
+        return
+    a5_room_floor_segments.append(Vector2(start_x, segment_width))
+    _add_ground_segment("A5RoomGround_%02d" % index, start_x, segment_width)
+
+
+func _draw_a5_room_floor_gaps() -> void:
+    for gap in a5_room_floor_gaps:
+        draw_rect(Rect2(gap.x, floor_y - 1.0, gap.y, 300.0), Color("#171820"))
+        draw_rect(Rect2(gap.x, floor_y - 1.0, 10.0, 150.0), Color("#51434a"))
+        draw_rect(Rect2(gap.x + gap.y - 10.0, floor_y - 1.0, 10.0, 150.0), Color("#51434a"))
+
+
 
 
 func _configure_platforms() -> void:
@@ -3226,7 +3306,11 @@ func _draw() -> void:
 	_draw_biome_color_wash()
 	_draw_atmospheric_layers()
 	_draw_midground_accents()
-	draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
+	if region_id == "A5" and not room_id.is_empty():
+		for segment in a5_room_floor_segments:
+			draw_texture_rect(STONE_FLOOR_STRIP, Rect2(segment.x, floor_y, segment.y, 180.0), false)
+	else:
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
 	_draw_ground_detail()
 	# Replace the old repetitive ground slashes with sparse, broken stone cracks and low atmospheric haze.
 	# 将重复的地面斜线改为稀疏断裂石纹与贴地薄雾，降低灰盒画面的噪声感。
@@ -3293,7 +3377,10 @@ func _draw() -> void:
 	_draw_route_goal_landmarks()
 	# Draw all floor cuts after ground seams and landmarks so art never falsely bridges a collision gap.
 	# 在地面接缝和地标之后绘制全部断口，避免美术线条错误地把碰撞缺口连起来。
-	_draw_floor_gap_visuals()
+	if region_id == "A5" and not room_id.is_empty():
+		_draw_a5_room_floor_gaps()
+	else:
+		_draw_floor_gap_visuals()
 
 	for platform in platforms:
 		# A shallow tinted side face adds material depth while keeping the walkable top unmistakable.
@@ -3308,6 +3395,14 @@ func _draw() -> void:
 		# 少量矿物／苔痕斑点按平台位置固定分布，不会随机闪烁。
 		if int(platform.position.x / 37.0) % 3 == 0:
 			draw_line(platform.position + Vector2(12.0, 6.0), platform.position + Vector2(minf(platform.size.x - 8.0, 29.0), 7.0), Color(platform_accent.r, platform_accent.g, platform_accent.b, 0.34), 1.0)
+
+	# Solid rubble blocks are both visible graybox geometry and real collision volumes.
+	# 实体残骸既是可见灰盒几何，也是实际碰撞体积。
+	for block in a5_room_blocks:
+		draw_rect(Rect2(block.position + Vector2(4.0, 5.0), block.size), Color("#211e25", 0.98))
+		draw_rect(Rect2(block.position, Vector2(block.size.x, minf(8.0, block.size.y))), Color("#655657", 0.98))
+		draw_line(block.position, block.position + Vector2(block.size.x, 0.0), Color("#a18a7c", 0.85), 2.0)
+		draw_line(block.position + Vector2(block.size.x * 0.25, 5.0), block.position + Vector2(block.size.x * 0.25 - 8.0, block.size.y), Color("#383139", 0.9), 2.0)
 
 	if OS.is_debug_build():
 		_draw_debug_exit_markers()
