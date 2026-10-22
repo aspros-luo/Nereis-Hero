@@ -301,7 +301,9 @@ func _spawn_y_for_side(side: String) -> float:
 	if region_id == "A2" and side == "old_pilgrim_highroad":
 		return floor_y - 140.0
 	if region_id == "A5" and side == "old_pilgrim_highroad":
-		return floor_y - 85.0
+		# C04 lands on the elevated winch platform, not the trench floor.
+		# C04落在高位绞盘平台，而不是战壕地面。
+		return floor_y - 250.0
 	if region_id == "A6" and side == "bell_drop":
 		return floor_y - 90.0
 	if region_id == "A9" and side == "old_lift":
