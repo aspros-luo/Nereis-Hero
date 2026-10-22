@@ -129,6 +129,15 @@ def main() -> int:
         authored = platforms[room_id]
         solid = blocks[room_id]
         room_gap_list = gaps[room_id]
+        terrain_contract = room.get("terrain_geometry", {})
+        for field, actual in (
+            ("platform_count", len(authored)),
+            ("solid_rubble_count", len(solid)),
+            ("floor_gap_count", len(room_gap_list)),
+        ):
+            if terrain_contract.get(field) != actual:
+                fail(f"{room_id}: contract {field}={terrain_contract.get(field)} but runtime defines {actual}")
+                failures += 1
         totals["platforms"] += len(authored)
         totals["solid_blocks"] += len(solid)
         totals["floor_gaps"] += len(room_gap_list)
@@ -204,6 +213,16 @@ def main() -> int:
                        for x, offset, width in resolved):
                 fail(f"{room_id}: floor gap x={gap_x:g} has no nearby crossing platform")
                 failures += 1
+
+    terrain_summary = data.get("terrain_design", {})
+    for field, actual in (
+        ("expected_platform_count", totals["platforms"]),
+        ("expected_solid_block_count", totals["solid_blocks"]),
+        ("expected_floor_gap_count", totals["floor_gaps"]),
+    ):
+        if terrain_summary.get(field) != actual:
+            fail(f"terrain_design.{field}={terrain_summary.get(field)} but geometry totals {actual}")
+            failures += 1
 
     for needle in (
         '@export var room_id: String = ""',
