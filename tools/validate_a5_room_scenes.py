@@ -7,6 +7,7 @@ Godot parsing, live collision testing, or manual playtesting.
 from __future__ import annotations
 
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -14,12 +15,43 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "tools" / "a5_room_design_contract.json"
 RUNTIME = ROOT / "scripts" / "levels" / "greybox_world_region.gd"
+HERO = ROOT / "scripts" / "player" / "hero.gd"
 RUNTIME_HARNESS = ROOT / "tools" / "a5_room_runtime_acceptance.gd"
 NUMBER_ROW = re.compile(r"\[([0-9.,\s]+)\]")
 
 
 def fail(message: str) -> None:
     print(f"[FAIL] {message}")
+
+
+def read_numeric_constant(source: str, name: str) -> float:
+    match = re.search(rf"^const {re.escape(name)} := (-?[0-9.]+)$", source, re.M)
+    if not match:
+        raise ValueError(f"cannot read Hero constant {name}")
+    return float(match.group(1))
+
+
+def can_traverse(
+    source: tuple[float, float, float],
+    target: tuple[float, float, float],
+    jump_speed: float,
+    gravity: float,
+    horizontal_speed: float,
+    collider_radius: float,
+) -> bool:
+    """Approximate a jump using the Hero's actual movement constants."""
+    sx, source_offset, sw = source
+    tx, target_offset, tw = target
+    rise = target_offset - source_offset
+    discriminant = jump_speed * jump_speed - 2.0 * gravity * rise
+    if discriminant < 0.0:
+        return False
+    # Descending root: land on a one-way platform at the target elevation.
+    flight_time = (jump_speed + math.sqrt(discriminant)) / gravity
+    horizontal_gap = max(0.0, tx - (sx + sw), sx - (tx + tw))
+    # The capsule may overhang both ledges by its radius at takeoff/landing.
+    horizontal_reach = horizontal_speed * flight_time + 2.0 * collider_radius
+    return horizontal_gap <= horizontal_reach
 
 
 def room_case_arrays(source: str, function_name: str, end_function: str, variable: str) -> dict[str, list[list[float]]]:
@@ -54,6 +86,7 @@ def main() -> int:
     failures = 0
     data = json.loads(CONTRACT.read_text(encoding="utf-8"))
     runtime = RUNTIME.read_text(encoding="utf-8")
+    hero_source = HERO.read_text(encoding="utf-8")
     if not RUNTIME_HARNESS.is_file():
         fail("missing runtime acceptance script: tools/a5_room_runtime_acceptance.gd")
         failures += 1
@@ -62,6 +95,18 @@ def main() -> int:
         harness = RUNTIME_HARNESS.read_text(encoding="utf-8")
     rooms = data.get("rooms", [])
     room_ids = [room.get("id") for room in rooms]
+    try:
+        jump_speed = abs(read_numeric_constant(hero_source, "JUMP_VELOCITY"))
+        gravity = read_numeric_constant(hero_source, "GRAVITY")
+        horizontal_speed = read_numeric_constant(hero_source, "SPEED")
+        collision_call = re.search(r"_add_character_collision\(hero,\s*([0-9.]+),\s*([0-9.]+)\)", runtime)
+        if not collision_call:
+            raise ValueError("cannot read Hero collision capsule dimensions")
+        collider_radius = float(collision_call.group(1))
+        jump_height = jump_speed * jump_speed / (2.0 * gravity)
+    except ValueError as error:
+        fail(f"cannot build Hero jump envelope: {error}")
+        return 1
     expected_ids = {f"A5-R{i:02d}" for i in range(1, 23)}
 
     if len(rooms) != 22 or set(room_ids) != expected_ids:
@@ -172,29 +217,76 @@ def main() -> int:
                 failures += 1
             resolved.append((x, offset, width))
 
-        # Model the room as a traversal graph, not a single linear chain.
-        # Side branches are valid when reachable from the starter ledge within
-        # the same ordinary/double-jump envelope as the main route.
-        reachable = {0} if resolved else set()
-        frontier = [0] if resolved else []
+        # Build a directed graph from floor segments and platforms using the
+        # actual Hero jump/gravity/speed/capsule constants. This is a ballistic
+        # approximation; runtime collision and live player-input tests remain separate.
+        ground_segments: list[tuple[float, float, float]] = []
+        cursor = 0.0
+        for gap_x, gap_width in room_gap_list:
+            if gap_x > cursor:
+                ground_segments.append((cursor, 0.0, gap_x - cursor))
+            cursor = max(cursor, gap_x + gap_width)
+        if cursor < room_width:
+            ground_segments.append((cursor, 0.0, room_width - cursor))
+        nodes = ground_segments + resolved
+        ground_count = len(ground_segments)
+        if room_id == "A5-R06":
+            start_x, start_y = 380.0, 96.0
+            candidates = [
+                index for index, (x, offset, width) in enumerate(resolved)
+                if start_x + collider_radius >= x
+                and start_x - collider_radius <= x + width
+                and floor_y - offset >= start_y - 2.0
+            ]
+            if candidates:
+                start_platform_index = min(
+                    candidates, key=lambda index: abs((floor_y - resolved[index][1]) - start_y)
+                )
+                start_nodes = {ground_count + start_platform_index}
+            else:
+                fail("A5-R06: elevated spawn does not overlap a valid starting platform")
+                failures += 1
+                start_nodes = set()
+        else:
+            start_x = 96.0
+            start_ground_indices = [
+                index for index, (x, _offset, width) in enumerate(ground_segments)
+                if x <= start_x <= x + width
+            ]
+            if not start_ground_indices:
+                fail(f"{room_id}: default spawn x=96 is inside a floor gap")
+                failures += 1
+                start_nodes = set()
+            else:
+                start_nodes = {start_ground_indices[0]}
+
+        reachable = set(start_nodes)
+        frontier = list(start_nodes)
         while frontier:
             current_index = frontier.pop()
-            x1, offset1, width1 = resolved[current_index]
-            for target_index, (x2, offset2, width2) in enumerate(resolved):
+            for target_index, target in enumerate(nodes):
                 if target_index in reachable:
                     continue
-                horizontal_gap = max(0.0, x2 - (x1 + width1), x1 - (x2 + width2))
-                upward_rise = max(0.0, offset2 - offset1)
-                if horizontal_gap <= 150 and upward_rise <= 90:
+                if can_traverse(
+                    nodes[current_index], target,
+                    jump_speed, gravity, horizontal_speed, collider_radius
+                ):
                     reachable.add(target_index)
                     frontier.append(target_index)
-        unreachable = sorted(set(range(len(resolved))) - reachable)
+        unreachable = [
+            index + 1 for index in range(len(resolved))
+            if ground_count + index not in reachable
+        ]
+        totals["reachable_platforms"] = totals.get("reachable_platforms", 0) + (
+            len(resolved) - len(unreachable)
+        )
+        totals["checked_platforms"] = totals.get("checked_platforms", 0) + len(resolved)
         if unreachable:
-            labels = ", ".join(str(index + 1) for index in unreachable[:12])
+            labels = ", ".join(str(index) for index in unreachable[:12])
             suffix = "..." if len(unreachable) > 12 else ""
             fail(
-                f"{room_id}: {len(unreachable)} platform(s) are unreachable from the starter ledge "
-                f"within the traversal envelope (platform indices {labels}{suffix})"
+                f"{room_id}: {len(unreachable)} platform(s) fail the Hero ballistic reachability model "
+                f"(platform indices {labels}{suffix})"
             )
             failures += 1
 
@@ -278,7 +370,15 @@ def main() -> int:
         return 1
     print("A5 TERRAIN STATIC ACCEPTANCE: PASS (22 room definitions and scene wiring)")
     print(f"Geometry scanned: {totals['platforms']} platforms, {totals['solid_blocks']} solid blocks, {totals['floor_gaps']} floor gaps")
-    print("Not covered: Godot parser/runtime, real jump physics, camera motion, and manual playability.")
+    print(
+        "Hero jump-envelope model: %d/%d platforms reachable "
+        "(speed=%.0f, jump=%.0f, gravity=%.0f, apex=%.1fpx; ballistic approximation only)"
+        % (
+            totals.get("reachable_platforms", 0), totals.get("checked_platforms", 0),
+            horizontal_speed, jump_speed, gravity, jump_height
+        )
+    )
+    print("Not covered: live jump/collision simulation, camera motion during movement, and manual playability.")
     return 0
 
 
