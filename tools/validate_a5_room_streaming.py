@@ -10,6 +10,7 @@ CONTRACT = ROOT / "tools" / "a5_room_assembly_contract.json"
 WORLD = ROOT / "scripts" / "world" / "world.gd"
 ROOM_DATA = ROOT / "scripts" / "resources" / "room_data.gd"
 ROOM_STATE = ROOT / "scripts" / "core" / "world_state.gd"
+SHORTCUT = ROOT / "scripts" / "rooms" / "shortcut_unlock_point.gd"
 
 def main() -> int:
     errors = []
@@ -17,6 +18,7 @@ def main() -> int:
     world = WORLD.read_text(encoding="utf-8")
     room_data = ROOM_DATA.read_text(encoding="utf-8")
     room_state = ROOM_STATE.read_text(encoding="utf-8")
+    shortcut = SHORTCUT.read_text(encoding="utf-8")
     rooms = data.get("rooms", [])
     edges = data.get("connections", [])
     ids = {room.get("id") for room in rooms}
@@ -66,6 +68,12 @@ def main() -> int:
     for token in ("mark_room_explored", "open_room_shortcut", "collect_room_item", "save_room_state", "load_room_state"):
         if token not in room_state:
             errors.append(f"WorldState room persistence missing {token}")
+    for token in ("_build_shortcut_unlock_point", "_unlock_shortcut", "opened_shortcut_ids", "KEY_E"):
+        if token not in world:
+            errors.append(f"World shortcut interaction missing {token}")
+    for token in ("player_nearby_changed", "body_entered", "body_exited", "InteractionPrompt", "按 E 开启捷径"):
+        if token not in shortcut:
+            errors.append(f"Shortcut unlock point missing {token}")
 
     # Existing macro contracts must remain attached to the intended rooms and exits.
     bindings = {item.get("id"): item for item in data.get("macro_bindings", [])}
