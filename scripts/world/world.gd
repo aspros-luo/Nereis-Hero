@@ -60,7 +60,7 @@ func _load_room(room_id: String, entry_id: StringName, use_fade: bool = true) ->
 		return
 	if use_fade:
 		await _fade_to(1.0)
-	var packed := _get_room_scene(data.scene_path)
+	var packed: PackedScene = await _get_room_scene(data.scene_path)
 	if packed == null:
 		push_error("World: 无法加载房间场景: " + data.scene_path)
 		if use_fade:
