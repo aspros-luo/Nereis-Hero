@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/village_backhill.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/world/village_poi.gd" id="2"]
 [ext_resource type="Script" path="res://scripts/player/hero.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/world/interaction_door.gd" id="4"]
 
 [sub_resource type="RectangleShape2D" id="GroundShape"]
 size = Vector2(1840, 40)
@@ -18,6 +19,9 @@ size = Vector2(180, 18)
 
 [sub_resource type="RectangleShape2D" id="CliffBoundaryShape"]
 size = Vector2(40, 720)
+
+[sub_resource type="RectangleShape2D" id="CliffCaveDoorShape"]
+size = Vector2(100, 138)
 
 [sub_resource type="CapsuleShape2D" id="HeroCapsule"]
 radius = 18.0
@@ -244,3 +248,12 @@ default_color = Color(0.46, 0.43, 0.49, 1)
 position = Vector2(1845, 490)
 polygon = PackedVector2Array(0, 0, 30, -14, 54, 0, 30, 14)
 color = Color(0.52, 0.37, 0.42, 1)
+
+[node name="CliffCaveDoor" type="Area2D" parent="."]
+position = Vector2(1940, 430)
+script = ExtResource("4")
+prompt_text = "E  进入蜂巢后的洞穴"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CliffCaveDoor"]
+position = Vector2(0, -69)
+shape = SubResource("CliffCaveDoorShape")
