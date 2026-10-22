@@ -11,6 +11,15 @@ const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 1500.0
 const CLIFF_APPROACH_LIMIT := CLIFF_X - 26.0
 const FORCED_DEFEAT_SECONDS := 12.0
+# Optional terrain route. Geometry is shared by collision and drawing so the ledges
+# remain readable as traversable rock shelves instead of decorative background seams.
+const MOUNTAIN_SHELF_RECTS := [
+	Rect2(300.0, 452.0, 112.0, 16.0),
+	Rect2(444.0, 420.0, 104.0, 16.0),
+	Rect2(580.0, 436.0, 112.0, 16.0),
+	Rect2(724.0, 462.0, 104.0, 16.0),
+	Rect2(860.0, 430.0, 112.0, 16.0),
+]
 
 var hero: CharacterBody2D
 var boss: CharacterBody2D
@@ -145,6 +154,8 @@ func _clear_interaction_focus() -> void:
 	NereisInteractionFocus.clear_all(get_tree())
 
 func _create_ground() -> void:
+	# Main route remains continuous: the cliff is the authored encounter boundary,
+	# not an accidental gap. Side shelves are optional vertical exploration.
 	var ground := StaticBody2D.new()
 	ground.name = "MountainPathGround"
 	var shape := CollisionShape2D.new()
@@ -154,7 +165,23 @@ func _create_ground() -> void:
 	shape.position = Vector2(CLIFF_X * 0.5, FLOOR_Y + 20.0)
 	ground.add_child(shape)
 	add_child(ground)
+
+	for i in range(MOUNTAIN_SHELF_RECTS.size()):
+		var shelf_rect: Rect2 = MOUNTAIN_SHELF_RECTS[i]
+		var shelf := StaticBody2D.new()
+		shelf.name = "MountainShelf_%02d" % (i + 1)
+		shelf.position = shelf_rect.position
+		var shelf_shape := CollisionShape2D.new()
+		var shelf_box := RectangleShape2D.new()
+		shelf_box.size = shelf_rect.size
+		shelf_shape.shape = shelf_box
+		shelf_shape.position = shelf_rect.size * 0.5
+		shelf_shape.one_way_collision = true
+		shelf.add_child(shelf_shape)
+		add_child(shelf)
+
 	var left_wall := StaticBody2D.new()
+	left_wall.name = "MountainPathWestBoundary"
 	var left_shape := CollisionShape2D.new()
 	var left_rect := RectangleShape2D.new()
 	left_rect.size = Vector2(40.0, 720.0)
@@ -182,6 +209,15 @@ func _draw() -> void:
 	draw_line(Vector2(250, 500), Vector2(520, 478), Color("#5b606b"), 3.0)
 	draw_line(Vector2(520, 478), Vector2(740, 505), Color("#5b606b"), 3.0)
 	draw_line(Vector2(740, 505), Vector2(CLIFF_X - 12.0, 485), Color("#5b606b"), 3.0)
+	# Match the five physical shelves above; the darker lower lip gives each ledge a readable edge.
+	for shelf_rect in MOUNTAIN_SHELF_RECTS:
+		draw_colored_polygon(PackedVector2Array([
+			shelf_rect.position,
+			Vector2(shelf_rect.end.x, shelf_rect.position.y),
+			Vector2(shelf_rect.end.x - 8.0, shelf_rect.end.y + 12.0),
+			Vector2(shelf_rect.position.x + 8.0, shelf_rect.end.y + 12.0)
+		]), Color("#343640"))
+		draw_line(shelf_rect.position, Vector2(shelf_rect.end.x, shelf_rect.position.y), Color("#777783"), 3.0)
 	draw_rect(Rect2(CLIFF_X, FLOOR_Y + 18.0, LEVEL_WIDTH - CLIFF_X, 230.0), Color("#0b121c"))
 	for ripple_x in range(int(CLIFF_X + 20.0), int(LEVEL_WIDTH - 20.0), 48):
 		draw_line(Vector2(ripple_x, FLOOR_Y + 62.0 + sin(float(ripple_x) * 0.04) * 4.0), Vector2(ripple_x + 24.0, FLOOR_Y + 62.0), Color("#344958", 0.65), 2.0)
