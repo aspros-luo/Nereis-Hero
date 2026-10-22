@@ -1,0 +1,54 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/rooms/room_base.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/rooms/room_bounds.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/rooms/room_entry.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/rooms/transition_point.gd" id="4"]
+
+[sub_resource type="RectangleShape2D" id="FloorShape"]
+size = Vector2(1280, 64)
+[sub_resource type="RectangleShape2D" id="TransitionShape"]
+size = Vector2(72, 150)
+[sub_resource type="RectangleShape2D" id="BlockShape"]
+size = Vector2(160, 100)
+
+[node name="A5_Room_01" type="Node2D"]
+script = ExtResource("1")
+room_id = &"A5-R01"
+area_id = &"A5"
+room_bounds = Rect2(0, 0, 1280, 720)
+
+[node name="RoomBounds" type="Node2D" parent="."]
+script = ExtResource("2")
+bounds = Rect2(0, 0, 1280, 720)
+
+[node name="EntryWest" type="Marker2D" parent="."]
+position = Vector2(100, 560)
+script = ExtResource("3")
+entry_id = &"west"
+
+[node name="EntryEast" type="Marker2D" parent="."]
+position = Vector2(1180, 560)
+script = ExtResource("3")
+entry_id = &"east"
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(640, 652)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("FloorShape")
+
+[node name="Block" type="StaticBody2D" parent="."]
+position = Vector2(620, 570)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Block"]
+shape = SubResource("BlockShape")
+
+[node name="ToRoom02" type="Area2D" parent="."]
+position = Vector2(1240, 555)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("4")
+connection_id = &"A5-CUT-01"
+target_room_id = &"A5-R02"
+target_entry_id = &"west"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToRoom02"]
+shape = SubResource("TransitionShape")
