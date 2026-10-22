@@ -122,6 +122,8 @@ def main() -> int:
     for token in ("_drop_exit_x", "_safe_entry_x", "floor_y + 30.0"):
         if token not in world:
             errors.append(f"World vertical traversal handling missing {token}")
+    if "if gaps is Array and not gaps.is_empty():" not in world or "floor_y - 48.0" not in world:
+        errors.append("South transitions must distinguish real drop gaps from ordinary floor-level exits")
     for token in ('"A5-R05":\n\t\t\t# The one-way drop', 'gaps = [Vector2(600, 120)]', 'gaps = [Vector2(560, 120)]'):
         if token not in region_script:
             errors.append(f"A5 drop shaft geometry missing {token}")
