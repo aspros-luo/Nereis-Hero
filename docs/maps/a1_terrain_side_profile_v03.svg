@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1200" viewBox="0 0 2400 1200">
+<defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#9aa5af" stroke-width="1" opacity=".22"/></pattern><style>text{font-family:"Noto Sans CJK SC","Microsoft YaHei",sans-serif}.h{font-size:28px;font-weight:700;fill:#24313d}.t{font-size:20px;font-weight:700;fill:#24313d}.s{font-size:16px;fill:#4c5b68}.tiny{font-size:14px;fill:#5d6872}</style></defs>
+<rect width="2400" height="1200" fill="#f5f3ed"/><rect width="2400" height="1200" fill="url(#grid)"/>
+<text x="48" y="52" class="h">A1 边境村庄｜横版侧视地形剖面 v0.3（结构验证稿）</text>
+<text x="50" y="82" class="s">横轴＝从西向东的游玩距离（非最终像素坐标）；纵向示意平台高度。此图用于检查地形连续性与层级，不是最终美术图。</text>
+<!-- labels bands -->
+<g stroke="#c8cdd1" stroke-dasharray="6 8"><path d="M60 190 H2340"/><path d="M60 380 H2340"/><path d="M60 570 H2340"/><path d="M60 760 H2340"/><path d="M60 950 H2340"/></g>
+<g class="tiny"><text x="65" y="178">高层：屋顶 / 木栈道</text><text x="65" y="368">建筑上缘 / 中层平台</text><text x="65" y="558">地面主街</text><text x="65" y="748">井底 / 低位支路</text><text x="65" y="938">隐藏层与最深落点（示意）</text></g>
+<!-- ground terrain -->
+<path d="M70 590 L70 540 L310 540 L360 520 L470 520 L500 540 L720 540 L760 555 L960 555 L1010 540 L1230 540 L1270 530 L1470 530 L1510 550 L1760 550 L1800 535 L2070 535 L2120 515 L2330 515 L2330 1000 L70 1000Z" fill="#c9b99f" stroke="#806c52" stroke-width="4"/>
+<path d="M70 540 L310 540 L360 520 L470 520 L500 540 L720 540 L760 555 L960 555 L1010 540 L1230 540 L1270 530 L1470 530 L1510 550 L1760 550 L1800 535 L2070 535 L2120 515 L2330 515" fill="none" stroke="#456e9a" stroke-width="8"/>
+<!-- left entry -->
+<rect x="90" y="430" width="150" height="108" rx="10" fill="#e4eaf0" stroke="#456e9a" stroke-width="2.5"/><text x="110" y="463" class="t">C01</text><text x="110" y="491" class="s">A0 入口</text><text x="110" y="515" class="s">安全落脚段</text>
+<!-- houses and roofs -->
+<g stroke="#8b765b" stroke-width="3">
+<path d="M300 520 V420 L380 350 L465 420 V520Z" fill="#d8c8ae"/><path d="M285 420 L380 335 L480 420" fill="#9b5c4c"/><path d="M515 540 V440 L600 375 L690 440 V540Z" fill="#d8c8ae"/><path d="M500 440 L600 360 L705 440" fill="#9b5c4c"/>
+<path d="M820 555 V420 L910 350 L1000 420 V555Z" fill="#d8c8ae"/><path d="M805 420 L910 330 L1015 420" fill="#9b5c4c"/>
+<path d="M1320 530 V420 L1410 355 L1500 420 V530Z" fill="#d8c8ae"/><path d="M1305 420 L1410 335 L1515 420" fill="#9b5c4c"/>
+<path d="M1610 550 V435 L1700 370 L1790 435 V550Z" fill="#d8c8ae"/><path d="M1595 435 L1700 350 L1805 435" fill="#9b5c4c"/>
+</g>
+<!-- roof walkways as platform segments -->
+<g fill="#438d78" stroke="#2e6654" stroke-width="3">
+<rect x="340" y="318" width="125" height="14" rx="4"/><rect x="540" y="345" width="150" height="14" rx="4"/><rect x="845" y="312" width="125" height="14" rx="4"/><rect x="1100" y="335" width="120" height="14" rx="4"/><rect x="1350" y="315" width="150" height="14" rx="4"/><rect x="1640" y="330" width="140" height="14" rx="4"/>
+</g>
+<g stroke="#438d78" stroke-width="4" stroke-dasharray="7 7" fill="none"><path d="M465 325 L540 352"/><path d="M690 352 L845 319"/><path d="M970 319 L1100 342"/><path d="M1220 342 L1350 322"/><path d="M1500 322 L1640 337"/></g>
+<g class="s"><text x="325" y="292">屋顶段 1</text><text x="538" y="320">屋顶段 2</text><text x="842" y="286">屋顶段 3</text><text x="1095" y="309">屋顶段 4</text><text x="1350" y="289">屋顶段 5</text><text x="1640" y="304">屋顶段 6</text></g>
+<!-- access jumps -->
+<g stroke="#438d78" stroke-width="3" stroke-dasharray="5 6" fill="none"><path d="M390 332 Q430 385 455 510"/><path d="M620 359 Q660 420 680 530"/><path d="M900 326 Q940 410 955 540"/><path d="M1160 349 Q1200 410 1220 530"/><path d="M1410 329 Q1450 400 1470 530"/><path d="M1700 344 Q1740 415 1760 550"/></g>
+<!-- well -->
+<rect x="1040" y="510" width="185" height="52" rx="8" fill="#f4e8d5" stroke="#9a7046" stroke-width="3"/><text x="1055" y="533" class="t">A1-S04 老井平台</text><text x="1055" y="553" class="tiny">C06 安全落点在平台侧边</text>
+<path d="M1125 562 V760 L1145 790 H1190 L1210 760 V562" fill="#aab6bb" stroke="#56666f" stroke-width="5"/><path d="M1145 585 V748 M1190 585 V748" stroke="#e9dfcb" stroke-width="4" stroke-dasharray="10 10"/>
+<ellipse cx="1167" cy="760" rx="42" ry="13" fill="#35454e" stroke="#56666f" stroke-width="3"/>
+<text x="1230" y="640" class="t">井道</text><text x="1230" y="668" class="s">可下落但井壁有承托</text><text x="1230" y="694" class="s">避免一跳直接坠出场景</text>
+<!-- hidden side chamber -->
+<path d="M1208 750 H1300 V815 H1470" fill="none" stroke="#8d5ca1" stroke-width="5" stroke-dasharray="9 7"/>
+<rect x="1300" y="775" width="300" height="100" rx="10" fill="#eee2f0" stroke="#8d5ca1" stroke-width="3" stroke-dasharray="8 5"/>
+<text x="1320" y="808" class="t">H01 井底侧洞</text><text x="1320" y="836" class="s">隐藏入口 / 可往返</text><text x="1320" y="858" class="s">共振视界 + 共鸣 ≥ 12</text>
+<!-- drain route -->
+<path d="M1780 550 V670 H1950 V730 H2150" fill="none" stroke="#9a7046" stroke-width="7" stroke-linejoin="round"/>
+<rect x="1800" y="605" width="260" height="82" rx="9" fill="#e8e1d6" stroke="#9a7046" stroke-width="2.5"/>
+<text x="1818" y="635" class="t">C24 排水低位段</text><text x="1818" y="661" class="s">低矮、短段、初始尽头</text>
+<rect x="2120" y="700" width="210" height="80" rx="9" fill="#f2e6d7" stroke="#9a7046" stroke-width="2.5" stroke-dasharray="8 6"/>
+<text x="2138" y="731" class="t">后期连接端</text><text x="2138" y="757" class="s">A4 侧解锁后</text>
+<!-- north gate -->
+<rect x="2080" y="420" width="240" height="95" rx="10" fill="#e4eaf0" stroke="#456e9a" stroke-width="2.5"/><text x="2100" y="452" class="t">C02 / 北门 → A2</text><text x="2100" y="480" class="s">防卫后开放 / 双向回访</text>
+<!-- movement notes -->
+<rect x="70" y="1030" width="2260" height="120" rx="14" fill="#fff" stroke="#c6cbd0"/>
+<text x="95" y="1067" class="t">侧视图的验收问题（进入坐标设计前必须逐项确认）</text>
+<text x="98" y="1100" class="s">① 每个屋顶间隙是否在角色最大水平跳距内？ ② 所有下落点是否有承托与回返路线？ ③ 井底 H01 入口是否与 C06 出生点分离？</text>
+<text x="98" y="1128" class="s">④ C24 未解锁端是否被实体阻挡？ ⑤ 镜头是否能同时表达井道深度与地面路线？ ⑥ 建筑屋檐与可站立平台碰撞是否分开？</text>
+</svg>
