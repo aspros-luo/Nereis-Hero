@@ -1100,30 +1100,78 @@ func _a5_connection_anchor(
 	source_room: Node2D, target_room: Node2D, endpoint_slots: Dictionary, source_id: String
 ) -> Vector2:
 	var source_width := float(source_room.get("map_width"))
+	var source_height := float(source_room.get("room_height"))
 	var source_floor := float(source_room.get("floor_y"))
 	var source_center := source_room.position.x + source_width * 0.5
 	var target_center := target_room.position.x + float(target_room.get("map_width")) * 0.5
+	var target_floor_world := target_room.position.y + float(target_room.get("floor_y")) - 36.0
+	var desired_local_y := target_floor_world - source_room.position.y
 	var side := "center"
-	var anchor_x := source_width * 0.5
 	if target_center > source_center + 1.0:
 		side = "right"
-		anchor_x = source_width - 120.0
 	elif target_center < source_center - 1.0:
 		side = "left"
-		anchor_x = 120.0
 	var slot_key := "%s:%s" % [source_id, side]
 	var slot := int(endpoint_slots.get(slot_key, 0))
 	endpoint_slots[slot_key] = slot + 1
-	if side == "right":
-		anchor_x -= float(slot) * 150.0
-	elif side == "left":
-		anchor_x += float(slot) * 150.0
-	elif slot > 0:
-		var offset := float((slot + 1) / 2) * 180.0
-		anchor_x += offset if slot % 2 == 1 else -offset
-	# Give exits on the same side separate physical anchors so overlapping interaction
-	# Areas cannot steal focus from one another.
-	return Vector2(clampf(anchor_x, 120.0, maxf(120.0, source_width - 120.0)), source_floor - 36.0)
+
+	# Prefer an authored platform near the destination's landing height and on the
+	# correct side of the room. This makes vertical links land on real ledges instead
+	# of placing every doorway at the bottom of a tall room.
+	# 根据目标房间的落脚高度和出口方向，选择源房间内真实存在的平台。
+	var platform_values: Variant = source_room.get("platforms")
+	var best_platform := Rect2()
+	var best_score := INF
+	if platform_values is Array:
+		for platform_variant in platform_values:
+			if not platform_variant is Rect2:
+				continue
+			var platform: Rect2 = platform_variant
+			if platform.size.x < 100.0:
+				continue
+			var side_distance := 0.0
+			match side:
+				"right":
+				side_distance = source_width - platform.end.x
+				"left":
+				side_distance = platform.position.x
+				_:
+				side_distance = absf(platform.get_center().x - source_width * 0.5)
+		var score := absf(platform.position.y - desired_local_y) + side_distance * 0.3
+		if score < best_score:
+			best_score = score
+			best_platform = platform
+
+	var anchor_x := source_width * 0.5
+	var anchor_y := source_floor - 36.0
+	if best_score < INF:
+		var left_limit := best_platform.position.x + 48.0
+		var right_limit := best_platform.end.x - 48.0
+		match side:
+			"right":
+				anchor_x = minf(source_width - 120.0, right_limit) - float(slot) * 150.0
+			"left":
+				anchor_x = maxf(120.0, left_limit) + float(slot) * 150.0
+			_:
+				anchor_x = clampf(source_width * 0.5, left_limit, right_limit)
+				if slot > 0:
+					var offset := float((slot + 1) / 2) * 150.0
+					anchor_x += offset if slot % 2 == 1 else -offset
+			anchor_x = clampf(anchor_x, left_limit, right_limit)
+			anchor_y = best_platform.position.y - 36.0
+	else:
+		if side == "right":
+			anchor_x = source_width - 120.0 - float(slot) * 150.0
+		elif side == "left":
+			anchor_x = 120.0 + float(slot) * 150.0
+		elif slot > 0:
+			var offset := float((slot + 1) / 2) * 150.0
+			anchor_x += offset if slot % 2 == 1 else -offset
+		anchor_x = clampf(anchor_x, 120.0, maxf(120.0, source_width - 120.0))
+	# Keep the portal inside the room's playable vertical extent even when the
+	# target landing is much higher or lower than this room's floor.
+	anchor_y = clampf(anchor_y, 36.0, minf(source_height - 36.0, source_floor - 36.0))
+	return Vector2(anchor_x, anchor_y)
 
 
 func _spawn_a5_internal_door(
