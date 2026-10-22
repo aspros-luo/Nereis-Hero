@@ -172,6 +172,18 @@ def main() -> int:
             fail(f"{label}: unexpected room definitions {sorted(extra)}")
             failures += 1
 
+    # Detect exact room-platform template reuse. Different IDs/roles must not silently
+    # share the same authored silhouette; functional similarity still requires human review.
+    geometry_signatures: dict[tuple[tuple[float, float, float], ...], str] = {}
+    for room_id, rows in platforms.items():
+        signature = tuple(sorted((round(row[0], 2), round(row[1], 2), round(row[2], 2)) for row in rows))
+        previous = geometry_signatures.get(signature)
+        if previous:
+            fail(f"{room_id}: exact platform-layout duplicate of {previous}; differentiate room silhouette")
+            failures += 1
+        else:
+            geometry_signatures[signature] = room_id
+
     totals = {"platforms": 0, "solid_blocks": 0, "floor_gaps": 0}
     for room in rooms:
         room_id = room["id"]
