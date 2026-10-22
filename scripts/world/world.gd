@@ -235,9 +235,12 @@ func _target_entry_id(edge: Dictionary, room_id: String) -> StringName:
 	return &"north" if dy >= 0 else &"south"
 
 func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> void:
+	# Remove old trigger Areas synchronously before creating replacements; queue_free() leaves
+	# a one-frame overlap where the previous and refreshed connections can both fire.
+	# 同步移除旧触发区，避免 queue_free() 延迟到帧末导致新旧转场区域短暂重叠。
 	for point in room_transition_nodes:
 		if is_instance_valid(point):
-			point.queue_free()
+			point.free()
 	room_transition_nodes.clear()
 	var side_counts: Dictionary = {&"west": 0, &"east": 0, &"north": 0, &"south": 0}
 	for gate in shortcut_unlock_nodes:
