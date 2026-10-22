@@ -2,7 +2,7 @@
   "schema_version": 1,
   "region_id": "A5",
   "status": "runtime_scene_instantiation_and_internal_room_transitions_implemented_runtime_validation_pending",
-  "purpose": "22个独立房间由此合同驱动实例化到正式 A5 场景；连接表生成同场景内的双向/单向交互门，捷径与隐藏/能力/共鸣路线按持久状态和条件开放。",
+  "purpose": "22个独立房间由此合同驱动实例化到正式 A5 场景；连接表生成同一张地图内的单向/双向门洞转场，开放连接自动触发，锁闭捷径、隐藏路线、能力门与共鸣捷径通过交互校验并持久化开启。",
   "viewport": {
     "width": 1280,
     "height": 720,
@@ -624,8 +624,8 @@
   "acceptance": {
     "static_contract": "validator_present_run_required",
     "room_scene_instantiation": "implemented_in_old_battlefield_scene_via_greybox_world_region",
-    "transition_doors": "implemented_for_all_contract_connections; blocked_shortcuts_hidden_routes_ability_gate_and_resonance_shortcut_use_persistent_unlocks; Godot_runtime_and_manual_route_validation_pending",
+    "transition_doors": "implemented_for_all_contract_connections; open_links_auto_transition_on_body_entered; blocked_shortcuts_hidden_routes_ability_gate_and_resonance_shortcut_require_interaction_and_persistent_unlock; Godot_runtime_validation_pending",
     "in_game_full_route": "requires_Godot_runtime_and_manual_playtest",
-    "note": "正式 old_battlefield.tscn 已启用 use_a5_room_assembly；运行时从本合同加载 22 个房间场景，生成内部连接交互门并由单一 Hero 在房间间转移。C08/C09/C04 仍由正式跨区出口负责。门位于各房间可接近的地面/连接锚点，具体跳跃、落差、镜头过渡、门触发与出生点仍须通过 Godot 运行时和人工路线验收。"
+    "note": "正式 old_battlefield.tscn 已启用 use_a5_room_assembly；运行时从本合同加载 22 个房间场景并生成 26 条连接的 51 个方向端点。开放连接在主角穿过门洞时自动转场，锁闭捷径/隐藏/能力/共鸣路线按条件交互开启。C08/C09/C04 仍由正式跨区出口负责。端点锚定在房间可接近的地面/连接位置；宏观房间未必物理贴边，镜头过渡、自然跳跃/落差、触发区与出生点仍须在 Godot 运行时和人工路线验收。"
   }
 }
