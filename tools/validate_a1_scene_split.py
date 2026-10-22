@@ -36,6 +36,8 @@ def main() -> int:
     a11_scene = read("scenes/village_backhill.tscn", errors)
     a11_script = read("scripts/levels/village_backhill.gd", errors)
 
+    require(a10_scene, '[node name="BackhillEntrance" type="Node2D" parent="."]', "A1.0 authored A1.1 entrance", errors)
+    require(a10_script, '$BackhillEntrance.interacted.connect', "A1.0 authored entrance signal", errors)
     require(a10_script, 'location_id == "backhill_path"', "A1.0 to A1.1 transition", errors)
     require(a10_script, 'res://scenes/village_backhill.tscn', "A1.0 to A1.1 transition", errors)
     require(a11_script, 'res://scenes/village_hub.tscn', "A1.1 return transition", errors)
@@ -43,6 +45,7 @@ def main() -> int:
     require(a11_scene, '[node name="Hero" type="CharacterBody2D" parent="."]', "A1.1 authored Hero", errors)
     require(a11_scene, '[node name="BackhillStairs" type="Node2D" parent="."]', "A1.1 authored stairs", errors)
     require(a11_scene, '[node name="CliffLookout" type="StaticBody2D" parent="."]', "A1.1 cliff lookout collision", errors)
+    require(a11_scene, '[node name="CliffLowerShelf" type="StaticBody2D" parent="."]', "A1.1 lower cliff landing", errors)
     require(a11_scene, '[node name="EastBoundary" type="StaticBody2D" parent="."]', "A1.1 east boundary", errors)
     require(a11_scene, '[node name="ChurchPOI" type="Node2D" parent="."]', "A1.1 church interaction node", errors)
     require(a11_scene, '[node name="TavernPOI" type="Node2D" parent="."]', "A1.1 tavern interaction node", errors)
