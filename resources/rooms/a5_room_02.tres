@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RoomData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/room_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+room_id = &"A5-R02"
+area_id = &"A5"
+scene_path = "res://scenes/rooms/a5/a5_room_02.tscn"
+entry_ids = PackedStringArray("west", "east")
+adjacent_room_ids = Array[StringName]([&"A5-R01"])
