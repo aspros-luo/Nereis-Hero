@@ -229,6 +229,13 @@ func _test_room(room: Dictionary) -> void:
 			"actual=(%.1f,%.1f) expected=(%.1f,%.1f)" % [
 				hero.position.x, hero.position.y, expected_spawn.x, expected_spawn.y
 			])
+		# Advance real physics without player input and require the Hero to land on a platform or ground.
+		for physics_step in range(45):
+			await physics_frame
+		_record(hero.is_on_floor(), "PHYSICS_GROUNDING/%s" % room_id,
+			"Hero grounded after 45 physics frames; position=(%.1f,%.1f)" % [
+				hero.position.x, hero.position.y
+			])
 
 	# Standalone room scenes are deliberately terrain-only: no shared world doors or region encounters.
 	var unexpected_doors := 0
