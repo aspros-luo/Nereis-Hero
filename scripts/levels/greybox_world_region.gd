@@ -35,6 +35,8 @@ const ENCOUNTER_DEACTIVATE_RANGE := 560.0
 @export var region_title: String = "旧朝圣路"
 @export var map_width: float = 2600.0
 @export var floor_y: float = 540.0
+@export var room_height: float = 720.0
+@export var room_id: String = ""
 # Keep combat out of graybox traversal until the world routes have passed map acceptance.
 # 世界路线完成实机验收前，灰盒探索默认不生成敌人。
 @export var enable_region_encounters: bool = false
@@ -52,6 +54,9 @@ var a6_bell_shortcut_spawned := false
 
 func _ready() -> void:
 	WorldState.prepare_scene_runtime()
+	if region_id == "A5" and not room_id.is_empty():
+		_ready_a5_room_test()
+		return
 	var spawn_side := WorldState.pending_region_spawn_side
 	# Save the target location and its incoming side before clearing the one-shot transition value.
 	# 先保存目标地图与进入侧，再清理一次性切图方向。
@@ -921,8 +926,70 @@ func _create_boundaries() -> void:
 		wall.add_child(shape)
 		add_child(wall)
 
+
+func _ready_a5_room_test() -> void:
+	# Standalone room mode intentionally skips regional doors, pickups and encounters.
+	WorldState.set_location(location_id)
+	WorldState.pending_region_spawn_side = "west"
+	_configure_platforms()
+	_create_floor()
+	_create_boundaries()
+	_spawn_region_ambience()
+	_spawn_hero(96.0, floor_y - 96.0)
+	_spawn_ui()
+	queue_redraw()
+	print("[NEREIS][A5_ROOM_TEST] room=%s width=%.0f height=%.0f" % [room_id, map_width, room_height])
+
+
+func _configure_a5_room_platforms() -> void:
+	var w := map_width
+	var h := room_height
+	match room_id:
+		"A5-R01":
+			_add_platform(Rect2(100, 410, 300, 18))
+			_add_platform(Rect2(430, 350, 220, 18))
+			_add_platform(Rect2(700, 290, 220, 18))
+		"A5-R02", "A5-R03", "A5-R04", "A5-R08", "A5-R10", "A5-R11", "A5-R12", "A5-R15", "A5-R20":
+			_add_platform(Rect2(w * 0.12, h * 0.68, w * 0.20, 18))
+			_add_platform(Rect2(w * 0.35, h * 0.56, w * 0.16, 18))
+			_add_platform(Rect2(w * 0.54, h * 0.68, w * 0.18, 18))
+			_add_platform(Rect2(w * 0.76, h * 0.55, w * 0.16, 18))
+		"A5-R05", "A5-R13":
+			_add_platform(Rect2(w * 0.16, h * 0.70, w * 0.24, 18))
+			_add_platform(Rect2(w * 0.31, h * 0.58, w * 0.20, 18))
+			_add_platform(Rect2(w * 0.43, h * 0.46, w * 0.20, 18))
+			_add_platform(Rect2(w * 0.55, h * 0.34, w * 0.20, 18))
+			_add_platform(Rect2(w * 0.69, h * 0.22, w * 0.18, 18))
+		"A5-R06", "A5-R17", "A5-R18":
+			_add_platform(Rect2(w * 0.10, h * 0.42, w * 0.18, 18))
+			_add_platform(Rect2(w * 0.31, h * 0.57, w * 0.18, 18))
+			_add_platform(Rect2(w * 0.52, h * 0.72, w * 0.18, 18))
+			_add_platform(Rect2(w * 0.73, h * 0.60, w * 0.18, 18))
+		"A5-R07", "A5-R09", "A5-R14", "A5-R19", "A5-R22":
+			_add_platform(Rect2(w * 0.12, h * 0.70, w * 0.25, 18))
+			_add_platform(Rect2(w * 0.43, h * 0.58, w * 0.20, 18))
+			_add_platform(Rect2(w * 0.68, h * 0.70, w * 0.20, 18))
+		"A5-R16":
+			_add_platform(Rect2(w * 0.08, h * 0.62, w * 0.20, 18))
+			_add_platform(Rect2(w * 0.32, h * 0.48, w * 0.20, 18))
+			_add_platform(Rect2(w * 0.55, h * 0.34, w * 0.20, 18))
+			_add_platform(Rect2(w * 0.76, h * 0.22, w * 0.18, 18))
+		"A5-R21":
+			_add_platform(Rect2(w * 0.12, h * 0.70, w * 0.18, 18))
+			_add_platform(Rect2(w * 0.33, h * 0.58, w * 0.18, 18))
+			_add_platform(Rect2(w * 0.54, h * 0.46, w * 0.18, 18))
+			_add_platform(Rect2(w * 0.75, h * 0.34, w * 0.18, 18))
+		_:
+			_add_platform(Rect2(w * 0.15, h * 0.68, w * 0.22, 18))
+			_add_platform(Rect2(w * 0.42, h * 0.55, w * 0.20, 18))
+			_add_platform(Rect2(w * 0.68, h * 0.68, w * 0.20, 18))
+
+
 func _configure_platforms() -> void:
 	platforms.clear()
+	if region_id == "A5" and not room_id.is_empty():
+		_configure_a5_room_platforms()
+		return
 	match region_id:
 		"A0":
 			# The prologue escape has a broken stair and a raised breach ledge, teaching layered traversal early.
