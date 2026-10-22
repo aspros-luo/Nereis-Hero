@@ -69,7 +69,8 @@
       "terrain_geometry": {
         "solid_rubble_count": 2,
         "floor_gap_count": 1,
-        "layout_note": "残墙入口、短跨壕沟与入口教学平台"
+        "layout_note": "残墙入口、短跨壕沟与入口教学平台",
+        "platform_count": 5
       }
     },
     {
