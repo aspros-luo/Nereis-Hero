@@ -13,6 +13,9 @@ var checks: Array[Dictionary] = []
 var passed := 0
 var failed := 0
 var started_at_msec := 0
+var observed_platforms := 0
+var observed_blocks := 0
+var observed_gaps := 0
 
 func _initialize() -> void:
 	started_at_msec = Time.get_ticks_msec()
@@ -54,30 +57,12 @@ func _run() -> void:
 	var expected_platforms := int(terrain_summary.get("expected_platform_count", -1))
 	var expected_blocks := int(terrain_summary.get("expected_solid_block_count", -1))
 	var expected_gaps := int(terrain_summary.get("expected_floor_gap_count", -1))
-	var actual_platforms := 0
-	var actual_blocks := 0
-	var actual_gaps := 0
-	for check in checks:
-		if not bool(check.get("passed", false)):
-			continue
-		var details: String = str(check.get("detail", ""))
-		if str(check.get("name", "")).begins_with("GEOMETRY_TOTALS/"):
-			continue
-	# Per-room checks already verify expected counts against the room contract.
-	# The aggregate contract is additionally cross-checked against those per-room expectations.
-	for room_variant in rooms:
-		if not (room_variant is Dictionary):
-			continue
-		var terrain: Dictionary = room_variant.get("terrain_geometry", {})
-		actual_platforms += int(terrain.get("platform_count", 0))
-		actual_blocks += int(terrain.get("solid_rubble_count", 0))
-		actual_gaps += int(terrain.get("floor_gap_count", 0))
-	_record(actual_platforms == expected_platforms,
-		"GEOMETRY_TOTALS/PLATFORMS", "contract=%d total=%d" % [expected_platforms, actual_platforms])
-	_record(actual_blocks == expected_blocks,
-		"GEOMETRY_TOTALS/RUBBLE", "contract=%d total=%d" % [expected_blocks, actual_blocks])
-	_record(actual_gaps == expected_gaps,
-		"GEOMETRY_TOTALS/FLOOR_GAPS", "contract=%d total=%d" % [expected_gaps, actual_gaps])
+	_record(observed_platforms == expected_platforms,
+		"GEOMETRY_TOTALS/PLATFORMS", "contract=%d runtime=%d" % [expected_platforms, observed_platforms])
+	_record(observed_blocks == expected_blocks,
+		"GEOMETRY_TOTALS/RUBBLE", "contract=%d runtime=%d" % [expected_blocks, observed_blocks])
+	_record(observed_gaps == expected_gaps,
+		"GEOMETRY_TOTALS/FLOOR_GAPS", "contract=%d runtime=%d" % [expected_gaps, observed_gaps])
 
 	_finish(world_state)
 
@@ -162,6 +147,9 @@ func _test_room(room: Dictionary) -> void:
 	var runtime_gap_count := gap_list.size() if gap_list is Array else -1
 	var runtime_segment_count := segment_list.size() if segment_list is Array else -1
 	var expected_gap_count := int(terrain.get("floor_gap_count", -1))
+	observed_platforms += platform_bodies.size()
+	observed_blocks += rubble_bodies.size()
+	observed_gaps += runtime_gap_count
 	_record(runtime_gap_count == expected_gap_count,
 		"FLOOR_GAP_COUNT/%s" % room_id,
 		"runtime=%d contract=%d" % [runtime_gap_count, expected_gap_count])
@@ -260,7 +248,7 @@ func _finish(world_state: Node) -> void:
 		"summary": {
 			"passed": passed,
 			"failed": failed,
-				"total": passed + failed,
+			"total": passed + failed,
 			"status": "PASS" if failed == 0 else "FAIL"
 		},
 		"checks": checks
