@@ -37,6 +37,8 @@ const ENCOUNTER_DEACTIVATE_RANGE := 560.0
 @export var floor_y: float = 540.0
 @export var room_height: float = 720.0
 @export var room_id: String = ""
+@export var use_a5_room_assembly: bool = false
+@export var assembly_child_mode: bool = false
 # Keep combat out of graybox traversal until the world routes have passed map acceptance.
 # 世界路线完成实机验收前，灰盒探索默认不生成敌人。
 @export var enable_region_encounters: bool = false
@@ -56,7 +58,13 @@ var respawning := false
 var a6_bell_shortcut_spawned := false
 
 func _ready() -> void:
+	if assembly_child_mode:
+		_ready_a5_assembly_child()
+		return
 	WorldState.prepare_scene_runtime()
+	if region_id == "A5" and use_a5_room_assembly:
+		_ready_a5_assembled_region()
+		return
 	if region_id == "A5" and not room_id.is_empty():
 		_ready_a5_room_test()
 		return
@@ -848,6 +856,9 @@ func _spawn_region_ambience() -> void:
 
 
 func _create_floor() -> void:
+	if assembly_child_mode:
+		_configure_a5_room_floor()
+		return
 	if region_id == "A5" and not room_id.is_empty():
 		_configure_a5_room_floor()
 		return
@@ -922,6 +933,8 @@ func _add_ground_segment(segment_name: String, start_x: float, segment_width: fl
 	add_child(floor)
 
 func _create_boundaries() -> void:
+	if assembly_child_mode:
+		return
 	for x in [-20.0, map_width + 20.0]:
 		var wall := StaticBody2D.new()
 		var shape := CollisionShape2D.new()
@@ -931,6 +944,87 @@ func _create_boundaries() -> void:
 		shape.position = Vector2(x, (room_height + 200.0) * 0.5 if region_id == "A5" and not room_id.is_empty() else 500.0)
 		wall.add_child(shape)
 		add_child(wall)
+
+
+func _ready_a5_assembly_child() -> void:
+	# Child rooms contribute only authored geometry and atmosphere drawing. The assembled root owns
+	# the single Hero, camera, HUD, region state, exits and save/respawn lifecycle.
+	# 组装子房间只提供合同定义的地形碰撞与绘制；主场景统一管理主角、镜头、HUD、出口和存档。
+	WorldState.prepare_scene_runtime()
+	a5_room_blocks.clear()
+	a5_room_floor_gaps.clear()
+	a5_room_floor_segments.clear()
+	floor_y = maxf(540.0, room_height - 180.0)
+	_configure_platforms()
+	_create_floor()
+	_configure_a5_room_blocks()
+	queue_redraw()
+
+
+func _ready_a5_assembled_region() -> void:
+	WorldState.prepare_scene_runtime()
+	var spawn_side := WorldState.pending_region_spawn_side
+	WorldState.set_location(location_id)
+	WorldState.pending_region_spawn_side = "west"
+	var contract_path := "res://tools/a5_room_assembly_contract.json"
+	if not FileAccess.file_exists(contract_path):
+		push_error("[NEREIS][A5_ASSEMBLY] Missing room assembly contract: " + contract_path)
+		return
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(contract_path))
+	if not parsed is Dictionary or not parsed.get("rooms", []) is Array:
+		push_error("[NEREIS][A5_ASSEMBLY] Invalid room assembly contract JSON")
+		return
+	var rooms: Array = parsed.get("rooms", [])
+	var room_by_id: Dictionary = {}
+	var max_right := 0.0
+	var min_top := 0.0
+	var max_bottom := 0.0
+	for room_data in rooms:
+		if not room_data is Dictionary:
+			continue
+		var room_scene_path := str(room_data.get("scene_path", ""))
+		var room_position: Array = room_data.get("position_screens", [0, 0])
+		var room_size: Array = room_data.get("size_screens", [1, 1])
+		if room_position.size() != 2 or room_size.size() != 2:
+			push_error("[NEREIS][A5_ASSEMBLY] Invalid room placement: " + str(room_data.get("id", "?")))
+			return
+		var packed := load(room_scene_path) as PackedScene
+		if packed == null:
+			push_error("[NEREIS][A5_ASSEMBLY] Cannot load room scene: " + room_scene_path)
+			return
+		var room := packed.instantiate() as Node2D
+		if room == null:
+			push_error("[NEREIS][A5_ASSEMBLY] Room root is not Node2D: " + room_scene_path)
+			return
+		room.set("assembly_child_mode", true)
+		room.set("map_width", float(room_size[0]) * 1280.0)
+		room.set("room_height", float(room_size[1]) * 720.0)
+		room.set("floor_y", maxf(540.0, float(room_size[1]) * 720.0 - 180.0))
+		room.position = Vector2(float(room_position[0]) * 1280.0, float(room_position[1]) * 720.0)
+		room.name = str(room_data.get("id", "A5Room")).replace("-", "_")
+		add_child(room)
+		room_by_id[str(room_data.get("id", ""))] = room
+		max_right = maxf(max_right, room.position.x + float(room_size[0]) * 1280.0)
+		min_top = minf(min_top, room.position.y)
+		max_bottom = maxf(max_bottom, room.position.y + float(room_size[1]) * 720.0)
+	if room_by_id.size() != rooms.size():
+		push_error("[NEREIS][A5_ASSEMBLY] Not all room scenes were instantiated")
+		return
+	map_width = max_right
+	room_height = max_bottom - min_top
+	floor_y = max_bottom - min_top - 180.0
+	# The R01 room is the only spawn authority. Keep all child rooms geometry-only to avoid duplicate Heroes.
+	var entry_room: Node2D = room_by_id.get("A5-R01")
+	if entry_room == null:
+		push_error("[NEREIS][A5_ASSEMBLY] Contract has no A5-R01 entry room")
+		return
+	_spawn_region_ambience()
+	_spawn_hero(entry_room.position.x + 96.0, entry_room.position.y + maxf(540.0, 720.0 - 180.0) - 96.0)
+	_spawn_ui()
+	# Cross-region doors remain handled by the established A5 exit system after its room-bound anchors are migrated.
+	# 跨区门继续由既有 A5 出口系统负责；其锚点迁移到合同房间后再启用，避免旧坐标落在空中。
+	queue_redraw()
+	print("[NEREIS][A5_ASSEMBLY] rooms=%d bounds=%.0fx%.0f contract=%s" % [room_by_id.size(), map_width, room_height, contract_path])
 
 
 func _ready_a5_room_test() -> void:
@@ -1161,7 +1255,7 @@ func _draw_a5_room_floor_gaps() -> void:
 
 func _configure_platforms() -> void:
 	platforms.clear()
-	if region_id == "A5" and not room_id.is_empty():
+	if (region_id == "A5" and not room_id.is_empty()) or assembly_child_mode:
 		_configure_a5_room_platforms()
 		return
 	match region_id:
