@@ -341,7 +341,12 @@ func _transition_position(side: StringName, bounds: Rect2, room: Node2D, side_in
 		&"north":
 			return Vector2(clampf(bounds.size.x * 0.5 + lane_offset, 90.0, bounds.end.x - 90.0), 24.0)
 		_:
-			return Vector2(_drop_exit_x(room, bounds, lane_offset), floor_y + 30.0)
+			# Drop transitions belong inside a real floor gap; ordinary south exits stay above the floor.
+			# 只有真实落差口才把触发器放到地板下；普通南侧连接必须留在地面上方。
+			var gaps: Variant = room.get("a5_room_floor_gaps") if _has_property(room, "a5_room_floor_gaps") else []
+			if gaps is Array and not gaps.is_empty():
+				return Vector2(_drop_exit_x(room, bounds, lane_offset), floor_y + 30.0)
+			return Vector2(clampf(bounds.size.x * 0.5 + lane_offset, 48.0, bounds.end.x - 48.0), floor_y - 48.0)
 
 func _drop_exit_x(room: Node2D, bounds: Rect2, lane_offset: float) -> float:
 	var gaps: Variant = room.get("a5_room_floor_gaps") if _has_property(room, "a5_room_floor_gaps") else []
