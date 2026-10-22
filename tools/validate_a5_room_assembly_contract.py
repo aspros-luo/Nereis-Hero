@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the proposed A5 room assembly contract; this does not test Godot runtime assembly."""
+"""Validate the A5 room assembly contract and its runtime-scene wiring; not a Godot runtime test."""
 import json
 import sys
 from pathlib import Path
@@ -42,6 +42,27 @@ def main():
             errors.append(f"{rid}: position_screens must be two integer screen coordinates")
         if not isinstance(size, list) or len(size) != 2 or not all(isinstance(v, int) and v > 0 for v in size):
             errors.append(f"{rid}: invalid size_screens")
+
+    # Ensure the production scene actually consumes the contract-driven assembly path.
+    production_scene = ROOT / "scenes" / "old_battlefield.tscn"
+    shared_script = ROOT / "scripts" / "levels" / "greybox_world_region.gd"
+    if not production_scene.exists() or "use_a5_room_assembly = true" not in production_scene.read_text(encoding="utf-8"):
+        errors.append("old_battlefield.tscn does not enable contract-driven A5 room assembly")
+    if not shared_script.exists():
+        errors.append("shared region script is missing")
+    else:
+        source = shared_script.read_text(encoding="utf-8")
+        for token in ("_ready_a5_assembled_region", "_ready_a5_assembly_child", "a5_room_assembly_contract.json", "assembly_child_mode"):
+            if token not in source:
+                errors.append(f"runtime assembly wiring missing token: {token}")
+    for room in assembly_rooms:
+        scene_path = room.get("scene_path", "")
+        if not scene_path.startswith("res://"):
+            errors.append(f"{room.get('id')}: invalid res:// scene path")
+        else:
+            disk_path = ROOT / scene_path.removeprefix("res://")
+            if not disk_path.is_file():
+                errors.append(f"{room.get('id')}: room scene file does not exist: {scene_path}")
 
     # Proposed room footprints may touch, but must not overlap.
     for i, a in enumerate(assembly_rooms):
@@ -124,7 +145,7 @@ def main():
     print("A5 ROOM ASSEMBLY CONTRACT: PASS")
     print(f"  rooms={len(known)} connections={len(edges)} macro_bindings=3")
     print("  world topology C04/C08/C09 preserved; resonance bridge contract preserved")
-    print("  NOTE: contract validation only; no claim of Godot scene assembly or in-game playability")
+    print("  runtime wiring and scene paths checked; Godot runtime and room-to-room transition playability still require testing")
     return 0
 
 if __name__ == "__main__":
