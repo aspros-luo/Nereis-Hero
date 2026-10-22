@@ -1021,8 +1021,9 @@ func _ready_a5_assembled_region() -> void:
 	_spawn_region_ambience()
 	_spawn_hero(entry_room.position.x + 96.0, entry_room.position.y + maxf(540.0, 720.0 - 180.0) - 96.0)
 	_spawn_ui()
-	# Cross-region doors remain handled by the established A5 exit system after its room-bound anchors are migrated.
-	# 跨区门继续由既有 A5 出口系统负责；其锚点迁移到合同房间后再启用，避免旧坐标落在空中。
+	_spawn_region_exits()
+	_register_debug_locked_route_hints()
+	_spawn_region_rest_point()
 	queue_redraw()
 	print("[NEREIS][A5_ASSEMBLY] rooms=%d bounds=%.0fx%.0f contract=%s" % [room_by_id.size(), map_width, room_height, contract_path])
 
@@ -2388,29 +2389,52 @@ func _spawn_region_exits() -> void:
 				)
 
 		"A5":
-			_spawn_exit_door(
-				180.0, "E  沿残墙高路返回被遗忘的城区", "forgotten_city",
-				"res://scenes/forgotten_city.tscn", "city_highroad_return",
-				true, "", "", floor_y - 130.0
-			)
-			_spawn_exit_door(
-				5350.0, "E  沿残墙高路进入修道院", "monastery_tower",
-				"res://scenes/monastery_tower.tscn", "battlefield_entry", true, "", "", floor_y - 90.0
-			)
-			if WorldState.is_hidden_path_opened("H02"):
+			if use_a5_room_assembly:
+				# These anchors are derived from the room placement contract, not the legacy 5.6k-wide strip.
+				# 出口坐标根据合同中的房间屏幕位置计算，不再沿用旧的 5600px 直线地图坐标。
 				_spawn_exit_door(
-					4500.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
-					"res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
-					true, "opened_old_bell_tower_connection", "E  进入倒响钟室"
+					180.0, "E  沿残墙高路返回被遗忘的城区", "forgotten_city",
+					"res://scenes/forgotten_city.tscn", "city_highroad_return",
+					true, "", "", 720.0 + 410.0
 				)
-			# C04: open the old pilgrim highroad from the battlefield side, then traverse on the next interaction.
-			# C04：从战场侧开启旧朝圣高路；首次互动开路，下一次互动才转场。
-			_spawn_exit_door(
-				3900.0, "E  打开旧朝圣高路", "ash_forest",
-				"res://scenes/ash_forest.tscn", "old_pilgrim_highroad",
-				true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",
-				floor_y - 140.0
-			)
+				_spawn_exit_door(
+					18.0 * 1280.0 + 1100.0, "E  沿残墙高路进入修道院", "monastery_tower",
+					"res://scenes/monastery_tower.tscn", "battlefield_entry", true, "", "", -720.0 + 630.0
+				)
+				if WorldState.is_hidden_path_opened("H02"):
+					_spawn_exit_door(
+					14.0 * 1280.0 + 1080.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
+					"res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
+					true, "opened_old_bell_tower_connection", "E  进入倒响钟室", -3.0 * 720.0 + 620.0
+					)
+				_spawn_exit_door(
+					17.0 * 1280.0 + 980.0, "E  打开旧朝圣高路", "ash_forest",
+					"res://scenes/ash_forest.tscn", "old_pilgrim_highroad",
+					true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",
+					-2.0 * 720.0 + 1080.0
+				)
+			else:
+				_spawn_exit_door(
+					180.0, "E  沿残墙高路返回被遗忘的城区", "forgotten_city",
+					"res://scenes/forgotten_city.tscn", "city_highroad_return",
+					true, "", "", floor_y - 130.0
+				)
+				_spawn_exit_door(
+					5350.0, "E  沿残墙高路进入修道院", "monastery_tower",
+					"res://scenes/monastery_tower.tscn", "battlefield_entry", true, "", "", floor_y - 90.0
+				)
+				if WorldState.is_hidden_path_opened("H02"):
+					_spawn_exit_door(
+						4500.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
+						"res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
+						true, "opened_old_bell_tower_connection", "E  进入倒响钟室"
+					)
+				_spawn_exit_door(
+					3900.0, "E  打开旧朝圣高路", "ash_forest",
+					"res://scenes/ash_forest.tscn", "old_pilgrim_highroad",
+					true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",
+					floor_y - 140.0
+				)
 		"A6":
 			_spawn_exit_door(
 				72.0, "E  返回边境战场", "old_battlefield",
@@ -3394,6 +3418,8 @@ func _draw_floor_gap_visuals() -> void:
 
 
 func _draw() -> void:
+	if use_a5_room_assembly:
+		return
 	var backdrop: Texture2D = _region_backdrop_texture()
 	if backdrop != null:
 		draw_texture_rect(backdrop, Rect2(0.0, 0.0, map_width, room_height if region_id == "A5" and not room_id.is_empty() else (1000.0 if region_id == "A2" else 720.0)), false)
