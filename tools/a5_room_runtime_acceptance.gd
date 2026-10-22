@@ -409,7 +409,7 @@ func _test_assembled_region(connections: Array) -> void:
 		)
 		if spawn_room == null or not (spawn_result is Vector2):
 			incoming_spawn_errors += 1
-		elif (spawn_result as Vector2).distance_to(spawn_room.position + spawn_spec["local"]) > 1.0:
+		elif spawn_result != spawn_room.position + spawn_spec["local"]:
 			incoming_spawn_errors += 1
 	_record(incoming_spawn_errors == 0, "ASSEMBLY/CROSS_REGION_SPAWN_MATRIX",
 		"incorrect C04/C08/C09/H02 incoming spawn anchors=%d" % incoming_spawn_errors)
