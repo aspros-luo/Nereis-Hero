@@ -52,9 +52,23 @@ def main():
         errors.append("shared region script is missing")
     else:
         source = shared_script.read_text(encoding="utf-8")
-        for token in ("_ready_a5_assembled_region", "_ready_a5_assembly_child", "a5_room_assembly_contract.json", "assembly_child_mode"):
+        for token in (
+            "_ready_a5_assembled_region",
+            "_ready_a5_assembly_child",
+            "a5_room_assembly_contract.json",
+            "assembly_child_mode",
+            "_spawn_a5_internal_connections",
+            "_spawn_a5_internal_door",
+            "_on_a5_internal_door_interacted",
+            "_a5_internal_connection_requirement_met",
+            "a5_internal_connection_door",
+        ):
             if token not in source:
                 errors.append(f"runtime assembly wiring missing token: {token}")
+        assembly_init = source.find("func _ready_a5_assembled_region()")
+        assembly_test = source.find("func _ready_a5_room_test()")
+        if assembly_init < 0 or assembly_test < 0 or "_spawn_a5_internal_connections(parsed.get(\"connections\", []))" not in source[assembly_init:assembly_test]:
+            errors.append("formal A5 assembly does not instantiate contract connection portals")
     for room in assembly_rooms:
         scene_path = room.get("scene_path", "")
         if not scene_path.startswith("res://"):
@@ -78,8 +92,15 @@ def main():
 
     edges = assembly.get("connections", [])
     edge_ids = [e.get("id") for e in edges]
+    if len(edges) != 26:
+        errors.append(f"expected 26 internal connections, got {len(edges)}")
     if len(edge_ids) != len(set(edge_ids)):
         errors.append("duplicate internal connection IDs")
+    endpoint_count = sum(1 if e.get("travel") == "one_way" else 2 for e in edges)
+    if endpoint_count != 51:
+        errors.append(f"expected 51 physical internal portal endpoints (one one-way edge), got {endpoint_count}")
+    if sum(1 for e in edges if e.get("travel") == "one_way") != 1:
+        errors.append("expected exactly one one-way drop connection")
     graph = {rid: set() for rid in known}
     for edge in edges:
         src, dst = edge.get("from"), edge.get("to")
