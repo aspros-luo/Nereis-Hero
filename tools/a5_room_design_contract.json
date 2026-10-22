@@ -1,0 +1,548 @@
+{
+  "schema_version": 1,
+  "region_id": "A5",
+  "region_name": "旧战场与边境堡垒",
+  "status": "design_draft_not_runtime_verified",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "tile_size": null,
+    "tile_size_status": "待确认项目 Tile 资源与缩放"
+  },
+  "preserve_world_topology": true,
+  "macro_region": "M1",
+  "cross_region_connections": [
+    {
+      "id": "C04",
+      "from": "A2",
+      "to": "A5",
+      "kind": "shortcut",
+      "initial_access": "blocked",
+      "final_direction": "both",
+      "unlock_condition": "reached_A5_and_opened_old_pilgrim_highroad",
+      "opens_from": "A5",
+      "room_binding": {
+        "a5_room": "A5-R16",
+        "a5_exit": "old_pilgrim_highroad_winch_gate"
+      }
+    },
+    {
+      "id": "C08",
+      "from": "A3",
+      "to": "A5",
+      "kind": "main",
+      "initial_access": "both",
+      "final_direction": "both",
+      "unlock_condition": "",
+      "opens_from": "",
+      "room_binding": {
+        "a5_room": "A5-R01",
+        "a5_exit": "west_high_parapet"
+      }
+    },
+    {
+      "id": "C09",
+      "from": "A5",
+      "to": "A6",
+      "kind": "main",
+      "initial_access": "both",
+      "final_direction": "both",
+      "unlock_condition": "",
+      "opens_from": "",
+      "room_binding": {
+        "a5_room": "A5-R20",
+        "a5_exit": "east_upper_parapet"
+      }
+    }
+  ],
+  "rooms": [
+    {
+      "id": "A5-R01",
+      "size_screens": [
+        1,
+        1
+      ],
+      "subregion": "A5-S02",
+      "role": "entry",
+      "play_hook": "C08高位入口；从城区残墙跃入战场"
+    },
+    {
+      "id": "A5-R02",
+      "size_screens": [
+        2,
+        1
+      ],
+      "subregion": "A5-S02",
+      "role": "route",
+      "play_hook": "沿断墙观察战壕、箭楼和远端绞盘"
+    },
+    {
+      "id": "A5-R03",
+      "size_screens": [
+        2,
+        1
+      ],
+      "subregion": "A5-S01",
+      "role": "junction",
+      "play_hook": "战壕岔口：选择地面主线或地下补给支路"
+    },
+    {
+      "id": "A5-R04",
+      "size_screens": [
+        2,
+        1
+      ],
+      "subregion": "A5-S01",
+      "role": "combat",
+      "play_hook": "在弹坑与残骸之间应对远近程交叉火力"
+    },
+    {
+      "id": "A5-R05",
+      "size_screens": [
+        1,
+        2
+      ],
+      "subregion": "A5-S04",
+      "role": "platform",
+      "play_hook": "攀登信号塔残架，俯瞰地面路线"
+    },
+    {
+      "id": "A5-R06",
+      "size_screens": [
+        1,
+        2
+      ],
+      "subregion": "A5-S01",
+      "role": "descent",
+      "play_hook": "沿塌陷坡道下降，寻找回到战壕的安全落点"
+    },
+    {
+      "id": "A5-R07",
+      "size_screens": [
+        1,
+        1
+      ],
+      "subregion": "A5-S01",
+      "role": "rest",
+      "play_hook": "废弃战地医疗所提供休整与战报线索"
+    },
+    {
+      "id": "A5-R08",
+      "size_screens": [
+        2,
+        1
+      ],
+      "subregion": "A5-S01",
+      "role": "combat_reward",
+      "play_hook": "夺回军需堡垒，战斗后获得补给"
+    },
+    {
+      "id": "A5-R09",
+      "size_screens": [
+        1,
+        1
+      ],
+      "subregion": "A5-S01",
+      "role": "optional_cache",
+      "play_hook": "从战壕侧面进入埋藏军需库寻找可选材料"
+    },
+    {
+      "id": "A5-R10",
+      "size_screens": [
+        2,
+        2
+      ],
+      "subregion": "A5-S02",
+      "role": "platform_challenge",
+      "play_hook": "穿越多层坍塌城墙，选择高风险上层路线"
+    },
+    {
+      "id": "A5-R11",
+      "size_screens": [
+        2,
+        1
+      ],
+      "subregion": "A5-S02",
+      "role": "mechanism",
+      "play_hook": "修复炮桥的活动支撑，观察机关节奏后通过"
+    },
+    {
+      "id": "A5-R12",
+      "size_screens": [
+        2,
+        1
+      ],
+      "subregion": "A5-S03",
+      "role": "hub_rest",
+      "play_hook": "中央指挥庭院作为区域地标、休息与路线分流点"
+    },
+    {
+      "id": "A5-R13",
+      "size_screens": [
+        1,
+        3
+      ],
+      "subregion": "A5-S04",
+      "role": "vertical_landmark",
+      "play_hook": "沿箭楼内部多层平台攀升并观察远方出口"
+    },
+    {
+      "id": "A5-R14",
+      "size_screens": [
+        1,
+        1
+      ],
+      "subregion": "A5-S04",
+      "role": "hidden_lore",
+      "play_hook": "发现被抹去的指挥记录，揭示战报矛盾"
+    },
+    {
+      "id": "A5-R15",
+      "size_screens": [
+        2,
+        1
+      ],
+      "subregion": "A5-S03",
+      "role": "upper_route",
+      "play_hook": "沿堡垒高墙回接主路并俯瞰地下维护区"
+    },
+    {
+      "id": "A5-R16",
+      "size_screens": [
+        1,
+        2
+      ],
+      "subregion": "A5-S05",
+      "role": "remote_shortcut",
+      "play_hook": "操作断桥绞盘，从A5侧开启C04旧朝圣高路"
+    },
+    {
+      "id": "A5-R17",
+      "size_screens": [
+        2,
+        2
+      ],
+      "subregion": "A5-S05",
+      "role": "undercroft",
+      "play_hook": "探索堡垒地下维护竖井并连接升降机"
+    },
+    {
+      "id": "A5-R18",
+      "size_screens": [
+        2,
+        1
+      ],
+      "subregion": "A5-S01",
+      "role": "lower_route",
+      "play_hook": "沿蓄水沟绕过一段高风险战壕"
+    },
+    {
+      "id": "A5-R19",
+      "size_screens": [
+        1,
+        1
+      ],
+      "subregion": "A5-S01",
+      "role": "loop_return",
+      "play_hook": "从地下回接战壕，打开后改变回程路线"
+    },
+    {
+      "id": "A5-R20",
+      "size_screens": [
+        1,
+        1
+      ],
+      "subregion": "A5-S03",
+      "role": "C09_exit",
+      "play_hook": "从高位城墙离开A5进入修道院上层廊桥"
+    },
+    {
+      "id": "A5-R21",
+      "size_screens": [
+        2,
+        1
+      ],
+      "subregion": "A5-S04",
+      "role": "late_ability_branch",
+      "play_hook": "用现有后期能力进入残墙侧翼并获得可选强化"
+    },
+    {
+      "id": "A5-R22",
+      "size_screens": [
+        1,
+        1
+      ],
+      "subregion": "A5-S04",
+      "role": "hidden_anomaly",
+      "play_hook": "找到地图外侧的隐秘观察室与终局相关异象"
+    }
+  ],
+  "connections": [
+    {
+      "id": "A5-I01",
+      "from": "A5-R01",
+      "to": "A5-R02",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I02",
+      "from": "A5-R02",
+      "to": "A5-R03",
+      "kind": "drop",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I03",
+      "from": "A5-R03",
+      "to": "A5-R04",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I04",
+      "from": "A5-R04",
+      "to": "A5-R05",
+      "kind": "climb",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I05",
+      "from": "A5-R05",
+      "to": "A5-R06",
+      "kind": "drop",
+      "travel": "one_way",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I06",
+      "from": "A5-R06",
+      "to": "A5-R07",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I07",
+      "from": "A5-R07",
+      "to": "A5-R08",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I08",
+      "from": "A5-R08",
+      "to": "A5-R10",
+      "kind": "climb",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I09",
+      "from": "A5-R10",
+      "to": "A5-R11",
+      "kind": "platform",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I10",
+      "from": "A5-R11",
+      "to": "A5-R12",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I11",
+      "from": "A5-R12",
+      "to": "A5-R13",
+      "kind": "ladder",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I12",
+      "from": "A5-R13",
+      "to": "A5-R15",
+      "kind": "drop",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I13",
+      "from": "A5-R15",
+      "to": "A5-R16",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I14",
+      "from": "A5-R16",
+      "to": "A5-R17",
+      "kind": "ladder",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I15",
+      "from": "A5-R17",
+      "to": "A5-R18",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-I16",
+      "from": "A5-R18",
+      "to": "A5-R19",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    },
+    {
+      "id": "A5-SC01",
+      "from": "A5-R19",
+      "to": "A5-R03",
+      "kind": "shortcut",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "opened_A5_SC01"
+    },
+    {
+      "id": "A5-SC02",
+      "from": "A5-R08",
+      "to": "A5-R02",
+      "kind": "shortcut",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "opened_A5_SC02"
+    },
+    {
+      "id": "A5-LIFT01",
+      "from": "A5-R17",
+      "to": "A5-R12",
+      "kind": "elevator",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "opened_A5_LIFT01"
+    },
+    {
+      "id": "A5-B01",
+      "from": "A5-R03",
+      "to": "A5-R09",
+      "kind": "hidden",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "existing_hidden_entry_condition"
+    },
+    {
+      "id": "A5-B02",
+      "from": "A5-R13",
+      "to": "A5-R14",
+      "kind": "hidden",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "existing_resonance_sight_condition"
+    },
+    {
+      "id": "A5-B03",
+      "from": "A5-R17",
+      "to": "A5-R22",
+      "kind": "hidden",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "existing_hidden_anomaly_condition"
+    },
+    {
+      "id": "A5-B04",
+      "from": "A5-R13",
+      "to": "A5-R21",
+      "kind": "ability_gate",
+      "travel": "both",
+      "initial_state": "blocked",
+      "unlock_condition": "existing_late_game_ability"
+    },
+    {
+      "id": "A5-B05",
+      "from": "A5-R21",
+      "to": "A5-R15",
+      "kind": "loop",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": ""
+    }
+  ],
+  "subregion_edges": [
+    {
+      "id": "SC025",
+      "from": "A5-S01",
+      "to": "A5-S02",
+      "kind": "climb",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC026",
+      "from": "A5-S02",
+      "to": "A5-S03",
+      "kind": "walk",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC027",
+      "from": "A5-S03",
+      "to": "A5-S04",
+      "kind": "ladder",
+      "travel": "both",
+      "initial_state": "open",
+      "unlock_condition": "",
+      "design_note": ""
+    },
+    {
+      "id": "SC028",
+      "from": "A5-S03",
+      "to": "A5-S05",
+      "kind": "winch",
+      "travel": "both",
+      "initial_state": "locked",
+      "unlock_condition": "opened_pilgrim_highroad",
+      "design_note": ""
+    }
+  ],
+  "design_notes": [
+    "本文件为A5试点设计合同，不替换tools/world_map_topology.json。",
+    "C04/C08/C09的世界拓扑端点、类型和解锁语义以原始world_map_topology.json为准。",
+    "现有能力门条件是占位引用；实施前必须映射到项目内真实能力ID/状态标志。",
+    "房间尺寸按1280x720逻辑视口倍数表示，Tile尺寸待确认。",
+    "A5-R16的绞盘用于从A5侧开启C04；开启前高路必须物理阻挡或单向。",
+    "A5-SC01/SC02/LIFT01为区域内部新增设计，不属于跨区拓扑修改。"
+  ]
+}
