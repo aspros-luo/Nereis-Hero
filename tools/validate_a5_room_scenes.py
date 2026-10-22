@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "tools" / "a5_room_design_contract.json"
 RUNTIME = ROOT / "scripts" / "levels" / "greybox_world_region.gd"
+RUNTIME_HARNESS = ROOT / "tools" / "a5_room_runtime_acceptance.gd"
 NUMBER_ROW = re.compile(r"\[([0-9.,\s]+)\]")
 
 
@@ -53,6 +54,12 @@ def main() -> int:
     failures = 0
     data = json.loads(CONTRACT.read_text(encoding="utf-8"))
     runtime = RUNTIME.read_text(encoding="utf-8")
+    if not RUNTIME_HARNESS.is_file():
+        fail("missing runtime acceptance script: tools/a5_room_runtime_acceptance.gd")
+        failures += 1
+        harness = ""
+    else:
+        harness = RUNTIME_HARNESS.read_text(encoding="utf-8")
     rooms = data.get("rooms", [])
     room_ids = [room.get("id") for room in rooms]
     expected_ids = {f"A5-R{i:02d}" for i in range(1, 23)}
@@ -238,6 +245,18 @@ def main() -> int:
     ):
         if needle not in runtime:
             fail(f"shared runtime missing required graybox terrain hook: {needle}")
+            failures += 1
+
+    for needle in (
+        "func _test_room(room: Dictionary) -> void:",
+        "PLATFORM_COLLISIONS/%s",
+        "RUBBLE_COLLISIONS/%s",
+        "GROUND_COLLISION_COVERAGE/%s",
+        "CAMERA_LIMITS/%s",
+        "A5 ROOM RUNTIME ACCEPTANCE:",
+    ):
+        if needle not in harness:
+            fail(f"runtime acceptance harness missing check hook: {needle}")
             failures += 1
 
     if failures:
