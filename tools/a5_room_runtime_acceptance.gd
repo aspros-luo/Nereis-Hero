@@ -53,7 +53,7 @@ func _run() -> void:
 		if room_variant is Dictionary:
 			await _test_room(room_variant)
 
-	await _test_assembled_region()
+	await _test_assembled_region(parsed.get("connections", []))
 
 	var terrain_summary: Dictionary = parsed.get("terrain_design", {})
 	var expected_platforms := int(terrain_summary.get("expected_platform_count", -1))
@@ -258,7 +258,7 @@ func _test_room(room: Dictionary) -> void:
 	instance.queue_free()
 	await process_frame
 
-func _test_assembled_region() -> void:
+func _test_assembled_region(connections: Array) -> void:
 	var scene_path := "res://scenes/a5_assembled_region.tscn"
 	if not ResourceLoader.exists(scene_path):
 		_record(false, "ASSEMBLY/SCENE_LOAD", "missing " + scene_path)
@@ -294,6 +294,67 @@ func _test_assembled_region() -> void:
 		"instantiated=%d expected=22" % present_rooms)
 	_record(negative_room_tops == 0, "ASSEMBLY/UPPER_ROOM_NORMALIZATION",
 		"rooms with negative local Y=%d" % negative_room_tops)
+
+	var endpoint_nodes := instance.get_tree().get_nodes_in_group("a5_internal_connection_door")
+	var expected_endpoints := 0
+	for connection in connections:
+		if connection is Dictionary:
+			expected_endpoints += 1 if str(connection.get("travel", "both")) == "one_way" else 2
+	_record(endpoint_nodes.size() == expected_endpoints and expected_endpoints == 51,
+		"ASSEMBLY/CONNECTION_ENDPOINT_COUNT",
+		"runtime=%d contract_expected=%d" % [endpoint_nodes.size(), expected_endpoints])
+
+	var malformed_endpoints := 0
+	var endpoint_positions: Array[Vector2] = []
+	for endpoint_variant in endpoint_nodes:
+		if not (endpoint_variant is Area2D):
+			malformed_endpoints += 1
+			continue
+		var endpoint := endpoint_variant as Area2D
+		if not endpoint.has_meta("a5_connection_id") or not endpoint.has_meta("a5_from_room") or not endpoint.has_meta("a5_to_room"):
+			malformed_endpoints += 1
+		endpoint_positions.append(endpoint.global_position)
+	_record(malformed_endpoints == 0, "ASSEMBLY/CONNECTION_ENDPOINT_METADATA",
+		"endpoints missing required metadata=%d" % malformed_endpoints)
+
+	var overlapping_endpoints := 0
+	for i in range(endpoint_positions.size()):
+		for j in range(i + 1, endpoint_positions.size()):
+			if endpoint_positions[i].distance_to(endpoint_positions[j]) < 100.0:
+				overlapping_endpoints += 1
+	_record(overlapping_endpoints == 0, "ASSEMBLY/CONNECTION_ENDPOINT_SPACING",
+		"endpoint pairs closer than 100px=%d" % overlapping_endpoints)
+
+	var connection_count_errors := 0
+	for connection_variant in connections:
+		if not connection_variant is Dictionary:
+			connection_count_errors += 1
+			continue
+		var connection: Dictionary = connection_variant
+		var connection_id := str(connection.get("id", ""))
+		var source_id := str(connection.get("from", ""))
+		var target_id := str(connection.get("to", ""))
+		var expected_count := 1 if str(connection.get("travel", "both")) == "one_way" else 2
+		var actual_count := 0
+		var has_source := false
+		var has_target := false
+		for endpoint_variant in endpoint_nodes:
+			if not (endpoint_variant is Area2D):
+				continue
+			var endpoint := endpoint_variant as Area2D
+			if str(endpoint.get_meta("a5_connection_id", "")) != connection_id:
+				continue
+			actual_count += 1
+			var endpoint_from := str(endpoint.get_meta("a5_from_room", ""))
+			var endpoint_to := str(endpoint.get_meta("a5_to_room", ""))
+			if endpoint_from == source_id and endpoint_to == target_id:
+				has_source = true
+			if endpoint_from == target_id and endpoint_to == source_id:
+				has_target = true
+		if actual_count != expected_count or not has_source or (expected_count == 2 and not has_target) or (expected_count == 1 and has_target):
+			connection_count_errors += 1
+	_record(connection_count_errors == 0, "ASSEMBLY/CONNECTION_DIRECTION_MATRIX",
+		"connections with missing/extra endpoints=%d of %d" % [connection_count_errors, connections.size()])
 
 	var hero := instance.get_node_or_null("Hero") as CharacterBody2D
 	_record(hero != null, "ASSEMBLY/SINGLE_HERO", "assembled Hero exists=%s" % str(hero != null))
