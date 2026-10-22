@@ -53,15 +53,24 @@ def main() -> int:
             failures += 1
         width = re.search(r"^map_width = ([0-9.]+)$", scene, re.M)
         height = re.search(r"^room_height = ([0-9.]+)$", scene, re.M)
-        if not width or not height or float(width.group(1)) <= 0 or float(height.group(1)) <= 0:
-            fail(f"{room_id}: invalid or missing room dimensions")
+        screens = room.get("size_screens", [])
+        if not width or not height or len(screens) != 2:
+            fail(f"{room_id}: invalid or missing room dimensions/size_screens")
             failures += 1
+        else:
+            expected_width = int(screens[0]) * 1280
+            expected_height = int(screens[1]) * 720
+            if float(width.group(1)) != expected_width or float(height.group(1)) != expected_height:
+                fail(f"{room_id}: dimensions {width.group(1)}x{height.group(1)} do not match {expected_width}x{expected_height}")
+                failures += 1
 
     for needle in (
         '@export var room_id: String = ""',
         '@export var room_height: float = 720.0',
         'func _ready_a5_room_test() -> void:',
         'func _configure_a5_room_platforms() -> void:',
+        'camera.limit_bottom = int(room_height) if region_id == "A5" and not room_id.is_empty() else (1000 if region_id == "A2" else 720)',
+        'floor_y = maxf(540.0, room_height - 180.0)',
         'if region_id == "A5" and not room_id.is_empty():',
     ):
         if needle not in runtime:
