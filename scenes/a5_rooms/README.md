@@ -1,0 +1,48 @@
+# A5 独立房间验收索引
+
+本目录的每个 `.tscn` 都可以单独运行。当前阶段以灰盒地形、平台碰撞、角色移动和摄像机范围为验收对象；不生成敌人、区域出口或拾取物。场景由 `scripts/levels/greybox_world_region.gd` 提供运行逻辑。
+
+## 房间列表
+
+| 房间 | 职责 | 尺寸 | 验收重点 | 场景 |
+|---|---|---:|---|---|
+| A5-R01 | entry | 1×1 屏 | C08高位入口；从城区残墙跃入战场 | [打开场景](../../scenes/a5_rooms/a5_r01.tscn) |
+| A5-R02 | route | 2×1 屏 | 沿断墙观察战壕、箭楼和远端绞盘 | [打开场景](../../scenes/a5_rooms/a5_r02.tscn) |
+| A5-R03 | junction | 2×1 屏 | 战壕岔口：选择地面主线或地下补给支路 | [打开场景](../../scenes/a5_rooms/a5_r03.tscn) |
+| A5-R04 | combat | 2×1 屏 | 在弹坑与残骸之间应对远近程交叉火力 | [打开场景](../../scenes/a5_rooms/a5_r04.tscn) |
+| A5-R05 | platform | 1×2 屏 | 攀登信号塔残架，俯瞰地面路线 | [打开场景](../../scenes/a5_rooms/a5_r05.tscn) |
+| A5-R06 | descent | 1×2 屏 | 沿塌陷坡道下降，寻找回到战壕的安全落点 | [打开场景](../../scenes/a5_rooms/a5_r06.tscn) |
+| A5-R07 | rest | 1×1 屏 | 废弃战地医疗所提供休整与战报线索 | [打开场景](../../scenes/a5_rooms/a5_r07.tscn) |
+| A5-R08 | combat_reward | 2×1 屏 | 夺回军需堡垒，战斗后获得补给 | [打开场景](../../scenes/a5_rooms/a5_r08.tscn) |
+| A5-R09 | optional_cache | 1×1 屏 | 从战壕侧面进入埋藏军需库寻找可选材料 | [打开场景](../../scenes/a5_rooms/a5_r09.tscn) |
+| A5-R10 | platform_challenge | 2×2 屏 | 穿越多层坍塌城墙，选择高风险上层路线 | [打开场景](../../scenes/a5_rooms/a5_r10.tscn) |
+| A5-R11 | mechanism | 2×1 屏 | 修复炮桥的活动支撑，观察机关节奏后通过 | [打开场景](../../scenes/a5_rooms/a5_r11.tscn) |
+| A5-R12 | hub_rest | 2×1 屏 | 中央指挥庭院作为区域地标、休息与路线分流点 | [打开场景](../../scenes/a5_rooms/a5_r12.tscn) |
+| A5-R13 | vertical_landmark | 1×3 屏 | 沿箭楼内部多层平台攀升并观察远方出口 | [打开场景](../../scenes/a5_rooms/a5_r13.tscn) |
+| A5-R14 | hidden_lore | 1×1 屏 | 发现被抹去的指挥记录，揭示战报矛盾 | [打开场景](../../scenes/a5_rooms/a5_r14.tscn) |
+| A5-R15 | upper_route | 2×1 屏 | 沿堡垒高墙回接主路并俯瞰地下维护区 | [打开场景](../../scenes/a5_rooms/a5_r15.tscn) |
+| A5-R16 | remote_shortcut | 1×2 屏 | 操作断桥绞盘，从A5侧开启C04旧朝圣高路 | [打开场景](../../scenes/a5_rooms/a5_r16.tscn) |
+| A5-R17 | undercroft | 2×2 屏 | 探索堡垒地下维护竖井并连接升降机 | [打开场景](../../scenes/a5_rooms/a5_r17.tscn) |
+| A5-R18 | lower_route | 2×1 屏 | 沿蓄水沟绕过一段高风险战壕 | [打开场景](../../scenes/a5_rooms/a5_r18.tscn) |
+| A5-R19 | loop_return | 1×1 屏 | 从地下回接战壕，打开后改变回程路线 | [打开场景](../../scenes/a5_rooms/a5_r19.tscn) |
+| A5-R20 | C09_exit | 1×1 屏 | 从高位城墙离开A5进入修道院上层廊桥 | [打开场景](../../scenes/a5_rooms/a5_r20.tscn) |
+| A5-R21 | late_ability_branch | 2×1 屏 | 用现有后期能力进入残墙侧翼并获得可选强化 | [打开场景](../../scenes/a5_rooms/a5_r21.tscn) |
+| A5-R22 | hidden_anomaly | 1×1 屏 | 找到地图外侧的隐秘观察室与终局相关异象 | [打开场景](../../scenes/a5_rooms/a5_r22.tscn) |
+
+## 静态检查
+
+在仓库根目录运行：
+
+```bash
+python3 tools/validate_a5_room_scenes.py
+```
+
+该检查验证场景清单、房间 ID、尺寸与共享运行脚本引用，不代替 Godot 的运行时验收。
+
+## 建议验收顺序
+
+1. R01：出生位置、地面与基础跳跃。
+2. R05、R06、R13、R16、R17：高差、垂直镜头、上升/下降路线。
+3. R02、R03、R04、R08、R10、R11、R12、R15、R18、R20、R21：长横向路线、平台间距与分支。
+4. R07、R09、R14、R19、R22：小房间落脚空间与探索支路。
+
