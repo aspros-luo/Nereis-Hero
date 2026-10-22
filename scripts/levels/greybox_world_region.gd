@@ -2403,9 +2403,9 @@ func _spawn_region_exits() -> void:
 				)
 				if WorldState.is_hidden_path_opened("H02"):
 					_spawn_exit_door(
-					14.0 * 1280.0 + 1080.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
-					"res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
-					true, "opened_old_bell_tower_connection", "E  进入倒响钟室", -3.0 * 720.0 + 620.0
+						14.0 * 1280.0 + 1080.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
+						"res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
+						true, "opened_old_bell_tower_connection", "E  进入倒响钟室", -3.0 * 720.0 + 620.0
 					)
 				_spawn_exit_door(
 					17.0 * 1280.0 + 980.0, "E  打开旧朝圣高路", "ash_forest",
