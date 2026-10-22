@@ -56,6 +56,7 @@ var a5_room_floor_segments: Array[Vector2] = []
 var debug_exit_markers: Array[Dictionary] = []
 var respawning := false
 var a6_bell_shortcut_spawned := false
+var a5_assembled_rooms: Dictionary = {}
 
 func _ready() -> void:
 	if assembly_child_mode:
@@ -974,6 +975,7 @@ func _ready_a5_assembled_region() -> void:
 		return
 	var rooms: Array = parsed.get("rooms", [])
 	var room_by_id: Dictionary = {}
+	a5_assembled_rooms.clear()
 	var max_right := 0.0
 	var min_top := 0.0
 	var max_bottom := 0.0
@@ -1018,6 +1020,7 @@ func _ready_a5_assembled_region() -> void:
 			var placed_room := room_value as Node2D
 			if placed_room != null:
 				placed_room.position.y += vertical_offset
+	a5_assembled_rooms = room_by_id
 	map_width = max_right
 	room_height = max_bottom - min_top
 	floor_y = max_bottom - min_top - 180.0
@@ -1869,6 +1872,7 @@ func _spawn_region_rest_point() -> void:
 	# Main regions receive one deliberate rest point; hidden regions remain riskier and have no free checkpoint.
 	# 主区域各有一处有意布置的休整点；隐藏区域不提供免费的安全检查点。
 	var rest_x := -1.0
+	var rest_y := floor_y
 	var rest_name := "歇脚圣龛"
 	match region_id:
 		"A2":
@@ -1881,7 +1885,13 @@ func _spawn_region_rest_point() -> void:
 			rest_x = 2050.0
 			rest_name = "水库祭坛"
 		"A5":
-			rest_x = 3000.0
+			if use_a5_room_assembly:
+				var hub := _get_a5_assembled_room("A5-R12")
+				if hub != null:
+					rest_x = hub.position.x + 1100.0
+					rest_y = hub.position.y + float(hub.get("floor_y"))
+			else:
+				rest_x = 3000.0
 			rest_name = "战场纪念碑"
 		"A6":
 			rest_x = 1300.0
@@ -1910,7 +1920,7 @@ func _spawn_region_rest_point() -> void:
 	var rest := Node2D.new()
 	rest.set_script(REST_POINT_SCRIPT)
 	rest.name = "RegionRestPoint_%s" % region_id
-	rest.position = Vector2(rest_x, floor_y)
+	rest.position = Vector2(rest_x, rest_y)
 	rest.rest_id = "rest_%s" % region_id
 	rest.display_name = rest_name
 	add_child(rest)
@@ -1958,8 +1968,13 @@ func _spawn_region_sources() -> void:
 			)
 
 		"A5":
+			var source_position := Vector2(1100.0, floor_y - 18.0)
+			if use_a5_room_assembly:
+				var clue_room := _get_a5_assembled_room("A5-R03")
+				if clue_room != null:
+					source_position = clue_room.position + Vector2(1100.0, float(clue_room.get("floor_y")) - 18.0)
 			_spawn_source(
-				Vector2(1100, floor_y - 18.0),
+				source_position,
 				"anomaly_battlefield_late_orders",
 				"迟于死者抵达的命令",
 				"战场报告的日期比战役晚了三天。\n\n尸体早已被摆成面向堡垒的姿势，仿佛有人专为目击者修整过现场。\n\n最后一行命令幸存者将这场屠杀称为信仰的奇迹。",
@@ -2265,6 +2280,15 @@ func _refresh_a6_bell_shortcut() -> void:
 	a6_bell_shortcut_spawned = true
 
 
+func _get_a5_assembled_room(room_key: String) -> Node2D:
+	if not use_a5_room_assembly:
+		return null
+	var room := a5_assembled_rooms.get(room_key) as Node2D
+	if room != null and is_instance_valid(room):
+		return room
+	return get_node_or_null(room_key.replace("-", "_")) as Node2D
+
+
 func _spawn_region_exits() -> void:
 	match region_id:
 		"A2":
@@ -2400,29 +2424,37 @@ func _spawn_region_exits() -> void:
 
 		"A5":
 			if use_a5_room_assembly:
-				# These anchors are derived from the room placement contract, not the legacy 5.6k-wide strip.
-				# 出口坐标根据合同中的房间屏幕位置计算，不再沿用旧的 5600px 直线地图坐标。
-				_spawn_exit_door(
-					180.0, "E  沿残墙高路返回被遗忘的城区", "forgotten_city",
-					"res://scenes/forgotten_city.tscn", "city_highroad_return",
-					true, "", "", 720.0 + 410.0
-				)
-				_spawn_exit_door(
-					18.0 * 1280.0 + 1100.0, "E  沿残墙高路进入修道院", "monastery_tower",
-					"res://scenes/monastery_tower.tscn", "battlefield_entry", true, "", "", -720.0 + 630.0
-				)
-				if WorldState.is_hidden_path_opened("H02"):
+				# Bind cross-region doors to the actual room origins after the assembly grid is normalized.
+				# 出口必须基于归一化后的真实房间原点计算，不能混用旧地图的绝对 Y。
+				var entry_room := _get_a5_assembled_room("A5-R01")
+				if entry_room != null:
 					_spawn_exit_door(
-						14.0 * 1280.0 + 1080.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
-						"res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
-						true, "opened_old_bell_tower_connection", "E  进入倒响钟室", -3.0 * 720.0 + 620.0
+						entry_room.position.x + 180.0, "E  沿残墙高路返回被遗忘的城区", "forgotten_city",
+						"res://scenes/forgotten_city.tscn", "city_highroad_return",
+						true, "", "", entry_room.position.y + 410.0
 					)
-				_spawn_exit_door(
-					17.0 * 1280.0 + 980.0, "E  打开旧朝圣高路", "ash_forest",
-					"res://scenes/ash_forest.tscn", "old_pilgrim_highroad",
-					true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",
-					-2.0 * 720.0 + 1080.0
-				)
+				var exit_room := _get_a5_assembled_room("A5-R20")
+				if exit_room != null:
+					_spawn_exit_door(
+						exit_room.position.x + 1200.0, "E  沿残墙高路进入修道院", "monastery_tower",
+						"res://scenes/monastery_tower.tscn", "battlefield_entry", true, "", "", exit_room.position.y + 410.0
+					)
+				if WorldState.is_hidden_path_opened("H02"):
+					var hidden_room := _get_a5_assembled_room("A5-R14")
+					if hidden_room != null:
+						_spawn_exit_door(
+							hidden_room.position.x + 1080.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
+							"res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
+							true, "opened_old_bell_tower_connection", "E  进入倒响钟室", hidden_room.position.y + 620.0
+						)
+				var winch_room := _get_a5_assembled_room("A5-R16")
+				if winch_room != null:
+					_spawn_exit_door(
+						winch_room.position.x + 980.0, "E  打开旧朝圣高路", "ash_forest",
+						"res://scenes/ash_forest.tscn", "old_pilgrim_highroad",
+						true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",
+						winch_room.position.y + 610.0
+					)
 			else:
 				_spawn_exit_door(
 					180.0, "E  沿残墙高路返回被遗忘的城区", "forgotten_city",
