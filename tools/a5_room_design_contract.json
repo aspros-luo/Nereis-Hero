@@ -132,13 +132,13 @@
       ],
       "subregion": "A5-S04",
       "role": "platform",
-      "play_hook": "攀登信号塔残架，俯瞰地面路线",
+      "play_hook": "交替经过外侧塔架和内侧落脚台；每隔数层设置观察停顿",
       "scene_path": "res://scenes/a5_rooms/a5_r05.tscn",
       "terrain_geometry": {
         "platform_count": 15,
         "solid_rubble_count": 3,
         "floor_gap_count": 0,
-        "layout_note": "15级信号塔阶梯，75px左右步幅"
+        "layout_note": "塔外攀升、宽阔观察台与内侧折返段"
       }
     },
     {
@@ -149,13 +149,13 @@
       ],
       "subregion": "A5-S01",
       "role": "descent",
-      "play_hook": "沿塌陷坡道下降，寻找回到战壕的安全落点",
+      "play_hook": "沿塌陷结构下降，选择可控落点并在末段重新找到战壕方向",
       "scene_path": "res://scenes/a5_rooms/a5_r06.tscn",
       "terrain_geometry": {
         "platform_count": 15,
         "solid_rubble_count": 3,
         "floor_gap_count": 0,
-        "layout_note": "塌陷坡道倒序平台；从上端出生验收下降"
+        "layout_note": "宽窄落点交替、横向回摆与末段缓冲平台"
       }
     },
     {
@@ -166,13 +166,13 @@
       ],
       "subregion": "A5-S01",
       "role": "rest",
-      "play_hook": "废弃战地医疗所提供休整与战报线索",
+      "play_hook": "以休整和调查为主，跳跃平台仅用于空间分隔而非强制挑战",
       "scene_path": "res://scenes/a5_rooms/a5_r07.tscn",
       "terrain_geometry": {
         "platform_count": 5,
         "solid_rubble_count": 3,
         "floor_gap_count": 0,
-        "layout_note": "医疗所低矮碎石、短平台与安全落脚区"
+        "layout_note": "宽阔安全地面、低矮调查台与侧边医疗床位"
       }
     },
     {
@@ -200,13 +200,13 @@
       ],
       "subregion": "A5-S01",
       "role": "optional_cache",
-      "play_hook": "从战壕侧面进入埋藏军需库寻找可选材料",
+      "play_hook": "发现入口后绕过中央高台取物，再从另一侧返回入口",
       "scene_path": "res://scenes/a5_rooms/a5_r09.tscn",
       "terrain_geometry": {
         "platform_count": 5,
         "solid_rubble_count": 2,
         "floor_gap_count": 1,
-        "layout_note": "侧向藏库、短裂缝与紧凑探索台"
+        "layout_note": "低入口、中央高位藏物台与侧向返回落点"
       }
     },
     {
@@ -285,13 +285,13 @@
       ],
       "subregion": "A5-S04",
       "role": "hidden_lore",
-      "play_hook": "发现被抹去的指挥记录，揭示战报矛盾",
+      "play_hook": "让玩家停留阅读并比较环境线索，避免把密室做成普通跳台",
       "scene_path": "res://scenes/a5_rooms/a5_r14.tscn",
       "terrain_geometry": {
         "platform_count": 5,
         "solid_rubble_count": 3,
         "floor_gap_count": 0,
-        "layout_note": "密室短阶、靠墙调查空间与低矮残骸"
+        "layout_note": "宽阔静止调查区、墙边记录台与短侧向高台"
       }
     },
     {
@@ -370,13 +370,13 @@
       ],
       "subregion": "A5-S01",
       "role": "loop_return",
-      "play_hook": "从地下回接战壕，打开后改变回程路线",
+      "play_hook": "从地下侧接近远端开启点，再落回熟悉的战壕路线",
       "scene_path": "res://scenes/a5_rooms/a5_r19.tscn",
       "terrain_geometry": {
         "platform_count": 5,
         "solid_rubble_count": 2,
         "floor_gap_count": 1,
-        "layout_note": "小裂缝、回环平台与短距离落差"
+        "layout_note": "回连门两侧落脚台与中央裂隙绕行"
       }
     },
     {
@@ -421,13 +421,13 @@
       ],
       "subregion": "A5-S04",
       "role": "hidden_anomaly",
-      "play_hook": "找到地图外侧的隐秘观察室与终局相关异象",
+      "play_hook": "隐藏空间以观察与远景为主，平台只帮助调整视线和位置",
       "scene_path": "res://scenes/a5_rooms/a5_r22.tscn",
       "terrain_geometry": {
         "platform_count": 5,
         "solid_rubble_count": 2,
         "floor_gap_count": 1,
-        "layout_note": "隐秘观察室短台、浅裂缝与紧凑隐藏空间"
+        "layout_note": "安静观察台、中央高点与边缘远景平台"
       }
     }
   ],
@@ -732,7 +732,7 @@
     "expected_platform_count": 240,
     "expected_solid_block_count": 70,
     "expected_floor_gap_count": 16,
-    "static_geometry_review": "room differentiation pass 1: R02/R03/R04/R08/R11/R15/R18 now have distinct platform silhouettes; static and runtime acceptance must be rerun",
+    "static_geometry_review": "room differentiation pass 2: horizontal and small-room layouts differentiated; static and runtime acceptance must be rerun",
     "godot_runtime_test": "not_run"
   }
 }
