@@ -186,7 +186,7 @@ func _spawn_item_pickups() -> void:
 
 	var record := Node2D.new()
 	record.set_script(pickup_script)
-	record.position = Vector2(810, 393)
+	record.position = Vector2(880, 393)
 	record.pickup_id = "a0_surgery_record_pickup"
 	record.item_id = "surgery_record_fragment"
 	record.amount = 1
@@ -500,9 +500,9 @@ func _draw_editor_layout_overlay() -> void:
 	draw_circle(Vector2(320.0, 482.0), 100.0, Color("#a7f3d0", 0.42), false, 2.0)
 	draw_string(ThemeDB.fallback_font, Vector2(325.0, 470.0), "绷带 (320, 482) / 半径100；置于手术台上", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#a7f3d0"))
 
-	draw_circle(Vector2(810.0, 393.0), 5.0, Color("#a7f3d0"))
+	draw_circle(Vector2(880.0, 393.0), 5.0, Color("#a7f3d0"))
 	draw_circle(Vector2(810.0, 393.0), 100.0, Color("#a7f3d0", 0.42), false, 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(815.0, 381.0), "手术记录 (810, 393) / 半径100；置于维护平台", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#a7f3d0"))
+	draw_string(ThemeDB.fallback_font, Vector2(815.0, 381.0), "手术记录 (880, 393) / 半径100；置于维护平台", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#a7f3d0"))
 
 	# Exit trigger area: center (2040, 470), 110 x 140.
 	draw_rect(Rect2(1985.0, 400.0, 110.0, 140.0), Color("#ff9f43", 0.12), true)
