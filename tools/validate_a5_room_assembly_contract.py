@@ -59,6 +59,8 @@ def main():
             "a5_room_assembly_contract.json",
             "assembly_child_mode",
             "_spawn_a5_internal_connections",
+            "_a5_connection_anchor",
+            'source_room.get("platforms")',
             "_spawn_a5_internal_door",
             "_create_a5_door_arch",
             "_refresh_a5_internal_connection_visuals",
