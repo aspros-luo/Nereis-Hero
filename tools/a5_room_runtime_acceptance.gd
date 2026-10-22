@@ -365,7 +365,7 @@ func _test_assembled_region(connections: Array) -> void:
 		"endpoints using the wrong auto/interact mode=%d" % wrong_transition_modes)
 
 	var visual_data_variant: Variant = instance.get("a5_internal_connection_visuals")
-	var visual_count := visual_data_variant.size() if visual_data_variant is Array else -1
+	var visual_count: int = visual_data_variant.size() if visual_data_variant is Array else -1
 	var hidden_state_mismatches := 0
 	if visual_data_variant is Array:
 		for visual_variant in visual_data_variant:
