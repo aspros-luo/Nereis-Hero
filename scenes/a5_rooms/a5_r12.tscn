@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+
+[node name="A5Room_R12" type="Node2D"]
+script = ExtResource("1")
+region_id = "A5"
+location_id = "a5_room_test_a5_r12"
+region_title = "hub_rest - 中央指挥庭院作为区域地标、休息与路线分流点"
+map_width = 2560.0
+floor_y = 540.0
+room_height = 720.0
+room_id = "A5-R12"
