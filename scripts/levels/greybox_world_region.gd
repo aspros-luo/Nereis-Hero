@@ -1132,15 +1132,15 @@ func _a5_connection_anchor(
 			var side_distance := 0.0
 			match side:
 				"right":
-				side_distance = source_width - platform.end.x
+					side_distance = source_width - platform.end.x
 				"left":
-				side_distance = platform.position.x
+					side_distance = platform.position.x
 				_:
-				side_distance = absf(platform.get_center().x - source_width * 0.5)
-		var score := absf(platform.position.y - desired_local_y) + side_distance * 0.3
-		if score < best_score:
-			best_score = score
-			best_platform = platform
+					side_distance = absf(platform.get_center().x - source_width * 0.5)
+			var score := absf(platform.position.y - desired_local_y) + side_distance * 0.3
+			if score < best_score:
+				best_score = score
+				best_platform = platform
 
 	var anchor_x := source_width * 0.5
 	var anchor_y := source_floor - 36.0
@@ -1157,8 +1157,8 @@ func _a5_connection_anchor(
 				if slot > 0:
 					var offset := float((slot + 1) / 2) * 150.0
 					anchor_x += offset if slot % 2 == 1 else -offset
-			anchor_x = clampf(anchor_x, left_limit, right_limit)
-			anchor_y = best_platform.position.y - 36.0
+		anchor_x = clampf(anchor_x, left_limit, right_limit)
+		anchor_y = best_platform.position.y - 36.0
 	else:
 		if side == "right":
 			anchor_x = source_width - 120.0 - float(slot) * 150.0
