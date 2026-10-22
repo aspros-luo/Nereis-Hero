@@ -1139,6 +1139,7 @@ func _spawn_a5_internal_door(
 	door.set_meta("a5_internal_connection_door", true)
 	door.set_meta("a5_connection_id", edge_id)
 	door.set_meta("a5_connection_kind", kind)
+	door.set_meta("a5_transition_mode", "interact" if requires_interaction else "auto")
 	door.set_meta("a5_from_room", from_id)
 	door.set_meta("a5_to_room", to_id)
 	door.set_meta("a5_reverse_endpoint", reverse_endpoint)
@@ -1204,19 +1205,11 @@ func _on_a5_internal_door_interacted(
 			return
 		WorldState.open_hidden_path(edge_id)
 		if is_instance_valid(door):
-			door.prompt_text = "E  通路已开启，继续前进"
+			if edge_id == "A5-RESONANCE-01":
+				door.prompt_text = "E  进入已显现的残响通路"
+			else:
+				door.prompt_text = "E  通路已开启，继续前进"
 		print("[NEREIS][A5_CONNECTION][OPEN] id=%s from=%s to=%s" % [edge_id, from_id, to_id])
-		return
-
-	# A resonance crossing is a persistent optional route, not a forced main-route gate.
-	if edge_id == "A5-RESONANCE-01" and not WorldState.is_hidden_path_opened(edge_id):
-		if not _a5_internal_connection_requirement_met(edge_id, kind, unlock_condition):
-			if is_instance_valid(door):
-				door.prompt_text = "需要灵视与 24 点共鸣"
-			return
-		WorldState.open_hidden_path(edge_id)
-		if is_instance_valid(door):
-			door.prompt_text = "E  进入已显现的残响通路"
 		return
 
 	_traverse_a5_connection(edge, from_id, to_id, destination_anchor)
