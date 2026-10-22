@@ -60,6 +60,8 @@ def main():
             "assembly_child_mode",
             "_spawn_a5_internal_connections",
             "_spawn_a5_internal_door",
+            "_create_a5_door_arch",
+            "_refresh_a5_internal_connection_visuals",
             "_on_a5_internal_door_interacted",
             "_on_a5_internal_auto_transition_body_entered",
             "_a5_internal_connection_requirement_met",
