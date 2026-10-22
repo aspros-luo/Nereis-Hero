@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1320" viewBox="0 0 2200 1320">
+<defs>
+ <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#9aa5af" stroke-width="1" opacity=".24"/></pattern>
+ <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#111827" flood-opacity=".14"/></filter>
+ <style>text{font-family:"Noto Sans CJK SC","Microsoft YaHei",sans-serif}.h{font-size:28px;font-weight:700;fill:#24313d}.t{font-size:19px;font-weight:700;fill:#24313d}.s{font-size:15px;fill:#4c5b68}.note{font-size:14px;fill:#5d6872}</style>
+</defs>
+<rect width="2200" height="1320" fill="#f5f3ed"/><rect width="2200" height="1320" fill="url(#grid)"/>
+<text x="56" y="56" class="h">NEREIS-HERO · A1 边境村庄｜内部地形图 v0.2</text>
+<text x="58" y="88" class="s">俯视布局草图用于表达 2D 横版平台地图的相对位置；实际游戏视角仍为侧视。地面、屋顶、井道和排水层必须在侧视剖面中形成可验证的连续地形。</text>
+<!-- area bands -->
+<rect x="48" y="124" width="2104" height="820" rx="18" fill="#e8e6df" stroke="#c6c8c6"/>
+<text x="72" y="158" class="t">地形布局（上北 / 右东；路径位置为相对关系，不代表最终 Tile 坐标）</text>
+<!-- main street continuous path -->
+<path d="M120 535 H350 H620 H890 H1160 H1430 H1700" fill="none" stroke="#456e9a" stroke-width="18" stroke-linecap="round" opacity=".25"/>
+<path d="M120 535 H350 H620 H890 H1160 H1430 H1700" fill="none" stroke="#456e9a" stroke-width="6" stroke-linecap="round"/>
+<!-- roof path split segments -->
+<path d="M330 365 H520 M590 330 H760 M830 365 H1030 M1100 335 H1290 M1370 365 H1540" fill="none" stroke="#438d78" stroke-width="11" stroke-linecap="round"/>
+<path d="M330 365 H520 M590 330 H760 M830 365 H1030 M1100 335 H1290 M1370 365 H1540" fill="none" stroke="#f5f3ed" stroke-width="2" stroke-dasharray="7 9"/>
+<!-- vertical links -->
+<g fill="none" stroke="#438d78" stroke-width="5" stroke-dasharray="8 7">
+<path d="M420 365 V480"/><path d="M700 330 V480"/><path d="M970 365 V480"/><path d="M1210 335 V480"/><path d="M1480 365 V480"/>
+</g>
+<!-- buildings spaced along main street -->
+<g filter="url(#shadow)">
+ <g><rect x="260" y="438" width="145" height="78" rx="5" fill="#d8c8ae" stroke="#8b765b" stroke-width="2"/><path d="M248 440 L332 390 L417 440Z" fill="#9b5c4c" stroke="#74463d" stroke-width="2"/><rect x="318" y="468" width="28" height="48" fill="#785e4a"/><text x="274" y="532" class="s">西侧民居</text></g>
+ <g><rect x="510" y="452" width="120" height="64" rx="4" fill="#d8c8ae" stroke="#8b765b" stroke-width="2"/><path d="M500 452 L570 410 L640 452Z" fill="#9b5c4c" stroke="#74463d" stroke-width="2"/><text x="516" y="532" class="s">杂货屋外墙</text></g>
+ <g><rect x="770" y="440" width="150" height="76" rx="5" fill="#d8c8ae" stroke="#8b765b" stroke-width="2"/><path d="M758 440 L845 388 L932 440Z" fill="#9b5c4c" stroke="#74463d" stroke-width="2"/><rect x="830" y="470" width="28" height="46" fill="#785e4a"/><text x="784" y="532" class="s">分散民居</text></g>
+ <g><rect x="1030" y="451" width="140" height="65" rx="4" fill="#d8c8ae" stroke="#8b765b" stroke-width="2"/><path d="M1020 451 L1100 405 L1180 451Z" fill="#9b5c4c" stroke="#74463d" stroke-width="2"/><text x="1040" y="532" class="s">工棚 / 后门</text></g>
+ <g><rect x="1320" y="438" width="150" height="78" rx="5" fill="#d8c8ae" stroke="#8b765b" stroke-width="2"/><path d="M1308 438 L1395 388 L1482 438Z" fill="#9b5c4c" stroke="#74463d" stroke-width="2"/><text x="1334" y="532" class="s">东侧住屋</text></g>
+</g>
+<!-- entry / exit -->
+<rect x="80" y="480" width="135" height="110" rx="10" fill="#e4eaf0" stroke="#456e9a" stroke-width="2.5"/><text x="98" y="513" class="t">C01</text><text x="98" y="540" class="s">A0 西入口</text><text x="98" y="562" class="s">安全落脚地</text>
+<rect x="1680" y="470" width="180" height="130" rx="10" fill="#e4eaf0" stroke="#456e9a" stroke-width="2.5"/><text x="1700" y="505" class="t">C02 / A2</text><text x="1700" y="533" class="s">北门出口</text><text x="1700" y="557" class="s">防卫后开放</text><text x="1700" y="581" class="s">双向回访</text>
+<!-- back alley branch -->
+<path d="M620 535 V680 H850 M850 680 H1050" fill="none" stroke="#607b90" stroke-width="6" stroke-linecap="round"/>
+<rect x="650" y="625" width="410" height="125" rx="12" fill="#e4eaf0" stroke="#607b90" stroke-width="2.5"/>
+<text x="675" y="658" class="t">A1-S02 民居后巷</text><text x="675" y="687" class="s">由主街偏入、可原路返回；NPC/可交互点沿支路分散</text><text x="675" y="713" class="s">后巷有矮墙与台阶，不作为第二条平行主街</text>
+<!-- well and vertical shaft -->
+<path d="M1160 535 V680" fill="none" stroke="#9a7046" stroke-width="7"/>
+<rect x="1090" y="630" width="250" height="120" rx="12" fill="#f4e8d5" stroke="#9a7046" stroke-width="2.5"/>
+<text x="1110" y="662" class="t">A1-S04 老井平台</text><text x="1110" y="689" class="s">稳定地面 / 安全交互点</text><text x="1110" y="716" class="s">C06 回村落点在平台边缘</text>
+<ellipse cx="1215" cy="780" rx="46" ry="19" fill="#7c8b91" stroke="#5c686e" stroke-width="3"/><path d="M1169 780 V865 Q1215 891 1261 865 V780" fill="#b7c0c2" stroke="#5c686e" stroke-width="3"/><ellipse cx="1215" cy="780" rx="30" ry="11" fill="#35454e"/><path d="M1190 802 V854 M1240 802 V854" stroke="#e5d7b8" stroke-width="3" stroke-dasharray="7 7"/>
+<text x="1280" y="796" class="t">井道（垂直空间）</text><text x="1280" y="824" class="s">可见下探目标；井口与 C06 出生点分离</text><text x="1280" y="849" class="s">H01 入口是井底侧壁的隐蔽缺口</text>
+<!-- drain low route -->
+<path d="M1450 535 V670 H1640 V770 H1850" fill="none" stroke="#9a7046" stroke-width="7" stroke-linecap="round"/>
+<rect x="1480" y="630" width="350" height="120" rx="12" fill="#e8e1d6" stroke="#9a7046" stroke-width="2.5"/>
+<text x="1500" y="662" class="t">C24 旧排水低位支路</text><text x="1500" y="690" class="s">初期短段 / 低矮通道 / 尽头探索</text><text x="1500" y="718" class="s">A4 侧打开后才形成通往 A3 的连接</text>
+<rect x="1820" y="765" width="270" height="100" rx="10" fill="#f2e6d7" stroke="#9a7046" stroke-width="2.5" stroke-dasharray="8 6"/>
+<text x="1840" y="800" class="t">后期回连接口</text><text x="1840" y="828" class="s">只表示 C24 合同端点</text><text x="1840" y="850" class="s">不是初始可通出口</text>
+<!-- hidden chamber -->
+<path d="M1215 880 V920 H1060" fill="none" stroke="#8d5ca1" stroke-width="5" stroke-dasharray="8 7"/>
+<rect x="730" y="820" width="330" height="100" rx="12" fill="#eee2f0" stroke="#8d5ca1" stroke-width="2.5" stroke-dasharray="8 5"/>
+<text x="752" y="854" class="t">H01 / A1-S05 井底回声层</text><text x="752" y="882" class="s">隐藏侧洞；门槛：共振视界有效且神识共鸣 ≥ 12</text><text x="752" y="905" class="s">进入后可返回 A1，不是单向软锁</text>
+<!-- legend -->
+<rect x="48" y="970" width="2104" height="295" rx="16" fill="#fff" stroke="#c6cbd0"/>
+<text x="72" y="1010" class="t">本轮细化后的关卡原则</text>
+<g class="s">
+<text x="78" y="1050">1. 主街是唯一清晰的初始导航轴；地面连续可走，不靠子区传送门切割。</text>
+<text x="78" y="1082">2. 屋顶分成多个可跳跃段，屋顶间存在空隙与高度差；从地面可见但不强制进入。</text>
+<text x="78" y="1114">3. 民居沿主街分散，后巷是偏离主路后可回返的探索支线，避免建筑和 NPC 聚成一团。</text>
+<text x="78" y="1146">4. 井口、C06 落点、H01 侧洞入口各自独立；C06 不把玩家送入井道、隐藏门或危险边缘。</text>
+<text x="78" y="1178">5. C24 与屋顶路线分离，初始低位段可以探索但不能提前进入 A3；后续解锁由现有连接状态控制。</text>
+<text x="78" y="1210">6. 这是相对布局图。下一步须转成侧视剖面/平台标高图，再确定像素坐标、碰撞体、跳跃跨度和镜头边界。</text>
+</g>
+<text x="72" y="1245" class="note">状态：layout_refinement_draft；尚未实现为 Godot 地形，也未进行运行时可达性验收。</text>
+</svg>
