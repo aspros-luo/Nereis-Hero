@@ -12,6 +12,16 @@ const SURGERY_FOREGROUND_PROPS = preload("res://assets/art/backdrops/surgery_for
 
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 2200.0
+# One source of truth for the optional surgery catwalk: collision and visible platforms must match.
+# 手术室可选高路只维护一份几何合同，物理碰撞与绘制必须使用同一组矩形。
+const SURGICAL_CATWALK_RECTS := [
+\tRect2(360.0, FLOOR_Y - 80.0, 120.0, 16.0),
+\tRect2(520.0, FLOOR_Y - 110.0, 120.0, 16.0),
+\tRect2(680.0, FLOOR_Y - 140.0, 120.0, 16.0),
+\tRect2(840.0, FLOOR_Y - 140.0, 120.0, 16.0),
+\tRect2(1000.0, FLOOR_Y - 110.0, 120.0, 16.0),
+\tRect2(1160.0, FLOOR_Y - 80.0, 120.0, 16.0),
+]
 # A0 opening route stays on the floor. Do not create the old graybox maintenance ledges:
 # their collision surfaces visually blended into background seams and obstructed jumping.
 
@@ -300,16 +310,9 @@ func _create_floor() -> void:
 
 
 func _create_prologue_traversal_route() -> void:
-	# A short optional catwalk teaches jump-through ledges and returns to the ground before the mandatory ambush.
-	# 一条短的可选高架路线用于教学单向平台跳跃，并在必经伏击前回到地面。
-	var route := [
-		Rect2(500.0, FLOOR_Y - 80.0, 110.0, 16.0),
-		Rect2(630.0, FLOOR_Y - 120.0, 110.0, 16.0),
-		Rect2(760.0, FLOOR_Y - 155.0, 120.0, 16.0),
-		Rect2(900.0, FLOOR_Y - 120.0, 110.0, 16.0),
-		Rect2(1030.0, FLOOR_Y - 80.0, 110.0, 16.0),
-	]
-	for platform_rect in route:
+	# Optional six-segment catwalk: 120 px per segment, 40 px gaps, and no more than 30 px per step.
+	# 六段可选高路：每段 120 px、间隙 40 px、相邻高差不超过 30 px。
+	for platform_rect in SURGICAL_CATWALK_RECTS:
 		var body := StaticBody2D.new()
 		body.name = "PrologueTraversalPlatform"
 		body.position = platform_rect.position
@@ -390,15 +393,12 @@ func _draw() -> void:
 	draw_texture_rect(SURGERY_FOREGROUND_PROPS, Rect2(0, 0, LEVEL_WIDTH, 720), false)
 	# Collision-backed tutorial ledges are also drawn so the optional route reads clearly.
 	# 将具有真实碰撞的教学平台同步绘制出来，让可选路线清晰可读。
-	for ledge in [
-		Rect2(500.0, FLOOR_Y - 80.0, 110.0, 16.0),
-		Rect2(630.0, FLOOR_Y - 120.0, 110.0, 16.0),
-		Rect2(760.0, FLOOR_Y - 155.0, 120.0, 16.0),
-		Rect2(900.0, FLOOR_Y - 120.0, 110.0, 16.0),
-		Rect2(1030.0, FLOOR_Y - 80.0, 110.0, 16.0),
-	]:
+	for ledge in SURGICAL_CATWALK_RECTS:
 		draw_rect(ledge, Color("#40323d"))
-		draw_line(ledge.position, Vector2(ledge.end.x, ledge.position.y), Color("#947984"), 2.0)
+		draw_rect(Rect2(ledge.position.x, ledge.position.y, ledge.size.x, 3.0), Color("#947984"))
+		# Broken edge marks keep the route readable without drawing a false continuous ramp.
+		for seam_x in [ledge.position.x + 28.0, ledge.position.x + 76.0, ledge.position.x + 104.0]:
+			draw_line(Vector2(seam_x, ledge.position.y + 4.0), Vector2(seam_x - 5.0, ledge.position.y + 12.0), Color("#241f29"), 1.5)
 
 	# Cold surgical shafts and suspended cables establish depth before the room's props are drawn.
 	# 冷色手术灯柱与悬垂线缆先建立空间纵深，再绘制房间内的物件。
