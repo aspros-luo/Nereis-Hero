@@ -217,22 +217,29 @@ func _edge_entry_id(edge: Dictionary, room_id: String) -> StringName:
 	var other: Dictionary = room_contract_by_id.get(other_id, {})
 	var here_pos: Array = here.get("position_screens", [0, 0])
 	var other_pos: Array = other.get("position_screens", [0, 0])
-	var dx := int(other_pos[0]) - int(here_pos[0])
-	var dy := int(other_pos[1]) - int(here_pos[1])
-	if absi(dx) >= absi(dy):
-		return &"east" if dx >= 0 else &"west"
-	return &"south" if dy >= 0 else &"north"
+	var here_size: Array = here.get("size_screens", [1, 1])
+	var other_size: Array = other.get("size_screens", [1, 1])
+	# Compare room centers, not top-left origins: tall/wide rooms otherwise choose the wrong exit side.
+	var here_center := Vector2(float(here_pos[0]) + float(here_size[0]) * 0.5, float(here_pos[1]) + float(here_size[1]) * 0.5)
+	var other_center := Vector2(float(other_pos[0]) + float(other_size[0]) * 0.5, float(other_pos[1]) + float(other_size[1]) * 0.5)
+	var delta := other_center - here_center
+	if absf(delta.x) >= absf(delta.y):
+		return &"east" if delta.x >= 0.0 else &"west"
+	return &"south" if delta.y >= 0.0 else &"north"
 
 func _target_entry_id(edge: Dictionary, room_id: String) -> StringName:
 	var here: Dictionary = room_contract_by_id.get(room_id, {})
 	var other: Dictionary = room_contract_by_id.get(str(edge.get("to", "")), {})
 	var here_pos: Array = here.get("position_screens", [0, 0])
 	var other_pos: Array = other.get("position_screens", [0, 0])
-	var dx := int(other_pos[0]) - int(here_pos[0])
-	var dy := int(other_pos[1]) - int(here_pos[1])
-	if absi(dx) >= absi(dy):
-		return &"west" if dx >= 0 else &"east"
-	return &"north" if dy >= 0 else &"south"
+	var here_size: Array = here.get("size_screens", [1, 1])
+	var other_size: Array = other.get("size_screens", [1, 1])
+	var here_center := Vector2(float(here_pos[0]) + float(here_size[0]) * 0.5, float(here_pos[1]) + float(here_size[1]) * 0.5)
+	var other_center := Vector2(float(other_pos[0]) + float(other_size[0]) * 0.5, float(other_pos[1]) + float(other_size[1]) * 0.5)
+	var delta := other_center - here_center
+	if absf(delta.x) >= absf(delta.y):
+		return &"west" if delta.x >= 0.0 else &"east"
+	return &"north" if delta.y >= 0.0 else &"south"
 
 func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> void:
 	# Remove old trigger Areas synchronously before creating replacements; queue_free() leaves
