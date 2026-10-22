@@ -510,8 +510,12 @@ func _test_assembled_region(connections: Array) -> void:
 	var hub := instance.get_node_or_null("A5_R12") as Node2D
 	var rest_ok := rest != null and hub != null
 	if rest_ok:
-		rest_ok = rest.position.x >= hub.position.x and rest.position.x <= hub.position.x + float(hub.get("map_width"))
-			and rest.position.y >= hub.position.y and rest.position.y <= hub.position.y + float(hub.get("room_height"))
+		rest_ok = (
+			rest.position.x >= hub.position.x
+			and rest.position.x <= hub.position.x + float(hub.get("map_width"))
+			and rest.position.y >= hub.position.y
+			and rest.position.y <= hub.position.y + float(hub.get("room_height"))
+		)
 	_record(rest_ok, "ASSEMBLY/REST_POINT_IN_HUB", "rest point is inside R12=%s" % str(rest_ok))
 
 	print("[A5_ASSEMBLY_RUNTIME] rooms=%d negative_tops=%d map=%.0fx%.0f" % [
