@@ -55,6 +55,7 @@ def main():
         for token in (
             "_ready_a5_assembled_region",
             "_ready_a5_assembly_child",
+            "_a5_assembled_spawn_for_side",
             "a5_room_assembly_contract.json",
             "assembly_child_mode",
             "_spawn_a5_internal_connections",
