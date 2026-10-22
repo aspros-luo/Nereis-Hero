@@ -60,8 +60,12 @@ def main():
             "_spawn_a5_internal_connections",
             "_spawn_a5_internal_door",
             "_on_a5_internal_door_interacted",
+            "_on_a5_internal_auto_transition_body_entered",
             "_a5_internal_connection_requirement_met",
             "a5_internal_connection_door",
+            "a5_transition_mode",
+            "door.body_entered.connect",
+            "door.interacted.connect",
         ):
             if token not in source:
                 errors.append(f"runtime assembly wiring missing token: {token}")
