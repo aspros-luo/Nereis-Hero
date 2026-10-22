@@ -99,12 +99,12 @@
 - 已同步更新 `tools/a5_room_design_contract.json` 的房间设计说明及 `scenes/a5_rooms/README.md` 的验收重点。
 - 已增强 `tools/validate_a5_room_scenes.py`：新增平台布局完全重复检测，避免不同房间误用完全相同的平台坐标/宽度模板。
 - 源码级预检查重新计算 Hero 的跳跃包络：22/22 房间的全部平台均在边界内，且弹道近似图中所有平台可达；平台数量仍与设计契约一致。该结果不是 Godot 运行时测试。
-- 尚未在当前会话中运行本地 Python 验证器、Godot smoke test 或人工试玩，因此不标记为完整验收通过。
+- 用户已在本地运行 Godot 运行时验收并反馈：`A5 ROOM RUNTIME ACCEPTANCE: PASS | PASS=444 FAIL=0`。这是运行时 smoke test 通过的用户实测结果；本会话没有独立运行本地 Python 验证器或 Godot，也没有人工试玩记录。
 - 世界级拓扑与 C04、C08、C09 语义未主动修改；埋旗共鸣桥契约保留。
 
 ## 7. 下一步验收
 
-1. 拉取当前分支后运行静态验收器，检查 GDScript 布局、房间尺寸、平台数量、边界、地面缺口和布局重复。
-2. 运行 Godot 运行时 smoke test。
+1. 用户已确认 Godot 运行时 smoke test 通过（444 PASS / 0 FAIL）。
+2. 拉取当前分支后运行 `python3 tools/validate_a5_room_scenes.py`，确认最新几何静态检查通过。
 3. 按 `tools/A5_MANUAL_PLAYABILITY_CHECKLIST_CN.md` 实测 R01、R05、R06、R10、R13、R16、R17 的移动、摄像机、回连与软锁。
-4. 若出现问题，按房间 ID 修复并重新运行全部检查；不得仅凭弹道近似模型宣告实机可玩。
+4. 若出现问题，按房间 ID 修复并重新运行全部检查；不得仅凭 smoke test 或弹道近似模型宣告实机可玩。
