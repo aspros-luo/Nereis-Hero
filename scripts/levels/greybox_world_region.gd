@@ -375,7 +375,7 @@ func _spawn_x_for_side(side: String) -> float:
 	if region_id == "A5" and side == "monastery_return":
 		# C09 returns to the lower approach ledge, not the floor beneath the upper parapet door.
 		# C09 回到较低的接近栈台，而不是高位门下方的地面。
-		return 2165.0
+		return 5050.0
 	if region_id == "A3" and side == "village_city_cut":
 		# C24's return door is at x=520; balance the landing between it and the anomaly at x=900.
 		# C24 回程门位于 x=520；出生点在回程门与 x=900 异常源之间保持安全距离。
@@ -405,9 +405,9 @@ func _spawn_x_for_side(side: String) -> float:
 		# C04 精确出生在 x=1740–1850 平台顶面，并避开回程门触发区。
 		return 1750.0
 	if region_id == "A5" and side == "old_pilgrim_highroad":
-		# C04's battlefield door is at x=520; land nearby without overlapping its trigger.
-		# C04 战场侧门位于 x=520；出生在门附近，但不进入其触发区。
-		return 650.0
+		# C04 optional winch branch is at x=3900; arrive on its supported upper landing.
+		# C04可选绞盘支路位于x=3900；从A2返回时落在有承托的高台。
+		return 3820.0
 	if region_id == "A2" and side == "bell_gate":
 		# Leave the H02 entrance's interaction radius after returning from the hidden chamber.
 		# 从倒响钟室返回时，出生点应离入口足够远，避免一落地就抢占 E 交互。
@@ -1089,35 +1089,54 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(970.0, floor_y + 135.0, 140.0, 18.0))
 			_add_platform(Rect2(1130.0, floor_y + 90.0, 140.0, 18.0))
 		"A5":
-			# The ground trench route remains open; a broken parapet line provides an optional high crossing.
-			# 地面战壕主路保持开放；断裂的城墙高路提供可选的上层穿越。
-			# C08 arrival/return ledge: paired with A3's raised city parapet exit.
-			# C08 进出落脚高台：与 A3 的残墙高路出口配对。
+			# A5 pilot implementation: long layered battlefield with room-scale landmarks.
+			# A5试点落地：长距离、多层、可辨识的探索空间。
 			_add_platform(Rect2(100, 410, 300, 18))
-			_add_platform(Rect2(280, 485, 185, 18))
-			_add_platform(Rect2(560, 455, 160, 18))
-			_add_platform(Rect2(850, 485, 210, 18))
-			_add_platform(Rect2(1180, 450, 160, 18))
-			_add_platform(Rect2(1490, 485, 175, 18))
-			_add_platform(Rect2(1800, 445, 185, 18))
-			_add_platform(Rect2(2150, 485, 180, 18))
-			# The monastery exit leaves the battlefield from the broken upper parapet, not the ground boundary.
-			# 修道院主出口从断裂的上层城墙离开战场，不再与地面边界连成直线。
-			_add_platform(Rect2(2190, 450, 140, 18))
-			_add_platform(Rect2(420, 420, 120, 18))
-			_add_platform(Rect2(560, 375, 130, 18))
-			_add_platform(Rect2(720, 335, 120, 18))
-			_add_platform(Rect2(880, 370, 130, 18))
-			_add_platform(Rect2(1050, 420, 120, 18))
-			_add_platform(Rect2(1220, 390, 120, 18))
-			_add_platform(Rect2(1390, 345, 130, 18))
-			_add_platform(Rect2(1550, 390, 120, 18))
-			_add_platform(Rect2(1730, 430, 110, 18))
-			# A broken trench floor adds a lower crossing under the parapet route.
-			# 断裂战壕地面在城墙高路下方增加一条低位横穿路线。
+			_add_platform(Rect2(300, 350, 130, 18))
+			_add_platform(Rect2(445, 300, 145, 18))
+			_add_platform(Rect2(580, 350, 140, 18))
+			_add_platform(Rect2(640, 455, 180, 18))
+			_add_platform(Rect2(760, 410, 110, 18))
+			_add_platform(Rect2(800, 350, 100, 18))
+			_add_platform(Rect2(845, 290, 105, 18))
+			_add_platform(Rect2(890, 230, 120, 18))
+			_add_platform(Rect2(960, 365, 150, 18))
+			# Preserve the existing buried-standard resonance crossing at x=880..1220.
 			_add_platform(Rect2(850.0, floor_y + 90.0, 145.0, 18.0))
 			_add_platform(Rect2(1015.0, floor_y + 135.0, 145.0, 18.0))
 			_add_platform(Rect2(1180.0, floor_y + 90.0, 145.0, 18.0))
+			_add_platform(Rect2(1280, 470, 180, 18))
+			_add_platform(Rect2(1460, 420, 140, 18))
+			_add_platform(Rect2(1600, 360, 150, 18))
+			_add_platform(Rect2(1740, 420, 140, 18))
+			_add_platform(Rect2(1880, 470, 170, 18))
+			_add_platform(Rect2(1980, 405, 140, 18))
+			_add_platform(Rect2(2110, 345, 140, 18))
+			_add_platform(Rect2(2240, 290, 150, 18))
+			_add_platform(Rect2(2370, 350, 150, 18))
+			_add_platform(Rect2(2500, 420, 170, 18))
+			_add_platform(Rect2(2670, 365, 160, 18))
+			_add_platform(Rect2(2830, 420, 180, 18))
+			_add_platform(Rect2(2960, 345, 140, 18))
+			_add_platform(Rect2(3090, 290, 120, 18))
+			_add_platform(Rect2(3210, 235, 125, 18))
+			_add_platform(Rect2(3335, 290, 130, 18))
+			_add_platform(Rect2(3465, 350, 160, 18))
+			_add_platform(Rect2(3600, 410, 180, 18))
+			_add_platform(Rect2(3770, 350, 170, 18))
+			_add_platform(Rect2(3910, 290, 150, 18))
+			_add_platform(Rect2(4040, 350, 160, 18))
+			_add_platform(Rect2(4190, 420, 180, 18))
+			_add_platform(Rect2(3710, 500, 180, 18))
+			_add_platform(Rect2(3900, 555, 170, 18))
+			_add_platform(Rect2(4080, 500, 180, 18))
+			_add_platform(Rect2(4260, 450, 150, 18))
+			_add_platform(Rect2(4380, 390, 160, 18))
+			_add_platform(Rect2(4540, 340, 160, 18))
+			_add_platform(Rect2(4700, 390, 160, 18))
+			_add_platform(Rect2(4860, 440, 170, 18))
+			_add_platform(Rect2(5020, 450, 180, 18))
+			_add_platform(Rect2(5180, 450, 200, 18))
 		"A6":
 			# Main stair climbs the bell tower; the side cloister balcony loops around its outer wall.
 			# 主阶梯攀上钟塔；侧边回廊阳台绕塔外墙形成另一条路线。
@@ -1512,7 +1531,7 @@ func _spawn_region_rest_point() -> void:
 			rest_x = 2050.0
 			rest_name = "水库祭坛"
 		"A5":
-			rest_x = 1360.0
+			rest_x = 3000.0
 			rest_name = "战场纪念碑"
 		"A6":
 			rest_x = 1300.0
@@ -2036,19 +2055,19 @@ func _spawn_region_exits() -> void:
 				true, "", "", floor_y - 130.0
 			)
 			_spawn_exit_door(
-				2250.0, "E  沿残墙高路进入修道院", "monastery_tower",
+				5350.0, "E  沿残墙高路进入修道院", "monastery_tower",
 				"res://scenes/monastery_tower.tscn", "battlefield_entry", true, "", "", floor_y - 90.0
 			)
 			if WorldState.is_hidden_path_opened("H02"):
 				_spawn_exit_door(
-					2060.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
+					4500.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
 					"res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
 					true, "opened_old_bell_tower_connection", "E  进入倒响钟室"
 				)
 			# C04: open the old pilgrim highroad from the battlefield side, then traverse on the next interaction.
 			# C04：从战场侧开启旧朝圣高路；首次互动开路，下一次互动才转场。
 			_spawn_exit_door(
-				520.0, "E  打开旧朝圣高路", "ash_forest",
+				3900.0, "E  打开旧朝圣高路", "ash_forest",
 				"res://scenes/ash_forest.tscn", "old_pilgrim_highroad",
 				true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",
 				floor_y - 140.0
