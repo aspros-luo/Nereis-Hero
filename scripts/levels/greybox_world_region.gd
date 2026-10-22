@@ -943,7 +943,7 @@ func _ready_a5_room_test() -> void:
 
 func _configure_a5_room_platforms() -> void:
 	var w := map_width
-	var h := room_height
+	var h := floor_y
 	match room_id:
 		"A5-R01":
 			_add_platform(Rect2(100, 410, 300, 18))
