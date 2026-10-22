@@ -53,6 +53,8 @@ func _run() -> void:
 		if room_variant is Dictionary:
 			await _test_room(room_variant)
 
+	await _test_assembled_region()
+
 	var terrain_summary: Dictionary = parsed.get("terrain_design", {})
 	var expected_platforms := int(terrain_summary.get("expected_platform_count", -1))
 	var expected_blocks := int(terrain_summary.get("expected_solid_block_count", -1))
@@ -255,6 +257,90 @@ func _test_room(room: Dictionary) -> void:
 	])
 	instance.queue_free()
 	await process_frame
+
+func _test_assembled_region() -> void:
+	var scene_path := "res://scenes/a5_assembled_region.tscn"
+	if not ResourceLoader.exists(scene_path):
+		_record(false, "ASSEMBLY/SCENE_LOAD", "missing " + scene_path)
+		return
+	var packed := load(scene_path) as PackedScene
+	if packed == null:
+		_record(false, "ASSEMBLY/PACKED_SCENE", "failed to load assembled A5 PackedScene")
+		return
+	var instance := packed.instantiate() as Node2D
+	if instance == null:
+		_record(false, "ASSEMBLY/INSTANTIATE", "assembled A5 root is not Node2D")
+		return
+	root.add_child(instance)
+	await process_frame
+	await process_frame
+
+	var room_ids := [
+		"A5_R01", "A5_R02", "A5_R03", "A5_R04", "A5_R05", "A5_R06",
+		"A5_R07", "A5_R08", "A5_R09", "A5_R10", "A5_R11", "A5_R12",
+		"A5_R13", "A5_R14", "A5_R15", "A5_R16", "A5_R17", "A5_R18",
+		"A5_R19", "A5_R20", "A5_R21", "A5_R22"
+	]
+	var present_rooms := 0
+	var negative_room_tops := 0
+	for room_name in room_ids:
+		var room := instance.get_node_or_null(room_name) as Node2D
+		if room == null:
+			continue
+		present_rooms += 1
+		if room.position.y < -0.5:
+			negative_room_tops += 1
+	_record(present_rooms == 22, "ASSEMBLY/ROOM_INVENTORY",
+		"instantiated=%d expected=22" % present_rooms)
+	_record(negative_room_tops == 0, "ASSEMBLY/UPPER_ROOM_NORMALIZATION",
+		"rooms with negative local Y=%d" % negative_room_tops)
+
+	var hero := instance.get_node_or_null("Hero") as CharacterBody2D
+	_record(hero != null, "ASSEMBLY/SINGLE_HERO", "assembled Hero exists=%s" % str(hero != null))
+	if hero != null:
+		var camera := hero.get_node_or_null("HeroCamera") as Camera2D
+		_record(camera != null, "ASSEMBLY/CAMERA", "assembled HeroCamera exists=%s" % str(camera != null))
+		if camera != null:
+			_record(camera.limit_left == 0 and camera.limit_top == 0
+				and camera.limit_right == int(instance.get("map_width"))
+				and camera.limit_bottom == int(instance.get("room_height")),
+				"ASSEMBLY/CAMERA_LIMITS",
+				"limits=(%d,%d,%d,%d) map=(%.0f,%.0f)" % [
+					camera.limit_left, camera.limit_top, camera.limit_right, camera.limit_bottom,
+					float(instance.get("map_width")), float(instance.get("room_height"))
+				])
+
+	for binding in [
+		{"door": "Exit_forgotten_city", "room": "A5_R01", "x": 180.0, "y": 410.0, "id": "C08"},
+		{"door": "Exit_monastery_tower", "room": "A5_R20", "x": 1200.0, "y": 410.0, "id": "C09"},
+		{"door": "Exit_ash_forest", "room": "A5_R16", "x": 980.0, "y": 610.0, "id": "C04"}
+	]:
+		var room := instance.get_node_or_null(str(binding["room"])) as Node2D
+		var door := instance.get_node_or_null(str(binding["door"])) as Node2D
+		var ok := room != null and door != null
+		if ok:
+			var expected_position := room.position + Vector2(float(binding["x"]), float(binding["y"]))
+			ok = door.position.distance_to(expected_position) <= 1.0
+		_record(ok, "ASSEMBLY/MACRO_BINDING/%s" % str(binding["id"]),
+			"room=%s door=%s expected local=(%.0f,%.0f)" % [
+				str(binding["room"]), str(binding["door"]),
+				float(binding["x"]), float(binding["y"])
+			])
+
+	var rest := instance.get_node_or_null("RegionRestPoint_A5") as Node2D
+	var hub := instance.get_node_or_null("A5_R12") as Node2D
+	var rest_ok := rest != null and hub != null
+	if rest_ok:
+		rest_ok = rest.position.x >= hub.position.x and rest.position.x <= hub.position.x + float(hub.get("map_width"))
+			and rest.position.y >= hub.position.y and rest.position.y <= hub.position.y + float(hub.get("room_height"))
+	_record(rest_ok, "ASSEMBLY/REST_POINT_IN_HUB", "rest point is inside R12=%s" % str(rest_ok))
+
+	print("[A5_ASSEMBLY_RUNTIME] rooms=%d negative_tops=%d map=%.0fx%.0f" % [
+		present_rooms, negative_room_tops, float(instance.get("map_width")), float(instance.get("room_height"))
+	])
+	instance.queue_free()
+	await process_frame
+
 
 func _first_collision_shape(body: Node) -> CollisionShape2D:
 	for child in body.get_children():
