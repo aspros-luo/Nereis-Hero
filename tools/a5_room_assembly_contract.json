@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "region_id": "A5",
-  "status": "proposed_assembly_contract_not_scene_instantiated",
-  "purpose": "把22个独立房间组织为有空间位置、有明确邻接与分支的A5地图。此文件仅是组装合同，直到运行时加载器/正式场景读取它之前，不代表已完成游戏内组装。",
+  "status": "runtime_scene_instantiation_implemented_internal_room_transitions_pending",
+  "purpose": "22个独立房间由此合同驱动实例化到正式 A5 场景；屏幕网格位置和房间尺寸控制各房间的世界坐标与地形尺寸。内部房间门/捷径交互仍需后续接入。",
   "viewport": {
     "width": 1280,
     "height": 720,
@@ -622,10 +622,10 @@
     "preserve_world_topology": true
   },
   "acceptance": {
-    "static_contract": "validator_added_not_yet_run_in_repo",
-    "room_scene_instantiation": "not_implemented",
-    "transition_doors": "not_implemented",
-    "in_game_full_route": "not_tested",
-    "note": "位置是屏幕网格级布局提案；垂直/水平门槛、地面支撑、落差与镜头需在实际组装后逐一校正。不得把此合同描述成已装配地图。"
+    "static_contract": "validator_present_run_required",
+    "room_scene_instantiation": "implemented_in_old_battlefield_scene_via_greybox_world_region",
+    "transition_doors": "cross_region_C08_C09_C04_anchors_moved_to_contract_room_positions_internal_room_transitions_not_implemented",
+    "in_game_full_route": "requires_Godot_runtime_and_manual_playtest",
+    "note": "正式 old_battlefield.tscn 已启用 use_a5_room_assembly；运行时从本合同加载 22 个房间场景，并以 assembly_child_mode 仅生成房间地形，避免重复生成主角和 HUD。当前连接表尚未生成房间之间的实体门/捷径，不能视为完整可玩路线。屏幕位置仍需通过 Godot 镜头、碰撞和跨区出生点实机校准。"
   }
 }
