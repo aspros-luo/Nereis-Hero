@@ -1105,31 +1105,39 @@ func _a5_connection_anchor(
 	var source_center := source_room.position.x + source_width * 0.5
 	var target_center := target_room.position.x + float(target_room.get("map_width")) * 0.5
 	var target_floor_world := target_room.position.y + float(target_room.get("floor_y")) - 36.0
-	var desired_local_y := target_floor_world - source_room.position.y
+	var desired_local_y := clampf(
+		target_floor_world - source_room.position.y, 36.0, minf(source_height - 36.0, source_floor - 36.0)
+	)
 	var side := "center"
 	if target_center > source_center + 1.0:
 		side = "right"
 	elif target_center < source_center - 1.0:
 		side = "left"
-	var slot_key := "%s:%s" % [source_id, side]
-	var slot := int(endpoint_slots.get(slot_key, 0))
-	endpoint_slots[slot_key] = slot + 1
 
-	# Prefer an authored platform near the destination's landing height and on the
-	# correct side of the room. This makes vertical links land on real ledges instead
-	# of placing every doorway at the bottom of a tall room.
-	# 根据目标房间的落脚高度和出口方向，选择源房间内真实存在的平台。
+	var used_key := "%s:anchors" % source_id
+	var used_positions: Array = endpoint_slots.get(used_key, [])
+	var offsets: Array = [0.0, 150.0, -150.0, 300.0, -300.0, 450.0, -450.0]
+	if side == "right":
+		offsets = [0.0, -150.0, -300.0, 150.0, 300.0, -450.0, 450.0]
+	elif side == "left":
+		offsets = [0.0, 150.0, 300.0, -150.0, -300.0, 450.0, -450.0]
+
+	# Choose a real platform near the target landing height. Candidate positions
+	# are scored against already-used anchors so multiple exits never overlap.
+	# 选择靠近目标落脚高度的真实平台，并避开同房间已经占用的出口锚点。
 	var platform_values: Variant = source_room.get("platforms")
-	var best_platform := Rect2()
+	var best_anchor := Vector2(source_width * 0.5, source_floor - 36.0)
 	var best_score := INF
 	if platform_values is Array:
 		for platform_variant in platform_values:
 			if not platform_variant is Rect2:
 				continue
 			var platform: Rect2 = platform_variant
-			# Leave enough usable width for each additional exit on this side.
-			# 同侧出口越多，候选平台必须越宽，避免多个触发区挤在同一位置。
-			if platform.size.x < 100.0 + float(slot) * 150.0:
+			if platform.size.x < 100.0 or platform.position.y < 72.0:
+				continue
+			var left_limit := platform.position.x + 48.0
+			var right_limit := platform.end.x - 48.0
+			if right_limit < left_limit:
 				continue
 			var side_distance := 0.0
 			match side:
@@ -1139,41 +1147,49 @@ func _a5_connection_anchor(
 					side_distance = platform.position.x
 				_:
 					side_distance = absf(platform.get_center().x - source_width * 0.5)
-			var score := absf(platform.position.y - desired_local_y) + side_distance * 0.3
-			if score < best_score:
-				best_score = score
-				best_platform = platform
+			var candidate_y := platform.position.y - 36.0
+			for offset in offsets:
+				var preferred_x := source_width * 0.5
+				match side:
+					"right":
+						preferred_x = minf(source_width - 120.0, right_limit)
+					"left":
+						preferred_x = maxf(120.0, left_limit)
+					_:
+						preferred_x = clampf(source_width * 0.5, left_limit, right_limit)
+				var candidate_x := clampf(preferred_x + float(offset), left_limit, right_limit)
+				var overlap_penalty := 0.0
+				for used_variant in used_positions:
+					if used_variant is Vector2 and Vector2(candidate_x, candidate_y).distance_to(used_variant) < 100.0:
+						overlap_penalty += 10000.0
+				var score := absf(candidate_y - desired_local_y) + side_distance * 0.3
+				score += absf(candidate_x - preferred_x) * 0.1 + overlap_penalty
+				if score < best_score:
+					best_score = score
+					best_anchor = Vector2(candidate_x, candidate_y)
 
-	var anchor_x := source_width * 0.5
-	var anchor_y := source_floor - 36.0
-	if best_score < INF:
-		var left_limit := best_platform.position.x + 48.0
-		var right_limit := best_platform.end.x - 48.0
-		match side:
-			"right":
-				anchor_x = minf(source_width - 120.0, right_limit) - float(slot) * 150.0
-			"left":
-				anchor_x = maxf(120.0, left_limit) + float(slot) * 150.0
-			_:
-				anchor_x = clampf(source_width * 0.5, left_limit, right_limit)
-				if slot > 0:
-					var offset := float((slot + 1) / 2) * 150.0
-					anchor_x += offset if slot % 2 == 1 else -offset
-		anchor_x = clampf(anchor_x, left_limit, right_limit)
-		anchor_y = best_platform.position.y - 36.0
-	else:
+	if best_score == INF:
+		var fallback_x := source_width * 0.5
 		if side == "right":
-			anchor_x = source_width - 120.0 - float(slot) * 150.0
+			fallback_x = source_width - 120.0
 		elif side == "left":
-			anchor_x = 120.0 + float(slot) * 150.0
-		elif slot > 0:
-			var offset := float((slot + 1) / 2) * 150.0
-			anchor_x += offset if slot % 2 == 1 else -offset
-		anchor_x = clampf(anchor_x, 120.0, maxf(120.0, source_width - 120.0))
-	# Keep the portal inside the room's playable vertical extent even when the
-	# target landing is much higher or lower than this room's floor.
-	anchor_y = clampf(anchor_y, 36.0, minf(source_height - 36.0, source_floor - 36.0))
-	return Vector2(anchor_x, anchor_y)
+			fallback_x = 120.0
+		var fallback_y := clampf(source_floor - 36.0, 36.0, minf(source_height - 36.0, source_floor - 36.0))
+		for offset in offsets:
+			var candidate_x := clampf(fallback_x + float(offset), 72.0, maxf(72.0, source_width - 72.0))
+			var candidate := Vector2(candidate_x, fallback_y)
+			var overlap := false
+			for used_variant in used_positions:
+				if used_variant is Vector2 and candidate.distance_to(used_variant) < 100.0:
+					overlap = true
+					break
+			if not overlap:
+				best_anchor = candidate
+				break
+
+	used_positions.append(best_anchor)
+	endpoint_slots[used_key] = used_positions
+	return best_anchor
 
 
 func _spawn_a5_internal_door(
