@@ -156,7 +156,7 @@ def main() -> int:
     require(
         'match String(npc.npc_id):' in village
         and '"graybox_intro_forgotten_city" in WorldState.achievement_flags' in village
-        and '"graybox_intro_ash_forest" in village
+        and '"graybox_intro_ash_forest" in WorldState.achievement_flags' in village
         and village.index('"graybox_intro_forgotten_city" in WorldState.achievement_flags')
             < village.index('"graybox_intro_ash_forest" in WorldState.achievement_flags')
         and 'elif "village_defense_survived" in WorldState.achievement_flags:' in village,
