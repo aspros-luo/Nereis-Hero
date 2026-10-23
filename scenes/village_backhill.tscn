@@ -191,7 +191,7 @@ shape = SubResource("CliffExplorationDoorShape")
 position = Vector2(1760, 520)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FutureA2RoadBlocker"]
-position = Vector2(0, -360)
+position = Vector2(0, -340)
 shape = SubResource("FutureA2BlockerShape")
 
 [node name="FutureA2EntranceVisual" type="Node2D" parent="."]
@@ -199,7 +199,7 @@ position = Vector2(1760, 520)
 z_index = 2
 
 [node name="SealedStoneWall" type="Polygon2D" parent="FutureA2EntranceVisual"]
-polygon = PackedVector2Array(-56, 0, -56, -540, -35, -595, -8, -560, 20, -615, 48, -570, 56, -530, 56, 0)
+polygon = PackedVector2Array(-56, 20, -56, -540, -35, -595, -8, -560, 20, -615, 48, -570, 56, -530, 56, 20)
 color = Color(0.23, 0.20, 0.25, 1)
 
 [node name="SealedStoneMarkings" type="Line2D" parent="FutureA2EntranceVisual"]
