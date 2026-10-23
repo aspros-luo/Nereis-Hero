@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_crypt_floor"]
+size = Vector2(200, 40)
+
+[node name="A2CryptLanding" type="StaticBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(100, 20)
+shape = SubResource("RectangleShape2D_crypt_floor")
