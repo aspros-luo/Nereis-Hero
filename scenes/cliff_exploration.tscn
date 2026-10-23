@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/cliff_exploration.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player/hero.gd" id="2"]
@@ -15,6 +15,9 @@ height = 48.0
 
 [sub_resource type="RectangleShape2D" id="GateTriggerShape"]
 size = Vector2(100, 138)
+
+[sub_resource type="RectangleShape2D" id="FutureRoadBlockerShape"]
+size = Vector2(24, 140)
 
 [node name="CliffExploration" type="Node2D"]
 script = ExtResource("1")
@@ -133,6 +136,13 @@ enabled = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FutureA2RoadDoor"]
 position = Vector2(0, -69)
 shape = SubResource("GateTriggerShape")
+
+[node name="FutureRoadBlocker" type="StaticBody2D" parent="."]
+position = Vector2(2240, 520)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FutureRoadBlocker"]
+position = Vector2(0, -60)
+shape = SubResource("FutureRoadBlockerShape")
 
 [node name="FutureRoadSeal" type="Polygon2D" parent="."]
 position = Vector2(2240, 510)
