@@ -372,6 +372,8 @@ color = Color("#79656a")
 z_index = -2
 
 [node name="RegionTitle" type="Label" parent="."]
+offset_right = 320.0
+offset_bottom = 52.0
 position = Vector2(100, 198)
 text = "边境村庄"
 visible = true
@@ -380,6 +382,8 @@ theme_override_colors/font_color = Color("#4d454d")
 theme_override_font_sizes/font_size = 30
 
 [node name="DrainLabel" type="Label" parent="."]
+offset_right = 130.0
+offset_bottom = 24.0
 position = Vector2(20, 380)
 text = "旧排水道"
 visible = true
@@ -388,6 +392,8 @@ theme_override_colors/font_color = Color("#8d7776")
 theme_override_font_sizes/font_size = 12
 
 [node name="GraveyardLabel" type="Label" parent="."]
+offset_right = 90.0
+offset_bottom = 28.0
 position = Vector2(885, 346)
 text = "墓地"
 visible = true
@@ -396,6 +402,8 @@ theme_override_colors/font_color = Color("#796d67")
 theme_override_font_sizes/font_size = 16
 
 [node name="OldHouseLabel" type="Label" parent="."]
+offset_right = 80.0
+offset_bottom = 24.0
 position = Vector2(1025, 316)
 text = "老屋"
 visible = true
@@ -433,6 +441,8 @@ color = Color("#a85e45")
 z_index = 1
 
 [node name="CampLabel" type="Label" parent="."]
+offset_right = 235.0
+offset_bottom = 28.0
 position = Vector2(1935, 313)
 text = "复国军营地"
 visible = false
@@ -514,6 +524,8 @@ color = Color("#d1b08a")
 z_index = 1
 
 [node name="NorthGateLabel" type="Label" parent="."]
+offset_right = 110.0
+offset_bottom = 28.0
 position = Vector2(2770, 288)
 text = "北门"
 visible = true
@@ -873,6 +885,8 @@ width = 3.0
 default_color = Color("#d6c7b2")
 
 [node name="PromptLabel" type="Label" parent="ResonanceWellGate"]
+offset_right = 145.0
+offset_bottom = 28.0
 position = Vector2(-58, 36)
 visible = false
 text = "E  共鸣"
@@ -880,6 +894,8 @@ theme_override_colors/font_color = Color("#d6c7b2")
 theme_override_font_sizes/font_size = 15
 
 [node name="StatusLabel" type="Label" parent="ResonanceWellGate"]
+offset_right = 240.0
+offset_bottom = 24.0
 position = Vector2(-64, 62)
 visible = false
 text = "已发现 · 再按 E 开启"
