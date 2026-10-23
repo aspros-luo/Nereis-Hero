@@ -3898,6 +3898,13 @@ func _draw() -> void:
 	if region_id == "A5" and not room_id.is_empty():
 		for segment in a5_room_floor_segments:
 			draw_texture_rect(STONE_FLOOR_STRIP, Rect2(segment.x, floor_y, segment.y, 180.0), false)
+	elif region_id == "A2":
+		# Match the visible surface to the real collision gaps at the Bell Grave and eastern ravine.
+		# 让地面贴图与钟墓、东侧沟壑的真实碰撞断口一致。
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, 860.0, 180.0), false)
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(1060.0, floor_y, 1360.0, 180.0), false)
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(2660.0, floor_y, map_width - 2660.0, 180.0), false)
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 790.0, 200.0, 180.0), false)
 	else:
 		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
 	_draw_ground_detail()
