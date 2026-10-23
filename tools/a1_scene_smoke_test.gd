@@ -167,8 +167,17 @@ func _test_a11_authored_terrain() -> void:
 		return
 	get_tree().root.add_child(scene)
 	await get_tree().process_frame
-	_expect(scene.has_node("CliffExplorationDoor/CollisionShape2D"), "A1.1 has an authored entrance to the separate cliff scene")
+	_expect(scene.has_node("CliffExplorationDoor/CollisionShape2D"), "A1.1 left route enters the separate cliff exploration scene")
 	_expect(scene.has_node("CliffEntryVisual") and scene.has_node("CliffEntryTitle"), "A1.1 cliff entrance has authored visual and Label")
+	_expect(scene.has_node("FutureA2RoadDoor/CollisionShape2D") and not scene.get_node("FutureA2RoadDoor").enabled, "A1.1 right route is reserved and disabled until A2 is designed")
+	var future_wall_shape := scene.get_node_or_null("FutureA2RoadBlocker/CollisionShape2D") as CollisionShape2D
+	_expect(
+		future_wall_shape != null
+		and future_wall_shape.shape is RectangleShape2D
+		and is_equal_approx((future_wall_shape.shape as RectangleShape2D).size.y, 720.0),
+		"A1.1 reserved A2 route has a full-height physical blocker"
+	)
+	_expect(scene.has_node("FutureA2EntranceVisual") and scene.has_node("FutureA2Title"), "A1.1 right route has an authored sealed entrance and Label")
 	_expect(not scene.has_node("BackhillStairs") and not scene.has_node("CliffLookout") and not scene.has_node("CliffLowerShelf"), "A1.1 has no jump platforms or cliff ledges")
 	_expect(scene.has_node("ChurchTitle") and scene.has_node("TavernTitle") and scene.has_node("BackhillTitle") and scene.has_node("CliffEntryTitle"), "A1.1 landmarks use authored Label nodes")
 	scene.queue_free()
@@ -194,10 +203,9 @@ func _test_cliff_exploration() -> void:
 		and is_equal_approx((ground_collision.shape as RectangleShape2D).size.x, 2400.0),
 		"Cliff exploration uses a single continuous walkable ground"
 	)
-	_expect(scene.has_node("BackToBackhillDoor/CollisionShape2D"), "Cliff exploration has left-side return to A1.1")
-	_expect(scene.has_node("FutureA2RoadDoor/CollisionShape2D"), "Cliff exploration has right-side reserved-road trigger")
-	_expect(not scene.get_node("FutureA2RoadDoor").enabled, "Future A2 road is disabled until map design is complete")
-	_expect(scene.has_node("FutureRoadBlocker/CollisionShape2D"), "Future road is physically blocked, not only visual")
+	_expect(scene.has_node("BackToBackhillDoor/CollisionShape2D"), "Cliff exploration has a return entrance to A1.1")
+	_expect(scene.has_node("CliffEndBoundary/CollisionShape2D"), "Cliff exploration ends at a safe authored boundary")
+	_expect(not scene.has_node("FutureA2RoadDoor") and not scene.has_node("FutureRoadBlocker"), "A2's reserved route belongs to the backhill, not the cliff scene")
 	_expect(scene.has_node("ObservationPOI") and scene.has_node("WeatheredInscriptionPOI") and scene.has_node("CollapsedLookoutPOI"), "Cliff scene has scene-authored exploration points")
 	scene.queue_free()
 	await get_tree().process_frame
