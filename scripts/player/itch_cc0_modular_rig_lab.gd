@@ -12,8 +12,8 @@ const PART_RULES := {
 	"hair": {"terms": ["hair"], "reject": ["enemy"]},
 	"eyes": {"terms": ["eyes", "eye"], "reject": ["enemy"]},
 	"mouth": {"terms": ["mouth"], "reject": ["enemy"]},
-	"arm_left": {"terms": ["left_arm", "arm_left", "leftarm", "armleft", "left_hand", "hand_left", "leftbodypart", "left_body_part"], "reject": ["leg", "foot", "enemy"]},
-	"arm_right": {"terms": ["right_arm", "arm_right", "rightarm", "armright", "right_hand", "hand_right", "rightbodypart", "right_body_part"], "reject": ["leg", "foot", "enemy"]},
+	"arm_left": {"terms": ["left_arm", "arm_left", "leftarm", "armleft"], "reject": ["leg", "foot", "enemy"]},
+	"arm_right": {"terms": ["right_arm", "arm_right", "rightarm", "armright"], "reject": ["leg", "foot", "enemy"]},
 	"leg_left": {"terms": ["left_leg", "leg_left", "leftleg", "legleft", "left_foot", "foot_left"], "reject": ["arm", "hand", "enemy"]},
 	"leg_right": {"terms": ["right_leg", "leg_right", "rightleg", "legright", "right_foot", "foot_right"], "reject": ["arm", "hand", "enemy"]},
 	"weapon": {"terms": ["katana", "sword", "blade", "dagger", "knife"], "reject": ["enemy", "gun", "rifle"]}
@@ -157,8 +157,9 @@ func _find_part_path(part_name: String) -> String:
 			if lower.contains(str(term)):
 				matches = true
 				break
-		if not matches and part_name in ["arm_left", "arm_right"] and lower.contains("body_part"):
-			matches = lower.contains("left") if part_name == "arm_left" else lower.contains("right")
+		if not matches and part_name in ["arm_left", "arm_right"]:
+			var wanted_side := "left" if part_name == "arm_left" else "right"
+			matches = lower.contains(wanted_side) and (lower.contains("arm") or lower.contains("hand"))
 		if not matches:
 			continue
 		var rejected := false
@@ -169,6 +170,11 @@ func _find_part_path(part_name: String) -> String:
 		if rejected:
 			continue
 		var score := 0
+		var base_name := lower.get_file()
+		for role_term in rule.terms:
+			if base_name.contains(str(role_term)):
+				score += 25
+				break
 		if lower.contains("character_1") or lower.contains("character1"):
 			score += 20
 		if lower.contains("idle") or lower.contains("stand"):
@@ -298,7 +304,7 @@ func _add_full_body_fallback() -> void:
 	if best_path.is_empty():
 		for relative_path in _asset_paths:
 			var lower := relative_path.to_lower()
-			if lower.contains("enemy") or lower.contains("head") or lower.contains("hair") or lower.contains("weapon"):
+			if lower.contains("enemy") or lower.contains("head") or lower.contains("hair") or lower.contains("eye") or lower.contains("mouth") or lower.contains("weapon"):
 				continue
 			best_path = relative_path
 			break
