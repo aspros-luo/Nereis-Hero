@@ -28,12 +28,16 @@ polygon = PackedVector2Array(6.00, 0.00, 5.54, 2.30, 4.24, 4.24, 2.30, 5.54, 0.0
 color = Color("#d49b68")
 
 [node name="RestNameLabel" type="Label" parent="."]
+offset_right = 90.0
+offset_bottom = 24.0
 position = Vector2(-36, -52)
 text = "炉火"
 theme_override_colors/font_color = Color("#8d7776")
 theme_override_font_sizes/font_size = 10
 
 [node name="PromptLabel" type="Label" parent="."]
+offset_right = 140.0
+offset_bottom = 30.0
 position = Vector2(-34, 28)
 visible = false
 text = "E  Rest"
