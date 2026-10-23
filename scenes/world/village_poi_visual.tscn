@@ -5,7 +5,7 @@
 [node name="Marker" type="Polygon2D" parent="."]
 position = Vector2(0, -70)
 polygon = PackedVector2Array(10.00, 0.00, 9.24, 3.83, 7.07, 7.07, 3.83, 9.24, 0.00, 10.00, -3.83, 9.24, -7.07, 7.07, -9.24, 3.83, -10.00, 0.00, -9.24, -3.83, -7.07, -7.07, -3.83, -9.24, -0.00, -10.00, 3.83, -9.24, 7.07, -7.07, 9.24, -3.83)
-color = Color("#8e7777")
+color = Color(0.556863, 0.466667, 0.466667, 1)
 
 [node name="PromptLabel" type="Label" parent="."]
 offset_right = 160.0
@@ -13,5 +13,5 @@ offset_bottom = 30.0
 position = Vector2(-54, 20)
 visible = false
 text = "E  Examine"
-theme_override_colors/font_color = Color("#d6c7b2")
+theme_override_colors/font_color = Color(0.839216, 0.780392, 0.698039, 1)
 theme_override_font_sizes/font_size = 16
