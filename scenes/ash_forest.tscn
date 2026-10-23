@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource path="res://scripts/levels/a2_authored_terrain.gd" type="Script" id="2"]
 
 [node name="AshForest" type="Node2D"]
 script = ExtResource("1")
@@ -9,3 +10,6 @@ location_id = "ash_forest"
 region_title = "THE OLD PILGRIM ROAD"
 map_width = 3600.0
 floor_y = 650.0
+
+[node name="A2AuthoredTerrain" type="Node" parent="."]
+script = ExtResource("2")
