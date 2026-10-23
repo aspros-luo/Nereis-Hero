@@ -501,6 +501,27 @@ def main() -> int:
         require(world_state, f'"{location_id}":', "WorldState resume mapping", errors)
         require(world_state, f'res://{scene_path}', "WorldState resume mapping", errors)
 
+    # A2's authored terrain is a child component so the shared doors, save state, UI and route contracts remain intact.
+    # A2 的自定义地形作为子节点挂载，保留公共门、存档、UI 与跨区连接逻辑。
+    a2_scene = read("scenes/ash_forest.tscn", errors)
+    require(a2_scene, 'path="res://scripts/levels/a2_authored_terrain.gd"', "A2 authored terrain resource", errors)
+    require(a2_scene, '[node name="A2AuthoredTerrain" type="Node" parent="."]', "A2 authored terrain node", errors)
+    require(a2_scene, 'script = ExtResource("2")', "A2 authored terrain attachment", errors)
+    a2_terrain = read("scripts/levels/a2_authored_terrain.gd", errors)
+    for contract in (
+        "func _apply_authored_terrain() -> void:",
+        '_add_floor_segment(region, "WestForestGround", 0.0, 860.0, 540.0)',
+        '_add_floor_segment(region, "EastForestGround", 1480.0, 1120.0, 540.0)',
+        '_add_floor_segment(region, "FloodedCryptFloor", 860.0, 620.0, CRYPT_FLOOR_Y)',
+        "const CRYPT_FLOOR_Y := 660.0",
+        "_add_platform(region, Rect2(875, 605, 120, 18))",
+        "_add_platform(region, Rect2(1325, 550, 125, 18))",
+        "_add_platform(region, Rect2(2195, 380, 160, 18))",
+        "rest.position = Vector2(1600.0, 540.0)",
+        "bell.position = Vector2(735.0, 322.0)",
+    ):
+        require(a2_terrain, contract, "A2 authored terrain contract", errors)
+
     # Optional boss encounters are not C-edges, but still require a traceable entry, victory, death-reset, and return contract.
     # 可选 Boss 遭遇不计入跨区 C 边，但入口、胜利、死亡重置和回程必须可追踪。
     encounter_contracts = topology.get("optional_encounters", [])
