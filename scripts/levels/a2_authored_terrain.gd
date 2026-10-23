@@ -55,7 +55,7 @@ func _validate_authored_rooms(region: Node) -> void:
 	var max_platform_right := 0.0
 	var room_count := 0
 	for room_name in A2_EXPECTED_PLATFORM_COUNTS:
-		var room := region.get_node_or_null(room_name) as Node2D
+		var room := region.get_node_or_null(NodePath(str(room_name))) as Node2D
 		if room == null:
 			push_error("[NEREIS][A2][VERIFY][FAIL] missing room root: " + str(room_name))
 			valid = false
