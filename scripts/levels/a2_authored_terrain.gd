@@ -1,9 +1,11 @@
 extends Node
-## A2 terrain pass that preserves the shared region controller's full platform and exit layout.
-## A2 地形补强：保留公共区域控制器生成的完整平台网络与跨区出口，只替换地面碰撞分段。
+## A2 terrain supplement. Keep the region controller's authored floors, ledges, doors, and route contracts.
+## A2 地形补强：保留公共控制器既有的地面分段、平台、出口门与地图连接合同。
 
 const FLOOR_THICKNESS := 40.0
 const CRYPT_FLOOR_Y := 790.0
+const CRYPT_LEFT := 860.0
+const CRYPT_WIDTH := 200.0
 
 func _ready() -> void:
 	call_deferred("_apply_authored_terrain")
@@ -13,37 +15,26 @@ func _apply_authored_terrain() -> void:
 	if region == null or not is_instance_valid(region):
 		return
 
-	# Replace only the three broad ground bodies. Do not clear region.platforms or delete ledges:
-	# those ledges include the contracted C03 remote canopy exit, C04 highroad, and ravine return shelves.
-	# 只替换大块地面碰撞体，不清空 platforms，也不删除 C03/C04 高路与沟壑回程台阶。
-	for child in region.get_children():
-		if child is StaticBody2D and String(child.name).begins_with("GreyboxGround"):
-			region.remove_child(child)
-			child.queue_free()
+	# The shared A2 controller already creates the west/middle/east surface gaps and all ledges.
+	# Preserve them: the crypt opening is x=860..1060 and the eastern ravine is x=2420..2660.
+	# 公共控制器已创建西/中/东地面分段与全部台阶；保留这些实体，只补上钟墓坑底。
+	if region.get_node_or_null("A2_FloodedCryptFloor") == null:
+		_add_floor_segment(region, "A2_FloodedCryptFloor", CRYPT_LEFT, CRYPT_WIDTH, CRYPT_FLOOR_Y)
 
-	var surface_y: float = float(region.get("floor_y"))
-	var width: float = float(region.get("map_width"))
-	_add_floor_segment(region, "A2_WestForestGround", 0.0, 860.0, surface_y)
-	_add_floor_segment(region, "A2_EastForestGround", 1480.0, 940.0, surface_y)
-	_add_floor_segment(region, "A2_FarEastForestGround", 2660.0, width - 2660.0, surface_y)
-	# The bell grave is a true drop with a lower floor; the eastern ravine remains a separate gap.
-	# 钟墓坑底是真实下落空间；东侧沟壑仍是独立的地面断口。
-	_add_floor_segment(region, "A2_FloodedCryptFloor", 860.0, 620.0, CRYPT_FLOOR_Y)
-
-	# The shared controller puts the checkpoint inside the sinkhole by default; move it onto safe east-bank ground.
-	# 公共控制器默认把休整点放在坑口范围内，将其移至东岸安全地面。
+	# The default checkpoint is placed at x=1150 inside the Bell Grave opening; move it to safe ground.
+	# 默认休整点 x=1150 位于钟墓坑口，移动到东侧安全地面。
 	var rest := region.get_node_or_null("RegionRestPoint_A2")
 	if rest != null:
-		rest.position = Vector2(1600.0, surface_y)
+		rest.position = Vector2(1600.0, float(region.get("floor_y")))
 
-	# Keep the existing clue interaction but place its visual at the upper bell-tomb ring.
-	# 保留原有线索交互，仅将钟线索放在钟墓上环的可见位置。
+	# Keep the shared clue node and interaction state; only align its visual with the upper tomb ring.
+	# 保留线索节点和交互状态，只将其摆放到钟墓上环。
 	var bell := region.get_node_or_null("Anomaly_anomaly_bell_retiming")
 	if bell != null:
 		bell.position = Vector2(735.0, 322.0)
 
 	region.queue_redraw()
-	print("[NEREIS][A2][TERRAIN] terrain collision aligned: bell-grave drop + crypt floor + eastern ravine; existing ledges preserved")
+	print("[NEREIS][A2][TERRAIN] crypt landing added at y=790; shared canopy, C03/C04 and ravine ledges preserved")
 
 func _add_floor_segment(region: Node, segment_name: String, x: float, width: float, top_y: float) -> void:
 	if width <= 0.0:
