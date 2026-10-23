@@ -28,6 +28,17 @@ def require(condition: bool, message: str, errors: list[str]) -> None:
         errors.append(message)
 
 
+def require_sized_label(source: str, name: str, owner: str, errors: list[str]) -> None:
+    start = source.find(f'[node name="{name}" type="Label"')
+    if start < 0:
+        errors.append(f"{owner}: missing Label node {name!r}")
+        return
+    end = source.find("\\n[node ", start + 1)
+    block = source[start:] if end < 0 else source[start:end]
+    if "offset_right = " not in block or "offset_bottom = " not in block:
+        errors.append(f"{owner}: Label {name!r} needs explicit width and height")
+
+
 def check_scene_resources(scene: str, path: str, errors: list[str]) -> None:
     header = re.search(r"^\[gd_scene load_steps=(\d+) format=3\]", scene, re.M)
     if not header:
@@ -132,6 +143,21 @@ def main() -> int:
         errors,
     )
     require(".new()" not in fireflies_script, "Fireflies must not construct visual nodes in code", errors)
+
+    for name in ["RegionTitle", "DrainLabel", "GraveyardLabel", "OldHouseLabel", "CampLabel", "NorthGateLabel", "PromptLabel", "StatusLabel"]:
+        require_sized_label(a10, name, "A1.0", errors)
+    for name in ["ChurchTitle", "TavernTitle", "BackhillTitle", "CliffTitle"]:
+        require_sized_label(a11, name, "A1.1", errors)
+    for source, names, owner in [
+        (poi_visual, ["PromptLabel"], "POI visual"),
+        (npc_labels, ["NameLabel", "PromptLabel"], "NPC labels"),
+        (interaction_prompt, ["PromptLabel"], "interaction prompt"),
+        (rest_visual, ["RestNameLabel", "PromptLabel"], "rest point visual"),
+        (checkpoint_visual, ["TitleLabel"], "checkpoint visual"),
+        (mite_visual, ["NameLabel", "PromptLabel"], "Mite visual"),
+    ]:
+        for name in names:
+            require_sized_label(source, name, owner, errors)
 
     # A1.0: scene-authored architecture, traversable terrain and persistent interaction anchors.
     for needle, label in [
