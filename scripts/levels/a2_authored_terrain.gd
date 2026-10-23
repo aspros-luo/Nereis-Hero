@@ -114,6 +114,8 @@ func configure_platforms(region: Node) -> void:
 
 
 func create_floor(region: Node) -> void:
+	var floor_y := float(region.get("floor_y"))
+	var map_width := float(region.get("map_width"))
 	# Keep the ground gaps and lower shelves aligned with the region controller’s camera/world bounds.
 	# 地面断口与下层石沿继续使用区域控制器的世界边界和镜头坐标。
 	region.call("_add_ground_segment", "GreyboxGround_West", 0.0, 860.0)
