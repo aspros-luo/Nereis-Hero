@@ -1,11 +1,7 @@
 extends Node
-## A2 terrain supplement. Keep the region controller's authored floors, ledges, doors, and route contracts.
-## A2 地形补强：保留公共控制器既有的地面分段、平台、出口门与地图连接合同。
+## A2 room assembly. Keep cross-region doors and world-state contracts in the shared region controller.
+## A2 房间装配：跨区出口与世界状态合同仍由公共区域控制器维护。
 
-const FLOOR_THICKNESS := 40.0
-const CRYPT_FLOOR_Y := 810.0
-const CRYPT_LEFT := 860.0
-const CRYPT_WIDTH := 200.0
 const A2_ROOM_SCENES: Array[PackedScene] = [
 	preload("res://scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn"),
 	preload("res://scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn"),
@@ -24,11 +20,8 @@ func _apply_authored_terrain() -> void:
 	if region == null or not is_instance_valid(region):
 		return
 
-	# The shared A2 controller already creates the west/middle/east surface gaps and all ledges.
-	# Preserve them: the crypt opening is x=860..1060 and the eastern ravine is x=2420..2660.
-	# 公共控制器已创建西/中/东地面分段与全部台阶；保留这些实体，只补上钟墓坑底。
-	# The flooded crypt floor is authored inside A2-R04 as a StaticBody2D node.
-	# 钟墓坑底已作为 StaticBody2D 手工放入 A2-R04 场景。
+	# Floor gaps stay in the region's ground contract; all ledges and the crypt landing are authored in the six room scenes.
+	# 地面断口仍由区域地面合同维护；所有台阶和钟墓坑底均手工放在六个房间场景中。
 
 	# The crypt opening ends at x=1060, so the checkpoint at x=1150 is already on continuous surface ground.
 	# 钟墓坑口在 x=1060 结束；x=1150 的休整点原本就在连续地表，不应被无故移到远处。
@@ -43,7 +36,7 @@ func _apply_authored_terrain() -> void:
 		bell.position = Vector2(735.0, 322.0)
 
 	region.queue_redraw()
-	print("[NEREIS][A2][TERRAIN] crypt landing added at y=810; shared canopy, C03/C04 and ravine ledges preserved")
+	print("[NEREIS][A2][ROOMS] six authored room scenes assembled; canopy, crypt, C03/C04 and ravine geometry indexed")
 
 
 func configure_platforms(region: Node) -> void:
@@ -70,15 +63,12 @@ func configure_platforms(region: Node) -> void:
 
 
 func create_floor(region: Node) -> void:
-	var floor_y := float(region.get("floor_y"))
 	var map_width := float(region.get("map_width"))
-	# Keep the ground gaps and lower shelves aligned with the region controller’s camera/world bounds.
-	# 地面断口与下层石沿继续使用区域控制器的世界边界和镜头坐标。
+	# Only the continuous ground segments are assembled here; room scenes own all lower shelves.
+	# 此处只装配连续地表分段；所有下层石沿均由房间场景负责。
 	region.call("_add_ground_segment", "GreyboxGround_West", 0.0, 860.0)
 	region.call("_add_ground_segment", "GreyboxGround_Middle", 1060.0, 1360.0)
 	# The eastern ravine separates the expanded forest from the remote canopy exit.
 	# 东部沟壑将扩建林地与远端树冠出口分开。
 	region.call("_add_ground_segment", "GreyboxGround_East", 2660.0, map_width - 2660.0)
-	# Bell Grave descends below the surface into a real undercroft with staggered exit shelves.
-	# The eastern ravine is a deep cut: lower shelves make a second route under the high bridge.
 	return
