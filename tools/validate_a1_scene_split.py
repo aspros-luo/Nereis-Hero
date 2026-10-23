@@ -117,6 +117,11 @@ def main() -> int:
         (humanoid_visual, "scenes/characters/humanoid_character_visual.tscn"),
     ]:
         check_scene_resources(scene, path, errors)
+        require(
+            'Color("#' not in scene,
+            f"{path}: Color values must use numeric serialization in .tscn resources.",
+            errors,
+        )
 
     # A1 roots must not paint map geometry or labels from script.
     for script, path in [(a10_script, "village_hub.gd"), (a11_script, "village_backhill.gd")]:
