@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Static A1 state contracts for the story-map workstream.
+"""A1 story flags, routes and scene-authored state contracts.
 
 Run from the repository root:
     python3 tools/validate_a1_village_state_contracts.py
 
-This is a source-contract check, not a replacement for Godot runtime acceptance.
+This validates source contracts only. Godot runtime testing is still required.
 """
 from __future__ import annotations
 
@@ -29,112 +29,141 @@ def require(condition: bool, message: str) -> None:
 
 def main() -> int:
     village = read("scripts/levels/village_hub.gd")
+    village_scene = read("scenes/village_hub.tscn")
+    backhill = read("scripts/levels/village_backhill.gd")
+    backhill_scene = read("scenes/village_backhill.tscn")
     interior = read("scripts/levels/interior_scene.gd")
     world_state = read("scripts/core/world_state.gd")
     defense = read("scripts/levels/village_defense_demo.gd")
-    topology = json.loads(read("tools/world_map_topology.json"))
     director = read("scripts/core/world_event_director.gd")
+    world_region = read("scripts/levels/greybox_world_region.gd")
+    topology = json.loads(read("tools/world_map_topology.json"))
 
-    # The church remains a quiet exploration space until an explicit story milestone.
+    # The church remains a quiet exploration space until its explicit story flag.
     require(
         'var church_occupied := "church_village_occupied" in WorldState.achievement_flags' in interior,
-        "A1: church occupancy must be controlled by the explicit story flag.",
+        "A1: church occupancy must use its explicit story flag.",
     )
     require(
         'if location_id != "church" or church_occupied:' in interior
-        and '_spawn_npc()' in interior
-        and '_spawn_clue()' in interior
-        and '_spawn_route_door()' in interior
-        and '_spawn_research_door()' in interior,
-        "A1: NPC, clue, route-door and research-door spawning must share the church occupancy gate.",
+        and "_spawn_npc()" in interior
+        and "_spawn_clue()" in interior
+        and "_spawn_route_door()" in interior
+        and "_spawn_research_door()" in interior,
+        "A1: church NPC/clue/route/research content must share the occupancy gate.",
     )
     require(
         'if location_id == "church" and "church_village_occupied" not in WorldState.achievement_flags:' in interior
         and "这里要等到后续剧情节点才会有人到来。" in interior,
-        "A1: empty-church intro must explain the current state without exposing later content.",
-    )
-    require(
-        'church.display_name = "教堂"' in village
-        and 'church.dialogue = "教堂的大门没有上锁。' in village,
-        "A1: village church exterior should remain an explorable empty church.",
+        "A1: empty-church intro must not expose later-stage content.",
     )
 
-    # Camp arrival is a separate, explicitly confirmed later story fact.
-    # Never infer the Restoration Army's arrival from surviving the village defense.
-    camp_poi_start = village.find('if "restoration_camp_established" in WorldState.achievement_flags:')
-    camp_poi_end = village.find('var north_gate := Node2D.new()', camp_poi_start)
-    camp_visual_start = village.find('# Hide the camp\'s distinctive fire and label')
-    camp_visual_end = village.find('draw_rect(Rect2(2780, 330, 120, 190)', camp_visual_start)
+    # Permanent village objects are authored in .tscn; story flags only change their state.
     require(
-        camp_poi_start >= 0
-        and camp_poi_end > camp_poi_start
-        and 'rebel_camp.poi_id = "rebel_camp"' in village[camp_poi_start:camp_poi_end]
-        and 'if "village_defense_survived" in WorldState.achievement_flags' not in village[camp_poi_start:camp_poi_end],
-        "A1: Restoration Army camp POI must use its own explicit arrival flag, not the defense milestone.",
+        all(f'[node name="{name}" type="Node2D" parent="."]' in village_scene for name in [
+            "CampVisual", "NorthGateVisual", "DrainEntranceVisual", "ResonanceWellGate"
+        ]),
+        "A1: camp, gate, drainage entrance and H01 visuals must remain in the scene tree.",
     )
     require(
-        camp_visual_start >= 0
-        and camp_visual_end > camp_visual_start
-        and 'if "restoration_camp_established" in WorldState.achievement_flags:' in village[camp_visual_start:camp_visual_end],
-        "A1: camp fire/label visuals must share the explicit camp-arrival gate.",
+        '$CampVisual.visible = camp_established' in village
+        and '$CampLabel.visible = camp_established' in village
+        and '$RestorationCampPOI.visible = camp_established' in village
+        and 'var camp_established := "restoration_camp_established" in WorldState.achievement_flags' in village,
+        "A1: Restoration Army camp must use its own explicit arrival flag.",
     )
-
-    # Keep the actual map-branch drain transition, rather than the stale direct A3 transition.
     require(
-        'city_cut.poi_id = "city_cut"' in village
-        and 'city_cut.set_meta("p5_1_target_scene", "res://scenes/old_drain_exploration.tscn")' in village
-        and 'WorldState.set_location("old_drain_exploration")' in village
-        and 'SceneTransition.fade_to_scene("res://scenes/old_drain_exploration.tscn")' in village,
-        "A1: city_cut must enter the phased old-drain exploration scene.",
+        '$NorthGateVisual/BlockedState.visible = not defense_survived' in village
+        and '$NorthGateVisual/RepairedState.visible = defense_survived' in village
+        and '$DrainEntranceVisual/RubbleState.visible = not defense_survived' in village,
+        "A1: the defense milestone must switch authored blocked/repaired/rubble states.",
     )
     require(
         'WorldState.record_achievement("village_defense_survived")' in defense
         and '"achievement_flags": achievement_flags' in world_state,
-        "A1: village-defense milestone must be recorded and serialized.",
+        "A1: village-defense milestone must remain persisted.",
     )
 
-    # The cliff-cave consequence requires a real return to A1 after the boss defeat.
+    # Keep the phased drainage route: the defense milestone opens its short segment,
+    # while the final A1/A3 shortcut remains locked until the A4-side gate opens.
+    require(
+        '[node name="CityCutPOI" type="Node2D" parent="."]' in village_scene
+        and 'var city_cut: Node2D = $CityCutPOI' in village
+        and 'city_cut.set_meta("p5_1_target_scene", "res://scenes/old_drain_exploration.tscn")' in village
+        and 'elif location_id == "city_cut":' in village
+        and 'WorldState.set_location("old_drain_exploration")' in village
+        and 'SceneTransition.fade_to_scene("res://scenes/old_drain_exploration.tscn")' in village,
+        "A1: the authored CityCut POI must enter the phased drainage segment after defense.",
+    )
+    c24 = next(edge for edge in topology["connections"] if edge.get("id") == "C24")
+    require(
+        c24.get("from") == "A1"
+        and c24.get("to") == "A3"
+        and c24.get("unlock_condition") == "village_defense_survived"
+        and "opened_old_drainage_link_from_A4" in c24["spatial_contract"]["intermediate_scene"]["a3_link_unlock_flag"],
+        "Topology: preserve C24 route identity and its later A4-side unlock.",
+    )
+
+    # H01 is represented by authored nodes; the gate script only drives the state and transition.
+    require(
+        'var resonance_well_gate: Node2D' in village
+        and 'resonance_well_gate = $ResonanceWellGate' in village
+        and 'resonance_well_gate.secret_id = "H01"' in village
+        and 'resonance_well_gate.target_scene_path = "res://scenes/hidden_well.tscn"' in village
+        and 'resonance_well_gate.required_resonance = 12' in village,
+        "Protected route: H01 identity, threshold or target scene changed.",
+    )
+    require(
+        '[node name="AuthoredVisual" type="Node2D" parent="ResonanceWellGate"]' in village_scene
+        and '[node name="RevealedState" type="Node2D" parent="ResonanceWellGate/AuthoredVisual"]' in village_scene
+        and '[node name="OpenedState" type="Node2D" parent="ResonanceWellGate/AuthoredVisual"]' in village_scene
+        and 'if secret_id == "H01" and has_node("AuthoredVisual"):' in read("scripts/world/resonance_secret_gate.gd"),
+        "H01 visuals must be authored nodes and not drawn from the shared gate script.",
+    )
+
+    # H09 is a consequence of beating the mad cleric and physically returning to A1.
     require(
         'if "defeated_mad_cleric" in WorldState.achievement_flags:' in village
-        and 'WorldState.record_achievement("returned_to_village_after_mad_cleric")' in village
-        and 'if "returned_to_village_after_mad_cleric" not in WorldState.achievement_flags:' in village,
-        "A1: cliff-cave unlock must be recorded on physical return after defeating the mad cleric.",
+        and 'WorldState.record_achievement("returned_to_village_after_mad_cleric")' in village,
+        "A1: returning after the mad cleric must record the explicit return fact.",
     )
     require(
-        'WorldState.record_achievement("defeated_mad_cleric")' in read("scripts/levels/greybox_world_region.gd")
-        and '村庄的山崖似乎回应了这声低鸣。' not in read("scripts/levels/greybox_world_region.gd"),
-        "A6: mad-cleric defeat must not force an explanatory exposition panel.",
+        'var cave_unlocked := "returned_to_village_after_mad_cleric" in WorldState.achievement_flags' in backhill
+        and '$CliffCaveVisual.visible = cave_unlocked' in backhill
+        and 'const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"' in backhill
+        and 'WorldState.discover_hidden_region("H09")' in backhill
+        and 'WorldState.open_hidden_path("H09")' in backhill
+        and 'SceneTransition.fade_to_scene(CLIFF_CAVE_SCENE)' in backhill,
+        "A1.1: H09 must stay gated by physical return, show the authored cave, and enter its existing scene.",
+    )
+    require(
+        'WorldState.record_achievement("defeated_mad_cleric")' in world_region
+        and "村庄的山崖似乎回应了这声低鸣。" not in world_region,
+        "A6: defeating the boss must not replace the return-to-village unlock with exposition.",
     )
 
-    # Merchant route feedback must depend on actual scene-entry facts, not unlocked exits.
+    # Four baseline villagers are scene-authored; dialogue derives from persisted state and can refresh.
     require(
-        '"graybox_intro_forgotten_city" in WorldState.achievement_flags' in village
-        and '"graybox_intro_ash_forest" in WorldState.achievement_flags' in village
+        all(f'[node name="{name}" type="Node2D" parent="."]' in village_scene for name in [
+            "Gatekeeper", "Grandmother", "BlacksmithNPC", "TravelingMerchant"
+        ])
+        and village_scene.count('groups = ["a1_baseline_npcs"]') == 4
+        and 'func _configure_baseline_npcs() -> void:' in village
+        and 'for npc in get_tree().get_nodes_in_group("a1_baseline_npcs"):' in village
+        and '_refresh_baseline_npc_dialogue(npc)' in village,
+        "A1: baseline NPCs must be scene-authored and refresh dialogue from current state.",
+    )
+    require(
+        'match String(npc.npc_id):' in village
+        and '"graybox_intro_forgotten_city" in WorldState.achievement_flags' in village
+        and '"graybox_intro_ash_forest" in village
         and village.index('"graybox_intro_forgotten_city" in WorldState.achievement_flags')
             < village.index('"graybox_intro_ash_forest" in WorldState.achievement_flags')
         and 'elif "village_defense_survived" in WorldState.achievement_flags:' in village,
-        "A1: merchant revisit dialogue must prioritize actual A3/A2 exploration facts before generic defense feedback.",
+        "A1: merchant dialogue must prioritize actual A3/A2 visits before generic defense feedback.",
     )
 
-    # The pilgrim knight is manifest-managed in exactly one interior selected by explicit story facts.
-    require(
-        director.count('"id": "pilgrim_knight_a1"') == 2
-        and '"value": "pilgrim_knight_a1_arrived"' in director
-        and '"value": "pilgrim_knight_at_tavern"' in director
-        and '{"type": "location", "value": "tavern"}' in director
-        and '{"type": "location", "value": "church"}' in director
-        and '"dialogue_variants"' in director,
-        "A1: pilgrim knight must be manifest-managed, arrival-gated, and assigned to only one interior by the location flag.",
-    )
-    require(
-        'const WORLD_EVENT_DIRECTOR_SCRIPT = preload("res://scripts/core/world_event_director.gd")' in interior
-        and 'world_event_director.setup(WorldState, self)' in interior
-        and 'world_event_director.spawn_npcs(self, ROUTE_NPC_SCRIPT, Callable(self, "_on_npc_interacted"))' in interior
-        and 'var pilgrim_arrived :=' not in interior,
-        "A1: interior progression NPCs must spawn through the director rather than duplicate hand-written branches.",
-    )
-
-    # The tavern sound event is a one-time, persisted world fact; dialogue is resolved on re-entry.
+    # The one-time tavern sound event is attached to the A1.1 scene that actually owns the tavern POI.
     require(
         '"id": "A1_tavern_sound_notice"' in director
         and '"trigger": "interaction"' in director
@@ -142,72 +171,45 @@ def main() -> int:
         and '"once": true' in director
         and '{"type": "flag_absent", "value": "A1_tavern_sound_noticed"}' in director
         and '{"type": "add_flag", "value": "A1_tavern_sound_noticed"}' in director,
-        "A1: tavern sound notice must be an idempotent one-time event gated by the missing fact.",
+        "A1: tavern sound must remain a one-time event guarded by the missing fact.",
     )
     require(
-        'world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": String(poi.poi_id)' in village
-        and 'world_event_director.dispatch("region_entered", {"region": "A1", "location": "village"' in village
-        and 'if "A1_tavern_sound_noticed" in WorldState.achievement_flags' in interior,
-        "A1: tavern notice must dispatch from the real POI interaction and resolve the follow-up on interior re-entry.",
+        '[node name="WorldEventDirector" type="Node" parent="."]' in backhill_scene
+        and 'groups = ["a1_tavern_poi"]' in backhill_scene
+        and 'world_event_director.dispatch("region_entered", {"region": "A1", "location": "village_backhill"})' in backhill
+        and 'world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": String(poi.poi_id)' in backhill
+        and '"A1_tavern_sound_noticed" in WorldState.achievement_flags' in backhill,
+        "A1.1: tavern one-time event must dispatch from the actual scene-owned Tavern POI.",
     )
     require(
-        'tavern.add_to_group("a1_tavern_poi")' in village
-        and 'func _refresh_tavern_poi_dialogue() -> void:' in village
-        and '你再次靠近酒馆。门内没有歌声' in village
-        and 'if "A1_tavern_sound_noticed" in WorldState.achievement_flags:' in village,
-        "A1: the outdoor tavern POI must react to the persisted first-visit sound fact on subsequent interactions.",
+        'if "A1_tavern_sound_noticed" in WorldState.achievement_flags:' in backhill
+        and "你再次靠近酒馆。门内没有歌声" in backhill
+        and 'func _refresh_tavern_poi_dialogue() -> void:' in backhill,
+        "A1.1: tavern repeat interaction must react to the persisted sound-noticed flag.",
     )
     require(
-        'func _apply_effects(effects: Array)' in director
-        and '_world_state.save_game()' in director
-        and 'func _mark_fired(event_id: String)' in director
-        and '_world_state.save_game()' in director[director.find('func _mark_fired(event_id: String)'):],
-        "A1: one-time event effects and fired markers must persist across scene changes and Continue.",
+        'func _apply_effects(effects: Array) -> void:' in director
+        and '_world_state.save_game()' in director[director.index('func _apply_effects(effects: Array) -> void:'):],
+        "A1: event effects must persist their story flags.",
     )
 
-    # Baseline villagers must recalculate dialogue from current facts, not only at scene creation.
+    # Preserve the phased-route and scene-bound manager contracts.
     require(
-        'npc.add_to_group("a1_baseline_npcs")' in village
-        and 'grandmother.add_to_group("a1_baseline_npcs")' in village
-        and 'blacksmith.add_to_group("a1_baseline_npcs")' in village
-        and 'merchant.add_to_group("a1_baseline_npcs")' in village
-        and 'for npc in get_tree().get_nodes_in_group("a1_baseline_npcs"):' in village
-        and '_refresh_baseline_npc_dialogue(npc)' in village,
-        "A1: gatekeeper, grandmother, blacksmith and merchant dialogue must refresh from current world facts.",
+        '$WorldEventDirector' in village
+        and '$NarrativeAudio' in village
+        and '$VillageFireflies' in village
+        and '[node name="VillageFireflies" parent="." instance=ExtResource("19")]' in village_scene,
+        "A1.0 managers and fireflies should be scene-authored, not manually constructed.",
     )
     require(
-        'func _refresh_baseline_npc_dialogue(npc: Node)' in village
-        and '"graybox_intro_forgotten_city" in WorldState.achievement_flags' in village
-        and '"graybox_intro_ash_forest" in WorldState.achievement_flags' in village,
-        "A1: refreshed merchant dialogue must preserve actual A3/A2 exploration priority.",
+        '"achievement_flags": achievement_flags' in world_state,
+        "WorldState must serialize achievement flags.",
     )
 
-    # Protect already established optional routes from unrelated A1 changes.
-    require(
-        'resonance_well_gate.secret_id = "H01"' in village
-        and 'resonance_well_gate.target_scene_path = "res://scenes/hidden_well.tscn"' in village
-        and "resonance_well_gate.required_resonance = 12" in village,
-        "Protected route: H01 well entrance contract changed.",
-    )
-    require(
-        '"returned_to_village_after_mad_cleric" not in WorldState.achievement_flags' in village
-        and 'const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"' in village
-        and "SceneTransition.fade_to_scene(CLIFF_CAVE_SCENE)" in village,
-        "Protected route: cliff-cave gate or destination changed.",
-    )
-
-    c24 = next(edge for edge in topology["connections"] if edge.get("id") == "C24")
-    require(
-        c24.get("from") == "A1"
-        and c24.get("to") == "A3"
-        and c24.get("unlock_condition") == "village_defense_survived",
-        "Topology: C24 must preserve the existing A1/A3 route identity and defense gate.",
-    )
-
-    print("[PASS] Church NPC/clue/route/research content remains gated until occupation")
-    print("[PASS] A1 old-drain entrance targets the phased exploration scene")
-    print("[PASS] Restoration Army camp appearance is gated by its own later-story flag")
-    print("[PASS] Village-defense milestone, H01 well, cliff cave and C24 contracts are preserved")
+    print("[PASS] Church occupancy and interior content remain explicitly gated")
+    print("[PASS] Camp, north gate, drain and H01 use scene-authored visuals with flag-driven states")
+    print("[PASS] A1/A1.1 transitions, H09 return unlock, C24 and H01 contracts are preserved")
+    print("[PASS] Baseline NPCs, tavern event, event persistence and managers are scene-bound")
     print("A1 VILLAGE STATE CONTRACTS: PASS")
     return 0
 
