@@ -5,6 +5,7 @@ extends SceneTree
 
 var failures: Array[String] = []
 var original_flags: Array = []
+var original_debug_map_test_mode := false
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -12,10 +13,14 @@ func _initialize() -> void:
 
 func _run() -> void:
 	original_flags = WorldState.achievement_flags.duplicate()
+	original_debug_map_test_mode = WorldState.debug_map_test_mode
+	# Suppress save writes: loading A1.0 activates its checkpoint during smoke testing.
+	WorldState.debug_map_test_mode = true
 	WorldState.achievement_flags.clear()
 	await _test_a10_scene_and_state_matrix()
 	await _test_h09_lock_and_unlock()
 	_restore_flags()
+	WorldState.debug_map_test_mode = original_debug_map_test_mode
 	if failures.is_empty():
 		print("A1 GODOT SCENE SMOKE TEST: PASS")
 		print(" - A1.0/A1.1 scenes instantiate and required authored nodes resolve.")
