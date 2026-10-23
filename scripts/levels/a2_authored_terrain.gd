@@ -11,6 +11,15 @@ const A2_ROOM_SCENES: Array[PackedScene] = [
 	preload("res://scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn"),
 ]
 
+const A2_EXPECTED_PLATFORM_COUNTS: Dictionary = {
+	"A2R01ForestCrossroads": 12,
+	"A2R02CanopyBridge": 7,
+	"A2R03BellTombGallery": 9,
+	"A2R04FloodedCrypt": 6,
+	"A2R05OldPilgrimHighroad": 13,
+	"A2R06EasternRavine": 24,
+}
+
 
 func _ready() -> void:
 	call_deferred("_apply_authored_terrain")
@@ -36,7 +45,50 @@ func _apply_authored_terrain() -> void:
 		bell.position = Vector2(735.0, 322.0)
 
 	region.queue_redraw()
+	_validate_authored_rooms(region)
 	print("[NEREIS][A2][ROOMS] six authored room scenes assembled; canopy, crypt, C03/C04 and ravine geometry indexed")
+
+
+func _validate_authored_rooms(region: Node) -> void:
+	var total_platforms := 0
+	var max_platform_right := 0.0
+	var room_count := 0
+	for room_name in A2_EXPECTED_PLATFORM_COUNTS:
+		var room := region.get_node_or_null(room_name) as Node2D
+		if room == null:
+			push_error("[NEREIS][A2][VERIFY][FAIL] missing room root: " + room_name)
+			continue
+		room_count += 1
+		var platform_count := 0
+		for body in room.get_children():
+			if not (body is StaticBody2D):
+				continue
+			platform_count += 1
+			for shape_node in body.get_children():
+				if not (shape_node is CollisionShape2D):
+					continue
+				var shape := shape_node.shape
+				if shape is RectangleShape2D:
+					var right_edge := body.position.x + shape_node.position.x + (shape as RectangleShape2D).size.x * 0.5
+					max_platform_right = maxf(max_platform_right, right_edge)
+		total_platforms += platform_count
+		var expected := int(A2_EXPECTED_PLATFORM_COUNTS[room_name])
+		if platform_count != expected:
+			push_error("[NEREIS][A2][VERIFY][FAIL] room=%s platforms=%d expected=%d" % [room_name, platform_count, expected])
+		else:
+			print("[NEREIS][A2][VERIFY][ROOM] %s platforms=%d" % [room_name, platform_count])
+
+	var map_width := float(region.get("map_width"))
+	if room_count != A2_EXPECTED_PLATFORM_COUNTS.size():
+		push_error("[NEREIS][A2][VERIFY][FAIL] room_count=%d expected=%d" % [room_count, A2_EXPECTED_PLATFORM_COUNTS.size()])
+	if max_platform_right > map_width:
+		push_error("[NEREIS][A2][VERIFY][FAIL] authored terrain exceeds map width: right=%.1f width=%.1f" % [max_platform_right, map_width])
+	if map_width < 3480.0:
+		push_error("[NEREIS][A2][VERIFY][FAIL] map width %.1f clips the eastern route; expected at least 3480" % map_width)
+	else:
+		print("[NEREIS][A2][VERIFY] PASS rooms=%d/%d platforms=%d/71 right_edge=%.1f map_width=%.1f ground_spans=3" % [
+			room_count, A2_EXPECTED_PLATFORM_COUNTS.size(), total_platforms, max_platform_right, map_width
+		])
 
 
 func configure_platforms(region: Node) -> void:
