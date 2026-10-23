@@ -342,6 +342,8 @@ polygon = PackedVector2Array(0,0, 12,-8, 18,5, 4,10)
 color = Color("#6b5c68")
 
 [node name="ChurchTitle" type="Label" parent="."]
+offset_right = 150.0
+offset_bottom = 42.0
 position = Vector2(365, 278)
 text = "教堂"
 z_index = 5
@@ -349,6 +351,8 @@ theme_override_colors/font_color = Color("#c8b9c5")
 theme_override_font_sizes/font_size = 22
 
 [node name="TavernTitle" type="Label" parent="."]
+offset_right = 130.0
+offset_bottom = 38.0
 position = Vector2(700, 348)
 text = "酒馆"
 z_index = 5
@@ -356,6 +360,8 @@ theme_override_colors/font_color = Color("#c8a68b")
 theme_override_font_sizes/font_size = 20
 
 [node name="BackhillTitle" type="Label" parent="."]
+offset_right = 180.0
+offset_bottom = 36.0
 position = Vector2(1320, 300)
 text = "后山小径"
 z_index = 5
@@ -363,6 +369,8 @@ theme_override_colors/font_color = Color("#a5a1b0")
 theme_override_font_sizes/font_size = 18
 
 [node name="CliffTitle" type="Label" parent="."]
+offset_right = 140.0
+offset_bottom = 30.0
 position = Vector2(1740, 292)
 text = "悬崖边缘"
 z_index = 5
