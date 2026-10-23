@@ -49,6 +49,24 @@ position = Vector2(60, 9)
 shape = SubResource("Rect_001")
 one_way_collision = true
 
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_001"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(120, 12), Vector2(120, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_001"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(120, 3), Vector2(120, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_001"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(120, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_001"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(118, 12))
+width = 2.0
+default_color = Color("#1b171f")
+
 [node name="Platform_002" type="StaticBody2D" parent="."]
 position = Vector2(430, 530)
 
@@ -56,6 +74,24 @@ position = Vector2(430, 530)
 position = Vector2(55, 9)
 shape = SubResource("Rect_002")
 one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_002"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(110, 12), Vector2(110, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_002"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(110, 3), Vector2(110, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_002"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(110, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_002"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(108, 12))
+width = 2.0
+default_color = Color("#1b171f")
 
 [node name="Platform_003" type="StaticBody2D" parent="."]
 position = Vector2(555, 465)
@@ -65,6 +101,24 @@ position = Vector2(57.5, 9)
 shape = SubResource("Rect_003")
 one_way_collision = true
 
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_003"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(115, 12), Vector2(115, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_003"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(115, 3), Vector2(115, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_003"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(115, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_003"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(113, 12))
+width = 2.0
+default_color = Color("#1b171f")
+
 [node name="Platform_004" type="StaticBody2D" parent="."]
 position = Vector2(690, 410)
 
@@ -72,6 +126,24 @@ position = Vector2(690, 410)
 position = Vector2(52.5, 9)
 shape = SubResource("Rect_004")
 one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_004"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(105, 12), Vector2(105, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_004"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(105, 3), Vector2(105, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_004"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(105, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_004"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(103, 12))
+width = 2.0
+default_color = Color("#1b171f")
 
 [node name="Platform_005" type="StaticBody2D" parent="."]
 position = Vector2(770, 345)
@@ -81,6 +153,24 @@ position = Vector2(52.5, 9)
 shape = SubResource("Rect_005")
 one_way_collision = true
 
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_005"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(105, 12), Vector2(105, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_005"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(105, 3), Vector2(105, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_005"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(105, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_005"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(103, 12))
+width = 2.0
+default_color = Color("#1b171f")
+
 [node name="Platform_006" type="StaticBody2D" parent="."]
 position = Vector2(900, 290)
 
@@ -88,6 +178,24 @@ position = Vector2(900, 290)
 position = Vector2(60, 9)
 shape = SubResource("Rect_006")
 one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_006"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(120, 12), Vector2(120, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_006"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(120, 3), Vector2(120, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_006"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(120, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_006"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(118, 12))
+width = 2.0
+default_color = Color("#1b171f")
 
 [node name="Platform_007" type="StaticBody2D" parent="."]
 position = Vector2(1035, 235)
@@ -97,6 +205,24 @@ position = Vector2(65, 9)
 shape = SubResource("Rect_007")
 one_way_collision = true
 
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_007"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(130, 12), Vector2(130, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_007"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(130, 3), Vector2(130, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_007"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(130, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_007"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(128, 12))
+width = 2.0
+default_color = Color("#1b171f")
+
 [node name="Platform_008" type="StaticBody2D" parent="."]
 position = Vector2(1175, 275)
 
@@ -104,6 +230,24 @@ position = Vector2(1175, 275)
 position = Vector2(57.5, 9)
 shape = SubResource("Rect_008")
 one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_008"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(115, 12), Vector2(115, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_008"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(115, 3), Vector2(115, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_008"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(115, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_008"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(113, 12))
+width = 2.0
+default_color = Color("#1b171f")
 
 [node name="Platform_009" type="StaticBody2D" parent="."]
 position = Vector2(1265, 345)
@@ -113,6 +257,24 @@ position = Vector2(60, 9)
 shape = SubResource("Rect_009")
 one_way_collision = true
 
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_009"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(120, 12), Vector2(120, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_009"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(120, 3), Vector2(120, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_009"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(120, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_009"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(118, 12))
+width = 2.0
+default_color = Color("#1b171f")
+
 [node name="Platform_010" type="StaticBody2D" parent="."]
 position = Vector2(1380, 405)
 
@@ -120,6 +282,24 @@ position = Vector2(1380, 405)
 position = Vector2(65, 9)
 shape = SubResource("Rect_010")
 one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_010"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(130, 12), Vector2(130, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_010"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(130, 3), Vector2(130, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_010"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(130, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_010"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(128, 12))
+width = 2.0
+default_color = Color("#1b171f")
 
 [node name="Platform_011" type="StaticBody2D" parent="."]
 position = Vector2(1510, 465)
@@ -129,6 +309,24 @@ position = Vector2(60, 9)
 shape = SubResource("Rect_011")
 one_way_collision = true
 
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_011"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(120, 12), Vector2(120, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_011"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(120, 3), Vector2(120, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_011"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(120, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_011"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(118, 12))
+width = 2.0
+default_color = Color("#1b171f")
+
 [node name="Platform_012" type="StaticBody2D" parent="."]
 position = Vector2(1630, 520)
 
@@ -136,4 +334,22 @@ position = Vector2(1630, 520)
 position = Vector2(67.5, 9)
 shape = SubResource("Rect_012")
 one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="Platform_012"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(135, 12), Vector2(135, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="Platform_012"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(135, 3), Vector2(135, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="Platform_012"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(135, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="Platform_012"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(133, 12))
+width = 2.0
+default_color = Color("#1b171f")
 
