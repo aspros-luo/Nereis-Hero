@@ -14,7 +14,7 @@ func _apply_authored_terrain() -> void:
 	if region == null or not is_instance_valid(region):
 		return
 
-	var old_platforms: Array = region.get("platforms")
+	var old_platforms: Array = region.get("platforms").duplicate()
 	for child in region.get_children():
 		if not (child is StaticBody2D):
 			continue
@@ -28,7 +28,8 @@ func _apply_authored_terrain() -> void:
 			region.remove_child(child)
 			child.queue_free()
 
-	region.set("platforms", [])
+	var live_platforms: Array = region.get("platforms")
+	live_platforms.clear()
 	_add_floor_segment(region, "WestForestGround", 0.0, 860.0, 540.0)
 	_add_floor_segment(region, "EastForestGround", 1480.0, 1120.0, 540.0)
 	_add_floor_segment(region, "FloodedCryptFloor", 860.0, 620.0, CRYPT_FLOOR_Y)
