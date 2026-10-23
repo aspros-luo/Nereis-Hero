@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource type="Script" path="res://scripts/levels/a2_authored_terrain.gd" id="1"]
 
 [node name="AshForest" type="Node2D"]
 script = ExtResource("1")
