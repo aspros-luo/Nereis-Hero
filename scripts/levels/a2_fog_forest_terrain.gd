@@ -163,3 +163,9 @@ func _spawn_region_rest_point() -> void:
 	var rest_point := get_node_or_null("RegionRestPoint_A2")
 	if rest_point != null:
 		rest_point.position.y = 650.0
+
+
+func _spawn_region_encounters() -> void:
+	# Terrain-first pass: leave the A2 route free of enemies until traversal and room scale are accepted.
+	# 地形优先阶段暂不生成 A2 敌人，待路线与空间规模验收后再安排遭遇。
+	pass
