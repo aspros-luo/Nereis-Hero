@@ -2201,6 +2201,12 @@ func _add_platform(rect: Rect2) -> void:
 	body.add_child(shape)
 	add_child(body)
 
+
+func _register_authored_platform(rect: Rect2) -> void:
+	# Authored room scenes own the StaticBody2D collision nodes; this list is only for the shared material renderer.
+	# 房间场景拥有实体碰撞节点；此数组只供共享材质渲染使用。
+	platforms.append(rect)
+
 func _spawn_region_rest_point() -> void:
 	# Main regions receive one deliberate rest point; hidden regions remain riskier and have no free checkpoint.
 	# 主区域各有一处有意布置的休整点；隐藏区域不提供免费的安全检查点。
