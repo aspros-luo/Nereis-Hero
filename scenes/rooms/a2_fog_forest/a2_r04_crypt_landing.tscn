@@ -42,16 +42,16 @@ one_way_collision = true
 polygon = PackedVector2Array(0, 12, 60, 12, 60, 18, 0, 18)
 color = Color("#211f25")
 
-[node name="StoneUpperFace" type="Polygon2D" parent="CryptReturnShelf"]
+[node name="StoneUpperFace" type="Polygon2D" parent="CryptReturnShelfWest"]
 polygon = PackedVector2Array(0, 3, 60, 3, 60, 12, 0, 12)
 color = Color("#39343d")
 
-[node name="StoneTopEdge" type="Line2D" parent="CryptReturnShelf"]
+[node name="StoneTopEdge" type="Line2D" parent="CryptReturnShelfWest"]
 points = PackedVector2Array(0, 0, 60, 0)
 width = 2.0
 default_color = Color("#a4d49a")
 
-[node name="StoneSeam" type="Line2D" parent="CryptReturnShelf"]
+[node name="StoneSeam" type="Line2D" parent="CryptReturnShelfWest"]
 points = PackedVector2Array(2, 12, 58, 12)
 width = 2.0
 default_color = Color("#1b171f")
