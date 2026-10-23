@@ -50,12 +50,12 @@ func configure_platforms(region: Node) -> void:
 			continue
 		region.add_child(room)
 		for body in room.get_children():
-			if not body is StaticBody2D:
+			if not (body is StaticBody2D):
 				continue
 			for shape_node in body.get_children():
-				if not shape_node is CollisionShape2D or not shape_node.one_way_collision:
+				if not (shape_node is CollisionShape2D) or not shape_node.one_way_collision:
 					continue
-				if not shape_node.shape is RectangleShape2D:
+				if not (shape_node.shape is RectangleShape2D):
 					continue
 				var rectangle := shape_node.shape as RectangleShape2D
 				var rect := Rect2(body.position + shape_node.position - rectangle.size * 0.5, rectangle.size)
