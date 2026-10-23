@@ -1,0 +1,150 @@
+[gd_scene load_steps=14 format=3]
+
+; 旧朝圣高路、C04高位落点与下层绕行
+; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
+
+[sub_resource type="RectangleShape2D" id="Rect_001"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_002"]
+size = Vector2(120, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_003"]
+size = Vector2(120, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_004"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_005"]
+size = Vector2(120, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_006"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_007"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_008"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_009"]
+size = Vector2(125, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_010"]
+size = Vector2(120, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_011"]
+size = Vector2(125, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_012"]
+size = Vector2(140, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_013"]
+size = Vector2(115, 18)
+
+[node name="A2R05OldPilgrimHighroad" type="Node2D"]
+
+[node name="Platform_029" type="StaticBody2D" parent="."]
+position = Vector2(1585, 365)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_029"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_001")
+one_way_collision = true
+
+[node name="Platform_030" type="StaticBody2D" parent="."]
+position = Vector2(1710, 310)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_030"]
+position = Vector2(60, 9)
+shape = SubResource("Rect_002")
+one_way_collision = true
+
+[node name="Platform_031" type="StaticBody2D" parent="."]
+position = Vector2(1840, 270)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_031"]
+position = Vector2(60, 9)
+shape = SubResource("Rect_003")
+one_way_collision = true
+
+[node name="Platform_032" type="StaticBody2D" parent="."]
+position = Vector2(1970, 315)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_032"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_004")
+one_way_collision = true
+
+[node name="Platform_033" type="StaticBody2D" parent="."]
+position = Vector2(2085, 375)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_033"]
+position = Vector2(60, 9)
+shape = SubResource("Rect_005")
+one_way_collision = true
+
+[node name="Platform_034" type="StaticBody2D" parent="."]
+position = Vector2(2185, 440)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_034"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_006")
+one_way_collision = true
+
+[node name="Platform_035" type="StaticBody2D" parent="."]
+position = Vector2(1735, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_035"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_007")
+one_way_collision = true
+
+[node name="Platform_036" type="StaticBody2D" parent="."]
+position = Vector2(1850, 485)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_036"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_008")
+one_way_collision = true
+
+[node name="Platform_037" type="StaticBody2D" parent="."]
+position = Vector2(1975, 525)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_037"]
+position = Vector2(62.5, 9)
+shape = SubResource("Rect_009")
+one_way_collision = true
+
+[node name="Platform_038" type="StaticBody2D" parent="."]
+position = Vector2(2100, 565)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_038"]
+position = Vector2(60, 9)
+shape = SubResource("Rect_010")
+one_way_collision = true
+
+[node name="Platform_039" type="StaticBody2D" parent="."]
+position = Vector2(1740, 510)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_039"]
+position = Vector2(62.5, 9)
+shape = SubResource("Rect_011")
+one_way_collision = true
+
+[node name="Platform_040" type="StaticBody2D" parent="."]
+position = Vector2(1840, 535)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_040"]
+position = Vector2(70, 9)
+shape = SubResource("Rect_012")
+one_way_collision = true
+
+[node name="Platform_041" type="StaticBody2D" parent="."]
+position = Vector2(1975, 465)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_041"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_013")
+one_way_collision = true
+
