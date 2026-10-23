@@ -569,17 +569,11 @@ def main() -> int:
     a2_terrain = read("scripts/levels/a2_authored_terrain.gd", errors)
     for contract in (
         "func _apply_authored_terrain() -> void:",
-        "const CRYPT_FLOOR_Y := 810.0",
-        "const CRYPT_LEFT := 860.0",
-        "const CRYPT_WIDTH := 200.0",
-        'region.get_node_or_null("A2_FloodedCryptFloor") == null',
-        'const CRYPT_LANDING_SCENE := preload("res://scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn")',
-        "var crypt_landing := CRYPT_LANDING_SCENE.instantiate() as StaticBody2D",
-        "crypt_landing.position = Vector2(CRYPT_LEFT, CRYPT_FLOOR_Y)",
-        "The shared A2 controller already creates the west/middle/east surface gaps and all ledges.",
+        "const A2_ROOM_SCENES: Array[PackedScene] = [",
+        "func configure_platforms(region: Node) -> void:",
+        "region.call(\"_register_authored_platform\", rect)",
         "rest.position = Vector2(1150.0, float(region.get(\"floor_y\")))",
         "bell.position = Vector2(735.0, 322.0)",
-        "shared canopy, C03/C04 and ravine ledges preserved",
     ):
         require(a2_terrain, contract, "A2 authored terrain contract", errors)
     require(region_script, 'authored_terrain.call("create_floor", self)', "A2 floor creation delegated to authored terrain", errors)
@@ -590,22 +584,31 @@ def main() -> int:
         'region.call("_add_ground_segment", "GreyboxGround_West", 0.0, 860.0)',
         'region.call("_add_ground_segment", "GreyboxGround_Middle", 1060.0, 1360.0)',
         'region.call("_add_ground_segment", "GreyboxGround_East", 2660.0, map_width - 2660.0)',
-        'region.call("_add_platform", Rect2(860.0, floor_y + 125.0, 200.0, 18.0))',
-        'region.call("_add_platform", Rect2(2420.0, floor_y + 125.0, 240.0, 18.0))',
     ):
         require(a2_terrain, contract, "A2 floor collision contract", errors)
     require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 810.0, 200.0, 180.0), false)', "A2 crypt floor rendering", errors)
     crypt_landing_scene = read("scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn", errors)
+    for room_path in (
+        "scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn",
+        "scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn",
+        "scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn",
+        "scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn",
+        "scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn",
+        "scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn",
+    ):
+        require(a2_terrain, room_path, "A2 six-room scene assembly", errors)
     for contract in (
-        '[node name="A2CryptLanding" type="StaticBody2D"]',
+        '[node name="CryptLanding" type="StaticBody2D" parent="."]',
         'size = Vector2(200, 40)',
         'position = Vector2(100, 20)',
-        'shape = SubResource("RectangleShape2D_crypt_floor")',
+        'shape = SubResource("Rect_001")',
     ):
         require(crypt_landing_scene, contract, "A2-R04 crypt landing collision scene", errors)
     require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(2660.0, floor_y, map_width - 2660.0, 180.0), false)', "A2 eastern ravine rendering", errors)
-    require(a2_terrain, 'region.call("_add_platform", Rect2(3335, 490, 145, 18))', "A2 C03 remote canopy landing", errors)
-    require(a2_terrain, 'region.call("_add_platform", Rect2(1740, 510, 125, 18))', "A2 C04 highroad landing", errors)
+    a2_r06_scene = read("scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn", errors)
+    require(a2_r06_scene, 'position = Vector2(3335, 490)', "A2 C03 remote canopy landing", errors)
+    a2_r05_scene = read("scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn", errors)
+    require(a2_r05_scene, 'position = Vector2(1740, 510)', "A2 C04 highroad landing", errors)
 
     # Optional boss encounters are not C-edges, but still require a traceable entry, victory, death-reset, and return contract.
     # 可选 Boss 遭遇不计入跨区 C 边，但入口、胜利、死亡重置和回程必须可追踪。
@@ -819,7 +822,8 @@ def main() -> int:
     # C03 must remain a genuinely supported two-way canopy route between A2 and A3.
     require(region_script, '3400.0, "E  沿树冠高路进入被遗忘的城区"', "C03 A2 eastern canopy door anchor", errors)
     require(region_script, '"res://scenes/forgotten_city.tscn", "city_canopy_entry",\n\t\t\t\ttrue, "", "", floor_y - 160.0', "C03 A2 door transition and elevation", errors)
-    require(a2_terrain, 'region.call("_add_platform", Rect2(3335, 490, 145, 18))', "C03 A2 exit support platform", errors)
+    a2_r06_scene = read("scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn", errors)
+    require(a2_r06_scene, 'position = Vector2(3335, 490)', "C03 A2 exit support platform", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return X mapping branch", errors)
     require(region_script, "return 3220.0", "C03 A2 return X landing", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return height mapping branch", errors)
@@ -849,7 +853,8 @@ def main() -> int:
     require(region_script, 'if region_id == "A3" and side == "village_city_cut":', "C24 A3 arrival spawn branch", errors)
     require(region_script, "return 700.0", "C24 A3 arrival spawn x=700", errors)
     require(region_script, '520.0, "E  经旧排水道返回"', "A3 return-to-village exit at x=520", errors)
-    require(a2_terrain, 'region.call("_add_platform", Rect2(770, 345, 105, 18))', "A2 forest canopy route", errors)
+    a2_r01_scene = read("scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn", errors)
+    require(a2_r01_scene, 'position = Vector2(770, 345)', "A2 forest canopy route", errors)
     require(region_script, "_add_platform(Rect2(450, 400, 110, 18))", "A3 rooftop loop", errors)
     require(region_script, "_add_platform(Rect2(1650, 310, 130, 18))", "A4 pipe-walk route", errors)
     require(region_script, "_add_platform(Rect2(420, 420, 120, 18))", "A5 battlefield parapet route", errors)
@@ -933,19 +938,47 @@ def main() -> int:
                 )
                 region_block = platform_section[header.start():block_end]
                 if region_id == "A2":
-                    a2_terrain_for_audit = read("scripts/levels/a2_authored_terrain.gd", errors)
-                    a2_platform_start = a2_terrain_for_audit.find("func configure_platforms(region: Node) -> void:")
-                    a2_platform_end = a2_terrain_for_audit.find("\nfunc create_floor", a2_platform_start)
-                    if a2_platform_start >= 0 and a2_platform_end > a2_platform_start:
-                        region_block = a2_terrain_for_audit[a2_platform_start:a2_platform_end]
-                        region_block = region_block.replace('region.call("_add_platform", Rect2(', "_add_platform(Rect2(")
-                platforms = [
-                    tuple(float(value) for value in match.groups())
-                    for match in re.finditer(
-                        r"_add_platform\(Rect2\(([0-9.]+),\s*([0-9.]+),\s*([0-9.]+),\s*([0-9.]+)\)\)",
-                        region_block,
+                    platforms = []
+                    a2_room_paths = (
+                        "scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn",
+                        "scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn",
+                        "scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn",
+                        "scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn",
+                        "scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn",
+                        "scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn",
                     )
-                ]
+                    for room_path in a2_room_paths:
+                        room_text = read(room_path, errors)
+                        shape_sizes = {
+                            shape_id: (float(width), float(height))
+                            for shape_id, width, height in re.findall(
+                                r'\[sub_resource type="RectangleShape2D" id="(Rect_\d+)"\]\s*size = Vector2\(([0-9.]+),\s*([0-9.]+)\)',
+                                room_text,
+                            )
+                        }
+                        body_matches = list(re.finditer(
+                            r'\[node name="[^"]+" type="StaticBody2D" parent="\\."\]\s*position = Vector2\(([0-9.]+),\s*([0-9.]+)\)',
+                            room_text,
+                        ))
+                        for body_index, body_match in enumerate(body_matches):
+                            body_end = body_matches[body_index + 1].start() if body_index + 1 < len(body_matches) else len(room_text)
+                            body_block = room_text[body_match.end():body_end]
+                            shape_match = re.search(r'shape = SubResource\("(Rect_\d+)"\)', body_block)
+                            if shape_match is None or "one_way_collision = true" not in body_block:
+                                continue
+                            shape_size = shape_sizes.get(shape_match.group(1))
+                            if shape_size is None:
+                                errors.append(f"{room_path}: missing rectangle resource {shape_match.group(1)}.")
+                                continue
+                            platforms.append((float(body_match.group(1)), float(body_match.group(2)), shape_size[0], shape_size[1]))
+                else:
+                    platforms = [
+                        tuple(float(value) for value in match.groups())
+                        for match in re.finditer(
+                            r"_add_platform\(Rect2\(([0-9.]+),\s*([0-9.]+),\s*([0-9.]+),\s*([0-9.]+)\)\)",
+                            region_block,
+                        )
+                    ]
                 if not platforms:
                     continue
                 platform_audit_regions += 1
