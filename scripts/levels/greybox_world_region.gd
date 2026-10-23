@@ -3905,6 +3905,10 @@ func _draw() -> void:
 		_draw_floor_gap_visuals()
 
 	for platform in platforms:
+		# A2's room scenes own their visible Polygon2D/Line2D platform nodes.
+		# A2 房间场景自身绘制平台节点，避免与区域级绘制重复。
+		if region_id == "A2":
+			continue
 		# A shallow tinted side face adds material depth while keeping the walkable top unmistakable.
 		# 薄薄的染色侧壁增加材质厚度，同时让可站立顶面保持清晰。
 		var platform_base := _platform_color()
