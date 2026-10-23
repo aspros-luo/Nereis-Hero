@@ -541,6 +541,9 @@ func _spawn_x_for_side(side: String) -> float:
 func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 	hero = CharacterBody2D.new()
 	hero.set_script(HERO_SCRIPT)
+	# The region controller owns the single delayed checkpoint recovery; prevent Hero.gd from running a second fade/teleport in parallel.
+	# 死亡后的延迟复位由区域控制器统一负责；禁止 Hero.gd 再并行执行第二套淡出/传送。
+	hero.defer_death_recovery = true
 	hero.position = Vector2(spawn_x, floor_y if spawn_y < 0.0 else spawn_y)
 	hero.name = "Hero"
 	_add_character_collision(hero, 18.0, 48.0)
