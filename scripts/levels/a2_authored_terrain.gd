@@ -34,7 +34,7 @@ func _apply_authored_terrain() -> void:
 		bell.position = Vector2(735.0, 322.0)
 
 	region.queue_redraw()
-	print("[NEREIS][A2][TERRAIN] crypt landing added at y=790; shared canopy, C03/C04 and ravine ledges preserved")
+	print("[NEREIS][A2][TERRAIN] crypt landing added at y=810; shared canopy, C03/C04 and ravine ledges preserved")
 
 func _add_floor_segment(region: Node, segment_name: String, x: float, width: float, top_y: float) -> void:
 	if width <= 0.0:
