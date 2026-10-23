@@ -3904,7 +3904,7 @@ func _draw() -> void:
 		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, 860.0, 180.0), false)
 		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(1060.0, floor_y, 1360.0, 180.0), false)
 		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(2660.0, floor_y, map_width - 2660.0, 180.0), false)
-		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 790.0, 200.0, 180.0), false)
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 810.0, 200.0, 180.0), false)
 	else:
 		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
 	_draw_ground_detail()
@@ -4580,7 +4580,7 @@ func _draw_forest_landmarks() -> void:
 	]), Color("#302832"))
 	draw_colored_polygon(PackedVector2Array([
 		Vector2(1048, 438), Vector2(1072, 438), Vector2(1072, 720),
-		Vector2(1040, 775), Vector2(1005, 790), Vector2(1005, 770),
+		Vector2(1040, 775), Vector2(1005, 810), Vector2(1005, 770),
 		Vector2(1030, 710)
 	]), Color("#302832"))
 	for seam_y in [492.0, 548.0, 610.0, 680.0, 735.0]:
