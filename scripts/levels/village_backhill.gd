@@ -15,8 +15,8 @@ func _ready() -> void:
 	get_tree().paused = false
 	WorldState.input_locked = false
 	world_event_director.setup(WorldState, self)
-	world_event_director.dispatch("region_entered", {"region": "A1", "location": "village_backhill"})
 	WorldState.set_location("village_backhill")
+	world_event_director.dispatch("region_entered", {"region": "A1", "location": "village_backhill"})
 	_spawn_ui()
 	$ChurchPOI.interacted.connect(_on_poi_interacted.bind($ChurchPOI))
 	$TavernPOI.interacted.connect(_on_poi_interacted.bind($TavernPOI))
