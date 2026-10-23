@@ -6,7 +6,6 @@ const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"
 
 @onready var hero: CharacterBody2D = $Hero
 @onready var backhill_return_door: Area2D = $BackToBackhillDoor
-@onready var future_road_door: Area2D = $FutureA2RoadDoor
 @onready var h09_cave_door: Area2D = $H09CaveDoor
 var narrative: CanvasLayer
 var hud: CanvasLayer
@@ -24,8 +23,6 @@ func _ready() -> void:
 	for poi_name in ["ObservationPOI", "WeatheredInscriptionPOI", "CollapsedLookoutPOI"]:
 		var poi: Node = get_node(poi_name)
 		poi.interacted.connect(_on_poi_interacted.bind(poi))
-	future_road_door.enabled = false
-	future_road_door.visible = true
 	var h09_unlocked := "returned_to_village_after_mad_cleric" in WorldState.achievement_flags
 	h09_cave_door.enabled = h09_unlocked
 	h09_cave_door.visible = h09_unlocked
@@ -43,7 +40,7 @@ func _spawn_ui() -> void:
 	hud.set_script(HUD_SCRIPT)
 	add_child(hud)
 	hud.bind_hero(hero)
-	hud.set_story_mode("A1.1｜悬崖探索", "沿崖岸探索旧观测遗址。西侧可以返回后山，东侧道路暂未打通。")
+	hud.set_story_mode("A1.1｜悬崖探索", "沿崖岸探索旧观测遗址。西侧入口可以返回后山。")
 
 
 func _on_backhill_return_interacted() -> void:
