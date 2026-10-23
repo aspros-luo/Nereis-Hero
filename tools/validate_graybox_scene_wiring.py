@@ -984,7 +984,7 @@ def main() -> int:
                 platform_audit_count += len(platforms)
                 platforms_by_region[region_id] = platforms
                 # Node zero is the continuous ground floor. Platform tuples are x, y, width, height.
-                nodes = [(0.0, 540.0, 3000.0 if region_id == "A1" else (3600.0 if region_id == "A2" else 2600.0), 40.0, True)] + [
+                nodes = [(0.0, 650.0 if region_id == "A2" else 540.0, 3000.0 if region_id == "A1" else (3600.0 if region_id == "A2" else 2600.0), 40.0, True)] + [
                     (x, y, width, height, False) for x, y, width, height in platforms
                 ]
                 adjacency: list[list[int]] = [[] for _ in nodes]
