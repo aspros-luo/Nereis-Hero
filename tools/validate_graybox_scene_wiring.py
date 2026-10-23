@@ -494,8 +494,30 @@ def main() -> int:
 
     for _region_id, (scene_path, location_id, title) in REGIONS.items():
         scene = read(scene_path, errors)
-        require(scene, 'path="res://scripts/levels/greybox_world_region.gd"', scene_path, errors)
+        expected_script = (
+            'path="res://scripts/levels/a2_fog_forest_terrain.gd"'
+            if _region_id == "A2"
+            else 'path="res://scripts/levels/greybox_world_region.gd"'
+        )
+        require(scene, expected_script, scene_path, errors)
         require(scene, f'region_id = "{_region_id}"', scene_path, errors)
+
+    # A2 has a dedicated terrain override while keeping all shared transition contracts.
+    # A2 使用独立地形覆盖，但继续复用共享跨区连接合同。
+    a2_terrain = read("scripts/levels/a2_fog_forest_terrain.gd", errors)
+    for contract in (
+        "func _create_floor() -> void:",
+        "func _configure_platforms() -> void:",
+        "func _spawn_hero(",
+        "func _draw_forest_landmarks() -> void:",
+        "func _spawn_region_rest_point() -> void:",
+        "const A2_PIT_LEFT := 970.0",
+        "const A2_PIT_RIGHT := 1250.0",
+        "A2_PIT_FLOOR_Y := 690.0",
+        "camera.limit_bottom = 900",
+        "super._spawn_region_rest_point()",
+    ):
+        require(a2_terrain, contract, "A2 dedicated terrain", errors)
         require(scene, f'location_id = "{location_id}"', scene_path, errors)
         require(scene, f'region_title = "{title}"', scene_path, errors)
         require(world_state, f'"{location_id}":', "WorldState resume mapping", errors)
