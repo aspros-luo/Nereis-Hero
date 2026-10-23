@@ -155,7 +155,7 @@ def main() -> int:
 
     for name in ["RegionTitle", "DrainLabel", "GraveyardLabel", "OldHouseLabel", "CampLabel", "NorthGateLabel", "PromptLabel", "StatusLabel"]:
         require_sized_label(a10, name, "A1.0", errors)
-    for name in ["ChurchTitle", "TavernTitle", "BackhillTitle", "CliffEntryTitle"]:
+    for name in ["ChurchTitle", "TavernTitle", "BackhillTitle", "CliffEntryTitle", "FutureA2Title"]:
         require_sized_label(a11, name, "A1.1", errors)
     for source, names, owner in [
         (poi_visual, ["PromptLabel"], "POI visual"),
@@ -363,7 +363,7 @@ def main() -> int:
         ('{"side": "mite_house_return", "x": 530.0}', "Mite-house return spawn"),
         ('func _test_a11_authored_terrain() -> void:', "A1.1 terrain smoke test"),
         ('func _test_cliff_exploration() -> void:', "standalone cliff exploration smoke test"),
-        ('Future A2 road is disabled until map design is complete', "reserved future route lock test"),
+        ('A1.1 right route is reserved and disabled until A2 is designed', "reserved future route lock test"),
         ('H01 discovery status uses its authored Label', "H01 discovered-status Label check"),
         ('H01 discovery prompt clears after permanent opening', "H01 permanent-open status check"),
     ]:
