@@ -34,6 +34,7 @@
 - [x] 更新 `tools/validate_a1_scene_split.py`：检查 A1 根脚本无绘图、固定场景节点、可复用实例、资源引用、`load_steps` 和节点父路径。
 - [x] 更新 `tools/validate_a1_village_state_contracts.py`：检查教堂占用、营地、北门/排水状态、C24、H01、H09、常驻 NPC 对话刷新与酒馆一次性事件。
 - [x] 更新 `tools/validate_old_drainage_connection.py`：保护 H01 与 A1.1 的 H09 入口合同。
+- [x] 增加 `tools/a1_scene_smoke_test.gd`：可通过 Godot headless 实例化 A1.0/A1.1，检查固定节点、北门/排水/营地状态矩阵及 H09 锁定/解锁。
 - [x] 保留 `tools/world_map_topology.json` 中 C24 的分阶段路线与 A4 侧解锁事实。
 - [x] 代码层保持防卫旗标、营地到达旗标、H01 与 H09 解锁条件相互独立。
 
@@ -46,7 +47,7 @@
 3. 逐一测试 Hero 的 `west`、`backhill_return`、`well_exit`、`cliff_cave_return`、`city_cut_return`、`north_gate`、`mite_house_return` 等实际用到的出生方向，并确认不会出生在门内、悬空或立刻触发不相关交互。
 4. 验证两场景往返、教堂/酒馆室内转场、存档继续、H01 的显现/发现/开启、H09 的锁定/解锁、北门防卫前后、排水支路防卫前后、营地建立前后。
 5. 在四种组合下检查村庄状态：未防卫/已防卫 × 营地未建立/已建立；确认外观、交互与对话各自读取正确旗标。
-6. 在本地运行三个 Python 合同脚本，并运行 Godot 4.6.1 项目解析/场景实机检查。静态脚本本身尚未在本次连接环境中执行。
+6. 在本地运行三个 Python 合同脚本，并运行 `godot --headless --path . --script res://tools/a1_scene_smoke_test.gd`。随后在 Godot 4.6.1 编辑器中做碰撞、跳跃、交互焦点、镜头和实际转场的人工实机检查。源码与静态结构已由本次连接环境审查；Python/Godot 脚本以及实机流程尚未在本次连接环境中执行。
 
 ## 完成标准
 
