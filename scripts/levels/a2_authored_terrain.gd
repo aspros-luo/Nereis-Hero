@@ -43,11 +43,11 @@ func _apply_authored_terrain() -> void:
 	# Floor gaps stay in the region's ground contract; all ledges and the crypt landing are authored in the six room scenes.
 	# 地面断口仍由区域地面合同维护；所有台阶和钟墓坑底均手工放在六个房间场景中。
 
-	# The crypt opening ends at x=1060, so the checkpoint at x=1150 is already on continuous surface ground.
-	# 钟墓坑口在 x=1060 结束；x=1150 的休整点原本就在连续地表，不应被无故移到远处。
+	# The expanded crypt opening ends at x=1360, so the checkpoint at x=1450 stays on continuous surface ground.
+	# 钟墓坑口扩展至 x=1360；休整点移至 x=1450 的连续地表，避免落入坑口。
 	var rest := region.get_node_or_null("RegionRestPoint_A2")
 	if rest != null:
-		rest.position = Vector2(1150.0, float(region.get("floor_y")))
+		rest.position = Vector2(1450.0, float(region.get("floor_y")))
 
 	# Keep the shared clue node and interaction state; only align its visual with the upper tomb ring.
 	# 保留线索节点和交互状态，只将其摆放到钟墓上环。
@@ -148,7 +148,7 @@ func create_floor(region: Node) -> void:
 	# Only the continuous ground segments are assembled here; room scenes own all lower shelves.
 	# 此处只装配连续地表分段；所有下层石沿均由房间场景负责。
 	region.call("_add_ground_segment", "GreyboxGround_West", 0.0, 860.0)
-	region.call("_add_ground_segment", "GreyboxGround_Middle", 1060.0, 1360.0)
+	region.call("_add_ground_segment", "GreyboxGround_Middle", 1360.0, 1060.0)
 	# The eastern ravine separates the expanded forest from the remote canopy exit.
 	# 东部沟壑将扩建林地与远端树冠出口分开。
 	region.call("_add_ground_segment", "GreyboxGround_East", 2660.0, map_width - 2660.0)
