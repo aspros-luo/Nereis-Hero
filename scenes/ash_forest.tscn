@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource path="res://scripts/levels/a2_authored_terrain.gd" type="Script" id="2"]
+[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn" type="PackedScene" id="3"]
+[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn" type="PackedScene" id="4"]
+[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn" type="PackedScene" id="5"]
+[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn" type="PackedScene" id="6"]
+[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn" type="PackedScene" id="7"]
+[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn" type="PackedScene" id="8"]
 
 [node name="AshForest" type="Node2D"]
 script = ExtResource("1")
@@ -13,3 +19,17 @@ floor_y = 650.0
 
 [node name="A2AuthoredTerrain" type="Node" parent="."]
 script = ExtResource("2")
+
+; The six A2 rooms are persistent scene instances so the full terrain is visible/editable in Godot's editor.
+; 六个房间直接作为场景实例保存，编辑器中可以展开并编辑，不再只在运行时动态生成。
+[node name="A2R01ForestCrossroads" parent="." instance=ExtResource("3")]
+
+[node name="A2R02CanopyBridge" parent="." instance=ExtResource("4")]
+
+[node name="A2R03BellTombGallery" parent="." instance=ExtResource("5")]
+
+[node name="A2R04FloodedCrypt" parent="." instance=ExtResource("6")]
+
+[node name="A2R05OldPilgrimHighroad" parent="." instance=ExtResource("7")]
+
+[node name="A2R06EasternRavine" parent="." instance=ExtResource("8")]
