@@ -3839,7 +3839,8 @@ func _draw() -> void:
 		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, 860.0, 180.0), false)
 		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(1060.0, floor_y, 1360.0, 180.0), false)
 		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(2660.0, floor_y, map_width - 2660.0, 180.0), false)
-		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 810.0, 200.0, 180.0), false)
+		# The crypt landing is now rendered by A2R04FloodedCrypt; do not paint the old floor strip across the pit.
+		# 地下墓穴落脚台由 A2R04FloodedCrypt 自行绘制；不要再用旧地面贴图填满坑底。
 	else:
 		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
 	_draw_ground_detail()
