@@ -16,8 +16,8 @@ height = 48.0
 [sub_resource type="RectangleShape2D" id="GateTriggerShape"]
 size = Vector2(100, 138)
 
-[sub_resource type="RectangleShape2D" id="FutureRoadBlockerShape"]
-size = Vector2(60, 600)
+[sub_resource type="RectangleShape2D" id="CliffEndBoundaryShape"]
+size = Vector2(40, 720)
 
 [node name="CliffExploration" type="Node2D"]
 script = ExtResource("1")
@@ -127,33 +127,22 @@ prompt_text = "E  返回后山小径"
 position = Vector2(0, -69)
 shape = SubResource("GateTriggerShape")
 
-[node name="FutureA2RoadDoor" type="Area2D" parent="."]
-position = Vector2(2240, 520)
-script = ExtResource("3")
-prompt_text = "道路尚未打通"
-enabled = false
+[node name="CliffEndBoundary" type="StaticBody2D" parent="."]
+position = Vector2(2380, 360)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="FutureA2RoadDoor"]
-position = Vector2(0, -69)
-shape = SubResource("GateTriggerShape")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CliffEndBoundary"]
+shape = SubResource("CliffEndBoundaryShape")
 
-[node name="FutureRoadBlocker" type="StaticBody2D" parent="."]
-position = Vector2(2240, 520)
+[node name="CliffEndVisual" type="Polygon2D" parent="."]
+position = Vector2(2360, 0)
+polygon = PackedVector2Array(0, 0, 40, 0, 40, 720, 0, 720)
+color = Color(0.08, 0.075, 0.10, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="FutureRoadBlocker"]
-position = Vector2(0, -300)
-shape = SubResource("FutureRoadBlockerShape")
-
-[node name="FutureRoadSeal" type="Polygon2D" parent="."]
-position = Vector2(2240, 510)
-polygon = PackedVector2Array(-120, 0, -114, -470, -62, -540, -20, -505, 16, -555, 62, -520, 112, -470, 120, 0)
-color = Color(0.23, 0.20, 0.25, 1)
-
-[node name="FutureRoadLabel" type="Label" parent="."]
-offset_right = 330.0
-offset_bottom = 44.0
-position = Vector2(2070, 345)
-text = "通往雾林与钟墓的道路 · 尚未开放"
+[node name="CliffEndTitle" type="Label" parent="."]
+offset_right = 180.0
+offset_bottom = 32.0
+position = Vector2(2140, 305)
+text = "崩塌的崖岸"
 z_index = 5
 theme_override_colors/font_color = Color(0.61, 0.56, 0.65, 1)
 theme_override_font_sizes/font_size = 15
