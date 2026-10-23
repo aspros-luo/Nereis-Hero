@@ -11,6 +11,15 @@ const A2_ROOM_SCENES: Array[PackedScene] = [
 	preload("res://scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn"),
 ]
 
+const A2_ROOM_NODE_NAMES: Array[String] = [
+	"A2R01ForestCrossroads",
+	"A2R02CanopyBridge",
+	"A2R03BellTombGallery",
+	"A2R04FloodedCrypt",
+	"A2R05OldPilgrimHighroad",
+	"A2R06EasternRavine",
+]
+
 const A2_EXPECTED_PLATFORM_COUNTS: Dictionary = {
 	"A2R01ForestCrossroads": 12,
 	"A2R02CanopyBridge": 7,
@@ -102,18 +111,23 @@ func _validate_authored_rooms(region: Node) -> void:
 
 
 func configure_platforms(region: Node) -> void:
-	# Replace the legacy A2 platform layout with the six authored room scenes themselves.
-	# The scenes own their visible stonework and real collision; registering rectangles alone
-	# leaves only the legacy backdrop visible, which made the game look like the old map.
-	# 直接用六个新房间场景替换旧 A2 地形。场景本身包含石台视觉与真实碰撞；
-	# 仅登记碰撞矩形而不保留场景节点，会导致游戏里仍然只看到旧地图背景。
-	for room_scene in A2_ROOM_SCENES:
-		var room := room_scene.instantiate() as Node2D
+	# Prefer persistent PackedScene instances authored directly in ash_forest.tscn.
+	# Fall back to instantiation only for older scene variants that do not yet contain them.
+	# 优先使用 ash_forest.tscn 中持久化、可在编辑器直接查看的场景实例；旧场景缺少实例时才动态补齐。
+	for room_index in range(A2_ROOM_SCENES.size()):
+		var room_name := A2_ROOM_NODE_NAMES[room_index]
+		var room := region.get_node_or_null(NodePath(room_name)) as Node2D
 		if room == null:
-			push_error("[NEREIS][A2] Failed to instantiate authored room scene: %s" % room_scene.resource_path)
-			continue
-		region.add_child(room)
-		room.owner = region
+			room = A2_ROOM_SCENES[room_index].instantiate() as Node2D
+			if room == null:
+				push_error("[NEREIS][A2] Failed to instantiate authored room scene: %s" % A2_ROOM_SCENES[room_index].resource_path)
+				continue
+			room.name = room_name
+			region.add_child(room)
+			room.owner = region
+
+		# Register existing scene collisions for shared route/material queries; never create duplicate room geometry.
+		# 将场景中的实体碰撞登记给公共路线/材质查询，不重复创建房间或平台。
 		for body in room.get_children():
 			if not (body is StaticBody2D):
 				continue
