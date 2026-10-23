@@ -1000,8 +1000,20 @@ def main() -> int:
                 platform_audit_regions += 1
                 platform_audit_count += len(platforms)
                 platforms_by_region[region_id] = platforms
-                # Node zero is the continuous ground floor. Platform tuples are x, y, width, height.
-                nodes = [(0.0, 650.0 if region_id == "A2" else 540.0, 3000.0 if region_id == "A1" else (3600.0 if region_id == "A2" else 2600.0), 40.0, True)] + [
+                # Model A2's real ground gaps and the crypt landing explicitly; a continuous floor here would hide fall-through and return-route defects.
+                # A2 必须按真实断口与钟墓坑底建模；若把地面简化成一整条，验收会掩盖落差与回程问题。
+                if region_id == "A2":
+                    ground_nodes = [
+                        (0.0, 650.0, 860.0, 40.0, True),
+                        (1060.0, 650.0, 1360.0, 40.0, True),
+                        (2660.0, 650.0, 940.0, 40.0, True),
+                        (860.0, 810.0, 200.0, 40.0, True),
+                    ]
+                else:
+                    ground_nodes = [
+                        (0.0, 540.0, 3000.0 if region_id == "A1" else 2600.0, 40.0, True)
+                    ]
+                nodes = ground_nodes + [
                     (x, y, width, height, False) for x, y, width, height in platforms
                 ]
                 adjacency: list[list[int]] = [[] for _ in nodes]
