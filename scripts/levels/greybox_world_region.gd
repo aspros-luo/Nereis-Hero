@@ -2659,7 +2659,14 @@ func _draw() -> void:
 	_draw_biome_color_wash()
 	_draw_atmospheric_layers()
 	_draw_midground_accents()
-	draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
+	if region_id == "A2":
+		# The A2 sinkhole is a real opening, so never paint a continuous floor strip across it.
+		# A2 钟墓塌陷是实际缺口，不能再用连续地面贴图把坑填平。
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, 970.0, 180.0), false)
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(1250.0, floor_y, map_width - 1250.0, 180.0), false)
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(970.0, 690.0, 280.0, 110.0), false)
+	else:
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
 	_draw_ground_detail()
 
 	# Replace the old repetitive ground slashes with sparse, broken stone cracks and low atmospheric haze.
