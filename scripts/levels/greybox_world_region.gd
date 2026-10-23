@@ -4482,7 +4482,7 @@ func _draw_a2_authored_landscape() -> void:
 	draw_rect(Rect2(0.0, 0.0, map_width, 1000.0), Color("#171b28"))
 	for layer in range(3):
 		var base_y := 370.0 + float(layer) * 92.0
-		var shade := [Color("#252a3a"), Color("#202635"), Color("#1c222f")][layer]
+		var shade: Color = [Color("#252a3a"), Color("#202635"), Color("#1c222f")][layer]
 		var points := PackedVector2Array([
 			Vector2(0.0, 1000.0), Vector2(0.0, base_y + 120.0),
 			Vector2(180.0, base_y - 30.0), Vector2(330.0, base_y + 40.0),
