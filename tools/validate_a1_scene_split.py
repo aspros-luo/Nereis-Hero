@@ -258,6 +258,7 @@ def main() -> int:
         ('[node name="CliffEntryVisual" type="Node2D" parent="."]', "scene-authored cliff entrance visual"),
         ('[node name="FutureA2RoadDoor" type="Area2D" parent="."]', "right reserved A2 entrance"),
         ('[node name="FutureA2RoadBlocker" type="StaticBody2D" parent="."]', "right reserved A2 route physical blocker"),
+        ('[node name="CollisionShape2D" type="CollisionShape2D" parent="FutureA2RoadBlocker"]', "full-height blocker collider"),
         ('[node name="FutureA2EntranceVisual" type="Node2D" parent="."]', "scene-authored sealed A2 entrance"),
         ('[node name="FutureA2Title" type="Label" parent="."]', "A2 entrance label"),
         ('[node name="ChurchPOI" type="Node2D" parent="."]', "church POI"),
@@ -292,7 +293,7 @@ def main() -> int:
     require("FutureA2RoadDoor" not in cliff_scene and "FutureRoadBlocker" not in cliff_scene,
             "The reserved A2 connection must remain at the backhill, not the cliff scene", errors)
     require("enabled = false" in a11, "The future A2 entrance must start disabled in the backhill scene", errors)
-    require("size = Vector2(60, 720)" in a11 and 'shape = SubResource("FutureA2BlockerShape")' in a11,
+    require("size = Vector2(60, 720)" in a11 and 'shape = SubResource("FutureA2BlockerShape")' in a11 and 'position = Vector2(0, -340)' in a11,
             "The right-hand future A2 route must use a full-height physical blocker", errors)
     require('const CLIFF_EXPLORATION_SCENE := "res://scenes/cliff_exploration.tscn"' in a11_script
             and 'SceneTransition.fade_to_scene(CLIFF_EXPLORATION_SCENE)' in a11_script,
