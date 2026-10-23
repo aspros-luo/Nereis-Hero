@@ -54,7 +54,7 @@ rest = Transform2D(1, 0, 0, 1, -4.5, 10)
 [node name="SpineOutline" type="Line2D" parent="Skeleton2D/RootBone/Spine"]
 points = PackedVector2Array(0,0, 0,18)
 width = 5.5
-default_color = Color("#211d27")
+default_color = Color(0.129412, 0.113725, 0.152941, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -63,7 +63,7 @@ end_cap_mode = 2
 [node name="SpineFill" type="Line2D" parent="Skeleton2D/RootBone/Spine"]
 points = PackedVector2Array(0,0, 0,18)
 width = 2.5
-default_color = Color("#49424a")
+default_color = Color(0.286275, 0.258824, 0.290196, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -72,7 +72,7 @@ end_cap_mode = 2
 [node name="ArmLeftOutline" type="Line2D" parent="Skeleton2D/RootBone/Spine/ArmLeft"]
 points = PackedVector2Array(0,0, 0,13.5)
 width = 5.5
-default_color = Color("#211d27")
+default_color = Color(0.129412, 0.113725, 0.152941, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -81,7 +81,7 @@ end_cap_mode = 2
 [node name="ArmLeftFill" type="Line2D" parent="Skeleton2D/RootBone/Spine/ArmLeft"]
 points = PackedVector2Array(0,0, 0,13.5)
 width = 2.5
-default_color = Color("#49424a")
+default_color = Color(0.286275, 0.258824, 0.290196, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -90,7 +90,7 @@ end_cap_mode = 2
 [node name="ArmRightOutline" type="Line2D" parent="Skeleton2D/RootBone/Spine/ArmRight"]
 points = PackedVector2Array(0,0, 0,13.5)
 width = 5.5
-default_color = Color("#211d27")
+default_color = Color(0.129412, 0.113725, 0.152941, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -99,7 +99,7 @@ end_cap_mode = 2
 [node name="ArmRightFill" type="Line2D" parent="Skeleton2D/RootBone/Spine/ArmRight"]
 points = PackedVector2Array(0,0, 0,13.5)
 width = 2.5
-default_color = Color("#49424a")
+default_color = Color(0.286275, 0.258824, 0.290196, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -108,7 +108,7 @@ end_cap_mode = 2
 [node name="LegLeftOutline" type="Line2D" parent="Skeleton2D/RootBone/LegLeft"]
 points = PackedVector2Array(0,0, 0,12)
 width = 5.5
-default_color = Color("#211d27")
+default_color = Color(0.129412, 0.113725, 0.152941, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -117,7 +117,7 @@ end_cap_mode = 2
 [node name="LegLeftFill" type="Line2D" parent="Skeleton2D/RootBone/LegLeft"]
 points = PackedVector2Array(0,0, 0,12)
 width = 2.5
-default_color = Color("#49424a")
+default_color = Color(0.286275, 0.258824, 0.290196, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -126,7 +126,7 @@ end_cap_mode = 2
 [node name="LegRightOutline" type="Line2D" parent="Skeleton2D/RootBone/LegRight"]
 points = PackedVector2Array(0,0, 0,12)
 width = 5.5
-default_color = Color("#211d27")
+default_color = Color(0.129412, 0.113725, 0.152941, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -135,7 +135,7 @@ end_cap_mode = 2
 [node name="LegRightFill" type="Line2D" parent="Skeleton2D/RootBone/LegRight"]
 points = PackedVector2Array(0,0, 0,12)
 width = 2.5
-default_color = Color("#49424a")
+default_color = Color(0.286275, 0.258824, 0.290196, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -144,7 +144,7 @@ end_cap_mode = 2
 [node name="KneeLeftOutline" type="Line2D" parent="Skeleton2D/RootBone/LegLeft/KneeLeft"]
 points = PackedVector2Array(0,0, 0,10)
 width = 5.5
-default_color = Color("#211d27")
+default_color = Color(0.129412, 0.113725, 0.152941, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -153,7 +153,7 @@ end_cap_mode = 2
 [node name="KneeLeftFill" type="Line2D" parent="Skeleton2D/RootBone/LegLeft/KneeLeft"]
 points = PackedVector2Array(0,0, 0,10)
 width = 2.5
-default_color = Color("#49424a")
+default_color = Color(0.286275, 0.258824, 0.290196, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -162,7 +162,7 @@ end_cap_mode = 2
 [node name="KneeRightOutline" type="Line2D" parent="Skeleton2D/RootBone/LegRight/KneeRight"]
 points = PackedVector2Array(0,0, 0,10)
 width = 5.5
-default_color = Color("#211d27")
+default_color = Color(0.129412, 0.113725, 0.152941, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -171,7 +171,7 @@ end_cap_mode = 2
 [node name="KneeRightFill" type="Line2D" parent="Skeleton2D/RootBone/LegRight/KneeRight"]
 points = PackedVector2Array(0,0, 0,10)
 width = 2.5
-default_color = Color("#49424a")
+default_color = Color(0.286275, 0.258824, 0.290196, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -180,7 +180,7 @@ end_cap_mode = 2
 [node name="FootLeftOutline" type="Line2D" parent="Skeleton2D/RootBone/LegLeft/KneeLeft/FootLeft"]
 points = PackedVector2Array(0,0, 6,0)
 width = 5.5
-default_color = Color("#211d27")
+default_color = Color(0.129412, 0.113725, 0.152941, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -189,7 +189,7 @@ end_cap_mode = 2
 [node name="FootLeftFill" type="Line2D" parent="Skeleton2D/RootBone/LegLeft/KneeLeft/FootLeft"]
 points = PackedVector2Array(0,0, 6,0)
 width = 2.5
-default_color = Color("#49424a")
+default_color = Color(0.286275, 0.258824, 0.290196, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -198,7 +198,7 @@ end_cap_mode = 2
 [node name="FootRightOutline" type="Line2D" parent="Skeleton2D/RootBone/LegRight/KneeRight/FootRight"]
 points = PackedVector2Array(0,0, 6,0)
 width = 5.5
-default_color = Color("#211d27")
+default_color = Color(0.129412, 0.113725, 0.152941, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -207,7 +207,7 @@ end_cap_mode = 2
 [node name="FootRightFill" type="Line2D" parent="Skeleton2D/RootBone/LegRight/KneeRight/FootRight"]
 points = PackedVector2Array(0,0, 6,0)
 width = 2.5
-default_color = Color("#49424a")
+default_color = Color(0.286275, 0.258824, 0.290196, 1)
 antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
@@ -215,12 +215,12 @@ end_cap_mode = 2
 
 [node name="HeadFill" type="Polygon2D" parent="Skeleton2D/RootBone/Spine/Head"]
 polygon = PackedVector2Array(6.500, 0.000, 6.182, 2.009, 5.259, 3.821, 3.821, 5.259, 2.009, 6.182, 0.000, 6.500, -2.009, 6.182, -3.821, 5.259, -5.259, 3.821, -6.182, 2.009, -6.500, 0.000, -6.182, -2.009, -5.259, -3.821, -3.821, -5.259, -2.009, -6.182, -0.000, -6.500, 2.009, -6.182, 3.821, -5.259, 5.259, -3.821, 6.182, -2.009, 6.500, -0.000)
-color = Color("#9c776f")
+color = Color(0.611765, 0.466667, 0.435294, 1)
 
 [node name="HeadOutline" type="Line2D" parent="Skeleton2D/RootBone/Spine/Head"]
 points = PackedVector2Array(6.500, 0.000, 6.182, 2.009, 5.259, 3.821, 3.821, 5.259, 2.009, 6.182, 0.000, 6.500, -2.009, 6.182, -3.821, 5.259, -5.259, 3.821, -6.182, 2.009, -6.500, 0.000, -6.182, -2.009, -5.259, -3.821, -3.821, -5.259, -2.009, -6.182, -0.000, -6.500, 2.009, -6.182, 3.821, -5.259, 5.259, -3.821, 6.182, -2.009, 6.500, -0.000)
 closed = true
 width = 3.85
-default_color = Color("#211d27")
+default_color = Color(0.129412, 0.113725, 0.152941, 1)
 antialiased = true
 
