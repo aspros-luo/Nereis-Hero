@@ -23,13 +23,19 @@ script = ExtResource("2")
 ; The six A2 rooms are persistent scene instances so the full terrain is visible/editable in Godot's editor.
 ; 六个房间直接作为场景实例保存，编辑器中可以展开并编辑，不再只在运行时动态生成。
 [node name="A2R01ForestCrossroads" parent="." instance=ExtResource("3")]
+position = Vector2(300, 235)
 
 [node name="A2R02CanopyBridge" parent="." instance=ExtResource("4")]
+position = Vector2(850, 145)
 
 [node name="A2R03BellTombGallery" parent="." instance=ExtResource("5")]
+position = Vector2(760, 385)
 
 [node name="A2R04FloodedCrypt" parent="." instance=ExtResource("6")]
+position = Vector2(850, 655)
 
 [node name="A2R05OldPilgrimHighroad" parent="." instance=ExtResource("7")]
+position = Vector2(1585, 270)
 
 [node name="A2R06EasternRavine" parent="." instance=ExtResource("8")]
+position = Vector2(2250, 165)
