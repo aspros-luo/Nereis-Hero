@@ -33,7 +33,7 @@ size = Vector2(115, 18)
 [node name="A2R03BellTombGallery" type="Node2D"]
 
 [node name="Platform_013" type="StaticBody2D" parent="."]
-position = Vector2(820, 470)
+position = Vector2(60, 85)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_013"]
 position = Vector2(52.5, 9)
@@ -59,7 +59,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_014" type="StaticBody2D" parent="."]
-position = Vector2(935, 420)
+position = Vector2(175, 35)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_014"]
 position = Vector2(57.5, 9)
@@ -85,7 +85,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_015" type="StaticBody2D" parent="."]
-position = Vector2(1060, 385)
+position = Vector2(300, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_015"]
 position = Vector2(60, 9)
@@ -111,7 +111,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_016" type="StaticBody2D" parent="."]
-position = Vector2(1180, 430)
+position = Vector2(420, 45)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_016"]
 position = Vector2(57.5, 9)
@@ -137,7 +137,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_017" type="StaticBody2D" parent="."]
-position = Vector2(1290, 490)
+position = Vector2(530, 105)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_017"]
 position = Vector2(62.5, 9)
@@ -163,7 +163,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_018" type="StaticBody2D" parent="."]
-position = Vector2(760, 535)
+position = Vector2(0, 150)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_018"]
 position = Vector2(50, 9)
@@ -189,7 +189,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_019" type="StaticBody2D" parent="."]
-position = Vector2(910, 560)
+position = Vector2(150, 175)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_019"]
 position = Vector2(55, 9)
@@ -215,7 +215,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_020" type="StaticBody2D" parent="."]
-position = Vector2(1050, 535)
+position = Vector2(290, 150)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_020"]
 position = Vector2(55, 9)
@@ -241,7 +241,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_021" type="StaticBody2D" parent="."]
-position = Vector2(1190, 555)
+position = Vector2(430, 170)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_021"]
 position = Vector2(57.5, 9)
