@@ -71,7 +71,7 @@ func _validate_authored_rooms(region: Node) -> void:
 					continue
 				if shape_node.shape is RectangleShape2D:
 					var rectangle := shape_node.shape as RectangleShape2D
-					var right_edge := body.position.x + shape_node.position.x + rectangle.size.x * 0.5
+					var right_edge: float = body.position.x + shape_node.position.x + rectangle.size.x * 0.5
 					max_platform_right = maxf(max_platform_right, right_edge)
 		total_platforms += platform_count
 		var expected := int(A2_EXPECTED_PLATFORM_COUNTS[room_name])
