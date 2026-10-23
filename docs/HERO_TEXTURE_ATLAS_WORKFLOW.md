@@ -1,13 +1,15 @@
 # Hero Texture Atlas Workflow / 主角纹理图集工作流
 
-## Source priority / 素材优先级
+## Art source strategy / 美术素材策略
 
-The packed texture atlas is the primary development source:
+The existing packed texture atlas remains available as an optional source for future matching and UV research:
 
 - `assets/characters/hero/tex1_512x512_4d6c36bcbd5d9ddc_423915aa39e773f2_9.png`
 - `assets/characters/hero/tex1_512x512_544f6621d3d7aae2_f32cd14fd4d9e265_9.dds`
 
-`assets/characters/hero/153143.png` is a visual reference only. Do not use it as the animation implementation, frame-selection source, rig artwork, or acceptance dependency.
+The reference image `assets/characters/hero/153143.png` is the visual prototype for silhouette, proportions, and movement language. It is not required to be the runtime texture or the only source of body parts.
+
+The alternate-source experiment is documented in `docs/ITCH_CC0_MODULAR_RIG_LAB.md`. It installs a creator-declared CC0 modular character pack into Godot's user-data folder and builds an isolated `Skeleton2D` preview. This lets the rigging workflow be proven with external art rather than being blocked by the current atlas. The prototype pack's cartoon style is for workflow verification, not the final Nereis-Hero art direction.
 
 ## Existing infrastructure / 现有基础设施
 
