@@ -1,11 +1,8 @@
 extends Node2D
 
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const WORLD_EVENT_DIRECTOR_SCRIPT = preload("res://scripts/core/world_event_director.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
-const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
-const FIREFLY_SCRIPT = preload("res://scripts/effects/village_fireflies.gd")
 @export var floor_y: float = 520.0
 
 var hero: CharacterBody2D
@@ -34,11 +31,8 @@ func _ready() -> void:
 		if WorldState.record_achievement("returned_to_village_after_mad_cleric"):
 			WorldState.save_game()
 	WorldState.pending_region_spawn_side = "west"
-	world_event_director = Node.new()
-	world_event_director.set_script(WORLD_EVENT_DIRECTOR_SCRIPT)
-	world_event_director.name = "WorldEventDirector"
+	world_event_director = $WorldEventDirector
 	world_event_director.setup(WorldState, self)
-	add_child(world_event_director)
 	print("[NEREIS][VILLAGE] Entered Village Hub route=%s spawn_side=%s" % [WorldState.selected_route, spawn_side])
 	WorldState.set_checkpoint(Vector2(360, 520))
 	# Each village return route uses a safe landing zone clear of unrelated interaction prompts.
@@ -55,8 +49,8 @@ func _ready() -> void:
 	_configure_baseline_npcs()
 	$BackhillEntrance.interacted.connect(_on_village_poi_interacted.bind($BackhillEntrance))
 	_spawn_ui()
-	_spawn_narrative_audio()
-	_spawn_fireflies()
+	narrative_audio = $NarrativeAudio
+	fireflies = $VillageFireflies
 	world_event_director.dispatch("region_entered", {"region": "A1", "location": "village", "spawn_side": spawn_side})
 	_spawn_progression_npcs()
 	# The newly revealed cave is presented by the changed world geometry and its entrance prompt, not a forced exposition panel.
@@ -157,21 +151,6 @@ func _enter_mite_house() -> void:
 	mite_house_transitioning = true
 	WorldState.set_location("mite_house")
 	SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")
-
-func _spawn_narrative_audio() -> void:
-	narrative_audio = Node.new()
-	narrative_audio.set_script(NARRATIVE_AUDIO_SCRIPT)
-	narrative_audio.name = "NarrativeAudio"
-	add_child(narrative_audio)
-	# No automatic lullaby on scene entry: the player should discover the sound through an in-world source.
-
-
-func _spawn_fireflies() -> void:
-	fireflies = Node2D.new()
-	fireflies.set_script(FIREFLY_SCRIPT)
-	fireflies.name = "VillageFireflies"
-	add_child(fireflies)
-
 
 func _spawn_progression_npcs() -> void:
 	# Progression-only NPCs are registered in world_event_director.gd; baseline villagers stay above.
