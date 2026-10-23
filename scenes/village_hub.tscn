@@ -387,14 +387,6 @@ z_index = 3
 theme_override_colors/font_color = Color("#8d7776")
 theme_override_font_sizes/font_size = 12
 
-[node name="HearthLabel" type="Label" parent="."]
-position = Vector2(584, 456)
-text = "炉火"
-visible = true
-z_index = 3
-theme_override_colors/font_color = Color("#8d7776")
-theme_override_font_sizes/font_size = 10
-
 [node name="GraveyardLabel" type="Label" parent="."]
 position = Vector2(885, 346)
 text = "墓地"
