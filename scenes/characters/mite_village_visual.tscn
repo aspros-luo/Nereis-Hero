@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/humanoid_character_visual.tscn" id="1"]
+
+[node name="MiteVillageVisual" type="Node2D"]
+
+[node name="CharacterVisual" parent="." instance=ExtResource("1")]
+position = Vector2(0, -5)
+
+[node name="Aura" type="Line2D" parent="."]
+position = Vector2(0, -34)
+points = PackedVector2Array(19.00, 0.00, 18.07, 5.87, 15.37, 11.17, 11.17, 15.37, 5.87, 18.07, 0.00, 19.00, -5.87, 18.07, -11.17, 15.37, -15.37, 11.17, -18.07, 5.87, -19.00, 0.00, -18.07, -5.87, -15.37, -11.17, -11.17, -15.37, -5.87, -18.07, -0.00, -19.00, 5.87, -18.07, 11.17, -15.37, 15.37, -11.17, 18.07, -5.87)
+closed = true
+width = 2.0
+default_color = Color(0.56, 0.34, 0.58, 0.22)
+visible = false
+
+[node name="Glow" type="Polygon2D" parent="."]
+position = Vector2(0, 6)
+polygon = PackedVector2Array(10.00, 0.00, 9.24, 3.83, 7.07, 7.07, 3.83, 9.24, 0.00, 10.00, -3.83, 9.24, -7.07, 7.07, -9.24, 3.83, -10.00, 0.00, -9.24, -3.83, -7.07, -7.07, -3.83, -9.24, -0.00, -10.00, 3.83, -9.24, 7.07, -7.07, 9.24, -3.83)
+color = Color(0.72, 0.56, 0.52, 0.12)
+
+[node name="ControlMark" type="Polygon2D" parent="."]
+position = Vector2(0, -39)
+polygon = PackedVector2Array(2.50, 0.00, 2.31, 0.96, 1.77, 1.77, 0.96, 2.31, 0.00, 2.50, -0.96, 2.31, -1.77, 1.77, -2.31, 0.96, -2.50, 0.00, -2.31, -0.96, -1.77, -1.77, -0.96, -2.31, -0.00, -2.50, 0.96, -2.31, 1.77, -1.77, 2.31, -0.96)
+color = Color(0.73, 0.42, 0.46, 0.75)
+visible = false
+
+[node name="NameLabel" type="Label" parent="."]
+position = Vector2(-38, -64)
+text = "MITE"
+theme_override_colors/font_color = Color("#d6c7b2")
+theme_override_font_sizes/font_size = 15
+
+[node name="PromptLabel" type="Label" parent="."]
+position = Vector2(-54, 42)
+visible = false
+text = "E  Talk"
+theme_override_colors/font_color = Color("#e0d1bd")
+theme_override_font_sizes/font_size = 16
