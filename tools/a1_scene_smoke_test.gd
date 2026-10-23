@@ -1,6 +1,6 @@
-extends SceneTree
+extends Node
 ## Headless smoke tests for the scene-authored A1 map and flag-driven visuals.
-## Run: godot --headless --path . --script res://tools/a1_scene_smoke_test.gd
+## Run: godot --headless --path . res://tools/a1_scene_smoke_test.tscn
 ## This does not replace manual collision/jump/transition testing.
 
 var failures: Array[String] = []
@@ -8,7 +8,7 @@ var original_flags: Array = []
 var original_discovered_hidden_regions: Array = []
 var original_debug_map_test_mode := false
 
-func _initialize() -> void:
+func _ready() -> void:
 	call_deferred("_run")
 
 
@@ -30,12 +30,12 @@ func _run() -> void:
 		print(" - A1.0/A1.1 scenes instantiate and required authored nodes resolve.")
 		print(" - Drain/gate/camp visuals follow their independent story flags.")
 		print(" - H01 resonance/open states and H09 cave/door states follow their story flags.")
-		quit(0)
+		get_tree().quit(0)
 		return
 	for failure in failures:
 		push_error("[A1 SMOKE FAIL] " + failure)
 	print("A1 GODOT SCENE SMOKE TEST: FAIL (%d)" % failures.size())
-	quit(1)
+	get_tree().quit(1)
 
 
 func _test_a10_scene_and_state_matrix() -> void:
@@ -47,8 +47,8 @@ func _test_a10_scene_and_state_matrix() -> void:
 	_expect(scene != null, "A1.0 scene instantiates")
 	if scene == null:
 		return
-	root.add_child(scene)
-	await process_frame
+	get_tree().root.add_child(scene)
+	await get_tree().process_frame
 
 	for path in [
 		"Hero", "Hero/HeroCamera", "VillageCheckpoint", "VillageHearthRestPoint",
@@ -100,7 +100,7 @@ func _test_a10_scene_and_state_matrix() -> void:
 	_expect(scene.get_node("RestorationCampPOI").visible, "Camp POI appears after explicit camp-arrival flag")
 
 	scene.queue_free()
-	await process_frame
+	await get_tree().process_frame
 
 
 func _test_spawn_side_matrix() -> void:
@@ -124,15 +124,15 @@ func _test_spawn_side_matrix() -> void:
 		_expect(scene != null, "A1.0 scene instantiates for spawn side " + String(test_case["side"]))
 		if scene == null:
 			continue
-		root.add_child(scene)
-		await process_frame
+		get_tree().root.add_child(scene)
+		await get_tree().process_frame
 		var hero := scene.get_node("Hero") as CharacterBody2D
 		_expect(
 			is_equal_approx(hero.position.x, float(test_case["x"])),
 			"A1.0 spawn side %s resolves to x=%s" % [String(test_case["side"]), str(test_case["x"])]
 		)
 		scene.queue_free()
-		await process_frame
+		await get_tree().process_frame
 
 
 func _test_a11_authored_terrain() -> void:
@@ -145,8 +145,8 @@ func _test_a11_authored_terrain() -> void:
 	_expect(scene != null, "A1.1 scene instantiates for authored-terrain checks")
 	if scene == null:
 		return
-	root.add_child(scene)
-	await process_frame
+	get_tree().root.add_child(scene)
+	await get_tree().process_frame
 	var stair_count := 0
 	for child in scene.get_node("BackhillStairs").get_children():
 		if child is StaticBody2D and child.has_node("CollisionShape2D") and child.has_node("Visual"):
@@ -157,7 +157,7 @@ func _test_a11_authored_terrain() -> void:
 	_expect(scene.has_node("EastBoundary/CollisionShape2D"), "A1.1 cliff boundary has authored collision")
 	_expect(scene.has_node("ChurchTitle") and scene.has_node("TavernTitle") and scene.has_node("BackhillTitle") and scene.has_node("CliffTitle"), "A1.1 landmarks use authored Label nodes")
 	scene.queue_free()
-	await process_frame
+	await get_tree().process_frame
 
 
 func _test_h09_lock_and_unlock() -> void:
@@ -171,25 +171,25 @@ func _test_h09_lock_and_unlock() -> void:
 	_expect(locked_scene != null, "A1.1 locked scene instantiates")
 	if locked_scene == null:
 		return
-	root.add_child(locked_scene)
-	await process_frame
+	get_tree().root.add_child(locked_scene)
+	await get_tree().process_frame
 	_expect(not locked_scene.get_node("CliffCaveDoor").visible, "H09 door remains hidden before actual return")
 	_expect(not locked_scene.get_node("CliffCaveVisual").visible, "H09 cave visual remains hidden before actual return")
 	locked_scene.queue_free()
-	await process_frame
+	await get_tree().process_frame
 
 	WorldState.achievement_flags.append("returned_to_village_after_mad_cleric")
 	var unlocked_scene := packed.instantiate()
 	_expect(unlocked_scene != null, "A1.1 unlocked scene instantiates")
 	if unlocked_scene == null:
 		return
-	root.add_child(unlocked_scene)
-	await process_frame
+	get_tree().root.add_child(unlocked_scene)
+	await get_tree().process_frame
 	_expect(unlocked_scene.get_node("CliffCaveDoor").visible, "H09 door appears after actual-return flag")
 	_expect(unlocked_scene.get_node("CliffCaveDoor").enabled, "H09 door interaction enables after actual-return flag")
 	_expect(unlocked_scene.get_node("CliffCaveVisual").visible, "H09 authored cave visual appears after actual-return flag")
 	unlocked_scene.queue_free()
-	await process_frame
+	await get_tree().process_frame
 
 
 func _expect(condition: bool, message: String) -> void:
