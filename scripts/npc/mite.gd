@@ -6,15 +6,35 @@ const INTERACTION_RANGE := 95.0
 const VILLAGE_HOUSE_DOOR_POSITION := Vector2(455, 520)
 const VILLAGE_HOUSE_DOOR_EXCLUSION_RANGE := 105.0
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
+const VILLAGE_VISUAL_SCENE = preload("res://scenes/characters/mite_village_visual.tscn")
 
 var hero_nearby := false
 var interaction_cooldown := 0.0
 var elapsed := 0.0
+var character_visual: Node2D
+var aura: Line2D
+var glow: Polygon2D
+var control_mark: Polygon2D
+var name_label: Label
+var prompt_label: Label
 
 func _ready() -> void:
     set_meta("interaction_priority", 80)
+    if not has_node("MiteVisual"):
+        var visual := VILLAGE_VISUAL_SCENE.instantiate()
+        visual.name = "MiteVisual"
+        add_child(visual)
+    var visual_root: Node = get_node("MiteVisual")
+    character_visual = visual_root.get_node("CharacterVisual") as Node2D
+    aura = visual_root.get_node("Aura") as Line2D
+    glow = visual_root.get_node("Glow") as Polygon2D
+    control_mark = visual_root.get_node("ControlMark") as Polygon2D
+    name_label = visual_root.get_node("NameLabel") as Label
+    prompt_label = visual_root.get_node("PromptLabel") as Label
+    name_label.text = NereisLocalization.translate_text("MITE")
+    prompt_label.text = NereisLocalization.translate_text("E  Talk")
+    _refresh_visual_state()
     print("[NEREIS][NPC] Mite initialized")
-    queue_redraw()
 
 func _process(delta: float) -> void:
     elapsed += delta
@@ -25,7 +45,18 @@ func _process(delta: float) -> void:
     var available := not WorldState.input_locked and hero_nearby and not _blocked_by_village_house_door(hero) and interaction_cooldown <= 0.0 and not _select_interaction().is_empty()
     INTERACTION_FOCUS_SCRIPT.sync(self, available, 80)
 
-    queue_redraw()
+    _refresh_visual_state()
+
+func _refresh_visual_state() -> void:
+    if character_visual == null:
+        return
+    var control_stage: int = WorldState.mite_control_stage
+    character_visual.modulate = Color("#ffffff") if control_stage == 0 else (Color("#e4d5e2") if control_stage == 1 else (Color("#d9bddb") if control_stage == 2 else Color("#d4a9c5")))
+    aura.visible = control_stage >= 2
+    control_mark.visible = control_stage >= 3
+    glow.scale = Vector2.ONE * (1.0 + sin(elapsed * 1.4) * 0.035)
+    prompt_label.visible = can_interact()
+    prompt_label.text = NereisLocalization.translate_text("E  Talk")
 
 func can_interact() -> bool:
     if WorldState.input_locked or not hero_nearby or interaction_cooldown > 0.0:
@@ -125,45 +156,3 @@ func _payload_for(interaction_id: String) -> Dictionary:
                 "message": "Mite watches the road with you.\n\nFor a while, neither of you says anything.\n\nThe silence is easy."
             }
 
-func _draw() -> void:
-    var sway := sin(elapsed * 1.7) * 2.0
-    var glow := 0.12 + sin(elapsed * 1.4) * 0.035
-    var control_stage: int = WorldState.mite_control_stage
-
-    var skin := Color("#b38d82")
-    var dress := Color("#61505d")
-    var shadow := Color("#211a20")
-
-    if control_stage == 1:
-        skin = Color("#ad8882")
-        dress = Color("#5d4f5e")
-    elif control_stage == 2:
-        skin = Color("#a47e7f")
-        dress = Color("#5b4a5c")
-    elif control_stage >= 3:
-        skin = Color("#9d777d")
-        dress = Color("#56455a")
-        shadow = Color("#261d28")
-
-    draw_circle(Vector2(0, -34), 16.0, skin)
-    draw_circle(Vector2(-5, -39), 3.0, Color("#211a20"))
-    draw_circle(Vector2(5, -39), 3.0, Color("#211a20"))
-    draw_rect(Rect2(-19, -18 + sway, 38, 52), dress)
-    draw_colored_polygon(
-        PackedVector2Array([
-            Vector2(-22, -18 + sway),
-            Vector2(0, 18 + sway),
-            Vector2(22, -18 + sway)
-        ]),
-        Color("#493d49")
-    )
-    draw_circle(Vector2(0, 6 + sway), 10.0, Color(0.72, 0.56, 0.52, glow))
-
-    if control_stage >= 2:
-        draw_arc(Vector2(0, -34), 19.0, 0.45, 2.7, 16, Color(0.56, 0.34, 0.58, 0.22), 2.0)
-    if control_stage >= 3:
-        draw_circle(Vector2(0, -39 + sway), 2.5, Color("#b96b75", 0.75))
-    draw_string(ThemeDB.fallback_font, Vector2(-38, -64), NereisLocalization.translate_text("MITE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#d6c7b2"))
-
-    if can_interact():
-        draw_string(ThemeDB.fallback_font, Vector2(-54, 42), NereisLocalization.translate_text("E  Talk"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#e0d1bd"))
