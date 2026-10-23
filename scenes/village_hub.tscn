@@ -75,13 +75,13 @@ z_index = -50
 [node name="WestPit" type="Polygon2D" parent="GroundCutouts"]
 position = Vector2(1180, 520)
 polygon = PackedVector2Array(0,0, 80,0, 80,200, 0,200)
-color = Color("#10131b")
+color = Color(0.062745, 0.07451, 0.105882, 1)
 z_index = -50
 
 [node name="EastPit" type="Polygon2D" parent="GroundCutouts"]
 position = Vector2(1660, 520)
 polygon = PackedVector2Array(0,0, 80,0, 80,200, 0,200)
-color = Color("#10131b")
+color = Color(0.062745, 0.07451, 0.105882, 1)
 z_index = -50
 
 [node name="LowerRouteVisuals" type="Node2D" parent="."]
@@ -90,19 +90,19 @@ z_index = -40
 [node name="LowerLedge1" type="Polygon2D" parent="LowerRouteVisuals"]
 position = Vector2(1200, 610)
 polygon = PackedVector2Array(0,0, 145,0, 145,18, 0,18)
-color = Color("#493b43")
+color = Color(0.286275, 0.231373, 0.262745, 1)
 z_index = -40
 
 [node name="LowerLedge2" type="Polygon2D" parent="LowerRouteVisuals"]
 position = Vector2(1365, 655)
 polygon = PackedVector2Array(0,0, 145,0, 145,18, 0,18)
-color = Color("#493b43")
+color = Color(0.286275, 0.231373, 0.262745, 1)
 z_index = -40
 
 [node name="LowerLedge3" type="Polygon2D" parent="LowerRouteVisuals"]
 position = Vector2(1530, 610)
 polygon = PackedVector2Array(0,0, 145,0, 145,18, 0,18)
-color = Color("#493b43")
+color = Color(0.286275, 0.231373, 0.262745, 1)
 z_index = -40
 
 [node name="FloorSeams" type="Node2D" parent="."]
@@ -111,217 +111,217 @@ z_index = -30
 [node name="Seam01" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(0, 520, 32, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam02" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(64, 520, 96, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam03" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(128, 520, 160, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam04" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(192, 520, 224, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam05" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(256, 520, 288, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam06" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(320, 520, 352, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam07" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(384, 520, 416, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam08" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(448, 520, 480, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam09" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(512, 520, 544, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam10" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(576, 520, 608, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam11" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(640, 520, 672, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam12" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(704, 520, 736, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam13" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(768, 520, 800, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam14" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(832, 520, 864, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam15" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(896, 520, 928, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam16" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(960, 520, 992, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam17" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1024, 520, 1056, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam18" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1088, 520, 1120, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam21" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1280, 520, 1312, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam22" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1344, 520, 1376, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam23" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1408, 520, 1440, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam24" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1472, 520, 1504, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam25" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1536, 520, 1568, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam26" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1600, 520, 1632, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam29" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1792, 520, 1824, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam30" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1856, 520, 1888, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam31" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1920, 520, 1952, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam32" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(1984, 520, 2016, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam33" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2048, 520, 2080, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam34" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2112, 520, 2144, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam35" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2176, 520, 2208, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam36" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2240, 520, 2272, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam37" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2304, 520, 2336, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam38" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2368, 520, 2400, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam39" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2432, 520, 2464, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam40" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2496, 520, 2528, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam41" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2560, 520, 2592, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam42" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2624, 520, 2656, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam43" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2688, 520, 2720, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam44" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2752, 520, 2784, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam45" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2816, 520, 2848, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam46" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2880, 520, 2912, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam47" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(2944, 520, 2976, 552)
 width = 2.0
-default_color = Color("#302a30")
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="DrainEntranceVisual" type="Node2D" parent="."]
 position = Vector2(66, 470)
@@ -330,25 +330,25 @@ z_index = -5
 [node name="StoneFrame" type="Polygon2D" parent="DrainEntranceVisual"]
 position = Vector2(-48, -50)
 polygon = PackedVector2Array(0,0, 96,0, 96,100, 0,100)
-color = Color("#25232b")
+color = Color(0.145098, 0.137255, 0.168627, 1)
 z_index = -5
 
 [node name="DarkOpening" type="Polygon2D" parent="DrainEntranceVisual"]
 position = Vector2(-34, -32)
 polygon = PackedVector2Array(0,0, 68,0, 68,82, 0,82)
-color = Color("#11141a")
+color = Color(0.066667, 0.078431, 0.101961, 1)
 z_index = -4
 
 [node name="LeftArchStone" type="Polygon2D" parent="DrainEntranceVisual"]
 position = Vector2(-43, -44)
 polygon = PackedVector2Array(0,0, 12,-1, 14,20, 9,42, 0,51)
-color = Color("#5d5964")
+color = Color(0.364706, 0.34902, 0.392157, 1)
 z_index = -3
 
 [node name="RightArchStone" type="Polygon2D" parent="DrainEntranceVisual"]
 position = Vector2(31, -44)
 polygon = PackedVector2Array(0,0, 12,1, 9,50, 0,43, -3,20)
-color = Color("#5d5964")
+color = Color(0.364706, 0.34902, 0.392157, 1)
 z_index = -3
 
 [node name="RubbleState" type="Node2D" parent="DrainEntranceVisual"]
@@ -356,19 +356,19 @@ z_index = -3
 [node name="Rubble01" type="Polygon2D" parent="DrainEntranceVisual/RubbleState"]
 position = Vector2(-42, -45)
 polygon = PackedVector2Array(0,0, 22,-7, 31,15, 14,29, -1,16)
-color = Color("#514149")
+color = Color(0.317647, 0.254902, 0.286275, 1)
 z_index = -2
 
 [node name="Rubble02" type="Polygon2D" parent="DrainEntranceVisual/RubbleState"]
 position = Vector2(-10, -33)
 polygon = PackedVector2Array(0,0, 18,5, 28,30, 4,48, -10,27)
-color = Color("#514149")
+color = Color(0.317647, 0.254902, 0.286275, 1)
 z_index = -2
 
 [node name="Rubble03" type="Polygon2D" parent="DrainEntranceVisual/RubbleState"]
 position = Vector2(17, -40)
 polygon = PackedVector2Array(0,0, 14,8, 17,36, -2,45, -8,18)
-color = Color("#79656a")
+color = Color(0.47451, 0.396078, 0.415686, 1)
 z_index = -2
 
 [node name="RegionTitle" type="Label" parent="."]
@@ -378,7 +378,7 @@ position = Vector2(100, 198)
 text = "边境村庄"
 visible = true
 z_index = 3
-theme_override_colors/font_color = Color("#4d454d")
+theme_override_colors/font_color = Color(0.301961, 0.270588, 0.301961, 1)
 theme_override_font_sizes/font_size = 30
 
 [node name="DrainLabel" type="Label" parent="."]
@@ -388,7 +388,7 @@ position = Vector2(20, 380)
 text = "旧排水道"
 visible = true
 z_index = 3
-theme_override_colors/font_color = Color("#8d7776")
+theme_override_colors/font_color = Color(0.552941, 0.466667, 0.462745, 1)
 theme_override_font_sizes/font_size = 12
 
 [node name="GraveyardLabel" type="Label" parent="."]
@@ -398,7 +398,7 @@ position = Vector2(885, 346)
 text = "墓地"
 visible = true
 z_index = 3
-theme_override_colors/font_color = Color("#796d67")
+theme_override_colors/font_color = Color(0.47451, 0.427451, 0.403922, 1)
 theme_override_font_sizes/font_size = 16
 
 [node name="OldHouseLabel" type="Label" parent="."]
@@ -408,7 +408,7 @@ position = Vector2(1025, 316)
 text = "老屋"
 visible = true
 z_index = 3
-theme_override_colors/font_color = Color("#b7a09b")
+theme_override_colors/font_color = Color(0.717647, 0.627451, 0.607843, 1)
 theme_override_font_sizes/font_size = 13
 
 [node name="CampVisual" type="Node2D" parent="."]
@@ -419,25 +419,25 @@ z_index = -2
 [node name="CampWall" type="Polygon2D" parent="CampVisual"]
 position = Vector2(-45, -160)
 polygon = PackedVector2Array(0,0, 90,0, 90,160, 0,160)
-color = Color("#27212a")
+color = Color(0.152941, 0.129412, 0.164706, 1)
 z_index = -2
 
 [node name="CampRoof" type="Polygon2D" parent="CampVisual"]
 position = Vector2(-55, -220)
 polygon = PackedVector2Array(0,60, 55,0, 110,60)
-color = Color("#312934")
+color = Color(0.192157, 0.160784, 0.203922, 1)
 z_index = -1
 
 [node name="CampFireBase" type="Polygon2D" parent="CampVisual"]
 position = Vector2(0, -65)
 polygon = PackedVector2Array(28.00, 0.00, 25.87, 10.72, 19.80, 19.80, 10.72, 25.87, 0.00, 28.00, -10.72, 25.87, -19.80, 19.80, -25.87, 10.72, -28.00, 0.00, -25.87, -10.72, -19.80, -19.80, -10.72, -25.87, -0.00, -28.00, 10.72, -25.87, 19.80, -19.80, 25.87, -10.72)
-color = Color("#63322f")
+color = Color(0.388235, 0.196078, 0.184314, 1)
 z_index = 0
 
 [node name="CampFire" type="Polygon2D" parent="CampVisual"]
 position = Vector2(0, -70)
 polygon = PackedVector2Array(13.00, 0.00, 12.01, 4.97, 9.19, 9.19, 4.97, 12.01, 0.00, 13.00, -4.97, 12.01, -9.19, 9.19, -12.01, 4.97, -13.00, 0.00, -12.01, -4.97, -9.19, -9.19, -4.97, -12.01, -0.00, -13.00, 4.97, -12.01, 9.19, -9.19, 12.01, -4.97)
-color = Color("#a85e45")
+color = Color(0.658824, 0.368627, 0.270588, 1)
 z_index = 1
 
 [node name="CampLabel" type="Label" parent="."]
@@ -447,7 +447,7 @@ position = Vector2(1935, 313)
 text = "复国军营地"
 visible = false
 z_index = 3
-theme_override_colors/font_color = Color("#8d7776")
+theme_override_colors/font_color = Color(0.552941, 0.466667, 0.462745, 1)
 theme_override_font_sizes/font_size = 15
 
 [node name="NorthGateVisual" type="Node2D" parent="."]
@@ -457,19 +457,19 @@ z_index = -1
 [node name="GateFrame" type="Polygon2D" parent="NorthGateVisual"]
 position = Vector2(-60, -190)
 polygon = PackedVector2Array(0,0, 120,0, 120,190, 0,190)
-color = Color("#241e27")
+color = Color(0.141176, 0.117647, 0.152941, 1)
 z_index = -1
 
 [node name="GatePostLeft" type="Polygon2D" parent="NorthGateVisual"]
 position = Vector2(-30, -170)
 polygon = PackedVector2Array(0,0, 18,0, 18,170, 0,170)
-color = Color("#4a3439")
+color = Color(0.290196, 0.203922, 0.223529, 1)
 z_index = 0
 
 [node name="GatePostRight" type="Polygon2D" parent="NorthGateVisual"]
 position = Vector2(20, -170)
 polygon = PackedVector2Array(0,0, 18,0, 18,170, 0,170)
-color = Color("#4a3439")
+color = Color(0.290196, 0.203922, 0.223529, 1)
 z_index = 0
 
 [node name="BlockedState" type="Node2D" parent="NorthGateVisual"]
@@ -477,13 +477,13 @@ z_index = 0
 [node name="CrossBar01" type="Polygon2D" parent="NorthGateVisual/BlockedState"]
 position = Vector2(-22, -135)
 polygon = PackedVector2Array(0,0, 44,0, 44,12, 0,12)
-color = Color("#79656a")
+color = Color(0.47451, 0.396078, 0.415686, 1)
 z_index = 0
 
 [node name="CrossBar02" type="Polygon2D" parent="NorthGateVisual/BlockedState"]
 position = Vector2(-22, -90)
 polygon = PackedVector2Array(0,0, 44,0, 44,12, 0,12)
-color = Color("#79656a")
+color = Color(0.47451, 0.396078, 0.415686, 1)
 z_index = 0
 
 [node name="RepairedState" type="Node2D" parent="NorthGateVisual"]
@@ -492,35 +492,35 @@ visible = false
 [node name="BraceLeft" type="Line2D" parent="NorthGateVisual/RepairedState"]
 points = PackedVector2Array(-22, -160, -46, -115)
 width = 6.0
-default_color = Color("#79656a")
+default_color = Color(0.47451, 0.396078, 0.415686, 1)
 
 [node name="BraceRight" type="Line2D" parent="NorthGateVisual/RepairedState"]
 points = PackedVector2Array(28, -160, 50, -115)
 width = 6.0
-default_color = Color("#79656a")
+default_color = Color(0.47451, 0.396078, 0.415686, 1)
 
 [node name="NailLeftA" type="Polygon2D" parent="NorthGateVisual/RepairedState"]
 position = Vector2(-30, -146)
 polygon = PackedVector2Array(3.00, 0.00, 2.12, 2.12, 0.00, 3.00, -2.12, 2.12, -3.00, 0.00, -2.12, -2.12, -0.00, -3.00, 2.12, -2.12)
-color = Color("#d1b08a")
+color = Color(0.819608, 0.690196, 0.541176, 1)
 z_index = 1
 
 [node name="NailLeftB" type="Polygon2D" parent="NorthGateVisual/RepairedState"]
 position = Vector2(-20, -132)
 polygon = PackedVector2Array(3.00, 0.00, 2.12, 2.12, 0.00, 3.00, -2.12, 2.12, -3.00, 0.00, -2.12, -2.12, -0.00, -3.00, 2.12, -2.12)
-color = Color("#d1b08a")
+color = Color(0.819608, 0.690196, 0.541176, 1)
 z_index = 1
 
 [node name="NailRightA" type="Polygon2D" parent="NorthGateVisual/RepairedState"]
 position = Vector2(27, -132)
 polygon = PackedVector2Array(3.00, 0.00, 2.12, 2.12, 0.00, 3.00, -2.12, 2.12, -3.00, 0.00, -2.12, -2.12, -0.00, -3.00, 2.12, -2.12)
-color = Color("#d1b08a")
+color = Color(0.819608, 0.690196, 0.541176, 1)
 z_index = 1
 
 [node name="NailRightB" type="Polygon2D" parent="NorthGateVisual/RepairedState"]
 position = Vector2(37, -146)
 polygon = PackedVector2Array(3.00, 0.00, 2.12, 2.12, 0.00, 3.00, -2.12, 2.12, -3.00, 0.00, -2.12, -2.12, -0.00, -3.00, 2.12, -2.12)
-color = Color("#d1b08a")
+color = Color(0.819608, 0.690196, 0.541176, 1)
 z_index = 1
 
 [node name="NorthGateLabel" type="Label" parent="."]
@@ -530,7 +530,7 @@ position = Vector2(2770, 288)
 text = "北门"
 visible = true
 z_index = 3
-theme_override_colors/font_color = Color("#796d67")
+theme_override_colors/font_color = Color(0.47451, 0.427451, 0.403922, 1)
 theme_override_font_sizes/font_size = 15
 
 
@@ -766,7 +766,7 @@ script = ExtResource("8")
 npc_id = "village_gatekeeper"
 display_name = "村庄守门人"
 interaction_range = 40.0
-cloth_color = Color("#51404a")
+cloth_color = Color(0.317647, 0.25098, 0.290196, 1)
 groups = ["a1_baseline_npcs"]
 
 [node name="Grandmother" type="Node2D" parent="."]
@@ -775,8 +775,8 @@ script = ExtResource("8")
 npc_id = "village_grandmother"
 display_name = "老婆婆"
 interaction_range = 60.0
-cloth_color = Color("#65594a")
-skin_color = Color("#a58b7a")
+cloth_color = Color(0.396078, 0.34902, 0.290196, 1)
+skin_color = Color(0.647059, 0.545098, 0.478431, 1)
 groups = ["a1_baseline_npcs"]
 
 [node name="BlacksmithNPC" type="Node2D" parent="."]
@@ -785,8 +785,8 @@ script = ExtResource("8")
 npc_id = "village_blacksmith"
 display_name = "铁匠"
 interaction_range = 45.0
-cloth_color = Color("#594038")
-skin_color = Color("#9b735e")
+cloth_color = Color(0.34902, 0.25098, 0.219608, 1)
+skin_color = Color(0.607843, 0.45098, 0.368627, 1)
 groups = ["a1_baseline_npcs"]
 
 [node name="TravelingMerchant" type="Node2D" parent="."]
@@ -795,8 +795,8 @@ script = ExtResource("8")
 npc_id = "traveling_merchant"
 display_name = "旅行商人"
 interaction_range = 60.0
-cloth_color = Color("#43564c")
-skin_color = Color("#a17e68")
+cloth_color = Color(0.262745, 0.337255, 0.298039, 1)
+skin_color = Color(0.631373, 0.494118, 0.407843, 1)
 groups = ["a1_baseline_npcs"]
 
 [node name="GraveyardPOI" type="Node2D" parent="."]
@@ -844,19 +844,19 @@ z_index = -1
 [node name="WellStone" type="Polygon2D" parent="ResonanceWellGate/AuthoredVisual"]
 position = Vector2(-52, -5)
 polygon = PackedVector2Array(0,0, 104,0, 104,24, 0,24)
-color = Color("#28232b")
+color = Color(0.156863, 0.137255, 0.168627, 1)
 z_index = -1
 
 [node name="WellOpening" type="Polygon2D" parent="ResonanceWellGate/AuthoredVisual"]
 position = Vector2(-32, -1)
 polygon = PackedVector2Array(0,0, 64,0, 64,17, 0,17)
-color = Color("#111018")
+color = Color(0.066667, 0.062745, 0.094118, 1)
 z_index = -1
 
 [node name="WellRim" type="Line2D" parent="ResonanceWellGate/AuthoredVisual"]
 points = PackedVector2Array(-34, -2, -32, -20, -20, -31, 0, -35, 20, -31, 32, -20, 34, -2)
 width = 5.0
-default_color = Color("#665b5d")
+default_color = Color(0.4, 0.356863, 0.364706, 1)
 
 [node name="RevealedState" type="Node2D" parent="ResonanceWellGate/AuthoredVisual"]
 visible = false
@@ -864,12 +864,12 @@ visible = false
 [node name="ResonanceArc" type="Line2D" parent="ResonanceWellGate/AuthoredVisual/RevealedState"]
 points = PackedVector2Array(-45, -8, -42, -29, -26, -43, 0, -48, 26, -43, 42, -29, 45, -8)
 width = 2.0
-default_color = Color("#9ce0ce")
+default_color = Color(0.611765, 0.878431, 0.807843, 1)
 
 [node name="ResonanceMark" type="Line2D" parent="ResonanceWellGate/AuthoredVisual/RevealedState"]
 points = PackedVector2Array(-24, -26, 24, 10, 24, -26, -24, 10)
 width = 2.0
-default_color = Color("#9ce0ce")
+default_color = Color(0.611765, 0.878431, 0.807843, 1)
 
 [node name="OpenedState" type="Node2D" parent="ResonanceWellGate/AuthoredVisual"]
 visible = false
@@ -877,12 +877,12 @@ visible = false
 [node name="OpenedStairLeft" type="Line2D" parent="ResonanceWellGate/AuthoredVisual/OpenedState"]
 points = PackedVector2Array(-14, -1, -32, 45)
 width = 3.0
-default_color = Color("#d6c7b2")
+default_color = Color(0.839216, 0.780392, 0.698039, 1)
 
 [node name="OpenedStairRight" type="Line2D" parent="ResonanceWellGate/AuthoredVisual/OpenedState"]
 points = PackedVector2Array(14, -1, 32, 45)
 width = 3.0
-default_color = Color("#d6c7b2")
+default_color = Color(0.839216, 0.780392, 0.698039, 1)
 
 [node name="PromptLabel" type="Label" parent="ResonanceWellGate"]
 offset_right = 145.0
@@ -890,7 +890,7 @@ offset_bottom = 28.0
 position = Vector2(-58, 36)
 visible = false
 text = "E  共鸣"
-theme_override_colors/font_color = Color("#d6c7b2")
+theme_override_colors/font_color = Color(0.839216, 0.780392, 0.698039, 1)
 theme_override_font_sizes/font_size = 15
 
 [node name="StatusLabel" type="Label" parent="ResonanceWellGate"]
@@ -899,7 +899,7 @@ offset_bottom = 24.0
 position = Vector2(-64, 62)
 visible = false
 text = "已发现 · 再按 E 开启"
-theme_override_colors/font_color = Color("#9ce0ce")
+theme_override_colors/font_color = Color(0.611765, 0.878431, 0.807843, 1)
 theme_override_font_sizes/font_size = 12
 
 [node name="CheckpointVisual" parent="VillageCheckpoint" instance=ExtResource("18")]
@@ -922,29 +922,29 @@ theme_override_font_sizes/font_size = 12
 
 [node name="CharacterVisual" parent="Gatekeeper" instance=ExtResource("17")]
 position = Vector2(0, -20)
-skin_color = Color("#8d7566")
-cloth_color = Color("#51404a")
+skin_color = Color(0.552941, 0.458824, 0.4, 1)
+cloth_color = Color(0.317647, 0.25098, 0.290196, 1)
 
 [node name="Labels" parent="Gatekeeper" instance=ExtResource("16")]
 
 [node name="CharacterVisual" parent="Grandmother" instance=ExtResource("17")]
 position = Vector2(0, -20)
-skin_color = Color("#a58b7a")
-cloth_color = Color("#65594a")
+skin_color = Color(0.647059, 0.545098, 0.478431, 1)
+cloth_color = Color(0.396078, 0.34902, 0.290196, 1)
 
 [node name="Labels" parent="Grandmother" instance=ExtResource("16")]
 
 [node name="CharacterVisual" parent="BlacksmithNPC" instance=ExtResource("17")]
 position = Vector2(0, -20)
-skin_color = Color("#9b735e")
-cloth_color = Color("#594038")
+skin_color = Color(0.607843, 0.45098, 0.368627, 1)
+cloth_color = Color(0.34902, 0.25098, 0.219608, 1)
 
 [node name="Labels" parent="BlacksmithNPC" instance=ExtResource("16")]
 
 [node name="CharacterVisual" parent="TravelingMerchant" instance=ExtResource("17")]
 position = Vector2(0, -20)
-skin_color = Color("#a17e68")
-cloth_color = Color("#43564c")
+skin_color = Color(0.631373, 0.494118, 0.407843, 1)
+cloth_color = Color(0.262745, 0.337255, 0.298039, 1)
 
 [node name="Labels" parent="TravelingMerchant" instance=ExtResource("16")]
 
