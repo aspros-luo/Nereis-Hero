@@ -8,5 +8,5 @@ offset_bottom = 30.0
 position = Vector2(-54, 30)
 visible = false
 text = "E  Enter"
-theme_override_colors/font_color = Color("#d6c7b2")
+theme_override_colors/font_color = Color(0.839216, 0.780392, 0.698039, 1)
 theme_override_font_sizes/font_size = 16
