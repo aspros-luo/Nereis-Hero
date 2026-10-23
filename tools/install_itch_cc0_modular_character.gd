@@ -37,6 +37,8 @@ func _run() -> void:
 		var result_code := int(response[0])
 		var http_code := int(response[1])
 		if result_code != HTTPRequest.RESULT_SUCCESS or http_code != 200:
+			if FileAccess.file_exists(ARCHIVE_PATH):
+				DirAccess.remove_absolute(ProjectSettings.globalize_path(ARCHIVE_PATH))
 			push_error("Asset download failed. result=%d HTTP=%d. Download manually from %s" % [result_code, http_code, ASSET_PAGE])
 			quit(1)
 			return
@@ -50,7 +52,9 @@ func _extract_archive(archive_path: String, output_dir: String) -> bool:
 	var reader := ZIPReader.new()
 	var open_error := reader.open(archive_path)
 	if open_error != OK:
-		push_error("Could not open downloaded ZIP (error %d): %s" % [open_error, archive_path])
+		if FileAccess.file_exists(archive_path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(archive_path))
+		push_error("Could not open downloaded ZIP (error %d): %s. The partial archive was removed so a retry can download it cleanly." % [open_error, archive_path])
 		return false
 
 	var files: Array[Dictionary] = []
