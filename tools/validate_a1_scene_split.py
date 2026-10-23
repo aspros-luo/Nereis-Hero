@@ -79,6 +79,7 @@ def main() -> int:
     interaction_prompt = read("scenes/world/interaction_prompt.tscn", errors)
     rest_visual = read("scenes/world/rest_point_visual.tscn", errors)
     checkpoint_visual = read("scenes/world/checkpoint_visual.tscn", errors)
+    fireflies_scene = read("scenes/world/village_fireflies.tscn", errors)
     mite_visual = read("scenes/characters/mite_village_visual.tscn", errors)
     humanoid_visual = read("scenes/characters/humanoid_character_visual.tscn", errors)
     humanoid_script = read("scripts/characters/humanoid_character_visual.gd", errors)
@@ -98,6 +99,7 @@ def main() -> int:
         (interaction_prompt, "scenes/world/interaction_prompt.tscn"),
         (rest_visual, "scenes/world/rest_point_visual.tscn"),
         (checkpoint_visual, "scenes/world/checkpoint_visual.tscn"),
+        (fireflies_scene, "scenes/world/village_fireflies.tscn"),
         (mite_visual, "scenes/characters/mite_village_visual.tscn"),
         (humanoid_visual, "scenes/characters/humanoid_character_visual.tscn"),
     ]:
@@ -141,6 +143,9 @@ def main() -> int:
         ('[node name="DrainEntranceVisual" type="Node2D" parent="."]', "drain entrance visuals"),
         ('[node name="CampVisual" type="Node2D" parent="."]', "camp visuals"),
         ('[node name="NorthGateVisual" type="Node2D" parent="."]', "north gate state visuals"),
+        ('[node name="WorldEventDirector" type="Node" parent="."]', "authored world event director"),
+        ('[node name="NarrativeAudio" type="Node" parent="."]', "authored narrative audio node"),
+        ('[node name="VillageFireflies" parent="." instance=ExtResource("19")]', "authored firefly scene"),
         ('[node name="BackhillEntrance" type="Node2D" parent="."]', "A1.1 entrance"),
         ('[node name="BackdropVisual" type="TextureRect" parent="."]', "authored backdrop"),
         ('[node name="GroundStripVisual" type="TextureRect" parent="."]', "authored ground strip"),
@@ -202,19 +207,6 @@ def main() -> int:
     require('groups = ["a1_tavern_poi"]' in a11, "A1.1 tavern POI group was removed", errors)
 
     # Shared visual prefabs and scripts must expose scene-driven labels/state.
-    for needle, label in [
-        ('[node name="PromptLabel" type="Label" parent="."]', "POI prompt Label"),
-        ('[node name="NameLabel" type="Label" parent="."]', "NPC name Label"),
-        ('[node name="PromptLabel" type="Label" parent="."]', "interaction prompt Label"),
-        ('[node name="RestNameLabel" type="Label" parent="."]', "rest name Label"),
-        ('[node name="InactiveState" type="Node2D" parent="."]', "inactive checkpoint state"),
-        ('[node name="ActiveState" type="Node2D" parent="."]', "active checkpoint state"),
-        ('[node name="CharacterVisual" parent="." instance=ExtResource("1")]', "Mite humanoid visual"),
-        ('[node name="Skeleton2D" type="Skeleton2D" parent="."]', "serialized humanoid skeleton"),
-        ('[node name="RootBone" type="Bone2D" parent="Skeleton2D"]', "serialized rig root bone"),
-    ]:
-        # A few names are intentionally checked in their own prefab below.
-        pass
     for src, needle, label in [
         (poi_visual, '[node name="PromptLabel" type="Label" parent="."]', "POI prompt"),
         (npc_labels, '[node name="NameLabel" type="Label" parent="."]', "NPC name"),
@@ -237,7 +229,6 @@ def main() -> int:
         ('$NorthGateVisual/RepairedState.visible = defense_survived', "repaired gate story state"),
         ('$CampVisual.visible = camp_established', "camp visual explicit arrival gate"),
         ('$RestorationCampPOI.visible = camp_established', "camp POI explicit arrival gate"),
-        ('WorldState.discover_hidden_region("H01")', "H01 discovery"),
         ('resonance_well_gate.secret_id = "H01"', "H01 identity"),
         ('resonance_well_gate.target_scene_path = "res://scenes/hidden_well.tscn"', "H01 destination"),
         ('WorldState.pending_region_spawn_side = "backhill_return"', "A1.1 return spawn contract"),
@@ -256,8 +247,13 @@ def main() -> int:
             "Retired rooftop route/reward returned", errors)
     require("func _build_rig() -> void:" not in humanoid_script and ".new()" not in humanoid_script,
             "Humanoid rig is still procedurally built instead of authored in scene", errors)
-    require('if secret_id == "H01" and has_node("AuthoredVisual"):' in gate_script,
-            "H01 continues to draw instead of using authored visuals", errors)
+    require(
+        'if secret_id == "H01" and has_node("AuthoredVisual"):' in gate_script
+        and 'if secret_id == "H01" and region_record_id not in WorldState.discovered_hidden_regions:' in gate_script
+        and 'WorldState.discover_hidden_region(region_record_id)' in gate_script,
+        "H01 authored visuals or discovery/open state contract is missing",
+        errors,
+    )
 
     if errors:
         print("A1 SCENE-AUTHORED STATIC CHECK FAILED")
