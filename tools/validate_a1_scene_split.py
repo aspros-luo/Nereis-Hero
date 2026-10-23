@@ -190,6 +190,8 @@ def main() -> int:
         ('[node name="BackhillEntrance" type="Node2D" parent="."]', "A1.1 entrance"),
         ('[node name="BackdropVisual" type="TextureRect" parent="."]', "authored backdrop"),
         ('[node name="GroundStripVisual" type="TextureRect" parent="."]', "authored ground strip"),
+        ('[node name="GroundMain" type="StaticBody2D" parent="Terrain"]', "continuous main-ground collider"),
+        ('[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/GroundMain"]', "continuous main-ground collision shape"),
         ('[node name="BlockedState" type="Node2D" parent="NorthGateVisual"]', "blocked gate state"),
         ('[node name="RepairedState" type="Node2D" parent="NorthGateVisual"]', "repaired gate state"),
         ('[node name="RubbleState" type="Node2D" parent="DrainEntranceVisual"]', "drain rubble state"),
@@ -200,6 +202,28 @@ def main() -> int:
         ('[node name="StatusLabel" type="Label" parent="ResonanceWellGate"]', "H01 discovered status"),
     ]:
         require(needle in a10, f"A1.0 scene missing {label}: {needle}", errors)
+
+    # The blacksmith-side drop was an unused greybox artifact, not a sewer connection.
+    require(
+        'size = Vector2(3000, 40)' in a10
+        and 'position = Vector2(1500, 20)' in a10
+        and 'shape = SubResource("GroundMain")' in a10,
+        "A1.0 main ground must remain continuous across the former blacksmith-side drop.",
+        errors,
+    )
+    for obsolete_node in [
+        '[node name="GroundCutouts" type="Node2D" parent="."]',
+        '[node name="WestPit" type="Polygon2D" parent="GroundCutouts"]',
+        '[node name="EastPit" type="Polygon2D" parent="GroundCutouts"]',
+        '[node name="LowerRouteVisuals" type="Node2D" parent="."]',
+        '[node name="LowerLedge1" type="Polygon2D" parent="LowerRouteVisuals"]',
+        '[node name="LowerLedge2" type="Polygon2D" parent="LowerRouteVisuals"]',
+        '[node name="LowerLedge3" type="Polygon2D" parent="LowerRouteVisuals"]',
+        '[node name="LowerRouteWest" type="StaticBody2D" parent="Terrain"]',
+        '[node name="LowerRouteMiddle" type="StaticBody2D" parent="Terrain"]',
+        '[node name="LowerRouteEast" type="StaticBody2D" parent="Terrain"]',
+    ]:
+        require(obsolete_node not in a10, f"A1.0 unused drop terrain returned: {obsolete_node}", errors)
 
     # Required reusable scene instances are direct children of their authored anchors.
     for needle, label in [
