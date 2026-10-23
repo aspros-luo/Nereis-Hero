@@ -21,7 +21,16 @@ GODOT="/Users/aspros/Downloads/Godot.app/Contents/MacOS/Godot"
 "$GODOT" --path . res://scenes/debug/itch_cc0_modular_rig_lab.tscn
 ```
 
-The installer downloads the public CC0 archive from OpenGameArt, extracts PNGs and license/readme files to the Godot user-data folder at `user://itch_cc0_modular_character/`, and writes `manifest.json`. It does not overwrite any file under `assets/characters/hero/`.
+The installer first looks in `~/Downloads` for the creator's ZIP (including common browser duplicate names). If found, it copies the archive into its user-data folder and skips the engine download. If no local archive is found, it tries the OpenGameArt URL.
+
+If the engine download fails, use the browser fallback:
+
+1. Open https://rgsdev.itch.io/free-cc0-modular-animated-vector-characters-2d
+2. Click **Download Now**, then choose **No thanks, just take me to the downloads**.
+3. Download `Free 2D Animated Vector Game Character Sprites.zip` into `~/Downloads`.
+4. Rerun the installer; it will discover that ZIP automatically.
+
+The installer extracts PNGs and license/readme files to the Godot user-data folder at `user://itch_cc0_modular_character/` and writes `manifest.json`. It does not overwrite any file under `assets/characters/hero/`.
 
 ## Controls
 
