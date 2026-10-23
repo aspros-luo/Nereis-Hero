@@ -579,7 +579,6 @@ def main() -> int:
     require(region_script, 'authored_terrain.call("create_floor", self)', "A2 floor creation delegated to authored terrain", errors)
     for contract in (
         "func create_floor(region: Node) -> void:",
-        'var floor_y := float(region.get("floor_y"))',
         'var map_width := float(region.get("map_width"))',
         'region.call("_add_ground_segment", "GreyboxGround_West", 0.0, 860.0)',
         'region.call("_add_ground_segment", "GreyboxGround_Middle", 1060.0, 1360.0)',
