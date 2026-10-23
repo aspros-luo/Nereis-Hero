@@ -4,7 +4,7 @@
 ; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
 
 [sub_resource type="RectangleShape2D" id="Rect_001"]
-size = Vector2(200, 40)
+size = Vector2(500, 40)
 
 [sub_resource type="RectangleShape2D" id="Rect_002"]
 size = Vector2(60, 18)
@@ -27,20 +27,20 @@ size = Vector2(75, 12)
 position = Vector2(10, 155)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CryptLanding"]
-position = Vector2(100, 20)
+position = Vector2(250, 20)
 shape = SubResource("Rect_001")
 
 [node name="LandingStoneMass" type="Polygon2D" parent="CryptLanding"]
-polygon = PackedVector2Array(0, 0, 200, 0, 200, 40, 0, 40)
+polygon = PackedVector2Array(0, 0, 500, 0, 500, 40, 0, 40)
 color = Color(0.105882, 0.094118, 0.12549, 1)
 
 [node name="LandingStoneTop" type="Line2D" parent="CryptLanding"]
-points = PackedVector2Array(0, 0, 200, 0)
+points = PackedVector2Array(0, 0, 500, 0)
 width = 3.0
 default_color = Color(0.392157, 0.419608, 0.376471, 1)
 
 [node name="LandingStoneSeam" type="Line2D" parent="CryptLanding"]
-points = PackedVector2Array(8, 27, 192, 27)
+points = PackedVector2Array(8, 27, 492, 27)
 width = 2.0
 default_color = Color(0.070588, 0.066667, 0.090196, 1)
 
