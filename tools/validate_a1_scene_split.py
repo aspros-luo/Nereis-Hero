@@ -33,7 +33,7 @@ def require_sized_label(source: str, name: str, owner: str, errors: list[str]) -
     if start < 0:
         errors.append(f"{owner}: missing Label node {name!r}")
         return
-    end = source.find("\\n[node ", start + 1)
+    end = source.find("\n[node ", start + 1)
     block = source[start:] if end < 0 else source[start:end]
     if "offset_right = " not in block or "offset_bottom = " not in block:
         errors.append(f"{owner}: Label {name!r} needs explicit width and height")
