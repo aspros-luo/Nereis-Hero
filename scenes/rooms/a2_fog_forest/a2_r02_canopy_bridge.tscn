@@ -1,0 +1,84 @@
+[gd_scene load_steps=8 format=3]
+
+; 树冠层、断裂树桥与共鸣桥路线
+; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
+
+[sub_resource type="RectangleShape2D" id="Rect_001"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_002"]
+size = Vector2(125, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_003"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_004"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_005"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_006"]
+size = Vector2(120, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_007"]
+size = Vector2(130, 18)
+
+[node name="A2R02CanopyBridge" type="Node2D"]
+
+[node name="Platform_022" type="StaticBody2D" parent="."]
+position = Vector2(850, 185)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_022"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_001")
+one_way_collision = true
+
+[node name="Platform_023" type="StaticBody2D" parent="."]
+position = Vector2(985, 145)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_023"]
+position = Vector2(62.5, 9)
+shape = SubResource("Rect_002")
+one_way_collision = true
+
+[node name="Platform_024" type="StaticBody2D" parent="."]
+position = Vector2(1125, 175)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_024"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_003")
+one_way_collision = true
+
+[node name="Platform_025" type="StaticBody2D" parent="."]
+position = Vector2(1245, 220)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_025"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_004")
+one_way_collision = true
+
+[node name="Platform_026" type="StaticBody2D" parent="."]
+position = Vector2(1360, 285)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_026"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_005")
+one_way_collision = true
+
+[node name="Platform_027" type="StaticBody2D" parent="."]
+position = Vector2(1475, 330)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_027"]
+position = Vector2(60, 9)
+shape = SubResource("Rect_006")
+one_way_collision = true
+
+[node name="Platform_028" type="StaticBody2D" parent="."]
+position = Vector2(1490, 405)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_028"]
+position = Vector2(65, 9)
+shape = SubResource("Rect_007")
+one_way_collision = true
+
