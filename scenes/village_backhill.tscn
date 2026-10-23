@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/village_backhill.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/world/village_poi.gd" id="2"]
@@ -11,22 +11,7 @@
 [sub_resource type="RectangleShape2D" id="GroundShape"]
 size = Vector2(1840, 40)
 
-[sub_resource type="RectangleShape2D" id="PlatformShape"]
-size = Vector2(180, 18)
-
-[sub_resource type="RectangleShape2D" id="StairStepShape"]
-size = Vector2(100, 20)
-
-[sub_resource type="RectangleShape2D" id="LookoutShape"]
-size = Vector2(180, 18)
-
-[sub_resource type="RectangleShape2D" id="CliffBoundaryShape"]
-size = Vector2(40, 720)
-
-[sub_resource type="RectangleShape2D" id="CliffShelfShape"]
-size = Vector2(200, 18)
-
-[sub_resource type="RectangleShape2D" id="CliffCaveDoorShape"]
+[sub_resource type="RectangleShape2D" id="CliffExplorationDoorShape"]
 size = Vector2(100, 138)
 
 [sub_resource type="CapsuleShape2D" id="HeroCapsule"]
@@ -63,82 +48,12 @@ color = Color(0.055, 0.067, 0.09, 1)
 polygon = PackedVector2Array(0, 540, 1840, 540, 1840, 720, 0, 720)
 color = Color(0.12, 0.11, 0.14, 1)
 
-[node name="FarCliff" type="Polygon2D" parent="."]
-position = Vector2(1160, 170)
-polygon = PackedVector2Array(0, 350, 140, 210, 260, 250, 390, 80, 560, 160, 760, 0, 980, 130, 1040, 550, 0, 550)
-color = Color(0.13, 0.14, 0.18, 1)
-
 [node name="MainGround" type="StaticBody2D" parent="."]
 position = Vector2(0, 540)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MainGround"]
 position = Vector2(920, 20)
 shape = SubResource("GroundShape")
-
-[node name="WestBoundary" type="StaticBody2D" parent="."]
-position = Vector2(-20, 360)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WestBoundary"]
-shape = SubResource("CliffBoundaryShape")
-
-[node name="CliffEdge" type="Polygon2D" parent="."]
-position = Vector2(1780, 470)
-polygon = PackedVector2Array(0, 0, 60, -90, 120, -45, 180, -160, 250, -210, 320, -170, 360, 250, 0, 250)
-color = Color(0.09, 0.10, 0.14, 1)
-
-[node name="CliffLookout" type="StaticBody2D" parent="."]
-position = Vector2(1660, 365)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CliffLookout"]
-position = Vector2(90, 0)
-shape = SubResource("LookoutShape")
-one_way_collision = true
-
-[node name="Visual" type="Polygon2D" parent="CliffLookout"]
-polygon = PackedVector2Array(0, -5, 180, -5, 180, 8, 0, 8)
-color = Color(0.40, 0.35, 0.39, 1)
-
-[node name="CliffLowerShelf" type="StaticBody2D" parent="."]
-position = Vector2(1830, 500)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CliffLowerShelf"]
-position = Vector2(100, 0)
-shape = SubResource("CliffShelfShape")
-one_way_collision = true
-
-[node name="Visual" type="Polygon2D" parent="CliffLowerShelf"]
-polygon = PackedVector2Array(0, -5, 200, -5, 200, 8, 0, 8)
-color = Color(0.34, 0.29, 0.34, 1)
-
-[node name="EastBoundary" type="StaticBody2D" parent="."]
-position = Vector2(2220, 360)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EastBoundary"]
-shape = SubResource("CliffBoundaryShape")
-
-[node name="RidgePlatform01" type="StaticBody2D" parent="."]
-position = Vector2(360, 450)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RidgePlatform01"]
-position = Vector2(90, 0)
-shape = SubResource("PlatformShape")
-one_way_collision = true
-
-[node name="RidgePlatform02" type="StaticBody2D" parent="."]
-position = Vector2(590, 395)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RidgePlatform02"]
-position = Vector2(90, 0)
-shape = SubResource("PlatformShape")
-one_way_collision = true
-
-[node name="RidgePlatform03" type="StaticBody2D" parent="."]
-position = Vector2(830, 430)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RidgePlatform03"]
-position = Vector2(90, 0)
-shape = SubResource("PlatformShape")
-one_way_collision = true
 
 [node name="ChurchSilhouette" type="Polygon2D" parent="."]
 position = Vector2(420, 330)
@@ -159,89 +74,6 @@ color = Color(0.29, 0.20, 0.18, 1)
 position = Vector2(-14, 85)
 polygon = PackedVector2Array(0, 0, 28, 0, 28, 65, 0, 65)
 color = Color(0.07, 0.06, 0.08, 1)
-
-[node name="BackhillStairs" type="Node2D" parent="."]
-position = Vector2(0, 0)
-
-[node name="Step01" type="StaticBody2D" parent="BackhillStairs"]
-position = Vector2(1030, 520)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step01"]
-shape = SubResource("StairStepShape")
-
-[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step01"]
-polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
-color = Color(0.31, 0.28, 0.32, 1)
-
-[node name="Step02" type="StaticBody2D" parent="BackhillStairs"]
-position = Vector2(1125, 500)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step02"]
-shape = SubResource("StairStepShape")
-
-[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step02"]
-polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
-color = Color(0.34, 0.30, 0.35, 1)
-
-[node name="Step03" type="StaticBody2D" parent="BackhillStairs"]
-position = Vector2(1220, 480)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step03"]
-shape = SubResource("StairStepShape")
-
-[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step03"]
-polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
-color = Color(0.31, 0.28, 0.32, 1)
-
-[node name="Step04" type="StaticBody2D" parent="BackhillStairs"]
-position = Vector2(1315, 460)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step04"]
-shape = SubResource("StairStepShape")
-
-[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step04"]
-polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
-color = Color(0.34, 0.30, 0.35, 1)
-
-[node name="Step05" type="StaticBody2D" parent="BackhillStairs"]
-position = Vector2(1410, 440)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step05"]
-shape = SubResource("StairStepShape")
-
-[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step05"]
-polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
-color = Color(0.31, 0.28, 0.32, 1)
-
-[node name="Step06" type="StaticBody2D" parent="BackhillStairs"]
-position = Vector2(1505, 420)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step06"]
-shape = SubResource("StairStepShape")
-
-[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step06"]
-polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
-color = Color(0.34, 0.30, 0.35, 1)
-
-[node name="Step07" type="StaticBody2D" parent="BackhillStairs"]
-position = Vector2(1600, 400)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step07"]
-shape = SubResource("StairStepShape")
-
-[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step07"]
-polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
-color = Color(0.31, 0.28, 0.32, 1)
-
-[node name="Step08" type="StaticBody2D" parent="BackhillStairs"]
-position = Vector2(1695, 380)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BackhillStairs/Step08"]
-shape = SubResource("StairStepShape")
-
-[node name="Visual" type="Polygon2D" parent="BackhillStairs/Step08"]
-polygon = PackedVector2Array(-50, -10, 50, -10, 50, 10, -50, 10)
-color = Color(0.34, 0.30, 0.35, 1)
 
 [node name="ChurchPOI" type="Node2D" parent="."]
 position = Vector2(420, 540)
@@ -265,25 +97,6 @@ poi_id = "back_to_village"
 display_name = "返回村庄主街"
 dialogue = "沿着坡道可以回到住宅区与工坊。"
 
-[node name="CliffGrassLine" type="Line2D" parent="."]
-points = PackedVector2Array(1660, 355, 1700, 355, 1740, 355, 1780, 355, 1810, 355)
-width = 4.0
-default_color = Color(0.46, 0.43, 0.49, 1)
-
-[node name="CliffWarningMarker" type="Polygon2D" parent="."]
-position = Vector2(1845, 490)
-polygon = PackedVector2Array(0, 0, 30, -14, 54, 0, 30, 14)
-color = Color(0.52, 0.37, 0.42, 1)
-
-[node name="CliffCaveDoor" type="Area2D" parent="."]
-position = Vector2(1940, 500)
-script = ExtResource("4")
-prompt_text = "E  进入蜂巢后的洞穴"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CliffCaveDoor"]
-position = Vector2(0, -69)
-shape = SubResource("CliffCaveDoorShape")
-
 [node name="GroundEdge" type="Line2D" parent="."]
 points = PackedVector2Array(0, 540, 180, 540, 360, 540, 540, 540, 720, 540, 900, 540, 1080, 540, 1260, 540, 1440, 540, 1620, 540, 1800, 540, 1840, 540)
 width = 3.0
@@ -303,43 +116,6 @@ color = Color(0.54, 0.40, 0.35, 1)
 position = Vector2(48, 68)
 polygon = PackedVector2Array(0, 0, 20, 0, 20, 28, 0, 28)
 color = Color(0.66, 0.42, 0.28, 1)
-
-[node name="CliffCaveVisual" type="Node2D" parent="."]
-position = Vector2(1940, 500)
-visible = false
-z_index = -3
-
-[node name="StoneMouth" type="Polygon2D" parent="CliffCaveVisual"]
-position = Vector2(-68, -108)
-polygon = PackedVector2Array(0,108, 0,46, 14,24, 37,6, 68,0, 99,9, 126,31, 136,108)
-color = Color(0.129412, 0.117647, 0.160784, 1)
-
-[node name="InnerDarkness" type="Polygon2D" parent="CliffCaveVisual"]
-position = Vector2(-40, -83)
-polygon = PackedVector2Array(0,83, 3,41, 16,18, 40,0, 64,7, 80,28, 83,83)
-color = Color(0.054902, 0.062745, 0.098039, 1)
-
-[node name="ArchRim" type="Line2D" parent="CliffCaveVisual"]
-points = PackedVector2Array(-65, 0, -62, -40, -42, -75, -13, -100, 12, -105, 42, -92, 64, -62, 68, 0)
-width = 5.0
-default_color = Color(0.380392, 0.341176, 0.396078, 1)
-
-[node name="RevealedState" type="Node2D" parent="CliffCaveVisual"]
-
-[node name="InnerGlow" type="Line2D" parent="CliffCaveVisual/RevealedState"]
-points = PackedVector2Array(-30, -18, -22, -61, 0, -84, 25, -71, 34, -30)
-width = 2.0
-default_color = Color(0.611765, 0.878431, 0.807843, 1)
-
-[node name="StoneChip01" type="Polygon2D" parent="CliffCaveVisual/RevealedState"]
-position = Vector2(-80, -30)
-polygon = PackedVector2Array(0,0, 14,-5, 19,8, 3,12)
-color = Color(0.419608, 0.360784, 0.407843, 1)
-
-[node name="StoneChip02" type="Polygon2D" parent="CliffCaveVisual/RevealedState"]
-position = Vector2(70, -48)
-polygon = PackedVector2Array(0,0, 12,-8, 18,5, 4,10)
-color = Color(0.419608, 0.360784, 0.407843, 1)
 
 [node name="ChurchTitle" type="Label" parent="."]
 offset_right = 150.0
@@ -368,20 +144,41 @@ z_index = 5
 theme_override_colors/font_color = Color(0.647059, 0.631373, 0.690196, 1)
 theme_override_font_sizes/font_size = 18
 
-[node name="CliffTitle" type="Label" parent="."]
-offset_right = 140.0
-offset_bottom = 30.0
-position = Vector2(1740, 292)
-text = "悬崖边缘"
-z_index = 5
-theme_override_colors/font_color = Color(0.6, 0.576471, 0.65098, 1)
-theme_override_font_sizes/font_size = 15
-
 [node name="POIVisual" parent="ChurchPOI" instance=ExtResource("6")]
 
 [node name="POIVisual" parent="TavernPOI" instance=ExtResource("6")]
 
 [node name="POIVisual" parent="BackToVillagePOI" instance=ExtResource("6")]
 
-[node name="Prompt" parent="CliffCaveDoor" instance=ExtResource("7")]
+[node name="CliffExplorationDoor" type="Area2D" parent="."]
+position = Vector2(1725, 520)
+script = ExtResource("4")
+prompt_text = "E  进入悬崖探索区"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CliffExplorationDoor"]
+position = Vector2(0, -69)
+shape = SubResource("CliffExplorationDoorShape")
+
+[node name="Prompt" parent="CliffExplorationDoor" instance=ExtResource("7")]
+
+[node name="CliffEntryVisual" type="Node2D" parent="."]
+position = Vector2(1725, 520)
+z_index = -1
+
+[node name="StoneArch" type="Polygon2D" parent="CliffEntryVisual"]
+polygon = PackedVector2Array(-68, 0, -68, -56, -50, -86, -22, -108, 0, -114, 24, -105, 52, -82, 68, -54, 68, 0, 44, 0, 44, -48, 30, -72, 0, -86, -30, -72, -44, -48, -44, 0)
+color = Color(0.13, 0.12, 0.16, 1)
+
+[node name="DarkPassage" type="Polygon2D" parent="CliffEntryVisual"]
+polygon = PackedVector2Array(-38, 0, -38, -48, -23, -68, 0, -78, 24, -65, 38, -45, 38, 0)
+color = Color(0.035, 0.04, 0.065, 1)
+
+[node name="CliffEntryTitle" type="Label" parent="."]
+offset_right = 220.0
+offset_bottom = 34.0
+position = Vector2(1605, 318)
+text = "悬崖探索入口"
+z_index = 5
+theme_override_colors/font_color = Color(0.6, 0.576471, 0.65098, 1)
+theme_override_font_sizes/font_size = 16
 
