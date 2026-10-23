@@ -957,7 +957,7 @@ def main() -> int:
                             )
                         }
                         body_matches = list(re.finditer(
-                            r'\[node name="[^"]+" type="StaticBody2D" parent="\\."\]\s*position = Vector2\(([0-9.]+),\s*([0-9.]+)\)',
+                            r'\[node name="[^"]+" type="StaticBody2D" parent="\."\]\s*position = Vector2\(([0-9.]+),\s*([0-9.]+)\)',
                             room_text,
                         ))
                         for body_index, body_match in enumerate(body_matches):
