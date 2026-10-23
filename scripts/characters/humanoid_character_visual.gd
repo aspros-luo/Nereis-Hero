@@ -134,9 +134,3 @@ func _apply_pose() -> void:
 	_knee_right.rotation = maxf(0.0, sin(phase)) * 0.34 if motion_state == "run" else 0.0
 	_foot_left.rotation = -_leg_left.rotation * 0.5 - _knee_left.rotation * 0.35
 	_foot_right.rotation = -_leg_right.rotation * 0.5 - _knee_right.rotation * 0.35
-
-
-func _apply_cloth_palette() -> void:
-	for line in _cloth_lines:
-		if is_instance_valid(line):
-			line.default_color = hurt_color if _hurt_flash else cloth_color
