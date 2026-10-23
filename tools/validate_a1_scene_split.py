@@ -354,7 +354,8 @@ def main() -> int:
         ('{"side": "north_gate", "x": 2630.0}', "north-gate return spawn"),
         ('{"side": "mite_house_return", "x": 530.0}', "Mite-house return spawn"),
         ('func _test_a11_authored_terrain() -> void:', "A1.1 terrain smoke test"),
-        ('stair_count == 8', "eight-step collision/visual stair check"),
+        ('func _test_cliff_exploration() -> void:', "standalone cliff exploration smoke test"),
+        ('Future A2 road is disabled until map design is complete', "reserved future route lock test"),
         ('H01 discovery status uses its authored Label', "H01 discovered-status Label check"),
         ('H01 discovery prompt clears after permanent opening', "H01 permanent-open status check"),
     ]:
