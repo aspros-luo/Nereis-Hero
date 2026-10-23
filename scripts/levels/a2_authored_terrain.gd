@@ -26,7 +26,7 @@ const A2_EXPECTED_PLATFORM_COUNTS: Dictionary = {
 	"A2R01ForestCrossroads": 12,
 	"A2R02CanopyBridge": 7,
 	"A2R03BellTombGallery": 9,
-	"A2R04FloodedCrypt": 6,
+	"A2R04FloodedCrypt": 9,
 	"A2R05OldPilgrimHighroad": 13,
 	"A2R06EasternRavine": 24,
 }
