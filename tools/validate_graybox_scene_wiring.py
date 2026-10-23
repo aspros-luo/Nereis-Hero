@@ -580,6 +580,18 @@ def main() -> int:
         "shared canopy, C03/C04 and ravine ledges preserved",
     ):
         require(a2_terrain, contract, "A2 authored terrain contract", errors)
+    require(region_script, 'authored_terrain.call("create_floor", self)', "A2 floor creation delegated to authored terrain", errors)
+    for contract in (
+        "func create_floor(region: Node) -> void:",
+        'var floor_y := float(region.get("floor_y"))',
+        'var map_width := float(region.get("map_width"))',
+        'region.call("_add_ground_segment", "GreyboxGround_West", 0.0, 860.0)',
+        'region.call("_add_ground_segment", "GreyboxGround_Middle", 1060.0, 1360.0)',
+        'region.call("_add_ground_segment", "GreyboxGround_East", 2660.0, map_width - 2660.0)',
+        'region.call("_add_platform", Rect2(860.0, floor_y + 125.0, 200.0, 18.0))',
+        'region.call("_add_platform", Rect2(2420.0, floor_y + 125.0, 240.0, 18.0))',
+    ):
+        require(a2_terrain, contract, "A2 floor collision contract", errors)
     require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 810.0, 200.0, 180.0), false)', "A2 crypt floor rendering", errors)
     require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(2660.0, floor_y, map_width - 2660.0, 180.0), false)', "A2 eastern ravine rendering", errors)
     require(region_script, '_add_platform(Rect2(3335, 490, 145, 18))', "A2 C03 remote canopy landing", errors)
