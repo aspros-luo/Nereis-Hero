@@ -4,8 +4,8 @@ extends SceneTree
 
 const ARCHIVE_URL := "https://opengameart.org/sites/default/files/free_2d_animated_vector_game_character_sprites.zip"
 const OUTPUT_DIR := "user://itch_cc0_modular_character"
-const ARCHIVE_PATH := OUTPUT_DIR.path_join("source_asset_pack.zip")
-const MANIFEST_PATH := OUTPUT_DIR.path_join("manifest.json")
+const ARCHIVE_PATH := "user://itch_cc0_modular_character/source_asset_pack.zip"
+const MANIFEST_PATH := "user://itch_cc0_modular_character/manifest.json"
 const ASSET_PAGE := "https://rgsdev.itch.io/free-cc0-modular-animated-vector-characters-2d"
 
 func _initialize() -> void:
