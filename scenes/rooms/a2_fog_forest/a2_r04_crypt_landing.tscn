@@ -35,6 +35,24 @@ position = Vector2(100, 9)
 shape = SubResource("Rect_002")
 one_way_collision = true
 
+[node name="StoneLowerFace" type="Polygon2D" parent="CryptReturnShelf"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(200, 12), Vector2(200, 18), Vector2(0, 18))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="CryptReturnShelf"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(200, 3), Vector2(200, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="CryptReturnShelf"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(200, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="CryptReturnShelf"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(198, 12))
+width = 2.0
+default_color = Color("#1b171f")
+
 [node name="CryptStepWest" type="StaticBody2D" parent="."]
 position = Vector2(850, 728)
 
@@ -42,6 +60,24 @@ position = Vector2(850, 728)
 position = Vector2(35, 6)
 shape = SubResource("Rect_003")
 one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="CryptStepWest"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(70, 12), Vector2(70, 12), Vector2(0, 12))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="CryptStepWest"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(70, 3), Vector2(70, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="CryptStepWest"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(70, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="CryptStepWest"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(68, 12))
+width = 2.0
+default_color = Color("#1b171f")
 
 [node name="CryptStepEast" type="StaticBody2D" parent="."]
 position = Vector2(1000, 695)
@@ -51,6 +87,24 @@ position = Vector2(35, 6)
 shape = SubResource("Rect_004")
 one_way_collision = true
 
+[node name="StoneLowerFace" type="Polygon2D" parent="CryptStepEast"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(70, 12), Vector2(70, 12), Vector2(0, 12))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="CryptStepEast"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(70, 3), Vector2(70, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="CryptStepEast"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(70, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="CryptStepEast"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(68, 12))
+width = 2.0
+default_color = Color("#1b171f")
+
 [node name="CryptUpperStep" type="StaticBody2D" parent="."]
 position = Vector2(900, 655)
 
@@ -58,4 +112,22 @@ position = Vector2(900, 655)
 position = Vector2(37.5, 6)
 shape = SubResource("Rect_005")
 one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="CryptUpperStep"]
+polygon = PackedVector2Array(Vector2(0, 12), Vector2(75, 12), Vector2(75, 12), Vector2(0, 12))
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="CryptUpperStep"]
+polygon = PackedVector2Array(Vector2(0, 3), Vector2(75, 3), Vector2(75, 12), Vector2(0, 12))
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="CryptUpperStep"]
+points = PackedVector2Array(Vector2(0, 0), Vector2(75, 0))
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="CryptUpperStep"]
+points = PackedVector2Array(Vector2(2, 12), Vector2(73, 12))
+width = 2.0
+default_color = Color("#1b171f")
 
