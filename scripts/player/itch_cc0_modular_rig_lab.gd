@@ -16,7 +16,7 @@ const PART_RULES := {
 	"arm_right": {"terms": ["right_arm", "arm_right", "rightarm", "armright", "right_hand", "hand_right", "rightbodypart", "right_body_part"], "reject": ["leg", "foot", "enemy"]},
 	"leg_left": {"terms": ["left_leg", "leg_left", "leftleg", "legleft", "left_foot", "foot_left"], "reject": ["arm", "hand", "enemy"]},
 	"leg_right": {"terms": ["right_leg", "leg_right", "rightleg", "legright", "right_foot", "foot_right"], "reject": ["arm", "hand", "enemy"]},
-	"weapon": {"terms": ["weapon", "sword", "blade"], "reject": ["enemy"]}
+	"weapon": {"terms": ["katana", "sword", "blade", "dagger", "knife"], "reject": ["enemy", "gun", "rifle"]}
 }
 
 var _asset_paths: Array[String] = []
@@ -66,7 +66,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _make_stage() -> void:
 	var ground := Line2D.new()
 	ground.name = "GroundReference"
-	ground.points = PackedVector2Array([Vector2(-180, 30), Vector2(180, 30)])
+	ground.points = PackedVector2Array([Vector2(-1000, 30), Vector2(1000, 30)])
 	ground.width = 2.0
 	ground.default_color = Color("#68616d")
 	add_child(ground)
@@ -132,6 +132,8 @@ func _build_rig() -> void:
 		_add_full_body_fallback()
 		_status_label.text += "\n\nPart-name match was incomplete. Showing best full-body idle candidate plus bone scaffold."
 		_status_label.text += "\nSee output log for selected paths and missing semantic slots."
+	if not selected.has("weapon"):
+		_add_procedural_sword()
 
 	scale = Vector2.ONE * DISPLAY_SCALE
 	_log_selected_parts(selected)
@@ -244,6 +246,8 @@ func _assemble_selected_parts(selected: Dictionary) -> void:
 	var weapon_info: Dictionary = selected.get("weapon", {})
 	if not weapon_info.is_empty():
 		var weapon_anchor := Vector2(weapon_info.bounds.position) + Vector2(weapon_info.bounds.size) * 0.5
+		var arm_right_global := body_center + _arm_right.position
+		_weapon_bone.position = weapon_anchor - arm_right_global
 		_add_part_sprite("weapon", weapon_info, _weapon_bone, weapon_anchor)
 
 	var palette := {
@@ -313,6 +317,26 @@ func _add_full_body_fallback() -> void:
 	_full_body_fallback.modulate = Color("#e3d8c8")
 	_root_bone.add_child(_full_body_fallback)
 	print("Fallback display asset: ", best_path)
+
+func _add_procedural_sword() -> void:
+	# The CC0 pack's stock weapon variants are firearms; never bind one as the Hero's sword.
+	# A restrained placeholder sword keeps the slash pose readable until a fitting blade asset is selected.
+	var blade := Polygon2D.new()
+	blade.name = "SwordBladePlaceholder"
+	blade.color = Color("#d4d0d5")
+	blade.polygon = PackedVector2Array([Vector2(1, -2), Vector2(30, -5), Vector2(36, -4), Vector2(31, -1), Vector2(2, 1)])
+	_weapon_bone.add_child(blade)
+	var guard := Polygon2D.new()
+	guard.name = "SwordGuardPlaceholder"
+	guard.color = Color("#8a7886")
+	guard.polygon = PackedVector2Array([Vector2(0, -4), Vector2(3, -2), Vector2(1, 4), Vector2(-2, 2)])
+	_weapon_bone.add_child(guard)
+	var grip := Line2D.new()
+	grip.name = "SwordGripPlaceholder"
+	grip.width = 2.0
+	grip.default_color = Color("#4a3942")
+	grip.points = PackedVector2Array([Vector2(-7, 2), Vector2(1, 0)])
+	_weapon_bone.add_child(grip)
 
 func _log_selected_parts(selected: Dictionary) -> void:
 	print("=== CC0 modular rig candidate selection ===")
