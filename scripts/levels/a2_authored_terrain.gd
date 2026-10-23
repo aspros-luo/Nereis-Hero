@@ -3,7 +3,7 @@ extends Node
 ## A2 地形补强：保留公共控制器既有的地面分段、平台、出口门与地图连接合同。
 
 const FLOOR_THICKNESS := 40.0
-const CRYPT_FLOOR_Y := 790.0
+const CRYPT_FLOOR_Y := 810.0
 const CRYPT_LEFT := 860.0
 const CRYPT_WIDTH := 200.0
 
