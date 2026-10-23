@@ -575,7 +575,7 @@ def main() -> int:
         'region.get_node_or_null("A2_FloodedCryptFloor") == null',
         '_add_floor_segment(region, "A2_FloodedCryptFloor", CRYPT_LEFT, CRYPT_WIDTH, CRYPT_FLOOR_Y)',
         "The shared A2 controller already creates the west/middle/east surface gaps and all ledges.",
-        "rest.position = Vector2(1600.0, float(region.get(\"floor_y\")))",
+        "rest.position = Vector2(1150.0, float(region.get(\"floor_y\")))",
         "bell.position = Vector2(735.0, 322.0)",
         "shared canopy, C03/C04 and ravine ledges preserved",
     ):
