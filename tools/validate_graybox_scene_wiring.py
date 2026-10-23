@@ -577,6 +577,7 @@ def main() -> int:
     ):
         require(a2_terrain, contract, "A2 authored terrain contract", errors)
     require(region_script, 'authored_terrain.call("create_floor", self)', "A2 floor creation delegated to authored terrain", errors)
+    require(region_script, 'if region_id == "A2":\n\t\t\tcontinue', "A2 visible platforms owned by room nodes", errors)
     for contract in (
         "func create_floor(region: Node) -> void:",
         'var map_width := float(region.get("map_width"))',
@@ -596,6 +597,9 @@ def main() -> int:
         "scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn",
     ):
         require(a2_terrain, room_path, "A2 six-room scene assembly", errors)
+        room_scene_text = read(room_path, errors)
+        require(room_scene_text, '[node name="StoneUpperFace" type="Polygon2D"', "A2 node-authored platform face", errors)
+        require(room_scene_text, '[node name="StoneTopEdge" type="Line2D"', "A2 node-authored platform edge", errors)
     for contract in (
         '[node name="CryptLanding" type="StaticBody2D" parent="."]',
         'size = Vector2(200, 40)',
