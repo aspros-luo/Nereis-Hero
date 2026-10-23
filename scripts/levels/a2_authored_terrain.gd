@@ -1,6 +1,8 @@
 extends Node
-## A2 room assembly. Keep cross-region doors and world-state contracts in the shared region controller.
-## A2 房间装配：跨区出口与世界状态合同仍由公共区域控制器维护。
+## A2 room assembly. Room scenes use local coordinates; the parent scene supplies each room origin.
+## Keep cross-region doors and world-state contracts in the shared region controller.
+## A2 房间装配：房间内部使用局部坐标，由父场景指定房间原点。
+## 跨区出口与世界状态合同仍由公共区域控制器维护。
 
 const A2_ROOM_SCENES: Array[PackedScene] = [
 	preload("res://scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn"),
@@ -80,7 +82,7 @@ func _validate_authored_rooms(region: Node) -> void:
 					continue
 				if shape_node.shape is RectangleShape2D:
 					var rectangle := shape_node.shape as RectangleShape2D
-					var right_edge: float = body.position.x + shape_node.position.x + rectangle.size.x * 0.5
+					var right_edge: float = room.position.x + body.position.x + shape_node.position.x + rectangle.size.x * 0.5
 					max_platform_right = maxf(max_platform_right, right_edge)
 		total_platforms += platform_count
 		var expected := int(A2_EXPECTED_PLATFORM_COUNTS[room_name])
