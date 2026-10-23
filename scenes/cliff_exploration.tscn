@@ -17,7 +17,7 @@ height = 48.0
 size = Vector2(100, 138)
 
 [sub_resource type="RectangleShape2D" id="FutureRoadBlockerShape"]
-size = Vector2(24, 140)
+size = Vector2(60, 600)
 
 [node name="CliffExploration" type="Node2D"]
 script = ExtResource("1")
@@ -141,12 +141,12 @@ shape = SubResource("GateTriggerShape")
 position = Vector2(2240, 520)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FutureRoadBlocker"]
-position = Vector2(0, -60)
+position = Vector2(0, -300)
 shape = SubResource("FutureRoadBlockerShape")
 
 [node name="FutureRoadSeal" type="Polygon2D" parent="."]
 position = Vector2(2240, 510)
-polygon = PackedVector2Array(-62, 0, -55, -75, -20, -110, 5, -90, 38, -122, 68, -82, 62, 0)
+polygon = PackedVector2Array(-120, 0, -114, -470, -62, -540, -20, -505, 16, -555, 62, -520, 112, -470, 120, 0)
 color = Color(0.23, 0.20, 0.25, 1)
 
 [node name="FutureRoadLabel" type="Label" parent="."]
