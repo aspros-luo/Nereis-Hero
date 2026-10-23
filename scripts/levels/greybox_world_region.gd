@@ -879,21 +879,9 @@ func _create_floor() -> void:
 	# A2's Bell Grave is a real opening in the ground collision, not just a label or background drawing.
 	# A2 钟墓必须是真正切开地面碰撞的坑口，而不只是地图标签或背景图案。
 	if region_id == "A2":
-		_add_ground_segment("GreyboxGround_West", 0.0, 860.0)
-		_add_ground_segment("GreyboxGround_Middle", 1060.0, 1360.0)
-		# The eastern ravine separates the expanded forest from the remote canopy exit.
-		# 东部沟壑将扩建林地与远端树冠出口分开。
-		_add_ground_segment("GreyboxGround_East", 2660.0, map_width - 2660.0)
-		# Bell Grave descends below the surface into a real undercroft with staggered exit shelves.
-		_add_platform(Rect2(860.0, floor_y + 125.0, 200.0, 18.0))
-		_add_platform(Rect2(850.0, floor_y + 78.0, 70.0, 12.0))
-		_add_platform(Rect2(1000.0, floor_y + 45.0, 70.0, 12.0))
-		_add_platform(Rect2(900.0, floor_y + 5.0, 75.0, 12.0))
-		# The eastern ravine is a deep cut: lower shelves make a second route under the high bridge.
-		_add_platform(Rect2(2420.0, floor_y + 125.0, 240.0, 18.0))
-		_add_platform(Rect2(2400.0, floor_y + 78.0, 70.0, 12.0))
-		_add_platform(Rect2(2590.0, floor_y + 45.0, 70.0, 12.0))
-		_add_platform(Rect2(2490.0, floor_y + 5.0, 80.0, 12.0))
+		var authored_terrain := get_node_or_null("A2AuthoredTerrain")
+		if authored_terrain != null:
+			authored_terrain.call("create_floor", self)
 		return
 	# Selected regions use real floor cuts with lower shelves, not platforms buried inside a solid floor.
 	# 指定区域使用真实地面断口与下层石沿，避免把平台埋在完整地面碰撞体里。
@@ -1720,77 +1708,9 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(820, floor_y + 135.0, 150, 18))
 			_add_platform(Rect2(990, floor_y + 90.0, 145, 18))
 		"A2":
-			# A2 is a vertically interlocked region, not a longer flat corridor.
-			# A2 采用犬牙交错的上下层：主路会攀升、回落，再从另一侧绕回同一地标。
-			# West root climb: jagged shelves climb into the first canopy.
-			_add_platform(Rect2(300, 585, 120, 18))
-			_add_platform(Rect2(430, 530, 110, 18))
-			_add_platform(Rect2(555, 465, 115, 18))
-			_add_platform(Rect2(690, 410, 105, 18))
-			_add_platform(Rect2(770, 345, 105, 18))
-			_add_platform(Rect2(900, 290, 120, 18))
-			_add_platform(Rect2(1035, 235, 130, 18))
-			_add_platform(Rect2(1175, 275, 115, 18))
-			_add_platform(Rect2(1265, 345, 120, 18))
-			_add_platform(Rect2(1380, 405, 130, 18))
-			_add_platform(Rect2(1510, 465, 120, 18))
-			_add_platform(Rect2(1630, 520, 135, 18))
-			# Bell Grave outer gallery: an upper rim and a lower return skirt overlap vertically.
-			_add_platform(Rect2(820, 470, 105, 18))
-			_add_platform(Rect2(935, 420, 115, 18))
-			_add_platform(Rect2(1060, 385, 120, 18))
-			_add_platform(Rect2(1180, 430, 115, 18))
-			_add_platform(Rect2(1290, 490, 125, 18))
-			_add_platform(Rect2(760, 535, 100, 18))
-			_add_platform(Rect2(910, 560, 110, 18))
-			_add_platform(Rect2(1050, 535, 110, 18))
-			_add_platform(Rect2(1190, 555, 115, 18))
-			# A broken canopy bridge rises over the gallery, then descends behind its ribs.
-			_add_platform(Rect2(850, 185, 115, 18))
-			_add_platform(Rect2(985, 145, 125, 18))
-			_add_platform(Rect2(1125, 175, 115, 18))
-			_add_platform(Rect2(1245, 220, 115, 18))
-			_add_platform(Rect2(1360, 285, 115, 18))
-			_add_platform(Rect2(1475, 330, 120, 18))
-			_add_platform(Rect2(1490, 405, 130, 18))
-			# Central pilgrim ribs: upper crossing and lower shelves weave around one another.
-			_add_platform(Rect2(1585, 365, 115, 18))
-			_add_platform(Rect2(1710, 310, 120, 18))
-			_add_platform(Rect2(1840, 270, 120, 18))
-			_add_platform(Rect2(1970, 315, 115, 18))
-			_add_platform(Rect2(2085, 375, 120, 18))
-			_add_platform(Rect2(2185, 440, 115, 18))
-			_add_platform(Rect2(1735, 430, 115, 18))
-			_add_platform(Rect2(1850, 485, 115, 18))
-			_add_platform(Rect2(1975, 525, 125, 18))
-			_add_platform(Rect2(2100, 565, 120, 18))
-			# C04 remains on a supported highroad shelf; the lower path can pass beneath it.
-			_add_platform(Rect2(1740, 510, 125, 18))
-			_add_platform(Rect2(1840, 535, 140, 18))
-			_add_platform(Rect2(1975, 465, 115, 18))
-			# Eastern ravine: an upper bridge and a deep underpass share the same footprint.
-			_add_platform(Rect2(2250, 490, 115, 18))
-			_add_platform(Rect2(2355, 425, 110, 18))
-			_add_platform(Rect2(2465, 350, 115, 18))
-			_add_platform(Rect2(2580, 300, 120, 18))
-			_add_platform(Rect2(2695, 345, 115, 18))
-			_add_platform(Rect2(2795, 410, 115, 18))
-			_add_platform(Rect2(2895, 465, 115, 18))
-			_add_platform(Rect2(2985, 400, 115, 18))
-			_add_platform(Rect2(3075, 335, 115, 18))
-			_add_platform(Rect2(3165, 390, 115, 18))
-			_add_platform(Rect2(3220, 510, 130, 18))
-			# C03's remote canopy exit has a real landing at the authored anchor height.
-			_add_platform(Rect2(3335, 490, 145, 18))
-			# A second, higher route crosses above the ravine and rejoins the exit approach.
-			_add_platform(Rect2(2310, 250, 115, 18))
-			_add_platform(Rect2(2435, 205, 115, 18))
-			_add_platform(Rect2(2560, 165, 120, 18))
-			_add_platform(Rect2(2685, 205, 115, 18))
-			_add_platform(Rect2(2805, 260, 115, 18))
-			_add_platform(Rect2(2925, 305, 115, 18))
-			_add_platform(Rect2(3045, 270, 115, 18))
-			_add_platform(Rect2(3155, 315, 115, 18))
+			var authored_terrain := get_node_or_null("A2AuthoredTerrain")
+			if authored_terrain != null:
+				authored_terrain.call("configure_platforms", self)
 		"A3":
 			# Street-level route: rubble, market, sewer descent, and the battlefield road.
 			# 地面主路连接碎墙、市场、下水道入口与战场方向。
