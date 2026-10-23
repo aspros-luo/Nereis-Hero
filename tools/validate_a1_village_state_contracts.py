@@ -32,6 +32,8 @@ def main() -> int:
     village_scene = read("scenes/village_hub.tscn")
     backhill = read("scripts/levels/village_backhill.gd")
     backhill_scene = read("scenes/village_backhill.tscn")
+    cliff = read("scripts/levels/cliff_exploration.gd")
+    cliff_scene = read("scenes/cliff_exploration.tscn")
     interior = read("scripts/levels/interior_scene.gd")
     world_state = read("scripts/core/world_state.gd")
     defense = read("scripts/levels/village_defense_demo.gd")
@@ -121,20 +123,16 @@ def main() -> int:
         "H01 visuals must be authored nodes and not drawn from the shared gate script.",
     )
 
-    # H09 is a consequence of beating the mad cleric and physically returning to A1.
+    # H09 remains gated by defeating the mad cleric and physically returning to A1, now inside the separate cliff scene.
     require(
-        'if "defeated_mad_cleric" in WorldState.achievement_flags:' in village
-        and 'WorldState.record_achievement("returned_to_village_after_mad_cleric")' in village,
-        "A1: returning after the mad cleric must record the explicit return fact.",
-    )
-    require(
-        'var cave_unlocked := "returned_to_village_after_mad_cleric" in WorldState.achievement_flags' in backhill
-        and '$CliffCaveVisual.visible = cave_unlocked' in backhill
-        and 'const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"' in backhill
-        and 'WorldState.discover_hidden_region("H09")' in backhill
-        and 'WorldState.open_hidden_path("H09")' in backhill
-        and 'SceneTransition.fade_to_scene(CLIFF_CAVE_SCENE)' in backhill,
-        "A1.1: H09 must stay gated by physical return, show the authored cave, and enter its existing scene.",
+        'var h09_unlocked := "returned_to_village_after_mad_cleric" in WorldState.achievement_flags' in cliff
+        and '$H09CaveVisual.visible = h09_unlocked' in cliff
+        and 'const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"' in cliff
+        and 'WorldState.discover_hidden_region("H09")' in cliff
+        and 'WorldState.open_hidden_path("H09")' in cliff
+        and 'SceneTransition.fade_to_scene(CLIFF_CAVE_SCENE)' in cliff
+        and '[node name="H09CaveDoor" type="Area2D" parent="."]' in cliff_scene,
+        "A1.1: H09 must stay gated by physical return and live in the separate cliff scene.",
     )
     require(
         'WorldState.record_achievement("defeated_mad_cleric")' in world_region
