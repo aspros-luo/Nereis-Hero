@@ -89,6 +89,7 @@ def main() -> int:
     rest_script = read("scripts/world/rest_point.gd", errors)
     checkpoint_script = read("scripts/world/checkpoint.gd", errors)
     mite_script = read("scripts/npc/mite.gd", errors)
+    fireflies_script = read("scripts/effects/village_fireflies.gd", errors)
     gate_script = read("scripts/world/resonance_secret_gate.gd", errors)
 
     for scene, path in [
@@ -120,9 +121,17 @@ def main() -> int:
         (rest_script, "rest_point.gd"),
         (checkpoint_script, "checkpoint.gd"),
         (mite_script, "mite.gd"),
+        (fireflies_script, "village_fireflies.gd"),
         (humanoid_script, "humanoid_character_visual.gd"),
     ]:
         require("func _draw() -> void:" not in script, f"{path}: visual draw method remains", errors)
+
+    require(
+        all(f'[node name="Firefly{i:02d}" type="Polygon2D" parent="."]' in fireflies_scene for i in range(1, 27)),
+        "Fireflies must be 26 scene-authored Polygon2D nodes.",
+        errors,
+    )
+    require(".new()" not in fireflies_script, "Fireflies must not construct visual nodes in code", errors)
 
     # A1.0: scene-authored architecture, traversable terrain and persistent interaction anchors.
     for needle, label in [
