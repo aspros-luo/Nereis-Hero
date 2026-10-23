@@ -30,6 +30,8 @@ polygon = PackedVector2Array(11.00, 0.00, 10.16, 4.21, 7.78, 7.78, 4.21, 10.16, 
 color = Color("#d6c7b2")
 
 [node name="TitleLabel" type="Label" parent="."]
+offset_right = 160.0
+offset_bottom = 24.0
 position = Vector2(-50, 30)
 text = "CHECKPOINT"
 theme_override_colors/font_color = Color("#d6c7b2")
