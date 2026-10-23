@@ -19,6 +19,17 @@ func _run() -> void:
 		quit(1)
 		return
 
+	# Prefer a manually downloaded local ZIP when the game engine cannot reach the asset host.
+	if not FileAccess.file_exists(ARCHIVE_PATH):
+		var local_archive := _find_local_archive()
+		if not local_archive.is_empty():
+			var copy_error := DirAccess.copy_absolute(local_archive, ProjectSettings.globalize_path(ARCHIVE_PATH))
+			if copy_error != OK:
+				push_error("Could not copy local asset archive (error %d): %s" % [copy_error, local_archive])
+				quit(1)
+				return
+			print("Using locally downloaded asset pack: " + local_archive)
+
 	if not FileAccess.file_exists(ARCHIVE_PATH):
 		print("Downloading CC0 modular character pack (~73 MB) from OpenGameArt...")
 		var downloader := HTTPRequest.new()
@@ -47,6 +58,35 @@ func _run() -> void:
 		quit(1)
 		return
 	quit(0)
+
+func _find_local_archive() -> String:
+	var home := OS.get_environment("HOME")
+	if home.is_empty():
+		return ""
+	var download_dir := home.path_join("Downloads")
+	var dir := DirAccess.open(download_dir)
+	if dir == null:
+		return ""
+	var matches: Array[String] = []
+	dir.list_dir_begin()
+	var filename := dir.get_next()
+	while not filename.is_empty():
+		if not dir.current_is_dir():
+			var lower := filename.to_lower()
+			var expected_name := lower.contains("free 2d animated vector game character sprites") or lower.contains("free_2d_animated_vector_game_character_sprites")
+			if expected_name and lower.ends_with(".zip"):
+				matches.append(download_dir.path_join(filename))
+		filename = dir.get_next()
+	dir.list_dir_end()
+	if matches.is_empty():
+		return ""
+	matches.sort()
+	# Prefer a plain original filename over browser-added duplicate suffixes.
+	for candidate in matches:
+		var base := candidate.get_file().to_lower()
+		if base in ["free 2d animated vector game character sprites.zip", "free_2d_animated_vector_game_character_sprites.zip"]:
+			return candidate
+	return matches[0]
 
 func _extract_archive(archive_path: String, output_dir: String) -> bool:
 	var reader := ZIPReader.new()
