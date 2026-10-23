@@ -59,6 +59,8 @@ func _apply_authored_terrain() -> void:
 	_add_platform(region, Rect2(1100, 610, 125, 18))
 	_add_platform(region, Rect2(1215, 585, 120, 18))
 	_add_platform(region, Rect2(1325, 550, 125, 18))
+	_add_platform(region, Rect2(1370, 475, 100, 18))
+	_add_platform(region, Rect2(1350, 440, 100, 18))
 	_add_platform(region, Rect2(1400, 515, 110, 18))
 
 	# A2-S04: canopy highroad is broken into readable jumps and rejoins the eastern approach.
@@ -68,7 +70,9 @@ func _apply_authored_terrain() -> void:
 	_add_platform(region, Rect2(1180, 335, 120, 18))
 	_add_platform(region, Rect2(1305, 355, 120, 18))
 	_add_platform(region, Rect2(1430, 375, 120, 18))
+	_add_platform(region, Rect2(1490, 490, 100, 18))
 	_add_platform(region, Rect2(1555, 395, 120, 18))
+	_add_platform(region, Rect2(1580, 455, 100, 18))
 	_add_platform(region, Rect2(1680, 415, 120, 18))
 	_add_platform(region, Rect2(1805, 425, 120, 18))
 
