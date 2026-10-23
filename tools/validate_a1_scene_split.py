@@ -85,6 +85,7 @@ def main() -> int:
     a10_script = read("scripts/levels/village_hub.gd", errors)
     a11 = read("scenes/village_backhill.tscn", errors)
     a11_script = read("scripts/levels/village_backhill.gd", errors)
+    smoke_test = read("tools/a1_scene_smoke_test.gd", errors)
     poi_visual = read("scenes/world/village_poi_visual.tscn", errors)
     npc_labels = read("scenes/world/route_npc_labels.tscn", errors)
     interaction_prompt = read("scenes/world/interaction_prompt.tscn", errors)
@@ -289,6 +290,27 @@ def main() -> int:
         "H01 authored visuals or discovery/open state contract is missing",
         errors,
     )
+
+    require(
+        "WorldState.debug_map_test_mode = true" in smoke_test
+        and "WorldState.debug_map_test_mode = original_debug_map_test_mode" in smoke_test,
+        "A1 headless smoke test must suppress and restore save writes.",
+        errors,
+    )
+    for needle, label in [
+        ('func _test_spawn_side_matrix() -> void:', "spawn-side matrix test"),
+        ('{"side": "backhill_return", "x": 2420.0}', "backhill return spawn"),
+        ('{"side": "well_exit", "x": 1850.0}', "well exit spawn"),
+        ('{"side": "cliff_cave_return", "x": 1850.0}', "cliff-cave return spawn"),
+        ('{"side": "city_cut_return", "x": 350.0}', "drain return spawn"),
+        ('{"side": "north_gate", "x": 2630.0}', "north-gate return spawn"),
+        ('{"side": "mite_house_return", "x": 530.0}', "Mite-house return spawn"),
+        ('func _test_a11_authored_terrain() -> void:', "A1.1 terrain smoke test"),
+        ('stair_count == 8', "eight-step collision/visual stair check"),
+        ('H01 discovery status uses its authored Label', "H01 discovered-status Label check"),
+        ('H01 discovery prompt clears after permanent opening', "H01 permanent-open status check"),
+    ]:
+        require(needle in smoke_test, f"A1 headless smoke test missing {label}", errors)
 
     if errors:
         print("A1 SCENE-AUTHORED STATIC CHECK FAILED")
