@@ -3,12 +3,16 @@
 [node name="RouteNPCLabels" type="Node2D"]
 
 [node name="NameLabel" type="Label" parent="."]
+offset_right = 230.0
+offset_bottom = 30.0
 position = Vector2(-58, -76)
 text = ""
 theme_override_colors/font_color = Color("#b7a09b")
 theme_override_font_sizes/font_size = 14
 
 [node name="PromptLabel" type="Label" parent="."]
+offset_right = 145.0
+offset_bottom = 30.0
 position = Vector2(-50, 28)
 visible = false
 text = "E  Speak"
