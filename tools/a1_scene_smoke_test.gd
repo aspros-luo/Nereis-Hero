@@ -20,7 +20,7 @@ func _run() -> void:
 		print("A1 GODOT SCENE SMOKE TEST: PASS")
 		print(" - A1.0/A1.1 scenes instantiate and required authored nodes resolve.")
 		print(" - Drain/gate/camp visuals follow their independent story flags.")
-		print(" - H09 cave appearance and door state follow the real-return flag.")
+		print(" - H01 resonance/open states and H09 cave/door states follow their story flags.")
 		quit(0)
 		return
 	for failure in failures:
@@ -56,6 +56,22 @@ func _test_a10_scene_and_state_matrix() -> void:
 	_expect(not scene.get_node("NorthGateVisual/RepairedState").visible, "North gate repair is hidden before defense")
 	_expect(not scene.get_node("CampVisual").visible, "Camp is hidden before its own arrival flag")
 	_expect(not scene.get_node("RestorationCampPOI").visible, "Camp POI is hidden before its own arrival flag")
+
+	var well: Node = scene.get_node("ResonanceWellGate")
+	well.set("revealed", false)
+	well.set("opened_permanently", false)
+	well.call("_sync_authored_visuals")
+	_expect(not well.get_node("AuthoredVisual/RevealedState").visible, "H01 resonance marks are hidden before reveal")
+	_expect(not well.get_node("AuthoredVisual/OpenedState").visible, "H01 opened marker is hidden before opening")
+	well.set("revealed", true)
+	well.set("opened_permanently", false)
+	well.call("_sync_authored_visuals")
+	_expect(well.get_node("AuthoredVisual/RevealedState").visible, "H01 authored resonance state appears when revealed")
+	_expect(not well.get_node("AuthoredVisual/OpenedState").visible, "H01 is not shown as opened while only revealed")
+	well.set("opened_permanently", true)
+	well.call("_sync_authored_visuals")
+	_expect(not well.get_node("AuthoredVisual/RevealedState").visible, "H01 resonance-only state clears after opening")
+	_expect(well.get_node("AuthoredVisual/OpenedState").visible, "H01 authored opened state appears after opening")
 
 	WorldState.achievement_flags.append("village_defense_survived")
 	scene.call("_refresh_world_visual_states")
