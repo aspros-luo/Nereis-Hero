@@ -501,6 +501,10 @@ def main() -> int:
         )
         require(scene, expected_script, scene_path, errors)
         require(scene, f'region_id = "{_region_id}"', scene_path, errors)
+        require(scene, f'location_id = "{location_id}"', scene_path, errors)
+        require(scene, f'region_title = "{title}"', scene_path, errors)
+        require(world_state, f'"{location_id}":', "WorldState resume mapping", errors)
+        require(world_state, f'res://{scene_path}', "WorldState resume mapping", errors)
 
     # A2 has a dedicated terrain override while keeping all shared transition contracts.
     # A2 使用独立地形覆盖，但继续复用共享跨区连接合同。
@@ -523,10 +527,6 @@ def main() -> int:
         "Terrain-first pass",
     ):
         require(a2_terrain, contract, "A2 dedicated terrain", errors)
-        require(scene, f'location_id = "{location_id}"', scene_path, errors)
-        require(scene, f'region_title = "{title}"', scene_path, errors)
-        require(world_state, f'"{location_id}":', "WorldState resume mapping", errors)
-        require(world_state, f'res://{scene_path}', "WorldState resume mapping", errors)
 
     # Optional boss encounters are not C-edges, but still require a traceable entry, victory, death-reset, and return contract.
     # 可选 Boss 遭遇不计入跨区 C 边，但入口、胜利、死亡重置和回程必须可追踪。
