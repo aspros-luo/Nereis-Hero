@@ -2662,6 +2662,21 @@ func _draw() -> void:
 	draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
 	_draw_ground_detail()
 
+	# A2's central sinkhole must be visible as well as collision-backed.
+	# A2 中央深坑需要在视觉上与真实碰撞断口一致。
+	if region_id == "A2":
+		draw_rect(Rect2(860.0, floor_y - 1.0, 620.0, 121.0), Color("#101a1b", 0.96))
+		draw_rect(Rect2(860.0, floor_y, 620.0, 120.0), Color("#132a2d", 0.70))
+		draw_line(Vector2(860.0, floor_y), Vector2(860.0, CRYPT_FLOOR_Y), Color("#66766e", 0.95), 5.0)
+		draw_line(Vector2(1480.0, floor_y), Vector2(1480.0, CRYPT_FLOOR_Y), Color("#66766e", 0.95), 5.0)
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, CRYPT_FLOOR_Y, 620.0, 60.0), false)
+		draw_line(Vector2(860.0, CRYPT_FLOOR_Y), Vector2(1480.0, CRYPT_FLOOR_Y), Color("#9ab7a3", 0.82), 3.0)
+		# Floodwater bands mark the lowest traversal stratum without obscuring collision silhouettes.
+		# 淹水层用低对比水纹提示最低层路线，不遮挡平台轮廓。
+		for waterline in range(3):
+			var water_y := 676.0 + float(waterline) * 11.0
+			draw_line(Vector2(885.0, water_y), Vector2(1455.0, water_y), Color("#58b8bd", 0.18), 2.0)
+
 	# Replace the old repetitive ground slashes with sparse, broken stone cracks and low atmospheric haze.
 	# 将重复的地面斜线改为稀疏断裂石纹与贴地薄雾，降低灰盒画面的噪声感。
 	var atmosphere := _atmosphere_color()
