@@ -3,6 +3,7 @@ extends Area2D
 signal interacted
 
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
+const PROMPT_SCENE = preload("res://scenes/world/interaction_prompt.tscn")
 
 @export var prompt_text: String = "E  Enter"
 @export var enabled := true
@@ -10,6 +11,7 @@ const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.g
 @export var opened_prompt_text: String = ""
 
 var hero_nearby := false
+var prompt_label: Label
 var cooldown := 0.0
 
 func _ready() -> void:
@@ -19,9 +21,15 @@ func _ready() -> void:
     set_meta("interaction_priority", 100)
     if not unlock_once_flag_id.is_empty() and unlock_once_flag_id in WorldState.achievement_flags and not opened_prompt_text.is_empty():
         prompt_text = opened_prompt_text
+    if not has_node("Prompt"):
+        var prompt := PROMPT_SCENE.instantiate()
+        prompt.name = "Prompt"
+        add_child(prompt)
+    prompt_label = get_node("Prompt/PromptLabel") as Label
+    prompt_label.text = NereisLocalization.translate_text(prompt_text)
+    prompt_label.visible = false
     body_entered.connect(_on_body_entered)
     body_exited.connect(_on_body_exited)
-    queue_redraw()
 
 func _process(delta: float) -> void:
     cooldown = maxf(0.0, cooldown - delta)
@@ -30,17 +38,19 @@ func _process(delta: float) -> void:
     # 距离状态与输入锁无关；对话期间不能清空距离，否则主角不离开触发区就不会再次收到 body_entered。
     var available := enabled and not WorldState.input_locked and hero_nearby and cooldown <= 0.0
     INTERACTION_FOCUS_SCRIPT.sync(self, available, 100)
-    queue_redraw()
+    if prompt_label != null:
+        prompt_label.visible = available
+        prompt_label.text = NereisLocalization.translate_text(prompt_text)
 
 func _on_body_entered(body: Node) -> void:
     if body.name == "Hero":
         hero_nearby = true
-        queue_redraw()
+
 
 func _on_body_exited(body: Node) -> void:
     if body.name == "Hero":
         hero_nearby = false
-        queue_redraw()
+
 
 func _unhandled_input(event: InputEvent) -> void:
     if WorldState.input_locked or not hero_nearby or cooldown > 0.0 or not INTERACTION_FOCUS_SCRIPT.is_focused(self):
@@ -52,7 +62,8 @@ func _unhandled_input(event: InputEvent) -> void:
             if not opened_prompt_text.is_empty():
                 prompt_text = opened_prompt_text
             print("[NEREIS][MAP] One-way hatch opened id=%s" % unlock_once_flag_id)
-            queue_redraw()
+            if prompt_label != null:
+                prompt_label.text = NereisLocalization.translate_text(prompt_text)
             var opened_viewport := get_viewport()
             if opened_viewport:
                 opened_viewport.set_input_as_handled()
@@ -62,14 +73,3 @@ func _unhandled_input(event: InputEvent) -> void:
         if viewport:
             viewport.set_input_as_handled()
 
-func _draw() -> void:
-    if hero_nearby and not WorldState.input_locked and INTERACTION_FOCUS_SCRIPT.is_focused(self):
-        draw_string(
-            ThemeDB.fallback_font,
-            Vector2(-54, 30),
-            NereisLocalization.translate_text(prompt_text),
-            HORIZONTAL_ALIGNMENT_LEFT,
-            -1,
-            16,
-            Color("#d6c7b2")
-        )
