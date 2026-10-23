@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 ; 钟墓坑底、落差与回程石沿
 ; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
@@ -7,7 +7,10 @@
 size = Vector2(200, 40)
 
 [sub_resource type="RectangleShape2D" id="Rect_002"]
-size = Vector2(200, 18)
+size = Vector2(60, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_006"]
+size = Vector2(60, 18)
 
 [sub_resource type="RectangleShape2D" id="Rect_003"]
 size = Vector2(70, 12)
@@ -27,29 +30,55 @@ position = Vector2(860, 810)
 position = Vector2(100, 20)
 shape = SubResource("Rect_001")
 
-[node name="CryptReturnShelf" type="StaticBody2D" parent="."]
+[node name="CryptReturnShelfWest" type="StaticBody2D" parent="."]
 position = Vector2(860, 775)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptReturnShelf"]
-position = Vector2(100, 9)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptReturnShelfWest"]
+position = Vector2(30, 9)
 shape = SubResource("Rect_002")
 one_way_collision = true
 
-[node name="StoneLowerFace" type="Polygon2D" parent="CryptReturnShelf"]
-polygon = PackedVector2Array(0, 12, 200, 12, 200, 18, 0, 18)
+[node name="StoneLowerFace" type="Polygon2D" parent="CryptReturnShelfWest"]
+polygon = PackedVector2Array(0, 12, 60, 12, 60, 18, 0, 18)
 color = Color("#211f25")
 
 [node name="StoneUpperFace" type="Polygon2D" parent="CryptReturnShelf"]
-polygon = PackedVector2Array(0, 3, 200, 3, 200, 12, 0, 12)
+polygon = PackedVector2Array(0, 3, 60, 3, 60, 12, 0, 12)
 color = Color("#39343d")
 
 [node name="StoneTopEdge" type="Line2D" parent="CryptReturnShelf"]
-points = PackedVector2Array(0, 0, 200, 0)
+points = PackedVector2Array(0, 0, 60, 0)
 width = 2.0
 default_color = Color("#a4d49a")
 
 [node name="StoneSeam" type="Line2D" parent="CryptReturnShelf"]
-points = PackedVector2Array(2, 12, 198, 12)
+points = PackedVector2Array(2, 12, 58, 12)
+width = 2.0
+default_color = Color("#1b171f")
+
+[node name="CryptReturnShelfEast" type="StaticBody2D" parent="."]
+position = Vector2(1000, 775)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptReturnShelfEast"]
+position = Vector2(30, 9)
+shape = SubResource("Rect_006")
+one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="CryptReturnShelfEast"]
+polygon = PackedVector2Array(0, 12, 60, 12, 60, 18, 0, 18)
+color = Color("#211f25")
+
+[node name="StoneUpperFace" type="Polygon2D" parent="CryptReturnShelfEast"]
+polygon = PackedVector2Array(0, 3, 60, 3, 60, 12, 0, 12)
+color = Color("#39343d")
+
+[node name="StoneTopEdge" type="Line2D" parent="CryptReturnShelfEast"]
+points = PackedVector2Array(0, 0, 60, 0)
+width = 2.0
+default_color = Color("#a4d49a")
+
+[node name="StoneSeam" type="Line2D" parent="CryptReturnShelfEast"]
+points = PackedVector2Array(2, 12, 58, 12)
 width = 2.0
 default_color = Color("#1b171f")
 
