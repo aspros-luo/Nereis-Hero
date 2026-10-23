@@ -278,7 +278,7 @@ def main() -> int:
     for obsolete in ["BackhillStairs", "RidgePlatform01", "RidgePlatform02", "RidgePlatform03", "CliffLookout", "CliffLowerShelf", "CliffCaveDoor"]:
         require(f'name="{obsolete}"' not in a11, f"A1.1 still contains jump-platform/cliff-cave content: {obsolete}", errors)
 
-    # The cliff is a separate scene with continuous walkable ground and a sealed future road.
+    # The cliff is a separate scene with continuous walkable ground; the A2 reserve is at the backhill.
     for needle, label in [
         ('[node name="CliffExploration" type="Node2D"]', "scene root"),
         ('[node name="Hero" type="CharacterBody2D" parent="."]', "Hero"),
