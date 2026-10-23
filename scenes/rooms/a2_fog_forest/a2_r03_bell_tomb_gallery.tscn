@@ -42,21 +42,21 @@ one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="Platform_013"]
 polygon = PackedVector2Array(0, 12, 105, 12, 105, 18, 0, 18)
-color = Color("#211f25")
+color = Color(0.129412, 0.121569, 0.145098, 1)
 
 [node name="StoneUpperFace" type="Polygon2D" parent="Platform_013"]
 polygon = PackedVector2Array(0, 3, 105, 3, 105, 12, 0, 12)
-color = Color("#39343d")
+color = Color(0.223529, 0.203922, 0.239216, 1)
 
 [node name="StoneTopEdge" type="Line2D" parent="Platform_013"]
 points = PackedVector2Array(0, 0, 105, 0)
 width = 2.0
-default_color = Color("#a4d49a")
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
 
 [node name="StoneSeam" type="Line2D" parent="Platform_013"]
 points = PackedVector2Array(2, 12, 103, 12)
 width = 2.0
-default_color = Color("#1b171f")
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_014" type="StaticBody2D" parent="."]
 position = Vector2(935, 420)
@@ -68,21 +68,21 @@ one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="Platform_014"]
 polygon = PackedVector2Array(0, 12, 115, 12, 115, 18, 0, 18)
-color = Color("#211f25")
+color = Color(0.129412, 0.121569, 0.145098, 1)
 
 [node name="StoneUpperFace" type="Polygon2D" parent="Platform_014"]
 polygon = PackedVector2Array(0, 3, 115, 3, 115, 12, 0, 12)
-color = Color("#39343d")
+color = Color(0.223529, 0.203922, 0.239216, 1)
 
 [node name="StoneTopEdge" type="Line2D" parent="Platform_014"]
 points = PackedVector2Array(0, 0, 115, 0)
 width = 2.0
-default_color = Color("#a4d49a")
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
 
 [node name="StoneSeam" type="Line2D" parent="Platform_014"]
 points = PackedVector2Array(2, 12, 113, 12)
 width = 2.0
-default_color = Color("#1b171f")
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_015" type="StaticBody2D" parent="."]
 position = Vector2(1060, 385)
@@ -94,21 +94,21 @@ one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="Platform_015"]
 polygon = PackedVector2Array(0, 12, 120, 12, 120, 18, 0, 18)
-color = Color("#211f25")
+color = Color(0.129412, 0.121569, 0.145098, 1)
 
 [node name="StoneUpperFace" type="Polygon2D" parent="Platform_015"]
 polygon = PackedVector2Array(0, 3, 120, 3, 120, 12, 0, 12)
-color = Color("#39343d")
+color = Color(0.223529, 0.203922, 0.239216, 1)
 
 [node name="StoneTopEdge" type="Line2D" parent="Platform_015"]
 points = PackedVector2Array(0, 0, 120, 0)
 width = 2.0
-default_color = Color("#a4d49a")
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
 
 [node name="StoneSeam" type="Line2D" parent="Platform_015"]
 points = PackedVector2Array(2, 12, 118, 12)
 width = 2.0
-default_color = Color("#1b171f")
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_016" type="StaticBody2D" parent="."]
 position = Vector2(1180, 430)
@@ -120,21 +120,21 @@ one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="Platform_016"]
 polygon = PackedVector2Array(0, 12, 115, 12, 115, 18, 0, 18)
-color = Color("#211f25")
+color = Color(0.129412, 0.121569, 0.145098, 1)
 
 [node name="StoneUpperFace" type="Polygon2D" parent="Platform_016"]
 polygon = PackedVector2Array(0, 3, 115, 3, 115, 12, 0, 12)
-color = Color("#39343d")
+color = Color(0.223529, 0.203922, 0.239216, 1)
 
 [node name="StoneTopEdge" type="Line2D" parent="Platform_016"]
 points = PackedVector2Array(0, 0, 115, 0)
 width = 2.0
-default_color = Color("#a4d49a")
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
 
 [node name="StoneSeam" type="Line2D" parent="Platform_016"]
 points = PackedVector2Array(2, 12, 113, 12)
 width = 2.0
-default_color = Color("#1b171f")
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_017" type="StaticBody2D" parent="."]
 position = Vector2(1290, 490)
@@ -146,21 +146,21 @@ one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="Platform_017"]
 polygon = PackedVector2Array(0, 12, 125, 12, 125, 18, 0, 18)
-color = Color("#211f25")
+color = Color(0.129412, 0.121569, 0.145098, 1)
 
 [node name="StoneUpperFace" type="Polygon2D" parent="Platform_017"]
 polygon = PackedVector2Array(0, 3, 125, 3, 125, 12, 0, 12)
-color = Color("#39343d")
+color = Color(0.223529, 0.203922, 0.239216, 1)
 
 [node name="StoneTopEdge" type="Line2D" parent="Platform_017"]
 points = PackedVector2Array(0, 0, 125, 0)
 width = 2.0
-default_color = Color("#a4d49a")
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
 
 [node name="StoneSeam" type="Line2D" parent="Platform_017"]
 points = PackedVector2Array(2, 12, 123, 12)
 width = 2.0
-default_color = Color("#1b171f")
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_018" type="StaticBody2D" parent="."]
 position = Vector2(760, 535)
@@ -172,21 +172,21 @@ one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="Platform_018"]
 polygon = PackedVector2Array(0, 12, 100, 12, 100, 18, 0, 18)
-color = Color("#211f25")
+color = Color(0.129412, 0.121569, 0.145098, 1)
 
 [node name="StoneUpperFace" type="Polygon2D" parent="Platform_018"]
 polygon = PackedVector2Array(0, 3, 100, 3, 100, 12, 0, 12)
-color = Color("#39343d")
+color = Color(0.223529, 0.203922, 0.239216, 1)
 
 [node name="StoneTopEdge" type="Line2D" parent="Platform_018"]
 points = PackedVector2Array(0, 0, 100, 0)
 width = 2.0
-default_color = Color("#a4d49a")
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
 
 [node name="StoneSeam" type="Line2D" parent="Platform_018"]
 points = PackedVector2Array(2, 12, 98, 12)
 width = 2.0
-default_color = Color("#1b171f")
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_019" type="StaticBody2D" parent="."]
 position = Vector2(910, 560)
@@ -198,21 +198,21 @@ one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="Platform_019"]
 polygon = PackedVector2Array(0, 12, 110, 12, 110, 18, 0, 18)
-color = Color("#211f25")
+color = Color(0.129412, 0.121569, 0.145098, 1)
 
 [node name="StoneUpperFace" type="Polygon2D" parent="Platform_019"]
 polygon = PackedVector2Array(0, 3, 110, 3, 110, 12, 0, 12)
-color = Color("#39343d")
+color = Color(0.223529, 0.203922, 0.239216, 1)
 
 [node name="StoneTopEdge" type="Line2D" parent="Platform_019"]
 points = PackedVector2Array(0, 0, 110, 0)
 width = 2.0
-default_color = Color("#a4d49a")
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
 
 [node name="StoneSeam" type="Line2D" parent="Platform_019"]
 points = PackedVector2Array(2, 12, 108, 12)
 width = 2.0
-default_color = Color("#1b171f")
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_020" type="StaticBody2D" parent="."]
 position = Vector2(1050, 535)
@@ -224,21 +224,21 @@ one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="Platform_020"]
 polygon = PackedVector2Array(0, 12, 110, 12, 110, 18, 0, 18)
-color = Color("#211f25")
+color = Color(0.129412, 0.121569, 0.145098, 1)
 
 [node name="StoneUpperFace" type="Polygon2D" parent="Platform_020"]
 polygon = PackedVector2Array(0, 3, 110, 3, 110, 12, 0, 12)
-color = Color("#39343d")
+color = Color(0.223529, 0.203922, 0.239216, 1)
 
 [node name="StoneTopEdge" type="Line2D" parent="Platform_020"]
 points = PackedVector2Array(0, 0, 110, 0)
 width = 2.0
-default_color = Color("#a4d49a")
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
 
 [node name="StoneSeam" type="Line2D" parent="Platform_020"]
 points = PackedVector2Array(2, 12, 108, 12)
 width = 2.0
-default_color = Color("#1b171f")
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_021" type="StaticBody2D" parent="."]
 position = Vector2(1190, 555)
@@ -250,19 +250,19 @@ one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="Platform_021"]
 polygon = PackedVector2Array(0, 12, 115, 12, 115, 18, 0, 18)
-color = Color("#211f25")
+color = Color(0.129412, 0.121569, 0.145098, 1)
 
 [node name="StoneUpperFace" type="Polygon2D" parent="Platform_021"]
 polygon = PackedVector2Array(0, 3, 115, 3, 115, 12, 0, 12)
-color = Color("#39343d")
+color = Color(0.223529, 0.203922, 0.239216, 1)
 
 [node name="StoneTopEdge" type="Line2D" parent="Platform_021"]
 points = PackedVector2Array(0, 0, 115, 0)
 width = 2.0
-default_color = Color("#a4d49a")
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
 
 [node name="StoneSeam" type="Line2D" parent="Platform_021"]
 points = PackedVector2Array(2, 12, 113, 12)
 width = 2.0
-default_color = Color("#1b171f")
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
