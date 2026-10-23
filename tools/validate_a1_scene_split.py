@@ -85,6 +85,8 @@ def main() -> int:
     a10_script = read("scripts/levels/village_hub.gd", errors)
     a11 = read("scenes/village_backhill.tscn", errors)
     a11_script = read("scripts/levels/village_backhill.gd", errors)
+    cliff_scene = read("scenes/cliff_exploration.tscn", errors)
+    cliff_script = read("scripts/levels/cliff_exploration.gd", errors)
     smoke_test = read("tools/a1_scene_smoke_test.gd", errors)
     poi_visual = read("scenes/world/village_poi_visual.tscn", errors)
     npc_labels = read("scenes/world/route_npc_labels.tscn", errors)
@@ -107,6 +109,7 @@ def main() -> int:
     for scene, path in [
         (a10, "scenes/village_hub.tscn"),
         (a11, "scenes/village_backhill.tscn"),
+        (cliff_scene, "scenes/cliff_exploration.tscn"),
         (poi_visual, "scenes/world/village_poi_visual.tscn"),
         (npc_labels, "scenes/world/route_npc_labels.tscn"),
         (interaction_prompt, "scenes/world/interaction_prompt.tscn"),
@@ -152,7 +155,7 @@ def main() -> int:
 
     for name in ["RegionTitle", "DrainLabel", "GraveyardLabel", "OldHouseLabel", "CampLabel", "NorthGateLabel", "PromptLabel", "StatusLabel"]:
         require_sized_label(a10, name, "A1.0", errors)
-    for name in ["ChurchTitle", "TavernTitle", "BackhillTitle", "CliffTitle"]:
+    for name in ["ChurchTitle", "TavernTitle", "BackhillTitle", "CliffEntryTitle"]:
         require_sized_label(a11, name, "A1.1", errors)
     for source, names, owner in [
         (poi_visual, ["PromptLabel"], "POI visual"),
@@ -247,29 +250,45 @@ def main() -> int:
         require(f'[node name="Labels" parent="{parent}" instance=ExtResource("16")]' in a10,
                 f"A1.0 authored NPC labels missing beneath {parent}", errors)
 
-    # A1.1: independently authored slope/cave, location anchors, and the one-time tavern event hook.
+    # A1.1 is a walkable hub; cliff traversal is a separate authored scene.
     for needle, label in [
         ('[node name="WorldEventDirector" type="Node" parent="."]', "event director"),
         ('[node name="Hero" type="CharacterBody2D" parent="."]', "Hero"),
-        ('[node name="BackhillStairs" type="Node2D" parent="."]', "stairs"),
-        ('[node name="CliffLookout" type="StaticBody2D" parent="."]', "cliff lookout"),
-        ('[node name="CliffLowerShelf" type="StaticBody2D" parent="."]', "lower shelf"),
+        ('[node name="CliffExplorationDoor" type="Area2D" parent="."]', "cliff exploration entrance"),
+        ('[node name="CliffEntryVisual" type="Node2D" parent="."]', "scene-authored cliff entrance visual"),
         ('[node name="ChurchPOI" type="Node2D" parent="."]', "church POI"),
         ('[node name="TavernPOI" type="Node2D" parent="."]', "tavern POI"),
         ('[node name="BackToVillagePOI" type="Node2D" parent="."]', "return POI"),
-        ('[node name="CliffCaveDoor" type="Area2D" parent="."]', "H09 door"),
-        ('[node name="CliffCaveVisual" type="Node2D" parent="."]', "H09 authored cave mouth"),
         ('[node name="ChurchTitle" type="Label" parent="."]', "church title"),
         ('[node name="TavernTitle" type="Label" parent="."]', "tavern title"),
         ('[node name="BackhillTitle" type="Label" parent="."]', "backhill title"),
-        ('[node name="CliffTitle" type="Label" parent="."]', "cliff title"),
+        ('[node name="CliffEntryTitle" type="Label" parent="."]', "cliff-entry title"),
         ('[node name="POIVisual" parent="ChurchPOI" instance=ExtResource("6")]', "church marker"),
         ('[node name="POIVisual" parent="TavernPOI" instance=ExtResource("6")]', "tavern marker"),
         ('[node name="POIVisual" parent="BackToVillagePOI" instance=ExtResource("6")]', "return marker"),
-        ('[node name="Prompt" parent="CliffCaveDoor" instance=ExtResource("7")]', "H09 prompt"),
+        ('[node name="Prompt" parent="CliffExplorationDoor" instance=ExtResource("7")]', "cliff entrance prompt"),
     ]:
-        require(needle in a11, f"A1.1 scene missing {label}", errors)
+        require(needle in a11, f"A1.1 scene missing {label}: {needle}", errors)
     require('groups = ["a1_tavern_poi"]' in a11, "A1.1 tavern POI group was removed", errors)
+    for obsolete in ["BackhillStairs", "RidgePlatform01", "RidgePlatform02", "RidgePlatform03", "CliffLookout", "CliffLowerShelf", "CliffCaveDoor"]:
+        require(f'name="{obsolete}"' not in a11, f"A1.1 still contains jump-platform/cliff-cave content: {obsolete}", errors)
+
+    # The cliff is a separate scene with continuous walkable ground and a sealed future road.
+    for needle, label in [
+        ('[node name="CliffExploration" type="Node2D"]', "scene root"),
+        ('[node name="Hero" type="CharacterBody2D" parent="."]', "Hero"),
+        ('[node name="MainGround" type="StaticBody2D" parent="."]', "continuous walkable ground"),
+        ('[node name="BackToBackhillDoor" type="Area2D" parent="."]', "left return connection"),
+        ('[node name="FutureA2RoadDoor" type="Area2D" parent="."]', "reserved future connection"),
+        ('[node name="FutureRoadBlocker" type="StaticBody2D" parent="."]', "physical future-road blocker"),
+        ('[node name="H09CaveDoor" type="Area2D" parent="."]', "H09 door"),
+        ('[node name="H09CaveVisual" type="Node2D" parent="."]', "H09 authored cave mouth"),
+    ]:
+        require(needle in cliff_scene, f"Cliff exploration scene missing {label}", errors)
+    require("size = Vector2(2400, 40)" in cliff_scene, "Cliff exploration must use continuous ground, not jump platforms", errors)
+    require("enabled = false" in cliff_scene, "Future A2 road must start disabled in the scene", errors)
+    require('SceneTransition.fade_to_scene("res://scenes/cliff_exploration.tscn")' in a11_script,
+            "A1.1 cliff entrance does not transition to the separate exploration scene", errors)
 
     # Shared visual prefabs and scripts must expose scene-driven labels/state.
     for src, needle, label in [
@@ -300,10 +319,10 @@ def main() -> int:
         ('SceneTransition.fade_to_scene("res://scenes/village_backhill.tscn")', "A1.0 to A1.1 transition"),
     ]:
         require(needle in a10_script, f"A1.0 root contract missing {label}", errors)
-    require('returned_to_village_after_mad_cleric' in a11_script, "H09 return-after-boss gate missing", errors)
-    require('WorldState.discover_hidden_region("H09")' in a11_script, "H09 discovery contract missing", errors)
-    require('WorldState.open_hidden_path("H09")' in a11_script, "H09 open-path contract missing", errors)
-    require('SceneTransition.fade_to_scene(CLIFF_CAVE_SCENE)' in a11_script, "H09 destination contract missing", errors)
+    require('returned_to_village_after_mad_cleric' in cliff_script, "H09 return-after-boss gate missing", errors)
+    require('WorldState.discover_hidden_region("H09")' in cliff_script, "H09 discovery contract missing", errors)
+    require('WorldState.open_hidden_path("H09")' in cliff_script, "H09 open-path contract missing", errors)
+    require('SceneTransition.fade_to_scene(CLIFF_CAVE_SCENE)' in cliff_script, "H09 destination contract missing", errors)
     require('world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": String(poi.poi_id)' in a11_script,
             "A1.1 tavern interaction event hook missing", errors)
     require('A1_tavern_sound_notice' in read("scripts/core/world_event_director.gd", errors),
