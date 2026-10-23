@@ -36,20 +36,20 @@ shape = SubResource("Rect_002")
 one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="CryptReturnShelf"]
-polygon = PackedVector2Array(Vector2(0, 12), Vector2(200, 12), Vector2(200, 18), Vector2(0, 18))
+polygon = PackedVector2Array(0, 12, 200, 12, 200, 18, 0, 18)
 color = Color("#211f25")
 
 [node name="StoneUpperFace" type="Polygon2D" parent="CryptReturnShelf"]
-polygon = PackedVector2Array(Vector2(0, 3), Vector2(200, 3), Vector2(200, 12), Vector2(0, 12))
+polygon = PackedVector2Array(0, 3, 200, 3, 200, 12, 0, 12)
 color = Color("#39343d")
 
 [node name="StoneTopEdge" type="Line2D" parent="CryptReturnShelf"]
-points = PackedVector2Array(Vector2(0, 0), Vector2(200, 0))
+points = PackedVector2Array(0, 0, 200, 0)
 width = 2.0
 default_color = Color("#a4d49a")
 
 [node name="StoneSeam" type="Line2D" parent="CryptReturnShelf"]
-points = PackedVector2Array(Vector2(2, 12), Vector2(198, 12))
+points = PackedVector2Array(2, 12, 198, 12)
 width = 2.0
 default_color = Color("#1b171f")
 
@@ -62,20 +62,20 @@ shape = SubResource("Rect_003")
 one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="CryptStepWest"]
-polygon = PackedVector2Array(Vector2(0, 12), Vector2(70, 12), Vector2(70, 12), Vector2(0, 12))
+polygon = PackedVector2Array(0, 12, 70, 12, 70, 12, 0, 12)
 color = Color("#211f25")
 
 [node name="StoneUpperFace" type="Polygon2D" parent="CryptStepWest"]
-polygon = PackedVector2Array(Vector2(0, 3), Vector2(70, 3), Vector2(70, 12), Vector2(0, 12))
+polygon = PackedVector2Array(0, 3, 70, 3, 70, 12, 0, 12)
 color = Color("#39343d")
 
 [node name="StoneTopEdge" type="Line2D" parent="CryptStepWest"]
-points = PackedVector2Array(Vector2(0, 0), Vector2(70, 0))
+points = PackedVector2Array(0, 0, 70, 0)
 width = 2.0
 default_color = Color("#a4d49a")
 
 [node name="StoneSeam" type="Line2D" parent="CryptStepWest"]
-points = PackedVector2Array(Vector2(2, 12), Vector2(68, 12))
+points = PackedVector2Array(2, 12, 68, 12)
 width = 2.0
 default_color = Color("#1b171f")
 
@@ -88,20 +88,20 @@ shape = SubResource("Rect_004")
 one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="CryptStepEast"]
-polygon = PackedVector2Array(Vector2(0, 12), Vector2(70, 12), Vector2(70, 12), Vector2(0, 12))
+polygon = PackedVector2Array(0, 12, 70, 12, 70, 12, 0, 12)
 color = Color("#211f25")
 
 [node name="StoneUpperFace" type="Polygon2D" parent="CryptStepEast"]
-polygon = PackedVector2Array(Vector2(0, 3), Vector2(70, 3), Vector2(70, 12), Vector2(0, 12))
+polygon = PackedVector2Array(0, 3, 70, 3, 70, 12, 0, 12)
 color = Color("#39343d")
 
 [node name="StoneTopEdge" type="Line2D" parent="CryptStepEast"]
-points = PackedVector2Array(Vector2(0, 0), Vector2(70, 0))
+points = PackedVector2Array(0, 0, 70, 0)
 width = 2.0
 default_color = Color("#a4d49a")
 
 [node name="StoneSeam" type="Line2D" parent="CryptStepEast"]
-points = PackedVector2Array(Vector2(2, 12), Vector2(68, 12))
+points = PackedVector2Array(2, 12, 68, 12)
 width = 2.0
 default_color = Color("#1b171f")
 
@@ -114,20 +114,20 @@ shape = SubResource("Rect_005")
 one_way_collision = true
 
 [node name="StoneLowerFace" type="Polygon2D" parent="CryptUpperStep"]
-polygon = PackedVector2Array(Vector2(0, 12), Vector2(75, 12), Vector2(75, 12), Vector2(0, 12))
+polygon = PackedVector2Array(0, 12, 75, 12, 75, 12, 0, 12)
 color = Color("#211f25")
 
 [node name="StoneUpperFace" type="Polygon2D" parent="CryptUpperStep"]
-polygon = PackedVector2Array(Vector2(0, 3), Vector2(75, 3), Vector2(75, 12), Vector2(0, 12))
+polygon = PackedVector2Array(0, 3, 75, 3, 75, 12, 0, 12)
 color = Color("#39343d")
 
 [node name="StoneTopEdge" type="Line2D" parent="CryptUpperStep"]
-points = PackedVector2Array(Vector2(0, 0), Vector2(75, 0))
+points = PackedVector2Array(0, 0, 75, 0)
 width = 2.0
 default_color = Color("#a4d49a")
 
 [node name="StoneSeam" type="Line2D" parent="CryptUpperStep"]
-points = PackedVector2Array(Vector2(2, 12), Vector2(73, 12))
+points = PackedVector2Array(2, 12, 73, 12)
 width = 2.0
 default_color = Color("#1b171f")
 
