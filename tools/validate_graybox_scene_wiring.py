@@ -579,6 +579,9 @@ def main() -> int:
     require(region_script, 'authored_terrain.call("create_floor", self)', "A2 floor creation delegated to authored terrain", errors)
     require(region_script, 'if region_id == "A2":\n\t\t\tcontinue', "A2 visible platforms owned by room nodes", errors)
     require(region_script, "func _register_authored_platform(rect: Rect2) -> void:", "A2 room platform registry", errors)
+    require(region_script, "hero.defer_death_recovery = true", "single owner for delayed checkpoint recovery", errors)
+    require(region_script, "await get_tree().create_timer(0.75).timeout", "death recovery delay remains explicit", errors)
+    require(region_script, "hero.global_position = WorldState.checkpoint_position", "checkpoint recovery uses saved world position", errors)
     for contract in (
         "func create_floor(region: Node) -> void:",
         'var map_width := float(region.get("map_width"))',
