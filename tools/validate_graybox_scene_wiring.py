@@ -932,6 +932,12 @@ def main() -> int:
                     else len(platform_section)
                 )
                 region_block = platform_section[header.start():block_end]
+                if region_id == "A2":
+                    a2_terrain_for_audit = read("scripts/levels/a2_authored_terrain.gd", errors)
+                    a2_platform_start = a2_terrain_for_audit.find("func configure_platforms(region: Node) -> void:")
+                    a2_platform_end = a2_terrain_for_audit.find("\\nfunc create_floor", a2_platform_start)
+                    if a2_platform_start >= 0 and a2_platform_end > a2_platform_start:
+                        region_block = a2_terrain_for_audit[a2_platform_start:a2_platform_end]
                 platforms = [
                     tuple(float(value) for value in match.groups())
                     for match in re.finditer(
