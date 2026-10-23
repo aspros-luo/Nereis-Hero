@@ -2667,10 +2667,10 @@ func _draw() -> void:
 	if region_id == "A2":
 		draw_rect(Rect2(860.0, floor_y - 1.0, 620.0, 121.0), Color("#101a1b", 0.96))
 		draw_rect(Rect2(860.0, floor_y, 620.0, 120.0), Color("#132a2d", 0.70))
-		draw_line(Vector2(860.0, floor_y), Vector2(860.0, CRYPT_FLOOR_Y), Color("#66766e", 0.95), 5.0)
-		draw_line(Vector2(1480.0, floor_y), Vector2(1480.0, CRYPT_FLOOR_Y), Color("#66766e", 0.95), 5.0)
-		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, CRYPT_FLOOR_Y, 620.0, 60.0), false)
-		draw_line(Vector2(860.0, CRYPT_FLOOR_Y), Vector2(1480.0, CRYPT_FLOOR_Y), Color("#9ab7a3", 0.82), 3.0)
+		draw_line(Vector2(860.0, floor_y), Vector2(860.0, 660.0), Color("#66766e", 0.95), 5.0)
+		draw_line(Vector2(1480.0, floor_y), Vector2(1480.0, 660.0), Color("#66766e", 0.95), 5.0)
+		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 660.0, 620.0, 60.0), false)
+		draw_line(Vector2(860.0, 660.0), Vector2(1480.0, 660.0), Color("#9ab7a3", 0.82), 3.0)
 		# Floodwater bands mark the lowest traversal stratum without obscuring collision silhouettes.
 		# 淹水层用低对比水纹提示最低层路线，不遮挡平台轮廓。
 		for waterline in range(3):
