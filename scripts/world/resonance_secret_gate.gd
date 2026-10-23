@@ -41,6 +41,7 @@ func _ready() -> void:
         WorldState.outer_exposure,
         _is_debug_override_active()
     )
+    _sync_authored_visuals()
     queue_redraw()
 
 func _process(delta: float) -> void:
@@ -63,7 +64,25 @@ func _process(delta: float) -> void:
         and (opened_permanently or revealed)
     )
     INTERACTION_FOCUS_SCRIPT.sync(self, available, 25)
+    _sync_authored_visuals()
     queue_redraw()
+
+func _sync_authored_visuals() -> void:
+    if secret_id != "H01" or not has_node("AuthoredVisual"):
+        return
+    var revealed_state := get_node("AuthoredVisual/RevealedState") as Node2D
+    var opened_state := get_node("AuthoredVisual/OpenedState") as Node2D
+    revealed_state.visible = revealed and not opened_permanently
+    opened_state.visible = opened_permanently
+    var prompt := get_node_or_null("PromptLabel") as Label
+    if prompt != null:
+        prompt.visible = hero_nearby and not WorldState.input_locked and INTERACTION_FOCUS_SCRIPT.is_focused(self) and (opened_permanently or revealed)
+        prompt.text = NereisLocalization.translate_text("E  Descend" if opened_permanently else "E  Resonate")
+    var status := get_node_or_null("StatusLabel") as Label
+    if status != null:
+        status.visible = hero_nearby and not WorldState.input_locked and not opened_permanently and secret_id in WorldState.discovered_hidden_regions
+        status.text = NereisLocalization.translate_text("已发现 · 再按 E 开启")
+
 
 func _is_debug_override_active() -> bool:
     return allow_debug_override and WorldState.debug_ability_override_active
@@ -174,6 +193,9 @@ func _unhandled_input(event: InputEvent) -> void:
             return
 
 func _draw() -> void:
+    # H01 is fully represented by authored scene nodes. Other gate motifs remain available to legacy non-A1 scenes.
+    if secret_id == "H01" and has_node("AuthoredVisual"):
+        return
     # Draw the anomaly using the motif of its parent region. A mirror-street entrance
     # must never look like another well just because both gates share this component.
     # 根据入口类型绘制对应的异常意象，避免镜街入口也呈现为一口井。
