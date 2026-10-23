@@ -604,8 +604,8 @@ def main() -> int:
     ):
         require(crypt_landing_scene, contract, "A2-R04 crypt landing collision scene", errors)
     require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(2660.0, floor_y, map_width - 2660.0, 180.0), false)', "A2 eastern ravine rendering", errors)
-    require(region_script, '_add_platform(Rect2(3335, 490, 145, 18))', "A2 C03 remote canopy landing", errors)
-    require(region_script, '_add_platform(Rect2(1740, 510, 125, 18))', "A2 C04 highroad landing", errors)
+    require(a2_terrain, 'region.call("_add_platform", Rect2(3335, 490, 145, 18))', "A2 C03 remote canopy landing", errors)
+    require(a2_terrain, 'region.call("_add_platform", Rect2(1740, 510, 125, 18))', "A2 C04 highroad landing", errors)
 
     # Optional boss encounters are not C-edges, but still require a traceable entry, victory, death-reset, and return contract.
     # 可选 Boss 遭遇不计入跨区 C 边，但入口、胜利、死亡重置和回程必须可追踪。
@@ -819,7 +819,7 @@ def main() -> int:
     # C03 must remain a genuinely supported two-way canopy route between A2 and A3.
     require(region_script, '3400.0, "E  沿树冠高路进入被遗忘的城区"', "C03 A2 eastern canopy door anchor", errors)
     require(region_script, '"res://scenes/forgotten_city.tscn", "city_canopy_entry",\n\t\t\t\ttrue, "", "", floor_y - 160.0', "C03 A2 door transition and elevation", errors)
-    require(region_script, "_add_platform(Rect2(3335, 490, 145, 18))", "C03 A2 exit support platform", errors)
+    require(a2_terrain, 'region.call("_add_platform", Rect2(3335, 490, 145, 18))', "C03 A2 exit support platform", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return X mapping branch", errors)
     require(region_script, "return 3220.0", "C03 A2 return X landing", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return height mapping branch", errors)
@@ -849,7 +849,7 @@ def main() -> int:
     require(region_script, 'if region_id == "A3" and side == "village_city_cut":', "C24 A3 arrival spawn branch", errors)
     require(region_script, "return 700.0", "C24 A3 arrival spawn x=700", errors)
     require(region_script, '520.0, "E  经旧排水道返回"', "A3 return-to-village exit at x=520", errors)
-    require(region_script, "_add_platform(Rect2(770, 345, 105, 18))", "A2 forest canopy route", errors)
+    require(a2_terrain, 'region.call("_add_platform", Rect2(770, 345, 105, 18))', "A2 forest canopy route", errors)
     require(region_script, "_add_platform(Rect2(450, 400, 110, 18))", "A3 rooftop loop", errors)
     require(region_script, "_add_platform(Rect2(1650, 310, 130, 18))", "A4 pipe-walk route", errors)
     require(region_script, "_add_platform(Rect2(420, 420, 120, 18))", "A5 battlefield parapet route", errors)
@@ -935,7 +935,7 @@ def main() -> int:
                 if region_id == "A2":
                     a2_terrain_for_audit = read("scripts/levels/a2_authored_terrain.gd", errors)
                     a2_platform_start = a2_terrain_for_audit.find("func configure_platforms(region: Node) -> void:")
-                    a2_platform_end = a2_terrain_for_audit.find("\\nfunc create_floor", a2_platform_start)
+                    a2_platform_end = a2_terrain_for_audit.find("\nfunc create_floor", a2_platform_start)
                     if a2_platform_start >= 0 and a2_platform_end > a2_platform_start:
                         region_block = a2_terrain_for_audit[a2_platform_start:a2_platform_end]
                 platforms = [
@@ -1344,7 +1344,6 @@ def main() -> int:
         'if region_id == "A5" and side == "old_pilgrim_highroad":',
         'return floor_y - 140.0',
         'return floor_y - 85.0',
-        '_add_platform(Rect2(1740, 510, 125, 18))',
         '_add_platform(Rect2(420, 420, 120, 18))',
         '_add_platform(Rect2(560, 455, 160, 18))',
         'if region_id == "A4" and side == "prison_tunnel":',
