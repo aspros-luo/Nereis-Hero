@@ -573,7 +573,9 @@ def main() -> int:
         "const CRYPT_LEFT := 860.0",
         "const CRYPT_WIDTH := 200.0",
         'region.get_node_or_null("A2_FloodedCryptFloor") == null',
-        '_add_floor_segment(region, "A2_FloodedCryptFloor", CRYPT_LEFT, CRYPT_WIDTH, CRYPT_FLOOR_Y)',
+        'const CRYPT_LANDING_SCENE := preload("res://scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn")',
+        "var crypt_landing := CRYPT_LANDING_SCENE.instantiate() as StaticBody2D",
+        "crypt_landing.position = Vector2(CRYPT_LEFT, CRYPT_FLOOR_Y)",
         "The shared A2 controller already creates the west/middle/east surface gaps and all ledges.",
         "rest.position = Vector2(1150.0, float(region.get(\"floor_y\")))",
         "bell.position = Vector2(735.0, 322.0)",
@@ -593,6 +595,14 @@ def main() -> int:
     ):
         require(a2_terrain, contract, "A2 floor collision contract", errors)
     require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 810.0, 200.0, 180.0), false)', "A2 crypt floor rendering", errors)
+    crypt_landing_scene = read("scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn", errors)
+    for contract in (
+        '[node name="A2CryptLanding" type="StaticBody2D"]',
+        'size = Vector2(200, 40)',
+        'position = Vector2(100, 20)',
+        'shape = SubResource("RectangleShape2D_crypt_floor")',
+    ):
+        require(crypt_landing_scene, contract, "A2-R04 crypt landing collision scene", errors)
     require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(2660.0, floor_y, map_width - 2660.0, 180.0), false)', "A2 eastern ravine rendering", errors)
     require(region_script, '_add_platform(Rect2(3335, 490, 145, 18))', "A2 C03 remote canopy landing", errors)
     require(region_script, '_add_platform(Rect2(1740, 510, 125, 18))', "A2 C04 highroad landing", errors)
