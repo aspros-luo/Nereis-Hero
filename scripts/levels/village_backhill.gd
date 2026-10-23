@@ -21,9 +21,10 @@ func _ready() -> void:
 	var cave_unlocked := "returned_to_village_after_mad_cleric" in WorldState.achievement_flags
 	cliff_cave_door.enabled = cave_unlocked
 	cliff_cave_door.visible = cave_unlocked
+	$CliffCaveVisual.visible = cave_unlocked
 	if cave_unlocked:
 		cliff_cave_door.interacted.connect(_on_cliff_cave_interacted)
-	queue_redraw()
+
 
 func _spawn_ui() -> void:
 	narrative = CanvasLayer.new()
@@ -59,11 +60,3 @@ func _on_cliff_cave_interacted() -> void:
 	WorldState.set_location("cliff_cave_experiment")
 	print("[NEREIS][SECRET] Entering H09 from A1.1 backhill cliff")
 	SceneTransition.fade_to_scene(CLIFF_CAVE_SCENE)
-
-func _draw() -> void:
-	# Buildings, platforms, and the collision-backed stair route are authored in village_backhill.tscn.
-	# 结构与地形由场景节点负责；这里只绘制可读标签，不在代码中伪造地形。
-	draw_string(ThemeDB.fallback_font, Vector2(365, 300), "教堂", HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color("#c8b9c5"))
-	draw_string(ThemeDB.fallback_font, Vector2(700, 370), "酒馆", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#c8a68b"))
-	draw_string(ThemeDB.fallback_font, Vector2(1320, 320), "后山小径", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#a5a1b0"))
-	draw_string(ThemeDB.fallback_font, Vector2(1740, 310), "悬崖边缘", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#9993a6"))
