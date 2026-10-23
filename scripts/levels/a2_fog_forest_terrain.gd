@@ -135,3 +135,22 @@ func _draw_forest_landmarks() -> void:
 		[2240.0, 380.0, 2390.0, 350.0]
 	]:
 		draw_line(Vector2(segment[0], segment[1]), Vector2(segment[2], segment[3]), Color("#68736e", 0.72), 3.0)
+
+
+func _draw_ground_detail() -> void:
+	# Draw surface detail only where collision-backed floor exists; leave the sinkhole visually open.
+	# 地面细节只绘制在有碰撞承托的区域，钟墓坑口保持视觉上的真实空缺。
+	var atmosphere := _atmosphere_color()
+	for segment in [
+		Rect2(0.0, floor_y, A2_PIT_LEFT, 180.0),
+		Rect2(A2_PIT_RIGHT, floor_y, map_width - A2_PIT_RIGHT, 180.0),
+		Rect2(A2_PIT_LEFT, A2_PIT_FLOOR_Y, A2_PIT_RIGHT - A2_PIT_LEFT, 100.0)
+	]:
+		draw_rect(Rect2(segment.position.x, segment.position.y, segment.size.x, 3.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.34))
+		draw_rect(Rect2(segment.position.x, segment.position.y + 92.0, segment.size.x, 2.0), Color("#100f17", 0.46))
+	for x in range(28, int(A2_PIT_LEFT), 128):
+		draw_line(Vector2(x, floor_y + 10.0), Vector2(x + 13.0, floor_y + 17.0), Color("#302a31", 0.72), 1.0)
+	for x in range(int(A2_PIT_RIGHT) + 28, int(map_width), 128):
+		draw_line(Vector2(x, floor_y + 10.0), Vector2(x + 13.0, floor_y + 17.0), Color("#302a31", 0.72), 1.0)
+	for x in range(int(A2_PIT_LEFT) + 28, int(A2_PIT_RIGHT), 128):
+		draw_line(Vector2(x, A2_PIT_FLOOR_Y + 10.0), Vector2(x + 13.0, A2_PIT_FLOOR_Y + 17.0), Color("#302a31", 0.72), 1.0)
