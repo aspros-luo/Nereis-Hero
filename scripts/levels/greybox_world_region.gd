@@ -3816,11 +3816,17 @@ func _draw() -> void:
 		if OS.is_debug_build():
 			_draw_debug_exit_markers()
 		return
-	var backdrop: Texture2D = _region_backdrop_texture()
-	if backdrop != null:
-		draw_texture_rect(backdrop, Rect2(0.0, 0.0, map_width, room_height if region_id == "A5" and not room_id.is_empty() else (1000.0 if region_id == "A2" else 720.0)), false)
+	if region_id == "A2":
+		# A2 has its own layered forest/tomb/ravine backdrop so the authored room layout reads as a new map,
+		# rather than the old single-piece forest illustration with a few platforms overlaid.
+		# A2 使用独立的森林、钟墓与沟壑分层背景，避免新房间看起来仍像旧版整张森林图。
+		_draw_a2_authored_landscape()
 	else:
-		draw_rect(Rect2(0.0, 0.0, map_width, room_height if region_id == "A5" and not room_id.is_empty() else (1000.0 if region_id == "A2" else 720.0)), _background_color())
+		var backdrop: Texture2D = _region_backdrop_texture()
+		if backdrop != null:
+			draw_texture_rect(backdrop, Rect2(0.0, 0.0, map_width, room_height if region_id == "A5" and not room_id.is_empty() else 720.0), false)
+		else:
+			draw_rect(Rect2(0.0, 0.0, map_width, room_height if region_id == "A5" and not room_id.is_empty() else 720.0), _background_color())
 	_draw_biome_color_wash()
 	_draw_atmospheric_layers()
 	_draw_midground_accents()
@@ -4437,6 +4443,66 @@ func _platform_color() -> Color:
 			return Color("#3c303b")
 		_:
 			return Color("#302a33")
+
+func _draw_a2_authored_landscape() -> void:
+	# Base atmosphere and distant silhouettes are visual-only; collision and traversable platforms remain authored in the six room scenes.
+	# 这里只绘制背景氛围与远景剪影；真实碰撞和可走平台仍由六个房间场景维护。
+	draw_rect(Rect2(0.0, 0.0, map_width, 1000.0), Color("#171b28"))
+	for layer in range(3):
+		var base_y := 370.0 + float(layer) * 92.0
+		var shade := [Color("#252a3a"), Color("#202635"), Color("#1c222f")][layer]
+		var points := PackedVector2Array([
+			Vector2(0.0, 1000.0), Vector2(0.0, base_y + 120.0),
+			Vector2(180.0, base_y - 30.0), Vector2(330.0, base_y + 40.0),
+			Vector2(520.0, base_y - 110.0), Vector2(690.0, base_y + 5.0),
+			Vector2(850.0, base_y - 65.0), Vector2(1040.0, base_y + 28.0),
+			Vector2(1250.0, base_y - 90.0), Vector2(1450.0, base_y + 22.0),
+			Vector2(1650.0, base_y - 70.0), Vector2(1850.0, base_y + 35.0),
+			Vector2(2050.0, base_y - 80.0), Vector2(2250.0, base_y + 20.0),
+			Vector2(2470.0, base_y - 100.0), Vector2(2680.0, base_y + 30.0),
+			Vector2(2880.0, base_y - 45.0), Vector2(3100.0, base_y + 10.0),
+			Vector2(3330.0, base_y - 85.0), Vector2(3600.0, base_y + 30.0),
+			Vector2(3600.0, 1000.0)
+		])
+		draw_colored_polygon(points, shade)
+	# Broken tree trunks and canopy masses make the first half read as a forest rather than a flat backdrop.
+	for tree in [
+		Vector2(140.0, 500.0), Vector2(410.0, 460.0), Vector2(640.0, 430.0),
+		Vector2(1180.0, 455.0), Vector2(1430.0, 490.0), Vector2(1770.0, 470.0)
+	]:
+		var trunk_x := tree.x
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(trunk_x, tree.y + 230.0), Vector2(trunk_x + 18.0, tree.y + 230.0),
+			Vector2(trunk_x + 12.0, tree.y - 40.0), Vector2(trunk_x + 3.0, tree.y - 40.0)
+		]), Color("#111722"))
+		draw_circle(Vector2(trunk_x + 8.0, tree.y - 35.0), 72.0, Color("#1c2632"))
+		draw_circle(Vector2(trunk_x - 32.0, tree.y - 5.0), 46.0, Color("#202a37"))
+	# Bell tomb silhouette at the mid-map landmark; kept behind the playable platforms.
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(900.0, 650.0), Vector2(900.0, 365.0), Vector2(930.0, 330.0),
+		Vector2(930.0, 285.0), Vector2(955.0, 250.0), Vector2(980.0, 285.0),
+		Vector2(980.0, 330.0), Vector2(1010.0, 365.0), Vector2(1010.0, 650.0)
+	]), Color("#121722"))
+	draw_circle(Vector2(955.0, 400.0), 13.0, Color("#6b586a", 0.48))
+	# The crypt is a deep, readable void under the Bell Grave route.
+	draw_rect(Rect2(850.0, 650.0, 210.0, 350.0), Color("#0b0e17"))
+	draw_line(Vector2(850.0, 650.0), Vector2(850.0, 900.0), Color("#554454", 0.8), 4.0)
+	draw_line(Vector2(1060.0, 650.0), Vector2(1060.0, 900.0), Color("#554454", 0.8), 4.0)
+	# Eastern ravine walls frame the gap and signal that the east route changes elevation.
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(2320.0, 650.0), Vector2(2390.0, 500.0), Vector2(2450.0, 470.0),
+		Vector2(2490.0, 560.0), Vector2(2550.0, 620.0), Vector2(2660.0, 650.0),
+		Vector2(2660.0, 1000.0), Vector2(2320.0, 1000.0)
+	]), Color("#111722"))
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(2660.0, 650.0), Vector2(2740.0, 590.0), Vector2(2800.0, 500.0),
+		Vector2(2870.0, 470.0), Vector2(2940.0, 545.0), Vector2(3000.0, 650.0),
+		Vector2(3000.0, 1000.0), Vector2(2660.0, 1000.0)
+	]), Color("#0e131d"))
+	# Distant cold lights establish depth without suggesting interactable objects.
+	for light in [Vector2(260.0, 300.0), Vector2(720.0, 250.0), Vector2(1320.0, 330.0), Vector2(1900.0, 290.0), Vector2(3100.0, 320.0)]:
+		draw_circle(light, 2.0, Color("#a2a0bc", 0.34))
+
 
 func _draw_forest_landmarks() -> void:
 	for x in range(180, int(map_width), 230):
