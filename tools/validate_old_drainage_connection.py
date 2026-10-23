@@ -29,6 +29,7 @@ def require(condition: bool, message: str) -> None:
 
 def main() -> int:
     village = read("scripts/levels/village_hub.gd")
+    backhill = read("scripts/levels/village_backhill.gd")
     region = read("scripts/levels/greybox_world_region.gd")
     drain = read("scripts/levels/old_drain_exploration.gd")
     rat = read("scripts/enemies/sewer_rat.gd")
@@ -82,9 +83,11 @@ def main() -> int:
     require(
         'resonance_well_gate.secret_id = "H01"' in village
         and 'resonance_well_gate.target_scene_path = "res://scenes/hidden_well.tscn"' in village
-        and '"returned_to_village_after_mad_cleric" not in WorldState.achievement_flags' in village
-        and 'const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"' in village,
-        "Protected H01 well or cliff-cave entry contract changed unexpectedly.",
+        and 'const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"' in backhill
+        and 'var cave_unlocked := "returned_to_village_after_mad_cleric" in WorldState.achievement_flags' in backhill
+        and 'WorldState.discover_hidden_region("H09")' in backhill
+        and 'WorldState.open_hidden_path("H09")' in backhill,
+        "Protected H01 well or H09 cliff-cave entry contract changed unexpectedly.",
     )
     require('[node name="OldDrainExploration" type="Node2D"]' in scene, "Drain scene root is missing.")
 
