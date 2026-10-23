@@ -27,7 +27,7 @@ size = Vector2(130, 18)
 [node name="A2R02CanopyBridge" type="Node2D"]
 
 [node name="Platform_022" type="StaticBody2D" parent="."]
-position = Vector2(850, 185)
+position = Vector2(0, 40)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_022"]
 position = Vector2(57.5, 9)
@@ -53,7 +53,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_023" type="StaticBody2D" parent="."]
-position = Vector2(985, 145)
+position = Vector2(135, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_023"]
 position = Vector2(62.5, 9)
@@ -79,7 +79,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_024" type="StaticBody2D" parent="."]
-position = Vector2(1125, 175)
+position = Vector2(275, 30)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_024"]
 position = Vector2(57.5, 9)
@@ -105,7 +105,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_025" type="StaticBody2D" parent="."]
-position = Vector2(1245, 220)
+position = Vector2(395, 75)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_025"]
 position = Vector2(57.5, 9)
@@ -131,7 +131,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_026" type="StaticBody2D" parent="."]
-position = Vector2(1360, 285)
+position = Vector2(510, 140)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_026"]
 position = Vector2(57.5, 9)
@@ -157,7 +157,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_027" type="StaticBody2D" parent="."]
-position = Vector2(1475, 330)
+position = Vector2(625, 185)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_027"]
 position = Vector2(60, 9)
@@ -183,7 +183,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_028" type="StaticBody2D" parent="."]
-position = Vector2(1490, 405)
+position = Vector2(640, 260)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_028"]
 position = Vector2(65, 9)
