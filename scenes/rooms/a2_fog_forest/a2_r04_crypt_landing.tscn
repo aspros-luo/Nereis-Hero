@@ -30,6 +30,20 @@ position = Vector2(860, 810)
 position = Vector2(100, 20)
 shape = SubResource("Rect_001")
 
+[node name="LandingStoneMass" type="Polygon2D" parent="CryptLanding"]
+polygon = PackedVector2Array(0, 0, 200, 0, 200, 40, 0, 40)
+color = Color(0.105882, 0.094118, 0.12549, 1)
+
+[node name="LandingStoneTop" type="Line2D" parent="CryptLanding"]
+points = PackedVector2Array(0, 0, 200, 0)
+width = 3.0
+default_color = Color(0.392157, 0.419608, 0.376471, 1)
+
+[node name="LandingStoneSeam" type="Line2D" parent="CryptLanding"]
+points = PackedVector2Array(8, 27, 192, 27)
+width = 2.0
+default_color = Color(0.070588, 0.066667, 0.090196, 1)
+
 [node name="CryptReturnShelfWest" type="StaticBody2D" parent="."]
 position = Vector2(860, 775)
 
