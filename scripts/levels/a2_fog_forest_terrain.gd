@@ -154,3 +154,12 @@ func _draw_ground_detail() -> void:
 		draw_line(Vector2(x, floor_y + 10.0), Vector2(x + 13.0, floor_y + 17.0), Color("#302a31", 0.72), 1.0)
 	for x in range(int(A2_PIT_LEFT) + 28, int(A2_PIT_RIGHT), 128):
 		draw_line(Vector2(x, A2_PIT_FLOOR_Y + 10.0), Vector2(x + 13.0, A2_PIT_FLOOR_Y + 17.0), Color("#302a31", 0.72), 1.0)
+
+
+func _spawn_region_rest_point() -> void:
+	super._spawn_region_rest_point()
+	# The existing A2 checkpoint anchor is x=1150, inside the sinkhole; place it on the basin shelf.
+	# A2 既有休整点锚点 x=1150 位于塌陷区，必须下移到坑底实体平台。
+	var rest_point := get_node_or_null("RegionRestPoint_A2")
+	if rest_point != null:
+		rest_point.position.y = 650.0
