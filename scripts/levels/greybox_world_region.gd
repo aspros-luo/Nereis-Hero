@@ -4502,7 +4502,7 @@ func _draw_a2_authored_landscape() -> void:
 		Vector2(140.0, 500.0), Vector2(410.0, 460.0), Vector2(640.0, 430.0),
 		Vector2(1180.0, 455.0), Vector2(1430.0, 490.0), Vector2(1770.0, 470.0)
 	]:
-		var trunk_x := tree.x
+		var trunk_x: float = tree.x
 		draw_colored_polygon(PackedVector2Array([
 			Vector2(trunk_x, tree.y + 230.0), Vector2(trunk_x + 18.0, tree.y + 230.0),
 			Vector2(trunk_x + 12.0, tree.y - 40.0), Vector2(trunk_x + 3.0, tree.y - 40.0)
