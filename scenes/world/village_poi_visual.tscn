@@ -8,6 +8,8 @@ polygon = PackedVector2Array(10.00, 0.00, 9.24, 3.83, 7.07, 7.07, 3.83, 9.24, 0.
 color = Color("#8e7777")
 
 [node name="PromptLabel" type="Label" parent="."]
+offset_right = 160.0
+offset_bottom = 30.0
 position = Vector2(-54, 20)
 visible = false
 text = "E  Examine"
