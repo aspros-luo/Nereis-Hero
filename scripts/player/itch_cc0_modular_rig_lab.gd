@@ -3,7 +3,7 @@ extends Node2D
 ## Isolated from the production Hero; intended for visual review only.
 
 const ASSET_ROOT := "user://itch_cc0_modular_character"
-const MANIFEST_PATH := ASSET_ROOT.path_join("manifest.json")
+const MANIFEST_PATH := "user://itch_cc0_modular_character/manifest.json"
 const DISPLAY_SCALE := 0.085
 
 const PART_RULES := {
