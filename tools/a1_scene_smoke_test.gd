@@ -59,6 +59,24 @@ func _test_a10_scene_and_state_matrix() -> void:
 	]:
 		_expect(scene.has_node(path), "A1.0 node exists: " + path)
 
+	var main_ground := scene.get_node_or_null("Terrain/GroundMain") as StaticBody2D
+	var main_ground_collision := scene.get_node_or_null("Terrain/GroundMain/CollisionShape2D") as CollisionShape2D
+	_expect(main_ground != null and main_ground_collision != null, "A1.0 has one continuous scene-authored ground collider")
+	_expect(
+		main_ground_collision != null
+		and main_ground_collision.shape is RectangleShape2D
+		and is_equal_approx((main_ground_collision.shape as RectangleShape2D).size.x, 3000.0),
+		"Main ground collision spans the village width without the blacksmith-side drop"
+	)
+	_expect(
+		not scene.has_node("GroundCutouts")
+		and not scene.has_node("LowerRouteVisuals")
+		and not scene.has_node("Terrain/LowerRouteWest")
+		and not scene.has_node("Terrain/LowerRouteMiddle")
+		and not scene.has_node("Terrain/LowerRouteEast"),
+		"Unused blacksmith-side pits and lower platforms are removed"
+	)
+
 	scene.call("_refresh_world_visual_states")
 	_expect(scene.get_node("DrainEntranceVisual/RubbleState").visible, "Drain rubble is visible before defense")
 	_expect(scene.get_node("NorthGateVisual/BlockedState").visible, "North gate is blocked before defense")
