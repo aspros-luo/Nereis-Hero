@@ -96,7 +96,7 @@ func _configure_static_village_nodes() -> void:
 	resonance_well_gate.required_ancient_exposure = 0
 	resonance_well_gate.required_outer_exposure = 0
 	resonance_well_gate.opened.connect(_on_resonance_well_opened)
-	for label_path in ["RegionTitle", "DrainLabel", "HearthLabel", "GraveyardLabel", "OldHouseLabel", "CampLabel", "NorthGateLabel"]:
+	for label_path in ["RegionTitle", "DrainLabel", "GraveyardLabel", "OldHouseLabel", "CampLabel", "NorthGateLabel"]:
 		var label: Label = get_node(label_path)
 		label.text = NereisLocalization.translate_text(label.text)
 	_refresh_world_visual_states()
