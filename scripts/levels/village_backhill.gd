@@ -37,7 +37,7 @@ func _spawn_ui() -> void:
 	hud.set_script(HUD_SCRIPT)
 	add_child(hud)
 	hud.bind_hero(hero)
-	hud.set_story_mode("A1.1｜教堂与后山", "教堂、酒馆与后山小径位于本区；悬崖探索是独立场景。")
+	hud.set_story_mode("A1.1｜教堂与后山", "左侧可进入悬崖探索；右侧通往雾林与钟墓的道路尚未开放。")
 
 
 func _on_poi_interacted(poi: Node) -> void:
