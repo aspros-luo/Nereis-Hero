@@ -287,7 +287,8 @@ def main() -> int:
         require(needle in cliff_scene, f"Cliff exploration scene missing {label}", errors)
     require("size = Vector2(2400, 40)" in cliff_scene, "Cliff exploration must use continuous ground, not jump platforms", errors)
     require("enabled = false" in cliff_scene, "Future A2 road must start disabled in the scene", errors)
-    require('SceneTransition.fade_to_scene("res://scenes/cliff_exploration.tscn")' in a11_script,
+    require('const CLIFF_EXPLORATION_SCENE := "res://scenes/cliff_exploration.tscn"' in a11_script
+            and 'SceneTransition.fade_to_scene(CLIFF_EXPLORATION_SCENE)' in a11_script,
             "A1.1 cliff entrance does not transition to the separate exploration scene", errors)
 
     # Shared visual prefabs and scripts must expose scene-driven labels/state.
