@@ -3834,25 +3834,23 @@ func _draw() -> void:
 		for segment in a5_room_floor_segments:
 			draw_texture_rect(STONE_FLOOR_STRIP, Rect2(segment.x, floor_y, segment.y, 180.0), false)
 	elif region_id == "A2":
-		# Match the visible surface to the real collision gaps at the Bell Grave and eastern ravine.
-		# 让地面贴图与钟墓、东侧沟壑的真实碰撞断口一致。
-		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, 860.0, 180.0), false)
-		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(1060.0, floor_y, 1360.0, 180.0), false)
-		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(2660.0, floor_y, map_width - 2660.0, 180.0), false)
-		# The crypt landing is now rendered by A2R04FloodedCrypt; do not paint the old floor strip across the pit.
-		# 地下墓穴落脚台由 A2R04FloodedCrypt 自行绘制；不要再用旧地面贴图填满坑底。
+		# The six room scenes define the ledges; this mossy undercroft only visualizes the three real ground spans.
+		# 六个房间场景负责平台；此处仅为三段真实地表绘制苔藓断层，不再覆盖旧石板贴图。
+		_draw_a2_authored_ground()
 	else:
 		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
-	_draw_ground_detail()
-	# Replace the old repetitive ground slashes with sparse, broken stone cracks and low atmospheric haze.
-	# 将重复的地面斜线改为稀疏断裂石纹与贴地薄雾，降低灰盒画面的噪声感。
+	if region_id != "A2":
+		_draw_ground_detail()
+	# Keep the legacy ground cracks off A2 so they cannot visually reconnect its authored drops.
+	# A2 不再叠加旧版地面裂纹，避免视觉上把手工设计的落差重新连起来。
 	var atmosphere := _atmosphere_color()
-	draw_rect(Rect2(0.0, floor_y - 92.0, map_width, 44.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.045))
-	draw_rect(Rect2(0.0, floor_y - 36.0, map_width, 20.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.025))
-	for x in range(28, int(map_width), 128):
-		draw_line(Vector2(x, floor_y + 10.0), Vector2(x + 13.0, floor_y + 17.0), Color("#302a31", 0.72), 1.0)
-		if x % 384 == 28:
-			draw_line(Vector2(x + 13.0, floor_y + 17.0), Vector2(x + 21.0, floor_y + 11.0), Color("#302a31", 0.58), 1.0)
+	if region_id != "A2":
+		draw_rect(Rect2(0.0, floor_y - 92.0, map_width, 44.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.045))
+		draw_rect(Rect2(0.0, floor_y - 36.0, map_width, 20.0), Color(atmosphere.r, atmosphere.g, atmosphere.b, 0.025))
+		for x in range(28, int(map_width), 128):
+			draw_line(Vector2(x, floor_y + 10.0), Vector2(x + 13.0, floor_y + 17.0), Color("#302a31", 0.72), 1.0)
+			if x % 384 == 28:
+				draw_line(Vector2(x + 13.0, floor_y + 17.0), Vector2(x + 21.0, floor_y + 11.0), Color("#302a31", 0.58), 1.0)
 	for mote in range(22):
 		var mote_x := float((mote * 173 + int(region_id.hash() % 113)) % int(map_width))
 		var mote_y := 235.0 + float((mote * 67) % 185)
@@ -4444,6 +4442,39 @@ func _platform_color() -> Color:
 			return Color("#3c303b")
 		_:
 			return Color("#302a33")
+
+func _draw_a2_authored_ground() -> void:
+	# Three moss-covered surface spans mirror the physical collision segments in A2AuthoredTerrain.
+	# 三段苔藓地表与 A2AuthoredTerrain 中真实的地面碰撞分段一致。
+	var spans: Array[Vector2] = [
+		Vector2(0.0, 860.0),
+		Vector2(1060.0, 1360.0),
+		Vector2(2660.0, map_width - 2660.0)
+	]
+	for span in spans:
+		var x := span.x
+		var width := span.y
+		draw_rect(Rect2(x, floor_y, width, 190.0), Color("#202b25"))
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(x, floor_y), Vector2(x + 34.0, floor_y - 5.0),
+			Vector2(x + 82.0, floor_y + 2.0), Vector2(x + 130.0, floor_y - 3.0),
+			Vector2(x + width * 0.34, floor_y + 1.0), Vector2(x + width * 0.57, floor_y - 4.0),
+			Vector2(x + width * 0.79, floor_y + 2.0), Vector2(x + width, floor_y - 2.0),
+			Vector2(x + width, floor_y + 20.0), Vector2(x, floor_y + 20.0)
+		]), Color("#536a42"))
+		draw_line(Vector2(x, floor_y + 22.0), Vector2(x + width, floor_y + 22.0), Color("#293b2b", 0.9), 3.0)
+		draw_rect(Rect2(x, floor_y + 34.0, width, 2.0), Color("#344037", 0.8))
+		for index in range(1, int(width / 145.0)):
+			var detail_x := x + float(index) * 145.0
+			draw_line(Vector2(detail_x, floor_y + 48.0), Vector2(detail_x - 7.0, floor_y + 63.0), Color("#101916", 0.7), 2.0)
+			if index % 2 == 0:
+				draw_line(Vector2(detail_x + 22.0, floor_y + 92.0), Vector2(detail_x + 42.0, floor_y + 88.0), Color("#78945a", 0.35), 2.0)
+	# Mark cliff lips at both ends of each ground gap without painting across the gap itself.
+	# 在每个地面断口两端标出崖沿，但绝不跨越断口绘制地表。
+	for edge_x in [860.0, 1060.0, 2420.0, 2660.0]:
+		draw_line(Vector2(edge_x, floor_y - 1.0), Vector2(edge_x, floor_y + 148.0), Color("#5d6250", 0.9), 3.0)
+		draw_line(Vector2(edge_x + 4.0, floor_y + 16.0), Vector2(edge_x + 12.0, floor_y + 42.0), Color("#303c31", 0.9), 2.0)
+
 
 func _draw_a2_authored_landscape() -> void:
 	# Base atmosphere and distant silhouettes are visual-only; collision and traversable platforms remain authored in the six room scenes.
