@@ -30,7 +30,7 @@ func _run() -> void:
 		print("A1 GODOT SCENE SMOKE TEST: PASS")
 		print(" - A1.0/A1.1 scenes instantiate and required authored nodes resolve.")
 		print(" - Drain/gate/camp visuals follow their independent story flags.")
-		print(" - A1.1 transitions into a standalone walkable cliff scene; the road to A2 stays sealed.")
+		print(" - A1.1 left exit enters the standalone cliff scene; its right-hand A2 exit stays sealed.")
 		print(" - H01 resonance/open states and H09 cave/door states follow their story flags.")
 		get_tree().quit(0)
 		return
