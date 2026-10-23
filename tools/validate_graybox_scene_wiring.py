@@ -938,6 +938,7 @@ def main() -> int:
                     a2_platform_end = a2_terrain_for_audit.find("\nfunc create_floor", a2_platform_start)
                     if a2_platform_start >= 0 and a2_platform_end > a2_platform_start:
                         region_block = a2_terrain_for_audit[a2_platform_start:a2_platform_end]
+                        region_block = region_block.replace('region.call("_add_platform", Rect2(', "_add_platform(Rect2(")
                 platforms = [
                     tuple(float(value) for value in match.groups())
                     for match in re.finditer(
