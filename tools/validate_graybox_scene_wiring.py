@@ -516,6 +516,11 @@ def main() -> int:
         "A2_PIT_FLOOR_Y := 690.0",
         "camera.limit_bottom = 900",
         "super._spawn_region_rest_point()",
+        "_add_platform(Rect2(2200, 380, 155, 18))",
+        "_add_platform(Rect2(1715, 400, 200, 18))",
+        "_add_platform(Rect2(980, 650, 250, 18))",
+        "func _spawn_region_encounters() -> void:",
+        "Terrain-first pass",
     ):
         require(a2_terrain, contract, "A2 dedicated terrain", errors)
         require(scene, f'location_id = "{location_id}"', scene_path, errors)
