@@ -1,0 +1,10 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="InteractionPrompt" type="Node2D"]
+
+[node name="PromptLabel" type="Label" parent="."]
+position = Vector2(-54, 30)
+visible = false
+text = "E  Enter"
+theme_override_colors/font_color = Color("#d6c7b2")
+theme_override_font_sizes/font_size = 16
