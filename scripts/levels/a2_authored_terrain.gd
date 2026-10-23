@@ -102,15 +102,18 @@ func _validate_authored_rooms(region: Node) -> void:
 
 
 func configure_platforms(region: Node) -> void:
-	# A2 geometry is authored in six editable Godot scenes. This function only assembles scenes
-	# and indexes their existing one-way collision rectangles for the region's shared renderer.
-	# A2 地形由六个可编辑 Godot 场景手工维护；这里仅装配场景，并把现有单向平台登记给区域渲染器。
+	# Replace the legacy A2 platform layout with the six authored room scenes themselves.
+	# The scenes own their visible stonework and real collision; registering rectangles alone
+	# leaves only the legacy backdrop visible, which made the game look like the old map.
+	# 直接用六个新房间场景替换旧 A2 地形。场景本身包含石台视觉与真实碰撞；
+	# 仅登记碰撞矩形而不保留场景节点，会导致游戏里仍然只看到旧地图背景。
 	for room_scene in A2_ROOM_SCENES:
 		var room := room_scene.instantiate() as Node2D
 		if room == null:
 			push_error("[NEREIS][A2] Failed to instantiate authored room scene: %s" % room_scene.resource_path)
 			continue
 		region.add_child(room)
+		room.owner = region
 		for body in room.get_children():
 			if not (body is StaticBody2D):
 				continue
@@ -120,7 +123,7 @@ func configure_platforms(region: Node) -> void:
 				if not (shape_node.shape is RectangleShape2D):
 					continue
 				var rectangle := shape_node.shape as RectangleShape2D
-				var rect := Rect2(body.position + shape_node.position - rectangle.size * 0.5, rectangle.size)
+				var rect := Rect2(room.position + body.position + shape_node.position - rectangle.size * 0.5, rectangle.size)
 				region.call("_register_authored_platform", rect)
 
 
