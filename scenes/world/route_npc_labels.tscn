@@ -7,7 +7,7 @@ offset_right = 230.0
 offset_bottom = 30.0
 position = Vector2(-58, -76)
 text = ""
-theme_override_colors/font_color = Color("#b7a09b")
+theme_override_colors/font_color = Color(0.717647, 0.627451, 0.607843, 1)
 theme_override_font_sizes/font_size = 14
 
 [node name="PromptLabel" type="Label" parent="."]
@@ -16,5 +16,5 @@ offset_bottom = 30.0
 position = Vector2(-50, 28)
 visible = false
 text = "E  Speak"
-theme_override_colors/font_color = Color("#d6c7b2")
+theme_override_colors/font_color = Color(0.839216, 0.780392, 0.698039, 1)
 theme_override_font_sizes/font_size = 16
