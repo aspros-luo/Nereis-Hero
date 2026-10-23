@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3]
+[gd_scene load_steps=27 format=3]
 
 [ext_resource path="res://scripts/levels/village_hub.gd" type="Script" id="1"]
 [ext_resource path="res://scripts/world/village_poi.gd" type="Script" id="2"]
@@ -22,17 +22,8 @@
 [ext_resource type="Script" path="res://scripts/core/world_event_director.gd" id="20"]
 [ext_resource type="Script" path="res://scripts/audio/narrative_audio.gd" id="21"]
 
-[sub_resource type="RectangleShape2D" id="GroundWest"]
-size = Vector2(1180, 40)
-
-[sub_resource type="RectangleShape2D" id="GroundMiddle"]
-size = Vector2(400, 40)
-
-[sub_resource type="RectangleShape2D" id="GroundEast"]
-size = Vector2(1260, 40)
-
-[sub_resource type="RectangleShape2D" id="LowerRoute"]
-size = Vector2(145, 18)
+[sub_resource type="RectangleShape2D" id="GroundMain"]
+size = Vector2(3000, 40)
 
 [sub_resource type="RectangleShape2D" id="Boundary"]
 size = Vector2(40, 720)
@@ -69,44 +60,28 @@ texture = ExtResource("4")
 expand_mode = 1
 stretch_mode = 0
 
-[node name="GroundCutouts" type="Node2D" parent="."]
-z_index = -50
-
-[node name="WestPit" type="Polygon2D" parent="GroundCutouts"]
-position = Vector2(1180, 520)
-polygon = PackedVector2Array(0,0, 80,0, 80,200, 0,200)
-color = Color(0.062745, 0.07451, 0.105882, 1)
-z_index = -50
-
-[node name="EastPit" type="Polygon2D" parent="GroundCutouts"]
-position = Vector2(1660, 520)
-polygon = PackedVector2Array(0,0, 80,0, 80,200, 0,200)
-color = Color(0.062745, 0.07451, 0.105882, 1)
-z_index = -50
-
-[node name="LowerRouteVisuals" type="Node2D" parent="."]
-z_index = -40
-
-[node name="LowerLedge1" type="Polygon2D" parent="LowerRouteVisuals"]
-position = Vector2(1200, 610)
-polygon = PackedVector2Array(0,0, 145,0, 145,18, 0,18)
-color = Color(0.286275, 0.231373, 0.262745, 1)
-z_index = -40
-
-[node name="LowerLedge2" type="Polygon2D" parent="LowerRouteVisuals"]
-position = Vector2(1365, 655)
-polygon = PackedVector2Array(0,0, 145,0, 145,18, 0,18)
-color = Color(0.286275, 0.231373, 0.262745, 1)
-z_index = -40
-
-[node name="LowerLedge3" type="Polygon2D" parent="LowerRouteVisuals"]
-position = Vector2(1530, 610)
-polygon = PackedVector2Array(0,0, 145,0, 145,18, 0,18)
-color = Color(0.286275, 0.231373, 0.262745, 1)
-z_index = -40
-
 [node name="FloorSeams" type="Node2D" parent="."]
 z_index = -30
+
+[node name="Seam19" type="Line2D" parent="FloorSeams"]
+points = PackedVector2Array(1152, 520, 1184, 552)
+width = 2.0
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
+
+[node name="Seam20" type="Line2D" parent="FloorSeams"]
+points = PackedVector2Array(1216, 520, 1248, 552)
+width = 2.0
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
+
+[node name="Seam27" type="Line2D" parent="FloorSeams"]
+points = PackedVector2Array(1664, 520, 1696, 552)
+width = 2.0
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
+
+[node name="Seam28" type="Line2D" parent="FloorSeams"]
+points = PackedVector2Array(1728, 520, 1760, 552)
+width = 2.0
+default_color = Color(0.188235, 0.164706, 0.188235, 1)
 
 [node name="Seam01" type="Line2D" parent="FloorSeams"]
 points = PackedVector2Array(0, 520, 32, 552)
@@ -537,50 +512,12 @@ theme_override_font_sizes/font_size = 15
 [node name="Terrain" type="Node2D" parent="."]
 y_sort_enabled = false
 
-[node name="GroundWest" type="StaticBody2D" parent="Terrain"]
+[node name="GroundMain" type="StaticBody2D" parent="Terrain"]
 position = Vector2(0, 520)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/GroundWest"]
-position = Vector2(590, 20)
-shape = SubResource("GroundWest")
-
-[node name="GroundMiddle" type="StaticBody2D" parent="Terrain"]
-position = Vector2(1260, 520)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/GroundMiddle"]
-position = Vector2(200, 20)
-shape = SubResource("GroundMiddle")
-
-[node name="GroundEast" type="StaticBody2D" parent="Terrain"]
-position = Vector2(1740, 520)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/GroundEast"]
-position = Vector2(630, 20)
-shape = SubResource("GroundEast")
-
-[node name="LowerRouteWest" type="StaticBody2D" parent="Terrain"]
-position = Vector2(1200, 610)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/LowerRouteWest"]
-position = Vector2(72.5, 9)
-shape = SubResource("LowerRoute")
-one_way_collision = true
-
-[node name="LowerRouteMiddle" type="StaticBody2D" parent="Terrain"]
-position = Vector2(1365, 655)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/LowerRouteMiddle"]
-position = Vector2(72.5, 9)
-shape = SubResource("LowerRoute")
-one_way_collision = true
-
-[node name="LowerRouteEast" type="StaticBody2D" parent="Terrain"]
-position = Vector2(1530, 610)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/LowerRouteEast"]
-position = Vector2(72.5, 9)
-shape = SubResource("LowerRoute")
-one_way_collision = true
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/GroundMain"]
+position = Vector2(1500, 20)
+shape = SubResource("GroundMain")
 
 [node name="WestBoundary" type="StaticBody2D" parent="Terrain"]
 position = Vector2(-20, 360)
