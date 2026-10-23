@@ -34,6 +34,7 @@ var _weapon_bone: Bone2D
 var _pose_index := 0
 var _clock := 0.0
 var _source_canvas := Vector2(2048.0, 2048.0)
+var _root_rest_position := Vector2.ZERO
 var _has_modular_parts := false
 var _full_body_fallback: Sprite2D
 
@@ -132,7 +133,7 @@ func _build_rig() -> void:
 		_add_full_body_fallback()
 		_status_label.text += "\n\nPart-name match was incomplete. Showing best full-body idle candidate plus bone scaffold."
 		_status_label.text += "\nSee output log for selected paths and missing semantic slots."
-	if not selected.has("weapon"):
+	if _has_modular_parts and not selected.has("weapon"):
 		_add_procedural_sword()
 
 	scale = Vector2.ONE * DISPLAY_SCALE
@@ -313,7 +314,9 @@ func _add_full_body_fallback() -> void:
 	_full_body_fallback.name = "FullBodyReferenceFallback"
 	_full_body_fallback.texture = ImageTexture.create_from_image(image.get_region(used))
 	_full_body_fallback.centered = true
-	_full_body_fallback.position = Vector2(used.get_center()) - Vector2(image.get_width(), image.get_height()) * 0.5
+	_root_rest_position = Vector2(used.get_center()) - Vector2(image.get_width(), image.get_height()) * 0.5
+	_root_bone.position = _root_rest_position
+	_full_body_fallback.position = Vector2.ZERO
 	_full_body_fallback.modulate = Color("#e3d8c8")
 	_root_bone.add_child(_full_body_fallback)
 	print("Fallback display asset: ", best_path)
@@ -355,7 +358,7 @@ func _apply_demo_pose() -> void:
 		if is_instance_valid(bone):
 			bone.rotation = 0.0
 	_root_bone.rotation = 0.0
-	_root_bone.position.y = 0.0
+	_root_bone.position = _root_rest_position
 	var wave := sin(_clock * 5.0)
 	match _pose_index:
 		0:
@@ -364,7 +367,7 @@ func _apply_demo_pose() -> void:
 			_arm_left.rotation = -0.08 + wave * 0.025
 			_arm_right.rotation = 0.12 - wave * 0.025
 		1:
-			_root_bone.position.y = absf(sin(_clock * 10.0)) * -1.8
+			_root_bone.position.y = _root_rest_position.y + absf(sin(_clock * 10.0)) * -1.8
 			_body_bone.rotation = -0.06
 			_arm_left.rotation = 0.12 + wave * 0.22
 			_arm_right.rotation = -0.12 - wave * 0.22
