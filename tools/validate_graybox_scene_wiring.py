@@ -569,18 +569,18 @@ def main() -> int:
     a2_terrain = read("scripts/levels/a2_authored_terrain.gd", errors)
     for contract in (
         "func _apply_authored_terrain() -> void:",
-        "const CRYPT_FLOOR_Y := 790.0",
+        "const CRYPT_FLOOR_Y := 810.0",
         "const CRYPT_LEFT := 860.0",
         "const CRYPT_WIDTH := 200.0",
         'region.get_node_or_null("A2_FloodedCryptFloor") == null',
         '_add_floor_segment(region, "A2_FloodedCryptFloor", CRYPT_LEFT, CRYPT_WIDTH, CRYPT_FLOOR_Y)',
-        'String(child.name).begins_with("GreyboxGround")',
+        "The shared A2 controller already creates the west/middle/east surface gaps and all ledges.",
         "rest.position = Vector2(1600.0, float(region.get(\"floor_y\")))",
         "bell.position = Vector2(735.0, 322.0)",
         "shared canopy, C03/C04 and ravine ledges preserved",
     ):
         require(a2_terrain, contract, "A2 authored terrain contract", errors)
-    require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 790.0, 200.0, 180.0), false)', "A2 crypt floor rendering", errors)
+    require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 810.0, 200.0, 180.0), false)', "A2 crypt floor rendering", errors)
     require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(2660.0, floor_y, map_width - 2660.0, 180.0), false)', "A2 eastern ravine rendering", errors)
     require(region_script, '_add_platform(Rect2(3335, 490, 145, 18))', "A2 C03 remote canopy landing", errors)
     require(region_script, '_add_platform(Rect2(1740, 510, 125, 18))', "A2 C04 highroad landing", errors)
