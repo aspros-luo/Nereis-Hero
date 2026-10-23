@@ -3853,7 +3853,10 @@ func _draw() -> void:
 
 	match region_id:
 		"A2":
-			_draw_forest_landmarks()
+			# The six authored A2 room scenes now own the terrain silhouettes; do not paint the legacy one-piece forest layout over them.
+			# A2 的六个手工房间场景负责地形轮廓；不再叠画旧版整张森林地图的装饰布局。
+			if get_node_or_null("A2AuthoredTerrain") == null:
+				_draw_forest_landmarks()
 		"A3":
 			_draw_city_landmarks()
 		"A4":
