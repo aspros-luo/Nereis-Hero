@@ -174,7 +174,8 @@ func _test_a11_authored_terrain() -> void:
 	_expect(
 		future_wall_shape != null
 		and future_wall_shape.shape is RectangleShape2D
-		and is_equal_approx((future_wall_shape.shape as RectangleShape2D).size.y, 720.0),
+		and is_equal_approx((future_wall_shape.shape as RectangleShape2D).size.y, 720.0)
+		and is_equal_approx(future_wall_shape.position.y, -340.0),
 		"A1.1 reserved A2 route has a full-height physical blocker"
 	)
 	_expect(scene.has_node("FutureA2EntranceVisual") and scene.has_node("FutureA2Title"), "A1.1 right route has an authored sealed entrance and Label")
