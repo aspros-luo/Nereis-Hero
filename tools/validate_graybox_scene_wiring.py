@@ -591,6 +591,15 @@ def main() -> int:
     ):
         require(a2_terrain, contract, "A2 floor collision contract", errors)
     require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 810.0, 200.0, 180.0), false)', "A2 crypt floor rendering", errors)
+    for contract in (
+        '[node name="CryptReturnShelfWest" type="StaticBody2D" parent="."]',
+        'position = Vector2(860, 775)',
+        'size = Vector2(60, 18)',
+        '[node name="CryptReturnShelfEast" type="StaticBody2D" parent="."]',
+        'position = Vector2(1000, 775)',
+        'shape = SubResource("Rect_006")',
+    ):
+        require(crypt_landing_scene, contract, "A2 crypt landing drop-through gap and return shelves", errors)
     crypt_landing_scene = read("scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn", errors)
     for room_path in (
         "scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn",
