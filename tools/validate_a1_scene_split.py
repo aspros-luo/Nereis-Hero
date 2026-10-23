@@ -254,8 +254,12 @@ def main() -> int:
     for needle, label in [
         ('[node name="WorldEventDirector" type="Node" parent="."]', "event director"),
         ('[node name="Hero" type="CharacterBody2D" parent="."]', "Hero"),
-        ('[node name="CliffExplorationDoor" type="Area2D" parent="."]', "cliff exploration entrance"),
+        ('[node name="CliffExplorationDoor" type="Area2D" parent="."]', "left cliff exploration entrance"),
         ('[node name="CliffEntryVisual" type="Node2D" parent="."]', "scene-authored cliff entrance visual"),
+        ('[node name="FutureA2RoadDoor" type="Area2D" parent="."]', "right reserved A2 entrance"),
+        ('[node name="FutureA2RoadBlocker" type="StaticBody2D" parent="."]', "right reserved A2 route physical blocker"),
+        ('[node name="FutureA2EntranceVisual" type="Node2D" parent="."]', "scene-authored sealed A2 entrance"),
+        ('[node name="FutureA2Title" type="Label" parent="."]', "A2 entrance label"),
         ('[node name="ChurchPOI" type="Node2D" parent="."]', "church POI"),
         ('[node name="TavernPOI" type="Node2D" parent="."]', "tavern POI"),
         ('[node name="BackToVillagePOI" type="Node2D" parent="."]', "return POI"),
@@ -279,14 +283,17 @@ def main() -> int:
         ('[node name="Hero" type="CharacterBody2D" parent="."]', "Hero"),
         ('[node name="MainGround" type="StaticBody2D" parent="."]', "continuous walkable ground"),
         ('[node name="BackToBackhillDoor" type="Area2D" parent="."]', "left return connection"),
-        ('[node name="FutureA2RoadDoor" type="Area2D" parent="."]', "reserved future connection"),
-        ('[node name="FutureRoadBlocker" type="StaticBody2D" parent="."]', "physical future-road blocker"),
+        ('[node name="CliffEndBoundary" type="StaticBody2D" parent="."]', "physical east-end boundary"),
         ('[node name="H09CaveDoor" type="Area2D" parent="."]', "H09 door"),
         ('[node name="H09CaveVisual" type="Node2D" parent="."]', "H09 authored cave mouth"),
     ]:
         require(needle in cliff_scene, f"Cliff exploration scene missing {label}", errors)
     require("size = Vector2(2400, 40)" in cliff_scene, "Cliff exploration must use continuous ground, not jump platforms", errors)
-    require("enabled = false" in cliff_scene, "Future A2 road must start disabled in the scene", errors)
+    require("FutureA2RoadDoor" not in cliff_scene and "FutureRoadBlocker" not in cliff_scene,
+            "The reserved A2 connection must remain at the backhill, not the cliff scene", errors)
+    require("enabled = false" in a11, "The future A2 entrance must start disabled in the backhill scene", errors)
+    require("size = Vector2(60, 720)" in a11 and 'shape = SubResource("FutureA2BlockerShape")' in a11,
+            "The right-hand future A2 route must use a full-height physical blocker", errors)
     require('const CLIFF_EXPLORATION_SCENE := "res://scenes/cliff_exploration.tscn"' in a11_script
             and 'SceneTransition.fade_to_scene(CLIFF_EXPLORATION_SCENE)' in a11_script,
             "A1.1 cliff entrance does not transition to the separate exploration scene", errors)
