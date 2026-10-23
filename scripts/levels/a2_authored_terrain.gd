@@ -6,6 +6,7 @@ const FLOOR_THICKNESS := 40.0
 const CRYPT_FLOOR_Y := 810.0
 const CRYPT_LEFT := 860.0
 const CRYPT_WIDTH := 200.0
+const CRYPT_LANDING_SCENE := preload("res://scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn")
 
 func _ready() -> void:
 	call_deferred("_apply_authored_terrain")
@@ -19,7 +20,11 @@ func _apply_authored_terrain() -> void:
 	# Preserve them: the crypt opening is x=860..1060 and the eastern ravine is x=2420..2660.
 	# 公共控制器已创建西/中/东地面分段与全部台阶；保留这些实体，只补上钟墓坑底。
 	if region.get_node_or_null("A2_FloodedCryptFloor") == null:
-		_add_floor_segment(region, "A2_FloodedCryptFloor", CRYPT_LEFT, CRYPT_WIDTH, CRYPT_FLOOR_Y)
+		var crypt_landing := CRYPT_LANDING_SCENE.instantiate() as StaticBody2D
+		if crypt_landing != null:
+			crypt_landing.name = "A2_FloodedCryptFloor"
+			crypt_landing.position = Vector2(CRYPT_LEFT, CRYPT_FLOOR_Y)
+			region.add_child(crypt_landing)
 
 	# The crypt opening ends at x=1060, so the checkpoint at x=1150 is already on continuous surface ground.
 	# 钟墓坑口在 x=1060 结束；x=1150 的休整点原本就在连续地表，不应被无故移到远处。
@@ -58,18 +63,3 @@ func create_floor(region: Node) -> void:
 	region.call("_add_platform", Rect2(2590.0, floor_y + 45.0, 70.0, 12.0))
 	region.call("_add_platform", Rect2(2490.0, floor_y + 5.0, 80.0, 12.0))
 	return
-
-
-func _add_floor_segment(region: Node, segment_name: String, x: float, width: float, top_y: float) -> void:
-	if width <= 0.0:
-		return
-	var floor_body := StaticBody2D.new()
-	floor_body.name = segment_name
-	floor_body.position = Vector2(x, top_y)
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(width, FLOOR_THICKNESS)
-	shape.shape = rectangle
-	shape.position = Vector2(width * 0.5, FLOOR_THICKNESS * 0.5)
-	floor_body.add_child(shape)
-	region.add_child(floor_body)
