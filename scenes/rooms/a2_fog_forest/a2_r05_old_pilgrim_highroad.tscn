@@ -45,7 +45,7 @@ size = Vector2(115, 18)
 [node name="A2R05OldPilgrimHighroad" type="Node2D"]
 
 [node name="Platform_029" type="StaticBody2D" parent="."]
-position = Vector2(1585, 365)
+position = Vector2(0, 95)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_029"]
 position = Vector2(57.5, 9)
@@ -71,7 +71,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_030" type="StaticBody2D" parent="."]
-position = Vector2(1710, 310)
+position = Vector2(125, 40)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_030"]
 position = Vector2(60, 9)
@@ -97,7 +97,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_031" type="StaticBody2D" parent="."]
-position = Vector2(1840, 270)
+position = Vector2(255, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_031"]
 position = Vector2(60, 9)
@@ -123,7 +123,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_032" type="StaticBody2D" parent="."]
-position = Vector2(1970, 315)
+position = Vector2(385, 45)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_032"]
 position = Vector2(57.5, 9)
@@ -149,7 +149,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_033" type="StaticBody2D" parent="."]
-position = Vector2(2085, 375)
+position = Vector2(500, 105)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_033"]
 position = Vector2(60, 9)
@@ -175,7 +175,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_034" type="StaticBody2D" parent="."]
-position = Vector2(2185, 440)
+position = Vector2(600, 170)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_034"]
 position = Vector2(57.5, 9)
@@ -201,7 +201,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_035" type="StaticBody2D" parent="."]
-position = Vector2(1735, 430)
+position = Vector2(150, 160)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_035"]
 position = Vector2(57.5, 9)
@@ -227,7 +227,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_036" type="StaticBody2D" parent="."]
-position = Vector2(1850, 485)
+position = Vector2(265, 215)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_036"]
 position = Vector2(57.5, 9)
@@ -253,7 +253,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_037" type="StaticBody2D" parent="."]
-position = Vector2(1975, 525)
+position = Vector2(390, 255)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_037"]
 position = Vector2(62.5, 9)
@@ -279,7 +279,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_038" type="StaticBody2D" parent="."]
-position = Vector2(2100, 565)
+position = Vector2(515, 295)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_038"]
 position = Vector2(60, 9)
@@ -305,7 +305,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_039" type="StaticBody2D" parent="."]
-position = Vector2(1740, 510)
+position = Vector2(155, 240)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_039"]
 position = Vector2(62.5, 9)
@@ -331,7 +331,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_040" type="StaticBody2D" parent="."]
-position = Vector2(1840, 535)
+position = Vector2(255, 265)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_040"]
 position = Vector2(70, 9)
@@ -357,7 +357,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_041" type="StaticBody2D" parent="."]
-position = Vector2(1975, 465)
+position = Vector2(390, 195)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_041"]
 position = Vector2(57.5, 9)
