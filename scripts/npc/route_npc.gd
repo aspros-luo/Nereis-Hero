@@ -20,22 +20,26 @@ var name_label: Label
 var prompt_label: Label
 
 func _ready() -> void:
-    character_visual = HUMANOID_VISUAL_SCENE.instantiate() as HumanoidCharacterVisual
-    character_visual.name = "CharacterVisual"
-    character_visual.position = Vector2(0.0, -20.0)
-    character_visual.skin_color = skin_color
-    character_visual.cloth_color = cloth_color
-    add_child(character_visual)
-    var labels := NPC_LABELS_SCENE.instantiate()
-    labels.name = "Labels"
-    add_child(labels)
+    character_visual = get_node_or_null("CharacterVisual") as HumanoidCharacterVisual
+    if character_visual == null:
+        character_visual = HUMANOID_VISUAL_SCENE.instantiate() as HumanoidCharacterVisual
+        character_visual.name = "CharacterVisual"
+        character_visual.position = Vector2(0.0, -20.0)
+        character_visual.skin_color = skin_color
+        character_visual.cloth_color = cloth_color
+        add_child(character_visual)
+
+    var labels := get_node_or_null("Labels")
+    if labels == null:
+        labels = NPC_LABELS_SCENE.instantiate()
+        labels.name = "Labels"
+        add_child(labels)
     name_label = labels.get_node("NameLabel") as Label
     prompt_label = labels.get_node("PromptLabel") as Label
     name_label.text = NereisLocalization.translate_text(display_name)
     prompt_label.text = NereisLocalization.translate_text("E  Speak")
     set_meta("interaction_priority", 60)
     print("[NEREIS][NPC] %s initialized id=%s" % [display_name, npc_id])
-
 func _process(delta: float) -> void:
     cooldown = max(0.0, cooldown - delta)
     var hero: Node2D = get_node_or_null("../Hero") as Node2D
