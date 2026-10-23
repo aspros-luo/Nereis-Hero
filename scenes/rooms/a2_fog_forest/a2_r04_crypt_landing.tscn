@@ -1,10 +1,61 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=6 format=3]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_crypt_floor"]
+; 钟墓坑底、落差与回程石沿
+; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
+
+[sub_resource type="RectangleShape2D" id="Rect_001"]
 size = Vector2(200, 40)
 
-[node name="A2CryptLanding" type="StaticBody2D"]
+[sub_resource type="RectangleShape2D" id="Rect_002"]
+size = Vector2(200, 18)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[sub_resource type="RectangleShape2D" id="Rect_003"]
+size = Vector2(70, 12)
+
+[sub_resource type="RectangleShape2D" id="Rect_004"]
+size = Vector2(70, 12)
+
+[sub_resource type="RectangleShape2D" id="Rect_005"]
+size = Vector2(75, 12)
+
+[node name="A2R04FloodedCrypt" type="Node2D"]
+
+[node name="CryptLanding" type="StaticBody2D" parent="."]
+position = Vector2(860, 810)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptLanding"]
 position = Vector2(100, 20)
-shape = SubResource("RectangleShape2D_crypt_floor")
+shape = SubResource("Rect_001")
+
+[node name="CryptReturnShelf" type="StaticBody2D" parent="."]
+position = Vector2(860, 775)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptReturnShelf"]
+position = Vector2(100, 9)
+shape = SubResource("Rect_002")
+one_way_collision = true
+
+[node name="CryptStepWest" type="StaticBody2D" parent="."]
+position = Vector2(850, 728)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptStepWest"]
+position = Vector2(35, 6)
+shape = SubResource("Rect_003")
+one_way_collision = true
+
+[node name="CryptStepEast" type="StaticBody2D" parent="."]
+position = Vector2(1000, 695)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptStepEast"]
+position = Vector2(35, 6)
+shape = SubResource("Rect_004")
+one_way_collision = true
+
+[node name="CryptUpperStep" type="StaticBody2D" parent="."]
+position = Vector2(900, 655)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptUpperStep"]
+position = Vector2(37.5, 6)
+shape = SubResource("Rect_005")
+one_way_collision = true
+
