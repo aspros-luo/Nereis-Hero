@@ -18,7 +18,7 @@ func _ready() -> void:
 	var spawn_side := WorldState.pending_region_spawn_side
 	WorldState.pending_region_spawn_side = "west"
 	if spawn_side == "cliff_return":
-		hero.position = Vector2(1570, 540)
+		hero.position = Vector2(1150, 540)
 	world_event_director.setup(WorldState, self)
 	WorldState.set_location("village_backhill")
 	world_event_director.dispatch("region_entered", {"region": "A1", "location": "village_backhill"})
