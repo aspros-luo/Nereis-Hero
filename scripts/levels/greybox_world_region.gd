@@ -2652,10 +2652,11 @@ func _region_backdrop_texture() -> Texture2D:
 
 func _draw() -> void:
 	var backdrop: Texture2D = _region_backdrop_texture()
+	var background_height := 900.0 if region_id == "A2" else 720.0
 	if backdrop != null:
-		draw_texture_rect(backdrop, Rect2(0.0, 0.0, map_width, 720.0), false)
+		draw_texture_rect(backdrop, Rect2(0.0, 0.0, map_width, background_height), false)
 	else:
-		draw_rect(Rect2(0.0, 0.0, map_width, 720.0), _background_color())
+		draw_rect(Rect2(0.0, 0.0, map_width, background_height), _background_color())
 	_draw_biome_color_wash()
 	_draw_atmospheric_layers()
 	_draw_midground_accents()
@@ -2795,7 +2796,8 @@ func _draw_biome_color_wash() -> void:
 			accent = Color("#d0a4ff")
 	# The wash is intentionally translucent; gameplay silhouettes and exit markers stay dominant.
 	# 色彩覆盖保持半透明，避免角色剪影与出口标记被淹没。
-	draw_rect(Rect2(0.0, 0.0, map_width, 720.0), Color(wash.r, wash.g, wash.b, 0.20))
+	var wash_height := 900.0 if region_id == "A2" else 720.0
+	draw_rect(Rect2(0.0, 0.0, map_width, wash_height), Color(wash.r, wash.g, wash.b, 0.20))
 	for band in range(4):
 		var band_y := 150.0 + float(band) * 118.0
 		var band_alpha := 0.025 + float(band % 2) * 0.012
