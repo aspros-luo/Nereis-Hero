@@ -21,11 +21,11 @@ func _apply_authored_terrain() -> void:
 	if region.get_node_or_null("A2_FloodedCryptFloor") == null:
 		_add_floor_segment(region, "A2_FloodedCryptFloor", CRYPT_LEFT, CRYPT_WIDTH, CRYPT_FLOOR_Y)
 
-	# The default checkpoint is placed at x=1150 inside the Bell Grave opening; move it to safe ground.
-	# 默认休整点 x=1150 位于钟墓坑口，移动到东侧安全地面。
+	# The crypt opening ends at x=1060, so the checkpoint at x=1150 is already on continuous surface ground.
+	# 钟墓坑口在 x=1060 结束；x=1150 的休整点原本就在连续地表，不应被无故移到远处。
 	var rest := region.get_node_or_null("RegionRestPoint_A2")
 	if rest != null:
-		rest.position = Vector2(1600.0, float(region.get("floor_y")))
+		rest.position = Vector2(1150.0, float(region.get("floor_y")))
 
 	# Keep the shared clue node and interaction state; only align its visual with the upper tomb ring.
 	# 保留线索节点和交互状态，只将其摆放到钟墓上环。
