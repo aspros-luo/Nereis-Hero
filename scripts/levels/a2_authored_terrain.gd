@@ -50,13 +50,15 @@ func _apply_authored_terrain() -> void:
 
 
 func _validate_authored_rooms(region: Node) -> void:
+	var valid := true
 	var total_platforms := 0
 	var max_platform_right := 0.0
 	var room_count := 0
 	for room_name in A2_EXPECTED_PLATFORM_COUNTS:
 		var room := region.get_node_or_null(room_name) as Node2D
 		if room == null:
-			push_error("[NEREIS][A2][VERIFY][FAIL] missing room root: " + room_name)
+			push_error("[NEREIS][A2][VERIFY][FAIL] missing room root: " + str(room_name))
+			valid = false
 			continue
 		room_count += 1
 		var platform_count := 0
@@ -67,26 +69,34 @@ func _validate_authored_rooms(region: Node) -> void:
 			for shape_node in body.get_children():
 				if not (shape_node is CollisionShape2D):
 					continue
-				var shape := shape_node.shape
-				if shape is RectangleShape2D:
-					var right_edge := body.position.x + shape_node.position.x + (shape as RectangleShape2D).size.x * 0.5
+				if shape_node.shape is RectangleShape2D:
+					var rectangle := shape_node.shape as RectangleShape2D
+					var right_edge := body.position.x + shape_node.position.x + rectangle.size.x * 0.5
 					max_platform_right = maxf(max_platform_right, right_edge)
 		total_platforms += platform_count
 		var expected := int(A2_EXPECTED_PLATFORM_COUNTS[room_name])
 		if platform_count != expected:
 			push_error("[NEREIS][A2][VERIFY][FAIL] room=%s platforms=%d expected=%d" % [room_name, platform_count, expected])
+			valid = false
 		else:
 			print("[NEREIS][A2][VERIFY][ROOM] %s platforms=%d" % [room_name, platform_count])
 
 	var map_width := float(region.get("map_width"))
 	if room_count != A2_EXPECTED_PLATFORM_COUNTS.size():
 		push_error("[NEREIS][A2][VERIFY][FAIL] room_count=%d expected=%d" % [room_count, A2_EXPECTED_PLATFORM_COUNTS.size()])
+		valid = false
 	if max_platform_right > map_width:
 		push_error("[NEREIS][A2][VERIFY][FAIL] authored terrain exceeds map width: right=%.1f width=%.1f" % [max_platform_right, map_width])
+		valid = false
 	if map_width < 3480.0:
 		push_error("[NEREIS][A2][VERIFY][FAIL] map width %.1f clips the eastern route; expected at least 3480" % map_width)
-	else:
+		valid = false
+	if valid:
 		print("[NEREIS][A2][VERIFY] PASS rooms=%d/%d platforms=%d/71 right_edge=%.1f map_width=%.1f ground_spans=3" % [
+			room_count, A2_EXPECTED_PLATFORM_COUNTS.size(), total_platforms, max_platform_right, map_width
+		])
+	else:
+		print("[NEREIS][A2][VERIFY] FAIL rooms=%d/%d platforms=%d/71 right_edge=%.1f map_width=%.1f" % [
 			room_count, A2_EXPECTED_PLATFORM_COUNTS.size(), total_platforms, max_platform_right, map_width
 		])
 
