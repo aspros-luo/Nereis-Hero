@@ -2,18 +2,23 @@ extends Node2D
 
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"
+const CLIFF_EXPLORATION_SCENE := "res://scenes/cliff_exploration.tscn"
 
 @onready var hero: CharacterBody2D = $Hero
-@onready var cliff_cave_door: Area2D = $CliffCaveDoor
+@onready var cliff_exploration_door: Area2D = $CliffExplorationDoor
 var narrative: CanvasLayer
 var hud: CanvasLayer
 @onready var world_event_director: Node = $WorldEventDirector
+
 
 func _ready() -> void:
 	WorldState.prepare_scene_runtime()
 	get_tree().paused = false
 	WorldState.input_locked = false
+	var spawn_side := WorldState.pending_region_spawn_side
+	WorldState.pending_region_spawn_side = "west"
+	if spawn_side == "cliff_return":
+		hero.position = Vector2(1570, 540)
 	world_event_director.setup(WorldState, self)
 	WorldState.set_location("village_backhill")
 	world_event_director.dispatch("region_entered", {"region": "A1", "location": "village_backhill"})
@@ -21,12 +26,7 @@ func _ready() -> void:
 	$ChurchPOI.interacted.connect(_on_poi_interacted.bind($ChurchPOI))
 	$TavernPOI.interacted.connect(_on_poi_interacted.bind($TavernPOI))
 	$BackToVillagePOI.interacted.connect(_on_poi_interacted.bind($BackToVillagePOI))
-	var cave_unlocked := "returned_to_village_after_mad_cleric" in WorldState.achievement_flags
-	cliff_cave_door.enabled = cave_unlocked
-	cliff_cave_door.visible = cave_unlocked
-	$CliffCaveVisual.visible = cave_unlocked
-	if cave_unlocked:
-		cliff_cave_door.interacted.connect(_on_cliff_cave_interacted)
+	cliff_exploration_door.interacted.connect(_on_cliff_exploration_interacted)
 
 
 func _spawn_ui() -> void:
@@ -37,7 +37,8 @@ func _spawn_ui() -> void:
 	hud.set_script(HUD_SCRIPT)
 	add_child(hud)
 	hud.bind_hero(hero)
-	hud.set_story_mode("A1.1｜教堂与后山", "探索教堂、酒馆与通往悬崖的山路。")
+	hud.set_story_mode("A1.1｜教堂与后山", "教堂、酒馆与后山小径位于本区；悬崖探索是独立场景。")
+
 
 func _on_poi_interacted(poi: Node) -> void:
 	_refresh_tavern_poi_dialogue()
@@ -57,14 +58,11 @@ func _on_poi_interacted(poi: Node) -> void:
 		SceneTransition.fade_to_scene("res://scenes/locations/church_interior.tscn")
 
 
-func _on_cliff_cave_interacted() -> void:
-	WorldState.discover_hidden_region("H09")
-	WorldState.open_hidden_path("H09")
-	WorldState.mark_hidden_region_entered("H09")
-	WorldState.pending_region_spawn_side = "west"
-	WorldState.set_location("cliff_cave_experiment")
-	print("[NEREIS][SECRET] Entering H09 from A1.1 backhill cliff")
-	SceneTransition.fade_to_scene(CLIFF_CAVE_SCENE)
+func _on_cliff_exploration_interacted() -> void:
+	WorldState.pending_region_spawn_side = "backhill"
+	WorldState.set_location("cliff_exploration")
+	SceneTransition.fade_to_scene(CLIFF_EXPLORATION_SCENE)
+
 
 func _refresh_tavern_poi_dialogue() -> void:
 	for poi in get_tree().get_nodes_in_group("a1_tavern_poi"):
