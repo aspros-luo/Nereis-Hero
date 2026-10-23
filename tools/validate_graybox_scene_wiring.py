@@ -569,17 +569,21 @@ def main() -> int:
     a2_terrain = read("scripts/levels/a2_authored_terrain.gd", errors)
     for contract in (
         "func _apply_authored_terrain() -> void:",
-        '_add_floor_segment(region, "WestForestGround", 0.0, 860.0, 540.0)',
-        '_add_floor_segment(region, "EastForestGround", 1480.0, 1120.0, 540.0)',
-        '_add_floor_segment(region, "FloodedCryptFloor", 860.0, 620.0, CRYPT_FLOOR_Y)',
-        "const CRYPT_FLOOR_Y := 660.0",
-        "_add_platform(region, Rect2(875, 605, 120, 18))",
-        "_add_platform(region, Rect2(1325, 550, 125, 18))",
-        "_add_platform(region, Rect2(2195, 380, 160, 18))",
-        "rest.position = Vector2(1600.0, 540.0)",
+        "const CRYPT_FLOOR_Y := 790.0",
+        "const CRYPT_LEFT := 860.0",
+        "const CRYPT_WIDTH := 200.0",
+        'region.get_node_or_null("A2_FloodedCryptFloor") == null',
+        '_add_floor_segment(region, "A2_FloodedCryptFloor", CRYPT_LEFT, CRYPT_WIDTH, CRYPT_FLOOR_Y)',
+        'String(child.name).begins_with("GreyboxGround")',
+        "rest.position = Vector2(1600.0, float(region.get(\"floor_y\")))",
         "bell.position = Vector2(735.0, 322.0)",
+        "shared canopy, C03/C04 and ravine ledges preserved",
     ):
         require(a2_terrain, contract, "A2 authored terrain contract", errors)
+    require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 790.0, 200.0, 180.0), false)', "A2 crypt floor rendering", errors)
+    require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(2660.0, floor_y, map_width - 2660.0, 180.0), false)', "A2 eastern ravine rendering", errors)
+    require(region_script, '_add_platform(Rect2(3335, 490, 145, 18))', "A2 C03 remote canopy landing", errors)
+    require(region_script, '_add_platform(Rect2(1740, 510, 125, 18))', "A2 C04 highroad landing", errors)
 
     # Optional boss encounters are not C-edges, but still require a traceable entry, victory, death-reset, and return contract.
     # 可选 Boss 遭遇不计入跨区 C 边，但入口、胜利、死亡重置和回程必须可追踪。
