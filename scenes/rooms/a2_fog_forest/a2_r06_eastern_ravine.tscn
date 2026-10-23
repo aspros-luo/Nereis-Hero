@@ -1,0 +1,271 @@
+[gd_scene load_steps=25 format=3]
+
+; 东侧沟壑、上下双路线与C03远端落点
+; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
+
+[sub_resource type="RectangleShape2D" id="Rect_001"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_002"]
+size = Vector2(110, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_003"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_004"]
+size = Vector2(120, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_005"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_006"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_007"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_008"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_009"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_010"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_011"]
+size = Vector2(130, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_012"]
+size = Vector2(145, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_013"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_014"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_015"]
+size = Vector2(120, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_016"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_017"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_018"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_019"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_020"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_021"]
+size = Vector2(240, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_022"]
+size = Vector2(70, 12)
+
+[sub_resource type="RectangleShape2D" id="Rect_023"]
+size = Vector2(70, 12)
+
+[sub_resource type="RectangleShape2D" id="Rect_024"]
+size = Vector2(80, 12)
+
+[node name="A2R06EasternRavine" type="Node2D"]
+
+[node name="Platform_042" type="StaticBody2D" parent="."]
+position = Vector2(2250, 490)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_042"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_001")
+one_way_collision = true
+
+[node name="Platform_043" type="StaticBody2D" parent="."]
+position = Vector2(2355, 425)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_043"]
+position = Vector2(55, 9)
+shape = SubResource("Rect_002")
+one_way_collision = true
+
+[node name="Platform_044" type="StaticBody2D" parent="."]
+position = Vector2(2465, 350)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_044"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_003")
+one_way_collision = true
+
+[node name="Platform_045" type="StaticBody2D" parent="."]
+position = Vector2(2580, 300)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_045"]
+position = Vector2(60, 9)
+shape = SubResource("Rect_004")
+one_way_collision = true
+
+[node name="Platform_046" type="StaticBody2D" parent="."]
+position = Vector2(2695, 345)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_046"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_005")
+one_way_collision = true
+
+[node name="Platform_047" type="StaticBody2D" parent="."]
+position = Vector2(2795, 410)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_047"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_006")
+one_way_collision = true
+
+[node name="Platform_048" type="StaticBody2D" parent="."]
+position = Vector2(2895, 465)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_048"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_007")
+one_way_collision = true
+
+[node name="Platform_049" type="StaticBody2D" parent="."]
+position = Vector2(2985, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_049"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_008")
+one_way_collision = true
+
+[node name="Platform_050" type="StaticBody2D" parent="."]
+position = Vector2(3075, 335)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_050"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_009")
+one_way_collision = true
+
+[node name="Platform_051" type="StaticBody2D" parent="."]
+position = Vector2(3165, 390)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_051"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_010")
+one_way_collision = true
+
+[node name="Platform_052" type="StaticBody2D" parent="."]
+position = Vector2(3220, 510)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_052"]
+position = Vector2(65, 9)
+shape = SubResource("Rect_011")
+one_way_collision = true
+
+[node name="Platform_053" type="StaticBody2D" parent="."]
+position = Vector2(3335, 490)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_053"]
+position = Vector2(72.5, 9)
+shape = SubResource("Rect_012")
+one_way_collision = true
+
+[node name="Platform_054" type="StaticBody2D" parent="."]
+position = Vector2(2310, 250)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_054"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_013")
+one_way_collision = true
+
+[node name="Platform_055" type="StaticBody2D" parent="."]
+position = Vector2(2435, 205)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_055"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_014")
+one_way_collision = true
+
+[node name="Platform_056" type="StaticBody2D" parent="."]
+position = Vector2(2560, 165)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_056"]
+position = Vector2(60, 9)
+shape = SubResource("Rect_015")
+one_way_collision = true
+
+[node name="Platform_057" type="StaticBody2D" parent="."]
+position = Vector2(2685, 205)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_057"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_016")
+one_way_collision = true
+
+[node name="Platform_058" type="StaticBody2D" parent="."]
+position = Vector2(2805, 260)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_058"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_017")
+one_way_collision = true
+
+[node name="Platform_059" type="StaticBody2D" parent="."]
+position = Vector2(2925, 305)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_059"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_018")
+one_way_collision = true
+
+[node name="Platform_060" type="StaticBody2D" parent="."]
+position = Vector2(3045, 270)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_060"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_019")
+one_way_collision = true
+
+[node name="Platform_061" type="StaticBody2D" parent="."]
+position = Vector2(3155, 315)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_061"]
+position = Vector2(57.5, 9)
+shape = SubResource("Rect_020")
+one_way_collision = true
+
+[node name="RavineLowerShelf" type="StaticBody2D" parent="."]
+position = Vector2(2420, 775)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RavineLowerShelf"]
+position = Vector2(120, 9)
+shape = SubResource("Rect_021")
+one_way_collision = true
+
+[node name="RavineStepWest" type="StaticBody2D" parent="."]
+position = Vector2(2400, 728)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RavineStepWest"]
+position = Vector2(35, 6)
+shape = SubResource("Rect_022")
+one_way_collision = true
+
+[node name="RavineStepEast" type="StaticBody2D" parent="."]
+position = Vector2(2590, 695)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RavineStepEast"]
+position = Vector2(35, 6)
+shape = SubResource("Rect_023")
+one_way_collision = true
+
+[node name="RavineUpperStep" type="StaticBody2D" parent="."]
+position = Vector2(2490, 655)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RavineUpperStep"]
+position = Vector2(40, 6)
+shape = SubResource("Rect_024")
+one_way_collision = true
+
