@@ -1,0 +1,163 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/effects/village_fireflies.gd" id="1"]
+
+[node name="VillageFireflies" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Firefly01" type="Polygon2D" parent="."]
+position = Vector2(125, 270)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly02" type="Polygon2D" parent="."]
+position = Vector2(215, 390)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly03" type="Polygon2D" parent="."]
+position = Vector2(310, 315)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly04" type="Polygon2D" parent="."]
+position = Vector2(405, 470)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly05" type="Polygon2D" parent="."]
+position = Vector2(495, 245)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly06" type="Polygon2D" parent="."]
+position = Vector2(590, 355)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly07" type="Polygon2D" parent="."]
+position = Vector2(675, 495)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly08" type="Polygon2D" parent="."]
+position = Vector2(765, 290)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly09" type="Polygon2D" parent="."]
+position = Vector2(855, 430)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly10" type="Polygon2D" parent="."]
+position = Vector2(945, 260)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly11" type="Polygon2D" parent="."]
+position = Vector2(1030, 350)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly12" type="Polygon2D" parent="."]
+position = Vector2(1115, 500)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly13" type="Polygon2D" parent="."]
+position = Vector2(1205, 285)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly14" type="Polygon2D" parent="."]
+position = Vector2(1295, 410)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly15" type="Polygon2D" parent="."]
+position = Vector2(1385, 245)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly16" type="Polygon2D" parent="."]
+position = Vector2(1475, 485)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly17" type="Polygon2D" parent="."]
+position = Vector2(1560, 335)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly18" type="Polygon2D" parent="."]
+position = Vector2(1650, 450)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly19" type="Polygon2D" parent="."]
+position = Vector2(1740, 265)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly20" type="Polygon2D" parent="."]
+position = Vector2(1830, 390)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly21" type="Polygon2D" parent="."]
+position = Vector2(1920, 510)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly22" type="Polygon2D" parent="."]
+position = Vector2(2010, 300)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly23" type="Polygon2D" parent="."]
+position = Vector2(2100, 430)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly24" type="Polygon2D" parent="."]
+position = Vector2(2200, 245)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly25" type="Polygon2D" parent="."]
+position = Vector2(2310, 360)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
+[node name="Firefly26" type="Polygon2D" parent="."]
+position = Vector2(2450, 485)
+polygon = PackedVector2Array(2.00, 0.00, 1.62, 1.18, 0.62, 1.90, -0.62, 1.90, -1.62, 1.18, -2.00, 0.00, -1.62, -1.18, -0.62, -1.90, 0.62, -1.90, 1.62, -1.18)
+color = Color(0.78, 0.70, 0.55, 0.22)
+z_index = -10
+
