@@ -517,4 +517,4 @@ position = Vector2(1680, 285)
 position = Vector2(930, 0)
 
 [node name="DropToR04" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(1110, 850)
+position = Vector2(1320, 850)
