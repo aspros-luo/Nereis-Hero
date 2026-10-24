@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 ; Canva terrain alignment pass: Canva R02 spans roughly x=0..1760 and calls out the separated bridge, high connection and lower return ledge; expand the authored horizontal spacing to that scale.
 
 ; 树冠层、断裂树桥与共鸣桥路线
@@ -30,6 +30,9 @@ size = Vector2(115, 18)
 
 [sub_resource type="RectangleShape2D" id="BridgeStepShape_002"]
 size = Vector2(110, 18)
+
+[sub_resource type="RectangleShape2D" id="GroundCanopyShape"]
+size = Vector2(1620, 18)
 
 [node name="A2R02CanopyBridge" type="Node2D"]
 
@@ -267,3 +270,19 @@ default_color = Color(0.643137, 0.831373, 0.603922, 1)
 points = PackedVector2Array(2, 12, 108, 12)
 width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
+
+[node name="Ground_CanopyFloor" type="StaticBody2D" parent="."]
+position = Vector2(0, 860)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_CanopyFloor"]
+position = Vector2(810, 9)
+shape = SubResource("GroundCanopyShape")
+
+[node name="TerrainMass" type="Polygon2D" parent="Ground_CanopyFloor"]
+polygon = PackedVector2Array(0, 0, 1620, 0, 1620, 48, 0, 48)
+color = Color(0.105882, 0.094118, 0.12549, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Ground_CanopyFloor"]
+points = PackedVector2Array(0, 0, 1620, 0)
+width = 3.0
+default_color = Color(0.392157, 0.419608, 0.376471, 1)
