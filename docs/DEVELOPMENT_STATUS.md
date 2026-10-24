@@ -2,6 +2,12 @@
 
 Date: 2026-10-24
 
+## Current A2 terrain design continuation — 2026-10-24
+
+- Added version-controlled SVG engineering blueprints for R04 Crypt Landing, R05 Old Pilgrim Highroad, and R06 Eastern Ravine under docs/maps/. They use existing room-local platform positions as a starting coordinate reference and overlay intended route links.
+- These drawings are design drafts only: dashed arrows are planned routes, not proof that exits/transitions exist or are playable. Godot scene geometry and room runtime still need to be reconciled with them.
+- Next step: expand/revise R04-R06 geometry where needed, author explicit editor-visible entry/exit markers, then implement and validate the shared room runtime. No A1 route switch has been made.
+
 ## Current A2 restart status — 2026-10-24
 
 - Current design authority: docs/maps/A2_DESIGN_BASELINE_CN.md.
