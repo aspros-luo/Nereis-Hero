@@ -148,6 +148,12 @@ def audit_room(room_id: str, relative_path: str, root_name: str, expected_platfo
     return len(platform_bodies), len(bodies), len(reachable)
 
 
+def require(source: str, expected: str, label: str, errors: list[str]) -> None:
+    """Record a missing source contract fragment without aborting the full audit."""
+    if expected not in source:
+        errors.append(f"{label}: missing expected source fragment {expected!r}")
+
+
 def main() -> int:
     errors: list[str] = []
     parent = PARENT_SCENE.read_text(encoding="utf-8") if PARENT_SCENE.is_file() else ""
