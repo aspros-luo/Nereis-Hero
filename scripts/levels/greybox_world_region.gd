@@ -951,13 +951,24 @@ func _add_ground_segment(segment_name: String, start_x: float, segment_width: fl
 func _create_boundaries() -> void:
 	if assembly_child_mode:
 		return
+	var wall_height := 1100.0
+	var wall_center_y := 500.0
+	if region_id == "A2" and not room_id.is_empty():
+		# Every independent A2 room needs side walls spanning its own camera/map height.
+		# 六个独立 A2 房间的侧墙必须覆盖各自真实的房间高度，不能共用固定 1100px 墙体。
+		wall_height = room_height + 200.0
+		wall_center_y = room_height * 0.5
+	elif region_id == "A5" and not room_id.is_empty():
+		# Preserve the established assembled-A5 wall extent calculation.
+		wall_height = maxf(1100.0, room_height + 400.0)
+		wall_center_y = (room_height + 200.0) * 0.5
 	for x in [-20.0, map_width + 20.0]:
 		var wall := StaticBody2D.new()
 		var shape := CollisionShape2D.new()
 		var rectangle := RectangleShape2D.new()
-		rectangle.size = Vector2(40.0, maxf(1100.0, room_height + 400.0 if region_id == "A5" and not room_id.is_empty() else 1100.0))
+		rectangle.size = Vector2(40.0, wall_height)
 		shape.shape = rectangle
-		shape.position = Vector2(x, (room_height + 200.0) * 0.5 if region_id == "A5" and not room_id.is_empty() else 500.0)
+		shape.position = Vector2(x, wall_center_y)
 		wall.add_child(shape)
 		add_child(wall)
 
