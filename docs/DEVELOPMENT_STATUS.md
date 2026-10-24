@@ -1,6 +1,16 @@
 # Nereis Hero — Development Status
 
-Date: 2026-10-08
+Date: 2026-10-24
+
+## Current A2 restart status — 2026-10-24
+
+- Current design authority: docs/maps/A2_DESIGN_BASELINE_CN.md.
+- Six A2 terrain scenes exist, but scenes/ash_forest.tscn still assembles them as one continuous map; A1 North Gate still routes to ash_forest.tscn.
+- Geometry audit found the existing local scene coordinates do not yet match the coordinate extents recorded in the available Canva R01–R03 designs. Do not switch A1 to a terrain-only room scene before the shared room runtime and connection contract exist.
+- Canva region overview, R01, R02, and a candidate R03 design are located. Creating separate R04–R06 Canva designs was blocked by quota_exceeded; no retry was made.
+- Documentation governance and first-round cleanup are recorded in docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md and docs/REPOSITORY_CLEANUP_AUDIT_2026-10-24_CN.md.
+- A new structural validator, tools/validate_a2_room_scene_geometry.py, replaces the obsolete validator that parsed the retired procedural A2 platform branch. It has not been run locally; Godot runtime acceptance remains pending.
+- Next A2 milestone: reconcile six room-local geometry and explicit entry/exit positions, then implement the shared room runtime while preserving C03/C04/H02, save/resume, checkpoints, and death recovery.
 
 ## Current direction
 
