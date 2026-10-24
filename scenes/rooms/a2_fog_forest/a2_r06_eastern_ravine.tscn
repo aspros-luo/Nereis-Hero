@@ -85,7 +85,10 @@ size = Vector2(110, 18)
 size = Vector2(110, 18)
 
 [sub_resource type="RectangleShape2D" id="GroundEastShape"]
-size = Vector2(1280, 18)
+size = Vector2(200, 18)
+
+[sub_resource type="RectangleShape2D" id="GroundEastFarShape"]
+size = Vector2(830, 18)
 
 [node name="A2R06EasternRavine" type="Node2D"]
 
@@ -798,15 +801,31 @@ default_color = Color(0.105882, 0.090196, 0.121569, 1)
 position = Vector2(0, 485)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_East"]
-position = Vector2(640, 9)
+position = Vector2(100, 9)
 shape = SubResource("GroundEastShape")
 
 [node name="TerrainMass" type="Polygon2D" parent="Ground_East"]
-polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 48, 0, 48)
+polygon = PackedVector2Array(0, 0, 200, 0, 200, 48, 0, 48)
 color = Color(0.105882, 0.094118, 0.12549, 1)
 
 [node name="TerrainTopEdge" type="Line2D" parent="Ground_East"]
-points = PackedVector2Array(0, 0, 1280, 0)
+points = PackedVector2Array(0, 0, 200, 0)
+width = 3.0
+default_color = Color(0.392157, 0.419608, 0.376471, 1)
+
+[node name="Ground_EastFar" type="StaticBody2D" parent="."]
+position = Vector2(450, 485)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_EastFar"]
+position = Vector2(415, 9)
+shape = SubResource("GroundEastFarShape")
+
+[node name="TerrainMass" type="Polygon2D" parent="Ground_EastFar"]
+polygon = PackedVector2Array(0, 0, 830, 0, 830, 48, 0, 48)
+color = Color(0.105882, 0.094118, 0.12549, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Ground_EastFar"]
+points = PackedVector2Array(0, 0, 830, 0)
 width = 3.0
 default_color = Color(0.392157, 0.419608, 0.376471, 1)
 
