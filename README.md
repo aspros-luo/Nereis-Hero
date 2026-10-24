@@ -26,6 +26,10 @@ Development working charter (Chinese / English):
 
 `docs/DEVELOPMENT_WORKING_CHARTER_CN_EN.md`
 
+Project documentation governance and task-start contract:
+
+`docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md`
+
 ## A0 prologue refinement
 
 - `docs/A0_PROLOGUE_REFINEMENT_V1_CN.md` — current A0 experience goals, first-round changes, unresolved work, and local acceptance checklist.
