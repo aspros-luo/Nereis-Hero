@@ -43,7 +43,7 @@ def audit_room(room_id: str, relative_path: str, root_name: str, expected: int, 
             shapes[shape_id] = vector(re.search(r"size\s*=\s*(Vector2\([^\n]+\))", body).group(1), f"{room_id} shape {shape_id}")
         except (AttributeError, ValueError) as exc:
             errors.append(f"{room_id}: invalid rectangle resource {shape_id}: {exc}")
-    bodies = re.findall(r'\[node name="([^"]+)" type="StaticBody2D" parent="\."\](.*?)(?=\n\[node |\Z)', source, re.S)
+    bodies = re.findall(r'\[node name="([^"]+)" type="StaticBody2D" parent="\."\](.*?)(?=\n\[node name="[^"]+" type="StaticBody2D" parent="\."\]|\Z)', source, re.S)
     if len(bodies) != expected:
         errors.append(f"{room_id}: StaticBody2D count={len(bodies)}, expected={expected}")
     min_x = min_y = float("inf")
