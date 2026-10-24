@@ -1,5 +1,8 @@
 # A2 本地实机验收清单
 
+> **旧架构验收说明（2026-10-24）：** 本文件此前将 ash_forest.tscn 连续大地图作为预期方案。该架构决定已废止；请以 docs/maps/A2_DESIGN_BASELINE_CN.md 为当前目标。以下平台计数和观察项只能作为历史实现记录，不能作为独立房间转场已完成的证据。
+
+
 分支：`feature/story-map-progression`
 
 ## 本轮改动
