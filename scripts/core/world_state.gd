@@ -969,6 +969,7 @@ func reset() -> void:
 	hero_humanity = 100
 	first_memory_unlocked = false
 	checkpoint_position = Vector2(320, 520)
+	checkpoint_room_id = ""
 	checkpoint_active = false
 	boss_defeated = false
 	boss_gate_open = false
