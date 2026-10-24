@@ -34,6 +34,18 @@ Current A2 terrain design baseline:
 
 `docs/maps/A2_DESIGN_BASELINE_CN.md`
 
+A2 scene geometry audit:
+
+`docs/maps/A2_SCENE_GEOMETRY_AUDIT_2026-10-24_CN.md`
+
+Repository cleanup audit:
+
+`docs/REPOSITORY_CLEANUP_AUDIT_2026-10-24_CN.md`
+
+A2 restart development log:
+
+`docs/DEVELOPMENT_LOG/A2_RESTART_AND_CLEANUP_2026-10-24_CN.md`
+
 Project documentation governance and task-start contract:
 
 `docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md`
