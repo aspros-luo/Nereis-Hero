@@ -3015,7 +3015,7 @@ func _spawn_region_exits() -> void:
 			# H02 是返回 A2 的可选探索支路；不额外设置通往 A5 的第二出口。
 			_spawn_exit_door(
 				72.0, "E  返回旧朝圣路", "ash_forest",
-				"res://scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn", "a2_r04_h02_return"
+				"res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn", "a2_r01_h02_return"
 			)
 
 		"H03":
