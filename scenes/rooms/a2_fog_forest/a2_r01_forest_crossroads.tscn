@@ -387,7 +387,7 @@ width = 3.0
 default_color = Color(0.392157, 0.419608, 0.376471, 1)
 
 [node name="ApproachStep_01" type="StaticBody2D" parent="."]
-position = Vector2(600, 550)
+position = Vector2(600, 560)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_01"]
 position = Vector2(65, 9)
@@ -413,7 +413,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="ApproachStep_02" type="StaticBody2D" parent="."]
-position = Vector2(450, 500)
+position = Vector2(450, 510)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_02"]
 position = Vector2(65, 9)
@@ -439,7 +439,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="ApproachStep_03" type="StaticBody2D" parent="."]
-position = Vector2(300, 450)
+position = Vector2(300, 460)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_03"]
 position = Vector2(65, 9)
@@ -465,7 +465,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="ApproachStep_04" type="StaticBody2D" parent="."]
-position = Vector2(150, 400)
+position = Vector2(150, 410)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_04"]
 position = Vector2(65, 9)
