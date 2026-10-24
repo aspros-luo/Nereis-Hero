@@ -383,6 +383,34 @@ points = PackedVector2Array(2, 10, 88, 10)
 width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
+; The mid-high step bridges the 105px climb from the lower gallery to Platform_019.
+; 中高位踏步补上低层平台到 Platform_019 的 105px 高差，拆成两次约 50px 上升。
+[node name="BellReturnStep_MidHigh" type="StaticBody2D" parent="."]
+position = Vector2(650, 255)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BellReturnStep_MidHigh"]
+position = Vector2(45, 8)
+shape = SubResource("Rect_003")
+one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="BellReturnStep_MidHigh"]
+polygon = PackedVector2Array(0, 10, 90, 10, 90, 16, 0, 16)
+color = Color(0.129412, 0.121569, 0.145098, 1)
+
+[node name="StoneUpperFace" type="Polygon2D" parent="BellReturnStep_MidHigh"]
+polygon = PackedVector2Array(0, 3, 90, 3, 90, 10, 0, 10)
+color = Color(0.223529, 0.203922, 0.239216, 1)
+
+[node name="StoneTopEdge" type="Line2D" parent="BellReturnStep_MidHigh"]
+points = PackedVector2Array(0, 0, 90, 0)
+width = 2.0
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
+
+[node name="StoneSeam" type="Line2D" parent="BellReturnStep_MidHigh"]
+points = PackedVector2Array(2, 10, 88, 10)
+width = 2.0
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
+
 [node name="Ground_TombWest" type="StaticBody2D" parent="."]
 position = Vector2(0, 560)
 
