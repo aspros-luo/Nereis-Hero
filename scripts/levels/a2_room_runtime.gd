@@ -20,6 +20,7 @@ func _ready() -> void:
 		return
 
 	WorldState.prepare_scene_runtime()
+	WorldState.load_room_state()
 	var spawn_side := WorldState.pending_region_spawn_side
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.current_a2_room_scene_path = _scene_path_for_room(room_id)
