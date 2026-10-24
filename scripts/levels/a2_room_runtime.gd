@@ -81,14 +81,16 @@ func _spawn_position_for_side(side: String) -> Vector2:
 					marker_name = "EntryTombReturn"
 				"a2_r01_h02_return":
 					marker_name = "EntryH02Return"
-				_: marker_name = "EntryWest"
+				_:
+					marker_name = "EntryWest"
 		"A2-R02":
 			match side:
 				"a2_r02_from_r01":
 					marker_name = "EntryFromR01"
 				"a2_r02_high_return":
 					marker_name = "EntryHighReturn"
-				_: marker_name = "EntryWest"
+				_:
+					marker_name = "EntryWest"
 		"A2-R03":
 			match side:
 				"a2_r03_from_r01":
@@ -97,7 +99,8 @@ func _spawn_position_for_side(side: String) -> Vector2:
 					marker_name = "EntryCryptReturn"
 				"a2_r03_highroad_shortcut":
 					marker_name = "EntryHighroadShortcut"
-				_: marker_name = "EntryWest"
+				_:
+					marker_name = "EntryWest"
 		"A2-R04":
 			match side:
 				"a2_r04_tomb_drop":
@@ -108,7 +111,8 @@ func _spawn_position_for_side(side: String) -> Vector2:
 					marker_name = "EntryH02Return"
 				"a2_r04_ravine_return":
 					marker_name = "EntryRavineReturn"
-				_: marker_name = "EntryDefault"
+				_:
+					marker_name = "EntryDefault"
 		"A2-R05":
 			match side:
 				"a2_r05_from_r02":
@@ -119,7 +123,8 @@ func _spawn_position_for_side(side: String) -> Vector2:
 					marker_name = "EntryRavineReturn"
 				"a2_r05_c04_return":
 					marker_name = "EntryC04Return"
-				_: marker_name = "EntryDefault"
+				_:
+					marker_name = "EntryDefault"
 		"A2-R06":
 			match side:
 				"a2_r06_high_entry":
@@ -130,7 +135,8 @@ func _spawn_position_for_side(side: String) -> Vector2:
 					marker_name = "EntryC03Return"
 				"a2_r06_ravine_return":
 					marker_name = "EntryRavineReturn"
-				_: marker_name = "EntryDefault"
+				_:
+					marker_name = "EntryDefault"
 	return _room_marker_position(marker_name, Vector2(220.0, floor_y))
 
 
