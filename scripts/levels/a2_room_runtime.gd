@@ -75,41 +75,61 @@ func _spawn_position_for_side(side: String) -> Vector2:
 	match room_id:
 		"A2-R01":
 			match side:
-				"a2_r01_canopy_return": marker_name = "EntryCanopyReturn"
-				"a2_r01_tomb_return": marker_name = "EntryTombReturn"
-				"a2_r01_h02_return": marker_name = "EntryH02Return"
+				"a2_r01_canopy_return":
+					marker_name = "EntryCanopyReturn"
+				"a2_r01_tomb_return":
+					marker_name = "EntryTombReturn"
+				"a2_r01_h02_return":
+					marker_name = "EntryH02Return"
 				_: marker_name = "EntryWest"
 		"A2-R02":
 			match side:
-				"a2_r02_from_r01": marker_name = "EntryFromR01"
-				"a2_r02_high_return": marker_name = "EntryHighReturn"
+				"a2_r02_from_r01":
+					marker_name = "EntryFromR01"
+				"a2_r02_high_return":
+					marker_name = "EntryHighReturn"
 				_: marker_name = "EntryWest"
 		"A2-R03":
 			match side:
-				"a2_r03_from_r01": marker_name = "EntryFromR01"
-				"a2_r03_crypt_return": marker_name = "EntryCryptReturn"
-				"a2_r03_highroad_shortcut": marker_name = "EntryHighroadShortcut"
+				"a2_r03_from_r01":
+					marker_name = "EntryFromR01"
+				"a2_r03_crypt_return":
+					marker_name = "EntryCryptReturn"
+				"a2_r03_highroad_shortcut":
+					marker_name = "EntryHighroadShortcut"
 				_: marker_name = "EntryWest"
 		"A2-R04":
 			match side:
-				"a2_r04_tomb_drop": marker_name = "EntryTombDrop"
-				"a2_r04_tomb_drop_r01": marker_name = "EntryTombDropR01"
-				"a2_r04_h02_return": marker_name = "EntryH02Return"
-				"a2_r04_ravine_return": marker_name = "EntryRavineReturn"
+				"a2_r04_tomb_drop":
+					marker_name = "EntryTombDrop"
+				"a2_r04_tomb_drop_r01":
+					marker_name = "EntryTombDropR01"
+				"a2_r04_h02_return":
+					marker_name = "EntryH02Return"
+				"a2_r04_ravine_return":
+					marker_name = "EntryRavineReturn"
 				_: marker_name = "EntryDefault"
 		"A2-R05":
 			match side:
-				"a2_r05_from_r02": marker_name = "EntryFromR02"
-				"a2_r05_upper_shortcut": marker_name = "EntryUpperShortcut"
-				"a2_r05_ravine_return": marker_name = "EntryRavineReturn"
-				"a2_r05_c04_return": marker_name = "EntryC04Return"
+				"a2_r05_from_r02":
+					marker_name = "EntryFromR02"
+				"a2_r05_upper_shortcut":
+					marker_name = "EntryUpperShortcut"
+				"a2_r05_ravine_return":
+					marker_name = "EntryRavineReturn"
+				"a2_r05_c04_return":
+					marker_name = "EntryC04Return"
 				_: marker_name = "EntryDefault"
 		"A2-R06":
 			match side:
-				"a2_r06_high_entry": marker_name = "EntryHigh"
-				"a2_r06_low_entry": marker_name = "EntryLow"
-				"a2_r06_c03_return": marker_name = "EntryC03Return"
-				"a2_r06_ravine_return": marker_name = "EntryRavineReturn"
+				"a2_r06_high_entry":
+					marker_name = "EntryHigh"
+				"a2_r06_low_entry":
+					marker_name = "EntryLow"
+				"a2_r06_c03_return":
+					marker_name = "EntryC03Return"
+				"a2_r06_ravine_return":
+					marker_name = "EntryRavineReturn"
 				_: marker_name = "EntryDefault"
 	return _room_marker_position(marker_name, Vector2(220.0, floor_y))
 
