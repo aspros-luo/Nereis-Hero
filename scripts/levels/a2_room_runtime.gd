@@ -71,35 +71,56 @@ func _spawn_x_for_side(side: String) -> float:
 			return 220.0
 		"A2-R02":
 			match side:
-				"a2_r02_from_r01": return 350.0
-				"a2_r02_high_return": return 1520.0
-				_: return 50.0
+				"a2_r02_from_r01":
+					return 350.0
+				"a2_r02_high_return":
+					return 1520.0
+				_:
+					return 50.0
 		"A2-R03":
 			match side:
-				"a2_r03_from_r01": return 250.0
-				"a2_r03_crypt_return": return 320.0
-				"a2_r03_highroad_shortcut": return 800.0
-				_: return 100.0
+				"a2_r03_from_r01":
+					return 250.0
+				"a2_r03_crypt_return":
+					return 320.0
+				"a2_r03_highroad_shortcut":
+					return 800.0
+				_:
+					return 100.0
 		"A2-R04":
 			match side:
-				"a2_r04_tomb_drop": return 200.0
-				"a2_r04_tomb_drop_r01": return 400.0
-				"a2_r04_h02_return": return 350.0
-				"a2_r04_ravine_return": return 400.0
-				_: return 200.0
+				"a2_r04_tomb_drop":
+					return 200.0
+				"a2_r04_tomb_drop_r01":
+					return 400.0
+				"a2_r04_h02_return":
+					return 350.0
+				"a2_r04_ravine_return":
+					return 400.0
+				_:
+					return 200.0
 		"A2-R05":
 			match side:
-				"a2_r05_from_r02", "a2_r05_upper_shortcut": return 200.0
-				"a2_r05_ravine_return": return 650.0
-				"a2_r05_c04_return": return 560.0
-				_: return 50.0
+				"a2_r05_from_r02", "a2_r05_upper_shortcut":
+					return 200.0
+				"a2_r05_ravine_return":
+					return 650.0
+				"a2_r05_c04_return":
+					return 560.0
+				_:
+					return 50.0
 		"A2-R06":
 			match side:
-				"a2_r06_high_entry": return 160.0
-				"a2_r06_low_entry": return 280.0
-				"a2_r06_c03_return": return 1010.0
-				"a2_r06_ravine_return": return 280.0
-				_: return 50.0
+				"a2_r06_high_entry":
+					return 160.0
+				"a2_r06_low_entry":
+					return 280.0
+				"a2_r06_c03_return":
+					return 1010.0
+				"a2_r06_ravine_return":
+					return 280.0
+				_:
+					return 50.0
 	return 220.0
 
 
@@ -113,30 +134,46 @@ func _spawn_y_for_side(side: String) -> float:
 			return 650.0
 		"A2-R02":
 			match side:
-				"a2_r02_from_r01": return 0.0
-				"a2_r02_high_return": return 260.0
-				_: return 40.0
+				"a2_r02_from_r01":
+					return 0.0
+				"a2_r02_high_return":
+					return 260.0
+				_:
+					return 40.0
 		"A2-R03":
 			match side:
-				"a2_r03_from_r01": return 120.0
-				"a2_r03_crypt_return": return 310.0
-				"a2_r03_highroad_shortcut": return 106.0
-				_: return 85.0
+				"a2_r03_from_r01":
+					return 120.0
+				"a2_r03_crypt_return":
+					return 310.0
+				"a2_r03_highroad_shortcut":
+					return 106.0
+				_:
+					return 85.0
 		"A2-R04":
 			return 380.0
 		"A2-R05":
 			match side:
-				"a2_r05_from_r02", "a2_r05_upper_shortcut": return 40.0
-				"a2_r05_ravine_return": return 170.0
-				"a2_r05_c04_return": return 105.0
-				_: return 95.0
+				"a2_r05_from_r02", "a2_r05_upper_shortcut":
+					return 40.0
+				"a2_r05_ravine_return":
+					return 170.0
+				"a2_r05_c04_return":
+					return 105.0
+				_:
+					return 95.0
 		"A2-R06":
 			match side:
-				"a2_r06_high_entry": return 260.0
-				"a2_r06_low_entry": return 490.0
-				"a2_r06_c03_return": return 345.0
-				"a2_r06_ravine_return": return 610.0
-				_: return 325.0
+				"a2_r06_high_entry":
+					return 260.0
+				"a2_r06_low_entry":
+					return 490.0
+				"a2_r06_c03_return":
+					return 345.0
+				"a2_r06_ravine_return":
+					return 610.0
+				_:
+					return 325.0
 	return floor_y
 
 
