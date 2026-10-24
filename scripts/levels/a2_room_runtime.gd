@@ -320,7 +320,7 @@ func _on_drop_transition_body_entered(body: Node2D, target_scene: String, target
 func _on_hero_defeated() -> void:
 	if respawning:
 		return
-	if WorldState.checkpoint_room_id.begins_with("A2-") and WorldState.checkpoint_room_id != room_id:
+	if ROOM_SCENE_PATHS.has(WorldState.checkpoint_room_id) and WorldState.checkpoint_room_id != room_id:
 		respawning = true
 		WorldState.input_locked = true
 		INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
