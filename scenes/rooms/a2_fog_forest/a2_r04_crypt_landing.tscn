@@ -25,6 +25,7 @@ size = Vector2(75, 12)
 size = Vector2(70, 12)
 
 [node name="A2R04FloodedCrypt" type="Node2D"]
+scale = Vector2(2.2, 1.35)
 
 [node name="CryptLanding" type="StaticBody2D" parent="."]
 position = Vector2(10, 380)
