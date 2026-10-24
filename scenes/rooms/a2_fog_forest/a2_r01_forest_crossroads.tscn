@@ -489,3 +489,29 @@ default_color = Color(0.643137, 0.831373, 0.603922, 1)
 points = PackedVector2Array(2, 12, 128, 12)
 width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
+
+; Editor-visible anchors used by the A2 room runtime. Adjust these alongside terrain.
+[node name="RoomMarkers" type="Node2D" parent="."]
+[node name="EntryWest" type="Marker2D" parent="RoomMarkers"]
+position = Vector2(220, 650)
+
+[node name="EntryCanopyReturn" type="Marker2D" parent="RoomMarkers"]
+position = Vector2(700, 560)
+
+[node name="EntryTombReturn" type="Marker2D" parent="RoomMarkers"]
+position = Vector2(700, 560)
+
+[node name="EntryH02Return" type="Marker2D" parent="RoomMarkers"]
+position = Vector2(650, 650)
+
+[node name="ExitVillage" type="Marker2D" parent="RoomMarkers"]
+position = Vector2(72, 650)
+
+[node name="ExitCanopy" type="Marker2D" parent="RoomMarkers"]
+position = Vector2(1680, 285)
+
+[node name="ExitBellTomb" type="Marker2D" parent="RoomMarkers"]
+position = Vector2(930, 0)
+
+[node name="DropToR04" type="Marker2D" parent="RoomMarkers"]
+position = Vector2(1110, 850)
