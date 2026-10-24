@@ -31,6 +31,12 @@ const A2_EXPECTED_PLATFORM_COUNTS: Dictionary = {
 	"A2R06EasternRavine": 24,
 }
 
+const A2_EXPECTED_GROUND_NODES: Dictionary = {
+	"A2R01ForestCrossroads": "Ground_West",
+	"A2R05OldPilgrimHighroad": "Ground_Middle",
+	"A2R06EasternRavine": "Ground_East",
+}
+
 
 func _ready() -> void:
 	call_deferred("_apply_authored_terrain")
@@ -73,8 +79,21 @@ func _validate_authored_rooms(region: Node) -> void:
 			continue
 		room_count += 1
 		var platform_count := 0
+		var expected_ground_name := str(A2_EXPECTED_GROUND_NODES.get(room_name, ""))
+		if not expected_ground_name.is_empty():
+			var ground := room.get_node_or_null(NodePath(expected_ground_name)) as StaticBody2D
+			if ground == null or ground.get_node_or_null("CollisionShape2D") == null:
+				push_error("[NEREIS][A2][VERIFY][FAIL] room=%s missing authored ground collision=%s" % [room_name, expected_ground_name])
+				valid = false
+			else:
+				var ground_shape := ground.get_node("CollisionShape2D") as CollisionShape2D
+				if not (ground_shape.shape is RectangleShape2D) or (ground_shape.shape as RectangleShape2D).size.x <= 0.0:
+					push_error("[NEREIS][A2][VERIFY][FAIL] room=%s invalid authored ground shape=%s" % [room_name, expected_ground_name])
+					valid = false
 		for body in room.get_children():
 			if not (body is StaticBody2D):
+				continue
+			if str(body.name).begins_with("Ground_"):
 				continue
 			platform_count += 1
 			for shape_node in body.get_children():
