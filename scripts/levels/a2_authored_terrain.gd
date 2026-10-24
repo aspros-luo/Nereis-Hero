@@ -103,11 +103,11 @@ func _validate_authored_rooms(region: Node) -> void:
 		push_error("[NEREIS][A2][VERIFY][FAIL] map width %.1f clips the eastern route; expected at least 3480" % map_width)
 		valid = false
 	if valid:
-		print("[NEREIS][A2][VERIFY] PASS rooms=%d/%d platforms=%d/71 right_edge=%.1f map_width=%.1f ground_spans=3" % [
+		print("[NEREIS][A2][VERIFY] PASS rooms=%d/%d platforms=%d/74 right_edge=%.1f map_width=%.1f ground_spans=3" % [
 			room_count, A2_EXPECTED_PLATFORM_COUNTS.size(), total_platforms, max_platform_right, map_width
 		])
 	else:
-		print("[NEREIS][A2][VERIFY] FAIL rooms=%d/%d platforms=%d/71 right_edge=%.1f map_width=%.1f" % [
+		print("[NEREIS][A2][VERIFY] FAIL rooms=%d/%d platforms=%d/74 right_edge=%.1f map_width=%.1f" % [
 			room_count, A2_EXPECTED_PLATFORM_COUNTS.size(), total_platforms, max_platform_right, map_width
 		])
 
