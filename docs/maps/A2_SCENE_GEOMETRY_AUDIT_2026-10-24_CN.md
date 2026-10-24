@@ -63,7 +63,7 @@ H02 门现由 R04 runtime 根据 R04 的 H02Gate Marker2D `(90,380)` 生成，�
 
 ## 9. 跨区返回与静态审计器续修（2026-10-24）
 
-- 共享出口处理器此前将跨区返回到 `ash_forest.tscn` 的路线折叠到 R01 兼容入口，导致 C03、C04、H02 的回返房间/出生标记与独立房间合同不一致。
-- 已修正回返目标：C03 → R06 `EntryC03Return`，C04 → R05 `EntryC04Return`，H02 → R04 `EntryH02Return`；返回侧标识会转换为 A2 房间运行时识别的局部 spawn side。
+- 当前正式出口定义已直接指定 C03 → R06 `EntryC03Return`、C04 → R05 `EntryC04Return`、H02 → R04 `EntryH02Return`；本次补充共享处理器的防回归兜底，避免未来使用旧的通用 `ash_forest.tscn` 目标时误落 R01。
+- 兜底会将旧侧标识 `east` / `old_pilgrim_highroad` / `bell_gate` 映射到对应 R06/R05/R04 runtime，并转成当前房间脚本识别的局部 spawn side。
 - 修正静态几何审计器过期的 R03/R05/R06 平台计数及总计，加入 Marker2D 必需节点、runtime wrapper 边界值和三条跨区回返路由断言。
 - 未执行审计脚本；脚本中的简化弹道图仍是近似模型。**Godot 4.6.1 实机测试未执行，不能宣称回返或碰撞验收通过。**
