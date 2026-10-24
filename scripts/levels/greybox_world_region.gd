@@ -3815,6 +3815,8 @@ func _region_backdrop_texture() -> Texture2D:
 
 
 func _draw_floor_gap_visuals() -> void:
+	if region_id == "A2" and room_id.begins_with("A2-R"):
+		return
 	var gaps: Array[Vector2] = []
 	match region_id:
 		"A1":
