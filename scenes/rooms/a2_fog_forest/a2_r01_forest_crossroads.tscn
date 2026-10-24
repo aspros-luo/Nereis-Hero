@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=18 format=3]
 ; Canva terrain alignment pass: Canva R01 extends from west entry x=-128 toward the upper canopy/eastern routes around x=1792; expand authored platform spacing to match the room's designed width.
 
 ; 林间入口、岔路与树根攀升
@@ -42,6 +42,18 @@ size = Vector2(135, 18)
 
 [sub_resource type="RectangleShape2D" id="GroundWestShape"]
 size = Vector2(860, 18)
+
+[sub_resource type="RectangleShape2D" id="ApproachRect_001"]
+size = Vector2(130, 18)
+
+[sub_resource type="RectangleShape2D" id="ApproachRect_002"]
+size = Vector2(130, 18)
+
+[sub_resource type="RectangleShape2D" id="ApproachRect_003"]
+size = Vector2(130, 18)
+
+[sub_resource type="RectangleShape2D" id="ApproachRect_004"]
+size = Vector2(130, 18)
 
 [node name="A2R01ForestCrossroads" type="Node2D"]
 
@@ -373,3 +385,107 @@ color = Color(0.105882, 0.094118, 0.12549, 1)
 points = PackedVector2Array(0, 0, 860, 0)
 width = 3.0
 default_color = Color(0.392157, 0.419608, 0.376471, 1)
+
+[node name="ApproachStep_01" type="StaticBody2D" parent="."]
+position = Vector2(600, 550)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_01"]
+position = Vector2(65, 9)
+shape = SubResource("ApproachRect_001")
+one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="ApproachStep_01"]
+polygon = PackedVector2Array(0, 12, 130, 12, 130, 18, 0, 18)
+color = Color(0.129412, 0.121569, 0.145098, 1)
+
+[node name="StoneUpperFace" type="Polygon2D" parent="ApproachStep_01"]
+polygon = PackedVector2Array(0, 3, 130, 3, 130, 12, 0, 12)
+color = Color(0.223529, 0.203922, 0.239216, 1)
+
+[node name="StoneTopEdge" type="Line2D" parent="ApproachStep_01"]
+points = PackedVector2Array(0, 0, 130, 0)
+width = 2.0
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
+
+[node name="StoneSeam" type="Line2D" parent="ApproachStep_01"]
+points = PackedVector2Array(2, 12, 128, 12)
+width = 2.0
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
+
+[node name="ApproachStep_02" type="StaticBody2D" parent="."]
+position = Vector2(450, 500)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_02"]
+position = Vector2(65, 9)
+shape = SubResource("ApproachRect_002")
+one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="ApproachStep_02"]
+polygon = PackedVector2Array(0, 12, 130, 12, 130, 18, 0, 18)
+color = Color(0.129412, 0.121569, 0.145098, 1)
+
+[node name="StoneUpperFace" type="Polygon2D" parent="ApproachStep_02"]
+polygon = PackedVector2Array(0, 3, 130, 3, 130, 12, 0, 12)
+color = Color(0.223529, 0.203922, 0.239216, 1)
+
+[node name="StoneTopEdge" type="Line2D" parent="ApproachStep_02"]
+points = PackedVector2Array(0, 0, 130, 0)
+width = 2.0
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
+
+[node name="StoneSeam" type="Line2D" parent="ApproachStep_02"]
+points = PackedVector2Array(2, 12, 128, 12)
+width = 2.0
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
+
+[node name="ApproachStep_03" type="StaticBody2D" parent="."]
+position = Vector2(300, 450)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_03"]
+position = Vector2(65, 9)
+shape = SubResource("ApproachRect_003")
+one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="ApproachStep_03"]
+polygon = PackedVector2Array(0, 12, 130, 12, 130, 18, 0, 18)
+color = Color(0.129412, 0.121569, 0.145098, 1)
+
+[node name="StoneUpperFace" type="Polygon2D" parent="ApproachStep_03"]
+polygon = PackedVector2Array(0, 3, 130, 3, 130, 12, 0, 12)
+color = Color(0.223529, 0.203922, 0.239216, 1)
+
+[node name="StoneTopEdge" type="Line2D" parent="ApproachStep_03"]
+points = PackedVector2Array(0, 0, 130, 0)
+width = 2.0
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
+
+[node name="StoneSeam" type="Line2D" parent="ApproachStep_03"]
+points = PackedVector2Array(2, 12, 128, 12)
+width = 2.0
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
+
+[node name="ApproachStep_04" type="StaticBody2D" parent="."]
+position = Vector2(150, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_04"]
+position = Vector2(65, 9)
+shape = SubResource("ApproachRect_004")
+one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="ApproachStep_04"]
+polygon = PackedVector2Array(0, 12, 130, 12, 130, 18, 0, 18)
+color = Color(0.129412, 0.121569, 0.145098, 1)
+
+[node name="StoneUpperFace" type="Polygon2D" parent="ApproachStep_04"]
+polygon = PackedVector2Array(0, 3, 130, 3, 130, 12, 0, 12)
+color = Color(0.223529, 0.203922, 0.239216, 1)
+
+[node name="StoneTopEdge" type="Line2D" parent="ApproachStep_04"]
+points = PackedVector2Array(0, 0, 130, 0)
+width = 2.0
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
+
+[node name="StoneSeam" type="Line2D" parent="ApproachStep_04"]
+points = PackedVector2Array(2, 12, 128, 12)
+width = 2.0
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
