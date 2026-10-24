@@ -78,7 +78,7 @@ func _configure_static_village_nodes() -> void:
 	north_gate.set_meta("p5_1_exit_contract", true)
 	north_gate.set_meta("p5_1_target_location", "ash_forest")
 	north_gate.set_meta("p5_1_target_region", "A2")
-	north_gate.set_meta("p5_1_target_scene", "res://scenes/ash_forest.tscn")
+	north_gate.set_meta("p5_1_target_scene", "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn")
 	north_gate.set_meta("p5_1_spawn_side", "west")
 	north_gate.interacted.connect(_on_village_poi_interacted.bind(north_gate))
 	var city_cut: Node2D = $CityCutPOI
