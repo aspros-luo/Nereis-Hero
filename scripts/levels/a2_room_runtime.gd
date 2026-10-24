@@ -66,6 +66,8 @@ func _spawn_x_for_side(side: String) -> float:
 		"A2-R01":
 			if side in ["a2_r01_canopy_return", "a2_r01_tomb_return"]:
 				return 700.0
+			if side == "a2_r01_h02_return":
+				return 650.0
 			return 220.0
 		"A2-R02":
 			match side:
@@ -155,7 +157,7 @@ func _spawn_room_content() -> void:
 				Vector2(300.0, 275.0)
 			)
 		"A2-R04":
-			_spawn_h02_gate(140.0, floor_y)
+			pass
 		"A2-R05":
 			_spawn_source(
 				Vector2(650.0, floor_y - 18.0),
@@ -200,6 +202,7 @@ func _spawn_room_rest_point() -> void:
 func _spawn_room_exits() -> void:
 	match room_id:
 		"A2-R01":
+			_spawn_h02_gate(750.0, floor_y)
 			_spawn_exit_door(72.0, "E  返回边境村庄", "village", "res://scenes/village_hub.tscn", "north_gate", true, "", "", 650.0)
 			_spawn_exit_door(1680.0, "E  沿树冠阶梯前进", "ash_forest", _scene_path_for_room("A2-R02"), "a2_r02_from_r01", true, "", "", 285.0)
 			_spawn_exit_door(930.0, "E  进入钟墓上环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_from_r01", true, "", "", 0.0)
