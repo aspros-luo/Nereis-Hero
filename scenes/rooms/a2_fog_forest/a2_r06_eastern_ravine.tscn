@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3]
+[gd_scene load_steps=29 format=3]
 
 ; 东侧沟壑、上下双路线与C03远端落点
 ; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
@@ -74,6 +74,15 @@ size = Vector2(70, 12)
 
 [sub_resource type="RectangleShape2D" id="Rect_024"]
 size = Vector2(80, 12)
+
+[sub_resource type="RectangleShape2D" id="Rect_025"]
+size = Vector2(110, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_026"]
+size = Vector2(110, 18)
+
+[sub_resource type="RectangleShape2D" id="Rect_027"]
+size = Vector2(110, 18)
 
 [sub_resource type="RectangleShape2D" id="GroundEastShape"]
 size = Vector2(870, 18)
@@ -704,6 +713,86 @@ points = PackedVector2Array(2, 12, 78, 12)
 width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
+
+[node name="RavineUpperReturnStep" type="StaticBody2D" parent="."]
+position = Vector2(380, 85)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RavineUpperReturnStep"]
+position = Vector2(55, 9)
+shape = SubResource("Rect_025")
+one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="RavineUpperReturnStep"]
+polygon = PackedVector2Array(0, 12, 110, 12, 110, 18, 0, 18)
+color = Color(0.129412, 0.121569, 0.145098, 1)
+
+[node name="StoneUpperFace" type="Polygon2D" parent="RavineUpperReturnStep"]
+polygon = PackedVector2Array(0, 3, 110, 3, 110, 12, 0, 12)
+color = Color(0.223529, 0.203922, 0.239216, 1)
+
+[node name="StoneTopEdge" type="Line2D" parent="RavineUpperReturnStep"]
+points = PackedVector2Array(0, 0, 110, 0)
+width = 2.0
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
+
+[node name="StoneSeam" type="Line2D" parent="RavineUpperReturnStep"]
+points = PackedVector2Array(2, 12, 108, 12)
+width = 2.0
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
+
+
+[node name="RavineReturnStep_Mid" type="StaticBody2D" parent="."]
+position = Vector2(170, 425)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RavineReturnStep_Mid"]
+position = Vector2(55, 9)
+shape = SubResource("Rect_026")
+one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="RavineReturnStep_Mid"]
+polygon = PackedVector2Array(0, 12, 110, 12, 110, 18, 0, 18)
+color = Color(0.129412, 0.121569, 0.145098, 1)
+
+[node name="StoneUpperFace" type="Polygon2D" parent="RavineReturnStep_Mid"]
+polygon = PackedVector2Array(0, 3, 110, 3, 110, 12, 0, 12)
+color = Color(0.223529, 0.203922, 0.239216, 1)
+
+[node name="StoneTopEdge" type="Line2D" parent="RavineReturnStep_Mid"]
+points = PackedVector2Array(0, 0, 110, 0)
+width = 2.0
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
+
+[node name="StoneSeam" type="Line2D" parent="RavineReturnStep_Mid"]
+points = PackedVector2Array(2, 12, 108, 12)
+width = 2.0
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
+
+
+[node name="RavineReturnStep_Upper" type="StaticBody2D" parent="."]
+position = Vector2(80, 370)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RavineReturnStep_Upper"]
+position = Vector2(55, 9)
+shape = SubResource("Rect_027")
+one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="RavineReturnStep_Upper"]
+polygon = PackedVector2Array(0, 12, 110, 12, 110, 18, 0, 18)
+color = Color(0.129412, 0.121569, 0.145098, 1)
+
+[node name="StoneUpperFace" type="Polygon2D" parent="RavineReturnStep_Upper"]
+polygon = PackedVector2Array(0, 3, 110, 3, 110, 12, 0, 12)
+color = Color(0.223529, 0.203922, 0.239216, 1)
+
+[node name="StoneTopEdge" type="Line2D" parent="RavineReturnStep_Upper"]
+points = PackedVector2Array(0, 0, 110, 0)
+width = 2.0
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
+
+[node name="StoneSeam" type="Line2D" parent="RavineReturnStep_Upper"]
+points = PackedVector2Array(2, 12, 108, 12)
+width = 2.0
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Ground_East" type="StaticBody2D" parent="."]
 position = Vector2(410, 485)
