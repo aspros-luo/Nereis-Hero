@@ -225,16 +225,17 @@ def main() -> int:
     if total_bodies != 97:
         errors.append(f"total authored collision bodies={total_bodies}; expected 97")
     # Cross-region returns must re-enter the room that owns each endpoint, not the R01 alias.
-    runtime_source = runtime_script.read_text(encoding="utf-8") if runtime_script.is_file() else ""
-    require(runtime_source, '"east":', RUNTIME_SCRIPT + " C03 return-side mapping", errors)
-    require(runtime_source, 'destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn"', RUNTIME_SCRIPT + " C03 return destination", errors)
-    require(runtime_source, '"old_pilgrim_highroad":', RUNTIME_SCRIPT + " C04 return-side mapping", errors)
-    require(runtime_source, 'destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn"', RUNTIME_SCRIPT + " C04 return destination", errors)
-    require(runtime_source, '"bell_gate":', RUNTIME_SCRIPT + " H02 return-side mapping", errors)
-    require(runtime_source, 'destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn"', RUNTIME_SCRIPT + " H02 return destination", errors)
-    require(runtime_source, 'destination_spawn_side = "a2_r06_c03_return"', RUNTIME_SCRIPT + " C03 landing marker mapping", errors)
-    require(runtime_source, 'destination_spawn_side = "a2_r05_c04_return"', RUNTIME_SCRIPT + " C04 landing marker mapping", errors)
-    require(runtime_source, 'destination_spawn_side = "a2_r04_h02_return"', RUNTIME_SCRIPT + " H02 landing marker mapping", errors)
+    cross_region_script = ROOT / "scripts/levels/greybox_world_region.gd"
+    cross_region_source = cross_region_script.read_text(encoding="utf-8") if cross_region_script.is_file() else ""
+    require(cross_region_source, '"east":', "scripts/levels/greybox_world_region.gd C03 return-side mapping", errors)
+    require(cross_region_source, 'destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn"', "C03 return destination", errors)
+    require(cross_region_source, '"old_pilgrim_highroad":', "C04 return-side mapping", errors)
+    require(cross_region_source, 'destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn"', "C04 return destination", errors)
+    require(cross_region_source, '"bell_gate":', "H02 return-side mapping", errors)
+    require(cross_region_source, 'destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn"', "H02 return destination", errors)
+    require(cross_region_source, 'destination_spawn_side = "a2_r06_c03_return"', "C03 landing marker mapping", errors)
+    require(cross_region_source, 'destination_spawn_side = "a2_r05_c04_return"', "C04 landing marker mapping", errors)
+    require(cross_region_source, 'destination_spawn_side = "a2_r04_h02_return"', "H02 landing marker mapping", errors)
 
     if errors:
         for error in errors:
