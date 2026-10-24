@@ -1,5 +1,7 @@
 # A2 可玩内容密度审计（基线版）
 
+> **权威性说明（2026-10-24）：** 本文是历史方案/审计资料；若与当前 A2 房间架构或入口规则冲突，以 docs/maps/A2_DESIGN_BASELINE_CN.md 为准。本文中的旧实现描述不代表当前代码状态或实机验收通过。
+
 - 仓库：`aspros-luo/Nereis-Hero`
 - 审计分支：`feature/story-map-progression`
 - 审计方式：检查 `scripts/levels/greybox_world_region.gd`、`tools/world_map_topology.json`、`tools/validate_spatial_route_contracts.py` 的代码与数据。
