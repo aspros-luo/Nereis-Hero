@@ -447,7 +447,7 @@ func _spawn_x_for_side(side: String) -> float:
 	if region_id == "A2" and side == "bell_gate":
 		# Leave the H02 entrance's interaction radius after returning from the hidden chamber.
 		# 从倒响钟室返回时，出生点应离入口足够远，避免一落地就抢占 E 交互。
-		return map_width - 450.0
+		return 1100.0
 	if region_id == "A3" and side == "third_street_gate":
 		# The gate is at map_width - 300; keep the return spawn outside its 80px focus radius.
 		# 第三街入口位于 map_width - 300；返回出生点必须离开其 80px 交互半径。
