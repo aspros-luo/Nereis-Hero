@@ -209,9 +209,9 @@ def main() -> int:
                             errors.append(f"{room.get('id')}: missing authored RoomMarkers anchor {marker_name}")
                     bounds = room.get("bounds", {})
                     for key, expected in (("map_width", bounds.get("width")), ("room_height", bounds.get("height")), ("floor_y", room.get("floor_y"))):
-                        if expected is None or not re.search(rf"^{key}\\s*=\\s*{re.escape(str(float(expected)))}(?:\\.0)?\\s*$", wrapper_source, re.M):
+                        if expected is None or not re.search(rf"^{key}\s*=\s*{re.escape(str(float(expected)))}(?:\.0)?\s*$", wrapper_source, re.M):
                             # Godot scene values may be serialized as either integer-like or decimal floats.
-                            if expected is None or not re.search(rf"^{key}\\s*=\\s*{re.escape(str(expected))}(?:\\.0)?\\s*$", wrapper_source, re.M):
+                            if expected is None or not re.search(rf"^{key}\s*=\s*{re.escape(str(expected))}(?:\.0)?\s*$", wrapper_source, re.M):
                                 errors.append(f"{room.get('id')}: runtime {key} does not match connection-contract bounds ({expected})")
 
             for connection in contract.get("connections", []):
@@ -225,11 +225,11 @@ def main() -> int:
     if total_bodies != 97:
         errors.append(f"total authored collision bodies={total_bodies}; expected 97")
     # Cross-region returns must re-enter the room that owns each endpoint, not the R01 alias.
-    if '"east":' not in (ROOT / RUNTIME_SCRIPT).read_text(encoding="utf-8"):
-        pass
     runtime_source = runtime_script.read_text(encoding="utf-8") if runtime_script.is_file() else ""
-    require(runtime_source, '"east":\\n\\t\\t\\t\\tdestination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn"', RUNTIME_SCRIPT, errors)
-    require(runtime_source, '"old_pilgrim_highroad":\\n\\t\\t\\t\\tdestination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn"', RUNTIME_SCRIPT, errors)
+    require(runtime_source, '"east":', RUNTIME_SCRIPT + " C03 return-side mapping", errors)
+    require(runtime_source, 'destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn"', RUNTIME_SCRIPT + " C03 return destination", errors)
+    require(runtime_source, '"old_pilgrim_highroad":', RUNTIME_SCRIPT + " C04 return-side mapping", errors)
+    require(runtime_source, 'destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn"', RUNTIME_SCRIPT + " C04 return destination", errors)
 
     if errors:
         for error in errors:
