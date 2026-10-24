@@ -2821,7 +2821,7 @@ func _spawn_region_exits() -> void:
 					)
 				_spawn_exit_door(
 					3900.0, "E  打开旧朝圣高路", "ash_forest",
-					"res://scenes/ash_forest.tscn", "old_pilgrim_highroad",
+					"res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn", "a2_r05_c04_return",
 					true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",
 					floor_y - 140.0
 				)
