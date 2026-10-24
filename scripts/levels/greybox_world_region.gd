@@ -564,7 +564,7 @@ func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 	camera.limit_left = 0
 	camera.limit_top = 0
 	camera.limit_right = int(map_width)
-	camera.limit_bottom = int(room_height) if region_id == "A5" and not room_id.is_empty() else (1000 if region_id == "A2" else 720)
+	camera.limit_bottom = int(room_height) if region_id == "A5" and not room_id.is_empty() else (1200 if region_id == "A2" else 720)
 	hero.add_child(camera)
 
 func _spawn_ui() -> void:
