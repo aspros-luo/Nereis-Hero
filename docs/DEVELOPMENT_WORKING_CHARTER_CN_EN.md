@@ -31,3 +31,12 @@
 9. **Priority order.** Fix blockers to startup, progression, saving, and interaction first; then regressions, gameplay/content, and presentation polish. Do not hide unverified core flows behind new features.
 
 10. **Narrative presentation rule.** Stories, plot, character motives, world lore, and clue interpretation must be conveyed primarily through environments, inspectable items / equipment, NPC dialogue, and changes caused by player actions. Do not use omniscient narration, Hero’s internal summaries, or auto-displayed blocks of prose to explain the story to the player. Keep only necessary controls/accessibility prompts and brief non-narrative feedback; even cutscenes should prioritize visible actions, sound, environmental changes, and character behavior over explanatory narration. Before removing narration, migrate its information into appropriate in-world carriers so clues are not lost.
+
+
+## 11. 文档治理与正反方裁定补充 / Documentation governance addendum
+
+- 开始任何任务前，必须执行 `docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md` 的必读与冲突审计流程；切换区域或恢复中断任务同样适用。
+- 任何代码、场景、配置、资源或地图合同修改，都必须同步更新相应设计基线、开发记录和验收状态。文档同步不能无限期延期。
+- 旧文档、脚本、场景和资源必须先盘点依赖与风险，再决定合并、归档或删除；不能仅凭文件名或年龄清理。
+- 重要方案记录正方、反方、裁定和验收条件。发现软锁、存档丢失、跨区合同破坏或关键依据缺失时，暂停受影响的修改并报告证据。
+- 文档中的旧方案必须显式标记为已废弃/被替代，并链接到当前权威基线，不能与当前设计并列而不注明优先级。
