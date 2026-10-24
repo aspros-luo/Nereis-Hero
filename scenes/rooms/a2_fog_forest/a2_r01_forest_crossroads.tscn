@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 ; Canva terrain alignment pass: Canva R01 extends from west entry x=-128 toward the upper canopy/eastern routes around x=1792; expand authored platform spacing to match the room's designed width.
 
 ; 林间入口、岔路与树根攀升
@@ -39,6 +39,9 @@ size = Vector2(120, 18)
 
 [sub_resource type="RectangleShape2D" id="Rect_012"]
 size = Vector2(135, 18)
+
+[sub_resource type="RectangleShape2D" id="GroundWestShape"]
+size = Vector2(860, 18)
 
 [node name="A2R01ForestCrossroads" type="Node2D"]
 
@@ -354,3 +357,19 @@ points = PackedVector2Array(2, 12, 133, 12)
 width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
+
+[node name="Ground_West" type="StaticBody2D" parent="."]
+position = Vector2(0, 650)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_West"]
+position = Vector2(430, 9)
+shape = SubResource("GroundWestShape")
+
+[node name="TerrainMass" type="Polygon2D" parent="Ground_West"]
+polygon = PackedVector2Array(0, 0, 860, 0, 860, 48, 0, 48)
+color = Color(0.105882, 0.094118, 0.12549, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Ground_West"]
+points = PackedVector2Array(0, 0, 860, 0)
+width = 3.0
+default_color = Color(0.392157, 0.419608, 0.376471, 1)
