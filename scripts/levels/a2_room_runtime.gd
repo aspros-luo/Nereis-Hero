@@ -252,8 +252,6 @@ func _spawn_room_rest_point() -> void:
 func _spawn_room_exits() -> void:
 	match room_id:
 		"A2-R01":
-			var h02_position := _room_marker_position("H02Gate", Vector2(750.0, floor_y))
-			_spawn_h02_gate(h02_position.x, h02_position.y)
 			_spawn_exit_door_at_marker("ExitVillage", "E  返回边境村庄", "village", "res://scenes/village_hub.tscn", "north_gate")
 			_spawn_exit_door_at_marker("ExitCanopy", "E  沿树冠阶梯前进", "ash_forest", _scene_path_for_room("A2-R02"), "a2_r02_from_r01")
 			_spawn_exit_door_at_marker("ExitBellTomb", "E  进入钟墓上环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_from_r01")
