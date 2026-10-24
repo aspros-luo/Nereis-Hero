@@ -89,7 +89,7 @@ func _load_a5_contract() -> bool:
 			return false
 		connections_by_room[src].append(edge)
 		if edge.get("travel", "both") != "one_way":
-			var reverse := edge.duplicate(true)
+			var reverse: Dictionary = edge.duplicate(true)
 			reverse["from"] = dst
 			reverse["to"] = src
 			reverse["reverse_generated"] = true
