@@ -54,7 +54,13 @@ func _unhandled_input(event: InputEvent) -> void:
         var hero: Node2D = get_node_or_null("../Hero") as Node2D
         if hero and hero.has_method("restore_full"):
             hero.restore_full()
-            WorldState.set_checkpoint(hero.global_position)
+            var checkpoint_room_id := ""
+            var parent_node := get_parent()
+            if parent_node != null:
+                var room_value: Variant = parent_node.get("room_id")
+                if room_value != null:
+                    checkpoint_room_id = str(room_value)
+            WorldState.set_checkpoint(hero.global_position, checkpoint_room_id)
             WorldState.save_game()
             rested.emit()
             print("[NEREIS][WORLD] Rest point used id=%s" % rest_id)
