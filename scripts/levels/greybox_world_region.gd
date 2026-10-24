@@ -1735,6 +1735,7 @@ func _configure_platforms() -> void:
 		"A2":
 			# A2 uses a2_room_runtime.gd plus authored room scenes; no procedural platform fallback.
 			# A2 使用 a2_room_runtime.gd 与手工房间场景，不再生成程序化平台。
+			pass
 		"A3":
 			# Street-level route: rubble, market, sewer descent, and the battlefield road.
 			# 地面主路连接碎墙、市场、下水道入口与战场方向。
