@@ -1,535 +1,104 @@
-[gd_scene load_steps=18 format=3]
-; Canva terrain alignment pass: Canva R01 extends from west entry x=-128 toward the upper canopy/eastern routes around x=1792; expand authored platform spacing to match the room's designed width.
+[gd_scene load_steps=4 format=3]
 
-; 林间入口、岔路与树根攀升
-; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
+; R01 林间小路：开阔林地，只有墓穴入口与古树攀爬两条探索分支。
+; 地形节点保留在编辑器中可见；树木是背景视觉，不用跳跃平台拼出攀爬路线。
 
-[sub_resource type="RectangleShape2D" id="Rect_001"]
-size = Vector2(120, 18)
+[sub_resource type="RectangleShape2D" id="GroundShape"]
+size = Vector2(1792, 28)
 
-[sub_resource type="RectangleShape2D" id="Rect_002"]
-size = Vector2(110, 18)
+[sub_resource type="RectangleShape2D" id="WestBoundaryShape"]
+size = Vector2(28, 220)
 
-[sub_resource type="RectangleShape2D" id="Rect_003"]
-size = Vector2(115, 18)
-
-[sub_resource type="RectangleShape2D" id="Rect_004"]
-size = Vector2(105, 18)
-
-[sub_resource type="RectangleShape2D" id="Rect_005"]
-size = Vector2(105, 18)
-
-[sub_resource type="RectangleShape2D" id="Rect_006"]
-size = Vector2(120, 18)
-
-[sub_resource type="RectangleShape2D" id="Rect_007"]
-size = Vector2(130, 18)
-
-[sub_resource type="RectangleShape2D" id="Rect_008"]
-size = Vector2(115, 18)
-
-[sub_resource type="RectangleShape2D" id="Rect_009"]
-size = Vector2(120, 18)
-
-[sub_resource type="RectangleShape2D" id="Rect_010"]
-size = Vector2(130, 18)
-
-[sub_resource type="RectangleShape2D" id="Rect_011"]
-size = Vector2(120, 18)
-
-[sub_resource type="RectangleShape2D" id="Rect_012"]
-size = Vector2(135, 18)
-
-[sub_resource type="RectangleShape2D" id="GroundWestShape"]
-size = Vector2(860, 18)
-
-[sub_resource type="RectangleShape2D" id="ApproachRect_001"]
-size = Vector2(130, 18)
-
-[sub_resource type="RectangleShape2D" id="ApproachRect_002"]
-size = Vector2(130, 18)
-
-[sub_resource type="RectangleShape2D" id="ApproachRect_003"]
-size = Vector2(130, 18)
-
-[sub_resource type="RectangleShape2D" id="ApproachRect_004"]
-size = Vector2(130, 18)
+[sub_resource type="RectangleShape2D" id="EastBoundaryShape"]
+size = Vector2(28, 220)
 
 [node name="A2R01ForestCrossroads" type="Node2D"]
 
-; Authored greybox backdrop: forest depth and distant trunks, purely visual.
 [node name="ForestBackdrop" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-100, -100, 1900, -100, 1900, 1200, -100, 1200)
+polygon = PackedVector2Array(0, 0, 1792, 0, 1792, 1200, 0, 1200)
 color = Color(0.055, 0.105, 0.09, 1)
 z_index = -30
 
-[node name="ForestDistantCanopy" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-80, 330, 100, 170, 260, 300, 420, 135, 610, 285, 800, 160, 990, 300, 1170, 145, 1370, 290, 1550, 170, 1830, 320, 1830, 1100, -80, 1100)
-color = Color(0.10, 0.17, 0.13, 1)
+[node name="DistantForestLine" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 310, 150, 220, 290, 300, 450, 180, 610, 285, 790, 205, 980, 300, 1170, 190, 1350, 285, 1540, 170, 1792, 280, 1792, 650, 0, 650)
+color = Color(0.09, 0.15, 0.11, 1)
 z_index = -20
 
-[node name="ForestTrunkWest" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(120, -80, 195, -80, 260, 570, 220, 760, 160, 610)
-color = Color(0.19, 0.15, 0.10, 1)
+[node name="ForestFloorFar" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 560, 1792, 560, 1792, 650, 0, 650)
+color = Color(0.13, 0.16, 0.105, 1)
 z_index = -10
 
-[node name="ForestTrunkEast" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(1450, -80, 1535, -80, 1590, 540, 1540, 720, 1490, 570)
-color = Color(0.19, 0.15, 0.10, 1)
-z_index = -10
-
-[node name="Platform_001" type="StaticBody2D" parent="."]
-position = Vector2(0, 350)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_001"]
-position = Vector2(60, 9)
-shape = SubResource("Rect_001")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_001"]
-polygon = PackedVector2Array(0, 12, 120, 12, 120, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_001"]
-polygon = PackedVector2Array(0, 3, 120, 3, 120, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_001"]
-points = PackedVector2Array(0, 0, 120, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_001"]
-points = PackedVector2Array(2, 12, 118, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="Platform_002" type="StaticBody2D" parent="."]
-position = Vector2(159, 295)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_002"]
-position = Vector2(55, 9)
-shape = SubResource("Rect_002")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_002"]
-polygon = PackedVector2Array(0, 12, 110, 12, 110, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_002"]
-polygon = PackedVector2Array(0, 3, 110, 3, 110, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_002"]
-points = PackedVector2Array(0, 0, 110, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_002"]
-points = PackedVector2Array(2, 12, 108, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="Platform_003" type="StaticBody2D" parent="."]
-position = Vector2(311, 230)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_003"]
-position = Vector2(57.5, 9)
-shape = SubResource("Rect_003")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_003"]
-polygon = PackedVector2Array(0, 12, 115, 12, 115, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_003"]
-polygon = PackedVector2Array(0, 3, 115, 3, 115, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_003"]
-points = PackedVector2Array(0, 0, 115, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_003"]
-points = PackedVector2Array(2, 12, 113, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="Platform_004" type="StaticBody2D" parent="."]
-position = Vector2(476, 175)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_004"]
-position = Vector2(52.5, 9)
-shape = SubResource("Rect_004")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_004"]
-polygon = PackedVector2Array(0, 12, 105, 12, 105, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_004"]
-polygon = PackedVector2Array(0, 3, 105, 3, 105, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_004"]
-points = PackedVector2Array(0, 0, 105, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_004"]
-points = PackedVector2Array(2, 12, 103, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="Platform_005" type="StaticBody2D" parent="."]
-position = Vector2(573, 110)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_005"]
-position = Vector2(52.5, 9)
-shape = SubResource("Rect_005")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_005"]
-polygon = PackedVector2Array(0, 12, 105, 12, 105, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_005"]
-polygon = PackedVector2Array(0, 3, 105, 3, 105, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_005"]
-points = PackedVector2Array(0, 0, 105, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_005"]
-points = PackedVector2Array(2, 12, 103, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="Platform_006" type="StaticBody2D" parent="."]
-position = Vector2(732, 55)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_006"]
-position = Vector2(60, 9)
-shape = SubResource("Rect_006")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_006"]
-polygon = PackedVector2Array(0, 12, 120, 12, 120, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_006"]
-polygon = PackedVector2Array(0, 3, 120, 3, 120, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_006"]
-points = PackedVector2Array(0, 0, 120, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_006"]
-points = PackedVector2Array(2, 12, 118, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="Platform_007" type="StaticBody2D" parent="."]
-position = Vector2(897, 0)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_007"]
-position = Vector2(65, 9)
-shape = SubResource("Rect_007")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_007"]
-polygon = PackedVector2Array(0, 12, 130, 12, 130, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_007"]
-polygon = PackedVector2Array(0, 3, 130, 3, 130, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_007"]
-points = PackedVector2Array(0, 0, 130, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_007"]
-points = PackedVector2Array(2, 12, 128, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="Platform_008" type="StaticBody2D" parent="."]
-position = Vector2(1068, 40)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_008"]
-position = Vector2(57.5, 9)
-shape = SubResource("Rect_008")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_008"]
-polygon = PackedVector2Array(0, 12, 115, 12, 115, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_008"]
-polygon = PackedVector2Array(0, 3, 115, 3, 115, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_008"]
-points = PackedVector2Array(0, 0, 115, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_008"]
-points = PackedVector2Array(2, 12, 113, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="Platform_009" type="StaticBody2D" parent="."]
-position = Vector2(1177, 110)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_009"]
-position = Vector2(60, 9)
-shape = SubResource("Rect_009")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_009"]
-polygon = PackedVector2Array(0, 12, 120, 12, 120, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_009"]
-polygon = PackedVector2Array(0, 3, 120, 3, 120, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_009"]
-points = PackedVector2Array(0, 0, 120, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_009"]
-points = PackedVector2Array(2, 12, 118, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="Platform_010" type="StaticBody2D" parent="."]
-position = Vector2(1318, 170)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_010"]
-position = Vector2(65, 9)
-shape = SubResource("Rect_010")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_010"]
-polygon = PackedVector2Array(0, 12, 130, 12, 130, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_010"]
-polygon = PackedVector2Array(0, 3, 130, 3, 130, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_010"]
-points = PackedVector2Array(0, 0, 130, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_010"]
-points = PackedVector2Array(2, 12, 128, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="Platform_011" type="StaticBody2D" parent="."]
-position = Vector2(1476, 230)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_011"]
-position = Vector2(60, 9)
-shape = SubResource("Rect_011")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_011"]
-polygon = PackedVector2Array(0, 12, 120, 12, 120, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_011"]
-polygon = PackedVector2Array(0, 3, 120, 3, 120, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_011"]
-points = PackedVector2Array(0, 0, 120, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_011"]
-points = PackedVector2Array(2, 12, 118, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="Platform_012" type="StaticBody2D" parent="."]
-position = Vector2(1623, 285)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_012"]
-position = Vector2(67.5, 9)
-shape = SubResource("Rect_012")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="Platform_012"]
-polygon = PackedVector2Array(0, 12, 135, 12, 135, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="Platform_012"]
-polygon = PackedVector2Array(0, 3, 135, 3, 135, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="Platform_012"]
-points = PackedVector2Array(0, 0, 135, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="Platform_012"]
-points = PackedVector2Array(2, 12, 133, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-
-[node name="Ground_West" type="StaticBody2D" parent="."]
-position = Vector2(0, 650)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_West"]
-position = Vector2(430, 9)
-shape = SubResource("GroundWestShape")
-
-[node name="TerrainMass" type="Polygon2D" parent="Ground_West"]
-polygon = PackedVector2Array(0, 0, 860, 0, 860, 48, 0, 48)
-color = Color(0.105882, 0.094118, 0.12549, 1)
-
-[node name="TerrainTopEdge" type="Line2D" parent="Ground_West"]
-points = PackedVector2Array(0, 0, 860, 0)
+; 古树：大树冠与树干作为背景地标，明确提示 R02 的入口方向。
+[node name="AncientTreeCanopy" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(1160, 330, 1200, 245, 1275, 195, 1345, 115, 1430, 85, 1510, 110, 1590, 165, 1665, 205, 1715, 285, 1680, 360, 1585, 390, 1480, 375, 1380, 395, 1280, 380, 1200, 370)
+color = Color(0.12, 0.23, 0.14, 1)
+z_index = -5
+
+[node name="AncientTreeTrunk" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(1430, 320, 1510, 320, 1545, 650, 1390, 650)
+color = Color(0.25, 0.18, 0.11, 1)
+z_index = -4
+
+[node name="AncientTreeBark" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(1460, 355, 1480, 355, 1490, 640, 1465, 640)
+color = Color(0.34, 0.24, 0.13, 1)
+z_index = -3
+
+; 墓穴以远景入口呈现，不额外制造跳台；玩家在地面入口处交互进入 R03。
+[node name="BellTombEntrance" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(850, 650, 875, 570, 920, 530, 965, 570, 990, 650)
+color = Color(0.24, 0.25, 0.22, 1)
+z_index = -2
+
+[node name="BellTombDarkOpening" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(892, 650, 900, 585, 920, 565, 940, 585, 948, 650)
+color = Color(0.025, 0.03, 0.027, 1)
+z_index = -1
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(896, 650)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+shape = SubResource("GroundShape")
+
+[node name="TerrainMass" type="Polygon2D" parent="Ground"]
+polygon = PackedVector2Array(-896, 0, 896, 0, 896, 64, -896, 64)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Ground"]
+points = PackedVector2Array(-896, 0, 896, 0)
 width = 3.0
-default_color = Color(0.392157, 0.419608, 0.376471, 1)
+default_color = Color(0.39, 0.42, 0.37, 1)
 
-[node name="ApproachStep_01" type="StaticBody2D" parent="."]
-position = Vector2(600, 560)
+[node name="WestBoundary" type="StaticBody2D" parent="."]
+position = Vector2(0, 540)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_01"]
-position = Vector2(65, 9)
-shape = SubResource("ApproachRect_001")
-one_way_collision = true
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WestBoundary"]
+shape = SubResource("WestBoundaryShape")
 
-[node name="StoneLowerFace" type="Polygon2D" parent="ApproachStep_01"]
-polygon = PackedVector2Array(0, 12, 130, 12, 130, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
+[node name="EastBoundary" type="StaticBody2D" parent="."]
+position = Vector2(1792, 540)
 
-[node name="StoneUpperFace" type="Polygon2D" parent="ApproachStep_01"]
-polygon = PackedVector2Array(0, 3, 130, 3, 130, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EastBoundary"]
+shape = SubResource("EastBoundaryShape")
 
-[node name="StoneTopEdge" type="Line2D" parent="ApproachStep_01"]
-points = PackedVector2Array(0, 0, 130, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="ApproachStep_01"]
-points = PackedVector2Array(2, 12, 128, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="ApproachStep_02" type="StaticBody2D" parent="."]
-position = Vector2(450, 510)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_02"]
-position = Vector2(65, 9)
-shape = SubResource("ApproachRect_002")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="ApproachStep_02"]
-polygon = PackedVector2Array(0, 12, 130, 12, 130, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="ApproachStep_02"]
-polygon = PackedVector2Array(0, 3, 130, 3, 130, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="ApproachStep_02"]
-points = PackedVector2Array(0, 0, 130, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="ApproachStep_02"]
-points = PackedVector2Array(2, 12, 128, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="ApproachStep_03" type="StaticBody2D" parent="."]
-position = Vector2(300, 460)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_03"]
-position = Vector2(65, 9)
-shape = SubResource("ApproachRect_003")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="ApproachStep_03"]
-polygon = PackedVector2Array(0, 12, 130, 12, 130, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="ApproachStep_03"]
-polygon = PackedVector2Array(0, 3, 130, 3, 130, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="ApproachStep_03"]
-points = PackedVector2Array(0, 0, 130, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="ApproachStep_03"]
-points = PackedVector2Array(2, 12, 128, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="ApproachStep_04" type="StaticBody2D" parent="."]
-position = Vector2(150, 410)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ApproachStep_04"]
-position = Vector2(65, 9)
-shape = SubResource("ApproachRect_004")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="ApproachStep_04"]
-polygon = PackedVector2Array(0, 12, 130, 12, 130, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="ApproachStep_04"]
-polygon = PackedVector2Array(0, 3, 130, 3, 130, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="ApproachStep_04"]
-points = PackedVector2Array(0, 0, 130, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="ApproachStep_04"]
-points = PackedVector2Array(2, 12, 128, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-; Editor-visible anchors used by the A2 room runtime. Adjust these alongside terrain.
 [node name="RoomMarkers" type="Node2D" parent="."]
+
 [node name="EntryWest" type="Marker2D" parent="RoomMarkers"]
 position = Vector2(220, 650)
 
 [node name="EntryCanopyReturn" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(700, 560)
+position = Vector2(1510, 650)
 
 [node name="EntryTombReturn" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(700, 560)
+position = Vector2(990, 650)
 
 [node name="ExitVillage" type="Marker2D" parent="RoomMarkers"]
 position = Vector2(72, 650)
 
-[node name="ExitCanopy" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(1680, 285)
-
 [node name="ExitBellTomb" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(930, 0)
+position = Vector2(920, 650)
 
-[node name="DropToR04" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(1320, 850)
+[node name="ExitCanopy" type="Marker2D" parent="RoomMarkers"]
+position = Vector2(1480, 650)
