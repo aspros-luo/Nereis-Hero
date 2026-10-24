@@ -1,6 +1,6 @@
 # NEREIS-HERO｜A2 六房间地形蓝图与 Canva 绘制合同 v0.2
 
-> 状态：地形设计合同已整理；Canva 六张独立设计尚未创建。本次 Canva 新设计生成因账号 Canva credits quota_exceeded 失败，不能将失败任务视为已交付地图。
+> 状态：历史绘制合同；当前权威基线见 docs/maps/A2_DESIGN_BASELINE_CN.md。此文件中的“六张独立设计尚未创建”是旧状态（2026-10-23），不能覆盖后来在 Canva 中找到的区域草图、R01、R02 与 R03 候选设计记录。R04–R06 是否已创建仍需逐项核实。
 > 分支：feature/story-map-progression
 > 原则：每张房间图独立可编辑；先画地形和路线，不放敌人 / NPC；不得用一张长图代替六张房间图。
 
