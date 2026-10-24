@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "region_id": "A2",
+  "status": "design_contract_pending_runtime",
+  "source_of_truth": "docs/maps/A2_DESIGN_BASELINE_CN.md",
+  "notes": [
+    "Room-local authored geometry remains in the six .tscn files.",
+    "Coordinates for the entry and exit triggers must be authored/verified against room bounds before routing A1 to the new room runtime.",
+    "C03, C04 and H02 remain world-level contracts owned by the existing region controller until migration is validated."
+  ],
+  "rooms": [
+    {"id":"A2-R01","scene_path":"res://scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn","design_role":"entry_crossroads","bounds":{"width":1792,"height":720},"floor_y":650,"entries":["west","east","north","south"]},
+    {"id":"A2-R02","scene_path":"res://scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn","design_role":"canopy_bridge","bounds":{"width":2000,"height":960},"floor_y":860,"entries":["west","east","north","south"]},
+    {"id":"A2-R03","scene_path":"res://scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn","design_role":"bell_tomb_upper_ring","bounds":{"width":1280,"height":720},"floor_y":560,"entries":["west","east","north","south"]},
+    {"id":"A2-R04","scene_path":"res://scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn","design_role":"crypt_landing_and_return_shelves","bounds":{"width":1280,"height":900},"floor_y":820,"entries":["west","east","north","south"]},
+    {"id":"A2-R05","scene_path":"res://scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn","design_role":"highroad_and_C04_endpoint","bounds":{"width":1280,"height":720},"floor_y":620,"entries":["west","east","north","south"]},
+    {"id":"A2-R06","scene_path":"res://scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn","design_role":"eastern_ravine_and_C03_endpoint","bounds":{"width":1280,"height":900},"floor_y":820,"entries":["west","east","north","south"]}
+  ],
+  "connections": [
+    {"id":"A1-A2-R01","from":"A1","to":"A2-R01","from_exit":"north_gate","to_entry":"west","travel":"both","kind":"region_entry","initial_state":"open","status":"must_preserve_existing_A1_contract"},
+    {"id":"A2-R01-R02-CANOPY","from":"A2-R01","to":"A2-R02","from_exit":"canopy_rise","to_entry":"west","travel":"both","kind":"walk","initial_state":"open","status":"entry_exit_markers_pending"},
+    {"id":"A2-R01-R03-TOMB","from":"A2-R01","to":"A2-R03","from_exit":"bell_tomb_path","to_entry":"west","travel":"both","kind":"walk","initial_state":"open","status":"entry_exit_markers_pending"},
+    {"id":"A2-R01-R04-DROP","from":"A2-R01","to":"A2-R04","from_exit":"crypt_drop","to_entry":"north","travel":"one_way","kind":"drop","initial_state":"open","return_route":"A2-R04-R03-RETURN","status":"landing_and_return_must_be_verified"},
+    {"id":"A2-R02-R05-HIGHROAD","from":"A2-R02","to":"A2-R05","from_exit":"eastern_high_link","to_entry":"west","travel":"both","kind":"shortcut","initial_state":"open","status":"exact_endpoint_pending_geometry_review"},
+    {"id":"A2-R03-R04-RETURN","from":"A2-R03","to":"A2-R04","from_exit":"lower_drop","to_entry":"north","travel":"one_way","kind":"drop","initial_state":"open","return_route":"CryptReturnShelfWest/East to climb route","status":"exact_endpoint_pending_geometry_review"},
+    {"id":"A2-R03-R05-ALT","from":"A2-R03","to":"A2-R05","from_exit":"upper_pilgrim_link","to_entry":"west","travel":"both","kind":"shortcut","initial_state":"open","status":"exact_endpoint_pending_geometry_review"},
+    {"id":"A2-R04-R06-LOW","from":"A2-R04","to":"A2-R06","from_exit":"east_deep_route","to_entry":"west","travel":"both","kind":"walk","initial_state":"open","status":"exact_endpoint_pending_geometry_review"},
+    {"id":"A2-R05-R06-UPPER","from":"A2-R05","to":"A2-R06","from_exit":"eastern_upper_route","to_entry":"west","travel":"both","kind":"walk","initial_state":"open","status":"exact_endpoint_pending_geometry_review"},
+    {"id":"A2-R06-C03","from":"A2-R06","to":"A3","from_exit":"C03","to_entry":"A2","travel":"both","kind":"region_exit","initial_state":"open","status":"preserve_existing_region_contract"},
+    {"id":"A2-R05-C04","from":"A2-R05","to":"A5","from_exit":"C04","to_entry":"A2","travel":"both","kind":"region_exit","initial_state":"open","status":"preserve_existing_region_contract"},
+    {"id":"A2-R01-H02","from":"A2-R01","to":"H02","from_exit":"H02_hidden_route","to_entry":"A2","travel":"both","kind":"hidden","initial_state":"locked","status":"preserve_existing_hidden_route_contract"}
+  ]
+}
