@@ -104,3 +104,36 @@ R06 authored root 的 `position.y=325`。上层主地面局部 y=485，对应世
 ## 当前结论
 
 已确认并修正三类会破坏地图路线/出生逻辑的结构性问题：R03 坑口被地面封住、R06 下层裂谷被整段地板封住、R04/R05 缩放场景的 floor_y 漏算根节点偏移。其余房间还需继续逐项核对，且这些改动必须在本机 Godot 4.6.1 打开和实机游玩后才能判定通过。
+
+## 本轮复核补充：转场映射矩阵（静态检查）
+
+已重新读取当前分支的 `a2_room_runtime.gd`、六个 authored room 和六个 runtime wrapper，按“源标记 → spawn_side → 目标 Entry 标记”逐项比对：
+
+| 源房间/出口 | 目标房间 | spawn_side | 目标标记 |
+|---|---|---|---|
+| A1 北门 / `ash_forest.tscn` | R01 | 默认 west | `EntryWest` |
+| R01 `ExitCanopy` | R02 | `a2_r02_from_r01` | `EntryFromR01` |
+| R02 `ExitToR01` | R01 | `a2_r01_canopy_return` | `EntryCanopyReturn` |
+| R01 `ExitBellTomb` | R03 | `a2_r03_from_r01` | `EntryFromR01` |
+| R03 `ExitToR01` | R01 | `a2_r01_tomb_return` | `EntryTombReturn` |
+| R01 `DropToR04` | R04 | `a2_r04_tomb_drop_r01` | `EntryTombDropR01` |
+| R03 `DropToR04` | R04 | `a2_r04_tomb_drop` | `EntryTombDrop` |
+| R04 `ExitToR03` | R03 | `a2_r03_crypt_return` | `EntryCryptReturn` |
+| R02 `ExitToR05` | R05 | `a2_r05_from_r02` | `EntryFromR02` |
+| R03 `ExitToR05` | R05 | `a2_r05_upper_shortcut` | `EntryUpperShortcut` |
+| R05 `ExitToR02` | R02 | `a2_r02_high_return` | `EntryHighReturn` |
+| R05 `ExitToR03` | R03 | `a2_r03_highroad_shortcut` | `EntryHighroadShortcut` |
+| R04 `ExitToR06` | R06 | `a2_r06_low_entry` | `EntryLow` |
+| R06 `ExitToR04` | R04 | `a2_r04_ravine_return` | `EntryRavineReturn` |
+| R05 `ExitToR06` | R06 | `a2_r06_high_entry` | `EntryHigh` |
+| R06 `ExitToR05` | R05 | `a2_r05_ravine_return` | `EntryRavineReturn` |
+
+上述映射的字符串与目标 Marker2D 名称一致；未发现此前怀疑的 R01 直连 R05 出口，当前脚本中 R01 仅配置村庄返回、R02 树冠入口、R03 钟墓入口及 R04 坠落触发。R05→A5 与 R06→A3 是外部场景连接，不属于六房间内回环。
+
+### 本轮仍不能静态判定为通过的事项
+
+- Marker 坐标和转场映射一致，不代表 Area2D 的实际触发范围一定能被玩家碰到；特别是 R01/R03 坠落触发器、R04 的高位回程门，需要实机确认。
+- 目前可用的工作环境无法启动用户 Mac 上的 Godot 4.6.1，因此未执行项目导入、GDScript 编译、碰撞模拟或键盘交互测试。
+- 本轮未更改运行逻辑：没有证据支持在未运行引擎的情况下盲目改动触发器尺寸或出生坐标。避免为消除静态疑虑引入新的路线偏差。
+
+**本轮结论：转场映射静态核对完成；A2 仍处于待本地引擎验证状态，不标记为实机验收通过。**
