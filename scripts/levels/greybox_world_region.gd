@@ -555,9 +555,17 @@ func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 	_add_character_collision(hero, 18.0, 48.0)
 	add_child(hero)
 	hero.defeated.connect(_on_hero_defeated)
-	# Keep death recovery inside the current region instead of reusing a previous scene's checkpoint.
-	# 每个灰盒区域记录自己的入口检查点，避免死亡后回到上一个场景的坐标。
-	WorldState.set_checkpoint(hero.global_position)
+	# Room-streamed A2 keeps an existing A2 checkpoint across door transitions; ordinary A2 entry
+	# initializes a room-aware checkpoint so cross-room death recovery has a valid destination.
+	# A2 房间切换时保留已经启用的 A2 检查点；首次进入才建立带房间 ID 的默认检查点。
+	if region_id == "A2" and not room_id.is_empty():
+		var valid_a2_checkpoint := WorldState.checkpoint_room_id in [
+			"A2-R01", "A2-R02", "A2-R03", "A2-R04", "A2-R05", "A2-R06"
+		]
+		if not WorldState.checkpoint_active or not valid_a2_checkpoint:
+			WorldState.set_checkpoint(hero.global_position, room_id)
+	else:
+		WorldState.set_checkpoint(hero.global_position)
 
 	camera = Camera2D.new()
 	camera.name = "HeroCamera"
