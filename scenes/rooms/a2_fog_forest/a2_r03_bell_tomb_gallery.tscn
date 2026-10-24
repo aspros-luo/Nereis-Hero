@@ -40,6 +40,17 @@ size = Vector2(930, 18)
 
 [node name="A2R03BellTombGallery" type="Node2D"]
 
+; Authored greybox backdrop: stone nave and tomb arches, non-colliding visual layer.
+[node name="TombBackdrop" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-80, -100, 1450, -100, 1450, 1000, -80, 1000)
+color = Color(0.105, 0.095, 0.10, 1)
+z_index = -30
+
+[node name="TombArchSilhouette" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(80, 510, 80, 240, 150, 140, 220, 240, 220, 510, 360, 510, 360, 210, 440, 100, 520, 210, 520, 510, 690, 510, 690, 250, 760, 150, 830, 250, 830, 510, 980, 510, 980, 220, 1060, 110, 1140, 220, 1140, 510, 1320, 510, 1320, 900, 80, 900)
+color = Color(0.20, 0.18, 0.19, 1)
+z_index = -20
+
 [node name="Platform_013" type="StaticBody2D" parent="."]
 position = Vector2(60, 85)
 
