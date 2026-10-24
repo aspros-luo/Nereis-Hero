@@ -47,7 +47,7 @@
    - python3 tools/validate_world_map_topology.py
    - python3 tools/validate_spatial_route_contracts.py
    - python3 tools/validate_graybox_scene_wiring.py
-   - python3 tools/validate_a2_platform_reachability.py（静态跳跃范围近似，不替代 Godot 实机验收）
+   - python3 tools/validate_a2_room_scene_geometry.py（检查六个 .tscn 的可见地形/碰撞节点与父场景引用；不做跳跃可达性证明，不替代 Godot 实机验收）
 3. 启动项目并进入 A2，从 A1 地面入口开始，完整走一次“地面→树冠→钟墓→坑底→回到中层→东侧双路线→C03→A3→C03 返回 A2”。
 4. 另测 C04：首次锁定不可通过；在 A5 开启后从两侧往返；重进 A2 后仍保持开放。
 5. 另测 H02：未满足条件时入口不可用；满足条件后可进入并返回；未探索 H02 时仍能正常抵达 C03。
