@@ -7,8 +7,8 @@
 ## 1. 交付图纸
 
 - [A2 六房间拼装总览](A2_FULL_ASSEMBLY_OVERVIEW.svg)
-- [R05 旧朝圣高路 v0.2](A2_R05_OLD_PILGRIM_HIGHROAD_BLUEPRINT.svg)
-- [R06 东侧裂谷 v0.2](A2_R06_EASTERN_RAVINE_BLUEPRINT.svg)
+- [R05 旧朝圣高路 v0.2](A2_R05_OLD_PILGRIM_HIGHROAD_BLUEPRINT_V02.svg)
+- [R06 东侧裂谷 v0.2](A2_R06_EASTERN_RAVINE_BLUEPRINT_V02.svg)
 - R01–R03 现有 Canva 设计见下方链接；R04 以独立提案为准。
 
 ## 2. R05 旧朝圣高路
