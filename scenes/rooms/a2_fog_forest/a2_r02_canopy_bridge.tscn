@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 ; Canva terrain alignment pass: Canva R02 spans roughly x=0..1760 and calls out the separated bridge, high connection and lower return ledge; expand the authored horizontal spacing to that scale.
 
 ; 树冠层、断裂树桥与共鸣桥路线
@@ -24,6 +24,12 @@ size = Vector2(120, 18)
 
 [sub_resource type="RectangleShape2D" id="Rect_007"]
 size = Vector2(130, 18)
+
+[sub_resource type="RectangleShape2D" id="BridgeStepShape_001"]
+size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="BridgeStepShape_002"]
+size = Vector2(110, 18)
 
 [node name="A2R02CanopyBridge" type="Node2D"]
 
@@ -209,3 +215,55 @@ points = PackedVector2Array(2, 12, 128, 12)
 width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
+
+[node name="BridgeStep_West" type="StaticBody2D" parent="."]
+position = Vector2(155, 20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BridgeStep_West"]
+position = Vector2(57.5, 9)
+shape = SubResource("BridgeStepShape_001")
+one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="BridgeStep_West"]
+polygon = PackedVector2Array(0, 12, 115, 12, 115, 18, 0, 18)
+color = Color(0.129412, 0.121569, 0.145098, 1)
+
+[node name="StoneUpperFace" type="Polygon2D" parent="BridgeStep_West"]
+polygon = PackedVector2Array(0, 3, 115, 3, 115, 12, 0, 12)
+color = Color(0.223529, 0.203922, 0.239216, 1)
+
+[node name="StoneTopEdge" type="Line2D" parent="BridgeStep_West"]
+points = PackedVector2Array(0, 0, 115, 0)
+width = 2.0
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
+
+[node name="StoneSeam" type="Line2D" parent="BridgeStep_West"]
+points = PackedVector2Array(2, 12, 113, 12)
+width = 2.0
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
+
+[node name="BridgeStep_Mid" type="StaticBody2D" parent="."]
+position = Vector2(500, 15)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BridgeStep_Mid"]
+position = Vector2(55, 9)
+shape = SubResource("BridgeStepShape_002")
+one_way_collision = true
+
+[node name="StoneLowerFace" type="Polygon2D" parent="BridgeStep_Mid"]
+polygon = PackedVector2Array(0, 12, 110, 12, 110, 18, 0, 18)
+color = Color(0.129412, 0.121569, 0.145098, 1)
+
+[node name="StoneUpperFace" type="Polygon2D" parent="BridgeStep_Mid"]
+polygon = PackedVector2Array(0, 3, 110, 3, 110, 12, 0, 12)
+color = Color(0.223529, 0.203922, 0.239216, 1)
+
+[node name="StoneTopEdge" type="Line2D" parent="BridgeStep_Mid"]
+points = PackedVector2Array(0, 0, 110, 0)
+width = 2.0
+default_color = Color(0.643137, 0.831373, 0.603922, 1)
+
+[node name="StoneSeam" type="Line2D" parent="BridgeStep_Mid"]
+points = PackedVector2Array(2, 12, 108, 12)
+width = 2.0
+default_color = Color(0.105882, 0.090196, 0.121569, 1)
