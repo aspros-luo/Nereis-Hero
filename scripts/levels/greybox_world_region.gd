@@ -885,12 +885,9 @@ func _create_floor() -> void:
 	if region_id == "A5" and not room_id.is_empty():
 		_configure_a5_room_floor()
 		return
-	# A2's Bell Grave is a real opening in the ground collision, not just a label or background drawing.
-	# A2 钟墓必须是真正切开地面碰撞的坑口，而不只是地图标签或背景图案。
+	# A2 ground collision belongs to its individual room .tscn files; never create a region-wide floor here.
+	# A2 地表碰撞由各独立房间 .tscn 负责；此处禁止生成区域级整片地面。
 	if region_id == "A2":
-		var authored_terrain := get_node_or_null("A2AuthoredTerrain")
-		if authored_terrain != null:
-			authored_terrain.call("create_floor", self)
 		return
 	# Selected regions use real floor cuts with lower shelves, not platforms buried inside a solid floor.
 	# 指定区域使用真实地面断口与下层石沿，避免把平台埋在完整地面碰撞体里。
@@ -1717,9 +1714,8 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(820, floor_y + 135.0, 150, 18))
 			_add_platform(Rect2(990, floor_y + 90.0, 145, 18))
 		"A2":
-			var authored_terrain := get_node_or_null("A2AuthoredTerrain")
-			if authored_terrain != null:
-				authored_terrain.call("configure_platforms", self)
+			# A2 uses a2_room_runtime.gd plus authored room scenes; no procedural platform fallback.
+			# A2 使用 a2_room_runtime.gd 与手工房间场景，不再生成程序化平台。
 		"A3":
 			# Street-level route: rubble, market, sewer descent, and the battlefield road.
 			# 地面主路连接碎墙、市场、下水道入口与战场方向。
@@ -3897,9 +3893,9 @@ func _draw() -> void:
 
 	match region_id:
 		"A2":
-			# The six authored A2 room scenes now own the terrain silhouettes; do not paint the legacy one-piece forest layout over them.
-			# A2 的六个手工房间场景负责地形轮廓；不再叠画旧版整张森林地图的装饰布局。
-			if get_node_or_null("A2AuthoredTerrain") == null:
+			# Standalone A2 room wrappers use their own terrain silhouettes; the legacy assembled-map preview may draw forest landmarks.
+			# 独立 A2 房间使用各自地形轮廓；仅旧版拼装预览可绘制森林地标。
+			if not room_id.begins_with("A2-R"):
 				_draw_forest_landmarks()
 		"A3":
 			_draw_city_landmarks()
