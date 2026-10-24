@@ -216,7 +216,7 @@ func _spawn_room_exits() -> void:
 		"A2-R05":
 			_spawn_exit_door(60.0, "E  返回树冠断桥", "ash_forest", _scene_path_for_room("A2-R02"), "a2_r02_high_return", true, "", "", 95.0)
 			_spawn_exit_door(350.0, "E  返回钟墓高环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_highroad_shortcut", true, "", "", 215.0)
-			_spawn_exit_door(680.0, "E  进入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_high_entry", true, "", "", 170.0)
+			_spawn_exit_door(540.0, "E  进入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_high_entry", true, "", "", 105.0)
 			if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
 				_spawn_exit_door(690.0, "E  返回边境战场", "old_battlefield", "res://scenes/old_battlefield.tscn", "old_pilgrim_highroad", true, "", "", 170.0)
 		"A2-R06":
