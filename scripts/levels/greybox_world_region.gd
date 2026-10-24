@@ -325,7 +325,11 @@ func _spawn_y_for_side(side: String) -> float:
 	if region_id == "A5" and side == "monastery_return":
 		return floor_y - 55.0
 	if region_id == "A2" and side == "east":
-		return floor_y - 140.0
+		return floor_y - 160.0
+	if region_id == "A2" and side == "bell_gate":
+		# R04's authored CryptLanding top is at world y=1035.
+		# R04 的 CryptLanding 实体平台顶面位于世界坐标 y=1035。
+		return 1035.0
 	# C04 must return to the actual old-pilgrim upper route on both sides.
 	# C04 双向回程都必须落在旧朝圣高路的实际上层平台。
 	if region_id == "A2" and side == "old_pilgrim_highroad":
@@ -2649,7 +2653,7 @@ func _spawn_region_exits() -> void:
 			)
 			# H02 belongs to the optional low Bell Grave space, not the far-eastern main-floor edge.
 			# H02 应位于钟墓坑底的可选低位空间，而不是地图最东侧的主地面。
-			_spawn_h02_gate(960.0, floor_y + 125.0)
+			_spawn_h02_gate(960.0, floor_y + 395.0)
 			# C04 is opened from A5; once opened, keep the reverse entrance persistent on A2.
 			# C04 在 A5 侧开启；开启后，A2 侧永久生成对应回程门。
 			if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
@@ -4448,7 +4452,7 @@ func _draw_a2_authored_ground() -> void:
 	# 三段苔藓地表与 A2AuthoredTerrain 中真实的地面碰撞分段一致。
 	var spans: Array[Vector2] = [
 		Vector2(0.0, 860.0),
-		Vector2(1060.0, 1360.0),
+		Vector2(1360.0, 1060.0),
 		Vector2(2660.0, map_width - 2660.0)
 	]
 	for span in spans:
@@ -4471,7 +4475,7 @@ func _draw_a2_authored_ground() -> void:
 				draw_line(Vector2(detail_x + 22.0, floor_y + 92.0), Vector2(detail_x + 42.0, floor_y + 88.0), Color("#78945a", 0.35), 2.0)
 	# Mark cliff lips at both ends of each ground gap without painting across the gap itself.
 	# 在每个地面断口两端标出崖沿，但绝不跨越断口绘制地表。
-	for edge_x in [860.0, 1060.0, 2420.0, 2660.0]:
+	for edge_x in [860.0, 1360.0, 2420.0, 2660.0]:
 		draw_line(Vector2(edge_x, floor_y - 1.0), Vector2(edge_x, floor_y + 148.0), Color("#5d6250", 0.9), 3.0)
 		draw_line(Vector2(edge_x + 4.0, floor_y + 16.0), Vector2(edge_x + 12.0, floor_y + 42.0), Color("#303c31", 0.9), 2.0)
 
@@ -4479,12 +4483,12 @@ func _draw_a2_authored_ground() -> void:
 func _draw_a2_authored_landscape() -> void:
 	# Base atmosphere and distant silhouettes are visual-only; collision and traversable platforms remain authored in the six room scenes.
 	# 这里只绘制背景氛围与远景剪影；真实碰撞和可走平台仍由六个房间场景维护。
-	draw_rect(Rect2(0.0, 0.0, map_width, 1000.0), Color("#171b28"))
+	draw_rect(Rect2(0.0, 0.0, map_width, 1200.0), Color("#171b28"))
 	for layer in range(3):
 		var base_y := 370.0 + float(layer) * 92.0
 		var shade: Color = [Color("#252a3a"), Color("#202635"), Color("#1c222f")][layer]
 		var points := PackedVector2Array([
-			Vector2(0.0, 1000.0), Vector2(0.0, base_y + 120.0),
+			Vector2(0.0, 1200.0), Vector2(0.0, base_y + 120.0),
 			Vector2(180.0, base_y - 30.0), Vector2(330.0, base_y + 40.0),
 			Vector2(520.0, base_y - 110.0), Vector2(690.0, base_y + 5.0),
 			Vector2(850.0, base_y - 65.0), Vector2(1040.0, base_y + 28.0),
@@ -4494,7 +4498,7 @@ func _draw_a2_authored_landscape() -> void:
 			Vector2(2470.0, base_y - 100.0), Vector2(2680.0, base_y + 30.0),
 			Vector2(2880.0, base_y - 45.0), Vector2(3100.0, base_y + 10.0),
 			Vector2(3330.0, base_y - 85.0), Vector2(3600.0, base_y + 30.0),
-			Vector2(3600.0, 1000.0)
+			Vector2(3600.0, 1200.0)
 		])
 		draw_colored_polygon(points, shade)
 	# Broken tree trunks and canopy masses make the first half read as a forest rather than a flat backdrop.
