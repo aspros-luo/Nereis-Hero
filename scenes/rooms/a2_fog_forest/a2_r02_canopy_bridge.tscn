@@ -1,4 +1,5 @@
 [gd_scene load_steps=8 format=3]
+; Canva terrain alignment pass: Canva R02 spans roughly x=0..1760 and calls out the separated bridge, high connection and lower return ledge; expand the authored horizontal spacing to that scale.
 
 ; 树冠层、断裂树桥与共鸣桥路线
 ; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
@@ -53,7 +54,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_023" type="StaticBody2D" parent="."]
-position = Vector2(135, 0)
+position = Vector2(311, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_023"]
 position = Vector2(62.5, 9)
@@ -79,7 +80,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_024" type="StaticBody2D" parent="."]
-position = Vector2(275, 30)
+position = Vector2(633, 30)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_024"]
 position = Vector2(57.5, 9)
@@ -105,7 +106,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_025" type="StaticBody2D" parent="."]
-position = Vector2(395, 75)
+position = Vector2(908, 75)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_025"]
 position = Vector2(57.5, 9)
@@ -131,7 +132,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_026" type="StaticBody2D" parent="."]
-position = Vector2(510, 140)
+position = Vector2(1173, 140)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_026"]
 position = Vector2(57.5, 9)
@@ -157,7 +158,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_027" type="StaticBody2D" parent="."]
-position = Vector2(625, 185)
+position = Vector2(1438, 185)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_027"]
 position = Vector2(60, 9)
@@ -183,7 +184,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_028" type="StaticBody2D" parent="."]
-position = Vector2(640, 260)
+position = Vector2(1472, 260)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_028"]
 position = Vector2(65, 9)
