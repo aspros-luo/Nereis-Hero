@@ -4448,8 +4448,8 @@ func _platform_color() -> Color:
 			return Color("#302a33")
 
 func _draw_a2_authored_ground() -> void:
-	# Three moss-covered surface spans mirror the physical collision segments in A2AuthoredTerrain.
-	# 三段苔藓地表与 A2AuthoredTerrain 中真实的地面碰撞分段一致。
+	# Visual-only ground bands align with the StaticBody2D spans authored inside R01, R05 and R06.
+	# 仅绘制地表视觉层；三段真实碰撞由 R01、R05、R06 场景内的 StaticBody2D 负责。
 	var spans: Array[Vector2] = [
 		Vector2(0.0, 860.0),
 		Vector2(1360.0, 1060.0),
