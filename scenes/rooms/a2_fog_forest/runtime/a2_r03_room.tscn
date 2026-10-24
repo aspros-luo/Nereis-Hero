@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="1"]
+[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn" type="PackedScene" id="2"]
+
+[node name="A2R03Room" type="Node2D"]
+script = ExtResource("1")
+region_id = "A2"
+location_id = "ash_forest"
+region_title = "A2 R03 钟墓上环"
+map_width = 1280.0
+floor_y = 560.0
+room_height = 820.0
+room_id = "A2-R03"
+enable_region_encounters = false
+
+[node name="AuthoredRoom" parent="." instance=ExtResource("2")]
