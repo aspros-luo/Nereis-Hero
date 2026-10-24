@@ -94,7 +94,10 @@ func _room_marker_position(marker_name: String, fallback: Vector2 = Vector2.ZERO
 	if marker == null:
 		push_error("[NEREIS][A2][ROOM][MARKER_MISSING] room=%s marker=%s" % [room_id, marker_name])
 		return fallback
-	return marker.position
+	# Room art scenes may use a root scale while their runtime wrapper remains unscaled.
+	# Convert the marker's transformed world position back into the runtime's local space
+	# so spawn points, doors and drop triggers stay aligned with the visible/colliding scene.
+	return to_local(marker.global_position)
 
 
 func _spawn_position_for_side(side: String) -> Vector2:
