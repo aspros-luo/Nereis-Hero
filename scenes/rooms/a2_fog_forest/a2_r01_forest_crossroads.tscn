@@ -504,6 +504,9 @@ position = Vector2(700, 560)
 [node name="EntryH02Return" type="Marker2D" parent="RoomMarkers"]
 position = Vector2(650, 650)
 
+[node name="H02Gate" type="Marker2D" parent="RoomMarkers"]
+position = Vector2(750, 650)
+
 [node name="ExitVillage" type="Marker2D" parent="RoomMarkers"]
 position = Vector2(72, 650)
 
