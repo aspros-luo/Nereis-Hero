@@ -230,6 +230,23 @@ def main() -> int:
         errors.append(f"total authored room platforms={total_platforms}; expected 91")
     if total_bodies != 97:
         errors.append(f"total authored collision bodies={total_bodies}; expected 97")
+    # Core room graph: assert the authored runtime actually wires both ends of each
+    # drop/height transition, not merely that the contract lists those edges.
+    room_runtime_source = runtime_script.read_text(encoding="utf-8") if runtime_script.is_file() else ""
+    route_contracts = [
+        ('_spawn_drop_transition_at_marker("DropToR04", 960.0, 260.0, "A2-R04", "a2_r04_tomb_drop_r01")', "R01->R04 drop"),
+        ('_spawn_drop_transition_at_marker("DropToR04", 150.0, 220.0, "A2-R04", "a2_r04_tomb_drop")', "R03->R04 drop"),
+        ('_spawn_exit_door_at_marker("ExitToR06", "E  深入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_low_entry")', "R04->R06 low entry"),
+        ('_spawn_exit_door_at_marker("ExitToR04", "E  返回钟墓坑底", "ash_forest", _scene_path_for_room("A2-R04"), "a2_r04_ravine_return")', "R06->R04 low return"),
+        ('_spawn_exit_door_at_marker("ExitToR06", "E  进入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_high_entry")', "R05->R06 high entry"),
+        ('_spawn_exit_door_at_marker("ExitToR05", "E  返回旧朝圣高路", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_ravine_return")', "R06->R05 high return"),
+        ('_spawn_exit_door_at_marker("ExitToA3", "E  沿树冠高路进入被遗忘的城区", "forgotten_city", "res://scenes/forgotten_city.tscn", "city_canopy_entry")', "C03 outbound"),
+        ('_spawn_exit_door_at_marker("ExitToA5", "E  返回边境战场", "old_battlefield", "res://scenes/old_battlefield.tscn", "old_pilgrim_highroad")', "C04 outbound"),
+        ('_spawn_h02_gate(h02_position.x, h02_position.y)', "H02 gate placement"),
+    ]
+    for fragment, label in route_contracts:
+        require(room_runtime_source, fragment, label, errors)
+
     # Cross-region returns must re-enter the room that owns each endpoint, not the R01 alias.
     cross_region_script = ROOT / "scripts/levels/greybox_world_region.gd"
     cross_region_source = cross_region_script.read_text(encoding="utf-8") if cross_region_script.is_file() else ""
