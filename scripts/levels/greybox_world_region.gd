@@ -3758,14 +3758,24 @@ func _on_exit_interacted(target_location: String, target_scene: String, spawn_si
 	# 切图前清理旧场景交互焦点，避免淡出期间残留可交互状态。
 	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
 	WorldState.pending_region_spawn_side = spawn_side
+	var destination_scene := target_scene
 	if target_location == "ash_forest":
-		if target_scene.begins_with("res://scenes/rooms/a2_fog_forest/runtime/") and ResourceLoader.exists(target_scene):
-			WorldState.current_a2_room_scene_path = target_scene
-		elif target_scene == "res://scenes/ash_forest.tscn":
-			WorldState.current_a2_room_scene_path = "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"
+		# C03 and C04 must return to the room that owns their far-side endpoint.
+		# Do not collapse these cross-region returns to the R01 compatibility alias.
+		match spawn_side:
+			"east":
+				destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn"
+			"old_pilgrim_highroad":
+				destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn"
+			_:
+				if target_scene.begins_with("res://scenes/rooms/a2_fog_forest/runtime/") and ResourceLoader.exists(target_scene):
+					destination_scene = target_scene
+				else:
+					destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"
+		WorldState.current_a2_room_scene_path = destination_scene
 	WorldState.set_location(target_location)
-	print("[NEREIS][MAP][EXIT] from=%s to=%s location=%s spawn_side=%s" % [region_id, target_scene, target_location, spawn_side])
-	SceneTransition.fade_to_scene(target_scene)
+	print("[NEREIS][MAP][EXIT] from=%s to=%s location=%s spawn_side=%s" % [region_id, destination_scene, target_location, spawn_side])
+	SceneTransition.fade_to_scene(destination_scene)
 
 func _on_hero_defeated() -> void:
 	if respawning:
