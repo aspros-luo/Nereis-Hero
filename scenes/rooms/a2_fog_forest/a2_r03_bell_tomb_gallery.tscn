@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=12 format=3]
 
 ; 钟墓上环与下层回返石沿
 ; Canva A2 R03 设计坐标初次落地：上层两段、中层悬钟平台、下层回返石沿与 R04 下坠入口。
@@ -31,6 +31,12 @@ size = Vector2(120, 18)
 
 [sub_resource type="RectangleShape2D" id="Rect_009"]
 size = Vector2(120, 18)
+
+[sub_resource type="RectangleShape2D" id="GroundTombWestShape"]
+size = Vector2(350, 18)
+
+[sub_resource type="RectangleShape2D" id="GroundTombEastShape"]
+size = Vector2(780, 18)
 
 [node name="A2R03BellTombGallery" type="Node2D"]
 
@@ -268,3 +274,35 @@ points = PackedVector2Array(2, 12, 118, 12)
 width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
+
+[node name="Ground_TombWest" type="StaticBody2D" parent="."]
+position = Vector2(0, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_TombWest"]
+position = Vector2(175, 9)
+shape = SubResource("GroundTombWestShape")
+
+[node name="TerrainMass" type="Polygon2D" parent="Ground_TombWest"]
+polygon = PackedVector2Array(0, 0, 350, 0, 350, 48, 0, 48)
+color = Color(0.105882, 0.094118, 0.12549, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Ground_TombWest"]
+points = PackedVector2Array(0, 0, 350, 0)
+width = 3.0
+default_color = Color(0.392157, 0.419608, 0.376471, 1)
+
+[node name="Ground_TombEast" type="StaticBody2D" parent="."]
+position = Vector2(500, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_TombEast"]
+position = Vector2(390, 9)
+shape = SubResource("GroundTombEastShape")
+
+[node name="TerrainMass" type="Polygon2D" parent="Ground_TombEast"]
+polygon = PackedVector2Array(0, 0, 780, 0, 780, 48, 0, 48)
+color = Color(0.105882, 0.094118, 0.12549, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Ground_TombEast"]
+points = PackedVector2Array(0, 0, 780, 0)
+width = 3.0
+default_color = Color(0.392157, 0.419608, 0.376471, 1)
