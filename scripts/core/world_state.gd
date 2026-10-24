@@ -10,6 +10,7 @@ var hero_memory := 0
 var hero_humanity := 100
 var first_memory_unlocked := false
 var checkpoint_position := Vector2(320, 520)
+var checkpoint_room_id := ""
 var checkpoint_active := false
 var boss_defeated := false
 var boss_gate_open := false
@@ -22,6 +23,7 @@ var route_memory_seen := false
 var route_memory_id := ""
 var route_complete := false
 var current_location := "slice"
+var current_a2_room_scene_path := "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"
 # Transient direction used by the next scene transition.
 var pending_region_spawn_side := "west"
 # Persisted direction used when Continue resumes the last saved graybox region.
@@ -322,8 +324,9 @@ func unlock_first_memory() -> void:
 	print("[NEREIS][STORY] First memory unlocked; hero_memory=%d" % hero_memory)
 	save_game()
 
-func set_checkpoint(position: Vector2) -> void:
+func set_checkpoint(position: Vector2, room_id: String = "") -> void:
 	checkpoint_position = position
+	checkpoint_room_id = room_id
 	checkpoint_active = true
 	print("[NEREIS][WORLD] Checkpoint activated at %s" % checkpoint_position)
 	save_game()
@@ -512,6 +515,7 @@ func save_game() -> void:
 			"y": checkpoint_position.y
 		},
 		"checkpoint_active": checkpoint_active,
+		"checkpoint_room_id": checkpoint_room_id,
 		"boss_defeated": boss_defeated,
 		"boss_gate_open": boss_gate_open,
 		"church_alignment": church_alignment,
@@ -523,6 +527,7 @@ func save_game() -> void:
 		"route_memory_id": route_memory_id,
 		"route_complete": route_complete,
 		"current_location": current_location,
+		"current_a2_room_scene_path": current_a2_room_scene_path,
 		"resume_spawn_side": resume_spawn_side,
 		"language": language,
 		"interior_clues_seen": interior_clues_seen,
@@ -601,6 +606,7 @@ func load_game() -> void:
 		checkpoint_position = Vector2(320, 520)
 
 	checkpoint_active = bool(parsed.get("checkpoint_active", false))
+	checkpoint_room_id = str(parsed.get("checkpoint_room_id", ""))
 	boss_defeated = bool(parsed.get("boss_defeated", false))
 	boss_gate_open = bool(parsed.get("boss_gate_open", false))
 	church_alignment = int(parsed.get("church_alignment", 0))
@@ -612,6 +618,9 @@ func load_game() -> void:
 	route_memory_id = str(parsed.get("route_memory_id", ""))
 	route_complete = bool(parsed.get("route_complete", false))
 	current_location = str(parsed.get("current_location", "slice"))
+	current_a2_room_scene_path = str(parsed.get("current_a2_room_scene_path", "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"))
+	if not current_a2_room_scene_path.begins_with("res://scenes/rooms/a2_fog_forest/runtime/") or not ResourceLoader.exists(current_a2_room_scene_path):
+		current_a2_room_scene_path = "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"
 	resume_spawn_side = str(parsed.get("resume_spawn_side", "west")).strip_edges()
 	if resume_spawn_side.is_empty() or resume_spawn_side.length() > 64:
 		resume_spawn_side = "west"
@@ -1117,6 +1126,12 @@ func _record_natural_test_scene(scene_path: String) -> void:
 		"res://scenes/escape_prologue.tscn": "A0",
 		"res://scenes/village_hub.tscn": "A1",
 		"res://scenes/ash_forest.tscn": "A2",
+		"res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn": "A2",
+		"res://scenes/rooms/a2_fog_forest/runtime/a2_r02_room.tscn": "A2",
+		"res://scenes/rooms/a2_fog_forest/runtime/a2_r03_room.tscn": "A2",
+		"res://scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn": "A2",
+		"res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn": "A2",
+		"res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn": "A2",
 		"res://scenes/forgotten_city.tscn": "A3",
 		"res://scenes/sewer_reservoir.tscn": "A4",
 		"res://scenes/old_battlefield.tscn": "A5",
@@ -1167,6 +1182,8 @@ func get_resume_scene_path() -> String:
 		"mite_house":
 			return "res://scenes/mite_house.tscn"
 		"ash_forest":
+			if ResourceLoader.exists(current_a2_room_scene_path):
+				return current_a2_room_scene_path
 			return "res://scenes/ash_forest.tscn"
 		"forgotten_city":
 			return "res://scenes/forgotten_city.tscn"
