@@ -230,6 +230,11 @@ def main() -> int:
     require(runtime_source, 'destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn"', RUNTIME_SCRIPT + " C03 return destination", errors)
     require(runtime_source, '"old_pilgrim_highroad":', RUNTIME_SCRIPT + " C04 return-side mapping", errors)
     require(runtime_source, 'destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn"', RUNTIME_SCRIPT + " C04 return destination", errors)
+    require(runtime_source, '"bell_gate":', RUNTIME_SCRIPT + " H02 return-side mapping", errors)
+    require(runtime_source, 'destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn"', RUNTIME_SCRIPT + " H02 return destination", errors)
+    require(runtime_source, 'destination_spawn_side = "a2_r06_c03_return"', RUNTIME_SCRIPT + " C03 landing marker mapping", errors)
+    require(runtime_source, 'destination_spawn_side = "a2_r05_c04_return"', RUNTIME_SCRIPT + " C04 landing marker mapping", errors)
+    require(runtime_source, 'destination_spawn_side = "a2_r04_h02_return"', RUNTIME_SCRIPT + " H02 landing marker mapping", errors)
 
     if errors:
         for error in errors:
