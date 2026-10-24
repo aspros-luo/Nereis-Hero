@@ -128,7 +128,7 @@ H02 是钟墓下层的可选探索支路，入口现位于 R04 的 CryptLanding�
 
 ## 15. 跨区回返的房间归属修正（2026-10-24）
 
-- 复核发现：A3 的 C03、A5 的 C04 与 H02 的回返如果仍以 `scenes/ash_forest.tscn` 作为目标场景，会被兼容别名统一送回 R01；即使保存了 `east` / `old_pilgrim_highroad` / `bell_gate`，R01–R06 独立房间也不会读取对应局部落点。
-- 已在共享出口处理器中按返回侧显式路由：C03 `east` → R06 / `a2_r06_c03_return`；C04 `old_pilgrim_highroad` → R05 / `a2_r05_c04_return`；H02 `bell_gate` → R04 / `a2_r04_h02_return`。目标房间路径和本地 Marker2D 出生侧一起更新，Continue 使用的 `current_a2_room_scene_path` 同步保存。
+- 当前 C03、C04、H02 的正式出口定义已直接指向对应 runtime 场景并使用局部 spawn side；静态核对确认分别为 R06 / `a2_r06_c03_return`、R05 / `a2_r05_c04_return`、R04 / `a2_r04_h02_return`。
+- 本次在共享出口处理器增加防回归兜底：若旧调用仍以 `scenes/ash_forest.tscn` 为目标并使用通用侧标识 `east` / `old_pilgrim_highroad` / `bell_gate`，则改路由到 R06 / R05 / R04，并转换为房间运行时识别的局部 Marker2D 出生侧；同步更新 `current_a2_room_scene_path`。现有正式路线的直接目标保持不变。
 - 静态合同验证器已同步六房间最新平台/碰撞节点计数（16/9/14/10/15/27，共 91 个平台/着陆节点与 6 段地表碰撞，共 97 个主要碰撞根节点），并增加房间边界、Marker2D、C03/C04/H02 回返映射断言。
 - **验证状态：** 仅完成 GitHub 源码静态修改与合同同步；本环境未运行 Python 验证器或 Godot 4.6.1。跨区返回、落点碰撞、Continue、检查点与死亡恢复仍须在 Godot 实机验收后才能标记通过。
