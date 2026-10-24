@@ -2653,7 +2653,7 @@ func _spawn_region_exits() -> void:
 			)
 			# H02 belongs to the optional low Bell Grave space, not the far-eastern main-floor edge.
 			# H02 应位于钟墓坑底的可选低位空间，而不是地图最东侧的主地面。
-			_spawn_h02_gate(960.0, floor_y + 395.0)
+			_spawn_h02_gate(960.0, floor_y + 385.0)
 			# C04 is opened from A5; once opened, keep the reverse entrance persistent on A2.
 			# C04 在 A5 侧开启；开启后，A2 侧永久生成对应回程门。
 			if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
