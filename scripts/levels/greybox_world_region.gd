@@ -2680,7 +2680,7 @@ func _spawn_region_exits() -> void:
 					)
 			_spawn_exit_door(
 				72.0, "E  返回旧朝圣路", "ash_forest",
-				"res://scenes/ash_forest.tscn", "east",
+				"res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn", "a2_r06_c03_return",
 				true, "", "", floor_y - 130.0
 			)
 			# The sewer descent branches off mid-market; the main road continues to A5.
@@ -2799,7 +2799,7 @@ func _spawn_region_exits() -> void:
 				if winch_room != null:
 					_spawn_exit_door(
 						winch_room.position.x + 980.0, "E  打开旧朝圣高路", "ash_forest",
-						"res://scenes/ash_forest.tscn", "old_pilgrim_highroad",
+						"res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn", "a2_r05_c04_return",
 						true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",
 						winch_room.position.y + 610.0
 					)
@@ -3015,7 +3015,7 @@ func _spawn_region_exits() -> void:
 			# H02 是返回 A2 的可选探索支路；不额外设置通往 A5 的第二出口。
 			_spawn_exit_door(
 				72.0, "E  返回旧朝圣路", "ash_forest",
-				"res://scenes/ash_forest.tscn", "bell_gate"
+				"res://scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn", "a2_r04_h02_return"
 			)
 
 		"H03":
@@ -3743,6 +3743,11 @@ func _on_exit_interacted(target_location: String, target_scene: String, spawn_si
 	# 切图前清理旧场景交互焦点，避免淡出期间残留可交互状态。
 	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
 	WorldState.pending_region_spawn_side = spawn_side
+	if target_location == "ash_forest":
+		if target_scene.begins_with("res://scenes/rooms/a2_fog_forest/runtime/") and ResourceLoader.exists(target_scene):
+			WorldState.current_a2_room_scene_path = target_scene
+		elif target_scene == "res://scenes/ash_forest.tscn":
+			WorldState.current_a2_room_scene_path = "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"
 	WorldState.set_location(target_location)
 	print("[NEREIS][MAP][EXIT] from=%s to=%s location=%s spawn_side=%s" % [region_id, target_scene, target_location, spawn_side])
 	SceneTransition.fade_to_scene(target_scene)
@@ -3822,10 +3827,11 @@ func _draw() -> void:
 		if OS.is_debug_build():
 			_draw_debug_exit_markers()
 		return
-	if region_id == "A2":
-		# A2 has its own layered forest/tomb/ravine backdrop so the authored room layout reads as a new map,
-		# rather than the old single-piece forest illustration with a few platforms overlaid.
-		# A2 使用独立的森林、钟墓与沟壑分层背景，避免新房间看起来仍像旧版整张森林图。
+	if region_id == "A2" and room_id.begins_with("A2-R"):
+		# Standalone A2 room runtime: room-local background only; terrain visuals belong to the authored child scene.
+		# 独立 A2 房间运行时只绘制局部背景；地形视觉由可编辑房间子场景负责。
+		draw_rect(Rect2(0.0, 0.0, map_width, room_height), Color("#171b28"))
+	elif region_id == "A2":
 		_draw_a2_authored_landscape()
 	else:
 		var backdrop: Texture2D = _region_backdrop_texture()
@@ -3839,9 +3845,9 @@ func _draw() -> void:
 	if region_id == "A5" and not room_id.is_empty():
 		for segment in a5_room_floor_segments:
 			draw_texture_rect(STONE_FLOOR_STRIP, Rect2(segment.x, floor_y, segment.y, 180.0), false)
-	elif region_id == "A2":
-		# The six room scenes define the ledges; this mossy undercroft only visualizes the three real ground spans.
-		# 六个房间场景负责平台；此处仅为三段真实地表绘制苔藓断层，不再覆盖旧石板贴图。
+	elif region_id == "A2" and not room_id.begins_with("A2-R"):
+		# Only the legacy assembled-map preview uses the shared ground bands; standalone room scenes draw their own ground.
+		# 仅旧版拼装预览绘制共享地表；独立房间由各自场景绘制地表。
 		_draw_a2_authored_ground()
 	else:
 		draw_texture_rect(STONE_FLOOR_STRIP, Rect2(0.0, floor_y, map_width, 180.0), false)
