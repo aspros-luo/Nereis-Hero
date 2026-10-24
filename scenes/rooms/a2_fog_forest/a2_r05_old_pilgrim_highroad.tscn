@@ -52,6 +52,7 @@ size = Vector2(100, 18)
 size = Vector2(760, 18)
 
 [node name="A2R05OldPilgrimHighroad" type="Node2D"]
+scale = Vector2(1.7, 1.25)
 
 [node name="Platform_029" type="StaticBody2D" parent="."]
 position = Vector2(0, 95)
