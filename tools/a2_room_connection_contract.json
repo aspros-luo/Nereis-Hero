@@ -132,7 +132,7 @@
       "from_exit": "canopy_rise",
       "to_entry": "west",
       "travel": "both",
-      "kind": "walk",
+      "kind": "interact_door",
       "initial_state": "open",
       "status": "implemented_pending_godot_playtest"
     },
@@ -143,7 +143,7 @@
       "from_exit": "bell_tomb_path",
       "to_entry": "west",
       "travel": "both",
-      "kind": "walk",
+      "kind": "interact_door",
       "initial_state": "open",
       "status": "implemented_pending_godot_playtest"
     },
@@ -166,7 +166,7 @@
       "from_exit": "eastern_high_link",
       "to_entry": "west",
       "travel": "both",
-      "kind": "shortcut",
+      "kind": "interact_door",
       "initial_state": "open",
       "status": "implemented_pending_godot_playtest"
     },
@@ -189,7 +189,7 @@
       "from_exit": "upper_pilgrim_link",
       "to_entry": "west",
       "travel": "both",
-      "kind": "shortcut",
+      "kind": "interact_door",
       "initial_state": "open",
       "status": "implemented_pending_godot_playtest"
     },
@@ -200,7 +200,7 @@
       "from_exit": "east_deep_route",
       "to_entry": "west",
       "travel": "both",
-      "kind": "walk",
+      "kind": "interact_door",
       "initial_state": "open",
       "status": "implemented_pending_godot_playtest"
     },
@@ -211,7 +211,7 @@
       "from_exit": "eastern_upper_route",
       "to_entry": "west",
       "travel": "both",
-      "kind": "walk",
+      "kind": "interact_door",
       "initial_state": "open",
       "status": "implemented_pending_godot_playtest"
     },
@@ -234,14 +234,15 @@
       "to_entry": "A2",
       "travel": "both",
       "kind": "region_exit",
-      "initial_state": "open",
-      "status": "implemented_pending_godot_playtest"
+      "initial_state": "requires_achievement",
+      "status": "implemented_pending_godot_playtest",
+      "unlock_condition": "reached_A5_and_opened_old_pilgrim_highroad"
     },
     {
       "id": "A2-R01-H02",
       "from": "A2-R01",
       "to": "H02",
-      "from_exit": "H02_hidden_route",
+      "from_exit": "H02_hidden_gate_on_R01",
       "to_entry": "A2",
       "travel": "both",
       "kind": "hidden",
