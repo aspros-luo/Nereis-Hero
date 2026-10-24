@@ -265,6 +265,8 @@ func _spawn_room_exits() -> void:
 			_spawn_exit_door_at_marker("ExitToR05", "E  进入旧朝圣高路捷径", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_upper_shortcut")
 			_spawn_drop_transition_at_marker("DropToR04", 150.0, 220.0, "A2-R04", "a2_r04_tomb_drop")
 		"A2-R04":
+			var h02_position := _room_marker_position("H02Gate", Vector2(90.0, floor_y))
+			_spawn_h02_gate(h02_position.x, h02_position.y)
 			_spawn_exit_door_at_marker("ExitToR03", "E  沿回程石沿返回钟墓上环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_crypt_return")
 			_spawn_exit_door_at_marker("ExitToR06", "E  深入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_low_entry")
 		"A2-R05":
