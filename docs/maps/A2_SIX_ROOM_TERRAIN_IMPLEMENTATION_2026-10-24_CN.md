@@ -6,7 +6,7 @@
 
 ## 1. 装配结构
 
-scenes/ash_forest.tscn 仍是 A2 的共享运行时根节点，直接实例化 R01–R06 六个独立 .tscn。各房间中的平台、碰撞和地表现在由场景节点拥有；a2_authored_terrain.gd 不再通过 _add_ground_segment() 生成旧版区域地面。世界状态、存档、死亡恢复和跨区域出口继续由共享 greybox_world_region.gd 管理。
+六个地形 .tscn 现在由各自的 runtime 包装场景独立加载（scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn 至 a2_r06_room.tscn）。scenes/ash_forest.tscn 仅保留为 R01 兼容别名。每个包装场景继承共享 greybox_world_region.gd 的世界状态/角色/UI能力，并由 a2_room_runtime.gd 提供房间内门、下坠触发器和局部出生点。地形平台与地表碰撞由房间地形场景节点拥有；旧 a2_authored_terrain.gd 不再处于 A2 主入口运行路径。
 
 | 房间 | 父场景原点 | 平台节点数 | 本轮地形职责 |
 |---|---:|---:|---|
@@ -40,7 +40,7 @@ scenes/ash_forest.tscn 仍是 A2 的共享运行时根节点，直接实例化 R
 
 ## 5. 尚未完成
 
-- 六个房间仍是同一 A2 父场景中的可编辑子场景实例；目标设计中的独立房间转场/入口出口合同仍待实现。
-- 在 Godot 4.6.1 编辑器中逐个打开 R01–R06，确认所有节点可见、碰撞位置正确。
-- 实机验证 R01 上行、R02 断桥、R03→R04 下坠、R04 回程、R05→R06 裂谷、C03/C04/H02、死亡恢复与存档恢复。
+- 已新增六个 runtime 包装场景与内部门；R01/R03 的下坠触发器、C03/C04/H02 返回路由和房间级检查点字段已接线，但未运行 Godot 4.6.1。
+- 在 Godot 编辑器中逐个打开 R01–R06 地形 .tscn 与 runtime 包装场景，确认节点可见、引用无误、地形子场景正确实例化。
+- 实机验证 A1→R01、R01↔R02、R01↔R03、R01→R04、R03→R04、R02↔R05、R03↔R05、R04↔R06、R05↔R06、C03/C04/H02、死亡恢复与 Continue。
 - 未验收之前，不宣称“全部路线已通过”。
