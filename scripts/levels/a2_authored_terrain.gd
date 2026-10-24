@@ -143,13 +143,9 @@ func configure_platforms(region: Node) -> void:
 				region.call("_register_authored_platform", rect)
 
 
-func create_floor(region: Node) -> void:
-	var map_width := float(region.get("map_width"))
-	# Only the continuous ground segments are assembled here; room scenes own all lower shelves.
-	# 此处只装配连续地表分段；所有下层石沿均由房间场景负责。
-	region.call("_add_ground_segment", "GreyboxGround_West", 0.0, 860.0)
-	region.call("_add_ground_segment", "GreyboxGround_Middle", 1360.0, 1060.0)
-	# The eastern ravine separates the expanded forest from the remote canopy exit.
-	# 东部沟壑将扩建林地与远端树冠出口分开。
-	region.call("_add_ground_segment", "GreyboxGround_East", 2660.0, map_width - 2660.0)
+func create_floor(_region: Node) -> void:
+	# A2's floor collision is authored inside R01, R05 and R06 as visible StaticBody2D nodes.
+	# Do not generate the old region-wide floor here: the six room scenes now own playable terrain.
+	# A2 地表碰撞已放入 R01、R05、R06 的可见 StaticBody2D 节点。
+	# 此处不再生成旧版区域级连续地面；可玩地形由六个房间场景直接负责。
 	return
