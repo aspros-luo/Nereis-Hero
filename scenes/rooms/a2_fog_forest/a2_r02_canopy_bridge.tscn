@@ -36,6 +36,27 @@ size = Vector2(1620, 18)
 
 [node name="A2R02CanopyBridge" type="Node2D"]
 
+; Temporary authored backdrop: canopy silhouettes, sky bands and distant trunk masses.
+[node name="CanopySkyBackdrop" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-80, -120, 1700, -120, 1700, 860, -80, 860)
+color = Color(0.105, 0.19, 0.24, 1)
+z_index = -20
+
+[node name="DistantCanopyMasses" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-40, 440, 100, 300, 210, 405, 360, 270, 490, 410, 650, 300, 810, 420, 970, 285, 1120, 400, 1300, 290, 1450, 405, 1660, 315, 1660, 860, -40, 860)
+color = Color(0.075, 0.145, 0.16, 1)
+z_index = -10
+
+[node name="CanopyTrunkWest" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(100, -80, 170, -80, 220, 590, 180, 760, 125, 610)
+color = Color(0.19, 0.16, 0.12, 1)
+z_index = -5
+
+[node name="CanopyTrunkEast" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(1290, -80, 1370, -80, 1450, 580, 1390, 750, 1330, 590)
+color = Color(0.19, 0.16, 0.12, 1)
+z_index = -5
+
 [node name="Platform_022" type="StaticBody2D" parent="."]
 position = Vector2(0, 40)
 
