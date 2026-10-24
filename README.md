@@ -26,6 +26,14 @@ Development working charter (Chinese / English):
 
 `docs/DEVELOPMENT_WORKING_CHARTER_CN_EN.md`
 
+Project documentation governance:
+
+`docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md`
+
+Current A2 terrain design baseline:
+
+`docs/maps/A2_DESIGN_BASELINE_CN.md`
+
 Project documentation governance and task-start contract:
 
 `docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md`
