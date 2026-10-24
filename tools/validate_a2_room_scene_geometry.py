@@ -19,10 +19,10 @@ RUNTIME_SCRIPT = "scripts/levels/a2_room_runtime.gd"
 ROOMS = [
     ("R01", "scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn", "A2R01ForestCrossroads", 16, "A2-R01", "a2_r01_room.tscn", "Ground_West", "Ground_West"),
     ("R02", "scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn", "A2R02CanopyBridge", 9, "A2-R02", "a2_r02_room.tscn", "Ground_CanopyFloor", "Platform_022"),
-    ("R03", "scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn", "A2R03BellTombGallery", 9, "A2-R03", "a2_r03_room.tscn", "Ground_TombWest", "Platform_013"),
+    ("R03", "scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn", "A2R03BellTombGallery", 14, "A2-R03", "a2_r03_room.tscn", "Ground_TombWest", "Platform_013"),
     ("R04", "scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn", "A2R04FloodedCrypt", 10, "A2-R04", "a2_r04_room.tscn", "CryptLanding", "CryptLanding"),
-    ("R05", "scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn", "A2R05OldPilgrimHighroad", 13, "A2-R05", "a2_r05_room.tscn", "Ground_Middle", "Ground_Middle"),
-    ("R06", "scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn", "A2R06EasternRavine", 24, "A2-R06", "a2_r06_room.tscn", "Ground_East", "Platform_042"),
+    ("R05", "scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn", "A2R05OldPilgrimHighroad", 15, "A2-R05", "a2_r05_room.tscn", "Ground_Middle", "Ground_Middle"),
+    ("R06", "scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn", "A2R06EasternRavine", 27, "A2-R06", "a2_r06_room.tscn", "Ground_East", "Platform_042"),
 ]
 GROUND_NODES = {
     "R01": {"Ground_West"},
@@ -187,21 +187,55 @@ def main() -> int:
                 runtime = ROOT / str(room.get("runtime_scene_path", "")).replace("res://", "")
                 if not terrain.is_file() or not runtime.is_file():
                     errors.append(f"{room.get('id')}: contract references missing terrain/runtime scene")
+            # Room bounds and editor-visible route anchors must match the runtime wrappers.
+            marker_contracts = {
+                "R01": ["EntryWest", "EntryCanopyReturn", "EntryTombReturn", "ExitVillage", "ExitCanopy", "ExitBellTomb", "DropToR04"],
+                "R02": ["EntryWest", "EntryFromR01", "EntryHighReturn", "ExitToR01", "ExitToR05"],
+                "R03": ["EntryWest", "EntryFromR01", "EntryCryptReturn", "EntryHighroadShortcut", "ExitToR01", "ExitToR05", "DropToR04"],
+                "R04": ["EntryDefault", "EntryTombDrop", "EntryTombDropR01", "H02Gate", "EntryH02Return", "EntryRavineReturn", "ExitToR03", "ExitToR06"],
+                "R05": ["EntryDefault", "EntryFromR02", "EntryUpperShortcut", "EntryRavineReturn", "EntryC04Return", "ExitToR02", "ExitToR03", "ExitToR06", "ExitToA5"],
+                "R06": ["EntryDefault", "EntryHigh", "EntryLow", "EntryC03Return", "EntryRavineReturn", "ExitToR05", "ExitToR04", "ExitToA3"],
+            }
+            for room in contract.get("rooms", []):
+                room_id = str(room.get("id", "")).replace("A2-", "")
+                terrain_path = ROOT / str(room.get("scene_path", "")).replace("res://", "")
+                runtime_path = ROOT / str(room.get("runtime_scene_path", "")).replace("res://", "")
+                if terrain_path.is_file() and runtime_path.is_file():
+                    terrain_source = terrain_path.read_text(encoding="utf-8")
+                    wrapper_source = runtime_path.read_text(encoding="utf-8")
+                    for marker_name in marker_contracts.get(room_id, []):
+                        marker_decl = f'[node name="{marker_name}" type="Marker2D" parent="RoomMarkers"]'
+                        if marker_decl not in terrain_source:
+                            errors.append(f"{room.get('id')}: missing authored RoomMarkers anchor {marker_name}")
+                    bounds = room.get("bounds", {})
+                    for key, expected in (("map_width", bounds.get("width")), ("room_height", bounds.get("height")), ("floor_y", room.get("floor_y"))):
+                        if expected is None or not re.search(rf"^{key}\\s*=\\s*{re.escape(str(float(expected)))}(?:\\.0)?\\s*$", wrapper_source, re.M):
+                            # Godot scene values may be serialized as either integer-like or decimal floats.
+                            if expected is None or not re.search(rf"^{key}\\s*=\\s*{re.escape(str(expected))}(?:\\.0)?\\s*$", wrapper_source, re.M):
+                                errors.append(f"{room.get('id')}: runtime {key} does not match connection-contract bounds ({expected})")
+
             for connection in contract.get("connections", []):
                 if connection.get("status") != "implemented_pending_godot_playtest":
                     errors.append(f"{connection.get('id')}: unexpected status={connection.get('status')}")
         except (json.JSONDecodeError, OSError) as exc:
             errors.append(f"Invalid A2 room connection contract: {exc}")
 
-    if total_platforms != 81:
-        errors.append(f"total authored room platforms={total_platforms}; expected 81")
-    if total_bodies != 87:
-        errors.append(f"total authored collision bodies={total_bodies}; expected 87")
+    if total_platforms != 91:
+        errors.append(f"total authored room platforms={total_platforms}; expected 91")
+    if total_bodies != 97:
+        errors.append(f"total authored collision bodies={total_bodies}; expected 97")
+    # Cross-region returns must re-enter the room that owns each endpoint, not the R01 alias.
+    if '"east":' not in (ROOT / RUNTIME_SCRIPT).read_text(encoding="utf-8"):
+        pass
+    runtime_source = runtime_script.read_text(encoding="utf-8") if runtime_script.is_file() else ""
+    require(runtime_source, '"east":\\n\\t\\t\\t\\tdestination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn"', RUNTIME_SCRIPT, errors)
+    require(runtime_source, '"old_pilgrim_highroad":\\n\\t\\t\\t\\tdestination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn"', RUNTIME_SCRIPT, errors)
+
     if errors:
         for error in errors:
             print(f"[FAIL] {error}")
         return 1
-    print(f"A2 authored room structure: PASS rooms=6/6 platforms={total_platforms}/81 collision_bodies={total_bodies}/87 simplified_reachable={total_reachable}/{total_bodies}")
+    print(f"A2 authored room structure: PASS rooms=6/6 platforms={total_platforms}/91 collision_bodies={total_bodies}/97 simplified_reachable={total_reachable}/{total_bodies}")
     print("BOUNDARY: static estimate only; not Godot parser/runtime, exact Canva fidelity, or interactive acceptance.")
     return 0
 
