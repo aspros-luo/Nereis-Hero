@@ -23,7 +23,7 @@
 
 | 候选 | 当前判断 | 下一步证据要求 |
 |---|---|---|
-| scenes/main.tscn + scripts/core/world.gd | 可能是早期垂直切片入口；项目默认入口已是 scenes/boot.tscn，但不能仅据此认定完全无用。 | 全仓扫描静态与动态场景引用、手动测试入口、README/调试菜单引用；确认可退役后再删。 |
+| scenes/main.tscn + scripts/core/world.gd | **已删除** | project.godot 默认入口为 scenes/boot.tscn；README、boot.gd、WorldState 的继续游戏路由和地图测试菜单均未将其列为入口；仓库代码搜索未发现 main.tscn 引用；该场景只挂载早期 core/world.gd。历史可由 Git 恢复。 |
 | scripts/levels/room_world_prototype.gd | 不能删除：surface_hub.tscn、canopy_crossing.tscn、undercity_descent.tscn 仍显式引用它。 | 如要退役，必须先迁移/删除这些原型场景并更新对应验收资料。 |
 | scenes/cliff_cave_experiment.tscn | 不能删除：scripts/levels/cliff_exploration.gd 引用它，且其 H09 状态/奖励逻辑仍存在。 | 需结合 A1 后山/H09 设计合同和世界拓扑审计。 |
 | scenes/ash_forest.tscn 与六个 A2 房间 | 不删除。父场景目前仍承载 A2 区域控制器、跨区出口、检查点与持久状态。 | 先完成房间运行时架构迁移并验证 A1→R01、C03/C04/H02 后，才评估退役父场景或将其转为兼容入口。 |
@@ -45,6 +45,7 @@
 
 ## 本轮验收边界
 
-- 已确认文档更新和删除操作均返回 GitHub 提交 SHA。
+- 已确认文档与文件删除操作均返回 GitHub 提交 SHA。
+- 额外删除 scenes/main.tscn 与 scripts/core/world.gd：这是未被项目启动、继续游戏路由、README 或地图测试菜单引用的旧垂直切片入口；删除前核对了当前项目启动配置与主要路由来源。
 - 未执行 Godot 运行时测试；未声称 A2 房间转场、坐标还原或实机可玩性通过。
 - 本报告记录清理进度，不替代后续代码引用审计和 Godot 4.6.1 本地验收。
