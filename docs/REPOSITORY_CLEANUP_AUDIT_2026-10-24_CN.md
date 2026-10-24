@@ -46,6 +46,7 @@
 ## 本轮验收边界
 
 - 已确认文档与文件删除操作均返回 GitHub 提交 SHA。
+- 删除旧的 tools/validate_a2_platform_reachability.py（其解析对象是退役的程序化 A2 地形分支），新增 tools/validate_a2_room_scene_geometry.py；新验证器尚未执行。
 - 额外删除 scenes/main.tscn 与 scripts/core/world.gd：这是未被项目启动、继续游戏路由、README 或地图测试菜单引用的旧垂直切片入口；删除前核对了当前项目启动配置与主要路由来源。
 - 未执行 Godot 运行时测试；未声称 A2 房间转场、坐标还原或实机可玩性通过。
 - 本报告记录清理进度，不替代后续代码引用审计和 Godot 4.6.1 本地验收。
