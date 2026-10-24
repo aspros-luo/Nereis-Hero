@@ -45,8 +45,8 @@
 
 ## 本次续开发：跨区回返合同（2026-10-24）
 
-- 当前分支仍为 `feature/story-map-progression`。检查共享出口处理器后发现 C03/C04/H02 返回到 A2 时可能落入 `ash_forest.tscn` 的 R01 兼容入口，未恢复实际端点房间。
-- 已修改 `scripts/levels/greybox_world_region.gd`：C03 回 R06 并使用 `a2_r06_c03_return`；C04 回 R05 并使用 `a2_r05_c04_return`；H02 回 R04 并使用 `a2_r04_h02_return`。同步设置 `current_a2_room_scene_path` 与一次性出生侧，未更改 H02 解锁条件或 C04 持久 flag。
+- 当前分支仍为 `feature/story-map-progression`。静态核对确认正式 C03/C04/H02 出口已直接指向 R06/R05/R04 的 runtime 场景并指定局部出生侧；共享处理器的通用 fallback 对旧式 `ash_forest.tscn` 调用仍会默认 R01。
+- 已修改 `scripts/levels/greybox_world_region.gd` 增加防回归映射：通用侧标识 `east` → R06 / `a2_r06_c03_return`，`old_pilgrim_highroad` → R05 / `a2_r05_c04_return`，`bell_gate` → R04 / `a2_r04_h02_return`。正式路线定义保持原样；未更改 H02 解锁条件或 C04 持久 flag。
 - 已修改 `tools/validate_a2_room_scene_geometry.py`：将房间平台计数更新为 16/9/14/10/15/27、总计 91；碰撞根节点预期总计更新为 97；新增房间边界、Marker2D 与跨区回返映射断言。
 - 已更新 `tools/a2_room_connection_contract.json`、A2 设计基线与几何审计，明确回返合同和未验收状态。
 - 验证边界：GitHub 写入已返回提交 SHA；未运行 Python 静态验证器、未运行 Godot 4.6.1，未进行跳跃/碰撞/转场/存档实机测试。
