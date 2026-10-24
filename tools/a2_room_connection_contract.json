@@ -1,13 +1,14 @@
 {
   "schema_version": 1,
   "region_id": "A2",
-  "status": "room_runtime_implemented_pending_godot_acceptance",
+  "status": "room_runtime_marker_driven_pending_godot_acceptance",
   "source_of_truth": "docs/maps/A2_DESIGN_BASELINE_CN.md",
   "notes": [
     "Each terrain .tscn is an editor-visible authored room; its runtime wrapper lives under scenes/rooms/a2_fog_forest/runtime/.",
     "scenes/ash_forest.tscn is a compatibility alias to the R01 runtime scene. A1 north gate routes directly to R01.",
     "Internal room doors and the R01/R03 drop transitions are implemented in a2_room_runtime.gd; they still require Godot 4.6.1 playtesting.",
-    "C03, C04, H02 and WorldState persistence remain shared campaign contracts; cross-region return paths now target their owning A2 room runtime."
+    "C03, C04, H02 and WorldState persistence remain shared campaign contracts; cross-region return paths now target their owning A2 room runtime.",
+    "Entry, exit and drop-transition anchors are authored Marker2D nodes under each terrain scene's RoomMarkers child; a2_room_runtime.gd reads these anchors instead of duplicating their coordinates."
   ],
   "rooms": [
     {
