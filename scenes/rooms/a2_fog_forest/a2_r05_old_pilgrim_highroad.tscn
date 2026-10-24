@@ -52,6 +52,17 @@ size = Vector2(100, 18)
 size = Vector2(760, 18)
 
 [node name="A2R05OldPilgrimHighroad" type="Node2D"]
+
+; Authored greybox backdrop: distant pilgrimage ruins and open sky.
+[node name="PilgrimSkyBackdrop" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-100, -120, 1700, -120, 1700, 1000, -100, 1000)
+color = Color(0.13, 0.17, 0.18, 1)
+z_index = -30
+
+[node name="DistantPilgrimRuins" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-30, 520, 70, 390, 170, 520, 250, 330, 340, 520, 480, 520, 480, 300, 540, 220, 600, 300, 600, 520, 760, 520, 760, 350, 840, 250, 920, 350, 920, 520, 1080, 520, 1080, 330, 1140, 240, 1200, 330, 1200, 520, 1370, 520, 1450, 400, 1550, 520, 1550, 900, -30, 900)
+color = Color(0.20, 0.22, 0.21, 1)
+z_index = -20
 scale = Vector2(1.7, 1.25)
 
 [node name="Platform_029" type="StaticBody2D" parent="."]
