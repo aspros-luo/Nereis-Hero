@@ -838,7 +838,7 @@ position = Vector2(50, 325)
 position = Vector2(160, 260)
 
 [node name="EntryLow" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(280, 490)
+position = Vector2(280, 610)
 
 [node name="EntryC03Return" type="Marker2D" parent="RoomMarkers"]
 position = Vector2(1010, 345)
