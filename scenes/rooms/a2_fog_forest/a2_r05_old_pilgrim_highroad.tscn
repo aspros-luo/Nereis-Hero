@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 ; 旧朝圣高路、C04高位落点与下层绕行
 ; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
@@ -41,6 +41,9 @@ size = Vector2(140, 18)
 
 [sub_resource type="RectangleShape2D" id="Rect_013"]
 size = Vector2(115, 18)
+
+[sub_resource type="RectangleShape2D" id="GroundMiddleShape"]
+size = Vector2(1060, 18)
 
 [node name="A2R05OldPilgrimHighroad" type="Node2D"]
 
@@ -382,3 +385,19 @@ points = PackedVector2Array(2, 12, 113, 12)
 width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
+
+[node name="Ground_Middle" type="StaticBody2D" parent="."]
+position = Vector2(0, 380)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_Middle"]
+position = Vector2(530, 9)
+shape = SubResource("GroundMiddleShape")
+
+[node name="TerrainMass" type="Polygon2D" parent="Ground_Middle"]
+polygon = PackedVector2Array(0, 0, 1060, 0, 1060, 48, 0, 48)
+color = Color(0.105882, 0.094118, 0.12549, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Ground_Middle"]
+points = PackedVector2Array(0, 0, 1060, 0)
+width = 3.0
+default_color = Color(0.392157, 0.419608, 0.376471, 1)
