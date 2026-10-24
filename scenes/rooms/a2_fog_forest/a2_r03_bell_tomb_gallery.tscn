@@ -446,7 +446,7 @@ position = Vector2(390, 9)
 shape = SubResource("GroundTombEastShape")
 
 [node name="TerrainMass" type="Polygon2D" parent="Ground_TombEast"]
-polygon = PackedVector2Array(0, 0, 930, 0, 930, 48, 0, 48)
+polygon = PackedVector2Array(0, 0, 780, 0, 780, 48, 0, 48)
 color = Color(0.105882, 0.094118, 0.12549, 1)
 
 [node name="TerrainTopEdge" type="Line2D" parent="Ground_TombEast"]
