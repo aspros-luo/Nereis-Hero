@@ -38,6 +38,7 @@ func _ready() -> void:
 		camera.limit_right = int(map_width)
 		camera.limit_bottom = int(room_height)
 	_spawn_ui()
+	_spawn_room_debug_label()
 
 	_spawn_room_content()
 	_spawn_room_exits()
@@ -48,6 +49,33 @@ func _ready() -> void:
 	print("[NEREIS][A2][ROOM] loaded=%s size=%.0fx%.0f spawn=%s at=(%.1f,%.1f)" % [
 		room_id, map_width, room_height, spawn_side, hero.position.x, hero.position.y
 	])
+
+
+## Temporary on-screen room marker for manual map acceptance.
+## 实机验收临时标识：始终显示当前 A2 房间编号与场景名称。
+func _spawn_room_debug_label() -> void:
+	var layer := CanvasLayer.new()
+	layer.name = "RoomDebugOverlay"
+	layer.layer = 100
+	add_child(layer)
+
+	var panel := PanelContainer.new()
+	panel.name = "RoomNamePanel"
+	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	panel.position = Vector2(18.0, 18.0)
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(panel)
+
+	var label := Label.new()
+	label.name = "RoomNameLabel"
+	label.text = "%s · %s · %s" % [region_id, room_id.replace("A2-", ""), region_title]
+	label.add_theme_font_size_override("font_size", 20)
+	label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 1.0))
+	label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.9))
+	label.add_theme_constant_override("shadow_offset_x", 1)
+	label.add_theme_constant_override("shadow_offset_y", 1)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(label)
 
 
 func _scene_path_for_room(target_room_id: String) -> String:
