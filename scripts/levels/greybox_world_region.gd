@@ -3755,6 +3755,31 @@ func _on_exit_interacted(target_location: String, target_scene: String, spawn_si
 func _on_hero_defeated() -> void:
 	if respawning:
 		return
+	if WorldState.checkpoint_room_id.begins_with("A2-") and (region_id != "A2" or room_id != WorldState.checkpoint_room_id):
+		var checkpoint_scene := ""
+		match WorldState.checkpoint_room_id:
+			"A2-R01":
+				checkpoint_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"
+			"A2-R02":
+				checkpoint_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r02_room.tscn"
+			"A2-R03":
+				checkpoint_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r03_room.tscn"
+			"A2-R04":
+				checkpoint_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn"
+			"A2-R05":
+				checkpoint_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn"
+			"A2-R06":
+				checkpoint_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn"
+		if not checkpoint_scene.is_empty() and ResourceLoader.exists(checkpoint_scene):
+			respawning = true
+			WorldState.input_locked = true
+			INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
+			await get_tree().create_timer(0.75).timeout
+			WorldState.pending_region_spawn_side = "a2_checkpoint"
+			WorldState.current_a2_room_scene_path = checkpoint_scene
+			WorldState.set_location("ash_forest")
+			SceneTransition.fade_to_scene(checkpoint_scene)
+			return
 	respawning = true
 	WorldState.input_locked = true
 	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
