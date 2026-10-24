@@ -1,4 +1,5 @@
 [gd_scene load_steps=13 format=3]
+; Canva terrain alignment pass: Canva R01 extends from west entry x=-128 toward the upper canopy/eastern routes around x=1792; expand authored platform spacing to match the room's designed width.
 
 ; 林间入口、岔路与树根攀升
 ; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
@@ -68,7 +69,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_002" type="StaticBody2D" parent="."]
-position = Vector2(130, 295)
+position = Vector2(159, 295)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_002"]
 position = Vector2(55, 9)
@@ -94,7 +95,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_003" type="StaticBody2D" parent="."]
-position = Vector2(255, 230)
+position = Vector2(311, 230)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_003"]
 position = Vector2(57.5, 9)
@@ -120,7 +121,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_004" type="StaticBody2D" parent="."]
-position = Vector2(390, 175)
+position = Vector2(476, 175)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_004"]
 position = Vector2(52.5, 9)
@@ -146,7 +147,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_005" type="StaticBody2D" parent="."]
-position = Vector2(470, 110)
+position = Vector2(573, 110)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_005"]
 position = Vector2(52.5, 9)
@@ -172,7 +173,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_006" type="StaticBody2D" parent="."]
-position = Vector2(600, 55)
+position = Vector2(732, 55)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_006"]
 position = Vector2(60, 9)
@@ -198,7 +199,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_007" type="StaticBody2D" parent="."]
-position = Vector2(735, 0)
+position = Vector2(897, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_007"]
 position = Vector2(65, 9)
@@ -224,7 +225,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_008" type="StaticBody2D" parent="."]
-position = Vector2(875, 40)
+position = Vector2(1068, 40)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_008"]
 position = Vector2(57.5, 9)
@@ -250,7 +251,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_009" type="StaticBody2D" parent="."]
-position = Vector2(965, 110)
+position = Vector2(1177, 110)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_009"]
 position = Vector2(60, 9)
@@ -276,7 +277,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_010" type="StaticBody2D" parent="."]
-position = Vector2(1080, 170)
+position = Vector2(1318, 170)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_010"]
 position = Vector2(65, 9)
@@ -302,7 +303,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_011" type="StaticBody2D" parent="."]
-position = Vector2(1210, 230)
+position = Vector2(1476, 230)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_011"]
 position = Vector2(60, 9)
@@ -328,7 +329,7 @@ width = 2.0
 default_color = Color(0.105882, 0.090196, 0.121569, 1)
 
 [node name="Platform_012" type="StaticBody2D" parent="."]
-position = Vector2(1330, 285)
+position = Vector2(1623, 285)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_012"]
 position = Vector2(67.5, 9)
