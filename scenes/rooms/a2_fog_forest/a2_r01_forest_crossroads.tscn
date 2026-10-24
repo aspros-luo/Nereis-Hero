@@ -57,6 +57,27 @@ size = Vector2(130, 18)
 
 [node name="A2R01ForestCrossroads" type="Node2D"]
 
+; Authored greybox backdrop: forest depth and distant trunks, purely visual.
+[node name="ForestBackdrop" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-100, -100, 1900, -100, 1900, 1200, -100, 1200)
+color = Color(0.055, 0.105, 0.09, 1)
+z_index = -30
+
+[node name="ForestDistantCanopy" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-80, 330, 100, 170, 260, 300, 420, 135, 610, 285, 800, 160, 990, 300, 1170, 145, 1370, 290, 1550, 170, 1830, 320, 1830, 1100, -80, 1100)
+color = Color(0.10, 0.17, 0.13, 1)
+z_index = -20
+
+[node name="ForestTrunkWest" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(120, -80, 195, -80, 260, 570, 220, 760, 160, 610)
+color = Color(0.19, 0.15, 0.10, 1)
+z_index = -10
+
+[node name="ForestTrunkEast" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(1450, -80, 1535, -80, 1590, 540, 1540, 720, 1490, 570)
+color = Color(0.19, 0.15, 0.10, 1)
+z_index = -10
+
 [node name="Platform_001" type="StaticBody2D" parent="."]
 position = Vector2(0, 350)
 
