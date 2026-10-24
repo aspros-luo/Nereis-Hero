@@ -259,7 +259,8 @@ func _spawn_room_exits() -> void:
 			_spawn_exit_door_at_marker("ExitVillage", "E  返回边境村庄", "village", "res://scenes/village_hub.tscn", "north_gate")
 			_spawn_exit_door_at_marker("ExitCanopy", "E  沿树冠阶梯前进", "ash_forest", _scene_path_for_room("A2-R02"), "a2_r02_from_r01")
 			_spawn_exit_door_at_marker("ExitBellTomb", "E  进入钟墓上环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_from_r01")
-			_spawn_drop_transition_at_marker("DropToR04", 500.0, 260.0, "A2-R04", "a2_r04_tomb_drop_r01")
+			# Cover the full unsupported east-side ravine below R01's canopy, up to the room boundary.
+			_spawn_drop_transition_at_marker("DropToR04", 960.0, 260.0, "A2-R04", "a2_r04_tomb_drop_r01")
 		"A2-R02":
 			_spawn_exit_door_at_marker("ExitToR01", "E  返回林间岔路", "ash_forest", _scene_path_for_room("A2-R01"), "a2_r01_canopy_return")
 			_spawn_exit_door_at_marker("ExitToR05", "E  沿旧朝圣高路前进", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_from_r02")
