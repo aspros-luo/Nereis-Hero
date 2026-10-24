@@ -42,3 +42,11 @@
 - 未运行新 Python 验证器。
 - 未运行 Godot 4.6.1；房间转场、碰撞、跳跃、C03/C04/H02、存档恢复均未验收。
 - Canva R04–R06 设计未创建成功。
+
+## 本次续开发：跨区回返合同（2026-10-24）
+
+- 当前分支仍为 `feature/story-map-progression`。检查共享出口处理器后发现 C03/C04/H02 返回到 A2 时可能落入 `ash_forest.tscn` 的 R01 兼容入口，未恢复实际端点房间。
+- 已修改 `scripts/levels/greybox_world_region.gd`：C03 回 R06 并使用 `a2_r06_c03_return`；C04 回 R05 并使用 `a2_r05_c04_return`；H02 回 R04 并使用 `a2_r04_h02_return`。同步设置 `current_a2_room_scene_path` 与一次性出生侧，未更改 H02 解锁条件或 C04 持久 flag。
+- 已修改 `tools/validate_a2_room_scene_geometry.py`：将房间平台计数更新为 16/9/14/10/15/27、总计 91；碰撞根节点预期总计更新为 97；新增房间边界、Marker2D 与跨区回返映射断言。
+- 已更新 `tools/a2_room_connection_contract.json`、A2 设计基线与几何审计，明确回返合同和未验收状态。
+- 验证边界：GitHub 写入已返回提交 SHA；未运行 Python 静态验证器、未运行 Godot 4.6.1，未进行跳跃/碰撞/转场/存档实机测试。
