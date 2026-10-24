@@ -80,8 +80,6 @@ func _spawn_position_for_side(side: String) -> Vector2:
 					marker_name = "EntryCanopyReturn"
 				"a2_r01_tomb_return":
 					marker_name = "EntryTombReturn"
-				"a2_r01_h02_return":
-					marker_name = "EntryH02Return"
 				_:
 					marker_name = "EntryWest"
 		"A2-R02":
