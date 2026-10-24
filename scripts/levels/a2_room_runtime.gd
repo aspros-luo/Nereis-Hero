@@ -29,7 +29,8 @@ func _ready() -> void:
 	# The authored room child owns every ledge and ground collider; no A2 region-wide floor is generated.
 	_create_boundaries()
 	_spawn_region_ambience()
-	_spawn_hero(_spawn_x_for_side(spawn_side), _spawn_y_for_side(spawn_side))
+	var spawn_position := _spawn_position_for_side(spawn_side)
+	_spawn_hero(spawn_position.x, spawn_position.y)
 	if camera != null:
 		camera.limit_left = 0
 		camera.limit_top = 0
@@ -59,122 +60,107 @@ func _room_id_for_scene_path(scene_path: String) -> String:
 	return ""
 
 
-func _spawn_x_for_side(side: String) -> float:
-	if side == "a2_checkpoint":
-		return WorldState.checkpoint_position.x
-	match room_id:
-		"A2-R01":
-			if side in ["a2_r01_canopy_return", "a2_r01_tomb_return"]:
-				return 700.0
-			if side == "a2_r01_h02_return":
-				return 650.0
-			return 220.0
-		"A2-R02":
-			match side:
-				"a2_r02_from_r01":
-					return 350.0
-				"a2_r02_high_return":
-					return 1520.0
-				_:
-					return 50.0
-		"A2-R03":
-			match side:
-				"a2_r03_from_r01":
-					return 250.0
-				"a2_r03_crypt_return":
-					return 320.0
-				"a2_r03_highroad_shortcut":
-					return 800.0
-				_:
-					return 100.0
-		"A2-R04":
-			match side:
-				"a2_r04_tomb_drop":
-					return 200.0
-				"a2_r04_tomb_drop_r01":
-					return 400.0
-				"a2_r04_h02_return":
-					return 350.0
-				"a2_r04_ravine_return":
-					return 400.0
-				_:
-					return 200.0
-		"A2-R05":
-			match side:
-				"a2_r05_from_r02", "a2_r05_upper_shortcut":
-					return 200.0
-				"a2_r05_ravine_return":
-					return 650.0
-				"a2_r05_c04_return":
-					return 560.0
-				_:
-					return 50.0
-		"A2-R06":
-			match side:
-				"a2_r06_high_entry":
-					return 160.0
-				"a2_r06_low_entry":
-					return 280.0
-				"a2_r06_c03_return":
-					return 1010.0
-				"a2_r06_ravine_return":
-					return 280.0
-				_:
-					return 50.0
-	return 220.0
+func _room_marker_position(marker_name: String, fallback: Vector2 = Vector2.ZERO) -> Vector2:
+	var marker := get_node_or_null("AuthoredRoom/RoomMarkers/" + marker_name) as Marker2D
+	if marker == null:
+		push_error("[NEREIS][A2][ROOM][MARKER_MISSING] room=%s marker=%s" % [room_id, marker_name])
+		return fallback
+	return marker.position
 
 
-func _spawn_y_for_side(side: String) -> float:
+func _spawn_position_for_side(side: String) -> Vector2:
 	if side == "a2_checkpoint":
-		return WorldState.checkpoint_position.y
+		return WorldState.checkpoint_position
+	var marker_name := "EntryWest"
 	match room_id:
 		"A2-R01":
-			if side in ["a2_r01_canopy_return", "a2_r01_tomb_return"]:
-				return 560.0
-			return 650.0
+			match side:
+				"a2_r01_canopy_return": marker_name = "EntryCanopyReturn"
+				"a2_r01_tomb_return": marker_name = "EntryTombReturn"
+				"a2_r01_h02_return": marker_name = "EntryH02Return"
+				_: marker_name = "EntryWest"
 		"A2-R02":
 			match side:
-				"a2_r02_from_r01":
-					return 0.0
-				"a2_r02_high_return":
-					return 260.0
-				_:
-					return 40.0
+				"a2_r02_from_r01": marker_name = "EntryFromR01"
+				"a2_r02_high_return": marker_name = "EntryHighReturn"
+				_: marker_name = "EntryWest"
 		"A2-R03":
 			match side:
-				"a2_r03_from_r01":
-					return 120.0
-				"a2_r03_crypt_return":
-					return 310.0
-				"a2_r03_highroad_shortcut":
-					return 106.0
-				_:
-					return 85.0
+				"a2_r03_from_r01": marker_name = "EntryFromR01"
+				"a2_r03_crypt_return": marker_name = "EntryCryptReturn"
+				"a2_r03_highroad_shortcut": marker_name = "EntryHighroadShortcut"
+				_: marker_name = "EntryWest"
 		"A2-R04":
-			return 380.0
+			match side:
+				"a2_r04_tomb_drop": marker_name = "EntryTombDrop"
+				"a2_r04_tomb_drop_r01": marker_name = "EntryTombDropR01"
+				"a2_r04_h02_return": marker_name = "EntryH02Return"
+				"a2_r04_ravine_return": marker_name = "EntryRavineReturn"
+				_: marker_name = "EntryDefault"
 		"A2-R05":
 			match side:
-				"a2_r05_from_r02", "a2_r05_upper_shortcut":
-					return 40.0
-				"a2_r05_ravine_return":
-					return 170.0
-				"a2_r05_c04_return":
-					return 105.0
-				_:
-					return 95.0
+				"a2_r05_from_r02": marker_name = "EntryFromR02"
+				"a2_r05_upper_shortcut": marker_name = "EntryUpperShortcut"
+				"a2_r05_ravine_return": marker_name = "EntryRavineReturn"
+				"a2_r05_c04_return": marker_name = "EntryC04Return"
+				_: marker_name = "EntryDefault"
 		"A2-R06":
 			match side:
-				"a2_r06_high_entry":
-					return 260.0
-				"a2_r06_low_entry":
-					return 490.0
-				"a2_r06_c03_return":
-					return 345.0
-				"a2_r06_ravine_return":
-					return 610.0
-				_:
-					return 325.0
-	return floor_y
+				"a2_r06_high_entry": marker_name = "EntryHigh"
+				"a2_r06_low_entry": marker_name = "EntryLow"
+				"a2_r06_c03_return": marker_name = "EntryC03Return"
+				"a2_r06_ravine_return": marker_name = "EntryRavineReturn"
+				_: marker_name = "EntryDefault"
+	return _room_marker_position(marker_name, Vector2(220.0, floor_y))
+
+
+func _spawn_exit_door_at_marker(
+	marker_name: String,
+	prompt_text: String,
+	target_location: String,
+	target_scene: String,
+	spawn_side: String,
+	enabled: bool = true,
+	unlock_once_flag_id: String = "",
+	opened_prompt_text: String = ""
+) -> void:
+	var marker_position := _room_marker_position(marker_name, Vector2(-1.0, -1.0))
+	if marker_position.x < 0.0 or marker_position.y < 0.0:
+		push_error("[NEREIS][A2][ROOM][EXIT_ANCHOR_INVALID] room=%s marker=%s" % [room_id, marker_name])
+		return
+	_spawn_exit_door(
+		marker_position.x,
+		prompt_text,
+		target_location,
+		target_scene,
+		spawn_side,
+		enabled,
+		unlock_once_flag_id,
+		opened_prompt_text,
+		marker_position.y
+	)
+
+
+func _spawn_drop_transition_at_marker(
+	marker_name: String,
+	width: float,
+	height: float,
+	target_room_id: String,
+	target_spawn_side: String
+) -> void:
+	var marker_position := _room_marker_position(marker_name, Vector2(-1.0, -1.0))
+	if marker_position.x < 0.0 or marker_position.y < 0.0:
+		push_error("[NEREIS][A2][ROOM][DROP_ANCHOR_INVALID] room=%s marker=%s" % [room_id, marker_name])
+		return
+	_spawn_drop_transition(
+		"Drop_%s_to_%s" % [room_id, target_room_id],
+		marker_position.x,
+		marker_position.y,
+		width,
+		height,
+		target_room_id,
+		target_spawn_side
+	)
 
 
 func _spawn_room_content() -> void:
@@ -239,31 +225,32 @@ func _spawn_room_rest_point() -> void:
 func _spawn_room_exits() -> void:
 	match room_id:
 		"A2-R01":
-			_spawn_h02_gate(750.0, floor_y)
-			_spawn_exit_door(72.0, "E  返回边境村庄", "village", "res://scenes/village_hub.tscn", "north_gate", true, "", "", 650.0)
-			_spawn_exit_door(1680.0, "E  沿树冠阶梯前进", "ash_forest", _scene_path_for_room("A2-R02"), "a2_r02_from_r01", true, "", "", 285.0)
-			_spawn_exit_door(930.0, "E  进入钟墓上环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_from_r01", true, "", "", 0.0)
-			_spawn_drop_transition("Drop_R01_to_R04", 1110.0, 850.0, 500.0, 260.0, "A2-R04", "a2_r04_tomb_drop_r01")
+			var h02_position := _room_marker_position("H02Gate", Vector2(750.0, floor_y))
+			_spawn_h02_gate(h02_position.x, h02_position.y)
+			_spawn_exit_door_at_marker("ExitVillage", "E  返回边境村庄", "village", "res://scenes/village_hub.tscn", "north_gate")
+			_spawn_exit_door_at_marker("ExitCanopy", "E  沿树冠阶梯前进", "ash_forest", _scene_path_for_room("A2-R02"), "a2_r02_from_r01")
+			_spawn_exit_door_at_marker("ExitBellTomb", "E  进入钟墓上环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_from_r01")
+			_spawn_drop_transition_at_marker("DropToR04", 500.0, 260.0, "A2-R04", "a2_r04_tomb_drop_r01")
 		"A2-R02":
-			_spawn_exit_door(50.0, "E  返回林间岔路", "ash_forest", _scene_path_for_room("A2-R01"), "a2_r01_canopy_return", true, "", "", 40.0)
-			_spawn_exit_door(1510.0, "E  沿旧朝圣高路前进", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_from_r02", true, "", "", 260.0)
+			_spawn_exit_door_at_marker("ExitToR01", "E  返回林间岔路", "ash_forest", _scene_path_for_room("A2-R01"), "a2_r01_canopy_return")
+			_spawn_exit_door_at_marker("ExitToR05", "E  沿旧朝圣高路前进", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_from_r02")
 		"A2-R03":
-			_spawn_exit_door(100.0, "E  返回林间岔路", "ash_forest", _scene_path_for_room("A2-R01"), "a2_r01_tomb_return", true, "", "", 85.0)
-			_spawn_exit_door(950.0, "E  进入旧朝圣高路捷径", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_upper_shortcut", true, "", "", 106.0)
-			_spawn_drop_transition("Drop_R03_to_R04", 425.0, 675.0, 150.0, 220.0, "A2-R04", "a2_r04_tomb_drop")
+			_spawn_exit_door_at_marker("ExitToR01", "E  返回林间岔路", "ash_forest", _scene_path_for_room("A2-R01"), "a2_r01_tomb_return")
+			_spawn_exit_door_at_marker("ExitToR05", "E  进入旧朝圣高路捷径", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_upper_shortcut")
+			_spawn_drop_transition_at_marker("DropToR04", 150.0, 220.0, "A2-R04", "a2_r04_tomb_drop")
 		"A2-R04":
-			_spawn_exit_door(55.0, "E  沿回程石沿返回钟墓上环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_crypt_return", true, "", "", 0.0)
-			_spawn_exit_door(450.0, "E  深入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_low_entry", true, "", "", 380.0)
+			_spawn_exit_door_at_marker("ExitToR03", "E  沿回程石沿返回钟墓上环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_crypt_return")
+			_spawn_exit_door_at_marker("ExitToR06", "E  深入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_low_entry")
 		"A2-R05":
-			_spawn_exit_door(60.0, "E  返回树冠断桥", "ash_forest", _scene_path_for_room("A2-R02"), "a2_r02_high_return", true, "", "", 95.0)
-			_spawn_exit_door(350.0, "E  返回钟墓高环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_highroad_shortcut", true, "", "", 215.0)
-			_spawn_exit_door(540.0, "E  进入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_high_entry", true, "", "", 105.0)
+			_spawn_exit_door_at_marker("ExitToR02", "E  返回树冠断桥", "ash_forest", _scene_path_for_room("A2-R02"), "a2_r02_high_return")
+			_spawn_exit_door_at_marker("ExitToR03", "E  返回钟墓高环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_highroad_shortcut")
+			_spawn_exit_door_at_marker("ExitToR06", "E  进入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_high_entry")
 			if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
-				_spawn_exit_door(690.0, "E  返回边境战场", "old_battlefield", "res://scenes/old_battlefield.tscn", "old_pilgrim_highroad", true, "", "", 170.0)
+				_spawn_exit_door_at_marker("ExitToA5", "E  返回边境战场", "old_battlefield", "res://scenes/old_battlefield.tscn", "old_pilgrim_highroad")
 		"A2-R06":
-			_spawn_exit_door(50.0, "E  返回旧朝圣高路", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_ravine_return", true, "", "", 325.0)
-			_spawn_exit_door(280.0, "E  返回钟墓坑底", "ash_forest", _scene_path_for_room("A2-R04"), "a2_r04_ravine_return", true, "", "", 610.0)
-			_spawn_exit_door(1150.0, "E  沿树冠高路进入被遗忘的城区", "forgotten_city", "res://scenes/forgotten_city.tscn", "city_canopy_entry", true, "", "", 325.0)
+			_spawn_exit_door_at_marker("ExitToR05", "E  返回旧朝圣高路", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_ravine_return")
+			_spawn_exit_door_at_marker("ExitToR04", "E  返回钟墓坑底", "ash_forest", _scene_path_for_room("A2-R04"), "a2_r04_ravine_return")
+			_spawn_exit_door_at_marker("ExitToA3", "E  沿树冠高路进入被遗忘的城区", "forgotten_city", "res://scenes/forgotten_city.tscn", "city_canopy_entry")
 
 
 func _spawn_drop_transition(
