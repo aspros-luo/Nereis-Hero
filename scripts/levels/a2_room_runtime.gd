@@ -22,9 +22,10 @@ func _ready() -> void:
 	WorldState.prepare_scene_runtime()
 	WorldState.load_room_state()
 	var spawn_side := WorldState.pending_region_spawn_side
-	WorldState.pending_region_spawn_side = "west"
 	WorldState.current_a2_room_scene_path = _scene_path_for_room(room_id)
+	# Save the actual incoming side for Continue before clearing the one-shot transition value.
 	WorldState.set_location(location_id)
+	WorldState.pending_region_spawn_side = "west"
 
 	# The authored room child owns every ledge and ground collider; no A2 region-wide floor is generated.
 	_create_boundaries()
