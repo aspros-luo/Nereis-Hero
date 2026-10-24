@@ -1,324 +1,141 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=6 format=3]
 
-; 钟墓坑底、落差与回程石沿
-; 手工可编辑的 Godot 节点场景：地形碰撞由 StaticBody2D / CollisionShape2D 组成，不在运行时创建平台节点。
+; R04 重设计：大尺度自然地形与少量有意义的落差/支路，不以连续跳台填充空间。
+; 所有可站立地面与碰撞均为编辑器可见节点；背景仅承担环境轮廓。
 
-[sub_resource type="RectangleShape2D" id="Rect_001"]
-size = Vector2(500, 40)
+[sub_resource type="RectangleShape2D" id="GroundShape1"]
+size = Vector2(1280, 24)
 
-[sub_resource type="RectangleShape2D" id="Rect_002"]
-size = Vector2(60, 18)
+[sub_resource type="RectangleShape2D" id="GroundShape2"]
+size = Vector2(220, 24)
 
-[sub_resource type="RectangleShape2D" id="Rect_006"]
-size = Vector2(60, 18)
+[sub_resource type="RectangleShape2D" id="GroundShape3"]
+size = Vector2(240, 24)
 
-[sub_resource type="RectangleShape2D" id="Rect_003"]
-size = Vector2(70, 12)
+[sub_resource type="RectangleShape2D" id="GroundShape4"]
+size = Vector2(210, 24)
 
-[sub_resource type="RectangleShape2D" id="Rect_004"]
-size = Vector2(70, 12)
+[sub_resource type="RectangleShape2D" id="GroundShape5"]
+size = Vector2(210, 24)
 
-[sub_resource type="RectangleShape2D" id="Rect_005"]
-size = Vector2(75, 12)
+[node name="A2R04AuthoredRoom" type="Node2D"]
 
-[sub_resource type="RectangleShape2D" id="Rect_007"]
-size = Vector2(70, 12)
-
-[node name="A2R04FloodedCrypt" type="Node2D"]
-
-; Authored greybox backdrop: deep crypt wall and distant stone ribs, visual only.
 [node name="CryptBackdrop" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-80, -100, 1400, -100, 1400, 900, -80, 900)
-color = Color(0.065, 0.075, 0.085, 1)
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 1100, 0, 1100)
+color = Color(0.035, 0.045, 0.06, 1)
 z_index = -30
 
 [node name="CryptWallSilhouette" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-20, 500, -20, 220, 60, 140, 120, 220, 120, 500, 250, 500, 250, 280, 330, 190, 410, 280, 410, 500, 570, 500, 570, 240, 650, 150, 730, 240, 730, 500, 900, 500, 900, 280, 980, 190, 1060, 280, 1060, 500, 1200, 500, 1200, 850, -20, 850)
-color = Color(0.14, 0.15, 0.17, 1)
+polygon = PackedVector2Array(0, 140, 100, 80, 230, 150, 330, 50, 470, 130, 590, 70, 720, 140, 850, 60, 980, 130, 1120, 70, 1280, 130, 1280, 520, 0, 520)
+color = Color(0.12, 0.13, 0.16, 1)
 z_index = -20
-scale = Vector2(2.2, 1.35)
+
+[node name="H02GateVisual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(110, 520, 190, 520, 190, 420, 110, 420)
+color = Color(0.025, 0.03, 0.035, 1)
+z_index = 1
 
 [node name="CryptLanding" type="StaticBody2D" parent="."]
-position = Vector2(10, 380)
+position = Vector2(0, 520)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CryptLanding"]
-position = Vector2(250, 20)
-shape = SubResource("Rect_001")
+position = Vector2(640, 12)
+shape = SubResource("GroundShape1")
 
-[node name="LandingStoneMass" type="Polygon2D" parent="CryptLanding"]
-polygon = PackedVector2Array(0, 0, 500, 0, 500, 40, 0, 40)
-color = Color(0.105882, 0.094118, 0.12549, 1)
+[node name="TerrainMass" type="Polygon2D" parent="CryptLanding"]
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
 
-[node name="LandingStoneTop" type="Line2D" parent="CryptLanding"]
-points = PackedVector2Array(0, 0, 500, 0)
+[node name="TerrainTopEdge" type="Line2D" parent="CryptLanding"]
+points = PackedVector2Array(0, 0, 1280, 0)
 width = 3.0
-default_color = Color(0.392157, 0.419608, 0.376471, 1)
-
-[node name="LandingStoneSeam" type="Line2D" parent="CryptLanding"]
-points = PackedVector2Array(8, 27, 492, 27)
-width = 2.0
-default_color = Color(0.070588, 0.066667, 0.090196, 1)
+default_color = Color(0.39, 0.42, 0.37, 1)
 
 [node name="CryptReturnShelfWest" type="StaticBody2D" parent="."]
-position = Vector2(10, 120)
+position = Vector2(80, 300)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CryptReturnShelfWest"]
-position = Vector2(30, 9)
-shape = SubResource("Rect_002")
-one_way_collision = true
+position = Vector2(110, 12)
+shape = SubResource("GroundShape2")
 
-[node name="StoneLowerFace" type="Polygon2D" parent="CryptReturnShelfWest"]
-polygon = PackedVector2Array(0, 12, 60, 12, 60, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
+[node name="TerrainMass" type="Polygon2D" parent="CryptReturnShelfWest"]
+polygon = PackedVector2Array(0, 0, 220, 0, 220, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
 
-[node name="StoneUpperFace" type="Polygon2D" parent="CryptReturnShelfWest"]
-polygon = PackedVector2Array(0, 3, 60, 3, 60, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
+[node name="TerrainTopEdge" type="Line2D" parent="CryptReturnShelfWest"]
+points = PackedVector2Array(0, 0, 220, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
 
-[node name="StoneTopEdge" type="Line2D" parent="CryptReturnShelfWest"]
-points = PackedVector2Array(0, 0, 60, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
+[node name="CryptReturnShelfMid" type="StaticBody2D" parent="."]
+position = Vector2(260, 390)
 
-[node name="StoneSeam" type="Line2D" parent="CryptReturnShelfWest"]
-points = PackedVector2Array(2, 12, 58, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptReturnShelfMid"]
+position = Vector2(120, 12)
+shape = SubResource("GroundShape3")
+
+[node name="TerrainMass" type="Polygon2D" parent="CryptReturnShelfMid"]
+polygon = PackedVector2Array(0, 0, 240, 0, 240, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="CryptReturnShelfMid"]
+points = PackedVector2Array(0, 0, 240, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
 
 [node name="CryptReturnShelfEast" type="StaticBody2D" parent="."]
-position = Vector2(150, 120)
+position = Vector2(470, 300)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CryptReturnShelfEast"]
-position = Vector2(30, 9)
-shape = SubResource("Rect_006")
-one_way_collision = true
+position = Vector2(105, 12)
+shape = SubResource("GroundShape4")
 
-[node name="StoneLowerFace" type="Polygon2D" parent="CryptReturnShelfEast"]
-polygon = PackedVector2Array(0, 12, 60, 12, 60, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
+[node name="TerrainMass" type="Polygon2D" parent="CryptReturnShelfEast"]
+polygon = PackedVector2Array(0, 0, 210, 0, 210, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
 
-[node name="StoneUpperFace" type="Polygon2D" parent="CryptReturnShelfEast"]
-polygon = PackedVector2Array(0, 3, 60, 3, 60, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
+[node name="TerrainTopEdge" type="Line2D" parent="CryptReturnShelfEast"]
+points = PackedVector2Array(0, 0, 210, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
 
-[node name="StoneTopEdge" type="Line2D" parent="CryptReturnShelfEast"]
-points = PackedVector2Array(0, 0, 60, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
+[node name="CryptLowShelf" type="StaticBody2D" parent="."]
+position = Vector2(650, 450)
 
-[node name="StoneSeam" type="Line2D" parent="CryptReturnShelfEast"]
-points = PackedVector2Array(2, 12, 58, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptLowShelf"]
+position = Vector2(105, 12)
+shape = SubResource("GroundShape5")
 
-[node name="CryptStepWest" type="StaticBody2D" parent="."]
-position = Vector2(0, 73)
+[node name="TerrainMass" type="Polygon2D" parent="CryptLowShelf"]
+polygon = PackedVector2Array(0, 0, 210, 0, 210, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptStepWest"]
-position = Vector2(35, 6)
-shape = SubResource("Rect_003")
-one_way_collision = true
+[node name="TerrainTopEdge" type="Line2D" parent="CryptLowShelf"]
+points = PackedVector2Array(0, 0, 210, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
 
-[node name="StoneLowerFace" type="Polygon2D" parent="CryptStepWest"]
-polygon = PackedVector2Array(0, 12, 70, 12, 70, 12, 0, 12)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="CryptStepWest"]
-polygon = PackedVector2Array(0, 3, 70, 3, 70, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="CryptStepWest"]
-points = PackedVector2Array(0, 0, 70, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="CryptStepWest"]
-points = PackedVector2Array(2, 12, 68, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="CryptStepEast" type="StaticBody2D" parent="."]
-position = Vector2(150, 40)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptStepEast"]
-position = Vector2(35, 6)
-shape = SubResource("Rect_004")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="CryptStepEast"]
-polygon = PackedVector2Array(0, 12, 70, 12, 70, 12, 0, 12)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="CryptStepEast"]
-polygon = PackedVector2Array(0, 3, 70, 3, 70, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="CryptStepEast"]
-points = PackedVector2Array(0, 0, 70, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="CryptStepEast"]
-points = PackedVector2Array(2, 12, 68, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="CryptUpperStep" type="StaticBody2D" parent="."]
-position = Vector2(50, 0)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptUpperStep"]
-position = Vector2(37.5, 6)
-shape = SubResource("Rect_005")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="CryptUpperStep"]
-polygon = PackedVector2Array(0, 12, 75, 12, 75, 12, 0, 12)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="CryptUpperStep"]
-polygon = PackedVector2Array(0, 3, 75, 3, 75, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="CryptUpperStep"]
-points = PackedVector2Array(0, 0, 75, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="CryptUpperStep"]
-points = PackedVector2Array(2, 12, 73, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-
-; Intermediate ledges create a readable three-level descent and a climbable return route.
-; 中间石沿构成清晰的三层下坠结构，并为回程提供攀爬路线。
-[node name="CryptMidShelf_East" type="StaticBody2D" parent="."]
-position = Vector2(320, 305)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptMidShelf_East"]
-position = Vector2(35, 6)
-shape = SubResource("Rect_003")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="CryptMidShelf_East"]
-polygon = PackedVector2Array(0, 12, 70, 12, 70, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="CryptMidShelf_East"]
-polygon = PackedVector2Array(0, 3, 70, 3, 70, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="CryptMidShelf_East"]
-points = PackedVector2Array(0, 0, 70, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="CryptMidShelf_East"]
-points = PackedVector2Array(2, 12, 68, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="CryptMidShelf_West" type="StaticBody2D" parent="."]
-position = Vector2(220, 245)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptMidShelf_West"]
-position = Vector2(35, 6)
-shape = SubResource("Rect_004")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="CryptMidShelf_West"]
-polygon = PackedVector2Array(0, 12, 70, 12, 70, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="CryptMidShelf_West"]
-polygon = PackedVector2Array(0, 3, 70, 3, 70, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="CryptMidShelf_West"]
-points = PackedVector2Array(0, 0, 70, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="CryptMidShelf_West"]
-points = PackedVector2Array(2, 12, 68, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-[node name="CryptLowerStep_East" type="StaticBody2D" parent="."]
-position = Vector2(370, 185)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptLowerStep_East"]
-position = Vector2(30, 6)
-shape = SubResource("Rect_002")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="CryptLowerStep_East"]
-polygon = PackedVector2Array(0, 12, 60, 12, 60, 18, 0, 18)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="CryptLowerStep_East"]
-polygon = PackedVector2Array(0, 3, 60, 3, 60, 12, 0, 12)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="CryptLowerStep_East"]
-points = PackedVector2Array(0, 0, 60, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="CryptLowerStep_East"]
-points = PackedVector2Array(2, 12, 58, 12)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-
-[node name="CryptReturnStep_Mid" type="StaticBody2D" parent="."]
-position = Vector2(270, 145)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CryptReturnStep_Mid"]
-position = Vector2(35, 6)
-shape = SubResource("Rect_007")
-one_way_collision = true
-
-[node name="StoneLowerFace" type="Polygon2D" parent="CryptReturnStep_Mid"]
-polygon = PackedVector2Array(0, 6, 70, 6, 70, 12, 0, 12)
-color = Color(0.129412, 0.121569, 0.145098, 1)
-
-[node name="StoneUpperFace" type="Polygon2D" parent="CryptReturnStep_Mid"]
-polygon = PackedVector2Array(0, 2, 70, 2, 70, 6, 0, 6)
-color = Color(0.223529, 0.203922, 0.239216, 1)
-
-[node name="StoneTopEdge" type="Line2D" parent="CryptReturnStep_Mid"]
-points = PackedVector2Array(0, 0, 70, 0)
-width = 2.0
-default_color = Color(0.643137, 0.831373, 0.603922, 1)
-
-[node name="StoneSeam" type="Line2D" parent="CryptReturnStep_Mid"]
-points = PackedVector2Array(2, 6, 68, 6)
-width = 2.0
-default_color = Color(0.105882, 0.090196, 0.121569, 1)
-
-; Editor-visible anchors used by the A2 room runtime. Adjust these alongside terrain.
 [node name="RoomMarkers" type="Node2D" parent="."]
 [node name="EntryDefault" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(200, 380)
+position = Vector2(220, 520)
 
 [node name="EntryTombDrop" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(200, 380)
+position = Vector2(300, 520)
 
 [node name="EntryTombDropR01" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(400, 380)
+position = Vector2(430, 520)
 
 [node name="H02Gate" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(90, 380)
+position = Vector2(150, 520)
 
 [node name="EntryH02Return" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(350, 380)
+position = Vector2(280, 520)
 
 [node name="EntryRavineReturn" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(400, 380)
+position = Vector2(940, 520)
 
 [node name="ExitToR03" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(55, 0)
+position = Vector2(80, 300)
 
 [node name="ExitToR06" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(450, 380)
+position = Vector2(940, 520)
