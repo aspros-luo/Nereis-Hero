@@ -66,4 +66,5 @@ H02 门现由 R04 runtime 根据 R04 的 H02Gate Marker2D `(90,380)` 生成，�
 - 当前正式出口定义已直接指定 C03 → R06 `EntryC03Return`、C04 → R05 `EntryC04Return`、H02 → R04 `EntryH02Return`；本次补充共享处理器的防回归兜底，避免未来使用旧的通用 `ash_forest.tscn` 目标时误落 R01。
 - 兜底会将旧侧标识 `east` / `old_pilgrim_highroad` / `bell_gate` 映射到对应 R06/R05/R04 runtime，并转成当前房间脚本识别的局部 spawn side。
 - 修正静态几何审计器过期的 R03/R05/R06 平台计数及总计，加入 Marker2D 必需节点、runtime wrapper 边界值和三条跨区回返路由断言。
-- 未执行审计脚本；脚本中的简化弹道图仍是近似模型。**Godot 4.6.1 实机测试未执行，不能宣称回返或碰撞验收通过。**
+- GitHub 源码读取后的等价静态复核已检查六房间边界值、必需 Marker2D、场景引用、平台/碰撞根节点计数及六房间连接图：6/6 房间边界和锚点匹配，平台/着陆节点为 91，碰撞根节点为 97，六房间从 R01 均在连接图中可达；按验证器同一组简化弹道参数重算，97/97 碰撞根节点均进入近似可达图。
+- 未在仓库环境执行 `python3 tools/validate_a2_room_scene_geometry.py` 本体；上述结果是基于 GitHub 源码的等价静态复核，简化弹道图仍是近似模型。**Godot 4.6.1 实机测试未执行，不能宣称回返或碰撞验收通过。**
