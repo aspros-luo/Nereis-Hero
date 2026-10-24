@@ -333,7 +333,9 @@ func _spawn_y_for_side(side: String) -> float:
 	# C04 must return to the actual old-pilgrim upper route on both sides.
 	# C04 双向回程都必须落在旧朝圣高路的实际上层平台。
 	if region_id == "A2" and side == "old_pilgrim_highroad":
-		return floor_y - 140.0
+		# C04 arrives on R05's eastern upper platform at world y=440.
+		# C04 回到 R05 东端高位平台，世界坐标 y=440。
+		return floor_y - 210.0
 	if region_id == "A5" and side == "old_pilgrim_highroad":
 		# C04 lands on the elevated winch platform, not the trench floor.
 		# C04落在高位绞盘平台，而不是战壕地面。
@@ -437,9 +439,9 @@ func _spawn_x_for_side(side: String) -> float:
 	if region_id == "H06" and side == "royal_transport_entry":
 		return map_width - 360.0
 	if region_id == "A2" and side == "old_pilgrim_highroad":
-		# C04 arrives exactly on the x=1740-1850 platform top and remains outside the return-door trigger.
-		# C04 精确出生在 x=1740–1850 平台顶面，并避开回程门触发区。
-		return 1750.0
+		# C04 returns to R05's eastern landing and remains outside the exit trigger.
+		# C04 回到 R05 东端落脚面，并与出口触发区保持净距。
+		return 1980.0
 	if region_id == "A5" and side == "old_pilgrim_highroad":
 		# C04 optional winch branch is at x=3900; arrive on its supported upper landing.
 		# C04可选绞盘支路位于x=3900；从A2返回时落在有承托的高台。
@@ -2658,9 +2660,9 @@ func _spawn_region_exits() -> void:
 			# C04 在 A5 侧开启；开启后，A2 侧永久生成对应回程门。
 			if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
 				_spawn_exit_door(
-					1880.0, "E  返回边境战场", "old_battlefield",
+					2050.0, "E  返回边境战场", "old_battlefield",
 					"res://scenes/old_battlefield.tscn", "old_pilgrim_highroad",
-					true, "", "", floor_y - 115.0
+					true, "", "", floor_y - 210.0
 				)
 		"A3":
 			# C24 enters the shared exploration segment only after the A4-side gate is opened.
