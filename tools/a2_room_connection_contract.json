@@ -9,7 +9,8 @@
     "R01->R04 drop trigger uses Marker2D (1320,850), width 960 and height 260; R03->R04 uses Marker2D (425,675), width 150 and height 220. H02 is placed on the R04 crypt landing (90,380) and returns to R04 EntryH02Return (350,380).",
     "C03 (R06/A3), C04 (R05/A5) and H02 (R04/H02) forward and return destinations were statically checked against the owning room runtime and Marker2D spawn anchors; still pending Godot 4.6.1 playtesting.",
     "A2 room transitions preserve a valid A2 checkpoint; incoming spawn side is saved before the transient side is reset. Death recovery accepts only the six known A2 room IDs.",
-    "All connection status values remain implemented_pending_godot_playtest until the user verifies physical collision and scene transitions in Godot 4.6.1."
+    "All connection status values remain implemented_pending_godot_playtest until the user verifies physical collision and scene transitions in Godot 4.6.1.",
+    "A2 side boundary walls now scale to each room's room_height (-100px to room_height+100px); the A5 assembled-region wall sizing remains unchanged."
   ],
   "rooms": [
     {
