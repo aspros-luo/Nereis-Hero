@@ -50,3 +50,11 @@
 - 已修改 `tools/validate_a2_room_scene_geometry.py`：将房间平台计数更新为 16/9/14/10/15/27、总计 91；碰撞根节点预期总计更新为 97；新增房间边界、Marker2D 与跨区回返映射断言。
 - 已更新 `tools/a2_room_connection_contract.json`、A2 设计基线与几何审计，明确回返合同和未验收状态。
 - 验证边界：GitHub 写入已返回提交 SHA；未运行 Python 静态验证器、未运行 Godot 4.6.1，未进行跳跃/碰撞/转场/存档实机测试。
+
+
+## 验证器续修（2026-10-24）
+
+- 继续审查 `tools/validate_a2_room_scene_geometry.py` 时发现，新增的跨区路由断言调用了 `require(...)`，但文件中没有定义该 helper；这会让验证器在扫描完房间后以 `NameError` 退出。
+- 已补上缺失的 `require` helper，并将验证器扩展为直接核对 R01→R04、R03→R04 下坠路线、R04↔R06 低位连接、R05↔R06 高位连接，以及 C03/C04/H02 出口布线。
+- 只读查询确认该分支目前没有 GitHub Actions workflow runs，仓库也没有可读取的 `.github/workflows` 目录，因此不能把 CI 当作执行环境。当前容器无法解析 GitHub 主机名，未能 clone 仓库；验证器本体和 Godot 4.6.1 仍未执行。
+- **当前状态：** 修复已提交到 `feature/story-map-progression`；需要在开发机运行 `python3 tools/validate_a2_room_scene_geometry.py` 和 `python3 -m py_compile tools/validate_a2_room_scene_geometry.py`，随后进行 Godot 4.6.1 实机验收。
