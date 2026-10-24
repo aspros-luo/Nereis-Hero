@@ -3015,11 +3015,11 @@ func _spawn_region_exits() -> void:
 			)
 
 		"H02":
-			# H02 is an optional detour that returns to A2; do not add a second A5 exit.
-			# H02 是返回 A2 的可选探索支路；不额外设置通往 A5 的第二出口。
+			# H02 branches from the low Bell Grave landing; return to that same independent room.
+			# H02 从钟墓坑底分出，回程回到同一个独立房间。
 			_spawn_exit_door(
-				72.0, "E  返回旧朝圣路", "ash_forest",
-				"res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn", "a2_r01_h02_return"
+				72.0, "E  返回钟墓坑底", "ash_forest",
+				"res://scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn", "a2_r04_h02_return"
 			)
 
 		"H03":
