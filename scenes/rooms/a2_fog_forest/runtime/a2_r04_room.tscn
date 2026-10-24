@@ -9,8 +9,8 @@ region_id = "A2"
 location_id = "ash_forest"
 region_title = "A2 R04 钟墓坑底"
 map_width = 1144.0
-floor_y = 586.0
-room_height = 760.0
+floor_y = 520
+room_height = 1100
 room_id = "A2-R04"
 enable_region_encounters = false
 
