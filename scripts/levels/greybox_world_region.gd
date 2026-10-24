@@ -3757,24 +3757,30 @@ func _on_exit_interacted(target_location: String, target_scene: String, spawn_si
 	# Clear old-scene focus before transition so no interactable retains stale availability during the fade.
 	# 切图前清理旧场景交互焦点，避免淡出期间残留可交互状态。
 	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
-	WorldState.pending_region_spawn_side = spawn_side
 	var destination_scene := target_scene
+	var destination_spawn_side := spawn_side
 	if target_location == "ash_forest":
-		# C03 and C04 must return to the room that owns their far-side endpoint.
-		# Do not collapse these cross-region returns to the R01 compatibility alias.
+		# Cross-region returns must restore the room AND its local authored landing marker.
+		# 跨区回返必须同时恢复所属房间与房间内的实际落点 Marker2D。
 		match spawn_side:
-			"east":
+			"east": # C03 from A3 -> R06
 				destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn"
-			"old_pilgrim_highroad":
+				destination_spawn_side = "a2_r06_c03_return"
+			"old_pilgrim_highroad": # C04 from A5 -> R05
 				destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn"
+				destination_spawn_side = "a2_r05_c04_return"
+			"bell_gate": # H02 from hidden chamber -> R04
+				destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn"
+				destination_spawn_side = "a2_r04_h02_return"
 			_:
 				if target_scene.begins_with("res://scenes/rooms/a2_fog_forest/runtime/") and ResourceLoader.exists(target_scene):
 					destination_scene = target_scene
 				else:
 					destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"
 		WorldState.current_a2_room_scene_path = destination_scene
+	WorldState.pending_region_spawn_side = destination_spawn_side
 	WorldState.set_location(target_location)
-	print("[NEREIS][MAP][EXIT] from=%s to=%s location=%s spawn_side=%s" % [region_id, destination_scene, target_location, spawn_side])
+	print("[NEREIS][MAP][EXIT] from=%s to=%s location=%s spawn_side=%s" % [region_id, destination_scene, target_location, destination_spawn_side])
 	SceneTransition.fade_to_scene(destination_scene)
 
 func _on_hero_defeated() -> void:
