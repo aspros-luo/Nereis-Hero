@@ -25,6 +25,17 @@ size = Vector2(75, 12)
 size = Vector2(70, 12)
 
 [node name="A2R04FloodedCrypt" type="Node2D"]
+
+; Authored greybox backdrop: deep crypt wall and distant stone ribs, visual only.
+[node name="CryptBackdrop" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-80, -100, 1400, -100, 1400, 900, -80, 900)
+color = Color(0.065, 0.075, 0.085, 1)
+z_index = -30
+
+[node name="CryptWallSilhouette" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-20, 500, -20, 220, 60, 140, 120, 220, 120, 500, 250, 500, 250, 280, 330, 190, 410, 280, 410, 500, 570, 500, 570, 240, 650, 150, 730, 240, 730, 500, 900, 500, 900, 280, 980, 190, 1060, 280, 1060, 500, 1200, 500, 1200, 850, -20, 850)
+color = Color(0.14, 0.15, 0.17, 1)
+z_index = -20
 scale = Vector2(2.2, 1.35)
 
 [node name="CryptLanding" type="StaticBody2D" parent="."]
