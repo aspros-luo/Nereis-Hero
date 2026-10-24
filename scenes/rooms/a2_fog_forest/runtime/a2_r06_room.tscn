@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="1"]
+[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn" type="PackedScene" id="2"]
+
+[node name="A2R06Room" type="Node2D"]
+script = ExtResource("1")
+region_id = "A2"
+location_id = "ash_forest"
+region_title = "A2 R06 东侧裂谷"
+map_width = 1280.0
+floor_y = 485.0
+room_height = 900.0
+room_id = "A2-R06"
+enable_region_encounters = false
+
+[node name="AuthoredRoom" parent="." instance=ExtResource("2")]
