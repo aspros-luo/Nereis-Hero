@@ -36,7 +36,7 @@ size = Vector2(120, 18)
 size = Vector2(350, 18)
 
 [sub_resource type="RectangleShape2D" id="GroundTombEastShape"]
-size = Vector2(780, 18)
+size = Vector2(930, 18)
 
 [node name="A2R03BellTombGallery" type="Node2D"]
 
@@ -428,18 +428,18 @@ width = 3.0
 default_color = Color(0.392157, 0.419608, 0.376471, 1)
 
 [node name="Ground_TombEast" type="StaticBody2D" parent="."]
-position = Vector2(500, 560)
+position = Vector2(350, 560)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_TombEast"]
-position = Vector2(390, 9)
+position = Vector2(465, 9)
 shape = SubResource("GroundTombEastShape")
 
 [node name="TerrainMass" type="Polygon2D" parent="Ground_TombEast"]
-polygon = PackedVector2Array(0, 0, 780, 0, 780, 48, 0, 48)
+polygon = PackedVector2Array(0, 0, 930, 0, 930, 48, 0, 48)
 color = Color(0.105882, 0.094118, 0.12549, 1)
 
 [node name="TerrainTopEdge" type="Line2D" parent="Ground_TombEast"]
-points = PackedVector2Array(0, 0, 780, 0)
+points = PackedVector2Array(0, 0, 930, 0)
 width = 3.0
 default_color = Color(0.392157, 0.419608, 0.376471, 1)
 
