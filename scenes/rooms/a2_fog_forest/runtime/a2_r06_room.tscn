@@ -9,8 +9,8 @@ region_id = "A2"
 location_id = "ash_forest"
 region_title = "A2 R06 东侧裂谷"
 map_width = 1280.0
-floor_y = 810.0
-room_height = 1100.0
+floor_y = 320
+room_height = 1100
 room_id = "A2-R06"
 enable_region_encounters = false
 
