@@ -23,8 +23,8 @@ const A2_ROOM_NODE_NAMES: Array[String] = [
 ]
 
 const A2_EXPECTED_PLATFORM_COUNTS: Dictionary = {
-	"A2R01ForestCrossroads": 12,
-	"A2R02CanopyBridge": 7,
+	"A2R01ForestCrossroads": 16,
+	"A2R02CanopyBridge": 9,
 	"A2R03BellTombGallery": 9,
 	"A2R04FloodedCrypt": 10,
 	"A2R05OldPilgrimHighroad": 13,
@@ -122,7 +122,7 @@ func _validate_authored_rooms(region: Node) -> void:
 		push_error("[NEREIS][A2][VERIFY][FAIL] map width %.1f clips the eastern route; expected at least 3480" % map_width)
 		valid = false
 	if valid:
-		print("[NEREIS][A2][VERIFY] PASS rooms=%d/%d platforms=%d/75 right_edge=%.1f map_width=%.1f ground_spans=3" % [
+		print("[NEREIS][A2][VERIFY] PASS rooms=%d/%d platforms=%d/81 right_edge=%.1f map_width=%.1f ground_spans=3" % [
 			room_count, A2_EXPECTED_PLATFORM_COUNTS.size(), total_platforms, max_platform_right, map_width
 		])
 	else:
