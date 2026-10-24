@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <title>A2-R01 雾林岔路 — 手工绘制地形草图</title>
+  <desc>Editable vector terrain plan, not AI-generated. Left entrance from A1; east route to Bell Tomb; elevated north route to Canopy Bridge; lower return loop.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#101d25"/><stop offset="1" stop-color="#1c2b2d"/></linearGradient>
+    <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#778078"/><stop offset="1" stop-color="#394744"/></linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#c3c8b8" stroke-opacity=".07" stroke-width="1"/></pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#d9c69a"/></marker>
+    <style>
+      .terrain{fill:url(#stone);stroke:#a7b0a0;stroke-width:3;stroke-linejoin:round}
+      .ledge{fill:#59675e;stroke:#a7b0a0;stroke-width:2.5;stroke-linejoin:round}
+      .label{font-family:Arial,'Noto Sans CJK SC',sans-serif;fill:#e9e4d5;font-size:23px}
+      .small{font-family:Arial,'Noto Sans CJK SC',sans-serif;fill:#c9d0c2;font-size:17px}
+      .route{fill:none;stroke:#d9c69a;stroke-width:4;stroke-dasharray:10 9;marker-end:url(#arrow)}
+      .secret{fill:none;stroke:#91b6a2;stroke-width:3;stroke-dasharray:5 8}
+      .gate{fill:#1a2524;stroke:#d9c69a;stroke-width:3}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/><rect width="1600" height="900" fill="url(#grid)"/>
+  <g opacity=".25" fill="#62766b"><path d="M0 190L100 70 190 210 290 45 390 220 520 75 620 210 730 35 840 205 940 65 1050 210 1160 45 1270 215 1390 70 1510 220 1600 110V0H0Z"/><path d="M0 310L90 220 170 330 280 190 390 330 500 215 610 335 740 200 850 330 960 225 1070 330 1200 195 1310 330 1440 220 1600 320V0H0Z" fill="#40574f"/></g>
+  <g opacity=".22" stroke="#9eb2a1" fill="none" stroke-width="2"><path d="M120 0Q70 130 145 260T130 520"/><path d="M380 0Q320 160 410 310T390 560"/><path d="M690 0Q620 160 700 300T680 520"/><path d="M1050 0Q980 160 1070 310T1040 540"/><path d="M1370 0Q1310 170 1390 300T1370 540"/></g>
+  <!-- Main continuous floor, intentionally broken by a deep lower ravine -->
+  <path class="terrain" d="M0 690H240L280 670H420L455 690H640L675 710H820L850 690H1000L1030 675H1180L1210 690H1390L1425 670H1600V900H0Z"/>
+  <!-- Upper canopy route -->
+  <path class="ledge" d="M430 310L475 286H660L690 305H830L860 284H1010L1040 306H1160V332H430Z"/>
+  <path class="ledge" d="M680 425L715 406H855L885 424H1015V448H680Z"/>
+  <path class="ledge" d="M1065 500L1095 482H1240L1270 500H1380V524H1065Z"/>
+  <!-- Broken mid-level shelves -->
+  <path class="ledge" d="M190 500L220 482H355L385 500H465V523H190Z"/>
+  <path class="ledge" d="M485 570L515 552H620L650 570H720V592H485Z"/>
+  <path class="ledge" d="M875 585L905 565H1010L1040 585H1100V608H875Z"/>
+  <!-- Stone root / landmark -->
+  <path d="M735 690L755 620L780 585L805 620L828 690Z" fill="#273b35" stroke="#879a88" stroke-width="3"/>
+  <path d="M785 610L785 650M770 632L800 632" stroke="#d9c69a" stroke-width="3" opacity=".8"/>
+  <g fill="#71836f" stroke="#a7b0a0" stroke-width="2"><path d="M330 690Q300 620 325 570Q350 615 350 690Z"/><path d="M355 690Q345 625 385 585Q390 650 375 690Z"/><path d="M1280 690Q1260 620 1290 560Q1320 625 1310 690Z"/><path d="M1320 690Q1310 630 1350 590Q1360 650 1345 690Z"/></g>
+  <!-- Entrances and connections -->
+  <rect class="gate" x="18" y="628" width="46" height="62" rx="4"/><path d="M30 685V641H52V685" fill="none" stroke="#d9c69a" stroke-width="2"/>
+  <rect class="gate" x="1515" y="606" width="58" height="66" rx="4"/><path d="M1528 668V622Q1544 600 1560 622V668" fill="none" stroke="#d9c69a" stroke-width="2"/>
+  <path class="route" d="M80 650Q170 610 230 540T440 470T620 390T800 360T1050 385T1320 440T1500 635"/>
+  <path class="route" d="M820 350Q830 285 900 250T1110 210"/>
+  <path class="route" d="M640 710Q700 780 830 785T1060 740T1200 690"/>
+  <path class="secret" d="M1130 330Q1190 365 1210 420L1220 470"/>
+  <!-- Labels -->
+  <text class="label" x="88" y="610">A1 来路 / R01入口</text>
+  <text class="label" x="250" y="455">林间石阶</text>
+  <text class="label" x="515" y="260">树冠高路</text>
+  <text class="label" x="725" y="390">中央根桥</text>
+  <text class="label" x="920" y="548">坍塌平台</text>
+  <text class="label" x="1080" y="465">可见的封闭树洞</text>
+  <text class="small" x="1090" y="490">后续能力 / 隐藏支路</text>
+  <text class="label" x="1270" y="575">东侧石门</text>
+  <text class="label" x="1320" y="720">→ R03 钟墓长廊</text>
+  <text class="label" x="900" y="180">↑ R02 树冠桥</text>
+  <text class="small" x="680" y="825">下层回环：单向落差后可从东侧回到主路</text>
+  <text class="small" x="45" y="850">地形原则：多层路线 / 远处可见目标 / 软门 / 可回收的落差</text>
+  <g transform="translate(1220 40)"><rect width="330" height="104" rx="8" fill="#0c1518" stroke="#64766b" stroke-width="2"/><text class="label" x="18" y="34">A2 · R01</text><text class="small" x="18" y="61">雾林岔路 — 手工矢量地形图</text><text class="small" x="18" y="85">草图 v0.1 · 可编辑 SVG · 非 AI 生成</text></g>
+</svg>
