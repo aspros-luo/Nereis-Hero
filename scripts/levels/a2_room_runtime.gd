@@ -14,6 +14,28 @@ const ROOM_SCENE_PATHS := {
 var room_transition_locked := false
 
 
+func _physics_process(_delta: float) -> void:
+	# R01 has deep optional routes but no lethal floor. Recover if the Hero falls below
+	# the authored room bounds instead of leaving them below the camera forever.
+	if room_id != "A2-R01" or hero == null or room_transition_locked or respawning:
+		return
+	if hero.global_position.y > global_position.y + room_height + 96.0:
+		_recover_r01_void_fall()
+
+
+func _recover_r01_void_fall() -> void:
+	if room_transition_locked or respawning:
+		return
+	respawning = true
+	room_transition_locked = true
+	WorldState.input_locked = true
+	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
+	WorldState.pending_region_spawn_side = "west"
+	WorldState.current_a2_room_scene_path = ROOM_SCENE_PATHS["A2-R01"]
+	WorldState.set_location("ash_forest")
+	SceneTransition.fade_to_scene(ROOM_SCENE_PATHS["A2-R01"])
+
+
 func _ready() -> void:
 	if not ROOM_SCENE_PATHS.has(room_id):
 		push_error("[NEREIS][A2][ROOM][FAIL] unknown room_id=%s" % room_id)
