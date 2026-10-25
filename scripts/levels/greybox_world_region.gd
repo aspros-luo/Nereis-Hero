@@ -3888,9 +3888,11 @@ func _draw() -> void:
 		return
 	if region_id == "A2" and room_id.begins_with("A2-R"):
 		# Standalone A2 rooms own their complete visible landscape in editor-authored child scenes.
-		# Do not draw the legacy opaque graybox backdrop, color wash, or landmarks over that artwork.
-		# 独立 A2 房间由编辑器内的子场景提供完整地形与背景；这里必须直接返回，
-		# 否则旧版不透明灰盒背景会盖住子场景的插画和远景。
+		# Draw only debug door markers; never paint the legacy opaque graybox backdrop over the art.
+		# 独立 A2 房间由编辑器内的子场景提供完整地形与背景；只保留调试出口标记，
+		# 禁止旧版不透明灰盒背景和色雾层覆盖美术。
+		if OS.is_debug_build():
+			_draw_debug_exit_markers()
 		return
 	if region_id == "A2":
 		_draw_a2_authored_landscape()
