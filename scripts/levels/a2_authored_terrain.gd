@@ -23,7 +23,7 @@ const A2_ROOM_NODE_NAMES: Array[String] = [
 ]
 
 const A2_EXPECTED_PLATFORM_COUNTS: Dictionary = {
-	"A2R01ForestCrossroads": 18,
+	"A2R01ForestCrossroads": 20,
 	"A2R02CanopyBridge": 9,
 	"A2R03BellTombGallery": 9,
 	"A2R04FloodedCrypt": 10,
@@ -46,17 +46,10 @@ func _apply_authored_terrain() -> void:
 	if region == null or not is_instance_valid(region):
 		return
 
-	# Floor gaps stay in the region's ground contract; all ledges and the crypt landing are authored in the six room scenes.
-	# 地面断口仍由区域地面合同维护；所有台阶和钟墓坑底均手工放在六个房间场景中。
-
-	# The expanded crypt opening ends at x=1360, so the checkpoint at x=1450 stays on continuous surface ground.
-	# 钟墓坑口扩展至 x=1360；休整点移至 x=1450 的连续地表，避免落入坑口。
 	var rest := region.get_node_or_null("RegionRestPoint_A2")
 	if rest != null:
 		rest.position = Vector2(1450.0, float(region.get("floor_y")))
 
-	# Keep the shared clue node and interaction state; only align its visual with the upper tomb ring.
-	# 保留线索节点和交互状态，只将其摆放到钟墓上环。
 	var bell := region.get_node_or_null("Anomaly_anomaly_bell_retiming")
 	if bell != null:
 		bell.position = Vector2(735.0, 322.0)
@@ -83,14 +76,11 @@ func _validate_authored_rooms(region: Node) -> void:
 		if not expected_ground_name.is_empty():
 			var ground := room.get_node_or_null(NodePath(expected_ground_name)) as StaticBody2D
 			if ground == null or ground.get_node_or_null("CollisionShape2D") == null:
-				# R01 uses CollisionPolygon2D on Ground_West; accept either shape type.
-				var poly := ground.get_node_or_null("TerrainCollision") if ground != null else null
-				if ground == null or (ground.get_node_or_null("CollisionShape2D") == null and poly == null):
-					push_error("[NEREIS][A2][VERIFY][FAIL] room=%s missing authored ground collision=%s" % [room_name, expected_ground_name])
-					valid = false
+				push_error("[NEREIS][A2][VERIFY][FAIL] room=%s missing authored ground collision=%s" % [room_name, expected_ground_name])
+				valid = false
 			else:
-				var ground_shape := ground.get_node_or_null("CollisionShape2D") as CollisionShape2D
-				if ground_shape != null and (not (ground_shape.shape is RectangleShape2D) or (ground_shape.shape as RectangleShape2D).size.x <= 0.0):
+				var ground_shape := ground.get_node("CollisionShape2D") as CollisionShape2D
+				if not (ground_shape.shape is RectangleShape2D) or (ground_shape.shape as RectangleShape2D).size.x <= 0.0:
 					push_error("[NEREIS][A2][VERIFY][FAIL] room=%s invalid authored ground shape=%s" % [room_name, expected_ground_name])
 					valid = false
 		for body in room.get_children():
@@ -135,9 +125,6 @@ func _validate_authored_rooms(region: Node) -> void:
 
 
 func configure_platforms(region: Node) -> void:
-	# Prefer persistent PackedScene instances authored directly in ash_forest.tscn.
-	# Fall back to instantiation only for older scene variants that do not yet contain them.
-	# 优先使用 ash_forest.tscn 中持久化、可在编辑器直接查看的场景实例；旧场景缺少实例时才动态补齐。
 	for room_index in range(A2_ROOM_SCENES.size()):
 		var room_name := A2_ROOM_NODE_NAMES[room_index]
 		var room := region.get_node_or_null(NodePath(room_name)) as Node2D
@@ -150,8 +137,6 @@ func configure_platforms(region: Node) -> void:
 			region.add_child(room)
 			room.owner = region
 
-		# Register existing scene collisions for shared route/material queries; never create duplicate room geometry.
-		# 将场景中的实体碰撞登记给公共路线/材质查询，不重复创建房间或平台。
 		for body in room.get_children():
 			if not (body is StaticBody2D):
 				continue
@@ -166,8 +151,4 @@ func configure_platforms(region: Node) -> void:
 
 
 func create_floor(_region: Node) -> void:
-	# A2's floor collision is authored inside R01, R05 and R06 as visible StaticBody2D nodes.
-	# Do not generate the old region-wide floor here: the six room scenes now own playable terrain.
-	# A2 地表碰撞已放入 R01、R05、R06 的可见 StaticBody2D 节点。
-	# 此处不再生成旧版区域级连续地面；可玩地形由六个房间场景直接负责。
 	return
