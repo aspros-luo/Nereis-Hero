@@ -4,7 +4,8 @@
 ; Scenic detail is an editable SVG Sprite2D. Every walkable surface below is a
 ; named StaticBody2D with an editor-visible CollisionShape2D; no terrain is
 ; created by runtime code. The broken bridge exists only in the illustration.
-; Coordinate contract: 1792x1200. R01->R04 drop shaft stays at (672,780).
+; Coordinate contract: authored 1792x1200 artwork scaled to a 2240x1500 playable room.
+; R01->R04 is a single narrow drop at the waterfall veil (1000,780); all other void falls respawn.
 
 [ext_resource type="Texture2D" path="res://assets/art/levels/a2_r01_forest_ruins_illustration.svg" id="1_r01_art"]
 
@@ -160,7 +161,7 @@ position = Vector2(80, 12)
 shape = SubResource("PlatMidLong")
 
 [node name="Platform_011" type="StaticBody2D" parent="."]
-position = Vector2(880, 800)
+position = Vector2(880, 900)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_011"]
 one_way_collision = true
@@ -257,7 +258,7 @@ position = Vector2(980, 672)
 position = Vector2(1520, 480)
 
 [node name="DropToR04" type="Marker2D" parent="RoomMarkers"]
-position = Vector2(672, 780)
+position = Vector2(1000, 780)
 
 ; Named editor-only footing anchors mirror the five red concept markers; no HUD dots in-game.
 [node name="FootingDesignMarkers" type="Node2D" parent="."]
