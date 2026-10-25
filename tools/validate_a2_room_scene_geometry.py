@@ -45,8 +45,76 @@ def vector(text: str, label: str) -> tuple[float, float]:
     return float(match.group(1)), float(match.group(2))
 
 
+R01_TILE_COUNTS = {"TerrainFill": 0, "TerrainPlatforms": 0, "TerrainDetails": 0}
+
+def audit_r01(source: str, root_name: str, errors: list[str]) -> tuple[int, int, int]:
+    """Audit R01's serialized TileMapLayer cells and authored polygon collision nodes."""
+    if f'[node name="{root_name}" type="Node2D"]' not in source:
+        errors.append(f"R01: root node mismatch; expected {root_name}")
+    load_match = re.search(r"^\[gd_scene load_steps=(\d+)", source, re.M)
+    ext_count = len(re.findall(r"^\[ext_resource ", source, re.M))
+    sub_count = len(re.findall(r"^\[sub_resource ", source, re.M))
+    if not load_match or int(load_match.group(1)) != ext_count + sub_count + 1:
+        errors.append("R01: gd_scene load_steps does not match resource declarations")
+    tile_set_path = ROOT / "resources/tilesets/a2_forest_terrain_tileset.tres"
+    if not tile_set_path.is_file():
+        errors.append("R01: missing reusable forest TileSet resource")
+    elif 'path="res://assets/art/tiles/a2_forest_terrain_atlas.svg"' not in tile_set_path.read_text(encoding="utf-8"):
+        errors.append("R01: TileSet does not reference the forest SVG atlas")
+
+    for layer_name, minimum in (("TerrainFill", 800), ("TerrainPlatforms", 40), ("TerrainDetails", 12)):
+        match = re.search(r'\[node name="' + re.escape(layer_name) + r'" type="TileMapLayer" parent="\."\](.*?)(?=\n\[node |\Z)', source, re.S)
+        if not match:
+            errors.append(f"R01: missing TileMapLayer {layer_name}")
+            continue
+        if 'tile_set = ExtResource("1_forest_tiles")' not in match.group(1):
+            errors.append(f"R01/{layer_name}: missing shared TileSet reference")
+        data_match = re.search(r"tile_map_data\s*=\s*PackedByteArray\((.*?)\)", match.group(1), re.S)
+        if not data_match:
+            errors.append(f"R01/{layer_name}: missing serialized tile_map_data")
+            continue
+        try:
+            values = [int(token.strip()) for token in data_match.group(1).split(",") if token.strip()]
+        except ValueError:
+            errors.append(f"R01/{layer_name}: tile_map_data contains a non-integer byte")
+            continue
+        if len(values) < 2 or values[:2] != [0, 0] or (len(values) - 2) % 12 != 0:
+            errors.append(f"R01/{layer_name}: tile_map_data is not a valid TileMapLayer byte buffer")
+            continue
+        cell_count = (len(values) - 2) // 12
+        R01_TILE_COUNTS[layer_name] = cell_count
+        if cell_count < minimum:
+            errors.append(f"R01/{layer_name}: only {cell_count} serialized cells; expected at least {minimum}")
+
+    body_names = re.findall(r'^\[node name="([^"]+)" type="StaticBody2D" parent="\."\]', source, re.M)
+    if len(body_names) != 17:
+        errors.append(f"R01: authored StaticBody2D count={len(body_names)}; expected 17")
+    if len([name for name in body_names if not name.startswith("Ground_")]) != 16:
+        errors.append("R01: authored platform/boundary bodies must total 16")
+    if {name for name in body_names if name.startswith("Ground_")} != {"Ground_West"}:
+        errors.append("R01: expected Ground_West as the only Ground_ body")
+    if len(re.findall(r'type="CollisionPolygon2D" parent="[^"]+"', source)) < 15:
+        errors.append("R01: not enough editor-visible CollisionPolygon2D shapes")
+    if '[node name="CollisionShape2D" type="CollisionShape2D" parent="WestBoundary"]' not in source or '[node name="CollisionShape2D" type="CollisionShape2D" parent="EastBoundary"]' not in source:
+        errors.append("R01: missing editor-visible room boundary collision")
+    for marker in ("EntryWest", "EntryCanopyReturn", "EntryTombReturn", "ExitVillage", "ExitBellTomb", "ExitCanopy", "DropToR04"):
+        if f'[node name="{marker}" type="Marker2D" parent="RoomMarkers"]' not in source:
+            errors.append(f"R01: missing RoomMarkers anchor {marker}")
+    if "position = Vector2(672, 780)" not in source:
+        errors.append("R01: DropToR04 marker must stay centered over the narrow shaft at (672,780)")
+    print(f"R01: tilemap_cells fill={R01_TILE_COUNTS['TerrainFill']} platforms={R01_TILE_COUNTS['TerrainPlatforms']} details={R01_TILE_COUNTS['TerrainDetails']} collision_bodies={len(body_names)}; ballistic reachability deferred to Godot playtest")
+    # Preserve the six-room structural budget. Exact movement reachability is deliberately not inferred from polygon bounds.
+    return 16, 17, 0
+
+
 def audit_room(room_id: str, relative_path: str, root_name: str, expected_platforms: int,
                runtime_id: str, runtime_file: str, start_node: str, errors: list[str]) -> tuple[int, int, int]:
+    if room_id == "R01":
+        path = ROOT / relative_path
+        if not path.is_file():
+            errors.append(f"R01: missing terrain scene {relative_path}")
+            return 0, 0, 0
+        return audit_r01(path.read_text(encoding="utf-8"), root_name, errors)
     path = ROOT / relative_path
     if not path.is_file():
         errors.append(f"{room_id}: missing terrain scene {relative_path}")
@@ -180,7 +248,8 @@ def main() -> int:
                 errors.append(f"{room_id}: runtime wrapper does not instance its terrain scene")
             if f'path="res://{RUNTIME_SCRIPT}"' not in wrapper:
                 errors.append(f"{room_id}: runtime wrapper does not use {RUNTIME_SCRIPT}")
-        print(f"{room_id}: platforms={count}/{expected} collision_bodies={bodies} simplified_reachable={reachable}/{bodies}")
+        if room_id != "R01":
+            print(f"{room_id}: platforms={count}/{expected} collision_bodies={bodies} simplified_reachable={reachable}/{bodies}")
 
     contract_path = ROOT / "tools/a2_room_connection_contract.json"
     if not contract_path.is_file():
@@ -234,7 +303,7 @@ def main() -> int:
     # drop/height transition, not merely that the contract lists those edges.
     room_runtime_source = runtime_script.read_text(encoding="utf-8") if runtime_script.is_file() else ""
     route_contracts = [
-        ('_spawn_drop_transition_at_marker("DropToR04", 960.0, 260.0, "A2-R04", "a2_r04_tomb_drop_r01")', "R01->R04 drop"),
+        ('_spawn_drop_transition_at_marker("DropToR04", 48.0, 120.0, "A2-R04", "a2_r04_tomb_drop_r01")', "R01->R04 narrow drop shaft"),
         ('_spawn_drop_transition_at_marker("DropToR04", 150.0, 220.0, "A2-R04", "a2_r04_tomb_drop")', "R03->R04 drop"),
         ('_spawn_exit_door_at_marker("ExitToR06", "E  深入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_low_entry")', "R04->R06 low entry"),
         ('_spawn_exit_door_at_marker("ExitToR04", "E  返回钟墓坑底", "ash_forest", _scene_path_for_room("A2-R04"), "a2_r04_ravine_return")', "R06->R04 low return"),
@@ -264,7 +333,7 @@ def main() -> int:
         for error in errors:
             print(f"[FAIL] {error}")
         return 1
-    print(f"A2 authored room structure: PASS rooms=6/6 platforms={total_platforms}/91 collision_bodies={total_bodies}/97 simplified_reachable={total_reachable}/{total_bodies}")
+    print(f"A2 authored room structure: PASS rooms=6/6 platforms={total_platforms}/91 collision_bodies={total_bodies}/97 non_R01_simplified_reachable={total_reachable}/{total_bodies-17}")
     print("BOUNDARY: static estimate only; not Godot parser/runtime, exact Canva fidelity, or interactive acceptance.")
     return 0
 
