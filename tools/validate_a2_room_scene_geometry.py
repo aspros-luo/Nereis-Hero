@@ -217,10 +217,10 @@ def audit_r01_illustration(source: str, errors: list[str]) -> None:
             report(errors, f"R01: footing marker {marker} does not match {position}")
     if not re.search(
         r'^\[node name="DropToR04" type="Marker2D" parent="RoomMarkers"\]\n'
-        r'position\s*=\s*Vector2\(672, 780\)$',
+        r'position\s*=\s*Vector2\(1000, 780\)$',
         source, re.M
     ):
-        report(errors, "R01: DropToR04 marker must remain at (1000,780)")
+        report(errors, "R01: DropToR04 marker must remain at (1000, 780), the waterfall seam")
 
 
 def require(source: str, expected: str, label: str, errors: list[str]) -> None:
