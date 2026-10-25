@@ -264,6 +264,21 @@
   <circle cx="389" cy="675" r="2.5"/><circle cx="443" cy="674" r="3"/><circle cx="566" cy="707" r="2.5"/><circle cx="724" cy="644" r="2.5"/><circle cx="843" cy="644" r="3"/>
   <circle cx="922" cy="724" r="2"/><circle cx="1078" cy="724" r="2.5"/><circle cx="1208" cy="644" r="3"/><circle cx="1329" cy="548" r="3"/><circle cx="1490" cy="516" r="3"/><circle cx="1610" cy="515" r="2.5"/><circle cx="1750" cy="514" r="3"/>
 </g>
+<!-- Additional authored route silhouettes: canopy, broken traverse, lower return, east branch -->
+<g id="expanded-routes" stroke="#1a2c22" stroke-width="3">
+  <path d="M300 420H520L508 437L488 446L469 441L451 455L430 445L411 458L390 446L369 455L348 442L326 448L300 438Z" fill="url(#root)"/>
+  <path d="M300 420H520" fill="none" stroke="#9eaa6d" stroke-width="7"/>
+  <path d="M500 464H640L628 481L610 491L592 484L575 497L554 485L536 496L518 483L500 486Z" fill="url(#stoneLight)"/>
+  <path d="M500 464H640" fill="none" stroke="#91a56d" stroke-width="6"/>
+  <path d="M880 592H1060L1046 609L1028 620L1008 614L990 629L970 616L950 628L932 614L910 623L894 609Z" fill="url(#stone)"/>
+  <path d="M880 592H1060" fill="none" stroke="#9eaf7a" stroke-width="7"/>
+  <path d="M600 848H780L766 866L746 878L726 870L707 884L685 870L665 883L645 870L625 880L600 865Z" fill="url(#stone)"/>
+  <path d="M600 848H780" fill="none" stroke="#8ea56e" stroke-width="7"/>
+  <path d="M1200 432H1360L1348 449L1328 461L1308 454L1289 468L1268 455L1249 467L1228 454L1200 459Z" fill="url(#stoneLight)"/>
+  <path d="M1200 432H1360" fill="none" stroke="#a1b57b" stroke-width="7"/>
+  <path d="M328 407q28 -19 51 -5t48 -3t54 4" fill="none" stroke="#756b43" stroke-width="4" opacity=".8"/>
+  <path d="M1220 420q22 -16 43 -4t41 -2t38 2" fill="none" stroke="#6c784b" stroke-width="4" opacity=".75"/>
+</g>
 <!-- Final atmospheric haze and small firefly glints -->
 <path d="M0 470Q180 445 330 470T640 460T930 477T1230 455T1510 470T1792 446V560H0Z" fill="url(#mist)" opacity=".5"/>
 <g fill="#c9edb5" opacity=".72">
