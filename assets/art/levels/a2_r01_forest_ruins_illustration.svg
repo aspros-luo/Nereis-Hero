@@ -167,8 +167,8 @@
   <path d="M360 672H560" stroke="#97ad70" stroke-width="7"/><path d="M360 670H560" stroke="#d2ce91" stroke-width="2" opacity=".6"/>
   <path d="M360 672H560V770H360Z" fill="url(#rockGrain)" opacity=".8"/>
   <!-- Narrow intermediate shelf ends at x=640; the R04 shaft remains open -->
-  <path d="M560 704H640V729L628 738L613 747L594 742L580 755L560 745Z" fill="url(#stone)" stroke="#1a2b24" stroke-width="3"/>
-  <path d="M560 704H640" stroke="#8fa66e" stroke-width="7"/><path d="M560 702H640" stroke="#c7cc8a" stroke-width="2" opacity=".6"/>
+  <path d="M560 704H608V729L600 738L590 747L579 742L570 755L560 745Z" fill="url(#stone)" stroke="#1a2b24" stroke-width="3"/>
+  <path d="M560 704H608" stroke="#8fa66e" stroke-width="7"/><path d="M560 702H608" stroke="#c7cc8a" stroke-width="2" opacity=".6"/>
   <!-- Root lookout 1 -->
   <path d="M120 512H320V536L305 547L292 565L273 575L255 572L237 589L217 580L194 591L171 580L147 590L130 575L120 548Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
   <path d="M120 512H320" stroke="#b1c183" stroke-width="8"/><path d="M120 510H320" stroke="#e0d8a0" stroke-width="2" opacity=".7"/>
@@ -186,13 +186,13 @@
   <path d="M320 768H560V850H320Z" fill="url(#rockGrain)" opacity=".8"/>
   <path d="M360 736H480V756L465 767L447 779L424 776L407 788L388 778L370 787L360 774Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
   <path d="M360 736H480" stroke="#9bb578" stroke-width="6"/>
-  <path d="M520 736H640V757L624 768L605 780L583 775L560 787L538 774L520 779Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
-  <path d="M520 736H640" stroke="#9bb578" stroke-width="6"/>
+  <path d="M480 736H560V757L550 768L538 780L523 775L509 787L495 774L480 779Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M480 736H560" stroke="#9bb578" stroke-width="6"/>
   <!-- Open R04 shaft at x=640..704 -->
   <path d="M704 704H784V726L770 736L752 749L731 744L714 756L704 744Z" fill="url(#stone)" stroke="#172923" stroke-width="3"/>
   <path d="M704 704H784" stroke="#8fa56c" stroke-width="7"/>
-  <path d="M640 710L655 720L651 742L670 754L663 777M658 736L668 758L661 780L676 802L668 826" fill="none" stroke="#343d2d" stroke-width="7" opacity=".9"/>
-  <path d="M658 756l-13 9M669 775l12 8M668 801l-9 7M668 821l13 5" stroke="#60785b" stroke-width="3"/>
+  <path d="M610 710L625 720L621 742L640 754L633 777M628 736L638 758L631 780L646 802L638 826" fill="none" stroke="#343d2d" stroke-width="7" opacity=".9"/>
+  <path d="M628 756l-13 9M639 775l12 8M638 801l-9 7M638 821l13 5" stroke="#60785b" stroke-width="3"/>
   <!-- Main lower passage under the decorative broken bridge -->
   <path d="M720 672H880V704L866 715L851 735L827 728L808 744L784 731L765 746L741 729L720 733Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
   <path d="M720 672H880" stroke="#9aaf75" stroke-width="8"/><path d="M720 670H880" stroke="#d3d19b" stroke-width="2" opacity=".6"/>
