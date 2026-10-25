@@ -197,9 +197,9 @@
   <path d="M720 672H880V704L866 715L851 735L827 728L808 744L784 731L765 746L741 729L720 733Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
   <path d="M720 672H880" stroke="#9aaf75" stroke-width="8"/><path d="M720 670H880" stroke="#d3d19b" stroke-width="2" opacity=".6"/>
   <path d="M720 672H880V746H720Z" fill="url(#rockGrain)" opacity=".75"/>
-  <path d="M960 640H1160V666L1144 677L1130 698L1107 704L1081 691L1063 709L1036 696L1018 709L995 697L980 708L960 691Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
-  <path d="M960 640H1160" stroke="#9db47a" stroke-width="8"/><path d="M960 638H1160" stroke="#d3d19b" stroke-width="2" opacity=".6"/>
-  <path d="M960 640H1160V718H960Z" fill="url(#rockGrain)" opacity=".75"/>
+  <path d="M960 672H1160V698L1144 709L1130 730L1107 736L1081 723L1063 741L1036 728L1018 741L995 729L980 740L960 723Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
+  <path d="M960 672H1160" stroke="#9db47a" stroke-width="8"/><path d="M960 670H1160" stroke="#d3d19b" stroke-width="2" opacity=".6"/>
+  <path d="M960 672H1160V746H960Z" fill="url(#rockGrain)" opacity=".75"/>
   <!-- Central ruins platform 3 -->
   <path d="M720 512H880V536L868 546L853 565L834 559L815 578L794 568L777 581L756 568L740 576L720 555Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
   <path d="M720 512H880" stroke="#b2c48a" stroke-width="8"/><path d="M720 510H880" stroke="#e1dba5" stroke-width="2" opacity=".75"/>
@@ -220,10 +220,10 @@
   <path d="M1160 640H1360V665L1345 676L1328 690L1308 684L1290 699L1268 686L1249 700L1228 687L1208 700L1188 686L1160 688Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
   <path d="M1160 640H1360" stroke="#9cb47a" stroke-width="8"/><path d="M1160 638H1360" stroke="#d2d19a" stroke-width="2" opacity=".6"/>
   <path d="M1160 640H1360V710H1160Z" fill="url(#rockGrain)" opacity=".75"/>
-  <path d="M1200 576H1360V600L1346 609L1329 623L1307 617L1291 632L1268 620L1247 634L1228 621L1200 625Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
-  <path d="M1200 576H1360" stroke="#a5ba80" stroke-width="7"/>
-  <path d="M1320 544H1480V566L1464 576L1447 589L1427 582L1406 596L1386 583L1366 594L1346 580L1320 585Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
-  <path d="M1320 544H1480" stroke="#b0c38a" stroke-width="7"/>
+  <path d="M1040 736H1200V758L1185 768L1168 782L1147 776L1129 790L1106 778L1085 791L1065 778L1040 785Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M1040 736H1200" stroke="#a5ba80" stroke-width="7"/>
+  <path d="M1320 560H1480V582L1464 592L1447 605L1427 598L1406 612L1386 599L1366 610L1346 596L1320 601Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M1320 560H1480" stroke="#b0c38a" stroke-width="7"/>
   <!-- Shrine summit 5 -->
   <path d="M1360 480H1792V509L1771 520L1757 538L1726 533L1704 551L1678 540L1654 555L1628 543L1604 558L1578 544L1553 558L1529 543L1504 555L1482 543L1458 554L1434 541L1411 553L1385 538L1360 539Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
   <path d="M1360 480H1792" stroke="#b5c68a" stroke-width="9"/><path d="M1360 478H1792" stroke="#e2dda3" stroke-width="2" opacity=".72"/>
