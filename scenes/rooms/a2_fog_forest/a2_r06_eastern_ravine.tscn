@@ -4,7 +4,7 @@
 ; 所有可站立地面与碰撞均为编辑器可见节点；背景仅承担环境轮廓。
 
 [sub_resource type="RectangleShape2D" id="GroundShape1"]
-size = Vector2(360, 24)
+size = Vector2(1280, 24)
 
 [sub_resource type="RectangleShape2D" id="GroundShape2"]
 size = Vector2(580, 24)
@@ -34,31 +34,15 @@ z_index = -20
 position = Vector2(0, 320)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RavineUpperWest"]
-position = Vector2(180, 12)
+position = Vector2(640, 12)
 shape = SubResource("GroundShape1")
 
 [node name="TerrainMass" type="Polygon2D" parent="RavineUpperWest"]
-polygon = PackedVector2Array(0, 0, 360, 0, 360, 48, 0, 48)
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 48, 0, 48)
 color = Color(0.105, 0.094, 0.125, 1)
 
 [node name="TerrainTopEdge" type="Line2D" parent="RavineUpperWest"]
-points = PackedVector2Array(0, 0, 360, 0)
-width = 3.0
-default_color = Color(0.39, 0.42, 0.37, 1)
-
-[node name="RavineUpperEast" type="StaticBody2D" parent="."]
-position = Vector2(700, 320)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RavineUpperEast"]
-position = Vector2(290, 12)
-shape = SubResource("GroundShape2")
-
-[node name="TerrainMass" type="Polygon2D" parent="RavineUpperEast"]
-polygon = PackedVector2Array(0, 0, 580, 0, 580, 48, 0, 48)
-color = Color(0.105, 0.094, 0.125, 1)
-
-[node name="TerrainTopEdge" type="Line2D" parent="RavineUpperEast"]
-points = PackedVector2Array(0, 0, 580, 0)
+points = PackedVector2Array(0, 0, 1280, 0)
 width = 3.0
 default_color = Color(0.39, 0.42, 0.37, 1)
 
@@ -107,6 +91,38 @@ color = Color(0.105, 0.094, 0.125, 1)
 
 [node name="TerrainTopEdge" type="Line2D" parent="RavineReturnShelf"]
 points = PackedVector2Array(0, 0, 170, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RavineClimbLower" type="StaticBody2D" parent="."]
+position = Vector2(300, 680)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RavineClimbLower"]
+position = Vector2(170, 12)
+shape = SubResource("GroundShape4")
+
+[node name="TerrainMass" type="Polygon2D" parent="RavineClimbLower"]
+polygon = PackedVector2Array(0, 0, 340, 0, 340, 40, 0, 40)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="RavineClimbLower"]
+points = PackedVector2Array(0, 0, 340, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RavineClimbMiddle" type="StaticBody2D" parent="."]
+position = Vector2(500, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RavineClimbMiddle"]
+position = Vector2(95, 12)
+shape = SubResource("GroundShape4")
+
+[node name="TerrainMass" type="Polygon2D" parent="RavineClimbMiddle"]
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 40, 0, 40)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="RavineClimbMiddle"]
+points = PackedVector2Array(0, 0, 190, 0)
 width = 3.0
 default_color = Color(0.39, 0.42, 0.37, 1)
 
