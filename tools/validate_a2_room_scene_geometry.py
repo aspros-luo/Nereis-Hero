@@ -11,6 +11,7 @@ import json
 import math
 import re
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -61,6 +62,33 @@ def audit_r01(source: str, root_name: str, errors: list[str]) -> tuple[int, int,
         errors.append("R01: missing reusable forest TileSet resource")
     elif 'path="res://assets/art/tiles/a2_forest_terrain_atlas.svg"' not in tile_set_path.read_text(encoding="utf-8"):
         errors.append("R01: TileSet does not reference the forest SVG atlas")
+
+    # Check the authored SVG/TileSet contract statically; Godot's actual import still requires editor/runtime validation.
+    atlas_path = ROOT / "assets/art/tiles/a2_forest_terrain_atlas.svg"
+    if not atlas_path.is_file():
+        errors.append("R01: missing forest SVG atlas")
+    else:
+        try:
+            svg_root = ET.parse(atlas_path).getroot()
+            svg_width = int(float(svg_root.attrib.get("width", "0").replace("px", "")))
+            svg_height = int(float(svg_root.attrib.get("height", "0").replace("px", "")))
+            view_box = [float(value) for value in svg_root.attrib.get("viewBox", "").replace(",", " ").split()]
+            if (svg_width, svg_height) != (256, 128):
+                errors.append(f"R01: SVG atlas dimensions={(svg_width, svg_height)}; expected (256, 128)")
+            if view_box != [0.0, 0.0, 256.0, 128.0]:
+                errors.append(f"R01: SVG viewBox={view_box}; expected [0, 0, 256, 128]")
+        except (ET.ParseError, ValueError) as exc:
+            errors.append(f"R01: invalid SVG atlas XML or dimensions: {exc}")
+    if tile_set_path.is_file():
+        tile_set_source = tile_set_path.read_text(encoding="utf-8")
+        if "texture_region_size = Vector2i(32, 32)" not in tile_set_source:
+            errors.append("R01: TileSet atlas region size must remain 32x32")
+        declared_cells = set(re.findall(r"^(\\d+):(\\d+)/0\\s*=\\s*0\\s*$", tile_set_source, re.M))
+        expected_cells = {(str(x), str(y)) for y in range(4) for x in range(8)}
+        if declared_cells != expected_cells:
+            errors.append(f"R01: TileSet atlas cells={len(declared_cells)}; expected all 32 cells in an 8x4 grid")
+    else:
+        declared_cells = set()
 
     for layer_name, minimum in (("TerrainFill", 800), ("TerrainPlatforms", 40), ("TerrainDetails", 12)):
         match = re.search(r'\[node name="' + re.escape(layer_name) + r'" type="TileMapLayer" parent="\."\](.*?)(?=\n\[node |\Z)', source, re.S)
