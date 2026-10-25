@@ -15,7 +15,7 @@ size = Vector2(28, 1200)
 size = Vector2(360, 240)
 
 [sub_resource type="RectangleShape2D" id="GroundStepA"]
-size = Vector2(200, 64)
+size = Vector2(200, 16)
 
 [sub_resource type="RectangleShape2D" id="GroundStepB"]
 size = Vector2(48, 24)
@@ -83,7 +83,7 @@ shape = SubResource("GroundMain")
 position = Vector2(360, 672)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_001"]
-position = Vector2(100, 32)
+position = Vector2(100, 8)
 shape = SubResource("GroundStepA")
 
 [node name="Platform_002" type="StaticBody2D" parent="."]
