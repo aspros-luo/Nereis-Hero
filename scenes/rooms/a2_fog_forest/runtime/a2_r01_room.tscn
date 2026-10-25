@@ -7,7 +7,7 @@
 script = ExtResource("1")
 region_id = "A2"
 location_id = "ash_forest"
-region_title = "A2 R01 林间岔路"
+region_title = "林间遗迹"
 map_width = 1792.0
 floor_y = 640.0
 room_height = 1200.0
