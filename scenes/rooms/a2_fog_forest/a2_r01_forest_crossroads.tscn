@@ -46,7 +46,22 @@ size = Vector2(160, 24)
 size = Vector2(240, 20)
 
 [sub_resource type="RectangleShape2D" id="PlatMainEast"]
-size = Vector2(200, 24)
+size = Vector2(136, 24)
+
+[sub_resource type="RectangleShape2D" id="PlatCanopyWide"]
+size = Vector2(220, 20)
+
+[sub_resource type="RectangleShape2D" id="PlatCanopyStep"]
+size = Vector2(140, 20)
+
+[sub_resource type="RectangleShape2D" id="PlatRootBridge"]
+size = Vector2(180, 20)
+
+[sub_resource type="RectangleShape2D" id="PlatLowerShelf"]
+size = Vector2(180, 24)
+
+[sub_resource type="RectangleShape2D" id="PlatEastBranch"]
+size = Vector2(160, 20)
 
 [sub_resource type="RectangleShape2D" id="PlatHigh"]
 size = Vector2(160, 20)
@@ -173,7 +188,7 @@ position = Vector2(960, 672)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_012"]
 one_way_collision = true
-position = Vector2(100, 12)
+position = Vector2(168, 12)
 shape = SubResource("PlatMainEast")
 
 [node name="Platform_013" type="StaticBody2D" parent="."]
@@ -223,6 +238,47 @@ position = Vector2(1360, 480)
 one_way_collision = true
 position = Vector2(216, 12)
 shape = SubResource("PlatShrine")
+
+; Expanded authored routes: upper root canopy, middle traverse, and lower return shelf.
+[node name="Platform_019_CanopyRoot" type="StaticBody2D" parent="."]
+position = Vector2(300, 420)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_019_CanopyRoot"]
+one_way_collision = true
+position = Vector2(110, 10)
+shape = SubResource("PlatCanopyWide")
+
+[node name="Platform_020_RootStep" type="StaticBody2D" parent="."]
+position = Vector2(500, 464)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_020_RootStep"]
+one_way_collision = true
+position = Vector2(70, 10)
+shape = SubResource("PlatCanopyStep")
+
+[node name="Platform_021_RuinsTraverse" type="StaticBody2D" parent="."]
+position = Vector2(880, 592)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_021_RuinsTraverse"]
+one_way_collision = true
+position = Vector2(90, 10)
+shape = SubResource("PlatRootBridge")
+
+[node name="Platform_022_LowerReturnShelf" type="StaticBody2D" parent="."]
+position = Vector2(600, 848)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_022_LowerReturnShelf"]
+one_way_collision = true
+position = Vector2(90, 12)
+shape = SubResource("PlatLowerShelf")
+
+[node name="Platform_023_EastBranch" type="StaticBody2D" parent="."]
+position = Vector2(1200, 432)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_023_EastBranch"]
+one_way_collision = true
+position = Vector2(80, 10)
+shape = SubResource("PlatEastBranch")
 
 [node name="WestBoundary" type="StaticBody2D" parent="."]
 position = Vector2(0, 600)
