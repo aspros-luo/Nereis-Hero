@@ -3887,10 +3887,12 @@ func _draw() -> void:
 			_draw_debug_exit_markers()
 		return
 	if region_id == "A2" and room_id.begins_with("A2-R"):
-		# Standalone A2 room runtime: room-local background only; terrain visuals belong to the authored child scene.
-		# 独立 A2 房间运行时只绘制局部背景；地形视觉由可编辑房间子场景负责。
-		draw_rect(Rect2(0.0, 0.0, map_width, room_height), Color("#171b28"))
-	elif region_id == "A2":
+		# Standalone A2 rooms own their complete visible landscape in editor-authored child scenes.
+		# Do not draw the legacy opaque graybox backdrop, color wash, or landmarks over that artwork.
+		# 独立 A2 房间由编辑器内的子场景提供完整地形与背景；这里必须直接返回，
+		# 否则旧版不透明灰盒背景会盖住子场景的插画和远景。
+		return
+	if region_id == "A2":
 		_draw_a2_authored_landscape()
 	else:
 		var backdrop: Texture2D = _region_backdrop_texture()
