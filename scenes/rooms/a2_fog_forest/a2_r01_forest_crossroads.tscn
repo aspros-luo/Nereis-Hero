@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3]
+[gd_scene load_steps=34 format=3]
 
 ; A2-R01 林间遗迹 — illustration-aligned, editor-authored terrain.
 ; Scenic detail is an editable SVG Sprite2D. Every walkable surface below is a
