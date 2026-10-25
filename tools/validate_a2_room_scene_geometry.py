@@ -52,9 +52,9 @@ def audit_r01(source: str, root_name: str, errors: list[str]) -> tuple[int, int,
     """Audit the illustration-backed R01 scene and its editor-authored collision anchors."""
     if f'[node name="{root_name}" type="Node2D"]' not in source:
         errors.append(f"R01: root node mismatch; expected {root_name}")
-    load_match = re.search(r"^\\[gd_scene load_steps=(\\d+)", source, re.M)
-    ext_count = len(re.findall(r"^\\[ext_resource ", source, re.M))
-    sub_count = len(re.findall(r"^\\[sub_resource ", source, re.M))
+    load_match = re.search(r"^\[gd_scene load_steps=(\d+)", source, re.M)
+    ext_count = len(re.findall(r"^\[ext_resource ", source, re.M))
+    sub_count = len(re.findall(r"^\[sub_resource ", source, re.M))
     if not load_match or int(load_match.group(1)) != ext_count + sub_count + 1:
         errors.append("R01: gd_scene load_steps does not match resource declarations")
 
@@ -93,8 +93,8 @@ def audit_r01(source: str, root_name: str, errors: list[str]) -> tuple[int, int,
         errors.append("R01: scene does not reference the new R01 illustration")
 
     shapes: dict[str, tuple[float, float]] = {}
-    for shape_id, body in re.findall(r'\\[sub_resource type="RectangleShape2D" id="([^"]+)"\\](.*?)(?=\\n\\[|\\Z)', source, re.S):
-        size_match = re.search(r"size\\s*=\\s*(Vector2\\([^\\n]+\\))", body)
+    for shape_id, body in re.findall(r'\[sub_resource type="RectangleShape2D" id="([^"]+)"\](.*?)(?=\n\[|\Z)', source, re.S):
+        size_match = re.search(r"size\s*=\s*(Vector2\([^\n]+\))", body)
         if not size_match:
             errors.append(f"R01: rectangle shape {shape_id} has no size")
             continue
@@ -103,9 +103,9 @@ def audit_r01(source: str, root_name: str, errors: list[str]) -> tuple[int, int,
         except ValueError as exc:
             errors.append(f"R01: invalid rectangle shape {shape_id}: {exc}")
 
-    body_matches = re.findall(r'^\\[node name="([^"]+)" type="StaticBody2D" parent="\\."\\](.*?)(?=\\n\\[node name="[^"]+" type="StaticBody2D" parent="\\."\\]|\\Z)', source, re.M | re.S)
+    body_matches = re.findall(r'^\[node name="([^"]+)" type="StaticBody2D" parent="\."\](.*?)(?=\n\[node name="[^"]+" type="StaticBody2D" parent="\."\]|\Z)', source, re.M | re.S)
     body_names = [name for name, _ in body_matches]
-    platform_names = [name for name in body_names if re.fullmatch(r"Platform_\\d{3}", name)]
+    platform_names = [name for name in body_names if re.fullmatch(r"Platform_\d{3}", name)]
     if len(platform_names) != 18:
         errors.append(f"R01: authored platform count={len(platform_names)}; expected 18")
     if set(platform_names) != {f"Platform_{index:03d}" for index in range(1, 19)}:
@@ -114,12 +114,12 @@ def audit_r01(source: str, root_name: str, errors: list[str]) -> tuple[int, int,
         errors.append(f"R01: unexpected/missing terrain collision bodies: {sorted(set(body_names))}")
 
     for body_name, body in body_matches:
-        collision_match = re.search(r'\\[node name="CollisionShape2D" type="CollisionShape2D" parent="' + re.escape(body_name) + r'"\\](.*?)(?=\\n\\[node |\\Z)', body, re.S)
+        collision_match = re.search(r'\[node name="CollisionShape2D" type="CollisionShape2D" parent="' + re.escape(body_name) + r'"\](.*?)(?=\n\[node |\Z)', body, re.S)
         if not collision_match:
             errors.append(f"R01/{body_name}: missing editor-visible CollisionShape2D")
             continue
         collision = collision_match.group(1)
-        shape_match = re.search(r'shape\\s*=\\s*SubResource\\("([^"]+)"\\)', collision)
+        shape_match = re.search(r'shape\s*=\s*SubResource\("([^"]+)"\)', collision)
         if not shape_match or shape_match.group(1) not in shapes:
             errors.append(f"R01/{body_name}: missing/unsupported RectangleShape2D")
             continue
@@ -330,9 +330,9 @@ def main() -> int:
             errors.append(f"Invalid A2 room connection contract: {exc}")
 
     if total_platforms != 91:
-        errors.append(f"total authored room platforms={total_platforms}; expected 91")
+        errors.append(f"total authored room platforms={total_platforms}; expected 95")
     if total_bodies != 97:
-        errors.append(f"total authored collision bodies={total_bodies}; expected 97")
+        errors.append(f"total authored collision bodies={total_bodies}; expected 101")
     # Core room graph: assert the authored runtime actually wires both ends of each
     # drop/height transition, not merely that the contract lists those edges.
     room_runtime_source = runtime_script.read_text(encoding="utf-8") if runtime_script.is_file() else ""
