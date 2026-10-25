@@ -180,7 +180,7 @@ def audit_r01_illustration(source: str, errors: list[str]) -> None:
             report(errors, f"R01: illustration missing {label}")
 
     sprite_block = re.search(
-        r'^\\[node name="LevelIllustration" type="Sprite2D" parent="\\."\\]\\n(.*?)(?=^\\[node |\\Z)',
+        r'^\[node name="LevelIllustration" type="Sprite2D" parent="\."\]\n(.*?)(?=^\[node |\Z)',
         source, re.M | re.S
     )
     if sprite_block is None:
@@ -189,8 +189,8 @@ def audit_r01_illustration(source: str, errors: list[str]) -> None:
         sprite_config = sprite_block.group(1)
         if 'texture = ExtResource("1_r01_art")' not in sprite_config or 'centered = false' not in sprite_config:
             report(errors, "R01: illustration sprite texture/origin is not configured")
-        if not re.search(r"^z_index\\s*=\\s*0$", sprite_config, re.M):
-            report(errors, "R01: illustration must render above the inherited legacy backdrop at z_index 0")
+        if not re.search(r"^z_index\s*=\s*-1$", sprite_config, re.M):
+            report(errors, "R01: illustration should sit below root-level debug markers at z_index -1")
     if 'size = Vector2(200, 16)' not in source or 'position = Vector2(100, 8)' not in source:
         report(errors, "R01: west root shelf collider must remain thin to keep the lower path open")
     for marker, position in (
