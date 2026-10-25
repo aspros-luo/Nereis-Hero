@@ -81,6 +81,30 @@ size = Vector2(160, 20)
 [sub_resource type="RectangleShape2D" id="PlatEastHighStep"]
 size = Vector2(160, 20)
 
+[sub_resource type="RectangleShape2D" id="PlatUpperLoop"]
+size = Vector2(180, 20)
+
+[sub_resource type="RectangleShape2D" id="PlatUpperLoopStep"]
+size = Vector2(112, 20)
+
+[sub_resource type="RectangleShape2D" id="PlatMiddleBranch"]
+size = Vector2(176, 20)
+
+[sub_resource type="RectangleShape2D" id="PlatMiddleStep"]
+size = Vector2(104, 20)
+
+[sub_resource type="RectangleShape2D" id="PlatLowerLoop"]
+size = Vector2(208, 24)
+
+[sub_resource type="RectangleShape2D" id="PlatLowerStepB"]
+size = Vector2(96, 20)
+
+[sub_resource type="RectangleShape2D" id="PlatEastLoop"]
+size = Vector2(184, 20)
+
+[sub_resource type="RectangleShape2D" id="PlatEastLoopStep"]
+size = Vector2(120, 20)
+
 [node name="A2R01ForestCrossroads" type="Node2D"]
 
 [node name="LevelIllustration" type="Sprite2D" parent="."]
@@ -279,6 +303,71 @@ position = Vector2(1200, 432)
 one_way_collision = true
 position = Vector2(80, 10)
 shape = SubResource("PlatEastBranch")
+
+; Expanded traversal branches: two returnable loops and one exposed dead-end lookout.
+[node name="Platform_024_UpperRootLoop" type="StaticBody2D" parent="."]
+position = Vector2(180, 344)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_024_UpperRootLoop"]
+one_way_collision = true
+position = Vector2(90, 10)
+shape = SubResource("PlatUpperLoop")
+
+[node name="Platform_025_UpperRootStep" type="StaticBody2D" parent="."]
+position = Vector2(430, 360)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_025_UpperRootStep"]
+one_way_collision = true
+position = Vector2(56, 10)
+shape = SubResource("PlatUpperLoopStep")
+
+[node name="Platform_026_MiddleBranch" type="StaticBody2D" parent="."]
+position = Vector2(640, 640)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_026_MiddleBranch"]
+one_way_collision = true
+position = Vector2(88, 10)
+shape = SubResource("PlatMiddleBranch")
+
+[node name="Platform_027_MiddleStep" type="StaticBody2D" parent="."]
+position = Vector2(820, 688)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_027_MiddleStep"]
+one_way_collision = true
+position = Vector2(52, 10)
+shape = SubResource("PlatMiddleStep")
+
+[node name="Platform_028_LowerLoop" type="StaticBody2D" parent="."]
+position = Vector2(420, 928)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_028_LowerLoop"]
+one_way_collision = true
+position = Vector2(104, 12)
+shape = SubResource("PlatLowerLoop")
+
+[node name="Platform_029_LowerLoopStep" type="StaticBody2D" parent="."]
+position = Vector2(700, 968)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_029_LowerLoopStep"]
+one_way_collision = true
+position = Vector2(48, 10)
+shape = SubResource("PlatLowerStepB")
+
+[node name="Platform_030_EastRootLoop" type="StaticBody2D" parent="."]
+position = Vector2(1180, 360)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_030_EastRootLoop"]
+one_way_collision = true
+position = Vector2(92, 10)
+shape = SubResource("PlatEastLoop")
+
+[node name="Platform_031_EastRootStep" type="StaticBody2D" parent="."]
+position = Vector2(1400, 392)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_031_EastRootStep"]
+one_way_collision = true
+position = Vector2(60, 10)
+shape = SubResource("PlatEastLoopStep")
 
 [node name="WestBoundary" type="StaticBody2D" parent="."]
 position = Vector2(0, 600)
