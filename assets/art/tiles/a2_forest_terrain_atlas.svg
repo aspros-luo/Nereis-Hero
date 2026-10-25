@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="128" viewBox="0 0 256 128">
+<title>A2 Fog Forest terrain atlas, 32px cells</title>
+<desc>Original editable SVG terrain tiles for the R01 TileMapLayer prototype. Rows: mossy surfaces, compact soil, cold stone, transparent decorations.</desc>
+<g id="surface-0"><rect x="0" y="0" width="32" height="32" fill="#293633"/>
+    <path d="M0 5 Q5 1 9 5 T18 4 T26 5 T32 3 L32 11 Q23 9 15 12 T0 10 Z" fill="#526a48"/>
+    <path d="M2 7 l4 -3 2 4 m7 -1 l3 -3 2 4 m7 -2 l3 -2" fill="none" stroke="#91a276" stroke-width="1.2" opacity=".85"/>
+    <path d="M4 17 l5 2 -2 4 m10 -7 l4 2 -2 4 m6 3 l4 -2" fill="none" stroke="#161f1d" stroke-width="1.3" opacity=".7"/>
+    <circle cx="7" cy="27" r="1.2" fill="#667064"/><circle cx="25" cy="20" r="1" fill="#71806a"/>
+  </g>
+<g id="soil-0"><rect x="0" y="32" width="32" height="32" fill="#293633"/>
+    <path d="M2 39 l8 2 -2 3 m6 4 l6 -2 3 3 m-16 7 l7 1 m6 -1 l5 2 m-18 5 l3 -2" fill="none" stroke="#536058" stroke-width="1.2" opacity=".8"/>
+    <circle cx="5" cy="48" r="1.2" fill="#69736a"/><circle cx="25" cy="59" r="1" fill="#18221f"/>
+    <path d="M1 62 Q9 58 17 62 T31 61" fill="none" stroke="#202b28" stroke-width="1.5"/>
+  </g>
+<g id="rock-0"><rect x="0" y="64" width="32" height="32" fill="#39433f"/>
+    <path d="M2 72 l7 -3 5 4 -3 3 m7 1 l4 -4 6 3 m-23 10 l5 -3 4 3 m6 6 l5 -3 5 2" fill="none" stroke="#68736d" stroke-width="1.1" opacity=".9"/>
+    <path d="M3 68 l8 1 m12 9 l5 -1 m-19 13 l3 1" stroke="#202927" stroke-width="1.2"/>
+    <circle cx="25" cy="86" r="1.1" fill="#788078"/>
+  </g>
+<g id="surface-1"><rect x="32" y="0" width="32" height="32" fill="#303a35"/>
+    <path d="M32 5 Q37 1 41 5 T50 4 T58 5 T64 3 L64 11 Q55 9 47 12 T32 10 Z" fill="#60764c"/>
+    <path d="M34 7 l4 -3 2 4 m7 -1 l3 -3 2 4 m7 -2 l3 -2" fill="none" stroke="#91a276" stroke-width="1.2" opacity=".85"/>
+    <path d="M36 17 l5 2 -2 4 m10 -7 l4 2 -2 4 m6 3 l4 -2" fill="none" stroke="#161f1d" stroke-width="1.3" opacity=".7"/>
+    <circle cx="42" cy="27" r="1.2" fill="#667064"/><circle cx="53" cy="20" r="1" fill="#71806a"/>
+  </g>
+<g id="soil-1"><rect x="32" y="32" width="32" height="32" fill="#303a35"/>
+    <path d="M34 39 l8 2 -2 3 m6 4 l6 -2 3 3 m-16 7 l7 1 m6 -1 l5 2 m-18 5 l3 -2" fill="none" stroke="#536058" stroke-width="1.2" opacity=".8"/>
+    <circle cx="40" cy="48" r="1.2" fill="#69736a"/><circle cx="53" cy="59" r="1" fill="#18221f"/>
+    <path d="M33 62 Q41 58 49 62 T63 61" fill="none" stroke="#202b28" stroke-width="1.5"/>
+  </g>
+<g id="rock-1"><rect x="32" y="64" width="32" height="32" fill="#313d3c"/>
+    <path d="M34 72 l7 -3 5 4 -3 3 m7 1 l4 -4 6 3 m-23 10 l5 -3 4 3 m6 6 l5 -3 5 2" fill="none" stroke="#68736d" stroke-width="1.1" opacity=".9"/>
+    <path d="M35 68 l8 1 m12 9 l5 -1 m-19 13 l3 1" stroke="#202927" stroke-width="1.2"/>
+    <circle cx="51" cy="86" r="1.1" fill="#788078"/>
+  </g>
+<g id="surface-2"><rect x="64" y="0" width="32" height="32" fill="#2a3438"/>
+    <path d="M64 5 Q69 1 73 5 T82 4 T90 5 T96 3 L96 11 Q87 9 79 12 T64 10 Z" fill="#496544"/>
+    <path d="M66 7 l4 -3 2 4 m7 -1 l3 -3 2 4 m7 -2 l3 -2" fill="none" stroke="#91a276" stroke-width="1.2" opacity=".85"/>
+    <path d="M68 17 l5 2 -2 4 m10 -7 l4 2 -2 4 m6 3 l4 -2" fill="none" stroke="#161f1d" stroke-width="1.3" opacity=".7"/>
+    <circle cx="77" cy="27" r="1.2" fill="#667064"/><circle cx="89" cy="20" r="1" fill="#71806a"/>
+  </g>
+<g id="soil-2"><rect x="64" y="32" width="32" height="32" fill="#2a3438"/>
+    <path d="M66 39 l8 2 -2 3 m6 4 l6 -2 3 3 m-16 7 l7 1 m6 -1 l5 2 m-18 5 l3 -2" fill="none" stroke="#536058" stroke-width="1.2" opacity=".8"/>
+    <circle cx="75" cy="48" r="1.2" fill="#69736a"/><circle cx="89" cy="59" r="1" fill="#18221f"/>
+    <path d="M65 62 Q73 58 81 62 T95 61" fill="none" stroke="#202b28" stroke-width="1.5"/>
+  </g>
+<g id="rock-2"><rect x="64" y="64" width="32" height="32" fill="#3c4548"/>
+    <path d="M66 72 l7 -3 5 4 -3 3 m7 1 l4 -4 6 3 m-23 10 l5 -3 4 3 m6 6 l5 -3 5 2" fill="none" stroke="#68736d" stroke-width="1.1" opacity=".9"/>
+    <path d="M67 68 l8 1 m12 9 l5 -1 m-19 13 l3 1" stroke="#202927" stroke-width="1.2"/>
+    <circle cx="89" cy="86" r="1.1" fill="#788078"/>
+  </g>
+<g id="surface-3"><rect x="96" y="0" width="32" height="32" fill="#343a30"/>
+    <path d="M96 5 Q101 1 105 5 T114 4 T122 5 T128 3 L128 11 Q119 9 111 12 T96 10 Z" fill="#687452"/>
+    <path d="M98 7 l4 -3 2 4 m7 -1 l3 -3 2 4 m7 -2 l3 -2" fill="none" stroke="#91a276" stroke-width="1.2" opacity=".85"/>
+    <path d="M100 17 l5 2 -2 4 m10 -7 l4 2 -2 4 m6 3 l4 -2" fill="none" stroke="#161f1d" stroke-width="1.3" opacity=".7"/>
+    <circle cx="103" cy="27" r="1.2" fill="#667064"/><circle cx="117" cy="20" r="1" fill="#71806a"/>
+  </g>
+<g id="soil-3"><rect x="96" y="32" width="32" height="32" fill="#343a30"/>
+    <path d="M98 39 l8 2 -2 3 m6 4 l6 -2 3 3 m-16 7 l7 1 m6 -1 l5 2 m-18 5 l3 -2" fill="none" stroke="#536058" stroke-width="1.2" opacity=".8"/>
+    <circle cx="101" cy="48" r="1.2" fill="#69736a"/><circle cx="117" cy="59" r="1" fill="#18221f"/>
+    <path d="M97 62 Q105 58 113 62 T127 61" fill="none" stroke="#202b28" stroke-width="1.5"/>
+  </g>
+<g id="rock-3"><rect x="96" y="64" width="32" height="32" fill="#35403a"/>
+    <path d="M98 72 l7 -3 5 4 -3 3 m7 1 l4 -4 6 3 m-23 10 l5 -3 4 3 m6 6 l5 -3 5 2" fill="none" stroke="#68736d" stroke-width="1.1" opacity=".9"/>
+    <path d="M99 68 l8 1 m12 9 l5 -1 m-19 13 l3 1" stroke="#202927" stroke-width="1.2"/>
+    <circle cx="115" cy="86" r="1.1" fill="#788078"/>
+  </g>
+<g id="surface-4"><rect x="128" y="0" width="32" height="32" fill="#303735"/>
+    <path d="M128 5 Q133 1 137 5 T146 4 T154 5 T160 3 L160 11 Q151 9 143 12 T128 10 Z" fill="#456048"/>
+    <path d="M130 7 l4 -3 2 4 m7 -1 l3 -3 2 4 m7 -2 l3 -2" fill="none" stroke="#91a276" stroke-width="1.2" opacity=".85"/>
+    <path d="M132 17 l5 2 -2 4 m10 -7 l4 2 -2 4 m6 3 l4 -2" fill="none" stroke="#161f1d" stroke-width="1.3" opacity=".7"/>
+    <circle cx="138" cy="27" r="1.2" fill="#667064"/><circle cx="153" cy="20" r="1" fill="#71806a"/>
+  </g>
+<g id="soil-4"><rect x="128" y="32" width="32" height="32" fill="#303735"/>
+    <path d="M130 39 l8 2 -2 3 m6 4 l6 -2 3 3 m-16 7 l7 1 m6 -1 l5 2 m-18 5 l3 -2" fill="none" stroke="#536058" stroke-width="1.2" opacity=".8"/>
+    <circle cx="136" cy="48" r="1.2" fill="#69736a"/><circle cx="153" cy="59" r="1" fill="#18221f"/>
+    <path d="M129 62 Q137 58 145 62 T159 61" fill="none" stroke="#202b28" stroke-width="1.5"/>
+  </g>
+<g id="rock-4"><rect x="128" y="64" width="32" height="32" fill="#404741"/>
+    <path d="M130 72 l7 -3 5 4 -3 3 m7 1 l4 -4 6 3 m-23 10 l5 -3 4 3 m6 6 l5 -3 5 2" fill="none" stroke="#68736d" stroke-width="1.1" opacity=".9"/>
+    <path d="M131 68 l8 1 m12 9 l5 -1 m-19 13 l3 1" stroke="#202927" stroke-width="1.2"/>
+    <circle cx="153" cy="86" r="1.1" fill="#788078"/>
+  </g>
+<g id="surface-5"><rect x="160" y="0" width="32" height="32" fill="#293336"/>
+    <path d="M160 5 Q165 1 169 5 T178 4 T186 5 T192 3 L192 11 Q183 9 175 12 T160 10 Z" fill="#5f6d4b"/>
+    <path d="M162 7 l4 -3 2 4 m7 -1 l3 -3 2 4 m7 -2 l3 -2" fill="none" stroke="#91a276" stroke-width="1.2" opacity=".85"/>
+    <path d="M164 17 l5 2 -2 4 m10 -7 l4 2 -2 4 m6 3 l4 -2" fill="none" stroke="#161f1d" stroke-width="1.3" opacity=".7"/>
+    <circle cx="173" cy="27" r="1.2" fill="#667064"/><circle cx="181" cy="20" r="1" fill="#71806a"/>
+  </g>
+<g id="soil-5"><rect x="160" y="32" width="32" height="32" fill="#293336"/>
+    <path d="M162 39 l8 2 -2 3 m6 4 l6 -2 3 3 m-16 7 l7 1 m6 -1 l5 2 m-18 5 l3 -2" fill="none" stroke="#536058" stroke-width="1.2" opacity=".8"/>
+    <circle cx="171" cy="48" r="1.2" fill="#69736a"/><circle cx="181" cy="59" r="1" fill="#18221f"/>
+    <path d="M161 62 Q169 58 177 62 T191 61" fill="none" stroke="#202b28" stroke-width="1.5"/>
+  </g>
+<g id="rock-5"><rect x="160" y="64" width="32" height="32" fill="#303b3b"/>
+    <path d="M162 72 l7 -3 5 4 -3 3 m7 1 l4 -4 6 3 m-23 10 l5 -3 4 3 m6 6 l5 -3 5 2" fill="none" stroke="#68736d" stroke-width="1.1" opacity=".9"/>
+    <path d="M163 68 l8 1 m12 9 l5 -1 m-19 13 l3 1" stroke="#202927" stroke-width="1.2"/>
+    <circle cx="179" cy="86" r="1.1" fill="#788078"/>
+  </g>
+<g id="surface-6"><rect x="192" y="0" width="32" height="32" fill="#343b34"/>
+    <path d="M192 5 Q197 1 201 5 T210 4 T218 5 T224 3 L224 11 Q215 9 207 12 T192 10 Z" fill="#4d674d"/>
+    <path d="M194 7 l4 -3 2 4 m7 -1 l3 -3 2 4 m7 -2 l3 -2" fill="none" stroke="#91a276" stroke-width="1.2" opacity=".85"/>
+    <path d="M196 17 l5 2 -2 4 m10 -7 l4 2 -2 4 m6 3 l4 -2" fill="none" stroke="#161f1d" stroke-width="1.3" opacity=".7"/>
+    <circle cx="199" cy="27" r="1.2" fill="#667064"/><circle cx="217" cy="20" r="1" fill="#71806a"/>
+  </g>
+<g id="soil-6"><rect x="192" y="32" width="32" height="32" fill="#343b34"/>
+    <path d="M194 39 l8 2 -2 3 m6 4 l6 -2 3 3 m-16 7 l7 1 m6 -1 l5 2 m-18 5 l3 -2" fill="none" stroke="#536058" stroke-width="1.2" opacity=".8"/>
+    <circle cx="197" cy="48" r="1.2" fill="#69736a"/><circle cx="217" cy="59" r="1" fill="#18221f"/>
+    <path d="M193 62 Q201 58 209 62 T223 61" fill="none" stroke="#202b28" stroke-width="1.5"/>
+  </g>
+<g id="rock-6"><rect x="192" y="64" width="32" height="32" fill="#3b4340"/>
+    <path d="M194 72 l7 -3 5 4 -3 3 m7 1 l4 -4 6 3 m-23 10 l5 -3 4 3 m6 6 l5 -3 5 2" fill="none" stroke="#68736d" stroke-width="1.1" opacity=".9"/>
+    <path d="M195 68 l8 1 m12 9 l5 -1 m-19 13 l3 1" stroke="#202927" stroke-width="1.2"/>
+    <circle cx="217" cy="86" r="1.1" fill="#788078"/>
+  </g>
+<g id="surface-7"><rect x="224" y="0" width="32" height="32" fill="#2b3530"/>
+    <path d="M224 5 Q229 1 233 5 T242 4 T250 5 T256 3 L256 11 Q247 9 239 12 T224 10 Z" fill="#526146"/>
+    <path d="M226 7 l4 -3 2 4 m7 -1 l3 -3 2 4 m7 -2 l3 -2" fill="none" stroke="#91a276" stroke-width="1.2" opacity=".85"/>
+    <path d="M228 17 l5 2 -2 4 m10 -7 l4 2 -2 4 m6 3 l4 -2" fill="none" stroke="#161f1d" stroke-width="1.3" opacity=".7"/>
+    <circle cx="234" cy="27" r="1.2" fill="#667064"/><circle cx="245" cy="20" r="1" fill="#71806a"/>
+  </g>
+<g id="soil-7"><rect x="224" y="32" width="32" height="32" fill="#2b3530"/>
+    <path d="M226 39 l8 2 -2 3 m6 4 l6 -2 3 3 m-16 7 l7 1 m6 -1 l5 2 m-18 5 l3 -2" fill="none" stroke="#536058" stroke-width="1.2" opacity=".8"/>
+    <circle cx="232" cy="48" r="1.2" fill="#69736a"/><circle cx="245" cy="59" r="1" fill="#18221f"/>
+    <path d="M225 62 Q233 58 241 62 T255 61" fill="none" stroke="#202b28" stroke-width="1.5"/>
+  </g>
+<g id="rock-7"><rect x="224" y="64" width="32" height="32" fill="#343d3c"/>
+    <path d="M226 72 l7 -3 5 4 -3 3 m7 1 l4 -4 6 3 m-23 10 l5 -3 4 3 m6 6 l5 -3 5 2" fill="none" stroke="#68736d" stroke-width="1.1" opacity=".9"/>
+    <path d="M227 68 l8 1 m12 9 l5 -1 m-19 13 l3 1" stroke="#202927" stroke-width="1.2"/>
+    <circle cx="243" cy="86" r="1.1" fill="#788078"/>
+  </g>
+<g id="decor-0"><path d="M5 0 Q8 7 5 12 T10 22 M13 0 Q18 5 14 11 T17 20" fill="none" stroke="#526547" stroke-width="2.5"/><path d="M5 8 l-3 3 m9 -1 l4 2 m-1 4 l-3 2" stroke="#8b9b69" stroke-width="1.6"/></g>
+<g id="decor-1"><path d="M2 28 Q8 17 11 22 Q14 8 19 21 Q25 12 30 27 Z" fill="#52734d"/><path d="M8 28 l3 -8 m7 8 l2 -10 m5 10 l2 -6" stroke="#8c9d65" stroke-width="1.5"/></g>
+<g id="decor-2"><path d="M3 4 L11 10 L8 17 L17 21 L13 30 M25 0 L21 8 L26 12 L21 19" fill="none" stroke="#8c9a8a" stroke-width="1.4" opacity=".85"/></g>
+<g id="decor-3"><path d="M3 25 l6 -4 4 3 5 -8 6 3 5 -7" fill="none" stroke="#66766b" stroke-width="2"/><circle cx="7" cy="10" r="1.2" fill="#9ca58c"/><circle cx="23" cy="25" r="1.1" fill="#899486"/></g>
+<g id="decor-4"><path d="M8 0 Q1 8 10 14 T12 29 M22 0 Q30 10 22 17 T25 31" fill="none" stroke="#536d4e" stroke-width="2.3"/><path d="M8 9 l-5 -1 m8 10 l6 -2 m6 -6 l5 -2" fill="none" stroke="#8aa16e" stroke-width="1.5"/></g>
+<g id="decor-5"><path d="M4 26 L10 13 L17 19 L21 7 L28 25 Z" fill="#65756d" stroke="#a0aa9a" stroke-width="1"/><path d="M10 13 l7 6 4 -12" fill="none" stroke="#35413d" stroke-width="1.5"/></g>
+<g id="decor-6"><path d="M16 3 L22 13 L18 20 L22 28 L13 24 L10 16 Z" fill="#628b85" opacity=".8" stroke="#9bb9a9" stroke-width="1.2"/><path d="M16 8 L17 20" stroke="#c3d1bc" stroke-width="1.2"/></g>
+<g id="decor-7"><path d="M1 27 Q8 15 13 21 Q17 7 23 21 Q27 14 31 27 Z" fill="#435d47"/><path d="M6 27 l5 -8 m7 8 l3 -11 m4 11 l3 -7" stroke="#9aaa75" stroke-width="1.5"/></g>
+</svg>
