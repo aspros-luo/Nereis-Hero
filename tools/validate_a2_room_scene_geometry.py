@@ -174,14 +174,25 @@ def audit_r01_illustration(source: str, errors: list[str]) -> None:
         ("Central ruins platform 3", "footing 3 / central ruins"),
         ("Waterfall-side lower bank 4", "footing 4 / waterfall pool"),
         ("Shrine summit 5", "footing 5 / shrine exit"),
+        ("L556 752L360 752", "lower passage with 62px vertical clearance"),
     ):
         if fragment not in art:
             report(errors, f"R01: illustration missing {label}")
 
-    if '[node name="LevelIllustration" type="Sprite2D" parent="."]' not in source:
+    sprite_block = re.search(
+        r'^\\[node name="LevelIllustration" type="Sprite2D" parent="\\."\\]\\n(.*?)(?=^\\[node |\\Z)',
+        source, re.M | re.S
+    )
+    if sprite_block is None:
         report(errors, "R01: missing LevelIllustration Sprite2D")
-    if 'texture = ExtResource("1_r01_art")' not in source or 'centered = false' not in source:
-        report(errors, "R01: illustration sprite texture/origin is not configured")
+    else:
+        sprite_config = sprite_block.group(1)
+        if 'texture = ExtResource("1_r01_art")' not in sprite_config or 'centered = false' not in sprite_config:
+            report(errors, "R01: illustration sprite texture/origin is not configured")
+        if not re.search(r"^z_index\\s*=\\s*0$", sprite_config, re.M):
+            report(errors, "R01: illustration must render above the inherited legacy backdrop at z_index 0")
+    if 'size = Vector2(200, 16)' not in source or 'position = Vector2(100, 8)' not in source:
+        report(errors, "R01: west root shelf collider must remain thin to keep the lower path open")
     for marker, position in (
         ("Footing_01_RootLookout", "Vector2(220, 512)"),
         ("Footing_02_LowerFork", "Vector2(440, 768)"),
