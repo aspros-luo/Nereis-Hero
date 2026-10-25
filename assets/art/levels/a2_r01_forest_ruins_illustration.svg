@@ -241,10 +241,10 @@
   </g>
 </g>
 <!-- Eroded hollow below the western root shelf: a readable lower path, not a solid wall -->
-<path d="M365 690Q395 700 428 692T490 696L556 713L556 734L360 734L360 709Z" fill="#071411" opacity=".98"/>
+<path d="M365 690Q395 700 428 692T490 696L556 713L556 752L360 752L360 709Z" fill="#071411" opacity=".99"/>
 <path d="M365 692Q408 705 449 695T510 699L550 715" fill="none" stroke="#334338" stroke-width="5"/>
 <path d="M380 702l18 8 -4 14M465 699l-5 14 12 8M518 705l12 8 -3 14" fill="none" stroke="#546348" stroke-width="3" opacity=".75"/>
-<path d="M370 730q14 -8 29 -2t27 -1t28 2t27 -1t27 2t27 -1" fill="none" stroke="#819b62" stroke-width="3" opacity=".62"/>
+<path d="M370 746q14 -8 29 -2t27 -1t28 2t27 -1t27 2t27 -1" fill="none" stroke="#819b62" stroke-width="3" opacity=".62"/>
 <!-- Surface growth: ferns, roots, broken masonry, hanging moss -->
 <g fill="none" stroke-linecap="round">
   <path d="M22 635q-6 -21 -18 -28m20 28q10 -16 16 -19m42 18q-5 -18 -17 -24m18 24q12 -14 21 -16" stroke="#72915a" stroke-width="3"/>
