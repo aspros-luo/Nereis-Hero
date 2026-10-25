@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PARENT_SCENE = ROOT / "scenes/ash_forest.tscn"
 RUNTIME_SCRIPT = "scripts/levels/a2_room_runtime.gd"
 ROOMS = [
-    ("R01", "scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn", "A2R01ForestCrossroads", 16, "A2-R01", "a2_r01_room.tscn", "Ground_West", "Ground_West"),
+    ("R01", "scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn", "A2R01ForestCrossroads", 20, "A2-R01", "a2_r01_room.tscn", "Ground_West", "Ground_West"),
     ("R02", "scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn", "A2R02CanopyBridge", 9, "A2-R02", "a2_r02_room.tscn", "Ground_CanopyFloor", "Platform_022"),
     ("R03", "scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn", "A2R03BellTombGallery", 14, "A2-R03", "a2_r03_room.tscn", "Ground_TombWest", "Platform_013"),
     ("R04", "scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn", "A2R04FloodedCrypt", 10, "A2-R04", "a2_r04_room.tscn", "CryptLanding", "CryptLanding"),
@@ -49,91 +49,97 @@ def vector(text: str, label: str) -> tuple[float, float]:
 R01_TILE_COUNTS = {"TerrainFill": 0, "TerrainPlatforms": 0, "TerrainDetails": 0}
 
 def audit_r01(source: str, root_name: str, errors: list[str]) -> tuple[int, int, int]:
-    """Audit R01's serialized TileMapLayer cells and authored polygon collision nodes."""
+    """Audit the illustration-backed R01 scene and its editor-authored collision anchors."""
     if f'[node name="{root_name}" type="Node2D"]' not in source:
         errors.append(f"R01: root node mismatch; expected {root_name}")
-    load_match = re.search(r"^\[gd_scene load_steps=(\d+)", source, re.M)
-    ext_count = len(re.findall(r"^\[ext_resource ", source, re.M))
-    sub_count = len(re.findall(r"^\[sub_resource ", source, re.M))
+    load_match = re.search(r"^\\[gd_scene load_steps=(\\d+)", source, re.M)
+    ext_count = len(re.findall(r"^\\[ext_resource ", source, re.M))
+    sub_count = len(re.findall(r"^\\[sub_resource ", source, re.M))
     if not load_match or int(load_match.group(1)) != ext_count + sub_count + 1:
         errors.append("R01: gd_scene load_steps does not match resource declarations")
-    tile_set_path = ROOT / "resources/tilesets/a2_forest_terrain_tileset.tres"
-    if not tile_set_path.is_file():
-        errors.append("R01: missing reusable forest TileSet resource")
-    elif 'path="res://assets/art/tiles/a2_forest_terrain_atlas.svg"' not in tile_set_path.read_text(encoding="utf-8"):
-        errors.append("R01: TileSet does not reference the forest SVG atlas")
 
-    # Check the authored SVG/TileSet contract statically; Godot's actual import still requires editor/runtime validation.
-    atlas_path = ROOT / "assets/art/tiles/a2_forest_terrain_atlas.svg"
-    if not atlas_path.is_file():
-        errors.append("R01: missing forest SVG atlas")
+    art_path = ROOT / "assets/art/levels/a2_r01_forest_ruins_illustration.svg"
+    if not art_path.is_file():
+        errors.append("R01: missing illustrated level art assets/art/levels/a2_r01_forest_ruins_illustration.svg")
     else:
         try:
-            svg_root = ET.parse(atlas_path).getroot()
-            svg_width = int(float(svg_root.attrib.get("width", "0").replace("px", "")))
-            svg_height = int(float(svg_root.attrib.get("height", "0").replace("px", "")))
+            svg_root = ET.parse(art_path).getroot()
+            width = int(float(svg_root.attrib.get("width", "0").replace("px", "")))
+            height = int(float(svg_root.attrib.get("height", "0").replace("px", "")))
             view_box = [float(value) for value in svg_root.attrib.get("viewBox", "").replace(",", " ").split()]
-            if (svg_width, svg_height) != (256, 128):
-                errors.append(f"R01: SVG atlas dimensions={(svg_width, svg_height)}; expected (256, 128)")
-            if view_box != [0.0, 0.0, 256.0, 128.0]:
-                errors.append(f"R01: SVG viewBox={view_box}; expected [0, 0, 256, 128]")
+            if (width, height) != (1792, 1200):
+                errors.append(f"R01: illustration size={(width, height)}; expected (1792, 1200)")
+            if view_box != [0.0, 0.0, 1792.0, 1200.0]:
+                errors.append(f"R01: illustration viewBox={view_box}; expected [0, 0, 1792, 1200]")
+            art_source = art_path.read_text(encoding="utf-8")
+            for fragment, label in (
+                ('id="terrain-masses"', "terrain masses"),
+                ("Broken bridge: purely decorative", "non-colliding broken bridge"),
+                ("Waterfall and turquoise pool", "waterfall landmark"),
+                ("Root lookout 1", "upper root lookout"),
+                ("Lower fork / footing 2", "lower fork"),
+                ("Central ruins platform 3", "central ruins footing"),
+                ("Waterfall-side lower bank 4", "waterfall-side footing"),
+                ("Shrine summit 5", "shrine exit footing"),
+            ):
+                if fragment not in art_source:
+                    errors.append(f"R01: illustration is missing {label}")
         except (ET.ParseError, ValueError) as exc:
-            errors.append(f"R01: invalid SVG atlas XML or dimensions: {exc}")
-    if tile_set_path.is_file():
-        tile_set_source = tile_set_path.read_text(encoding="utf-8")
-        if "texture_region_size = Vector2i(32, 32)" not in tile_set_source:
-            errors.append("R01: TileSet atlas region size must remain 32x32")
-        declared_cells = set(re.findall(r"^(\\d+):(\\d+)/0\\s*=\\s*0\\s*$", tile_set_source, re.M))
-        expected_cells = {(str(x), str(y)) for y in range(4) for x in range(8)}
-        if declared_cells != expected_cells:
-            errors.append(f"R01: TileSet atlas cells={len(declared_cells)}; expected all 32 cells in an 8x4 grid")
-    else:
-        declared_cells = set()
+            errors.append(f"R01: invalid SVG illustration XML or dimensions: {exc}")
 
-    for layer_name, minimum in (("TerrainFill", 800), ("TerrainPlatforms", 40), ("TerrainDetails", 12)):
-        match = re.search(r'\[node name="' + re.escape(layer_name) + r'" type="TileMapLayer" parent="\."\](.*?)(?=\n\[node |\Z)', source, re.S)
-        if not match:
-            errors.append(f"R01: missing TileMapLayer {layer_name}")
-            continue
-        if 'tile_set = ExtResource("1_forest_tiles")' not in match.group(1):
-            errors.append(f"R01/{layer_name}: missing shared TileSet reference")
-        data_match = re.search(r"tile_map_data\s*=\s*PackedByteArray\((.*?)\)", match.group(1), re.S)
-        if not data_match:
-            errors.append(f"R01/{layer_name}: missing serialized tile_map_data")
+    if '[node name="LevelIllustration" type="Sprite2D" parent="."]' not in source:
+        errors.append("R01: missing editor-visible LevelIllustration Sprite2D")
+    if 'path="res://assets/art/levels/a2_r01_forest_ruins_illustration.svg"' not in source:
+        errors.append("R01: scene does not reference the new R01 illustration")
+
+    shapes: dict[str, tuple[float, float]] = {}
+    for shape_id, body in re.findall(r'\\[sub_resource type="RectangleShape2D" id="([^"]+)"\\](.*?)(?=\\n\\[|\\Z)', source, re.S):
+        size_match = re.search(r"size\\s*=\\s*(Vector2\\([^\\n]+\\))", body)
+        if not size_match:
+            errors.append(f"R01: rectangle shape {shape_id} has no size")
             continue
         try:
-            values = [int(token.strip()) for token in data_match.group(1).split(",") if token.strip()]
-        except ValueError:
-            errors.append(f"R01/{layer_name}: tile_map_data contains a non-integer byte")
-            continue
-        if len(values) < 2 or values[:2] != [0, 0] or (len(values) - 2) % 12 != 0:
-            errors.append(f"R01/{layer_name}: tile_map_data is not a valid TileMapLayer byte buffer")
-            continue
-        cell_count = (len(values) - 2) // 12
-        R01_TILE_COUNTS[layer_name] = cell_count
-        if cell_count < minimum:
-            errors.append(f"R01/{layer_name}: only {cell_count} serialized cells; expected at least {minimum}")
+            shapes[shape_id] = vector(size_match.group(1), f"R01 shape {shape_id}")
+        except ValueError as exc:
+            errors.append(f"R01: invalid rectangle shape {shape_id}: {exc}")
 
-    body_names = re.findall(r'^\[node name="([^"]+)" type="StaticBody2D" parent="\."\]', source, re.M)
-    if len(body_names) != 17:
-        errors.append(f"R01: authored StaticBody2D count={len(body_names)}; expected 17")
-    if len([name for name in body_names if not name.startswith("Ground_")]) != 16:
-        errors.append("R01: authored platform/boundary bodies must total 16")
-    if {name for name in body_names if name.startswith("Ground_")} != {"Ground_West"}:
-        errors.append("R01: expected Ground_West as the only Ground_ body")
-    if len(re.findall(r'type="CollisionPolygon2D" parent="[^"]+"', source)) < 15:
-        errors.append("R01: not enough editor-visible CollisionPolygon2D shapes")
-    if '[node name="CollisionShape2D" type="CollisionShape2D" parent="WestBoundary"]' not in source or '[node name="CollisionShape2D" type="CollisionShape2D" parent="EastBoundary"]' not in source:
-        errors.append("R01: missing editor-visible room boundary collision")
+    body_matches = re.findall(r'^\\[node name="([^"]+)" type="StaticBody2D" parent="\\."\\](.*?)(?=\\n\\[node name="[^"]+" type="StaticBody2D" parent="\\."\\]|\\Z)', source, re.M | re.S)
+    body_names = [name for name, _ in body_matches]
+    platform_names = [name for name in body_names if re.fullmatch(r"Platform_\\d{3}", name)]
+    if len(platform_names) != 18:
+        errors.append(f"R01: authored platform count={len(platform_names)}; expected 18")
+    if set(platform_names) != {f"Platform_{index:03d}" for index in range(1, 19)}:
+        errors.append("R01: platform IDs must remain Platform_001 through Platform_018")
+    if set(body_names) != {"Ground_West", "WestBoundary", "EastBoundary", *platform_names}:
+        errors.append(f"R01: unexpected/missing terrain collision bodies: {sorted(set(body_names))}")
+
+    for body_name, body in body_matches:
+        collision_match = re.search(r'\\[node name="CollisionShape2D" type="CollisionShape2D" parent="' + re.escape(body_name) + r'"\\](.*?)(?=\\n\\[node |\\Z)', body, re.S)
+        if not collision_match:
+            errors.append(f"R01/{body_name}: missing editor-visible CollisionShape2D")
+            continue
+        collision = collision_match.group(1)
+        shape_match = re.search(r'shape\\s*=\\s*SubResource\\("([^"]+)"\\)', collision)
+        if not shape_match or shape_match.group(1) not in shapes:
+            errors.append(f"R01/{body_name}: missing/unsupported RectangleShape2D")
+            continue
+        width, height = shapes[shape_match.group(1)]
+        if width <= 0 or height <= 0:
+            errors.append(f"R01/{body_name}: collision size must be positive")
+
     for marker in ("EntryWest", "EntryCanopyReturn", "EntryTombReturn", "ExitVillage", "ExitBellTomb", "ExitCanopy", "DropToR04"):
         if f'[node name="{marker}" type="Marker2D" parent="RoomMarkers"]' not in source:
             errors.append(f"R01: missing RoomMarkers anchor {marker}")
+    for marker in ("Footing_01_RootLookout", "Footing_02_LowerFork", "Footing_03_CentralRuins", "Footing_04_WaterfallPool", "Footing_05_ShrineExit"):
+        if f'[node name="{marker}" type="Marker2D" parent="FootingDesignMarkers"]' not in source:
+            errors.append(f"R01: missing editor-only footing design marker {marker}")
     if "position = Vector2(672, 780)" not in source:
         errors.append("R01: DropToR04 marker must stay centered over the narrow shaft at (672,780)")
-    print(f"R01: tilemap_cells fill={R01_TILE_COUNTS['TerrainFill']} platforms={R01_TILE_COUNTS['TerrainPlatforms']} details={R01_TILE_COUNTS['TerrainDetails']} collision_bodies={len(body_names)}; ballistic reachability deferred to Godot playtest")
-    # Preserve the six-room structural budget. Exact movement reachability is deliberately not inferred from polygon bounds.
-    return 16, 17, 0
-
+    if 'position = Vector2(1040, 736)' not in source or 'position = Vector2(1320, 560)' not in source:
+        errors.append("R01: the lower-pool return step and east shrine approach are not at their contracted positions")
+    print(f"R01: illustration=1792x1200 platforms={len(platform_names)} collision_bodies={len(body_names)}; movement and SVG import are pending Godot playtest")
+    # Count the 18 platform bodies plus two boundaries; Ground_West is a separate ground body.
+    return len(platform_names) + 2, len(body_names), 0
 
 def audit_room(room_id: str, relative_path: str, root_name: str, expected_platforms: int,
                runtime_id: str, runtime_file: str, start_node: str, errors: list[str]) -> tuple[int, int, int]:
@@ -361,8 +367,8 @@ def main() -> int:
         for error in errors:
             print(f"[FAIL] {error}")
         return 1
-    print(f"A2 authored room structure: PASS rooms=6/6 platforms={total_platforms}/91 collision_bodies={total_bodies}/97 non_R01_simplified_reachable={total_reachable}/{total_bodies-17}")
-    print("BOUNDARY: static estimate only; not Godot parser/runtime, exact Canva fidelity, or interactive acceptance.")
+    print(f"A2 authored room structure: PASS rooms=6/6 platforms={total_platforms}/95 collision_bodies={total_bodies}/101 non_R01_simplified_reachable={total_reachable}/{total_bodies-21}")
+    print("BOUNDARY: static estimate only; SVG visual appearance, Godot import, exact jump reachability and interactive acceptance still require Godot 4.6.1.")
     return 0
 
 
