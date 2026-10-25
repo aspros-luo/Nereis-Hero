@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1792" height="1200" viewBox="0 0 1792 1200">
+<title>A2 R01 Forest Ruins — side-view playable level art</title>
+<desc>Original layered 2D side-view level illustration. Platform top edges correspond to authored collision anchors in a2_r01_forest_crossroads.tscn. Decorative broken bridge is non-colliding.</desc>
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0.95" y2="1">
+    <stop offset="0" stop-color="#07100f"/><stop offset=".32" stop-color="#132b2a"/><stop offset=".65" stop-color="#31534e"/><stop offset="1" stop-color="#102221"/>
+  </linearGradient>
+  <linearGradient id="mist" x1="0" y1="0" x2="1" y2=".3">
+    <stop offset="0" stop-color="#b3d8ca" stop-opacity="0"/><stop offset=".48" stop-color="#b7e0d5" stop-opacity=".34"/><stop offset=".75" stop-color="#9acbc4" stop-opacity=".2"/><stop offset="1" stop-color="#8fb9b7" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="stone" x1="0" y1="0" x2=".18" y2="1">
+    <stop offset="0" stop-color="#6c8270"/><stop offset=".09" stop-color="#3c5548"/><stop offset=".3" stop-color="#263a35"/><stop offset=".72" stop-color="#172523"/><stop offset="1" stop-color="#091311"/>
+  </linearGradient>
+  <linearGradient id="stoneLight" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#95a87b"/><stop offset=".16" stop-color="#647b58"/><stop offset=".34" stop-color="#384d40"/><stop offset="1" stop-color="#182724"/>
+  </linearGradient>
+  <linearGradient id="root" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#5f5035"/><stop offset=".25" stop-color="#3e3d2a"/><stop offset=".62" stop-color="#242d22"/><stop offset="1" stop-color="#0d1814"/>
+  </linearGradient>
+  <linearGradient id="water" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#183b3c"/><stop offset=".45" stop-color="#4f9894"/><stop offset=".7" stop-color="#1f6266"/><stop offset="1" stop-color="#102d32"/>
+  </linearGradient>
+  <linearGradient id="fall" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#7bc6c2" stop-opacity=".18"/><stop offset=".28" stop-color="#a7e9df" stop-opacity=".82"/><stop offset=".48" stop-color="#4eaaa9" stop-opacity=".45"/><stop offset=".72" stop-color="#d4fff0" stop-opacity=".8"/><stop offset="1" stop-color="#5ca6a2" stop-opacity=".14"/>
+  </linearGradient>
+  <linearGradient id="ray" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#d5f7d7" stop-opacity=".22"/><stop offset="1" stop-color="#b6e7d0" stop-opacity="0"/>
+  </linearGradient>
+  <pattern id="rockGrain" width="74" height="58" patternUnits="userSpaceOnUse">
+    <path d="M8 11l13 -4 8 6 -5 8 -15 -2z M44 35l11 -6 9 4 -3 10 -13 2z M29 49l5 -4 5 3" fill="#a2b49a" opacity=".08"/>
+    <path d="M3 32l10 -2 M59 12l8 -3 M17 54l6 -2" fill="none" stroke="#050d0c" stroke-width="2" opacity=".26"/>
+  </pattern>
+  <pattern id="moss" width="42" height="20" patternUnits="userSpaceOnUse">
+    <path d="M1 8q5 -7 10 0t10 -1t10 1t10 -2" fill="none" stroke="#a3bd76" stroke-width="2" opacity=".42"/>
+    <circle cx="8" cy="15" r="1.8" fill="#a6c77e" opacity=".4"/><circle cx="31" cy="5" r="1.2" fill="#d1d59a" opacity=".35"/>
+  </pattern>
+  <g id="leaf">
+    <path d="M0 0Q8 -13 22 -6Q17 7 0 0Z" fill="#31553b"/>
+    <path d="M1 0L18 -5" fill="none" stroke="#78965a" stroke-width="1.5" opacity=".8"/>
+  </g>
+  <g id="stoneBlock">
+    <path d="M0 4l5 -4 22 1 5 5 -3 12 -24 1 -5 -5z" fill="#263a32" stroke="#71826a" stroke-width="1"/>
+    <path d="M5 2l17 1M4 8l8 1" stroke="#a5b08b" stroke-width="1" opacity=".45"/>
+  </g>
+  <g id="spire">
+    <path d="M0 0L7 -42L14 0L11 -5L7 -28L3 -5Z" fill="#253a38" stroke="#627c71" stroke-width="1"/>
+    <path d="M4 -8L7 -42L10 -8" fill="none" stroke="#95b7a1" stroke-width="1" opacity=".6"/>
+  </g>
+</defs>
+<!-- Deep mist forest -->
+<rect width="1792" height="1200" fill="url(#sky)"/>
+<path d="M0 230Q210 120 410 226T820 205T1230 172T1792 210V610H0Z" fill="#1c3933" opacity=".72"/>
+<path d="M0 350Q180 270 370 330T730 290T1100 345T1480 275T1792 320V720H0Z" fill="#25453c" opacity=".55"/>
+<path d="M0 180Q250 120 460 205T880 160T1310 205T1792 120V470H0Z" fill="url(#mist)"/>
+<!-- Distant forest stems and valley -->
+<g fill="none" stroke-linecap="round">
+  <path d="M100 0Q80 170 122 390M170 20Q220 190 178 430M340 0Q310 210 372 470M468 0Q500 180 455 370M590 0Q570 180 615 470M690 0Q735 190 700 410" stroke="#172c27" stroke-width="27" opacity=".8"/>
+  <path d="M1120 0Q1090 170 1128 470M1210 0Q1240 200 1200 420M1485 0Q1450 180 1500 420M1630 0Q1670 210 1620 455M1740 0Q1710 180 1750 400" stroke="#10231f" stroke-width="30" opacity=".8"/>
+  <path d="M80 420Q170 300 240 420T390 410T540 360T700 420T880 390T1050 435T1270 365T1490 415T1720 370" stroke="#73927b" stroke-width="3" opacity=".14"/>
+</g>
+<!-- Far ruined towers in the fog -->
+<g opacity=".64" fill="#172d2d" stroke="#66877e" stroke-width="2">
+  <path d="M1290 440V260L1310 260V226L1324 226V183L1341 222V260H1356V440Z"/>
+  <path d="M1372 435V198L1392 198V159L1410 159V125L1425 164V198H1444V435Z"/>
+  <path d="M1456 455V236L1477 236V203L1491 203V166L1507 207V236H1525V455Z"/>
+  <path d="M1540 445V285L1560 285V250L1573 250V220L1588 253V285H1605V445Z"/>
+  <path d="M1630 450V315L1648 315V287L1663 287V260L1677 290V315H1693V450Z"/>
+  <path d="M1265 445L1265 390L1240 390L1240 365L1275 365L1275 345L1290 345L1290 445Z"/>
+</g>
+<g fill="none" stroke="#b9d8c8" stroke-width="2" opacity=".25">
+  <path d="M1310 280v150M1392 205v230M1477 280v165M1560 315v130M1648 340v110"/>
+  <path d="M1274 388h16M1356 261h16M1444 238h12M1525 291h15M1605 323h25"/>
+</g>
+<!-- Volumetric light -->
+<path d="M840 0L950 0L1140 510L1045 510Z" fill="url(#ray)"/>
+<path d="M1040 0L1085 0L1280 550L1230 550Z" fill="url(#ray)" opacity=".55"/>
+<path d="M600 0L640 0L820 370L780 370Z" fill="url(#ray)" opacity=".42"/>
+<!-- Enormous old tree canopy at left -->
+<path d="M0 0H560Q490 42 430 85T310 155T205 230T130 360L0 410Z" fill="#07110e"/>
+<path d="M0 0H420Q360 64 330 125T235 224T150 350L0 390Z" fill="#10231b"/>
+<path d="M0 0Q110 22 192 95T315 170T450 232L660 375L750 415Q650 436 555 383T385 306T220 253T80 170L0 190Z" fill="url(#root)"/>
+<path d="M0 0Q105 42 182 109T315 177T455 246L650 380" fill="none" stroke="#8c7a4f" stroke-width="21" opacity=".33"/>
+<path d="M0 0Q105 42 182 109T315 177T455 246L650 380" fill="none" stroke="#0b1711" stroke-width="10" opacity=".85"/>
+<path d="M68 0Q90 90 62 176T35 324M145 0Q160 80 133 158T100 254M260 0Q246 90 285 144T380 215M360 0Q345 60 400 112T515 185" fill="none" stroke="#4c4b30" stroke-width="12" opacity=".65"/>
+<path d="M0 280Q100 250 150 292T250 355L340 415Q385 445 450 460L535 488Q570 500 610 518L520 534Q450 505 390 490T280 440T170 386T0 390Z" fill="url(#root)" stroke="#6e6844" stroke-width="3"/>
+<path d="M0 304Q105 272 160 326T270 388T405 462T545 512" fill="none" stroke="#a0a16a" stroke-width="7" opacity=".36"/>
+<path d="M40 0Q130 58 178 124T260 195M205 0Q214 64 260 110T365 158M305 30Q360 78 400 134T500 205M90 150Q145 178 188 222T280 275" fill="none" stroke="#293d27" stroke-width="22" stroke-linecap="round"/>
+<!-- Leaf masses -->
+<g opacity=".96">
+  <path d="M0 18Q70 -20 145 28Q220 -6 278 36Q350 -15 420 38Q495 18 540 78Q490 118 420 95Q370 150 300 118Q220 150 170 112Q90 137 30 96Z" fill="#12291b"/>
+  <path d="M0 74Q90 24 152 72T290 68T425 78T548 115L500 155Q438 126 384 160T268 146T160 163T38 140Z" fill="#203c24"/>
+  <path d="M0 142Q75 95 145 132T260 132T385 153T490 175L444 208Q356 190 300 218T180 213T60 226L0 207Z" fill="#294a2d"/>
+  <path d="M0 218Q70 180 145 212T260 217T380 248T465 273L410 300Q325 263 264 289T130 292T0 306Z" fill="#1a3925"/>
+  <path d="M0 20Q35 8 65 31T125 35T190 48T250 45T318 62T390 55T470 77T540 92" fill="none" stroke="#8da766" stroke-width="5" opacity=".22"/>
+  <g>
+    <use href="#leaf" x="42" y="48"/><use href="#leaf" x="88" y="78"/><use href="#leaf" x="144" y="45"/><use href="#leaf" x="196" y="84"/><use href="#leaf" x="244" y="62"/><use href="#leaf" x="300" y="91"/><use href="#leaf" x="362" y="66"/><use href="#leaf" x="412" y="101"/><use href="#leaf" x="470" y="88"/>
+    <use href="#leaf" x="25" y="122"/><use href="#leaf" x="78" y="147"/><use href="#leaf" x="128" y="122"/><use href="#leaf" x="182" y="157"/><use href="#leaf" x="235" y="136"/><use href="#leaf" x="286" y="169"/><use href="#leaf" x="345" y="145"/><use href="#leaf" x="401" y="177"/><use href="#leaf" x="452" y="160"/>
+    <use href="#leaf" x="35" y="210"/><use href="#leaf" x="100" y="193"/><use href="#leaf" x="153" y="228"/><use href="#leaf" x="220" y="208"/><use href="#leaf" x="278" y="241"/><use href="#leaf" x="340" y="229"/><use href="#leaf" x="391" y="257"/>
+  </g>
+</g>
+<!-- Ancient tree on the east side -->
+<path d="M1470 0Q1510 110 1500 205T1530 390L1572 512L1502 520Q1450 430 1455 330T1425 178L1390 0Z" fill="url(#root)" opacity=".92"/>
+<path d="M1487 15Q1498 115 1483 207T1510 389L1531 456" fill="none" stroke="#a18a52" stroke-width="9" opacity=".3"/>
+<path d="M1390 0Q1420 30 1470 60T1580 115T1700 108T1792 64V0Z" fill="#0d2015"/>
+<path d="M1380 50Q1430 12 1488 48T1605 50T1722 72T1792 100V180Q1730 140 1670 164T1550 150T1440 166Z" fill="#1d3c25"/>
+<path d="M1400 112Q1460 76 1518 112T1630 122T1745 143T1792 168V235Q1710 195 1642 218T1515 201T1400 225Z" fill="#2b4a2c"/>
+<g opacity=".9"><use href="#leaf" x="1432" y="48"/><use href="#leaf" x="1492" y="80"/><use href="#leaf" x="1550" y="60"/><use href="#leaf" x="1612" y="97"/><use href="#leaf" x="1680" y="71"/><use href="#leaf" x="1740" y="113"/><use href="#leaf" x="1450" y="143"/><use href="#leaf" x="1510" y="176"/><use href="#leaf" x="1580" y="151"/><use href="#leaf" x="1650" y="180"/><use href="#leaf" x="1710" y="157"/></g>
+<!-- Hanging vines from canopy -->
+<g fill="none" stroke-linecap="round">
+  <path d="M70 270q12 42 -2 88t-4 78M132 300q-9 37 5 67t0 71M310 322q-15 27 2 54t-9 49M420 355q8 22 -3 43t-1 56" stroke="#1a3220" stroke-width="5"/>
+  <path d="M35 300q10 20 0 38M158 320q8 14 0 28M340 350q6 18 1 25M448 370q-5 20 3 31" stroke="#8caa61" stroke-width="2" opacity=".6"/>
+  <path d="M1550 218q-15 28 -4 56t-7 38M1650 220q12 24 0 50t4 30M1730 205q-8 28 3 50" stroke="#172c1b" stroke-width="5"/>
+</g>
+<!-- Distant forest floor and broken columns -->
+<path d="M0 530Q180 472 320 530T600 520T850 500T1120 535T1400 500T1792 520V800H0Z" fill="#10241f" opacity=".75"/>
+<g opacity=".65" fill="#1b322b" stroke="#527568" stroke-width="2">
+  <path d="M510 535V430L525 416L540 430V535Z"/><path d="M552 530V470L567 455L581 470V530Z"/>
+  <path d="M1015 600V470L1030 452L1045 470V600Z"/><path d="M1090 590V440L1108 424L1125 440V590Z"/>
+  <path d="M1238 575V445L1253 428L1268 445V575Z"/><path d="M1268 575V500L1283 485L1297 500V575Z"/>
+</g>
+<!-- Ruined central arch behind playable ledge -->
+<g fill="#243a34" stroke="#708477" stroke-width="3">
+  <path d="M730 545V433L748 433V391L767 372L786 391V433H802V545Z"/>
+  <path d="M830 545V450L849 450V408L866 390L884 408V450H900V545Z"/>
+  <path d="M760 432L778 413L796 432V545H760Z" fill="#13231f"/>
+  <path d="M842 449L864 427L886 449V545H842Z" fill="#12221e"/>
+</g>
+<g fill="none" stroke="#b7c4a0" stroke-width="2" opacity=".5">
+  <path d="M741 438h53M841 455h50M747 478l25 0M843 492h28M754 525h18M849 524h22"/>
+  <path d="M749 410l9 -7M856 426l9 -7"/>
+</g>
+<!-- Broken bridge: purely decorative, visible gap; no collision geometry is authored beneath it -->
+<g>
+  <path d="M832 525L880 517L922 530L930 537L887 532L850 539Z" fill="#342f23" stroke="#8e7a4e" stroke-width="3"/>
+  <path d="M842 522l4 -14M856 526l5 -16M874 522l4 -20M895 523l4 -16M914 529l4 -12" stroke="#4d3b27" stroke-width="6"/>
+  <path d="M875 505Q975 477 1082 508" fill="none" stroke="#6d6344" stroke-width="4"/>
+  <path d="M886 510Q968 494 1070 513" fill="none" stroke="#1d2924" stroke-width="4"/>
+  <path d="M1152 529L1187 518L1228 525L1264 519L1273 529L1229 535L1188 532L1160 540Z" fill="#3f392a" stroke="#8c7952" stroke-width="3"/>
+  <path d="M1170 528l3 -14M1190 523l4 -12M1212 527l6 -17M1234 523l4 -13M1251 522l5 -12" stroke="#4b3b29" stroke-width="6"/>
+  <path d="M915 515l-13 19M930 512l-17 22M1150 515l-13 15M1167 515l-12 17" stroke="#b59b61" stroke-width="2" opacity=".8"/>
+  <path d="M888 506q9 -5 12 5M1072 507q10 -4 15 7" fill="none" stroke="#9b7d4c" stroke-width="3"/>
+</g>
+<!-- Waterfall and turquoise pool, behind foreground ledges -->
+<path d="M1000 480Q1025 480 1043 488L1056 715L1045 752L1027 728L1020 520Z" fill="url(#fall)" opacity=".9"/>
+<path d="M1024 484Q1037 505 1032 558T1044 655T1035 724" fill="none" stroke="#c3f4e8" stroke-width="4" opacity=".76"/>
+<path d="M1047 487Q1061 520 1053 571T1068 661T1055 723" fill="none" stroke="#75c6c1" stroke-width="3" opacity=".7"/>
+<path d="M1072 493Q1082 520 1073 580T1088 665T1082 728" fill="none" stroke="#d5fff0" stroke-width="2" opacity=".62"/>
+<path d="M875 786Q944 757 1009 777T1144 781L1196 835Q1125 870 1020 853T878 832Z" fill="url(#water)" opacity=".92"/>
+<path d="M865 800Q932 777 1000 797T1140 800M893 821Q956 810 1012 826T1130 824M935 844Q1006 831 1082 847" fill="none" stroke="#94d9cc" stroke-width="3" opacity=".48"/>
+<path d="M1012 742Q1042 755 1074 744L1100 774Q1064 788 1030 772Z" fill="#bcf8e7" opacity=".3"/>
+<g fill="#c3fff0" opacity=".65"><circle cx="1002" cy="752" r="3"/><circle cx="1083" cy="760" r="2.5"/><circle cx="1049" cy="771" r="2"/><circle cx="1097" cy="786" r="1.5"/></g>
+<!-- Forest fog in the lower ravine -->
+<path d="M0 720Q130 690 240 732T490 720T720 744T930 730T1180 750T1460 718T1792 740V1040H0Z" fill="url(#mist)" opacity=".5"/>
+<path d="M0 895Q200 855 360 898T700 888T1020 904T1400 880T1792 910V1200H0Z" fill="#071512" opacity=".55"/>
+<!-- Old stone masses: color and texture follow the collision ledges -->
+<g id="terrain-masses" stroke-linejoin="round">
+  <!-- West entrance shelf -->
+  <path d="M0 640H360V670L344 680L333 703L300 716L275 750L240 765L200 755L176 779L135 775L100 798L57 788L0 795Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
+  <path d="M0 640H360" stroke="#a2b77b" stroke-width="8"/><path d="M0 637H360" stroke="#d0d09a" stroke-width="2" opacity=".65"/>
+  <path d="M0 640H360V795H0Z" fill="url(#rockGrain)" opacity=".9"/>
+  <path d="M16 646Q52 649 68 643T111 646T160 641T216 645T268 643T343 646" fill="none" stroke="#31543a" stroke-width="7"/>
+  <g fill="#839966"><path d="M24 639l5 -11 5 11z"/><path d="M55 640l4 -7 5 7z"/><path d="M116 642l6 -10 6 10z"/><path d="M210 642l4 -8 5 8z"/><path d="M288 642l6 -11 6 11z"/></g>
+  <path d="M52 700l18 8 -7 15 25 7M148 678l-5 18 18 7M225 721l20 -8 10 12" fill="none" stroke="#0b1714" stroke-width="4" opacity=".75"/>
+  <!-- descending root steps -->
+  <path d="M360 672H560V699L544 706L535 728L506 742L484 754L451 752L432 765L398 754L380 766L360 760Z" fill="url(#stone)" stroke="#1a2b24" stroke-width="4"/>
+  <path d="M360 672H560" stroke="#97ad70" stroke-width="7"/><path d="M360 670H560" stroke="#d2ce91" stroke-width="2" opacity=".6"/>
+  <path d="M360 672H560V760H360Z" fill="url(#rockGrain)" opacity=".8"/>
+  <path d="M560 704H720V733L702 743L684 755L656 755L632 776L610 761L585 767L560 751Z" fill="url(#stone)" stroke="#1a2b24" stroke-width="4"/>
+  <path d="M560 704H720" stroke="#8fa66e" stroke-width="7"/><path d="M560 702H720" stroke="#c7cc8a" stroke-width="2" opacity=".6"/>
+  <!-- Root lookout 1 -->
+  <path d="M120 544H320V566L306 575L294 593L276 604L255 600L238 614L218 606L194 616L171 606L146 613L130 599L120 576Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
+  <path d="M120 544H320" stroke="#b1c183" stroke-width="8"/><path d="M120 542H320" stroke="#e0d8a0" stroke-width="2" opacity=".7"/>
+  <path d="M120 544H320V615H120Z" fill="url(#rockGrain)" opacity=".65"/>
+  <path d="M132 546q22 -10 41 0t42 -1t41 0t51 -1" fill="none" stroke="#3d6339" stroke-width="8"/>
+  <path d="M140 547l-8 12M165 546l-7 13M211 546l-4 12M268 546l-7 13M302 546l-6 10" stroke="#799759" stroke-width="3"/>
+  <!-- small root-connected steps -->
+  <path d="M160 576H280V603L263 613L238 625L220 620L199 630L179 619L160 624Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M160 576H280" stroke="#95ac71" stroke-width="6"/>
+  <path d="M280 608H400V633L384 641L367 655L342 652L321 662L301 650L280 652Z" fill="url(#stone)" stroke="#172923" stroke-width="3"/>
+  <path d="M280 608H400" stroke="#92a66b" stroke-width="6"/>
+  <!-- lower fork 2 -->
+  <path d="M320 720H560V746L546 753L530 772L506 785L477 778L458 796L430 786L409 804L385 793L359 805L338 785L320 780Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
+  <path d="M320 720H560" stroke="#9eb579" stroke-width="8"/><path d="M320 718H560" stroke="#d0d19a" stroke-width="2" opacity=".55"/>
+  <path d="M320 720H560V807H320Z" fill="url(#rockGrain)" opacity=".8"/>
+  <path d="M360 688H480V710L465 716L447 731L424 728L407 739L388 730L370 738L360 725Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M360 688H480" stroke="#9bb578" stroke-width="6"/>
+  <path d="M520 688H640V711L624 720L605 732L583 727L560 740L538 726L520 731Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M520 688H640" stroke="#9bb578" stroke-width="6"/>
+  <!-- Shaft edge: the center gap at x=640..704 remains open to the R04 drop trigger -->
+  <path d="M704 672H784V700L770 710L752 724L731 719L714 731L704 719Z" fill="url(#stone)" stroke="#172923" stroke-width="3"/>
+  <path d="M704 672H784" stroke="#8fa56c" stroke-width="7"/>
+  <path d="M640 696L655 706L651 730L670 742L663 765" fill="none" stroke="#534b34" stroke-width="7" opacity=".8"/>
+  <path d="M658 724L668 746L661 768L676 790L668 814" fill="none" stroke="#1a2923" stroke-width="8" opacity=".95"/>
+  <path d="M665 766l-13 9M669 785l12 8M668 807l-9 7" stroke="#60785b" stroke-width="3"/>
+  <!-- Main route through middle and under the broken bridge -->
+  <path d="M720 640H960V666L944 675L932 695L906 707L880 700L858 717L834 704L814 718L791 707L769 719L748 701L720 700Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
+  <path d="M720 640H960" stroke="#9aaf75" stroke-width="8"/><path d="M720 638H960" stroke="#d3d19b" stroke-width="2" opacity=".6"/>
+  <path d="M720 640H960V720H720Z" fill="url(#rockGrain)" opacity=".75"/>
+  <path d="M960 640H1160V664L1144 674L1130 694L1107 700L1081 688L1063 706L1036 693L1018 706L995 694L980 705L960 688Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
+  <path d="M960 640H1160" stroke="#9db47a" stroke-width="8"/><path d="M960 638H1160" stroke="#d3d19b" stroke-width="2" opacity=".6"/>
+  <path d="M960 640H1160V716H960Z" fill="url(#rockGrain)" opacity=".75"/>
+  <!-- Central ruins platform 3 and its old arch -->
+  <path d="M720 544H880V564L868 572L853 592L834 586L815 604L794 594L777 607L756 594L740 602L720 581Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
+  <path d="M720 544H880" stroke="#b2c48a" stroke-width="8"/><path d="M720 542H880" stroke="#e1dba5" stroke-width="2" opacity=".75"/>
+  <path d="M720 544H880V608H720Z" fill="url(#rockGrain)" opacity=".65"/>
+  <g fill="#2b4138" stroke="#728776" stroke-width="2">
+    <path d="M752 544V478L765 464L778 478V544Z"/><path d="M810 544V457L825 440L840 457V544Z"/><path d="M849 544V491L861 479L873 491V544Z"/>
+    <path d="M756 479L765 464L774 479Z" fill="#82977b"/><path d="M816 458L825 440L834 458Z" fill="#82977b"/>
+  </g>
+  <g fill="#152721"><path d="M764 504v40h-14v-40z"/><path d="M824 481v63h-17v-63z"/><path d="M861 507v37h-12v-37z"/></g>
+  <path d="M756 490h18M814 472h22M850 505h21" stroke="#b4c69b" stroke-width="2" opacity=".6"/>
+  <!-- Mid ledge connecting main route to the ruins overlook -->
+  <path d="M640 576H760V599L747 607L729 621L710 615L694 627L672 614L655 626L640 610Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M640 576H760" stroke="#9eb67b" stroke-width="7"/>
+  <!-- Pool-side lower route: separate banks leave a visible water cleft -->
+  <path d="M880 720H960V744L948 751L934 765L913 759L894 770L880 755Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M880 720H960" stroke="#a3bd82" stroke-width="7"/>
+  <path d="M1040 720H1160V743L1146 750L1129 767L1108 759L1091 774L1072 759L1040 757Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M1040 720H1160" stroke="#a3bd82" stroke-width="7"/>
+  <path d="M882 721H960V773H882Z" fill="url(#rockGrain)" opacity=".65"/><path d="M1040 721H1160V775H1040Z" fill="url(#rockGrain)" opacity=".65"/>
+  <!-- East-side lower trail and stair rise -->
+  <path d="M1160 640H1360V664L1345 676L1328 690L1308 684L1290 699L1268 686L1249 700L1228 687L1208 700L1188 686L1160 688Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
+  <path d="M1160 640H1360" stroke="#9cb47a" stroke-width="8"/><path d="M1160 638H1360" stroke="#d2d19a" stroke-width="2" opacity=".6"/>
+  <path d="M1160 640H1360V710H1160Z" fill="url(#rockGrain)" opacity=".75"/>
+  <path d="M1200 576H1360V600L1346 609L1329 623L1307 617L1291 632L1268 620L1247 634L1228 621L1200 625Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M1200 576H1360" stroke="#a5ba80" stroke-width="7"/>
+  <path d="M1320 544H1480V568L1464 576L1447 591L1427 582L1406 598L1386 583L1366 594L1346 580L1320 587Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M1320 544H1480" stroke="#b0c38a" stroke-width="7"/>
+  <!-- Shrine summit 5 -->
+  <path d="M1360 512H1792V541L1771 551L1757 569L1726 565L1704 583L1678 572L1654 587L1628 575L1604 590L1578 576L1553 590L1529 575L1504 587L1482 575L1458 586L1434 573L1411 585L1385 570L1360 571Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
+  <path d="M1360 512H1792" stroke="#b5c68a" stroke-width="9"/><path d="M1360 510H1792" stroke="#e2dda3" stroke-width="2" opacity=".72"/>
+  <path d="M1360 512H1792V593H1360Z" fill="url(#rockGrain)" opacity=".8"/>
+  <!-- shrine architecture -->
+  <g fill="#263d36" stroke="#8ba18a" stroke-width="3">
+    <path d="M1440 512V405L1458 385L1477 405V512Z"/><path d="M1484 512V365L1506 340L1528 365V512Z"/>
+    <path d="M1536 512V392L1555 372L1574 392V512Z"/><path d="M1634 512V382L1654 359L1675 382V512Z"/>
+    <path d="M1687 512V420L1704 401L1722 420V512Z"/>
+  </g>
+  <g fill="#0e201b">
+    <path d="M1457 427l19 -22v107h-19z"/><path d="M1505 390l22 -25v147h-22z"/><path d="M1554 411l20 -19v120h-20z"/><path d="M1653 399l22 -17v130h-22z"/><path d="M1703 435l18 -15v92h-18z"/>
+  </g>
+  <g fill="none" stroke="#bac9a0" stroke-width="2" opacity=".65">
+    <path d="M1444 412h28M1488 374h36M1540 402h30M1638 393h31M1691 430h27"/>
+    <path d="M1450 451l8 -8M1495 421l9 -9M1546 446l9 -8M1645 436l9 -9"/>
+  </g>
+</g>
+<!-- Surface growth: ferns, roots, broken masonry, hanging moss -->
+<g fill="none" stroke-linecap="round">
+  <path d="M22 635q-6 -21 -18 -28m20 28q10 -16 16 -19m42 18q-5 -18 -17 -24m18 24q12 -14 21 -16" stroke="#72915a" stroke-width="3"/>
+  <path d="M188 539q-12 -16 -5 -29m5 29q8 -18 19 -20m60 20q-5 -17 -16 -20m16 20q12 -12 24 -12" stroke="#7e9e5c" stroke-width="3"/>
+  <path d="M394 668q-8 -18 -20 -18m21 18q10 -13 22 -14m41 16q-1 -18 -13 -25m13 25q11 -12 23 -11" stroke="#78935c" stroke-width="3"/>
+  <path d="M744 636q-7 -19 -18 -22m19 22q12 -13 24 -14m63 14q-2 -15 -13 -22m13 22q13 -11 25 -11" stroke="#8da769" stroke-width="3"/>
+  <path d="M905 716q-6 -14 -17 -17m18 17q8 -11 20 -12m117 -67q-6 -16 -16 -18m17 18q10 -11 19 -11" stroke="#87a567" stroke-width="3"/>
+  <path d="M1218 636q-5 -17 -16 -19m17 19q10 -14 22 -14m58 -65q-3 -13 -12 -17m12 17q10 -10 19 -11m93 -37q-2 -14 -12 -18m12 18q11 -11 22 -12" stroke="#93ae6a" stroke-width="3"/>
+</g>
+<g fill="#7f9a5d" opacity=".9">
+  <circle cx="43" cy="637" r="3"/><circle cx="104" cy="640" r="2"/><circle cx="185" cy="543" r="3"/><circle cx="239" cy="545" r="2.5"/><circle cx="319" cy="610" r="2.5"/>
+  <circle cx="389" cy="675" r="2.5"/><circle cx="443" cy="674" r="3"/><circle cx="566" cy="707" r="2.5"/><circle cx="724" cy="644" r="2.5"/><circle cx="843" cy="644" r="3"/>
+  <circle cx="922" cy="724" r="2"/><circle cx="1078" cy="724" r="2.5"/><circle cx="1208" cy="644" r="3"/><circle cx="1329" cy="548" r="3"/><circle cx="1490" cy="516" r="3"/><circle cx="1610" cy="515" r="2.5"/><circle cx="1750" cy="514" r="3"/>
+</g>
+<!-- Final atmospheric haze and small firefly glints -->
+<path d="M0 470Q180 445 330 470T640 460T930 477T1230 455T1510 470T1792 446V560H0Z" fill="url(#mist)" opacity=".5"/>
+<g fill="#c9edb5" opacity=".72">
+  <circle cx="95" cy="462" r="2"/><circle cx="284" cy="501" r="1.8"/><circle cx="430" cy="578" r="2"/><circle cx="596" cy="650" r="1.5"/><circle cx="768" cy="492" r="2"/><circle cx="900" cy="607" r="1.5"/><circle cx="1122" cy="601" r="2"/><circle cx="1295" cy="495" r="1.8"/><circle cx="1504" cy="456" r="2"/><circle cx="1690" cy="464" r="1.5"/>
+</g>
+</svg>
