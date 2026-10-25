@@ -129,12 +129,12 @@
     <path d="M227 68 l8 1 m12 9 l5 -1 m-19 13 l3 1" stroke="#202927" stroke-width="1.2"/>
     <circle cx="243" cy="86" r="1.1" fill="#788078"/>
   </g>
-<g id="decor-0"><path d="M5 0 Q8 7 5 12 T10 22 M13 0 Q18 5 14 11 T17 20" fill="none" stroke="#526547" stroke-width="2.5"/><path d="M5 8 l-3 3 m9 -1 l4 2 m-1 4 l-3 2" stroke="#8b9b69" stroke-width="1.6"/></g>
-<g id="decor-1"><path d="M2 28 Q8 17 11 22 Q14 8 19 21 Q25 12 30 27 Z" fill="#52734d"/><path d="M8 28 l3 -8 m7 8 l2 -10 m5 10 l2 -6" stroke="#8c9d65" stroke-width="1.5"/></g>
-<g id="decor-2"><path d="M3 4 L11 10 L8 17 L17 21 L13 30 M25 0 L21 8 L26 12 L21 19" fill="none" stroke="#8c9a8a" stroke-width="1.4" opacity=".85"/></g>
-<g id="decor-3"><path d="M3 25 l6 -4 4 3 5 -8 6 3 5 -7" fill="none" stroke="#66766b" stroke-width="2"/><circle cx="7" cy="10" r="1.2" fill="#9ca58c"/><circle cx="23" cy="25" r="1.1" fill="#899486"/></g>
-<g id="decor-4"><path d="M8 0 Q1 8 10 14 T12 29 M22 0 Q30 10 22 17 T25 31" fill="none" stroke="#536d4e" stroke-width="2.3"/><path d="M8 9 l-5 -1 m8 10 l6 -2 m6 -6 l5 -2" fill="none" stroke="#8aa16e" stroke-width="1.5"/></g>
-<g id="decor-5"><path d="M4 26 L10 13 L17 19 L21 7 L28 25 Z" fill="#65756d" stroke="#a0aa9a" stroke-width="1"/><path d="M10 13 l7 6 4 -12" fill="none" stroke="#35413d" stroke-width="1.5"/></g>
-<g id="decor-6"><path d="M16 3 L22 13 L18 20 L22 28 L13 24 L10 16 Z" fill="#628b85" opacity=".8" stroke="#9bb9a9" stroke-width="1.2"/><path d="M16 8 L17 20" stroke="#c3d1bc" stroke-width="1.2"/></g>
-<g id="decor-7"><path d="M1 27 Q8 15 13 21 Q17 7 23 21 Q27 14 31 27 Z" fill="#435d47"/><path d="M6 27 l5 -8 m7 8 l3 -11 m4 11 l3 -7" stroke="#9aaa75" stroke-width="1.5"/></g>
+<g id="decor-0" transform="translate(0 96)"><path d="M5 0 Q8 7 5 12 T10 22 M13 0 Q18 5 14 11 T17 20" fill="none" stroke="#526547" stroke-width="2.5"/><path d="M5 8 l-3 3 m9 -1 l4 2 m-1 4 l-3 2" stroke="#8b9b69" stroke-width="1.6"/></g>
+<g id="decor-1" transform="translate(32 96)"><path d="M2 28 Q8 17 11 22 Q14 8 19 21 Q25 12 30 27 Z" fill="#52734d"/><path d="M8 28 l3 -8 m7 8 l2 -10 m5 10 l2 -6" stroke="#8c9d65" stroke-width="1.5"/></g>
+<g id="decor-2" transform="translate(64 96)"><path d="M3 4 L11 10 L8 17 L17 21 L13 30 M25 0 L21 8 L26 12 L21 19" fill="none" stroke="#8c9a8a" stroke-width="1.4" opacity=".85"/></g>
+<g id="decor-3" transform="translate(96 96)"><path d="M3 25 l6 -4 4 3 5 -8 6 3 5 -7" fill="none" stroke="#66766b" stroke-width="2"/><circle cx="7" cy="10" r="1.2" fill="#9ca58c"/><circle cx="23" cy="25" r="1.1" fill="#899486"/></g>
+<g id="decor-4" transform="translate(128 96)"><path d="M8 0 Q1 8 10 14 T12 29 M22 0 Q30 10 22 17 T25 31" fill="none" stroke="#536d4e" stroke-width="2.3"/><path d="M8 9 l-5 -1 m8 10 l6 -2 m6 -6 l5 -2" fill="none" stroke="#8aa16e" stroke-width="1.5"/></g>
+<g id="decor-5" transform="translate(160 96)"><path d="M4 26 L10 13 L17 19 L21 7 L28 25 Z" fill="#65756d" stroke="#a0aa9a" stroke-width="1"/><path d="M10 13 l7 6 4 -12" fill="none" stroke="#35413d" stroke-width="1.5"/></g>
+<g id="decor-6" transform="translate(192 96)"><path d="M16 3 L22 13 L18 20 L22 28 L13 24 L10 16 Z" fill="#628b85" opacity=".8" stroke="#9bb9a9" stroke-width="1.2"/><path d="M16 8 L17 20" stroke="#c3d1bc" stroke-width="1.2"/></g>
+<g id="decor-7" transform="translate(224 96)"><path d="M1 27 Q8 15 13 21 Q17 7 23 21 Q27 14 31 27 Z" fill="#435d47"/><path d="M6 27 l5 -8 m7 8 l3 -11 m4 11 l3 -7" stroke="#9aaa75" stroke-width="1.5"/></g>
 </svg>
