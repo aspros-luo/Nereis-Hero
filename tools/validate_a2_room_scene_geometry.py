@@ -300,6 +300,8 @@ def main() -> int:
 
     cross_region_path = ROOT / "scripts/levels/greybox_world_region.gd"
     cross_region_source = cross_region_path.read_text(encoding="utf-8") if cross_region_path.is_file() else ""
+    require(cross_region_source, 'if region_id == "A2" and room_id.begins_with("A2-R"):', "authored A2 renderer guard", errors)
+    require(cross_region_source, "Do not draw the legacy opaque graybox backdrop", "authored A2 renderer guard comment", errors)
     for fragment, label in (
         ('"east":', "C03 return-side mapping"),
         ('destination_scene = "res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn"', "C03 return destination"),
