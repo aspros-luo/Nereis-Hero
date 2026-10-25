@@ -150,6 +150,11 @@
 <path d="M865 800Q932 777 1000 797T1140 800M893 821Q956 810 1012 826T1130 824M935 844Q1006 831 1082 847" fill="none" stroke="#94d9cc" stroke-width="3" opacity=".48"/>
 <path d="M1012 742Q1042 755 1074 744L1100 774Q1064 788 1030 772Z" fill="#bcf8e7" opacity=".3"/>
 <g fill="#c3fff0" opacity=".65"><circle cx="1002" cy="752" r="3"/><circle cx="1083" cy="760" r="2.5"/><circle cx="1049" cy="771" r="2"/><circle cx="1097" cy="786" r="1.5"/></g>
+<!-- Hidden descent clue: a narrow, dark seam where the waterfall thins.
+     Keep the clue subtle; its x=1000 center aligns with RoomMarkers/DropToR04. -->
+<path d="M986 492Q995 530 991 572T998 646L1000 716L1014 720Q1007 672 1010 630T1006 554L1004 494Z" fill="#132a29" opacity=".74"/>
+<path d="M988 506Q994 550 990 592T997 668" fill="none" stroke="#6faaa1" stroke-width="2" opacity=".38"/>
+<path d="M1012 504Q1018 548 1014 594T1018 663" fill="none" stroke="#9dd8ce" stroke-width="1.5" opacity=".26"/>
 <!-- Forest fog in the lower ravine -->
 <path d="M0 720Q130 690 240 732T490 720T720 744T930 730T1180 750T1460 718T1792 740V1040H0Z" fill="url(#mist)" opacity=".5"/>
 <path d="M0 895Q200 855 360 898T700 888T1020 904T1400 880T1792 910V1200H0Z" fill="#071512" opacity=".55"/>
