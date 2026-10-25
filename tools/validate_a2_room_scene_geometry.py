@@ -193,6 +193,13 @@ def audit_r01_illustration(source: str, errors: list[str]) -> None:
             report(errors, "R01: illustration should sit below root-level debug markers at z_index -1")
     if 'size = Vector2(200, 16)' not in source or 'position = Vector2(100, 8)' not in source:
         report(errors, "R01: west root shelf collider must remain thin to keep the lower path open")
+    for platform in ("Platform_004", "Platform_005"):
+        collider = re.search(
+            r'^\[node name="CollisionShape2D" type="CollisionShape2D" parent="' + platform + r'"\]\n(.*?)(?=^\[node |\Z)',
+            source, re.M | re.S
+        )
+        if collider is None or not re.search(r"^one_way_collision\s*=\s*true$", collider.group(1), re.M):
+            report(errors, f"R01: {platform} must use one-way collision so the lower root path is not blocked")
     for marker, position in (
         ("Footing_01_RootLookout", "Vector2(220, 512)"),
         ("Footing_02_LowerFork", "Vector2(440, 768)"),
