@@ -3806,11 +3806,11 @@ func _on_hero_defeated() -> void:
 			respawning = true
 			WorldState.input_locked = true
 			INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
-			await get_tree().create_timer(0.75).timeout
+			await get_tree().create_timer(0.45).timeout
 			WorldState.pending_region_spawn_side = "a2_checkpoint"
 			WorldState.current_a2_room_scene_path = checkpoint_scene
 			WorldState.set_location("ash_forest")
-			SceneTransition.fade_to_scene(checkpoint_scene)
+			SceneTransition.fade_to_scene(checkpoint_scene, 0.62, 0.48, 0.38)
 			return
 	respawning = true
 	WorldState.input_locked = true
