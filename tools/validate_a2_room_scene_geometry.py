@@ -220,7 +220,7 @@ def audit_r01_illustration(source: str, errors: list[str]) -> None:
         r'position\s*=\s*Vector2\(672, 780\)$',
         source, re.M
     ):
-        report(errors, "R01: DropToR04 marker must remain at (672,780)")
+        report(errors, "R01: DropToR04 marker must remain at (1000,780)")
 
 
 def require(source: str, expected: str, label: str, errors: list[str]) -> None:
@@ -264,6 +264,11 @@ def main() -> int:
         wrapper = runtime_scene_path.read_text(encoding="utf-8")
         if f'room_id = "{runtime_id}"' not in wrapper:
             report(errors, f"{room_id}: runtime wrapper room_id mismatch")
+        if room_id == "R01":
+            if 'map_width = 2240.0' not in wrapper or 'room_height = 1500.0' not in wrapper:
+                report(errors, "R01: expanded runtime bounds must be 2240x1500")
+            if 'scale = Vector2(1.25, 1.25)' not in wrapper:
+                report(errors, "R01: authored terrain must be uniformly scaled to match expanded bounds")
         if f'path="res://{scene_path}"' not in wrapper:
             report(errors, f"{room_id}: runtime wrapper does not instance {scene_path}")
         if f'path="res://{RUNTIME_SCRIPT}"' not in wrapper:
