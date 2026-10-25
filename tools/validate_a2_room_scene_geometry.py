@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RUNTIME_SCRIPT = "scripts/levels/a2_room_runtime.gd"
 ROOMS = [
     ("R01", "scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn",
-     "A2R01ForestCrossroads", 18, 21, "A2-R01", "a2_r01_room.tscn"),
+     "A2R01ForestCrossroads", 23, 26, "A2-R01", "a2_r01_room.tscn"),
     ("R02", "scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn",
      "A2R02AuthoredRoom", 4, 4, "A2-R02", "a2_r02_room.tscn"),
     ("R03", "scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn",
@@ -115,8 +115,8 @@ def audit_scene(
         platforms = [name for name in body_names if re.fullmatch(r"Platform_\d{3}", name)]
         if len(platforms) != expected_platform_count:
             report(errors, f"R01: authored ledge count={len(platforms)}; expected {expected_platform_count}")
-        if set(platforms) != {f"Platform_{i:03d}" for i in range(1, 19)}:
-            report(errors, "R01: expected Platform_001 through Platform_018")
+        if set(platforms) != {f"Platform_{i:03d}" for i in range(1, 24)}:
+            report(errors, "R01: expected Platform_001 through Platform_023")
         if set(body_names) != {"Ground_West", "WestBoundary", "EastBoundary", *platforms}:
             report(errors, f"R01: unexpected/missing collision body IDs: {sorted(set(body_names))}")
     else:
@@ -193,7 +193,7 @@ def audit_r01_illustration(source: str, errors: list[str]) -> None:
             report(errors, "R01: illustration should sit below root-level debug markers at z_index -1")
     if 'size = Vector2(200, 16)' not in source or 'position = Vector2(100, 8)' not in source:
         report(errors, "R01: west root shelf collider must remain thin to keep the lower path open")
-    for index in range(1, 19):
+    for index in range(1, 24):
         platform = f"Platform_{index:03d}"
         collider = re.search(
             r'^\[node name="CollisionShape2D" type="CollisionShape2D" parent="' + platform + r'"\]\n(.*?)(?=^\[node |\Z)',
