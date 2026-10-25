@@ -153,96 +153,91 @@
 <!-- Forest fog in the lower ravine -->
 <path d="M0 720Q130 690 240 732T490 720T720 744T930 730T1180 750T1460 718T1792 740V1040H0Z" fill="url(#mist)" opacity=".5"/>
 <path d="M0 895Q200 855 360 898T700 888T1020 904T1400 880T1792 910V1200H0Z" fill="#071512" opacity=".55"/>
-<!-- Old stone masses: color and texture follow the collision ledges -->
+<!-- Old stone masses: color, soil strata and moss follow the authored gameplay ledges -->
 <g id="terrain-masses" stroke-linejoin="round">
-  <!-- West entrance shelf -->
-  <path d="M0 640H360V670L344 680L333 703L300 716L275 750L240 765L200 755L176 779L135 775L100 798L57 788L0 795Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
-  <path d="M0 640H360" stroke="#a2b77b" stroke-width="8"/><path d="M0 637H360" stroke="#d0d09a" stroke-width="2" opacity=".65"/>
+  <!-- Entrance shelf -->
+  <path d="M0 640H360V681L340 695L326 718L295 725L273 752L241 761L215 750L189 772L158 767L128 790L89 782L57 799L0 792Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
+  <path d="M0 640H360" stroke="#a2b77b" stroke-width="8"/><path d="M0 638H360" stroke="#d0d09a" stroke-width="2" opacity=".65"/>
   <path d="M0 640H360V795H0Z" fill="url(#rockGrain)" opacity=".9"/>
-  <path d="M16 646Q52 649 68 643T111 646T160 641T216 645T268 643T343 646" fill="none" stroke="#31543a" stroke-width="7"/>
+  <path d="M18 646q29 -7 51 0t43 -1t45 0t49 1t45 -1t48 1t49 -1" fill="none" stroke="#31543a" stroke-width="7"/>
   <g fill="#839966"><path d="M24 639l5 -11 5 11z"/><path d="M55 640l4 -7 5 7z"/><path d="M116 642l6 -10 6 10z"/><path d="M210 642l4 -8 5 8z"/><path d="M288 642l6 -11 6 11z"/></g>
   <path d="M52 700l18 8 -7 15 25 7M148 678l-5 18 18 7M225 721l20 -8 10 12" fill="none" stroke="#0b1714" stroke-width="4" opacity=".75"/>
-  <!-- descending root steps -->
-  <path d="M360 672H560V699L544 706L535 728L506 742L484 754L451 752L432 765L398 754L380 766L360 760Z" fill="url(#stone)" stroke="#1a2b24" stroke-width="4"/>
+  <!-- Natural descending root shelves -->
+  <path d="M360 672H560V706L545 716L532 739L505 748L484 766L451 760L431 779L400 764L380 780L360 766Z" fill="url(#stone)" stroke="#1a2b24" stroke-width="4"/>
   <path d="M360 672H560" stroke="#97ad70" stroke-width="7"/><path d="M360 670H560" stroke="#d2ce91" stroke-width="2" opacity=".6"/>
-  <path d="M360 672H560V760H360Z" fill="url(#rockGrain)" opacity=".8"/>
-  <path d="M560 704H720V733L702 743L684 755L656 755L632 776L610 761L585 767L560 751Z" fill="url(#stone)" stroke="#1a2b24" stroke-width="4"/>
-  <path d="M560 704H720" stroke="#8fa66e" stroke-width="7"/><path d="M560 702H720" stroke="#c7cc8a" stroke-width="2" opacity=".6"/>
+  <path d="M360 672H560V770H360Z" fill="url(#rockGrain)" opacity=".8"/>
+  <!-- Narrow intermediate shelf ends at x=640; the R04 shaft remains open -->
+  <path d="M560 704H640V729L628 738L613 747L594 742L580 755L560 745Z" fill="url(#stone)" stroke="#1a2b24" stroke-width="3"/>
+  <path d="M560 704H640" stroke="#8fa66e" stroke-width="7"/><path d="M560 702H640" stroke="#c7cc8a" stroke-width="2" opacity=".6"/>
   <!-- Root lookout 1 -->
-  <path d="M120 544H320V566L306 575L294 593L276 604L255 600L238 614L218 606L194 616L171 606L146 613L130 599L120 576Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
-  <path d="M120 544H320" stroke="#b1c183" stroke-width="8"/><path d="M120 542H320" stroke="#e0d8a0" stroke-width="2" opacity=".7"/>
-  <path d="M120 544H320V615H120Z" fill="url(#rockGrain)" opacity=".65"/>
-  <path d="M132 546q22 -10 41 0t42 -1t41 0t51 -1" fill="none" stroke="#3d6339" stroke-width="8"/>
-  <path d="M140 547l-8 12M165 546l-7 13M211 546l-4 12M268 546l-7 13M302 546l-6 10" stroke="#799759" stroke-width="3"/>
-  <!-- small root-connected steps -->
-  <path d="M160 576H280V603L263 613L238 625L220 620L199 630L179 619L160 624Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M120 512H320V536L305 547L292 565L273 575L255 572L237 589L217 580L194 591L171 580L147 590L130 575L120 548Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
+  <path d="M120 512H320" stroke="#b1c183" stroke-width="8"/><path d="M120 510H320" stroke="#e0d8a0" stroke-width="2" opacity=".7"/>
+  <path d="M120 512H320V591H120Z" fill="url(#rockGrain)" opacity=".65"/>
+  <path d="M132 514q22 -10 41 0t42 -1t41 0t51 -1" fill="none" stroke="#3d6339" stroke-width="8"/>
+  <path d="M140 515l-8 12M165 514l-7 13M211 514l-4 12M268 514l-7 13M302 514l-6 10" stroke="#799759" stroke-width="3"/>
+  <!-- Stepping stones up to the overlook -->
+  <path d="M160 576H280V598L263 609L238 621L220 616L199 626L179 615L160 620Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
   <path d="M160 576H280" stroke="#95ac71" stroke-width="6"/>
-  <path d="M280 608H400V633L384 641L367 655L342 652L321 662L301 650L280 652Z" fill="url(#stone)" stroke="#172923" stroke-width="3"/>
+  <path d="M280 608H400V631L384 641L367 653L342 650L321 659L301 647L280 650Z" fill="url(#stone)" stroke="#172923" stroke-width="3"/>
   <path d="M280 608H400" stroke="#92a66b" stroke-width="6"/>
-  <!-- lower fork 2 -->
-  <path d="M320 720H560V746L546 753L530 772L506 785L477 778L458 796L430 786L409 804L385 793L359 805L338 785L320 780Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
-  <path d="M320 720H560" stroke="#9eb579" stroke-width="8"/><path d="M320 718H560" stroke="#d0d19a" stroke-width="2" opacity=".55"/>
-  <path d="M320 720H560V807H320Z" fill="url(#rockGrain)" opacity=".8"/>
-  <path d="M360 688H480V710L465 716L447 731L424 728L407 739L388 730L370 738L360 725Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
-  <path d="M360 688H480" stroke="#9bb578" stroke-width="6"/>
-  <path d="M520 688H640V711L624 720L605 732L583 727L560 740L538 726L520 731Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
-  <path d="M520 688H640" stroke="#9bb578" stroke-width="6"/>
-  <!-- Shaft edge: the center gap at x=640..704 remains open to the R04 drop trigger -->
-  <path d="M704 672H784V700L770 710L752 724L731 719L714 731L704 719Z" fill="url(#stone)" stroke="#172923" stroke-width="3"/>
-  <path d="M704 672H784" stroke="#8fa56c" stroke-width="7"/>
-  <path d="M640 696L655 706L651 730L670 742L663 765" fill="none" stroke="#534b34" stroke-width="7" opacity=".8"/>
-  <path d="M658 724L668 746L661 768L676 790L668 814" fill="none" stroke="#1a2923" stroke-width="8" opacity=".95"/>
-  <path d="M665 766l-13 9M669 785l12 8M668 807l-9 7" stroke="#60785b" stroke-width="3"/>
-  <!-- Main route through middle and under the broken bridge -->
-  <path d="M720 640H960V666L944 675L932 695L906 707L880 700L858 717L834 704L814 718L791 707L769 719L748 701L720 700Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
-  <path d="M720 640H960" stroke="#9aaf75" stroke-width="8"/><path d="M720 638H960" stroke="#d3d19b" stroke-width="2" opacity=".6"/>
-  <path d="M720 640H960V720H720Z" fill="url(#rockGrain)" opacity=".75"/>
-  <path d="M960 640H1160V664L1144 674L1130 694L1107 700L1081 688L1063 706L1036 693L1018 706L995 694L980 705L960 688Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
+  <!-- Lower fork / footing 2 -->
+  <path d="M320 768H560V790L544 801L530 819L506 830L477 823L458 840L430 830L409 849L385 837L359 849L338 829L320 824Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
+  <path d="M320 768H560" stroke="#9eb579" stroke-width="8"/><path d="M320 766H560" stroke="#d0d19a" stroke-width="2" opacity=".55"/>
+  <path d="M320 768H560V850H320Z" fill="url(#rockGrain)" opacity=".8"/>
+  <path d="M360 736H480V756L465 767L447 779L424 776L407 788L388 778L370 787L360 774Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M360 736H480" stroke="#9bb578" stroke-width="6"/>
+  <path d="M520 736H640V757L624 768L605 780L583 775L560 787L538 774L520 779Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M520 736H640" stroke="#9bb578" stroke-width="6"/>
+  <!-- Open R04 shaft at x=640..704 -->
+  <path d="M704 704H784V726L770 736L752 749L731 744L714 756L704 744Z" fill="url(#stone)" stroke="#172923" stroke-width="3"/>
+  <path d="M704 704H784" stroke="#8fa56c" stroke-width="7"/>
+  <path d="M640 710L655 720L651 742L670 754L663 777M658 736L668 758L661 780L676 802L668 826" fill="none" stroke="#343d2d" stroke-width="7" opacity=".9"/>
+  <path d="M658 756l-13 9M669 775l12 8M668 801l-9 7M668 821l13 5" stroke="#60785b" stroke-width="3"/>
+  <!-- Main lower passage under the decorative broken bridge -->
+  <path d="M720 672H880V704L866 715L851 735L827 728L808 744L784 731L765 746L741 729L720 733Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
+  <path d="M720 672H880" stroke="#9aaf75" stroke-width="8"/><path d="M720 670H880" stroke="#d3d19b" stroke-width="2" opacity=".6"/>
+  <path d="M720 672H880V746H720Z" fill="url(#rockGrain)" opacity=".75"/>
+  <path d="M960 640H1160V666L1144 677L1130 698L1107 704L1081 691L1063 709L1036 696L1018 709L995 697L980 708L960 691Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
   <path d="M960 640H1160" stroke="#9db47a" stroke-width="8"/><path d="M960 638H1160" stroke="#d3d19b" stroke-width="2" opacity=".6"/>
-  <path d="M960 640H1160V716H960Z" fill="url(#rockGrain)" opacity=".75"/>
-  <!-- Central ruins platform 3 and its old arch -->
-  <path d="M720 544H880V564L868 572L853 592L834 586L815 604L794 594L777 607L756 594L740 602L720 581Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
-  <path d="M720 544H880" stroke="#b2c48a" stroke-width="8"/><path d="M720 542H880" stroke="#e1dba5" stroke-width="2" opacity=".75"/>
-  <path d="M720 544H880V608H720Z" fill="url(#rockGrain)" opacity=".65"/>
+  <path d="M960 640H1160V718H960Z" fill="url(#rockGrain)" opacity=".75"/>
+  <!-- Central ruins platform 3 -->
+  <path d="M720 512H880V536L868 546L853 565L834 559L815 578L794 568L777 581L756 568L740 576L720 555Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
+  <path d="M720 512H880" stroke="#b2c48a" stroke-width="8"/><path d="M720 510H880" stroke="#e1dba5" stroke-width="2" opacity=".75"/>
+  <path d="M720 512H880V581H720Z" fill="url(#rockGrain)" opacity=".65"/>
   <g fill="#2b4138" stroke="#728776" stroke-width="2">
-    <path d="M752 544V478L765 464L778 478V544Z"/><path d="M810 544V457L825 440L840 457V544Z"/><path d="M849 544V491L861 479L873 491V544Z"/>
-    <path d="M756 479L765 464L774 479Z" fill="#82977b"/><path d="M816 458L825 440L834 458Z" fill="#82977b"/>
+    <path d="M752 512V446L765 432L778 446V512Z"/><path d="M810 512V425L825 408L840 425V512Z"/><path d="M849 512V459L861 447L873 459V512Z"/>
+    <path d="M756 447L765 432L774 447Z" fill="#82977b"/><path d="M816 426L825 408L834 426Z" fill="#82977b"/>
   </g>
-  <g fill="#152721"><path d="M764 504v40h-14v-40z"/><path d="M824 481v63h-17v-63z"/><path d="M861 507v37h-12v-37z"/></g>
-  <path d="M756 490h18M814 472h22M850 505h21" stroke="#b4c69b" stroke-width="2" opacity=".6"/>
-  <!-- Mid ledge connecting main route to the ruins overlook -->
-  <path d="M640 576H760V599L747 607L729 621L710 615L694 627L672 614L655 626L640 610Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
-  <path d="M640 576H760" stroke="#9eb67b" stroke-width="7"/>
-  <!-- Pool-side lower route: separate banks leave a visible water cleft -->
-  <path d="M880 720H960V744L948 751L934 765L913 759L894 770L880 755Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
-  <path d="M880 720H960" stroke="#a3bd82" stroke-width="7"/>
-  <path d="M1040 720H1160V743L1146 750L1129 767L1108 759L1091 774L1072 759L1040 757Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
-  <path d="M1040 720H1160" stroke="#a3bd82" stroke-width="7"/>
-  <path d="M882 721H960V773H882Z" fill="url(#rockGrain)" opacity=".65"/><path d="M1040 721H1160V775H1040Z" fill="url(#rockGrain)" opacity=".65"/>
-  <!-- East-side lower trail and stair rise -->
-  <path d="M1160 640H1360V664L1345 676L1328 690L1308 684L1290 699L1268 686L1249 700L1228 687L1208 700L1188 686L1160 688Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
+  <g fill="#152721"><path d="M764 472v40h-14v-40z"/><path d="M824 449v63h-17v-63z"/><path d="M861 475v37h-12v-37z"/></g>
+  <path d="M756 458h18M814 440h22M850 473h21" stroke="#b4c69b" stroke-width="2" opacity=".6"/>
+  <!-- Intermediate stair lets the Hero reach the ruins without an air jump -->
+  <path d="M640 592H760V613L747 622L729 636L710 630L694 642L672 629L655 641L640 625Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M640 592H760" stroke="#9eb67b" stroke-width="7"/>
+  <!-- Waterfall-side lower bank 4 -->
+  <path d="M880 800H1120V826L1106 836L1087 850L1066 844L1047 860L1025 847L1006 860L985 847L963 859L941 846L922 859L901 845L880 850Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M880 800H1120" stroke="#a3bd82" stroke-width="7"/><path d="M880 801H1120V862H880Z" fill="url(#rockGrain)" opacity=".65"/>
+  <!-- East underpass and return ledge -->
+  <path d="M1160 640H1360V665L1345 676L1328 690L1308 684L1290 699L1268 686L1249 700L1228 687L1208 700L1188 686L1160 688Z" fill="url(#stone)" stroke="#172923" stroke-width="4"/>
   <path d="M1160 640H1360" stroke="#9cb47a" stroke-width="8"/><path d="M1160 638H1360" stroke="#d2d19a" stroke-width="2" opacity=".6"/>
   <path d="M1160 640H1360V710H1160Z" fill="url(#rockGrain)" opacity=".75"/>
   <path d="M1200 576H1360V600L1346 609L1329 623L1307 617L1291 632L1268 620L1247 634L1228 621L1200 625Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
   <path d="M1200 576H1360" stroke="#a5ba80" stroke-width="7"/>
-  <path d="M1320 544H1480V568L1464 576L1447 591L1427 582L1406 598L1386 583L1366 594L1346 580L1320 587Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
+  <path d="M1320 544H1480V566L1464 576L1447 589L1427 582L1406 596L1386 583L1366 594L1346 580L1320 585Z" fill="url(#stoneLight)" stroke="#172923" stroke-width="3"/>
   <path d="M1320 544H1480" stroke="#b0c38a" stroke-width="7"/>
   <!-- Shrine summit 5 -->
-  <path d="M1360 512H1792V541L1771 551L1757 569L1726 565L1704 583L1678 572L1654 587L1628 575L1604 590L1578 576L1553 590L1529 575L1504 587L1482 575L1458 586L1434 573L1411 585L1385 570L1360 571Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
-  <path d="M1360 512H1792" stroke="#b5c68a" stroke-width="9"/><path d="M1360 510H1792" stroke="#e2dda3" stroke-width="2" opacity=".72"/>
-  <path d="M1360 512H1792V593H1360Z" fill="url(#rockGrain)" opacity=".8"/>
-  <!-- shrine architecture -->
+  <path d="M1360 480H1792V509L1771 520L1757 538L1726 533L1704 551L1678 540L1654 555L1628 543L1604 558L1578 544L1553 558L1529 543L1504 555L1482 543L1458 554L1434 541L1411 553L1385 538L1360 539Z" fill="url(#stoneLight)" stroke="#1b3026" stroke-width="4"/>
+  <path d="M1360 480H1792" stroke="#b5c68a" stroke-width="9"/><path d="M1360 478H1792" stroke="#e2dda3" stroke-width="2" opacity=".72"/>
+  <path d="M1360 480H1792V560H1360Z" fill="url(#rockGrain)" opacity=".8"/>
+  <!-- ruined shrine architecture -->
   <g fill="#263d36" stroke="#8ba18a" stroke-width="3">
-    <path d="M1440 512V405L1458 385L1477 405V512Z"/><path d="M1484 512V365L1506 340L1528 365V512Z"/>
-    <path d="M1536 512V392L1555 372L1574 392V512Z"/><path d="M1634 512V382L1654 359L1675 382V512Z"/>
-    <path d="M1687 512V420L1704 401L1722 420V512Z"/>
+    <path d="M1440 480V373L1458 353L1477 373V480Z"/><path d="M1484 480V333L1506 308L1528 333V480Z"/>
+    <path d="M1536 480V360L1555 340L1574 360V480Z"/><path d="M1634 480V350L1654 327L1675 350V480Z"/>
+    <path d="M1687 480V388L1704 369L1722 388V480Z"/>
   </g>
-  <g fill="#0e201b">
-    <path d="M1457 427l19 -22v107h-19z"/><path d="M1505 390l22 -25v147h-22z"/><path d="M1554 411l20 -19v120h-20z"/><path d="M1653 399l22 -17v130h-22z"/><path d="M1703 435l18 -15v92h-18z"/>
-  </g>
+  <g fill="#0e201b"><path d="M1457 395l19 -22v107h-19z"/><path d="M1505 358l22 -25v147h-22z"/><path d="M1554 379l20 -19v120h-20z"/><path d="M1653 367l22 -17v130h-22z"/><path d="M1703 403l18 -15v92h-18z"/></g>
   <g fill="none" stroke="#bac9a0" stroke-width="2" opacity=".65">
-    <path d="M1444 412h28M1488 374h36M1540 402h30M1638 393h31M1691 430h27"/>
-    <path d="M1450 451l8 -8M1495 421l9 -9M1546 446l9 -8M1645 436l9 -9"/>
+    <path d="M1444 380h28M1488 342h36M1540 370h30M1638 361h31M1691 398h27"/>
+    <path d="M1450 419l8 -8M1495 389l9 -9M1546 414l9 -8M1645 404l9 -9"/>
   </g>
 </g>
 <!-- Surface growth: ferns, roots, broken masonry, hanging moss -->
