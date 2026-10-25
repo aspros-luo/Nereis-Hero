@@ -15,8 +15,8 @@ var room_transition_locked := false
 
 
 func _physics_process(_delta: float) -> void:
-	# R01 has deep optional routes but no lethal floor. Recover if the Hero falls below
-	# the authored room bounds instead of leaving them below the camera forever.
+	# R01 has one authored safe drop to R04. Every other fall beyond the expanded room
+	# bounds is lethal and returns the Hero to R01's west entry.
 	if room_id != "A2-R01" or hero == null or room_transition_locked or respawning:
 		return
 	if hero.global_position.y > global_position.y + room_height + 96.0:
@@ -33,7 +33,7 @@ func _recover_r01_void_fall() -> void:
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.current_a2_room_scene_path = ROOM_SCENE_PATHS["A2-R01"]
 	WorldState.set_location("ash_forest")
-	SceneTransition.fade_to_scene(ROOM_SCENE_PATHS["A2-R01"], 0.38, 0.42, 0.18)
+	SceneTransition.fade_to_scene(ROOM_SCENE_PATHS["A2-R01"], 0.62, 0.48, 0.38)
 
 
 func _ready() -> void:
@@ -308,7 +308,7 @@ func _spawn_room_exits() -> void:
 			_spawn_exit_door_at_marker("ExitVillage", "E  返回边境村庄", "village", "res://scenes/village_hub.tscn", "north_gate")
 			_spawn_exit_door_at_marker("ExitCanopy", "E  攀上古树，进入树冠", "ash_forest", _scene_path_for_room("A2-R02"), "a2_r02_from_r01")
 			_spawn_exit_door_at_marker("ExitBellTomb", "E  进入钟墓上环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_from_r01")
-			_spawn_drop_transition_at_marker("DropToR04", 48.0, 120.0, "A2-R04", "a2_r04_tomb_drop_r01")
+			_spawn_drop_transition_at_marker("DropToR04", 32.0, 120.0, "A2-R04", "a2_r04_tomb_drop_r01")
 		"A2-R02":
 			_spawn_exit_door_at_marker("ExitToR01", "E  返回林间岔路", "ash_forest", _scene_path_for_room("A2-R01"), "a2_r01_canopy_return")
 			_spawn_exit_door_at_marker("ExitToR05", "E  沿旧朝圣高路前进", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_from_r02")
