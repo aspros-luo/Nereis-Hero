@@ -309,7 +309,7 @@ def main() -> int:
         audit_r01_illustration(r01_path.read_text(encoding="utf-8"), errors)
 
     route_contracts = [
-        ('_spawn_drop_transition_at_marker("DropToR04", 48.0, 120.0, "A2-R04", "a2_r04_tomb_drop_r01")', "R01->R04 narrow drop shaft"),
+        ('_spawn_drop_transition_at_marker("DropToR04", 32.0, 120.0, "A2-R04", "a2_r04_tomb_drop_r01")', "R01->R04 narrow drop shaft"),
         ('_spawn_drop_transition_at_marker("DropToR04", 150.0, 220.0, "A2-R04", "a2_r04_tomb_drop")', "R03->R04 drop"),
         ('_spawn_exit_door_at_marker("ExitToR06", "E  深入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_low_entry")', "R04->R06 low entry"),
         ('_spawn_exit_door_at_marker("ExitToR04", "E  返回钟墓坑底", "ash_forest", _scene_path_for_room("A2-R04"), "a2_r04_ravine_return")', "R06->R04 low return"),
