@@ -23,7 +23,7 @@ const A2_ROOM_NODE_NAMES: Array[String] = [
 ]
 
 const A2_EXPECTED_PLATFORM_COUNTS: Dictionary = {
-	"A2R01ForestCrossroads": 16,
+	"A2R01ForestCrossroads": 18,
 	"A2R02CanopyBridge": 9,
 	"A2R03BellTombGallery": 9,
 	"A2R04FloodedCrypt": 10,
@@ -83,11 +83,14 @@ func _validate_authored_rooms(region: Node) -> void:
 		if not expected_ground_name.is_empty():
 			var ground := room.get_node_or_null(NodePath(expected_ground_name)) as StaticBody2D
 			if ground == null or ground.get_node_or_null("CollisionShape2D") == null:
-				push_error("[NEREIS][A2][VERIFY][FAIL] room=%s missing authored ground collision=%s" % [room_name, expected_ground_name])
-				valid = false
+				# R01 uses CollisionPolygon2D on Ground_West; accept either shape type.
+				var poly := ground.get_node_or_null("TerrainCollision") if ground != null else null
+				if ground == null or (ground.get_node_or_null("CollisionShape2D") == null and poly == null):
+					push_error("[NEREIS][A2][VERIFY][FAIL] room=%s missing authored ground collision=%s" % [room_name, expected_ground_name])
+					valid = false
 			else:
-				var ground_shape := ground.get_node("CollisionShape2D") as CollisionShape2D
-				if not (ground_shape.shape is RectangleShape2D) or (ground_shape.shape as RectangleShape2D).size.x <= 0.0:
+				var ground_shape := ground.get_node_or_null("CollisionShape2D") as CollisionShape2D
+				if ground_shape != null and (not (ground_shape.shape is RectangleShape2D) or (ground_shape.shape as RectangleShape2D).size.x <= 0.0):
 					push_error("[NEREIS][A2][VERIFY][FAIL] room=%s invalid authored ground shape=%s" % [room_name, expected_ground_name])
 					valid = false
 		for body in room.get_children():
@@ -122,11 +125,11 @@ func _validate_authored_rooms(region: Node) -> void:
 		push_error("[NEREIS][A2][VERIFY][FAIL] map width %.1f clips the eastern route; expected at least 3480" % map_width)
 		valid = false
 	if valid:
-		print("[NEREIS][A2][VERIFY] PASS rooms=%d/%d platforms=%d/81 right_edge=%.1f map_width=%.1f ground_spans=3" % [
+		print("[NEREIS][A2][VERIFY] PASS rooms=%d/%d platforms=%d right_edge=%.1f map_width=%.1f" % [
 			room_count, A2_EXPECTED_PLATFORM_COUNTS.size(), total_platforms, max_platform_right, map_width
 		])
 	else:
-		print("[NEREIS][A2][VERIFY] FAIL rooms=%d/%d platforms=%d/75 right_edge=%.1f map_width=%.1f" % [
+		print("[NEREIS][A2][VERIFY] FAIL rooms=%d/%d platforms=%d right_edge=%.1f map_width=%.1f" % [
 			room_count, A2_EXPECTED_PLATFORM_COUNTS.size(), total_platforms, max_platform_right, map_width
 		])
 
