@@ -70,7 +70,7 @@ size = Vector2(160, 20)
 [node name="LevelIllustration" type="Sprite2D" parent="."]
 texture = ExtResource("1_r01_art")
 centered = false
-z_index = 0
+z_index = -1
 
 [node name="Ground_West" type="StaticBody2D" parent="."]
 position = Vector2(0, 640)
