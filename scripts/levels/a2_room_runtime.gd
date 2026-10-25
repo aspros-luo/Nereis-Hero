@@ -33,7 +33,7 @@ func _recover_r01_void_fall() -> void:
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.current_a2_room_scene_path = ROOM_SCENE_PATHS["A2-R01"]
 	WorldState.set_location("ash_forest")
-	SceneTransition.fade_to_scene(ROOM_SCENE_PATHS["A2-R01"])
+	SceneTransition.fade_to_scene(ROOM_SCENE_PATHS["A2-R01"], 0.38, 0.42, 0.18)
 
 
 func _ready() -> void:
