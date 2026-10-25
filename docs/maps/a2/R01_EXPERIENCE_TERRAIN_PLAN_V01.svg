@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820">
+<title>Nereis-Hero A2 R01 experience-first terrain plan v0.1</title>
+<desc>Design proposal, not runtime evidence. Coordinates are normalized from current 1792 by 1200 room and must be validated against the live scene.</desc>
+<defs>
+  <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#a3b3ad" stroke-opacity=".16" stroke-width="1"/></pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#d7c99b"/></marker>
+</defs>
+<rect width="1200" height="820" fill="#101a19"/>
+<text x="38" y="36" font-family="sans-serif" font-size="22" fill="#f0eee4" font-weight="700">A2 · R01 雾林十字路口 — 体验优先地形提案</text>
+<text x="38" y="60" font-family="sans-serif" font-size="12" fill="#b3c2ba">方案图 / 非最终施工坐标 / 不是 Godot 实机截图 / 坐标空间约 1792 × 1200</text>
+<rect x="38" y="82" width="1120" height="660" fill="url(#grid)" stroke="#60716a"/>
+<!-- silhouettes -->
+<path d="M40 255 Q120 180 210 230 T385 210 T550 255 T720 220 T900 230 T1158 175 L1158 430 L40 430Z" fill="#1b3029" opacity=".95"/>
+<path d="M720 350 Q790 290 860 305 Q940 245 1000 285 Q1080 290 1158 350 L1158 520 L720 520Z" fill="#294536" opacity=".9"/>
+<path d="M40 500 L90 470 L150 475 L195 440 L260 455 L300 490 L350 510 L405 535 L470 530 L510 570 L580 570 L625 600 L680 600 L700 650 L740 650 L780 600 L845 590 L895 555 L960 545 L1010 500 L1080 490 L1158 470 L1158 742 L40 742Z" fill="#26312c" stroke="#60766a" stroke-width="2"/>
+<!-- west root walk -->
+<path d="M40 495 L95 470 L150 475 L195 440 L260 455 L300 490 L350 510 L405 535 L470 530 L510 570 L540 570" fill="none" stroke="#8b9b6a" stroke-width="18" stroke-linejoin="round"/>
+<path d="M40 495 L95 470 L150 475 L195 440 L260 455 L300 490 L350 510 L405 535 L470 530 L510 570 L540 570" fill="none" stroke="#c4c79a" stroke-width="3" stroke-linejoin="round"/>
+<!-- central collapse and tomb -->
+<path d="M475 530 Q520 545 545 600 L570 680 Q605 715 650 680 L680 600 Q710 560 755 555" fill="none" stroke="#0a1110" stroke-width="42"/>
+<path d="M475 530 Q520 545 545 600 L570 680 Q605 715 650 680 L680 600 Q710 560 755 555" fill="none" stroke="#7b8277" stroke-width="2" stroke-dasharray="6 7"/>
+<path d="M560 610 L580 570 L610 550 L640 570 L660 610" fill="#111716" stroke="#b6b9a3" stroke-width="3"/>
+<text x="610" y="635" fill="#d6d8c9" font-family="sans-serif" font-size="12" text-anchor="middle">R03 钟墓入口</text>
+<!-- intentional drop -->
+<path d="M525 575 L545 610 L557 655" fill="none" stroke="#d7c99b" stroke-width="3" stroke-dasharray="5 5" marker-end="url(#arrow)"/>
+<ellipse cx="557" cy="675" rx="26" ry="12" fill="#070b0b" stroke="#d7c99b" stroke-width="2"/>
+<text x="490" y="704" fill="#d7c99b" font-family="sans-serif" font-size="12" text-anchor="end">R04 下坠井</text>
+<!-- high root/canopy path -->
+<path d="M690 510 Q730 470 770 435 L820 450 L865 405 L915 415 L960 365 L1010 375 L1050 335 L1100 345 L1158 315" fill="none" stroke="#5c744b" stroke-width="25" stroke-linejoin="round"/>
+<path d="M690 510 Q730 470 770 435 L820 450 L865 405 L915 415 L960 365 L1010 375 L1050 335 L1100 345 L1158 315" fill="none" stroke="#b4c78c" stroke-width="3" stroke-linejoin="round"/>
+<!-- tree -->
+<path d="M1005 475 Q1018 410 1000 340 L1035 260 L1065 335 L1082 470Z" fill="#4a3527" stroke="#9c7a51" stroke-width="3"/>
+<path d="M900 315 Q915 250 975 225 Q1030 180 1090 225 Q1140 250 1150 310 Q1090 345 1040 320 Q980 345 900 315Z" fill="#31503b" stroke="#6f9560" stroke-width="2"/>
+<!-- hidden nook -->
+<path d="M245 455 L270 420 L300 423 L315 455" fill="#0a1110" stroke="#b5b5a0" stroke-width="2" stroke-dasharray="3 3"/>
+<text x="278" y="405" fill="#c9d5c8" font-family="sans-serif" font-size="12" text-anchor="middle">根石暗隙（可选）</text>
+<!-- route arrows -->
+<path d="M75 430 Q180 390 270 430 T430 495" fill="none" stroke="#d7c99b" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M710 475 Q800 420 880 380 T1090 315" fill="none" stroke="#d7c99b" stroke-width="3" marker-end="url(#arrow)"/>
+<!-- callouts -->
+<g font-family="sans-serif">
+<rect x="58" y="105" width="250" height="82" rx="8" fill="#172622" stroke="#71877a"/>
+<text x="74" y="128" fill="#e4e9de" font-size="14" font-weight="700">I · 西侧根台</text><text x="74" y="150" fill="#b9c8bf" font-size="12">安全观察点；入口先建立方向感</text><text x="74" y="169" fill="#b9c8bf" font-size="12">根系与坡体解释自然高差</text>
+<path d="M175 187 L175 250 L190 440" fill="none" stroke="#71877a" stroke-dasharray="4 4"/>
+<rect x="380" y="105" width="255" height="82" rx="8" fill="#172622" stroke="#71877a"/>
+<text x="396" y="128" fill="#e4e9de" font-size="14" font-weight="700">II · 中央塌陷</text><text x="396" y="150" fill="#b9c8bf" font-size="12">可从高处看见墓道，但不一次看全</text><text x="396" y="169" fill="#b9c8bf" font-size="12">主路绕行；下坠是玩家主动选择</text>
+<path d="M510 187 L510 260 L595 545" fill="none" stroke="#71877a" stroke-dasharray="4 4"/>
+<rect x="710" y="105" width="410" height="82" rx="8" fill="#172622" stroke="#71877a"/>
+<text x="726" y="128" fill="#e4e9de" font-size="14" font-weight="700">III · 古树高路 → R02 树冠桥</text><text x="726" y="150" fill="#b9c8bf" font-size="12">粗根、断桥、树干共同构成上升路线</text><text x="726" y="169" fill="#b9c8bf" font-size="12">入口侧先看见目标；后段由空间关系揭示</text>
+<path d="M905 187 L905 230 L965 365" fill="none" stroke="#71877a" stroke-dasharray="4 4"/>
+<rect x="65" y="680" width="360" height="42" rx="6" fill="#172622" stroke="#71877a"/>
+<text x="80" y="697" fill="#e4e9de" font-size="12" font-weight="700">体验目标：看见线索 → 做出选择 → 发现连接</text>
+<text x="80" y="713" fill="#b9c8bf" font-size="11">不是增加跳台数量；每条路线都必须有空间理由</text>
+<rect x="810" y="680" width="310" height="42" rx="6" fill="#172622" stroke="#71877a"/>
+<text x="825" y="697" fill="#e4e9de" font-size="12" font-weight="700">验收前置条件</text>
+<text x="825" y="713" fill="#b9c8bf" font-size="11">按 Hero 实测跳跃包络校正平台距离与落点</text>
+</g>
+</svg>
