@@ -104,6 +104,7 @@ shape = SubResource("PlatRoot")
 position = Vector2(160, 576)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_004"]
+one_way_collision = true
 position = Vector2(60, 10)
 shape = SubResource("PlatStep")
 
@@ -111,6 +112,7 @@ shape = SubResource("PlatStep")
 position = Vector2(280, 608)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform_005"]
+one_way_collision = true
 position = Vector2(60, 12)
 shape = SubResource("PlatStepSmall")
 
