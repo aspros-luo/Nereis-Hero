@@ -256,10 +256,8 @@ func _draw_security_shutter(gate_x: float) -> void:
 
 
 func _draw() -> void:
-	draw_texture_rect(SURGERY_BACKDROP, Rect2(0, 0, LEVEL_WIDTH, 720), false)
-	draw_texture_rect(SURGERY_FLOOR_STRIP, Rect2(0, FLOOR_Y, LEVEL_WIDTH, 180), false)
-	# Illustrated prop pass replaces the flat geometric furniture while leaving gameplay bodies untouched.
-	draw_texture_rect(SURGERY_FOREGROUND_PROPS, Rect2(0, 0, LEVEL_WIDTH, 720), false)
+	# Static backdrop, floor strip and illustrated props are authored as TextureRect nodes in escape_prologue.tscn.
+	# Only state-dependent shutters and small foreground marks remain in this draw pass.
 	# Collision-backed tutorial ledges are also drawn so the optional route reads clearly.
 	# 将具有真实碰撞的教学平台同步绘制出来，让可选路线清晰可读。
 	for ledge in _get_traversal_route_rects():
