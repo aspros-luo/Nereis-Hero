@@ -5,15 +5,15 @@ const DEATH_BURST_SCENE: PackedScene = preload("res://scenes/effects/death_burst
 
 var health := 240
 var max_health := 240
-var boss_display_name := "灰烬骑士"
+@export var boss_display_name := "灰烬骑士"
 var phase := 1
-var persist_global_boss_defeat := true
+@export var persist_global_boss_defeat := true
 # Prologue-only executioner cannot be defeated; ordinary bosses remain damageable by default.
 var damage_immune := false
 ## Per-instance damage scaling; lower values make a boss more resilient without making it invulnerable.
 var damage_taken_multiplier := 1.0
 var is_defeated := false
-var visual_theme := "ashen"
+@export var visual_theme := "ashen"
 var attack_cooldown := 0.0
 var windup := 0.0
 var hit_flash := 0.0
