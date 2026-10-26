@@ -13,10 +13,6 @@ func _ready() -> void:
     collision_layer = 4
     collision_mask = 1
     monitoring = true
-    if not has_node("CheckpointVisual"):
-        var visual := CHECKPOINT_VISUAL_SCENE.instantiate()
-        visual.name = "CheckpointVisual"
-        add_child(visual)
     body_entered.connect(_on_body_entered)
     _refresh_visual_state()
 
