@@ -38,7 +38,6 @@ func _ready() -> void:
     hud.bind_hero(hero)
     hud.set_story_mode("ANCIENT RESEARCH WARD", "SEARCH THE ROOM / LEAVE WITH WHAT YOU CAN BEAR")
     get_tree().create_timer(0.7).timeout.connect(_show_intro)
-    queue_redraw()
 
 
 func _show_intro() -> void:
@@ -105,16 +104,3 @@ func _mark_input_handled() -> void:
     if viewport != null:
         viewport.set_input_as_handled()
 
-
-func _draw() -> void:
-    draw_rect(Rect2(0, 0, 2400, 720), Color("#0e0d12"))
-    draw_rect(Rect2(0, FLOOR_Y, 2400, 180), Color("#1d1820"))
-
-    for x in range(240, 2200, 340):
-        draw_rect(Rect2(x, 270, 170, 250), Color("#211c24"))
-        draw_line(Vector2(x + 25, 330), Vector2(x + 145, 330), Color("#4b383f"), 4.0)
-        draw_line(Vector2(x + 50, 365), Vector2(x + 50, 500), Color("#30262f"), 6.0)
-
-    draw_string(ThemeDB.fallback_font, Vector2(280, 210), "WHERE FAITH BECAME AN INSTRUMENT", HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color("#665860"))
-    draw_rect(Rect2(1130, 330, 200, 190), Color("#30232c"))
-    draw_circle(Vector2(1230, 385), 46, Color("#70454f", 0.35))
