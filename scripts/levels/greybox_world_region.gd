@@ -962,16 +962,36 @@ func _create_boundaries() -> void:
 		add_child(wall)
 		index += 1
 func _ready_a5_assembly_child() -> void:
-	# Child rooms contribute only authored geometry and atmosphere drawing. The assembled root owns
-	# the single Hero, camera, HUD, region state, exits and save/respawn lifecycle.
-	# 组装子房间只提供合同定义的地形碰撞与绘制；主场景统一管理主角、镜头、HUD、出口和存档。
+	# A5 assembly children read collision geometry from their authored .tscn node trees.
+	# A5 组装子房间只读取场景树中的实体碰撞；这里不再创建地形节点。
 	a5_room_blocks.clear()
 	a5_room_floor_gaps.clear()
 	a5_room_floor_segments.clear()
+	platforms.clear()
 	floor_y = maxf(540.0, room_height - 180.0)
-	_configure_platforms()
-	_create_floor()
-	_configure_a5_room_blocks()
+	for child in get_children():
+		if not (child is StaticBody2D):
+			continue
+		var body := child as StaticBody2D
+		var collision := body.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if collision == null or not (collision.shape is RectangleShape2D):
+			continue
+		var shape := collision.shape as RectangleShape2D
+		match str(body.name):
+			var node_name := str(body.name)
+			if node_name.begins_with("A5RoomPlatform_"):
+				platforms.append(Rect2(body.position, shape.size))
+			elif node_name.begins_with("A5RoomRubble_"):
+				a5_room_blocks.append(Rect2(body.position, shape.size))
+			elif node_name.begins_with("A5RoomGround_"):
+				a5_room_floor_segments.append(Vector2(body.position.x, shape.size.x))
+	var cursor := 0.0
+	for segment in a5_room_floor_segments:
+		if segment.x > cursor:
+			a5_room_floor_gaps.append(Vector2(cursor, segment.x - cursor))
+		cursor = maxf(cursor, segment.x + segment.y)
+	if cursor < map_width:
+		a5_room_floor_gaps.append(Vector2(cursor, map_width - cursor))
 	queue_redraw()
 
 

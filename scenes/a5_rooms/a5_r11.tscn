@@ -1,13 +1,161 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=16 format=3]
 
-[ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource type="Script" path="res://scripts/levels/greybox_world_region.gd" id="1"]
 
-[node name="A5Room_R11" type="Node2D"]
+[node name="A5_R11" type="Node2D"]
 script = ExtResource("1")
 region_id = "A5"
-location_id = "a5_room_test_a5_r11"
-region_title = "mechanism - 修复炮桥的活动支撑，观察机关节奏后通过"
-map_width = 2560.0
-floor_y = 540.0
-room_height = 720.0
 room_id = "A5-R11"
+map_width = 2560
+room_height = 720
+floor_y = 540
+assembly_child_mode = true
+
+[sub_resource type="RectangleShape2D" id="A5Shape1"]
+size = Vector2(900, 40)
+
+[node name="A5RoomGround_00" type="StaticBody2D" parent="."]
+position = Vector2(0, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomGround_00"]
+position = Vector2(450, 560)
+shape = SubResource("A5Shape1")
+
+[sub_resource type="RectangleShape2D" id="A5Shape2"]
+size = Vector2(1340, 40)
+
+[node name="A5RoomGround_01" type="StaticBody2D" parent="."]
+position = Vector2(1220, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomGround_01"]
+position = Vector2(670, 560)
+shape = SubResource("A5Shape2")
+
+[sub_resource type="RectangleShape2D" id="A5Shape3"]
+size = Vector2(280, 18)
+
+[node name="A5RoomPlatform_001" type="StaticBody2D" parent="."]
+position = Vector2(70, 470)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomPlatform_001"]
+position = Vector2(140, 9)
+shape = SubResource("A5Shape3")
+one_way_collision = true
+
+[sub_resource type="RectangleShape2D" id="A5Shape4"]
+size = Vector2(200, 18)
+
+[node name="A5RoomPlatform_002" type="StaticBody2D" parent="."]
+position = Vector2(380, 395)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomPlatform_002"]
+position = Vector2(100, 9)
+shape = SubResource("A5Shape4")
+one_way_collision = true
+
+[sub_resource type="RectangleShape2D" id="A5Shape5"]
+size = Vector2(280, 18)
+
+[node name="A5RoomPlatform_003" type="StaticBody2D" parent="."]
+position = Vector2(630, 470)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomPlatform_003"]
+position = Vector2(140, 9)
+shape = SubResource("A5Shape5")
+one_way_collision = true
+
+[sub_resource type="RectangleShape2D" id="A5Shape6"]
+size = Vector2(200, 18)
+
+[node name="A5RoomPlatform_004" type="StaticBody2D" parent="."]
+position = Vector2(950, 395)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomPlatform_004"]
+position = Vector2(100, 9)
+shape = SubResource("A5Shape6")
+one_way_collision = true
+
+[sub_resource type="RectangleShape2D" id="A5Shape7"]
+size = Vector2(280, 18)
+
+[node name="A5RoomPlatform_005" type="StaticBody2D" parent="."]
+position = Vector2(1200, 470)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomPlatform_005"]
+position = Vector2(140, 9)
+shape = SubResource("A5Shape7")
+one_way_collision = true
+
+[sub_resource type="RectangleShape2D" id="A5Shape8"]
+size = Vector2(200, 18)
+
+[node name="A5RoomPlatform_006" type="StaticBody2D" parent="."]
+position = Vector2(1520, 395)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomPlatform_006"]
+position = Vector2(100, 9)
+shape = SubResource("A5Shape8")
+one_way_collision = true
+
+[sub_resource type="RectangleShape2D" id="A5Shape9"]
+size = Vector2(280, 18)
+
+[node name="A5RoomPlatform_007" type="StaticBody2D" parent="."]
+position = Vector2(1770, 470)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomPlatform_007"]
+position = Vector2(140, 9)
+shape = SubResource("A5Shape9")
+one_way_collision = true
+
+[sub_resource type="RectangleShape2D" id="A5Shape10"]
+size = Vector2(200, 18)
+
+[node name="A5RoomPlatform_008" type="StaticBody2D" parent="."]
+position = Vector2(2090, 395)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomPlatform_008"]
+position = Vector2(100, 9)
+shape = SubResource("A5Shape10")
+one_way_collision = true
+
+[sub_resource type="RectangleShape2D" id="A5Shape11"]
+size = Vector2(220, 18)
+
+[node name="A5RoomPlatform_009" type="StaticBody2D" parent="."]
+position = Vector2(2340, 470)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomPlatform_009"]
+position = Vector2(110, 9)
+shape = SubResource("A5Shape11")
+one_way_collision = true
+
+[sub_resource type="RectangleShape2D" id="A5Shape12"]
+size = Vector2(65, 38)
+
+[node name="A5RoomRubble_001" type="StaticBody2D" parent="."]
+position = Vector2(520, 502)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomRubble_001"]
+position = Vector2(32.5, 19)
+shape = SubResource("A5Shape12")
+
+[sub_resource type="RectangleShape2D" id="A5Shape13"]
+size = Vector2(90, 55)
+
+[node name="A5RoomRubble_002" type="StaticBody2D" parent="."]
+position = Vector2(1320, 485)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomRubble_002"]
+position = Vector2(45, 27.5)
+shape = SubResource("A5Shape13")
+
+[sub_resource type="RectangleShape2D" id="A5Shape14"]
+size = Vector2(75, 42)
+
+[node name="A5RoomRubble_003" type="StaticBody2D" parent="."]
+position = Vector2(2100, 498)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomRubble_003"]
+position = Vector2(37.5, 21)
+shape = SubResource("A5Shape14")
