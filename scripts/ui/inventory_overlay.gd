@@ -1,86 +1,21 @@
 extends CanvasLayer
 
 const ITEM_CATALOG = preload("res://scripts/core/item_catalog.gd")
+const ITEM_BUTTON_SCENE: PackedScene = preload("res://scenes/ui/inventory_item_button.tscn")
 
-var background: ColorRect
-var panel: ColorRect
-var title_label: Label
-var list_container: VBoxContainer
-var detail_name: Label
-var detail_body: Label
-var close_hint: Label
+@onready var background: ColorRect = $Background
+@onready var panel: ColorRect = $Background/Panel
+@onready var title_label: Label = $Background/Panel/TitleLabel
+@onready var list_container: VBoxContainer = $Background/Panel/ItemScroll/ListContainer
+@onready var detail_name: Label = $Background/Panel/DetailName
+@onready var detail_body: Label = $Background/Panel/DetailBody
+@onready var close_hint: Label = $Background/Panel/CloseHint
 var _previous_input_locked := false
 var _previous_paused := false
 var _selected_item_id := ""
 
 func _ready() -> void:
-    layer = 24
-    process_mode = Node.PROCESS_MODE_ALWAYS
-
-    background = ColorRect.new()
-    background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    background.color = Color("#07060b", 0.86)
-    background.visible = false
-    background.mouse_filter = Control.MOUSE_FILTER_STOP
-    add_child(background)
-
-    panel = ColorRect.new()
-    panel.position = Vector2(120, 64)
-    panel.size = Vector2(1040, 592)
-    panel.color = Color("#111018", 0.98)
-    background.add_child(panel)
-
-    title_label = Label.new()
-    title_label.position = Vector2(28, 20)
-    title_label.size = Vector2(984, 38)
-    title_label.text = "物品"
-    title_label.add_theme_font_size_override("font_size", 28)
-    title_label.add_theme_color_override("font_color", Color("#d6c7b2"))
-    panel.add_child(title_label)
-
-    var separator := ColorRect.new()
-    separator.position = Vector2(28, 68)
-    separator.size = Vector2(984, 2)
-    separator.color = Color("#554650")
-    panel.add_child(separator)
-
-    var scroll := ScrollContainer.new()
-    scroll.position = Vector2(28, 88)
-    scroll.size = Vector2(350, 430)
-    panel.add_child(scroll)
-
-    list_container = VBoxContainer.new()
-    list_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-    list_container.add_theme_constant_override("separation", 8)
-    scroll.add_child(list_container)
-
-    detail_name = Label.new()
-    detail_name.position = Vector2(410, 94)
-    detail_name.size = Vector2(590, 38)
-    detail_name.add_theme_font_size_override("font_size", 23)
-    detail_name.add_theme_color_override("font_color", Color("#d6c7b2"))
-    panel.add_child(detail_name)
-
-    detail_body = Label.new()
-    detail_body.position = Vector2(410, 145)
-    detail_body.size = Vector2(590, 420)
-    detail_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-    detail_body.add_theme_font_size_override("font_size", 18)
-    detail_body.add_theme_color_override("font_color", Color("#c0b6b2"))
-    panel.add_child(detail_body)
-
-    close_hint = Label.new()
-    close_hint.position = Vector2(28, 548)
-    close_hint.size = Vector2(984, 24)
-    close_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-    close_hint.text = "I / Esc  关闭"
-    close_hint.add_theme_font_size_override("font_size", 13)
-    close_hint.add_theme_color_override("font_color", Color("#756d72"))
-    panel.add_child(close_hint)
-
-    visible = true
-    background.visible = false
-
+	process_mode = Node.PROCESS_MODE_ALWAYS
 func open_inventory() -> void:
     _previous_input_locked = WorldState.input_locked
     _previous_paused = get_tree().paused
@@ -113,9 +48,7 @@ func _refresh_items() -> void:
         if definition.is_empty():
             continue
         var count := int(WorldState.inventory_items.get(item_id, 0))
-        var button := Button.new()
-        button.custom_minimum_size = Vector2(320, 46)
-        button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+        var button := ITEM_BUTTON_SCENE.instantiate() as Button
         button.text = "%s  ×%d" % [str(definition.get("display_name", item_id)), count]
         button.alignment = HORIZONTAL_ALIGNMENT_LEFT
         button.pressed.connect(_select_item.bind(item_id))
