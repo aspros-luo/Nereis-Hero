@@ -11,7 +11,7 @@ const SHORTCUT_UNLOCK_POINT_SCENE: PackedScene = preload("res://scenes/rooms/sho
 @onready var transition_manager: RoomTransitionManager = $TransitionManager
 
 @onready var player: CharacterBody2D = $Player
-@onready var camera: Camera2D = $Player/Camera2D
+@onready var camera: Camera2D = $Player/HeroCamera
 @onready var hud: CanvasLayer = $HUD
 var current_room: Node2D
 var room_data_by_id: Dictionary = {}
