@@ -27,7 +27,6 @@ size = Vector2(180, 20)
 [node name="Room_A3_R02" type="Node2D"]
 script = ExtResource("1")
 room_id = "A3-R02"
-authored_scene_mode = true
 
 [node name="Terrain_market_roof_01" type="StaticBody2D" parent="."]
 position = Vector2(0, 800)

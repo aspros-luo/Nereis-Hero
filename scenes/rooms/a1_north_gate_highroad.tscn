@@ -27,7 +27,6 @@ size = Vector2(470, 24)
 [node name="Room_A1_R03" type="Node2D"]
 script = ExtResource("1")
 room_id = "A1-R03"
-authored_scene_mode = true
 
 [node name="Terrain_gate_lower" type="StaticBody2D" parent="."]
 position = Vector2(0, 1000)
