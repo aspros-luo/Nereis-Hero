@@ -315,17 +315,28 @@ func _spawn_drop_transition(
 	target_spawn_side: String
 ) -> void:
 	var target_scene := _scene_path_for_room(target_room_id)
-	var area := AUTO_ROOM_TRANSITION_SCENE.instantiate() as Area2D
-	area.name = transition_name
+	# Fixed A2 drop areas are authored in the room .tscn files so their collision
+	# extents can be inspected and adjusted in the Godot editor. Keep a fallback for
+	# transitional/test rooms that do not yet contain an authored Area2D.
+	var area := get_node_or_null(transition_name) as Area2D
+	if area == null:
+		area = AUTO_ROOM_TRANSITION_SCENE.instantiate() as Area2D
+		area.name = transition_name
+		add_child(area)
 	area.position = Vector2(x, y)
 	area.collision_layer = 0
 	area.collision_mask = 1
+	area.monitoring = true
 	var shape := area.get_node("CollisionShape2D") as CollisionShape2D
 	var rectangle := shape.shape as RectangleShape2D
+	if rectangle == null:
+		push_error("[NEREIS][A2][ROOM][DROP_SHAPE_INVALID] room=%s area=%s" % [room_id, transition_name])
+		return
 	rectangle.size = Vector2(width, height)
 	shape.position = Vector2.ZERO
-	add_child(area)
-	area.body_entered.connect(_on_drop_transition_body_entered.bind(target_scene, target_spawn_side))
+	var callback := _on_drop_transition_body_entered.bind(target_scene, target_spawn_side)
+	if not area.body_entered.is_connected(callback):
+		area.body_entered.connect(callback)
 func _on_drop_transition_body_entered(body: Node2D, target_scene: String, target_spawn_side: String) -> void:
 	if body != hero or room_transition_locked or hero == null or hero.velocity.y <= 0.0:
 		return
