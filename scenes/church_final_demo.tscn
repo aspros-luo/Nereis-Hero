@@ -1,10 +1,50 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/church_final_demo.gd" id="1"]
-[ext_resource type="PackedScene" path="res://scenes/ui/ending_sequence_overlay.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/high_priest.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/king_guardian.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ending_sequence_overlay.tscn" id="7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_church_floor"]
+size = Vector2(4600, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_church_boundary"]
+size = Vector2(40, 720)
 
 [node name="ChurchFinalDemo" type="Node2D"]
+process_mode = 3
 script = ExtResource("1")
 
-[node name="EndingLayer" parent="." instance=ExtResource("2")]
+[node name="Ground" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(2200, 560)
+shape = SubResource("RectangleShape2D_church_floor")
+
+[node name="LeftBoundary" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftBoundary"]
+position = Vector2(-20, 360)
+shape = SubResource("RectangleShape2D_church_boundary")
+
+[node name="RightBoundary" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightBoundary"]
+position = Vector2(4420, 360)
+shape = SubResource("RectangleShape2D_church_boundary")
+
+[node name="Hero" parent="." instance=ExtResource("2")]
+position = Vector2(320, 540)
+
+[node name="HighPriest" parent="." instance=ExtResource("3")]
+position = Vector2(1900, 540)
+
+[node name="HUD" parent="." instance=ExtResource("4")]
+
+[node name="Narrative" parent="." instance=ExtResource("5")]
+
+[node name="EndingLayer" parent="." instance=ExtResource("7")]
 visible = false

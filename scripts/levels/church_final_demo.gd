@@ -1,102 +1,66 @@
 extends Node2D
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const HIGH_PRIEST_SCRIPT = preload("res://scripts/enemies/high_priest.gd")
-const KING_SCRIPT = preload("res://scripts/enemies/king_guardian.gd")
-
+const KING_SCENE: PackedScene = preload("res://scenes/enemies/king_guardian.tscn")
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 4400.0
 
-var hero: CharacterBody2D
-var camera: Camera2D
-var hud: CanvasLayer
-var narrative: CanvasLayer
+@onready var hero: CharacterBody2D = $Hero
+@onready var camera: Camera2D = $Hero/HeroCamera
+@onready var hud: CanvasLayer = $HUD
+@onready var narrative: CanvasLayer = $Narrative
+
 var boss: CharacterBody2D
-var phase := 0
+var phase := 1
 var epilogue_started := false
-var epilogue_elapsed := 0.0
 var ending_layer: CanvasLayer
 var ending_backdrop: ColorRect
 var ending_card: ColorRect
 var ending_title: Label
 var ending_body: Label
 var ending_prompt: Label
-var ending_stage := -1
+var ending_cg: Control
+var ending_stage := 0
 var ending_stage_elapsed := 0.0
 var ending_can_exit := false
-var ending_cg: Control
+
 
 func _ready() -> void:
-    process_mode = Node.PROCESS_MODE_ALWAYS
     WorldState.current_location = "church_final_demo"
-    _create_floor()
-    _create_boundaries()
-    _spawn_hero()
-    _spawn_hud()
-    _spawn_narrative()
-    _spawn_priest()
-    get_tree().create_timer(0.8).timeout.connect(_show_intro)
-    queue_redraw()
-
-func _spawn_hero() -> void:
-    hero = CharacterBody2D.new()
-    hero.set_script(HERO_SCRIPT)
-    hero.position = Vector2(320, FLOOR_Y)
-    hero.name = "Hero"
-    _add_character_collision(hero, 18.0, 48.0)
-    add_child(hero)
-
-    camera = Camera2D.new()
     camera.position_smoothing_enabled = true
     camera.position_smoothing_speed = 5.5
     camera.limit_left = 0
     camera.limit_top = 0
-    camera.limit_right = LEVEL_WIDTH
+    camera.limit_right = int(LEVEL_WIDTH)
     camera.limit_bottom = 720
-    hero.add_child(camera)
-
-func _spawn_hud() -> void:
-    hud = CanvasLayer.new()
-    hud.set_script(HUD_SCRIPT)
-    add_child(hud)
     hud.bind_hero(hero)
     hud.set_debug_visible(false)
 
-func _spawn_narrative() -> void:
-    narrative = CanvasLayer.new()
-    narrative.set_script(NARRATIVE_SCRIPT)
-    add_child(narrative)
-
-func _spawn_priest() -> void:
-    phase = 1
-    boss = CharacterBody2D.new()
-    boss.set_script(HIGH_PRIEST_SCRIPT)
-    boss.position = Vector2(1900, FLOOR_Y)
-    boss.name = "HighPriest"
-    _add_character_collision(boss, 24.0, 58.0)
-    add_child(boss)
+    boss = $HighPriest as CharacterBody2D
     boss.defeated.connect(_on_priest_defeated)
-    hud.bind_boss(boss)
     boss.phase_changed.connect(_on_priest_phase_changed)
+    hud.bind_boss(boss)
+    get_tree().create_timer(0.8).timeout.connect(_show_intro)
+    queue_redraw()
+
 
 func _spawn_king() -> void:
     phase = 3
-    boss = CharacterBody2D.new()
-    boss.set_script(KING_SCRIPT)
+    boss = KING_SCENE.instantiate() as CharacterBody2D
+    if boss == null:
+        push_error("Church ending: failed to instantiate KingGuardian scene")
+        return
     boss.position = Vector2(3420, FLOOR_Y)
     boss.name = "King"
-    _add_character_collision(boss, 26.0, 62.0)
     add_child(boss)
     boss.defeated.connect(_on_king_defeated)
     hud.bind_boss(boss)
     boss.phase_changed.connect(_on_king_phase_changed)
     narrative.show_message(
         "THE KING",
-        "The doors open.\n\n\"You think I did not know?\"\n\n\"I knew what they were doing. I knew what the Church had become.\nI only knew the alternative: the Kingdom falls.\"" ,
+        "The doors open.\n\n\"You think I did not know?\"\n\n\"I knew what they were doing. I knew what the Church had become.\nI only knew the alternative: the Kingdom falls.\"",
         7.0
     )
+
 
 func _on_priest_defeated() -> void:
     phase = 2
@@ -184,7 +148,6 @@ func _create_human_ending_overlay() -> void:
     ending_cg.call("setup", "human")
     ending_cg.call("play")
 
-
 func _show_human_ending_stage(stage: int) -> void:
     ending_stage = clampi(stage, 0, 3)
     ending_stage_elapsed = 0.0
@@ -237,44 +200,6 @@ func _show_intro() -> void:
         "The High Priest is waiting.\n\nHe does not look surprised to see you.",
         4.5
     )
-
-func _create_floor() -> void:
-    var floor := StaticBody2D.new()
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(LEVEL_WIDTH + 200.0, 40.0)
-    shape.shape = rectangle
-    shape.position = Vector2(LEVEL_WIDTH * 0.5, FLOOR_Y + 20.0)
-    floor.add_child(shape)
-    add_child(floor)
-
-func _create_boundaries() -> void:
-    var left := StaticBody2D.new()
-    var ls := CollisionShape2D.new()
-    var lr := RectangleShape2D.new()
-    lr.size = Vector2(40, 720)
-    ls.shape = lr
-    ls.position = Vector2(-20, 360)
-    left.add_child(ls)
-    add_child(left)
-
-    var right := StaticBody2D.new()
-    var rs := CollisionShape2D.new()
-    var rr := RectangleShape2D.new()
-    rr.size = Vector2(40, 720)
-    rs.shape = rr
-    rs.position = Vector2(LEVEL_WIDTH + 20.0, 360)
-    right.add_child(rs)
-    add_child(right)
-
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
-    var collision := CollisionShape2D.new()
-    var capsule := CapsuleShape2D.new()
-    capsule.radius = radius
-    capsule.height = height
-    collision.shape = capsule
-    collision.position = Vector2(0, -height * 0.5)
-    character.add_child(collision)
 
 func _unhandled_input(event: InputEvent) -> void:
     if epilogue_started:
