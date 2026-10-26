@@ -258,14 +258,8 @@ func _draw_security_shutter(gate_x: float) -> void:
 func _draw() -> void:
 	# Static backdrop, floor strip and illustrated props are authored as TextureRect nodes in escape_prologue.tscn.
 	# Only state-dependent shutters and small foreground marks remain in this draw pass.
-	# Collision-backed tutorial ledges are also drawn so the optional route reads clearly.
-	# 将具有真实碰撞的教学平台同步绘制出来，让可选路线清晰可读。
-	for ledge in _get_traversal_route_rects():
-		draw_rect(ledge, Color("#40323d"))
-		draw_rect(Rect2(ledge.position.x, ledge.position.y, ledge.size.x, 3.0), Color("#947984"))
-		# Broken edge marks keep the route readable without drawing a false continuous ramp.
-		for seam_x in [ledge.position.x + 28.0, ledge.position.x + 76.0, ledge.position.x + 104.0]:
-			draw_line(Vector2(seam_x, ledge.position.y + 4.0), Vector2(seam_x - 5.0, ledge.position.y + 12.0), Color("#241f29"), 1.5)
+	# Traversal platform visuals are children of the StaticBody2D nodes in the scene tree.
+	# The editor and runtime now share the same visible platform geometry.
 
 	# Cold surgical shafts and suspended cables establish depth before the room's props are drawn.
 	# 冷色手术灯柱与悬垂线缆先建立空间纵深，再绘制房间内的物件。
