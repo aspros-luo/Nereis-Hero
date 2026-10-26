@@ -189,17 +189,46 @@ func _spawn_exit_door_at_marker(
 	if marker_position.x < 0.0 or marker_position.y < 0.0:
 		push_error("[NEREIS][A2][ROOM][EXIT_ANCHOR_INVALID] room=%s marker=%s" % [room_id, marker_name])
 		return
-	_spawn_exit_door(
-		marker_position.x,
-		prompt_text,
-		target_location,
-		target_scene,
-		spawn_side,
-		enabled,
-		unlock_once_flag_id,
-		opened_prompt_text,
-		marker_position.y
-	)
+	var authored_door := get_node_or_null("Door_" + marker_name) as Area2D
+	if authored_door == null:
+		# Compatibility fallback for rooms not yet migrated to authored door instances.
+		_spawn_exit_door(
+			marker_position.x,
+			prompt_text,
+			target_location,
+			target_scene,
+			spawn_side,
+			enabled,
+			unlock_once_flag_id,
+			opened_prompt_text,
+			marker_position.y
+		)
+		return
+
+	# Fixed exits are instances in the .tscn scene tree. Runtime only applies their
+	# destination and progression contract; it does not create duplicate Area2D nodes.
+	authored_door.position = marker_position
+	authored_door.set("prompt_text", prompt_text)
+	authored_door.set("enabled", enabled)
+	authored_door.set("unlock_once_flag_id", unlock_once_flag_id)
+	authored_door.set("opened_prompt_text", opened_prompt_text)
+	authored_door.set_meta("p5_1_exit_contract", true)
+	authored_door.set_meta("p5_1_target_location", target_location)
+	authored_door.set_meta("p5_1_target_region", _region_id_for_location(target_location))
+	authored_door.set_meta("p5_1_target_scene", target_scene)
+	authored_door.set_meta("p5_1_spawn_side", spawn_side)
+	authored_door.set_meta("p5_1_enabled", enabled)
+	var callback := _on_exit_interacted.bind(target_location, target_scene, spawn_side)
+	if not authored_door.interacted.is_connected(callback):
+		authored_door.interacted.connect(callback)
+	var exit_kind := "locked" if not enabled else ("shortcut" if not unlock_once_flag_id.is_empty() else "exit")
+	debug_exit_markers.append({
+		"position": authored_door.position,
+		"label": _debug_route_label(target_location),
+		"kind": exit_kind,
+		"condition": unlock_once_flag_id if not unlock_once_flag_id.is_empty() else ("需从另一侧开启" if not enabled else "")
+	})
+	queue_redraw()
 
 
 func _spawn_drop_transition_at_marker(
