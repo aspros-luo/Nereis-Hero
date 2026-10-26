@@ -191,7 +191,7 @@ def main() -> int:
                 failures += 1
 
     transition_builder = re.search(
-        r"func _build_room_transitions\([^\n]*\):(?P<body>.*?)(?=\nfunc )",
+        r"func _build_room_transitions[^\n]*:\n(?P<body>.*?)(?=\nfunc )",
         world_source, re.S
     )
     if not transition_builder:
