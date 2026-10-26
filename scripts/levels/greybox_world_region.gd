@@ -3114,8 +3114,7 @@ func _spawn_a11_maintenance_gate(x: float) -> void:
 func _spawn_a11_chapel_gate(x: float) -> void:
 	# The cathedral approach is an alternate entrance; it still requires the Mite-related outer-god fact.
 	# 大圣堂是另一条入口，但仍然要求蜜忒相关的外神共鸣事实。
-	var gate := Node2D.new()
-	gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
 	gate.name = "SilentChapelDeepResearchGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "C19"
@@ -3143,8 +3142,7 @@ func _on_a11_gate_opened(secret_id: String) -> void:
 	)
 
 func _spawn_h08_gate(x: float) -> void:
-	var gate := Node2D.new()
-	gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
 	gate.name = "PrimordialHollowGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H08"
@@ -3176,8 +3174,7 @@ func _on_h08_gate_opened(_secret_id: String) -> void:
 
 
 func _spawn_a9_mirror_gate(x: float) -> void:
-	var gate := Node2D.new()
-	gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
 	gate.name = "ResonanceMirrorStreetGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H07"
@@ -3221,8 +3218,7 @@ func _spawn_local_resonance_routes() -> void:
 			route.bridge_y = 386.0
 			route.prompt_text = "E  ANCHOR THE BELLGRAVE CANOPY"
 		"A3":
-			route = Node2D.new()
-			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+			route = LOCAL_RESONANCE_ROUTE_SCENE.instantiate() as Node2D
 			route.name = "ThirdStreetResonanceBridge"
 			route.route_id = "A3_THIRD_STREET_ROOFLINE"
 			route.required_resonance = 28
@@ -3233,8 +3229,7 @@ func _spawn_local_resonance_routes() -> void:
 		"A4":
 			# A dry aqueduct span appears above the old reservoir only after the buried stone answers.
 			# 旧水库上方的干涸渡槽只有在埋藏石层回应鸣响后才显现。
-			route = Node2D.new()
-			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+			route = LOCAL_RESONANCE_ROUTE_SCENE.instantiate() as Node2D
 			route.name = "OldStoneAqueductRoute"
 			route.route_id = "A4_OLD_STONE_AQUEDUCT"
 			route.required_resonance = 36
@@ -3245,8 +3240,7 @@ func _spawn_local_resonance_routes() -> void:
 		"A5":
 			# A buried standard marks a trench crossing erased from the fortress survey.
 			# 被埋没的军旗标记着堡垒测绘图中被删去的战壕横渡路线。
-			route = Node2D.new()
-			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+			route = LOCAL_RESONANCE_ROUTE_SCENE.instantiate() as Node2D
 			route.name = "BuriedStandardTrenchRoute"
 			route.route_id = "A5_BURIED_STANDARD_CROSSING"
 			route.required_resonance = 24
@@ -3257,8 +3251,7 @@ func _spawn_local_resonance_routes() -> void:
 		"A6":
 			# The silent bell's upper service walk reconnects the tower stair to the outer cloister.
 			# 无声钟的高位检修道重新连接钟塔阶梯与外侧回廊。
-			route = Node2D.new()
-			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+			route = LOCAL_RESONANCE_ROUTE_SCENE.instantiate() as Node2D
 			route.name = "SilentBellServiceWalk"
 			route.route_id = "A6_SILENT_BELL_SERVICE_WALK"
 			route.required_resonance = 32
@@ -3269,8 +3262,7 @@ func _spawn_local_resonance_routes() -> void:
 		"A7":
 			# A maintenance catwalk bridges two cell-block levels without opening the royal tomb gate.
 			# 维修栈道横接两层牢房，但不会打开王墓主门。
-			route = Node2D.new()
-			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+			route = LOCAL_RESONANCE_ROUTE_SCENE.instantiate() as Node2D
 			route.name = "PrisonMaintenanceCrosswalk"
 			route.route_id = "A7_PRISON_MAINTENANCE_CROSSWALK"
 			route.required_resonance = 30
@@ -3281,8 +3273,7 @@ func _spawn_local_resonance_routes() -> void:
 		"A8":
 			# The erased regent gallery spans the upper tomb passage, linking the name-wall ledge to the return gallery.
 			# 被抹去的摄政王墓廊横跨王墓上层，连接王名墙平台与回程廊道。
-			route = Node2D.new()
-			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+			route = LOCAL_RESONANCE_ROUTE_SCENE.instantiate() as Node2D
 			route.name = "ErasedRegentGalleryRoute"
 			route.route_id = "A8_ERASED_REGENT_GALLERY"
 			route.required_resonance = 40
@@ -3293,8 +3284,7 @@ func _spawn_local_resonance_routes() -> void:
 		"A9":
 			# A rain-reflection roofwalk bridges the abandoned outer-ring homes without opening the royal transport gate.
 			# 雨中倒影屋顶道横接王城外环的废弃民居，但不会开启王室运输门。
-			route = Node2D.new()
-			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+			route = LOCAL_RESONANCE_ROUTE_SCENE.instantiate() as Node2D
 			route.name = "RainReflectionRoofwalk"
 			route.route_id = "A9_RAIN_REFLECTION_ROOFWALK"
 			route.required_resonance = 44
@@ -3305,8 +3295,7 @@ func _spawn_local_resonance_routes() -> void:
 		"A10":
 			# The choir gallery bridges the staggered upper chapel ledges; it does not replace the cathedral exits or C19.
 			# 唱诗席高廊横接错层的礼拜堂高台，不替代大圣堂出口或 C19 深层入口。
-			route = Node2D.new()
-			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+			route = LOCAL_RESONANCE_ROUTE_SCENE.instantiate() as Node2D
 			route.name = "ChoirlessUpperGallery"
 			route.route_id = "A10_CHOIRLESS_UPPER_GALLERY"
 			route.required_resonance = 48
@@ -3317,8 +3306,7 @@ func _spawn_local_resonance_routes() -> void:
 		"A11":
 			# An upper span reconnects two ancient observation ledges above the later Church laboratory.
 			# 高位横桥重连后建教会实验室上方的两处古老观测台。
-			route = Node2D.new()
-			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+			route = LOCAL_RESONANCE_ROUTE_SCENE.instantiate() as Node2D
 			route.name = "SecondObserverSpan"
 			route.route_id = "A11_SECOND_OBSERVER_SPAN"
 			route.required_resonance = 56
@@ -3329,8 +3317,7 @@ func _spawn_local_resonance_routes() -> void:
 		"A12":
 			# The crown wall offers a risky upper traverse but leaves the throne approach and ending gate untouched.
 			# 王冠城墙提供高风险上层横道，但不改变王座入口与结局门槛。
-			route = Node2D.new()
-			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+			route = LOCAL_RESONANCE_ROUTE_SCENE.instantiate() as Node2D
 			route.name = "CrownWallWalk"
 			route.route_id = "A12_CROWN_WALL_WALK"
 			route.required_resonance = 62
@@ -3422,8 +3409,7 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
 	print("[NEREIS][MAP][LOCAL_ROUTE] opened id=%s" % route_id)
 
 func _spawn_h02_gate(x: float, y: float = -1.0) -> void:
-	var gate := Node2D.new()
-	gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
 	gate.name = "HiddenBellChamberGate"
 	gate.position = Vector2(x, floor_y if y < 0.0 else y)
 	gate.secret_id = "H02"
@@ -3436,8 +3422,7 @@ func _spawn_h02_gate(x: float, y: float = -1.0) -> void:
 	debug_exit_markers.append({"position": gate.position, "label": "H02 倒响钟室", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _spawn_h03_gate(x: float) -> void:
-	var gate := Node2D.new()
-	gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
 	gate.name = "ErasedThirdStreetGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H03"
@@ -3450,8 +3435,7 @@ func _spawn_h03_gate(x: float) -> void:
 	debug_exit_markers.append({"position": gate.position, "label": "H03 被删去的第三街", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _spawn_h04_gate(x: float) -> void:
-	var gate := Node2D.new()
-	gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
 	gate.name = "ReflectedStairwellGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H04"
@@ -3465,8 +3449,7 @@ func _spawn_h04_gate(x: float) -> void:
 	debug_exit_markers.append({"position": gate.position, "label": "H04 水面背后的楼梯", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _spawn_h05_gate(x: float) -> void:
-	var gate := Node2D.new()
-	gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
 	gate.name = "SilentBellRoomGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H05"
@@ -3480,8 +3463,7 @@ func _spawn_h05_gate(x: float) -> void:
 	debug_exit_markers.append({"position": gate.position, "label": "H05 无声钟室", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _spawn_h06_gate(x: float) -> void:
-	var gate := Node2D.new()
-	gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
 	gate.name = "ErasedRoyalNameGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H06"
@@ -3519,8 +3501,7 @@ func _on_optional_hidden_gate_opened(secret_id: String) -> void:
 func _spawn_a4_hidden_well_gate(x: float) -> void:
 	# This is the far-side entrance to H01, not a bypass: it still requires active Resonance Sight.
 	# A4 另一侧井门也使用同一 H01 状态，但首次发现仍必须通过灵视条件。
-	var gate := Node2D.new()
-	gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
 	gate.name = "ResonanceWellGateFromA4"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H01"
@@ -3765,15 +3746,6 @@ func _on_hero_defeated() -> void:
 	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
 	WorldState.input_locked = false
 	respawning = false
-
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
-	var collision := CollisionShape2D.new()
-	var capsule := CapsuleShape2D.new()
-	capsule.radius = radius
-	capsule.height = height
-	collision.shape = capsule
-	collision.position = Vector2(0, -height * 0.5)
-	character.add_child(collision)
 
 func _region_backdrop_texture() -> Texture2D:
 	match region_id:
