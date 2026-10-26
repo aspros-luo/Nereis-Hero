@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
-const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
+const HIT_SPARK_SCENE: PackedScene = preload("res://scenes/effects/hit_spark.tscn")
+const DEATH_BURST_SCENE: PackedScene = preload("res://scenes/effects/death_burst.tscn")
 
 signal defeated
 signal attack_telegraphed
@@ -72,7 +72,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
     stun_time = 0.15
     hit_flash = 0.1
 
-    var spark: Node2D = HIT_SPARK_SCRIPT.new()
+    var spark: Node2D = HIT_SPARK_SCENE.instantiate() as Node2D
     spark.global_position = global_position + Vector2(0, -40)
     get_parent().add_child(spark)
 
@@ -80,7 +80,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
         velocity.x = sign(global_position.x - source.global_position.x) * 100.0
 
     if health <= 0:
-        var burst: Node2D = DEATH_BURST_SCRIPT.new()
+        var burst: Node2D = DEATH_BURST_SCENE.instantiate() as Node2D
         burst.global_position = global_position + Vector2(0, -40)
         get_parent().add_child(burst)
         burst.call("setup", 20.0)
