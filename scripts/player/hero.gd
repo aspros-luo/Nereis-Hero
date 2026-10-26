@@ -2,11 +2,11 @@ extends CharacterBody2D
 
 const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
 const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
-const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
-const SLASH_ARC_SCRIPT = preload("res://scripts/effects/slash_arc.gd")
-const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
+const HIT_SPARK_SCENE: PackedScene = preload("res://scenes/effects/hit_spark.tscn")
+const SLASH_ARC_SCENE: PackedScene = preload("res://scenes/effects/slash_arc.tscn")
+const DEATH_BURST_SCENE: PackedScene = preload("res://scenes/effects/death_burst.tscn")
 const HERO_SYSTEM_SCRIPT = preload("res://scripts/player/hero_system.gd")
-const ECHO_PULSE_SCRIPT = preload("res://scripts/effects/echo_pulse.gd")
+const ECHO_PULSE_SCENE: PackedScene = preload("res://scenes/effects/echo_pulse.tscn")
 const GRAPPLE_ANCHOR_SCRIPT = preload("res://scripts/systems/grapple_anchor.gd")
 const RESONANCE_TARGET_SCRIPT = preload("res://scripts/systems/resonance_hidden_target.gd")
 const DEBUG_WALL_SCRIPT = preload("res://scripts/systems/debug_traversal_wall.gd")
@@ -703,7 +703,7 @@ func _perform_eldritch_echo() -> void:
 	_log("TECHNIQUE", "Eldritch Echo invoked; cooldown=%.1f" % ECHO_COOLDOWN)
 
 func _release_eldritch_echo() -> void:
-	var pulse: Node2D = ECHO_PULSE_SCRIPT.new()
+	var pulse: Node2D = ECHO_PULSE_SCENE.instantiate() as Node2D
 	pulse.global_position = global_position + Vector2(0.0, -30.0)
 	get_parent().add_child(pulse)
 	var affected := 0
@@ -717,7 +717,7 @@ func _release_eldritch_echo() -> void:
 	_log("TECHNIQUE", "Eldritch Echo resolved; affected_enemies=%d" % affected)
 
 func _spawn_combat_slash_arc(step: int, short_blade: bool) -> void:
-	var effect: Node2D = SLASH_ARC_SCRIPT.new()
+	var effect: Node2D = SLASH_ARC_SCENE.instantiate() as Node2D
 	effect.global_position = global_position
 	get_parent().add_child(effect)
 	effect.call("setup", facing, step, short_blade, false, "")
@@ -1134,13 +1134,12 @@ func _spawn_slash_arc() -> void:
 	effect.call("setup", facing, combo_step, hero_system != null and hero_system.is_short_blade(), iaijutsu_active, variant)
 
 func _spawn_hit_spark() -> void:
-	var effect := Node2D.new()
-	effect.set_script(HIT_SPARK_SCRIPT)
+	var effect := HIT_SPARK_SCENE.instantiate() as Node2D
 	effect.global_position = global_position + Vector2(0, -34)
 	get_parent().add_child(effect)
 
 func _spawn_death_burst() -> void:
-	var effect: Node2D = DEATH_BURST_SCRIPT.new()
+	var effect: Node2D = DEATH_BURST_SCENE.instantiate() as Node2D
 	effect.global_position = global_position + Vector2(0, -38)
 	get_parent().add_child(effect)
 	effect.call("setup", 18.0)
