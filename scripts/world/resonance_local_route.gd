@@ -78,15 +78,15 @@ func _hero_over_bridge() -> bool:
     )
 
 func _sync_bridge_collision() -> void:
-	var should_exist := revealed or opened_permanently or _hero_over_bridge()
-	var collision := bridge_body.get_node("CollisionShape2D") as CollisionShape2D
-	var rectangle := collision.shape as RectangleShape2D
-	bridge_body.position = Vector2(bridge_start_x, bridge_y)
-	rectangle.size = Vector2(bridge_end_x - bridge_start_x, 18.0)
-	collision.position = rectangle.size * 0.5
-	collision.one_way_collision = true
-	collision.disabled = not should_exist
-	bridge_body.visible = should_exist
+    var should_exist := revealed or opened_permanently or _hero_over_bridge()
+    var collision := bridge_body.get_node("CollisionShape2D") as CollisionShape2D
+    var rectangle := collision.shape as RectangleShape2D
+    bridge_body.position = Vector2(bridge_start_x, bridge_y)
+    rectangle.size = Vector2(bridge_end_x - bridge_start_x, 18.0)
+    collision.position = rectangle.size * 0.5
+    collision.one_way_collision = true
+    collision.disabled = not should_exist
+    bridge_body.visible = should_exist
 func _unhandled_input(event: InputEvent) -> void:
     if (
         WorldState.input_locked
