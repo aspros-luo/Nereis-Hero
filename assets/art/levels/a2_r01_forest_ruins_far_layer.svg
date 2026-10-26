@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1792" height="1200" viewBox="0 0 1792 1200">
+<title>A2 R01 — separated distant forest and atmospheric depth layer</title>
+<desc>Original distant forest, fog, ruined towers and volumetric light, separated from the main environment illustration for independent depth tuning.</desc>
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0.95" y2="1">
+    <stop offset="0" stop-color="#07100f"/><stop offset=".32" stop-color="#132b2a"/><stop offset=".65" stop-color="#31534e"/><stop offset="1" stop-color="#102221"/>
+  </linearGradient>
+  <linearGradient id="mist" x1="0" y1="0" x2="1" y2=".3">
+    <stop offset="0" stop-color="#b3d8ca" stop-opacity="0"/><stop offset=".48" stop-color="#b7e0d5" stop-opacity=".34"/><stop offset=".75" stop-color="#9acbc4" stop-opacity=".2"/><stop offset="1" stop-color="#8fb9b7" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="stone" x1="0" y1="0" x2=".18" y2="1">
+    <stop offset="0" stop-color="#6c8270"/><stop offset=".09" stop-color="#3c5548"/><stop offset=".3" stop-color="#263a35"/><stop offset=".72" stop-color="#172523"/><stop offset="1" stop-color="#091311"/>
+  </linearGradient>
+  <linearGradient id="stoneLight" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#95a87b"/><stop offset=".16" stop-color="#647b58"/><stop offset=".34" stop-color="#384d40"/><stop offset="1" stop-color="#182724"/>
+  </linearGradient>
+  <linearGradient id="root" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#5f5035"/><stop offset=".25" stop-color="#3e3d2a"/><stop offset=".62" stop-color="#242d22"/><stop offset="1" stop-color="#0d1814"/>
+  </linearGradient>
+  <linearGradient id="water" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#183b3c"/><stop offset=".45" stop-color="#4f9894"/><stop offset=".7" stop-color="#1f6266"/><stop offset="1" stop-color="#102d32"/>
+  </linearGradient>
+  <linearGradient id="fall" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#7bc6c2" stop-opacity=".18"/><stop offset=".28" stop-color="#a7e9df" stop-opacity=".82"/><stop offset=".48" stop-color="#4eaaa9" stop-opacity=".45"/><stop offset=".72" stop-color="#d4fff0" stop-opacity=".8"/><stop offset="1" stop-color="#5ca6a2" stop-opacity=".14"/>
+  </linearGradient>
+  <linearGradient id="ray" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#d5f7d7" stop-opacity=".22"/><stop offset="1" stop-color="#b6e7d0" stop-opacity="0"/>
+  </linearGradient>
+  <pattern id="rockGrain" width="74" height="58" patternUnits="userSpaceOnUse">
+    <path d="M8 11l13 -4 8 6 -5 8 -15 -2z M44 35l11 -6 9 4 -3 10 -13 2z M29 49l5 -4 5 3" fill="#a2b49a" opacity=".08"/>
+    <path d="M3 32l10 -2 M59 12l8 -3 M17 54l6 -2" fill="none" stroke="#050d0c" stroke-width="2" opacity=".26"/>
+  </pattern>
+  <pattern id="moss" width="42" height="20" patternUnits="userSpaceOnUse">
+    <path d="M1 8q5 -7 10 0t10 -1t10 1t10 -2" fill="none" stroke="#a3bd76" stroke-width="2" opacity=".42"/>
+    <circle cx="8" cy="15" r="1.8" fill="#a6c77e" opacity=".4"/><circle cx="31" cy="5" r="1.2" fill="#d1d59a" opacity=".35"/>
+  </pattern>
+  <g id="leaf">
+    <path d="M0 0Q8 -13 22 -6Q17 7 0 0Z" fill="#31553b"/>
+    <path d="M1 0L18 -5" fill="none" stroke="#78965a" stroke-width="1.5" opacity=".8"/>
+  </g>
+  <g id="stoneBlock">
+    <path d="M0 4l5 -4 22 1 5 5 -3 12 -24 1 -5 -5z" fill="#263a32" stroke="#71826a" stroke-width="1"/>
+    <path d="M5 2l17 1M4 8l8 1" stroke="#a5b08b" stroke-width="1" opacity=".45"/>
+  </g>
+  <g id="spire">
+    <path d="M0 0L7 -42L14 0L11 -5L7 -28L3 -5Z" fill="#253a38" stroke="#627c71" stroke-width="1"/>
+    <path d="M4 -8L7 -42L10 -8" fill="none" stroke="#95b7a1" stroke-width="1" opacity=".6"/>
+  </g>
+</defs>
+
+<!-- Deep mist forest -->
+<rect width="1792" height="1200" fill="url(#sky)"/>
+<path d="M0 230Q210 120 410 226T820 205T1230 172T1792 210V610H0Z" fill="#1c3933" opacity=".72"/>
+<path d="M0 350Q180 270 370 330T730 290T1100 345T1480 275T1792 320V720H0Z" fill="#25453c" opacity=".55"/>
+<path d="M0 180Q250 120 460 205T880 160T1310 205T1792 120V470H0Z" fill="url(#mist)"/>
+<!-- Distant forest stems and valley -->
+<g fill="none" stroke-linecap="round">
+  <path d="M100 0Q80 170 122 390M170 20Q220 190 178 430M340 0Q310 210 372 470M468 0Q500 180 455 370M590 0Q570 180 615 470M690 0Q735 190 700 410" stroke="#172c27" stroke-width="27" opacity=".8"/>
+  <path d="M1120 0Q1090 170 1128 470M1210 0Q1240 200 1200 420M1485 0Q1450 180 1500 420M1630 0Q1670 210 1620 455M1740 0Q1710 180 1750 400" stroke="#10231f" stroke-width="30" opacity=".8"/>
+  <path d="M80 420Q170 300 240 420T390 410T540 360T700 420T880 390T1050 435T1270 365T1490 415T1720 370" stroke="#73927b" stroke-width="3" opacity=".14"/>
+</g>
+<!-- Far ruined towers in the fog -->
+<g opacity=".64" fill="#172d2d" stroke="#66877e" stroke-width="2">
+  <path d="M1290 440V260L1310 260V226L1324 226V183L1341 222V260H1356V440Z"/>
+  <path d="M1372 435V198L1392 198V159L1410 159V125L1425 164V198H1444V435Z"/>
+  <path d="M1456 455V236L1477 236V203L1491 203V166L1507 207V236H1525V455Z"/>
+  <path d="M1540 445V285L1560 285V250L1573 250V220L1588 253V285H1605V445Z"/>
+  <path d="M1630 450V315L1648 315V287L1663 287V260L1677 290V315H1693V450Z"/>
+  <path d="M1265 445L1265 390L1240 390L1240 365L1275 365L1275 345L1290 345L1290 445Z"/>
+</g>
+<g fill="none" stroke="#b9d8c8" stroke-width="2" opacity=".25">
+  <path d="M1310 280v150M1392 205v230M1477 280v165M1560 315v130M1648 340v110"/>
+  <path d="M1274 388h16M1356 261h16M1444 238h12M1525 291h15M1605 323h25"/>
+</g>
+<!-- Volumetric light -->
+<path d="M840 0L950 0L1140 510L1045 510Z" fill="url(#ray)"/>
+<path d="M1040 0L1085 0L1280 550L1230 550Z" fill="url(#ray)" opacity=".55"/>
+<path d="M600 0L640 0L820 370L780 370Z" fill="url(#ray)" opacity=".42"/>
+</svg>
