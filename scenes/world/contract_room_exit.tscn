@@ -18,3 +18,22 @@ position = Vector2(0, -44)
 shape = SubResource("RectangleShape2D_contract_exit")
 
 [node name="Prompt" parent="." instance=ExtResource("2")]
+
+[node name="DoorwayVisual" type="Node2D" parent="."]
+position = Vector2(0, -30)
+z_index = -1
+
+[node name="LeftPillar" type="Line2D" parent="DoorwayVisual"]
+points = PackedVector2Array(Vector2(-28, 30), Vector2(-28, 0))
+width = 3.0
+default_color = Color(0.486275, 0.411765, 0.368627, 0.8)
+
+[node name="RightPillar" type="Line2D" parent="DoorwayVisual"]
+points = PackedVector2Array(Vector2(28, 30), Vector2(28, 0))
+width = 3.0
+default_color = Color(0.486275, 0.411765, 0.368627, 0.8)
+
+[node name="Arch" type="Line2D" parent="DoorwayVisual"]
+points = PackedVector2Array(Vector2(-28, 0), Vector2(-24, -12), Vector2(-16, -22), Vector2(0, -28), Vector2(16, -22), Vector2(24, -12), Vector2(28, 0))
+width = 3.0
+default_color = Color(0.768627, 0.701961, 0.545098, 0.8)
