@@ -1,6 +1,5 @@
 extends CharacterBody2D
 
-const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
 
 signal defeated
@@ -22,10 +21,7 @@ func _ready() -> void:
     collision_layer = 0
     collision_mask = 0
 
-    var hurtbox := Area2D.new()
-    hurtbox.name = "Hurtbox"
-    hurtbox.set_script(HURTBOX_SCRIPT)
-    add_child(hurtbox)
+    var hurtbox := $Hurtbox as Area2D
     hurtbox.setup(self, Vector2(34, 66), Vector2(0, -32))
     queue_redraw()
 
