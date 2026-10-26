@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/high_priest.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/combat/hitbox.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/combat/hurtbox.tscn" id="3"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_high_priest"]
+radius = 24.0
+height = 58.0
+
+[node name="ParadiseHighPriest" type="CharacterBody2D"]
+script = ExtResource("1")
+boss_display_name = "HIGH PRIEST"
+max_health = 190
+health = 190
+phase = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -29)
+shape = SubResource("CapsuleShape2D_high_priest")
+
+[node name="AttackHitbox" parent="." instance=ExtResource("2")]
+
+[node name="Hurtbox" parent="." instance=ExtResource("3")]

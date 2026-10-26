@@ -8,13 +8,13 @@ signal attack_telegraphed
 signal phase_changed(phase: int)
 
 const MAX_HEALTH := 320
-var max_health := MAX_HEALTH
-var boss_display_name := "HIGH PRIEST"
+@export var max_health := MAX_HEALTH
+@export var boss_display_name := "HIGH PRIEST"
 const PHASE_TWO_THRESHOLD := 160
 const MOVE_SPEED := 72.0
 
-var health := MAX_HEALTH
-var phase := 1
+@export var health := MAX_HEALTH
+@export var phase := 1
 var cooldown := 0.0
 var windup := 0.0
 var released := false

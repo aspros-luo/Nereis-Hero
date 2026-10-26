@@ -1,29 +1,23 @@
 extends Node2D
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
-const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
-const HIGH_PRIEST_SCRIPT = preload("res://scripts/enemies/high_priest.gd")
-const KING_SCRIPT = preload("res://scripts/enemies/king_guardian.gd")
+const KING_SCENE: PackedScene = preload("res://scenes/enemies/king_guardian.tscn")
 
 const FLOOR_Y := 540.0
 const WIDTH := 2600.0
 
-var hero: CharacterBody2D
-var mite: Node2D
-var camera: Camera2D
-var narrative: CanvasLayer
-var hud: CanvasLayer
-var audio_director: Node
+@onready var hero: CharacterBody2D = $Hero
+@onready var camera: Camera2D = $Hero/HeroCamera
+@onready var mite: Node2D = $Mite
+@onready var narrative: CanvasLayer = $Narrative
+@onready var hud: CanvasLayer = $HUD
+@onready var audio_director: Node = $AudioDirector
+@onready var ending_layer: CanvasLayer = $EndingLayer
+
 var paradise := 0.0
 var merged := false
 var elapsed := 0.0
-var fade: ColorRect
 var boss: CharacterBody2D
 var boss_stage := 0
-var ending_layer: CanvasLayer
 var ending_backdrop: ColorRect
 var ending_card: ColorRect
 var ending_title: Label
@@ -35,20 +29,49 @@ var ending_stage_elapsed := 0.0
 var ending_can_exit := false
 var ending_cg: Control
 
+
 func _ready() -> void:
-    process_mode = Node.PROCESS_MODE_ALWAYS
     WorldState.current_location = "ending_paradise_demo"
+    camera.position_smoothing_enabled = true
+    camera.position_smoothing_speed = 4.0
+    camera.limit_left = 0
+    camera.limit_top = 0
+    camera.limit_right = int(WIDTH)
+    camera.limit_bottom = 720
+    hud.bind_hero(hero)
+    hud.set_story_mode("ETERNAL GARDEN", "THERE IS NOWHERE ELSE TO GO")
 
-    _create_floor()
-    _create_boundaries()
-    _spawn_hero()
-    _spawn_mite()
-    _spawn_ui()
-    _spawn_high_priest()
-    _spawn_audio()
-
-    # The cosmic ending follows from Resonance and exploration, not a relationship milestone.
+    boss_stage = 1
+    boss = $ParadiseHighPriest as CharacterBody2D
+    boss.defeated.connect(_on_high_priest_defeated)
+    hud.bind_boss(boss)
+    narrative.show_message(
+        "THE LAST PRAYER",
+        "The High Priest is no longer human.\n\nHe still bows.",
+        3.5
+    )
     queue_redraw()
+
+
+func _spawn_paradise_king() -> void:
+    boss = KING_SCENE.instantiate() as CharacterBody2D
+    if boss == null:
+        push_error("Paradise ending: failed to instantiate KingGuardian scene")
+        return
+    boss.name = "ParadiseKing"
+    boss.position = Vector2(2050, FLOOR_Y)
+    boss.phase = 2
+    boss.max_health = 210
+    boss.health = 210
+    add_child(boss)
+    boss.defeated.connect(_on_paradise_king_defeated)
+    hud.bind_boss(boss)
+    narrative.show_message(
+        "THE LAST CROWN",
+        "The King arrives already transformed.\n\nHe does not recognize the throne.",
+        3.8
+    )
+
 
 func _process(delta: float) -> void:
     elapsed += delta
@@ -59,63 +82,9 @@ func _process(delta: float) -> void:
             _advance_ending_stage()
     queue_redraw()
 
-func _spawn_hero() -> void:
-    hero = CharacterBody2D.new()
-    hero.set_script(HERO_SCRIPT)
-    hero.position = Vector2(760, FLOOR_Y)
-    hero.name = "Hero"
-    _add_character_collision(hero, 18.0, 48.0)
-    add_child(hero)
-
-    camera = Camera2D.new()
-    camera.position_smoothing_enabled = true
-    camera.position_smoothing_speed = 4.0
-    camera.limit_left = 0
-    camera.limit_top = 0
-    camera.limit_right = WIDTH
-    camera.limit_bottom = 720
-    hero.add_child(camera)
-
-func _spawn_high_priest() -> void:
-    boss_stage = 1
-    boss = CharacterBody2D.new()
-    boss.set_script(HIGH_PRIEST_SCRIPT)
-    boss.position = Vector2(1500, FLOOR_Y)
-    boss.name = "ParadiseHighPriest"
-    _add_character_collision(boss, 24.0, 58.0)
-    add_child(boss)
-    boss.phase = 2
-    boss.max_health = 190
-    boss.health = 190
-    boss.defeated.connect(_on_high_priest_defeated)
-    hud.bind_boss(boss)
-    narrative.show_message(
-        "THE LAST PRAYER",
-        "The High Priest is no longer human.\n\nHe still bows.",
-        3.5
-    )
-
 func _on_high_priest_defeated() -> void:
     boss_stage = 2
     _spawn_paradise_king()
-
-func _spawn_paradise_king() -> void:
-    boss = CharacterBody2D.new()
-    boss.set_script(KING_SCRIPT)
-    boss.position = Vector2(2050, FLOOR_Y)
-    boss.name = "ParadiseKing"
-    _add_character_collision(boss, 26.0, 62.0)
-    add_child(boss)
-    boss.phase = 2
-    boss.max_health = 210
-    boss.health = 210
-    boss.defeated.connect(_on_paradise_king_defeated)
-    hud.bind_boss(boss)
-    narrative.show_message(
-        "THE LAST CROWN",
-        "The King arrives already transformed.\n\nHe does not recognize the throne.",
-        3.8
-    )
 
 func _on_paradise_king_defeated() -> void:
     boss_stage = 3
@@ -127,29 +96,6 @@ func _on_paradise_king_defeated() -> void:
     await narrative.message_finished
     _begin_paradise_ending()
     ending_active = true
-
-func _spawn_mite() -> void:
-    mite = Node2D.new()
-    mite.set_script(MITE_SCRIPT)
-    mite.position = Vector2(960, FLOOR_Y)
-    mite.name = "Mite"
-    add_child(mite)
-
-func _spawn_ui() -> void:
-    narrative = CanvasLayer.new()
-    narrative.set_script(NARRATIVE_SCRIPT)
-    add_child(narrative)
-
-    hud = CanvasLayer.new()
-    hud.set_script(HUD_SCRIPT)
-    add_child(hud)
-    hud.bind_hero(hero)
-    hud.set_story_mode("ETERNAL GARDEN", "THERE IS NOWHERE ELSE TO GO")
-
-func _spawn_audio() -> void:
-    audio_director = Node.new()
-    audio_director.set_script(NARRATIVE_AUDIO_SCRIPT)
-    add_child(audio_director)
 
 func _begin_paradise_ending() -> void:
     WorldState.ending_route = "永恒乐园"
@@ -195,7 +141,6 @@ func _create_ending_overlay() -> void:
     ending_prompt.add_theme_color_override("font_color", Color("#6f596d"))
     ending_cg.call("setup", "paradise")
     ending_cg.call("play")
-
 
 func _show_ending_stage(stage: int) -> void:
     ending_stage = stage
@@ -255,36 +200,6 @@ func _return_from_ending() -> void:
     ending_active = false
     get_tree().paused = false
     get_tree().change_scene_to_file("res://scenes/boot.tscn")
-
-func _create_floor() -> void:
-    var floor := StaticBody2D.new()
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(WIDTH + 200.0, 40.0)
-    shape.shape = rectangle
-    shape.position = Vector2(WIDTH * 0.5, FLOOR_Y + 20.0)
-    floor.add_child(shape)
-    add_child(floor)
-
-func _create_boundaries() -> void:
-    for x in [-20.0, WIDTH + 20.0]:
-        var wall := StaticBody2D.new()
-        var shape := CollisionShape2D.new()
-        var rectangle := RectangleShape2D.new()
-        rectangle.size = Vector2(40, 720)
-        shape.shape = rectangle
-        shape.position = Vector2(x, 360)
-        wall.add_child(shape)
-        add_child(wall)
-
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
-    var collision := CollisionShape2D.new()
-    var capsule := CapsuleShape2D.new()
-    capsule.radius = radius
-    capsule.height = height
-    collision.shape = capsule
-    collision.position = Vector2(0, -height * 0.5)
-    character.add_child(collision)
 
 func _unhandled_input(event: InputEvent) -> void:
     if not (event is InputEventKey and event.pressed and not event.echo):
