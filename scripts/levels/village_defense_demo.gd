@@ -1,20 +1,18 @@
 extends Node2D
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
+const HERO_SCENE: PackedScene = preload("res://scenes/player/hero.tscn")
+const ENEMY_ACTOR_SCENE: PackedScene = preload("res://scenes/characters/enemy_actor_base.tscn")
 const BANDIT_SCRIPT = preload("res://scripts/enemies/bandit_raider.gd")
 const INQUISITOR_SCRIPT = preload("res://scripts/enemies/church_inquisitor.gd")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
+
 
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 3600.0
 
-var hero: CharacterBody2D
-var camera: Camera2D
-var narrative: CanvasLayer
-var hud: CanvasLayer
-var narrative_audio: Node
+@onready var hero: CharacterBody2D = $Hero
+@onready var narrative: CanvasLayer = $NarrativeManager
+@onready var hud: CanvasLayer = $HUD
+@onready var narrative_audio: Node = $NarrativeAudio
 var attackers: Array[CharacterBody2D] = []
 var defeated := 0
 var stage := 0
@@ -22,48 +20,21 @@ var spawn_timer := 0.0
 var wave_started := false
 
 func _ready() -> void:
-    WorldState.current_location = "village_defense_demo"
-    _create_floor()
-    _create_boundaries()
-    _spawn_hero()
-    _spawn_ui()
-    narrative_audio = Node.new()
-    narrative_audio.set_script(NARRATIVE_AUDIO_SCRIPT)
-    add_child(narrative_audio)
+	WorldState.current_location = "village_defense_demo"
+	hero.set("defer_death_recovery", true)
+	var camera := hero.get_node("Camera2D") as Camera2D
+	camera.position_smoothing_enabled = true
+	camera.position_smoothing_speed = 6.0
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = LEVEL_WIDTH
+	camera.limit_bottom = 720
+	hero.defeated.connect(_on_hero_defeated)
+	hud.bind_hero(hero)
+	hud.set_story_mode("THE VILLAGE", "PROTECT THE VILLAGE")
+	get_tree().create_timer(0.8).timeout.connect(_begin_attack)
+	queue_redraw()
 
-    get_tree().create_timer(0.8).timeout.connect(_begin_attack)
-    queue_redraw()
-
-func _spawn_hero() -> void:
-    hero = CharacterBody2D.new()
-    hero.set_script(HERO_SCRIPT)
-    hero.position = Vector2(420, FLOOR_Y)
-    hero.name = "Hero"
-    # This scene owns recovery so it cannot race the generic checkpoint respawn.
-    hero.defer_death_recovery = true
-    _add_character_collision(hero, 18.0, 48.0)
-    add_child(hero)
-    hero.defeated.connect(_on_hero_defeated)
-
-    camera = Camera2D.new()
-    camera.position_smoothing_enabled = true
-    camera.position_smoothing_speed = 6.0
-    camera.limit_left = 0
-    camera.limit_top = 0
-    camera.limit_right = LEVEL_WIDTH
-    camera.limit_bottom = 720
-    hero.add_child(camera)
-
-func _spawn_ui() -> void:
-    narrative = CanvasLayer.new()
-    narrative.set_script(NARRATIVE_SCRIPT)
-    add_child(narrative)
-
-    hud = CanvasLayer.new()
-    hud.set_script(HUD_SCRIPT)
-    add_child(hud)
-    hud.bind_hero(hero)
-    hud.set_story_mode("THE VILLAGE", "PROTECT THE VILLAGE")
 
 func _begin_attack() -> void:
     wave_started = true
@@ -87,22 +58,21 @@ func _spawn_wave() -> void:
     narrative.show_message("THE FIRST WAVE", "They are coming for the houses behind you.", 3.0)
 
 func _spawn_attackers(definitions: Array) -> void:
-    for definition in definitions:
-        var kind: String = definition[0]
-        var position: Vector2 = definition[1]
-        var enemy: CharacterBody2D = CharacterBody2D.new()
-        if kind == "bandit":
-            enemy.set_script(BANDIT_SCRIPT)
-            _add_character_collision(enemy, 20.0, 44.0)
-        else:
-            enemy.set_script(INQUISITOR_SCRIPT)
-            _add_character_collision(enemy, 22.0, 50.0)
-        enemy.position = position
-        enemy.name = "%s_%d" % [kind, attackers.size()]
-        add_child(enemy)
-        enemy.defeated.connect(_on_attacker_defeated)
-        attackers.append(enemy)
-
+	for definition in definitions:
+		var kind: String = definition[0]
+		var spawn_position: Vector2 = definition[1]
+		var enemy := ENEMY_ACTOR_SCENE.instantiate() as CharacterBody2D
+		if kind == "bandit":
+			enemy.set_script(BANDIT_SCRIPT)
+			_configure_actor_collision(enemy, 20.0, 44.0)
+		else:
+			enemy.set_script(INQUISITOR_SCRIPT)
+			_configure_actor_collision(enemy, 22.0, 50.0)
+		enemy.position = spawn_position
+		enemy.name = "%s_%d" % [kind, attackers.size()]
+		add_child(enemy)
+		enemy.defeated.connect(_on_attacker_defeated)
+		attackers.append(enemy)
 func _on_attacker_defeated() -> void:
     defeated += 1
     if defeated == 3 and stage == 1:
@@ -151,36 +121,14 @@ func _on_hero_defeated() -> void:
     await narrative.message_finished
     _begin_attack()
 
-func _create_floor() -> void:
-    var floor := StaticBody2D.new()
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(LEVEL_WIDTH + 200, 40)
-    shape.shape = rectangle
-    shape.position = Vector2(LEVEL_WIDTH * 0.5, FLOOR_Y + 20)
-    floor.add_child(shape)
-    add_child(floor)
 
-func _create_boundaries() -> void:
-    for x in [-20.0, LEVEL_WIDTH + 20.0]:
-        var wall := StaticBody2D.new()
-        var shape := CollisionShape2D.new()
-        var rectangle := RectangleShape2D.new()
-        rectangle.size = Vector2(40, 720)
-        shape.shape = rectangle
-        shape.position = Vector2(x, 360)
-        wall.add_child(shape)
-        add_child(wall)
 
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
-    var collision := CollisionShape2D.new()
-    var capsule := CapsuleShape2D.new()
-    capsule.radius = radius
-    capsule.height = height
-    collision.shape = capsule
-    collision.position = Vector2(0, -height * 0.5)
-    character.add_child(collision)
-
+func _configure_actor_collision(character: CharacterBody2D, radius: float, height: float) -> void:
+	var collision := character.get_node("CollisionShape2D") as CollisionShape2D
+	var capsule := collision.shape as CapsuleShape2D
+	capsule.radius = radius
+	capsule.height = height
+	collision.position = Vector2(0.0, -height * 0.5)
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
         _mark_input_handled()
