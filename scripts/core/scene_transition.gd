@@ -4,10 +4,6 @@ extends CanvasLayer
 var transitioning := false
 
 
-func _ready() -> void:
-	layer = 100
-
-
 func fade_to_scene(
 	scene_path: String,
 	fade_out_duration: float = 0.22,
