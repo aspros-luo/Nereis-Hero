@@ -68,40 +68,130 @@ const LEGACY_SCENES := {
 	"A12": "res://scenes/inner_city.tscn", "A13": "res://scenes/terminal_anomaly.tscn"
 }
 @export var room_id := "A1-R01"
+@export var authored_scene_mode := false
 var room_data: Dictionary = {}
 var room_size := Vector2(1600, 900)
 var hero: CharacterBody2D
+var camera: Camera2D
+var narrative: CanvasLayer
+var hud: CanvasLayer
 var platforms: Array[Dictionary] = []
 var exits: Array[Dictionary] = []
 var landmarks: Array[Dictionary] = []
 
+func _enter_tree() -> void:
+    # Reset shared runtime state before pre-authored child nodes receive _ready().
+    WorldState.prepare_scene_runtime()
+
+
 func _ready() -> void:
-	WorldState.prepare_scene_runtime()
-	var file := FileAccess.open(CONTRACT_PATH, FileAccess.READ)
-	if file == null:
-		push_error("Room spatial contracts not found: " + CONTRACT_PATH)
-		return
-	var parsed = JSON.parse_string(file.get_as_text())
-	if not parsed is Dictionary:
-		push_error("Room spatial contracts are invalid JSON.")
-		return
-	for candidate in parsed.get("rooms", []):
-		if candidate.get("room_id", "") == room_id:
-			room_data = candidate
-			break
-	if room_data.is_empty():
-		push_error("No room contract for " + room_id)
-		return
-	room_size = Vector2(room_data.size[0], room_data.size[1])
-	WorldState.set_location(room_id.to_lower())
-	_build_terrain()
-	_build_exits()
-	_spawn_hero(_entry_position(WorldState.pending_region_spawn_side))
-	WorldState.pending_region_spawn_side = "west"
-	_spawn_ui()
-	WorldState.set_checkpoint(hero.global_position)
-	queue_redraw()
-	print("[NEREIS][ROOM_NETWORK] id=%s terrain=%d exits=%d" % [room_id, platforms.size(), exits.size()])
+    var file := FileAccess.open(CONTRACT_PATH, FileAccess.READ)
+    if file == null:
+        push_error("Room spatial contracts not found: " + CONTRACT_PATH)
+        return
+    var parsed = JSON.parse_string(file.get_as_text())
+    if not parsed is Dictionary:
+        push_error("Room spatial contracts are invalid JSON.")
+        return
+    for candidate in parsed.get("rooms", []):
+        if candidate.get("room_id", "") == room_id:
+            room_data = candidate
+            break
+    if room_data.is_empty():
+        push_error("No room contract for " + room_id)
+        return
+
+    room_size = Vector2(room_data.size[0], room_data.size[1])
+    WorldState.set_location(room_id.to_lower())
+    if authored_scene_mode:
+        hero = $Hero as CharacterBody2D
+        narrative = $Narrative as CanvasLayer
+        hud = $HUD as CanvasLayer
+        _read_authored_terrain()
+        _read_authored_exits()
+        _configure_authored_hero(_entry_position(WorldState.pending_region_spawn_side))
+        WorldState.pending_region_spawn_side = "west"
+        _configure_authored_ui()
+    else:
+        # Legacy compatibility while remaining contract scenes are migrated in batches.
+        _build_terrain()
+        _build_exits()
+        _spawn_hero(_entry_position(WorldState.pending_region_spawn_side))
+        WorldState.pending_region_spawn_side = "west"
+        _spawn_ui()
+
+    WorldState.set_checkpoint(hero.global_position)
+    queue_redraw()
+    print("[NEREIS][ROOM_NETWORK] id=%s terrain=%d exits=%d authored=%s" % [room_id, platforms.size(), exits.size(), str(authored_scene_mode)])
+
+
+func _read_authored_terrain() -> void:
+    platforms.clear()
+    for item in room_data.get("terrain", []):
+        var values: Array = item.rect
+        var rect := Rect2(Vector2(values[0], values[1]), Vector2(values[2], values[3]))
+        var terrain_id := str(item.id)
+        var body := get_node_or_null("Terrain_" + terrain_id) as StaticBody2D
+        if body == null:
+            push_error("%s missing authored terrain node Terrain_%s" % [room_id, terrain_id])
+            continue
+        var collision := body.get_node_or_null("CollisionShape2D") as CollisionShape2D
+        if collision == null or not collision.shape is RectangleShape2D:
+            push_error("%s terrain %s has no RectangleShape2D collision" % [room_id, terrain_id])
+            continue
+        var shape := collision.shape as RectangleShape2D
+        if shape.size != rect.size:
+            push_error("%s terrain %s collision size differs from spatial contract" % [room_id, terrain_id])
+        platforms.append({"id": terrain_id, "rect": rect, "type": item.get("type", "ground")})
+    landmarks = room_data.get("landmarks", [])
+
+
+func _read_authored_exits() -> void:
+    exits.clear()
+    for item in room_data.get("exits", []):
+        var target_id: String = item.get("target", "")
+        var target_scene: String = ROOM_SCENES.get(target_id, "")
+        if target_scene.is_empty():
+            var region := target_id.split("-")[0]
+            target_scene = LEGACY_SCENES.get(region, "")
+        if target_scene.is_empty() or not ResourceLoader.exists(target_scene):
+            push_warning("%s exit %s has no scene target yet." % [room_id, item.get("id", "?")])
+            continue
+        var exit_id := str(item.get("id", ""))
+        var door := get_node_or_null("Exit_" + exit_id) as Area2D
+        if door == null:
+            push_error("%s missing authored exit node Exit_%s" % [room_id, exit_id])
+            continue
+        var condition := str(item.get("condition", "none"))
+        door.set_meta("room_target_id", target_id)
+        door.set_meta("route_condition", condition)
+        if door.has_signal("interacted"):
+            door.interacted.connect(_on_exit_interacted.bind(target_scene, target_id, exit_id, condition))
+        exits.append({
+            "id": exit_id,
+            "position": Vector2(item.at[0], item.at[1]),
+            "target": target_id,
+            "condition": condition
+        })
+
+
+func _configure_authored_hero(at: Vector2) -> void:
+    hero.position = at
+    camera = hero.get_node("HeroCamera") as Camera2D
+    camera.position_smoothing_enabled = true
+    camera.position_smoothing_speed = 6.0
+    camera.limit_left = 0
+    camera.limit_top = 0
+    camera.limit_right = int(room_size.x)
+    camera.limit_bottom = int(room_size.y)
+    if hero.has_signal("defeated") and not hero.defeated.is_connected(_on_hero_defeated):
+        hero.defeated.connect(_on_hero_defeated)
+
+
+func _configure_authored_ui() -> void:
+    hud.bind_hero(hero)
+    hud.set_story_mode(str(room_data.get("title", room_id)), "探索错层地形，寻找回环、竖井与隐藏路线")
+
 
 func _build_terrain() -> void:
 	platforms.clear()
