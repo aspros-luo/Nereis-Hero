@@ -1,6 +1,5 @@
 extends Area2D
 
-const CHECKPOINT_VISUAL_SCENE = preload("res://scenes/world/checkpoint_visual.tscn")
 
 var active := false
 var animation_time := 0.0
