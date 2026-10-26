@@ -1,10 +1,10 @@
-[gd_scene load_steps=27 format=3]
+[gd_scene load_steps=25 format=3]
 
 [ext_resource path="res://scripts/levels/village_hub.gd" type="Script" id="1"]
 [ext_resource path="res://scripts/world/village_poi.gd" type="Script" id="2"]
 [ext_resource type="Texture2D" path="res://assets/art/backdrops/village_backdrop.svg" id="3"]
 [ext_resource type="Texture2D" path="res://assets/art/backdrops/village_ground_strip.svg" id="4"]
-[ext_resource type="Script" path="res://scripts/player/hero.gd" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="5"]
 [ext_resource type="Script" path="res://scripts/world/checkpoint.gd" id="6"]
 [ext_resource type="Script" path="res://scripts/world/rest_point.gd" id="7"]
 [ext_resource type="Script" path="res://scripts/npc/route_npc.gd" id="8"]
@@ -28,9 +28,6 @@ size = Vector2(3000, 40)
 [sub_resource type="RectangleShape2D" id="Boundary"]
 size = Vector2(40, 720)
 
-[sub_resource type="CapsuleShape2D" id="HeroCapsule"]
-radius = 18.0
-height = 48.0
 
 [sub_resource type="RectangleShape2D" id="CheckpointShape"]
 size = Vector2(130, 110)
@@ -646,21 +643,8 @@ position = Vector2(-10, 90)
 polygon = PackedVector2Array(0, 0, 20, 0, 20, 70, 0, 70)
 color = Color(0.07, 0.06, 0.08, 1)
 
-[node name="Hero" type="CharacterBody2D" parent="."]
+[node name="Hero" parent="." instance=ExtResource("5")]
 position = Vector2(260, 520)
-script = ExtResource("5")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hero"]
-position = Vector2(0, -24)
-shape = SubResource("HeroCapsule")
-
-[node name="HeroCamera" type="Camera2D" parent="Hero"]
-position_smoothing_enabled = true
-position_smoothing_speed = 6.0
-limit_left = 0
-limit_top = 0
-limit_right = 3000
-limit_bottom = 720
 
 [node name="VillageCheckpoint" type="Area2D" parent="."]
 position = Vector2(360, 520)
