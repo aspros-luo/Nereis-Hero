@@ -356,3 +356,14 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 3. `scripts/levels/route_scene.gd` 之外的其他场景控制器：检查动态 NPC、角色视觉、碰撞组件、门、HUD 和 Narrative 创建代码。
 4. 角色骨骼/动画预览工具与编辑器工具：区分编辑器专用工具和游戏场景，避免调试场景依赖代码拼装。
 5. 全项目资源引用、未引用函数/字段、重复状态所有权和可删除旧逻辑的引用闭包审计。
+
+
+## 20. 第七批实际重构：王墓守墓者 Boss 场景
+
+- `scenes/royal_tomb_boss.tscn` 从单根节点扩展为 12 个显式节点：地板与碰撞、左右边界与碰撞、Hero、王墓守墓者、HUD、Narrative，以及预先存在但初始隐藏/禁用的返回门。
+- 新增 `scenes/enemies/ashen_knight.tscn`，显式包含 AshenKnight 根节点、主碰撞、AttackHitbox 和 Hurtbox。
+- `scripts/levels/royal_tomb_boss.gd` 删除了运行时创建竞技场、主角、HUD、Narrative、返回门及碰撞体的代码；当前不再调用 `.new()`，只在玩家死亡后通过预制 Boss 场景实例化守墓者。
+- `scripts/enemies/ashen_knight.gd` 将 `boss_display_name`、`persist_global_boss_defeat` 和 `visual_theme` 设为导出属性，使场景中的 Boss 配置可在编辑器检查，而不是只能由父脚本在运行时赋值。
+- 返回门在场景中预先存在，只有当击败标记生效时才显示并启用；不再由胜利回调临时创建门和碰撞体。
+- 源码级复核：竞技场 12 个节点，Boss 4 个节点；场景引用路径均存在；Boss 控制脚本的 `.new()` 调用为 0，唯一 `.instantiate()` / `add_child()` 用于死亡后的 Boss 重生。
+- [ ] Godot 4.6.1 导入/解析、Boss 两阶段战斗、死亡重生、胜利持久化与返回王墓路线：BLOCKED。
