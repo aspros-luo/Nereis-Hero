@@ -1698,15 +1698,6 @@ func _add_a5_room_floor_segment(start_x: float, segment_width: float, index: int
 	_add_ground_segment("A5RoomGround_%02d" % index, start_x, segment_width)
 
 
-func _draw_a5_room_floor_gaps() -> void:
-	for gap in a5_room_floor_gaps:
-		draw_rect(Rect2(gap.x, floor_y - 1.0, gap.y, 300.0), Color("#171820"))
-		draw_rect(Rect2(gap.x, floor_y - 1.0, 10.0, 150.0), Color("#51434a"))
-		draw_rect(Rect2(gap.x + gap.y - 10.0, floor_y - 1.0, 10.0, 150.0), Color("#51434a"))
-
-
-
-
 func _configure_platforms() -> void:
 	platforms.clear()
 	var authored_terrain := get_node_or_null("AuthoredTerrain")
