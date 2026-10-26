@@ -3,7 +3,8 @@ extends Node2D
 ## A5 房间清单与连接唯一读取 tools/a5_room_assembly_contract.json。
 
 const A5_CONTRACT_PATH := "res://tools/a5_room_assembly_contract.json"
-const SHORTCUT_UNLOCK_SCRIPT: Script = preload("res://scripts/rooms/shortcut_unlock_point.gd")
+const TRANSITION_POINT_SCENE: PackedScene = preload("res://scenes/rooms/transition_point.tscn")
+const SHORTCUT_UNLOCK_POINT_SCENE: PackedScene = preload("res://scenes/rooms/shortcut_unlock_point.tscn")
 
 @onready var room_container: Node2D = $RoomContainer
 @onready var fade_rect: ColorRect = $FadeLayer/ColorRect
@@ -236,21 +237,16 @@ func _target_entry_id(edge: Dictionary, room_id: String) -> StringName:
 	return &"north" if delta.y >= 0.0 else &"south"
 
 func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> void:
-	# Remove old trigger Areas synchronously before creating replacements; queue_free() leaves
-	# a one-frame overlap where the previous and refreshed connections can both fire.
-	# 同步移除旧触发区，避免 queue_free() 延迟到帧末导致新旧转场区域短暂重叠。
 	for point in room_transition_nodes:
 		if is_instance_valid(point):
-			point.free()
+			point.queue_free()
 	room_transition_nodes.clear()
-	var side_counts: Dictionary = {&"west": 0, &"east": 0, &"north": 0, &"south": 0}
 	for gate in shortcut_unlock_nodes:
 		if is_instance_valid(gate):
-			if gate.get_parent() != null:
-				gate.get_parent().remove_child(gate)
 			gate.queue_free()
 	shortcut_unlock_nodes.clear()
 	pending_shortcut_id = ""
+	var side_counts := {"west": 0, "east": 0, "north": 0, "south": 0}
 	for edge: Variant in connections_by_room.get(room_id, []):
 		if not edge is Dictionary:
 			continue
@@ -262,7 +258,10 @@ func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> vo
 			if edge_kind in ["shortcut", "elevator", "hidden"]:
 				_build_shortcut_unlock_point(room, edge, room_id, bounds)
 			continue
-		var point := TransitionPoint.new()
+		var point := TRANSITION_POINT_SCENE.instantiate() as TransitionPoint
+		if point == null:
+			push_error("World: 无法实例化房间过渡场景")
+			continue
 		point.name = "Transition_" + edge_id
 		point.connection_id = StringName(edge_id)
 		point.target_room_id = StringName(edge.get("to", ""))
@@ -271,26 +270,26 @@ func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> vo
 		var side_index: int = int(side_counts.get(side, 0))
 		side_counts[side] = side_index + 1
 		point.position = _transition_position(side, bounds, room, side_index)
-		var shape := CollisionShape2D.new()
-		var rectangle := RectangleShape2D.new()
+		var shape := point.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		var rectangle := shape.shape as RectangleShape2D if shape != null else null
+		if rectangle == null:
+			push_error("World: 过渡场景缺少 RectangleShape2D")
+			point.free()
+			continue
 		rectangle.size = Vector2(48.0, 112.0) if side == &"west" or side == &"east" else Vector2(112.0, 48.0)
-		shape.shape = rectangle
-		point.add_child(shape)
 		room.add_child(point)
 		point.transition_requested.connect(_on_transition_requested)
 		room_transition_nodes.append(point)
-
 func _build_shortcut_unlock_point(room: Node2D, edge: Dictionary, room_id: String, bounds: Rect2) -> void:
+	var gate := SHORTCUT_UNLOCK_POINT_SCENE.instantiate() as Area2D
+	if gate == null:
+		push_error("World: 无法实例化捷径交互场景")
+		return
 	var side := _edge_entry_id(edge, room_id)
-	var gate := Area2D.new()
-	gate.set_script(SHORTCUT_UNLOCK_SCRIPT)
 	gate.name = "Unlock_" + str(edge.get("id", "shortcut"))
 	gate.set("shortcut_id", str(edge.get("id", "")))
 	var edge_kind := str(edge.get("kind", "shortcut"))
-	var prompt_text := "按 E 开启捷径"
-	if edge_kind == "hidden":
-		prompt_text = "按 E 探查隐藏通路"
-	gate.set("prompt_text", prompt_text)
+	gate.set("prompt_text", "按 E 探查隐藏通路" if edge_kind == "hidden" else "按 E 开启捷径")
 	var gate_position := _transition_position(side, bounds, room, 0)
 	match side:
 		&"west":
@@ -302,15 +301,9 @@ func _build_shortcut_unlock_point(room: Node2D, edge: Dictionary, room_id: Strin
 		&"south":
 			gate_position.y = bounds.end.y - 112.0
 	gate.position = gate_position
-	var collision := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(116.0, 116.0)
-	collision.shape = rectangle
-	gate.add_child(collision)
 	room.add_child(gate)
 	gate.connect("player_nearby_changed", _on_shortcut_player_nearby_changed)
 	shortcut_unlock_nodes.append(gate)
-
 func _on_shortcut_player_nearby_changed(shortcut_id: String, nearby: bool) -> void:
 	if nearby:
 		pending_shortcut_id = shortcut_id
