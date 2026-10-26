@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/village_graveyard.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interior_exit.tscn" id="6"]
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="8"]
+[ext_resource type="Texture2D" path="res://assets/art/backdrops/eldritch_backdrop.svg" id="GraveyardBackdrop"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 resource_local_to_scene = true
@@ -60,3 +61,138 @@ position = Vector2(2050, 520)
 [node name="NarrativeManager" parent="." instance=ExtResource("7")]
 
 [node name="HUD" parent="." instance=ExtResource("8")]
+
+[node name="GraveyardBackdropVisual" type="Sprite2D" parent="."]
+texture = ExtResource("GraveyardBackdrop")
+position = Vector2(0, 0)
+centered = false
+scale = Vector2(1.5, 1.2)
+modulate = Color(0.5, 0.46, 0.56, 1)
+z_index = -100
+
+[node name="GraveyardGroundVisual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(Vector2(0, 520), Vector2(2200, 520), Vector2(2200, 720), Vector2(0, 720))
+color = Color("#1d1820")
+z_index = -20
+
+[node name="GravestoneVisual140" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(Vector2(112, 520), Vector2(112, 450), Vector2(122, 430), Vector2(158, 430), Vector2(168, 450), Vector2(168, 520))
+color = Color("#302a32")
+z_index = -5
+
+[node name="GravestoneCross140" type="Label" parent="."]
+position = Vector2(116, 426)
+size = Vector2(48, 60)
+text = "†"
+theme_override_colors/font_color = Color("#66545c")
+theme_override_font_sizes/font_size = 40
+z_index = -4
+
+[node name="GravestoneVisual400" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(Vector2(372, 520), Vector2(372, 450), Vector2(382, 430), Vector2(418, 430), Vector2(428, 450), Vector2(428, 520))
+color = Color("#302a32")
+z_index = -5
+
+[node name="GravestoneCross400" type="Label" parent="."]
+position = Vector2(376, 426)
+size = Vector2(48, 60)
+text = "†"
+theme_override_colors/font_color = Color("#66545c")
+theme_override_font_sizes/font_size = 40
+z_index = -4
+
+[node name="GravestoneVisual660" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(Vector2(632, 520), Vector2(632, 450), Vector2(642, 430), Vector2(678, 430), Vector2(688, 450), Vector2(688, 520))
+color = Color("#302a32")
+z_index = -5
+
+[node name="GravestoneCross660" type="Label" parent="."]
+position = Vector2(636, 426)
+size = Vector2(48, 60)
+text = "†"
+theme_override_colors/font_color = Color("#66545c")
+theme_override_font_sizes/font_size = 40
+z_index = -4
+
+[node name="GravestoneVisual920" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(Vector2(892, 520), Vector2(892, 450), Vector2(902, 430), Vector2(938, 430), Vector2(948, 450), Vector2(948, 520))
+color = Color("#302a32")
+z_index = -5
+
+[node name="GravestoneCross920" type="Label" parent="."]
+position = Vector2(896, 426)
+size = Vector2(48, 60)
+text = "†"
+theme_override_colors/font_color = Color("#66545c")
+theme_override_font_sizes/font_size = 40
+z_index = -4
+
+[node name="GravestoneVisual1180" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(Vector2(1152, 520), Vector2(1152, 450), Vector2(1162, 430), Vector2(1198, 430), Vector2(1208, 450), Vector2(1208, 520))
+color = Color("#302a32")
+z_index = -5
+
+[node name="GravestoneCross1180" type="Label" parent="."]
+position = Vector2(1156, 426)
+size = Vector2(48, 60)
+text = "†"
+theme_override_colors/font_color = Color("#66545c")
+theme_override_font_sizes/font_size = 40
+z_index = -4
+
+[node name="GravestoneVisual1440" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(Vector2(1412, 520), Vector2(1412, 450), Vector2(1422, 430), Vector2(1458, 430), Vector2(1468, 450), Vector2(1468, 520))
+color = Color("#302a32")
+z_index = -5
+
+[node name="GravestoneCross1440" type="Label" parent="."]
+position = Vector2(1416, 426)
+size = Vector2(48, 60)
+text = "†"
+theme_override_colors/font_color = Color("#66545c")
+theme_override_font_sizes/font_size = 40
+z_index = -4
+
+[node name="GravestoneVisual1700" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(Vector2(1672, 520), Vector2(1672, 450), Vector2(1682, 430), Vector2(1718, 430), Vector2(1728, 450), Vector2(1728, 520))
+color = Color("#302a32")
+z_index = -5
+
+[node name="GravestoneCross1700" type="Label" parent="."]
+position = Vector2(1676, 426)
+size = Vector2(48, 60)
+text = "†"
+theme_override_colors/font_color = Color("#66545c")
+theme_override_font_sizes/font_size = 40
+z_index = -4
+
+[node name="GravestoneVisual1960" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(Vector2(1932, 520), Vector2(1932, 450), Vector2(1942, 430), Vector2(1978, 430), Vector2(1988, 450), Vector2(1988, 520))
+color = Color("#302a32")
+z_index = -5
+
+[node name="GravestoneCross1960" type="Label" parent="."]
+position = Vector2(1936, 426)
+size = Vector2(48, 60)
+text = "†"
+theme_override_colors/font_color = Color("#66545c")
+theme_override_font_sizes/font_size = 40
+z_index = -4
+
+[node name="BellTowerBodyVisual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(Vector2(1840, 520), Vector2(1840, 300), Vector2(1930, 300), Vector2(1930, 520))
+color = Color("#28212a")
+z_index = -3
+
+[node name="BellTowerRoofVisual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(Vector2(1810, 300), Vector2(1885, 190), Vector2(1960, 300))
+color = Color("#352d38")
+z_index = -2
+
+[node name="BellTowerLabel" type="Label" parent="."]
+position = Vector2(1805, 150)
+size = Vector2(260, 30)
+text = "BELL TOWER"
+theme_override_colors/font_color = Color("#796d67")
+theme_override_font_sizes/font_size = 16
+z_index = 5
