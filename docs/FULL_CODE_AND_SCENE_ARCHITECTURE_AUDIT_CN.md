@@ -2,7 +2,7 @@
 
 - 审计分支：`feature/story-map-progression`
 - 基线提交：`1313d25b8976a59426f5aa50fd736589e0838cfd`
-- 审计状态：进行中；本文件不是完成报告。
+- 审计状态：进行中；本文件不是完成报告。第 2 节记录最初基线风险，当前状态以第 9 节之后的最新复核为准。
 - 强制规则：场景结构必须由可在 Godot 编辑器中查看的 `.tscn` 节点树定义；脚本负责行为、状态与运行时协调。不得以代码生成节点替代编辑器中的场景设计。
 
 ## 1. 仓库盘点
@@ -148,7 +148,7 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 
 ### 验证状态
 
-- [x] 从 GitHub 重新读取文件，确认 `world.tscn` 有 9 个显式节点声明。
+- [x] 从 GitHub 重新读取当前版本，确认 `world.tscn` 有 7 个显式节点声明（Player 实例内部的节点另计）。
 - [x] 源码模式检查确认 `boot.gd` 与 `scene_transition.gd` 不再调用节点 `.new()` / `add_child()`。
 - [ ] Godot 4.6.1 导入和场景解析：BLOCKED。
 - [ ] 编辑器节点树与全屏遮罩布局验收：BLOCKED。
@@ -186,7 +186,7 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 
 ## 11. A0 序章场景结构迁移
 
-- `scenes/escape_prologue.tscn` 已从只有根节点的场景，改为显式定义 34 个节点：地板、左右边界、手术台、六段可选高路、Hero 与碰撞体/相机、线索、两件拾取物、休息点与视觉子场景、出口与交互提示、HUD。
+- `scenes/escape_prologue.tscn` 已从只有根节点的场景，改为显式定义 32 个节点：地板、左右边界、手术台、六段可选高路、Hero 与碰撞体/相机、线索、两件拾取物、休息点与视觉子场景、出口与交互提示、HUD。
 - `scripts/levels/escape_prologue.gd` 已删除常驻节点的 `.new()` 构建代码，改为引用 `$Hero`、`$HUD`、`$VillageRoadExit` 和 `$SurgicalMark`；平台绘制矩形由实际平台节点和碰撞形状读取，避免代码与场景重复维护六段平台坐标。
 - 伏击守卫与战斗封锁体分别通过 `scenes/enemies/experiment_warden.tscn`、`scenes/rooms/prologue_progress_barrier.tscn` 实例化，避免用代码直接构建其根节点与主碰撞体。
 - 序章控制器当前没有常见节点类 `.new()` 调用；剩余的两个 `add_child()` 调用用于把预制场景实例加入场景树，这是运行时生成敌人/封锁体的正常实例化流程。
@@ -194,7 +194,68 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 
 ### A0 仍未完全合规的子系统
 
-- `game_hud.gd` 仍在运行时构建 HUD 内部控件。
-- `hero.gd` 仍在运行时构建 HeroSystem、攻击/受击盒及部分调试对象。
-- `experiment_warden.gd` 仍在运行时构建攻击/受击盒；虽然敌人主体和主碰撞已场景化，战斗组件仍需后续迁移。
+- 当前 `game_hud.gd` 不再使用 `.new()` 或 `add_child()` 搭建 HUD；`game_hud.tscn` 已有 40 个显式节点。
+- 当前 `hero.tscn` 已显式包含 HeroSystem、AttackHitbox、Hurtbox 与 HeroCamera；`hero.gd` 剩余的 `add_child()` 用于实例化骨骼视觉、命中特效、抓钩锚点、共鸣目标、调试墙和死亡转场等预制场景，仍需逐项判断哪些应改为常驻节点，哪些确属运行时对象。
+- `experiment_warden.gd` 当前没有常见节点类 `.new()` 调用，但会实例化战斗组件；需核对 `experiment_warden.tscn` 的节点树和这些组件是否应常驻预置。
 - Godot 4.6.1 导入/解析与 A0 实机流程均尚未执行，状态为 BLOCKED。
+
+
+## 12. 全部 GDScript 第一轮静态扫描（当前提交 bad696dda96502bbe1c48ac827029183dd983808）
+
+本轮逐个读取了仓库当前版本的 130 个 `.gd` 文件，并对常见的节点构造调用、`add_child()`、`PackedScene.instantiate()` 和同文件重复函数声明做了模式扫描。
+
+### 扫描结果
+
+- [x] 130/130 个 GDScript 已进行模式扫描。
+- [x] 未发现同一脚本内重复定义的同名函数。
+- [x] Git tree 中未发现文件内容 SHA 完全相同的重复文件组。
+- [ ] 这不代表没有跨文件重复逻辑、死代码或功能重复；需要结合所有调用方、场景绑定、合同、存档路径和调试入口继续确认。
+- [ ] 未执行 Godot 4.6.1 导入或运行，因此解析和运行时验收仍为 BLOCKED。
+
+### 高优先级场景结构风险
+
+以下场景的当前 `.tscn` 仅有根节点，节点由对应脚本创建。它们必须迁移为编辑器可见节点树，或者在证明完全不再使用后整体删除；不能保留“空场景 + 大量代码搭建”的形式：
+
+| 场景 | 绑定脚本 | 源码扫描观察 |
+|---|---|---|
+| `scenes/ancient_research_lab.tscn` | `scripts/levels/ancient_research_lab.gd` | 约 20 处常见节点 `.new()`、16 处 `add_child()` |
+| `scenes/church_final_demo.tscn` | `scripts/levels/church_final_demo.gd` | 约 27 处 `.new()`、23 处 `add_child()` |
+| `scenes/ending_fire_demo.tscn` | `scripts/levels/ending_fire_demo.gd` | 约 28 处 `.new()`、24 处 `add_child()` |
+| `scenes/ending_paradise_demo.tscn` | `scripts/levels/ending_paradise_demo.gd` | 约 25 处 `.new()`、22 处 `add_child()` |
+| `scenes/royal_tomb_boss.tscn` | `scripts/levels/royal_tomb_boss.gd` | 约 16 处 `.new()`、12 处 `add_child()` |
+| `scenes/mite_resonance_demo.tscn` | `scripts/levels/mite_resonance_demo.gd` | 约 14 处 `.new()`、11 处 `add_child()` |
+
+这些是代码生成节点的明确候选，不应仅凭文件名就删除。下一步必须先确认它们是否由主菜单、剧情、结局评估、测试工具或存档恢复引用，再决定“场景化”还是“安全删除”。
+
+### 其他重要发现
+
+- `scripts/core/world_map_test_menu.gd` 原本动态创建背景、布局、地图预览、24 个入口按钮和页脚按钮；本轮已将这组结构迁移到 `scenes/world_map_test_menu.tscn`。
+- `scripts/core/world_map_test_menu.gd` 目前不再调用节点 `.new()`、`add_child()` 或 `instantiate()`；入口按钮在场景树中预先存在，脚本只将按钮与入口数据绑定。
+- `scripts/levels/contract_room_region.gd`、`scripts/levels/room_world_prototype.gd` 和 `scripts/levels/route_scene.gd` 没有同名的 `.tscn`；这可能表示它们是继承脚本、由其他场景复用的脚本或孤立旧代码，需要检查引用后再判断。
+- 多个调试预览脚本仍会创建临时 UI/预览节点。调试工具也应优先使用编辑器可见的场景节点；如果仅为编辑器临时工具，需明确标注用途并与游戏运行场景分开。
+- `scripts/levels/greybox_world_region.gd` 当前 5,166 行、约 226 KB；脚本不再大量调用 `Node.new()`，但仍通过多处 `PackedScene.instantiate()` / `add_child()` 装配敌人、拾取物、Hero、HUD、地板、墙、门、区域房间与交互物。后续应拆分职责并让固定地形和常驻对象直接存在于对应场景树中；只保留确实由世界状态/玩家行为决定的动态实例化。
+
+## 13. 第三批实际重构：宏观地图验收菜单
+
+### 已修改
+
+- `scenes/world_map_test_menu.tscn` 从只有一个根节点，扩展为 38 个显式节点：背景、边距容器、标题与说明、宏观地图预览、滚动容器、24 个区域入口按钮、重置测试状态按钮和返回主菜单按钮。
+- `scripts/core/world_map_test_menu.gd` 从 164 行缩减到 92 行；删除整段 `_build_ui()` 及所有运行时控件构建逻辑。
+- 脚本通过 `@onready` 获取 RegionGrid、ResetButton、BackButton，并把预置按钮绑定到入口数据；保留原有测试标志、区域启动与返回主菜单行为。
+- 最新提交：场景 `1e23da59a8ba231645a63ed7f8fc2265eebd2f55`；脚本 `bad696dda96502bbe1c48ac827029183dd983808`。
+
+### 源码级验证
+
+- [x] 从 GitHub 重新读取提交后的场景，确认共有 38 个显式节点声明。
+- [x] 从 GitHub 重新读取脚本，确认节点 `.new()`、`add_child()` 和 `.instantiate()` 调用均为 0。
+- [ ] Godot 4.6.1 导入/解析：BLOCKED。
+- [ ] 编辑器中检查 24 个按钮、地图预览与滚动布局：BLOCKED。
+- [ ] 实际点击所有入口、重置测试状态和返回主菜单：BLOCKED。
+
+## 14. 当前下一步顺序
+
+1. 继续检查根节点场景仍由脚本构建的旧 Demo/结局场景；先做引用图，再决定迁移或删除。
+2. 审计 `scripts/levels/greybox_world_region.gd` 的所有 `PackedScene.instantiate()` 调用点，按固定地形、常驻对象、条件对象和瞬时效果分类。
+3. 对 Hero 与敌人的碰撞组件、骨骼视觉、死亡转场等节点，逐个确认应由 `.tscn` 常驻声明还是作为独立场景动态实例化。
+4. 对所有被标记为“可能冗余”的脚本和场景进行引用闭包检查后再删；不得仅凭文件名、体积或未找到同名场景就删除。
+5. 完成静态检查后，在 Godot 4.6.1 下逐批执行导入、解析、关键场景加载和功能 smoke test。
