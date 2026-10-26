@@ -437,3 +437,18 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 - 目标房间流架构为 `scenes/world/world.tscn` + `scripts/world/world.gd` + `RoomContainer`，使用持久 Hero/HUD/Camera、RoomData/房间合同和场景实例化转场。
 - 已有 22 个 A5 房间具备编辑器可见的真实地形节点，RoomContainer 的子场景装配模式只读取节点树。
 - 仍有并行的旧 A5 总图装配路径（`old_battlefield.tscn` / `a5_assembled_region.tscn`）与旧几何生成函数。它们与 RoomContainer 的职责重叠，是当前审计剩余的 P0 架构风险；在确认全部跨区边、入口菜单和验收脚本引用后，必须选择唯一正式入口并清理另一条路径。
+
+
+## 28. 第十二批实际重构：序章障碍节点
+
+- 基线中的 `escape_prologue.tscn` 曾只有根节点；当前场景已包含手术台、Hero、线索、绷带/记录拾取物、休息点、出口、地板、HUD、Narrative 与敌人预制场景引用。
+- 本批将左右两道进度屏障作为 `ProgressBarrier_Left` 与 `ProgressBarrier_Right` 显式实例加入 `escape_prologue.tscn`。`prologue_progress_barrier.tscn` 的碰撞形状默认禁用，脚本只切换可见性和碰撞开关。
+- 删除 `escape_prologue.gd` 中的屏障场景实例化/添加逻辑。现在该脚本的 `.new()` 调用为 0；保留的 `.instantiate()` / `add_child()` 仅用于伏击开始后生成预制 Warden 敌人。
+- [ ] 序章死亡重置、双屏障开启/关闭、敌人伏击和离场条件的 Godot 4.6.1 实机验证：BLOCKED。
+
+## 29. 第十三批实际重构：村庄 HUD 与 Narrative
+
+- `scenes/village_hub.tscn` 新增显式 `Narrative` 与 `HUD` 场景实例，编辑器 Scene 面板可直接查看这两个常驻界面节点。
+- `scripts/levels/village_hub.gd` 移除 `_spawn_ui()`、HUD/Narrative 场景 preload 常量，以及未使用的 `ROUTE_NPC_SCRIPT` 常量；现在通过节点路径获取现有 UI 并绑定 Hero。
+- 村庄控制器自身不再调用 `.new()`、`add_child()` 或 `.instantiate()`。按剧情阶段出现的 NPC 仍由 `WorldEventDirector` 实例化预制 NPC 场景，不再手工拼装节点树。
+- [ ] 村庄开场、存档恢复、剧情 NPC 出现/离场、HUD 与 Narrative 绑定的 Godot 4.6.1 实机验证：BLOCKED。
