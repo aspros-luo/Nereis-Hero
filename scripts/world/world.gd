@@ -17,8 +17,6 @@ var room_contract_by_id: Dictionary = {}
 var connections_by_room: Dictionary = {}
 var threaded_scene_paths: Dictionary = {}
 var current_room_id: String = ""
-var room_transition_nodes: Array[TransitionPoint] = []
-var shortcut_unlock_nodes: Array[Area2D] = []
 var pending_shortcut_id: String = ""
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -166,7 +164,7 @@ func _load_room(room_id: String, entry_id: StringName, use_fade: bool = true) ->
 	var entry_position := _entry_position(instance, entry_id, bounds)
 	player.global_position = instance.to_global(entry_position)
 	_apply_camera_bounds(bounds, instance.global_transform)
-	_build_room_transitions(instance, room_id, bounds)
+	_build_room_transitions(instance, room_id)
 	WorldState.mark_room_explored(room_id)
 	_preload_adjacent_rooms(data)
 	if use_fade:
@@ -234,11 +232,9 @@ func _target_entry_id(edge: Dictionary, room_id: String) -> StringName:
 		return &"west" if delta.x >= 0.0 else &"east"
 	return &"north" if delta.y >= 0.0 else &"south"
 
-func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> void:
+func _build_room_transitions(room: Node2D, room_id: String) -> void:
 	# 房间出口与捷径交互区由每个房间的 .tscn 预先声明；这里仅按合同切换状态。
 	# Never create or free map nodes here: the editor-authored Room scene is the source of truth.
-	room_transition_nodes.clear()
-	shortcut_unlock_nodes.clear()
 	pending_shortcut_id = ""
 	for edge: Variant in connections_by_room.get(room_id, []):
 		if not edge is Dictionary:
@@ -268,8 +264,6 @@ func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> vo
 		var transition_callback := Callable(self, "_on_transition_requested")
 		if not point.transition_requested.is_connected(transition_callback):
 			point.transition_requested.connect(transition_callback)
-		if unlocked:
-			room_transition_nodes.append(point)
 
 		var can_unlock_here := edge_kind in ["shortcut", "elevator", "hidden"]
 		var gate_active := not unlocked and can_unlock_here
@@ -285,8 +279,6 @@ func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> vo
 		var gate_callback := Callable(self, "_on_shortcut_player_nearby_changed")
 		if not gate.is_connected("player_nearby_changed", gate_callback):
 			gate.connect("player_nearby_changed", gate_callback)
-		if gate_active:
-			shortcut_unlock_nodes.append(gate)
 
 func _on_shortcut_player_nearby_changed(shortcut_id: String, nearby: bool) -> void:
 	if nearby:
@@ -300,7 +292,7 @@ func _unlock_shortcut(shortcut_id: String) -> void:
 		WorldState.open_room_shortcut(shortcut_id)
 	print("[NEREIS][ROOM_STREAM][SHORTCUT] 已开启 %s" % shortcut_id)
 	if is_instance_valid(current_room):
-		_build_room_transitions(current_room, current_room_id, _get_room_bounds(current_room))
+		_build_room_transitions(current_room, current_room_id)
 func _transition_position(side: StringName, bounds: Rect2, room: Node2D, side_index: int) -> Vector2:
 	var floor_y := float(room.get("floor_y")) if _has_property(room, "floor_y") else bounds.end.y - 100.0
 	var lane_offset := float(side_index) * 104.0
