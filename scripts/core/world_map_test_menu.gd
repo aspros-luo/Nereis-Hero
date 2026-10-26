@@ -9,7 +9,7 @@ const REGION_ENTRIES: Array[Dictionary] = [
     {"id":"A2", "name":"雾林与旧朝圣路 / Ash Forest", "path":"res://scenes/ash_forest.tscn", "spawn":"west"},
     {"id":"A3", "name":"废弃城区 / Forgotten City", "path":"res://scenes/forgotten_city.tscn", "spawn":"west"},
     {"id":"A4", "name":"沉积大厅与水库 / Sewer Reservoir", "path":"res://scenes/sewer_reservoir.tscn", "spawn":"west"},
-    {"id":"A5", "name":"旧战场 / Old Battlefield", "path":"res://scenes/old_battlefield.tscn", "spawn":"west"},
+    {"id":"A5", "name":"旧战场 / A5 RoomContainer 验收", "path":"res://scenes/world/world.tscn", "spawn":"west"},
     {"id":"A6", "name":"修道院钟塔 / Monastery Tower", "path":"res://scenes/monastery_tower.tscn", "spawn":"west"},
     {"id":"A7", "name":"监牢深层 / Prison Depths", "path":"res://scenes/prison_depths.tscn", "spawn":"west"},
     {"id":"A8", "name":"王室墓穴 / Royal Tomb", "path":"res://scenes/royal_tomb.tscn", "spawn":"west"},
