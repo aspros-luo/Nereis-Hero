@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="5"]
 
 [sub_resource type="RectangleShape2D" id="RoomBoundaryShape"]
-size = Vector2(40, ${height+200})
+size = Vector2(40, 1300)
 
 [node name="A2R04Room" type="Node2D"]
 script = ExtResource("1")
