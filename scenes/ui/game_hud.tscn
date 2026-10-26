@@ -294,6 +294,7 @@ process_mode = 3
 [node name="MapTestPanel" parent="." instance=ExtResource("2")]
 
 [node name="WorldMapOverlay" parent="." instance=ExtResource("3")]
+visible = false
 
 [node name="ItemInspectionPanel" parent="." instance=ExtResource("4")]
 
