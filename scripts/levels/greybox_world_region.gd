@@ -1821,6 +1821,10 @@ func _register_authored_platform(rect: Rect2) -> void:
 	platforms.append(rect)
 
 func _spawn_region_rest_point() -> void:
+	# Authored region scenes own fixed rest-point nodes; never duplicate them at runtime.
+	# 固定地形区域的休息点由 .tscn 场景树拥有，禁止运行时重复生成。
+	if get_node_or_null("AuthoredTerrain") != null:
+		return
 	var rest_x := -1.0
 	var rest_y := floor_y
 	var rest_name := "歇脚圣龛"
