@@ -24,7 +24,7 @@
 - `scripts/levels/greybox_world_region.gd`：超大共享区域控制器，可能混合地形生成、敌人、拾取物、UI、房间和出口职责。
 - `scripts/player/hero.gd`：约 65 KB，需检查战斗、移动、视觉、共鸣和节点构建职责是否混杂。
 - `scripts/core/world_state.gd`：约 50 KB，需检查状态所有权、重复字段和持久化边界。
-- `scripts/core/localization.gd`：约 91 KB，需检查数据与逻辑是否混杂；不得仅因文件大而删除内容。
+- `scripts/core/localization.gd`：约 60 KB，主要为多语言文本表；不得将文本数据量误判为冗余业务代码。
 - A2 有六个正式地形场景和六个 runtime 场景；A5 存在多套命名不同的场景目录。需基于引用、入口、合同和测试判断用途，禁止只按文件名删除。
 - 角色视觉相关目录分布于 `scripts/character/`、`scripts/characters/` 与 `scripts/player/`，需核实它们是否属于不同系统或存在重复实现。
 
@@ -56,9 +56,9 @@
 | 文件 | 观测结果 | 结论 |
 |---|---|---|
 | `scenes/escape_prologue.tscn` | 只有根节点 `EscapePrologue`，仅挂载 `escape_prologue.gd` | 编辑器中看不到真实场景结构；P0 |
-| `scripts/levels/escape_prologue.gd` | 512 行；包含 23 处常见节点类型的 `.new()`，9 处 `add_child()` | 手术台、主角、碰撞、线索、拾取物、休息点、出口、地板、边界、HUD 等由脚本搭建；P0 |
-| `scripts/world/world.gd` | 420 行；7 处常见节点类型的 `.new()`，7 处 `add_child()` | 持久主角、碰撞、相机、HUD、过渡门和触发器由脚本搭建；P0 |
-| `scripts/levels/greybox_world_region.gd` | 5,253 行；44 处常见节点类型的 `.new()`，8 处 `add_child()` | 单个脚本混合区域几何、主角、敌人、拾取物、门和其他结构；P0 |
+| `scripts/levels/escape_prologue.gd` | 512 行；包含 23 处常见节点类型的 `.new()`，23 处 `add_child()` | 手术台、主角、碰撞、线索、拾取物、休息点、出口、地板、边界、HUD 等由脚本搭建；P0 |
+| `scripts/world/world.gd` | 420 行；7 处常见节点类型的 `.new()`，11 处 `add_child()` | 持久主角、碰撞、相机、HUD、过渡门和触发器由脚本搭建；P0 |
+| `scripts/levels/greybox_world_region.gd` | 5,253 行；44 处常见节点类型的 `.new()`，36 处 `add_child()` | 单个脚本混合区域几何、主角、敌人、拾取物、门和其他结构；P0 |
 | `scripts/levels/a2_room_runtime.gd` | 385 行；6 处常见节点类型的 `.new()`，3 处 `add_child()` | 动态生成调试 UI、休息点和落差触发器；需迁移到场景节点/可复用场景 |
 | `scripts/core/boot.gd` | 154 行；通过代码生成菜单控件 | 菜单节点树也应在 `boot.tscn` 中可见 |
 | `scripts/core/scene_transition.gd` | 通过代码创建遮罩节点 | 转场遮罩属于常驻结构，建议在转场场景中声明；动画可继续由脚本驱动 |
@@ -161,13 +161,13 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 
 | 文件 | 行数 | 常见节点 `.new()` | `add_child()` | 当前判断 |
 |---|---:|---:|---:|---|
-| `scripts/levels/greybox_world_region.gd` | 5,253 | 44 | 8 | 主要结构生成集中点，必须拆分；内部回调不能仅因同文件调用次数少就删除 |
-| `scripts/player/hero.gd` | 1,625 | 8 | 11 | 移动、战斗、共鸣、视觉和调试职责混合，需按组件边界拆分 |
+| `scripts/levels/greybox_world_region.gd` | 5,253 | 44 | 36 | 主要结构生成集中点，必须拆分；内部回调不能仅因同文件调用次数少就删除 |
+| `scripts/player/hero.gd` | 1,625 | 8 | 14 | 移动、战斗、共鸣、视觉和调试职责混合，需按组件边界拆分 |
 | `scripts/core/world_state.gd` | 1,264 | 1 | 1 | 目前主要是状态/存档职责；需要继续检查字段重复、保存/恢复一致性，暂不建议按文件大小重写 |
 | `scripts/core/localization.gd` | 1,386 | 0 | 0 | 主要是多语言文本表与少量静态查询函数；这是数据量，不应误判为冗余业务代码 |
-| `scripts/ui/game_hud.gd` | 689 | 29 | 23 | P0 场景结构违规；HUD 主界面和弹层应由场景节点定义，脚本只更新内容、可见性和状态 |
-| `scripts/world/world.gd`（根节点迁移后） | 391 | 3 | 5 | 主角/HUD 已迁移；剩余构建主要集中在房间出口和捷径触发器，继续迁移到可复用场景 |
-| `scripts/levels/escape_prologue.gd`（迁移前基线） | 512 | 23 | 9 | A0 场景结构违规，列为下一批迁移对象 |
+| `scripts/ui/game_hud.gd` | 689 | 31 | 39 | P0 场景结构违规；HUD 主界面和弹层应由场景节点定义，脚本只更新内容、可见性和状态 |
+| `scripts/world/world.gd`（根节点迁移后） | 391 | 3 | 7 | 主角/HUD 已迁移；剩余构建主要集中在房间出口和捷径触发器，继续迁移到可复用场景 |
+| `scripts/levels/escape_prologue.gd`（迁移前基线） | 512 | 23 | 23 | A0 场景结构违规，列为下一批迁移对象 |
 
 ### 关于冗余代码的删除标准
 
@@ -182,3 +182,19 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 ### 静态审计工具修正
 
 `tools/audit_scene_authorship.py` 已修正资源路径匹配和 `static func` 识别规则。该工具尚未在完整工作树中运行，因此其实际输出和误报率仍待本地运行复核。
+
+
+## 11. A0 序章场景结构迁移
+
+- `scenes/escape_prologue.tscn` 已从只有根节点的场景，改为显式定义 34 个节点：地板、左右边界、手术台、六段可选高路、Hero 与碰撞体/相机、线索、两件拾取物、休息点与视觉子场景、出口与交互提示、HUD。
+- `scripts/levels/escape_prologue.gd` 已删除常驻节点的 `.new()` 构建代码，改为引用 `$Hero`、`$HUD`、`$VillageRoadExit` 和 `$SurgicalMark`；平台绘制矩形由实际平台节点和碰撞形状读取，避免代码与场景重复维护六段平台坐标。
+- 伏击守卫与战斗封锁体分别通过 `scenes/enemies/experiment_warden.tscn`、`scenes/rooms/prologue_progress_barrier.tscn` 实例化，避免用代码直接构建其根节点与主碰撞体。
+- 序章控制器当前没有常见节点类 `.new()` 调用；剩余的两个 `add_child()` 调用用于把预制场景实例加入场景树，这是运行时生成敌人/封锁体的正常实例化流程。
+- 提交：`736dd1d5ebff4e687009b148934fb9567f343464`、`9ac2c815ea2ca2c43191c261bb32f15f1355585f`、`9add5002675fdd1fc975d71c4d00bf73be1b53c6`、`f54ffa872c6906d4163d8796e71bf0a084767442`。
+
+### A0 仍未完全合规的子系统
+
+- `game_hud.gd` 仍在运行时构建 HUD 内部控件。
+- `hero.gd` 仍在运行时构建 HeroSystem、攻击/受击盒及部分调试对象。
+- `experiment_warden.gd` 仍在运行时构建攻击/受击盒；虽然敌人主体和主碰撞已场景化，战斗组件仍需后续迁移。
+- Godot 4.6.1 导入/解析与 A0 实机流程均尚未执行，状态为 BLOCKED。
