@@ -413,3 +413,27 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 - 已迁移到显式节点树的重点对象：50 个合同房间、地图验收菜单、古代研究所、教堂路线、摇篮曲路线、王墓 Boss 竞技场、Mite 共鸣导演场景、三个结局场景的基础结构与共享结局视觉层。
 - 仍然需要处理：`greybox_world_region.gd` 和 A5 房间系统、其他旧 Demo/研究场景、角色预览/调试工具、NPC 与交互场景的残余动态节点构建、跨文件重复逻辑和孤立代码。
 - 目前所有“通过”只表示源码/场景文件级检查，不表示 Godot 导入或实机测试通过。
+
+
+## 25. 第十一批实际重构：22 个 A5 房间地形节点化
+
+- 将 `scenes/a5_rooms/a5_r01.tscn` 至 `a5_r22.tscn` 从只有脚本根节点改为真实的地形节点树；地形数据来自现有 A5 房间几何合同与 `greybox_world_region.gd` 的既有平台/残骸/地面缺口配置，没有重新设计地形。
+- 22 个房间的静态地形现在由 **240 个单向平台、70 个实体残骸、40 个地面分段**及其 `CollisionShape2D` 直接定义在 `.tscn` 中。每个场景都保存 `room_id`、尺寸、`floor_y` 和 `assembly_child_mode = true`。
+- `scripts/levels/greybox_world_region.gd::_ready_a5_assembly_child()` 改为读取现有 StaticBody2D / RectangleShape2D，重建绘制和验收所需的 `platforms`、`a5_room_blocks`、`a5_room_floor_segments` 与 `a5_room_floor_gaps` 数据，不再为这 22 个房间创建地形节点。
+- 已更新 `tools/validate_a5_room_scenes.py`：检查每个场景的地形节点数量、碰撞形状数量、单向碰撞标记，以及 assembly-child reader 不得调用 `.new()`、`.instantiate()` 或 `add_child()`。
+- 已更新 `tools/a5_room_runtime_acceptance.gd` 和 `scenes/a5_rooms/README.md`，明确场景树是地形的真实来源，并记录运行时验收边界。
+- 生成时已逐房间核对平台、残骸、缺口数量与设计合同；设计合同与 RoomContainer 组装合同的 22 个房间尺寸一致。
+- [ ] 本地运行 `python3 tools/validate_a5_room_scenes.py`：BLOCKED（当前环境无法从 GitHub 拉取仓库进行本地执行）。
+- [ ] Godot 4.6.1 导入、22 房间逐个加载、真实碰撞与摄像机/转场验收：BLOCKED。
+
+## 26. 已确认并清理的孤立原型
+
+- 删除 `scripts/levels/room_world_prototype.gd`、`scenes/rooms/canopy_crossing.tscn` 和 `scenes/rooms/surface_hub.tscn`。
+- 删除依据：这两个场景仅挂载该原型脚本；它们不在主地图入口、A2 房间合同、A5 房间合同、地图测试菜单或相关运行时场景映射中。它们构成未接入正式拓扑的旧房间原型，不是当前 Hero 主流程依赖。
+- 未删除 `scenes/old_battlefield.tscn`、`scenes/a5_assembled_region.tscn` 或旧 assembly 分支：它们仍有菜单/验收引用闭包，需要在统一 A5 入口与验收后再决定删除。
+
+## 27. 最新 A5 架构结论
+
+- 目标房间流架构为 `scenes/world/world.tscn` + `scripts/world/world.gd` + `RoomContainer`，使用持久 Hero/HUD/Camera、RoomData/房间合同和场景实例化转场。
+- 已有 22 个 A5 房间具备编辑器可见的真实地形节点，RoomContainer 的子场景装配模式只读取节点树。
+- 仍有并行的旧 A5 总图装配路径（`old_battlefield.tscn` / `a5_assembled_region.tscn`）与旧几何生成函数。它们与 RoomContainer 的职责重叠，是当前审计剩余的 P0 架构风险；在确认全部跨区边、入口菜单和验收脚本引用后，必须选择唯一正式入口并清理另一条路径。
