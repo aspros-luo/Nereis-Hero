@@ -1,16 +1,27 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=10 format=3]
 
-[ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="1"]
-[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn" type="PackedScene" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="5"]
+[ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="room_script"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="narrative_scene"]
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape1"]
+size = Vector2(430, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape2"]
+size = Vector2(570, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape3"]
+size = Vector2(420, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape4"]
+size = Vector2(280, 24)
 
 [sub_resource type="RectangleShape2D" id="RoomBoundaryShape"]
 size = Vector2(40, 1200)
 
 [node name="A2R02Room" type="Node2D"]
-script = ExtResource("1")
+script = ExtResource("room_script")
 region_id = "A2"
 location_id = "ash_forest"
 region_title = "A2 R02 树冠与断桥"
@@ -20,7 +31,98 @@ room_height = 1000
 room_id = "A2-R02"
 enable_region_encounters = false
 
-[node name="AuthoredRoom" parent="." instance=ExtResource("2")]
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="CanopySkyBackdrop" type="Polygon2D" parent="Terrain"]
+polygon = PackedVector2Array(0, 0, 1792, 0, 1792, 1000, 0, 1000)
+color = Color(0.045, 0.09, 0.12, 1)
+z_index = -30
+
+[node name="DistantCanopyMasses" type="Polygon2D" parent="Terrain"]
+polygon = PackedVector2Array(0, 420, 150, 260, 330, 380, 500, 220, 700, 360, 890, 180, 1090, 360, 1270, 210, 1450, 330, 1630, 170, 1792, 290, 1792, 600, 0, 600)
+color = Color(0.08, 0.18, 0.13, 1)
+z_index = -20
+
+[node name="CanopyBranch_West" type="StaticBody2D" parent="Terrain"]
+position = Vector2(0, 480)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/CanopyBranch_West"]
+position = Vector2(215, 12)
+shape = SubResource("terrain_GroundShape1")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/CanopyBranch_West"]
+polygon = PackedVector2Array(0, 0, 430, 0, 430, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/CanopyBranch_West"]
+points = PackedVector2Array(0, 0, 430, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="CanopyBridge_Main" type="StaticBody2D" parent="Terrain"]
+position = Vector2(430, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/CanopyBridge_Main"]
+position = Vector2(285, 12)
+shape = SubResource("terrain_GroundShape2")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/CanopyBridge_Main"]
+polygon = PackedVector2Array(0, 0, 570, 0, 570, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/CanopyBridge_Main"]
+points = PackedVector2Array(0, 0, 570, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="CanopyBranch_East" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1060, 350)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/CanopyBranch_East"]
+position = Vector2(210, 12)
+shape = SubResource("terrain_GroundShape3")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/CanopyBranch_East"]
+polygon = PackedVector2Array(0, 0, 420, 0, 420, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/CanopyBranch_East"]
+points = PackedVector2Array(0, 0, 420, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="HighroadBranch" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1430, 320)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/HighroadBranch"]
+position = Vector2(140, 12)
+shape = SubResource("terrain_GroundShape4")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/HighroadBranch"]
+polygon = PackedVector2Array(0, 0, 280, 0, 280, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/HighroadBranch"]
+points = PackedVector2Array(0, 0, 280, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RoomMarkers" type="Node2D" parent="Terrain"]
+
+[node name="EntryWest" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(50, 600)
+
+[node name="EntryFromR01" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(250, 480)
+
+[node name="EntryHighReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(1510, 320)
+
+[node name="ExitToR01" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(250, 480)
+
+[node name="ExitToR05" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(1510, 320)
 
 [node name="RegionBoundary_0" type="StaticBody2D" parent="."]
 
@@ -34,10 +136,10 @@ shape = SubResource("RoomBoundaryShape")
 position = Vector2(1640, 500)
 shape = SubResource("RoomBoundaryShape")
 
-[node name="Hero" parent="." instance=ExtResource("3")]
+[node name="Hero" parent="." instance=ExtResource("hero_scene")]
 position = Vector2(180, 600)
 
-[node name="Narrative" parent="." instance=ExtResource("5")]
+[node name="Narrative" parent="." instance=ExtResource("narrative_scene")]
 
-[node name="HUD" parent="." instance=ExtResource("4")]
+[node name="HUD" parent="." instance=ExtResource("hud_scene")]
 
