@@ -444,7 +444,7 @@ position = Vector2(990, 800)
 position = Vector2(1570, 480)
 
 [node name="A2R01Room" type="Node2D"]
-script = ExtResource("1")
+script = ExtResource("runtime_script")
 region_id = "A2"
 location_id = "ash_forest"
 region_title = "林间遗迹"
