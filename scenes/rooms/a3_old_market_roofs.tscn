@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/contract_room_region.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/world/contract_room_exit.tscn" id="5"]
+[ext_resource type="Texture2D" path="res://assets/art/backdrops/ruins_backdrop.svg" id="RoomBackdrop"]
 
 [sub_resource type="RectangleShape2D" id="TerrainShape1"]
 size = Vector2(350, 50)
@@ -25,6 +26,13 @@ size = Vector2(180, 20)
 size = Vector2(180, 20)
 
 [node name="Room_A3_R02" type="Node2D"]
+
+[node name="RoomBackdropVisual" type="Sprite2D" parent="."]
+texture = ExtResource("RoomBackdrop")
+position = Vector2(-80, -100)
+scale = Vector2(1.35, 1.35)
+centered = false
+z_index = -100
 script = ExtResource("1")
 room_id = "A3-R02"
 
@@ -110,3 +118,75 @@ position = Vector2(100, 760)
 [node name="Narrative" parent="." instance=ExtResource("3")]
 
 [node name="HUD" parent="." instance=ExtResource("4")]
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_market_roof_01"]
+position = Vector2(175, 25)
+polygon = PackedVector2Array(Vector2(-175, -25), Vector2(175, -25), Vector2(175, 25), Vector2(-175, 25))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_market_roof_01"]
+position = Vector2(175, 0)
+polygon = PackedVector2Array(Vector2(-175, 0), Vector2(175, 0), Vector2(175, 3), Vector2(-175, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_market_roof_02"]
+position = Vector2(140, 12)
+polygon = PackedVector2Array(Vector2(-140, -12), Vector2(140, -12), Vector2(140, 12), Vector2(-140, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_market_roof_02"]
+position = Vector2(140, 0)
+polygon = PackedVector2Array(Vector2(-140, 0), Vector2(140, 0), Vector2(140, 3), Vector2(-140, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_market_roof_03"]
+position = Vector2(140, 12)
+polygon = PackedVector2Array(Vector2(-140, -12), Vector2(140, -12), Vector2(140, 12), Vector2(-140, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_market_roof_03"]
+position = Vector2(140, 0)
+polygon = PackedVector2Array(Vector2(-140, 0), Vector2(140, 0), Vector2(140, 3), Vector2(-140, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_market_roof_04"]
+position = Vector2(215, 25)
+polygon = PackedVector2Array(Vector2(-215, -25), Vector2(215, -25), Vector2(215, 25), Vector2(-215, 25))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_market_roof_04"]
+position = Vector2(215, 0)
+polygon = PackedVector2Array(Vector2(-215, 0), Vector2(215, 0), Vector2(215, 3), Vector2(-215, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_stall_canopy_01"]
+position = Vector2(90, 10)
+polygon = PackedVector2Array(Vector2(-90, -10), Vector2(90, -10), Vector2(90, 10), Vector2(-90, 10))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_stall_canopy_01"]
+position = Vector2(90, 0)
+polygon = PackedVector2Array(Vector2(-90, 0), Vector2(90, 0), Vector2(90, 3), Vector2(-90, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_stall_canopy_02"]
+position = Vector2(90, 10)
+polygon = PackedVector2Array(Vector2(-90, -10), Vector2(90, -10), Vector2(90, 10), Vector2(-90, 10))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_stall_canopy_02"]
+position = Vector2(90, 0)
+polygon = PackedVector2Array(Vector2(-90, 0), Vector2(90, 0), Vector2(90, 3), Vector2(-90, 3))
+color = Color("#c1a77e")
+z_index = 1
