@@ -241,3 +241,37 @@ position = Vector2(2000, 420)
 visible = false
 
 [node name="HUD" parent="." instance=ExtResource("7")]
+
+[node name="ExitGateVisual" type="Node2D" parent="."]
+position = Vector2(2000, 300)
+z_index = 5
+
+[node name="ClosedGate" type="Polygon2D" parent="ExitGateVisual"]
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(90, 0), Vector2(90, 220), Vector2(0, 220))
+color = Color("#18151b")
+
+[node name="LeftBar" type="Line2D" parent="ExitGateVisual"]
+position = Vector2(10, 20)
+points = PackedVector2Array(Vector2(0, 0), Vector2(0, 180))
+width = 5.0
+default_color = Color("#5d4c55")
+
+[node name="RightBar" type="Line2D" parent="ExitGateVisual"]
+position = Vector2(80, 20)
+points = PackedVector2Array(Vector2(0, 0), Vector2(0, 180))
+width = 5.0
+default_color = Color("#5d4c55")
+
+[node name="OpenedGate" type="Polygon2D" parent="ExitGateVisual"]
+visible = false
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(90, 0), Vector2(90, 220), Vector2(0, 220))
+color = Color("#33232a")
+
+[node name="OpenedLabel" type="Label" parent="ExitGateVisual"]
+visible = false
+offset_left = -5.0
+offset_top = -25.0
+offset_right = 110.0
+offset_bottom = 0.0
+text = "开启"
+theme_override_colors/font_color = Color("#d6c7b2")
