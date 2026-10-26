@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/combat/hitbox.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/combat/hurtbox.tscn" id="2"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_enemy"]
+resource_local_to_scene = true
+radius = 22.0
+height = 60.0
+
+[node name="EnemyActor" type="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -30)
+shape = SubResource("CapsuleShape2D_enemy")
+
+[node name="AttackHitbox" parent="." instance=ExtResource("1")]
+
+[node name="Hurtbox" parent="." instance=ExtResource("2")]
