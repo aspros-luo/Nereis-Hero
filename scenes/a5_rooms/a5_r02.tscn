@@ -163,45 +163,42 @@ position = Vector2(42.5, 15)
 shape = SubResource("A5Shape14")
 
 [node name="Transition_A5-I01" parent="." instance=ExtResource("RoomTransitionScene")]
-position = Vector2(1280, 24)
+position = Vector2(24, 484)
 visible = false
 monitoring = false
 connection_id = &"A5-I01"
 target_room_id = &"A5-R01"
-target_entry_id = &"south"
-
+target_entry_id = &"east"
 [node name="Unlock_A5-I01" parent="." instance=ExtResource("ShortcutUnlockScene")]
-position = Vector2(1280, 24)
+position = Vector2(24, 484)
 visible = false
 monitoring = false
 shortcut_id = "A5-I01"
 prompt_text = "按 E 开启捷径"
 
 [node name="Transition_A5-I02" parent="." instance=ExtResource("RoomTransitionScene")]
-position = Vector2(1384, 24)
+position = Vector2(2536, 484)
 visible = false
 monitoring = false
 connection_id = &"A5-I02"
 target_room_id = &"A5-R03"
-target_entry_id = &"south"
-
+target_entry_id = &"west"
 [node name="Unlock_A5-I02" parent="." instance=ExtResource("ShortcutUnlockScene")]
-position = Vector2(1384, 24)
+position = Vector2(2536, 484)
 visible = false
 monitoring = false
 shortcut_id = "A5-I02"
 prompt_text = "按 E 开启捷径"
 
 [node name="Transition_A5-SC02" parent="." instance=ExtResource("RoomTransitionScene")]
-position = Vector2(1488, 24)
+position = Vector2(2536, 588)
 visible = false
 monitoring = false
 connection_id = &"A5-SC02"
 target_room_id = &"A5-R08"
-target_entry_id = &"south"
-
+target_entry_id = &"west"
 [node name="Unlock_A5-SC02" parent="." instance=ExtResource("ShortcutUnlockScene")]
-position = Vector2(1488, 24)
+position = Vector2(2536, 588)
 visible = false
 monitoring = false
 shortcut_id = "A5-SC02"
