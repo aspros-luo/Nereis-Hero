@@ -1,7 +1,6 @@
 extends Node
 
 @onready var title_label: Label = $TitleLabel
-@onready var subtitle_label: Label = $SubtitleLabel
 @onready var continue_button: Button = $TitlePanel/ContinueButton
 @onready var new_game_button: Button = $TitlePanel/NewGameButton
 @onready var map_test_button: Button = $TitlePanel/MapTestButton
