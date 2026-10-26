@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="room_script"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="door_scene"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="narrative_scene"]
@@ -160,4 +161,18 @@ position = Vector2(180, 400)
 position = Vector2(350, 400)
 rest_id = "rest_A2"
 display_name = "旧朝圣圣龛"
+
+
+[node name="Door_ExitToR02" parent="." instance=ExtResource("door_scene")]
+position = Vector2(60, 400)
+
+[node name="Door_ExitToR03" parent="." instance=ExtResource("door_scene")]
+position = Vector2(370, 240)
+
+[node name="Door_ExitToR06" parent="." instance=ExtResource("door_scene")]
+position = Vector2(950, 400)
+
+[node name="Door_ExitToA5" parent="." instance=ExtResource("door_scene")]
+position = Vector2(1200, 400)
+enabled = false
 
