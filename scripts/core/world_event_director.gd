@@ -5,6 +5,8 @@ extends Node
 
 signal event_triggered(event_id: String, payload: Dictionary)
 
+const ROUTE_NPC_SCENE: PackedScene = preload("res://scenes/npc/route_npc.tscn")
+
 const NPC_DEFINITIONS: Array[Dictionary] = [
 	{
 		"id": "pilgrim_knight_a1",
@@ -63,7 +65,7 @@ func setup(world_state: Variant, host: Node) -> void:
 	_world_state = world_state
 	_host = host
 
-func spawn_npcs(host: Node, npc_script: Script, interaction_callback: Callable) -> Array[Node]:
+func spawn_npcs(host: Node, interaction_callback: Callable) -> Array[Node]:
 	# Refresh only director-managed NPCs; baseline NPCs are owned by the scene controller.
 	for old_npc in _managed_npcs:
 		if is_instance_valid(old_npc):
@@ -79,8 +81,7 @@ func spawn_npcs(host: Node, npc_script: Script, interaction_callback: Callable) 
 		var absent_flag := String(definition.get("required_flag_absent", ""))
 		if not absent_flag.is_empty() and absent_flag in _world_state.achievement_flags:
 			continue
-		var npc := Node2D.new()
-		npc.set_script(npc_script)
+		var npc := ROUTE_NPC_SCENE.instantiate() as Node2D
 		npc.name = npc_id
 		npc.npc_id = npc_id
 		npc.position = definition.get("position", Vector2.ZERO)
