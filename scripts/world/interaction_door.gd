@@ -3,7 +3,6 @@ extends Area2D
 signal interacted
 
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
-const PROMPT_SCENE = preload("res://scenes/world/interaction_prompt.tscn")
 
 @export var prompt_text: String = "E  Enter"
 @export var enabled := true
@@ -21,10 +20,6 @@ func _ready() -> void:
     set_meta("interaction_priority", 100)
     if not unlock_once_flag_id.is_empty() and unlock_once_flag_id in WorldState.achievement_flags and not opened_prompt_text.is_empty():
         prompt_text = opened_prompt_text
-    if not has_node("Prompt"):
-        var prompt := PROMPT_SCENE.instantiate()
-        prompt.name = "Prompt"
-        add_child(prompt)
     prompt_label = get_node("Prompt/PromptLabel") as Label
     prompt_label.text = NereisLocalization.translate_text(prompt_text)
     prompt_label.visible = false
