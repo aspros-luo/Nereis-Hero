@@ -34,9 +34,8 @@ func _ready() -> void:
 	WorldState.prepare_scene_runtime()
 	WorldState.load_room_state()
 	if not _load_a5_contract():
-	player.add_to_group("player")
+		return
 	hud.bind_hero(player)
-	_create_persistent_hud()
 	fade_rect.modulate.a = 1.0
 	await _load_room("A5-R01", &"west", false)
 	await _fade_to(0.0)
