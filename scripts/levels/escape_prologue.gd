@@ -96,35 +96,35 @@ func _spawn_warden(spawn_position: Vector2, enemy_name: String) -> void:
 	wardens.append(warden)
 
 func _spawn_progress_barriers() -> void:
-    # Both barrier nodes are authored in escape_prologue.tscn; only their state changes at runtime.
-    for gate in progress_barriers:
-        gate.visible = false
-        var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
-        collision.disabled = true
-    _spawn_single_progress_barrier(1320.0)
+	# Both barrier nodes are authored in escape_prologue.tscn; only their state changes at runtime.
+	for gate in progress_barriers:
+		gate.visible = false
+		var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
+		collision.disabled = true
+	_spawn_single_progress_barrier(1320.0)
 
 
 func _spawn_single_progress_barrier(gate_x: float) -> void:
-    var gate_name := "ProgressBarrier_Left" if gate_x < 1600.0 else "ProgressBarrier_Right"
-    var gate := get_node_or_null(gate_name) as StaticBody2D
-    if gate == null:
-        push_error("[NEREIS][PROLOGUE] Missing authored progress barrier: " + gate_name)
-        return
-    gate.position = Vector2(gate_x, 420.0)
-    gate.visible = true
-    var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
-    collision.disabled = false
+	var gate_name := "ProgressBarrier_Left" if gate_x < 1600.0 else "ProgressBarrier_Right"
+	var gate := get_node_or_null(gate_name) as StaticBody2D
+	if gate == null:
+		push_error("[NEREIS][PROLOGUE] Missing authored progress barrier: " + gate_name)
+		return
+	gate.position = Vector2(gate_x, 420.0)
+	gate.visible = true
+	var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
+	collision.disabled = false
 
 
 func _open_progress_barrier(index: int) -> void:
-    if index < 0 or index >= progress_barriers.size():
-        return
-    var gate := progress_barriers[index]
-    if is_instance_valid(gate):
-        gate.visible = false
-        var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
-        collision.disabled = true
-    queue_redraw()
+	if index < 0 or index >= progress_barriers.size():
+		return
+	var gate := progress_barriers[index]
+	if is_instance_valid(gate):
+		gate.visible = false
+		var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
+		collision.disabled = true
+	queue_redraw()
 
 
 func _on_clue_examined(clue: Node) -> void:
