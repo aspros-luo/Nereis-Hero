@@ -459,6 +459,6 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 - A5 的 22 个房间场景现在都显式实例化了对应合同边的 `TransitionPoint` 与 `ShortcutUnlockPoint` 节点；连接节点可以在 Godot Scene 面板中展开检查，不再由 `world.gd` 临时 `.instantiate()` 并 `add_child()`。
 - 每条合同连接在房间场景中预置转场与捷径两种节点，运行时根据 `initial_state` 和存档中的捷径状态切换 `visible/monitoring`；关闭的占位节点保留在 Scene 树中，方便编辑器审查。
 - `scripts/world/world.gd::_build_room_transitions()` 已改为按房间合同查找预置节点、设置目标房间/入口、碰撞尺寸和启用状态；删除该函数中动态实例化、添加、释放连接节点的逻辑。
-- 本批只重构 A5 的 RoomContainer 房间连接；旧版 `old_battlefield.tscn` 总图路径仍需完成引用闭包审计，暂不删除。
+- 宏观地图验收菜单的 A5 入口已切换至 `scenes/world/world.tscn`，确保玩家从菜单进入的是使用上述显式节点的 RoomContainer 房间流，而不是旧版总图装配。旧版 `old_battlefield.tscn` / `a5_assembled_region.tscn` 仍需完成全仓引用闭包审计，暂不删除。
 - [x] 源码级检查：22 个房间均有合同连接节点占位，脚本不再在该函数中创建连接节点。
 - [ ] Godot 4.6.1 场景解析、连接触发、捷径开启与跨房间回程：BLOCKED（本轮未在本地引擎运行）。
