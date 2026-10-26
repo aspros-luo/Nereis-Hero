@@ -1,7 +1,7 @@
 extends Node2D
 
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
+const NARRATIVE_SCENE: PackedScene = preload("res://scenes/core/narrative_manager.tscn")
+const HUD_SCENE: PackedScene = preload("res://scenes/ui/game_hud.tscn")
 const CLIFF_EXPLORATION_SCENE := "res://scenes/cliff_exploration.tscn"
 
 @onready var hero: CharacterBody2D = $Hero
@@ -30,11 +30,9 @@ func _ready() -> void:
 
 
 func _spawn_ui() -> void:
-	narrative = CanvasLayer.new()
-	narrative.set_script(NARRATIVE_SCRIPT)
+	narrative = NARRATIVE_SCENE.instantiate() as CanvasLayer
 	add_child(narrative)
-	hud = CanvasLayer.new()
-	hud.set_script(HUD_SCRIPT)
+	hud = HUD_SCENE.instantiate() as CanvasLayer
 	add_child(hud)
 	hud.bind_hero(hero)
 	hud.set_story_mode("A1.1｜教堂与后山", "左侧可进入悬崖探索；右侧通往雾林与钟墓的道路尚未开放。")
