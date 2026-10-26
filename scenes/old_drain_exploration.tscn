@@ -1,6 +1,166 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=17 format=3]
 
-[ext_resource path="res://scripts/levels/old_drain_exploration.gd" type="Script" id="1"]
+[ext_resource type="Script" path="res://scripts/levels/old_drain_exploration.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/sewer_rat.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_start"]
+resource_local_to_scene = true
+size = Vector2(280, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_main"]
+resource_local_to_scene = true
+size = Vector2(1800, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_95"]
+resource_local_to_scene = true
+size = Vector2(95, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_110"]
+resource_local_to_scene = true
+size = Vector2(110, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_140"]
+resource_local_to_scene = true
+size = Vector2(140, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_125"]
+resource_local_to_scene = true
+size = Vector2(125, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_130"]
+resource_local_to_scene = true
+size = Vector2(130, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_145"]
+resource_local_to_scene = true
+size = Vector2(145, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+resource_local_to_scene = true
+size = Vector2(40, 900)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
+resource_local_to_scene = true
+size = Vector2(38, 190)
 
 [node name="OldDrainExploration" type="Node2D"]
 script = ExtResource("1")
+
+[node name="DrainFloorStart" type="StaticBody2D" parent="."]
+position = Vector2(140, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DrainFloorStart"]
+shape = SubResource("RectangleShape2D_floor_start")
+
+[node name="DrainFloorMain" type="StaticBody2D" parent="."]
+position = Vector2(1500, 710)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DrainFloorMain"]
+shape = SubResource("RectangleShape2D_floor_main")
+
+[node name="Ledge_01" type="StaticBody2D" parent="."]
+position = Vector2(300, 555)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ledge_01"]
+position = Vector2(47.5, 8)
+shape = SubResource("RectangleShape2D_platform_95")
+one_way_collision = true
+
+[node name="Ledge_02" type="StaticBody2D" parent="."]
+position = Vector2(390, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ledge_02"]
+position = Vector2(47.5, 8)
+shape = SubResource("RectangleShape2D_platform_95")
+one_way_collision = true
+
+[node name="Ledge_03" type="StaticBody2D" parent="."]
+position = Vector2(485, 645)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ledge_03"]
+position = Vector2(55, 8)
+shape = SubResource("RectangleShape2D_platform_110")
+one_way_collision = true
+
+[node name="Ledge_04" type="StaticBody2D" parent="."]
+position = Vector2(700, 635)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ledge_04"]
+position = Vector2(70, 8)
+shape = SubResource("RectangleShape2D_platform_140")
+one_way_collision = true
+
+[node name="Ledge_05" type="StaticBody2D" parent="."]
+position = Vector2(1030, 590)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ledge_05"]
+position = Vector2(62.5, 8)
+shape = SubResource("RectangleShape2D_platform_125")
+one_way_collision = true
+
+[node name="Ledge_06" type="StaticBody2D" parent="."]
+position = Vector2(1210, 550)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ledge_06"]
+position = Vector2(65, 8)
+shape = SubResource("RectangleShape2D_platform_130")
+one_way_collision = true
+
+[node name="Ledge_07" type="StaticBody2D" parent="."]
+position = Vector2(1480, 590)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ledge_07"]
+position = Vector2(72.5, 8)
+shape = SubResource("RectangleShape2D_platform_145")
+one_way_collision = true
+
+[node name="Ledge_08" type="StaticBody2D" parent="."]
+position = Vector2(1770, 625)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ledge_08"]
+position = Vector2(65, 8)
+shape = SubResource("RectangleShape2D_platform_130")
+one_way_collision = true
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(2420, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="SealedOldDrainGate" type="StaticBody2D" parent="."]
+position = Vector2(2170, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SealedOldDrainGate"]
+disabled = true
+shape = SubResource("RectangleShape2D_gate")
+
+[node name="Hero" parent="." instance=ExtResource("2")]
+position = Vector2(150, 520)
+
+[node name="VillageReturnDoor" parent="." instance=ExtResource("3")]
+position = Vector2(150, 540)
+prompt_text = "E  返回边境村庄"
+
+[node name="CityGateDoor" parent="." instance=ExtResource("3")]
+position = Vector2(2260, 690)
+prompt_text = "E  检查被堵住的闸门"
+
+[node name="ReservoirDoor" parent="." instance=ExtResource("3")]
+visible = false
+position = Vector2(1360, 690)
+prompt_text = "E  返回旧水库"
+
+[node name="NarrativeManager" parent="." instance=ExtResource("5")]
+
+[node name="HUD" parent="." instance=ExtResource("6")]
