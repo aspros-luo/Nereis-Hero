@@ -2,6 +2,93 @@
 
 [ext_resource type="Script" path="res://scripts/levels/greybox_world_region.gd" id="1"]
 
+[sub_resource type="RectangleShape2D" id="A5Shape1"]
+size = Vector2(800, 40)
+
+[sub_resource type="RectangleShape2D" id="A5Shape2"]
+size = Vector2(530, 40)
+
+[sub_resource type="RectangleShape2D" id="A5Shape3"]
+size = Vector2(720, 40)
+
+[sub_resource type="RectangleShape2D" id="A5Shape4"]
+size = Vector2(260, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape5"]
+size = Vector2(260, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape6"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape7"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape8"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape9"]
+size = Vector2(260, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape10"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape11"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape12"]
+size = Vector2(260, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape13"]
+size = Vector2(180, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape14"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape15"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape16"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape17"]
+size = Vector2(260, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape18"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape19"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape20"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape21"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape22"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape23"]
+size = Vector2(220, 18)
+
+[sub_resource type="RectangleShape2D" id="A5Shape24"]
+size = Vector2(75, 45)
+
+[sub_resource type="RectangleShape2D" id="A5Shape25"]
+size = Vector2(84, 56)
+
+[sub_resource type="RectangleShape2D" id="A5Shape26"]
+size = Vector2(90, 38)
+
+[sub_resource type="RectangleShape2D" id="A5Shape27"]
+size = Vector2(70, 50)
+
+[sub_resource type="RectangleShape2D" id="A5Shape28"]
+size = Vector2(65, 70)
+
+[sub_resource type="RectangleShape2D" id="A5Shape29"]
+size = Vector2(60, 70)
+
 [node name="A5_R10" type="Node2D"]
 script = ExtResource("1")
 region_id = "A5"
@@ -11,18 +98,12 @@ room_height = 1440
 floor_y = 1260
 assembly_child_mode = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape1"]
-size = Vector2(800, 40)
-
 [node name="A5RoomGround_00" type="StaticBody2D" parent="."]
 position = Vector2(0, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomGround_00"]
 position = Vector2(400, 1280)
 shape = SubResource("A5Shape1")
-
-[sub_resource type="RectangleShape2D" id="A5Shape2"]
-size = Vector2(530, 40)
 
 [node name="A5RoomGround_01" type="StaticBody2D" parent="."]
 position = Vector2(1180, 0)
@@ -31,18 +112,12 @@ position = Vector2(1180, 0)
 position = Vector2(265, 1280)
 shape = SubResource("A5Shape2")
 
-[sub_resource type="RectangleShape2D" id="A5Shape3"]
-size = Vector2(720, 40)
-
 [node name="A5RoomGround_02" type="StaticBody2D" parent="."]
 position = Vector2(1840, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomGround_02"]
 position = Vector2(360, 1280)
 shape = SubResource("A5Shape3")
-
-[sub_resource type="RectangleShape2D" id="A5Shape4"]
-size = Vector2(260, 18)
 
 [node name="A5RoomPlatform_001" type="StaticBody2D" parent="."]
 position = Vector2(70, 1190)
@@ -52,9 +127,6 @@ position = Vector2(130, 9)
 shape = SubResource("A5Shape4")
 one_way_collision = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape5"]
-size = Vector2(260, 18)
-
 [node name="A5RoomPlatform_002" type="StaticBody2D" parent="."]
 position = Vector2(300, 1120)
 
@@ -62,9 +134,6 @@ position = Vector2(300, 1120)
 position = Vector2(130, 9)
 shape = SubResource("A5Shape5")
 one_way_collision = true
-
-[sub_resource type="RectangleShape2D" id="A5Shape6"]
-size = Vector2(220, 18)
 
 [node name="A5RoomPlatform_003" type="StaticBody2D" parent="."]
 position = Vector2(530, 1050)
@@ -74,9 +143,6 @@ position = Vector2(110, 9)
 shape = SubResource("A5Shape6")
 one_way_collision = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape7"]
-size = Vector2(220, 18)
-
 [node name="A5RoomPlatform_004" type="StaticBody2D" parent="."]
 position = Vector2(760, 980)
 
@@ -84,9 +150,6 @@ position = Vector2(760, 980)
 position = Vector2(110, 9)
 shape = SubResource("A5Shape7")
 one_way_collision = true
-
-[sub_resource type="RectangleShape2D" id="A5Shape8"]
-size = Vector2(220, 18)
 
 [node name="A5RoomPlatform_005" type="StaticBody2D" parent="."]
 position = Vector2(990, 910)
@@ -96,9 +159,6 @@ position = Vector2(110, 9)
 shape = SubResource("A5Shape8")
 one_way_collision = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape9"]
-size = Vector2(260, 18)
-
 [node name="A5RoomPlatform_006" type="StaticBody2D" parent="."]
 position = Vector2(1220, 840)
 
@@ -106,9 +166,6 @@ position = Vector2(1220, 840)
 position = Vector2(130, 9)
 shape = SubResource("A5Shape9")
 one_way_collision = true
-
-[sub_resource type="RectangleShape2D" id="A5Shape10"]
-size = Vector2(220, 18)
 
 [node name="A5RoomPlatform_007" type="StaticBody2D" parent="."]
 position = Vector2(1510, 770)
@@ -118,9 +175,6 @@ position = Vector2(110, 9)
 shape = SubResource("A5Shape10")
 one_way_collision = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape11"]
-size = Vector2(220, 18)
-
 [node name="A5RoomPlatform_008" type="StaticBody2D" parent="."]
 position = Vector2(1760, 700)
 
@@ -128,9 +182,6 @@ position = Vector2(1760, 700)
 position = Vector2(110, 9)
 shape = SubResource("A5Shape11")
 one_way_collision = true
-
-[sub_resource type="RectangleShape2D" id="A5Shape12"]
-size = Vector2(260, 18)
 
 [node name="A5RoomPlatform_009" type="StaticBody2D" parent="."]
 position = Vector2(2010, 630)
@@ -140,9 +191,6 @@ position = Vector2(130, 9)
 shape = SubResource("A5Shape12")
 one_way_collision = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape13"]
-size = Vector2(180, 18)
-
 [node name="A5RoomPlatform_010" type="StaticBody2D" parent="."]
 position = Vector2(2300, 560)
 
@@ -150,9 +198,6 @@ position = Vector2(2300, 560)
 position = Vector2(90, 9)
 shape = SubResource("A5Shape13")
 one_way_collision = true
-
-[sub_resource type="RectangleShape2D" id="A5Shape14"]
-size = Vector2(220, 18)
 
 [node name="A5RoomPlatform_011" type="StaticBody2D" parent="."]
 position = Vector2(2240, 480)
@@ -162,9 +207,6 @@ position = Vector2(110, 9)
 shape = SubResource("A5Shape14")
 one_way_collision = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape15"]
-size = Vector2(220, 18)
-
 [node name="A5RoomPlatform_012" type="StaticBody2D" parent="."]
 position = Vector2(1960, 410)
 
@@ -172,9 +214,6 @@ position = Vector2(1960, 410)
 position = Vector2(110, 9)
 shape = SubResource("A5Shape15")
 one_way_collision = true
-
-[sub_resource type="RectangleShape2D" id="A5Shape16"]
-size = Vector2(220, 18)
 
 [node name="A5RoomPlatform_013" type="StaticBody2D" parent="."]
 position = Vector2(1680, 340)
@@ -184,9 +223,6 @@ position = Vector2(110, 9)
 shape = SubResource("A5Shape16")
 one_way_collision = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape17"]
-size = Vector2(260, 18)
-
 [node name="A5RoomPlatform_014" type="StaticBody2D" parent="."]
 position = Vector2(1400, 270)
 
@@ -194,9 +230,6 @@ position = Vector2(1400, 270)
 position = Vector2(130, 9)
 shape = SubResource("A5Shape17")
 one_way_collision = true
-
-[sub_resource type="RectangleShape2D" id="A5Shape18"]
-size = Vector2(220, 18)
 
 [node name="A5RoomPlatform_015" type="StaticBody2D" parent="."]
 position = Vector2(1080, 200)
@@ -206,9 +239,6 @@ position = Vector2(110, 9)
 shape = SubResource("A5Shape18")
 one_way_collision = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape19"]
-size = Vector2(220, 18)
-
 [node name="A5RoomPlatform_016" type="StaticBody2D" parent="."]
 position = Vector2(800, 130)
 
@@ -216,9 +246,6 @@ position = Vector2(800, 130)
 position = Vector2(110, 9)
 shape = SubResource("A5Shape19")
 one_way_collision = true
-
-[sub_resource type="RectangleShape2D" id="A5Shape20"]
-size = Vector2(220, 18)
 
 [node name="A5RoomPlatform_017" type="StaticBody2D" parent="."]
 position = Vector2(520, 200)
@@ -228,9 +255,6 @@ position = Vector2(110, 9)
 shape = SubResource("A5Shape20")
 one_way_collision = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape21"]
-size = Vector2(220, 18)
-
 [node name="A5RoomPlatform_018" type="StaticBody2D" parent="."]
 position = Vector2(300, 270)
 
@@ -238,9 +262,6 @@ position = Vector2(300, 270)
 position = Vector2(110, 9)
 shape = SubResource("A5Shape21")
 one_way_collision = true
-
-[sub_resource type="RectangleShape2D" id="A5Shape22"]
-size = Vector2(220, 18)
 
 [node name="A5RoomPlatform_019" type="StaticBody2D" parent="."]
 position = Vector2(520, 340)
@@ -250,9 +271,6 @@ position = Vector2(110, 9)
 shape = SubResource("A5Shape22")
 one_way_collision = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape23"]
-size = Vector2(220, 18)
-
 [node name="A5RoomPlatform_020" type="StaticBody2D" parent="."]
 position = Vector2(780, 410)
 
@@ -261,18 +279,12 @@ position = Vector2(110, 9)
 shape = SubResource("A5Shape23")
 one_way_collision = true
 
-[sub_resource type="RectangleShape2D" id="A5Shape24"]
-size = Vector2(75, 45)
-
 [node name="A5RoomRubble_001" type="StaticBody2D" parent="."]
 position = Vector2(500, 1215)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomRubble_001"]
 position = Vector2(37.5, 22.5)
 shape = SubResource("A5Shape24")
-
-[sub_resource type="RectangleShape2D" id="A5Shape25"]
-size = Vector2(84, 56)
 
 [node name="A5RoomRubble_002" type="StaticBody2D" parent="."]
 position = Vector2(1020, 1204)
@@ -281,18 +293,12 @@ position = Vector2(1020, 1204)
 position = Vector2(42, 28)
 shape = SubResource("A5Shape25")
 
-[sub_resource type="RectangleShape2D" id="A5Shape26"]
-size = Vector2(90, 38)
-
 [node name="A5RoomRubble_003" type="StaticBody2D" parent="."]
 position = Vector2(1740, 1222)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomRubble_003"]
 position = Vector2(45, 19)
 shape = SubResource("A5Shape26")
-
-[sub_resource type="RectangleShape2D" id="A5Shape27"]
-size = Vector2(70, 50)
 
 [node name="A5RoomRubble_004" type="StaticBody2D" parent="."]
 position = Vector2(2210, 1210)
@@ -301,18 +307,12 @@ position = Vector2(2210, 1210)
 position = Vector2(35, 25)
 shape = SubResource("A5Shape27")
 
-[sub_resource type="RectangleShape2D" id="A5Shape28"]
-size = Vector2(65, 70)
-
 [node name="A5RoomRubble_005" type="StaticBody2D" parent="."]
 position = Vector2(610, 790)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomRubble_005"]
 position = Vector2(32.5, 35)
 shape = SubResource("A5Shape28")
-
-[sub_resource type="RectangleShape2D" id="A5Shape29"]
-size = Vector2(60, 70)
 
 [node name="A5RoomRubble_006" type="StaticBody2D" parent="."]
 position = Vector2(1890, 640)
