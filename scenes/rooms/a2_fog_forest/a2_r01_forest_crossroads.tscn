@@ -382,6 +382,22 @@ position = Vector2(1792, 600)
 shape = SubResource("BoundaryShape")
 
 
+; Low-contrast editable depth placeholders. These are intentionally separate from collision geometry.
+; Replace each polygon group with original layered SVG/PNG artwork when approved.
+[node name="FarBackgroundPlaceholder" type="Node2D" parent="."]
+z_index = -3
+
+[node name="DistantTreeSilhouettes" type="Polygon2D" parent="FarBackgroundPlaceholder"]
+color = Color(0.24, 0.36, 0.34, 0.24)
+polygon = PackedVector2Array(0, 480, 60, 360, 92, 468, 145, 290, 185, 470, 245, 330, 280, 485, 340, 350, 390, 480, 450, 305, 500, 480, 560, 370, 620, 490, 690, 330, 740, 480, 810, 360, 870, 485, 940, 320, 990, 470, 1060, 345, 1120, 490, 1200, 310, 1260, 470, 1330, 355, 1390, 480, 1460, 300, 1515, 465, 1580, 340, 1640, 480, 1710, 320, 1792, 460, 1792, 0, 0, 0)
+
+[node name="MidgroundAtmospherePlaceholder" type="Node2D" parent="."]
+z_index = -1
+
+[node name="RavineMistBand" type="Polygon2D" parent="MidgroundAtmospherePlaceholder"]
+color = Color(0.55, 0.72, 0.66, 0.12)
+polygon = PackedVector2Array(0, 440, 260, 420, 520, 448, 790, 425, 1030, 450, 1300, 420, 1560, 442, 1792, 415, 1792, 555, 1500, 570, 1260, 545, 980, 575, 720, 548, 460, 570, 220, 545, 0, 560)
+
 ; Temporary, low-contrast foreground foliage placeholders.
 ; These are decorative Polygon2D overlays only: no collision and no gameplay logic.
 ; Replace with original transparent foliage textures after the layer composition is approved.
