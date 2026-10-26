@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/mite_house.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="6"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/audio/narrative_audio.tscn" id="8"]
+[ext_resource type="Texture2D" path="res://assets/art/backdrops/mite_house_backdrop.svg" id="HouseBackdrop"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 resource_local_to_scene = true
@@ -18,6 +19,11 @@ resource_local_to_scene = true
 size = Vector2(40, 720)
 
 [node name="MiteHouse" type="Node2D"]
+
+[node name="HouseBackdropVisual" type="Sprite2D" parent="."]
+texture = ExtResource("HouseBackdrop")
+centered = false
+z_index = -100
 script = ExtResource("1")
 
 [node name="Ground" type="StaticBody2D" parent="."]
