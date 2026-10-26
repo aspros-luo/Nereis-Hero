@@ -63,11 +63,16 @@ func _ready() -> void:
 		reservoir_door.monitoring = false
 		(reservoir_door.get_node("CollisionShape2D") as CollisionShape2D).disabled = true
 		gate_blocker.disabled = false
+	var gate_open := CONNECTION_FLAG in WorldState.achievement_flags
+	$SealedGateVisual.visible = not gate_open
+	$SealedGateLabel.visible = not gate_open
+	$OpenGateLeftPost.visible = gate_open
+	$OpenGateRightPost.visible = gate_open
+	$OpenGateLabel.visible = gate_open
 	_spawn_rat(900.0)
 	_spawn_rat(1100.0)
 	hud.bind_hero(hero)
 	hud.set_story_mode("A1/A3/A4｜旧排水通道", "向下探索；东侧闸门暂时封闭，找到另一侧后再回来。")
-	queue_redraw()
 	if "old_drain_first_visit_seen" not in WorldState.achievement_flags and not WorldState.debug_map_test_mode:
 		WorldState.record_achievement("old_drain_first_visit_seen")
 		get_tree().create_timer(0.55).timeout.connect(_show_intro)
@@ -164,25 +169,3 @@ func _recover_from_fall() -> void:
 	INTERACTION_FOCUS_SCRIPT.clear_all(get_tree())
 	WorldState.input_locked = false
 	respawning = false
-
-func _draw() -> void:
-	draw_rect(Rect2(0.0, 0.0, 2400.0, 900.0), Color("#101920"))
-	for x in range(0, 2400, 160):
-		draw_rect(Rect2(float(x), 140.0 + float((x / 160) % 3) * 26.0, 150.0, 130.0), Color("#1a2a30", 0.65))
-		draw_line(Vector2(float(x) + 14.0, 520.0), Vector2(float(x) + 38.0, 540.0), Color("#37444a"), 2.0)
-	for x in [60.0, 250.0, 640.0, 990.0, 1330.0, 1710.0, 2070.0]:
-		draw_arc(Vector2(x, 510.0 + (20.0 if x > 300.0 else 0.0)), 42.0, PI, TAU, 18, Color("#46545b"), 5.0)
-		draw_line(Vector2(x - 38.0, 520.0), Vector2(x - 38.0, 690.0), Color("#2d3c43"), 4.0)
-		draw_line(Vector2(x + 38.0, 520.0), Vector2(x + 38.0, 690.0), Color("#2d3c43"), 4.0)
-	draw_string(ThemeDB.fallback_font, Vector2(80.0, 450.0), "OLD DRAIN", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 15, Color("#9b8587"))
-	if CONNECTION_FLAG in WorldState.achievement_flags:
-		# The opened gate leaves a visible gap; the collision blocker is not spawned in this state.
-		draw_rect(Rect2(2100.0, 568.0, 18.0, 122.0), Color("#3c4248"))
-		draw_rect(Rect2(2220.0, 568.0, 18.0, 122.0), Color("#3c4248"))
-		draw_string(ThemeDB.fallback_font, Vector2(2010.0, 548.0), "GATE OPEN", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 15, Color("#84c4ad"))
-	else:
-		draw_rect(Rect2(2118.0, 568.0, 110.0, 122.0), Color("#1c1d24"))
-		draw_rect(Rect2(2128.0, 579.0, 90.0, 111.0), Color("#090d12"))
-		for x in range(2125, 2220, 18):
-			draw_line(Vector2(float(x), 580.0), Vector2(float(x - 5), 686.0), Color("#615b60"), 4.0)
-		draw_string(ThemeDB.fallback_font, Vector2(2020.0, 548.0), "SEALED GATE", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 15, Color("#9b8587"))
