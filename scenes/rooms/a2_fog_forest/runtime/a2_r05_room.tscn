@@ -1,17 +1,28 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=11 format=3]
 
-[ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="1"]
-[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn" type="PackedScene" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="6"]
+[ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="room_script"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="narrative_scene"]
+[ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="rest_point_scene"]
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape1"]
+size = Vector2(360, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape2"]
+size = Vector2(240, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape3"]
+size = Vector2(400, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape4"]
+size = Vector2(520, 24)
 
 [sub_resource type="RectangleShape2D" id="RoomBoundaryShape"]
 size = Vector2(40, 1200)
 
 [node name="A2R05Room" type="Node2D"]
-script = ExtResource("1")
+script = ExtResource("room_script")
 region_id = "A2"
 location_id = "ash_forest"
 region_title = "A2 R05 旧朝圣高路"
@@ -21,7 +32,110 @@ room_height = 1000
 room_id = "A2-R05"
 enable_region_encounters = false
 
-[node name="AuthoredRoom" parent="." instance=ExtResource("2")]
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="PilgrimSkyBackdrop" type="Polygon2D" parent="Terrain"]
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 1000, 0, 1000)
+color = Color(0.09, 0.09, 0.105, 1)
+z_index = -30
+
+[node name="DistantPilgrimRuins" type="Polygon2D" parent="Terrain"]
+polygon = PackedVector2Array(0, 300, 130, 210, 260, 270, 390, 170, 530, 260, 680, 140, 840, 250, 990, 180, 1120, 260, 1280, 150, 1280, 400, 0, 400)
+color = Color(0.19, 0.18, 0.17, 1)
+z_index = -20
+
+[node name="HighroadWest" type="StaticBody2D" parent="Terrain"]
+position = Vector2(0, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/HighroadWest"]
+position = Vector2(180, 12)
+shape = SubResource("terrain_GroundShape1")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/HighroadWest"]
+polygon = PackedVector2Array(0, 0, 360, 0, 360, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/HighroadWest"]
+points = PackedVector2Array(0, 0, 360, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="HighroadUpperShortcut" type="StaticBody2D" parent="Terrain"]
+position = Vector2(350, 240)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/HighroadUpperShortcut"]
+position = Vector2(120, 12)
+shape = SubResource("terrain_GroundShape2")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/HighroadUpperShortcut"]
+polygon = PackedVector2Array(0, 0, 240, 0, 240, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/HighroadUpperShortcut"]
+points = PackedVector2Array(0, 0, 240, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="HighroadMiddle" type="StaticBody2D" parent="Terrain"]
+position = Vector2(360, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/HighroadMiddle"]
+position = Vector2(200, 12)
+shape = SubResource("terrain_GroundShape3")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/HighroadMiddle"]
+polygon = PackedVector2Array(0, 0, 400, 0, 400, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/HighroadMiddle"]
+points = PackedVector2Array(0, 0, 400, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="HighroadEast" type="StaticBody2D" parent="Terrain"]
+position = Vector2(760, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/HighroadEast"]
+position = Vector2(260, 12)
+shape = SubResource("terrain_GroundShape4")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/HighroadEast"]
+polygon = PackedVector2Array(0, 0, 520, 0, 520, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/HighroadEast"]
+points = PackedVector2Array(0, 0, 520, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RoomMarkers" type="Node2D" parent="Terrain"]
+
+[node name="EntryDefault" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(50, 400)
+
+[node name="EntryFromR02" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(100, 400)
+
+[node name="EntryUpperShortcut" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(370, 240)
+
+[node name="EntryRavineReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(650, 400)
+
+[node name="EntryC04Return" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(560, 400)
+
+[node name="ExitToR02" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(60, 400)
+
+[node name="ExitToR03" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(370, 240)
+
+[node name="ExitToR06" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(950, 400)
+
+[node name="ExitToA5" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(1200, 400)
 
 [node name="RegionBoundary_0" type="StaticBody2D" parent="."]
 
@@ -35,14 +149,14 @@ shape = SubResource("RoomBoundaryShape")
 position = Vector2(1312, 500)
 shape = SubResource("RoomBoundaryShape")
 
-[node name="Hero" parent="." instance=ExtResource("3")]
+[node name="Hero" parent="." instance=ExtResource("hero_scene")]
 position = Vector2(180, 400)
 
-[node name="Narrative" parent="." instance=ExtResource("5")]
+[node name="Narrative" parent="." instance=ExtResource("narrative_scene")]
 
-[node name="HUD" parent="." instance=ExtResource("4")]
+[node name="HUD" parent="." instance=ExtResource("hud_scene")]
 
-[node name="RegionRestPoint_A2" parent="." instance=ExtResource("6")]
+[node name="RegionRestPoint_A2" parent="." instance=ExtResource("rest_point_scene")]
 position = Vector2(350, 400)
 rest_id = "rest_A2"
 display_name = "旧朝圣圣龛"
