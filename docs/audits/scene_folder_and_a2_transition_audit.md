@@ -45,6 +45,18 @@ The room graph and marker names line up statically, but this cannot prove that t
 
 The H02 resonance gate is still created at runtime because its state/requirements are conditional. That is intentional for this pass; its visual placement and collision still need manual inspection.
 
+### R06 low-to-high return path — geometry correction
+
+- Static collision-top review found the earlier R06 climb gaps were 100–160 px, exceeding the previously measured Hero jump apex of about 96.6 px. That made the low entry's return to the upper R05/A3 routes doubtful or impossible without runtime proof.
+- Adjusted the climb ledges in `a2_r06_room.tscn` and added two editor-visible upper steps. The intended collision-top sequence is now approximately y=792 → 712 → 632 → 572 → 492 → 412 → 332, with each rise at most 80 px.
+- Adjacent platforms overlap horizontally, so the route is intended to form a continuous upward climb from R06's lower entry to the upper floor. This is a source-level geometry correction, not a claim of verified jump reachability; Hero collision dimensions, coyote time, and real jump behavior still need local playtesting.
+
+### Cross-region state audit
+
+- R06's `a2_r06_c03_return` destination maps to `EntryC03Return`; R04's `a2_r04_ravine_return` maps to `EntryRavineReturn`; R05's `a2_r05_ravine_return` maps to `EntryRavineReturn`; and C04's `a2_r05_c04_return` maps to `EntryC04Return`.
+- H02 uses `a2_r04_h02_return` → `EntryH02Return`. Hidden-region discovery/open/entry arrays are serialized by `WorldState.save_game()` and restored by `load_game()`; the room exploration/shortcut/item arrays are saved separately by `save_room_state()`.
+- These mappings and serializers are present in source. Whether the correct reverse door appears after reopening a saved game still requires an end-to-end save/load test.
+
 ## Acceptance checklist
 
 - [x] One editable playable scene per room (R01–R06).
@@ -55,5 +67,5 @@ The H02 resonance gate is still created at runtime because its state/requirement
 - [x] R05 rest point preserved; A5 exit remains progression-gated.
 - [ ] Godot 4.6.1 editor import passes without parse/resource errors.
 - [ ] R01 safe drop reaches R04; other void falls remain lethal.
-- [ ] R03 drop reaches R04; R04↔R06 and R05↔R06 routes work at their intended heights.
+- [ ] R03 drop reaches R04; R04↔R06 and R05↔R06 routes work at their intended heights.\n- [ ] R06 low-entry climb reaches the upper R05/A3 route with the real Hero controller.
 - [ ] C03, C04 and H02 cross-region/return routes and saved discovery state verified.
