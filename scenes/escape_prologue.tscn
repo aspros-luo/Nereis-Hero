@@ -90,6 +90,14 @@ shape = SubResource("RectangleShape2D_table")
 [node name="Platform01" type="StaticBody2D" parent="PrologueTraversalRoute"]
 position = Vector2(360, 460)
 
+[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform01"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
+color = Color(0.25, 0.2, 0.24, 1)
+
+[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform01"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
+color = Color(0.58, 0.47, 0.5, 1)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform01"]
 position = Vector2(60, 8)
 shape = SubResource("RectangleShape2D_platform")
@@ -97,6 +105,14 @@ one_way_collision = true
 
 [node name="Platform02" type="StaticBody2D" parent="PrologueTraversalRoute"]
 position = Vector2(520, 430)
+
+[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform02"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
+color = Color(0.25, 0.2, 0.24, 1)
+
+[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform02"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
+color = Color(0.58, 0.47, 0.5, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform02"]
 position = Vector2(60, 8)
@@ -106,6 +122,14 @@ one_way_collision = true
 [node name="Platform03" type="StaticBody2D" parent="PrologueTraversalRoute"]
 position = Vector2(680, 400)
 
+[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform03"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
+color = Color(0.25, 0.2, 0.24, 1)
+
+[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform03"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
+color = Color(0.58, 0.47, 0.5, 1)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform03"]
 position = Vector2(60, 8)
 shape = SubResource("RectangleShape2D_platform")
@@ -113,6 +137,14 @@ one_way_collision = true
 
 [node name="Platform04" type="StaticBody2D" parent="PrologueTraversalRoute"]
 position = Vector2(840, 400)
+
+[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform04"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
+color = Color(0.25, 0.2, 0.24, 1)
+
+[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform04"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
+color = Color(0.58, 0.47, 0.5, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform04"]
 position = Vector2(60, 8)
@@ -122,6 +154,14 @@ one_way_collision = true
 [node name="Platform05" type="StaticBody2D" parent="PrologueTraversalRoute"]
 position = Vector2(1000, 430)
 
+[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform05"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
+color = Color(0.25, 0.2, 0.24, 1)
+
+[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform05"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
+color = Color(0.58, 0.47, 0.5, 1)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform05"]
 position = Vector2(60, 8)
 shape = SubResource("RectangleShape2D_platform")
@@ -129,6 +169,14 @@ one_way_collision = true
 
 [node name="Platform06" type="StaticBody2D" parent="PrologueTraversalRoute"]
 position = Vector2(1160, 460)
+
+[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform06"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
+color = Color(0.25, 0.2, 0.24, 1)
+
+[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform06"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
+color = Color(0.58, 0.47, 0.5, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform06"]
 position = Vector2(60, 8)
