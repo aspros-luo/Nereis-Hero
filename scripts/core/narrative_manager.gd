@@ -2,13 +2,13 @@ extends CanvasLayer
 
 signal message_finished
 
-var panel: ColorRect
-var title_label: Label
-var body_label: Label
+@onready var panel: ColorRect = $Panel
+@onready var title_label: Label = $Panel/TitleLabel
+@onready var body_label: Label = $Panel/BodyLabel
 var timer := 0.0
 var choice_active := false
-var skip_label: Label
-var continue_button: Button
+@onready var skip_label: Label = $Panel/SkipLabel
+@onready var continue_button: Button = $Panel/ContinueButton
 var paused_for_narrative := false
 var blocks_input := true
 
@@ -18,46 +18,7 @@ func _mark_input_handled() -> void:
         viewport.set_input_as_handled()
 
 func _ready() -> void:
-    layer = 20
-    process_mode = Node.PROCESS_MODE_ALWAYS
-
-    panel = ColorRect.new()
-    panel.color = Color("#0a090d", 0.94)
-    panel.position = Vector2(170, 500)
-    panel.size = Vector2(940, 150)
-    panel.visible = false
-    add_child(panel)
-
-    title_label = Label.new()
-    title_label.position = Vector2(28, 18)
-    title_label.add_theme_font_size_override("font_size", 22)
-    title_label.text = "记忆"
-    panel.add_child(title_label)
-
-    body_label = Label.new()
-    body_label.position = Vector2(28, 58)
-    body_label.size = Vector2(880, 75)
-    body_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-    body_label.add_theme_font_size_override("font_size", 19)
-    panel.add_child(body_label)
-
-    skip_label = Label.new()
-    skip_label.position = Vector2(28, 126)
-    skip_label.size = Vector2(880, 20)
-    skip_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-    skip_label.add_theme_font_size_override("font_size", 12)
-    skip_label.add_theme_color_override("font_color", Color("#756d72"))
-    skip_label.text = NereisLocalization.t("narrative.skip")
-    panel.add_child(skip_label)
-
-    continue_button = Button.new()
-    continue_button.position = Vector2(730, 116)
-    continue_button.size = Vector2(170, 28)
-    continue_button.add_theme_font_size_override("font_size", 13)
-    continue_button.text = NereisLocalization.t("narrative.continue")
-    continue_button.pressed.connect(_finish_message)
-    panel.add_child(continue_button)
-
+	continue_button.pressed.connect(_finish_message)
 func _process(delta: float) -> void:
     if not panel.visible:
         return
