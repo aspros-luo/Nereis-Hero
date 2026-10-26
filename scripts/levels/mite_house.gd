@@ -16,7 +16,7 @@ func _ready() -> void:
 	get_tree().paused = false
 	WorldState.input_locked = false
 	WorldState.set_location("mite_house")
-	var camera := hero.get_node("Camera2D") as Camera2D
+	var camera := hero.get_node("HeroCamera") as Camera2D
 	camera.limit_left = 0
 	camera.limit_top = 0
 	camera.limit_right = 1400
