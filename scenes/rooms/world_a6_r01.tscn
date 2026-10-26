@@ -187,3 +187,171 @@ position = Vector2(525, 240)
 [node name="Narrative" parent="." instance=ExtResource("3")]
 
 [node name="HUD" parent="." instance=ExtResource("4")]
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_shaft_lip_west"]
+position = Vector2(189, 30)
+polygon = PackedVector2Array(Vector2(-189, -30), Vector2(189, -30), Vector2(189, 30), Vector2(-189, 30))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_shaft_lip_west"]
+position = Vector2(189, 0)
+polygon = PackedVector2Array(Vector2(-189, 0), Vector2(189, 0), Vector2(189, 3), Vector2(-189, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_shaft_lip_east"]
+position = Vector2(184, 30)
+polygon = PackedVector2Array(Vector2(-184, -30), Vector2(184, -30), Vector2(184, 30), Vector2(-184, 30))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_shaft_lip_east"]
+position = Vector2(184, 0)
+polygon = PackedVector2Array(Vector2(-184, 0), Vector2(184, 0), Vector2(184, 3), Vector2(-184, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_shaft_floor"]
+position = Vector2(525, 40)
+polygon = PackedVector2Array(Vector2(-525, -40), Vector2(525, -40), Vector2(525, 40), Vector2(-525, 40))
+color = Color("#34333a")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_shaft_floor"]
+position = Vector2(525, 0)
+polygon = PackedVector2Array(Vector2(-525, 0), Vector2(525, 0), Vector2(525, 3), Vector2(-525, 3))
+color = Color("#8c796c")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ledge_low_a"]
+position = Vector2(115.5, 12)
+polygon = PackedVector2Array(Vector2(-115.5, -12), Vector2(115.5, -12), Vector2(115.5, 12), Vector2(-115.5, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_ledge_low_a"]
+position = Vector2(115.5, 0)
+polygon = PackedVector2Array(Vector2(-115.5, 0), Vector2(115.5, 0), Vector2(115.5, 3), Vector2(-115.5, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ledge_low_b"]
+position = Vector2(100, 12)
+polygon = PackedVector2Array(Vector2(-100, -12), Vector2(100, -12), Vector2(100, 12), Vector2(-100, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_ledge_low_b"]
+position = Vector2(100, 0)
+polygon = PackedVector2Array(Vector2(-100, 0), Vector2(100, 0), Vector2(100, 3), Vector2(-100, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ledge_mid_a"]
+position = Vector2(110.5, 12)
+polygon = PackedVector2Array(Vector2(-110.5, -12), Vector2(110.5, -12), Vector2(110.5, 12), Vector2(-110.5, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_ledge_mid_a"]
+position = Vector2(110.5, 0)
+polygon = PackedVector2Array(Vector2(-110.5, 0), Vector2(110.5, 0), Vector2(110.5, 3), Vector2(-110.5, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ledge_mid_b"]
+position = Vector2(94.5, 12)
+polygon = PackedVector2Array(Vector2(-94.5, -12), Vector2(94.5, -12), Vector2(94.5, 12), Vector2(-94.5, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_ledge_mid_b"]
+position = Vector2(94.5, 0)
+polygon = PackedVector2Array(Vector2(-94.5, 0), Vector2(94.5, 0), Vector2(94.5, 3), Vector2(-94.5, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ledge_high_a"]
+position = Vector2(100, 12)
+polygon = PackedVector2Array(Vector2(-100, -12), Vector2(100, -12), Vector2(100, 12), Vector2(-100, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_ledge_high_a"]
+position = Vector2(100, 0)
+polygon = PackedVector2Array(Vector2(-100, 0), Vector2(100, 0), Vector2(100, 3), Vector2(-100, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ledge_high_b"]
+position = Vector2(89.5, 12)
+polygon = PackedVector2Array(Vector2(-89.5, -12), Vector2(89.5, -12), Vector2(89.5, 12), Vector2(-89.5, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_ledge_high_b"]
+position = Vector2(89.5, 0)
+polygon = PackedVector2Array(Vector2(-89.5, 0), Vector2(89.5, 0), Vector2(89.5, 3), Vector2(-89.5, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_shaft_ledge_01"]
+position = Vector2(184, 12)
+polygon = PackedVector2Array(Vector2(-184, -12), Vector2(184, -12), Vector2(184, 12), Vector2(-184, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_shaft_ledge_01"]
+position = Vector2(184, 0)
+polygon = PackedVector2Array(Vector2(-184, 0), Vector2(184, 0), Vector2(184, 3), Vector2(-184, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_shaft_ledge_02"]
+position = Vector2(178.5, 12)
+polygon = PackedVector2Array(Vector2(-178.5, -12), Vector2(178.5, -12), Vector2(178.5, 12), Vector2(-178.5, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_shaft_ledge_02"]
+position = Vector2(178.5, 0)
+polygon = PackedVector2Array(Vector2(-178.5, 0), Vector2(178.5, 0), Vector2(178.5, 3), Vector2(-178.5, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_shaft_ledge_03"]
+position = Vector2(189, 12)
+polygon = PackedVector2Array(Vector2(-189, -12), Vector2(189, -12), Vector2(189, 12), Vector2(-189, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_shaft_ledge_03"]
+position = Vector2(189, 0)
+polygon = PackedVector2Array(Vector2(-189, 0), Vector2(189, 0), Vector2(189, 3), Vector2(-189, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_shaft_ledge_04"]
+position = Vector2(178.5, 12)
+polygon = PackedVector2Array(Vector2(-178.5, -12), Vector2(178.5, -12), Vector2(178.5, 12), Vector2(-178.5, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_shaft_ledge_04"]
+position = Vector2(178.5, 0)
+polygon = PackedVector2Array(Vector2(-178.5, 0), Vector2(178.5, 0), Vector2(178.5, 3), Vector2(-178.5, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_shaft_ledge_05"]
+position = Vector2(184, 12)
+polygon = PackedVector2Array(Vector2(-184, -12), Vector2(184, -12), Vector2(184, 12), Vector2(-184, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_shaft_ledge_05"]
+position = Vector2(184, 0)
+polygon = PackedVector2Array(Vector2(-184, 0), Vector2(184, 0), Vector2(184, 3), Vector2(-184, 3))
+color = Color("#c1a77e")
+z_index = 1
