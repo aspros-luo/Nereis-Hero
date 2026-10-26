@@ -296,16 +296,20 @@ func _draw() -> void:
 			draw_colored_polygon(ridge, palette.far if layer < 3 else palette.mid)
 			x += step * 0.74
 	_draw_region_silhouette(palette)
-	for item in platforms:
-		var rect: Rect2 = item.rect
-		var top := rect.position
-		var is_ground := item.type == "ground"
-		draw_rect(Rect2(top + Vector2(0, 8), rect.size), Color("#08090d"), true)
-		draw_rect(rect, palette.stone if is_ground else palette.detail, true)
-		draw_line(top, top + Vector2(rect.size.x, 0), palette.ledge if is_ground else palette.glow, 3.0, true)
-		draw_line(top + Vector2(0, 5), top + Vector2(rect.size.x, 5), palette.detail, 1.0, true)
-		for seam_x in range(30, int(rect.size.x), 78):
-			draw_line(top + Vector2(seam_x, 8), top + Vector2(seam_x + 15, minf(rect.size.y, 21)), palette.sky, 1.0, true)
+	# A1-R01's fixed terrain is rendered by Polygon2D/Line2D children authored in its .tscn.
+	# Keep the legacy drawing fallback only for contract rooms that have not yet been migrated.
+	var terrain_visuals_authored := get_node_or_null("Terrain_ground_01/TerrainVisual") != null
+	if not terrain_visuals_authored:
+		for item in platforms:
+			var rect: Rect2 = item.rect
+			var top := rect.position
+			var is_ground := item.type == "ground"
+			draw_rect(Rect2(top + Vector2(0, 8), rect.size), Color("#08090d"), true)
+			draw_rect(rect, palette.stone if is_ground else palette.detail, true)
+			draw_line(top, top + Vector2(rect.size.x, 0), palette.ledge if is_ground else palette.glow, 3.0, true)
+			draw_line(top + Vector2(0, 5), top + Vector2(rect.size.x, 5), palette.detail, 1.0, true)
+			for seam_x in range(30, int(rect.size.x), 78):
+				draw_line(top + Vector2(seam_x, 8), top + Vector2(seam_x + 15, minf(rect.size.y, 21)), palette.sky, 1.0, true)
 	for landmark in landmarks:
 		var p := Vector2(landmark.at[0], landmark.at[1])
 		draw_circle(p, 34, palette.sky)
