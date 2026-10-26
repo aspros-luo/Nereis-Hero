@@ -1,7 +1,124 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=13 format=3]
 
-[ext_resource path="res://scripts/levels/contract_room_region.gd" type="Script" id="1"]
+[ext_resource type="Script" path="res://scripts/levels/contract_room_region.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/contract_room_exit.tscn" id="5"]
 
-[node name="OldWellShaftRoom" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="TerrainShape1"]
+size = Vector2(660, 50)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape2"]
+size = Vector2(300, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape3"]
+size = Vector2(300, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape4"]
+size = Vector2(290, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape5"]
+size = Vector2(320, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape6"]
+size = Vector2(310, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape7"]
+size = Vector2(900, 80)
+
+[node name="Room_A1_R02" type="Node2D"]
 script = ExtResource("1")
 room_id = "A1-R02"
+authored_scene_mode = true
+
+[node name="Terrain_upper_rim" type="StaticBody2D" parent="."]
+position = Vector2(120, 160)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_upper_rim"]
+position = Vector2(330, 25)
+shape = SubResource("TerrainShape1")
+
+[node name="Terrain_ledge_01" type="StaticBody2D" parent="."]
+position = Vector2(80, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_01"]
+position = Vector2(150, 12)
+shape = SubResource("TerrainShape2")
+one_way_collision = true
+
+[node name="Terrain_ledge_02" type="StaticBody2D" parent="."]
+position = Vector2(500, 620)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_02"]
+position = Vector2(150, 12)
+shape = SubResource("TerrainShape3")
+one_way_collision = true
+
+[node name="Terrain_ledge_03" type="StaticBody2D" parent="."]
+position = Vector2(100, 860)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_03"]
+position = Vector2(145, 12)
+shape = SubResource("TerrainShape4")
+one_way_collision = true
+
+[node name="Terrain_ledge_04" type="StaticBody2D" parent="."]
+position = Vector2(480, 1090)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_04"]
+position = Vector2(160, 12)
+shape = SubResource("TerrainShape5")
+one_way_collision = true
+
+[node name="Terrain_ledge_05" type="StaticBody2D" parent="."]
+position = Vector2(80, 1320)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_05"]
+position = Vector2(155, 12)
+shape = SubResource("TerrainShape6")
+one_way_collision = true
+
+[node name="Terrain_bottom_floor" type="StaticBody2D" parent="."]
+position = Vector2(0, 1670)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_bottom_floor"]
+position = Vector2(450, 40)
+shape = SubResource("TerrainShape7")
+
+[node name="Exit_I-A1-01" parent="." instance=ExtResource("5")]
+position = Vector2(450, 160)
+prompt_text = "E  return ladder"
+metadata/room_target_id = "A1-R01"
+metadata/route_condition = "none"
+
+[node name="Exit_H01-ENTRY" parent="." instance=ExtResource("5")]
+position = Vector2(730, 1660)
+prompt_text = "E  hidden crack"
+metadata/room_target_id = "H01-R01"
+metadata/route_condition = "resonance_sight_and_H01_contract"
+
+[node name="Exit_C06" parent="." instance=ExtResource("5")]
+position = Vector2(450, 1670)
+prompt_text = "E  watergate tunnel"
+metadata/room_target_id = "A4-R03"
+metadata/route_condition = "opened_watergate_and_village_well_exit"
+
+[node name="Exit_I03" parent="." instance=ExtResource("5")]
+position = Vector2(810, 1368)
+prompt_text = "E  internal"
+metadata/room_target_id = "A1-R01"
+metadata/route_condition = "none"
+
+[node name="Exit_I04" parent="." instance=ExtResource("5")]
+position = Vector2(90, 1368)
+prompt_text = "E  internal"
+metadata/room_target_id = "A1-R03"
+metadata/route_condition = "none"
+
+[node name="Hero" parent="." instance=ExtResource("2")]
+position = Vector2(450, 140)
+
+[node name="Narrative" parent="." instance=ExtResource("3")]
+
+[node name="HUD" parent="." instance=ExtResource("4")]

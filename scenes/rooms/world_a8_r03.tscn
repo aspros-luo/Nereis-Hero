@@ -1,7 +1,188 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=20 format=3]
 
-[ext_resource path="res://scripts/levels/contract_room_region.gd" type="Script" id="1"]
+[ext_resource type="Script" path="res://scripts/levels/contract_room_region.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/contract_room_exit.tscn" id="5"]
 
-[node name="A8_R03" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="TerrainShape1"]
+size = Vector2(378, 60)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape2"]
+size = Vector2(368, 60)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape3"]
+size = Vector2(1050, 80)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape4"]
+size = Vector2(231, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape5"]
+size = Vector2(200, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape6"]
+size = Vector2(221, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape7"]
+size = Vector2(189, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape8"]
+size = Vector2(200, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape9"]
+size = Vector2(179, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape10"]
+size = Vector2(368, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape11"]
+size = Vector2(357, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape12"]
+size = Vector2(378, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape13"]
+size = Vector2(357, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape14"]
+size = Vector2(368, 24)
+
+[node name="Room_A8_R03" type="Node2D"]
 script = ExtResource("1")
 room_id = "A8-R03"
+authored_scene_mode = true
+
+[node name="Terrain_shaft_lip_west" type="StaticBody2D" parent="."]
+position = Vector2(0, 140)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_shaft_lip_west"]
+position = Vector2(189, 30)
+shape = SubResource("TerrainShape1")
+
+[node name="Terrain_shaft_lip_east" type="StaticBody2D" parent="."]
+position = Vector2(682, 140)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_shaft_lip_east"]
+position = Vector2(184, 30)
+shape = SubResource("TerrainShape2")
+
+[node name="Terrain_shaft_floor" type="StaticBody2D" parent="."]
+position = Vector2(0, 1980)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_shaft_floor"]
+position = Vector2(525, 40)
+shape = SubResource("TerrainShape3")
+
+[node name="Terrain_ledge_low_a" type="StaticBody2D" parent="."]
+position = Vector2(126, 1760)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_low_a"]
+position = Vector2(115.5, 12)
+shape = SubResource("TerrainShape4")
+one_way_collision = true
+
+[node name="Terrain_ledge_low_b" type="StaticBody2D" parent="."]
+position = Vector2(557, 1650)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_low_b"]
+position = Vector2(100, 12)
+shape = SubResource("TerrainShape5")
+one_way_collision = true
+
+[node name="Terrain_ledge_mid_a" type="StaticBody2D" parent="."]
+position = Vector2(284, 1510)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_mid_a"]
+position = Vector2(110.5, 12)
+shape = SubResource("TerrainShape6")
+one_way_collision = true
+
+[node name="Terrain_ledge_mid_b" type="StaticBody2D" parent="."]
+position = Vector2(714, 1390)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_mid_b"]
+position = Vector2(94.5, 12)
+shape = SubResource("TerrainShape7")
+one_way_collision = true
+
+[node name="Terrain_ledge_high_a" type="StaticBody2D" parent="."]
+position = Vector2(84, 1260)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_high_a"]
+position = Vector2(100, 12)
+shape = SubResource("TerrainShape8")
+one_way_collision = true
+
+[node name="Terrain_ledge_high_b" type="StaticBody2D" parent="."]
+position = Vector2(504, 1150)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_high_b"]
+position = Vector2(89.5, 12)
+shape = SubResource("TerrainShape9")
+one_way_collision = true
+
+[node name="Terrain_shaft_ledge_01" type="StaticBody2D" parent="."]
+position = Vector2(63, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_shaft_ledge_01"]
+position = Vector2(184, 12)
+shape = SubResource("TerrainShape10")
+one_way_collision = true
+
+[node name="Terrain_shaft_ledge_02" type="StaticBody2D" parent="."]
+position = Vector2(609, 700)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_shaft_ledge_02"]
+position = Vector2(178.5, 12)
+shape = SubResource("TerrainShape11")
+one_way_collision = true
+
+[node name="Terrain_shaft_ledge_03" type="StaticBody2D" parent="."]
+position = Vector2(105, 980)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_shaft_ledge_03"]
+position = Vector2(189, 12)
+shape = SubResource("TerrainShape12")
+one_way_collision = true
+
+[node name="Terrain_shaft_ledge_04" type="StaticBody2D" parent="."]
+position = Vector2(588, 1260)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_shaft_ledge_04"]
+position = Vector2(178.5, 12)
+shape = SubResource("TerrainShape13")
+one_way_collision = true
+
+[node name="Terrain_shaft_ledge_05" type="StaticBody2D" parent="."]
+position = Vector2(84, 1540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_shaft_ledge_05"]
+position = Vector2(184, 12)
+shape = SubResource("TerrainShape14")
+one_way_collision = true
+
+[node name="Exit_I18" parent="." instance=ExtResource("5")]
+position = Vector2(955, 1950)
+prompt_text = "E  internal"
+metadata/room_target_id = "A8-R02"
+metadata/route_condition = "none"
+
+[node name="Exit_C14" parent="." instance=ExtResource("5")]
+position = Vector2(95, 1950)
+prompt_text = "E  main"
+metadata/room_target_id = "A9-R01"
+metadata/route_condition = "none"
+
+[node name="Exit_C15" parent="." instance=ExtResource("5")]
+position = Vector2(525, 170)
+prompt_text = "E  secret"
+metadata/room_target_id = "A11-R01"
+metadata/route_condition = "resonance_sight_and_ancient_truth"
+
+[node name="Hero" parent="." instance=ExtResource("2")]
+position = Vector2(525, 240)
+
+[node name="Narrative" parent="." instance=ExtResource("3")]
+
+[node name="HUD" parent="." instance=ExtResource("4")]

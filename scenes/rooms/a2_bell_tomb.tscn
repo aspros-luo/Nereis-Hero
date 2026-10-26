@@ -1,7 +1,119 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=12 format=3]
 
-[ext_resource path="res://scripts/levels/contract_room_region.gd" type="Script" id="1"]
+[ext_resource type="Script" path="res://scripts/levels/contract_room_region.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/contract_room_exit.tscn" id="5"]
 
-[node name="BellTombRoom" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="TerrainShape1"]
+size = Vector2(350, 60)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape2"]
+size = Vector2(300, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape3"]
+size = Vector2(310, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape4"]
+size = Vector2(300, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape5"]
+size = Vector2(300, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape6"]
+size = Vector2(1150, 70)
+
+[node name="Room_A2_R02" type="Node2D"]
 script = ExtResource("1")
 room_id = "A2-R02"
+authored_scene_mode = true
+
+[node name="Terrain_tomb_entry" type="StaticBody2D" parent="."]
+position = Vector2(0, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_tomb_entry"]
+position = Vector2(175, 30)
+shape = SubResource("TerrainShape1")
+
+[node name="Terrain_gallery_01" type="StaticBody2D" parent="."]
+position = Vector2(420, 570)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_gallery_01"]
+position = Vector2(150, 12)
+shape = SubResource("TerrainShape2")
+one_way_collision = true
+
+[node name="Terrain_gallery_02" type="StaticBody2D" parent="."]
+position = Vector2(80, 760)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_gallery_02"]
+position = Vector2(155, 12)
+shape = SubResource("TerrainShape3")
+one_way_collision = true
+
+[node name="Terrain_gallery_03" type="StaticBody2D" parent="."]
+position = Vector2(500, 960)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_gallery_03"]
+position = Vector2(150, 12)
+shape = SubResource("TerrainShape4")
+one_way_collision = true
+
+[node name="Terrain_gallery_04" type="StaticBody2D" parent="."]
+position = Vector2(170, 1190)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_gallery_04"]
+position = Vector2(150, 12)
+shape = SubResource("TerrainShape5")
+one_way_collision = true
+
+[node name="Terrain_tomb_floor" type="StaticBody2D" parent="."]
+position = Vector2(0, 1510)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_tomb_floor"]
+position = Vector2(575, 35)
+shape = SubResource("TerrainShape6")
+
+[node name="Exit_I-A2-01" parent="." instance=ExtResource("5")]
+position = Vector2(120, 400)
+prompt_text = "E  forest return"
+metadata/room_target_id = "A2-R01"
+metadata/route_condition = "none"
+
+[node name="Exit_H02-ENTRY" parent="." instance=ExtResource("5")]
+position = Vector2(1000, 1490)
+prompt_text = "E  reversed bell hidden seam"
+metadata/room_target_id = "H02-R01"
+metadata/route_condition = "resonance_sight_and_H02_contract"
+
+[node name="Exit_I-A2-02" parent="." instance=ExtResource("5")]
+position = Vector2(1000, 1510)
+prompt_text = "E  pilgrim stair"
+metadata/room_target_id = "A2-R03"
+metadata/route_condition = "none"
+
+[node name="Exit_I05" parent="." instance=ExtResource("5")]
+position = Vector2(1060, 1260)
+prompt_text = "E  internal"
+metadata/room_target_id = "A2-R01"
+metadata/route_condition = "none"
+
+[node name="Exit_I06" parent="." instance=ExtResource("5")]
+position = Vector2(90, 1260)
+prompt_text = "E  internal"
+metadata/room_target_id = "A2-R03"
+metadata/route_condition = "none"
+
+[node name="Exit_C03" parent="." instance=ExtResource("5")]
+position = Vector2(575, 525)
+prompt_text = "E  main"
+metadata/room_target_id = "A3-R01"
+metadata/route_condition = "none"
+
+[node name="Hero" parent="." instance=ExtResource("2")]
+position = Vector2(130, 360)
+
+[node name="Narrative" parent="." instance=ExtResource("3")]
+
+[node name="HUD" parent="." instance=ExtResource("4")]

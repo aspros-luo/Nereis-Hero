@@ -1,7 +1,113 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=12 format=3]
 
-[ext_resource path="res://scripts/levels/contract_room_region.gd" type="Script" id="1"]
+[ext_resource type="Script" path="res://scripts/levels/contract_room_region.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/contract_room_exit.tscn" id="5"]
 
-[node name="OldMarketRoofsRoom" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="TerrainShape1"]
+size = Vector2(350, 50)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape2"]
+size = Vector2(280, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape3"]
+size = Vector2(280, 24)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape4"]
+size = Vector2(430, 50)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape5"]
+size = Vector2(180, 20)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape6"]
+size = Vector2(180, 20)
+
+[node name="Room_A3_R02" type="Node2D"]
 script = ExtResource("1")
 room_id = "A3-R02"
+authored_scene_mode = true
+
+[node name="Terrain_market_roof_01" type="StaticBody2D" parent="."]
+position = Vector2(0, 800)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_market_roof_01"]
+position = Vector2(175, 25)
+shape = SubResource("TerrainShape1")
+
+[node name="Terrain_market_roof_02" type="StaticBody2D" parent="."]
+position = Vector2(430, 680)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_market_roof_02"]
+position = Vector2(140, 12)
+shape = SubResource("TerrainShape2")
+one_way_collision = true
+
+[node name="Terrain_market_roof_03" type="StaticBody2D" parent="."]
+position = Vector2(800, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_market_roof_03"]
+position = Vector2(140, 12)
+shape = SubResource("TerrainShape3")
+one_way_collision = true
+
+[node name="Terrain_market_roof_04" type="StaticBody2D" parent="."]
+position = Vector2(1170, 420)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_market_roof_04"]
+position = Vector2(215, 25)
+shape = SubResource("TerrainShape4")
+
+[node name="Terrain_stall_canopy_01" type="StaticBody2D" parent="."]
+position = Vector2(270, 580)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_stall_canopy_01"]
+position = Vector2(90, 10)
+shape = SubResource("TerrainShape5")
+one_way_collision = true
+
+[node name="Terrain_stall_canopy_02" type="StaticBody2D" parent="."]
+position = Vector2(900, 360)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_stall_canopy_02"]
+position = Vector2(90, 10)
+shape = SubResource("TerrainShape6")
+one_way_collision = true
+
+[node name="Exit_I-A3-02" parent="." instance=ExtResource("5")]
+position = Vector2(100, 800)
+prompt_text = "E  street drop"
+metadata/room_target_id = "A3-R01"
+metadata/route_condition = "none"
+
+[node name="Exit_H03-ENTRY" parent="." instance=ExtResource("5")]
+position = Vector2(1480, 420)
+prompt_text = "E  erased street seam"
+metadata/room_target_id = "H03-R01"
+metadata/route_condition = "resonance_sight_and_H03_contract"
+
+[node name="Exit_C08" parent="." instance=ExtResource("5")]
+position = Vector2(1550, 420)
+prompt_text = "E  raised battlefield bridge"
+metadata/room_target_id = "A5-R01"
+metadata/route_condition = "none"
+
+[node name="Exit_I07" parent="." instance=ExtResource("5")]
+position = Vector2(1510, 756)
+prompt_text = "E  internal"
+metadata/room_target_id = "A3-R01"
+metadata/route_condition = "none"
+
+[node name="Exit_I08" parent="." instance=ExtResource("5")]
+position = Vector2(90, 756)
+prompt_text = "E  internal"
+metadata/room_target_id = "A3-R03"
+metadata/route_condition = "none"
+
+[node name="Hero" parent="." instance=ExtResource("2")]
+position = Vector2(100, 760)
+
+[node name="Narrative" parent="." instance=ExtResource("3")]
+
+[node name="HUD" parent="." instance=ExtResource("4")]

@@ -1,7 +1,138 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=15 format=3]
 
-[ext_resource path="res://scripts/levels/contract_room_region.gd" type="Script" id="1"]
+[ext_resource type="Script" path="res://scripts/levels/contract_room_region.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/contract_room_exit.tscn" id="5"]
 
-[node name="VillageStreetsRoom" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="TerrainShape1"]
+size = Vector2(480, 80)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape2"]
+size = Vector2(410, 80)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape3"]
+size = Vector2(500, 80)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape4"]
+size = Vector2(370, 80)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape5"]
+size = Vector2(230, 26)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape6"]
+size = Vector2(250, 26)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape7"]
+size = Vector2(220, 26)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape8"]
+size = Vector2(270, 26)
+
+[sub_resource type="RectangleShape2D" id="TerrainShape9"]
+size = Vector2(260, 26)
+
+[node name="Room_A1_R01" type="Node2D"]
 script = ExtResource("1")
 room_id = "A1-R01"
+authored_scene_mode = true
+
+[node name="Terrain_ground_01" type="StaticBody2D" parent="."]
+position = Vector2(0, 900)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ground_01"]
+position = Vector2(240, 40)
+shape = SubResource("TerrainShape1")
+
+[node name="Terrain_ground_02" type="StaticBody2D" parent="."]
+position = Vector2(590, 900)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ground_02"]
+position = Vector2(205, 40)
+shape = SubResource("TerrainShape2")
+
+[node name="Terrain_ground_03" type="StaticBody2D" parent="."]
+position = Vector2(1120, 900)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ground_03"]
+position = Vector2(250, 40)
+shape = SubResource("TerrainShape3")
+
+[node name="Terrain_ground_04" type="StaticBody2D" parent="."]
+position = Vector2(1730, 900)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ground_04"]
+position = Vector2(185, 40)
+shape = SubResource("TerrainShape4")
+
+[node name="Terrain_roof_01" type="StaticBody2D" parent="."]
+position = Vector2(270, 700)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_roof_01"]
+position = Vector2(115, 13)
+shape = SubResource("TerrainShape5")
+one_way_collision = true
+
+[node name="Terrain_roof_02" type="StaticBody2D" parent="."]
+position = Vector2(620, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_roof_02"]
+position = Vector2(125, 13)
+shape = SubResource("TerrainShape6")
+one_way_collision = true
+
+[node name="Terrain_roof_03" type="StaticBody2D" parent="."]
+position = Vector2(1050, 690)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_roof_03"]
+position = Vector2(110, 13)
+shape = SubResource("TerrainShape7")
+one_way_collision = true
+
+[node name="Terrain_roof_04" type="StaticBody2D" parent="."]
+position = Vector2(1460, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_roof_04"]
+position = Vector2(135, 13)
+shape = SubResource("TerrainShape8")
+one_way_collision = true
+
+[node name="Terrain_well_lip" type="StaticBody2D" parent="."]
+position = Vector2(820, 1030)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_well_lip"]
+position = Vector2(130, 13)
+shape = SubResource("TerrainShape9")
+one_way_collision = true
+
+[node name="Exit_C02" parent="." instance=ExtResource("5")]
+position = Vector2(1990, 900)
+prompt_text = "E  north gate"
+metadata/room_target_id = "A2-R01"
+metadata/route_condition = "village_defense_survived"
+
+[node name="Exit_C24" parent="." instance=ExtResource("5")]
+position = Vector2(1770, 900)
+prompt_text = "E  concealed shortcut"
+metadata/room_target_id = "A3-R01"
+metadata/route_condition = "village_defense_survived"
+
+[node name="Exit_I-A1-01" parent="." instance=ExtResource("5")]
+position = Vector2(950, 1040)
+prompt_text = "E  well drop"
+metadata/room_target_id = "A1-R02"
+metadata/route_condition = "none"
+
+[node name="Exit_I03" parent="." instance=ExtResource("5")]
+position = Vector2(2010, 864)
+prompt_text = "E  internal"
+metadata/room_target_id = "A1-R02"
+metadata/route_condition = "none"
+
+[node name="Hero" parent="." instance=ExtResource("2")]
+position = Vector2(150, 850)
+
+[node name="Narrative" parent="." instance=ExtResource("3")]
+
+[node name="HUD" parent="." instance=ExtResource("4")]
