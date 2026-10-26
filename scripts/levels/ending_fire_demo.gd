@@ -100,8 +100,10 @@ func _start_mite_phase() -> void:
             cultist.queue_free()
     cultists.clear()
 
-    mite = Node2D.new()
-    mite.set_script(FINAL_MITE_SCRIPT)
+    mite = FINAL_MITE_SCENE.instantiate() as Node2D
+    if mite == null:
+        push_error("Fire ending: failed to instantiate FinalMite scene")
+        return
     mite.position = Vector2(4550, FLOOR_Y)
     mite.name = "Mite"
     add_child(mite)
@@ -116,6 +118,7 @@ func _start_mite_phase() -> void:
         6.0
     )
     print("[NEREIS][ENDING] Entered final Mite encounter")
+
 
 func _mite_chooses_the_blade() -> void:
     if not mite or not is_instance_valid(mite) or detonation_started:
