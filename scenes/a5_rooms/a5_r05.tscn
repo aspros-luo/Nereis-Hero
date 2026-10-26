@@ -1,7 +1,9 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=24 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/greybox_world_region.gd" id="1"]
 
+[ext_resource type="PackedScene" path="res://scenes/rooms/transition_point.tscn" id="RoomTransitionScene"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/shortcut_unlock_point.tscn" id="ShortcutUnlockScene"]
 [sub_resource type="RectangleShape2D" id="A5Shape1"]
 size = Vector2(600, 40)
 
@@ -225,3 +227,33 @@ position = Vector2(620, 310)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomRubble_003"]
 position = Vector2(45, 40)
 shape = SubResource("A5Shape20")
+
+[node name="Transition_A5-I04" parent="." instance=ExtResource("RoomTransitionScene")]
+position = Vector2(24, 1204)
+visible = false
+monitoring = false
+connection_id = &"A5-I04"
+target_room_id = &"A5-R04"
+target_entry_id = &"east"
+
+[node name="Unlock_A5-I04" parent="." instance=ExtResource("ShortcutUnlockScene")]
+position = Vector2(24, 1204)
+visible = false
+monitoring = false
+shortcut_id = "A5-I04"
+prompt_text = "按 E 开启捷径"
+
+[node name="Transition_A5-I05" parent="." instance=ExtResource("RoomTransitionScene")]
+position = Vector2(640, 1290)
+visible = false
+monitoring = false
+connection_id = &"A5-I05"
+target_room_id = &"A5-R06"
+target_entry_id = &"north"
+
+[node name="Unlock_A5-I05" parent="." instance=ExtResource("ShortcutUnlockScene")]
+position = Vector2(640, 1290)
+visible = false
+monitoring = false
+shortcut_id = "A5-I05"
+prompt_text = "按 E 开启捷径"

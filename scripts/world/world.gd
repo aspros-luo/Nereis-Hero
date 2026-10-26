@@ -3,8 +3,6 @@ extends Node2D
 ## A5 房间清单与连接唯一读取 tools/a5_room_assembly_contract.json。
 
 const A5_CONTRACT_PATH := "res://tools/a5_room_assembly_contract.json"
-const TRANSITION_POINT_SCENE: PackedScene = preload("res://scenes/rooms/transition_point.tscn")
-const SHORTCUT_UNLOCK_POINT_SCENE: PackedScene = preload("res://scenes/rooms/shortcut_unlock_point.tscn")
 
 @onready var room_container: Node2D = $RoomContainer
 @onready var fade_rect: ColorRect = $FadeLayer/ColorRect
@@ -237,73 +235,59 @@ func _target_entry_id(edge: Dictionary, room_id: String) -> StringName:
 	return &"north" if delta.y >= 0.0 else &"south"
 
 func _build_room_transitions(room: Node2D, room_id: String, bounds: Rect2) -> void:
-	for point in room_transition_nodes:
-		if is_instance_valid(point):
-			point.queue_free()
+	# 房间出口与捷径交互区由每个房间的 .tscn 预先声明；这里仅按合同切换状态。
+	# Never create or free map nodes here: the editor-authored Room scene is the source of truth.
 	room_transition_nodes.clear()
-	for gate in shortcut_unlock_nodes:
-		if is_instance_valid(gate):
-			gate.queue_free()
 	shortcut_unlock_nodes.clear()
 	pending_shortcut_id = ""
-	var side_counts := {"west": 0, "east": 0, "north": 0, "south": 0}
 	for edge: Variant in connections_by_room.get(room_id, []):
 		if not edge is Dictionary:
 			continue
 		var edge_id := str(edge.get("id", ""))
-		var edge_state := str(edge.get("initial_state", "open"))
 		var edge_kind := str(edge.get("kind", "walk"))
+		var edge_state := str(edge.get("initial_state", "open"))
 		var unlocked := edge_state == "open" or WorldState.opened_shortcut_ids.has(edge_id)
-		if not unlocked:
-			if edge_kind in ["shortcut", "elevator", "hidden"]:
-				_build_shortcut_unlock_point(room, edge, room_id, bounds)
+		var point := room.get_node_or_null("Transition_" + edge_id) as TransitionPoint
+		var gate := room.get_node_or_null("Unlock_" + edge_id) as Area2D
+		if point == null or gate == null:
+			push_error("World: 房间 %s 缺少场景中预置的连接节点 %s" % [room_id, edge_id])
 			continue
-		var point := TRANSITION_POINT_SCENE.instantiate() as TransitionPoint
-		if point == null:
-			push_error("World: 无法实例化房间过渡场景")
-			continue
-		point.name = "Transition_" + edge_id
+
 		point.connection_id = StringName(edge_id)
 		point.target_room_id = StringName(edge.get("to", ""))
 		point.target_entry_id = _target_entry_id(edge, room_id)
 		var side := _edge_entry_id(edge, room_id)
-		var side_index: int = int(side_counts.get(side, 0))
-		side_counts[side] = side_index + 1
-		point.position = _transition_position(side, bounds, room, side_index)
 		var shape := point.get_node_or_null("CollisionShape2D") as CollisionShape2D
 		var rectangle := shape.shape as RectangleShape2D if shape != null else null
 		if rectangle == null:
-			push_error("World: 过渡场景缺少 RectangleShape2D")
-			point.free()
+			push_error("World: 场景出口 %s 缺少 RectangleShape2D" % edge_id)
 			continue
 		rectangle.size = Vector2(48.0, 112.0) if side == &"west" or side == &"east" else Vector2(112.0, 48.0)
-		room.add_child(point)
-		point.transition_requested.connect(_on_transition_requested)
-		room_transition_nodes.append(point)
-func _build_shortcut_unlock_point(room: Node2D, edge: Dictionary, room_id: String, bounds: Rect2) -> void:
-	var gate := SHORTCUT_UNLOCK_POINT_SCENE.instantiate() as Area2D
-	if gate == null:
-		push_error("World: 无法实例化捷径交互场景")
-		return
-	var side := _edge_entry_id(edge, room_id)
-	gate.name = "Unlock_" + str(edge.get("id", "shortcut"))
-	gate.set("shortcut_id", str(edge.get("id", "")))
-	var edge_kind := str(edge.get("kind", "shortcut"))
-	gate.set("prompt_text", "按 E 探查隐藏通路" if edge_kind == "hidden" else "按 E 开启捷径")
-	var gate_position := _transition_position(side, bounds, room, 0)
-	match side:
-		&"west":
-			gate_position.x = 112.0
-		&"east":
-			gate_position.x = bounds.end.x - 112.0
-		&"north":
-			gate_position.y = 112.0
-		&"south":
-			gate_position.y = bounds.end.y - 112.0
-	gate.position = gate_position
-	room.add_child(gate)
-	gate.connect("player_nearby_changed", _on_shortcut_player_nearby_changed)
-	shortcut_unlock_nodes.append(gate)
+		point.visible = unlocked
+		point.monitoring = unlocked
+		var transition_callback := Callable(self, "_on_transition_requested")
+		if not point.transition_requested.is_connected(transition_callback):
+			point.transition_requested.connect(transition_callback)
+		if unlocked:
+			room_transition_nodes.append(point)
+
+		var can_unlock_here := edge_kind in ["shortcut", "elevator", "hidden"]
+		var gate_active := not unlocked and can_unlock_here
+		gate.set("shortcut_id", edge_id)
+		var prompt_text := "按 E 探查隐藏通路" if edge_kind == "hidden" else "按 E 开启捷径"
+		gate.set("prompt_text", prompt_text)
+		var prompt := gate.get_node_or_null("InteractionPrompt") as Label
+		if prompt != null:
+			prompt.text = prompt_text
+			prompt.visible = false
+		gate.visible = gate_active
+		gate.monitoring = gate_active
+		var gate_callback := Callable(self, "_on_shortcut_player_nearby_changed")
+		if not gate.is_connected("player_nearby_changed", gate_callback):
+			gate.connect("player_nearby_changed", gate_callback)
+		if gate_active:
+			shortcut_unlock_nodes.append(gate)
+
 func _on_shortcut_player_nearby_changed(shortcut_id: String, nearby: bool) -> void:
 	if nearby:
 		pending_shortcut_id = shortcut_id

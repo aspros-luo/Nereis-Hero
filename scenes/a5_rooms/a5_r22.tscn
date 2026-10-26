@@ -1,7 +1,9 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/greybox_world_region.gd" id="1"]
 
+[ext_resource type="PackedScene" path="res://scenes/rooms/transition_point.tscn" id="RoomTransitionScene"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/shortcut_unlock_point.tscn" id="ShortcutUnlockScene"]
 [sub_resource type="RectangleShape2D" id="A5Shape1"]
 size = Vector2(560, 40)
 
@@ -105,3 +107,17 @@ position = Vector2(780, 495)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="A5RoomRubble_002"]
 position = Vector2(31, 22.5)
 shape = SubResource("A5Shape9")
+
+[node name="Transition_A5-B03" parent="." instance=ExtResource("RoomTransitionScene")]
+position = Vector2(640, 492)
+visible = false
+monitoring = false
+connection_id = &"A5-B03"
+target_room_id = &"A5-R17"
+target_entry_id = &"north"
+[node name="Unlock_A5-B03" parent="." instance=ExtResource("ShortcutUnlockScene")]
+position = Vector2(640, 492)
+visible = false
+monitoring = false
+shortcut_id = "A5-B03"
+prompt_text = "按 E 探查隐藏通路"
