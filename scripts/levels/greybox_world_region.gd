@@ -3451,12 +3451,9 @@ func _draw_floor_gap_visuals() -> void:
 
 
 func _draw() -> void:
-	# Fixed terrain regions already contain editor-authored backdrop, platforms and floor geometry.
-	# Do not paint the legacy procedural landscape over those scene nodes; only keep the still-unmigrated
-	# region landmark overlays and route/debug indicators visible until each landmark is authored in .tscn.
+	# Authored regions are fully represented by editor-visible .tscn nodes.
+	# Only optional debug exit markers may be drawn over the authored map.
 	if get_node_or_null("AuthoredTerrain") != null:
-		_draw_authored_region_landmark_overlays()
-		_draw_route_goal_landmarks()
 		if OS.is_debug_build():
 			_draw_debug_exit_markers()
 		return
