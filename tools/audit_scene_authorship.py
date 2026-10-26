@@ -23,7 +23,7 @@ NODE_NEW = re.compile(
 )
 ADD_CHILD = re.compile(r'\.add_child\s*\(')
 RESOURCE_PATH = re.compile(r'res://([^"\s]+)')
-FUNCTION = re.compile(r'^\s*func\s+([A-Za-z_]\w*)\s*\(', re.M)
+FUNCTION = re.compile(r'^\s*(?:static\s+)?func\s+([A-Za-z_]\w*)\s*\(', re.M)
 SCRIPT_SUFFIXES = {".gd", ".tscn", ".tres", ".godot", ".cfg", ".json", ".gdshader"}
 
 
