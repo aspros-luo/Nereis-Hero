@@ -24,7 +24,6 @@ func _ready() -> void:
 	if not WorldState.graveyard_cleared:
 		_spawn_wraith(Vector2(1100, 430), "BellWraith_A")
 		_spawn_wraith(Vector2(1480, 390), "BellWraith_B")
-	queue_redraw()
 	get_tree().create_timer(0.6).timeout.connect(_show_intro)
 
 
@@ -103,22 +102,3 @@ func _unhandled_input(event: InputEvent) -> void:
         print("[NEREIS][DEBUG] Graveyard reset; returning to Vertical Slice")
         get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
         get_viewport().set_input_as_handled()
-
-func _draw() -> void:
-    draw_rect(Rect2(0, 0, 2200, 720), Color("#0f0e14"))
-    draw_rect(Rect2(0, 520, 2200, 200), Color("#1d1820"))
-
-    for x in range(140, 2120, 260):
-        draw_rect(Rect2(x - 28, 430, 56, 90), Color("#302a32"))
-        draw_string(ThemeDB.fallback_font, Vector2(x - 24, 455), NereisLocalization.translate_text("†"), HORIZONTAL_ALIGNMENT_LEFT, -1, 40, Color("#66545c"))
-
-    draw_rect(Rect2(1840, 300, 90, 220), Color("#28212a"))
-    draw_colored_polygon(
-        PackedVector2Array([
-            Vector2(1810, 300),
-            Vector2(1885, 190),
-            Vector2(1960, 300)
-        ]),
-        Color("#352d38")
-    )
-    draw_string(ThemeDB.fallback_font, Vector2(1805, 170), NereisLocalization.translate_text("BELL TOWER"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#796d67"))
