@@ -37,25 +37,25 @@ func _ready() -> void:
 
 
 func _begin_attack() -> void:
-    wave_started = true
-    if narrative_audio and narrative_audio.has_method("play_corrupted_lullaby"):
-        narrative_audio.play_corrupted_lullaby()
-    narrative.show_message(
-        "THE ATTACK",
-        "Torches appear beyond the fields.\n\nThe Church came with the bandits.\n\nNo one asks the Hero to fight. He simply draws his sword.",
-        5.0
-    )
-    await narrative.message_finished
-    _spawn_wave()
+	wave_started = true
+	if narrative_audio and narrative_audio.has_method("play_corrupted_lullaby"):
+		narrative_audio.play_corrupted_lullaby()
+	narrative.show_message(
+		"THE ATTACK",
+		"Torches appear beyond the fields.\n\nThe Church came with the bandits.\n\nNo one asks the Hero to fight. He simply draws his sword.",
+		5.0
+	)
+	await narrative.message_finished
+	_spawn_wave()
 
 func _spawn_wave() -> void:
-    stage = 1
-    _spawn_attackers([
-        ["bandit", Vector2(1380, FLOOR_Y)],
-        ["bandit", Vector2(1520, FLOOR_Y)],
-        ["inquisitor", Vector2(1780, FLOOR_Y)]
-    ])
-    narrative.show_message("THE FIRST WAVE", "They are coming for the houses behind you.", 3.0)
+	stage = 1
+	_spawn_attackers([
+		["bandit", Vector2(1380, FLOOR_Y)],
+		["bandit", Vector2(1520, FLOOR_Y)],
+		["inquisitor", Vector2(1780, FLOOR_Y)]
+	])
+	narrative.show_message("THE FIRST WAVE", "They are coming for the houses behind you.", 3.0)
 
 func _spawn_attackers(definitions: Array) -> void:
 	for definition in definitions:
@@ -74,52 +74,52 @@ func _spawn_attackers(definitions: Array) -> void:
 		enemy.defeated.connect(_on_attacker_defeated)
 		attackers.append(enemy)
 func _on_attacker_defeated() -> void:
-    defeated += 1
-    if defeated == 3 and stage == 1:
-        stage = 2
-        get_tree().create_timer(0.7).timeout.connect(_spawn_second_wave)
-    elif defeated == 7 and stage == 2:
-        _finish_defense()
+	defeated += 1
+	if defeated == 3 and stage == 1:
+		stage = 2
+		get_tree().create_timer(0.7).timeout.connect(_spawn_second_wave)
+	elif defeated == 7 and stage == 2:
+		_finish_defense()
 
 func _spawn_second_wave() -> void:
-    _spawn_attackers([
-        ["bandit", Vector2(2080, FLOOR_Y)],
-        ["bandit", Vector2(2240, FLOOR_Y)],
-        ["inquisitor", Vector2(2380, FLOOR_Y)],
-        ["inquisitor", Vector2(2520, FLOOR_Y)]
-    ])
-    narrative.show_message("THE SECOND WAVE", "The first line breaks.\n\nThere are more behind it.", 3.2)
+	_spawn_attackers([
+		["bandit", Vector2(2080, FLOOR_Y)],
+		["bandit", Vector2(2240, FLOOR_Y)],
+		["inquisitor", Vector2(2380, FLOOR_Y)],
+		["inquisitor", Vector2(2520, FLOOR_Y)]
+	])
+	narrative.show_message("THE SECOND WAVE", "The first line breaks.\n\nThere are more behind it.", 3.2)
 
 func _finish_defense() -> void:
-    stage = 3
-    WorldState.current_location = "village"
-    WorldState.record_achievement("village_defense_survived")
-    narrative.show_message(
-        "AFTER THE FIRE",
-        "The attackers retreat.\n\nThe village is still standing.\n\nFor tonight, that is enough.",
-        4.5
-    )
-    await narrative.message_finished
-    SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+	stage = 3
+	WorldState.current_location = "village"
+	WorldState.record_achievement("village_defense_survived")
+	narrative.show_message(
+		"AFTER THE FIRE",
+		"The attackers retreat.\n\nThe village is still standing.\n\nFor tonight, that is enough.",
+		4.5
+	)
+	await narrative.message_finished
+	SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
 
 func _on_hero_defeated() -> void:
-    if stage == 0 and not wave_started:
-        return
-    for attacker in attackers:
-        if is_instance_valid(attacker) and not attacker.is_queued_for_deletion():
-            attacker.queue_free()
-    attackers.clear()
-    defeated = 0
-    stage = 0
-    wave_started = false
-    # Restore at this chapter's spawn rather than the village hub checkpoint.
-    await get_tree().create_timer(0.75).timeout
-    if is_instance_valid(hero):
-        hero.global_position = Vector2(420.0, FLOOR_Y)
-        hero.restore_full()
-    narrative.show_message("THE VILLAGE FALLS QUIET", "The Hero rises again.\n\nThe attack has not ended.", 3.0)
-    await narrative.message_finished
-    _begin_attack()
+	if stage == 0 and not wave_started:
+		return
+	for attacker in attackers:
+		if is_instance_valid(attacker) and not attacker.is_queued_for_deletion():
+			attacker.queue_free()
+	attackers.clear()
+	defeated = 0
+	stage = 0
+	wave_started = false
+	# Restore at this chapter's spawn rather than the village hub checkpoint.
+	await get_tree().create_timer(0.75).timeout
+	if is_instance_valid(hero):
+		hero.global_position = Vector2(420.0, FLOOR_Y)
+		hero.restore_full()
+	narrative.show_message("THE VILLAGE FALLS QUIET", "The Hero rises again.\n\nThe attack has not ended.", 3.0)
+	await narrative.message_finished
+	_begin_attack()
 
 
 
@@ -130,28 +130,28 @@ func _configure_actor_collision(character: CharacterBody2D, radius: float, heigh
 	capsule.height = height
 	collision.position = Vector2(0.0, -height * 0.5)
 func _unhandled_input(event: InputEvent) -> void:
-    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
-        _mark_input_handled()
-        WorldState.delete_save()
-        get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
+		_mark_input_handled()
+		WorldState.delete_save()
+		get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
 
 func _mark_input_handled() -> void:
-    var viewport := get_viewport()
-    if viewport != null:
-        viewport.set_input_as_handled()
+	var viewport := get_viewport()
+	if viewport != null:
+		viewport.set_input_as_handled()
 
 func _draw() -> void:
-    draw_rect(Rect2(0, 0, LEVEL_WIDTH, 720), Color("#130f13"))
-    draw_rect(Rect2(0, FLOOR_Y, LEVEL_WIDTH, 180), Color("#211a22"))
+	draw_rect(Rect2(0, 0, LEVEL_WIDTH, 720), Color("#130f13"))
+	draw_rect(Rect2(0, FLOOR_Y, LEVEL_WIDTH, 180), Color("#211a22"))
 
-    for x in range(100, 3400, 360):
-        draw_rect(Rect2(x, 370, 150, 150), Color("#2a242c"))
-        draw_colored_polygon(
-            PackedVector2Array([
-                Vector2(x - 20, 370),
-                Vector2(x + 75, 285),
-                Vector2(x + 170, 370)
-            ]),
-            Color("#352d38")
-        )
-    draw_string(ThemeDB.fallback_font, Vector2(120, 230), NereisLocalization.translate_text("THE VILLAGE BURNS AT THE EDGES"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#6f5e63"))
+	for x in range(100, 3400, 360):
+		draw_rect(Rect2(x, 370, 150, 150), Color("#2a242c"))
+		draw_colored_polygon(
+			PackedVector2Array([
+				Vector2(x - 20, 370),
+				Vector2(x + 75, 285),
+				Vector2(x + 170, 370)
+			]),
+			Color("#352d38")
+		)
+	draw_string(ThemeDB.fallback_font, Vector2(120, 230), NereisLocalization.translate_text("THE VILLAGE BURNS AT THE EDGES"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#6f5e63"))
