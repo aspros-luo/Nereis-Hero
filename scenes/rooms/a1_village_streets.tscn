@@ -252,3 +252,18 @@ position = Vector2(150, 850)
 [node name="Narrative" parent="." instance=ExtResource("3")]
 
 [node name="HUD" parent="." instance=ExtResource("4")]
+
+[node name="SceneBackdrop" type="Polygon2D" parent="."]
+z_index = -100
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(2300, 0), Vector2(2300, 1250), Vector2(0, 1250))
+color = Color("#181820")
+
+[node name="FarScenery" type="Polygon2D" parent="."]
+z_index = -90
+polygon = PackedVector2Array(Vector2(0, 820), Vector2(0, 540), Vector2(160, 590), Vector2(320, 470), Vector2(490, 610), Vector2(660, 510), Vector2(820, 650), Vector2(1010, 500), Vector2(1190, 600), Vector2(1360, 450), Vector2(1530, 590), Vector2(1720, 500), Vector2(1900, 620), Vector2(2100, 510), Vector2(2300, 570), Vector2(2300, 1250))
+color = Color("#29252f")
+
+[node name="NearScenery" type="Polygon2D" parent="."]
+z_index = -80
+polygon = PackedVector2Array(Vector2(0, 880), Vector2(0, 700), Vector2(190, 720), Vector2(360, 650), Vector2(520, 760), Vector2(740, 640), Vector2(900, 750), Vector2(1080, 670), Vector2(1260, 740), Vector2(1440, 620), Vector2(1620, 760), Vector2(1840, 660), Vector2(2050, 730), Vector2(2300, 680), Vector2(2300, 1250))
+color = Color("#332b31")
