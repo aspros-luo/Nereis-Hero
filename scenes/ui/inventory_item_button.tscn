@@ -1,0 +1,6 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="InventoryItemButton" type="Button"]
+custom_minimum_size = Vector2(320, 46)
+size_flags_horizontal = 3
+alignment = 0
