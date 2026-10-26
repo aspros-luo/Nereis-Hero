@@ -2,7 +2,7 @@ extends Node2D
 
 @export var location_id: String = "tavern"
 @onready var hero: CharacterBody2D = $Hero
-@onready var camera: Camera2D = $Hero/Camera2D
+@onready var camera: Camera2D = $Hero/HeroCamera
 @onready var narrative: CanvasLayer = $NarrativeManager
 @onready var hud: CanvasLayer = $HUD
 @onready var exit: Area2D = $InteriorExit
