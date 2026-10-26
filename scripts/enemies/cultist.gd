@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
-const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
+const HIT_SPARK_SCENE: PackedScene = preload("res://scenes/effects/hit_spark.tscn")
+const DEATH_BURST_SCENE: PackedScene = preload("res://scenes/effects/death_burst.tscn")
 
 const MOVE_SPEED := 82.0
 const ATTACK_RANGE := 108.0
@@ -86,14 +86,13 @@ func _physics_process(delta: float) -> void:
     queue_redraw()
 
 func _spawn_death_burst() -> void:
-    var effect: Node2D = DEATH_BURST_SCRIPT.new()
+    var effect: Node2D = DEATH_BURST_SCENE.instantiate() as Node2D
     effect.global_position = global_position + Vector2(0, -34)
     get_parent().add_child(effect)
     effect.call("setup", 14.0)
 
 func _spawn_hit_spark() -> void:
-    var effect := Node2D.new()
-    effect.set_script(HIT_SPARK_SCRIPT)
+    var effect := HIT_SPARK_SCENE.instantiate() as Node2D
     effect.global_position = global_position + Vector2(0, -34)
     get_parent().add_child(effect)
 
