@@ -1,70 +1,38 @@
 extends Node2D
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
-const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
-const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
-const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
+
 const MITE_HOUSE_BACKDROP = preload("res://assets/art/backdrops/mite_house_backdrop.svg")
 
-var hero: CharacterBody2D
-var camera: Camera2D
-var mite: Node2D
-var narrative: CanvasLayer
-var hud: CanvasLayer
-var narrative_audio: Node
-var rest_point: Node2D
-var exit: Area2D
+@onready var hero: CharacterBody2D = $Hero
+@onready var mite: Node2D = $Mite
+@onready var narrative: CanvasLayer = $NarrativeManager
+@onready var hud: CanvasLayer = $HUD
+@onready var narrative_audio: Node = $NarrativeAudio
+@onready var rest_point: Node2D = $RestPoint
+@onready var exit: Area2D = $VillageExit
 
 func _ready() -> void:
 	WorldState.prepare_scene_runtime()
 	get_tree().paused = false
 	WorldState.input_locked = false
 	WorldState.set_location("mite_house")
-	_create_floor()
-	_create_boundaries()
-	_spawn_hero()
-	_spawn_mite()
-	_spawn_rest()
-	_spawn_exit()
-	_spawn_ui()
-	queue_redraw()
-
-func _spawn_hero() -> void:
-	hero = CharacterBody2D.new()
-	hero.set_script(HERO_SCRIPT)
-	hero.position = Vector2(420, 520)
-	hero.name = "Hero"
-	_add_character_collision(hero, 18.0, 48.0)
-	add_child(hero)
-
-	camera = Camera2D.new()
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 6.0
+	var camera := hero.get_node("Camera2D") as Camera2D
 	camera.limit_left = 0
 	camera.limit_top = 0
 	camera.limit_right = 1400
 	camera.limit_bottom = 720
-	hero.add_child(camera)
-
-func _spawn_mite() -> void:
-	mite = Node2D.new()
-	mite.set_script(MITE_SCRIPT)
-	mite.position = Vector2(760, 520)
-	mite.name = "Mite"
-	add_child(mite)
 	mite.interacted.connect(_on_mite_interacted)
-
-func _spawn_rest() -> void:
-	rest_point = Node2D.new()
-	rest_point.set_script(REST_POINT_SCRIPT)
-	rest_point.position = Vector2(1050, 520)
-	rest_point.rest_id = "mite_house_bed"
-	rest_point.display_name = "THE BED"
-	add_child(rest_point)
 	rest_point.rested.connect(_on_rest)
+	exit.reached.connect(func() -> void:
+		WorldState.pending_region_spawn_side = "mite_house_return"
+		WorldState.set_location("village")
+		SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+	)
+	hud.bind_hero(hero)
+	hud.set_story_mode("MITE'S HOUSE", "STAY A LITTLE LONGER")
+	queue_redraw()
+
+
 
 func _on_rest() -> void:
 	if WorldState.physical_union_complete or WorldState.mite_connection_missed:
@@ -107,74 +75,10 @@ func _on_mite_interacted(_interaction_id: String, title: String, message: String
 	if narrative_audio and narrative_audio.has_method("play_lullaby"):
 		narrative_audio.play_lullaby()
 
-func _spawn_exit() -> void:
-	exit = Area2D.new()
-	exit.set_script(INTERIOR_EXIT_SCRIPT)
-	exit.position = Vector2(170, 520)
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(100, 130)
-	shape.shape = rectangle
-	shape.position = Vector2(0, -65)
-	exit.add_child(shape)
-	exit.set_meta("p5_1_exit_contract", true)
-	exit.set_meta("p5_1_target_scene", "res://scenes/village_hub.tscn")
-	exit.set_meta("p5_1_target_region", "A1")
-	exit.set_meta("p5_1_spawn_side", "mite_house_return")
-	add_child(exit)
-	exit.reached.connect(func() -> void:
-		# Return beside the matching exterior door, not at the A0 arrival point or inside its trigger.
-		WorldState.pending_region_spawn_side = "mite_house_return"
-		WorldState.set_location("village")
-		SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
-	)
 
-func _spawn_ui() -> void:
-	narrative = CanvasLayer.new()
-	narrative.set_script(NARRATIVE_SCRIPT)
-	add_child(narrative)
 
-	hud = CanvasLayer.new()
-	hud.set_script(HUD_SCRIPT)
-	add_child(hud)
-	hud.bind_hero(hero)
-	hud.set_story_mode("MITE'S HOUSE", "STAY A LITTLE LONGER")
 
-	narrative_audio = Node.new()
-	narrative_audio.set_script(NARRATIVE_AUDIO_SCRIPT)
-	add_child(narrative_audio)
 
-	# Opening story is carried by room details and player observation, not an automatic narration panel.
-
-func _create_floor() -> void:
-	var floor := StaticBody2D.new()
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(1400, 40)
-	shape.shape = rectangle
-	shape.position = Vector2(700, 540)
-	floor.add_child(shape)
-	add_child(floor)
-
-func _create_boundaries() -> void:
-	for x in [-20.0, 1420.0]:
-		var wall := StaticBody2D.new()
-		var shape := CollisionShape2D.new()
-		var rectangle := RectangleShape2D.new()
-		rectangle.size = Vector2(40, 720)
-		shape.shape = rectangle
-		shape.position = Vector2(x, 360)
-		wall.add_child(shape)
-		add_child(wall)
-
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
-	var collision := CollisionShape2D.new()
-	var capsule := CapsuleShape2D.new()
-	capsule.radius = radius
-	capsule.height = height
-	collision.shape = capsule
-	collision.position = Vector2(0, -height * 0.5)
-	character.add_child(collision)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
