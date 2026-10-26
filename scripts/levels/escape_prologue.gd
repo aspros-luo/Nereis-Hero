@@ -2,7 +2,6 @@
 extends Node2D
 
 const WARDEN_SCENE: PackedScene = preload("res://scenes/enemies/experiment_warden.tscn")
-const PROGRESS_BARRIER_SCENE: PackedScene = preload("res://scenes/rooms/prologue_progress_barrier.tscn")
 const SURGERY_BACKDROP = preload("res://assets/art/backdrops/surgery_ward_backdrop.svg")
 const SURGERY_FLOOR_STRIP = preload("res://assets/art/backdrops/surgery_floor_strip.svg")
 const SURGERY_FOREGROUND_PROPS = preload("res://assets/art/backdrops/surgery_foreground_props.svg")
@@ -34,6 +33,11 @@ func _ready() -> void:
 	hero = $Hero
 	hud = $HUD
 	exit_area = $VillageRoadExit
+	progress_barriers = [$ProgressBarrier_Left as StaticBody2D, $ProgressBarrier_Right as StaticBody2D]
+	for gate in progress_barriers:
+		gate.visible = false
+		var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
+		collision.disabled = true
 	WorldState.current_location = "church_escape"
 	WorldState.record_natural_test_region("A0", "church_escape")
 	WorldState.set_checkpoint(Vector2(420.0, FLOOR_Y))
@@ -92,28 +96,35 @@ func _spawn_warden(spawn_position: Vector2, enemy_name: String) -> void:
 	wardens.append(warden)
 
 func _spawn_progress_barriers() -> void:
-	# Close both ends of the arena only after the exit ambush starts.
-	# 仅在出口伏击触发后关闭战斗场地两端，避免开场就加载敌人。
-	_spawn_single_progress_barrier(1320.0)
+    # Both barrier nodes are authored in escape_prologue.tscn; only their state changes at runtime.
+    for gate in progress_barriers:
+        gate.visible = false
+        var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
+        collision.disabled = true
+    _spawn_single_progress_barrier(1320.0)
 
 
 func _spawn_single_progress_barrier(gate_x: float) -> void:
-	var gate := PROGRESS_BARRIER_SCENE.instantiate() as StaticBody2D
-	if gate == null:
-		push_error("[NEREIS][PROLOGUE] Failed to instantiate progress barrier scene")
-		return
-	gate.name = "SurgeryProgressBarrier"
-	gate.position = Vector2(gate_x, 420.0)
-	add_child(gate)
-	progress_barriers.append(gate)
+    var gate_name := "ProgressBarrier_Left" if gate_x < 1600.0 else "ProgressBarrier_Right"
+    var gate := get_node_or_null(gate_name) as StaticBody2D
+    if gate == null:
+        push_error("[NEREIS][PROLOGUE] Missing authored progress barrier: " + gate_name)
+        return
+    gate.position = Vector2(gate_x, 420.0)
+    gate.visible = true
+    var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
+    collision.disabled = false
+
 
 func _open_progress_barrier(index: int) -> void:
-	if index < 0 or index >= progress_barriers.size():
-		return
-	var gate := progress_barriers[index]
-	if is_instance_valid(gate):
-		gate.queue_free()
-	queue_redraw()
+    if index < 0 or index >= progress_barriers.size():
+        return
+    var gate := progress_barriers[index]
+    if is_instance_valid(gate):
+        gate.visible = false
+        var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
+        collision.disabled = true
+    queue_redraw()
 
 
 func _on_clue_examined(clue: Node) -> void:
@@ -131,8 +142,9 @@ func _on_hero_defeated() -> void:
 	wardens.clear()
 	for gate in progress_barriers:
 		if is_instance_valid(gate):
-			gate.queue_free()
-	progress_barriers.clear()
+			gate.visible = false
+			var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
+			collision.disabled = true
 	wardens_defeated = 0
 	ambush_started = false
 	ambush_phase = 0

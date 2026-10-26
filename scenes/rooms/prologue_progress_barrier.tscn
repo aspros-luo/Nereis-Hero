@@ -6,4 +6,5 @@ size = Vector2(24, 240)
 [node name="SurgeryProgressBarrier" type="StaticBody2D"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+disabled = true
 shape = SubResource("RectangleShape2D_barrier")

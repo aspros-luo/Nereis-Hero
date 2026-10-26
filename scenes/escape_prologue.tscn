@@ -153,4 +153,12 @@ shape = SubResource("RectangleShape2D_exit")
 
 [node name="Prompt" parent="VillageRoadExit" instance=ExtResource("9")]
 
+[node name="ProgressBarrier_Left" parent="." instance=ExtResource("11")]
+position = Vector2(1320, 420)
+visible = false
+
+[node name="ProgressBarrier_Right" parent="." instance=ExtResource("11")]
+position = Vector2(2000, 420)
+visible = false
+
 [node name="HUD" parent="." instance=ExtResource("7")]
