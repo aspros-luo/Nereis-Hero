@@ -977,14 +977,13 @@ func _ready_a5_assembly_child() -> void:
 		if collision == null or not (collision.shape is RectangleShape2D):
 			continue
 		var shape := collision.shape as RectangleShape2D
-		match str(body.name):
-			var node_name := str(body.name)
-			if node_name.begins_with("A5RoomPlatform_"):
-				platforms.append(Rect2(body.position, shape.size))
-			elif node_name.begins_with("A5RoomRubble_"):
-				a5_room_blocks.append(Rect2(body.position, shape.size))
-			elif node_name.begins_with("A5RoomGround_"):
-				a5_room_floor_segments.append(Vector2(body.position.x, shape.size.x))
+		var node_name := str(body.name)
+		if node_name.begins_with("A5RoomPlatform_"):
+			platforms.append(Rect2(body.position, shape.size))
+		elif node_name.begins_with("A5RoomRubble_"):
+			a5_room_blocks.append(Rect2(body.position, shape.size))
+		elif node_name.begins_with("A5RoomGround_"):
+			a5_room_floor_segments.append(Vector2(body.position.x, shape.size.x))
 	var cursor := 0.0
 	for segment in a5_room_floor_segments:
 		if segment.x > cursor:
