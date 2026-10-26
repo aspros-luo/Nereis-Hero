@@ -9,41 +9,51 @@ Static source inspection only. No claim of Godot editor import, runtime, or game
 ## Completed in this pass
 
 - Consolidated R01–R06 into one playable `.tscn` per room under `scenes/rooms/a2_fog_forest/runtime/`.
-- Removed the six superseded standalone terrain scenes. Each playable room now has an editor-visible `Terrain` child containing the authored platforms, artwork, decoration and `RoomMarkers`.
-- Kept Hero, Narrative, HUD, fixed left/right room boundary bodies and room-level metadata in the same scene.
-- Preserved R05's `RegionRestPoint_A2` scene instance.
+- Removed the six superseded standalone terrain scenes. Each playable room has an editor-visible `Terrain` child containing the authored platforms, artwork, decoration and `RoomMarkers`.
+- Kept Hero, Narrative, HUD, room metadata and fixed left/right boundary bodies in each room scene.
+- Preserved R05's `RegionRestPoint_A2` instance.
 - Updated `scripts/levels/a2_room_runtime.gd` to resolve marker anchors through `Terrain/RoomMarkers`.
-- R01's authored terrain is scaled 1.25x to preserve the 1792×1200 art-space to 2240×1500 room-space contract. Its room boundary bodies remain at the playable room edges.
+- Added editor-visible `InteractionDoor` scene instances for all fixed A2 exits. Runtime now configures their destination, prompt and progression metadata instead of creating duplicate fixed door areas.
+- Added editor-visible `Area2D` drop triggers for R01→R04 and R03→R04. Runtime reuses these nodes and binds the transition callback instead of duplicating them.
+- Kept R05→A5's door authored but disabled by default; the existing progression flag controls whether runtime enables it.
+- R01's authored terrain is scaled 1.25x to preserve the 1792×1200 art-space to 2240×1500 room-space contract. Its safe-drop Area2D is authored at the transformed marker position.
 
 ## Static checks completed
 
 - All six room IDs in `ROOM_SCENE_PATHS` resolve to existing R01–R06 playable scene paths.
 - Each consolidated scene has one room root, one `Terrain` node, Hero, and two authored `RegionBoundary_*` bodies.
 - Scene `load_steps` values match the declared external resources and subresources.
-- External and subresource references resolve within the scene text.
-- The fixed exit/drop marker names used by `_spawn_room_exits()` exist in the matching room's `Terrain/RoomMarkers`.
-- No `AuthoredRoom` wrapper instance remains. R05's rest point remains present.
+- External and subresource references resolve within each scene text.
+- Node parent paths are valid and have no duplicate full node paths.
+- Every fixed exit configured by `_spawn_room_exits()` has a matching authored `Door_<marker>` instance and a matching `Terrain/RoomMarkers` anchor.
+- R01 and R03 have the authored drop Area2D nodes expected by the runtime transition names.
+- R05's rest point is preserved and its A5 exit starts disabled.
 
 ## Remaining audit findings
 
-### Fixed transitions are still created by script
+### Room-to-room geometry is not proven by text inspection
 
-`_spawn_room_exits()`, `_spawn_exit_door_at_marker()`, and `_spawn_drop_transition_at_marker()` still instantiate the fixed doors/drop areas at runtime. The destination marker anchors are editor-visible, but the actual `Area2D` and collision nodes are not yet authored in the scene tree.
+The room graph and marker names line up statically, but this cannot prove that the player can reach each marker, that the collision gap is truly open, or that a door is reachable from the intended platform. R01's safe drop and R03's drop still require in-editor collision inspection and gameplay testing.
 
-Next change: convert fixed room-to-room doors and the two A2 drop transitions into editor-visible reusable scene instances, with target scene, spawn side, prompt and conditions configured per room. Keep genuinely state-dependent gates conditional, and prevent runtime code from duplicating authored instances.
+### Cross-region contracts require manual verification
 
-### Cross-room route acceptance remains unverified
+- R06→A3 uses spawn side `city_canopy_entry`, which has an A3 spawn mapping in `greybox_world_region.gd`.
+- R05→A5 uses `old_pilgrim_highroad`, which has a special A5 spawn mapping.
+- The actual C03/C04 route continuity, H02 return, and persistence of discovery state still need gameplay verification.
 
-Static marker/path checks do not prove that the six rooms form a traversable map. R01→R04 and R03→R04 drop geometry, R04↔R06 and R05↔R06 height changes, C03/C04/H02 returns, spawn positions, collision boundaries and R05 rest-point reachability still require Godot 4.6.1 editor/runtime acceptance.
+### Dynamic stateful gates remain code-driven
+
+The H02 resonance gate is still created at runtime because its state/requirements are conditional. That is intentional for this pass; its visual placement and collision still need manual inspection.
 
 ## Acceptance checklist
 
 - [x] One editable playable scene per room (R01–R06).
-- [x] Terrain, markers, Hero, HUD, Narrative and fixed room boundaries are visible in the scene tree.
-- [x] Room path, marker, resource-reference and `load_steps` static checks pass.
-- [x] R05 rest point preserved.
-- [ ] Fixed exit/drop Area2D nodes authored in the scene tree; runtime duplication removed.
-- [ ] R01's one safe drop reaches R04; other void falls remain lethal.
+- [x] Terrain, markers, Hero, HUD, Narrative, fixed room boundaries and fixed exit doors are visible in the scene tree.
+- [x] R01→R04 and R03→R04 drop Area2D nodes are visible in the scene tree.
+- [x] Room path, marker, resource-reference, node-parent and `load_steps` static checks pass.
+- [x] Runtime configures authored doors and reuses authored drop areas.
+- [x] R05 rest point preserved; A5 exit remains progression-gated.
+- [ ] Godot 4.6.1 editor import passes without parse/resource errors.
+- [ ] R01 safe drop reaches R04; other void falls remain lethal.
 - [ ] R03 drop reaches R04; R04↔R06 and R05↔R06 routes work at their intended heights.
 - [ ] C03, C04 and H02 cross-region/return routes and saved discovery state verified.
-- [ ] Godot 4.6.1 editor import and manual gameplay acceptance pass.
