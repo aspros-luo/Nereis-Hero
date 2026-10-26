@@ -187,4 +187,4 @@ A2 的若干旧 runtime wrapper 高度、floor_y 与 `tools/a2_room_connection_c
 - 两者均无碰撞，不参与路线判定；仅作为可直接在 Scene 树中选择、调整和后续替换的视觉占位。
 - 占位形状目前是低对比色块，不代表最终美术完成。它们应在用户本地检查画面后按需调整或替换为原创透明 PNG。
 
-**当前多层状态必须准确表述：**远景、主要环境和中景地形仍合并在 `LevelIllustration` 单张 SVG 中；本轮只是补上了独立可编辑的前景占位层，还没有完成真正可独立调整的远景/中景插画拆分。场景导入、遮挡观感与碰撞仍待用户在 Godot 4.6.1 实机验收。
+**当前多层状态必须准确表述：**本轮已将原插画的 `Deep mist forest`、`Distant forest stems and valley`、`Far ruined towers in the fog`、`Volumetric light` 四段拆到 `a2_r01_forest_ruins_far_layer.svg`，并在场景中以 `FarForestArtwork`（z=-2）独立绘制；主插画移除了这些片段，作为主体环境层（z=-1）。这是实际的远景资源拆分，不是重复叠图。中景雾气和前景遮挡仍未完成正式美术拆层，当前低对比 `Polygon2D` 仍只是临时辅助。场景导入、资源引用、遮挡观感与碰撞仍待用户在 Godot 4.6.1 实机验收。
