@@ -1,6 +1,6 @@
 extends Node
 
-func route_candidate() -> String:
+static func route_candidate() -> String:
     var candidate := NereisEndingEvaluator.get_candidate()
     print("[NEREIS][ENDING] Candidate route=%s reason=%s" % [
         candidate,
