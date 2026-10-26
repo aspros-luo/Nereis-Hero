@@ -381,6 +381,23 @@ position = Vector2(1792, 600)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EastBoundary"]
 shape = SubResource("BoundaryShape")
 
+
+; Temporary, low-contrast foreground foliage placeholders.
+; These are decorative Polygon2D overlays only: no collision and no gameplay logic.
+; Replace with original transparent foliage textures after the layer composition is approved.
+[node name="ForegroundDecor" type="Node2D" parent="."]
+z_index = 2
+
+[node name="ForegroundPlaceholder_WestFerns" type="Polygon2D" parent="ForegroundDecor"]
+position = Vector2(0, 0)
+color = Color(0.18, 0.29, 0.22, 0.38)
+polygon = PackedVector2Array(0, 1200, 0, 1110, 40, 1140, 68, 1060, 95, 1135, 132, 1085, 155, 1160, 198, 1100, 235, 1200)
+
+[node name="ForegroundPlaceholder_EastRoots" type="Polygon2D" parent="ForegroundDecor"]
+position = Vector2(0, 0)
+color = Color(0.14, 0.24, 0.19, 0.32)
+polygon = PackedVector2Array(1450, 1200, 1490, 1135, 1525, 1180, 1570, 1085, 1600, 1165, 1640, 1110, 1685, 1180, 1735, 1095, 1792, 1145, 1792, 1200)
+
 ; Runtime transition and spawn anchors. Names are API contracts used by a2_room_runtime.gd.
 [node name="RoomMarkers" type="Node2D" parent="."]
 
