@@ -4,9 +4,9 @@ const HIT_SPARK_SCENE: PackedScene = preload("res://scenes/effects/hit_spark.tsc
 const SLASH_ARC_SCENE: PackedScene = preload("res://scenes/effects/slash_arc.tscn")
 const DEATH_BURST_SCENE: PackedScene = preload("res://scenes/effects/death_burst.tscn")
 const ECHO_PULSE_SCENE: PackedScene = preload("res://scenes/effects/echo_pulse.tscn")
-const GRAPPLE_ANCHOR_SCRIPT = preload("res://scripts/systems/grapple_anchor.gd")
-const RESONANCE_TARGET_SCRIPT = preload("res://scripts/systems/resonance_hidden_target.gd")
-const DEBUG_WALL_SCRIPT = preload("res://scripts/systems/debug_traversal_wall.gd")
+const GRAPPLE_ANCHOR_SCENE: PackedScene = preload("res://scenes/systems/grapple_anchor.tscn")
+const RESONANCE_TARGET_SCENE: PackedScene = preload("res://scenes/systems/resonance_hidden_target.tscn")
+const DEBUG_WALL_SCENE: PackedScene = preload("res://scenes/systems/debug_traversal_wall.tscn")
 
 const HERO_SKELETON_SCENE = preload("res://scenes/player/hero_skeleton.tscn")
 
@@ -765,8 +765,7 @@ func _refresh_debug_test_fixtures(enabled: bool) -> void:
 		return
 
 	for index in range(DEBUG_ANCHOR_OFFSETS.size()):
-		var anchor := Node2D.new()
-		anchor.set_script(GRAPPLE_ANCHOR_SCRIPT)
+		var anchor := GRAPPLE_ANCHOR_SCENE.instantiate() as Node2D
 		anchor.name = "DebugGrappleAnchor_%d" % index
 		anchor.set("debug_fixture", true)
 		anchor.set("anchor_label", "TEST ANCHOR %d" % (index + 1))
@@ -775,24 +774,21 @@ func _refresh_debug_test_fixtures(enabled: bool) -> void:
 		debug_anchor_fixtures.append(anchor)
 
 	for index in range(DEBUG_REVEAL_OFFSETS.size()):
-		var hidden_target := Node2D.new()
-		hidden_target.set_script(RESONANCE_TARGET_SCRIPT)
+		var hidden_target := RESONANCE_TARGET_SCENE.instantiate() as Node2D
 		hidden_target.name = "DebugResonanceTarget_%d" % index
+		hidden_target.call("configure", [0, 15, 32][index], [0, 1, 1][index], [0, 0, 12][index], "TRACE %d" % (index + 1), true)
 		get_parent().add_child(hidden_target)
 		hidden_target.global_position = global_position + DEBUG_REVEAL_OFFSETS[index]
-		hidden_target.call("configure", [0, 15, 32][index], [0, 1, 1][index], [0, 0, 12][index], "TRACE %d" % (index + 1), true)
 		debug_reveal_fixtures.append(hidden_target)
 
 	for offset in [-210.0, 210.0]:
-		var wall := StaticBody2D.new()
-		wall.set_script(DEBUG_WALL_SCRIPT)
+		var wall := DEBUG_WALL_SCENE.instantiate() as StaticBody2D
 		wall.name = "DebugWall_%s" % ("Left" if offset < 0.0 else "Right")
 		get_parent().add_child(wall)
 		wall.global_position = global_position + Vector2(offset, -90.0)
 		debug_wall_fixtures.append(wall)
 
 	_log("DEBUG", "Temporary traversal fixtures created: 4 anchors, 3 hidden traces, 2 marked walls")
-
 func _start_grapple() -> void:
 	if state in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD] or attack_time > 0.0 or dodge_time > 0.0 or quick_dash_time > 0.0 or hurt_time > 0.0:
 		_log("MOVEMENT", "Grapple cannot start during the current action")
