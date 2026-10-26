@@ -1,6 +1,6 @@
 # A5 独立房间验收索引
 
-本目录的每个 `.tscn` 都可以单独运行。当前阶段以灰盒地形、平台碰撞、角色移动和摄像机范围为验收对象；不生成敌人、区域出口或拾取物。场景由 `scripts/levels/greybox_world_region.gd` 提供运行逻辑。
+本目录的每个 `.tscn` 都是由 `scenes/world/world.tscn` 装配的 terrain-only 房间组件，不是独立可玩的关卡。平台、残骸、地面分段及其 `CollisionShape2D` 都直接保存在场景节点树中；`scripts/levels/greybox_world_region.gd` 在组装模式下只读取这些节点、建立绘制数据，不再创建地形节点。运行时 smoke test 会临时加入 Hero 检查碰撞和落地。
 
 ## 房间列表
 
@@ -33,7 +33,8 @@
 
 - [A5 22 房间空间组装合同](../../tools/a5_room_assembly_contract.json)：记录 22 个房间的屏幕网格提案位置、房间邻接边、可选支路，以及 C04/C08/C09 的绑定。
 - [组装合同静态验证器](../../tools/validate_a5_room_assembly_contract.py)：在仓库根目录执行 `python3 tools/validate_a5_room_assembly_contract.py`。
-- 当前合同明确标注为提案；它还没有被正式 A5 场景读取，不能宣称场景已组装或路线已可玩。下一步必须把合同接入实际场景加载/房间实例化，并在 Godot 中完整跑通主线、捷径、隐藏分支和死亡恢复。
+- `scripts/world/world.gd` 读取该合同，将 22 个房间实例化到 `RoomContainer`，并统一管理持久 Hero/HUD/Camera 与房间转场。22 个子场景现在提供显式地形节点。
+- 仍存在并行旧路径：`scenes/old_battlefield.tscn` / `scenes/a5_assembled_region.tscn` 走 `greybox_world_region.gd` 的 legacy assembly 分支。该重复系统是待关闭的 P0 架构项；在完整引用闭包与验收完成前不要直接删除。目标架构优先保留 `scenes/world/world.tscn` 的 RoomContainer 方案。
 
 ## 集成边界审计
 
@@ -41,8 +42,8 @@
 
 ## 当前灰盒地形实现
 
-- **地面不是统一模板**：不同房间分别定义实际碰撞地面的分段与缺口；缺口处不生成地面碰撞，并由对应平台跨越。
-- **平台按房间独立设计**：横向战壕、交叉火力区、信号塔、绞盘竖井、地下维护层和隐秘观察室采用不同的平台数量与高差。
+- **地面不是统一模板**：不同房间在 `.tscn` 中显式保存实际碰撞地面的分段与缺口；缺口处没有地面碰撞，并由对应平台跨越。
+- **平台按房间独立设计**：横向战壕、交叉火力区、信号塔、绞盘竖井、地下维护层和隐秘观察室采用不同的平台数量与高差；每个平台都是可在 Scene 面板中选择的 `StaticBody2D / CollisionShape2D`。
 - **残骸是实体障碍**：每间房间都有单独布置的矩形残骸，视觉形状与 `StaticBody2D / CollisionShape2D` 碰撞一致，主要高度控制在可跳越范围。
 - **R06 从高位开始验收**：出生点放在塌陷坡道上端，方便检查下降路线；其余房间默认从地面入口开始检查。
 - **当前限制**：这是无美术资源阶段的灰盒，尚未添加敌人、机关动画、拾取物与正式区域出口。脚本静态验收通过不等于 Godot 实机跳跃验收通过。
@@ -68,7 +69,7 @@ python3 tools/validate_a5_room_scenes.py
 python3 tools/validate_a5_room_scenes.py
 ```
 
-该检查验证 22 个场景文件、房间 ID 与尺寸，并检查每间房的平台范围、路线相邻步幅、实体残骸边界和真实地面缺口。它是静态几何检查，不代替 Godot 解析、碰撞物理和人工游玩验收。
+该检查验证 22 个场景文件、房间 ID 与尺寸，逐个核对场景中的平台/残骸/地面节点数量、碰撞形状与单向碰撞标记，并检查每间房的平台范围、路线相邻步幅、实体残骸边界和真实地面缺口。它是静态几何检查，不代替 Godot 解析、碰撞物理和人工游玩验收。
 
 ## 建议验收顺序
 

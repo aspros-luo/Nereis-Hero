@@ -3,7 +3,7 @@ extends SceneTree
 ## Run with: godot --headless --path . --script tools/a5_room_runtime_acceptance.gd
 ##
 ## This instantiates all room scenes using the real project scripts and checks
-## runtime-created physics nodes. It does not simulate player input or certify
+## authored physics nodes. It does not simulate player input or certify
 ## that every route is manually playable.
 
 const CONTRACT_PATH := "res://tools/a5_room_design_contract.json"
@@ -85,7 +85,7 @@ func _test_room(room: Dictionary) -> void:
 		return
 
 	root.add_child(instance)
-	# Let _ready(), world setup, Hero initialization, and collision node creation run.
+	# Let _ready(), world setup, Hero initialization, and authored node geometry reader run.
 	await process_frame
 	await process_frame
 
