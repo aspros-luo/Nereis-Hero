@@ -100,17 +100,6 @@ size = Vector2(120, 20)
 [sub_resource type="RectangleShape2D" id="RoomBoundaryShape"]
 size = Vector2(40, 1700)
 
-[node name="A2R01Room" type="Node2D"]
-script = ExtResource("runtime_script")
-region_id = "A2"
-location_id = "ash_forest"
-region_title = "林间遗迹"
-map_width = 2240.0
-floor_y = 640.0
-room_height = 1500.0
-room_id = "A2-R01"
-enable_region_encounters = false
-
 [node name="RegionBoundary_0" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RegionBoundary_0"]
