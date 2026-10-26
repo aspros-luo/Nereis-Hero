@@ -48,7 +48,8 @@ func _ready() -> void:
 	_spawn_rest_point()
 	_spawn_exit()
 	_spawn_ui()
-	queue_redraw()
+	$TavernArchitecture.visible = location_id == "tavern"
+	$ChurchArchitecture.visible = location_id == "church"
 
 
 func _spawn_npc() -> void:
@@ -210,29 +211,3 @@ func _unhandled_input(event: InputEvent) -> void:
         print("[NEREIS][DEBUG] Interior run reset; returning to Vertical Slice")
         get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
         get_viewport().set_input_as_handled()
-
-func _draw() -> void:
-    draw_rect(Rect2(0, 0, 1800, 720), Color("#141116"))
-    draw_rect(Rect2(0, 520, 1800, 200), Color("#201c22"))
-
-    if location_id == "tavern":
-        draw_rect(Rect2(480, 290, 840, 230), Color("#2e252e"))
-        draw_rect(Rect2(700, 400, 420, 120), Color("#211a21"))
-        draw_string(ThemeDB.fallback_font, Vector2(820, 380), NereisLocalization.translate_text("TAVERN HALL"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#d6c7b2"))
-        for x in range(560, 1320, 120):
-            draw_circle(Vector2(x, 350), 10, Color("#8e7777"))
-    else:
-        draw_rect(Rect2(420, 220, 960, 300), Color("#29222c"))
-        draw_colored_polygon(
-            PackedVector2Array([
-                Vector2(380, 220),
-                Vector2(900, 80),
-                Vector2(1420, 220)
-            ]),
-            Color("#352d38")
-        )
-        draw_rect(Rect2(850, 350, 100, 170), Color("#17141b"))
-        draw_string(ThemeDB.fallback_font, Vector2(800, 190), NereisLocalization.translate_text("CHURCH NAVE"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#d6c7b2"))
-
-    draw_rect(Rect2(1550, 370, 120, 150), Color("#241d25"))
-    draw_string(ThemeDB.fallback_font, Vector2(1560, 350), NereisLocalization.translate_text("VILLAGE EXIT"), HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color("#796d67"))
