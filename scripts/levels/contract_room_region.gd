@@ -298,7 +298,11 @@ func _draw() -> void:
 	_draw_region_silhouette(palette)
 	# A1-R01's fixed terrain is rendered by Polygon2D/Line2D children authored in its .tscn.
 	# Keep the legacy drawing fallback only for contract rooms that have not yet been migrated.
-	var terrain_visuals_authored := get_node_or_null("Terrain_ground_01/TerrainVisual") != null
+	var terrain_visuals_authored := false
+	for child in get_children():
+		if child is StaticBody2D and child.get_node_or_null("TerrainVisual") is Polygon2D:
+			terrain_visuals_authored = true
+			break
 	if not terrain_visuals_authored:
 		for item in platforms:
 			var rect: Rect2 = item.rect
