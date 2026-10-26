@@ -1,0 +1,20 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="RoomDebugOverlay" type="CanvasLayer"]
+layer = 100
+
+[node name="RoomNamePanel" type="PanelContainer" parent="."]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 420.0
+offset_bottom = 60.0
+mouse_filter = 2
+
+[node name="RoomNameLabel" type="Label" parent="RoomNamePanel"]
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+mouse_filter = 2
+text = "A2 · R01"
