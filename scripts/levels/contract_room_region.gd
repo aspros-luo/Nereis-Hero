@@ -321,13 +321,8 @@ func _draw() -> void:
 		draw_arc(p, 21, 0, TAU, 24, palette.detail, 1.0, true)
 		draw_line(p + Vector2(0, -19), p + Vector2(0, 19), palette.ledge, 2.0, true)
 		draw_line(p + Vector2(-13, 0), p + Vector2(13, 0), palette.ledge, 2.0, true)
-	for exit in exits:
-		var p: Vector2 = exit.position
-		var glow: Color = palette.glow if exit.condition == "none" else palette.detail
-		draw_arc(p + Vector2(0, -30), 29, PI, TAU, 28, glow, 3.0, true)
-		draw_line(p + Vector2(-28, 0), p + Vector2(-28, -30), glow, 3.0, true)
-		draw_line(p + Vector2(28, 0), p + Vector2(28, -30), glow, 3.0, true)
-		draw_line(p + Vector2(-28, -15), p + Vector2(28, -15), glow, 1.0, true)
+	# Exit arches are authored in scenes/world/contract_room_exit.tscn.
+	# Route availability remains dynamic, but fixed doorway geometry is not drawn here.
 	draw_rect(Rect2(24, 24, minf(room_size.x - 48.0, 650.0), 52), Color("#090b10"), true)
 	draw_string(ThemeDB.fallback_font, Vector2(42, 58), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, palette.ledge)
 
