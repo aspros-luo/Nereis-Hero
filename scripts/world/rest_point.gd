@@ -3,7 +3,6 @@ extends Node2D
 signal rested
 
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
-const REST_VISUAL_SCENE = preload("res://scenes/world/rest_point_visual.tscn")
 
 @export var rest_id: String = ""
 @export var display_name: String = "REST"
@@ -14,10 +13,6 @@ var prompt_label: Label
 
 func _ready() -> void:
     set_meta("p5_1_rest_contract", true)
-    if not has_node("RestVisual"):
-        var visual := REST_VISUAL_SCENE.instantiate()
-        visual.name = "RestVisual"
-        add_child(visual)
     prompt_label = get_node("RestVisual/PromptLabel") as Label
     prompt_label.text = NereisLocalization.translate_text("E  Rest")
     prompt_label.visible = false
