@@ -44,7 +44,6 @@ func _ready() -> void:
 	hud.bind_hero(hero)
 	hud.set_story_mode("A0｜教会手术所", "查看手术托盘和周边物品，寻找离开的路。")
 	queue_redraw()
-
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
@@ -64,35 +63,6 @@ func _process(_delta: float) -> void:
 			hud.set_story_mode("A0｜教会手术所", "伏击开始！留意两侧来敌与上方坠落的守卫，利用攻击前摇进行闪避。")
 
 
-	var table := StaticBody2D.new()
-	table.name = "BrokenSurgeryTable"
-	table.position = Vector2(280.0, 500.0)
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(180.0, 12.0)
-	shape.shape = rectangle
-	table.add_child(shape)
-	add_child(table)
-
-
-	hero = CharacterBody2D.new()
-	hero.set_script(HERO_SCRIPT)
-	hero.position = Vector2(420.0, FLOOR_Y)
-	hero.name = "Hero"
-	_add_character_collision(hero, 18.0, 48.0)
-	add_child(hero)
-	# Hero handles checkpoint respawn internally; this interior scene has no defeated callback.
-	hero.attack_started.connect(func(_combo): pass)
-	hero.defeated.connect(_on_hero_defeated)
-
-	camera = Camera2D.new()
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 6.0
-	camera.limit_left = 0
-	camera.limit_top = 0
-	camera.limit_right = LEVEL_WIDTH
-	camera.limit_bottom = 720
-	hero.add_child(camera)
 
 func _start_exit_ambush() -> void:
 	if ambush_started:
@@ -118,7 +88,6 @@ func _spawn_warden(spawn_position: Vector2, enemy_name: String) -> void:
 	add_child(warden)
 	warden.defeated.connect(_on_warden_defeated)
 	wardens.append(warden)
-
 func _spawn_progress_barriers() -> void:
 	# Close both ends of the arena only after the exit ambush starts.
 	# 仅在出口伏击触发后关闭战斗场地两端，避免开场就加载敌人。
@@ -133,7 +102,6 @@ func _spawn_single_progress_barrier(gate_x: float) -> void:
 	gate.position = Vector2(gate_x, 420.0)
 	add_child(gate)
 	progress_barriers.append(gate)
-
 func _open_progress_barrier(index: int) -> void:
 	if index < 0 or index >= progress_barriers.size():
 		return
@@ -143,71 +111,11 @@ func _open_progress_barrier(index: int) -> void:
 	queue_redraw()
 
 
-	var clue := Node2D.new()
-	clue.set_script(preload("res://scripts/world/world_clue.gd"))
-	clue.position = Vector2(620, 520)
-	clue.clue_id = "escape_surgical_mark"
-	clue.humanity_delta = -1
-	clue.display_name = "手术托盘"
-	clue.description = "金属托盘上覆着一层血。托盘底部凝结着干涸的黑色残留物，边缘留有几道浅浅的刮痕。器械编号已被刮去，只剩模糊的痕迹。"
-	add_child(clue)
-	var examined_callback := _on_clue_examined.bind(clue)
-	clue.examined.connect(examined_callback)
-
-
-	var pickup_script = preload("res://scripts/world/world_item_pickup.gd")
-	var bandage := Node2D.new()
-	bandage.set_script(pickup_script)
-	bandage.position = Vector2(320, 482)
-	bandage.pickup_id = "a0_bandage_pickup"
-	bandage.item_id = "church_bandage"
-	bandage.amount = 1
-	add_child(bandage)
-
-	var record := Node2D.new()
-	record.set_script(pickup_script)
-	record.position = Vector2(880, 393)
-	record.pickup_id = "a0_surgery_record_pickup"
-	record.item_id = "surgery_record_fragment"
-	record.amount = 1
-	add_child(record)
 
 func _on_clue_examined(clue: Node) -> void:
 	WorldState.mark_ancient_residue_awakened()
 	hud.call("show_item_description", clue.display_name, clue.description)
 
-	WorldState.mark_ancient_residue_awakened()
-	hud.call("show_item_description", clue.display_name, clue.description)
-
-
-	var rest := Node2D.new()
-	rest.set_script(REST_POINT_SCRIPT)
-	rest.position = Vector2(540.0, FLOOR_Y)
-	rest.rest_id = "escape_stool"
-	rest.display_name = "破损的凳子"
-	add_child(rest)
-
-
-	exit_area = Area2D.new()
-	exit_area.set_script(INTERACTION_DOOR_SCRIPT)
-	exit_area.position = Vector2(2040, FLOOR_Y)
-	exit_area.name = "VillageRoadExit"
-	exit_area.prompt_text = "E  逃离"
-	exit_area.enabled = false
-	exit_area.set_meta("p5_1_exit_contract", true)
-	exit_area.set_meta("p5_1_target_scene", "res://scenes/prologue_exterior.tscn")
-	exit_area.set_meta("p5_1_target_region", "A0_TRANSITION")
-	exit_area.set_meta("p5_1_spawn_side", "west")
-
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(110, 140)
-	shape.shape = rectangle
-	shape.position = Vector2(0, -70)
-	exit_area.add_child(shape)
-	add_child(exit_area)
-	exit_area.interacted.connect(_on_exit_interacted)
-	queue_redraw()
 
 func _on_hero_defeated() -> void:
 	# A0 is a retryable encounter: reset the entire ambush immediately when death starts,
@@ -274,67 +182,9 @@ func _on_exit_interacted() -> void:
 	SceneTransition.fade_to_scene("res://scenes/prologue_exterior.tscn")
 
 
-	hud = CanvasLayer.new()
-	hud.set_script(HUD_SCRIPT)
-	add_child(hud)
-	hud.bind_hero(hero)
-	hud.set_story_mode("A0｜教会手术所", "查看手术托盘和周边物品，寻找离开的路。")
-
-
-	var floor := StaticBody2D.new()
-	floor.name = "SurgeryFloor"
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(LEVEL_WIDTH, 40.0)
-	shape.shape = rectangle
-	shape.position = Vector2(LEVEL_WIDTH * 0.5, FLOOR_Y + 20.0)
-	floor.add_child(shape)
-	add_child(floor)
 
 
 
-	# Optional six-segment catwalk: 120 px per segment, 40 px gaps, and no more than 30 px per step.
-	# 六段可选高路：每段 120 px、间隙 40 px、相邻高差不超过 30 px。
-	for platform_rect in SURGICAL_CATWALK_RECTS:
-		var body := StaticBody2D.new()
-		body.name = "PrologueTraversalPlatform"
-		body.position = platform_rect.position
-		var shape := CollisionShape2D.new()
-		var rectangle := RectangleShape2D.new()
-		rectangle.size = platform_rect.size
-		shape.shape = rectangle
-		shape.position = platform_rect.size * 0.5
-		shape.one_way_collision = true
-		body.add_child(shape)
-		add_child(body)
-
-
-	var left := StaticBody2D.new()
-	var ls := CollisionShape2D.new()
-	var lr := RectangleShape2D.new()
-	lr.size = Vector2(40, 720)
-	ls.shape = lr
-	ls.position = Vector2(-20, 360)
-	left.add_child(ls)
-	add_child(left)
-
-	var right := StaticBody2D.new()
-	var rs := CollisionShape2D.new()
-	var rr := RectangleShape2D.new()
-	rr.size = Vector2(40, 720)
-	rs.shape = rr
-	rs.position = Vector2(LEVEL_WIDTH + 20.0, 360)
-	right.add_child(rs)
-	add_child(right)
-
-
-	var collision := CollisionShape2D.new()
-	var capsule := CapsuleShape2D.new()
-	capsule.radius = radius
-	capsule.height = height
-	collision.shape = capsule
-	collision.position = Vector2(0, -height * 0.5)
-	character.add_child(collision)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if WorldState.debug_map_test_mode and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F6:
