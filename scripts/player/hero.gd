@@ -1,11 +1,8 @@
 extends CharacterBody2D
 
-const HITBOX_SCENE: PackedScene = preload("res://scenes/combat/hitbox.tscn")
-const HURTBOX_SCENE: PackedScene = preload("res://scenes/combat/hurtbox.tscn")
 const HIT_SPARK_SCENE: PackedScene = preload("res://scenes/effects/hit_spark.tscn")
 const SLASH_ARC_SCENE: PackedScene = preload("res://scenes/effects/slash_arc.tscn")
 const DEATH_BURST_SCENE: PackedScene = preload("res://scenes/effects/death_burst.tscn")
-const HERO_SYSTEM_SCRIPT = preload("res://scripts/player/hero_system.gd")
 const ECHO_PULSE_SCENE: PackedScene = preload("res://scenes/effects/echo_pulse.tscn")
 const GRAPPLE_ANCHOR_SCRIPT = preload("res://scripts/systems/grapple_anchor.gd")
 const RESONANCE_TARGET_SCRIPT = preload("res://scripts/systems/resonance_hidden_target.gd")
@@ -235,9 +232,7 @@ func _input(event: InputEvent) -> void:
 			attack_requested = true
 
 func _ready() -> void:
-	hero_system = HERO_SYSTEM_SCRIPT.new()
-	hero_system.name = "HeroSystem"
-	add_child(hero_system)
+	hero_system = get_node("HeroSystem")
 	_setup_combat_components()
 	_set_skeleton_visual_enabled(use_skeleton_visual or WorldState.hero_skeleton_visual_enabled)
 	debug_ability_override = WorldState.debug_ability_override_active
@@ -246,18 +241,12 @@ func _ready() -> void:
 		WorldState.refresh_resonance_reveals(true)
 	_log("BOOT", "Hero initialized")
 	queue_redraw()
-
 func _setup_combat_components() -> void:
-	attack_hitbox = HITBOX_SCENE.instantiate() as Area2D
-	attack_hitbox.name = "AttackHitbox"
-	add_child(attack_hitbox)
+	attack_hitbox = get_node("AttackHitbox") as Area2D
 	attack_hitbox.setup(self, Vector2(66, 48), Vector2(facing * 48.0, -28.0))
 
-	var hurtbox := HURTBOX_SCENE.instantiate() as Area2D
-	hurtbox.name = "Hurtbox"
-	add_child(hurtbox)
+	var hurtbox := get_node("Hurtbox") as Area2D
 	hurtbox.setup(self, Vector2(34, 78), Vector2(0, -34))
-
 func _process(delta: float) -> void:
 	animation_time += delta
 	if is_instance_valid(skeleton_visual) and skeleton_visual.has_method("apply_visual_context"):
