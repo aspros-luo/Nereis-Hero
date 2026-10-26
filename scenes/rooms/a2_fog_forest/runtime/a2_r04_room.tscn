@@ -1,16 +1,30 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=11 format=3]
 
-[ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="1"]
-[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn" type="PackedScene" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="5"]
+[ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="room_script"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="narrative_scene"]
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape1"]
+size = Vector2(1280, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape2"]
+size = Vector2(220, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape3"]
+size = Vector2(240, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape4"]
+size = Vector2(210, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape5"]
+size = Vector2(210, 24)
 
 [sub_resource type="RectangleShape2D" id="RoomBoundaryShape"]
 size = Vector2(40, 1300)
 
 [node name="A2R04Room" type="Node2D"]
-script = ExtResource("1")
+script = ExtResource("room_script")
 region_id = "A2"
 location_id = "ash_forest"
 region_title = "A2 R04 钟墓坑底"
@@ -20,7 +34,128 @@ room_height = 1100
 room_id = "A2-R04"
 enable_region_encounters = false
 
-[node name="AuthoredRoom" parent="." instance=ExtResource("2")]
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="CryptBackdrop" type="Polygon2D" parent="Terrain"]
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 1100, 0, 1100)
+color = Color(0.035, 0.045, 0.06, 1)
+z_index = -30
+
+[node name="CryptWallSilhouette" type="Polygon2D" parent="Terrain"]
+polygon = PackedVector2Array(0, 140, 100, 80, 230, 150, 330, 50, 470, 130, 590, 70, 720, 140, 850, 60, 980, 130, 1120, 70, 1280, 130, 1280, 520, 0, 520)
+color = Color(0.12, 0.13, 0.16, 1)
+z_index = -20
+
+[node name="H02GateVisual" type="Polygon2D" parent="Terrain"]
+polygon = PackedVector2Array(110, 520, 190, 520, 190, 420, 110, 420)
+color = Color(0.025, 0.03, 0.035, 1)
+z_index = 1
+
+[node name="CryptLanding" type="StaticBody2D" parent="Terrain"]
+position = Vector2(0, 520)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/CryptLanding"]
+position = Vector2(640, 12)
+shape = SubResource("terrain_GroundShape1")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/CryptLanding"]
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/CryptLanding"]
+points = PackedVector2Array(0, 0, 1280, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="CryptReturnShelfWest" type="StaticBody2D" parent="Terrain"]
+position = Vector2(80, 300)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/CryptReturnShelfWest"]
+position = Vector2(110, 12)
+shape = SubResource("terrain_GroundShape2")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/CryptReturnShelfWest"]
+polygon = PackedVector2Array(0, 0, 220, 0, 220, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/CryptReturnShelfWest"]
+points = PackedVector2Array(0, 0, 220, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="CryptReturnShelfMid" type="StaticBody2D" parent="Terrain"]
+position = Vector2(260, 390)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/CryptReturnShelfMid"]
+position = Vector2(120, 12)
+shape = SubResource("terrain_GroundShape3")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/CryptReturnShelfMid"]
+polygon = PackedVector2Array(0, 0, 240, 0, 240, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/CryptReturnShelfMid"]
+points = PackedVector2Array(0, 0, 240, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="CryptReturnShelfEast" type="StaticBody2D" parent="Terrain"]
+position = Vector2(470, 300)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/CryptReturnShelfEast"]
+position = Vector2(105, 12)
+shape = SubResource("terrain_GroundShape4")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/CryptReturnShelfEast"]
+polygon = PackedVector2Array(0, 0, 210, 0, 210, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/CryptReturnShelfEast"]
+points = PackedVector2Array(0, 0, 210, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="CryptLowShelf" type="StaticBody2D" parent="Terrain"]
+position = Vector2(650, 450)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/CryptLowShelf"]
+position = Vector2(105, 12)
+shape = SubResource("terrain_GroundShape5")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/CryptLowShelf"]
+polygon = PackedVector2Array(0, 0, 210, 0, 210, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/CryptLowShelf"]
+points = PackedVector2Array(0, 0, 210, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RoomMarkers" type="Node2D" parent="Terrain"]
+
+[node name="EntryDefault" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(220, 520)
+
+[node name="EntryTombDrop" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(300, 520)
+
+[node name="EntryTombDropR01" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(430, 520)
+
+[node name="H02Gate" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(150, 520)
+
+[node name="EntryH02Return" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(280, 520)
+
+[node name="EntryRavineReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(940, 520)
+
+[node name="ExitToR03" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(80, 300)
+
+[node name="ExitToR06" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(940, 520)
 
 [node name="RegionBoundary_0" type="StaticBody2D" parent="."]
 
@@ -34,10 +169,10 @@ shape = SubResource("RoomBoundaryShape")
 position = Vector2(1164, 550)
 shape = SubResource("RoomBoundaryShape")
 
-[node name="Hero" parent="." instance=ExtResource("3")]
+[node name="Hero" parent="." instance=ExtResource("hero_scene")]
 position = Vector2(180, 520)
 
-[node name="Narrative" parent="." instance=ExtResource("5")]
+[node name="Narrative" parent="." instance=ExtResource("narrative_scene")]
 
-[node name="HUD" parent="." instance=ExtResource("4")]
+[node name="HUD" parent="." instance=ExtResource("hud_scene")]
 
