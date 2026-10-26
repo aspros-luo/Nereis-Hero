@@ -1,7 +1,5 @@
 extends CharacterBody2D
 
-const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
-const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
 
@@ -33,14 +31,10 @@ func _ready() -> void:
     queue_redraw()
 
 func _setup_combat() -> void:
-    attack_hitbox = Area2D.new()
-    attack_hitbox.set_script(HITBOX_SCRIPT)
-    add_child(attack_hitbox)
+    attack_hitbox = $AttackHitbox as Area2D
     attack_hitbox.setup(self, Vector2(110, 70), Vector2(-60, -32))
 
-    var hurtbox := Area2D.new()
-    hurtbox.set_script(HURTBOX_SCRIPT)
-    add_child(hurtbox)
+    var hurtbox := $Hurtbox as Area2D
     hurtbox.setup(self, Vector2(44, 86), Vector2(0, -42))
 
 func _process(delta: float) -> void:
