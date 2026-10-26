@@ -1,6 +1,7 @@
-[gd_scene load_steps=39 format=3]
+[gd_scene load_steps=40 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/art/levels/a2_r01_forest_ruins_illustration.svg" id="1_r01_art"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="door_scene"]
 [ext_resource type="Texture2D" path="res://assets/art/levels/a2_r01_forest_ruins_far_layer.svg" id="2_r01_far_art"]
 [ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="runtime_script"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
@@ -466,3 +467,14 @@ monitoring = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Drop_R01_to_R04"]
 shape = SubResource("DropR01ToR04Shape")
+
+
+[node name="Door_ExitVillage" parent="." instance=ExtResource("door_scene")]
+position = Vector2(90, 800)
+
+[node name="Door_ExitBellTomb" parent="." instance=ExtResource("door_scene")]
+position = Vector2(1225, 840)
+
+[node name="Door_ExitCanopy" parent="." instance=ExtResource("door_scene")]
+position = Vector2(1900, 600)
+
