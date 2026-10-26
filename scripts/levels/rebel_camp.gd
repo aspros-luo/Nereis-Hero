@@ -22,7 +22,6 @@ func _ready() -> void:
 			5.5
 		)
 	)
-	queue_redraw()
 
 func _spawn_npcs() -> void:
     _spawn_npc(
@@ -78,28 +77,3 @@ func _unhandled_input(event: InputEvent) -> void:
         WorldState.delete_save()
         get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
         get_viewport().set_input_as_handled()
-
-func _draw() -> void:
-    draw_rect(Rect2(0, 0, 1900, 720), Color("#100f13"))
-    draw_rect(Rect2(0, 520, 1900, 200), Color("#201a22"))
-
-    for x in range(120, 1750, 320):
-        draw_line(Vector2(x, 520), Vector2(x + 35, 410), Color("#30262e"), 8.0)
-        draw_line(Vector2(x + 20, 470), Vector2(x + 72, 395), Color("#342a31"), 5.0)
-
-    draw_circle(Vector2(570, 470), 85.0, Color("#302127"))
-    draw_circle(Vector2(570, 470), 52.0, Color("#63322f"))
-
-    for x in [720.0, 1050.0, 1380.0]:
-        draw_rect(Rect2(x - 80, 360, 160, 160), Color("#26212a"))
-        draw_colored_polygon(
-            PackedVector2Array([
-                Vector2(x - 95, 360),
-                Vector2(x, 270),
-                Vector2(x + 95, 360)
-            ]),
-            Color("#302832")
-        )
-
-    draw_string(ThemeDB.fallback_font, Vector2(100, 230), NereisLocalization.translate_text("THE RESTORATION CAMP"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#6c5d64"))
-    draw_string(ThemeDB.fallback_font, Vector2(480, 450), NereisLocalization.translate_text("NO KING / NO CHURCH"), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("#8d7776"))
