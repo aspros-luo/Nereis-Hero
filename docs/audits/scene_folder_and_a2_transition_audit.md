@@ -8,9 +8,9 @@ Static source inspection only. No claim of Godot editor import, runtime, or game
 
 ## Confirmed structure
 
-- Six authored terrain scenes currently live under `scenes/rooms/a2_fog_forest/`.
-- Six runtime wrappers currently live under `scenes/rooms/a2_fog_forest/runtime/`.
-- Each wrapper instances its terrain scene as `AuthoredRoom`, plus Hero, Narrative, HUD, and two runtime-generated boundary bodies.
+- R01 has been consolidated into `scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn`: terrain, marker anchors, Hero, Narrative, HUD, and fixed boundary bodies are all visible in one editable scene tree. Its former standalone terrain file was removed after consolidating the room.
+- R02–R06 still use separate terrain scenes and runtime wrappers under `scenes/rooms/a2_fog_forest/` and `scenes/rooms/a2_fog_forest/runtime/`.
+- The R01 pilot keeps the terrain under an editor-visible `Terrain` node (scaled 1.25x) and moves marker lookup to `Terrain/RoomMarkers`.
 - The terrain scenes already contain `RoomMarkers` for entries/exits and drops. This gives a grounded source for migrating fixed transitions into authored scene nodes.
 - R05's rest point is already a scene instance in the wrapper; it should remain there unless the design calls for it to belong to the terrain itself.
 
@@ -57,7 +57,8 @@ The README files under `scenes/regions/` document this target. Scene files have 
 ## Acceptance checklist
 
 - [ ] Every `res://` scene/script/resource path resolves after migration.
-- [ ] All six wrappers instance the intended terrain scene exactly once.
+- [ ] R01 consolidated scene has no duplicate terrain wrapper and all marker paths resolve.
+- [ ] Consolidate R02–R06 using the validated R01 pattern after static and editor acceptance.
 - [ ] Each fixed exit/drop trigger exists visibly in the editor scene tree.
 - [ ] No fixed exit/drop is duplicated by runtime instantiation.
 - [ ] Story/save-state conditions still control conditional exits.
