@@ -19,7 +19,6 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-    process_mode = Node.PROCESS_MODE_ALWAYS
     get_tree().paused = false
     WorldState.input_locked = false
     get_tree().process_frame.connect(_ensure_route_runtime, CONNECT_ONE_SHOT)

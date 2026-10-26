@@ -17,6 +17,7 @@ size = Vector2(2200, 40)
 size = Vector2(40, 720)
 
 [node name="ChurchPath" type="Node2D"]
+process_mode = 3
 script = ExtResource("1")
 route_id = "church"
 
