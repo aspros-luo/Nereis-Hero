@@ -89,36 +89,6 @@ func _show_second_influence() -> void:
         5.0
     )
 
-func _create_floor() -> void:
-    var floor := StaticBody2D.new()
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(1400, 40)
-    shape.shape = rectangle
-    shape.position = Vector2(700, 540)
-    floor.add_child(shape)
-    add_child(floor)
-
-func _create_boundaries() -> void:
-    for x in [-20.0, 1420.0]:
-        var wall := StaticBody2D.new()
-        var shape := CollisionShape2D.new()
-        var rectangle := RectangleShape2D.new()
-        rectangle.size = Vector2(40, 720)
-        shape.shape = rectangle
-        shape.position = Vector2(x, 360)
-        wall.add_child(shape)
-        add_child(wall)
-
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
-    var collision := CollisionShape2D.new()
-    var capsule := CapsuleShape2D.new()
-    capsule.radius = radius
-    capsule.height = height
-    collision.shape = capsule
-    collision.position = Vector2(0, -height * 0.5)
-    character.add_child(collision)
-
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
         _mark_input_handled()
