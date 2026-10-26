@@ -26,7 +26,7 @@ func _ready() -> void:
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.set_location("old_drain_exploration")
 	hero.position = Vector2(_spawn_x_for_side(entry_side), _spawn_y_for_side(entry_side))
-	var camera := hero.get_node("Camera2D") as Camera2D
+	var camera := hero.get_node("HeroCamera") as Camera2D
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 6.0
 	camera.limit_left = 0
