@@ -63,7 +63,7 @@ func _spawn_hero() -> void:
 	hero.dodge_started.connect(_on_hero_dodge_started)
 	hero.attack_landed.connect(_on_hero_attack_landed)
 
-	camera = hero.get_node("Camera2D") as Camera2D
+	camera = hero.get_node("HeroCamera") as Camera2D
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 7.0
 	camera.limit_left = 0
