@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="1"]
 [ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn" type="PackedScene" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="6"]
 
 [sub_resource type="RectangleShape2D" id="RoomBoundaryShape"]
 size = Vector2(40, 1200)
@@ -40,4 +41,9 @@ position = Vector2(180, 400)
 [node name="Narrative" parent="." instance=ExtResource("5")]
 
 [node name="HUD" parent="." instance=ExtResource("4")]
+
+[node name="RegionRestPoint_A2" parent="." instance=ExtResource("6")]
+position = Vector2(350, 400)
+rest_id = "rest_A2"
+display_name = "旧朝圣圣龛"
 
