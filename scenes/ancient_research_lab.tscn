@@ -18,6 +18,7 @@ size = Vector2(2400, 40)
 size = Vector2(40, 720)
 
 [node name="AncientResearchLab" type="Node2D"]
+script = ExtResource("1")
 
 [node name="LabBackdropVisual" type="Sprite2D" parent="."]
 texture = ExtResource("LabBackdrop")
@@ -156,7 +157,7 @@ size = Vector2(700, 45)
 text = "WHERE FAITH BECAME AN INSTRUMENT"
 theme_override_colors/font_color = Color("#665860")
 theme_override_font_sizes/font_size = 24
-script = ExtResource("1")
+
 
 [node name="Floor" type="StaticBody2D" parent="."]
 
