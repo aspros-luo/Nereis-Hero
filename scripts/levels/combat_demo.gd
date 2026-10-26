@@ -38,8 +38,6 @@ func _ready() -> void:
     # Combat can be entered from the narrative hub without wiping story state.
     WorldState.current_location = "combat_demo"
 
-    _create_floor()
-    _create_boundaries()
     _spawn_ambient_particles()
     _spawn_hero()
     _spawn_checkpoint()
