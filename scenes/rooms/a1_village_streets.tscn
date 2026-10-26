@@ -40,12 +40,38 @@ room_id = "A1-R01"
 [node name="Terrain_ground_01" type="StaticBody2D" parent="."]
 position = Vector2(0, 900)
 
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ground_01"]
+position = Vector2(240, 40)
+polygon = PackedVector2Array(Vector2(-240, -40), Vector2(240, -40), Vector2(240, 40), Vector2(-240, 40))
+color = Color("#45443a")
+z_index = 0
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_ground_01"]
+position = Vector2(240, 0)
+points = PackedVector2Array(Vector2(-240, 0), Vector2(240, 0))
+width = 3.0
+default_color = Color("#c4b38b")
+z_index = 1
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ground_01"]
 position = Vector2(240, 40)
 shape = SubResource("TerrainShape1")
 
 [node name="Terrain_ground_02" type="StaticBody2D" parent="."]
 position = Vector2(590, 900)
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ground_02"]
+position = Vector2(205, 40)
+polygon = PackedVector2Array(Vector2(-205, -40), Vector2(205, -40), Vector2(205, 40), Vector2(-205, 40))
+color = Color("#45443a")
+z_index = 0
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_ground_02"]
+position = Vector2(205, 0)
+points = PackedVector2Array(Vector2(-205, 0), Vector2(205, 0))
+width = 3.0
+default_color = Color("#c4b38b")
+z_index = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ground_02"]
 position = Vector2(205, 40)
@@ -54,6 +80,19 @@ shape = SubResource("TerrainShape2")
 [node name="Terrain_ground_03" type="StaticBody2D" parent="."]
 position = Vector2(1120, 900)
 
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ground_03"]
+position = Vector2(250, 40)
+polygon = PackedVector2Array(Vector2(-250, -40), Vector2(250, -40), Vector2(250, 40), Vector2(-250, 40))
+color = Color("#45443a")
+z_index = 0
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_ground_03"]
+position = Vector2(250, 0)
+points = PackedVector2Array(Vector2(-250, 0), Vector2(250, 0))
+width = 3.0
+default_color = Color("#c4b38b")
+z_index = 1
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ground_03"]
 position = Vector2(250, 40)
 shape = SubResource("TerrainShape3")
@@ -61,12 +100,38 @@ shape = SubResource("TerrainShape3")
 [node name="Terrain_ground_04" type="StaticBody2D" parent="."]
 position = Vector2(1730, 900)
 
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ground_04"]
+position = Vector2(185, 40)
+polygon = PackedVector2Array(Vector2(-185, -40), Vector2(185, -40), Vector2(185, 40), Vector2(-185, 40))
+color = Color("#45443a")
+z_index = 0
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_ground_04"]
+position = Vector2(185, 0)
+points = PackedVector2Array(Vector2(-185, 0), Vector2(185, 0))
+width = 3.0
+default_color = Color("#c4b38b")
+z_index = 1
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ground_04"]
 position = Vector2(185, 40)
 shape = SubResource("TerrainShape4")
 
 [node name="Terrain_roof_01" type="StaticBody2D" parent="."]
 position = Vector2(270, 700)
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_roof_01"]
+position = Vector2(115, 13)
+polygon = PackedVector2Array(Vector2(-115, -13), Vector2(115, -13), Vector2(115, 13), Vector2(-115, 13))
+color = Color("#78634a")
+z_index = 0
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_roof_01"]
+position = Vector2(115, 0)
+points = PackedVector2Array(Vector2(-115, 0), Vector2(115, 0))
+width = 3.0
+default_color = Color("#e8bd78")
+z_index = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_roof_01"]
 position = Vector2(115, 13)
@@ -76,6 +141,19 @@ one_way_collision = true
 [node name="Terrain_roof_02" type="StaticBody2D" parent="."]
 position = Vector2(620, 600)
 
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_roof_02"]
+position = Vector2(125, 13)
+polygon = PackedVector2Array(Vector2(-125, -13), Vector2(125, -13), Vector2(125, 13), Vector2(-125, 13))
+color = Color("#78634a")
+z_index = 0
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_roof_02"]
+position = Vector2(125, 0)
+points = PackedVector2Array(Vector2(-125, 0), Vector2(125, 0))
+width = 3.0
+default_color = Color("#e8bd78")
+z_index = 1
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_roof_02"]
 position = Vector2(125, 13)
 shape = SubResource("TerrainShape6")
@@ -83,6 +161,19 @@ one_way_collision = true
 
 [node name="Terrain_roof_03" type="StaticBody2D" parent="."]
 position = Vector2(1050, 690)
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_roof_03"]
+position = Vector2(110, 13)
+polygon = PackedVector2Array(Vector2(-110, -13), Vector2(110, -13), Vector2(110, 13), Vector2(-110, 13))
+color = Color("#78634a")
+z_index = 0
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_roof_03"]
+position = Vector2(110, 0)
+points = PackedVector2Array(Vector2(-110, 0), Vector2(110, 0))
+width = 3.0
+default_color = Color("#e8bd78")
+z_index = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_roof_03"]
 position = Vector2(110, 13)
@@ -92,6 +183,19 @@ one_way_collision = true
 [node name="Terrain_roof_04" type="StaticBody2D" parent="."]
 position = Vector2(1460, 560)
 
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_roof_04"]
+position = Vector2(135, 13)
+polygon = PackedVector2Array(Vector2(-135, -13), Vector2(135, -13), Vector2(135, 13), Vector2(-135, 13))
+color = Color("#78634a")
+z_index = 0
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_roof_04"]
+position = Vector2(135, 0)
+points = PackedVector2Array(Vector2(-135, 0), Vector2(135, 0))
+width = 3.0
+default_color = Color("#e8bd78")
+z_index = 1
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_roof_04"]
 position = Vector2(135, 13)
 shape = SubResource("TerrainShape8")
@@ -99,6 +203,19 @@ one_way_collision = true
 
 [node name="Terrain_well_lip" type="StaticBody2D" parent="."]
 position = Vector2(820, 1030)
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_well_lip"]
+position = Vector2(130, 13)
+polygon = PackedVector2Array(Vector2(-130, -13), Vector2(130, -13), Vector2(130, 13), Vector2(-130, 13))
+color = Color("#78634a")
+z_index = 0
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_well_lip"]
+position = Vector2(130, 0)
+points = PackedVector2Array(Vector2(-130, 0), Vector2(130, 0))
+width = 3.0
+default_color = Color("#e8bd78")
+z_index = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_well_lip"]
 position = Vector2(130, 13)
