@@ -4,14 +4,20 @@ extends Node2D
 
 const HERO_SCENE: PackedScene = preload("res://scenes/player/hero.tscn")
 const ENEMY_ACTOR_SCENE: PackedScene = preload("res://scenes/characters/enemy_actor_base.tscn")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
+const NARRATIVE_SCENE: PackedScene = preload("res://scenes/core/narrative_manager.tscn")
+const HUD_SCENE: PackedScene = preload("res://scenes/ui/game_hud.tscn")
+const INTERACTION_DOOR_SCENE: PackedScene = preload("res://scenes/world/interaction_door.tscn")
+const AUTO_ROOM_TRANSITION_SCENE: PackedScene = preload("res://scenes/world/automatic_room_transition.tscn")
+const REST_POINT_SCENE: PackedScene = preload("res://scenes/world/rest_point.tscn")
+const RESONANCE_SOURCE_SCENE: PackedScene = preload("res://scenes/world/resonance_source_clue.tscn")
+const RESONANCE_SECRET_GATE_SCENE: PackedScene = preload("res://scenes/world/resonance_secret_gate.tscn")
+const LOCAL_RESONANCE_ROUTE_SCENE: PackedScene = preload("res://scenes/world/resonance_local_route.tscn")
+const THIRD_CORD_FRAGMENT_SCENE: PackedScene = preload("res://scenes/world/third_cord_fragment.tscn")
+const WORLD_ITEM_PICKUP_SCENE: PackedScene = preload("res://scenes/world/world_item_pickup.tscn")
+const REGION_AMBIENCE_SCENE: PackedScene = preload("res://scenes/effects/region_ambience.tscn")
+const SOLID_RECTANGLE_SCENE: PackedScene = preload("res://scenes/world/solid_rectangle.tscn")
+const DOOR_ARCH_SCENE: PackedScene = preload("res://scenes/world/door_arch.tscn")
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
-const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
-const RESONANCE_SOURCE_SCRIPT = preload("res://scripts/world/resonance_source_clue.gd")
-const RESONANCE_SECRET_GATE_SCRIPT = preload("res://scripts/world/resonance_secret_gate.gd")
-const LOCAL_RESONANCE_ROUTE_SCRIPT = preload("res://scripts/world/resonance_local_route.gd")
 const ENDGAME_GATE_SCRIPT = preload("res://scripts/core/endgame_gate.gd")
 const CULTIST_SCRIPT = preload("res://scripts/enemies/cultist.gd")
 const PALE_HOUND_SCRIPT = preload("res://scripts/enemies/pale_hound.gd")
@@ -19,9 +25,6 @@ const BANDIT_RAIDER_SCRIPT = preload("res://scripts/enemies/bandit_raider.gd")
 const RESEARCH_HUSK_SCRIPT = preload("res://scripts/enemies/research_husk.gd")
 const CHURCH_INQUISITOR_SCRIPT = preload("res://scripts/enemies/church_inquisitor.gd")
 const BELL_WRAITH_SCRIPT = preload("res://scripts/enemies/bell_wraith.gd")
-const THIRD_CORD_FRAGMENT_SCRIPT = preload("res://scripts/world/third_cord_fragment.gd")
-const WORLD_ITEM_PICKUP_SCRIPT = preload("res://scripts/world/world_item_pickup.gd")
-const REGION_AMBIENCE_SCRIPT = preload("res://scripts/effects/region_ambience.gd")
 const FOREST_BACKDROP = preload("res://assets/art/backdrops/forest_backdrop.svg")
 const RUINS_BACKDROP = preload("res://assets/art/backdrops/ruins_backdrop.svg")
 const CHURCH_BACKDROP = preload("res://assets/art/backdrops/church_backdrop.svg")
@@ -291,14 +294,11 @@ func _on_region_enemy_defeated(enemy_name: String, enemy_node: Node2D) -> void:
 func _spawn_cord_fragment_pickup(pickup_position: Vector2) -> void:
 	if "provisional_h09_relic_collected" in WorldState.achievement_flags:
 		return
-	var pickup := Node2D.new()
-	pickup.set_script(THIRD_CORD_FRAGMENT_SCRIPT)
+	var pickup := THIRD_CORD_FRAGMENT_SCENE.instantiate() as Node2D
 	pickup.name = "ThirdUmbilicalCordFragment"
 	pickup.position = pickup_position
 	add_child(pickup)
 	pickup.collected.connect(_on_cord_fragment_collected)
-
-
 func _on_cord_fragment_collected() -> void:
 	if not is_instance_valid(narrative):
 		return
@@ -585,16 +585,12 @@ func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 	camera.limit_bottom = int(room_height) if region_id == "A5" and not room_id.is_empty() else (1200 if region_id == "A2" else 720)
 
 func _spawn_ui() -> void:
-	narrative = CanvasLayer.new()
-	narrative.set_script(NARRATIVE_SCRIPT)
+	narrative = NARRATIVE_SCENE.instantiate() as CanvasLayer
 	add_child(narrative)
-
-	hud = CanvasLayer.new()
-	hud.set_script(HUD_SCRIPT)
+	hud = HUD_SCENE.instantiate() as CanvasLayer
 	add_child(hud)
 	hud.bind_hero(hero)
 	hud.set_story_mode(_localized_region_title(), _get_objective_text())
-
 func _localized_region_title() -> String:
 	var display_name := region_title
 	match region_id:
@@ -870,29 +866,21 @@ func _spawn_region_item_pickups() -> void:
 func _spawn_world_item_pickup(pickup_id: String, item_id: String, node_name: String, pickup_position: Vector2) -> void:
 	if pickup_id.is_empty() or pickup_id in WorldState.collected_world_item_ids:
 		return
-	var pickup := Node2D.new()
-	pickup.set_script(WORLD_ITEM_PICKUP_SCRIPT)
+	var pickup := WORLD_ITEM_PICKUP_SCENE.instantiate() as Node2D
 	pickup.name = node_name
 	pickup.position = pickup_position
 	pickup.set("pickup_id", pickup_id)
 	pickup.set("item_id", item_id)
 	pickup.set("prompt_text", "E  拾取")
 	add_child(pickup)
-
-
 func _spawn_region_ambience() -> void:
-	# Add a tiny independent draw layer so ambient motion never redraws the whole level.
-	# 独立绘制少量环境粒子，避免为了动态效果每帧重绘整张地图。
-	var ambience := Node2D.new()
-	ambience.set_script(REGION_AMBIENCE_SCRIPT)
+	var ambience := REGION_AMBIENCE_SCENE.instantiate() as Node2D
 	ambience.name = "RegionAmbience"
 	ambience.set("map_width", map_width)
 	ambience.set("floor_y", floor_y)
 	ambience.set("region_id", region_id)
 	ambience.set("atmosphere_color", _atmosphere_color())
 	add_child(ambience)
-
-
 func _create_floor() -> void:
 	if assembly_child_mode:
 		_configure_a5_room_floor()
@@ -944,42 +932,35 @@ func _create_floor() -> void:
 func _add_ground_segment(segment_name: String, start_x: float, segment_width: float) -> void:
 	if segment_width <= 0.0:
 		return
-	var floor := StaticBody2D.new()
+	var floor := SOLID_RECTANGLE_SCENE.instantiate() as StaticBody2D
 	floor.name = segment_name
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(segment_width, 40.0)
-	shape.shape = rectangle
-	shape.position = Vector2(segment_width * 0.5, floor_y + 20.0)
-	floor.add_child(shape)
 	floor.position.x = start_x
+	var shape := floor.get_node("CollisionShape2D") as CollisionShape2D
+	var rectangle := shape.shape as RectangleShape2D
+	rectangle.size = Vector2(segment_width, 40.0)
+	shape.position = Vector2(segment_width * 0.5, floor_y + 20.0)
 	add_child(floor)
-
 func _create_boundaries() -> void:
 	if assembly_child_mode:
 		return
 	var wall_height := 1100.0
 	var wall_center_y := 500.0
 	if region_id == "A2" and not room_id.is_empty():
-		# Every independent A2 room needs side walls spanning its own camera/map height.
-		# 六个独立 A2 房间的侧墙必须覆盖各自真实的房间高度，不能共用固定 1100px 墙体。
 		wall_height = room_height + 200.0
 		wall_center_y = room_height * 0.5
 	elif region_id == "A5" and not room_id.is_empty():
-		# Preserve the established assembled-A5 wall extent calculation.
 		wall_height = maxf(1100.0, room_height + 400.0)
 		wall_center_y = (room_height + 200.0) * 0.5
+	var index := 0
 	for x in [-20.0, map_width + 20.0]:
-		var wall := StaticBody2D.new()
-		var shape := CollisionShape2D.new()
-		var rectangle := RectangleShape2D.new()
+		var wall := SOLID_RECTANGLE_SCENE.instantiate() as StaticBody2D
+		wall.name = "RegionBoundary_%d" % index
+		var shape := wall.get_node("CollisionShape2D") as CollisionShape2D
+		var rectangle := shape.shape as RectangleShape2D
 		rectangle.size = Vector2(40.0, wall_height)
-		shape.shape = rectangle
 		shape.position = Vector2(x, wall_center_y)
-		wall.add_child(shape)
 		add_child(wall)
-
-
+		index += 1
 func _ready_a5_assembly_child() -> void:
 	# Child rooms contribute only authored geometry and atmosphere drawing. The assembled root owns
 	# the single Hero, camera, HUD, region state, exits and save/respawn lifecycle.
@@ -1226,11 +1207,10 @@ func _spawn_a5_internal_door(
 	var edge_id := str(edge.get("id", "A5-UNKNOWN"))
 	var kind := str(edge.get("kind", "walk"))
 	var initial_state := str(edge.get("initial_state", "open"))
-	var door := Area2D.new()
 	var requires_interaction := initial_state == "blocked"
-	if requires_interaction:
-		door.set_script(INTERACTION_DOOR_SCRIPT)
-	else:
+	var door_scene: PackedScene = INTERACTION_DOOR_SCENE if requires_interaction else AUTO_ROOM_TRANSITION_SCENE
+	var door := door_scene.instantiate() as Area2D
+	if not requires_interaction:
 		# Open room links trigger when the Hero crosses the doorway, like a room-based
 		# metroidvania; only locked shortcuts and secret gates require pressing E.
 		# 已开放的房间连接在主角穿过门洞时自动转场；只有锁闭捷径/隐藏门需要按 E。
@@ -1276,12 +1256,10 @@ func _spawn_a5_internal_door(
 		"connection_kind": kind,
 		"marker_kind": marker_kind
 	})
-	var collision := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
+	var collision := door.get_node("CollisionShape2D") as CollisionShape2D
+	var rectangle := collision.shape as RectangleShape2D
 	rectangle.size = Vector2(108.0, 86.0) if requires_interaction else Vector2(76.0, 128.0)
-	collision.shape = rectangle
 	collision.position = Vector2(0.0, -34.0) if requires_interaction else Vector2(0.0, -64.0)
-	door.add_child(collision)
 	add_child(door)
 	door.add_to_group("a5_internal_connection_door")
 	if requires_interaction:
@@ -1295,9 +1273,7 @@ func _spawn_a5_internal_door(
 
 
 func _create_a5_door_arch(anchor: Vector2, marker_kind: String, visual_id: String) -> Line2D:
-	# This visual is a child of the assembled root, created after room scenes so it
-	# renders above room backdrops rather than being painted over by child rooms.
-	var arch := Line2D.new()
+	var arch := DOOR_ARCH_SCENE.instantiate() as Line2D
 	arch.name = "A5DoorArch_%s" % visual_id.replace("-", "_").replace(" ", "_")
 	arch.position = anchor + Vector2(0.0, 36.0)
 	arch.width = 4.0
@@ -1311,16 +1287,8 @@ func _create_a5_door_arch(anchor: Vector2, marker_kind: String, visual_id: Strin
 		tint = Color("#c6a0f6")
 	tint.a = 0.72
 	arch.default_color = tint
-	for point in [
-		Vector2(-27.0, 0.0), Vector2(-27.0, -46.0), Vector2(-20.0, -62.0),
-		Vector2(-10.0, -72.0), Vector2(10.0, -72.0), Vector2(20.0, -62.0),
-		Vector2(27.0, -46.0), Vector2(27.0, 0.0)
-	]:
-		arch.add_point(point)
 	add_child(arch)
 	return arch
-
-
 func _refresh_a5_internal_connection_visuals() -> void:
 	for visual_data in a5_internal_connection_visuals:
 		var visual := visual_data.get("visual") as Line2D
@@ -1603,18 +1571,14 @@ func _configure_a5_room_blocks() -> void:
 func _add_a5_room_block(x: float, top_offset: float, block_width: float, block_height: float) -> void:
 	var rect := Rect2(x, floor_y - top_offset, block_width, block_height)
 	a5_room_blocks.append(rect)
-	var body := StaticBody2D.new()
+	var body := SOLID_RECTANGLE_SCENE.instantiate() as StaticBody2D
 	body.name = "A5RoomRubble_%03d" % a5_room_blocks.size()
 	body.position = rect.position
-	var shape := CollisionShape2D.new()
-	var collision := RectangleShape2D.new()
+	var shape := body.get_node("CollisionShape2D") as CollisionShape2D
+	var collision := shape.shape as RectangleShape2D
 	collision.size = rect.size
-	shape.shape = collision
 	shape.position = rect.size * 0.5
-	body.add_child(shape)
 	add_child(body)
-
-
 func _configure_a5_room_floor() -> void:
 	var gaps: Array[Vector2] = []
 	match room_id:
@@ -2218,30 +2182,22 @@ func _configure_additional_lower_route_platforms() -> void:
 
 func _add_platform(rect: Rect2) -> void:
 	platforms.append(rect)
-	var body := StaticBody2D.new()
+	var body := SOLID_RECTANGLE_SCENE.instantiate() as StaticBody2D
 	if region_id == "A5" and not room_id.is_empty():
 		body.name = "A5RoomPlatform_%03d" % platforms.size()
+	var shape := body.get_node("CollisionShape2D") as CollisionShape2D
+	var rectangle := shape.shape as RectangleShape2D
 	body.position = rect.position
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
 	rectangle.size = rect.size
-	shape.shape = rectangle
 	shape.position = rect.size * 0.5
-	# One-way ledges let the Hero jump through their undersides instead of turning every platform into a wall.
-	# 单向平台允许主角从下方跳穿，避免每个平台都成为阻挡路线的墙体。
 	shape.one_way_collision = true
-	body.add_child(shape)
 	add_child(body)
-
-
 func _register_authored_platform(rect: Rect2) -> void:
 	# Authored room scenes own the StaticBody2D collision nodes; this list is only for the shared material renderer.
 	# 房间场景拥有实体碰撞节点；此数组只供共享材质渲染使用。
 	platforms.append(rect)
 
 func _spawn_region_rest_point() -> void:
-	# Main regions receive one deliberate rest point; hidden regions remain riskier and have no free checkpoint.
-	# 主区域各有一处有意布置的休整点；隐藏区域不提供免费的安全检查点。
 	var rest_x := -1.0
 	var rest_y := floor_y
 	var rest_name := "歇脚圣龛"
@@ -2287,16 +2243,12 @@ func _spawn_region_rest_point() -> void:
 			rest_name = "王座区圣龛"
 		_:
 			return
-
-	var rest := Node2D.new()
-	rest.set_script(REST_POINT_SCRIPT)
+	var rest := REST_POINT_SCENE.instantiate() as Node2D
 	rest.name = "RegionRestPoint_%s" % region_id
 	rest.position = Vector2(rest_x, rest_y)
-	rest.rest_id = "rest_%s" % region_id
-	rest.display_name = rest_name
+	rest.set("rest_id", "rest_%s" % region_id)
+	rest.set("display_name", rest_name)
 	add_child(rest)
-
-
 func _spawn_region_sources() -> void:
 	match region_id:
 		"A2":
@@ -2506,24 +2458,22 @@ func _spawn_source(
 	outer_floor: int = 0,
 	require_outer_god_resonance: bool = false
 ) -> void:
-	var clue := Node2D.new()
-	clue.set_script(RESONANCE_SOURCE_SCRIPT)
+	var clue := RESONANCE_SOURCE_SCENE.instantiate() as Node2D
 	clue.name = "Anomaly_%s" % source_id
 	clue.position = source_position
-	clue.source_id = source_id
-	clue.display_name = display_name
-	clue.description = description
-	clue.resonance_target = resonance_target
-	clue.ancient_exposure_delta = ancient_delta
-	clue.outer_exposure_delta = outer_delta
-	clue.ancient_exposure_floor = ancient_floor
-	clue.outer_exposure_floor = outer_floor
-	clue.require_outer_god_resonance = require_outer_god_resonance
-	clue.unlock_ability_id = unlock_ability_id
-	clue.unlock_source_type = "resonance"
+	clue.set("source_id", source_id)
+	clue.set("display_name", display_name)
+	clue.set("description", description)
+	clue.set("resonance_target", resonance_target)
+	clue.set("ancient_exposure_delta", ancient_delta)
+	clue.set("outer_exposure_delta", outer_delta)
+	clue.set("ancient_exposure_floor", ancient_floor)
+	clue.set("outer_exposure_floor", outer_floor)
+	clue.set("require_outer_god_resonance", require_outer_god_resonance)
+	clue.set("unlock_ability_id", unlock_ability_id)
+	clue.set("unlock_source_type", "resonance")
 	add_child(clue)
 	clue.activated.connect(_on_source_activated.bind(source_id, unlock_ability_id))
-
 func _on_source_activated(
 	display_name: String,
 	description: String,
@@ -3130,9 +3080,7 @@ func _spawn_region_exits() -> void:
 				_register_debug_locked_route_hint(map_width - 72.0, "terminal_anomaly", "需满足结局路线条件：鸣响、真相锚点与隐藏探索")
 
 		"A13":
-			var ending_gate := ENDGAME_GATE_SCRIPT.new()
-			var ending_scene_path := str(ending_gate.call("route_candidate"))
-			ending_gate.free()
+			var ending_scene_path := str(ENDGAME_GATE_SCRIPT.route_candidate())
 			var ending_location := "church_final_demo"
 			if ending_scene_path.ends_with("ending_paradise_demo.tscn"):
 				ending_location = "ending_paradise_demo"
@@ -3147,8 +3095,7 @@ func _spawn_region_exits() -> void:
 func _spawn_a11_maintenance_gate(x: float) -> void:
 	# The royal shaft requires proof that the Hero investigated the erased royal name.
 	# 王室竖井要求主角已调查被抹去的王室姓名。
-	var gate := Node2D.new()
-	gate.set_script(RESONANCE_SECRET_GATE_SCRIPT)
+	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
 	gate.name = "RoyalTombDeepResearchGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "C15"
@@ -3265,8 +3212,7 @@ func _spawn_local_resonance_routes() -> void:
 		"A2":
 			# A canopy span reconnects the high bell-grave ledges without opening the hidden bell chamber.
 			# 树冠横桥重连钟墓高台，但不会开启隐藏钟室。
-			route = Node2D.new()
-			route.set_script(LOCAL_RESONANCE_ROUTE_SCRIPT)
+			route = LOCAL_RESONANCE_ROUTE_SCENE.instantiate() as Node2D
 			route.name = "BellgraveCanopyCrossing"
 			route.route_id = "A2_BELLGRAVE_CANOPY_CROSSING"
 			route.required_resonance = 20
@@ -3621,31 +3567,23 @@ func _spawn_exit_door(
 	opened_prompt_text: String = "",
 	door_y: float = -1.0
 ) -> void:
-	var door := Area2D.new()
-	door.set_script(INTERACTION_DOOR_SCRIPT)
+	var door := INTERACTION_DOOR_SCENE.instantiate() as Area2D
 	door.name = "Exit_%s" % target_location
 	door.position = Vector2(x, floor_y if door_y < 0.0 else door_y)
-	door.prompt_text = prompt_text
-	door.enabled = enabled
-	door.unlock_once_flag_id = unlock_once_flag_id
-	door.opened_prompt_text = opened_prompt_text
-	# Runtime contract metadata for P5.1 automated acceptance; no gameplay behavior change.
+	door.set("prompt_text", prompt_text)
+	door.set("enabled", enabled)
+	door.set("unlock_once_flag_id", unlock_once_flag_id)
+	door.set("opened_prompt_text", opened_prompt_text)
 	door.set_meta("p5_1_exit_contract", true)
 	door.set_meta("p5_1_target_location", target_location)
 	door.set_meta("p5_1_target_region", _region_id_for_location(target_location))
 	door.set_meta("p5_1_target_scene", target_scene)
 	door.set_meta("p5_1_spawn_side", spawn_side)
 	door.set_meta("p5_1_enabled", enabled)
-
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	# Keep the interaction volume aligned to the visible doorway. The old 138px
-	# trigger reached the continuous floor even when the door was on an upper ledge.
-	# 交互触发区应贴合可见门洞；旧版 138px 高的触发体会延伸到地面，使高位出口可被绕过。
+	var shape := door.get_node("CollisionShape2D") as CollisionShape2D
+	var rectangle := shape.shape as RectangleShape2D
 	rectangle.size = Vector2(110.0, 80.0)
-	shape.shape = rectangle
 	shape.position = Vector2(0.0, -35.0)
-	door.add_child(shape)
 	add_child(door)
 	var exit_kind := "locked" if not enabled else ("shortcut" if not unlock_once_flag_id.is_empty() else "exit")
 	debug_exit_markers.append({
@@ -3658,10 +3596,6 @@ func _spawn_exit_door(
 		_create_a5_door_arch(door.position, exit_kind, door.name)
 	queue_redraw()
 	door.interacted.connect(_on_exit_interacted.bind(target_location, target_scene, spawn_side))
-
-# Draw distant, non-colliding silhouettes at authored exits so players can read route goals
-# before reaching them. These arches are visual landmarks only; Area2D doors own all interaction.
-# 在正式出口位置绘制远景门廊，让玩家抵达前就能读懂路线目标；门廊不参与碰撞，交互仍由 Area2D 出口负责。
 func _draw_route_goal_landmarks() -> void:
 	for marker in debug_exit_markers:
 		var marker_kind := str(marker.get("kind", "exit"))
