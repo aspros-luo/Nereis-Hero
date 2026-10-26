@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
+const HIT_SPARK_SCENE: PackedScene = preload("res://scenes/effects/hit_spark.tscn")
 
 const MOVE_SPEED := 75.0
 const ATTACK_RANGE := 250.0
@@ -76,8 +76,7 @@ func take_damage(amount: int) -> void:
     receive_damage(amount, null)
 
 func _spawn_hit_spark() -> void:
-    var effect := Node2D.new()
-    effect.set_script(HIT_SPARK_SCRIPT)
+    var effect := HIT_SPARK_SCENE.instantiate() as Node2D
     effect.global_position = global_position
     get_parent().add_child(effect)
 
