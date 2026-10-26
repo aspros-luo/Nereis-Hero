@@ -1,221 +1,60 @@
 extends CanvasLayer
 
-const MAP_TEST_PANEL_SCRIPT = preload("res://scripts/ui/map_test_panel.gd")
-const WORLD_MAP_OVERLAY_SCRIPT = preload("res://scripts/ui/world_map_overlay.gd")
-const INVENTORY_OVERLAY_SCRIPT = preload("res://scripts/ui/inventory_overlay.gd")
-const ITEM_INSPECTION_PANEL_SCRIPT = preload("res://scripts/ui/item_inspection_panel.gd")
 
 var hero: Node
 var debug_enabled := false
-var debug_panel: ColorRect
-var debug_label: Label
-var title_label: Label
-var controls_label: Label
-var region_label: Label
-var objective_label: Label
-var combat_banner: Label
+@onready var debug_panel: ColorRect = $DebugPanel
+@onready var debug_label: Label = $DebugPanel/DebugLabel
+@onready var title_label: Label = $TitleLabel
+@onready var controls_label: Label = $ControlsLabel
+@onready var region_label: Label = $RegionLabel
+@onready var objective_label: Label = $ObjectiveLabel
+@onready var combat_banner: Label = $CombatBanner
 var combat_banner_time := 0.0
 var technique_banner_queue: Array[String] = []
 var boss: Node
-var boss_panel: ColorRect
-var boss_bar: ColorRect
-var boss_title: Label
-var status_panel: ColorRect
-var hp_bar: ColorRect
-var stamina_bar: ColorRect
-var hp_label: Label
-var stamina_label: Label
-var humanity_label: Label
-var humanity_bar: ColorRect
-var humanity_bg: ColorRect
-var objective_rule: ColorRect
-var impact_flash: ColorRect
+@onready var boss_panel: ColorRect = $BossPanel
+@onready var boss_bar: ColorRect = $BossPanel/BossBar
+@onready var boss_title: Label = $BossPanel/BossTitle
+@onready var status_panel: ColorRect = $StatusPanel
+@onready var hp_bar: ColorRect = $StatusPanel/HPBar
+@onready var stamina_bar: ColorRect = $StatusPanel/StaminaBar
+@onready var hp_label: Label = $StatusPanel/HPLabel
+@onready var stamina_label: Label = $StatusPanel/StaminaLabel
+@onready var humanity_label: Label = $StatusPanel/HumanityLabel
+@onready var humanity_bar: ColorRect = $StatusPanel/HumanityBar
+@onready var humanity_bg: ColorRect = $StatusPanel/HumanityBackground
+@onready var objective_rule: ColorRect = $ObjectiveRule
+@onready var impact_flash: ColorRect = $ImpactFlash
 var impact_flash_time := 0.0
-var pause_overlay: ColorRect
-var pause_panel: ColorRect
-var pause_title: Label
-var resume_button: Button
-var save_button: Button
-var new_game_button: Button
-var title_button: Button
-var language_option: OptionButton
-var language_label: Label
-var save_status_label: Label
-var character_button: Button
-var character_details_label: Label
-var new_game_dialog: ConfirmationDialog
+@onready var pause_overlay: ColorRect = $PauseOverlay
+@onready var pause_panel: ColorRect = $PauseOverlay/PausePanel
+@onready var pause_title: Label = $PauseOverlay/PausePanel/PauseTitle
+@onready var resume_button: Button = $PauseOverlay/PausePanel/ResumeButton
+@onready var save_button: Button = $PauseOverlay/PausePanel/SaveButton
+@onready var new_game_button: Button = $PauseOverlay/PausePanel/NewGameButton
+@onready var title_button: Button = $PauseOverlay/PausePanel/TitleButton
+@onready var language_option: OptionButton = $PauseOverlay/PausePanel/LanguageOption
+@onready var language_label: Label = $PauseOverlay/PausePanel/LanguageLabel
+@onready var save_status_label: Label = $PauseOverlay/PausePanel/SaveStatusLabel
+@onready var character_button: Button = $PauseOverlay/PausePanel/CharacterButton
+@onready var character_details_label: Label = $PauseOverlay/PausePanel/CharacterDetailsLabel
+@onready var new_game_dialog: ConfirmationDialog = $NewGameDialog
 var story_region_source := ""
 var story_objective_source := ""
 var pause_open := false
 var character_details_open := false
-var world_map_overlay: Control
-var inventory_overlay: CanvasLayer
-var item_inspection_panel: CanvasLayer
+@onready var world_map_overlay: Control = $WorldMapOverlay
+@onready var inventory_overlay: CanvasLayer = $InventoryOverlay
+@onready var item_inspection_panel: CanvasLayer = $ItemInspectionPanel
 var map_overlay_previous_input_locked := false
 
 func _ready() -> void:
-    layer = 10
-    process_mode = Node.PROCESS_MODE_ALWAYS
-    if not WorldState.hidden_resistance_awakened_event.is_connected(_on_hidden_resistance_awakened):
-        WorldState.hidden_resistance_awakened_event.connect(_on_hidden_resistance_awakened)
-
-    impact_flash = ColorRect.new()
-    impact_flash.position = Vector2.ZERO
-    impact_flash.color = Color(0.95, 0.86, 0.72, 0.0)
-    impact_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    add_child(impact_flash)
-
-    title_label = Label.new()
-    title_label.position = Vector2(36, 24)
-    title_label.text = "蜜忒之歌：英雄"
-    title_label.add_theme_font_size_override("font_size", 24)
-    title_label.add_theme_color_override("font_color", Color("#d6c7b2"))
-    add_child(title_label)
-
-    controls_label = Label.new()
-    controls_label.position = Vector2(38, 62)
-    controls_label.text = "A/D 移动    空格 跳跃    J 攻击    K 闪避    Q 切换武器    I 物品    M 世界路线图"
-    controls_label.add_theme_font_size_override("font_size", 13)
-    controls_label.add_theme_color_override("font_color", Color("#8f8586"))
-    add_child(controls_label)
-
-    region_label = Label.new()
-    region_label.position = Vector2(38, 91)
-    region_label.text = NereisLocalization.translate_text("灰烬之路")
-    region_label.add_theme_font_size_override("font_size", 16)
-    region_label.add_theme_color_override("font_color", Color("#b7a48c"))
-    add_child(region_label)
-
-    objective_label = Label.new()
-    objective_label.position = Vector2(38, 118)
-    objective_label.add_theme_font_size_override("font_size", 16)
-    objective_label.add_theme_color_override("font_color", Color("#b7a48c"))
-    add_child(objective_label)
-
-    objective_rule = ColorRect.new()
-    objective_rule.position = Vector2(38, 145)
-    objective_rule.size = Vector2(280, 2)
-    objective_rule.color = Color("#5d5050", 0.55)
-    add_child(objective_rule)
-
-    combat_banner = Label.new()
-    combat_banner.position = Vector2(410, 116)
-    combat_banner.size = Vector2(460, 46)
-    combat_banner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    combat_banner.add_theme_font_size_override("font_size", 28)
-    combat_banner.visible = false
-    add_child(combat_banner)
-
-    status_panel = ColorRect.new()
-    status_panel.position = Vector2(36, 630)
-    status_panel.size = Vector2(300, 70)
-    status_panel.color = Color("#0a090d", 0.78)
-    add_child(status_panel)
-
-    hp_label = Label.new()
-    hp_label.position = Vector2(12, 7)
-    hp_label.add_theme_font_size_override("font_size", 13)
-    status_panel.add_child(hp_label)
-
-    var hp_bg := ColorRect.new()
-    hp_bg.position = Vector2(72, 10)
-    hp_bg.size = Vector2(235, 10)
-    hp_bg.color = Color("#2a2026")
-    status_panel.add_child(hp_bg)
-
-    hp_bar = ColorRect.new()
-    hp_bar.position = Vector2(72, 10)
-    hp_bar.size = Vector2(235, 10)
-    hp_bar.color = Color("#a4505a")
-    status_panel.add_child(hp_bar)
-
-    stamina_label = Label.new()
-    stamina_label.position = Vector2(12, 37)
-    stamina_label.add_theme_font_size_override("font_size", 13)
-    status_panel.add_child(stamina_label)
-
-    var stamina_bg := ColorRect.new()
-    stamina_bg.position = Vector2(72, 40)
-    stamina_bg.size = Vector2(235, 10)
-    stamina_bg.color = Color("#2a2026")
-    status_panel.add_child(stamina_bg)
-
-    stamina_bar = ColorRect.new()
-    stamina_bar.position = Vector2(72, 40)
-    stamina_bar.size = Vector2(235, 10)
-    stamina_bar.color = Color("#9e8b72")
-    status_panel.add_child(stamina_bar)
-
-    humanity_label = Label.new()
-    humanity_label.position = Vector2(12, 67)
-    humanity_label.add_theme_font_size_override("font_size", 13)
-    status_panel.add_child(humanity_label)
-
-    humanity_bg = ColorRect.new()
-    humanity_bg.position = Vector2(72, 70)
-    humanity_bg.size = Vector2(235, 10)
-    humanity_bg.color = Color("#2a2026")
-    humanity_bg.visible = false
-    status_panel.add_child(humanity_bg)
-
-    humanity_bar = ColorRect.new()
-    humanity_bar.position = Vector2(72, 70)
-    humanity_bar.size = Vector2(235, 10)
-    humanity_bar.color = Color("#8e7777")
-    humanity_bar.visible = false
-    humanity_label.visible = false
-    status_panel.add_child(humanity_bar)
-
-    boss_panel = ColorRect.new()
-    boss_panel.position = Vector2(390, 24)
-    boss_panel.size = Vector2(500, 54)
-    boss_panel.color = Color("#0a090d", 0.88)
-    boss_panel.visible = false
-    add_child(boss_panel)
-
-    boss_title = Label.new()
-    boss_title.position = Vector2(16, 7)
-    boss_title.text = "灰烬骑士"
-    boss_title.add_theme_font_size_override("font_size", 15)
-    boss_panel.add_child(boss_title)
-
-    boss_bar = ColorRect.new()
-    boss_bar.position = Vector2(16, 31)
-    boss_bar.size = Vector2(468, 10)
-    boss_bar.color = Color("#9e5961")
-    boss_panel.add_child(boss_bar)
-
-    debug_panel = ColorRect.new()
-    debug_panel.position = Vector2(930, 24)
-    debug_panel.size = Vector2(326, 460)
-    debug_panel.color = Color("#0a090d", 0.88)
-    add_child(debug_panel)
-
-    debug_label = Label.new()
-    debug_label.position = Vector2(18, 14)
-    debug_label.size = Vector2(290, 430)
-    debug_label.add_theme_font_size_override("font_size", 12)
-    debug_panel.add_child(debug_label)
-    debug_panel.visible = debug_enabled
-
-    _build_pause_menu()
-    var map_test_panel := MAP_TEST_PANEL_SCRIPT.new()
-    map_test_panel.name = "MapTestPanel"
-    add_child(map_test_panel)
-
-    world_map_overlay = WORLD_MAP_OVERLAY_SCRIPT.new()
-    world_map_overlay.name = "WorldMapOverlay"
-    add_child(world_map_overlay)
-
-    item_inspection_panel = ITEM_INSPECTION_PANEL_SCRIPT.new()
-    item_inspection_panel.name = "ItemInspectionPanel"
-    add_child(item_inspection_panel)
-
-    inventory_overlay = INVENTORY_OVERLAY_SCRIPT.new()
-    inventory_overlay.name = "InventoryOverlay"
-    add_child(inventory_overlay)
-    _refresh_localized_ui()
-
+	if not WorldState.hidden_resistance_awakened_event.is_connected(_on_hidden_resistance_awakened):
+		WorldState.hidden_resistance_awakened_event.connect(_on_hidden_resistance_awakened)
+	_build_pause_menu()
+	debug_panel.visible = debug_enabled
+	_refresh_localized_ui()
 func show_item_description(item_name: String, description: String) -> void:
     if is_instance_valid(item_inspection_panel):
         item_inspection_panel.call("show_description", item_name, description)
@@ -428,94 +267,15 @@ func _localize_objective(value: String) -> String:
     return NereisLocalization.t(key) if not key.is_empty() else value
 
 func _build_pause_menu() -> void:
-    pause_overlay = ColorRect.new()
-    pause_overlay.position = Vector2.ZERO
-    pause_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    pause_overlay.color = Color("#07060b", 0.82)
-    pause_overlay.visible = false
-    pause_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-    add_child(pause_overlay)
-
-    pause_panel = ColorRect.new()
-    pause_panel.position = Vector2(390, 90)
-    pause_panel.size = Vector2(500, 540)
-    pause_panel.color = Color("#111018", 0.97)
-    pause_overlay.add_child(pause_panel)
-
-    pause_title = Label.new()
-    pause_title.position = Vector2(44, 28)
-    pause_title.size = Vector2(412, 40)
-    pause_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    pause_title.add_theme_font_size_override("font_size", 28)
-    pause_title.add_theme_color_override("font_color", Color("#d6c7b2"))
-    pause_panel.add_child(pause_title)
-
-    resume_button = _make_menu_button()
-    character_details_label = Label.new()
-    character_details_label.position = Vector2(48, 72)
-    character_details_label.size = Vector2(404, 52)
-    character_details_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-    character_details_label.visible = false
-    character_details_label.add_theme_font_size_override("font_size", 13)
-    character_details_label.add_theme_color_override("font_color", Color("#b7a48c"))
-    pause_panel.add_child(character_details_label)
-
-    resume_button.position = Vector2(90, 132)
-    pause_panel.add_child(resume_button)
-    resume_button.pressed.connect(_close_pause_menu)
-
-    save_button = _make_menu_button()
-    save_button.position = Vector2(90, 187)
-    pause_panel.add_child(save_button)
-    save_button.pressed.connect(_save_from_menu)
-
-    new_game_button = _make_menu_button()
-    new_game_button.position = Vector2(90, 242)
-    pause_panel.add_child(new_game_button)
-    new_game_button.pressed.connect(_confirm_new_game)
-
-    character_button = _make_menu_button()
-    character_button.position = Vector2(90, 297)
-    pause_panel.add_child(character_button)
-    character_button.pressed.connect(_toggle_character_details)
-
-    title_button = _make_menu_button()
-    title_button.position = Vector2(90, 352)
-    pause_panel.add_child(title_button)
-    title_button.pressed.connect(_return_to_title)
-
-    language_label = Label.new()
-    language_label.position = Vector2(90, 408)
-    language_label.add_theme_font_size_override("font_size", 14)
-    language_label.add_theme_color_override("font_color", Color("#8f8586"))
-    pause_panel.add_child(language_label)
-
-    language_option = OptionButton.new()
-    language_option.position = Vector2(90, 430)
-    language_option.size = Vector2(320, 42)
-    for language in NereisLocalization.LANGUAGES:
-        language_option.add_item(NereisLocalization.language_name(language))
-    language_option.item_selected.connect(_on_language_selected)
-    pause_panel.add_child(language_option)
-
-    save_status_label = Label.new()
-    save_status_label.position = Vector2(90, 478)
-    save_status_label.size = Vector2(320, 28)
-    save_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    save_status_label.add_theme_font_size_override("font_size", 13)
-    save_status_label.add_theme_color_override("font_color", Color("#9e8b72"))
-    pause_panel.add_child(save_status_label)
-
-    new_game_dialog = ConfirmationDialog.new()
-    new_game_dialog.process_mode = Node.PROCESS_MODE_ALWAYS
-    new_game_dialog.confirmed.connect(_start_new_game)
-    add_child(new_game_dialog)
-
-func _make_menu_button() -> Button:
-    var button := Button.new()
-    button.size = Vector2(320, 46)
-    button.add_theme_font_size_override("font_size", 17)
-    return button
+	resume_button.pressed.connect(_close_pause_menu)
+	save_button.pressed.connect(_save_from_menu)
+	new_game_button.pressed.connect(_confirm_new_game)
+	character_button.pressed.connect(_toggle_character_details)
+	title_button.pressed.connect(_return_to_title)
+	language_option.item_selected.connect(_on_language_selected)
+	new_game_dialog.confirmed.connect(_start_new_game)
+	for language in NereisLocalization.LANGUAGES:
+		language_option.add_item(NereisLocalization.language_name(language))
 
 func _refresh_localized_ui() -> void:
     if not is_instance_valid(title_label):
