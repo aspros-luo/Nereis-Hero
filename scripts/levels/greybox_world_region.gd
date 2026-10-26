@@ -3391,6 +3391,31 @@ func _region_backdrop_texture() -> Texture2D:
 			return RUINS_BACKDROP
 
 
+func _draw_authored_region_landmark_overlays() -> void:
+	# These are the remaining fixed visual details still drawn by code. The backdrop, platforms,
+	# ground cuts and collision boundaries are owned by AuthoredTerrain .tscn scenes.
+	match region_id:
+		"A3": _draw_city_landmarks()
+		"A4": _draw_reservoir_landmarks()
+		"A6": _draw_monastery_landmarks()
+		"A7": _draw_prison_landmarks()
+		"A8": _draw_royal_tomb_landmarks()
+		"A9": _draw_outer_ring_landmarks()
+		"A10": _draw_cathedral_landmarks()
+		"A11": _draw_deep_research_landmarks()
+		"A12": _draw_inner_city_landmarks()
+		"A13": _draw_terminal_anomaly_landmarks()
+		"H01": _draw_well_landmarks()
+		"H02": _draw_hidden_bell_chamber_landmarks()
+		"H03": _draw_erased_third_street_landmarks()
+		"H04": _draw_reflected_stairwell_landmarks()
+		"H05": _draw_silent_bell_room_landmarks()
+		"H06": _draw_erased_royal_name_landmarks()
+		"H07": _draw_mirror_street_landmarks()
+		"H08": _draw_primordial_hollow_landmarks()
+		"H09": _draw_cliff_cave_landmarks()
+
+
 func _draw_floor_gap_visuals() -> void:
 	if region_id == "A2" and room_id.begins_with("A2-R"):
 		return
@@ -3426,6 +3451,15 @@ func _draw_floor_gap_visuals() -> void:
 
 
 func _draw() -> void:
+	# Fixed terrain regions already contain editor-authored backdrop, platforms and floor geometry.
+	# Do not paint the legacy procedural landscape over those scene nodes; only keep the still-unmigrated
+	# region landmark overlays and route/debug indicators visible until each landmark is authored in .tscn.
+	if get_node_or_null("AuthoredTerrain") != null:
+		_draw_authored_region_landmark_overlays()
+		_draw_route_goal_landmarks()
+		if OS.is_debug_build():
+			_draw_debug_exit_markers()
+		return
 	if use_a5_room_assembly:
 		_draw_route_goal_landmarks()
 		if OS.is_debug_build():
