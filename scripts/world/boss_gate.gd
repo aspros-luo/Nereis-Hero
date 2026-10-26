@@ -16,12 +16,10 @@ func _ready() -> void:
     collision_layer = 1
     collision_mask = 0
 
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(42, 170)
-    shape.shape = rectangle
-    shape.position = Vector2(0, -85)
-    add_child(shape)
+    var shape := get_node_or_null("CollisionShape2D") as CollisionShape2D
+    if shape == null:
+        push_error("Boss gate scene requires a CollisionShape2D child")
+        return
     queue_redraw()
 
 func open() -> void:
