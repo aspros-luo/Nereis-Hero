@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3]
+[gd_scene load_steps=39 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/art/levels/a2_r01_forest_ruins_illustration.svg" id="1_r01_art"]
 [ext_resource type="Texture2D" path="res://assets/art/levels/a2_r01_forest_ruins_far_layer.svg" id="2_r01_far_art"]
@@ -99,6 +99,9 @@ size = Vector2(120, 20)
 
 [sub_resource type="RectangleShape2D" id="RoomBoundaryShape"]
 size = Vector2(40, 1700)
+
+[sub_resource type="RectangleShape2D" id="DropR01ToR04Shape"]
+size = Vector2(32, 120)
 
 [node name="RegionBoundary_0" type="StaticBody2D" parent="."]
 
@@ -454,3 +457,12 @@ room_height = 1500.0
 room_id = "A2-R01"
 enable_region_encounters = false
 
+
+[node name="Drop_R01_to_R04" type="Area2D" parent="."]
+position = Vector2(1250, 975)
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Drop_R01_to_R04"]
+shape = SubResource("DropR01ToR04Shape")
