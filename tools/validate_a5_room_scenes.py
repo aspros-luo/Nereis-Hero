@@ -97,6 +97,7 @@ def main() -> int:
         harness = RUNTIME_HARNESS.read_text(encoding="utf-8")
     rooms = data.get("rooms", [])
     room_ids = [room.get("id") for room in rooms]
+    room_lookup = {room.get("id"): room for room in rooms}
     try:
         jump_speed = abs(read_numeric_constant(hero_source, "JUMP_VELOCITY"))
         gravity = read_numeric_constant(hero_source, "GRAVITY")
@@ -188,6 +189,46 @@ def main() -> int:
         ):
             if f'path="{resource_path}" id="{resource_id}"' not in scene:
                 fail(f"{room_id}: missing scene resource {resource_path}")
+                failures += 1
+
+        here = room_lookup.get(room_id, {})
+        here_pos = here.get("position_screens", [0, 0])
+        here_size = here.get("size_screens", [1, 1])
+        here_center = (float(here_pos[0]) + float(here_size[0]) / 2.0,
+                       float(here_pos[1]) + float(here_size[1]) / 2.0)
+        for edge in data.get("connections", []):
+            if edge.get("from") == room_id:
+                target_id = str(edge.get("to", ""))
+            elif edge.get("to") == room_id and edge.get("travel", "both") != "one_way":
+                target_id = str(edge.get("from", ""))
+            else:
+                continue
+            target = room_lookup.get(target_id, {})
+            target_pos = target.get("position_screens", [0, 0])
+            target_size = target.get("size_screens", [1, 1])
+            target_center = (float(target_pos[0]) + float(target_size[0]) / 2.0,
+                             float(target_pos[1]) + float(target_size[1]) / 2.0)
+            dx = target_center[0] - here_center[0]
+            dy = target_center[1] - here_center[1]
+            if abs(dx) >= abs(dy):
+                expected_entry = "west" if dx >= 0 else "east"
+            else:
+                expected_entry = "north" if dy >= 0 else "south"
+            edge_id = str(edge.get("id", ""))
+            block_match = re.search(
+                rf'^\[node name="Transition_{re.escape(edge_id)}"[^\n]*\]\n(?P<body>.*?)(?=^\[node|\Z)',
+                scene, re.M | re.S
+            )
+            if not block_match:
+                continue
+            body = block_match.group("body")
+            actual_target = re.search(r'target_room_id = &"([^"]+)"', body)
+            actual_entry = re.search(r'target_entry_id = &"([^"]+)"', body)
+            if not actual_target or actual_target.group(1) != target_id:
+                fail(f"{room_id}: {edge_id} target_room_id does not match contract target {target_id}")
+                failures += 1
+            if not actual_entry or actual_entry.group(1) != expected_entry:
+                fail(f"{room_id}: {edge_id} target_entry_id does not match topology; expected {expected_entry}")
                 failures += 1
 
     transition_builder = re.search(
