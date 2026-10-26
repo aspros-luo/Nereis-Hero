@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/terrain/terrain_h04.tscn" id="2"]
 
 [node name="ReflectedStairwell" type="Node2D"]
 script = ExtResource("1")
@@ -8,3 +9,5 @@ region_id = "H04"
 location_id = "reflected_stairwell"
 region_title = "THE STAIRS BEHIND THE WATER"
 map_width = 2000.0
+
+[node name="AuthoredTerrain" parent="." instance=ExtResource("2")]

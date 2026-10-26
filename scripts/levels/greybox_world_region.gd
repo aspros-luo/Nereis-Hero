@@ -896,6 +896,8 @@ func _spawn_region_ambience() -> void:
 	ambience.set("atmosphere_color", _atmosphere_color())
 	add_child(ambience)
 func _create_floor() -> void:
+	if get_node_or_null("AuthoredTerrain") != null:
+		return
 	if assembly_child_mode:
 		_configure_a5_room_floor()
 		return
@@ -955,6 +957,8 @@ func _add_ground_segment(segment_name: String, start_x: float, segment_width: fl
 	shape.position = Vector2(segment_width * 0.5, floor_y + 20.0)
 	add_child(floor)
 func _create_boundaries() -> void:
+	if get_node_or_null("AuthoredTerrain") != null:
+		return
 	if assembly_child_mode:
 		return
 	if get_node_or_null("RegionBoundary_0") != null and get_node_or_null("RegionBoundary_1") != null:
@@ -1701,6 +1705,17 @@ func _draw_a5_room_floor_gaps() -> void:
 
 func _configure_platforms() -> void:
 	platforms.clear()
+	var authored_terrain := get_node_or_null("AuthoredTerrain")
+	if authored_terrain != null:
+		for child in authored_terrain.get_children():
+			if not (child is StaticBody2D) or not str(child.name).begins_with("Platform_"):
+				continue
+			var collision := child.get_node_or_null("CollisionShape2D") as CollisionShape2D
+			if collision == null or not (collision.shape is RectangleShape2D):
+				continue
+			var rectangle := collision.shape as RectangleShape2D
+			platforms.append(Rect2(child.position, rectangle.size))
+		return
 	if (region_id == "A5" and not room_id.is_empty()) or assembly_child_mode:
 		_configure_a5_room_platforms()
 		return
@@ -3939,6 +3954,8 @@ func _draw() -> void:
 		_draw_floor_gap_visuals()
 
 	for platform in platforms:
+		if get_node_or_null("AuthoredTerrain") != null:
+			continue
 		# A2's room scenes own their visible Polygon2D/Line2D platform nodes.
 		# A2 房间场景自身绘制平台节点，避免与区域级绘制重复。
 		if region_id == "A2":
