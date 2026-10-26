@@ -96,7 +96,7 @@ width = 3.0
 default_color = Color(0.39, 0.42, 0.37, 1)
 
 [node name="RavineReturnShelf" type="StaticBody2D" parent="Terrain"]
-position = Vector2(630, 480)
+position = Vector2(630, 560)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RavineReturnShelf"]
 position = Vector2(85, 12)
@@ -112,7 +112,7 @@ width = 3.0
 default_color = Color(0.39, 0.42, 0.37, 1)
 
 [node name="RavineClimbLower" type="StaticBody2D" parent="Terrain"]
-position = Vector2(300, 680)
+position = Vector2(300, 700)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RavineClimbLower"]
 position = Vector2(95, 12)
@@ -128,7 +128,7 @@ width = 3.0
 default_color = Color(0.39, 0.42, 0.37, 1)
 
 [node name="RavineClimbMiddle" type="StaticBody2D" parent="Terrain"]
-position = Vector2(500, 540)
+position = Vector2(500, 620)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RavineClimbMiddle"]
 position = Vector2(95, 12)
@@ -139,6 +139,38 @@ polygon = PackedVector2Array(0, 0, 190, 0, 190, 40, 0, 40)
 color = Color(0.105, 0.094, 0.125, 1)
 
 [node name="TerrainTopEdge" type="Line2D" parent="Terrain/RavineClimbMiddle"]
+points = PackedVector2Array(0, 0, 190, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RavineClimbUpperA" type="StaticBody2D" parent="Terrain"]
+position = Vector2(760, 480)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RavineClimbUpperA"]
+position = Vector2(95, 12)
+shape = SubResource("terrain_GroundShape4")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/RavineClimbUpperA"]
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/RavineClimbUpperA"]
+points = PackedVector2Array(0, 0, 190, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RavineClimbUpperB" type="StaticBody2D" parent="Terrain"]
+position = Vector2(930, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RavineClimbUpperB"]
+position = Vector2(95, 12)
+shape = SubResource("terrain_GroundShape4")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/RavineClimbUpperB"]
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/RavineClimbUpperB"]
 points = PackedVector2Array(0, 0, 190, 0)
 width = 3.0
 default_color = Color(0.39, 0.42, 0.37, 1)
