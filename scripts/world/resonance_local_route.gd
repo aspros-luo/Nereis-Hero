@@ -18,7 +18,7 @@ var hero_nearby := false
 var cooldown := 0.0
 @export var prompt_text: String = "E  ANCHOR THE THIRD STREET"
 
-var bridge_body: StaticBody2D
+@onready var bridge_body: StaticBody2D = $BridgeBody
 
 func _ready() -> void:
     add_to_group("resonance_hidden_targets")
@@ -78,26 +78,15 @@ func _hero_over_bridge() -> bool:
     )
 
 func _sync_bridge_collision() -> void:
-    var should_exist := revealed or opened_permanently or _hero_over_bridge()
-    var has_bridge := is_instance_valid(bridge_body)
-    if should_exist and not has_bridge:
-        bridge_body = StaticBody2D.new()
-        bridge_body.name = "ResonanceBridge_%s" % route_id
-        bridge_body.position = Vector2(bridge_start_x, bridge_y)
-        var collision := CollisionShape2D.new()
-        var rectangle := RectangleShape2D.new()
-        rectangle.size = Vector2(bridge_end_x - bridge_start_x, 18.0)
-        collision.shape = rectangle
-        collision.position = rectangle.size * 0.5
-        # Resonance bridges are walkable surfaces, not solid walls; the Hero may jump through from below.
-        # 鸣响桥只提供可站立面，不应成为实心墙；主角可以从下方跳穿。
-        collision.one_way_collision = true
-        bridge_body.add_child(collision)
-        add_child(bridge_body)
-    elif not should_exist and has_bridge:
-        bridge_body.queue_free()
-        bridge_body = null
-
+	var should_exist := revealed or opened_permanently or _hero_over_bridge()
+	var collision := bridge_body.get_node("CollisionShape2D") as CollisionShape2D
+	var rectangle := collision.shape as RectangleShape2D
+	bridge_body.position = Vector2(bridge_start_x, bridge_y)
+	rectangle.size = Vector2(bridge_end_x - bridge_start_x, 18.0)
+	collision.position = rectangle.size * 0.5
+	collision.one_way_collision = true
+	collision.disabled = not should_exist
+	bridge_body.visible = should_exist
 func _unhandled_input(event: InputEvent) -> void:
     if (
         WorldState.input_locked
