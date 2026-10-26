@@ -150,123 +150,36 @@ const PROGRESSION_FLAGS := [
 	"ending_state_allows_throne_entry", "outer_god_resonance"
 ]
 
-var panel: PanelContainer
-var map_picker: OptionButton
-var status_label: Label
-var exploration_label: Label
-var mode_button: Button
-var natural_start_button: Button
-var full_sight_button: Button
-var all_routes_button: Button
-var teleport_button: Button
-var restore_button: Button
-var guide_label: Label
+@onready var panel: PanelContainer = $Panel
+@onready var map_picker: OptionButton = $Panel/Scroll/Column/MapPicker
+@onready var status_label: Label = $Panel/Scroll/Column/StatusLabel
+@onready var exploration_label: Label = $Panel/Scroll/Column/ExplorationLabel
+@onready var mode_button: Button = $Panel/Scroll/Column/ModeButton
+@onready var natural_start_button: Button = $Panel/Scroll/Column/NaturalStartButton
+@onready var full_sight_button: Button = $Panel/Scroll/Column/FullSightButton
+@onready var all_routes_button: Button = $Panel/Scroll/Column/AllRoutesButton
+@onready var teleport_button: Button = $Panel/Scroll/Column/TeleportButton
+@onready var restore_button: Button = $Panel/Scroll/Column/RestoreButton
+@onready var guide_label: Label = $Panel/Scroll/Column/GuideLabel
 var guide_step_index := 0
-var guide_prev_button: Button
-var guide_next_button: Button
-
+@onready var guide_prev_button: Button = $Panel/Scroll/Column/GuideButtons/GuidePrevButton
+@onready var guide_next_button: Button = $Panel/Scroll/Column/GuideButtons/GuideNextButton
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_build_panel()
+	_bind_panel()
 	_update_guide()
 	visible = false
-
-func _build_panel() -> void:
-	panel = PanelContainer.new()
-	panel.position = Vector2(260, 24)
-	panel.size = Vector2(820, 672)
-	add_child(panel)
-
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	panel.add_child(scroll)
-
-	var column := VBoxContainer.new()
-	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	column.add_theme_constant_override("separation", 10)
-	scroll.add_child(column)
-
-	var title := Label.new()
-	title.text = "地图测试模式"
-	title.add_theme_font_size_override("font_size", 26)
-	column.add_child(title)
-
-	var warning := Label.new()
-	warning.text = "仅用于地图验收。开启后不会写入或覆盖正式存档；关闭游戏前可恢复磁盘存档。"
-	warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	column.add_child(warning)
-
-	mode_button = _make_button("1. 开启地图测试模式（保护正式存档）")
+func _bind_panel() -> void:
 	mode_button.pressed.connect(_enable_test_mode)
-	column.add_child(mode_button)
-
-	natural_start_button = _make_button("自然探索验收：从 A0 开始（无传送／无作弊解锁）")
 	natural_start_button.pressed.connect(_start_natural_exploration)
-	column.add_child(natural_start_button)
-
-	var map_label := Label.new()
-	map_label.text = "选择要直接进入的区域："
-	column.add_child(map_label)
-
-	map_picker = OptionButton.new()
-	map_picker.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	teleport_button.pressed.connect(_teleport_to_selected_map)
+	full_sight_button.pressed.connect(_apply_full_sight_profile)
+	all_routes_button.pressed.connect(_apply_all_routes_profile)
+	restore_button.pressed.connect(_restore_disk_save)
+	guide_prev_button.pressed.connect(_previous_guide_step)
+	guide_next_button.pressed.connect(_next_guide_step)
 	for entry in MAPS:
 		map_picker.add_item(str(entry["label"]))
-	column.add_child(map_picker)
-
-	teleport_button = _make_button("进入所选区域")
-	teleport_button.pressed.connect(_teleport_to_selected_map)
-	column.add_child(teleport_button)
-
-	full_sight_button = _make_button("2. 灵视条件测试：鸣响与接触值拉满（不自动开门）")
-	full_sight_button.pressed.connect(_apply_full_sight_profile)
-	column.add_child(full_sight_button)
-
-	all_routes_button = _make_button("3. 全地图连通测试：开启隐藏门与捷径")
-	all_routes_button.pressed.connect(_apply_all_routes_profile)
-	column.add_child(all_routes_button)
-
-	restore_button = _make_button("退出测试并恢复磁盘存档")
-	restore_button.pressed.connect(_restore_disk_save)
-	column.add_child(restore_button)
-
-	guide_label = Label.new()
-	guide_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	guide_label.custom_minimum_size = Vector2(0, 116)
-	column.add_child(guide_label)
-
-	var guide_buttons := HBoxContainer.new()
-	guide_buttons.add_theme_constant_override("separation", 8)
-	column.add_child(guide_buttons)
-	guide_prev_button = _make_button("上一步指引")
-	guide_prev_button.pressed.connect(_previous_guide_step)
-	guide_buttons.add_child(guide_prev_button)
-	guide_next_button = _make_button("下一步指引")
-	guide_next_button.pressed.connect(_next_guide_step)
-	guide_buttons.add_child(guide_next_button)
-
-	exploration_label = Label.new()
-	exploration_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	exploration_label.text = "自然探索记录：未启动"
-	column.add_child(exploration_label)
-
-	status_label = Label.new()
-	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	status_label.text = "F10：打开／关闭本面板。自然探索会重置当前内存进度并从 A0 开始，但不删除或覆盖磁盘正式存档。"
-	column.add_child(status_label)
-
-	var controls := Label.new()
-	controls.text = "地图验收：A／D 移动；V 激活灵视；E 调查／开门；F3 调试信息；F10 本面板。"
-	controls.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	column.add_child(controls)
-
-func _make_button(caption: String) -> Button:
-	var button := Button.new()
-	button.text = caption
-	button.custom_minimum_size = Vector2(0, 42)
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	return button
 
 func _update_guide() -> void:
 	if guide_label == null:
