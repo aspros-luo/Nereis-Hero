@@ -1,7 +1,5 @@
 extends CharacterBody2D
 
-const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
-const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
 
@@ -21,15 +19,9 @@ var attack_hitbox: Area2D
 
 func _ready() -> void:
 	add_to_group("combat_enemies")
-	attack_hitbox = Area2D.new()
-	attack_hitbox.name = "AttackHitbox"
-	attack_hitbox.set_script(HITBOX_SCRIPT)
-	add_child(attack_hitbox)
+	attack_hitbox = $AttackHitbox as Area2D
 	attack_hitbox.setup(self, Vector2(34.0, 22.0), Vector2(facing * 20.0, -12.0))
-	var hurtbox := Area2D.new()
-	hurtbox.name = "Hurtbox"
-	hurtbox.set_script(HURTBOX_SCRIPT)
-	add_child(hurtbox)
+	var hurtbox := $Hurtbox as Area2D
 	hurtbox.setup(self, Vector2(36.0, 24.0), Vector2(0.0, -12.0))
 	queue_redraw()
 
