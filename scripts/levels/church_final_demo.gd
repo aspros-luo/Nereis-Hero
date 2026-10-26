@@ -5,7 +5,7 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HIGH_PRIEST_SCRIPT = preload("res://scripts/enemies/high_priest.gd")
 const KING_SCRIPT = preload("res://scripts/enemies/king_guardian.gd")
-const ENDING_CG_SCRIPT = preload("res://scripts/ui/ending_cg_overlay.gd")
+const ENDING_OVERLAY_SCENE: PackedScene = preload("res://scenes/ui/ending_sequence_overlay.tscn")
 
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 4400.0
@@ -142,74 +142,50 @@ func _on_king_defeated() -> void:
 func _create_human_ending_overlay() -> void:
     if ending_layer and is_instance_valid(ending_layer):
         return
-
-    ending_layer = CanvasLayer.new()
-    ending_layer.layer = 100
-    ending_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+    ending_layer = ENDING_OVERLAY_SCENE.instantiate() as CanvasLayer
     add_child(ending_layer)
-
-    ending_backdrop = ColorRect.new()
+    ending_layer.layer = 100
+    ending_layer.visible = true
+    ending_backdrop = ending_layer.get_node("Backdrop") as ColorRect
+    ending_cg = ending_layer.get_node("CGOverlay") as Control
+    ending_card = ending_layer.get_node("Card") as ColorRect
+    ending_title = ending_layer.get_node("Card/Title") as Label
+    ending_body = ending_layer.get_node("Card/Body") as Label
+    ending_prompt = ending_layer.get_node("Card/Prompt") as Label
+    var upper_rule := ending_layer.get_node("Card/TopRule") as ColorRect
+    var lower_rule := ending_layer.get_node("Card/BottomRule") as ColorRect
     ending_backdrop.position = Vector2.ZERO
     ending_backdrop.size = Vector2(1280, 720)
     ending_backdrop.color = Color("#08070b")
-    ending_layer.add_child(ending_backdrop)
-
-    ending_cg = Control.new()
-    ending_cg.set_script(ENDING_CG_SCRIPT)
-    ending_layer.add_child(ending_cg)
-    ending_cg.setup("human")
-    ending_cg.play()
-
-    ending_card = ColorRect.new()
+    ending_backdrop.modulate.a = 1.0
     ending_card.position = Vector2(110, 90)
     ending_card.size = Vector2(1060, 540)
     ending_card.color = Color("#111018", 0.48)
-    ending_layer.add_child(ending_card)
-
-    var upper_rule := ColorRect.new()
+    ending_card.modulate.a = 1.0
     upper_rule.position = Vector2(54, 74)
     upper_rule.size = Vector2(952, 2)
     upper_rule.color = Color("#5a4a50", 0.7)
-    ending_card.add_child(upper_rule)
-
-    var lower_rule := ColorRect.new()
     lower_rule.position = Vector2(54, 444)
     lower_rule.size = Vector2(952, 2)
-    lower_rule.color = Color("#5a4a50", 0.7)
-    ending_card.add_child(lower_rule)
-
-    for index in range(3):
-        var banner := ColorRect.new()
-        banner.position = Vector2(170 + index * 310, 104)
-        banner.size = Vector2(120, 250)
-        banner.color = Color("#241d27") if index != 1 else Color("#30252d")
-        ending_card.add_child(banner)
-
-    ending_title = Label.new()
+    lower_rule.color = upper_rule.color
     ending_title.position = Vector2(54, 44)
     ending_title.size = Vector2(952, 54)
-    ending_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     ending_title.add_theme_font_size_override("font_size", 36)
     ending_title.add_theme_color_override("font_color", Color("#d6c7b2"))
-    ending_card.add_child(ending_title)
-
-    ending_body = Label.new()
     ending_body.position = Vector2(120, 150)
     ending_body.size = Vector2(820, 270)
-    ending_body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    ending_body.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-    ending_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     ending_body.add_theme_font_size_override("font_size", 21)
     ending_body.add_theme_color_override("font_color", Color("#b8aaa5"))
-    ending_card.add_child(ending_body)
-
-    ending_prompt = Label.new()
     ending_prompt.position = Vector2(70, 462)
     ending_prompt.size = Vector2(920, 42)
-    ending_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     ending_prompt.add_theme_font_size_override("font_size", 14)
     ending_prompt.add_theme_color_override("font_color", Color("#756d72"))
-    ending_card.add_child(ending_prompt)
+    for banner_name in ["BannerLeft", "BannerCenter", "BannerRight"]:
+        var banner := ending_layer.get_node("Card/" + banner_name) as ColorRect
+        banner.visible = true
+    ending_cg.call("setup", "human")
+    ending_cg.call("play")
+
 
 func _show_human_ending_stage(stage: int) -> void:
     ending_stage = clampi(stage, 0, 3)

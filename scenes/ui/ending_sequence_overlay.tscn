@@ -1,0 +1,93 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/ui/ending_cg_overlay.tscn" id="1"]
+
+[node name="EndingSequenceOverlay" type="CanvasLayer"]
+layer = 50
+process_mode = 3
+visible = false
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0352941, 0.027451, 0.0392157, 1)
+modulate = Color(1, 1, 1, 0)
+
+[node name="CGOverlay" parent="." instance=ExtResource("1")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Card" type="ColorRect" parent="."]
+position = Vector2(170, 105)
+size = Vector2(1060, 510)
+mouse_filter = 2
+color = Color(0.105882, 0.082353, 0.094118, 0.58)
+modulate = Color(1, 1, 1, 0)
+
+[node name="TopRule" type="ColorRect" parent="Card"]
+position = Vector2(70, 76)
+size = Vector2(920, 2)
+mouse_filter = 2
+color = Color("#9b4c42")
+
+[node name="BottomRule" type="ColorRect" parent="Card"]
+position = Vector2(70, 426)
+size = Vector2(920, 2)
+mouse_filter = 2
+color = Color("#9b4c42")
+
+[node name="BannerLeft" type="ColorRect" parent="Card"]
+visible = false
+position = Vector2(170, 104)
+size = Vector2(120, 250)
+mouse_filter = 2
+color = Color("#241d27")
+
+[node name="BannerCenter" type="ColorRect" parent="Card"]
+visible = false
+position = Vector2(480, 104)
+size = Vector2(120, 250)
+mouse_filter = 2
+color = Color("#30252d")
+
+[node name="BannerRight" type="ColorRect" parent="Card"]
+visible = false
+position = Vector2(790, 104)
+size = Vector2(120, 250)
+mouse_filter = 2
+color = Color("#241d27")
+
+[node name="Title" type="Label" parent="Card"]
+position = Vector2(70, 105)
+size = Vector2(920, 70)
+mouse_filter = 2
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 38
+theme_override_colors/font_color = Color("#ead3c7")
+
+[node name="Body" type="Label" parent="Card"]
+position = Vector2(110, 205)
+size = Vector2(840, 180)
+mouse_filter = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color("#c7b1a8")
+
+[node name="Prompt" type="Label" parent="Card"]
+position = Vector2(70, 446)
+size = Vector2(920, 34)
+mouse_filter = 2
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color("#9b8078")
