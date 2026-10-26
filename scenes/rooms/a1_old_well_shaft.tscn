@@ -29,6 +29,8 @@ size = Vector2(310, 24)
 size = Vector2(900, 80)
 
 [node name="Room_A1_R02" type="Node2D"]
+script = ExtResource("1")
+room_id = "A1-R02"
 
 [node name="RoomBackdropVisual" type="Sprite2D" parent="."]
 texture = ExtResource("RoomBackdrop")
@@ -36,8 +38,8 @@ position = Vector2(-80, -100)
 scale = Vector2(1.35, 1.35)
 centered = false
 z_index = -100
-script = ExtResource("1")
-room_id = "A1-R02"
+
+
 
 [node name="Terrain_upper_rim" type="StaticBody2D" parent="."]
 position = Vector2(120, 160)
