@@ -13,7 +13,7 @@ map_width = 2600.0
 
 [node name="AuthoredTerrain" parent="." instance=ExtResource("2")]
 
-[node name="RegionRestPoint_12" parent="." instance=ExtResource("3")]
+[node name="RegionRestPoint_A12" parent="." instance=ExtResource("3")]
 position = Vector2(1360, 540)
 rest_id = "rest_A12"
 display_name = "王座区圣龛"
