@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://scripts/world/world_item_pickup.gd" id="4"]
 [ext_resource type="Script" path="res://scripts/world/rest_point.gd" id="5"]
 [ext_resource type="Script" path="res://scripts/world/interaction_door.gd" id="6"]
-[ext_resource type="Script" path="res://scripts/ui/game_hud.gd" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point_visual.tscn" id="8"]
 [ext_resource type="PackedScene" path="res://scenes/world/interaction_prompt.tscn" id="9"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/experiment_warden.tscn" id="10"]
@@ -153,6 +153,4 @@ shape = SubResource("RectangleShape2D_exit")
 
 [node name="Prompt" parent="VillageRoadExit" instance=ExtResource("9")]
 
-[node name="HUD" type="CanvasLayer" parent="."]
-layer = 10
-script = ExtResource("7")
+[node name="HUD" parent="." instance=ExtResource("7")]
