@@ -7,11 +7,16 @@ func setup(actor: Node, shape_size: Vector2, offset: Vector2) -> void:
     position = offset
     collision_layer = 2
     collision_mask = 0
-    var collision := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
+    var collision := get_node_or_null("CollisionShape2D") as CollisionShape2D
+    if collision == null:
+        collision = CollisionShape2D.new()
+        collision.name = "CollisionShape2D"
+        add_child(collision)
+    var rectangle := collision.shape as RectangleShape2D
+    if rectangle == null:
+        rectangle = RectangleShape2D.new()
+        collision.shape = rectangle
     rectangle.size = shape_size
-    collision.shape = rectangle
-    add_child(collision)
 
 func receive_hit(damage: int, source: Node) -> void:
     if host and host.has_method("receive_damage"):
