@@ -1,32 +1,15 @@
 @tool
 extends Node2D
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
-const WARDEN_SCRIPT = preload("res://scripts/enemies/experiment_warden.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
-const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
+const WARDEN_SCENE: PackedScene = preload("res://scenes/enemies/experiment_warden.tscn")
+const PROGRESS_BARRIER_SCENE: PackedScene = preload("res://scenes/rooms/prologue_progress_barrier.tscn")
 const SURGERY_BACKDROP = preload("res://assets/art/backdrops/surgery_ward_backdrop.svg")
 const SURGERY_FLOOR_STRIP = preload("res://assets/art/backdrops/surgery_floor_strip.svg")
 const SURGERY_FOREGROUND_PROPS = preload("res://assets/art/backdrops/surgery_foreground_props.svg")
 
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 2200.0
-# One source of truth for the optional surgery catwalk: collision and visible platforms must match.
-# 手术室可选高路只维护一份几何合同，物理碰撞与绘制必须使用同一组矩形。
-const SURGICAL_CATWALK_RECTS := [
-	Rect2(360.0, FLOOR_Y - 80.0, 120.0, 16.0),
-	Rect2(520.0, FLOOR_Y - 110.0, 120.0, 16.0),
-	Rect2(680.0, FLOOR_Y - 140.0, 120.0, 16.0),
-	Rect2(840.0, FLOOR_Y - 140.0, 120.0, 16.0),
-	Rect2(1000.0, FLOOR_Y - 110.0, 120.0, 16.0),
-	Rect2(1160.0, FLOOR_Y - 80.0, 120.0, 16.0),
-]
-# The mandatory escape route stays on the main floor; this optional catwalk is a distinct,
-# visibly drawn side route with collision matching the same rectangle contract.
-
 var hero: CharacterBody2D
-var camera: Camera2D
 var hud: CanvasLayer
 var wardens: Array[CharacterBody2D] = []
 var exit_area: Area2D
@@ -39,7 +22,7 @@ var right_gate_closed := false
 var progress_barriers: Array[StaticBody2D] = []
 
 func _ready() -> void:
-	# Editor preview must never spawn runtime actors or mutate save/world state.
+	# Editor preview must never mutate save/world state.
 	if Engine.is_editor_hint():
 		queue_redraw()
 		return
@@ -47,21 +30,19 @@ func _ready() -> void:
 		get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
 		return
 
+	hero = $Hero
+	hud = $HUD
+	exit_area = $VillageRoadExit
 	WorldState.current_location = "church_escape"
 	WorldState.record_natural_test_region("A0", "church_escape")
 	WorldState.set_checkpoint(Vector2(420.0, FLOOR_Y))
 
-	_create_floor()
-	_create_prologue_traversal_route()
-	_create_boundaries()
-	_create_surgery_table()
-	_spawn_hero()
-	# Keep the opening focused on exploration; the exit ambush creates enemies and shutters later.
-	_spawn_clue()
-	_spawn_item_pickups()
-	_spawn_rest()
-	_spawn_exit()
-	_spawn_ui()
+	hero.defeated.connect(_on_hero_defeated)
+	exit_area.interacted.connect(_on_exit_interacted)
+	var clue := $SurgicalMark
+	clue.examined.connect(_on_clue_examined.bind(clue))
+	hud.bind_hero(hero)
+	hud.set_story_mode("A0｜教会手术所", "查看手术托盘和周边物品，寻找离开的路。")
 	queue_redraw()
 
 func _process(_delta: float) -> void:
@@ -82,7 +63,7 @@ func _process(_delta: float) -> void:
 		if is_instance_valid(hud):
 			hud.set_story_mode("A0｜教会手术所", "伏击开始！留意两侧来敌与上方坠落的守卫，利用攻击前摇进行闪避。")
 
-func _create_surgery_table() -> void:
+
 	var table := StaticBody2D.new()
 	table.name = "BrokenSurgeryTable"
 	table.position = Vector2(280.0, 500.0)
@@ -93,7 +74,7 @@ func _create_surgery_table() -> void:
 	table.add_child(shape)
 	add_child(table)
 
-func _spawn_hero() -> void:
+
 	hero = CharacterBody2D.new()
 	hero.set_script(HERO_SCRIPT)
 	hero.position = Vector2(420.0, FLOOR_Y)
@@ -127,12 +108,13 @@ func _start_exit_ambush() -> void:
 		hud.set_story_mode("A0｜教会手术所", "左侧传来沉重的脚步声，出口处的守卫也逼了进来！先解决他们。")
 	print("[NEREIS][PROLOGUE] Exit ambush wave 1 started")
 
-func _spawn_warden(position: Vector2, enemy_name: String) -> void:
-	var warden := CharacterBody2D.new()
-	warden.set_script(WARDEN_SCRIPT)
-	warden.position = position
+func _spawn_warden(spawn_position: Vector2, enemy_name: String) -> void:
+	var warden := WARDEN_SCENE.instantiate() as CharacterBody2D
+	if warden == null:
+		push_error("[NEREIS][PROLOGUE] Failed to instantiate warden scene")
+		return
+	warden.position = spawn_position
 	warden.name = enemy_name
-	_add_character_collision(warden, 22.0, 50.0)
 	add_child(warden)
 	warden.defeated.connect(_on_warden_defeated)
 	wardens.append(warden)
@@ -143,14 +125,12 @@ func _spawn_progress_barriers() -> void:
 	_spawn_single_progress_barrier(1320.0)
 
 func _spawn_single_progress_barrier(gate_x: float) -> void:
-	var gate := StaticBody2D.new()
+	var gate := PROGRESS_BARRIER_SCENE.instantiate() as StaticBody2D
+	if gate == null:
+		push_error("[NEREIS][PROLOGUE] Failed to instantiate progress barrier scene")
+		return
 	gate.name = "SurgeryProgressBarrier"
 	gate.position = Vector2(gate_x, 420.0)
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(24.0, 240.0)
-	shape.shape = rectangle
-	gate.add_child(shape)
 	add_child(gate)
 	progress_barriers.append(gate)
 
@@ -162,7 +142,7 @@ func _open_progress_barrier(index: int) -> void:
 		gate.queue_free()
 	queue_redraw()
 
-func _spawn_clue() -> void:
+
 	var clue := Node2D.new()
 	clue.set_script(preload("res://scripts/world/world_clue.gd"))
 	clue.position = Vector2(620, 520)
@@ -174,7 +154,7 @@ func _spawn_clue() -> void:
 	var examined_callback := _on_clue_examined.bind(clue)
 	clue.examined.connect(examined_callback)
 
-func _spawn_item_pickups() -> void:
+
 	var pickup_script = preload("res://scripts/world/world_item_pickup.gd")
 	var bandage := Node2D.new()
 	bandage.set_script(pickup_script)
@@ -196,7 +176,10 @@ func _on_clue_examined(clue: Node) -> void:
 	WorldState.mark_ancient_residue_awakened()
 	hud.call("show_item_description", clue.display_name, clue.description)
 
-func _spawn_rest() -> void:
+	WorldState.mark_ancient_residue_awakened()
+	hud.call("show_item_description", clue.display_name, clue.description)
+
+
 	var rest := Node2D.new()
 	rest.set_script(REST_POINT_SCRIPT)
 	rest.position = Vector2(540.0, FLOOR_Y)
@@ -204,7 +187,7 @@ func _spawn_rest() -> void:
 	rest.display_name = "破损的凳子"
 	add_child(rest)
 
-func _spawn_exit() -> void:
+
 	exit_area = Area2D.new()
 	exit_area.set_script(INTERACTION_DOOR_SCRIPT)
 	exit_area.position = Vector2(2040, FLOOR_Y)
@@ -290,14 +273,14 @@ func _on_exit_interacted() -> void:
 	print("[NEREIS][PROLOGUE] Leaving surgery interior for the exterior mountain path")
 	SceneTransition.fade_to_scene("res://scenes/prologue_exterior.tscn")
 
-func _spawn_ui() -> void:
+
 	hud = CanvasLayer.new()
 	hud.set_script(HUD_SCRIPT)
 	add_child(hud)
 	hud.bind_hero(hero)
 	hud.set_story_mode("A0｜教会手术所", "查看手术托盘和周边物品，寻找离开的路。")
 
-func _create_floor() -> void:
+
 	var floor := StaticBody2D.new()
 	floor.name = "SurgeryFloor"
 	var shape := CollisionShape2D.new()
@@ -309,7 +292,7 @@ func _create_floor() -> void:
 	add_child(floor)
 
 
-func _create_prologue_traversal_route() -> void:
+
 	# Optional six-segment catwalk: 120 px per segment, 40 px gaps, and no more than 30 px per step.
 	# 六段可选高路：每段 120 px、间隙 40 px、相邻高差不超过 30 px。
 	for platform_rect in SURGICAL_CATWALK_RECTS:
@@ -325,7 +308,7 @@ func _create_prologue_traversal_route() -> void:
 		body.add_child(shape)
 		add_child(body)
 
-func _create_boundaries() -> void:
+
 	var left := StaticBody2D.new()
 	var ls := CollisionShape2D.new()
 	var lr := RectangleShape2D.new()
@@ -344,7 +327,7 @@ func _create_boundaries() -> void:
 	right.add_child(rs)
 	add_child(right)
 
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
+
 	var collision := CollisionShape2D.new()
 	var capsule := CapsuleShape2D.new()
 	capsule.radius = radius
@@ -367,6 +350,23 @@ func _mark_input_handled() -> void:
 	var viewport := get_viewport()
 	if viewport != null:
 		viewport.set_input_as_handled()
+
+func _get_traversal_route_rects() -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	var route := get_node_or_null("PrologueTraversalRoute") as Node2D
+	if route == null:
+		return rects
+	for child in route.get_children():
+		var platform := child as StaticBody2D
+		if platform == null:
+			continue
+		var collision := platform.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if collision == null or not collision.shape is RectangleShape2D:
+			continue
+		var rectangle := collision.shape as RectangleShape2D
+		var top_left := route.position + platform.position + collision.position - rectangle.size * 0.5
+		rects.append(Rect2(top_left, rectangle.size))
+	return rects
 
 func _draw_security_shutter(gate_x: float) -> void:
 	# Make the temporary collision boundary legible before the player reaches it.
@@ -393,7 +393,7 @@ func _draw() -> void:
 	draw_texture_rect(SURGERY_FOREGROUND_PROPS, Rect2(0, 0, LEVEL_WIDTH, 720), false)
 	# Collision-backed tutorial ledges are also drawn so the optional route reads clearly.
 	# 将具有真实碰撞的教学平台同步绘制出来，让可选路线清晰可读。
-	for ledge in SURGICAL_CATWALK_RECTS:
+	for ledge in _get_traversal_route_rects():
 		draw_rect(ledge, Color("#40323d"))
 		draw_rect(Rect2(ledge.position.x, ledge.position.y, ledge.size.x, 3.0), Color("#947984"))
 		# Broken edge marks keep the route readable without drawing a false continuous ramp.
