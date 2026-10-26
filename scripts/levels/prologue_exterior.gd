@@ -1,30 +1,16 @@
 extends Node2D
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
-const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
-const PURSUER_SCRIPT = preload("res://scripts/levels/prologue_pursuer.gd")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
+
 const CLIFF_BACKDROP = preload("res://assets/art/backdrops/prologue_cliff_backdrop.svg")
 const CLIFF_X := 1120.0
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 1500.0
 const CLIFF_APPROACH_LIMIT := CLIFF_X - 26.0
 const FORCED_DEFEAT_SECONDS := 12.0
-# Optional terrain route. Geometry is shared by collision and drawing so the ledges
-# remain readable as traversable rock shelves instead of decorative background seams.
-const MOUNTAIN_SHELF_RECTS := [
-	Rect2(300.0, 452.0, 112.0, 16.0),
-	Rect2(444.0, 420.0, 104.0, 16.0),
-	Rect2(580.0, 436.0, 112.0, 16.0),
-	Rect2(724.0, 462.0, 104.0, 16.0),
-	Rect2(860.0, 430.0, 112.0, 16.0),
-]
-
-var hero: CharacterBody2D
-var boss: CharacterBody2D
-var narrative: CanvasLayer
-var hud: CanvasLayer
+@onready var hero: CharacterBody2D = $Hero
+@onready var boss: CharacterBody2D = $A0_ChurchExecutioner
+@onready var narrative: CanvasLayer = $NarrativeManager
+@onready var hud: CanvasLayer = $HUD
 var ending_started := false
 var boss_encounter_started := false
 var boss_encounter_elapsed := 0.0
@@ -37,12 +23,24 @@ func _ready() -> void:
 	set_meta("p5_1_spawn_side", "west")
 	WorldState.current_location = "church_escape_exterior"
 	WorldState.record_natural_test_region("A0", "church_escape_exterior")
-	_create_ground()
-	_spawn_hero()
-	_spawn_boss()
-	_spawn_ui()
+	hero.set("defer_death_recovery", true)
+	var camera := hero.get_node("Camera2D") as Camera2D
+	camera.position_smoothing_enabled = true
+	camera.position_smoothing_speed = 5.0
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = LEVEL_WIDTH
+	camera.limit_bottom = 720
+	hero.defeated.connect(func() -> void:
+		if not ending_started:
+			AchievementManager.unlock("prologue_knight_defeat")
+			call_deferred("_begin_rescue_transition", "defeated")
+	)
+	boss.defeated.connect(func() -> void:
+		if not ending_started:
+			call_deferred("_begin_rescue_transition", "defeated")
+	)
 	queue_redraw()
-
 func _physics_process(delta: float) -> void:
 	if ending_started or not is_instance_valid(hero):
 		return
@@ -66,56 +64,8 @@ func _physics_process(delta: float) -> void:
 		if boss_encounter_elapsed >= FORCED_DEFEAT_SECONDS:
 			call_deferred("_begin_rescue_transition", "defeated")
 
-func _spawn_hero() -> void:
-	hero = CharacterBody2D.new()
-	hero.set_script(HERO_SCRIPT)
-	hero.name = "Hero"
-	hero.position = Vector2(150.0, FLOOR_Y)
-	hero.set("defer_death_recovery", true)
-	_add_character_collision(hero, 18.0, 48.0)
-	add_child(hero)
-	hero.defeated.connect(func() -> void:
-		if not ending_started:
-			AchievementManager.unlock("prologue_knight_defeat")
-			call_deferred("_begin_rescue_transition", "defeated")
-	)
-	var camera := Camera2D.new()
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 5.0
-	camera.limit_left = 0
-	camera.limit_top = 0
-	camera.limit_right = LEVEL_WIDTH
-	camera.limit_bottom = 720
-	hero.add_child(camera)
 
-func _spawn_boss() -> void:
-	boss = CharacterBody2D.new()
-	boss.set_script(BOSS_SCRIPT)
-	boss.name = "A0_ChurchExecutioner"
-	boss.position = Vector2(760.0, FLOOR_Y)
-	boss.set("boss_display_name", "教会执行者")
-	boss.set("damage_immune", true)
-	boss.set("health", 900)
-	boss.set("max_health", 900)
-	boss.set("damage_taken_multiplier", 0.42)
-	boss.set("persist_global_boss_defeat", false)
-	_add_character_collision(boss, 26.0, 58.0)
-	add_child(boss)
-	# Defensive fallback in case a future combat change bypasses damage immunity.
-	boss.defeated.connect(func() -> void:
-		if not ending_started:
-			call_deferred("_begin_rescue_transition", "defeated")
-	)
 
-func _spawn_ui() -> void:
-	narrative = CanvasLayer.new()
-	narrative.set_script(NARRATIVE_SCRIPT)
-	add_child(narrative)
-	hud = CanvasLayer.new()
-	hud.set_script(HUD_SCRIPT)
-	add_child(hud)
-	hud.bind_hero(hero)
-	hud.set_story_mode("A0｜洞外山路", "沿山路前进。眼前的人挡住了唯一的出口。")
 
 func _begin_rescue_transition(reason: String) -> void:
 	if ending_started:
@@ -125,7 +75,7 @@ func _begin_rescue_transition(reason: String) -> void:
 	_clear_interaction_focus()
 	if is_instance_valid(boss):
 		boss.queue_free()
-	_spawn_pursuers()
+	_show_pursuers()
 
 	# Keep the story progression deterministic while the full cliff/fall animation is deferred.
 	# A short fade-to-black replaces the unfinished retreat/fall animation; it must not block map development.
@@ -137,67 +87,28 @@ func _begin_rescue_transition(reason: String) -> void:
 	WorldState.save_game()
 	SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")
 
-func _spawn_pursuers() -> void:
-	# The chase is represented on-screen, not only described by the caption.
-	# 追兵实际出现在画面中，封住退路；这组剪影仅服务于演出，不介入战斗逻辑。
-	var positions := [Vector2(630.0, FLOOR_Y), Vector2(770.0, FLOOR_Y), Vector2(910.0, FLOOR_Y)]
-	for i in range(positions.size()):
-		var pursuer := Node2D.new()
-		pursuer.set_script(PURSUER_SCRIPT)
-		pursuer.name = "ChurchPursuer_%02d" % (i + 1)
-		pursuer.set("variant", i)
-		pursuer.set("lantern", i == 0)
-		pursuer.position = positions[i]
-		add_child(pursuer)
-
+func _show_pursuers() -> void:
+	$Pursuers.visible = true
 func _clear_interaction_focus() -> void:
 	NereisInteractionFocus.clear_all(get_tree())
 
-func _create_ground() -> void:
-	# Main route remains continuous: the cliff is the authored encounter boundary,
-	# not an accidental gap. Side shelves are optional vertical exploration.
-	var ground := StaticBody2D.new()
-	ground.name = "MountainPathGround"
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(CLIFF_X, 40.0)
-	shape.shape = rectangle
-	shape.position = Vector2(CLIFF_X * 0.5, FLOOR_Y + 20.0)
-	ground.add_child(shape)
-	add_child(ground)
 
-	for i in range(MOUNTAIN_SHELF_RECTS.size()):
-		var shelf_rect: Rect2 = MOUNTAIN_SHELF_RECTS[i]
-		var shelf := StaticBody2D.new()
-		shelf.name = "MountainShelf_%02d" % (i + 1)
-		shelf.position = shelf_rect.position
-		var shelf_shape := CollisionShape2D.new()
-		var shelf_box := RectangleShape2D.new()
-		shelf_box.size = shelf_rect.size
-		shelf_shape.shape = shelf_box
-		shelf_shape.position = shelf_rect.size * 0.5
-		shelf_shape.one_way_collision = true
-		shelf.add_child(shelf_shape)
-		add_child(shelf)
 
-	var left_wall := StaticBody2D.new()
-	left_wall.name = "MountainPathWestBoundary"
-	var left_shape := CollisionShape2D.new()
-	var left_rect := RectangleShape2D.new()
-	left_rect.size = Vector2(40.0, 720.0)
-	left_shape.shape = left_rect
-	left_shape.position = Vector2(-20.0, 360.0)
-	left_wall.add_child(left_shape)
-	add_child(left_wall)
-
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
-	var collision := CollisionShape2D.new()
-	var capsule := CapsuleShape2D.new()
-	capsule.radius = radius
-	capsule.height = height
-	collision.shape = capsule
-	collision.position = Vector2(0.0, -height * 0.5)
-	character.add_child(collision)
+func _get_shelf_rects() -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	var shelves := get_node_or_null("MountainShelves") as Node2D
+	if shelves == null:
+		return rects
+	for child in shelves.get_children():
+		var body := child as StaticBody2D
+		if body == null:
+			continue
+		var collision := body.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if collision == null or not collision.shape is RectangleShape2D:
+			continue
+		var rectangle := collision.shape as RectangleShape2D
+		rects.append(Rect2(shelves.position + body.position + collision.position - rectangle.size * 0.5, rectangle.size))
+	return rects
 
 func _draw() -> void:
 	# Painted scenic layer is visual-only; collision, encounter bounds and cliff coordinates stay in code.
@@ -210,7 +121,7 @@ func _draw() -> void:
 	draw_line(Vector2(520, 478), Vector2(740, 505), Color("#5b606b"), 3.0)
 	draw_line(Vector2(740, 505), Vector2(CLIFF_X - 12.0, 485), Color("#5b606b"), 3.0)
 	# Match the five physical shelves above; the darker lower lip gives each ledge a readable edge.
-	for shelf_rect in MOUNTAIN_SHELF_RECTS:
+	for shelf_rect in _get_shelf_rects():
 		draw_colored_polygon(PackedVector2Array([
 			shelf_rect.position,
 			Vector2(shelf_rect.end.x, shelf_rect.position.y),
