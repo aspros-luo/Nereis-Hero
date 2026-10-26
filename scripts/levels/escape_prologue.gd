@@ -25,7 +25,7 @@ func _ready() -> void:
 	# Editor preview must never mutate save/world state.
 	if Engine.is_editor_hint():
 		_sync_exit_gate_visual()
-	queue_redraw()
+		queue_redraw()
 		return
 	if WorldState.prologue_complete:
 		get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
@@ -185,6 +185,7 @@ func _open_exit() -> void:
 	if exit_open:
 		return
 	exit_open = true
+	_sync_exit_gate_visual()
 	exit_area.enabled = true
 	if is_instance_valid(hud):
 		hud.set_story_mode("A0｜教会手术所", "出口已打开。前往右侧出口按 E，离开手术所。")
