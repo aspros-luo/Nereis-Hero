@@ -7,7 +7,7 @@
 
 ## 1. 仓库盘点
 
-基线递归 Git tree 共 544 个文件：130 个 GDScript、155 个 `.tscn`、16 个 Python、183 个 Markdown，以及资源、配置和数据文件。此为目录盘点，不等于逐文件审计完成。
+最初基线递归 Git tree 共 544 个文件；当前提交递归 Git tree 共 602 个文件（130 个 GDScript、210 个 `.tscn`、17 个 Python、184 个 Markdown，以及资源、配置和数据文件）。不同时间点的新增文件不应与最初基线混为一谈；此为目录盘点，不等于每个文件都已完成语义审计。
 
 ## 2. 已确认的 P0 架构违规
 
@@ -259,3 +259,31 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 3. 对 Hero 与敌人的碰撞组件、骨骼视觉、死亡转场等节点，逐个确认应由 `.tscn` 常驻声明还是作为独立场景动态实例化。
 4. 对所有被标记为“可能冗余”的脚本和场景进行引用闭包检查后再删；不得仅凭文件名、体积或未找到同名场景就删除。
 5. 完成静态检查后，在 Godot 4.6.1 下逐批执行导入、解析、关键场景加载和功能 smoke test。
+
+
+## 15. 第四批实际重构：古代研究所场景与休整点
+
+### 场景结构迁移
+
+- 新增 `scenes/enemies/research_husk.tscn`，显式定义 ResearchHusk 根节点、主碰撞体、AttackHitbox 和 Hurtbox；敌人脚本不再需要由区域脚本用 `CharacterBody2D.new()` 临时拼装敌人主体与碰撞结构。
+- `scenes/ancient_research_lab.tscn` 从只有根节点扩展为 16 个显式节点：地板与碰撞、左右边界与碰撞、Hero、ResearchHusk、三个调查点、休整点、出口、Narrative 和 HUD。
+- `scripts/levels/ancient_research_lab.gd` 从 210 行缩减为 121 行，删除运行时创建地板、边界、主角、线索、休整点、出口、HUD 与 Narrative 的代码；改为使用 `@onready` 节点引用并连接信号。
+- 主角死亡后 ResearchHusk 仍需恢复，因此脚本只通过 `RESEARCH_HUSK_SCENE.instantiate()` 重生预制敌人场景，不再通过 `CharacterBody2D.new()` 和脚本赋值来构造对象。
+- `scripts/world/rest_point.gd` 删除运行时补建 `RestVisual` 子节点的后备逻辑。休整点的视觉节点必须由 `scenes/world/rest_point.tscn` 声明，缺少节点时应暴露场景合同错误，而不是静默生成替代结构。
+- 提交：ResearchHusk 场景 `75bc61cc18fe83b2ac22877555ad367d69490194`；研究所场景 `12712a2714616fcdcf77bf95464dad45c12a2fb1`；研究所脚本 `16739ce287dc210443c81325a4e3ab2608b09635`；休整点行为清理 `08f61d37b86ef31788e0529ca022aff8225c7d12`。
+
+### 源码级复核
+
+- [x] 当前研究所场景声明 16 个节点；所有外部场景和脚本资源路径均在当前 Git tree 中存在。
+- [x] ResearchHusk 场景声明 4 个节点，包含主碰撞、攻击盒和受击盒；其依赖的 hitbox/hurtbox 子场景路径均存在。
+- [x] `ancient_research_lab.gd` 常见节点 `.new()` 调用为 0；只保留一次预制敌人场景实例化和一次 `add_child()`，用于死亡后的敌人重生。
+- [x] `rest_point.gd` 的 `.new()`、`instantiate()` 和 `add_child()` 调用均为 0。
+- [ ] Godot 4.6.1 导入/解析：BLOCKED。
+- [ ] 研究所场景在编辑器中的节点树与布局检查：BLOCKED。
+- [ ] 调查三个线索、休息存档、敌人死亡、主角死亡后敌人重生、出口切换：BLOCKED。
+
+### 当前仍需注意
+
+- 研究所场景的视觉背景仍由根脚本的 `_draw()` 绘制；本批次只将游戏对象与碰撞结构迁移为显式节点，未重做美术层。
+- `ResearchHusk` 的攻击盒和受击盒使用可复用子场景；这些是场景资源实例，不是用 `Node.new()` 创建节点树。
+- 不应将本批次的源码级检查误报为 Godot 实机通过。完整验证仍需本地 Godot 4.6.1。
