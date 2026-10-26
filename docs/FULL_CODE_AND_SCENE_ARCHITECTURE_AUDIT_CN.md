@@ -367,3 +367,49 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 - 返回门在场景中预先存在，只有当击败标记生效时才显示并启用；不再由胜利回调临时创建门和碰撞体。
 - 源码级复核：竞技场 12 个节点，Boss 4 个节点；场景引用路径均存在；Boss 控制脚本的 `.new()` 调用为 0，唯一 `.instantiate()` / `add_child()` 用于死亡后的 Boss 重生。
 - [ ] Godot 4.6.1 导入/解析、Boss 两阶段战斗、死亡重生、胜利持久化与返回王墓路线：BLOCKED。
+
+
+## 21. 第八批实际重构：Mite 共鸣导演场景
+
+- `scenes/mite_resonance_demo.tscn` 现在有 12 个显式节点：地板与碰撞、左右边界与碰撞、Hero、Mite、Narrative、HUD、AudioDirector。
+- `scripts/levels/mite_resonance_demo.gd` 从 199 行缩减到 131 行；移除主角、Mite、HUD、Narrative、音频节点、地板、边界与角色碰撞的全部运行时代建方法。
+- 当前该脚本的 `.new()`、`add_child()`、`.instantiate()` 调用均为 0。测试状态与共鸣剧情顺序保持在脚本中，场景结构则由 `.tscn` 提供。
+- [ ] Godot 4.6.1 导入与导演流程运行验收：BLOCKED。
+
+## 22. 第九批实际重构：共享结局视觉层
+
+- 新增 `scenes/ui/ending_cg_overlay.tscn`，显式包含 CG TextureRect 与 Vignette ColorRect；`scripts/ui/ending_cg_overlay.gd` 不再通过 `TextureRect.new()` / `ColorRect.new()` 动态创建视觉节点。
+- 新增 `scenes/ui/ending_sequence_overlay.tscn`，显式包含 CanvasLayer、Backdrop、CGOverlay、Card、TopRule、BottomRule、三个 Banner、Title、Body 和 Prompt，共 12 个节点。
+- `scenes/church_final_demo.tscn`、`scenes/ending_fire_demo.tscn`、`scenes/ending_paradise_demo.tscn` 都预先包含 EndingLayer；控制器只获取节点、设置颜色/文案/布局并播放动画，不再运行时创建结局 UI。
+- 共享视觉层消除了三套结局中重复创建 CanvasLayer、ColorRect、规则线和 Label 的代码。Human ending 仍可调整布局并显示三个 Banner；Fire/Paradise ending 则复用同一节点结构并覆盖配色。
+- [ ] Godot 4.6.1 中检查三种 CG 资源、动画层级、淡入与键盘退出：BLOCKED。
+
+## 23. 第十批实际重构：永恒乐园、烈火天罚与教堂结局
+
+### 永恒乐园（Paradise）
+
+- `scenes/ending_paradise_demo.tscn` 现在有 14 个显式节点：地板、边界、Hero、Mite、HighPriest、HUD、Narrative、AudioDirector 和 EndingLayer。
+- 新增 `scenes/enemies/high_priest.tscn` 与 `scenes/enemies/king_guardian.tscn`，都显式声明敌人主体、碰撞体、AttackHitbox 和 Hurtbox。
+- High Priest 的阶段、生命值与显示名称改为导出属性，可直接在场景中检查。
+- `ending_paradise_demo.gd` 删除主角、Mite、HUD、Narrative、音频、地板、边界、角色碰撞和结局 UI 的节点构建代码；只在剧情推进时实例化预制 KingGuardian 场景。
+
+### 烈火天罚（Fire）
+
+- `scenes/ending_fire_demo.tscn` 现在有 13 个显式节点：地板、边界、Hero、HUD、Narrative、NarrativeAudio、EndingLayer 与全屏 Flash。
+- 新增 `scenes/enemies/final_cultist.tscn` 与 `scenes/npc/final_mite.tscn`；FinalCultist 预置 Hurtbox 与主体碰撞，FinalMite 预置 Hurtbox。
+- `scripts/npc/final_mite.gd` 不再在 `_ready()` 中创建 Hurtbox。
+- 100 个 FinalCultist 仍由玩法循环按需实例化，但每个都是独立预制场景；这属于运行时生成敌人实例，不是通过 `Node.new()` 拼装节点树。
+- 全屏 Flash 现在是 `.tscn` 中的固定 ColorRect，由代码只控制透明度和动画。
+
+### 教堂结局（Church）
+
+- `scenes/church_final_demo.tscn` 现在有 12 个显式节点：地板、边界、Hero、HighPriest、HUD、Narrative 与 EndingLayer。
+- `church_final_demo.gd` 删除主角、HUD、Narrative、地板、边界、碰撞体与结局 UI 的运行时代建方法；只在 High Priest 倒下后实例化预制 KingGuardian 场景。
+- 以上三个结局控制器目前的 `.new()` 调用均为 0；保留的 `.instantiate()` / `add_child()` 只用于剧情阶段切换所需的预制 Boss/敌人场景。
+- [ ] 三个结局的 Godot 4.6.1 解析、战斗阶段切换、存档写入、CG 与返回标题流程：BLOCKED。
+
+## 24. 当前代码审计状态
+
+- 已迁移到显式节点树的重点对象：50 个合同房间、地图验收菜单、古代研究所、教堂路线、摇篮曲路线、王墓 Boss 竞技场、Mite 共鸣导演场景、三个结局场景的基础结构与共享结局视觉层。
+- 仍然需要处理：`greybox_world_region.gd` 和 A5 房间系统、其他旧 Demo/研究场景、角色预览/调试工具、NPC 与交互场景的残余动态节点构建、跨文件重复逻辑和孤立代码。
+- 目前所有“通过”只表示源码/场景文件级检查，不表示 Godot 导入或实机测试通过。
