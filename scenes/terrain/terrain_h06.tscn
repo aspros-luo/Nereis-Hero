@@ -1,4 +1,6 @@
-[gd_scene load_steps=23 format=3]
+[gd_scene load_steps=24 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/art/backdrops/ruins_backdrop.svg" id="Backdrop"]
 
 ; Editor-authored collision terrain for H06.
 ; Fixed platforms, ground segments and region boundaries are scene nodes, not runtime-generated nodes.
@@ -70,6 +72,11 @@ size = Vector2(1040, 40)
 size = Vector2(40, 1100)
 
 [node name="AuthoredTerrainH06" type="Node2D"]
+
+[node name="Backdrop" type="Sprite2D" parent="."]
+texture = ExtResource("Backdrop")
+centered = false
+z_index = -100
 
 [node name="Platform_001" type="StaticBody2D" parent="."]
 position = Vector2(260, 480)
