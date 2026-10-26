@@ -1,7 +1,5 @@
 extends CharacterBody2D
 
-const HITBOX_SCRIPT = preload("res://scripts/combat/hitbox.gd")
-const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 const HIT_SPARK_SCRIPT = preload("res://scripts/effects/hit_spark.gd")
 
 const MOVE_SPEED := 75.0
@@ -26,16 +24,10 @@ func _ready() -> void:
     queue_redraw()
 
 func _setup_combat_components() -> void:
-    attack_hitbox = Area2D.new()
-    attack_hitbox.name = "SonicPulseHitbox"
-    attack_hitbox.set_script(HITBOX_SCRIPT)
-    add_child(attack_hitbox)
+    attack_hitbox = $AttackHitbox as Area2D
     attack_hitbox.setup(self, Vector2(74, 74), Vector2.ZERO)
 
-    var hurtbox := Area2D.new()
-    hurtbox.name = "Hurtbox"
-    hurtbox.set_script(HURTBOX_SCRIPT)
-    add_child(hurtbox)
+    var hurtbox := $Hurtbox as Area2D
     hurtbox.setup(self, Vector2(48, 70), Vector2(0, -8))
 
 func _physics_process(delta: float) -> void:
