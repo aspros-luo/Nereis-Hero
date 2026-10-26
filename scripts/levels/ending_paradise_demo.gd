@@ -7,7 +7,6 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
 const HIGH_PRIEST_SCRIPT = preload("res://scripts/enemies/high_priest.gd")
 const KING_SCRIPT = preload("res://scripts/enemies/king_guardian.gd")
-const ENDING_OVERLAY_SCENE: PackedScene = preload("res://scenes/ui/ending_sequence_overlay.tscn")
 
 const FLOOR_Y := 540.0
 const WIDTH := 2600.0
@@ -172,8 +171,7 @@ func _begin_paradise_ending() -> void:
     _show_ending_stage(0)
 
 func _create_ending_overlay() -> void:
-    ending_layer = ENDING_OVERLAY_SCENE.instantiate() as CanvasLayer
-    add_child(ending_layer)
+    ending_layer = $EndingLayer as CanvasLayer
     ending_layer.visible = true
     ending_backdrop = ending_layer.get_node("Backdrop") as ColorRect
     ending_cg = ending_layer.get_node("CGOverlay") as Control

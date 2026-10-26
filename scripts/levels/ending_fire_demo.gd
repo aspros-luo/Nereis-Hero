@@ -6,7 +6,6 @@ const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const FINAL_CULTIST_SCRIPT = preload("res://scripts/enemies/final_cultist.gd")
 const FINAL_MITE_SCRIPT = preload("res://scripts/npc/final_mite.gd")
 const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
-const ENDING_OVERLAY_SCENE: PackedScene = preload("res://scenes/ui/ending_sequence_overlay.tscn")
 
 const CULTIST_COUNT := 100
 const FLOOR_Y := 540.0
@@ -220,8 +219,7 @@ func _start_final_ending() -> void:
     _show_ending_stage(0)
 
 func _create_ending_overlay() -> void:
-    ending_layer = ENDING_OVERLAY_SCENE.instantiate() as CanvasLayer
-    add_child(ending_layer)
+    ending_layer = $EndingLayer as CanvasLayer
     ending_layer.visible = true
     ending_backdrop = ending_layer.get_node("Backdrop") as ColorRect
     ending_cg = ending_layer.get_node("CGOverlay") as Control

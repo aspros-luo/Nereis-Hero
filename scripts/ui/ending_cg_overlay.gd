@@ -5,7 +5,6 @@ class_name NereisEndingCGOverlay
 @onready var vignette: ColorRect = $Vignette
 
 var route_id := ""
-var elapsed := 0.0
 
 const CG_PATHS := {
     "human": "res://assets/cg/ending_human.svg",

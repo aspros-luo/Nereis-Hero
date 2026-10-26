@@ -5,7 +5,6 @@ const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HIGH_PRIEST_SCRIPT = preload("res://scripts/enemies/high_priest.gd")
 const KING_SCRIPT = preload("res://scripts/enemies/king_guardian.gd")
-const ENDING_OVERLAY_SCENE: PackedScene = preload("res://scenes/ui/ending_sequence_overlay.tscn")
 
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 4400.0
@@ -142,9 +141,7 @@ func _on_king_defeated() -> void:
 func _create_human_ending_overlay() -> void:
     if ending_layer and is_instance_valid(ending_layer):
         return
-    ending_layer = ENDING_OVERLAY_SCENE.instantiate() as CanvasLayer
-    add_child(ending_layer)
-    ending_layer.layer = 100
+    ending_layer = $EndingLayer as CanvasLayer
     ending_layer.visible = true
     ending_backdrop = ending_layer.get_node("Backdrop") as ColorRect
     ending_cg = ending_layer.get_node("CGOverlay") as Control
@@ -152,8 +149,7 @@ func _create_human_ending_overlay() -> void:
     ending_title = ending_layer.get_node("Card/Title") as Label
     ending_body = ending_layer.get_node("Card/Body") as Label
     ending_prompt = ending_layer.get_node("Card/Prompt") as Label
-    var upper_rule := ending_layer.get_node("Card/TopRule") as ColorRect
-    var lower_rule := ending_layer.get_node("Card/BottomRule") as ColorRect
+    ending_layer.layer = 100
     ending_backdrop.position = Vector2.ZERO
     ending_backdrop.size = Vector2(1280, 720)
     ending_backdrop.color = Color("#08070b")
@@ -162,6 +158,8 @@ func _create_human_ending_overlay() -> void:
     ending_card.size = Vector2(1060, 540)
     ending_card.color = Color("#111018", 0.48)
     ending_card.modulate.a = 1.0
+    var upper_rule := ending_layer.get_node("Card/TopRule") as ColorRect
+    var lower_rule := ending_layer.get_node("Card/BottomRule") as ColorRect
     upper_rule.position = Vector2(54, 74)
     upper_rule.size = Vector2(952, 2)
     upper_rule.color = Color("#5a4a50", 0.7)
