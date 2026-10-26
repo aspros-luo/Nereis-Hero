@@ -21,7 +21,7 @@ NODE_NEW = re.compile(
     r'ColorRect|Sprite2D|TileMapLayer|Polygon2D|PanelContainer|VBoxContainer|'
     r'HBoxContainer|Button|ProgressBar|AnimationPlayer|RayCast2D|Line2D)\.new\s*\('
 )
-ADD_CHILD = re.compile(r'\.add_child\s*\(')
+ADD_CHILD = re.compile(r'(?<![\w.])add_child\s*\(')
 RESOURCE_PATH = re.compile(r'res://([^"\s]+)')
 FUNCTION = re.compile(r'^\s*(?:static\s+)?func\s+([A-Za-z_]\w*)\s*\(', re.M)
 SCRIPT_SUFFIXES = {".gd", ".tscn", ".tres", ".godot", ".cfg", ".json", ".gdshader"}
