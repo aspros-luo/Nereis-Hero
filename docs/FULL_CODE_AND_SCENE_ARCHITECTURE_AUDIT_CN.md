@@ -123,3 +123,33 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 - [ ] 运行新游戏、继续游戏、语言切换和地图验收按钮的 smoke test：BLOCKED。
 
 此批次只完成结构迁移，不代表整个项目审计完成，也不把未运行的测试标记为通过。后续以此模式继续重构 A0 序章与世界根场景。
+
+
+## 9. 第二批实际重构：转场遮罩与世界根节点
+
+### 转场遮罩
+
+- 新增 `scenes/scene_transition.tscn`，明确声明 CanvasLayer 和全屏 FadeRect。
+- `project.godot` 的 SceneTransition autoload 从脚本路径改为该场景路径。
+- `scripts/core/scene_transition.gd` 改为通过 `$FadeRect` 取得遮罩，移除 `ColorRect.new()`、`add_child()` 和手动 resize 逻辑；遮罩尺寸改由全屏锚点负责。
+- 移除了脚本中与场景属性重复的 layer 设置。
+- 提交：`8120dd06c46fff0687303b2b02adcf5e6ad8e5ee`、`3ab21e8fef581d6fada461f62555f758975b7c9e`、`41367f2cfb346da516c3de6cbbc2e18c57996499`、`c4c05f3c802e8e7b86d5583a41d72fd78253030b`。
+
+### 世界根节点
+
+- `scenes/world/world.tscn` 现在显式声明 Player、CollisionShape2D、Camera2D、HUD、RoomContainer、TransitionManager 与场景内房间切换用 FadeLayer。
+- `scripts/world/world.gd` 改为通过节点路径引用 Player、Camera2D 和 HUD，并删除创建常驻 Player/HUD 的两个构建函数。
+- 保留 A5 合同解析、房间装配、房间边界相机配置与房间内过渡流程。
+- 提交：`cf88bfd77ad7d59bf8e798b8254135e37c1d6cc7`、`68900b401acd6437f689be2cdc9b3df7f5091bdd`、`707119a55a8f998d0e0f15620895b888ed014231`、`4dbb47e36a5be3b1759dd99b946a08e9acddceea`。
+
+### 尚未关闭的世界结构问题
+
+`world.gd` 仍会在运行时创建房间过渡点和捷径交互点；这些对象需要迁移为可复用的独立场景，由合同数据配置实例属性。Hero 自身也会在 `hero.gd` 中创建战斗盒和 HeroSystem，HUD 仍在 `game_hud.gd` 中构建大量界面节点；这两项属于后续 P0/P1 迁移范围，不能因根场景已改造就视为全部符合规则。
+
+### 验证状态
+
+- [x] 从 GitHub 重新读取文件，确认 `world.tscn` 有 9 个显式节点声明。
+- [x] 源码模式检查确认 `boot.gd` 与 `scene_transition.gd` 不再调用节点 `.new()` / `add_child()`。
+- [ ] Godot 4.6.1 导入和场景解析：BLOCKED。
+- [ ] 编辑器节点树与全屏遮罩布局验收：BLOCKED。
+- [ ] 世界场景启动、A5-R01 载入、房间切换、存档继续与转场失败恢复 smoke test：BLOCKED。
