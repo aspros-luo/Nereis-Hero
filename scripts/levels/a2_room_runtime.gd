@@ -2,6 +2,8 @@ extends "res://scripts/levels/greybox_world_region.gd"
 ## Room-scoped runtime for A2. Terrain remains authored in the six child scenes;
 ## this script supplies the shared Hero, camera, save/respawn state and room doors.
 
+const ROOM_DEBUG_OVERLAY_SCENE: PackedScene = preload("res://scenes/ui/room_debug_overlay.tscn")
+
 const ROOM_SCENE_PATHS := {
 	"A2-R01": "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn",
 	"A2-R02": "res://scenes/rooms/a2_fog_forest/runtime/a2_r02_room.tscn",
@@ -76,30 +78,11 @@ func _ready() -> void:
 ## Temporary on-screen room marker for manual map acceptance.
 ## 实机验收临时标识：始终显示当前 A2 房间编号与场景名称。
 func _spawn_room_debug_label() -> void:
-	var layer := CanvasLayer.new()
+	var layer := ROOM_DEBUG_OVERLAY_SCENE.instantiate() as CanvasLayer
 	layer.name = "RoomDebugOverlay"
-	layer.layer = 100
-	add_child(layer)
-
-	var panel := PanelContainer.new()
-	panel.name = "RoomNamePanel"
-	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	panel.position = Vector2(18.0, 18.0)
-	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layer.add_child(panel)
-
-	var label := Label.new()
-	label.name = "RoomNameLabel"
+	var label := layer.get_node("RoomNamePanel/RoomNameLabel") as Label
 	label.text = "%s · %s · %s" % [region_id, room_id.replace("A2-", ""), region_title]
-	label.add_theme_font_size_override("font_size", 20)
-	label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 1.0))
-	label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.9))
-	label.add_theme_constant_override("shadow_offset_x", 1)
-	label.add_theme_constant_override("shadow_offset_y", 1)
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	panel.add_child(label)
-
-
+	add_child(layer)
 func _scene_path_for_room(target_room_id: String) -> String:
 	return str(ROOM_SCENE_PATHS.get(target_room_id, ROOM_SCENE_PATHS["A2-R01"]))
 
@@ -293,15 +276,12 @@ func _spawn_room_content() -> void:
 
 
 func _spawn_room_rest_point() -> void:
-	var rest := Node2D.new()
-	rest.set_script(REST_POINT_SCRIPT)
+	var rest := REST_POINT_SCENE.instantiate() as Node2D
 	rest.name = "RegionRestPoint_A2"
 	rest.position = Vector2(350.0, floor_y)
-	rest.rest_id = "rest_A2"
-	rest.display_name = "旧朝圣圣龛"
+	rest.set("rest_id", "rest_A2")
+	rest.set("display_name", "旧朝圣圣龛")
 	add_child(rest)
-
-
 func _spawn_room_exits() -> void:
 	match room_id:
 		"A2-R01":
@@ -343,20 +323,17 @@ func _spawn_drop_transition(
 	target_spawn_side: String
 ) -> void:
 	var target_scene := _scene_path_for_room(target_room_id)
-	var area := Area2D.new()
+	var area := AUTO_ROOM_TRANSITION_SCENE.instantiate() as Area2D
 	area.name = transition_name
 	area.position = Vector2(x, y)
 	area.collision_layer = 0
 	area.collision_mask = 1
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
+	var shape := area.get_node("CollisionShape2D") as CollisionShape2D
+	var rectangle := shape.shape as RectangleShape2D
 	rectangle.size = Vector2(width, height)
-	shape.shape = rectangle
-	area.add_child(shape)
+	shape.position = Vector2.ZERO
 	add_child(area)
 	area.body_entered.connect(_on_drop_transition_body_entered.bind(target_scene, target_spawn_side))
-
-
 func _on_drop_transition_body_entered(body: Node2D, target_scene: String, target_spawn_side: String) -> void:
 	if body != hero or room_transition_locked or hero == null or hero.velocity.y <= 0.0:
 		return
