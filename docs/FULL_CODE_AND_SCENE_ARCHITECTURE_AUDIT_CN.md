@@ -287,3 +287,39 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 - 研究所场景的视觉背景仍由根脚本的 `_draw()` 绘制；本批次只将游戏对象与碰撞结构迁移为显式节点，未重做美术层。
 - `ResearchHusk` 的攻击盒和受击盒使用可复用子场景；这些是场景资源实例，不是用 `Node.new()` 创建节点树。
 - 不应将本批次的源码级检查误报为 Godot 实机通过。完整验证仍需本地 Godot 4.6.1。
+
+
+## 16. 第五批实际重构：50 个合同房间改为显式节点树
+
+### 完成的架构变更
+
+- 新增 `scenes/world/contract_room_exit.tscn`，作为合同房间的可复用出口预制场景；包含 Area2D、76×100 碰撞形状与 Prompt 子场景。
+- 将 `tools/room_spatial_contracts_a1_a3.json` 中的 50 个房间空间合同序列化为 50 个正式 `.tscn` 节点树。节点直接保存在场景文件中，不再依赖运行时 GDScript 创建地形和出口。
+- 50 个房间合计显式声明 **1,395 个节点**：50 个根节点、523 个地形 StaticBody2D、523 个地形 CollisionShape2D、149 个出口场景实例，以及每个房间预置的 Hero、Narrative、HUD（各 50 个）。
+- 375 个 one-way 地形碰撞也在各自场景中设置；场景树中的地形名称与合同的 terrain ID 对齐。
+- `scripts/levels/contract_room_region.gd` 移除了 `_build_terrain()`、`_build_exits()`、`_spawn_hero()`、`_spawn_ui()`、`_add_character_collision()` 以及相应节点构造常量。当前控制器不再调用 `.new()`、`add_child()` 或 `PackedScene.instantiate()`，只读取现有节点、核对合同、绑定行为和绘制当前视觉层。
+- 控制器现在在 `_enter_tree()` 中提前准备 WorldState，确保预置子节点执行 `_ready()` 前共享运行状态已经复位。
+- `scripts/world/interaction_door.gd` 不再在缺少 Prompt 时静默创建替代节点；Prompt 必须由 `interaction_door.tscn` 或 `contract_room_exit.tscn` 显式提供。
+
+### 源码级验证
+
+- [x] 50 个房间全部匹配到空间合同和目标场景路径。
+- [x] 50/50 个场景通过节点数量、terrain ID、exit ID、父节点路径与资源引用静态检查；场景结构在移除临时模式开关时没有变化。
+- [x] 抽查 A0-R01、A1-R01、H08-R01：地形、出口、Hero、Narrative、HUD 均直接存在于 `.tscn` 中。
+- [x] `contract_room_region.gd` 当前 385 行，节点 `.new()`、`add_child()`、`.instantiate()` 调用均为 0；旧场景构建函数已移除。
+- [x] `interaction_door.gd` 当前节点 `.new()`、`add_child()`、`.instantiate()` 调用均为 0。
+- [ ] Godot 4.6.1 项目导入与脚本解析：BLOCKED。
+- [ ] 50 个场景逐个打开、碰撞形状检查与房间间转场实测：BLOCKED。
+- [ ] 确认所有 one-way 平台、出口条件、出生点、HUD 与存档恢复：BLOCKED。
+
+### 重要边界
+
+这一步只把已有空间合同中的节点结构写入场景文件，**没有重新设计房间地形，也不代表这些房间已经达到最终《空洞骑士》式地图品质**。现有 `_draw()` 仍负责绘制背景、地形表面与区域剪影；之后的地图设计工作应另行审计视觉层和真实地形职责，不应把这批节点迁移误认为地图最终完成。
+
+## 17. 最新状态与下一批
+
+- 最新已提交分支：`feature/story-map-progression`
+- 最新已确认提交：`6a85b9b9e8a24d9123e1e305ddd4bacfc814a914`
+- 当前完成：宏观地图验收菜单、古代研究所场景、休整点与门的 Prompt 子节点合同，以及 50 个合同房间的显式节点树迁移。
+- 当前未完成：旧 Demo/结局场景、`greybox_world_region.gd` 的运行时装配、`route_scene.gd`、角色预览/调试场景及其他脚本中的节点创建行为审计。
+- 下一批优先检查 `scripts/levels/route_scene.gd` 和仍只有根节点的教堂/结局 Demo：先判定它们的真实引用关系，再把常驻地形、主角、NPC、出口、检查点、HUD 与 Narrative 迁移到场景树。不可只按文件名删除。
