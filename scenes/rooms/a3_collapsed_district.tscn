@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/contract_room_region.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/world/contract_room_exit.tscn" id="5"]
+[ext_resource type="Texture2D" path="res://assets/art/backdrops/ruins_backdrop.svg" id="RoomBackdrop"]
 
 [sub_resource type="RectangleShape2D" id="TerrainShape1"]
 size = Vector2(380, 70)
@@ -37,6 +38,13 @@ size = Vector2(300, 24)
 size = Vector2(460, 24)
 
 [node name="Room_A3_R01" type="Node2D"]
+
+[node name="RoomBackdropVisual" type="Sprite2D" parent="."]
+texture = ExtResource("RoomBackdrop")
+position = Vector2(-80, -100)
+scale = Vector2(1.35, 1.35)
+centered = false
+z_index = -100
 script = ExtResource("1")
 room_id = "A3-R01"
 
@@ -163,3 +171,123 @@ position = Vector2(120, 930)
 [node name="Narrative" parent="." instance=ExtResource("3")]
 
 [node name="HUD" parent="." instance=ExtResource("4")]
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_street_01"]
+position = Vector2(190, 35)
+polygon = PackedVector2Array(Vector2(-190, -35), Vector2(190, -35), Vector2(190, 35), Vector2(-190, 35))
+color = Color("#34333a")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_street_01"]
+position = Vector2(190, 0)
+polygon = PackedVector2Array(Vector2(-190, 0), Vector2(190, 0), Vector2(190, 3), Vector2(-190, 3))
+color = Color("#8c796c")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_street_02"]
+position = Vector2(185, 35)
+polygon = PackedVector2Array(Vector2(-185, -35), Vector2(185, -35), Vector2(185, 35), Vector2(-185, 35))
+color = Color("#34333a")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_street_02"]
+position = Vector2(185, 0)
+polygon = PackedVector2Array(Vector2(-185, 0), Vector2(185, 0), Vector2(185, 3), Vector2(-185, 3))
+color = Color("#8c796c")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_street_03"]
+position = Vector2(230, 35)
+polygon = PackedVector2Array(Vector2(-230, -35), Vector2(230, -35), Vector2(230, 35), Vector2(-230, 35))
+color = Color("#34333a")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_street_03"]
+position = Vector2(230, 0)
+polygon = PackedVector2Array(Vector2(-230, 0), Vector2(230, 0), Vector2(230, 3), Vector2(-230, 3))
+color = Color("#8c796c")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_street_04"]
+position = Vector2(175, 35)
+polygon = PackedVector2Array(Vector2(-175, -35), Vector2(175, -35), Vector2(175, 35), Vector2(-175, 35))
+color = Color("#34333a")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_street_04"]
+position = Vector2(175, 0)
+polygon = PackedVector2Array(Vector2(-175, 0), Vector2(175, 0), Vector2(175, 3), Vector2(-175, 3))
+color = Color("#8c796c")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_street_05"]
+position = Vector2(175, 35)
+polygon = PackedVector2Array(Vector2(-175, -35), Vector2(175, -35), Vector2(175, 35), Vector2(-175, 35))
+color = Color("#34333a")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_street_05"]
+position = Vector2(175, 0)
+polygon = PackedVector2Array(Vector2(-175, 0), Vector2(175, 0), Vector2(175, 3), Vector2(-175, 3))
+color = Color("#8c796c")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_facade_ledge_01"]
+position = Vector2(130, 12)
+polygon = PackedVector2Array(Vector2(-130, -12), Vector2(130, -12), Vector2(130, 12), Vector2(-130, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_facade_ledge_01"]
+position = Vector2(130, 0)
+polygon = PackedVector2Array(Vector2(-130, 0), Vector2(130, 0), Vector2(130, 3), Vector2(-130, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_facade_ledge_02"]
+position = Vector2(125, 12)
+polygon = PackedVector2Array(Vector2(-125, -12), Vector2(125, -12), Vector2(125, 12), Vector2(-125, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_facade_ledge_02"]
+position = Vector2(125, 0)
+polygon = PackedVector2Array(Vector2(-125, 0), Vector2(125, 0), Vector2(125, 3), Vector2(-125, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_facade_ledge_03"]
+position = Vector2(140, 12)
+polygon = PackedVector2Array(Vector2(-140, -12), Vector2(140, -12), Vector2(140, 12), Vector2(-140, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_facade_ledge_03"]
+position = Vector2(140, 0)
+polygon = PackedVector2Array(Vector2(-140, 0), Vector2(140, 0), Vector2(140, 3), Vector2(-140, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_facade_ledge_04"]
+position = Vector2(150, 12)
+polygon = PackedVector2Array(Vector2(-150, -12), Vector2(150, -12), Vector2(150, 12), Vector2(-150, 12))
+color = Color("#29272f")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_facade_ledge_04"]
+position = Vector2(150, 0)
+polygon = PackedVector2Array(Vector2(-150, 0), Vector2(150, 0), Vector2(150, 3), Vector2(-150, 3))
+color = Color("#c1a77e")
+z_index = 1
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_substreet_lip"]
+position = Vector2(230, 12)
+polygon = PackedVector2Array(Vector2(-230, -12), Vector2(230, -12), Vector2(230, 12), Vector2(-230, 12))
+color = Color("#34333a")
+z_index = 0
+
+[node name="TerrainTop" type="Polygon2D" parent="Terrain_substreet_lip"]
+position = Vector2(230, 0)
+polygon = PackedVector2Array(Vector2(-230, 0), Vector2(230, 0), Vector2(230, 3), Vector2(-230, 3))
+color = Color("#8c796c")
+z_index = 1
