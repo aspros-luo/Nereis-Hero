@@ -265,7 +265,6 @@ func _spawn_room_content() -> void:
 					"CharredChurchSeal",
 					Vector2(560.0, 130.0)
 				)
-			_spawn_room_rest_point()
 		"A2-R06":
 			_spawn_world_item_pickup(
 				"exploration_reward_canopy_waymarker_fragment",
@@ -275,13 +274,6 @@ func _spawn_room_content() -> void:
 			)
 
 
-func _spawn_room_rest_point() -> void:
-	var rest := REST_POINT_SCENE.instantiate() as Node2D
-	rest.name = "RegionRestPoint_A2"
-	rest.position = Vector2(350.0, floor_y)
-	rest.set("rest_id", "rest_A2")
-	rest.set("display_name", "旧朝圣圣龛")
-	add_child(rest)
 func _spawn_room_exits() -> void:
 	match room_id:
 		"A2-R01":
