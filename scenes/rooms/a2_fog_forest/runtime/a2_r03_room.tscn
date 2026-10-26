@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="room_script"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
@@ -19,6 +19,9 @@ size = Vector2(300, 24)
 
 [sub_resource type="RectangleShape2D" id="RoomBoundaryShape"]
 size = Vector2(40, 1200)
+
+[sub_resource type="RectangleShape2D" id="DropR03ToR04Shape"]
+size = Vector2(150, 220)
 
 [node name="A2R03Room" type="Node2D"]
 script = ExtResource("room_script")
@@ -154,3 +157,12 @@ position = Vector2(180, 600)
 
 [node name="HUD" parent="." instance=ExtResource("hud_scene")]
 
+
+[node name="Drop_R03_to_R04" type="Area2D" parent="."]
+position = Vector2(600, 640)
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Drop_R03_to_R04"]
+shape = SubResource("DropR03ToR04Shape")
