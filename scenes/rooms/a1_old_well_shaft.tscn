@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/contract_room_region.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/world/contract_room_exit.tscn" id="5"]
+[ext_resource type="Texture2D" path="res://assets/art/backdrops/village_backdrop.svg" id="RoomBackdrop"]
 
 [sub_resource type="RectangleShape2D" id="TerrainShape1"]
 size = Vector2(660, 50)
@@ -28,6 +29,13 @@ size = Vector2(310, 24)
 size = Vector2(900, 80)
 
 [node name="Room_A1_R02" type="Node2D"]
+
+[node name="RoomBackdropVisual" type="Sprite2D" parent="."]
+texture = ExtResource("RoomBackdrop")
+position = Vector2(-80, -100)
+scale = Vector2(1.35, 1.35)
+centered = false
+z_index = -100
 script = ExtResource("1")
 room_id = "A1-R02"
 
