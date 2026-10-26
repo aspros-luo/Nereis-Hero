@@ -1,0 +1,97 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/interior_scene.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/world/checkpoint.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/npc/route_npc.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/npc/mite.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/world/interior_clue.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/world/interior_exit.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/core/world_event_director.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/audio/narrative_audio.tscn" id="13"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+resource_local_to_scene = true
+size = Vector2(1800, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_boundary"]
+resource_local_to_scene = true
+size = Vector2(40, 720)
+
+[node name="InteriorBase" type="Node2D"]
+script = ExtResource("1")
+location_id = "tavern"
+
+[node name="Ground" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(900, 540)
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="LeftBoundary" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftBoundary"]
+position = Vector2(-20, 360)
+shape = SubResource("RectangleShape2D_boundary")
+
+[node name="RightBoundary" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightBoundary"]
+position = Vector2(1820, 360)
+shape = SubResource("RectangleShape2D_boundary")
+
+[node name="Hero" parent="." instance=ExtResource("2")]
+position = Vector2(260, 520)
+
+[node name="InteriorCheckpoint" parent="." instance=ExtResource("3")]
+position = Vector2(260, 520)
+
+[node name="TavernKeeper" parent="." instance=ExtResource("4")]
+visible = false
+position = Vector2(900, 520)
+
+[node name="Mite" parent="." instance=ExtResource("5")]
+visible = false
+position = Vector2(650, 520)
+
+[node name="InteriorClue" parent="." instance=ExtResource("6")]
+position = Vector2(1120, 520)
+
+[node name="RestPoint" parent="." instance=ExtResource("7")]
+visible = false
+position = Vector2(1460, 520)
+rest_id = "tavern_bench"
+display_name = "A QUIET BENCH"
+
+[node name="InteriorExit" parent="." instance=ExtResource("8")]
+position = Vector2(1660, 520)
+
+[node name="InvestigationDoor" parent="." instance=ExtResource("9")]
+visible = false
+monitoring = false
+position = Vector2(1350, 520)
+prompt_text = "E  Enter"
+
+[node name="CollisionShape2D" parent="InvestigationDoor" index="0"]
+disabled = true
+
+[node name="ResearchDoor" parent="." instance=ExtResource("9")]
+visible = false
+monitoring = false
+position = Vector2(1020, 520)
+prompt_text = "E  Enter"
+
+[node name="CollisionShape2D" parent="ResearchDoor" index="0"]
+disabled = true
+
+[node name="WorldEventDirector" parent="." instance=ExtResource("10")]
+
+[node name="NarrativeManager" parent="." instance=ExtResource("11")]
+
+[node name="HUD" parent="." instance=ExtResource("12")]
+
+[node name="NarrativeAudio" parent="." instance=ExtResource("13")]
