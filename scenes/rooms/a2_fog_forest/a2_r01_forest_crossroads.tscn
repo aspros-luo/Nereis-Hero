@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3]
+[gd_scene load_steps=35 format=3]
 
 ; A2-R01 林间遗迹 — illustration-aligned, editor-authored terrain.
 ; Scenic detail is an editable SVG Sprite2D. Every walkable surface below is a
@@ -8,6 +8,7 @@
 ; R01->R04 is a single narrow drop at the waterfall veil (1000,780); all other void falls respawn.
 
 [ext_resource type="Texture2D" path="res://assets/art/levels/a2_r01_forest_ruins_illustration.svg" id="1_r01_art"]
+[ext_resource type="Texture2D" path="res://assets/art/levels/a2_r01_forest_ruins_far_layer.svg" id="2_r01_far_art"]
 
 [sub_resource type="RectangleShape2D" id="BoundaryShape"]
 size = Vector2(28, 1200)
@@ -106,6 +107,11 @@ size = Vector2(184, 20)
 size = Vector2(120, 20)
 
 [node name="A2R01ForestCrossroads" type="Node2D"]
+
+[node name="FarForestArtwork" type="Sprite2D" parent="."]
+texture = ExtResource("2_r01_far_art")
+centered = false
+z_index = -2
 
 [node name="LevelIllustration" type="Sprite2D" parent="."]
 texture = ExtResource("1_r01_art")
@@ -384,13 +390,6 @@ shape = SubResource("BoundaryShape")
 
 ; Low-contrast editable depth placeholders. These are intentionally separate from collision geometry.
 ; Replace each polygon group with original layered SVG/PNG artwork when approved.
-[node name="FarBackgroundPlaceholder" type="Node2D" parent="."]
-z_index = 0
-
-[node name="DistantTreeSilhouettes" type="Polygon2D" parent="FarBackgroundPlaceholder"]
-color = Color(0.24, 0.36, 0.34, 0.24)
-polygon = PackedVector2Array(0, 480, 60, 360, 92, 468, 145, 290, 185, 470, 245, 330, 280, 485, 340, 350, 390, 480, 450, 305, 500, 480, 560, 370, 620, 490, 690, 330, 740, 480, 810, 360, 870, 485, 940, 320, 990, 470, 1060, 345, 1120, 490, 1200, 310, 1260, 470, 1330, 355, 1390, 480, 1460, 300, 1515, 465, 1580, 340, 1640, 480, 1710, 320, 1792, 460, 1792, 0, 0, 0)
-
 [node name="MidgroundAtmospherePlaceholder" type="Node2D" parent="."]
 z_index = 1
 
