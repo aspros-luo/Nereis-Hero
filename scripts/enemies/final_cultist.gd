@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const DEATH_BURST_SCRIPT = preload("res://scripts/effects/death_burst.gd")
+const DEATH_BURST_SCENE: PackedScene = preload("res://scenes/effects/death_burst.tscn")
 
 signal defeated
 
@@ -53,7 +53,7 @@ func receive_damage(_amount: int, source: Node = null) -> void:
     dying = true
     health = 0
 
-    var effect: Node2D = DEATH_BURST_SCRIPT.new()
+    var effect: Node2D = DEATH_BURST_SCENE.instantiate() as Node2D
     effect.global_position = global_position + Vector2(0, -30)
     get_parent().add_child(effect)
     effect.call("setup", 10.0)
