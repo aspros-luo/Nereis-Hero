@@ -32,7 +32,7 @@ const ELDRITCH_BACKDROP = preload("res://assets/art/backdrops/eldritch_backdrop.
 const STONE_FLOOR_STRIP = preload("res://assets/art/backdrops/stone_floor_strip.svg")
 
 const ENCOUNTER_ACTIVATE_RANGE := 420.0
-const AUTHORED_TERRAIN_REGIONS := ["A3", "A4", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08"]
+const AUTHORED_TERRAIN_REGIONS := ["A3", "A4", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08", "H09"]
 const ENCOUNTER_DEACTIVATE_RANGE := 560.0
 
 @export var region_id: String = "A2"
@@ -1810,7 +1810,7 @@ func _configure_platforms() -> void:
 			_add_platform(Rect2(4860, 440, 170, 18))
 			_add_platform(Rect2(5020, 450, 180, 18))
 			_add_platform(Rect2(5180, 450, 200, 18))
-		"A3", "A4", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08":
+		"A3", "A4", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08", "H09":
 			pass
 func _add_platform(rect: Rect2) -> void:
 	platforms.append(rect)
