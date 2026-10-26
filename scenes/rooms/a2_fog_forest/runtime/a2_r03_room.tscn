@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="room_script"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="door_scene"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="narrative_scene"]
@@ -166,3 +167,11 @@ monitoring = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Drop_R03_to_R04"]
 shape = SubResource("DropR03ToR04Shape")
+
+
+[node name="Door_ExitToR01" parent="." instance=ExtResource("door_scene")]
+position = Vector2(100, 600)
+
+[node name="Door_ExitToR05" parent="." instance=ExtResource("door_scene")]
+position = Vector2(950, 240)
+
