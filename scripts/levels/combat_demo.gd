@@ -1,14 +1,15 @@
 extends Node2D
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
+const HERO_SCENE: PackedScene = preload("res://scenes/player/hero.tscn")
 const CULTIST_SCRIPT = preload("res://scripts/enemies/cultist.gd")
 const HOUND_SCRIPT = preload("res://scripts/enemies/pale_hound.gd")
 const BOSS_SCRIPT = preload("res://scripts/enemies/ashen_knight.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const BOSS_GATE_SCRIPT = preload("res://scripts/world/boss_gate.gd")
-const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
-const COMBAT_AUDIO_SCRIPT = preload("res://scripts/audio/combat_audio.gd")
-const ASH_PARTICLES_SCRIPT = preload("res://scripts/effects/ash_particles.gd")
+const ENEMY_ACTOR_SCENE: PackedScene = preload("res://scenes/characters/enemy_actor_base.tscn")
+const HUD_SCENE: PackedScene = preload("res://scenes/ui/game_hud.tscn")
+const BOSS_GATE_SCENE: PackedScene = preload("res://scenes/world/boss_gate.tscn")
+const CHECKPOINT_SCENE: PackedScene = preload("res://scenes/world/checkpoint.tscn")
+const COMBAT_AUDIO_SCENE: PackedScene = preload("res://scenes/audio/combat_audio.tscn")
+const ASH_PARTICLES_SCENE: PackedScene = preload("res://scenes/effects/ash_particles.tscn")
 
 ## Enable the production Hero's opt-in skeletal visual only in the A3 preview scene.
 ## 仅在 A3 预览场景启用正式主角的可选骨骼表现。
@@ -54,139 +55,106 @@ func _ready() -> void:
     queue_redraw()
 
 func _spawn_hero() -> void:
-    hero = CharacterBody2D.new()
-    hero.set_script(HERO_SCRIPT)
-    hero.set("use_skeleton_visual", use_skeleton_visual_preview)
-    hero.position = Vector2(260, FLOOR_Y)
-    hero.name = "Hero"
-    _add_character_collision(hero, 18.0, 48.0)
-    add_child(hero)
-    hero.defeated.connect(_on_hero_defeated)
-    hero.attack_started.connect(_on_hero_attack_started)
-    hero.dodge_started.connect(_on_hero_dodge_started)
-    hero.attack_landed.connect(_on_hero_attack_landed)
+	hero = HERO_SCENE.instantiate() as CharacterBody2D
+	hero.set("use_skeleton_visual", use_skeleton_visual_preview)
+	hero.position = Vector2(260, FLOOR_Y)
+	hero.name = "Hero"
+	add_child(hero)
+	hero.defeated.connect(_on_hero_defeated)
+	hero.attack_started.connect(_on_hero_attack_started)
+	hero.dodge_started.connect(_on_hero_dodge_started)
+	hero.attack_landed.connect(_on_hero_attack_landed)
 
-    camera = Camera2D.new()
-    camera.name = "HeroCamera"
-    camera.position_smoothing_enabled = true
-    camera.position_smoothing_speed = 7.0
-    camera.limit_left = 0
-    camera.limit_top = 0
-    camera.limit_right = int(LEVEL_WIDTH)
-    camera.limit_bottom = 720
-    camera.position = Vector2.ZERO
-    hero.add_child(camera)
-
+	camera = hero.get_node("Camera2D") as Camera2D
+	camera.position_smoothing_enabled = true
+	camera.position_smoothing_speed = 7.0
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = int(LEVEL_WIDTH)
+	camera.limit_bottom = 720
+	camera.position = Vector2.ZERO
 func _spawn_ambient_particles() -> void:
-    var particles := Node2D.new()
-    particles.name = "AshParticles"
-    particles.set_script(ASH_PARTICLES_SCRIPT)
-    add_child(particles)
-
+	var particles := ASH_PARTICLES_SCENE.instantiate() as Node2D
+	particles.name = "AshParticles"
+	add_child(particles)
 func _spawn_checkpoint() -> void:
-    checkpoint = Area2D.new()
-    checkpoint.set_script(CHECKPOINT_SCRIPT)
-    checkpoint.position = Vector2(420, FLOOR_Y)
-    checkpoint.name = "CombatCheckpoint"
-
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(120, 110)
-    shape.shape = rectangle
-    shape.position = Vector2(0, -55)
-    checkpoint.add_child(shape)
-
-    add_child(checkpoint)
-
+	checkpoint = CHECKPOINT_SCENE.instantiate() as Area2D
+	checkpoint.position = Vector2(420, FLOOR_Y)
+	checkpoint.name = "CombatCheckpoint"
+	add_child(checkpoint)
 func _spawn_small_enemies() -> void:
     _spawn_enemy(CULTIST_SCRIPT, Vector2(900, FLOOR_Y), "Cultist_A")
     _spawn_enemy(HOUND_SCRIPT, Vector2(1240, FLOOR_Y), "PaleHound")
     _spawn_enemy(CULTIST_SCRIPT, Vector2(1500, FLOOR_Y), "Cultist_B")
 
-func _spawn_enemy(enemy_script: Script, position: Vector2, enemy_name: String) -> void:
-    var enemy := CharacterBody2D.new()
-    enemy.set_script(enemy_script)
-    enemy.position = position
-    enemy.name = enemy_name
-
-    if enemy_script == HOUND_SCRIPT:
-        _add_character_collision(enemy, 25.0, 42.0)
-    else:
-        _add_character_collision(enemy, 20.0, 44.0)
-
-    add_child(enemy)
-    enemy.defeated.connect(_on_small_enemy_defeated)
-    if enemy.has_signal("attack_telegraphed"):
-        enemy.attack_telegraphed.connect(_on_enemy_attack_telegraphed)
-    enemies.append(enemy)
-
+func _spawn_enemy(enemy_script: Script, spawn_position: Vector2, enemy_name: String) -> void:
+	var enemy := ENEMY_ACTOR_SCENE.instantiate() as CharacterBody2D
+	if enemy == null:
+		push_error("[NEREIS][DEMO] Failed to instantiate enemy actor scene")
+		return
+	enemy.set_script(enemy_script)
+	enemy.position = spawn_position
+	enemy.name = enemy_name
+	var body_radius := 25.0 if enemy_script == HOUND_SCRIPT else 20.0
+	var body_height := 42.0 if enemy_script == HOUND_SCRIPT else 44.0
+	_configure_actor_collision(enemy, body_radius, body_height)
+	add_child(enemy)
+	enemy.defeated.connect(_on_small_enemy_defeated)
+	if enemy.has_signal("attack_telegraphed"):
+		enemy.attack_telegraphed.connect(_on_enemy_attack_telegraphed)
+	enemies.append(enemy)
 func _spawn_boss_gate() -> void:
-    boss_gate = StaticBody2D.new()
-    boss_gate.set_script(BOSS_GATE_SCRIPT)
-    boss_gate.position = Vector2(1800, FLOOR_Y)
-    boss_gate.name = "BossGate"
-    add_child(boss_gate)
-
+	boss_gate = BOSS_GATE_SCENE.instantiate() as StaticBody2D
+	boss_gate.position = Vector2(1800, FLOOR_Y)
+	boss_gate.name = "BossGate"
+	add_child(boss_gate)
 func _spawn_boss() -> void:
-    if boss_active or demo_complete:
-        return
+	if boss_active or demo_complete:
+		return
 
-    boss_active = true
-    boss = CharacterBody2D.new()
-    boss.set_script(BOSS_SCRIPT)
-    boss.position = Vector2(2120, FLOOR_Y)
-    boss.name = "AshenKnight"
-    _add_character_collision(boss, 24.0, 56.0)
-    add_child(boss)
-    boss.defeated.connect(_on_boss_defeated)
-    if boss.has_signal("attack_telegraphed"):
-        boss.attack_telegraphed.connect(_on_enemy_attack_telegraphed)
-    if boss.has_signal("phase_changed"):
-        boss.phase_changed.connect(_on_boss_phase_changed)
+	boss_active = true
+	boss = ENEMY_ACTOR_SCENE.instantiate() as CharacterBody2D
+	if boss == null:
+		push_error("[NEREIS][DEMO] Failed to instantiate boss actor scene")
+		boss_active = false
+		return
+	boss.set_script(BOSS_SCRIPT)
+	boss.position = Vector2(2120, FLOOR_Y)
+	boss.name = "AshenKnight"
+	_configure_actor_collision(boss, 24.0, 56.0)
+	add_child(boss)
+	boss.defeated.connect(_on_boss_defeated)
+	if boss.has_signal("attack_telegraphed"):
+		boss.attack_telegraphed.connect(_on_enemy_attack_telegraphed)
+	if boss.has_signal("phase_changed"):
+		boss.phase_changed.connect(_on_boss_phase_changed)
 
-    if hud:
-        hud.bind_boss(boss)
-        hud.set_combat_demo_progress(enemies_defeated, true, demo_complete)
-
-    if hud:
-        hud.show_boss_intro()
-    print("[NEREIS][DEMO] Boss encounter started")
-
+	if hud:
+		hud.bind_boss(boss)
+		hud.set_combat_demo_progress(enemies_defeated, true, demo_complete)
+		hud.show_boss_intro()
+	print("[NEREIS][DEMO] Boss encounter started")
 func _spawn_boss_checkpoint() -> void:
-    if is_instance_valid(boss_checkpoint):
-        return
+	if is_instance_valid(boss_checkpoint):
+		return
 
-    WorldState.set_checkpoint(Vector2(1880, FLOOR_Y))
-    boss_checkpoint = Area2D.new()
-    boss_checkpoint.set_script(CHECKPOINT_SCRIPT)
-    boss_checkpoint.position = Vector2(1880, FLOOR_Y)
-    boss_checkpoint.name = "BossCheckpoint"
-
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(120, 110)
-    shape.shape = rectangle
-    shape.position = Vector2(0, -55)
-    boss_checkpoint.add_child(shape)
-
-    add_child(boss_checkpoint)
-    print("[NEREIS][DEMO] Boss checkpoint activated at x=1880")
-
+	WorldState.set_checkpoint(Vector2(1880, FLOOR_Y))
+	boss_checkpoint = CHECKPOINT_SCENE.instantiate() as Area2D
+	boss_checkpoint.position = Vector2(1880, FLOOR_Y)
+	boss_checkpoint.name = "BossCheckpoint"
+	add_child(boss_checkpoint)
+	print("[NEREIS][DEMO] Boss checkpoint activated at x=1880")
 func _spawn_audio() -> void:
-    combat_audio = Node.new()
-    combat_audio.name = "CombatAudio"
-    combat_audio.set_script(COMBAT_AUDIO_SCRIPT)
-    add_child(combat_audio)
-
+	combat_audio = COMBAT_AUDIO_SCENE.instantiate()
+	combat_audio.name = "CombatAudio"
+	add_child(combat_audio)
 func _spawn_hud() -> void:
-    hud = CanvasLayer.new()
-    hud.set_script(HUD_SCRIPT)
-    add_child(hud)
-    hud.bind_hero(hero)
-    hud.set_combat_demo_mode()
-    hud.set_combat_demo_progress(0, false, false)
-    hud.set_debug_visible(false)
-
+	hud = HUD_SCENE.instantiate() as CanvasLayer
+	add_child(hud)
+	hud.bind_hero(hero)
+	hud.set_combat_demo_mode()
+	hud.set_combat_demo_progress(0, false, false)
+	hud.set_debug_visible(false)
 func _on_small_enemy_defeated() -> void:
     enemies_defeated += 1
     print("[NEREIS][DEMO] Small enemy defeated %d/3" % enemies_defeated)
@@ -294,14 +262,12 @@ func _create_boundaries() -> void:
     right.add_child(right_shape)
     add_child(right)
 
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
-    var collision := CollisionShape2D.new()
-    var capsule := CapsuleShape2D.new()
-    capsule.radius = radius
-    capsule.height = height
-    collision.shape = capsule
-    collision.position = Vector2(0, -height * 0.5)
-    character.add_child(collision)
+func _configure_actor_collision(character: CharacterBody2D, radius: float, height: float) -> void:
+	var collision := character.get_node("CollisionShape2D") as CollisionShape2D
+	var capsule := collision.shape as CapsuleShape2D
+	capsule.radius = radius
+	capsule.height = height
+	collision.position = Vector2(0, -height * 0.5)
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
