@@ -24,7 +24,7 @@ func _ready() -> void:
 	WorldState.current_location = "church_escape_exterior"
 	WorldState.record_natural_test_region("A0", "church_escape_exterior")
 	hero.set("defer_death_recovery", true)
-	var camera := hero.get_node("Camera2D") as Camera2D
+	var camera := hero.get_node("HeroCamera") as Camera2D
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 5.0
 	camera.limit_left = 0
