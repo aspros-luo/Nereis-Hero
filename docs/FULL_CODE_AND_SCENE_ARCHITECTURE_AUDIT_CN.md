@@ -411,7 +411,7 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 ## 24. 当前代码审计状态
 
 - 已迁移到显式节点树的重点对象：50 个合同房间、地图验收菜单、古代研究所、教堂路线、摇篮曲路线、王墓 Boss 竞技场、Mite 共鸣导演场景、三个结局场景的基础结构与共享结局视觉层。
-- 仍然需要处理：`greybox_world_region.gd` 和 A5 房间系统、其他旧 Demo/研究场景、角色预览/调试工具、NPC 与交互场景的残余动态节点构建、跨文件重复逻辑和孤立代码。
+- 仍然需要处理：`greybox_world_region.gd` 的非 A5 房间常驻结构与旧版 A5 总图装配分支、其他旧 Demo/研究场景、角色预览/调试工具、NPC 与交互场景的残余动态节点构建、跨文件重复逻辑和孤立代码。A5 RoomContainer 的 22 个房间地形与连接节点已在 `.tscn` 中声明，但 Godot 实机验证仍未完成。
 - 目前所有“通过”只表示源码/场景文件级检查，不表示 Godot 导入或实机测试通过。
 
 
