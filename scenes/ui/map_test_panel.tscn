@@ -8,4 +8,102 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+visible = false
 script = ExtResource("1")
+
+[node name="Panel" type="PanelContainer" parent="."]
+offset_left = 260.0
+offset_top = 24.0
+offset_right = 1080.0
+offset_bottom = 696.0
+
+[node name="Scroll" type="ScrollContainer" parent="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Column" type="VBoxContainer" parent="Panel/Scroll"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Panel/Scroll/Column"]
+theme_override_font_sizes/font_size = 26
+text = "地图测试模式"
+
+[node name="Warning" type="Label" parent="Panel/Scroll/Column"]
+autowrap_mode = 2
+text = "仅用于地图验收。开启后不会写入或覆盖正式存档；关闭游戏前可恢复磁盘存档。"
+
+[node name="ModeButton" type="Button" parent="Panel/Scroll/Column"]
+custom_minimum_size = Vector2(0, 42)
+size_flags_horizontal = 3
+text = "1. 开启地图测试模式（保护正式存档）"
+
+[node name="NaturalStartButton" type="Button" parent="Panel/Scroll/Column"]
+custom_minimum_size = Vector2(0, 42)
+size_flags_horizontal = 3
+text = "自然探索验收：从 A0 开始（无传送／无作弊解锁）"
+
+[node name="MapLabel" type="Label" parent="Panel/Scroll/Column"]
+text = "选择要直接进入的区域："
+
+[node name="MapPicker" type="OptionButton" parent="Panel/Scroll/Column"]
+size_flags_horizontal = 3
+
+[node name="TeleportButton" type="Button" parent="Panel/Scroll/Column"]
+custom_minimum_size = Vector2(0, 42)
+size_flags_horizontal = 3
+text = "进入所选区域"
+
+[node name="FullSightButton" type="Button" parent="Panel/Scroll/Column"]
+custom_minimum_size = Vector2(0, 42)
+size_flags_horizontal = 3
+text = "2. 灵视条件测试：鸣响与接触值拉满（不自动开门）"
+
+[node name="AllRoutesButton" type="Button" parent="Panel/Scroll/Column"]
+custom_minimum_size = Vector2(0, 42)
+size_flags_horizontal = 3
+text = "3. 全地图连通测试：开启隐藏门与捷径"
+
+[node name="RestoreButton" type="Button" parent="Panel/Scroll/Column"]
+custom_minimum_size = Vector2(0, 42)
+size_flags_horizontal = 3
+text = "退出测试并恢复磁盘存档"
+
+[node name="GuideLabel" type="Label" parent="Panel/Scroll/Column"]
+custom_minimum_size = Vector2(0, 116)
+autowrap_mode = 2
+
+[node name="GuideButtons" type="HBoxContainer" parent="Panel/Scroll/Column"]
+theme_override_constants/separation = 8
+
+[node name="GuidePrevButton" type="Button" parent="Panel/Scroll/Column/GuideButtons"]
+custom_minimum_size = Vector2(0, 42)
+size_flags_horizontal = 3
+text = "上一步指引"
+
+[node name="GuideNextButton" type="Button" parent="Panel/Scroll/Column/GuideButtons"]
+custom_minimum_size = Vector2(0, 42)
+size_flags_horizontal = 3
+text = "下一步指引"
+
+[node name="ExplorationLabel" type="Label" parent="Panel/Scroll/Column"]
+autowrap_mode = 2
+text = "自然探索记录：未启动"
+
+[node name="StatusLabel" type="Label" parent="Panel/Scroll/Column"]
+autowrap_mode = 2
+text = "F10：打开／关闭本面板。自然探索会重置当前内存进度并从 A0 开始，但不删除或覆盖磁盘正式存档。"
+
+[node name="ControlsLabel" type="Label" parent="Panel/Scroll/Column"]
+autowrap_mode = 2
+text = "地图验收：A／D 移动；V 激活灵视；E 调查／开门；F3 调试信息；F10 本面板。"
