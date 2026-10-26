@@ -8,11 +8,10 @@ func _ready() -> void:
     add_to_group("wall_climb_surfaces")
     collision_layer = 1
     collision_mask = 1
-    var collision := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = WALL_SIZE
-    collision.shape = rectangle
-    add_child(collision)
+    var collision := get_node_or_null("CollisionShape2D") as CollisionShape2D
+    if collision == null:
+        push_error("Debug traversal wall scene requires a CollisionShape2D child")
+        return
     queue_redraw()
 
 func _draw() -> void:
