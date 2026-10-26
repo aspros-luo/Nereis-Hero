@@ -32,14 +32,10 @@ func _ready() -> void:
         cooldown = 0.65
     elif name == "Warden_Drop":
         cooldown = 1.15
-    attack_hitbox = Area2D.new()
-    attack_hitbox.set_script(HITBOX_SCRIPT)
-    add_child(attack_hitbox)
+    attack_hitbox = $AttackHitbox as Area2D
     attack_hitbox.setup(self, Vector2(92, 60), Vector2(-52, -28))
 
-    var hurtbox := Area2D.new()
-    hurtbox.set_script(HURTBOX_SCRIPT)
-    add_child(hurtbox)
+    var hurtbox := $Hurtbox as Area2D
     hurtbox.setup(self, Vector2(42, 78), Vector2(0, -38))
     queue_redraw()
 
