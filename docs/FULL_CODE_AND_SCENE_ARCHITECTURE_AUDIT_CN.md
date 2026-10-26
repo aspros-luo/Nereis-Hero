@@ -323,3 +323,36 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 - 当前完成：宏观地图验收菜单、古代研究所场景、休整点与门的 Prompt 子节点合同，以及 50 个合同房间的显式节点树迁移。
 - 当前未完成：旧 Demo/结局场景、`greybox_world_region.gd` 的运行时装配、`route_scene.gd`、角色预览/调试场景及其他脚本中的节点创建行为审计。
 - 下一批优先检查 `scripts/levels/route_scene.gd` 和仍只有根节点的教堂/结局 Demo：先判定它们的真实引用关系，再把常驻地形、主角、NPC、出口、检查点、HUD 与 Narrative 迁移到场景树。不可只按文件名删除。
+
+
+## 18. 第六批实际重构：教堂路线与摇篮曲路线
+
+### 场景结构
+
+- `scenes/routes/church_path.tscn` 和 `scenes/routes/lullaby_path.tscn` 从只有根节点扩展为各 15 个显式节点：地板、左右边界与碰撞体、Hero、检查点、敌人、NPC、路线出口、记忆回声、Narrative 和 HUD。
+- 新增 `scenes/enemies/cultist.tscn` 与 `scenes/enemies/pale_hound.tscn`，分别预置敌人主体碰撞体和 AttackHitbox/Hurtbox 场景实例。
+- 新增 `scenes/world/route_exit.tscn` 与 `scenes/world/route_memory_echo.tscn`，将路线出口与记忆回声从脚本临时构造改为可复用场景。
+- `scenes/npc/route_npc.tscn` 现在显式包含 `CharacterVisual` 和 `Labels`；`scripts/npc/route_npc.gd` 移除了缺少子节点时的运行时补建逻辑。
+- `scripts/levels/route_scene.gd` 删除了运行时创建地板、边界、主角、检查点、NPC、出口、记忆回声和 UI 的代码；只保留主角死亡后通过预制敌人场景进行重生的 `PackedScene.instantiate()` / `add_child()`。
+- 清理了原来只写入但从未读取的 `route_enemy_defeated` 状态字段及其无实际玩法效果的回调。路线完成仍由记忆回声条件与出口交互逻辑控制。
+- 路线根节点的 Always 处理模式已移入两个 `.tscn`，而不是在 `_ready()` 里临时设置。
+- 最新相关提交：`dc4dd68793543283d72abb8a19e03edf7603a637`。
+
+### 源码级验证
+
+- [x] 两个路线场景各有 15 个显式节点声明；引用资源均存在，父节点路径检查无错误。
+- [x] RouteNPC、Cultist、PaleHound 的场景子节点均显式声明。
+- [x] `route_npc.gd` 不再调用 `.new()`、`add_child()` 或 `.instantiate()`。
+- [x] `route_scene.gd` 不再调用 `.new()`；唯一的 `instantiate()` 和 `add_child()` 用于玩家死亡后重生一个预制敌人场景。
+- [ ] Godot 4.6.1 导入/解析：BLOCKED。
+- [ ] 两条路线的 NPC 对话、记忆回声、敌人重生、路线出口与返回村庄流程：BLOCKED。
+
+## 19. 下一批待审计范围
+
+优先级从高到低：
+
+1. `scripts/levels/greybox_world_region.gd` 及其 50+ 个调用/继承场景：当前仍负责多区域地形、门、交互点与房间装配。必须区分固定场景节点与确需按状态动态实例化的对象。
+2. `scenes/church_final_demo.tscn`、`scenes/ending_fire_demo.tscn`、`scenes/ending_paradise_demo.tscn`、`scenes/mite_resonance_demo.tscn`、`scenes/royal_tomb_boss.tscn`：仍是根节点场景，需确认调用闭包后迁移或删除，不能按名称直接判废。
+3. `scripts/levels/route_scene.gd` 之外的其他场景控制器：检查动态 NPC、角色视觉、碰撞组件、门、HUD 和 Narrative 创建代码。
+4. 角色骨骼/动画预览工具与编辑器工具：区分编辑器专用工具和游戏场景，避免调试场景依赖代码拼装。
+5. 全项目资源引用、未引用函数/字段、重复状态所有权和可删除旧逻辑的引用闭包审计。
