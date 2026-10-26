@@ -1,8 +1,5 @@
 extends Node2D
 
-const NARRATIVE_SCENE: PackedScene = preload("res://scenes/core/narrative_manager.tscn")
-const HUD_SCENE: PackedScene = preload("res://scenes/ui/game_hud.tscn")
-const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
 @export var floor_y: float = 520.0
 
 var hero: CharacterBody2D
@@ -52,7 +49,10 @@ func _ready() -> void:
 	_configure_static_village_nodes()
 	_configure_baseline_npcs()
 	$BackhillEntrance.interacted.connect(_on_village_poi_interacted.bind($BackhillEntrance))
-	_spawn_ui()
+	narrative = $Narrative
+	hud = $HUD
+	hud.bind_hero(hero)
+	hud.set_story_mode("A1｜边境村庄", "自由探索村庄；按 E 与附近的人物和可调查物件互动。")
 	narrative_audio = $NarrativeAudio
 	fireflies = $VillageFireflies
 	world_event_director.dispatch("region_entered", {"region": "A1", "location": "village", "spawn_side": spawn_side})
@@ -293,15 +293,6 @@ func _enter_village_location(location_id: String) -> void:
 		WorldState.set_location("graveyard")
 		print("[NEREIS][VILLAGE] Entering Village Graveyard")
 		SceneTransition.fade_to_scene("res://scenes/village_graveyard.tscn")
-
-func _spawn_ui() -> void:
-	narrative = NARRATIVE_SCENE.instantiate() as CanvasLayer
-	add_child(narrative)
-
-	hud = HUD_SCENE.instantiate() as CanvasLayer
-	add_child(hud)
-	hud.bind_hero(hero)
-	hud.set_story_mode("A1｜边境村庄", "自由探索村庄；按 E 与附近的人物和可调查物件互动。")
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:

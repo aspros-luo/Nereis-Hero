@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3]
+[gd_scene load_steps=28 format=3]
 
 [ext_resource path="res://scripts/levels/village_hub.gd" type="Script" id="1"]
 [ext_resource path="res://scripts/world/village_poi.gd" type="Script" id="2"]
@@ -21,6 +21,9 @@
 [ext_resource type="PackedScene" path="res://scenes/world/village_fireflies.tscn" id="19"]
 [ext_resource type="Script" path="res://scripts/core/world_event_director.gd" id="20"]
 [ext_resource type="Script" path="res://scripts/audio/narrative_audio.gd" id="21"]
+
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="22"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="23"]
 
 [sub_resource type="RectangleShape2D" id="GroundMain"]
 size = Vector2(3000, 40)
@@ -868,6 +871,10 @@ skin_color = Color(0.631373, 0.494118, 0.407843, 1)
 cloth_color = Color(0.262745, 0.337255, 0.298039, 1)
 
 [node name="Labels" parent="TravelingMerchant" instance=ExtResource("16")]
+
+[node name="Narrative" parent="." instance=ExtResource("22")]
+
+[node name="HUD" parent="." instance=ExtResource("23")]
 
 [node name="WorldEventDirector" type="Node" parent="."]
 script = ExtResource("20")
