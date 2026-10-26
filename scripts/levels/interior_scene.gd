@@ -1,200 +1,136 @@
 extends Node2D
 
 @export var location_id: String = "tavern"
-
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const ROUTE_NPC_SCRIPT = preload("res://scripts/npc/route_npc.gd")
-const WORLD_EVENT_DIRECTOR_SCRIPT = preload("res://scripts/core/world_event_director.gd")
-const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
-const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
-const INTERIOR_CLUE_SCRIPT = preload("res://scripts/world/interior_clue.gd")
-const REST_POINT_SCRIPT = preload("res://scripts/world/rest_point.gd")
-const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
-const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
-const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
-
-var hero: CharacterBody2D
-var camera: Camera2D
-var narrative: CanvasLayer
-var hud: CanvasLayer
-var exit: Area2D
-var checkpoint: Area2D
-var clue: Node2D
-var rest_point: Node2D
-var mite: Node2D
-var narrative_audio: Node
-var route_door: Area2D
-var world_event_director: Node
-var research_door: Area2D
-
+@onready var hero: CharacterBody2D = $Hero
+@onready var camera: Camera2D = $Hero/Camera2D
+@onready var narrative: CanvasLayer = $NarrativeManager
+@onready var hud: CanvasLayer = $HUD
+@onready var exit: Area2D = $InteriorExit
+@onready var checkpoint: Area2D = $InteriorCheckpoint
+@onready var clue: Node2D = $InteriorClue
+@onready var rest_point: Node2D = $RestPoint
+@onready var mite: Node2D = $Mite
+@onready var narrative_audio: Node = $NarrativeAudio
+@onready var route_door: Area2D = $InvestigationDoor
+@onready var world_event_director: Node = $WorldEventDirector
+@onready @onready var research_door: Area2D = $ResearchDoor
+@onready var tavern_keeper: Node2D = $TavernKeeper = $ResearchDoor
 func _ready() -> void:
-    WorldState.prepare_scene_runtime()
-    WorldState.set_location(location_id)
-    world_event_director = Node.new()
-    world_event_director.set_script(WORLD_EVENT_DIRECTOR_SCRIPT)
-    world_event_director.name = "WorldEventDirector"
-    world_event_director.setup(WorldState, self)
-    add_child(world_event_director)
-    print("[NEREIS][INTERIOR] Entered %s route=%s" % [location_id, WorldState.selected_route])
-    _create_floor()
-    _create_boundaries()
-    _spawn_hero()
-    _spawn_checkpoint()
-    # Keep the church empty until a story node explicitly occupies it.
-    # 教堂在剧情节点明确启用前保持空置。
-    var church_occupied := "church_village_occupied" in WorldState.achievement_flags
-    if location_id != "church" or church_occupied:
-        _spawn_npc()
-        world_event_director.spawn_npcs(self, ROUTE_NPC_SCRIPT, Callable(self, "_on_npc_interacted"))
-        _spawn_clue()
-        _spawn_route_door()
-        _spawn_research_door()
-    _spawn_mite_if_present()
-    _spawn_rest_point()
-    _spawn_exit()
-    _spawn_ui()
-    queue_redraw()
+	WorldState.prepare_scene_runtime()
+	WorldState.set_location(location_id)
+	world_event_director.setup(WorldState, self)
+	hero.position = Vector2(260, 520)
+	camera.position_smoothing_enabled = true
+	camera.position_smoothing_speed = 6.0
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = 1800
+	camera.limit_bottom = 720
+	checkpoint.position = Vector2(260, 520)
+	WorldState.set_checkpoint(Vector2(260, 520))
+	var church_occupied := "church_village_occupied" in WorldState.achievement_flags
+	if location_id != "church" or church_occupied:
+		_spawn_npc()
+		world_event_director.spawn_npcs(self, Callable(self, "_on_npc_interacted"))
+		_spawn_clue()
+		_spawn_route_door()
+		_spawn_research_door()
+	else:
+		tavern_keeper.visible = false
+		clue.visible = false
+		route_door.visible = false
+		route_door.monitoring = false
+		(route_door.get_node("CollisionShape2D") as CollisionShape2D).disabled = true
+		research_door.visible = false
+		research_door.monitoring = false
+		(research_door.get_node("CollisionShape2D") as CollisionShape2D).disabled = true
+	_spawn_mite_if_present()
+	_spawn_rest_point()
+	_spawn_exit()
+	_spawn_ui()
+	queue_redraw()
 
-func _spawn_hero() -> void:
-    hero = CharacterBody2D.new()
-    hero.set_script(HERO_SCRIPT)
-    hero.position = Vector2(260, 520)
-    hero.name = "Hero"
-    _add_character_collision(hero, 18.0, 48.0)
-    add_child(hero)
-
-    camera = Camera2D.new()
-    camera.name = "HeroCamera"
-    camera.position_smoothing_enabled = true
-    camera.position_smoothing_speed = 6.0
-    camera.limit_left = 0
-    camera.limit_top = 0
-    camera.limit_right = 1800
-    camera.limit_bottom = 720
-    camera.position = Vector2.ZERO
-    hero.add_child(camera)
-
-func _spawn_checkpoint() -> void:
-    WorldState.set_checkpoint(Vector2(260, 520))
-    checkpoint = Area2D.new()
-    checkpoint.set_script(CHECKPOINT_SCRIPT)
-    checkpoint.position = Vector2(260, 520)
-    checkpoint.name = "InteriorCheckpoint"
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(120, 110)
-    shape.shape = rectangle
-    shape.position = Vector2(0, -55)
-    checkpoint.add_child(shape)
-    add_child(checkpoint)
 
 func _spawn_npc() -> void:
-    # The tavern keeper is an ordinary resident and is always present inside the tavern.
-    # 教堂初始保持空置；朝圣骑士只由明确的后续剧情状态召来。
-    if location_id == "tavern":
-        var npc := Node2D.new()
-        npc.set_script(ROUTE_NPC_SCRIPT)
-        npc.position = Vector2(900, 520)
-        npc.cloth_color = Color("#69404a")
-        npc.npc_id = "tavern_keeper"
-        npc.display_name = "酒馆值夜人"
-        if "A1_tavern_sound_noticed" in WorldState.achievement_flags and "village_defense_survived" in WorldState.achievement_flags:
-            npc.dialogue = "值夜人看了看你，又瞥向已经安静下来的北门方向。\n\n“你听见过那声音，也看见过北门外的事。两件事不一定有关——至少我没打算替你把它们连起来。”"
-        elif "A1_tavern_sound_noticed" in WorldState.achievement_flags:
-            npc.dialogue = "值夜人看了你一眼，又低头擦杯子。\n\n“你上次听见的声音？我没说那是歌。你自己确定就好。”"
-        elif "village_defense_survived" in WorldState.achievement_flags:
-            npc.dialogue = "值夜人把杯子放回架上。\n\n“北门那边总算安静了些。今晚的灯会一直亮着，但我可不保证每个故事都是真的。”"
-        else:
-            npc.dialogue = "值夜人把杯子擦干，朝门口点点头。\n\n“进来暖暖身子吧。村里白天说的话，到了夜里往往就不一样了。”"
-        add_child(npc)
-        npc.interacted.connect(_on_npc_interacted.bind(npc))
-
+	if location_id != "tavern":
+		tavern_keeper.visible = false
+		return
+	tavern_keeper.visible = true
+	tavern_keeper.position = Vector2(900, 520)
+	tavern_keeper.set("cloth_color", Color("#69404a"))
+	tavern_keeper.set("npc_id", "tavern_keeper")
+	tavern_keeper.set("display_name", "酒馆值夜人")
+	if "A1_tavern_sound_noticed" in WorldState.achievement_flags and "village_defense_survived" in WorldState.achievement_flags:
+		tavern_keeper.set("dialogue", "值夜人看了看你，又瞥向已经安静下来的北门方向。\n\n“你听见过那声音，也看见过北门外的事。两件事不一定有关——至少我没打算替你把它们连起来。”")
+	elif "A1_tavern_sound_noticed" in WorldState.achievement_flags:
+		tavern_keeper.set("dialogue", "值夜人看了你一眼，又低头擦杯子。\n\n“你上次听见的声音？我没说那是歌。你自己确定就好。”")
+	elif "village_defense_survived" in WorldState.achievement_flags:
+		tavern_keeper.set("dialogue", "值夜人把杯子放回架上。\n\n“北门那边总算安静了些。今晚的灯会一直亮着，但我可不保证每个故事都是真的。”")
+	else:
+		tavern_keeper.set("dialogue", "值夜人把杯子擦干，朝门口点点头。\n\n“进来暖暖身子吧。村里白天说的话，到了夜里往往就不一样了。”")
+	tavern_keeper.interacted.connect(_on_npc_interacted.bind(tavern_keeper))
 func _spawn_mite_if_present() -> void:
-    if location_id != "tavern" or WorldState.mite_connection_missed or not WorldState.mite_first_meeting:
-        return
-    mite = Node2D.new()
-    mite.set_script(MITE_SCRIPT)
-    mite.position = Vector2(650, 520)
-    mite.name = "Mite"
-    add_child(mite)
-    mite.interacted.connect(_on_mite_interacted)
-
+	if location_id != "tavern" or WorldState.mite_connection_missed or not WorldState.mite_first_meeting:
+		mite.visible = false
+		return
+	mite.visible = true
+	mite.position = Vector2(650, 520)
+	mite.interacted.connect(_on_mite_interacted)
 func _on_mite_interacted(_interaction_id: String, title: String, message: String) -> void:
     narrative.show_message(title, message, 7.0)
     if narrative_audio and narrative_audio.has_method("play_lullaby"):
         narrative_audio.play_lullaby()
 
 func _spawn_clue() -> void:
-    clue = Node2D.new()
-    clue.set_script(INTERIOR_CLUE_SCRIPT)
-
-    if location_id == "tavern":
-        clue.position = Vector2(1120, 520)
-        clue.clue_id = "tavern_silver_bell"
-        clue.humanity_delta = 2
-        clue.display_name = "SILVER BELL"
-        clue.description = "The bell is cold to the touch.\n\nWhen you lift it, you remember a hand placing a cup in front of you. The hand is yours."
-    else:
-        clue.position = Vector2(1260, 520)
-        clue.clue_id = "church_confession_book"
-        clue.humanity_delta = -5
-        clue.display_name = "CONFESSION BOOK"
-        clue.description = "The book contains your handwriting.\n\nThe last entry ends with one sentence: \"I agreed because they promised she would live.\""
-
-    add_child(clue)
-    clue.examined.connect(_on_clue_examined.bind(clue))
-
+	clue.visible = true
+	if location_id == "tavern":
+		clue.position = Vector2(1120, 520)
+		clue.set("clue_id", "tavern_silver_bell")
+		clue.set("humanity_delta", 2)
+		clue.set("display_name", "SILVER BELL")
+		clue.set("description", "The bell is cold to the touch.\n\nWhen you lift it, you remember a hand placing a cup in front of you. The hand is yours.")
+	else:
+		clue.position = Vector2(1260, 520)
+		clue.set("clue_id", "church_confession_book")
+		clue.set("humanity_delta", -5)
+		clue.set("display_name", "CONFESSION BOOK")
+		clue.set("description", "The book contains your handwriting.\n\nThe last entry ends with one sentence: \"I agreed because they promised she would live.\"")
+	clue.examined.connect(_on_clue_examined.bind(clue))
 func _on_clue_examined(target: Node) -> void:
     narrative.show_message(target.display_name, target.description, 7.0)
 
 func _spawn_rest_point() -> void:
-    if location_id != "tavern":
-        return
-
-    rest_point = Node2D.new()
-    rest_point.set_script(REST_POINT_SCRIPT)
-    rest_point.position = Vector2(1460, 520)
-    rest_point.rest_id = "tavern_bench"
-    add_child(rest_point)
-    rest_point.rested.connect(_on_rest_point_used)
-
+	if location_id != "tavern":
+		rest_point.visible = false
+		return
+	rest_point.visible = true
+	rest_point.position = Vector2(1460, 520)
+	rest_point.set("rest_id", "tavern_bench")
+	rest_point.set("display_name", "A QUIET BENCH")
+	rest_point.rested.connect(_on_rest_point_used)
 func _on_rest_point_used() -> void:
     narrative.show_message("A MOMENT OF QUIET", "For once, nothing asks you to remember.", 4.0)
 
 
 func _spawn_exit() -> void:
-    exit = Area2D.new()
-    exit.set_script(INTERIOR_EXIT_SCRIPT)
-    exit.position = Vector2(1660, 520)
-    exit.name = "InteriorExit"
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(100, 130)
-    shape.shape = rectangle
-    shape.position = Vector2(0, -65)
-    exit.add_child(shape)
-    add_child(exit)
-    exit.reached.connect(_on_exit_reached)
-
+	exit.position = Vector2(1660, 520)
+	exit.reached.connect(_on_exit_reached)
 func _spawn_route_door() -> void:
-    if location_id == "church" and "church_village_occupied" not in WorldState.achievement_flags:
-        return
-    route_door = Area2D.new()
-    route_door.set_script(INTERACTION_DOOR_SCRIPT)
-    route_door.position = Vector2(1350, 520)
-    route_door.name = "InvestigationDoor"
-    route_door.prompt_text = "E  Enter"
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(100, 130)
-    shape.shape = rectangle
-    shape.position = Vector2(0, -65)
-    route_door.add_child(shape)
-    add_child(route_door)
-    route_door.interacted.connect(_on_route_door_interacted)
-
+	if location_id == "church" and "church_village_occupied" not in WorldState.achievement_flags:
+		route_door.visible = false
+		route_door.monitoring = false
+		(route_door.get_node("CollisionShape2D") as CollisionShape2D).disabled = true
+		return
+	route_door.visible = true
+	route_door.monitoring = true
+	route_door.position = Vector2(1350, 520)
+	route_door.set("prompt_text", "E  Enter")
+	var collision := route_door.get_node("CollisionShape2D") as CollisionShape2D
+	var rectangle := collision.shape as RectangleShape2D
+	rectangle.size = Vector2(100, 130)
+	collision.position = Vector2(0, -65)
+	collision.disabled = false
+	route_door.interacted.connect(_on_route_door_interacted)
 func _on_route_door_interacted() -> void:
     if WorldState.input_locked:
         return
@@ -212,22 +148,21 @@ func _on_route_door_interacted() -> void:
         SceneTransition.fade_to_scene("res://scenes/routes/lullaby_path.tscn")
 
 func _spawn_research_door() -> void:
-    if location_id != "church" or "church_village_occupied" not in WorldState.achievement_flags:
-        return
-    research_door = Area2D.new()
-    research_door.set_script(INTERACTION_DOOR_SCRIPT)
-    research_door.position = Vector2(1020, 520)
-    research_door.name = "ResearchDoor"
-    research_door.prompt_text = "E  Enter"
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(80, 130)
-    shape.shape = rectangle
-    shape.position = Vector2(0, -65)
-    research_door.add_child(shape)
-    add_child(research_door)
-    research_door.interacted.connect(_on_research_door_interacted)
-
+	if location_id != "church" or "church_village_occupied" not in WorldState.achievement_flags:
+		research_door.visible = false
+		research_door.monitoring = false
+		(research_door.get_node("CollisionShape2D") as CollisionShape2D).disabled = true
+		return
+	research_door.visible = true
+	research_door.monitoring = true
+	research_door.position = Vector2(1020, 520)
+	research_door.set("prompt_text", "E  Enter")
+	var collision := research_door.get_node("CollisionShape2D") as CollisionShape2D
+	var rectangle := collision.shape as RectangleShape2D
+	rectangle.size = Vector2(80, 130)
+	collision.position = Vector2(0, -65)
+	collision.disabled = false
+	research_door.interacted.connect(_on_research_door_interacted)
 func _on_research_door_interacted() -> void:
     if WorldState.input_locked:
         return
@@ -237,21 +172,8 @@ func _on_research_door_interacted() -> void:
     SceneTransition.fade_to_scene("res://scenes/ancient_research_lab.tscn")
 
 func _spawn_ui() -> void:
-    narrative = CanvasLayer.new()
-    narrative.set_script(NARRATIVE_SCRIPT)
-    add_child(narrative)
-
-    hud = CanvasLayer.new()
-    hud.set_script(HUD_SCRIPT)
-    add_child(hud)
-    hud.bind_hero(hero)
-
-    narrative_audio = Node.new()
-    narrative_audio.set_script(NARRATIVE_AUDIO_SCRIPT)
-    add_child(narrative_audio)
-
-    get_tree().create_timer(0.6).timeout.connect(_show_intro)
-
+	hud.bind_hero(hero)
+	get_tree().create_timer(0.6).timeout.connect(_show_intro)
 func _show_intro() -> void:
     if location_id == "tavern" and WorldState.mite_connection_missed:
         narrative.show_message(
@@ -279,43 +201,8 @@ func _on_exit_reached() -> void:
 func _return_to_village() -> void:
     SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
 
-func _create_floor() -> void:
-    var floor := StaticBody2D.new()
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(1800, 40)
-    shape.shape = rectangle
-    shape.position = Vector2(900, 540)
-    floor.add_child(shape)
-    add_child(floor)
 
-func _create_boundaries() -> void:
-    var left := StaticBody2D.new()
-    var ls := CollisionShape2D.new()
-    var lr := RectangleShape2D.new()
-    lr.size = Vector2(40, 720)
-    ls.shape = lr
-    ls.position = Vector2(-20, 360)
-    left.add_child(ls)
-    add_child(left)
 
-    var right := StaticBody2D.new()
-    var rs := CollisionShape2D.new()
-    var rr := RectangleShape2D.new()
-    rr.size = Vector2(40, 720)
-    rs.shape = rr
-    rs.position = Vector2(1820, 360)
-    right.add_child(rs)
-    add_child(right)
-
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
-    var collision := CollisionShape2D.new()
-    var capsule := CapsuleShape2D.new()
-    capsule.radius = radius
-    capsule.height = height
-    collision.shape = capsule
-    collision.position = Vector2(0, -height * 0.5)
-    character.add_child(collision)
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
