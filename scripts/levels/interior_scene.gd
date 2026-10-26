@@ -13,8 +13,8 @@ extends Node2D
 @onready var narrative_audio: Node = $NarrativeAudio
 @onready var route_door: Area2D = $InvestigationDoor
 @onready var world_event_director: Node = $WorldEventDirector
-@onready @onready var research_door: Area2D = $ResearchDoor
-@onready var tavern_keeper: Node2D = $TavernKeeper = $ResearchDoor
+@onready var research_door: Area2D = $ResearchDoor
+@onready var tavern_keeper: Node2D = $TavernKeeper
 func _ready() -> void:
 	WorldState.prepare_scene_runtime()
 	WorldState.set_location(location_id)
