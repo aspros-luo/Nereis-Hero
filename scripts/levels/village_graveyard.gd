@@ -1,132 +1,46 @@
 extends Node2D
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
-const WRAITH_SCRIPT = preload("res://scripts/enemies/bell_wraith.gd")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const CHECKPOINT_SCRIPT = preload("res://scripts/world/checkpoint.gd")
-const WORLD_CLUE_SCRIPT = preload("res://scripts/world/world_clue.gd")
-const INTERIOR_EXIT_SCRIPT = preload("res://scripts/world/interior_exit.gd")
-const BELL_KEEPER_SCRIPT = preload("res://scripts/npc/bell_keeper.gd")
+const WRAITH_SCENE: PackedScene = preload("res://scenes/enemies/bell_wraith.tscn")
 
-var hero: CharacterBody2D
+@onready var hero: CharacterBody2D = $Hero
 var wraiths: Array[CharacterBody2D] = []
-var camera: Camera2D
-var checkpoint: Area2D
-var narrative: CanvasLayer
-var hud: CanvasLayer
-var exit: Area2D
-var clue: Node2D
-var bell_keeper: Node2D
+@onready var checkpoint: Area2D = $GraveyardCheckpoint
+@onready var narrative: CanvasLayer = $NarrativeManager
+@onready var hud: CanvasLayer = $HUD
+@onready var exit: Area2D = $GraveyardExit
+@onready var clue: Node2D = $GravestoneClue
+@onready var bell_keeper: Node2D = $BellKeeper
 
 func _ready() -> void:
-    WorldState.prepare_scene_runtime()
-    WorldState.set_location("graveyard")
-    WorldState.set_checkpoint(Vector2(360, 520))
-    print("[NEREIS][GRAVEYARD] Entered Village Graveyard route=%s" % WorldState.selected_route)
-    _create_floor()
-    _create_boundaries()
-    _spawn_hero()
-    _spawn_checkpoint()
-    if not WorldState.graveyard_cleared:
-        _spawn_wraith(Vector2(1100, 430), "BellWraith_A")
-        _spawn_wraith(Vector2(1480, 390), "BellWraith_B")
-    _spawn_clue()
-    _spawn_bell_keeper()
-    _spawn_exit()
-    _spawn_ui()
-    queue_redraw()
+	WorldState.prepare_scene_runtime()
+	WorldState.set_location("graveyard")
+	WorldState.set_checkpoint(Vector2(360, 520))
+	print("[NEREIS][GRAVEYARD] Entered Village Graveyard route=%s" % WorldState.selected_route)
+	hero.defeated.connect(_on_hero_defeated)
+	clue.examined.connect(_on_clue_examined.bind(clue))
+	bell_keeper.interacted.connect(_on_bell_keeper_interacted)
+	exit.reached.connect(_on_exit_reached)
+	hud.bind_hero(hero)
+	if not WorldState.graveyard_cleared:
+		_spawn_wraith(Vector2(1100, 430), "BellWraith_A")
+		_spawn_wraith(Vector2(1480, 390), "BellWraith_B")
+	queue_redraw()
+	get_tree().create_timer(0.6).timeout.connect(_show_intro)
 
-func _spawn_hero() -> void:
-    hero = CharacterBody2D.new()
-    hero.set_script(HERO_SCRIPT)
-    hero.position = Vector2(260, 520)
-    hero.name = "Hero"
-    _add_character_collision(hero, 18.0, 48.0)
-    add_child(hero)
-    hero.defeated.connect(_on_hero_defeated)
 
-    camera = Camera2D.new()
-    camera.name = "HeroCamera"
-    camera.position_smoothing_enabled = true
-    camera.position_smoothing_speed = 6.0
-    camera.limit_left = 0
-    camera.limit_top = 0
-    camera.limit_right = 2200
-    camera.limit_bottom = 720
-    camera.position = Vector2.ZERO
-    hero.add_child(camera)
+func _spawn_wraith(spawn_position: Vector2, wraith_name: String) -> void:
+	var wraith := WRAITH_SCENE.instantiate() as CharacterBody2D
+	wraith.position = spawn_position
+	wraith.name = wraith_name
+	add_child(wraith)
+	wraith.defeated.connect(_on_wraith_defeated.bind(wraith))
+	wraiths.append(wraith)
 
-func _spawn_checkpoint() -> void:
-    checkpoint = Area2D.new()
-    checkpoint.set_script(CHECKPOINT_SCRIPT)
-    checkpoint.position = Vector2(360, 520)
-    checkpoint.name = "GraveyardCheckpoint"
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(140, 110)
-    shape.shape = rectangle
-    shape.position = Vector2(0, -55)
-    checkpoint.add_child(shape)
-    add_child(checkpoint)
-
-func _spawn_wraith(position: Vector2, wraith_name: String) -> void:
-    var wraith := CharacterBody2D.new()
-    wraith.set_script(WRAITH_SCRIPT)
-    wraith.position = position
-    wraith.name = wraith_name
-    _add_character_collision(wraith, 22.0, 58.0)
-    add_child(wraith)
-    wraith.defeated.connect(_on_wraith_defeated.bind(wraith))
-    wraiths.append(wraith)
-
-func _spawn_clue() -> void:
-    clue = Node2D.new()
-    clue.set_script(WORLD_CLUE_SCRIPT)
-    clue.position = Vector2(1740, 520)
-    clue.clue_id = "graveyard_hero_gravestone"
-    clue.humanity_delta = -8
-    clue.display_name = "THE WEATHERED STONE"
-    clue.description = "The stone carries your name, but the date is wrong.\n\nSomeone carved a second line beneath it: \"He came back after the bell stopped.\""
-    add_child(clue)
-    clue.examined.connect(_on_clue_examined.bind(clue))
-
-func _spawn_bell_keeper() -> void:
-    bell_keeper = Node2D.new()
-    bell_keeper.set_script(BELL_KEEPER_SCRIPT)
-    bell_keeper.position = Vector2(760, 520)
-    bell_keeper.name = "BellKeeper"
-    add_child(bell_keeper)
-    bell_keeper.interacted.connect(_on_bell_keeper_interacted)
 
 func _on_bell_keeper_interacted(title: String, message: String) -> void:
     narrative.show_message(title, message, 7.0)
 
-func _spawn_exit() -> void:
-    exit = Area2D.new()
-    exit.set_script(INTERIOR_EXIT_SCRIPT)
-    exit.position = Vector2(2050, 520)
-    exit.name = "GraveyardExit"
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(100, 130)
-    shape.shape = rectangle
-    shape.position = Vector2(0, -65)
-    exit.add_child(shape)
-    add_child(exit)
-    exit.reached.connect(_on_exit_reached)
 
-func _spawn_ui() -> void:
-    narrative = CanvasLayer.new()
-    narrative.set_script(NARRATIVE_SCRIPT)
-    add_child(narrative)
-
-    hud = CanvasLayer.new()
-    hud.set_script(HUD_SCRIPT)
-    add_child(hud)
-    hud.bind_hero(hero)
-
-    get_tree().create_timer(0.6).timeout.connect(_show_intro)
 
 func _show_intro() -> void:
     if WorldState.graveyard_cleared:
@@ -177,43 +91,8 @@ func _on_exit_reached() -> void:
 func _return_to_village() -> void:
     SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
 
-func _create_floor() -> void:
-    var floor := StaticBody2D.new()
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(2200, 40)
-    shape.shape = rectangle
-    shape.position = Vector2(1100, 540)
-    floor.add_child(shape)
-    add_child(floor)
 
-func _create_boundaries() -> void:
-    var left := StaticBody2D.new()
-    var ls := CollisionShape2D.new()
-    var lr := RectangleShape2D.new()
-    lr.size = Vector2(40, 720)
-    ls.shape = lr
-    ls.position = Vector2(-20, 360)
-    left.add_child(ls)
-    add_child(left)
 
-    var right := StaticBody2D.new()
-    var rs := CollisionShape2D.new()
-    var rr := RectangleShape2D.new()
-    rr.size = Vector2(40, 720)
-    rs.shape = rr
-    rs.position = Vector2(2220, 360)
-    right.add_child(rs)
-    add_child(right)
-
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
-    var collision := CollisionShape2D.new()
-    var capsule := CapsuleShape2D.new()
-    capsule.radius = radius
-    capsule.height = height
-    collision.shape = capsule
-    collision.position = Vector2(0, -height * 0.5)
-    character.add_child(collision)
 
 func _log(category: String, message: String) -> void:
     print("[NEREIS][%s] %s" % [category, message])
