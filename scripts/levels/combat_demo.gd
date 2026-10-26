@@ -230,38 +230,6 @@ func _on_boss_defeated() -> void:
     print("[NEREIS][DEMO] CORE COMBAT DEMO COMPLETE")
     queue_redraw()
 
-func _create_floor() -> void:
-    var floor := StaticBody2D.new()
-    floor.name = "Ground"
-
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(LEVEL_WIDTH + 200.0, 40.0)
-    shape.shape = rectangle
-    shape.position = Vector2(LEVEL_WIDTH * 0.5, FLOOR_Y + 20.0)
-
-    floor.add_child(shape)
-    add_child(floor)
-
-func _create_boundaries() -> void:
-    var left := StaticBody2D.new()
-    var left_shape := CollisionShape2D.new()
-    var left_rect := RectangleShape2D.new()
-    left_rect.size = Vector2(40, 720)
-    left_shape.shape = left_rect
-    left_shape.position = Vector2(-20, 360)
-    left.add_child(left_shape)
-    add_child(left)
-
-    var right := StaticBody2D.new()
-    var right_shape := CollisionShape2D.new()
-    var right_rect := RectangleShape2D.new()
-    right_rect.size = Vector2(40, 720)
-    right_shape.shape = right_rect
-    right_shape.position = Vector2(LEVEL_WIDTH + 20.0, 360)
-    right.add_child(right_shape)
-    add_child(right)
-
 func _configure_actor_collision(character: CharacterBody2D, radius: float, height: float) -> void:
 	var collision := character.get_node("CollisionShape2D") as CollisionShape2D
 	var capsule := collision.shape as CapsuleShape2D
