@@ -1,6 +1,57 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=10 format=3]
 
-[ext_resource path="res://scripts/levels/rebel_camp.gd" type="Script" id="1"]
+[ext_resource type="Script" path="res://scripts/levels/rebel_camp.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/world/world_clue.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/world/interior_exit.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/audio/narrative_audio.tscn" id="7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+resource_local_to_scene = true
+size = Vector2(1900, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_boundary"]
+resource_local_to_scene = true
+size = Vector2(40, 720)
 
 [node name="RebelCamp" type="Node2D"]
 script = ExtResource("1")
+
+[node name="Ground" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(950, 560)
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="LeftBoundary" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftBoundary"]
+position = Vector2(-20, 360)
+shape = SubResource("RectangleShape2D_boundary")
+
+[node name="RightBoundary" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightBoundary"]
+position = Vector2(1920, 360)
+shape = SubResource("RectangleShape2D_boundary")
+
+[node name="Hero" parent="." instance=ExtResource("2")]
+position = Vector2(260, 520)
+
+[node name="UnsentOrderClue" parent="." instance=ExtResource("3")]
+position = Vector2(1670, 520)
+clue_id = "rebel_dead_letter"
+display_name = "UNSENT ORDER"
+humanity_delta = 1
+description = "An unsigned order lies beneath a bloodstained map.\n\nThe first line reads: 'After the Church falls, do not let the soldiers choose the next priest.'\n\nThe rest has been burned away."
+
+[node name="CampExit" parent="." instance=ExtResource("4")]
+position = Vector2(1780, 520)
+
+[node name="NarrativeManager" parent="." instance=ExtResource("5")]
+
+[node name="HUD" parent="." instance=ExtResource("6")]
+
+[node name="NarrativeAudio" parent="." instance=ExtResource("7")]
