@@ -576,7 +576,7 @@ func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 	else:
 		WorldState.set_checkpoint(hero.global_position)
 
-	camera = hero.get_node("Camera2D") as Camera2D
+	camera = hero.get_node("HeroCamera") as Camera2D
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 6.0
 	camera.limit_left = 0
