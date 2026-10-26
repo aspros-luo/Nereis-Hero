@@ -1,0 +1,7 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="DoorArch" type="Line2D"]
+width = 4.0
+antialiased = true
+points = PackedVector2Array(-27, 0, -27, -46, -20, -62, -10, -72, 10, -72, 20, -62, 27, -46, 27, 0)
+default_color = Color(0.556863, 0.666667, 0.603922, 0.72)
