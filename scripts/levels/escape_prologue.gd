@@ -24,7 +24,8 @@ var progress_barriers: Array[StaticBody2D] = []
 func _ready() -> void:
 	# Editor preview must never mutate save/world state.
 	if Engine.is_editor_hint():
-		queue_redraw()
+		_sync_exit_gate_visual()
+	queue_redraw()
 		return
 	if WorldState.prologue_complete:
 		get_tree().change_scene_to_file("res://scenes/village_hub.tscn")
@@ -255,6 +256,28 @@ func _draw_security_shutter(gate_x: float) -> void:
 	draw_line(Vector2(gate_x + 17.0, 284.0), Vector2(gate_x + 28.0, 284.0), Color("#c58b62"), 2.0)
 
 
+func _sync_exit_gate_visual() -> void:
+	var gate := get_node_or_null("ExitGateVisual")
+	if gate == null:
+		return
+	gate.visible = true
+	var closed := gate.get_node_or_null("ClosedGate") as CanvasItem
+	var left_bar := gate.get_node_or_null("LeftBar") as CanvasItem
+	var right_bar := gate.get_node_or_null("RightBar") as CanvasItem
+	var opened := gate.get_node_or_null("OpenedGate") as CanvasItem
+	var label := gate.get_node_or_null("OpenedLabel") as CanvasItem
+	if closed != null:
+		closed.visible = not exit_open
+	if left_bar != null:
+		left_bar.visible = not exit_open
+	if right_bar != null:
+		right_bar.visible = not exit_open
+	if opened != null:
+		opened.visible = exit_open
+	if label != null:
+		label.visible = exit_open
+
+
 func _draw() -> void:
 	# Static backdrop, floor strip and illustrated props are authored as TextureRect nodes in escape_prologue.tscn.
 	# Only state-dependent shutters and small foreground marks remain in this draw pass.
@@ -268,13 +291,6 @@ func _draw() -> void:
 		if right_gate_closed:
 			_draw_security_shutter(2000.0)
 
-	if not exit_open:
-		draw_rect(Rect2(2000, 300, 90, 220), Color("#18151b"))
-		draw_line(Vector2(2010, 320), Vector2(2010, 500), Color("#5d4c55"), 5.0)
-		draw_line(Vector2(2080, 320), Vector2(2080, 500), Color("#5d4c55"), 5.0)
-	else:
-		draw_rect(Rect2(2000, 300, 90, 220), Color("#33232a"))
-		draw_string(ThemeDB.fallback_font, Vector2(1995, 275), _editor_safe_text("开启"), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("#d6c7b2"))
 
 	if Engine.is_editor_hint():
 		_draw_editor_layout_overlay()
