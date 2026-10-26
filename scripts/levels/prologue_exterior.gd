@@ -1,7 +1,6 @@
 extends Node2D
 
 
-const CLIFF_BACKDROP = preload("res://assets/art/backdrops/prologue_cliff_backdrop.svg")
 const CLIFF_X := 1120.0
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 1500.0
@@ -40,7 +39,6 @@ func _ready() -> void:
 		if not ending_started:
 			call_deferred("_begin_rescue_transition", "defeated")
 	)
-	queue_redraw()
 func _physics_process(delta: float) -> void:
 	if ending_started or not is_instance_valid(hero):
 		return
@@ -109,38 +107,3 @@ func _get_shelf_rects() -> Array[Rect2]:
 		var rectangle := collision.shape as RectangleShape2D
 		rects.append(Rect2(shelves.position + body.position + collision.position - rectangle.size * 0.5, rectangle.size))
 	return rects
-
-func _draw() -> void:
-	# Painted scenic layer is visual-only; collision, encounter bounds and cliff coordinates stay in code.
-	# 绘制感远景只负责视觉；碰撞、遭遇边界和悬崖坐标仍由逻辑代码控制。
-	draw_texture_rect(CLIFF_BACKDROP, Rect2(0.0, 0.0, LEVEL_WIDTH, 720.0), false)
-	# Cave mouth behind the player; the open path leads toward a broken cliff above the river.
-	draw_rect(Rect2(35, 300, 185, 240), Color("#090c12"))
-	draw_arc(Vector2(127, 315), 92.0, PI, TAU, 32, Color("#59606c"), 12.0)
-	draw_line(Vector2(250, 500), Vector2(520, 478), Color("#5b606b"), 3.0)
-	draw_line(Vector2(520, 478), Vector2(740, 505), Color("#5b606b"), 3.0)
-	draw_line(Vector2(740, 505), Vector2(CLIFF_X - 12.0, 485), Color("#5b606b"), 3.0)
-	# Match the five physical shelves above; the darker lower lip gives each ledge a readable edge.
-	for shelf_rect in _get_shelf_rects():
-		draw_colored_polygon(PackedVector2Array([
-			shelf_rect.position,
-			Vector2(shelf_rect.end.x, shelf_rect.position.y),
-			Vector2(shelf_rect.end.x - 8.0, shelf_rect.end.y + 12.0),
-			Vector2(shelf_rect.position.x + 8.0, shelf_rect.end.y + 12.0)
-		]), Color("#343640"))
-		draw_line(shelf_rect.position, Vector2(shelf_rect.end.x, shelf_rect.position.y), Color("#777783"), 3.0)
-	draw_rect(Rect2(CLIFF_X, FLOOR_Y + 18.0, LEVEL_WIDTH - CLIFF_X, 230.0), Color("#0b121c"))
-	for ripple_x in range(int(CLIFF_X + 20.0), int(LEVEL_WIDTH - 20.0), 48):
-		draw_line(Vector2(ripple_x, FLOOR_Y + 62.0 + sin(float(ripple_x) * 0.04) * 4.0), Vector2(ripple_x + 24.0, FLOOR_Y + 62.0), Color("#344958", 0.65), 2.0)
-	draw_line(Vector2(CLIFF_X, FLOOR_Y - 12.0), Vector2(CLIFF_X, FLOOR_Y + 34.0), Color("#7b8189"), 4.0)
-	# Broken masonry and a collapsed path frame the edge; the player cannot bypass the scripted encounter.
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(CLIFF_X - 86.0, FLOOR_Y - 6.0),
-		Vector2(CLIFF_X - 72.0, FLOOR_Y - 52.0),
-		Vector2(CLIFF_X - 46.0, FLOOR_Y - 32.0),
-		Vector2(CLIFF_X - 22.0, FLOOR_Y - 68.0),
-		Vector2(CLIFF_X - 4.0, FLOOR_Y - 8.0)
-	]), Color("#3a3b43"))
-	draw_line(Vector2(CLIFF_X - 90.0, FLOOR_Y - 8.0), Vector2(CLIFF_X - 8.0, FLOOR_Y - 8.0), Color("#72717b"), 3.0)
-	draw_string(ThemeDB.fallback_font, Vector2(55, 265), "山洞出口", HORIZONTAL_ALIGNMENT_LEFT, -1, 17, Color("#9a9aa8"))
-	draw_string(ThemeDB.fallback_font, Vector2(565, 270), "通往河谷的山路", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#a7a6b0"))
