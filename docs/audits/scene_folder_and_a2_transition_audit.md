@@ -87,5 +87,6 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - [x] R05 rest point preserved; A5 exit remains progression-gated.
 - [ ] Godot 4.6.1 editor import passes without parse/resource errors.
 - [ ] R01 safe drop reaches R04; other void falls remain lethal.
-- [ ] R03 drop reaches R04; R04↔R06 and R05↔R06 routes work at their intended heights.\n- [ ] R06 low-entry climb reaches the upper R05/A3 route with the real Hero controller.
+- [ ] R03 drop reaches R04; R04↔R06 and R05↔R06 routes work at their intended heights.
+- [ ] R06 low-entry climb reaches the upper R05/A3 route with the real Hero controller.
 - [ ] C03, C04 and H02 cross-region/return routes and saved discovery state verified.
