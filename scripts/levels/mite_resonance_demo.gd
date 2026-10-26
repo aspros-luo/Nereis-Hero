@@ -1,20 +1,16 @@
 extends Node2D
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const MITE_SCRIPT = preload("res://scripts/npc/mite.gd")
-const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
+@onready var hero: CharacterBody2D = $Hero
+@onready var camera: Camera2D = $Hero/HeroCamera
+@onready var mite: Node2D = $Mite
+@onready var narrative: CanvasLayer = $Narrative
+@onready var hud: CanvasLayer = $HUD
+@onready var audio_director: Node = $AudioDirector
 
-var hero: CharacterBody2D
-var camera: Camera2D
-var narrative: CanvasLayer
-var hud: CanvasLayer
-var audio_director: Node
-var mite: Node2D
 var resonance_started := false
 var resonance_elapsed := 0.0
 var corruption_level := 0.0
+
 
 func _ready() -> void:
     WorldState.current_location = "mite_resonance_demo"
@@ -26,14 +22,18 @@ func _ready() -> void:
         "mite_return"
     ]
 
-    _create_floor()
-    _create_boundaries()
-    _spawn_hero()
-    _spawn_mite()
-    _spawn_ui()
-    _spawn_audio()
+    camera.position_smoothing_enabled = true
+    camera.position_smoothing_speed = 5.0
+    camera.limit_left = 0
+    camera.limit_top = 0
+    camera.limit_right = 1400
+    camera.limit_bottom = 720
+
+    hud.bind_hero(hero)
+    hud.set_story_mode("THE QUIET HOUSE", "DIRECTOR TEST: RESONANCE")
     get_tree().create_timer(0.7).timeout.connect(_begin_scene)
     queue_redraw()
+
 
 func _process(delta: float) -> void:
     if not resonance_started:
@@ -44,45 +44,6 @@ func _process(delta: float) -> void:
         queue_redraw()
     queue_redraw()
 
-func _spawn_hero() -> void:
-    hero = CharacterBody2D.new()
-    hero.set_script(HERO_SCRIPT)
-    hero.position = Vector2(430, 520)
-    hero.name = "Hero"
-    _add_character_collision(hero, 18.0, 48.0)
-    add_child(hero)
-
-    camera = Camera2D.new()
-    camera.position_smoothing_enabled = true
-    camera.position_smoothing_speed = 5.0
-    camera.limit_left = 0
-    camera.limit_top = 0
-    camera.limit_right = 1400
-    camera.limit_bottom = 720
-    hero.add_child(camera)
-
-func _spawn_mite() -> void:
-    mite = Node2D.new()
-    mite.set_script(MITE_SCRIPT)
-    mite.position = Vector2(770, 520)
-    mite.name = "Mite"
-    add_child(mite)
-
-func _spawn_ui() -> void:
-    narrative = CanvasLayer.new()
-    narrative.set_script(NARRATIVE_SCRIPT)
-    add_child(narrative)
-
-    hud = CanvasLayer.new()
-    hud.set_script(HUD_SCRIPT)
-    add_child(hud)
-    hud.bind_hero(hero)
-    hud.set_story_mode("THE QUIET HOUSE", "DIRECTOR TEST: RESONANCE")
-
-func _spawn_audio() -> void:
-    audio_director = Node.new()
-    audio_director.set_script(NARRATIVE_AUDIO_SCRIPT)
-    add_child(audio_director)
 
 func _begin_scene() -> void:
     narrative.show_message(
@@ -168,6 +129,7 @@ func _mark_input_handled() -> void:
     var viewport := get_viewport()
     if viewport != null:
         viewport.set_input_as_handled()
+
 
 func _draw() -> void:
     draw_rect(Rect2(0, 0, 1400, 720), Color("#151117"))
