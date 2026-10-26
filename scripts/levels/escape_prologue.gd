@@ -21,6 +21,7 @@ var ambush_phase := 0 # 0=not started, 1=two-entry wave, 2=falling ambusher, 3=c
 var right_gate_closed := false
 var progress_barriers: Array[StaticBody2D] = []
 
+
 func _ready() -> void:
 	# Editor preview must never mutate save/world state.
 	if Engine.is_editor_hint():
@@ -44,6 +45,7 @@ func _ready() -> void:
 	hud.bind_hero(hero)
 	hud.set_story_mode("A0｜教会手术所", "查看手术托盘和周边物品，寻找离开的路。")
 	queue_redraw()
+
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
@@ -63,7 +65,6 @@ func _process(_delta: float) -> void:
 			hud.set_story_mode("A0｜教会手术所", "伏击开始！留意两侧来敌与上方坠落的守卫，利用攻击前摇进行闪避。")
 
 
-
 func _start_exit_ambush() -> void:
 	if ambush_started:
 		return
@@ -78,6 +79,7 @@ func _start_exit_ambush() -> void:
 		hud.set_story_mode("A0｜教会手术所", "左侧传来沉重的脚步声，出口处的守卫也逼了进来！先解决他们。")
 	print("[NEREIS][PROLOGUE] Exit ambush wave 1 started")
 
+
 func _spawn_warden(spawn_position: Vector2, enemy_name: String) -> void:
 	var warden := WARDEN_SCENE.instantiate() as CharacterBody2D
 	if warden == null:
@@ -88,10 +90,12 @@ func _spawn_warden(spawn_position: Vector2, enemy_name: String) -> void:
 	add_child(warden)
 	warden.defeated.connect(_on_warden_defeated)
 	wardens.append(warden)
+
 func _spawn_progress_barriers() -> void:
 	# Close both ends of the arena only after the exit ambush starts.
 	# 仅在出口伏击触发后关闭战斗场地两端，避免开场就加载敌人。
 	_spawn_single_progress_barrier(1320.0)
+
 
 func _spawn_single_progress_barrier(gate_x: float) -> void:
 	var gate := PROGRESS_BARRIER_SCENE.instantiate() as StaticBody2D
@@ -102,6 +106,7 @@ func _spawn_single_progress_barrier(gate_x: float) -> void:
 	gate.position = Vector2(gate_x, 420.0)
 	add_child(gate)
 	progress_barriers.append(gate)
+
 func _open_progress_barrier(index: int) -> void:
 	if index < 0 or index >= progress_barriers.size():
 		return
@@ -109,7 +114,6 @@ func _open_progress_barrier(index: int) -> void:
 	if is_instance_valid(gate):
 		gate.queue_free()
 	queue_redraw()
-
 
 
 func _on_clue_examined(clue: Node) -> void:
@@ -141,6 +145,7 @@ func _on_hero_defeated() -> void:
 		hud.set_story_mode("A0｜教会手术所", "你在检查点恢复了意识。重新接近出口时，守卫会再次出现。")
 	queue_redraw()
 
+
 func _on_warden_defeated() -> void:
 	wardens_defeated += 1
 	if ambush_phase == 1 and wardens_defeated >= 2:
@@ -162,6 +167,7 @@ func _on_warden_defeated() -> void:
 	if remaining > 0 and is_instance_valid(hud):
 		hud.set_story_mode("A0｜教会手术所", "守卫倒下了。还剩 %d 名敌人。" % remaining)
 
+
 func _open_exit() -> void:
 	if exit_open:
 		return
@@ -172,6 +178,7 @@ func _open_exit() -> void:
 	print("[NEREIS][PROLOGUE] Escape route opened")
 	queue_redraw()
 
+
 func _on_exit_interacted() -> void:
 	if not exit_open or WorldState.input_locked:
 		return
@@ -180,10 +187,6 @@ func _on_exit_interacted() -> void:
 	WorldState.pending_region_spawn_side = "west"
 	print("[NEREIS][PROLOGUE] Leaving surgery interior for the exterior mountain path")
 	SceneTransition.fade_to_scene("res://scenes/prologue_exterior.tscn")
-
-
-
-
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -196,10 +199,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		WorldState.delete_save()
 		get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
 
+
 func _mark_input_handled() -> void:
 	var viewport := get_viewport()
 	if viewport != null:
 		viewport.set_input_as_handled()
+
 
 func _get_traversal_route_rects() -> Array[Rect2]:
 	var rects: Array[Rect2] = []
@@ -218,6 +223,7 @@ func _get_traversal_route_rects() -> Array[Rect2]:
 		rects.append(Rect2(top_left, rectangle.size))
 	return rects
 
+
 func _draw_security_shutter(gate_x: float) -> void:
 	# Make the temporary collision boundary legible before the player reaches it.
 	# 临时碰撞边界必须在玩家撞上之前就能被清楚识别，不能只靠物理体表达。
@@ -235,6 +241,7 @@ func _draw_security_shutter(gate_x: float) -> void:
 	draw_circle(Vector2(gate_x, 284.0), 4.0, Color("#f0b35c"))
 	draw_line(Vector2(gate_x - 28.0, 284.0), Vector2(gate_x - 17.0, 284.0), Color("#c58b62"), 2.0)
 	draw_line(Vector2(gate_x + 17.0, 284.0), Vector2(gate_x + 28.0, 284.0), Color("#c58b62"), 2.0)
+
 
 func _draw() -> void:
 	draw_texture_rect(SURGERY_BACKDROP, Rect2(0, 0, LEVEL_WIDTH, 720), false)
@@ -273,8 +280,6 @@ func _draw() -> void:
 	# Operating table, snapped restraints, instrument trolley and wall shelf are drawn by the SVG prop layer.
 	draw_rect(Rect2(180, 240, 300, 40), Color("#352d38"))
 	draw_string(ThemeDB.fallback_font, Vector2(210, 215), _editor_safe_text("教会手术所"), HORIZONTAL_ALIGNMENT_LEFT, -1, 28, Color("#7d6c73"))
-
-
 
 
 	# Background equipment is already illustrated in SURGERY_BACKDROP; do not cover it with
@@ -317,6 +322,7 @@ func _editor_safe_text(fallback_text: String) -> String:
 
 ## Editor-only collision and interaction guides for checking the fixed A0 layout.
 ## These outlines are guides, not extra physics bodies.
+
 func _draw_editor_layout_overlay() -> void:
 	var collision_color := Color("#4bd4ff", 0.88)
 	var focus_color := Color("#ffd166", 0.72)
