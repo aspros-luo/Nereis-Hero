@@ -12,15 +12,11 @@ func setup(actor: Node, shape_size: Vector2, offset: Vector2) -> void:
     position = offset
     collision_layer = 0
     collision_mask = 2
-    collision_shape = get_node_or_null("CollisionShape2D") as CollisionShape2D
-    if collision_shape == null:
-        collision_shape = CollisionShape2D.new()
-        collision_shape.name = "CollisionShape2D"
-        add_child(collision_shape)
+    collision_shape = get_node("CollisionShape2D") as CollisionShape2D
     var rectangle := collision_shape.shape as RectangleShape2D
     if rectangle == null:
-        rectangle = RectangleShape2D.new()
-        collision_shape.shape = rectangle
+        push_error("Hitbox scene requires a RectangleShape2D child")
+        return
     rectangle.size = shape_size
 
 func set_shape_size(shape_size: Vector2) -> void:
