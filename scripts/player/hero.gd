@@ -3,6 +3,7 @@ extends CharacterBody2D
 const HIT_SPARK_SCENE: PackedScene = preload("res://scenes/effects/hit_spark.tscn")
 const SLASH_ARC_SCENE: PackedScene = preload("res://scenes/effects/slash_arc.tscn")
 const DEATH_BURST_SCENE: PackedScene = preload("res://scenes/effects/death_burst.tscn")
+const DEATH_TRANSITION_SCENE: PackedScene = preload("res://scenes/ui/death_transition_overlay.tscn")
 const ECHO_PULSE_SCENE: PackedScene = preload("res://scenes/effects/echo_pulse.tscn")
 const GRAPPLE_ANCHOR_SCENE: PackedScene = preload("res://scenes/systems/grapple_anchor.tscn")
 const RESONANCE_TARGET_SCENE: PackedScene = preload("res://scenes/systems/resonance_hidden_target.tscn")
@@ -710,7 +711,7 @@ func _spawn_combat_slash_arc(step: int, short_blade: bool) -> void:
 	effect.call("setup", facing, step, short_blade, false, "")
 
 func _spawn_technique_arc(technique_id: String, stage: int) -> void:
-	var effect: Node2D = SLASH_ARC_SCRIPT.new()
+	var effect: Node2D = SLASH_ARC_SCENE.instantiate() as Node2D
 	effect.global_position = global_position
 	get_parent().add_child(effect)
 	effect.call("setup_combat_technique", facing, technique_id, stage)
@@ -1110,7 +1111,7 @@ func get_visual_context() -> Dictionary:
 	}
 
 func _spawn_slash_arc() -> void:
-	var effect: Node2D = SLASH_ARC_SCRIPT.new()
+	var effect: Node2D = SLASH_ARC_SCENE.instantiate() as Node2D
 	effect.global_position = global_position
 	get_parent().add_child(effect)
 	var variant: String = (debug_iaijutsu_variant if debug_ability_override else hero_system.resolve_iaijutsu_variant()) if hero_system != null and iaijutsu_active else ""
@@ -1288,18 +1289,12 @@ func receive_damage(amount: int, source: Node = null) -> void:
 ## Fade out and move to the checkpoint, returning the still-opaque overlay so gameplay
 ## state can be fully restored before the fade-in begins.
 func _play_death_fade_out_and_wait() -> CanvasLayer:
-	var layer := CanvasLayer.new()
+	var layer := DEATH_TRANSITION_SCENE.instantiate() as CanvasLayer
 	layer.name = "DeathTransition"
-	layer.layer = 100
+	var overlay := layer.get_node("Fade") as ColorRect
 	# Parent the overlay to the current scene, not the root. A scene change must clean it up.
 	var overlay_parent: Node = get_tree().current_scene if get_tree().current_scene != null else get_tree().root
 	overlay_parent.add_child(layer)
-	var overlay := ColorRect.new()
-	overlay.name = "Fade"
-	overlay.color = Color(0.0, 0.0, 0.0, 0.0)
-	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layer.add_child(overlay)
 
 	var fade_out := create_tween()
 	fade_out.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
