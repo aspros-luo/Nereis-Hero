@@ -1,16 +1,30 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=11 format=3]
 
-[ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="1"]
-[ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn" type="PackedScene" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="5"]
+[ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="room_script"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="narrative_scene"]
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape1"]
+size = Vector2(1280, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape2"]
+size = Vector2(580, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape3"]
+size = Vector2(460, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape4"]
+size = Vector2(190, 24)
+
+[sub_resource type="RectangleShape2D" id="terrain_GroundShape5"]
+size = Vector2(170, 24)
 
 [sub_resource type="RectangleShape2D" id="RoomBoundaryShape"]
 size = Vector2(40, 1300)
 
 [node name="A2R06Room" type="Node2D"]
-script = ExtResource("1")
+script = ExtResource("room_script")
 region_id = "A2"
 location_id = "ash_forest"
 region_title = "A2 R06 东侧裂谷"
@@ -20,7 +34,139 @@ room_height = 1100
 room_id = "A2-R06"
 enable_region_encounters = false
 
-[node name="AuthoredRoom" parent="." instance=ExtResource("2")]
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="RavineBackdrop" type="Polygon2D" parent="Terrain"]
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 1100, 0, 1100)
+color = Color(0.045, 0.065, 0.075, 1)
+z_index = -30
+
+[node name="RavineCliffSilhouette" type="Polygon2D" parent="Terrain"]
+polygon = PackedVector2Array(0, 180, 130, 120, 250, 180, 390, 75, 540, 170, 690, 90, 830, 170, 970, 65, 1120, 160, 1280, 80, 1280, 320, 0, 320)
+color = Color(0.12, 0.17, 0.16, 1)
+z_index = -20
+
+[node name="RavineUpperWest" type="StaticBody2D" parent="Terrain"]
+position = Vector2(0, 320)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RavineUpperWest"]
+position = Vector2(640, 12)
+shape = SubResource("terrain_GroundShape1")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/RavineUpperWest"]
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/RavineUpperWest"]
+points = PackedVector2Array(0, 0, 1280, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RavineLowerShelf" type="StaticBody2D" parent="Terrain"]
+position = Vector2(250, 780)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RavineLowerShelf"]
+position = Vector2(230, 12)
+shape = SubResource("terrain_GroundShape3")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/RavineLowerShelf"]
+polygon = PackedVector2Array(0, 0, 460, 0, 460, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/RavineLowerShelf"]
+points = PackedVector2Array(0, 0, 460, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RavineMidShelf" type="StaticBody2D" parent="Terrain"]
+position = Vector2(470, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RavineMidShelf"]
+position = Vector2(95, 12)
+shape = SubResource("terrain_GroundShape4")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/RavineMidShelf"]
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/RavineMidShelf"]
+points = PackedVector2Array(0, 0, 190, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RavineReturnShelf" type="StaticBody2D" parent="Terrain"]
+position = Vector2(630, 480)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RavineReturnShelf"]
+position = Vector2(85, 12)
+shape = SubResource("terrain_GroundShape5")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/RavineReturnShelf"]
+polygon = PackedVector2Array(0, 0, 170, 0, 170, 48, 0, 48)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/RavineReturnShelf"]
+points = PackedVector2Array(0, 0, 170, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RavineClimbLower" type="StaticBody2D" parent="Terrain"]
+position = Vector2(300, 680)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RavineClimbLower"]
+position = Vector2(95, 12)
+shape = SubResource("terrain_GroundShape4")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/RavineClimbLower"]
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 40, 0, 40)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/RavineClimbLower"]
+points = PackedVector2Array(0, 0, 190, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RavineClimbMiddle" type="StaticBody2D" parent="Terrain"]
+position = Vector2(500, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RavineClimbMiddle"]
+position = Vector2(95, 12)
+shape = SubResource("terrain_GroundShape4")
+
+[node name="TerrainMass" type="Polygon2D" parent="Terrain/RavineClimbMiddle"]
+polygon = PackedVector2Array(0, 0, 190, 0, 190, 40, 0, 40)
+color = Color(0.105, 0.094, 0.125, 1)
+
+[node name="TerrainTopEdge" type="Line2D" parent="Terrain/RavineClimbMiddle"]
+points = PackedVector2Array(0, 0, 190, 0)
+width = 3.0
+default_color = Color(0.39, 0.42, 0.37, 1)
+
+[node name="RoomMarkers" type="Node2D" parent="Terrain"]
+
+[node name="EntryDefault" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(50, 320)
+
+[node name="EntryHigh" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(100, 320)
+
+[node name="EntryLow" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(350, 780)
+
+[node name="EntryC03Return" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(1010, 320)
+
+[node name="EntryRavineReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(350, 780)
+
+[node name="ExitToR05" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(50, 320)
+
+[node name="ExitToR04" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(350, 780)
+
+[node name="ExitToA3" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(1150, 320)
 
 [node name="RegionBoundary_0" type="StaticBody2D" parent="."]
 
@@ -34,10 +180,10 @@ shape = SubResource("RoomBoundaryShape")
 position = Vector2(1300, 550)
 shape = SubResource("RoomBoundaryShape")
 
-[node name="Hero" parent="." instance=ExtResource("3")]
+[node name="Hero" parent="." instance=ExtResource("hero_scene")]
 position = Vector2(180, 320)
 
-[node name="Narrative" parent="." instance=ExtResource("5")]
+[node name="Narrative" parent="." instance=ExtResource("narrative_scene")]
 
-[node name="HUD" parent="." instance=ExtResource("4")]
+[node name="HUD" parent="." instance=ExtResource("hud_scene")]
 
