@@ -1,67 +1,49 @@
-# Scene Audit — A2 and World Scene Organization
+# Scene Audit — A2 Room Scene Consolidation
 
 Branch: `feature/story-map-progression`
 
 ## Scope and limits
 
-Static source inspection only. No claim of Godot editor import, runtime, or gameplay acceptance. This audit focuses on A2's six terrain scenes and six runtime wrappers, plus reusable world interactions.
+Static source inspection only. No claim of Godot editor import, runtime, or gameplay acceptance.
 
-## Confirmed structure
+## Completed in this pass
 
-- R01 has been consolidated into `scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn`: terrain, marker anchors, Hero, Narrative, HUD, and fixed boundary bodies are all visible in one editable scene tree. Its former standalone terrain file was removed after consolidating the room.
-- R02–R06 still use separate terrain scenes and runtime wrappers under `scenes/rooms/a2_fog_forest/` and `scenes/rooms/a2_fog_forest/runtime/`.
-- The R01 pilot keeps the terrain under an editor-visible `Terrain` node (scaled 1.25x) and moves marker lookup to `Terrain/RoomMarkers`.
-- The terrain scenes already contain `RoomMarkers` for entries/exits and drops. This gives a grounded source for migrating fixed transitions into authored scene nodes.
-- R05's rest point is already a scene instance in the wrapper; it should remain there unless the design calls for it to belong to the terrain itself.
+- Consolidated R01–R06 into one playable `.tscn` per room under `scenes/rooms/a2_fog_forest/runtime/`.
+- Removed the six superseded standalone terrain scenes. Each playable room now has an editor-visible `Terrain` child containing the authored platforms, artwork, decoration and `RoomMarkers`.
+- Kept Hero, Narrative, HUD, fixed left/right room boundary bodies and room-level metadata in the same scene.
+- Preserved R05's `RegionRestPoint_A2` scene instance.
+- Updated `scripts/levels/a2_room_runtime.gd` to resolve marker anchors through `Terrain/RoomMarkers`.
+- R01's authored terrain is scaled 1.25x to preserve the 1792×1200 art-space to 2240×1500 room-space contract. Its room boundary bodies remain at the playable room edges.
 
-## Findings
+## Static checks completed
 
-### A2 fixed transitions are not authored scene nodes yet
+- All six room IDs in `ROOM_SCENE_PATHS` resolve to existing R01–R06 playable scene paths.
+- Each consolidated scene has one room root, one `Terrain` node, Hero, and two authored `RegionBoundary_*` bodies.
+- Scene `load_steps` values match the declared external resources and subresources.
+- External and subresource references resolve within the scene text.
+- The fixed exit/drop marker names used by `_spawn_room_exits()` exist in the matching room's `Terrain/RoomMarkers`.
+- No `AuthoredRoom` wrapper instance remains. R05's rest point remains present.
 
-`scripts/levels/a2_room_runtime.gd::_spawn_room_exits()` creates the fixed doors for R01–R06 by reading `RoomMarkers`. R01 and R03 drop transitions are also instantiated by script. The marker exists in the editor, but the actual interaction/Area2D and collision shape do not.
+## Remaining audit findings
 
-**Required change:** add reusable door/drop-transition instances at the authored marker positions in the relevant terrain or wrapper scenes; expose route destination, spawn side, prompt, and conditional unlock configuration as scene properties; connect signals/configuration from the runtime script without duplicating the nodes.
+### Fixed transitions are still created by script
 
-### Runtime wrappers still create fixed region boundaries
+`_spawn_room_exits()`, `_spawn_exit_door_at_marker()`, and `_spawn_drop_transition_at_marker()` still instantiate the fixed doors/drop areas at runtime. The destination marker anchors are editor-visible, but the actual `Area2D` and collision nodes are not yet authored in the scene tree.
 
-Each of the six wrappers contains two `RegionBoundary_*` StaticBody2D nodes created at runtime by `_create_boundaries()`. These are structural bounds, not transient effects.
+Next change: convert fixed room-to-room doors and the two A2 drop transitions into editor-visible reusable scene instances, with target scene, spawn side, prompt and conditions configured per room. Keep genuinely state-dependent gates conditional, and prevent runtime code from duplicating authored instances.
 
-**Required change:** decide and document whether the left/right bounds belong in each wrapper or in the terrain scene. Prefer authored `StaticBody2D` + `CollisionShape2D` nodes when the bounds are part of the room's fixed geometry. Avoid having both scene-authored and script-generated duplicates.
+### Cross-room route acceptance remains unverified
 
-### Folder migration must be atomic with references
-
-The six terrain scenes are referenced by their wrappers; the runtime script maps room IDs to wrapper paths; other world-state, test, or documentation files may also refer to these paths. Moving files before a repository-wide reference audit risks broken `res://` paths and stale saved-scene references.
-
-**Migration plan:** keep current paths until all references have been enumerated; then move the six terrain scenes and six wrappers in one coordinated change, update all `ExtResource`, preload, room-path map, test, and documentation references, and run static path/load-step validation.
-
-### A5 remains excluded from mechanical migration
-
-`scenes/a5_assembled_region.tscn` and `scenes/old_battlefield.tscn` still depend on the legacy A5 assembly route. Do not reorganize or freeze the rejected 22-room layout as if it were the final authored map.
-
-## Target organization
-
-```
-scenes/
-  regions/
-    a2/
-      rooms/       # authored R01-R06 terrain, markers, fixed room geometry
-      runtime/     # playable wrappers: Hero, camera, HUD, save/transition orchestration
-    terrain/       # only terrain scenes genuinely shared by multiple regions
-  world/
-    interactions/  # reusable doors, gates, levers, drop transitions
-    props/         # reusable non-interactive visual props
-```
-
-The README files under `scenes/regions/` document this target. Scene files have not yet been moved; compatibility paths remain unchanged.
+Static marker/path checks do not prove that the six rooms form a traversable map. R01→R04 and R03→R04 drop geometry, R04↔R06 and R05↔R06 height changes, C03/C04/H02 returns, spawn positions, collision boundaries and R05 rest-point reachability still require Godot 4.6.1 editor/runtime acceptance.
 
 ## Acceptance checklist
 
-- [ ] Every `res://` scene/script/resource path resolves after migration.
-- [ ] R01 consolidated scene has no duplicate terrain wrapper and all marker paths resolve.
-- [ ] Consolidate R02–R06 using the validated R01 pattern after static and editor acceptance.
-- [ ] Each fixed exit/drop trigger exists visibly in the editor scene tree.
-- [ ] No fixed exit/drop is duplicated by runtime instantiation.
-- [ ] Story/save-state conditions still control conditional exits.
-- [ ] R01's intended safe drop reaches R04; other void falls remain lethal.
-- [ ] R05 rest point remains reachable and does not duplicate.
-- [ ] Godot 4.6.1 editor import and manual room-transition acceptance pass.
+- [x] One editable playable scene per room (R01–R06).
+- [x] Terrain, markers, Hero, HUD, Narrative and fixed room boundaries are visible in the scene tree.
+- [x] Room path, marker, resource-reference and `load_steps` static checks pass.
+- [x] R05 rest point preserved.
+- [ ] Fixed exit/drop Area2D nodes authored in the scene tree; runtime duplication removed.
+- [ ] R01's one safe drop reaches R04; other void falls remain lethal.
+- [ ] R03 drop reaches R04; R04↔R06 and R05↔R06 routes work at their intended heights.
+- [ ] C03, C04 and H02 cross-region/return routes and saved discovery state verified.
+- [ ] Godot 4.6.1 editor import and manual gameplay acceptance pass.
