@@ -51,7 +51,7 @@ func _ready() -> void:
 	WorldState.set_location(location_id)
 	WorldState.pending_region_spawn_side = "west"
 
-	# The authored room child owns every ledge and ground collider; no A2 region-wide floor is generated.
+	# The playable R01 scene owns terrain, markers, Hero, HUD and boundaries as editor-visible nodes; no A2 region-wide floor is generated.
 	_create_boundaries()
 	_spawn_region_ambience()
 	var spawn_position := _spawn_position_for_side(spawn_side)
@@ -95,7 +95,7 @@ func _room_id_for_scene_path(scene_path: String) -> String:
 
 
 func _room_marker_position(marker_name: String, fallback: Vector2 = Vector2.ZERO) -> Vector2:
-	var marker := get_node_or_null("AuthoredRoom/RoomMarkers/" + marker_name) as Marker2D
+	var marker := get_node_or_null("Terrain/RoomMarkers/" + marker_name) as Marker2D
 	if marker == null:
 		push_error("[NEREIS][A2][ROOM][MARKER_MISSING] room=%s marker=%s" % [room_id, marker_name])
 		return fallback
