@@ -3,6 +3,7 @@ extends Node2D
 ## 第一条互通地图环路的通用可玩灰盒场景。
 
 const HERO_SCENE: PackedScene = preload("res://scenes/player/hero.tscn")
+const ENEMY_ACTOR_SCENE: PackedScene = preload("res://scenes/characters/enemy_actor_base.tscn")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
@@ -217,11 +218,18 @@ func _spawn_region_encounters() -> void:
 
 
 func _spawn_encounter(enemy_script: Script, enemy_name: String, spawn_x: float, body_radius: float, body_height: float) -> void:
-	var enemy := CharacterBody2D.new()
+	var enemy := ENEMY_ACTOR_SCENE.instantiate() as CharacterBody2D
+	if enemy == null:
+		push_error("[NEREIS][MAP] Failed to instantiate enemy actor scene for " + enemy_name)
+		return
 	enemy.set_script(enemy_script)
 	enemy.name = enemy_name
 	enemy.position = Vector2(spawn_x, floor_y)
-	_add_character_collision(enemy, body_radius, body_height)
+	var body_collision := enemy.get_node("CollisionShape2D") as CollisionShape2D
+	var body_capsule := body_collision.shape as CapsuleShape2D
+	body_capsule.radius = body_radius
+	body_capsule.height = body_height
+	body_collision.position = Vector2(0.0, -body_height * 0.5)
 	enemy.set_meta("region_encounter", true)
 	enemy.set_meta("encounter_active", false)
 	add_child(enemy)
