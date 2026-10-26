@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="1"]
 [ext_resource path="res://scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn" type="PackedScene" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="5"]
+
+[sub_resource type="RectangleShape2D" id="RoomBoundaryShape"]
+size = Vector2(40, ${height+200})
 
 [node name="A2R03Room" type="Node2D"]
 script = ExtResource("1")
@@ -15,3 +21,23 @@ room_id = "A2-R03"
 enable_region_encounters = false
 
 [node name="AuthoredRoom" parent="." instance=ExtResource("2")]
+
+[node name="RegionBoundary_0" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RegionBoundary_0"]
+position = Vector2(-20, 500)
+shape = SubResource("RoomBoundaryShape")
+
+[node name="RegionBoundary_1" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RegionBoundary_1"]
+position = Vector2(1300, 500)
+shape = SubResource("RoomBoundaryShape")
+
+[node name="Hero" parent="." instance=ExtResource("3")]
+position = Vector2(180, 600)
+
+[node name="Narrative" parent="." instance=ExtResource("5")]
+
+[node name="HUD" parent="." instance=ExtResource("4")]
+

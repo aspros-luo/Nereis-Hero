@@ -553,17 +553,22 @@ func _spawn_x_for_side(side: String) -> float:
 	return 180.0
 
 func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
-	hero = HERO_SCENE.instantiate() as CharacterBody2D
-	if hero == null:
-		push_error("[NEREIS][REGION] Failed to instantiate Hero scene")
-		return
+	var authored_hero := get_node_or_null("Hero") as CharacterBody2D
+	if authored_hero != null:
+		hero = authored_hero
+	else:
+		hero = HERO_SCENE.instantiate() as CharacterBody2D
+		if hero == null:
+			push_error("[NEREIS][REGION] Failed to instantiate Hero scene")
+			return
+		hero.name = "Hero"
+		add_child(hero)
 	# The region controller owns the single delayed checkpoint recovery; prevent Hero.gd from running a second fade/teleport in parallel.
 	# 死亡后的延迟复位由区域控制器统一负责；禁止 Hero.gd 再并行执行第二套淡出/传送。
 	hero.defer_death_recovery = true
 	hero.position = Vector2(spawn_x, floor_y if spawn_y < 0.0 else spawn_y)
-	hero.name = "Hero"
-	add_child(hero)
-	hero.defeated.connect(_on_hero_defeated)
+	if not hero.defeated.is_connected(_on_hero_defeated):
+		hero.defeated.connect(_on_hero_defeated)
 	# Room-streamed A2 keeps an existing A2 checkpoint across door transitions; ordinary A2 entry
 	# initializes a room-aware checkpoint so cross-room death recovery has a valid destination.
 	# A2 房间切换时保留已经启用的 A2 检查点；首次进入才建立带房间 ID 的默认检查点。
@@ -576,21 +581,30 @@ func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 	else:
 		WorldState.set_checkpoint(hero.global_position)
 
-	camera = hero.get_node("HeroCamera") as Camera2D
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 6.0
-	camera.limit_left = 0
-	camera.limit_top = 0
-	camera.limit_right = int(map_width)
-	camera.limit_bottom = int(room_height) if region_id == "A5" and not room_id.is_empty() else (1200 if region_id == "A2" else 720)
+	camera = hero.get_node_or_null("HeroCamera") as Camera2D
+	if camera != null:
+		camera.position_smoothing_enabled = true
+		camera.position_smoothing_speed = 6.0
+		camera.limit_left = 0
+		camera.limit_top = 0
+		camera.limit_right = int(map_width)
+		camera.limit_bottom = int(room_height) if region_id == "A5" and not room_id.is_empty() else (1200 if region_id == "A2" else 720)
 
 func _spawn_ui() -> void:
-	narrative = NARRATIVE_SCENE.instantiate() as CanvasLayer
-	add_child(narrative)
-	hud = HUD_SCENE.instantiate() as CanvasLayer
-	add_child(hud)
-	hud.bind_hero(hero)
-	hud.set_story_mode(_localized_region_title(), _get_objective_text())
+	narrative = get_node_or_null("Narrative") as CanvasLayer
+	if narrative == null:
+		narrative = NARRATIVE_SCENE.instantiate() as CanvasLayer
+		if narrative != null:
+			add_child(narrative)
+	hud = get_node_or_null("HUD") as CanvasLayer
+	if hud == null:
+		hud = HUD_SCENE.instantiate() as CanvasLayer
+		if hud != null:
+			add_child(hud)
+	if hud != null:
+		hud.bind_hero(hero)
+		hud.set_story_mode(_localized_region_title(), _get_objective_text())
+
 func _localized_region_title() -> String:
 	var display_name := region_title
 	match region_id:
@@ -942,6 +956,8 @@ func _add_ground_segment(segment_name: String, start_x: float, segment_width: fl
 	add_child(floor)
 func _create_boundaries() -> void:
 	if assembly_child_mode:
+		return
+	if get_node_or_null("RegionBoundary_0") != null and get_node_or_null("RegionBoundary_1") != null:
 		return
 	var wall_height := 1100.0
 	var wall_center_y := 500.0
