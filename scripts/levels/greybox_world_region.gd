@@ -2,7 +2,7 @@ extends Node2D
 ## Shared playable graybox for the first connected world-map loop.
 ## 第一条互通地图环路的通用可玩灰盒场景。
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
+const HERO_SCENE: PackedScene = preload("res://scenes/player/hero.tscn")
 const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
 const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
 const INTERACTION_DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
@@ -545,14 +545,15 @@ func _spawn_x_for_side(side: String) -> float:
 	return 180.0
 
 func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
-	hero = CharacterBody2D.new()
-	hero.set_script(HERO_SCRIPT)
+	hero = HERO_SCENE.instantiate() as CharacterBody2D
+	if hero == null:
+		push_error("[NEREIS][REGION] Failed to instantiate Hero scene")
+		return
 	# The region controller owns the single delayed checkpoint recovery; prevent Hero.gd from running a second fade/teleport in parallel.
 	# 死亡后的延迟复位由区域控制器统一负责；禁止 Hero.gd 再并行执行第二套淡出/传送。
 	hero.defer_death_recovery = true
 	hero.position = Vector2(spawn_x, floor_y if spawn_y < 0.0 else spawn_y)
 	hero.name = "Hero"
-	_add_character_collision(hero, 18.0, 48.0)
 	add_child(hero)
 	hero.defeated.connect(_on_hero_defeated)
 	# Room-streamed A2 keeps an existing A2 checkpoint across door transitions; ordinary A2 entry
@@ -567,15 +568,13 @@ func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 	else:
 		WorldState.set_checkpoint(hero.global_position)
 
-	camera = Camera2D.new()
-	camera.name = "HeroCamera"
+	camera = hero.get_node("Camera2D") as Camera2D
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 6.0
 	camera.limit_left = 0
 	camera.limit_top = 0
 	camera.limit_right = int(map_width)
 	camera.limit_bottom = int(room_height) if region_id == "A5" and not room_id.is_empty() else (1200 if region_id == "A2" else 720)
-	hero.add_child(camera)
 
 func _spawn_ui() -> void:
 	narrative = CanvasLayer.new()
