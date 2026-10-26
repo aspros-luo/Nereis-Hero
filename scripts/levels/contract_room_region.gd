@@ -109,7 +109,7 @@ func _ready() -> void:
 
 	WorldState.set_checkpoint(hero.global_position)
 	queue_redraw()
-	print("[NEREIS][ROOM_NETWORK] id=%s terrain=%d exits=%d authored=%s" % [room_id, platforms.size(), exits.size(), str(authored_scene_mode)])
+	print("[NEREIS][ROOM_NETWORK] id=%s terrain=%d exits=%d" % [room_id, platforms.size(), exits.size()])
 
 
 func _read_authored_terrain() -> void:
