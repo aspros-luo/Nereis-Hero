@@ -2,11 +2,7 @@ extends Node2D
 ## Compact first-visit exploration section for the village's old drainage passage.
 ## 村庄旧排水口的早期探索短段；后续从城区/水库侧开启连接。
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const DOOR_SCRIPT = preload("res://scripts/world/interaction_door.gd")
-const RAT_SCRIPT = preload("res://scripts/enemies/sewer_rat.gd")
+const SEWER_RAT_SCENE: PackedScene = preload("res://scenes/enemies/sewer_rat.tscn")
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
 
 const VILLAGE_SCENE := "res://scenes/village_hub.tscn"
@@ -14,34 +10,67 @@ const CITY_SCENE := "res://scenes/forgotten_city.tscn"
 const RESERVOIR_SCENE := "res://scenes/sewer_reservoir.tscn"
 const CONNECTION_FLAG := "opened_old_drainage_link_from_A4"
 
-var hero: CharacterBody2D
-var narrative: CanvasLayer
-var hud: CanvasLayer
+@onready var hero: CharacterBody2D = $Hero
+@onready var narrative: CanvasLayer = $NarrativeManager
+@onready var hud: CanvasLayer = $HUD
 var entry_side := "village_entry"
 var respawning := false
+@onready var village_door: Area2D = $VillageReturnDoor
+@onready var city_door: Area2D = $CityGateDoor
+@onready var reservoir_door: Area2D = $ReservoirDoor
+@onready var gate_blocker: CollisionShape2D = $SealedOldDrainGate/CollisionShape2D
 
 func _ready() -> void:
 	WorldState.prepare_scene_runtime()
 	entry_side = WorldState.pending_region_spawn_side
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.set_location("old_drain_exploration")
-	_build_floor_and_descent()
-	_spawn_hero(_spawn_x_for_side(entry_side), _spawn_y_for_side(entry_side))
-	_spawn_door(150.0, 540.0, "E  返回边境村庄", _return_to_village, VILLAGE_SCENE, "city_cut_return")
+	hero.position = Vector2(_spawn_x_for_side(entry_side), _spawn_y_for_side(entry_side))
+	var camera := hero.get_node("Camera2D") as Camera2D
+	camera.position_smoothing_enabled = true
+	camera.position_smoothing_speed = 6.0
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = 2400
+	camera.limit_bottom = 900
+	hero.defeated.connect(_on_hero_defeated)
+	WorldState.set_checkpoint(hero.global_position)
+	village_door.set_meta("p5_1_exit_contract", true)
+	village_door.set_meta("p5_1_target_scene", VILLAGE_SCENE)
+	village_door.set_meta("p5_1_target_region", "A1")
+	village_door.set_meta("p5_1_spawn_side", "city_cut_return")
+	village_door.interacted.connect(_return_to_village)
 	if CONNECTION_FLAG in WorldState.achievement_flags:
-		_spawn_door(2260.0, 690.0, "E  沿旧排水道进入城区", _enter_city, CITY_SCENE, "village_city_cut")
-		_spawn_door(1360.0, 690.0, "E  返回旧水库", _return_to_reservoir, RESERVOIR_SCENE, "old_drain_link")
+		city_door.set("prompt_text", "E  沿旧排水道进入城区")
+		city_door.set_meta("p5_1_exit_contract", true)
+		city_door.set_meta("p5_1_target_scene", CITY_SCENE)
+		city_door.set_meta("p5_1_target_region", "A3")
+		city_door.set_meta("p5_1_spawn_side", "village_city_cut")
+		city_door.interacted.connect(_enter_city)
+		reservoir_door.visible = true
+		reservoir_door.monitoring = true
+		(reservoir_door.get_node("CollisionShape2D") as CollisionShape2D).disabled = false
+		reservoir_door.set_meta("p5_1_exit_contract", true)
+		reservoir_door.set_meta("p5_1_target_scene", RESERVOIR_SCENE)
+		reservoir_door.set_meta("p5_1_target_region", "A4")
+		reservoir_door.set_meta("p5_1_spawn_side", "old_drain_link")
+		reservoir_door.interacted.connect(_return_to_reservoir)
+		gate_blocker.disabled = true
 	else:
-		_spawn_door(2260.0, 690.0, "E  检查被堵住的闸门", _inspect_blocked_gate)
+		city_door.set("prompt_text", "E  检查被堵住的闸门")
+		city_door.interacted.connect(_inspect_blocked_gate)
+		reservoir_door.visible = false
+		reservoir_door.monitoring = false
+		(reservoir_door.get_node("CollisionShape2D") as CollisionShape2D).disabled = true
+		gate_blocker.disabled = false
 	_spawn_rat(900.0)
 	_spawn_rat(1100.0)
-	_spawn_ui()
+	hud.bind_hero(hero)
+	hud.set_story_mode("A1/A3/A4｜旧排水通道", "向下探索；东侧闸门暂时封闭，找到另一侧后再回来。")
 	queue_redraw()
 	if "old_drain_first_visit_seen" not in WorldState.achievement_flags and not WorldState.debug_map_test_mode:
 		WorldState.record_achievement("old_drain_first_visit_seen")
 		get_tree().create_timer(0.55).timeout.connect(_show_intro)
-
-
 func _physics_process(_delta: float) -> void:
 	# The drainage shaft has descending ledges but no lethal bottom collider.
 	# Recover the Hero if they fall below the playable space, rather than leaving
@@ -49,136 +78,19 @@ func _physics_process(_delta: float) -> void:
 	if not respawning and is_instance_valid(hero) and hero.global_position.y > 820.0:
 		_recover_from_fall()
 
-func _build_floor_and_descent() -> void:
-	_add_floor_segment(0.0, 280.0, 540.0)
-	_add_floor_segment(600.0, 1800.0, 690.0)
-	_add_platform(Rect2(300.0, 555.0, 95.0, 16.0))
-	_add_platform(Rect2(390.0, 600.0, 95.0, 16.0))
-	_add_platform(Rect2(485.0, 645.0, 110.0, 16.0))
-	_add_platform(Rect2(700.0, 635.0, 140.0, 16.0))
-	_add_platform(Rect2(1030.0, 590.0, 125.0, 16.0))
-	_add_platform(Rect2(1210.0, 550.0, 130.0, 16.0))
-	_add_platform(Rect2(1480.0, 590.0, 145.0, 16.0))
-	_add_platform(Rect2(1770.0, 625.0, 130.0, 16.0))
-	_add_wall(-20.0)
-	_add_wall(2420.0)
-	if CONNECTION_FLAG not in WorldState.achievement_flags:
-		_add_gate_blocker()
 
-func _add_floor_segment(x: float, width: float, top_y: float) -> void:
-	var body := StaticBody2D.new()
-	body.name = "DrainFloor"
-	body.position = Vector2(x + width * 0.5, top_y + 20.0)
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(width, 40.0)
-	shape.shape = rectangle
-	body.add_child(shape)
-	add_child(body)
 
-func _add_platform(rect: Rect2) -> void:
-	var body := StaticBody2D.new()
-	body.position = rect.position
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = rect.size
-	shape.shape = rectangle
-	shape.position = rect.size * 0.5
-	shape.one_way_collision = true
-	body.add_child(shape)
-	add_child(body)
 
-func _add_wall(x: float) -> void:
-	var body := StaticBody2D.new()
-	body.position = Vector2(x, 600.0)
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(40.0, 900.0)
-	shape.shape = rectangle
-	body.add_child(shape)
-	add_child(body)
 
-func _add_gate_blocker() -> void:
-	# The sealed gate is a real collider, not only a drawn hint or interaction prompt.
-	# 封闭闸门必须有真实碰撞体，不能只画出外观却允许主角穿过。
-	var body := StaticBody2D.new()
-	body.name = "SealedOldDrainGate"
-	body.position = Vector2(2170.0, 600.0)
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(38.0, 190.0)
-	shape.shape = rectangle
-	body.add_child(shape)
-	add_child(body)
 
-func _spawn_hero(spawn_x: float, spawn_y: float) -> void:
-	hero = CharacterBody2D.new()
-	hero.set_script(HERO_SCRIPT)
-	hero.name = "Hero"
-	hero.position = Vector2(spawn_x, spawn_y)
-	var collision := CollisionShape2D.new()
-	var capsule := CapsuleShape2D.new()
-	capsule.radius = 18.0
-	capsule.height = 48.0
-	collision.shape = capsule
-	collision.position = Vector2(0.0, -24.0)
-	hero.add_child(collision)
-	add_child(hero)
-	hero.defeated.connect(_on_hero_defeated)
-	WorldState.set_checkpoint(hero.global_position)
-	var camera := Camera2D.new()
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 6.0
-	camera.limit_left = 0
-	camera.limit_top = 0
-	camera.limit_right = 2400
-	camera.limit_bottom = 900
-	hero.add_child(camera)
 
-func _spawn_ui() -> void:
-	narrative = CanvasLayer.new()
-	narrative.set_script(NARRATIVE_SCRIPT)
-	add_child(narrative)
-	hud = CanvasLayer.new()
-	hud.set_script(HUD_SCRIPT)
-	add_child(hud)
-	hud.bind_hero(hero)
-	hud.set_story_mode("A1/A3/A4｜旧排水通道", "向下探索；东侧闸门暂时封闭，找到另一侧后再回来。")
 
-func _spawn_door(x: float, y: float, prompt: String, callback: Callable, target_scene: String = "", spawn_side: String = "") -> void:
-	var door := Area2D.new()
-	door.set_script(DOOR_SCRIPT)
-	door.position = Vector2(x, y)
-	door.prompt_text = prompt
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(84.0, 112.0)
-	shape.shape = rectangle
-	shape.position = Vector2(0.0, -56.0)
-	door.add_child(shape)
-	if not target_scene.is_empty() and not spawn_side.is_empty():
-		door.set_meta("p5_1_exit_contract", true)
-		door.set_meta("p5_1_target_scene", target_scene)
-		door.set_meta("p5_1_target_region", "A1" if target_scene == VILLAGE_SCENE else ("A3" if target_scene == CITY_SCENE else "A4"))
-		door.set_meta("p5_1_spawn_side", spawn_side)
-	add_child(door)
-	door.interacted.connect(callback)
 
 func _spawn_rat(x: float) -> void:
-	var rat := CharacterBody2D.new()
-	rat.set_script(RAT_SCRIPT)
+	var rat := SEWER_RAT_SCENE.instantiate() as CharacterBody2D
 	rat.name = "SewerRat_%d" % int(x)
 	rat.position = Vector2(x, 690.0)
-	var collision := CollisionShape2D.new()
-	var capsule := CapsuleShape2D.new()
-	capsule.radius = 14.0
-	capsule.height = 28.0
-	collision.shape = capsule
-	collision.position = Vector2(0.0, -14.0)
-	rat.add_child(collision)
 	add_child(rat)
-	rat.set_meta("interaction_priority", 0)
-
 func _spawn_x_for_side(side: String) -> float:
 	match side:
 		"city_side_entry":
