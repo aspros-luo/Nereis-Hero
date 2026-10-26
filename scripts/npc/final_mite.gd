@@ -1,10 +1,10 @@
 extends Node2D
 
-const HURTBOX_SCRIPT = preload("res://scripts/combat/hurtbox.gd")
 
 signal died
 
 var hero: Node2D
+@onready var hurtbox: Area2D = $Hurtbox
 var controller: Node
 var elapsed := 0.0
 var hit_flash := 0.0
@@ -19,10 +19,6 @@ func setup(hero_target: Node2D, ending_controller: Node) -> void:
     controller = ending_controller
 
 func _ready() -> void:
-    var hurtbox := Area2D.new()
-    hurtbox.name = "Hurtbox"
-    hurtbox.set_script(HURTBOX_SCRIPT)
-    add_child(hurtbox)
     hurtbox.setup(self, Vector2(34, 72), Vector2(0, -36))
     queue_redraw()
 

@@ -1,20 +1,19 @@
 extends Node2D
 
-const HERO_SCRIPT = preload("res://scripts/player/hero.gd")
-const HUD_SCRIPT = preload("res://scripts/ui/game_hud.gd")
-const NARRATIVE_SCRIPT = preload("res://scripts/core/narrative_manager.gd")
-const FINAL_CULTIST_SCRIPT = preload("res://scripts/enemies/final_cultist.gd")
-const FINAL_MITE_SCRIPT = preload("res://scripts/npc/final_mite.gd")
-const NARRATIVE_AUDIO_SCRIPT = preload("res://scripts/audio/narrative_audio.gd")
-
 const CULTIST_COUNT := 100
 const FLOOR_Y := 540.0
 const LEVEL_WIDTH := 5600.0
+const FINAL_CULTIST_SCENE: PackedScene = preload("res://scenes/enemies/final_cultist.tscn")
+const FINAL_MITE_SCENE: PackedScene = preload("res://scenes/npc/final_mite.tscn")
 
-var hero: CharacterBody2D
-var camera: Camera2D
-var hud: CanvasLayer
-var narrative: CanvasLayer
+@onready var hero: CharacterBody2D = $Hero
+@onready var camera: Camera2D = $Hero/HeroCamera
+@onready var hud: CanvasLayer = $HUD
+@onready var narrative: CanvasLayer = $Narrative
+@onready var narrative_audio: Node = $NarrativeAudio
+@onready var ending_layer: CanvasLayer = $EndingLayer
+@onready var flash: ColorRect = $Flash
+
 var cultists: Array[CharacterBody2D] = []
 var cultists_defeated := 0
 var mite: Node2D
@@ -23,8 +22,6 @@ var ending_started := false
 var detonation_started := false
 var elapsed := 0.0
 var fire_intensity := 0.0
-var narrative_audio: Node
-var ending_layer: CanvasLayer
 var ending_backdrop: ColorRect
 var ending_card: ColorRect
 var ending_title: Label
@@ -36,22 +33,44 @@ var ending_stage_elapsed := 0.0
 var ending_can_exit := false
 var ending_cg: Control
 
+
 func _ready() -> void:
-    process_mode = Node.PROCESS_MODE_ALWAYS
     # Director test scene only. Do not save forced ending facts or fabricate relationship milestones.
     WorldState.current_location = "ending_fire_demo"
     WorldState.ancient_residue_awakened = true
     WorldState.hidden_artifact_pieces = 3
 
-    _create_floor()
-    _create_boundaries()
-    _spawn_hero()
-    _spawn_hud()
-    _spawn_narrative()
-    _spawn_narrative_audio()
+    camera.position_smoothing_enabled = true
+    camera.position_smoothing_speed = 5.0
+    camera.limit_left = 0
+    camera.limit_top = 0
+    camera.limit_right = int(LEVEL_WIDTH)
+    camera.limit_bottom = 720
+    hud.bind_hero(hero)
+    hud.set_debug_visible(false)
+    if hud.has_method("_set_humanity_visible"):
+        hud._set_humanity_visible(true)
+
     _spawn_cultist_swarm()
     get_tree().create_timer(0.8).timeout.connect(_show_intro)
     queue_redraw()
+
+
+func _spawn_cultist_swarm() -> void:
+    for i in range(CULTIST_COUNT):
+        var cultist := FINAL_CULTIST_SCENE.instantiate() as CharacterBody2D
+        if cultist == null:
+            push_error("Fire ending: failed to instantiate FinalCultist scene")
+            return
+        var lane := i % 5
+        var row := int(i / 5)
+        cultist.position = Vector2(900.0 + row * 92.0, FLOOR_Y - float(lane * 9))
+        cultist.name = "FinalCultist_%03d" % (i + 1)
+        add_child(cultist)
+        cultist.setup(hero, float(i + 1) * 0.17)
+        cultist.defeated.connect(_on_cultist_defeated)
+        cultists.append(cultist)
+
 
 func _process(delta: float) -> void:
     elapsed += delta
@@ -66,57 +85,6 @@ func _process(delta: float) -> void:
             _advance_ending_stage()
 
     queue_redraw()
-
-func _spawn_hero() -> void:
-    hero = CharacterBody2D.new()
-    hero.set_script(HERO_SCRIPT)
-    hero.position = Vector2(260, FLOOR_Y)
-    hero.name = "Hero"
-    _add_character_collision(hero, 18.0, 48.0)
-    add_child(hero)
-
-    camera = Camera2D.new()
-    camera.name = "EndingCamera"
-    camera.position_smoothing_enabled = true
-    camera.position_smoothing_speed = 5.0
-    camera.limit_left = 0
-    camera.limit_top = 0
-    camera.limit_right = int(LEVEL_WIDTH)
-    camera.limit_bottom = 720
-    hero.add_child(camera)
-
-func _spawn_hud() -> void:
-    hud = CanvasLayer.new()
-    hud.set_script(HUD_SCRIPT)
-    add_child(hud)
-    hud.bind_hero(hero)
-    hud.set_debug_visible(false)
-    if hud.has_method("_set_humanity_visible"):
-        hud._set_humanity_visible(true)
-
-func _spawn_narrative() -> void:
-    narrative = CanvasLayer.new()
-    narrative.set_script(NARRATIVE_SCRIPT)
-    add_child(narrative)
-
-func _spawn_narrative_audio() -> void:
-    narrative_audio = Node.new()
-    narrative_audio.set_script(NARRATIVE_AUDIO_SCRIPT)
-    add_child(narrative_audio)
-
-func _spawn_cultist_swarm() -> void:
-    for i in range(CULTIST_COUNT):
-        var cultist := CharacterBody2D.new()
-        cultist.set_script(FINAL_CULTIST_SCRIPT)
-        var lane := i % 5
-        var row := int(i / 5)
-        cultist.position = Vector2(900.0 + row * 92.0, FLOOR_Y - float(lane * 9))
-        cultist.name = "FinalCultist_%03d" % (i + 1)
-        _add_character_collision(cultist, 14.0, 42.0)
-        add_child(cultist)
-        cultist.setup(hero, float(i + 1) * 0.17)
-        cultist.defeated.connect(_on_cultist_defeated)
-        cultists.append(cultist)
 
 func _on_cultist_defeated() -> void:
     cultists_defeated += 1
@@ -191,11 +159,9 @@ func _begin_detonation() -> void:
     WorldState.ending_route = "烈火天罚"
     WorldState.save_game()
 
-    var flash := ColorRect.new()
     flash.color = Color("#f2d0a8")
     flash.modulate.a = 0.0
-    flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    add_child(flash)
+    flash.visible = true
 
     var tween := create_tween()
     tween.tween_property(flash, "modulate:a", 1.0, 0.12)
@@ -243,7 +209,6 @@ func _create_ending_overlay() -> void:
     ending_prompt.add_theme_color_override("font_color", Color("#9b8078"))
     ending_cg.call("setup", "fire")
     ending_cg.call("play")
-
 
 func _show_ending_stage(stage: int) -> void:
     ending_stage = stage
@@ -306,44 +271,6 @@ func _show_intro() -> void:
         "One hundred cultists.\n\nNo hidden lore is attached to the count.\n\nKeep moving.",
         4.0
     )
-
-func _create_floor() -> void:
-    var floor := StaticBody2D.new()
-    var shape := CollisionShape2D.new()
-    var rectangle := RectangleShape2D.new()
-    rectangle.size = Vector2(LEVEL_WIDTH + 200.0, 40.0)
-    shape.shape = rectangle
-    shape.position = Vector2(LEVEL_WIDTH * 0.5, FLOOR_Y + 20.0)
-    floor.add_child(shape)
-    add_child(floor)
-
-func _create_boundaries() -> void:
-    var left := StaticBody2D.new()
-    var left_shape := CollisionShape2D.new()
-    var left_rect := RectangleShape2D.new()
-    left_rect.size = Vector2(40, 720)
-    left_shape.shape = left_rect
-    left_shape.position = Vector2(-20, 360)
-    left.add_child(left_shape)
-    add_child(left)
-
-    var right := StaticBody2D.new()
-    var right_shape := CollisionShape2D.new()
-    var right_rect := RectangleShape2D.new()
-    right_rect.size = Vector2(40, 720)
-    right_shape.shape = right_rect
-    right_shape.position = Vector2(LEVEL_WIDTH + 20.0, 360)
-    right.add_child(right_shape)
-    add_child(right)
-
-func _add_character_collision(character: CharacterBody2D, radius: float, height: float) -> void:
-    var collision := CollisionShape2D.new()
-    var capsule := CapsuleShape2D.new()
-    capsule.radius = radius
-    capsule.height = height
-    collision.shape = capsule
-    collision.position = Vector2(0, -height * 0.5)
-    character.add_child(collision)
 
 func _unhandled_input(event: InputEvent) -> void:
     if not (event is InputEventKey and event.pressed and not event.echo):

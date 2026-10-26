@@ -1,10 +1,61 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/ending_fire_demo.gd" id="1"]
-[ext_resource type="PackedScene" path="res://scenes/ui/ending_sequence_overlay.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/audio/narrative_audio.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ending_sequence_overlay.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/final_cultist.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/npc/final_mite.tscn" id="8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fire_floor"]
+size = Vector2(5800, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fire_boundary"]
+size = Vector2(40, 720)
 
 [node name="EndingFireDemo" type="Node2D"]
+process_mode = 3
 script = ExtResource("1")
 
-[node name="EndingLayer" parent="." instance=ExtResource("2")]
+[node name="Ground" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(2800, 560)
+shape = SubResource("RectangleShape2D_fire_floor")
+
+[node name="LeftBoundary" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftBoundary"]
+position = Vector2(-20, 360)
+shape = SubResource("RectangleShape2D_fire_boundary")
+
+[node name="RightBoundary" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightBoundary"]
+position = Vector2(5620, 360)
+shape = SubResource("RectangleShape2D_fire_boundary")
+
+[node name="Hero" parent="." instance=ExtResource("2")]
+position = Vector2(260, 540)
+
+[node name="HUD" parent="." instance=ExtResource("3")]
+
+[node name="Narrative" parent="." instance=ExtResource("4")]
+
+[node name="NarrativeAudio" parent="." instance=ExtResource("5")]
+
+[node name="EndingLayer" parent="." instance=ExtResource("6")]
 visible = false
+
+[node name="Flash" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color("#f2d0a8")
+modulate = Color(1, 1, 1, 0)
