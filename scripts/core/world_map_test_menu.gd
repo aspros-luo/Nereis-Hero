@@ -29,95 +29,23 @@ const REGION_ENTRIES: Array[Dictionary] = [
     {"id":"H08", "name":"胎宫与原初空腔 / Primordial Hollow", "path":"res://scenes/primordial_hollow.tscn", "spawn":"west"}
 ]
 
+@onready var region_grid: GridContainer = $MarginContainer/Content/MapAndRegions/ScrollContainer/RegionGrid
+@onready var reset_button: Button = $MarginContainer/Content/Footer/ResetButton
+@onready var back_button: Button = $MarginContainer/Content/Footer/BackButton
+
 func _ready() -> void:
-    _build_ui()
-
-func _build_ui() -> void:
-    var background := ColorRect.new()
-    background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    background.color = Color("#0b090f")
-    add_child(background)
-
-    var root := VBoxContainer.new()
-    root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    root.add_theme_constant_override("separation", 12)
-    root.add_theme_constant_override("margin_left", 44)
-    root.add_theme_constant_override("margin_right", 44)
-    root.add_theme_constant_override("margin_top", 26)
-    root.add_theme_constant_override("margin_bottom", 26)
-    add_child(root)
-
-    var title := Label.new()
-    title.text = "宏观地图验收 / WORLD MAP ACCEPTANCE"
-    title.add_theme_font_size_override("font_size", 30)
-    title.add_theme_color_override("font_color", Color("#d6c7b2"))
-    root.add_child(title)
-
-    var description := Label.new()
-    description.text = "选择 ROOM_WORLD 从序章进入完整房间网络：A0-A13 主区域与 H01-H08 隐藏区域，共 50 个房间规格。场景出口由宏观连接图生成；地形碰撞、路线门槛与出生点仍需在 Godot 运行时逐项验收。测试模式不覆盖正式存档。\nEnter ROOM_WORLD to explore the complete room network: A0-A13 plus H01-H08, 50 room contracts. Scene exits are driven by the world graph; collision, route gates and spawn safety still require Godot runtime acceptance. Normal saves are protected.\n操作：方向键/A-D 移动，Space 跳跃，E 交互，F6 返回本选择页。"
-    description.custom_minimum_size.y = 58
-    description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-    description.add_theme_color_override("font_color", Color("#9b9099"))
-    root.add_child(description)
-
-    # Show the original macro topology beside the region launch list so map acceptance starts from spatial context.
-    # 在区域启动列表旁展示原创宏观拓扑图，让地图验收从空间关系出发。
-    var map_and_regions := HBoxContainer.new()
-    map_and_regions.size_flags_vertical = Control.SIZE_EXPAND_FILL
-    map_and_regions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-    map_and_regions.add_theme_constant_override("separation", 18)
-    root.add_child(map_and_regions)
-
-    var map_panel := PanelContainer.new()
-    map_panel.custom_minimum_size = Vector2(470, 0)
-    map_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-    map_and_regions.add_child(map_panel)
-
-    var map_preview := TextureRect.new()
-    map_preview.texture = load("res://assets/art/maps/nereis_world_topology.svg")
-    map_preview.custom_minimum_size = Vector2(450, 330)
-    map_preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-    map_preview.size_flags_vertical = Control.SIZE_EXPAND_FILL
-    map_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-    map_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-    map_panel.add_child(map_preview)
-
-    var scroll := ScrollContainer.new()
-    scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-    scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-    map_and_regions.add_child(scroll)
-
-    var grid := GridContainer.new()
-    grid.columns = 2
-    grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-    grid.add_theme_constant_override("h_separation", 14)
-    grid.add_theme_constant_override("v_separation", 8)
-    scroll.add_child(grid)
-
-    for entry in REGION_ENTRIES:
-        var button := Button.new()
-        button.text = "%s   %s" % [str(entry.id), str(entry.name)]
-        button.custom_minimum_size = Vector2(520, 42)
-        button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-        button.add_theme_font_size_override("font_size", 15)
-        button.pressed.connect(_enter_region.bind(entry))
-        grid.add_child(button)
-
-    var footer := HBoxContainer.new()
-    root.add_child(footer)
-
-    var reset_button := Button.new()
-    reset_button.text = "重新预置测试条件 / Reset Test Flags"
-    reset_button.custom_minimum_size = Vector2(300, 40)
+    var button_count := region_grid.get_child_count()
+    if button_count != REGION_ENTRIES.size():
+        push_error("World map test menu button count mismatch: %d != %d" % [button_count, REGION_ENTRIES.size()])
+    var count := mini(button_count, REGION_ENTRIES.size())
+    for index in range(count):
+        var button := region_grid.get_child(index) as Button
+        if button == null:
+            push_error("World map test menu child %d is not a Button" % index)
+            continue
+        button.pressed.connect(_enter_region.bind(REGION_ENTRIES[index]))
     reset_button.pressed.connect(_prepare_test_state)
-    footer.add_child(reset_button)
-
-    var back_button := Button.new()
-    back_button.text = "返回标题菜单 / Main Menu"
-    back_button.custom_minimum_size = Vector2(240, 40)
     back_button.pressed.connect(_return_to_title)
-    footer.add_child(back_button)
-
     _prepare_test_state()
 
 func _prepare_test_state() -> void:
