@@ -48,34 +48,6 @@
     <path d="M4 -8L7 -42L10 -8" fill="none" stroke="#95b7a1" stroke-width="1" opacity=".6"/>
   </g>
 </defs>
-<!-- Deep mist forest -->
-<rect width="1792" height="1200" fill="url(#sky)"/>
-<path d="M0 230Q210 120 410 226T820 205T1230 172T1792 210V610H0Z" fill="#1c3933" opacity=".72"/>
-<path d="M0 350Q180 270 370 330T730 290T1100 345T1480 275T1792 320V720H0Z" fill="#25453c" opacity=".55"/>
-<path d="M0 180Q250 120 460 205T880 160T1310 205T1792 120V470H0Z" fill="url(#mist)"/>
-<!-- Distant forest stems and valley -->
-<g fill="none" stroke-linecap="round">
-  <path d="M100 0Q80 170 122 390M170 20Q220 190 178 430M340 0Q310 210 372 470M468 0Q500 180 455 370M590 0Q570 180 615 470M690 0Q735 190 700 410" stroke="#172c27" stroke-width="27" opacity=".8"/>
-  <path d="M1120 0Q1090 170 1128 470M1210 0Q1240 200 1200 420M1485 0Q1450 180 1500 420M1630 0Q1670 210 1620 455M1740 0Q1710 180 1750 400" stroke="#10231f" stroke-width="30" opacity=".8"/>
-  <path d="M80 420Q170 300 240 420T390 410T540 360T700 420T880 390T1050 435T1270 365T1490 415T1720 370" stroke="#73927b" stroke-width="3" opacity=".14"/>
-</g>
-<!-- Far ruined towers in the fog -->
-<g opacity=".64" fill="#172d2d" stroke="#66877e" stroke-width="2">
-  <path d="M1290 440V260L1310 260V226L1324 226V183L1341 222V260H1356V440Z"/>
-  <path d="M1372 435V198L1392 198V159L1410 159V125L1425 164V198H1444V435Z"/>
-  <path d="M1456 455V236L1477 236V203L1491 203V166L1507 207V236H1525V455Z"/>
-  <path d="M1540 445V285L1560 285V250L1573 250V220L1588 253V285H1605V445Z"/>
-  <path d="M1630 450V315L1648 315V287L1663 287V260L1677 290V315H1693V450Z"/>
-  <path d="M1265 445L1265 390L1240 390L1240 365L1275 365L1275 345L1290 345L1290 445Z"/>
-</g>
-<g fill="none" stroke="#b9d8c8" stroke-width="2" opacity=".25">
-  <path d="M1310 280v150M1392 205v230M1477 280v165M1560 315v130M1648 340v110"/>
-  <path d="M1274 388h16M1356 261h16M1444 238h12M1525 291h15M1605 323h25"/>
-</g>
-<!-- Volumetric light -->
-<path d="M840 0L950 0L1140 510L1045 510Z" fill="url(#ray)"/>
-<path d="M1040 0L1085 0L1280 550L1230 550Z" fill="url(#ray)" opacity=".55"/>
-<path d="M600 0L640 0L820 370L780 370Z" fill="url(#ray)" opacity=".42"/>
 <!-- Enormous old tree canopy at left -->
 <path d="M0 0H560Q490 42 430 85T310 155T205 230T130 360L0 410Z" fill="#07110e"/>
 <path d="M0 0H420Q360 64 330 125T235 224T150 350L0 390Z" fill="#10231b"/>
