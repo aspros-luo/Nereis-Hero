@@ -34,12 +34,34 @@ room_id = "A1-R02"
 [node name="Terrain_upper_rim" type="StaticBody2D" parent="."]
 position = Vector2(120, 160)
 
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_upper_rim"]
+position = Vector2(330, 25)
+polygon = PackedVector2Array(Vector2(-330, -25), Vector2(330, -25), Vector2(330, 25), Vector2(-330, 25))
+color = Color("#34333c")
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_upper_rim"]
+position = Vector2(330, 0)
+points = PackedVector2Array(Vector2(-330, 0), Vector2(330, 0))
+width = 3.0
+default_color = Color("#c4b38b")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_upper_rim"]
 position = Vector2(330, 25)
 shape = SubResource("TerrainShape1")
 
 [node name="Terrain_ledge_01" type="StaticBody2D" parent="."]
 position = Vector2(80, 400)
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ledge_01"]
+position = Vector2(150, 12)
+polygon = PackedVector2Array(Vector2(-150, -12), Vector2(150, -12), Vector2(150, 12), Vector2(-150, 12))
+color = Color("#78634a")
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_ledge_01"]
+position = Vector2(150, 0)
+points = PackedVector2Array(Vector2(-150, 0), Vector2(150, 0))
+width = 3.0
+default_color = Color("#e8bd78")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_01"]
 position = Vector2(150, 12)
@@ -49,6 +71,17 @@ one_way_collision = true
 [node name="Terrain_ledge_02" type="StaticBody2D" parent="."]
 position = Vector2(500, 620)
 
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ledge_02"]
+position = Vector2(150, 12)
+polygon = PackedVector2Array(Vector2(-150, -12), Vector2(150, -12), Vector2(150, 12), Vector2(-150, 12))
+color = Color("#78634a")
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_ledge_02"]
+position = Vector2(150, 0)
+points = PackedVector2Array(Vector2(-150, 0), Vector2(150, 0))
+width = 3.0
+default_color = Color("#e8bd78")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_02"]
 position = Vector2(150, 12)
 shape = SubResource("TerrainShape3")
@@ -56,6 +89,17 @@ one_way_collision = true
 
 [node name="Terrain_ledge_03" type="StaticBody2D" parent="."]
 position = Vector2(100, 860)
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ledge_03"]
+position = Vector2(145, 12)
+polygon = PackedVector2Array(Vector2(-145, -12), Vector2(145, -12), Vector2(145, 12), Vector2(-145, 12))
+color = Color("#78634a")
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_ledge_03"]
+position = Vector2(145, 0)
+points = PackedVector2Array(Vector2(-145, 0), Vector2(145, 0))
+width = 3.0
+default_color = Color("#e8bd78")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_03"]
 position = Vector2(145, 12)
@@ -65,6 +109,17 @@ one_way_collision = true
 [node name="Terrain_ledge_04" type="StaticBody2D" parent="."]
 position = Vector2(480, 1090)
 
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ledge_04"]
+position = Vector2(160, 12)
+polygon = PackedVector2Array(Vector2(-160, -12), Vector2(160, -12), Vector2(160, 12), Vector2(-160, 12))
+color = Color("#78634a")
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_ledge_04"]
+position = Vector2(160, 0)
+points = PackedVector2Array(Vector2(-160, 0), Vector2(160, 0))
+width = 3.0
+default_color = Color("#e8bd78")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_04"]
 position = Vector2(160, 12)
 shape = SubResource("TerrainShape5")
@@ -73,6 +128,17 @@ one_way_collision = true
 [node name="Terrain_ledge_05" type="StaticBody2D" parent="."]
 position = Vector2(80, 1320)
 
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_ledge_05"]
+position = Vector2(155, 12)
+polygon = PackedVector2Array(Vector2(-155, -12), Vector2(155, -12), Vector2(155, 12), Vector2(-155, 12))
+color = Color("#78634a")
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_ledge_05"]
+position = Vector2(155, 0)
+points = PackedVector2Array(Vector2(-155, 0), Vector2(155, 0))
+width = 3.0
+default_color = Color("#e8bd78")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_ledge_05"]
 position = Vector2(155, 12)
 shape = SubResource("TerrainShape6")
@@ -80,6 +146,17 @@ one_way_collision = true
 
 [node name="Terrain_bottom_floor" type="StaticBody2D" parent="."]
 position = Vector2(0, 1670)
+
+[node name="TerrainVisual" type="Polygon2D" parent="Terrain_bottom_floor"]
+position = Vector2(450, 40)
+polygon = PackedVector2Array(Vector2(-450, -40), Vector2(450, -40), Vector2(450, 40), Vector2(-450, 40))
+color = Color("#34333c")
+
+[node name="TerrainTop" type="Line2D" parent="Terrain_bottom_floor"]
+position = Vector2(450, 0)
+points = PackedVector2Array(Vector2(-450, 0), Vector2(450, 0))
+width = 3.0
+default_color = Color("#c4b38b")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain_bottom_floor"]
 position = Vector2(450, 40)
