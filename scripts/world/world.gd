@@ -2,8 +2,6 @@ extends Node2D
 ## 常驻世界：玩家、相机与 HUD 持续存在；每次只实例化一个 A5 房间。
 ## A5 房间清单与连接唯一读取 tools/a5_room_assembly_contract.json。
 
-const HERO_SCRIPT: Script = preload("res://scripts/player/hero.gd")
-const HUD_SCRIPT: Script = preload("res://scripts/ui/game_hud.gd")
 const A5_CONTRACT_PATH := "res://tools/a5_room_assembly_contract.json"
 const SHORTCUT_UNLOCK_SCRIPT: Script = preload("res://scripts/rooms/shortcut_unlock_point.gd")
 
@@ -11,9 +9,9 @@ const SHORTCUT_UNLOCK_SCRIPT: Script = preload("res://scripts/rooms/shortcut_unl
 @onready var fade_rect: ColorRect = $FadeLayer/ColorRect
 @onready var transition_manager: RoomTransitionManager = $TransitionManager
 
-var player: CharacterBody2D
-var camera: Camera2D
-var hud: CanvasLayer
+@onready var player: CharacterBody2D = $Player
+@onready var camera: Camera2D = $Player/Camera2D
+@onready var hud: CanvasLayer = $HUD
 var current_room: Node2D
 var room_data_by_id: Dictionary = {}
 var room_contract_by_id: Dictionary = {}
@@ -36,8 +34,8 @@ func _ready() -> void:
 	WorldState.prepare_scene_runtime()
 	WorldState.load_room_state()
 	if not _load_a5_contract():
-		return
-	_create_persistent_player()
+	player.add_to_group("player")
+	hud.bind_hero(player)
 	_create_persistent_hud()
 	fade_rect.modulate.a = 1.0
 	await _load_room("A5-R01", &"west", false)
@@ -124,32 +122,6 @@ func _load_a5_contract() -> bool:
 		return false
 	print("[NEREIS][ROOM_STREAM][CONTRACT] rooms=%d connections=%d macro_bindings=%d" % [room_data_by_id.size(), connections.size(), found_macro_ids.size()])
 	return true
-
-func _create_persistent_player() -> void:
-	player = CharacterBody2D.new()
-	player.name = "Player"
-	player.set_script(HERO_SCRIPT)
-	player.add_to_group("player")
-	var collision := CollisionShape2D.new()
-	collision.name = "CollisionShape2D"
-	var capsule := CapsuleShape2D.new()
-	capsule.radius = 18.0
-	capsule.height = 48.0
-	collision.shape = capsule
-	player.add_child(collision)
-	add_child(player)
-	camera = Camera2D.new()
-	camera.name = "Camera2D"
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 8.0
-	player.add_child(camera)
-
-func _create_persistent_hud() -> void:
-	hud = CanvasLayer.new()
-	hud.name = "HUD"
-	hud.set_script(HUD_SCRIPT)
-	add_child(hud)
-	hud.bind_hero(player)
 
 func _load_room(room_id: String, entry_id: StringName, use_fade: bool = true) -> void:
 	var data: RoomData = room_data_by_id.get(room_id) as RoomData
