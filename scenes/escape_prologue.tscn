@@ -1,6 +1,175 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=15 format=3]
 
-[ext_resource path="res://scripts/levels/escape_prologue.gd" type="Script" id="1"]
+[ext_resource type="Script" path="res://scripts/levels/escape_prologue.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/player/hero.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/world/world_clue.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/world/world_item_pickup.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/world/rest_point.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/world/interaction_door.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/ui/game_hud.gd" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/world/rest_point_visual.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_prompt.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/experiment_warden.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/prologue_progress_barrier.tscn" id="11"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(2200, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+size = Vector2(120, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_boundary"]
+size = Vector2(40, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_table"]
+size = Vector2(180, 12)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hero"]
+radius = 18.0
+height = 48.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(110, 140)
 
 [node name="EscapePrologue" type="Node2D"]
 script = ExtResource("1")
+
+[node name="SurgeryFloor" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SurgeryFloor"]
+position = Vector2(1100, 560)
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="LeftBoundary" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftBoundary"]
+position = Vector2(-20, 360)
+shape = SubResource("RectangleShape2D_boundary")
+
+[node name="RightBoundary" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightBoundary"]
+position = Vector2(2220, 360)
+shape = SubResource("RectangleShape2D_boundary")
+
+[node name="BrokenSurgeryTable" type="StaticBody2D" parent="."]
+position = Vector2(280, 500)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BrokenSurgeryTable"]
+shape = SubResource("RectangleShape2D_table")
+
+[node name="PrologueTraversalRoute" type="Node2D" parent="."]
+
+[node name="Platform01" type="StaticBody2D" parent="PrologueTraversalRoute"]
+position = Vector2(360, 460)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform01"]
+position = Vector2(60, 8)
+shape = SubResource("RectangleShape2D_platform")
+one_way_collision = true
+
+[node name="Platform02" type="StaticBody2D" parent="PrologueTraversalRoute"]
+position = Vector2(520, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform02"]
+position = Vector2(60, 8)
+shape = SubResource("RectangleShape2D_platform")
+one_way_collision = true
+
+[node name="Platform03" type="StaticBody2D" parent="PrologueTraversalRoute"]
+position = Vector2(680, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform03"]
+position = Vector2(60, 8)
+shape = SubResource("RectangleShape2D_platform")
+one_way_collision = true
+
+[node name="Platform04" type="StaticBody2D" parent="PrologueTraversalRoute"]
+position = Vector2(840, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform04"]
+position = Vector2(60, 8)
+shape = SubResource("RectangleShape2D_platform")
+one_way_collision = true
+
+[node name="Platform05" type="StaticBody2D" parent="PrologueTraversalRoute"]
+position = Vector2(1000, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform05"]
+position = Vector2(60, 8)
+shape = SubResource("RectangleShape2D_platform")
+one_way_collision = true
+
+[node name="Platform06" type="StaticBody2D" parent="PrologueTraversalRoute"]
+position = Vector2(1160, 460)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform06"]
+position = Vector2(60, 8)
+shape = SubResource("RectangleShape2D_platform")
+one_way_collision = true
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(420, 540)
+script = ExtResource("2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hero"]
+position = Vector2(0, -24)
+shape = SubResource("CapsuleShape2D_hero")
+
+[node name="Camera2D" type="Camera2D" parent="Hero"]
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+limit_left = 0
+limit_top = 0
+limit_right = 2200
+limit_bottom = 720
+
+[node name="SurgicalMark" type="Node2D" parent="."]
+position = Vector2(620, 520)
+script = ExtResource("3")
+clue_id = "escape_surgical_mark"
+humanity_delta = -1
+display_name = "手术托盘"
+description = "金属托盘上覆着一层血。托盘底部凝结着干涸的黑色残留物，边缘留有几道浅浅的刮痕。器械编号已被刮去，只剩模糊的痕迹。"
+
+[node name="BandagePickup" type="Node2D" parent="."]
+position = Vector2(320, 482)
+script = ExtResource("4")
+pickup_id = "a0_bandage_pickup"
+item_id = "church_bandage"
+amount = 1
+
+[node name="SurgeryRecordPickup" type="Node2D" parent="."]
+position = Vector2(880, 393)
+script = ExtResource("4")
+pickup_id = "a0_surgery_record_pickup"
+item_id = "surgery_record_fragment"
+amount = 1
+
+[node name="RestPoint" type="Node2D" parent="."]
+position = Vector2(540, 540)
+script = ExtResource("5")
+rest_id = "escape_stool"
+display_name = "破损的凳子"
+
+[node name="RestVisual" parent="RestPoint" instance=ExtResource("8")]
+
+[node name="VillageRoadExit" type="Area2D" parent="."]
+position = Vector2(2040, 540)
+script = ExtResource("6")
+prompt_text = "E  逃离"
+enabled = false
+metadata/p5_1_exit_contract = true
+metadata/p5_1_target_scene = "res://scenes/prologue_exterior.tscn"
+metadata/p5_1_target_region = "A0_TRANSITION"
+metadata/p5_1_spawn_side = "west"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VillageRoadExit"]
+position = Vector2(0, -70)
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="Prompt" parent="VillageRoadExit" instance=ExtResource("9")]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 10
+script = ExtResource("7")
