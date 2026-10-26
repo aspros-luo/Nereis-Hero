@@ -41,6 +41,10 @@ func _ready() -> void:
 	var spawn_x := 2420.0 if spawn_side == "backhill_return" else (1850.0 if spawn_side in ["well_exit", "cliff_cave_return"] else (350.0 if spawn_side == "city_cut_return" else (2630.0 if spawn_side == "north_gate" else (530.0 if spawn_side == "mite_house_return" else 260.0))))
 	hero = $Hero
 	camera = $Hero/HeroCamera
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = 3000
+	camera.limit_bottom = 720
 	hero.position = Vector2(spawn_x, floor_y)
 	checkpoint = $VillageCheckpoint
 	mite = $Mite
@@ -157,7 +161,7 @@ func _spawn_progression_npcs() -> void:
 	# 进度专属 NPC 在 world_event_director.gd 注册；常驻村民仍由上方基础生成逻辑负责。
 	if world_event_director == null:
 		return
-	world_event_director.spawn_npcs(self, ROUTE_NPC_SCRIPT, Callable(self, "_on_village_npc_interacted"))
+	world_event_director.spawn_npcs(self, Callable(self, "_on_village_npc_interacted"))
 
 func _refresh_baseline_npc_dialogue(npc: Node) -> void:
 	if not is_instance_valid(npc):
