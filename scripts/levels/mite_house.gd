@@ -1,8 +1,6 @@
 extends Node2D
 
 
-const MITE_HOUSE_BACKDROP = preload("res://assets/art/backdrops/mite_house_backdrop.svg")
-
 @onready var hero: CharacterBody2D = $Hero
 @onready var mite: Node2D = $Mite
 @onready var narrative: CanvasLayer = $NarrativeManager
@@ -30,7 +28,6 @@ func _ready() -> void:
 	)
 	hud.bind_hero(hero)
 	hud.set_story_mode("MITE'S HOUSE", "STAY A LITTLE LONGER")
-	queue_redraw()
 
 
 
@@ -87,8 +84,3 @@ func _unhandled_input(event: InputEvent) -> void:
 		var viewport := get_viewport()
 		if viewport:
 			viewport.set_input_as_handled()
-
-func _draw() -> void:
-	# The hand-painted background is visual-only. Collision and interaction remain separate runtime nodes.
-	# 手绘背景只负责视觉；地面碰撞、床边休息点、蜜忒交互与出口仍由独立节点控制。
-	draw_texture_rect(MITE_HOUSE_BACKDROP, Rect2(0.0, 0.0, 1400.0, 720.0), false)
