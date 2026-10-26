@@ -3,7 +3,7 @@ extends Node
 signal hidden_resistance_awakened_event
 
 const SAVE_PATH := "user://nereis_hero_save.json"
-const WITCH_TIME_OVERLAY_SCRIPT: Script = preload("res://scripts/effects/witch_time_overlay.gd")
+const WITCH_TIME_OVERLAY_SCENE: PackedScene = preload("res://scenes/effects/witch_time_overlay.tscn")
 const ITEM_CATALOG_SCRIPT: Script = preload("res://scripts/core/item_catalog.gd")
 
 var hero_memory := 0
@@ -287,8 +287,7 @@ func _show_witch_time_visual() -> void:
 		witch_time_visual.queue_free()
 		witch_time_visual = null
 	if not is_instance_valid(witch_time_visual):
-		witch_time_visual = CanvasLayer.new()
-		witch_time_visual.set_script(WITCH_TIME_OVERLAY_SCRIPT)
+		witch_time_visual = WITCH_TIME_OVERLAY_SCENE.instantiate() as CanvasLayer
 		witch_time_visual.name = "WitchTimeVisual"
 		scene.add_child(witch_time_visual)
 	else:
