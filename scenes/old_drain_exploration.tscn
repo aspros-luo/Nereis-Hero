@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/old_drain_exploration.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/sewer_rat.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="6"]
+[ext_resource type="Texture2D" path="res://assets/art/backdrops/ruins_backdrop.svg" id="DrainBackdrop"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_start"]
 resource_local_to_scene = true
@@ -164,3 +165,389 @@ prompt_text = "E  返回旧水库"
 [node name="NarrativeManager" parent="." instance=ExtResource("5")]
 
 [node name="HUD" parent="." instance=ExtResource("6")]
+
+[node name="DrainBackdropVisual" type="Sprite2D" parent="."]
+texture = ExtResource("DrainBackdrop")
+position = Vector2(-80, -100)
+scale = Vector2(1.35, 1.35)
+centered = false
+z_index = -100
+
+[node name="DrainWallPanel01" type="Polygon2D" parent="."]
+position = Vector2(0, 140)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack01" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(14, 520), Vector2(38, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel02" type="Polygon2D" parent="."]
+position = Vector2(160, 166)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack02" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(174, 520), Vector2(198, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel03" type="Polygon2D" parent="."]
+position = Vector2(320, 192)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack03" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(334, 520), Vector2(358, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel04" type="Polygon2D" parent="."]
+position = Vector2(480, 140)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack04" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(494, 520), Vector2(518, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel05" type="Polygon2D" parent="."]
+position = Vector2(640, 166)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack05" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(654, 520), Vector2(678, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel06" type="Polygon2D" parent="."]
+position = Vector2(800, 192)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack06" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(814, 520), Vector2(838, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel07" type="Polygon2D" parent="."]
+position = Vector2(960, 140)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack07" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(974, 520), Vector2(998, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel08" type="Polygon2D" parent="."]
+position = Vector2(1120, 166)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack08" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1134, 520), Vector2(1158, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel09" type="Polygon2D" parent="."]
+position = Vector2(1280, 192)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack09" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1294, 520), Vector2(1318, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel10" type="Polygon2D" parent="."]
+position = Vector2(1440, 140)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack10" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1454, 520), Vector2(1478, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel11" type="Polygon2D" parent="."]
+position = Vector2(1600, 166)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack11" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1614, 520), Vector2(1638, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel12" type="Polygon2D" parent="."]
+position = Vector2(1760, 192)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack12" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1774, 520), Vector2(1798, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel13" type="Polygon2D" parent="."]
+position = Vector2(1920, 140)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack13" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1934, 520), Vector2(1958, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel14" type="Polygon2D" parent="."]
+position = Vector2(2080, 166)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack14" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(2094, 520), Vector2(2118, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainWallPanel15" type="Polygon2D" parent="."]
+position = Vector2(2240, 192)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(150, 0), Vector2(150, 130), Vector2(0, 130))
+color = Color(0.101961, 0.164706, 0.188235, 0.65)
+z_index = -20
+
+[node name="DrainCrack15" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(2254, 520), Vector2(2278, 540))
+width = 2.0
+default_color = Color("#37444a")
+z_index = -1
+
+[node name="DrainArch1" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(18, 648), Vector2(20, 598), Vector2(30, 543), Vector2(45, 496), Vector2(60, 468), Vector2(75, 496), Vector2(90, 543), Vector2(100, 598), Vector2(102, 648))
+width = 5.0
+default_color = Color("#46545b")
+z_index = -5
+
+[node name="DrainArchSupportL1" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(22, 520), Vector2(22, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArchSupportR1" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(98, 520), Vector2(98, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArch2" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(208, 648), Vector2(210, 598), Vector2(220, 543), Vector2(235, 496), Vector2(250, 468), Vector2(265, 496), Vector2(280, 543), Vector2(290, 598), Vector2(292, 648))
+width = 5.0
+default_color = Color("#46545b")
+z_index = -5
+
+[node name="DrainArchSupportL2" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(212, 520), Vector2(212, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArchSupportR2" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(288, 520), Vector2(288, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArch3" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(598, 668), Vector2(600, 618), Vector2(610, 563), Vector2(625, 516), Vector2(640, 488), Vector2(655, 516), Vector2(670, 563), Vector2(680, 618), Vector2(682, 668))
+width = 5.0
+default_color = Color("#46545b")
+z_index = -5
+
+[node name="DrainArchSupportL3" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(602, 540), Vector2(602, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArchSupportR3" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(678, 540), Vector2(678, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArch4" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(948, 668), Vector2(950, 618), Vector2(960, 563), Vector2(975, 516), Vector2(990, 488), Vector2(1005, 516), Vector2(1020, 563), Vector2(1030, 618), Vector2(1032, 668))
+width = 5.0
+default_color = Color("#46545b")
+z_index = -5
+
+[node name="DrainArchSupportL4" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(952, 540), Vector2(952, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArchSupportR4" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1028, 540), Vector2(1028, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArch5" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1288, 668), Vector2(1290, 618), Vector2(1300, 563), Vector2(1315, 516), Vector2(1330, 488), Vector2(1345, 516), Vector2(1360, 563), Vector2(1370, 618), Vector2(1372, 668))
+width = 5.0
+default_color = Color("#46545b")
+z_index = -5
+
+[node name="DrainArchSupportL5" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1292, 540), Vector2(1292, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArchSupportR5" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1368, 540), Vector2(1368, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArch6" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1668, 668), Vector2(1670, 618), Vector2(1680, 563), Vector2(1695, 516), Vector2(1710, 488), Vector2(1725, 516), Vector2(1740, 563), Vector2(1750, 618), Vector2(1752, 668))
+width = 5.0
+default_color = Color("#46545b")
+z_index = -5
+
+[node name="DrainArchSupportL6" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1672, 540), Vector2(1672, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArchSupportR6" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(1748, 540), Vector2(1748, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArch7" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(2028, 668), Vector2(2030, 618), Vector2(2040, 563), Vector2(2055, 516), Vector2(2070, 488), Vector2(2085, 516), Vector2(2100, 563), Vector2(2110, 618), Vector2(2112, 668))
+width = 5.0
+default_color = Color("#46545b")
+z_index = -5
+
+[node name="DrainArchSupportL7" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(2032, 540), Vector2(2032, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="DrainArchSupportR7" type="Line2D" parent="."]
+points = PackedVector2Array(Vector2(2108, 540), Vector2(2108, 690))
+width = 4.0
+default_color = Color("#2d3c43")
+z_index = -4
+
+[node name="OldDrainTitle" type="Label" parent="."]
+position = Vector2(80, 430)
+size = Vector2(250, 30)
+text = "OLD DRAIN"
+theme_override_colors/font_color = Color("#9b8587")
+theme_override_font_sizes/font_size = 15
+z_index = 5
+
+[node name="GateVisualClosed" type="Node2D" parent="."]
+position = Vector2(0, 0)
+z_index = 10
+
+[node name="GateOuter" type="Polygon2D" parent="GateVisualClosed"]
+position = Vector2(2118, 568)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(110, 0), Vector2(110, 122), Vector2(0, 122))
+color = Color("#1c1d24")
+
+[node name="GateInner" type="Polygon2D" parent="GateVisualClosed"]
+position = Vector2(2128, 579)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(90, 0), Vector2(90, 111), Vector2(0, 111))
+color = Color("#090d12")
+
+[node name="GateBar1" type="Line2D" parent="GateVisualClosed"]
+points = PackedVector2Array(Vector2(2125, 580), Vector2(2120, 686))
+width = 4.0
+default_color = Color("#615b60")
+
+[node name="GateBar2" type="Line2D" parent="GateVisualClosed"]
+points = PackedVector2Array(Vector2(2143, 580), Vector2(2138, 686))
+width = 4.0
+default_color = Color("#615b60")
+
+[node name="GateBar3" type="Line2D" parent="GateVisualClosed"]
+points = PackedVector2Array(Vector2(2161, 580), Vector2(2156, 686))
+width = 4.0
+default_color = Color("#615b60")
+
+[node name="GateBar4" type="Line2D" parent="GateVisualClosed"]
+points = PackedVector2Array(Vector2(2179, 580), Vector2(2174, 686))
+width = 4.0
+default_color = Color("#615b60")
+
+[node name="GateBar5" type="Line2D" parent="GateVisualClosed"]
+points = PackedVector2Array(Vector2(2197, 580), Vector2(2192, 686))
+width = 4.0
+default_color = Color("#615b60")
+
+[node name="GateBar6" type="Line2D" parent="GateVisualClosed"]
+points = PackedVector2Array(Vector2(2215, 580), Vector2(2210, 686))
+width = 4.0
+default_color = Color("#615b60")
+
+[node name="GateVisualOpen" type="Node2D" parent="."]
+visible = false
+z_index = 10
+
+[node name="GateOpenLeftPost" type="Polygon2D" parent="GateVisualOpen"]
+position = Vector2(2100, 568)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(18, 0), Vector2(18, 122), Vector2(0, 122))
+color = Color("#3c4248")
+
+[node name="GateOpenRightPost" type="Polygon2D" parent="GateVisualOpen"]
+position = Vector2(2220, 568)
+polygon = PackedVector2Array(Vector2(0, 0), Vector2(18, 0), Vector2(18, 122), Vector2(0, 122))
+color = Color("#3c4248")
+
+[node name="GateOpenLabel" type="Label" parent="GateVisualOpen"]
+position = Vector2(2010, 528)
+size = Vector2(180, 28)
+text = "GATE OPEN"
+theme_override_colors/font_color = Color("#84c4ad")
+theme_override_font_sizes/font_size = 15
