@@ -316,3 +316,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 
 - The backhill and cliff scenes now own their Narrative and HUD instances in the editor-visible .tscn tree; scripts only bind the Hero and configure story text.
 - Removed runtime instantiate/add_child for these fixed UI layers. Scene load_steps values were updated for the two new external resources. Static resource accounting and runtime validation remain pending.
+
+
+### A2 debug overlays are scene-authored — 2026-10-27
+
+- R01–R06 now each contain an editor-visible RoomDebugOverlay scene instance.
+- a2_room_runtime.gd only updates the authored RoomNameLabel and reports a missing overlay; it no longer preloads, instantiates or adds a debug overlay at runtime.
+- Updated each room's load_steps to account for the new external scene resource. Static resource and reference checks follow this change; Godot import/runtime validation remains pending.

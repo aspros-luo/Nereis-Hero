@@ -2,7 +2,6 @@ extends "res://scripts/levels/greybox_world_region.gd"
 ## Room-scoped runtime for A2. Terrain remains authored in the six child scenes;
 ## this script supplies the shared Hero, camera, save/respawn state and room doors.
 
-const ROOM_DEBUG_OVERLAY_SCENE: PackedScene = preload("res://scenes/ui/room_debug_overlay.tscn")
 
 const ROOM_SCENE_PATHS := {
 	"A2-R01": "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn",
@@ -78,11 +77,17 @@ func _ready() -> void:
 ## Temporary on-screen room marker for manual map acceptance.
 ## 实机验收临时标识：始终显示当前 A2 房间编号与场景名称。
 func _spawn_room_debug_label() -> void:
-	var layer := ROOM_DEBUG_OVERLAY_SCENE.instantiate() as CanvasLayer
-	layer.name = "RoomDebugOverlay"
-	var label := layer.get_node("RoomNamePanel/RoomNameLabel") as Label
+	# The debug overlay is a scene-authored child so room trees stay visible in the editor.
+	# 调试标记由房间场景预置；代码只更新当前房间文字。
+	var layer := get_node_or_null("RoomDebugOverlay") as CanvasLayer
+	if layer == null:
+		push_error("[NEREIS][A2][ROOM][AUTHORED_DEBUG_OVERLAY_MISSING] room=%s" % room_id)
+		return
+	var label := layer.get_node_or_null("RoomNamePanel/RoomNameLabel") as Label
+	if label == null:
+		push_error("[NEREIS][A2][ROOM][DEBUG_LABEL_MISSING] room=%s" % room_id)
+		return
 	label.text = "%s · %s · %s" % [region_id, room_id.replace("A2-", ""), region_title]
-	add_child(layer)
 func _scene_path_for_room(target_room_id: String) -> String:
 	return str(ROOM_SCENE_PATHS.get(target_room_id, ROOM_SCENE_PATHS["A2-R01"]))
 

@@ -1,6 +1,7 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="room_script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/room_debug_overlay.tscn" id="debug_overlay_scene"]
 [ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="door_scene"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
@@ -196,3 +197,5 @@ position = Vector2(560, 130)
 pickup_id = "combat_reward_a2_cultist_seal"
 item_id = "charred_church_seal"
 required_achievement_flag = "defeated_A2_Cultist_01"
+
+[node name="RoomDebugOverlay" parent="." instance=ExtResource("debug_overlay_scene")]

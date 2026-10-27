@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="room_script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/room_debug_overlay.tscn" id="debug_overlay_scene"]
 [ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="door_scene"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
@@ -236,3 +237,5 @@ position = Vector2(1150, 320)
 position = Vector2(1120, 295)
 pickup_id = "exploration_reward_canopy_waymarker_fragment"
 item_id = "canopy_waymarker_fragment"
+
+[node name="RoomDebugOverlay" parent="." instance=ExtResource("debug_overlay_scene")]
