@@ -3021,7 +3021,7 @@ func _spawn_exit_door(
 ) -> void:
 	var door: Area2D
 	var expected_position := Vector2(x, floor_y if door_y < 0.0 else door_y)
-	if region_id in ["A3", "A4"]:
+	if region_id in ["A3", "A4", "A6"]:
 		# A3's fixed exits are authored in forgotten_city.tscn. Runtime only configures state.
 		door = get_node_or_null("Exit_%s" % target_location) as Area2D
 		if door == null:
