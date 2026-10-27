@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a10.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="5"]
 
 [node name="GrandCathedral" type="Node2D"]
 script = ExtResource("1")
@@ -25,3 +26,13 @@ source_id = "anomaly_double_sealed_reliquary"
 display_name = "双重封印的圣物匣"
 description = "教会印记覆盖在更古老的符号之上。\n\n封蜡与圣物石匣上的刻痕形状相同，官方祷文则是后来才添上的。"
 resonance_target = 62
+
+[node name="Exit_royal_outer_ring" parent="." instance=ExtResource("5")]
+position = Vector2(72, 360)
+visible = false
+enabled = false
+
+[node name="Exit_inner_city" parent="." instance=ExtResource("5")]
+position = Vector2(2528, 540)
+visible = false
+enabled = false
