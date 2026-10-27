@@ -240,3 +240,12 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Added a visible `ShutterVisual` node subtree to the shared `scenes/rooms/prologue_progress_barrier.tscn`, including the panel, caps, rails and cross bars.
 - Removed runtime `_draw_security_shutter()` drawing; the authored barrier instance now owns both the fixed visual and collision shape. Encounter logic controls visibility/collision state.
 - Static source checks only; Godot scene import and visual alignment still require local editor/runtime acceptance.
+
+
+### A0/A1/A2 priority audit pass — 2026-10-27
+
+- **A0:** Progress-barrier visuals are authored as child nodes in `prologue_progress_barrier.tscn`; its collision shape is already authored disabled by default. `escape_prologue.gd` enables it only when the ambush phase calls for it. The barrier's fixed position is scene-owned. Static source check only.
+- **A1 finding:** `village_hub.gd` sets the persistent checkpoint to the village hearth on every entry, then separately places the Hero based on the incoming return side. This may be intentional as the village hub checkpoint, but it needs a death/continue acceptance check against the intended return-point behavior before changing it. Baseline NPCs are authored in the scene; progression NPCs are delegated to `WorldEventDirector`.
+- **A2 finding:** `a2_room_runtime.gd` binds authored doors and validates authored drop Areas, but fixed room clues and rewards for R03/R05/R06 are still created through inherited runtime helpers (`_spawn_source` / `_spawn_world_item_pickup`). These should be migrated to visible scene nodes after verifying persistence and conditional-reward behavior. The R03/R05/R06 scenes already contain editor-visible terrain, markers, boundary bodies, and door instances.
+- **A2 finding:** room-wide ambience and debug overlays are instantiated at runtime; these are dynamic/support layers, not fixed traversal geometry. Do not remove them as part of fixed-map cleanup.
+- **Not yet verified:** Godot 4.6.1 scene import, parser, runtime collision state, combat progression, room transitions, and save/continue behavior.
