@@ -8,7 +8,7 @@ const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.g
 
 @export var secret_id: String = "H01"
 @export var region_record_id: String = "" # Optional area ID when the secret path ID differs.
-@export var target_scene_path: String = "res://scenes/hidden_well.tscn"
+@export var target_scene_path: String = "res://scenes/hidden_regions/hidden_well.tscn"
 @export var target_location_id: String = "hidden_well"
 @export_enum("west", "east") var target_spawn_side: String = "west"
 @export_range(0, 100, 1) var required_resonance: int = 12

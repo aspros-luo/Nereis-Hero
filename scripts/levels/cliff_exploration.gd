@@ -2,7 +2,7 @@ extends Node2D
 
 const NARRATIVE_SCENE: PackedScene = preload("res://scenes/core/narrative_manager.tscn")
 const HUD_SCENE: PackedScene = preload("res://scenes/ui/game_hud.tscn")
-const CLIFF_CAVE_SCENE := "res://scenes/cliff_cave_experiment.tscn"
+const CLIFF_CAVE_SCENE := "res://scenes/demos/cliff_cave_experiment.tscn"
 
 @onready var hero: CharacterBody2D = $Hero
 @onready var backhill_return_door: Area2D = $BackToBackhillDoor

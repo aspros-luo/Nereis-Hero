@@ -302,3 +302,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Removed the now-unreferenced _spawn_region_sources() and _spawn_region_item_pickups() startup calls and methods, plus the dead _spawn_source() factory and its scene preload.
 - The active regions bind fixed clues from authored scene children; A2 fixed rewards are scene instances. The shared _spawn_world_item_pickup() remains because combat rewards can be created dynamically when an enemy is defeated.
 - Repository-wide search was not available on the feature ref through the connector; within the current shared controller, the factory had no remaining callers after the previous A2 retirement. Static source review only.
+
+
+### Fixed missing scene paths in A0/A1 routes — 2026-10-27
+
+- A0 debug shortcut now points to scenes/debug/world_map_test_menu.tscn.
+- A1 H01 resonance well now points to scenes/hidden_regions/hidden_well.tscn, both at the village instance configuration and the shared gate script's default.
+- A1 cliff exploration now points to scenes/demos/cliff_cave_experiment.tscn for H09 entry.
+- These paths were checked against the current repository tree; all three previously referenced paths were absent and their corrected destinations exist. Godot import/runtime validation remains pending.

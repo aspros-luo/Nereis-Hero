@@ -94,7 +94,7 @@ func _configure_static_village_nodes() -> void:
 	city_cut.interacted.connect(_on_village_poi_interacted.bind(city_cut))
 	resonance_well_gate = $ResonanceWellGate
 	resonance_well_gate.secret_id = "H01"
-	resonance_well_gate.target_scene_path = "res://scenes/hidden_well.tscn"
+	resonance_well_gate.target_scene_path = "res://scenes/hidden_regions/hidden_well.tscn"
 	resonance_well_gate.target_location_id = "hidden_well"
 	resonance_well_gate.required_resonance = 12
 	resonance_well_gate.required_ancient_exposure = 0

@@ -207,7 +207,7 @@ func _on_exit_interacted() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if WorldState.debug_map_test_mode and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F6:
 		_mark_input_handled()
-		get_tree().change_scene_to_file("res://scenes/world_map_test_menu.tscn")
+		get_tree().change_scene_to_file("res://scenes/debug/world_map_test_menu.tscn")
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
 		_mark_input_handled()
