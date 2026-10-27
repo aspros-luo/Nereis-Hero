@@ -851,13 +851,6 @@ func _spawn_region_item_pickups() -> void:
 					"position": Vector2(1750.0, floor_y - 40.0)
 				})
 
-		"A8":
-			placements.append({
-				"pickup_id": "map_reward_royal_mortuary_register",
-				"item_id": "royal_mortuary_register",
-				"node_name": "RoyalMortuaryRegister",
-				"position": Vector2(1290.0, 282.0)
-			})
 
 	for placement in placements:
 		_spawn_world_item_pickup(

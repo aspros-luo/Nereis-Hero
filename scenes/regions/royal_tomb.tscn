@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a8.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/world_item_pickup.tscn" id="5"]
 
 [node name="RoyalTomb" type="Node2D"]
 script = ExtResource("1")
@@ -26,3 +27,8 @@ display_name = "石碑上被刮去的名字"
 description = "铭文并未磨损。\n\n凿痕是在石碑封存之后才留下的。"
 resonance_target = 55
 ancient_exposure_floor = 2
+
+[node name="RoyalMortuaryRegister" parent="." instance=ExtResource("5")]
+position = Vector2(1290, 282)
+pickup_id = "map_reward_royal_mortuary_register"
+item_id = "royal_mortuary_register"

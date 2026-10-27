@@ -188,3 +188,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Added the remaining four hidden-region clue nodes to the corresponding `.tscn` files and removed their runtime spawn branches.
 - The entire H01–H08 clue set is now scene-authored; the shared runtime only binds their progression signals.
 - Static source checks only; Godot editor import and interaction checks remain pending.
+
+
+### A6/A8 fixed pickups are scene-authored, with progression handled as state
+
+- A6's Bell Tower Winch Key is now an editor-visible pickup node. Its `required_achievement_flag` keeps it hidden and non-interactive until `defeated_A6_BellWarden_01` is recorded; runtime no longer creates it at the fixed coordinate.
+- A8's Royal Mortuary Register is now an editor-visible pickup node, and its fixed-coordinate spawn branch has been removed.
+- `world_item_pickup.gd` now supports an optional required achievement flag for authored conditional rewards. Existing pickups without that field retain their prior behavior.
+- Static source checks only; test reward visibility after defeating the A6 boss and collection persistence in Godot.
