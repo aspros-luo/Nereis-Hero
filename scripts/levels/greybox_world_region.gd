@@ -1039,44 +1039,34 @@ func _ready_a5_assembled_region() -> void:
 	for room_data in rooms:
 		if not room_data is Dictionary:
 			continue
-		var room_scene_path := str(room_data.get("scene_path", ""))
-		var room_position: Array = room_data.get("position_screens", [0, 0])
-		var room_size: Array = room_data.get("size_screens", [1, 1])
-		if room_position.size() != 2 or room_size.size() != 2:
-			push_error("[NEREIS][A5_ASSEMBLY] Invalid room placement: " + str(room_data.get("id", "?")))
-			return
-		var packed := load(room_scene_path) as PackedScene
-		if packed == null:
-			push_error("[NEREIS][A5_ASSEMBLY] Cannot load room scene: " + room_scene_path)
-			return
-		var room := packed.instantiate() as Node2D
+		var room_id_value := str(room_data.get("id", ""))
+		var room_node_name := room_id_value.replace("-", "_")
+		var room := get_node_or_null(room_node_name) as Node2D
 		if room == null:
-			push_error("[NEREIS][A5_ASSEMBLY] Room root is not Node2D: " + room_scene_path)
+			push_error("[NEREIS][A5_ASSEMBLY][AUTHORED_ROOM_MISSING] expected editor-authored child: " + room_node_name)
 			return
-		room.set("assembly_child_mode", true)
-		room.set("map_width", float(room_size[0]) * 1280.0)
-		room.set("room_height", float(room_size[1]) * 720.0)
-		room.set("floor_y", maxf(540.0, float(room_size[1]) * 720.0 - 180.0))
-		room.position = Vector2(float(room_position[0]) * 1280.0, float(room_position[1]) * 720.0)
-		room.name = str(room_data.get("id", "A5Room")).replace("-", "_")
-		add_child(room)
-		room_by_id[str(room_data.get("id", ""))] = room
-		max_right = maxf(max_right, room.position.x + float(room_size[0]) * 1280.0)
+		if not bool(room.get("assembly_child_mode")):
+			push_error("[NEREIS][A5_ASSEMBLY][AUTHORED_ROOM_MODE] room must be geometry-only: " + room_node_name)
+			return
+		var room_size: Array = room_data.get("size_screens", [1, 1])
+		if room_size.size() != 2:
+			push_error("[NEREIS][A5_ASSEMBLY] Invalid room size: " + room_id_value)
+			return
+		var expected_width := float(room_size[0]) * 1280.0
+		var expected_height := float(room_size[1]) * 720.0
+		if not is_equal_approx(float(room.get("map_width")), expected_width) or not is_equal_approx(float(room.get("room_height")), expected_height):
+			push_error("[NEREIS][A5_ASSEMBLY][ROOM_SIZE_MISMATCH] room=%s expected=%.0fx%.0f" % [room_id_value, expected_width, expected_height])
+			return
+		room_by_id[room_id_value] = room
+		max_right = maxf(max_right, room.position.x + expected_width)
 		min_top = minf(min_top, room.position.y)
-		max_bottom = maxf(max_bottom, room.position.y + float(room_size[1]) * 720.0)
+		max_bottom = maxf(max_bottom, room.position.y + expected_height)
 	if room_by_id.size() != rooms.size():
-		push_error("[NEREIS][A5_ASSEMBLY] Not all room scenes were instantiated")
+		push_error("[NEREIS][A5_ASSEMBLY] Not all editor-authored room scenes are present")
 		return
-	# The proposed screen grid deliberately uses negative Y for upper branches.
-	# Normalize every room into the assembled map's local positive coordinate space;
-	# otherwise upper rooms sit above camera.limit_top and can be clipped or unreachable.
-	# 房间合同用负 Y 表示高层；组装时统一平移到地图局部正坐标，避免高层跑到镜头上边界之外。
-	var vertical_offset := -min_top
-	if not is_zero_approx(vertical_offset):
-		for room_value in room_by_id.values():
-			var placed_room := room_value as Node2D
-			if placed_room != null:
-				placed_room.position.y += vertical_offset
+	# Room positions are authored directly in old_battlefield.tscn. Runtime validates and reads
+	# their bounds but never instantiates or repositions fixed room geometry.
+	# 固定房间的位置由 old_battlefield.tscn 直接维护；运行时只校验与读取边界，不实例化或重排地形。
 	a5_assembled_rooms = room_by_id
 	map_width = max_right
 	room_height = max_bottom - min_top
