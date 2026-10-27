@@ -80,6 +80,9 @@ func _ready() -> void:
 	if region_id in AUTHORED_TERRAIN_REGIONS and get_node_or_null("AuthoredTerrain") == null:
 		push_error("[NEREIS][MAP][AUTHORED_TERRAIN_MISSING] region=%s scene=%s" % [region_id, scene_file_path])
 		return
+	if region_id == "A2" and room_id.is_empty():
+		push_error("[NEREIS][A2][LEGACY_RUNTIME_DISABLED] Load A2-R01 through A2-R06 authored room scenes")
+		return
 	var spawn_side := WorldState.pending_region_spawn_side
 	# Save the target location and its incoming side before clearing the one-shot transition value.
 	# 先保存目标地图与进入侧，再清理一次性切图方向。
@@ -820,45 +823,9 @@ func _show_intro() -> void:
 
 
 func _spawn_region_item_pickups() -> void:
-	# Exploration rewards are placed on existing upper-route landings; they do not block the safe ground route.
-	# 探索奖励放在现有上层路线的落脚点上，不封锁安全地面主路。
-	var placements: Array[Dictionary] = []
-	match region_id:
-		"A2":
-			placements.append({
-				"pickup_id": "map_reward_old_pilgrim_waybill",
-				"item_id": "old_pilgrim_waybill",
-				"node_name": "OldPilgrimWaybill",
-				"position": Vector2(1550.0, 282.0)
-			})
-			placements.append({
-				"pickup_id": "exploration_reward_bellgrave_burial_token",
-				"item_id": "bellgrave_burial_token",
-				"node_name": "BellgraveBurialToken",
-				"position": Vector2(965.0, 625.0)
-			})
-			placements.append({
-				"pickup_id": "exploration_reward_canopy_waymarker_fragment",
-				"item_id": "canopy_waymarker_fragment",
-				"node_name": "CanopyWaymarkerFragment",
-				"position": Vector2(3105.0, 300.0)
-			})
-			if "defeated_A2_Cultist_01" in WorldState.achievement_flags:
-				placements.append({
-					"pickup_id": "combat_reward_a2_cultist_seal",
-					"item_id": "charred_church_seal",
-					"node_name": "CharredChurchSeal",
-					"position": Vector2(1750.0, floor_y - 40.0)
-				})
-
-
-	for placement in placements:
-		_spawn_world_item_pickup(
-			str(placement.get("pickup_id", "")),
-			str(placement.get("item_id", "")),
-			str(placement.get("node_name", "RegionItemPickup")),
-			placement.get("position", Vector2.ZERO)
-		)
+	# A2 fixed pickups are authored in R03/R05/R06 .tscn scenes. This legacy helper is intentionally inert.
+	# A2 固定拾取物已迁入 R03/R05/R06 场景；此旧入口保留为空操作，防止重复生成。
+	return
 
 
 func _spawn_world_item_pickup(pickup_id: String, item_id: String, node_name: String, pickup_position: Vector2) -> void:
@@ -1811,46 +1778,9 @@ func _spawn_region_rest_point() -> void:
 	push_error("[NEREIS][MAP][AUTHORED_REST_MISSING] region=%s" % region_id)
 
 func _spawn_region_sources() -> void:
-	match region_id:
-		"A2":
-			_spawn_source(
-				Vector2(735, floor_y - 18.0),
-				"anomaly_bell_retiming",
-				"从未移动的钟",
-				"钟舌垂落不动。\n\n钟声却依然响起。你掌下的石头震动了一次，随后归于沉寂。\n\n第二道脉动仍残留在你的眼后。",
-				12,
-				0,
-				0,
-				"resonance_sight"
-			)
-			_spawn_source(
-				Vector2(1530, floor_y - 18.0),
-				"anomaly_old_pilgrim_echo",
-				"第二道回声",
-				"你轻敲旧里程碑，回应却从身后的道路传来。\n\n石头仍然温热，仿佛有人刚刚离开。",
-				18
-			)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	# Fixed anomaly clues are authored in their region/room .tscn scenes.
+	# 固定异常线索已由区域/房间场景预置；禁止再按硬编码坐标创建。
+	return
 
 
 func _bind_authored_region_sources() -> void:
@@ -2035,30 +1965,8 @@ func _get_a5_assembled_room(room_key: String) -> Node2D:
 func _spawn_region_exits() -> void:
 	match region_id:
 		"A2":
-			_spawn_exit_door(
-				72.0, "E  返回边境村庄", "village",
-				"res://scenes/regions/village_hub.tscn", "north_gate"
-			)
-			# The main route to A3 sits on the eastern canopy ledge; the ground-level bell anomaly remains a separate choice.
-			# 通往 A3 的主线出口位于东侧树冠高台；地面的钟墓异常入口保留为另一种探索选择。
-			# C03's authored/topology anchor is x=3400, at the far eastern end of the expanded canopy.
-			# C03 的正式路线锚点为 x=3400，位于扩建后树冠高路的最东端。
-			_spawn_exit_door(
-				3400.0, "E  沿树冠高路进入被遗忘的城区", "forgotten_city",
-				"res://scenes/regions/forgotten_city.tscn", "city_canopy_entry",
-				true, "", "", floor_y - 160.0
-			)
-			# H02 belongs to the optional low Bell Grave space, not the far-eastern main-floor edge.
-			# H02 应位于钟墓坑底的可选低位空间，而不是地图最东侧的主地面。
-			_spawn_h02_gate(960.0, floor_y + 385.0)
-			# C04 is opened from A5; once opened, keep the reverse entrance persistent on A2.
-			# C04 在 A5 侧开启；开启后，A2 侧永久生成对应回程门。
-			if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
-				_spawn_exit_door(
-					2050.0, "E  返回边境战场", "old_battlefield",
-					"res://scenes/regions/old_battlefield.tscn", "old_pilgrim_highroad",
-					true, "", "", floor_y - 210.0
-				)
+			push_error("[NEREIS][A2][LEGACY_EXITS_DISABLED] Use the six authored A2 room scenes")
+			return
 		"A3":
 			# C24 enters the shared exploration segment only after the A4-side gate is opened.
 			# A4 侧闸门开启后，C24 才经共享探索段连通；此前仍保持原有村庄回程。

@@ -287,3 +287,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - This now matches the authored `NorthGatePOI` exit contract and avoids routing through the legacy `scenes/regions/ash_forest.tscn` alias. The alias is retained for compatibility with other callers.
 - The one-shot spawn side remains `west`; A2-R01 still owns the actual spawn marker and current room save path.
 - Static reference and resource accounting checks pass for the A0/A1/A2 priority scenes. Godot import/runtime acceptance is still pending.
+
+
+### A2 legacy region-generation paths retired from active fallback — 2026-10-27
+
+- Disabled the legacy greybox_world_region.gd A2 region-wide startup when room_id is empty. The active A2 entry is the six authored room scenes using a2_room_runtime.gd.
+- Made the old A2 fixed-clue and fixed-pickup helpers inert; R03/R05/R06 scenes are now the sole owners of those fixed nodes. Dynamic combat rewards still use the shared pickup helper.
+- Replaced the legacy A2 branch of _spawn_region_exits() with a fail-loud guard instead of procedurally creating exits or an H02 gate. Authored A2 room doors and the R04 H02 gate continue through a2_room_runtime.gd.
+- This is source-level retirement of stale fallback logic. Godot 4.6.1 import and runtime acceptance remain outstanding.
