@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a9.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="5"]
 
 [node name="RoyalOuterRing" type="Node2D"]
 script = ExtResource("1")
@@ -27,3 +28,39 @@ description = "水洼倒映出一条多了一盏灯的街道。\n\n你再次清�
 resonance_target = 68
 outer_exposure_floor = 12
 require_outer_god_resonance = true
+
+; Editor-authored fixed exits. Runtime configures only destination/progression state.
+[node name="Exit_royal_tomb" parent="." instance=ExtResource("5")]
+position = Vector2(72, 540)
+visible = false
+enabled = false
+
+[node name="Exit_grand_cathedral" parent="." instance=ExtResource("5")]
+position = Vector2(2350, 360)
+visible = false
+enabled = false
+
+[node name="Exit_erased_third_street" parent="." instance=ExtResource("5")]
+position = Vector2(1250, 540)
+visible = false
+enabled = false
+
+[node name="Exit_erased_royal_name_corridor" parent="." instance=ExtResource("5")]
+position = Vector2(2200, 540)
+visible = false
+enabled = false
+
+[node name="Exit_inner_city" parent="." instance=ExtResource("5")]
+position = Vector2(900, 540)
+visible = false
+enabled = false
+
+[node name="Exit_forgotten_city" parent="." instance=ExtResource("5")]
+position = Vector2(520, 430)
+visible = false
+enabled = false
+
+[node name="Exit_sewer_reservoir" parent="." instance=ExtResource("5")]
+position = Vector2(740, 390)
+visible = false
+enabled = false
