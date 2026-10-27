@@ -1,225 +1,27 @@
-[gd_scene load_steps=26 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="Script"]
 [ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="Clue"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="Rest"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r01.tscn" id="Room01"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r02.tscn" id="Room02"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r03.tscn" id="Room03"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r04.tscn" id="Room04"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r05.tscn" id="Room05"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r06.tscn" id="Room06"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r07.tscn" id="Room07"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r08.tscn" id="Room08"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r09.tscn" id="Room09"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r10.tscn" id="Room10"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r11.tscn" id="Room11"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r12.tscn" id="Room12"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r13.tscn" id="Room13"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r14.tscn" id="Room14"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r15.tscn" id="Room15"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r16.tscn" id="Room16"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r17.tscn" id="Room17"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r18.tscn" id="Room18"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r19.tscn" id="Room19"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r20.tscn" id="Room20"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r21.tscn" id="Room21"]
-[ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r22.tscn" id="Room22"]
 
 [node name="OldBattlefield" type="Node2D"]
 script = ExtResource("Script")
 region_id = "A5"
 location_id = "old_battlefield"
 region_title = "旧战场与边境堡垒"
-map_width = 25600.0
-floor_y = 4860.0
-room_height = 5040.0
-use_a5_room_assembly = true
-
-[node name="A5_R01" parent="." instance=ExtResource("Room01")]
-position = Vector2(0, 2880)
-room_id = "A5-R01"
-map_width = 1280
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R02" parent="." instance=ExtResource("Room02")]
-position = Vector2(1280, 2880)
-room_id = "A5-R02"
-map_width = 2560
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R03" parent="." instance=ExtResource("Room03")]
-position = Vector2(3840, 2880)
-room_id = "A5-R03"
-map_width = 2560
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R04" parent="." instance=ExtResource("Room04")]
-position = Vector2(6400, 2880)
-room_id = "A5-R04"
-map_width = 2560
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R05" parent="." instance=ExtResource("Room05")]
-position = Vector2(8960, 2160)
-room_id = "A5-R05"
-map_width = 1280
-room_height = 1440
-floor_y = 1260
-assembly_child_mode = true
-
-[node name="A5_R06" parent="." instance=ExtResource("Room06")]
-position = Vector2(7680, 3600)
-room_id = "A5-R06"
-map_width = 1280
-room_height = 1440
-floor_y = 1260
-assembly_child_mode = true
-
-[node name="A5_R07" parent="." instance=ExtResource("Room07")]
-position = Vector2(8960, 3600)
-room_id = "A5-R07"
-map_width = 1280
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R08" parent="." instance=ExtResource("Room08")]
-position = Vector2(11520, 3600)
-room_id = "A5-R08"
-map_width = 2560
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R09" parent="." instance=ExtResource("Room09")]
-position = Vector2(3840, 2160)
-room_id = "A5-R09"
-map_width = 1280
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R10" parent="." instance=ExtResource("Room10")]
-position = Vector2(11520, 2160)
-room_id = "A5-R10"
-map_width = 2560
-room_height = 1440
-floor_y = 1260
-assembly_child_mode = true
-
-[node name="A5_R11" parent="." instance=ExtResource("Room11")]
-position = Vector2(14080, 2160)
-room_id = "A5-R11"
-map_width = 2560
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R12" parent="." instance=ExtResource("Room12")]
-position = Vector2(16640, 2160)
-room_id = "A5-R12"
-map_width = 2560
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R13" parent="." instance=ExtResource("Room13")]
-position = Vector2(16640, 0)
-room_id = "A5-R13"
-map_width = 1280
-room_height = 2160
-floor_y = 1980
-assembly_child_mode = true
-
-[node name="A5_R14" parent="." instance=ExtResource("Room14")]
-position = Vector2(17920, 0)
-room_id = "A5-R14"
-map_width = 1280
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R15" parent="." instance=ExtResource("Room15")]
-position = Vector2(19200, 1440)
-room_id = "A5-R15"
-map_width = 2560
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R16" parent="." instance=ExtResource("Room16")]
-position = Vector2(21760, 720)
-room_id = "A5-R16"
-map_width = 1280
-room_height = 1440
-floor_y = 1260
-assembly_child_mode = true
-
-[node name="A5_R17" parent="." instance=ExtResource("Room17")]
-position = Vector2(21760, 2160)
-room_id = "A5-R17"
-map_width = 2560
-room_height = 1440
-floor_y = 1260
-assembly_child_mode = true
-
-[node name="A5_R18" parent="." instance=ExtResource("Room18")]
-position = Vector2(24320, 2160)
-room_id = "A5-R18"
-map_width = 2560
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R19" parent="." instance=ExtResource("Room19")]
-position = Vector2(24320, 2880)
-room_id = "A5-R19"
-map_width = 1280
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R20" parent="." instance=ExtResource("Room20")]
-position = Vector2(23040, 1440)
-room_id = "A5-R20"
-map_width = 1280
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R21" parent="." instance=ExtResource("Room21")]
-position = Vector2(19200, 0)
-room_id = "A5-R21"
-map_width = 2560
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
-
-[node name="A5_R22" parent="." instance=ExtResource("Room22")]
-position = Vector2(24320, 720)
-room_id = "A5-R22"
-map_width = 1280
-room_height = 720
-floor_y = 540
-assembly_child_mode = true
+map_width = 2600.0
+floor_y = 540.0
+room_height = 720.0
+use_a5_room_assembly = false
 
 [node name="Anomaly_anomaly_battlefield_late_orders" parent="." instance=ExtResource("Clue")]
-position = Vector2(4940, 3402)
+position = Vector2(1560, 430)
 source_id = "anomaly_battlefield_late_orders"
 display_name = "迟于死者抵达的命令"
 description = "战场报告的日期比战役晚了三天。\n\n尸体早已被摆成面向堡垒的姿势，仿佛有人专为目击者修整过现场。\n\n最后一行命令幸存者将这场屠杀称为信仰的奇迹。"
 resonance_target = 46
 
 [node name="RegionRestPoint_A5" parent="." instance=ExtResource("Rest")]
-position = Vector2(17740, 2700)
+position = Vector2(2200, 540)
 rest_id = "rest_A5"
 display_name = "战场纪念碑"

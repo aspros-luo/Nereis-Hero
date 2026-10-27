@@ -1796,21 +1796,17 @@ func _spawn_region_rest_point() -> void:
 	# 固定休息点由对应区域 .tscn 预置，运行时不得生成或移动。
 	if get_node_or_null("AuthoredTerrain") != null:
 		return
-	# Legacy isolated A5 room fixtures are test scenes, not the production assembled region.
-	if region_id == "A5" and not room_id.is_empty() and not use_a5_room_assembly:
-		return
-	if region_id == "A5" and use_a5_room_assembly:
+	if region_id == "A5":
+		# A5 is intentionally back to one main region scene while A3/A4 are designed.
+		# A5 暂时恢复单一主区域场景；等 A3/A4 设计完成后再重做内部结构。
+		if not room_id.is_empty():
+			return
 		var authored_rest := get_node_or_null("RegionRestPoint_A5") as Node2D
 		if authored_rest == null:
-			push_error("[NEREIS][A5_ASSEMBLY][AUTHORED_REST_MISSING] expected RegionRestPoint_A5")
+			push_error("[NEREIS][A5][AUTHORED_REST_MISSING] expected RegionRestPoint_A5")
 			return
-		var hub := _get_a5_assembled_room("A5-R12")
-		if hub == null:
-			push_error("[NEREIS][A5_ASSEMBLY][AUTHORED_REST_HUB_MISSING] A5-R12")
-			return
-		var expected_position := hub.position + Vector2(1100.0, float(hub.get("floor_y")))
-		if authored_rest.position.distance_to(expected_position) > 1.0:
-			push_error("[NEREIS][A5_ASSEMBLY][REST_POSITION_MISMATCH] authored=%s expected=%s" % [str(authored_rest.position), str(expected_position)])
+		if authored_rest.position.x < 0.0 or authored_rest.position.x > map_width:
+			push_error("[NEREIS][A5][REST_OUT_OF_BOUNDS] position=%s width=%.1f" % [str(authored_rest.position), map_width])
 		return
 	push_error("[NEREIS][MAP][AUTHORED_REST_MISSING] region=%s" % region_id)
 

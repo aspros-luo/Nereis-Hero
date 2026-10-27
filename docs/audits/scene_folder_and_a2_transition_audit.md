@@ -217,3 +217,12 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - `scenes/a5_assembled_region.tscn` previously declared `use_a5_room_assembly = true` on a root-only scene with no 22 room children, which conflicts with the controller's new authored-child contract.
 - Kept the legacy resource path for compatibility, but converted it to an inherited instance of `scenes/regions/old_battlefield.tscn`. Opening either path now exposes the same authored room tree rather than a second incomplete assembly root.
 - This avoids deleting a potentially referenced scene while removing its contradictory root-only implementation. Static source validation only; local Godot import remains pending.
+
+
+## A5 scope rollback — 2026-10-27
+
+- Reverted `scenes/regions/old_battlefield.tscn` to one main A5 region scene. The 22 `A5_R##` child instances and their 22 room resource declarations are no longer part of the active region scene tree.
+- Restored the main region bounds to 2600×720 and disabled `use_a5_room_assembly`. The fixed anomaly clue and rest point remain as scene-authored instances inside the main region.
+- Updated the rest-point validator to check the single-scene A5 contract rather than requiring the removed R12 hub.
+- A5's room files and room-streaming contract are retained as inactive source material for now because the legacy `scenes/world/world.tscn` streaming path and its validators still reference them. They are not instantiated by `old_battlefield.tscn`. Remove those orphaned files only after that separate legacy entry path is retired; otherwise opening it would fail to load rooms.
+- Static source review only; no Godot editor/runtime acceptance was run.
