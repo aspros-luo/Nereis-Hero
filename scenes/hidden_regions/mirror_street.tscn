@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_h07.tscn" id="2"]
 
 [node name="MirrorStreet" type="Node2D"]
@@ -11,3 +12,10 @@ region_title = "MIRROR STREET: BEHIND THE RAIN"
 map_width = 2600.0
 
 [node name="AuthoredTerrain" parent="." instance=ExtResource("2")]
+
+[node name="Anomaly_hidden_mirror_lamp_count" parent="." instance=ExtResource("3")]
+position = Vector2(2200, 522)
+source_id = "hidden_mirror_lamp_count"
+display_name = "多出来的一盏灯"
+description = "水中有七盏灯，街上只有六盏。\n\n当你转过身，第七盏灯已经移动到你的身后。"
+resonance_target = 0

@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_h06.tscn" id="2"]
 
 [node name="ErasedRoyalNameCorridor" type="Node2D"]
@@ -11,3 +12,10 @@ region_title = "THE NAME SCRAPED FROM STONE"
 map_width = 2200.0
 
 [node name="AuthoredTerrain" parent="." instance=ExtResource("2")]
+
+[node name="Anomaly_hidden_royal_name_scrape" parent="." instance=ExtResource("3")]
+position = Vector2(1980, 522)
+source_id = "hidden_royal_name_scrape"
+display_name = "石头记得那个名字"
+description = "名字已被抹去，凿痕却恰好停在每个字的边界。\n\n有人细致地擦除了文字，甚至保留了它们的轮廓。"
+resonance_target = 0

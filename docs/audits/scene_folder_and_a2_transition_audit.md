@@ -181,3 +181,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Added the first four hidden-region clue nodes to their terrain-owning `.tscn` files and removed their runtime spawn branches.
 - Their saved IDs, descriptions, resonance targets and authored positions are preserved.
 - Static source checks only; Godot editor import and progression interaction remain pending.
+
+
+### H05–H08 fixed clues moved into their hidden-region scenes
+
+- Added the remaining four hidden-region clue nodes to the corresponding `.tscn` files and removed their runtime spawn branches.
+- The entire H01–H08 clue set is now scene-authored; the shared runtime only binds their progression signals.
+- Static source checks only; Godot editor import and interaction checks remain pending.

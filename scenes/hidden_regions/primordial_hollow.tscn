@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_h08.tscn" id="2"]
 
 [node name="PrimordialHollow" type="Node2D"]
@@ -11,3 +12,10 @@ region_title = "THE WOMB BELOW THE LAB"
 map_width = 2000.0
 
 [node name="AuthoredTerrain" parent="." instance=ExtResource("2")]
+
+[node name="Anomaly_hidden_primordial_cradle" parent="." instance=ExtResource("3")]
+position = Vector2(1850, 522)
+source_id = "hidden_primordial_cradle"
+display_name = "空摇篮"
+description = "活石上的凹槽容不下一个人的身体，形状却精细得绝非天然形成。\n\n墙壁围绕凹槽收缩了一次，随后缓缓松弛。"
+resonance_target = 0

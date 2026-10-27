@@ -1900,38 +1900,10 @@ func _spawn_region_sources() -> void:
 
 
 
-		"H05":
-			_spawn_source(
-				Vector2(1960, floor_y - 18.0),
-				"hidden_bell_shadowless_record",
-				"无影档案",
-				"档案记载钟已从塔中移走。\n\n库存清单却仍记录着它的影子，每天早晨都有人签收。",
-				0
-			)
-		"H06":
-			_spawn_source(
-				Vector2(1980, floor_y - 18.0),
-				"hidden_royal_name_scrape",
-				"石头记得那个名字",
-				"名字已被抹去，凿痕却恰好停在每个字的边界。\n\n有人细致地擦除了文字，甚至保留了它们的轮廓。",
-				0
-			)
-		"H07":
-			_spawn_source(
-				Vector2(2200, floor_y - 18.0),
-				"hidden_mirror_lamp_count",
-				"多出来的一盏灯",
-				"水中有七盏灯，街上只有六盏。\n\n当你转过身，第七盏灯已经移动到你的身后。",
-				0
-			)
-		"H08":
-			_spawn_source(
-				Vector2(1850, floor_y - 18.0),
-				"hidden_primordial_cradle",
-				"空摇篮",
-				"活石上的凹槽容不下一个人的身体，形状却精细得绝非天然形成。\n\n墙壁围绕凹槽收缩了一次，随后缓缓松弛。",
-				0
-			)
+
+
+
+
 
 func _bind_authored_region_sources() -> void:
 	# Fixed anomaly clues are scene-authored; runtime only wires their state callbacks.
