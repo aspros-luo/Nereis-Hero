@@ -1,6 +1,7 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=25 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="Script"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="Clue"]
 [ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r01.tscn" id="Room01"]
 [ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r02.tscn" id="Room02"]
 [ext_resource type="PackedScene" path="res://scenes/a5_rooms/a5_r03.tscn" id="Room03"]
@@ -209,3 +210,10 @@ map_width = 1280
 room_height = 720
 floor_y = 540
 assembly_child_mode = true
+
+[node name="Anomaly_anomaly_battlefield_late_orders" parent="." instance=ExtResource("Clue")]
+position = Vector2(4940, 3402)
+source_id = "anomaly_battlefield_late_orders"
+display_name = "迟于死者抵达的命令"
+description = "战场报告的日期比战役晚了三天。\n\n尸体早已被摆成面向堡垒的姿势，仿佛有人专为目击者修整过现场。\n\n最后一行命令幸存者将这场屠杀称为信仰的奇迹。"
+resonance_target = 46

@@ -1082,6 +1082,7 @@ func _ready_a5_assembled_region() -> void:
 		camera.limit_right = int(map_width)
 		camera.limit_bottom = int(room_height)
 	_spawn_ui()
+	_bind_authored_region_sources()
 	_spawn_region_exits()
 	_spawn_a5_internal_connections(parsed.get("connections", []))
 	_register_debug_locked_route_hints()
@@ -1884,19 +1885,7 @@ func _spawn_region_sources() -> void:
 
 
 
-		"A5":
-			var source_position := Vector2(1100.0, floor_y - 18.0)
-			if use_a5_room_assembly:
-				var clue_room := _get_a5_assembled_room("A5-R03")
-				if clue_room != null:
-					source_position = clue_room.position + Vector2(1100.0, float(clue_room.get("floor_y")) - 18.0)
-			_spawn_source(
-				source_position,
-				"anomaly_battlefield_late_orders",
-				"迟于死者抵达的命令",
-				"战场报告的日期比战役晚了三天。\n\n尸体早已被摆成面向堡垒的姿势，仿佛有人专为目击者修整过现场。\n\n最后一行命令幸存者将这场屠杀称为信仰的奇迹。",
-				46
-			)
+
 
 
 

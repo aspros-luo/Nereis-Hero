@@ -166,3 +166,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Preserved A11's resonance target, ancient-exposure floor, and outer-exposure reward; preserved A12's resonance target and description.
 - Removed both runtime spawn branches. Source callbacks remain bound by the shared authored-source binder.
 - Static source checks only; Godot editor/runtime validation remains pending.
+
+
+### A5 battlefield clue moved to the assembled region scene
+
+- Added the fixed battlefield-orders clue as a direct child of `old_battlefield.tscn` at its assembled world coordinate, so its placement is visible without opening or running a script.
+- Removed the old runtime placement calculation from the region source table.
+- The A5 assembled-region setup now binds authored clue callbacks after Hero/UI creation. This preserves the clue's ability to find the sibling Hero while leaving its position authored in the scene.
+- Static validation only; the saved coordinate and interaction must still be checked in Godot.
