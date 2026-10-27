@@ -196,3 +196,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - A8's Royal Mortuary Register is now an editor-visible pickup node, and its fixed-coordinate spawn branch has been removed.
 - `world_item_pickup.gd` now supports an optional required achievement flag for authored conditional rewards. Existing pickups without that field retain their prior behavior.
 - Static source checks only; test reward visibility after defeating the A6 boss and collection persistence in Godot.
+
+
+### Legacy A2 assembler neutralized
+
+- `scripts/levels/a2_authored_terrain.gd` referenced six legacy A2 room paths that no longer exist in the current tree and could instantiate fixed room geometry under a region parent.
+- The file now contains no stale `preload()` references, no fixed-position mutations, and no `PackedScene.instantiate()` / `add_child()` terrain assembly. Calling its former `configure_platforms()` entry point fails loudly instead of generating geometry.
+- The six current runtime room scenes remain untouched. This is a source-level safety guard, not a claim that the retired script has been removed from every external caller; reference tracing and Godot import validation remain pending.
