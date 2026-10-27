@@ -1,7 +1,5 @@
 extends Node2D
 
-@export var floor_y: float = 520.0
-
 var hero: CharacterBody2D
 var camera: Camera2D
 var narrative: CanvasLayer

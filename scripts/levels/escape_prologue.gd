@@ -41,7 +41,7 @@ func _ready() -> void:
 		collision.disabled = true
 	WorldState.current_location = "church_escape"
 	WorldState.record_natural_test_region("A0", "church_escape")
-	WorldState.set_checkpoint(Vector2(420.0, FLOOR_Y))
+	WorldState.set_checkpoint(hero.global_position)
 
 	hero.defeated.connect(_on_hero_defeated)
 	exit_area.interacted.connect(_on_exit_interacted)

@@ -341,3 +341,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Village checkpoint initialization now reads the authored VillageCheckpoint node's global position instead of duplicating (360, 520) in code.
 - Added EntryCliffReturn to the backhill scene and switched the cliff-return spawn to that marker. Removed the redundant hard-coded Hero reposition from the cliff scene script; its default start remains authored on the Hero node.
 - Static scene/resource checks follow; local runtime validation remains pending.
+
+
+### A0 initial checkpoint now follows the authored Hero node — 2026-10-27
+
+- Replaced the duplicated hard-coded A0 checkpoint coordinate with the authored Hero node's global position, keeping the initial spawn and checkpoint aligned when the scene is edited.
+- Removed the unused village floor_y export after village spawn heights became scene-authored Marker2D positions.
+- Static source check only; local death/continue behavior still needs Godot runtime acceptance.
