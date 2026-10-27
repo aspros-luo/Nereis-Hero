@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a3.tscn" id="2"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/world/world_item_pickup.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_secret_gate.tscn" id="7"]
 
 [node name="ForgottenCity" type="Node2D"]
 script = ExtResource("1")
@@ -75,3 +76,11 @@ enabled = false
 position = Vector2(1710, 540)
 visible = false
 enabled = false
+
+[node name="ErasedThirdStreetGate" parent="." instance=ExtResource("7")]
+position = Vector2(1120, 540)
+secret_id = "H03"
+target_scene_path = "res://scenes/hidden_regions/erased_third_street.tscn"
+target_location_id = "erased_third_street"
+target_spawn_side = "west"
+required_resonance = 28

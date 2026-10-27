@@ -2881,16 +2881,28 @@ func _spawn_h02_gate(x: float, y: float = -1.0) -> void:
 	debug_exit_markers.append({"position": gate.position, "label": "H02 倒响钟室", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _spawn_h03_gate(x: float) -> void:
-	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
-	gate.name = "ErasedThirdStreetGate"
-	gate.position = Vector2(x, floor_y)
-	gate.secret_id = "H03"
-	gate.target_scene_path = "res://scenes/hidden_regions/erased_third_street.tscn"
-	gate.target_location_id = "erased_third_street"
-	gate.target_spawn_side = "west"
-	gate.required_resonance = 28
-	gate.opened.connect(_on_optional_hidden_gate_opened)
-	add_child(gate)
+	var gate: Node2D
+	if region_id == "A3":
+		gate = get_node_or_null("ErasedThirdStreetGate") as Node2D
+		if gate == null:
+			push_error("[NEREIS][A3][AUTHORED_GATE_MISSING] H03")
+			return
+		var expected_position := Vector2(x, floor_y)
+		if gate.position.distance_to(expected_position) > 1.0:
+			push_error("[NEREIS][A3][GATE_POSITION_MISMATCH] H03 authored=%s expected=%s" % [str(gate.position), str(expected_position)])
+			return
+	else:
+		gate = RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
+		gate.name = "ErasedThirdStreetGate"
+		gate.position = Vector2(x, floor_y)
+		gate.secret_id = "H03"
+		gate.target_scene_path = "res://scenes/hidden_regions/erased_third_street.tscn"
+		gate.target_location_id = "erased_third_street"
+		gate.target_spawn_side = "west"
+		gate.required_resonance = 28
+		add_child(gate)
+	if not gate.opened.is_connected(_on_optional_hidden_gate_opened):
+		gate.opened.connect(_on_optional_hidden_gate_opened)
 	debug_exit_markers.append({"position": gate.position, "label": "H03 被删去的第三街", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _spawn_h04_gate(x: float) -> void:
