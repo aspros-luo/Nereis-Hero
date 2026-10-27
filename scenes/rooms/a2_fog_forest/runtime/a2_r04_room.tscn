@@ -188,6 +188,7 @@ position = Vector2(940, 520)
 
 [node name="HiddenBellChamberGate" parent="." instance=ExtResource("secret_gate_scene")]
 position = Vector2(150, 520)
+z_index = 2
 secret_id = "H02"
 target_scene_path = "res://scenes/hidden_regions/hidden_bell_chamber.tscn"
 target_location_id = "hidden_bell_chamber"

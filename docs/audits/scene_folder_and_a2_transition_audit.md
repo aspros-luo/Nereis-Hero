@@ -267,3 +267,6 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Replaced runtime gate instantiation and position assignment with validation/configuration of the existing scene instance.
 - Other legacy hidden-gate motifs still use procedural rendering and are outside this A0–A2 pass.
 - Static source checks only; Godot 4.6.1 import, scene-tree validation, and interaction acceptance remain pending.
+
+
+- **Layering follow-up:** Set the authored H02 gate instance to `z_index = 2` so its bell motif renders above the R04 doorway silhouette (`H02GateVisual`, z-index 1). This is a source-level ordering check; visual appearance still needs editor/runtime confirmation.
