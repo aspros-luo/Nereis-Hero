@@ -150,3 +150,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Added the fixed resonance clue instances to `sewer_reservoir.tscn`, `monastery_tower.tscn`, and `royal_tomb.tscn`, preserving their IDs, positions, resonance targets, and ancient-exposure thresholds.
 - Removed the matching region-specific clue creation branches from `greybox_world_region.gd`. The shared authored-source callback binder connects them to progression handling.
 - Static checks confirm each source is represented in its region scene and no longer spawned by its former region branch. Godot editor import and interaction acceptance remain pending.
+
+
+### A7, A9 and A10 fixed anomaly clues moved into authored scenes
+
+- Added the prisoner register clue to A7, the mirror-street echo to A9, and the double-sealed reliquary clue to A10 as editor-visible instances.
+- Preserved each source ID, displayed text, world position, resonance threshold, and A9's outer-exposure / outer-god requirements.
+- Removed these three region-specific runtime creation branches; the shared callback binder handles progression signals only.
+- Static text checks passed; Godot editor import and runtime interactions remain unverified.

@@ -1898,38 +1898,11 @@ func _spawn_region_sources() -> void:
 				46
 			)
 
-		"A7":
-			_spawn_source(
-				Vector2(1070, floor_y - 18.0),
-				"anomaly_prisoner_register",
-				"无名者名册",
-				"账册分为姓名、判决与转送三栏。\n\n转送一栏写得满满当当，处决一栏却几乎空白。\n\n所有目的地都被写成了“观测区”。",
-				52
-			)
 
 
-		"A9":
-			_spawn_source(
-				Vector2(1380, floor_y - 18.0),
-				"anomaly_mirror_street_echo",
-				"水洼中的街道",
-				"水洼倒映出一条多了一盏灯的街道。\n\n你再次清点灯火，头顶的街景却毫无变化。",
-				68,
-				0,
-				0,
-				"",
-				0,
-				12,
-				true
-			)
-		"A10":
-			_spawn_source(
-				Vector2(700, floor_y - 18.0),
-				"anomaly_double_sealed_reliquary",
-				"双重封印的圣物匣",
-				"教会印记覆盖在更古老的符号之上。\n\n封蜡与圣物石匣上的刻痕形状相同，官方祷文则是后来才添上的。",
-				62
-			)
+
+
+
 		"A11":
 			_spawn_source(
 				Vector2(1450, floor_y - 18.0),

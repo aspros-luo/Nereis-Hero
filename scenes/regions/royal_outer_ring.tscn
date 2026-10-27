@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a9.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
 
 [node name="RoyalOuterRing" type="Node2D"]
 script = ExtResource("1")
@@ -17,3 +18,12 @@ map_width = 2600.0
 position = Vector2(1100, 540)
 rest_id = "rest_A9"
 display_name = "外环圣龛"
+
+[node name="Anomaly_anomaly_mirror_street_echo" parent="." instance=ExtResource("4")]
+position = Vector2(1380, 522)
+source_id = "anomaly_mirror_street_echo"
+display_name = "水洼中的街道"
+description = "水洼倒映出一条多了一盏灯的街道。\n\n你再次清点灯火，头顶的街景却毫无变化。"
+resonance_target = 68
+outer_exposure_floor = 12
+require_outer_god_resonance = true
