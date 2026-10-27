@@ -233,3 +233,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Removed the runtime assignment that moved `ProgressBarrier_Left/Right` to hard-coded coordinates.
 - The barrier nodes and their collision shapes remain authored in `scenes/regions/escape_prologue.tscn`; encounter logic only toggles visibility and collision enabled state.
 - Static source inspection confirms the selected barrier is still resolved by its authored node name. Godot editor/runtime acceptance remains pending.
+
+
+### A0 progress-shutter visual migrated into its scene — 2026-10-27
+
+- Added a visible `ShutterVisual` node subtree to the shared `scenes/rooms/prologue_progress_barrier.tscn`, including the panel, caps, rails and cross bars.
+- Removed runtime `_draw_security_shutter()` drawing; the authored barrier instance now owns both the fixed visual and collision shape. Encounter logic controls visibility/collision state.
+- Static source checks only; Godot scene import and visual alignment still require local editor/runtime acceptance.

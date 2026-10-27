@@ -5,6 +5,40 @@ size = Vector2(24, 240)
 
 [node name="SurgeryProgressBarrier" type="StaticBody2D"]
 
+[node name="ShutterVisual" type="Node2D" parent="."]
+
+[node name="Glow" type="Polygon2D" parent="ShutterVisual"]
+color = Color(0.647059, 0.298039, 0.384314, 0.1)
+polygon = PackedVector2Array(-34, -128, 34, -128, 34, 124, -34, 124)
+
+[node name="Panel" type="Polygon2D" parent="ShutterVisual"]
+color = Color(0.0901961, 0.0784314, 0.105882, 1)
+polygon = PackedVector2Array(-16, -120, 16, -120, 16, 120, -16, 120)
+
+[node name="TopCap" type="Polygon2D" parent="ShutterVisual"]
+color = Color(0.721569, 0.458824, 0.513725, 1)
+polygon = PackedVector2Array(-21, -124, 21, -124, 21, -116, -21, -116)
+
+[node name="BottomCap" type="Polygon2D" parent="ShutterVisual"]
+position = Vector2(0, 120)
+color = Color(0.552941, 0.34902, 0.407843, 1)
+polygon = PackedVector2Array(-21, -4, 21, -4, 21, 3, -21, 3)
+
+[node name="RailLeft" type="Line2D" parent="ShutterVisual"]
+points = PackedVector2Array(-13, -118, -13, 116)
+width = 3.0
+default_color = Color(0.658824, 0.458824, 0.501961, 1)
+
+[node name="RailRight" type="Line2D" parent="ShutterVisual"]
+points = PackedVector2Array(13, -118, 13, 116)
+width = 3.0
+default_color = Color(0.658824, 0.458824, 0.501961, 1)
+
+[node name="CrossBars" type="Line2D" parent="ShutterVisual"]
+points = PackedVector2Array(-10, -90, 10, -90, 0, -90, 0, -90, 0, -50, 0, -50, -10, -50, 10, -50, 0, -10, 0, -10, -10, -10, 10, -10, 0, 30, 0, 30, -10, 30, 10, 30, 0, 70, 0, 70, -10, 70, 10, 70, 0, 110, 0, 110)
+width = 3.0
+default_color = Color(0.54902, 0.407843, 0.45098, 1)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 disabled = true
 shape = SubResource("RectangleShape2D_barrier")
