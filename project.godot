@@ -6,7 +6,7 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 [autoload]
 WorldState="*res://scripts/core/world_state.gd"
 AchievementManager="*res://scripts/core/achievement_manager.gd"
-SceneTransition="*res://scenes/scene_transition.tscn"
+SceneTransition="*res://scenes/world/scene_transition.tscn"
 
 [display]
 window/size/viewport_width=1280
