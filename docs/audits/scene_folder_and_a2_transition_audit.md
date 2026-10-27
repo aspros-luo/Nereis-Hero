@@ -249,3 +249,12 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - **A2 finding:** `a2_room_runtime.gd` binds authored doors and validates authored drop Areas, but fixed room clues and rewards for R03/R05/R06 are still created through inherited runtime helpers (`_spawn_source` / `_spawn_world_item_pickup`). These should be migrated to visible scene nodes after verifying persistence and conditional-reward behavior. The R03/R05/R06 scenes already contain editor-visible terrain, markers, boundary bodies, and door instances.
 - **A2 finding:** room-wide ambience and debug overlays are instantiated at runtime; these are dynamic/support layers, not fixed traversal geometry. Do not remove them as part of fixed-map cleanup.
 - **Not yet verified:** Godot 4.6.1 scene import, parser, runtime collision state, combat progression, room transitions, and save/continue behavior.
+
+
+### A2 fixed clues and rewards migrated to room scenes — 2026-10-27
+
+- R03 now owns the bell anomaly and burial token as visible scene instances.
+- R05 now owns the pilgrim echo, waybill, and conditional charred church seal. The seal remains present in the editor and uses its existing `required_achievement_flag` to control availability.
+- R06 now owns the canopy waymarker fragment as a visible scene instance.
+- `a2_room_runtime.gd` no longer creates these fixed clues/rewards at runtime; it binds authored clue callbacks and reports missing expected nodes. Pickup collection/persistence remains delegated to the existing pickup component.
+- Static text checks are not a substitute for Godot 4.6.1 import/parser/runtime acceptance.

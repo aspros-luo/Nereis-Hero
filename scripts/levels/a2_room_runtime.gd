@@ -247,51 +247,21 @@ func _spawn_drop_transition_at_marker(
 
 
 func _spawn_room_content() -> void:
+	# Fixed clues and rewards are authored in each room scene. Runtime only binds
+	# clue callbacks and verifies the required nodes exist; it never creates fixed pickups.
+	# 固定线索和奖励由各房间场景预置；运行时只绑定线索回调并检查节点，不再按坐标生成。
+	_bind_authored_region_sources()
+	var expected_nodes: Array[String] = []
 	match room_id:
 		"A2-R03":
-			_spawn_source(
-				Vector2(735.0, floor_y - 18.0),
-				"anomaly_bell_retiming",
-				"从未移动的钟",
-				"钟舌垂落不动。\n\n钟声却依然响起。你掌下的石头震动了一次，随后归于沉寂。\n\n第二道脉动仍残留在你的眼后。",
-				12, 0, 0, "resonance_sight"
-			)
-			_spawn_world_item_pickup(
-				"exploration_reward_bellgrave_burial_token",
-				"bellgrave_burial_token",
-				"BellgraveBurialToken",
-				Vector2(300.0, 275.0)
-			)
-		"A2-R04":
-			pass
+			expected_nodes = ["Anomaly_anomaly_bell_retiming", "BellgraveBurialToken"]
 		"A2-R05":
-			_spawn_source(
-				Vector2(650.0, floor_y - 18.0),
-				"anomaly_old_pilgrim_echo",
-				"第二道回声",
-				"你轻敲旧里程碑，回应却从身后的道路传来。\n\n石头仍然温热，仿佛有人刚刚离开。",
-				18
-			)
-			_spawn_world_item_pickup(
-				"map_reward_old_pilgrim_waybill",
-				"old_pilgrim_waybill",
-				"OldPilgrimWaybill",
-				Vector2(650.0, 130.0)
-			)
-			if "defeated_A2_Cultist_01" in WorldState.achievement_flags:
-				_spawn_world_item_pickup(
-					"combat_reward_a2_cultist_seal",
-					"charred_church_seal",
-					"CharredChurchSeal",
-					Vector2(560.0, 130.0)
-				)
+			expected_nodes = ["Anomaly_anomaly_old_pilgrim_echo", "OldPilgrimWaybill", "CharredChurchSeal"]
 		"A2-R06":
-			_spawn_world_item_pickup(
-				"exploration_reward_canopy_waymarker_fragment",
-				"canopy_waymarker_fragment",
-				"CanopyWaymarkerFragment",
-				Vector2(1120.0, 295.0)
-			)
+			expected_nodes = ["CanopyWaymarkerFragment"]
+	for node_name in expected_nodes:
+		if get_node_or_null(NodePath(node_name)) == null:
+			push_error("[NEREIS][A2][ROOM][AUTHORED_CONTENT_MISSING] room=%s node=%s" % [room_id, node_name])
 
 
 func _spawn_room_exits() -> void:

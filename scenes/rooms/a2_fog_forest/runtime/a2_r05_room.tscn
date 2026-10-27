@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="room_script"]
 [ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="door_scene"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="narrative_scene"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="rest_point_scene"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="source_scene"]
+[ext_resource type="PackedScene" path="res://scenes/world/world_item_pickup.tscn" id="pickup_scene"]
 
 [sub_resource type="RectangleShape2D" id="terrain_GroundShape1"]
 size = Vector2(360, 24)
@@ -176,3 +178,21 @@ position = Vector2(950, 400)
 position = Vector2(1200, 400)
 enabled = false
 
+
+[node name="Anomaly_anomaly_old_pilgrim_echo" parent="." instance=ExtResource("source_scene")]
+position = Vector2(650, 382)
+source_id = "anomaly_old_pilgrim_echo"
+display_name = "第二道回声"
+description = "你轻敲旧里程碑，回应却从身后的道路传来。\n\n石头仍然温热，仿佛有人刚刚离开。"
+resonance_target = 18
+
+[node name="OldPilgrimWaybill" parent="." instance=ExtResource("pickup_scene")]
+position = Vector2(650, 130)
+pickup_id = "map_reward_old_pilgrim_waybill"
+item_id = "old_pilgrim_waybill"
+
+[node name="CharredChurchSeal" parent="." instance=ExtResource("pickup_scene")]
+position = Vector2(560, 130)
+pickup_id = "combat_reward_a2_cultist_seal"
+item_id = "charred_church_seal"
+required_achievement_flag = "defeated_A2_Cultist_01"
