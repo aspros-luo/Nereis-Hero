@@ -323,3 +323,13 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - R01–R06 now each contain an editor-visible RoomDebugOverlay scene instance.
 - a2_room_runtime.gd only updates the authored RoomNameLabel and reports a missing overlay; it no longer preloads, instantiates or adds a debug overlay at runtime.
 - Updated each room's load_steps to account for the new external scene resource. Static resource and reference checks follow this change; Godot import/runtime validation remains pending.
+
+
+### Final static acceptance pass for A0/A1/A2 priority scenes — 2026-10-27
+
+- Verified 13 priority scene resources: A0 interior/exterior and barrier; A1 village/backhill/cliff; A2 R01–R06 and shared H02 gate. Every scene's load_steps equals 1 + external resources + subresources.
+- All referenced scene/resource paths in those scenes exist in the current branch tree. All explicit CollisionShape2D scene blocks have an assigned shape resource.
+- A2 door and drop trigger positions match their corresponding authored markers after accounting for R01's Terrain scale of 1.25; no mismatch found in the six rooms. R04 H02 gate is authored as a scene instance and its runtime helper validates rather than creates it.
+- Checked eight priority scripts for referenced resource paths; no missing paths remain. Fixed three stale paths earlier in this audit: A0 debug menu, A1 H01 hidden well, and A1 H09 cliff-cave scene.
+- A1.1 Narrative/HUD and A2 room debug overlays are now editor-visible scene instances; scripts configure them instead of instantiating them.
+- Static acceptance is complete for resource accounting, resource existence, explicit collision-shape assignments, and authored A2 exit/drop anchors. Godot 4.6.1 import/parser/playable acceptance is not complete because this environment has no Godot executable; combat, deaths, saves, and traversal still require local runtime confirmation.

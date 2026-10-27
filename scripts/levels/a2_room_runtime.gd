@@ -61,7 +61,7 @@ func _ready() -> void:
 		camera.limit_right = int(map_width)
 		camera.limit_bottom = int(room_height)
 	_spawn_ui()
-	_spawn_room_debug_label()
+	_configure_room_debug_label()
 
 	_spawn_room_content()
 	_spawn_room_exits()
