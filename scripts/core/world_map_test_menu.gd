@@ -19,14 +19,14 @@ const REGION_ENTRIES: Array[Dictionary] = [
     {"id":"A11", "name":"古神研究深层 / Deep Research Depths", "path":"res://scenes/deep_research_depths.tscn", "spawn":"west"},
     {"id":"A12", "name":"王室内城 / Inner City", "path":"res://scenes/inner_city.tscn", "spawn":"west"},
     {"id":"A13", "name":"深层梦境与终局异象 / Terminal Anomaly", "path":"res://scenes/terminal_anomaly.tscn", "spawn":"west"},
-    {"id":"H01", "name":"井底回声层 / Hidden Well", "path":"res://scenes/hidden_well.tscn", "spawn":"west"},
-    {"id":"H02", "name":"倒响钟室 / Hidden Bell Chamber", "path":"res://scenes/hidden_bell_chamber.tscn", "spawn":"west"},
+    {"id":"H01", "name":"井底回声层 / Hidden Well", "path":"res://scenes/hidden_regions/hidden_well.tscn", "spawn":"west"},
+    {"id":"H02", "name":"倒响钟室 / Hidden Bell Chamber", "path":"res://scenes/hidden_regions/hidden_bell_chamber.tscn", "spawn":"west"},
     {"id":"H03", "name":"被删去的第三街 / Erased Third Street", "path":"res://scenes/erased_third_street.tscn", "spawn":"west"},
     {"id":"H04", "name":"水面背后的楼梯 / Reflected Stairwell", "path":"res://scenes/reflected_stairwell.tscn", "spawn":"west"},
     {"id":"H05", "name":"无声钟室 / Silent Bell Room", "path":"res://scenes/silent_bell_room.tscn", "spawn":"west"},
     {"id":"H06", "name":"王名抹除廊 / Erased Royal Name", "path":"res://scenes/erased_royal_name_corridor.tscn", "spawn":"west"},
     {"id":"H07", "name":"镜街 / Mirror Street", "path":"res://scenes/mirror_street.tscn", "spawn":"west"},
-    {"id":"H08", "name":"胎宫与原初空腔 / Primordial Hollow", "path":"res://scenes/primordial_hollow.tscn", "spawn":"west"}
+    {"id":"H08", "name":"胎宫与原初空腔 / Primordial Hollow", "path":"res://scenes/hidden_regions/primordial_hollow.tscn", "spawn":"west"}
 ]
 
 @onready var region_grid: GridContainer = $MarginContainer/Content/MapAndRegions/ScrollContainer/RegionGrid
