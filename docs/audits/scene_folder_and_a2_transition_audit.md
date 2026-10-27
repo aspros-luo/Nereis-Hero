@@ -158,3 +158,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Preserved each source ID, displayed text, world position, resonance threshold, and A9's outer-exposure / outer-god requirements.
 - Removed these three region-specific runtime creation branches; the shared callback binder handles progression signals only.
 - Static text checks passed; Godot editor import and runtime interactions remain unverified.
+
+
+### A11 and A12 fixed anomaly clues moved into authored scenes
+
+- Added the observer-reaction clue to A11 and the king's unopened letter to A12 as fixed scene instances.
+- Preserved A11's resonance target, ancient-exposure floor, and outer-exposure reward; preserved A12's resonance target and description.
+- Removed both runtime spawn branches. Source callbacks remain bound by the shared authored-source binder.
+- Static source checks only; Godot editor/runtime validation remains pending.

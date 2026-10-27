@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a11.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
 
 [node name="DeepResearchDepths" type="Node2D"]
 script = ExtResource("1")
@@ -17,3 +18,12 @@ map_width = 2600.0
 position = Vector2(1050, 540)
 rest_id = "rest_A11"
 display_name = "观测室歇脚处"
+
+[node name="Anomaly_anomaly_observer_reaction" parent="." instance=ExtResource("4")]
+position = Vector2(1450, 522)
+source_id = "anomaly_observer_reaction"
+display_name = "第二位观测者"
+description = "记录中写着一位从未进入密室的观测者。\n\n另一行字迹来自不同的人，描述的却是你离开的情景。"
+resonance_target = 78
+ancient_exposure_floor = 2
+outer_exposure_delta = 6

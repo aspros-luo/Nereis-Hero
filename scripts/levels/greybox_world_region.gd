@@ -1903,27 +1903,9 @@ func _spawn_region_sources() -> void:
 
 
 
-		"A11":
-			_spawn_source(
-				Vector2(1450, floor_y - 18.0),
-				"anomaly_observer_reaction",
-				"第二位观测者",
-				"记录中写着一位从未进入密室的观测者。\n\n另一行字迹来自不同的人，描述的却是你离开的情景。",
-				78,
-				0,
-				6,
-				"",
-				2
-			)
 
-		"A12":
-			_spawn_source(
-				Vector2(1070, floor_y - 18.0),
-				"anomaly_kings_unopened_letter",
-				"国王未曾拆开的信",
-				"这封信从未寄出。\n\n国王直言教会的实验，并请求读信者即使埋葬真相，也要保全王国。\n\n他的签名沉稳，封印却颤抖不止。",
-				74
-			)
+
+
 
 		"H01":
 			_spawn_source(
