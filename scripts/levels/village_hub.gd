@@ -298,7 +298,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if WorldState.debug_map_test_mode and event.keycode == KEY_F6:
 			_mark_input_handled()
-			get_tree().change_scene_to_file("res://scenes/world_map_test_menu.tscn")
+			get_tree().change_scene_to_file("res://scenes/debug/world_map_test_menu.tscn")
 			return
 		if event.keycode == KEY_F1:
 			var endgame_scene := NereisEndingEvaluator.get_candidate()
@@ -310,7 +310,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				"永恒乐园":
 					get_tree().change_scene_to_file("res://scenes/demos/ending_paradise_demo.tscn")
 				_:
-					get_tree().change_scene_to_file("res://scenes/church_final_demo.tscn")
+					get_tree().change_scene_to_file("res://scenes/demos/church_final_demo.tscn")
 		elif event.keycode == KEY_F2:
 			_mark_input_handled()
 			print("[NEREIS][DEBUG] Opening Eternal Paradise theater")
@@ -330,11 +330,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.keycode == KEY_F7:
 			_mark_input_handled()
 			print("[NEREIS][DEBUG] Opening church final boss theater")
-			get_tree().change_scene_to_file("res://scenes/church_final_demo.tscn")
+			get_tree().change_scene_to_file("res://scenes/demos/church_final_demo.tscn")
 		elif event.keycode == KEY_F6:
 			_mark_input_handled()
 			print("[NEREIS][DEBUG] Opening Mite resonance theater")
-			get_tree().change_scene_to_file("res://scenes/mite_resonance_demo.tscn")
+			get_tree().change_scene_to_file("res://scenes/demos/mite_resonance_demo.tscn")
 		elif event.keycode == KEY_F9:
 			_mark_input_handled()
 			WorldState.delete_save()
