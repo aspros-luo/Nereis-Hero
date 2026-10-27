@@ -295,3 +295,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Made the old A2 fixed-clue and fixed-pickup helpers inert; R03/R05/R06 scenes are now the sole owners of those fixed nodes. Dynamic combat rewards still use the shared pickup helper.
 - Replaced the legacy A2 branch of _spawn_region_exits() with a fail-loud guard instead of procedurally creating exits or an H02 gate. Authored A2 room doors and the R04 H02 gate continue through a2_room_runtime.gd.
 - This is source-level retirement of stale fallback logic. Godot 4.6.1 import and runtime acceptance remain outstanding.
+
+
+### Removed unused A2 fixed-content factory code — 2026-10-27
+
+- Removed the now-unreferenced _spawn_region_sources() and _spawn_region_item_pickups() startup calls and methods, plus the dead _spawn_source() factory and its scene preload.
+- The active regions bind fixed clues from authored scene children; A2 fixed rewards are scene instances. The shared _spawn_world_item_pickup() remains because combat rewards can be created dynamically when an enemy is defeated.
+- Repository-wide search was not available on the feature ref through the connector; within the current shared controller, the factory had no remaining callers after the previous A2 retirement. Static source review only.

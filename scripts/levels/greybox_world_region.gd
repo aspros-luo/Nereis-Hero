@@ -9,7 +9,6 @@ const HUD_SCENE: PackedScene = preload("res://scenes/ui/game_hud.tscn")
 const INTERACTION_DOOR_SCENE: PackedScene = preload("res://scenes/world/interaction_door.tscn")
 const AUTO_ROOM_TRANSITION_SCENE: PackedScene = preload("res://scenes/world/automatic_room_transition.tscn")
 const REST_POINT_SCENE: PackedScene = preload("res://scenes/world/rest_point.tscn")
-const RESONANCE_SOURCE_SCENE: PackedScene = preload("res://scenes/world/resonance_source_clue.tscn")
 const RESONANCE_SECRET_GATE_SCENE: PackedScene = preload("res://scenes/world/resonance_secret_gate.tscn")
 const LOCAL_RESONANCE_ROUTE_SCENE: PackedScene = preload("res://scenes/world/resonance_local_route.tscn")
 const THIRD_CORD_FRAGMENT_SCENE: PackedScene = preload("res://scenes/world/third_cord_fragment.tscn")
@@ -110,9 +109,7 @@ func _ready() -> void:
 	_spawn_hero(_spawn_x_for_side(spawn_side), _spawn_y_for_side(spawn_side))
 	print("[NEREIS][MAP][SPAWN] region=%s location=%s side=%s x=%.1f y=%.1f resume_side=%s" % [region_id, location_id, spawn_side, hero.position.x, hero.position.y, WorldState.resume_spawn_side])
 	_spawn_ui()
-	_spawn_region_sources()
 	_bind_authored_region_sources()
-	_spawn_region_item_pickups()
 	_spawn_region_exits()
 	_register_debug_locked_route_hints()
 	_spawn_region_rest_point()
@@ -820,12 +817,6 @@ func _show_intro() -> void:
 				"铭文并非被风雨磨损。\n\n凿痕是在墓穴封闭之后才留下的。",
 				5.0
 			)
-
-
-func _spawn_region_item_pickups() -> void:
-	# A2 fixed pickups are authored in R03/R05/R06 .tscn scenes. This legacy helper is intentionally inert.
-	# A2 固定拾取物已迁入 R03/R05/R06 场景；此旧入口保留为空操作，防止重复生成。
-	return
 
 
 func _spawn_world_item_pickup(pickup_id: String, item_id: String, node_name: String, pickup_position: Vector2) -> void:
@@ -1777,12 +1768,6 @@ func _spawn_region_rest_point() -> void:
 		return
 	push_error("[NEREIS][MAP][AUTHORED_REST_MISSING] region=%s" % region_id)
 
-func _spawn_region_sources() -> void:
-	# Fixed anomaly clues are authored in their region/room .tscn scenes.
-	# 固定异常线索已由区域/房间场景预置；禁止再按硬编码坐标创建。
-	return
-
-
 func _bind_authored_region_sources() -> void:
 	# Fixed anomaly clues are scene-authored; runtime only wires their state callbacks.
 	# 固定异常线索由场景预置；运行时只绑定状态回调，不创建或移动线索节点。
@@ -1797,35 +1782,6 @@ func _bind_authored_region_sources() -> void:
 		if not child.activated.is_connected(callback):
 			child.activated.connect(callback)
 
-func _spawn_source(
-	source_position: Vector2,
-	source_id: String,
-	display_name: String,
-	description: String,
-	resonance_target: int,
-	ancient_delta: int = 0,
-	outer_delta: int = 0,
-	unlock_ability_id: String = "",
-	ancient_floor: int = 0,
-	outer_floor: int = 0,
-	require_outer_god_resonance: bool = false
-) -> void:
-	var clue := RESONANCE_SOURCE_SCENE.instantiate() as Node2D
-	clue.name = "Anomaly_%s" % source_id
-	clue.position = source_position
-	clue.set("source_id", source_id)
-	clue.set("display_name", display_name)
-	clue.set("description", description)
-	clue.set("resonance_target", resonance_target)
-	clue.set("ancient_exposure_delta", ancient_delta)
-	clue.set("outer_exposure_delta", outer_delta)
-	clue.set("ancient_exposure_floor", ancient_floor)
-	clue.set("outer_exposure_floor", outer_floor)
-	clue.set("require_outer_god_resonance", require_outer_god_resonance)
-	clue.set("unlock_ability_id", unlock_ability_id)
-	clue.set("unlock_source_type", "resonance")
-	add_child(clue)
-	clue.activated.connect(_on_source_activated.bind(source_id, unlock_ability_id))
 func _on_source_activated(
 	display_name: String,
 	description: String,
