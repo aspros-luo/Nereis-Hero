@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a8.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/world/world_item_pickup.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="6"]
 
 [node name="RoyalTomb" type="Node2D"]
 script = ExtResource("1")
@@ -32,3 +33,29 @@ ancient_exposure_floor = 2
 position = Vector2(1290, 282)
 pickup_id = "map_reward_royal_mortuary_register"
 item_id = "royal_mortuary_register"
+
+; Editor-authored fixed exits. Runtime configures only destination/progression state.
+[node name="Exit_royal_tomb_boss" parent="." instance=ExtResource("6")]
+position = Vector2(1540, 540)
+visible = false
+enabled = false
+
+[node name="Exit_prison_depths" parent="." instance=ExtResource("6")]
+position = Vector2(72, 360)
+visible = false
+enabled = false
+
+[node name="Exit_royal_outer_ring" parent="." instance=ExtResource("6")]
+position = Vector2(2528, 540)
+visible = false
+enabled = false
+
+[node name="Exit_sewer_reservoir" parent="." instance=ExtResource("6")]
+position = Vector2(520, 375)
+visible = false
+enabled = false
+
+[node name="Exit_reflected_stairwell" parent="." instance=ExtResource("6")]
+position = Vector2(930, 540)
+visible = false
+enabled = false
