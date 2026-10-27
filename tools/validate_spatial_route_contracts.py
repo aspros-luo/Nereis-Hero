@@ -659,7 +659,7 @@ def main() -> int:
     require(
         errors,
         h02_exit_block.count("_spawn_exit_door(") == 1
-        and '"res://scenes/ash_forest.tscn", "bell_gate"' in h02_exit_block
+        and '"res://scenes/regions/ash_forest.tscn", "bell_gate"' in h02_exit_block
         and "old_battlefield" not in h02_exit_block
         and "old_pilgrim_highroad" not in h02_exit_block,
         "H02: retain one return door to A2 only; do not add a second A5 exit.",

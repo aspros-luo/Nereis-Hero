@@ -15,18 +15,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 REGIONS = {
-    "A2": ("scenes/ash_forest.tscn", "ash_forest", "THE OLD PILGRIM ROAD"),
-    "A3": ("scenes/forgotten_city.tscn", "forgotten_city", "THE FORGOTTEN CITY"),
-    "A4": ("scenes/sewer_reservoir.tscn", "sewer_reservoir", "THE SEDIMENT HALL"),
-    "A5": ("scenes/old_battlefield.tscn", "old_battlefield", "THE BORDER BATTLEFIELD"),
-    "A6": ("scenes/monastery_tower.tscn", "monastery_tower", "THE MONASTERY THAT KEPT ITS BELL"),
-    "A7": ("scenes/prison_depths.tscn", "prison_depths", "THE PENITENTIAL DEPTHS"),
-    "A8": ("scenes/royal_tomb.tscn", "royal_tomb", "THE ROYAL TOMB"),
-    "A9": ("scenes/royal_outer_ring.tscn", "royal_outer_ring", "THE ROYAL OUTER RING"),
-    "A10": ("scenes/grand_cathedral.tscn", "grand_cathedral", "THE GREAT CATHEDRAL"),
-    "A12": ("scenes/inner_city.tscn", "inner_city", "THE INNER CITY"),
-    "A13": ("scenes/terminal_anomaly.tscn", "terminal_anomaly", "THE DEEP DREAM AND FINAL ANOMALY"),
-    "A11": ("scenes/deep_research_depths.tscn", "deep_research_depths", "THE DEPTHS THAT PRECEDED THE LAB"),
+    "A2": ("scenes/regions/ash_forest.tscn", "ash_forest", "THE OLD PILGRIM ROAD"),
+    "A3": ("scenes/regions/forgotten_city.tscn", "forgotten_city", "THE FORGOTTEN CITY"),
+    "A4": ("scenes/regions/sewer_reservoir.tscn", "sewer_reservoir", "THE SEDIMENT HALL"),
+    "A5": ("scenes/regions/old_battlefield.tscn", "old_battlefield", "THE BORDER BATTLEFIELD"),
+    "A6": ("scenes/regions/monastery_tower.tscn", "monastery_tower", "THE MONASTERY THAT KEPT ITS BELL"),
+    "A7": ("scenes/regions/prison_depths.tscn", "prison_depths", "THE PENITENTIAL DEPTHS"),
+    "A8": ("scenes/regions/royal_tomb.tscn", "royal_tomb", "THE ROYAL TOMB"),
+    "A9": ("scenes/regions/royal_outer_ring.tscn", "royal_outer_ring", "THE ROYAL OUTER RING"),
+    "A10": ("scenes/regions/grand_cathedral.tscn", "grand_cathedral", "THE GREAT CATHEDRAL"),
+    "A12": ("scenes/regions/inner_city.tscn", "inner_city", "THE INNER CITY"),
+    "A13": ("scenes/regions/terminal_anomaly.tscn", "terminal_anomaly", "THE DEEP DREAM AND FINAL ANOMALY"),
+    "A11": ("scenes/regions/deep_research_depths.tscn", "deep_research_depths", "THE DEPTHS THAT PRECEDED THE LAB"),
     "H08": ("scenes/hidden_regions/primordial_hollow.tscn", "primordial_hollow", "THE WOMB BELOW THE LAB"),
     "H07": ("scenes/hidden_regions/mirror_street.tscn", "mirror_street", "MIRROR STREET: BEHIND THE RAIN"),
     "H01": ("scenes/hidden_regions/hidden_well.tscn", "hidden_well", "THE WELL BELOW THE WELL"),
@@ -81,8 +81,8 @@ ART_ASSETS = [
 REQUIRED_ENTRY_SCENES = [
     "scenes/boot.tscn",
     "scenes/debug/world_map_test_menu.tscn",
-    "scenes/escape_prologue.tscn",
-    "scenes/village_hub.tscn",
+    "scenes/regions/escape_prologue.tscn",
+    "scenes/regions/village_hub.tscn",
 ]
 
 
@@ -472,7 +472,7 @@ def main() -> int:
     require(world_state, "var debug_ability_override_active := false", "WorldState", errors)
     require(world_state, '"resume_spawn_side": resume_spawn_side', "WorldState save payload", errors)
     require(world_state, 'resume_spawn_side = str(parsed.get("resume_spawn_side", "west"))', "WorldState save migration", errors)
-    require(world_state, '"res://scenes/terminal_anomaly.tscn": "A13"', "Natural map test A13 tracking", errors)
+    require(world_state, '"res://scenes/regions/terminal_anomaly.tscn": "A13"', "Natural map test A13 tracking", errors)
     require(world_state, "[%d/23]", "Natural map test region total", errors)
     require(world_state, 'resume_spawn_side = requested_spawn_side', "WorldState location save", errors)
     require(world_state, 'resume_spawn_side.length() > 64', "WorldState spawn-side input guard", errors)
@@ -493,7 +493,7 @@ def main() -> int:
         'func _respawn_boss_after_death()',
         'WorldState.pending_region_spawn_side = "boss_return"',
         'WorldState.set_location("royal_tomb")',
-        'SceneTransition.fade_to_scene("res://scenes/royal_tomb.tscn")',
+        'SceneTransition.fade_to_scene("res://scenes/regions/royal_tomb.tscn")',
         'func _spawn_return_door()',
     ]:
         require(boss_arena_script, contract, "Royal tomb Boss arena lifecycle", errors)
@@ -521,7 +521,7 @@ def main() -> int:
     require(world_state, '"OB01"', "Optional boss included in full-map coverage", errors)
     require(world_state, '"INCOMPLETE"', "Incomplete whole-map coverage is reported", errors)
     require(map_test_script, "WorldState.physical_union_complete = true", "Macro-map route test flags", errors)
-    require(map_test_script, "res://scenes/terminal_anomaly.tscn", "A13 acceptance destination", errors)
+    require(map_test_script, "res://scenes/regions/terminal_anomaly.tscn", "A13 acceptance destination", errors)
     require(map_test_script, "res://scenes/hidden_regions/primordial_hollow.tscn", "H08 acceptance destination", errors)
     require(map_test_script, '"id":"OB01"', "Royal tomb boss isolated acceptance entry", errors)
     require(world_state, '"res://scenes/royal_tomb_boss.tscn": "OB01"', "Royal tomb boss natural-test coverage mapping", errors)
@@ -562,7 +562,7 @@ def main() -> int:
 
     # A2's authored terrain is a child component so shared transitions, save state, and UI remain owned by the region controller.
     # A2 自定义地形以子组件方式接入，跨区、存档与 UI 仍由公共区域控制器负责。
-    a2_scene = read("scenes/ash_forest.tscn", errors)
+    a2_scene = read("scenes/regions/ash_forest.tscn", errors)
     require(a2_scene, 'path="res://scripts/levels/a2_authored_terrain.gd"', "A2 authored terrain resource", errors)
     require(a2_scene, '[node name="A2AuthoredTerrain" type="Node" parent="."]', "A2 authored terrain node", errors)
     require(a2_scene, 'script = ExtResource("2")', "A2 authored terrain attachment", errors)
@@ -653,7 +653,7 @@ def main() -> int:
     require(boss_controller, 'boss.connect("phase_changed"', "Royal tomb boss phase signal", errors)
     require(boss_controller, 'WorldState.record_achievement(BOSS_FLAG)', "Royal tomb boss victory persistence", errors)
     require(boss_controller, 'WorldState.pending_region_spawn_side = "boss_return"', "Royal tomb boss return spawn side", errors)
-    require(boss_controller, 'SceneTransition.fade_to_scene("res://scenes/royal_tomb.tscn")', "Royal tomb boss return transition", errors)
+    require(boss_controller, 'SceneTransition.fade_to_scene("res://scenes/regions/royal_tomb.tscn")', "Royal tomb boss return transition", errors)
     require(boss_controller, '_respawn_boss_after_death', "Royal tomb boss death-reset route", errors)
     require(boss_controller, 'if BOSS_FLAG in WorldState.achievement_flags:', "Royal tomb boss Continue-state recovery", errors)
     require(boss_script, 'if not phase_two and health <= maxi(1, max_health / 2):', "Boss phase-two threshold", errors)
@@ -812,7 +812,7 @@ def main() -> int:
     require(defense_route_script, 'if defeated == 3 and stage == 1:', "A1 defense first wave completion", errors)
     require(defense_route_script, 'elif defeated == 7 and stage == 2:', "A1 defense second wave completion", errors)
     require(defense_route_script, 'WorldState.record_achievement("village_defense_survived")', "A1 defense victory persists progression flag", errors)
-    require(defense_route_script, 'SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")', "A1 defense victory returns to village", errors)
+    require(defense_route_script, 'SceneTransition.fade_to_scene("res://scenes/regions/village_hub.tscn")', "A1 defense victory returns to village", errors)
     require(defense_route_script, 'defeated = 0', "A1 defense retry resets wave counter", errors)
     require(defense_route_script, "hero.defer_death_recovery = true", "A1 defense uses its authored Hero lifecycle", errors)
     require(defense_route_script, "hero.global_position = Vector2(420.0, FLOOR_Y)", "A1 defeat returns to its local start point", errors)
@@ -832,12 +832,12 @@ def main() -> int:
     require(village_route_script, 'if "village_defense_survived" in WorldState.achievement_flags:', "C02 defense flag gates A2 entry", errors)
     require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/demos/village_defense_demo.tscn")', "C02 first North Gate interaction starts defense", errors)
     require(village_route_script, 'WorldState.pending_region_spawn_side = "west"', "C02 A1-to-A2 spawn side", errors)
-    require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/ash_forest.tscn")', "C02 A1-to-A2 transition", errors)
-    require(region_script, '"res://scenes/village_hub.tscn", "north_gate"', "C02 A2-to-A1 reverse transition", errors)
+    require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/regions/ash_forest.tscn")', "C02 A1-to-A2 transition", errors)
+    require(region_script, '"res://scenes/regions/village_hub.tscn", "north_gate"', "C02 A2-to-A1 reverse transition", errors)
 
     # C03 must remain a genuinely supported two-way canopy route between A2 and A3.
     require(region_script, '3400.0, "E  沿树冠高路进入被遗忘的城区"', "C03 A2 eastern canopy door anchor", errors)
-    require(region_script, '"res://scenes/forgotten_city.tscn", "city_canopy_entry",\n\t\t\t\ttrue, "", "", floor_y - 160.0', "C03 A2 door transition and elevation", errors)
+    require(region_script, '"res://scenes/regions/forgotten_city.tscn", "city_canopy_entry",\n\t\t\t\ttrue, "", "", floor_y - 160.0', "C03 A2 door transition and elevation", errors)
     a2_r06_scene = read("scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn", errors)
     require(a2_r06_scene, 'position = Vector2(3335, 490)', "C03 A2 exit support platform", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return X mapping branch", errors)
@@ -860,7 +860,7 @@ def main() -> int:
     # C24 intentionally uses a two-scene route: village -> old drain -> A3.
     # Validate target, arrival-side persistence, and transition independently;
     # do not require an incorrect direct village-to-city jump.
-    require(old_drain_route_script, 'const CITY_SCENE := "res://scenes/forgotten_city.tscn"', "C24 old-drain destination scene", errors)
+    require(old_drain_route_script, 'const CITY_SCENE := "res://scenes/regions/forgotten_city.tscn"', "C24 old-drain destination scene", errors)
     require(old_drain_route_script, 'WorldState.pending_region_spawn_side = "village_city_cut"', "C24 old-drain-to-A3 spawn mapping", errors)
     require(old_drain_route_script, "SceneTransition.fade_to_scene(CITY_SCENE)", "C24 old-drain-to-A3 transition call", errors)
     require(village_route_script, "func _create_village_rooftop_route() -> void:", "A1 rooftop route builder", errors)
@@ -876,11 +876,11 @@ def main() -> int:
     require(region_script, "_add_platform(Rect2(420, 420, 120, 18))", "A5 battlefield parapet route", errors)
     require(region_script, "_add_platform(Rect2(2190, 450, 140, 18))", "A5 elevated monastery approach", errors)
     require(region_script, "2250.0, \"E  沿残墙高路进入修道院\"", "A5 raised main exit", errors)
-    require(region_script, '"res://scenes/monastery_tower.tscn", "battlefield_entry", true, "", "", floor_y - 90.0', "C09 elevated door height contract", errors)
+    require(region_script, '"res://scenes/regions/monastery_tower.tscn", "battlefield_entry", true, "", "", floor_y - 90.0', "C09 elevated door height contract", errors)
     require(region_script, '2350.0, "E  沿外环屋顶阶梯登上大圣堂"', "C17 A9 rooftop exit anchor", errors)
-    require(region_script, '"res://scenes/grand_cathedral.tscn", "cathedral_roof", true, "", "", floor_y - 180.0', "C17 elevated destination spawn side", errors)
+    require(region_script, '"res://scenes/regions/grand_cathedral.tscn", "cathedral_roof", true, "", "", floor_y - 180.0', "C17 elevated destination spawn side", errors)
     require(region_script, '_add_platform(Rect2(80, 360, 150, 18))', "A10 C17 west upper landing platform", errors)
-    require(region_script, '"res://scenes/royal_outer_ring.tscn", "cathedral_roof_return",\n\t\t\t\ttrue, "", "", floor_y - 180.0', "C17 elevated return door", errors)
+    require(region_script, '"res://scenes/regions/royal_outer_ring.tscn", "cathedral_roof_return",\n\t\t\t\ttrue, "", "", floor_y - 180.0', "C17 elevated return door", errors)
     require(region_script, 'if region_id == "A10" and side == "cathedral_roof":', "C17 A10 arrival height mapping branch", errors)
     require(region_script, "return floor_y - 180.0", "C17 A10 arrival height mapping", errors)
     require(region_script, 'if region_id == "A9" and side == "cathedral_roof_return":', "C17 A9 return height mapping branch", errors)
@@ -1267,8 +1267,8 @@ def main() -> int:
     # 一次性逐条核对全部 24 条 C 连接的源区域转场代码与反向门，不再只依赖主线抽样断言。
     village_route_script = read("scripts/levels/village_hub.gd", errors)
     scene_path_by_region = {
-        "A0": "scenes/escape_prologue.tscn",
-        "A1": "scenes/village_hub.tscn",
+        "A0": "scenes/regions/escape_prologue.tscn",
+        "A1": "scenes/regions/village_hub.tscn",
     }
     scene_path_by_region.update({
         region_id: scene_data[0]
@@ -1399,7 +1399,7 @@ def main() -> int:
     # C04 是双侧高路捷径：两侧门高、承托平台与到达高度必须保持一致。
     for contract in (
         '1880.0, "E  返回边境战场", "old_battlefield"',
-        '"res://scenes/old_battlefield.tscn", "old_pilgrim_highroad",',
+        '"res://scenes/regions/old_battlefield.tscn", "old_pilgrim_highroad",',
         '520.0, "E  打开旧朝圣高路", "ash_forest"',
         '"reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回"',
         'if region_id == "A2" and side == "old_pilgrim_highroad":',
@@ -1425,12 +1425,12 @@ def main() -> int:
     a12_route_block = _region_exit_block("A12")
     for contract in [
         '"E  沿外环屋顶阶梯登上大圣堂"',
-        'res://scenes/grand_cathedral.tscn", "cathedral_roof"',
+        'res://scenes/regions/grand_cathedral.tscn", "cathedral_roof"',
     ]:
         require(a9_route_block, contract, "C17 outer-ring-to-cathedral main route", errors)
     for contract in [
         '"E  进入王室内城"',
-        'res://scenes/inner_city.tscn", "west"',
+        'res://scenes/regions/inner_city.tscn", "west"',
     ]:
         require(a10_route_block, contract, "C20 cathedral-to-inner-city main route", errors)
     require(a12_route_block, '"E  返回大圣堂"', "C20 inner-city return route", errors)
@@ -1534,7 +1534,7 @@ def main() -> int:
             '"E  返回深层研究区"',
             'if NereisEndingEvaluator.get_candidate() != "凡人之墓":',
             '"terminal_anomaly"',
-            '"res://scenes/terminal_anomaly.tscn"',
+            '"res://scenes/regions/terminal_anomaly.tscn"',
         ],
     }
     exits_source = region_script[exits_start:]
@@ -1642,7 +1642,7 @@ def main() -> int:
         region_script,
     )
     a6_shortcut_body = a6_shortcut_match.group(1) if a6_shortcut_match else ""
-    require(a6_shortcut_body, 'res://scenes/forgotten_city.tscn', "C10 A6-to-A3 destination scene", errors)
+    require(a6_shortcut_body, 'res://scenes/regions/forgotten_city.tscn', "C10 A6-to-A3 destination scene", errors)
     require(a6_shortcut_body, '"bell_drop"', "C10 A6-to-A3 arrival side", errors)
     require(a6_shortcut_body, 'WorldState.is_item_owned("bell_tower_winch_key")', "C10 key-gated shortcut creation", errors)
     require(a6_shortcut_body, '"opened_bell_tower_drop"', "C10 persistent shortcut-open flag", errors)
@@ -1660,7 +1660,7 @@ def main() -> int:
     # C03 树冠高路与 C07 王墓中层水道必须在双向转场中保留设计高度。
     for contract in [
         '3400.0, "E  沿树冠高路进入被遗忘的城区"',
-        '"res://scenes/forgotten_city.tscn", "city_canopy_entry",',
+        '"res://scenes/regions/forgotten_city.tscn", "city_canopy_entry",',
         'true, "", "", floor_y - 160.0',
         '72.0, "E  返回旧朝圣路", "ash_forest"',
         '_add_platform(Rect2(80, 410, 150, 18))',
@@ -2044,12 +2044,12 @@ def main() -> int:
     require(village_hub, '350.0 if spawn_side == "city_cut_return"', "Village old-drain return spawn", errors)
     require(village_hub, '1850.0 if spawn_side in ["well_exit", "cliff_cave_return"]', "Village lower east return spawn", errors)
     require(village_hub, '530.0 if spawn_side == "mite_house_return"', "Village house return spawn", errors)
-    require(region_spawn_script, '"res://scenes/village_hub.tscn", "north_gate"', "A2 village return side", errors)
-    require(region_spawn_script, '"res://scenes/village_hub.tscn", "city_cut_return"', "A3 old-drain return side", errors)
-    require(region_spawn_script, '"res://scenes/village_hub.tscn", "well_exit"', "Watergate return side", errors)
+    require(region_spawn_script, '"res://scenes/regions/village_hub.tscn", "north_gate"', "A2 village return side", errors)
+    require(region_spawn_script, '"res://scenes/regions/village_hub.tscn", "city_cut_return"', "A3 old-drain return side", errors)
+    require(region_spawn_script, '"res://scenes/regions/village_hub.tscn", "well_exit"', "Watergate return side", errors)
     require(village_hub, 'WorldState.set_checkpoint(Vector2(360, 520))', "A1 checkpoint is restored on entering the hub", errors)
     require(village_hub, '"village_defense_survived"', "Village old-road unlock", errors)
-    require(village_hub, 'res://scenes/ash_forest.tscn', "Village old-road route", errors)
+    require(village_hub, 'res://scenes/regions/ash_forest.tscn', "Village old-road route", errors)
     require(village_hub, 'if "village_defense_survived" in WorldState.achievement_flags:', "A1 north gate and old drain share the village-defense progression flag", errors)
     require(village_hub, 'draw_rect(Rect2(2818, 385, 50, 12)', "A1 north gate has a visible blocked state before village defense", errors)
     require(village_hub, 'draw_line(Vector2(2818, 360), Vector2(2794, 405)', "A1 north gate visibly opens after village defense", errors)

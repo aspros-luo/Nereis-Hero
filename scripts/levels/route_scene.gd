@@ -86,7 +86,7 @@ func _on_route_exit_reached() -> void:
 
 func _enter_village_hub() -> void:
     print("[NEREIS][VILLAGE] Leaving route=%s -> Village Hub" % WorldState.selected_route)
-    SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+    SceneTransition.fade_to_scene("res://scenes/regions/village_hub.tscn")
 
 func _process(_delta: float) -> void:
     if not WorldState.input_locked and get_tree().paused:
@@ -130,7 +130,7 @@ func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
         WorldState.delete_save()
         print("[NEREIS][DEBUG] Route run reset; returning to Vertical Slice")
-        get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
+        get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
         var viewport := get_viewport()
         if viewport:
             viewport.set_input_as_handled()

@@ -41,7 +41,7 @@ func _run() -> void:
 
 
 func _test_a10_scene_and_state_matrix() -> void:
-	var packed := load("res://scenes/village_hub.tscn") as PackedScene
+	var packed := load("res://scenes/regions/village_hub.tscn") as PackedScene
 	_expect(packed != null, "A1.0 PackedScene loads")
 	if packed == null:
 		return
@@ -124,7 +124,7 @@ func _test_a10_scene_and_state_matrix() -> void:
 
 
 func _test_spawn_side_matrix() -> void:
-	var packed := load("res://scenes/village_hub.tscn") as PackedScene
+	var packed := load("res://scenes/regions/village_hub.tscn") as PackedScene
 	_expect(packed != null, "A1.0 scene loads for spawn matrix")
 	if packed == null:
 		return

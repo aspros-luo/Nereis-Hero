@@ -43,7 +43,7 @@ func _on_poi_interacted(poi: Node) -> void:
 	if String(poi.poi_id) == "back_to_village":
 		WorldState.pending_region_spawn_side = "backhill_return"
 		WorldState.set_location("village")
-		SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+		SceneTransition.fade_to_scene("res://scenes/regions/village_hub.tscn")
 		return
 	narrative.show_message(poi.display_name, poi.dialogue, 4.0)
 	await narrative.message_finished

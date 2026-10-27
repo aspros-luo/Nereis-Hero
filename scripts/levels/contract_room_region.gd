@@ -55,13 +55,13 @@ const ROOM_SCENES := {
 	"H08-R01": "res://scenes/rooms/world_h08_r01.tscn"
 }
 const LEGACY_SCENES := {
-	"A0": "res://scenes/escape_prologue.tscn", "A1": "res://scenes/village_hub.tscn",
-	"A2": "res://scenes/ash_forest.tscn", "A3": "res://scenes/forgotten_city.tscn",
-	"A4": "res://scenes/sewer_reservoir.tscn", "A5": "res://scenes/old_battlefield.tscn",
-	"A6": "res://scenes/monastery_tower.tscn", "A7": "res://scenes/prison_depths.tscn",
-	"A8": "res://scenes/royal_tomb.tscn", "A9": "res://scenes/royal_outer_ring.tscn",
-	"A10": "res://scenes/grand_cathedral.tscn", "A11": "res://scenes/deep_research_depths.tscn",
-	"A12": "res://scenes/inner_city.tscn", "A13": "res://scenes/terminal_anomaly.tscn"
+	"A0": "res://scenes/regions/escape_prologue.tscn", "A1": "res://scenes/regions/village_hub.tscn",
+	"A2": "res://scenes/regions/ash_forest.tscn", "A3": "res://scenes/regions/forgotten_city.tscn",
+	"A4": "res://scenes/regions/sewer_reservoir.tscn", "A5": "res://scenes/regions/old_battlefield.tscn",
+	"A6": "res://scenes/regions/monastery_tower.tscn", "A7": "res://scenes/regions/prison_depths.tscn",
+	"A8": "res://scenes/regions/royal_tomb.tscn", "A9": "res://scenes/regions/royal_outer_ring.tscn",
+	"A10": "res://scenes/regions/grand_cathedral.tscn", "A11": "res://scenes/regions/deep_research_depths.tscn",
+	"A12": "res://scenes/regions/inner_city.tscn", "A13": "res://scenes/regions/terminal_anomaly.tscn"
 }
 @export var room_id := "A1-R01"
 var room_data: Dictionary = {}

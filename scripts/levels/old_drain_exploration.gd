@@ -5,9 +5,9 @@ extends Node2D
 const SEWER_RAT_SCENE: PackedScene = preload("res://scenes/enemies/sewer_rat.tscn")
 const INTERACTION_FOCUS_SCRIPT = preload("res://scripts/core/interaction_focus.gd")
 
-const VILLAGE_SCENE := "res://scenes/village_hub.tscn"
-const CITY_SCENE := "res://scenes/forgotten_city.tscn"
-const RESERVOIR_SCENE := "res://scenes/sewer_reservoir.tscn"
+const VILLAGE_SCENE := "res://scenes/regions/village_hub.tscn"
+const CITY_SCENE := "res://scenes/regions/forgotten_city.tscn"
+const RESERVOIR_SCENE := "res://scenes/regions/sewer_reservoir.tscn"
 const CONNECTION_FLAG := "opened_old_drainage_link_from_A4"
 
 @onready var hero: CharacterBody2D = $Hero

@@ -24,7 +24,7 @@ func _ready() -> void:
 	exit.reached.connect(func() -> void:
 		WorldState.pending_region_spawn_side = "mite_house_return"
 		WorldState.set_location("village")
-		SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+		SceneTransition.fade_to_scene("res://scenes/regions/village_hub.tscn")
 	)
 	hud.bind_hero(hero)
 	hud.set_story_mode("MITE'S HOUSE", "STAY A LITTLE LONGER")
@@ -80,7 +80,7 @@ func _on_mite_interacted(_interaction_id: String, title: String, message: String
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
 		WorldState.delete_save()
-		get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
+		get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
 		var viewport := get_viewport()
 		if viewport:
 			viewport.set_input_as_handled()

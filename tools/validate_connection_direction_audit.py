@@ -60,16 +60,16 @@ def main() -> int:
     # Mainline C11/C13/C14 must be explicitly wired from both endpoint scenes.
     endpoint_contracts = {
         "C11": [
-            '"A6":', '"res://scenes/prison_depths.tscn", "west"',
-            '"A7":', '"res://scenes/monastery_tower.tscn", "east"',
+            '"A6":', '"res://scenes/regions/prison_depths.tscn", "west"',
+            '"A7":', '"res://scenes/regions/monastery_tower.tscn", "east"',
         ],
         "C13": [
-            '"A7":', '"res://scenes/royal_tomb.tscn", "maintenance_shaft_entry"',
-            '"A8":', '"res://scenes/prison_depths.tscn", "maintenance_shaft_return"',
+            '"A7":', '"res://scenes/regions/royal_tomb.tscn", "maintenance_shaft_entry"',
+            '"A8":', '"res://scenes/regions/prison_depths.tscn", "maintenance_shaft_return"',
         ],
         "C14": [
-            '"A8":', '"res://scenes/royal_outer_ring.tscn", "west"',
-            '"A9":', '"res://scenes/royal_tomb.tscn", "east"',
+            '"A8":', '"res://scenes/regions/royal_outer_ring.tscn", "west"',
+            '"A9":', '"res://scenes/regions/royal_tomb.tscn", "east"',
         ],
     }
     for edge_id, needles in endpoint_contracts.items():
@@ -113,7 +113,7 @@ def main() -> int:
         and c14_arrival.get("y_offset") == 0 and c14_arrival.get("spawn_side") == "west"
     ):
         errors.append("C14: topology must record the paired A8/A9 ground doors and safe arrival spawns.")
-    if '"res://scenes/royal_outer_ring.tscn", "west"' not in region or '"res://scenes/royal_tomb.tscn", "east"' not in region:
+    if '"res://scenes/regions/royal_outer_ring.tscn", "west"' not in region or '"res://scenes/regions/royal_tomb.tscn", "east"' not in region:
         errors.append("C14: paired ground doors must remain wired between A8 and A9.")
     if 'if side == "east":\n\t\treturn map_width - 180.0' not in region or '\n\treturn 180.0\n' not in region:
         errors.append("C14: safe ground arrivals must remain on the far side of the paired boundary doors.")
@@ -184,7 +184,7 @@ def main() -> int:
         'NereisEndingEvaluator.get_candidate() == "凡人之墓"' in c21_refresh
         and 'get_node_or_null("Exit_terminal_anomaly")' in c21_refresh
         and 'debug_exit_markers.remove_at(index)' in c21_refresh
-        and '"res://scenes/terminal_anomaly.tscn", "west"' in c21_refresh
+        and '"res://scenes/regions/terminal_anomaly.tscn", "west"' in c21_refresh
     ):
         errors.append("C21: dynamic refresh must remove the stale locked hint and spawn exactly one enabled A13/west door.")
     if region.count("var ending_gate := ENDGAME_GATE_SCRIPT.new()") != 1:
@@ -295,16 +295,16 @@ def main() -> int:
 
     a11_split = exit_source.split('\n\t\t"A11":', 1)
     a11_branch_for_c21 = a11_split[1].split('\n\t\t"', 1)[0] if len(a11_split) > 1 else ""
-    if 'if NereisEndingEvaluator.get_candidate() != "凡人之墓":' not in a11_branch_for_c21 or '"res://scenes/terminal_anomaly.tscn"' not in a11_branch_for_c21:
+    if 'if NereisEndingEvaluator.get_candidate() != "凡人之墓":' not in a11_branch_for_c21 or '"res://scenes/regions/terminal_anomaly.tscn"' not in a11_branch_for_c21:
         errors.append("C21: A11-to-A13 transition must use the shared ending evaluator")
     h08_split = exit_source.split('\n\t\t"H08":', 1)
     h08_branch = h08_split[1].split('\n\t\t"', 1)[0] if len(h08_split) > 1 else ""
-    if 'if NereisEndingEvaluator.get_candidate() != "凡人之墓":' not in h08_branch or '"res://scenes/terminal_anomaly.tscn"' not in h08_branch:
+    if 'if NereisEndingEvaluator.get_candidate() != "凡人之墓":' not in h08_branch or '"res://scenes/regions/terminal_anomaly.tscn"' not in h08_branch:
         errors.append("H08: alternate A13 entry must use the shared ending evaluator")
     # Four source literals represent three runtime entries: C21 is authored once in the
     # initial A11 branch and once in its dynamic in-place refresh helper; C22 and H08
     # each contribute one additional route. The runtime helper guard prevents duplicates.
-    if region.count('"res://scenes/terminal_anomaly.tscn"') != 4:
+    if region.count('"res://scenes/regions/terminal_anomaly.tscn"') != 4:
         errors.append("A13 entry audit: expected C21 initial/dynamic wiring plus C22 and H08 (three runtime entries)")
 
     # Floor geometry is continuous by design; a trigger door is not a physical wall.

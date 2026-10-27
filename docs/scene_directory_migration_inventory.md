@@ -2,26 +2,26 @@
 
 Branch: `feature/story-map-progression`
 
-Status: inventory derived from the current branch tree, `scripts/core/world_state.gd`, and `tools/world_map_topology.json`. This is a migration plan, not evidence of runtime acceptance.
+Status: A0–A13 entry scenes have been moved to `scenes/regions/`; runtime and acceptance references were updated in this branch. GitHub static checks do not replace local Godot 4.6.1 import and runtime acceptance.
 
 ## Primary region entry scenes
 
-| Region | Current entry scene | Proposed path |
+| Region | Migrated entry scene | Status |
 |---|---|---|
-| A0 | `scenes/escape_prologue.tscn` | `scenes/regions/escape_prologue.tscn` |
-| A1 | `scenes/village_hub.tscn` | `scenes/regions/village_hub.tscn` |
-| A2 | `scenes/ash_forest.tscn` | `scenes/regions/ash_forest.tscn` |
-| A3 | `scenes/forgotten_city.tscn` | `scenes/regions/forgotten_city.tscn` |
-| A4 | `scenes/sewer_reservoir.tscn` | `scenes/regions/sewer_reservoir.tscn` |
-| A5 | `scenes/old_battlefield.tscn` | `scenes/regions/old_battlefield.tscn` |
-| A6 | `scenes/monastery_tower.tscn` | `scenes/regions/monastery_tower.tscn` |
-| A7 | `scenes/prison_depths.tscn` | `scenes/regions/prison_depths.tscn` |
-| A8 | `scenes/royal_tomb.tscn` | `scenes/regions/royal_tomb.tscn` |
-| A9 | `scenes/royal_outer_ring.tscn` | `scenes/regions/royal_outer_ring.tscn` |
-| A10 | `scenes/grand_cathedral.tscn` | `scenes/regions/grand_cathedral.tscn` |
-| A11 | `scenes/deep_research_depths.tscn` | `scenes/regions/deep_research_depths.tscn` |
-| A12 | `scenes/inner_city.tscn` | `scenes/regions/inner_city.tscn` |
-| A13 | `scenes/terminal_anomaly.tscn` | `scenes/regions/terminal_anomaly.tscn` |
+| A0 | `scenes/regions/escape_prologue.tscn` | migrated |
+| A1 | `scenes/regions/village_hub.tscn` | migrated |
+| A2 | `scenes/regions/ash_forest.tscn` | migrated |
+| A3 | `scenes/regions/forgotten_city.tscn` | migrated |
+| A4 | `scenes/regions/sewer_reservoir.tscn` | migrated |
+| A5 | `scenes/regions/old_battlefield.tscn` | migrated |
+| A6 | `scenes/regions/monastery_tower.tscn` | migrated |
+| A7 | `scenes/regions/prison_depths.tscn` | migrated |
+| A8 | `scenes/regions/royal_tomb.tscn` | migrated |
+| A9 | `scenes/regions/royal_outer_ring.tscn` | migrated |
+| A10 | `scenes/regions/grand_cathedral.tscn` | migrated |
+| A11 | `scenes/regions/deep_research_depths.tscn` | migrated |
+| A12 | `scenes/regions/inner_city.tscn` | migrated |
+| A13 | `scenes/regions/terminal_anomaly.tscn` | migrated |
 
 ## Root-level scenes that are not primary region entries
 
@@ -36,16 +36,16 @@ These remain separate until their ownership and every reference are audited:
 - `scenes/cliff_exploration.tscn` — cliff exploration scene; review ownership separately.
 - `scenes/ancient_research_lab.tscn` — auxiliary research scene; review ownership separately.
 
-## Required pre-move audit
+## Migration implementation and reference audit
 
-Before moving any entry scene, update and verify all path consumers in:
+The following runtime, route-data, and acceptance consumers were updated to the new entry-scene paths:
 - `scripts/core/world_state.gd` (region ID mapping and resume destinations)
 - `scripts/levels/greybox_world_region.gd` (doors, exits and route destinations)
 - `tools/validate_graybox_scene_wiring.py` (acceptance assertions)
 - `tools/world_map_topology.json` and other data contracts
 - Every other `.gd`, `.tscn`, `.tres`, `.json`, `.py`, and `project.godot` reference on this branch.
 
-The first reference scan found direct consumers in the files above. It is not yet a complete repository-wide scan, so primary entry scenes have deliberately not been moved in this batch.
+The path update covers the central runtime scene routing, world-state region mapping, boot/prologue/village/route transitions, A2 room exits, the contract-room scene map, world topology, acceptance harness, static wiring checks, A2 geometry contract, A8 spatial contract, and the world acceptance ledger. A local Godot import is still required to catch parser/resource errors.
 
 ## Non-negotiable preservation
 
@@ -68,15 +68,13 @@ The first reference scan found direct consumers in the files above. It is not ye
 
 ### 当前审计边界
 
-本轮已读取并检查上述文件以及场景目录说明，确认正式区域路径存在多处直接引用；尚未完成对所有文本文件的全仓库逐文件引用扫描。因此，本轮**不移动 A0–A13 场景文件**，避免制造未更新的引用。隐藏区域 H01–H08 的现有路径在已检查的 `world_state.gd`、`greybox_world_region.gd` 和拓扑 JSON 中均能看到新目录路径；但这不等于已经证明仓库所有引用均无遗漏。
+已更新集中式运行时路径映射、主要区域转场脚本、A2 独立房间出口、数据合同、静态校验器与接受度账本。迁移不改变场景内部节点树，也不涉及 A2/A5 房间合并。最后仍需在本地 Godot 4.6.1 中完成导入与实机转场验收。
 
-### 下一批执行顺序
+### 后续验收
 
-1. 完成全仓库旧路径引用盘点，覆盖脚本、场景、资源、配置、JSON 与 Python 验收工具。
-2. 按依赖组更新所有引用，并将 A0–A13 正式入口迁移到 `scenes/regions/`。
-3. 检查每个目标文件只存在于新路径，且旧路径引用数为零（允许迁移清单/历史说明中的路径作为文字记录）。
-4. 执行可用的静态校验；Godot 4.6.1 场景导入与实机转场仍需本地运行确认。
-5. 将辅助场景（序章到达场景、A1 辅助场景、C24、OB01、A5 组装场景及悬崖/研究场景）按实际职责单独归档，不与正式区域入口混为一类。
+1. 对分支运行旧入口路径残留扫描，排除迁移历史文档中的说明文字。
+2. 执行可用的静态校验；Godot 4.6.1 场景导入与实机转场仍需本地运行确认。
+3. 将辅助场景（序章到达场景、A1 辅助场景、C24、OB01、A5 组装场景及悬崖/研究场景）按实际职责单独归档，不与正式区域入口混为一类。
 
 A2 的六个运行时房间、A5 的 22 个旧房间以及现有节点树均保持原样；目录整理不授权删减房间，也不以脚本动态创建节点替代编辑器中可见的场景节点。
 
@@ -99,11 +97,11 @@ A2 的六个运行时房间、A5 的 22 个旧房间以及现有节点树均保�
 - A1 辅助场景、C24 排水探索、OB01 Boss、A5 组装场景、悬崖探索、古代研究实验室必须先判定调用方与职责，再归档；不能将它们误当成 A0–A13 入口。
 - 目录树核对已覆盖 590 个符合脚本/场景/资源/配置/文档扩展名的文件条目（递归 Git tree 未截断）；这只是文件清单核对，**不是**全部文件内容的引用扫描。逐文件引用核验仍未完成，故不据此宣称旧路径零残留。
 
-### 当前剩余工作量更新
+### 本轮迁移结果
 
-1. 对 14 个正式入口及辅助场景的实际引用做完整内容级扫描，并建立逐文件命中表。
-2. 依据命中表更新运行时脚本、场景资源引用、拓扑数据和验收断言。
-3. 分批移动场景并检查旧路径残留。
-4. 本地 Godot 4.6.1 导入和转场验收。
+- A0–A13 正式入口已统一归档至 `scenes/regions/`。
+- `scenes/boot.tscn`、`project.godot` 的主启动入口与 Autoload 路径保持稳定。
+- A2 六个运行时房间、A5 22 个旧房间以及辅助场景均保留原位。
+- GitHub 静态路径核对不代表 Godot 本地导入和实际转场已经通过；这些仍是最终验收项。
 
 A2 六个运行时房间与 A5 22 个旧房间必须保留；整理目录不等于删减内容。

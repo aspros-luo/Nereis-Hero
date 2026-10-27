@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TOPOLOGY = ROOT / "tools/world_map_topology.json"
 REGION = ROOT / "scripts/levels/greybox_world_region.gd"
-A8_SCENE = ROOT / "scenes/royal_tomb.tscn"
+A8_SCENE = ROOT / "scenes/regions/royal_tomb.tscn"
 WORLD_STATE = ROOT / "scripts/core/world_state.gd"
 DOOR = ROOT / "scripts/world/interaction_door.gd"
 
@@ -88,9 +88,9 @@ def main() -> int:
     require(errors, (c14.get("from"), c14.get("to"), c14.get("initial_access"), c14.get("final_direction"))
             == ("A8", "A9", "both", "both"),
             "C14 topology must remain bidirectional A8 <-> A9.")
-    require(errors, '"A8":' in exits and '"res://scenes/royal_outer_ring.tscn", "west"' in exits,
+    require(errors, '"A8":' in exits and '"res://scenes/regions/royal_outer_ring.tscn", "west"' in exits,
             "C14 A8 -> A9 transition wiring is missing.")
-    require(errors, '"A9":' in exits and '"res://scenes/royal_tomb.tscn"' in exits,
+    require(errors, '"A9":' in exits and '"res://scenes/regions/royal_tomb.tscn"' in exits,
             "C14 A9 -> A8 return wiring is missing.")
 
     # C15 is distinct from H06 and C19; source checks are not a reachability proof.

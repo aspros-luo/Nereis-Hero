@@ -100,7 +100,7 @@ func _finish_defense() -> void:
 		4.5
 	)
 	await narrative.message_finished
-	SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+	SceneTransition.fade_to_scene("res://scenes/regions/village_hub.tscn")
 
 func _on_hero_defeated() -> void:
 	if stage == 0 and not wave_started:
@@ -133,7 +133,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
 		_mark_input_handled()
 		WorldState.delete_save()
-		get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
+		get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
 
 func _mark_input_handled() -> void:
 	var viewport := get_viewport()

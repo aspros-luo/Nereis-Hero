@@ -5,7 +5,7 @@
   "source_of_truth": "docs/maps/A2_DESIGN_BASELINE_CN.md",
   "notes": [
     "Each terrain .tscn is an editor-visible authored room; its runtime wrapper lives under scenes/rooms/a2_fog_forest/runtime/.",
-    "scenes/ash_forest.tscn is a compatibility alias to the R01 runtime scene. A1 north gate routes directly to R01.",
+    "scenes/regions/ash_forest.tscn is the A2 region entry scene to the R01 runtime scene. A1 north gate routes directly to R01.",
     "R01->R04 drop trigger uses the narrow shaft Marker2D (672,780), width 48 and height 120 so a committed fall enters R04 while a clean jump can cross; R03->R04 uses Marker2D (425,675), width 150 and height 220. H02 is placed on the R04 crypt landing (90,380) and returns to R04 EntryH02Return (350,380).",
     "C03 (R06/A3), C04 (R05/A5) and H02 (R04/H02) forward and return destinations were statically checked against the owning room runtime and Marker2D spawn anchors; still pending Godot 4.6.1 playtesting.",
     "A2 room transitions preserve a valid A2 checkpoint; incoming spawn side is saved before the transient side is reset. Death recovery accepts only the six known A2 room IDs.",

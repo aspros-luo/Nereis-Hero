@@ -306,7 +306,7 @@ func _spawn_room_content() -> void:
 func _spawn_room_exits() -> void:
 	match room_id:
 		"A2-R01":
-			_spawn_exit_door_at_marker("ExitVillage", "E  返回边境村庄", "village", "res://scenes/village_hub.tscn", "north_gate")
+			_spawn_exit_door_at_marker("ExitVillage", "E  返回边境村庄", "village", "res://scenes/regions/village_hub.tscn", "north_gate")
 			_spawn_exit_door_at_marker("ExitCanopy", "E  攀上古树，进入树冠", "ash_forest", _scene_path_for_room("A2-R02"), "a2_r02_from_r01")
 			_spawn_exit_door_at_marker("ExitBellTomb", "E  进入钟墓上环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_from_r01")
 			_spawn_drop_transition_at_marker("DropToR04", 32.0, 120.0, "A2-R04", "a2_r04_tomb_drop_r01")
@@ -327,11 +327,11 @@ func _spawn_room_exits() -> void:
 			_spawn_exit_door_at_marker("ExitToR03", "E  返回钟墓高环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_highroad_shortcut")
 			_spawn_exit_door_at_marker("ExitToR06", "E  进入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_high_entry")
 			if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
-				_spawn_exit_door_at_marker("ExitToA5", "E  返回边境战场", "old_battlefield", "res://scenes/old_battlefield.tscn", "old_pilgrim_highroad")
+				_spawn_exit_door_at_marker("ExitToA5", "E  返回边境战场", "old_battlefield", "res://scenes/regions/old_battlefield.tscn", "old_pilgrim_highroad")
 		"A2-R06":
 			_spawn_exit_door_at_marker("ExitToR05", "E  返回旧朝圣高路", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_ravine_return")
 			_spawn_exit_door_at_marker("ExitToR04", "E  返回钟墓坑底", "ash_forest", _scene_path_for_room("A2-R04"), "a2_r04_ravine_return")
-			_spawn_exit_door_at_marker("ExitToA3", "E  沿树冠高路进入被遗忘的城区", "forgotten_city", "res://scenes/forgotten_city.tscn", "city_canopy_entry")
+			_spawn_exit_door_at_marker("ExitToA3", "E  沿树冠高路进入被遗忘的城区", "forgotten_city", "res://scenes/regions/forgotten_city.tscn", "city_canopy_entry")
 
 
 func _spawn_drop_transition(

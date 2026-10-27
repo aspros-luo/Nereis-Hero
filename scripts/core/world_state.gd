@@ -1085,7 +1085,7 @@ func begin_natural_test_session() -> void:
 	debug_natural_test_visited_regions.clear()
 	var scene := get_tree().current_scene
 	_last_natural_test_scene_path = str(scene.scene_file_path) if scene != null else ""
-	if _last_natural_test_scene_path == "res://scenes/escape_prologue.tscn":
+	if _last_natural_test_scene_path == "res://scenes/regions/escape_prologue.tscn":
 		record_natural_test_region("A0", "escape_prologue.tscn")
 
 func finish_natural_test_session() -> void:
@@ -1123,27 +1123,27 @@ func record_natural_test_region(region_id: String, location_id: String = "") -> 
 
 func _record_natural_test_scene(scene_path: String) -> void:
 	var region_by_scene := {
-		"res://scenes/escape_prologue.tscn": "A0",
-		"res://scenes/village_hub.tscn": "A1",
-		"res://scenes/ash_forest.tscn": "A2",
+		"res://scenes/regions/escape_prologue.tscn": "A0",
+		"res://scenes/regions/village_hub.tscn": "A1",
+		"res://scenes/regions/ash_forest.tscn": "A2",
 		"res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn": "A2",
 		"res://scenes/rooms/a2_fog_forest/runtime/a2_r02_room.tscn": "A2",
 		"res://scenes/rooms/a2_fog_forest/runtime/a2_r03_room.tscn": "A2",
 		"res://scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn": "A2",
 		"res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn": "A2",
 		"res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn": "A2",
-		"res://scenes/forgotten_city.tscn": "A3",
-		"res://scenes/sewer_reservoir.tscn": "A4",
-		"res://scenes/old_battlefield.tscn": "A5",
-		"res://scenes/monastery_tower.tscn": "A6",
-		"res://scenes/prison_depths.tscn": "A7",
-		"res://scenes/royal_tomb.tscn": "A8",
+		"res://scenes/regions/forgotten_city.tscn": "A3",
+		"res://scenes/regions/sewer_reservoir.tscn": "A4",
+		"res://scenes/regions/old_battlefield.tscn": "A5",
+		"res://scenes/regions/monastery_tower.tscn": "A6",
+		"res://scenes/regions/prison_depths.tscn": "A7",
+		"res://scenes/regions/royal_tomb.tscn": "A8",
 		"res://scenes/royal_tomb_boss.tscn": "OB01",
-		"res://scenes/royal_outer_ring.tscn": "A9",
-		"res://scenes/grand_cathedral.tscn": "A10",
-		"res://scenes/deep_research_depths.tscn": "A11",
-		"res://scenes/inner_city.tscn": "A12",
-		"res://scenes/terminal_anomaly.tscn": "A13",
+		"res://scenes/regions/royal_outer_ring.tscn": "A9",
+		"res://scenes/regions/grand_cathedral.tscn": "A10",
+		"res://scenes/regions/deep_research_depths.tscn": "A11",
+		"res://scenes/regions/inner_city.tscn": "A12",
+		"res://scenes/regions/terminal_anomaly.tscn": "A13",
 		"res://scenes/hidden_regions/hidden_well.tscn": "H01",
 		"res://scenes/hidden_regions/hidden_bell_chamber.tscn": "H02",
 		"res://scenes/hidden_regions/erased_third_street.tscn": "H03",
@@ -1174,43 +1174,43 @@ func mark_route_complete() -> void:
 func get_resume_scene_path() -> String:
 	match current_location:
 		"church_escape":
-			return "res://scenes/escape_prologue.tscn"
+			return "res://scenes/regions/escape_prologue.tscn"
 		"church_escape_exterior":
 			return "res://scenes/prologue_exterior.tscn"
 		"village":
-			return "res://scenes/village_hub.tscn"
+			return "res://scenes/regions/village_hub.tscn"
 		"mite_house":
 			return "res://scenes/mite_house.tscn"
 		"ash_forest":
 			if ResourceLoader.exists(current_a2_room_scene_path):
 				return current_a2_room_scene_path
-			return "res://scenes/ash_forest.tscn"
+			return "res://scenes/regions/ash_forest.tscn"
 		"forgotten_city":
-			return "res://scenes/forgotten_city.tscn"
+			return "res://scenes/regions/forgotten_city.tscn"
 		"sewer_reservoir":
-			return "res://scenes/sewer_reservoir.tscn"
+			return "res://scenes/regions/sewer_reservoir.tscn"
 		"old_battlefield":
-			return "res://scenes/old_battlefield.tscn"
+			return "res://scenes/regions/old_battlefield.tscn"
 		"monastery_tower":
-			return "res://scenes/monastery_tower.tscn"
+			return "res://scenes/regions/monastery_tower.tscn"
 		"prison_depths":
-			return "res://scenes/prison_depths.tscn"
+			return "res://scenes/regions/prison_depths.tscn"
 		"royal_tomb":
-			return "res://scenes/royal_tomb.tscn"
+			return "res://scenes/regions/royal_tomb.tscn"
 		"royal_tomb_boss":
 			return "res://scenes/royal_tomb_boss.tscn"
 		"royal_outer_ring":
-			return "res://scenes/royal_outer_ring.tscn"
+			return "res://scenes/regions/royal_outer_ring.tscn"
 		"grand_cathedral":
-			return "res://scenes/grand_cathedral.tscn"
+			return "res://scenes/regions/grand_cathedral.tscn"
 		"inner_city":
-			return "res://scenes/inner_city.tscn"
+			return "res://scenes/regions/inner_city.tscn"
 		"deep_research_depths":
-			return "res://scenes/deep_research_depths.tscn"
+			return "res://scenes/regions/deep_research_depths.tscn"
 		"primordial_hollow":
 			return "res://scenes/hidden_regions/primordial_hollow.tscn"
 		"terminal_anomaly":
-			return "res://scenes/terminal_anomaly.tscn"
+			return "res://scenes/regions/terminal_anomaly.tscn"
 		"cliff_cave_experiment":
 			return "res://scenes/cliff_cave_experiment.tscn"
 		"church_final_demo":
@@ -1251,10 +1251,10 @@ func get_resume_scene_path() -> String:
 			return "res://scenes/routes/lullaby_path.tscn"
 		_:
 			if route_complete:
-				return "res://scenes/village_hub.tscn"
+				return "res://scenes/regions/village_hub.tscn"
 			if slice_complete and selected_route != "":
 				return get_route_scene_path()
-			return "res://scenes/escape_prologue.tscn"
+			return "res://scenes/regions/escape_prologue.tscn"
 
 func get_route_scene_path() -> String:
 	if selected_route == "lullaby":

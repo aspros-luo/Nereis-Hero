@@ -23,7 +23,7 @@
       "archetype": "序章逃脱 / 受控单向空间",
       "spatial_shape": "紧凑室内、观察廊、明确向下的排污井；以视线引导代替自由分叉",
       "scenes": [
-        "scenes/escape_prologue.tscn",
+        "scenes/regions/escape_prologue.tscn",
         "scenes/prologue_exterior.tscn"
       ],
       "subregions": [
@@ -105,7 +105,7 @@
       "spatial_shape": "主街作为认知骨架，墓地、村庄边缘、旧排水与防卫事件形成支路",
       "scenes": [
         "scenes/mite_house.tscn",
-        "scenes/village_hub.tscn",
+        "scenes/regions/village_hub.tscn",
         "scenes/village_graveyard.tscn",
         "scenes/village_defense_demo.tscn",
         "scenes/old_drain_exploration.tscn"
@@ -246,7 +246,7 @@
       "archetype": "荒野探索样板 / 多层回环",
       "spatial_shape": "地面、钟墓深井、树冠高路、旧朝圣高路、东部沟壑互相交织",
       "scenes": [
-        "scenes/ash_forest.tscn"
+        "scenes/regions/ash_forest.tscn"
       ],
       "subregions": [
         {
@@ -424,7 +424,7 @@
       "archetype": "城区枢纽 / 街巷与屋顶网络",
       "spatial_shape": "地面街巷、屋顶连廊、抬高管线、旧升降机与侧街形成垂直街区",
       "scenes": [
-        "scenes/forgotten_city.tscn"
+        "scenes/regions/forgotten_city.tscn"
       ],
       "subregions": [
         {
@@ -611,7 +611,7 @@
       "archetype": "地下水系枢纽 / 多层管廊与水库",
       "spatial_shape": "上层检查廊、中层水道、低位淹水沟、深井/井边支路",
       "scenes": [
-        "scenes/sewer_reservoir.tscn"
+        "scenes/regions/sewer_reservoir.tscn"
       ],
       "subregions": [
         {
@@ -807,7 +807,7 @@
       "archetype": "战场与堡垒 / 横向战壕加高位城墙",
       "spatial_shape": "战壕、破墙、堡垒高路、瞭望塔和 C04 朝圣高路入口",
       "scenes": [
-        "scenes/old_battlefield.tscn"
+        "scenes/regions/old_battlefield.tscn"
       ],
       "subregions": [
         {
@@ -937,7 +937,7 @@
       "archetype": "垂直修道院 / 回廊、庭院、钟塔",
       "spatial_shape": "庭院底层、侧廊、钟塔中层与塔顶通过楼梯/坠落井连接",
       "scenes": [
-        "scenes/monastery_tower.tscn"
+        "scenes/regions/monastery_tower.tscn"
       ],
       "subregions": [
         {
@@ -1090,7 +1090,7 @@
       "archetype": "监牢与维护竖井 / 牢房迷宫",
       "spatial_shape": "牢房短支路、忏悔井、维护梯井、底层排水路线",
       "scenes": [
-        "scenes/prison_depths.tscn"
+        "scenes/regions/prison_depths.tscn"
       ],
       "subregions": [
         {
@@ -1243,7 +1243,7 @@
       "archetype": "王墓地下枢纽 / 墓室与升降井",
       "spatial_shape": "墓室、铭文廊、王室地下道、垂直升降井",
       "scenes": [
-        "scenes/royal_tomb.tscn"
+        "scenes/regions/royal_tomb.tscn"
       ],
       "subregions": [
         {
@@ -1405,7 +1405,7 @@
       "archetype": "王城外环 / 城市交通枢纽",
       "spatial_shape": "街巷、广场、屋顶、王室排水道、货梯和远端升降捷径",
       "scenes": [
-        "scenes/royal_outer_ring.tscn"
+        "scenes/regions/royal_outer_ring.tscn"
       ],
       "subregions": [
         {
@@ -1591,7 +1591,7 @@
       "archetype": "大圣堂 / 仪式性垂直主线",
       "spatial_shape": "主堂高挑空间、侧廊、上层唱诗廊、维护梯井与内廷",
       "scenes": [
-        "scenes/grand_cathedral.tscn"
+        "scenes/regions/grand_cathedral.tscn"
       ],
       "subregions": [
         {
@@ -1735,7 +1735,7 @@
       "archetype": "可选深层研究区 / 人工设施转古神遗迹",
       "spatial_shape": "研究设施规整廊道逐渐过渡到不规则遗迹、多层下沉空间",
       "scenes": [
-        "scenes/deep_research_depths.tscn"
+        "scenes/regions/deep_research_depths.tscn"
       ],
       "subregions": [
         {
@@ -1864,7 +1864,7 @@
       "archetype": "王室内城 / 终章主线枢纽",
       "spatial_shape": "服务街、内庭、城墙、王座厅上层与货运井",
       "scenes": [
-        "scenes/inner_city.tscn"
+        "scenes/regions/inner_city.tscn"
       ],
       "subregions": [
         {
@@ -2002,7 +2002,7 @@
       "archetype": "终局异象 / 状态驱动空间",
       "spatial_shape": "不稳定平台、折返走廊、上下颠倒的空间节奏，仍需保证可读导航",
       "scenes": [
-        "scenes/terminal_anomaly.tscn"
+        "scenes/regions/terminal_anomaly.tscn"
       ],
       "subregions": [
         {

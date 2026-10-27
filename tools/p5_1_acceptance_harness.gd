@@ -7,20 +7,20 @@ const TOPOLOGY_PATH := "res://tools/world_map_topology.json"
 const REPORT_PATH := "user://p5_1_automated_acceptance_report.json"
 
 const REGION_SCENES := {
-	"A0": "res://scenes/escape_prologue.tscn",
-	"A1": "res://scenes/village_hub.tscn",
-	"A2": "res://scenes/ash_forest.tscn",
-	"A3": "res://scenes/forgotten_city.tscn",
-	"A4": "res://scenes/sewer_reservoir.tscn",
-	"A5": "res://scenes/old_battlefield.tscn",
-	"A6": "res://scenes/monastery_tower.tscn",
-	"A7": "res://scenes/prison_depths.tscn",
-	"A8": "res://scenes/royal_tomb.tscn",
-	"A9": "res://scenes/royal_outer_ring.tscn",
-	"A10": "res://scenes/grand_cathedral.tscn",
-	"A11": "res://scenes/deep_research_depths.tscn",
-	"A12": "res://scenes/inner_city.tscn",
-	"A13": "res://scenes/terminal_anomaly.tscn",
+	"A0": "res://scenes/regions/escape_prologue.tscn",
+	"A1": "res://scenes/regions/village_hub.tscn",
+	"A2": "res://scenes/regions/ash_forest.tscn",
+	"A3": "res://scenes/regions/forgotten_city.tscn",
+	"A4": "res://scenes/regions/sewer_reservoir.tscn",
+	"A5": "res://scenes/regions/old_battlefield.tscn",
+	"A6": "res://scenes/regions/monastery_tower.tscn",
+	"A7": "res://scenes/regions/prison_depths.tscn",
+	"A8": "res://scenes/regions/royal_tomb.tscn",
+	"A9": "res://scenes/regions/royal_outer_ring.tscn",
+	"A10": "res://scenes/regions/grand_cathedral.tscn",
+	"A11": "res://scenes/regions/deep_research_depths.tscn",
+	"A12": "res://scenes/regions/inner_city.tscn",
+	"A13": "res://scenes/regions/terminal_anomaly.tscn",
 	"OB01": "res://scenes/royal_tomb_boss.tscn",
 	"H01": "res://scenes/hidden_well.tscn",
 	"H02": "res://scenes/hidden_bell_chamber.tscn",
@@ -351,7 +351,7 @@ func _validate_dynamic_c21_ending_route() -> void:
 		ending_door != null
 		and bool(ending_door.get("enabled"))
 		and str(ending_door.get_meta("p5_1_target_region", "")) == "A13"
-		and str(ending_door.get_meta("p5_1_target_scene", "")) == "res://scenes/terminal_anomaly.tscn"
+		and str(ending_door.get_meta("p5_1_target_scene", "")) == "res://scenes/regions/terminal_anomaly.tscn"
 		and str(ending_door.get_meta("p5_1_spawn_side", "")) == "west"
 	)
 	if contract_ok:

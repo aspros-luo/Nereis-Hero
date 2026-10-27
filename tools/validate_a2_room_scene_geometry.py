@@ -231,10 +231,10 @@ def require(source: str, expected: str, label: str, errors: list[str]) -> None:
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
-    parent_path = ROOT / "scenes/ash_forest.tscn"
+    parent_path = ROOT / "scenes/regions/ash_forest.tscn"
     parent = parent_path.read_text(encoding="utf-8") if parent_path.is_file() else ""
     require(parent, "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn",
-            "scenes/ash_forest.tscn compatibility alias", errors)
+            "scenes/regions/ash_forest.tscn region entry scene", errors)
 
     runtime_path = ROOT / RUNTIME_SCRIPT
     runtime_source = runtime_path.read_text(encoding="utf-8") if runtime_path.is_file() else ""
@@ -315,8 +315,8 @@ def main() -> int:
         ('_spawn_exit_door_at_marker("ExitToR04", "E  返回钟墓坑底", "ash_forest", _scene_path_for_room("A2-R04"), "a2_r04_ravine_return")', "R06->R04 low return"),
         ('_spawn_exit_door_at_marker("ExitToR06", "E  进入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_high_entry")', "R05->R06 high entry"),
         ('_spawn_exit_door_at_marker("ExitToR05", "E  返回旧朝圣高路", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_ravine_return")', "R06->R05 high return"),
-        ('_spawn_exit_door_at_marker("ExitToA3", "E  沿树冠高路进入被遗忘的城区", "forgotten_city", "res://scenes/forgotten_city.tscn", "city_canopy_entry")', "C03 outbound"),
-        ('_spawn_exit_door_at_marker("ExitToA5", "E  返回边境战场", "old_battlefield", "res://scenes/old_battlefield.tscn", "old_pilgrim_highroad")', "C04 outbound"),
+        ('_spawn_exit_door_at_marker("ExitToA3", "E  沿树冠高路进入被遗忘的城区", "forgotten_city", "res://scenes/regions/forgotten_city.tscn", "city_canopy_entry")', "C03 outbound"),
+        ('_spawn_exit_door_at_marker("ExitToA5", "E  返回边境战场", "old_battlefield", "res://scenes/regions/old_battlefield.tscn", "old_pilgrim_highroad")', "C04 outbound"),
         ("_spawn_h02_gate(h02_position.x, h02_position.y)", "H02 gate placement"),
     ]
     for fragment, label in route_contracts:

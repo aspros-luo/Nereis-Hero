@@ -48,7 +48,7 @@ func _on_language_selected(index: int) -> void:
 func _continue_game() -> void:
 	if not FileAccess.file_exists("user://nereis_hero_save.json"):
 		status_label.text = NereisLocalization.t("menu.no_save")
-		get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
+		get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
 		return
 
 	var next_scene := WorldState.get_resume_scene_path()
@@ -70,4 +70,4 @@ func _confirm_new_game() -> void:
 func _start_new_game() -> void:
 	WorldState.delete_save()
 	print("[NEREIS][MENU] New game started")
-	get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
+	get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")

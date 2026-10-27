@@ -119,7 +119,7 @@ func _return_to_tomb() -> void:
     WorldState.pending_region_spawn_side = "boss_return"
     WorldState.set_location("royal_tomb")
     print("[NEREIS][BOSS][EXIT] to=royal_tomb spawn_side=boss_return")
-    SceneTransition.fade_to_scene("res://scenes/royal_tomb.tscn")
+    SceneTransition.fade_to_scene("res://scenes/regions/royal_tomb.tscn")
 
 
 func _on_hero_defeated() -> void:
