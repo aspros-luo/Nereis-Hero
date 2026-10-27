@@ -1146,11 +1146,11 @@ func _record_natural_test_scene(scene_path: String) -> void:
 		"res://scenes/terminal_anomaly.tscn": "A13",
 		"res://scenes/hidden_regions/hidden_well.tscn": "H01",
 		"res://scenes/hidden_regions/hidden_bell_chamber.tscn": "H02",
-		"res://scenes/erased_third_street.tscn": "H03",
-		"res://scenes/reflected_stairwell.tscn": "H04",
-		"res://scenes/silent_bell_room.tscn": "H05",
-		"res://scenes/erased_royal_name_corridor.tscn": "H06",
-		"res://scenes/mirror_street.tscn": "H07",
+		"res://scenes/hidden_regions/erased_third_street.tscn": "H03",
+		"res://scenes/hidden_regions/reflected_stairwell.tscn": "H04",
+		"res://scenes/hidden_regions/silent_bell_room.tscn": "H05",
+		"res://scenes/hidden_regions/erased_royal_name_corridor.tscn": "H06",
+		"res://scenes/hidden_regions/mirror_street.tscn": "H07",
 		"res://scenes/hidden_regions/primordial_hollow.tscn": "H08"
 	}
 	var region_id := str(region_by_scene.get(scene_path, ""))
@@ -1222,15 +1222,15 @@ func get_resume_scene_path() -> String:
 		"hidden_bell_chamber":
 			return "res://scenes/hidden_regions/hidden_bell_chamber.tscn"
 		"erased_third_street":
-			return "res://scenes/erased_third_street.tscn"
+			return "res://scenes/hidden_regions/erased_third_street.tscn"
 		"reflected_stairwell":
-			return "res://scenes/reflected_stairwell.tscn"
+			return "res://scenes/hidden_regions/reflected_stairwell.tscn"
 		"silent_bell_room":
-			return "res://scenes/silent_bell_room.tscn"
+			return "res://scenes/hidden_regions/silent_bell_room.tscn"
 		"erased_royal_name_corridor":
-			return "res://scenes/erased_royal_name_corridor.tscn"
+			return "res://scenes/hidden_regions/erased_royal_name_corridor.tscn"
 		"mirror_street":
-			return "res://scenes/mirror_street.tscn"
+			return "res://scenes/hidden_regions/mirror_street.tscn"
 		"hidden_well":
 			return "res://scenes/hidden_regions/hidden_well.tscn"
 		"tavern":

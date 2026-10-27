@@ -2315,7 +2315,7 @@ func _spawn_region_exits() -> void:
 				# H05 位于 C10 与东侧高位升降机之间，并与两者保持交互净空。
 				_spawn_exit_door(
 					1870.0, "E  返回无声之窗", "silent_bell_room",
-					"res://scenes/silent_bell_room.tscn", "bell_drop_entry"
+					"res://scenes/hidden_regions/silent_bell_room.tscn", "bell_drop_entry"
 				)
 			# C10 reverse door: only exists after the bell-tower drop has been opened from A6.
 			# C10 反向门：必须先从 A6 开启钟塔落差，A3 才生成回程捷径。
@@ -2489,7 +2489,7 @@ func _spawn_region_exits() -> void:
 			if WorldState.is_hidden_path_opened("H04"):
 				_spawn_exit_door(
 					930.0, "E  打开王墓侧门", "reflected_stairwell",
-					"res://scenes/reflected_stairwell.tscn", "royal_tomb_side_entry",
+					"res://scenes/hidden_regions/reflected_stairwell.tscn", "royal_tomb_side_entry",
 					true, "opened_royal_tomb_side_door", "E  进入倒影阶梯"
 				)
 			_spawn_a11_maintenance_gate(2310.0)
@@ -2506,13 +2506,13 @@ func _spawn_region_exits() -> void:
 			if WorldState.is_hidden_path_opened("H03"):
 				_spawn_exit_door(
 					1250.0, "E  打开旧服务门", "erased_third_street",
-					"res://scenes/erased_third_street.tscn", "third_street_entry",
+					"res://scenes/hidden_regions/erased_third_street.tscn", "third_street_entry",
 					true, "opened_old_service_door", "E  进入第三街"
 				)
 			if WorldState.is_hidden_path_opened("H06"):
 				_spawn_exit_door(
 					2200.0, "E  打开王室运输侧门", "erased_royal_name_corridor",
-					"res://scenes/erased_royal_name_corridor.tscn", "royal_transport_entry",
+					"res://scenes/hidden_regions/erased_royal_name_corridor.tscn", "royal_transport_entry",
 					true, "opened_royal_transport_side_door", "E  进入王名抹除廊"
 				)
 			_spawn_a9_mirror_gate(1850.0)
@@ -2566,7 +2566,7 @@ func _spawn_region_exits() -> void:
 			):
 				_spawn_exit_door(
 					map_width - 350.0, "E  打开镜街侧门", "mirror_street",
-					"res://scenes/mirror_street.tscn", "east",
+					"res://scenes/hidden_regions/mirror_street.tscn", "east",
 					true, "opened_mirror_street_side_gate", "E  进入镜街"
 				)
 
@@ -2805,7 +2805,7 @@ func _spawn_a9_mirror_gate(x: float) -> void:
 	gate.name = "ResonanceMirrorStreetGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H07"
-	gate.target_scene_path = "res://scenes/mirror_street.tscn"
+	gate.target_scene_path = "res://scenes/hidden_regions/mirror_street.tscn"
 	gate.target_location_id = "mirror_street"
 	gate.target_spawn_side = "west"
 	gate.required_resonance = 68
@@ -3053,7 +3053,7 @@ func _spawn_h03_gate(x: float) -> void:
 	gate.name = "ErasedThirdStreetGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H03"
-	gate.target_scene_path = "res://scenes/erased_third_street.tscn"
+	gate.target_scene_path = "res://scenes/hidden_regions/erased_third_street.tscn"
 	gate.target_location_id = "erased_third_street"
 	gate.target_spawn_side = "west"
 	gate.required_resonance = 28
@@ -3066,7 +3066,7 @@ func _spawn_h04_gate(x: float) -> void:
 	gate.name = "ReflectedStairwellGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H04"
-	gate.target_scene_path = "res://scenes/reflected_stairwell.tscn"
+	gate.target_scene_path = "res://scenes/hidden_regions/reflected_stairwell.tscn"
 	gate.target_location_id = "reflected_stairwell"
 	gate.target_spawn_side = "west"
 	gate.required_resonance = 36
@@ -3080,7 +3080,7 @@ func _spawn_h05_gate(x: float) -> void:
 	gate.name = "SilentBellRoomGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H05"
-	gate.target_scene_path = "res://scenes/silent_bell_room.tscn"
+	gate.target_scene_path = "res://scenes/hidden_regions/silent_bell_room.tscn"
 	gate.target_location_id = "silent_bell_room"
 	gate.target_spawn_side = "west"
 	gate.required_resonance = 42
@@ -3094,7 +3094,7 @@ func _spawn_h06_gate(x: float) -> void:
 	gate.name = "ErasedRoyalNameGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H06"
-	gate.target_scene_path = "res://scenes/erased_royal_name_corridor.tscn"
+	gate.target_scene_path = "res://scenes/hidden_regions/erased_royal_name_corridor.tscn"
 	gate.target_location_id = "erased_royal_name_corridor"
 	gate.target_spawn_side = "west"
 	gate.required_resonance = 55

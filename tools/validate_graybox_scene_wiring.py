@@ -28,13 +28,13 @@ REGIONS = {
     "A13": ("scenes/terminal_anomaly.tscn", "terminal_anomaly", "THE DEEP DREAM AND FINAL ANOMALY"),
     "A11": ("scenes/deep_research_depths.tscn", "deep_research_depths", "THE DEPTHS THAT PRECEDED THE LAB"),
     "H08": ("scenes/hidden_regions/primordial_hollow.tscn", "primordial_hollow", "THE WOMB BELOW THE LAB"),
-    "H07": ("scenes/mirror_street.tscn", "mirror_street", "MIRROR STREET: BEHIND THE RAIN"),
+    "H07": ("scenes/hidden_regions/mirror_street.tscn", "mirror_street", "MIRROR STREET: BEHIND THE RAIN"),
     "H01": ("scenes/hidden_regions/hidden_well.tscn", "hidden_well", "THE WELL BELOW THE WELL"),
     "H02": ("scenes/hidden_regions/hidden_bell_chamber.tscn", "hidden_bell_chamber", "THE BELL BEFORE THE SOUND"),
-    "H03": ("scenes/erased_third_street.tscn", "erased_third_street", "THE STREET THE CITY REMOVED"),
-    "H04": ("scenes/reflected_stairwell.tscn", "reflected_stairwell", "THE STAIRS BEHIND THE WATER"),
-    "H05": ("scenes/silent_bell_room.tscn", "silent_bell_room", "THE WINDOW THAT CASTS NO SHADOW"),
-    "H06": ("scenes/erased_royal_name_corridor.tscn", "erased_royal_name_corridor", "THE NAME SCRAPED FROM STONE"),
+    "H03": ("scenes/hidden_regions/erased_third_street.tscn", "erased_third_street", "THE STREET THE CITY REMOVED"),
+    "H04": ("scenes/hidden_regions/reflected_stairwell.tscn", "reflected_stairwell", "THE STAIRS BEHIND THE WATER"),
+    "H05": ("scenes/hidden_regions/silent_bell_room.tscn", "silent_bell_room", "THE WINDOW THAT CASTS NO SHADOW"),
+    "H06": ("scenes/hidden_regions/erased_royal_name_corridor.tscn", "erased_royal_name_corridor", "THE NAME SCRAPED FROM STONE"),
 }
 
 REQUIRED_FILES = [

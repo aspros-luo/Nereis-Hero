@@ -1,9 +1,14 @@
 # Hidden Region Entry Scenes
 
-Optional hidden-region entry scenes live here. Current migrated entries:
+Optional hidden-region entry scenes live here. Migrated entries:
 
 - `hidden_well.tscn` — H01
 - `hidden_bell_chamber.tscn` — H02
+- `erased_third_street.tscn` — H03
+- `reflected_stairwell.tscn` — H04
+- `silent_bell_room.tscn` — H05
+- `erased_royal_name_corridor.tscn` — H06
+- `mirror_street.tscn` — H07
 - `primordial_hollow.tscn` — H08
 
-Other H-region entries remain at their previous paths until their route, save/resume and validation references are audited. Hidden regions remain optional exploration; this folder does not imply that internal rooms should be merged into one scene.
+These scenes remain separate optional entries. Internal rooms are not merged into one scene merely to reduce file count.

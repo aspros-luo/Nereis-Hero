@@ -1113,7 +1113,7 @@
         "requires_target_already_reached": true,
         "requires_ending_state": false
       },
-      "scene_path": "scenes/erased_third_street.tscn",
+      "scene_path": "scenes/hidden_regions/erased_third_street.tscn",
       "location_id": "erased_third_street",
       "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },
@@ -1138,7 +1138,7 @@
         "requires_target_already_reached": true,
         "requires_ending_state": false
       },
-      "scene_path": "scenes/reflected_stairwell.tscn",
+      "scene_path": "scenes/hidden_regions/reflected_stairwell.tscn",
       "location_id": "reflected_stairwell",
       "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },
@@ -1168,7 +1168,7 @@
           "layer": "street-level-return"
         }
       },
-      "scene_path": "scenes/silent_bell_room.tscn",
+      "scene_path": "scenes/hidden_regions/silent_bell_room.tscn",
       "location_id": "silent_bell_room",
       "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },
@@ -1197,7 +1197,7 @@
         "requires_ending_state": false
       },
       "min_distinct_anomaly_sources": 2,
-      "scene_path": "scenes/erased_royal_name_corridor.tscn",
+      "scene_path": "scenes/hidden_regions/erased_royal_name_corridor.tscn",
       "location_id": "erased_royal_name_corridor",
       "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },
@@ -1225,7 +1225,7 @@
         "requires_ending_state": false
       },
       "min_distinct_anomaly_sources": 1,
-      "scene_path": "scenes/mirror_street.tscn",
+      "scene_path": "scenes/hidden_regions/mirror_street.tscn",
       "location_id": "mirror_street",
       "implementation_status": "graybox_scene_and_gate_wired_runtime_unverified"
     },

@@ -18,4 +18,4 @@ Scene path moves must update every `res://` reference in `.tscn`, `.tres`, `.gd`
 
 ## Current migration status
 
-The migration batches have moved six standalone demos and the two ending demonstration scenes into `demos/`, the world-map test menu into `debug/`, and H01, H02 and H08 entries into `hidden_regions/`. Their authored node trees and attached script paths are preserved; known launch, route, save/resume and validation references were updated. Remaining primary and hidden region entry scenes stay at their existing paths pending full reference auditing. A2's six runtime rooms and all 22 legacy A5 room scenes remain untouched.
+The migration batches have moved six standalone demos and the two ending demonstration scenes into `demos/`, the world-map test menu into `debug/`, and H01–H08 entries into `hidden_regions/`. Their authored node trees and attached script paths are preserved; known launch, route, save/resume and validation references were updated. Remaining primary region entry scenes stay at their existing paths pending full reference auditing. A2's six runtime rooms and all 22 legacy A5 room scenes remain untouched.
