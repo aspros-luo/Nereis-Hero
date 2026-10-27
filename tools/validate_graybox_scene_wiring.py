@@ -27,10 +27,10 @@ REGIONS = {
     "A12": ("scenes/inner_city.tscn", "inner_city", "THE INNER CITY"),
     "A13": ("scenes/terminal_anomaly.tscn", "terminal_anomaly", "THE DEEP DREAM AND FINAL ANOMALY"),
     "A11": ("scenes/deep_research_depths.tscn", "deep_research_depths", "THE DEPTHS THAT PRECEDED THE LAB"),
-    "H08": ("scenes/primordial_hollow.tscn", "primordial_hollow", "THE WOMB BELOW THE LAB"),
+    "H08": ("scenes/hidden_regions/primordial_hollow.tscn", "primordial_hollow", "THE WOMB BELOW THE LAB"),
     "H07": ("scenes/mirror_street.tscn", "mirror_street", "MIRROR STREET: BEHIND THE RAIN"),
-    "H01": ("scenes/hidden_well.tscn", "hidden_well", "THE WELL BELOW THE WELL"),
-    "H02": ("scenes/hidden_bell_chamber.tscn", "hidden_bell_chamber", "THE BELL BEFORE THE SOUND"),
+    "H01": ("scenes/hidden_regions/hidden_well.tscn", "hidden_well", "THE WELL BELOW THE WELL"),
+    "H02": ("scenes/hidden_regions/hidden_bell_chamber.tscn", "hidden_bell_chamber", "THE BELL BEFORE THE SOUND"),
     "H03": ("scenes/erased_third_street.tscn", "erased_third_street", "THE STREET THE CITY REMOVED"),
     "H04": ("scenes/reflected_stairwell.tscn", "reflected_stairwell", "THE STAIRS BEHIND THE WATER"),
     "H05": ("scenes/silent_bell_room.tscn", "silent_bell_room", "THE WINDOW THAT CASTS NO SHADOW"),
@@ -522,7 +522,7 @@ def main() -> int:
     require(world_state, '"INCOMPLETE"', "Incomplete whole-map coverage is reported", errors)
     require(map_test_script, "WorldState.physical_union_complete = true", "Macro-map route test flags", errors)
     require(map_test_script, "res://scenes/terminal_anomaly.tscn", "A13 acceptance destination", errors)
-    require(map_test_script, "res://scenes/primordial_hollow.tscn", "H08 acceptance destination", errors)
+    require(map_test_script, "res://scenes/hidden_regions/primordial_hollow.tscn", "H08 acceptance destination", errors)
     require(map_test_script, '"id":"OB01"', "Royal tomb boss isolated acceptance entry", errors)
     require(world_state, '"res://scenes/royal_tomb_boss.tscn": "OB01"', "Royal tomb boss natural-test coverage mapping", errors)
     require(world_state, "[%d/23]", "Natural-test coverage count includes optional boss arena", errors)

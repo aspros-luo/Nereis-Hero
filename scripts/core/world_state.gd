@@ -1144,14 +1144,14 @@ func _record_natural_test_scene(scene_path: String) -> void:
 		"res://scenes/deep_research_depths.tscn": "A11",
 		"res://scenes/inner_city.tscn": "A12",
 		"res://scenes/terminal_anomaly.tscn": "A13",
-		"res://scenes/hidden_well.tscn": "H01",
-		"res://scenes/hidden_bell_chamber.tscn": "H02",
+		"res://scenes/hidden_regions/hidden_well.tscn": "H01",
+		"res://scenes/hidden_regions/hidden_bell_chamber.tscn": "H02",
 		"res://scenes/erased_third_street.tscn": "H03",
 		"res://scenes/reflected_stairwell.tscn": "H04",
 		"res://scenes/silent_bell_room.tscn": "H05",
 		"res://scenes/erased_royal_name_corridor.tscn": "H06",
 		"res://scenes/mirror_street.tscn": "H07",
-		"res://scenes/primordial_hollow.tscn": "H08"
+		"res://scenes/hidden_regions/primordial_hollow.tscn": "H08"
 	}
 	var region_id := str(region_by_scene.get(scene_path, ""))
 	record_natural_test_region(region_id, scene_path.get_file())
@@ -1208,7 +1208,7 @@ func get_resume_scene_path() -> String:
 		"deep_research_depths":
 			return "res://scenes/deep_research_depths.tscn"
 		"primordial_hollow":
-			return "res://scenes/primordial_hollow.tscn"
+			return "res://scenes/hidden_regions/primordial_hollow.tscn"
 		"terminal_anomaly":
 			return "res://scenes/terminal_anomaly.tscn"
 		"cliff_cave_experiment":
@@ -1220,7 +1220,7 @@ func get_resume_scene_path() -> String:
 		"ending_fire_demo":
 			return "res://scenes/demos/ending_fire_demo.tscn"
 		"hidden_bell_chamber":
-			return "res://scenes/hidden_bell_chamber.tscn"
+			return "res://scenes/hidden_regions/hidden_bell_chamber.tscn"
 		"erased_third_street":
 			return "res://scenes/erased_third_street.tscn"
 		"reflected_stairwell":
@@ -1232,7 +1232,7 @@ func get_resume_scene_path() -> String:
 		"mirror_street":
 			return "res://scenes/mirror_street.tscn"
 		"hidden_well":
-			return "res://scenes/hidden_well.tscn"
+			return "res://scenes/hidden_regions/hidden_well.tscn"
 		"tavern":
 			return "res://scenes/locations/tavern_interior.tscn"
 		"church":

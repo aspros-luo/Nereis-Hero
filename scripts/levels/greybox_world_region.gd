@@ -2392,7 +2392,7 @@ func _spawn_region_exits() -> void:
 					if hidden_room != null:
 						_spawn_exit_door(
 							hidden_room.position.x + 1080.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
-							"res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
+							"res://scenes/hidden_regions/hidden_bell_chamber.tscn", "bell_tower_entry",
 							true, "opened_old_bell_tower_connection", "E  进入倒响钟室", hidden_room.position.y + 620.0
 						)
 				var winch_room := _get_a5_assembled_room("A5-R16")
@@ -2416,7 +2416,7 @@ func _spawn_region_exits() -> void:
 				if WorldState.is_hidden_path_opened("H02"):
 					_spawn_exit_door(
 						4500.0, "E  打开旧钟塔通路", "hidden_bell_chamber",
-						"res://scenes/hidden_bell_chamber.tscn", "bell_tower_entry",
+						"res://scenes/hidden_regions/hidden_bell_chamber.tscn", "bell_tower_entry",
 						true, "opened_old_bell_tower_connection", "E  进入倒响钟室"
 					)
 				_spawn_exit_door(
@@ -2773,7 +2773,7 @@ func _spawn_h08_gate(x: float) -> void:
 	gate.name = "PrimordialHollowGate"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H08"
-	gate.target_scene_path = "res://scenes/primordial_hollow.tscn"
+	gate.target_scene_path = "res://scenes/hidden_regions/primordial_hollow.tscn"
 	gate.target_location_id = "primordial_hollow"
 	gate.target_spawn_side = "west"
 	gate.required_resonance = 78
@@ -3040,7 +3040,7 @@ func _spawn_h02_gate(x: float, y: float = -1.0) -> void:
 	gate.name = "HiddenBellChamberGate"
 	gate.position = Vector2(x, floor_y if y < 0.0 else y)
 	gate.secret_id = "H02"
-	gate.target_scene_path = "res://scenes/hidden_bell_chamber.tscn"
+	gate.target_scene_path = "res://scenes/hidden_regions/hidden_bell_chamber.tscn"
 	gate.target_location_id = "hidden_bell_chamber"
 	gate.target_spawn_side = "west"
 	gate.required_resonance = 18
@@ -3132,7 +3132,7 @@ func _spawn_a4_hidden_well_gate(x: float) -> void:
 	gate.name = "ResonanceWellGateFromA4"
 	gate.position = Vector2(x, floor_y)
 	gate.secret_id = "H01"
-	gate.target_scene_path = "res://scenes/hidden_well.tscn"
+	gate.target_scene_path = "res://scenes/hidden_regions/hidden_well.tscn"
 	gate.target_location_id = "hidden_well"
 	gate.target_spawn_side = "east"
 	gate.required_resonance = 12
