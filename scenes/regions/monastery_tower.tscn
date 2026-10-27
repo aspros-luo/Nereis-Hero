@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a6.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/world_item_pickup.tscn" id="5"]
 
 [node name="MonasteryTower" type="Node2D"]
 script = ExtResource("1")
@@ -26,3 +27,9 @@ display_name = "无声之窗"
 description = "钟塔窗外没有景色。\n\n它的影子却落在一面并不存在的墙上。"
 resonance_target = 42
 ancient_exposure_floor = 1
+
+[node name="BellTowerWinchKey" parent="." instance=ExtResource("5")]
+position = Vector2(1940, 500)
+pickup_id = "combat_reward_a6_bell_winch_key"
+item_id = "bell_tower_winch_key"
+required_achievement_flag = "defeated_A6_BellWarden_01"

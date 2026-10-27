@@ -7,6 +7,7 @@ const ITEM_CATALOG = preload("res://scripts/core/item_catalog.gd")
 @export var item_id: String = ""
 @export var amount: int = 1
 @export var prompt_text: String = "E  拾取"
+@export var required_achievement_flag: String = ""
 
 var hero_nearby := false
 var consumed := false
@@ -18,6 +19,12 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
     cooldown = maxf(0.0, cooldown - delta)
+    if not required_achievement_flag.is_empty() and required_achievement_flag not in WorldState.achievement_flags:
+        visible = false
+        hero_nearby = false
+        INTERACTION_FOCUS_SCRIPT.sync(self, false)
+        return
+    visible = true
     if consumed:
         hero_nearby = false
         INTERACTION_FOCUS_SCRIPT.sync(self, false)

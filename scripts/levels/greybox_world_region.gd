@@ -851,14 +851,6 @@ func _spawn_region_item_pickups() -> void:
 					"position": Vector2(1750.0, floor_y - 40.0)
 				})
 
-		"A6":
-			if "defeated_A6_BellWarden_01" in WorldState.achievement_flags:
-				placements.append({
-					"pickup_id": "combat_reward_a6_bell_winch_key",
-					"item_id": "bell_tower_winch_key",
-					"node_name": "BellTowerWinchKey",
-					"position": Vector2(1940.0, floor_y - 40.0)
-				})
 		"A8":
 			placements.append({
 				"pickup_id": "map_reward_royal_mortuary_register",
