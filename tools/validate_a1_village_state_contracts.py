@@ -29,7 +29,7 @@ def require(condition: bool, message: str) -> None:
 
 def main() -> int:
     village = read("scripts/levels/village_hub.gd")
-    village_scene = read("scenes/village_hub.tscn")
+    village_scene = read("scenes/regions/village_hub.tscn")
     backhill = read("scripts/levels/village_backhill.gd")
     backhill_scene = read("scenes/village_backhill.tscn")
     cliff = read("scripts/levels/cliff_exploration.gd")

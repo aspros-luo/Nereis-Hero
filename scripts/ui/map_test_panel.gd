@@ -39,19 +39,19 @@ const GUIDE_STEPS: Array[Dictionary] = [
 ]
 
 const MAPS: Array[Dictionary] = [
-	{"label": "A0｜教会手术所与逃脱通道", "scene": "res://scenes/escape_prologue.tscn"},
-	{"label": "A1｜边境村庄", "scene": "res://scenes/village_hub.tscn"},
-	{"label": "A2｜雾林、钟墓与旧朝圣路", "scene": "res://scenes/ash_forest.tscn"},
-	{"label": "A3｜废弃城区", "scene": "res://scenes/forgotten_city.tscn"},
-	{"label": "A4｜下水道、沉积大厅与旧水库", "scene": "res://scenes/sewer_reservoir.tscn"},
-	{"label": "A5｜旧战场与边境堡垒", "scene": "res://scenes/old_battlefield.tscn"},
-	{"label": "A6｜修道院、回廊与钟塔", "scene": "res://scenes/monastery_tower.tscn"},
-	{"label": "A7｜监牢、忏悔井与维护竖井", "scene": "res://scenes/prison_depths.tscn"},
-	{"label": "A8｜旧王墓与王室地下道", "scene": "res://scenes/royal_tomb.tscn"},
-	{"label": "A9｜王城外环与废弃街区", "scene": "res://scenes/royal_outer_ring.tscn"},
-	{"label": "A10｜大圣堂、朝圣阶梯与教会内廷", "scene": "res://scenes/grand_cathedral.tscn"},
-	{"label": "A11｜古神遗迹与深层研究区", "scene": "res://scenes/deep_research_depths.tscn"},
-	{"label": "A12｜王室内城与王座区", "scene": "res://scenes/inner_city.tscn"},
+	{"label": "A0｜教会手术所与逃脱通道", "scene": "res://scenes/regions/escape_prologue.tscn"},
+	{"label": "A1｜边境村庄", "scene": "res://scenes/regions/village_hub.tscn"},
+	{"label": "A2｜雾林、钟墓与旧朝圣路", "scene": "res://scenes/regions/ash_forest.tscn"},
+	{"label": "A3｜废弃城区", "scene": "res://scenes/regions/forgotten_city.tscn"},
+	{"label": "A4｜下水道、沉积大厅与旧水库", "scene": "res://scenes/regions/sewer_reservoir.tscn"},
+	{"label": "A5｜旧战场与边境堡垒", "scene": "res://scenes/regions/old_battlefield.tscn"},
+	{"label": "A6｜修道院、回廊与钟塔", "scene": "res://scenes/regions/monastery_tower.tscn"},
+	{"label": "A7｜监牢、忏悔井与维护竖井", "scene": "res://scenes/regions/prison_depths.tscn"},
+	{"label": "A8｜旧王墓与王室地下道", "scene": "res://scenes/regions/royal_tomb.tscn"},
+	{"label": "A9｜王城外环与废弃街区", "scene": "res://scenes/regions/royal_outer_ring.tscn"},
+	{"label": "A10｜大圣堂、朝圣阶梯与教会内廷", "scene": "res://scenes/regions/grand_cathedral.tscn"},
+	{"label": "A11｜古神遗迹与深层研究区", "scene": "res://scenes/regions/deep_research_depths.tscn"},
+	{"label": "A12｜王室内城与王座区", "scene": "res://scenes/regions/inner_city.tscn"},
 	{"label": "H01｜井底回声层", "scene": "res://scenes/hidden_well.tscn"},
 	{"label": "H02｜倒响钟室", "scene": "res://scenes/hidden_bell_chamber.tscn"},
 	{"label": "H03｜被删去的第三街", "scene": "res://scenes/erased_third_street.tscn"},
@@ -315,7 +315,7 @@ func _start_natural_exploration() -> void:
 	_update_guide()
 	status_label.text = "自然探索已启动：从 A0 正常开始；未解锁灵视、未开放隐藏门、未启用传送。正式存档写入保持关闭。全程不要使用区域传送或状态预设。"
 	print("[NEREIS][MAP][NATURAL_TEST] Started clean in-memory run from A0; disk save protected.")
-	SceneTransition.fade_to_scene("res://scenes/escape_prologue.tscn")
+	SceneTransition.fade_to_scene("res://scenes/regions/escape_prologue.tscn")
 
 func _teleport_to_selected_map() -> void:
 	_ensure_test_mode()

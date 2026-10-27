@@ -81,7 +81,7 @@ def check_scene_resources(scene: str, path: str, errors: list[str]) -> None:
 
 def main() -> int:
     errors: list[str] = []
-    a10 = read("scenes/village_hub.tscn", errors)
+    a10 = read("scenes/regions/village_hub.tscn", errors)
     a10_script = read("scripts/levels/village_hub.gd", errors)
     a11 = read("scenes/village_backhill.tscn", errors)
     a11_script = read("scripts/levels/village_backhill.gd", errors)
@@ -107,7 +107,7 @@ def main() -> int:
     gate_script = read("scripts/world/resonance_secret_gate.gd", errors)
 
     for scene, path in [
-        (a10, "scenes/village_hub.tscn"),
+        (a10, "scenes/regions/village_hub.tscn"),
         (a11, "scenes/village_backhill.tscn"),
         (cliff_scene, "scenes/cliff_exploration.tscn"),
         (poi_visual, "scenes/world/village_poi_visual.tscn"),

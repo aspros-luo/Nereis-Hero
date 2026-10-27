@@ -88,7 +88,7 @@ func _on_exit_reached() -> void:
     _return_to_village()
 
 func _return_to_village() -> void:
-    SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+    SceneTransition.fade_to_scene("res://scenes/regions/village_hub.tscn")
 
 
 
@@ -100,5 +100,5 @@ func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
         WorldState.delete_save()
         print("[NEREIS][DEBUG] Graveyard reset; returning to Vertical Slice")
-        get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
+        get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
         get_viewport().set_input_as_handled()

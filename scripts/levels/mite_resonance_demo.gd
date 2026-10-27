@@ -93,7 +93,7 @@ func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
         _mark_input_handled()
         WorldState.delete_save()
-        get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
+        get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
 
 func _mark_input_handled() -> void:
     var viewport := get_viewport()

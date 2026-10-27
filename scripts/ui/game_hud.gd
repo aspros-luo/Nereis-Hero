@@ -346,7 +346,7 @@ func _start_new_game() -> void:
     pause_overlay.visible = false
     get_tree().paused = false
     print("[NEREIS][MENU] New game started")
-    get_tree().change_scene_to_file("res://scenes/escape_prologue.tscn")
+    get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
 
 func _return_to_title() -> void:
     WorldState.menu_input_locked = false
