@@ -105,7 +105,7 @@ These conclusions come from the branch tree and targeted source/scene inspection
 ### Remaining violations and audit work
 
 - `greybox_world_region.gd` still contains generic `_configure_platforms()`, `_create_floor()`, `_create_boundaries()`, and A5 test-room helpers. The main A3/A4/A6–A13 scenes have an `AuthoredTerrain` child and return before those fixed terrain generators, but the legacy A0/A1/A5/test branches must be mapped to their actual entry scenes before any helper is retired.
-- `_spawn_region_exits()` and `_spawn_exit_door()` create fixed exits at hard-coded coordinates for legacy region branches. Those doors are stable map fixtures and should be represented in the relevant `.tscn`; runtime should configure destination/progression state on those existing nodes. A2's production rooms already use authored doors, but a compatibility fallback still creates a door if an expected authored instance is absent.
+- `_spawn_region_exits()` and `_spawn_exit_door()` create fixed exits at hard-coded coordinates for legacy region branches. Those doors are stable map fixtures and should be represented in the relevant `.tscn`; runtime should configure destination/progression state on those existing nodes. A2's production rooms already use authored doors, and the A2 runtime has now been tightened to report an error rather than synthesize a missing fixed exit or drop trigger. This makes incomplete scene authoring visible instead of silently masking it.
 - `_spawn_region_sources()`, `_spawn_region_item_pickups()`, and parts of `_spawn_region_rest_point()` place repeatable, fixed-location world content through code. Conditional rewards may remain state-driven, but stable source/pickup/rest-point fixtures need an editor-visible node or an explicitly documented reason to be dynamic.
 - `_spawn_h02_gate()`, encounter actors, ambience, and other stateful/runtime-only objects require per-method classification. A conditional gate may be code-instantiated only if the scene-design requirement is genuinely dynamic; fixed gate frame, position, collision footprint and visual anchor should still be authored.
 - `scripts/levels/a2_authored_terrain.gd` still preloads six deleted pre-consolidation A2 scene paths. Its remaining references must be checked across all scripts and tools before deleting or rewriting it; do not remove it based only on the stale-looking preload list.
@@ -119,3 +119,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - [ ] Godot 4.6.1 editor import and scene-tree inspection.
 - [ ] A5 camera bounds, route transitions, spawn coordinates and internal connection overlays verified in local gameplay.
 - [ ] Continue full audit of fixed exits, clues, pickups, rest points and remaining legacy/test generators.
+
+
+### A2 compatibility fallbacks removed
+
+- `_spawn_exit_door_at_marker()` now reports `AUTHORED_EXIT_MISSING` and returns if a fixed door instance is absent; it no longer creates a replacement `Area2D`.
+- `_spawn_drop_transition()` now reports `AUTHORED_DROP_MISSING` and returns if the fixed drop trigger is absent; it no longer instantiates a transition node.
+- This intentionally fails loudly for an incomplete room scene rather than hiding an editor-authoring defect with runtime node creation.
+- The six production room scenes were previously statically checked to contain every door/marker and the R01/R03 drop triggers; this pass changes only the missing-node behavior. Local Godot import and runtime acceptance remain pending.

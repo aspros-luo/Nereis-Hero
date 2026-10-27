@@ -191,18 +191,7 @@ func _spawn_exit_door_at_marker(
 		return
 	var authored_door := get_node_or_null("Door_" + marker_name) as Area2D
 	if authored_door == null:
-		# Compatibility fallback for rooms not yet migrated to authored door instances.
-		_spawn_exit_door(
-			marker_position.x,
-			prompt_text,
-			target_location,
-			target_scene,
-			spawn_side,
-			enabled,
-			unlock_once_flag_id,
-			opened_prompt_text,
-			marker_position.y
-		)
+		push_error("[NEREIS][A2][ROOM][AUTHORED_EXIT_MISSING] room=%s expected=Door_%s" % [room_id, marker_name])
 		return
 
 	# Fixed exits are instances in the .tscn scene tree. Runtime only applies their
@@ -349,9 +338,8 @@ func _spawn_drop_transition(
 	# transitional/test rooms that do not yet contain an authored Area2D.
 	var area := get_node_or_null(transition_name) as Area2D
 	if area == null:
-		area = AUTO_ROOM_TRANSITION_SCENE.instantiate() as Area2D
-		area.name = transition_name
-		add_child(area)
+		push_error("[NEREIS][A2][ROOM][AUTHORED_DROP_MISSING] room=%s expected=%s" % [room_id, transition_name])
+		return
 	area.position = Vector2(x, y)
 	area.collision_layer = 0
 	area.collision_mask = 1
