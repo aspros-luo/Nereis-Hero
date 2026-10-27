@@ -1,7 +1,5 @@
 extends Node2D
 
-const NARRATIVE_SCENE: PackedScene = preload("res://scenes/core/narrative_manager.tscn")
-const HUD_SCENE: PackedScene = preload("res://scenes/ui/game_hud.tscn")
 const CLIFF_EXPLORATION_SCENE := "res://scenes/cliff_exploration.tscn"
 
 @onready var hero: CharacterBody2D = $Hero
@@ -22,18 +20,19 @@ func _ready() -> void:
 	world_event_director.setup(WorldState, self)
 	WorldState.set_location("village_backhill")
 	world_event_director.dispatch("region_entered", {"region": "A1", "location": "village_backhill"})
-	_spawn_ui()
+	_configure_ui()
 	$ChurchPOI.interacted.connect(_on_poi_interacted.bind($ChurchPOI))
 	$TavernPOI.interacted.connect(_on_poi_interacted.bind($TavernPOI))
 	$BackToVillagePOI.interacted.connect(_on_poi_interacted.bind($BackToVillagePOI))
 	cliff_exploration_door.interacted.connect(_on_cliff_exploration_interacted)
 
 
-func _spawn_ui() -> void:
-	narrative = NARRATIVE_SCENE.instantiate() as CanvasLayer
-	add_child(narrative)
-	hud = HUD_SCENE.instantiate() as CanvasLayer
-	add_child(hud)
+func _configure_ui() -> void:
+	narrative = get_node_or_null("Narrative") as CanvasLayer
+	hud = get_node_or_null("HUD") as CanvasLayer
+	if narrative == null or hud == null:
+		push_error("[NEREIS][A1][BACKHILL][AUTHORED_UI_MISSING]")
+		return
 	hud.bind_hero(hero)
 	hud.set_story_mode("A1.1｜教堂与后山", "左侧可进入悬崖探索；右侧通往雾林与钟墓的道路尚未开放。")
 

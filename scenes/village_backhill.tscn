@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/village_backhill.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/world/village_poi.gd" id="2"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://scripts/core/world_event_director.gd" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/world/village_poi_visual.tscn" id="6"]
 [ext_resource type="PackedScene" path="res://scenes/world/interaction_prompt.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="narrative_scene"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
 
 [sub_resource type="RectangleShape2D" id="GroundShape"]
 size = Vector2(1840, 40)
@@ -209,3 +211,6 @@ z_index = 5
 theme_override_colors/font_color = Color(0.6, 0.576471, 0.65098, 1)
 theme_override_font_sizes/font_size = 16
 
+
+[node name="Narrative" parent="." instance=ExtResource("narrative_scene")]
+[node name="HUD" parent="." instance=ExtResource("hud_scene")]

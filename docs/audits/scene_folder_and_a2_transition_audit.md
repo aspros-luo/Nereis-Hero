@@ -310,3 +310,9 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - A1 H01 resonance well now points to scenes/hidden_regions/hidden_well.tscn, both at the village instance configuration and the shared gate script's default.
 - A1 cliff exploration now points to scenes/demos/cliff_cave_experiment.tscn for H09 entry.
 - These paths were checked against the current repository tree; all three previously referenced paths were absent and their corrected destinations exist. Godot import/runtime validation remains pending.
+
+
+### A1.1 fixed UI nodes migrated into scene trees — 2026-10-27
+
+- The backhill and cliff scenes now own their Narrative and HUD instances in the editor-visible .tscn tree; scripts only bind the Hero and configure story text.
+- Removed runtime instantiate/add_child for these fixed UI layers. Scene load_steps values were updated for the two new external resources. Static resource accounting and runtime validation remain pending.

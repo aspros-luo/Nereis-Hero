@@ -1,10 +1,12 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/cliff_exploration.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player/hero.gd" id="2"]
 [ext_resource type="Script" path="res://scripts/world/interaction_door.gd" id="3"]
 [ext_resource type="Script" path="res://scripts/world/village_poi.gd" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/world/village_poi_visual.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="narrative_scene"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
 
 [sub_resource type="RectangleShape2D" id="GroundShape"]
 size = Vector2(2400, 40)
@@ -176,3 +178,6 @@ color = Color(0.054902, 0.062745, 0.098039, 1)
 points = PackedVector2Array(-65, 0, -62, -40, -42, -75, -13, -100, 12, -105, 42, -92, 64, -62, 68, 0)
 width = 5.0
 default_color = Color(0.380392, 0.341176, 0.396078, 1)
+
+[node name="Narrative" parent="." instance=ExtResource("narrative_scene")]
+[node name="HUD" parent="." instance=ExtResource("hud_scene")]

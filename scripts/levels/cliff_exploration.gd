@@ -1,7 +1,5 @@
 extends Node2D
 
-const NARRATIVE_SCENE: PackedScene = preload("res://scenes/core/narrative_manager.tscn")
-const HUD_SCENE: PackedScene = preload("res://scenes/ui/game_hud.tscn")
 const CLIFF_CAVE_SCENE := "res://scenes/demos/cliff_cave_experiment.tscn"
 
 @onready var hero: CharacterBody2D = $Hero
@@ -28,14 +26,15 @@ func _ready() -> void:
 	$H09CaveVisual.visible = h09_unlocked
 	if h09_unlocked:
 		h09_cave_door.interacted.connect(_on_h09_cave_interacted)
-	_spawn_ui()
+	_configure_ui()
 
 
-func _spawn_ui() -> void:
-	narrative = NARRATIVE_SCENE.instantiate() as CanvasLayer
-	add_child(narrative)
-	hud = HUD_SCENE.instantiate() as CanvasLayer
-	add_child(hud)
+func _configure_ui() -> void:
+	narrative = get_node_or_null("Narrative") as CanvasLayer
+	hud = get_node_or_null("HUD") as CanvasLayer
+	if narrative == null or hud == null:
+		push_error("[NEREIS][A1][CLIFF][AUTHORED_UI_MISSING]")
+		return
 	hud.bind_hero(hero)
 	hud.set_story_mode("A1.1｜悬崖探索", "沿崖岸探索旧观测遗址。西侧入口可以返回后山。")
 
