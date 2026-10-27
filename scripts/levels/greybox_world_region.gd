@@ -1796,6 +1796,9 @@ func _spawn_region_rest_point() -> void:
 	# 固定休息点由对应区域 .tscn 预置，运行时不得生成或移动。
 	if get_node_or_null("AuthoredTerrain") != null:
 		return
+	# Legacy isolated A5 room fixtures are test scenes, not the production assembled region.
+	if region_id == "A5" and not room_id.is_empty() and not use_a5_room_assembly:
+		return
 	if region_id == "A5" and use_a5_room_assembly:
 		var authored_rest := get_node_or_null("RegionRestPoint_A5") as Node2D
 		if authored_rest == null:
