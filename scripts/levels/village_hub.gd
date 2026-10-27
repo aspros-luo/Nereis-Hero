@@ -276,7 +276,7 @@ func _enter_village_location(location_id: String) -> void:
 			WorldState.pending_region_spawn_side = "west"
 			WorldState.set_location("ash_forest")
 			print("[NEREIS][MAP] Entering A2: Old Pilgrim Road")
-			SceneTransition.fade_to_scene("res://scenes/regions/ash_forest.tscn")
+			SceneTransition.fade_to_scene("res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn")
 		else:
 			WorldState.set_location("village")
 			print("[NEREIS][VILLAGE] Triggering village defense chapter")

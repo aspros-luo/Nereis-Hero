@@ -279,3 +279,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - A2 door/marker positions match for R02–R06; R01's marker positions are authored under the `Terrain` scale of 1.25 and correctly transform to its root-level door coordinates. R01/R03 drop Areas are authored and runtime code validates their shape/size instead of creating them.
 - Progression NPC refresh uses `WorldEventDirector` to remove/recreate its own managed NPCs before refreshing, avoiding duplicate progression NPCs.
 - These are static checks only. Godot 4.6.1 import and playable acceptance remain outstanding.
+
+
+### A1 north gate uses the canonical A2 entry scene — 2026-10-27
+
+- Updated the village north-gate transition to load `scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn` directly.
+- This now matches the authored `NorthGatePOI` exit contract and avoids routing through the legacy `scenes/regions/ash_forest.tscn` alias. The alias is retained for compatibility with other callers.
+- The one-shot spawn side remains `west`; A2-R01 still owns the actual spawn marker and current room save path.
+- Static reference and resource accounting checks pass for the A0/A1/A2 priority scenes. Godot import/runtime acceptance is still pending.
