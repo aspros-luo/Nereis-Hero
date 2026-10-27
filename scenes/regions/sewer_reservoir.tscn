@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a4.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="5"]
 
 [node name="SewerReservoir" type="Node2D"]
 script = ExtResource("1")
@@ -26,3 +27,35 @@ display_name = "管道下的石头"
 description = "管道被固定在另一种工艺切削的石层上。\n\n铺设管道的工人并不是这座大厅的建造者。"
 resonance_target = 36
 ancient_exposure_floor = 1
+
+; Editor-authored fixed exits. Runtime configures only destination/progression state.
+
+[node name="Exit_forgotten_city" parent="." instance=ExtResource("5")]
+position = Vector2(72, 425)
+visible = false
+enabled = false
+
+[node name="Exit_village" parent="." instance=ExtResource("5")]
+position = Vector2(2220, 540)
+visible = false
+enabled = false
+
+[node name="Exit_prison_depths" parent="." instance=ExtResource("5")]
+position = Vector2(1050, 465)
+visible = false
+enabled = false
+
+[node name="Exit_royal_tomb" parent="." instance=ExtResource("5")]
+position = Vector2(1320, 455)
+visible = false
+enabled = false
+
+[node name="Exit_royal_outer_ring" parent="." instance=ExtResource("5")]
+position = Vector2(1650, 435)
+visible = false
+enabled = false
+
+[node name="Exit_old_drain_exploration" parent="." instance=ExtResource("5")]
+position = Vector2(600, 540)
+visible = false
+enabled = false

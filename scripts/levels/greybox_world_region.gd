@@ -3021,22 +3021,22 @@ func _spawn_exit_door(
 ) -> void:
 	var door: Area2D
 	var expected_position := Vector2(x, floor_y if door_y < 0.0 else door_y)
-	if region_id == "A3":
+	if region_id in ["A3", "A4"]:
 		# A3's fixed exits are authored in forgotten_city.tscn. Runtime only configures state.
 		door = get_node_or_null("Exit_%s" % target_location) as Area2D
 		if door == null:
-			push_error("[NEREIS][A3][AUTHORED_EXIT_MISSING] target=%s" % target_location)
+			push_error("[NEREIS][AUTHORED_EXIT][AUTHORED_EXIT_MISSING] target=%s" % target_location)
 			return
 		if door.position.distance_to(expected_position) > 1.0:
-			push_error("[NEREIS][A3][EXIT_POSITION_MISMATCH] target=%s authored=%s expected=%s" % [target_location, str(door.position), str(expected_position)])
+			push_error("[NEREIS][AUTHORED_EXIT][EXIT_POSITION_MISMATCH] target=%s authored=%s expected=%s" % [target_location, str(door.position), str(expected_position)])
 			return
 		var authored_shape := door.get_node_or_null("CollisionShape2D") as CollisionShape2D
 		if authored_shape == null or not (authored_shape.shape is RectangleShape2D):
-			push_error("[NEREIS][A3][EXIT_SHAPE_INVALID] target=%s" % target_location)
+			push_error("[NEREIS][AUTHORED_EXIT][EXIT_SHAPE_INVALID] target=%s" % target_location)
 			return
 		var authored_rect := authored_shape.shape as RectangleShape2D
 		if not is_equal_approx(authored_rect.size.x, 110.0) or not is_equal_approx(authored_rect.size.y, 80.0) or authored_shape.position.distance_to(Vector2(0.0, -35.0)) > 1.0:
-			push_error("[NEREIS][A3][EXIT_GEOMETRY_MISMATCH] target=%s" % target_location)
+			push_error("[NEREIS][AUTHORED_EXIT][EXIT_GEOMETRY_MISMATCH] target=%s" % target_location)
 			return
 		door.visible = true
 		door.monitoring = true
