@@ -270,3 +270,12 @@ These conclusions come from the branch tree and targeted source/scene inspection
 
 
 - **Layering follow-up:** Set the authored H02 gate instance to `z_index = 2` so its bell motif renders above the R04 doorway silhouette (`H02GateVisual`, z-index 1). This is a source-level ordering check; visual appearance still needs editor/runtime confirmation.
+
+
+### A0/A1/A2 scene-resource audit follow-up — 2026-10-27
+
+- Static resource accounting and `res://` reference checks passed for the A0 prologue, A0 exterior, A1 village, A1 backhill, A1 cliff exploration, A2 R01–R06, the A0 barrier scene, and the shared resonance-gate scene, except one resource-count mismatch.
+- Fixed `scenes/village_backhill.tscn` from `load_steps=10` to `load_steps=11`, matching its 7 external resources + 3 subresources + scene resource.
+- A2 door/marker positions match for R02–R06; R01's marker positions are authored under the `Terrain` scale of 1.25 and correctly transform to its root-level door coordinates. R01/R03 drop Areas are authored and runtime code validates their shape/size instead of creating them.
+- Progression NPC refresh uses `WorldEventDirector` to remove/recreate its own managed NPCs before refreshing, avoiding duplicate progression NPCs.
+- These are static checks only. Godot 4.6.1 import and playable acceptance remain outstanding.

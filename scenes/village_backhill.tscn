@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/village_backhill.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/world/village_poi.gd" id="2"]
