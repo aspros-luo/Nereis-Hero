@@ -3931,7 +3931,7 @@
       },
       "return_route": {
         "target_region": "A8",
-        "target_scene": "scenes/royal_tomb.tscn",
+        "target_scene": "scenes/regions/royal_tomb.tscn",
         "target_location": "royal_tomb",
         "spawn_side": "boss_return",
         "spawn_x": 1700
@@ -4164,7 +4164,7 @@
       {
         "id": "A2_vertical_interlock_pass_2026_10_21",
         "status": "code_committed_runtime_unverified",
-        "source": "scripts/levels/greybox_world_region.gd; scenes/ash_forest.tscn",
+        "source": "scripts/levels/greybox_world_region.gd; scenes/regions/ash_forest.tscn",
         "details": "A2 floor_y is 650, camera bottom limit is 1000, and terrain is distributed across a jagged canopy crown, middle return ribs, surface floor, and a lower Bell Grave/eastern-ravine undercroft. The canopy resonance crossing is aligned to y=386 and H02 is placed on the undercroft floor. Godot traversal, camera framing, collision, and loop closure remain unverified."
       }
     ],
