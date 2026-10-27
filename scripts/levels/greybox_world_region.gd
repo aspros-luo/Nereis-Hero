@@ -3007,9 +3007,36 @@ func _spawn_exit_door(
 	opened_prompt_text: String = "",
 	door_y: float = -1.0
 ) -> void:
-	var door := INTERACTION_DOOR_SCENE.instantiate() as Area2D
-	door.name = "Exit_%s" % target_location
-	door.position = Vector2(x, floor_y if door_y < 0.0 else door_y)
+	var door: Area2D
+	var expected_position := Vector2(x, floor_y if door_y < 0.0 else door_y)
+	if region_id == "A3":
+		# A3's fixed exits are authored in forgotten_city.tscn. Runtime only configures state.
+		door = get_node_or_null("Exit_%s" % target_location) as Area2D
+		if door == null:
+			push_error("[NEREIS][A3][AUTHORED_EXIT_MISSING] target=%s" % target_location)
+			return
+		if door.position.distance_to(expected_position) > 1.0:
+			push_error("[NEREIS][A3][EXIT_POSITION_MISMATCH] target=%s authored=%s expected=%s" % [target_location, str(door.position), str(expected_position)])
+			return
+		var authored_shape := door.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if authored_shape == null or not (authored_shape.shape is RectangleShape2D):
+			push_error("[NEREIS][A3][EXIT_SHAPE_INVALID] target=%s" % target_location)
+			return
+		var authored_rect := authored_shape.shape as RectangleShape2D
+		if not is_equal_approx(authored_rect.size.x, 110.0) or not is_equal_approx(authored_rect.size.y, 80.0) or authored_shape.position.distance_to(Vector2(0.0, -35.0)) > 1.0:
+			push_error("[NEREIS][A3][EXIT_GEOMETRY_MISMATCH] target=%s" % target_location)
+			return
+		door.visible = true
+		door.monitoring = true
+	else:
+		door = INTERACTION_DOOR_SCENE.instantiate() as Area2D
+		door.name = "Exit_%s" % target_location
+		door.position = expected_position
+		var shape := door.get_node("CollisionShape2D") as CollisionShape2D
+		var rectangle := shape.shape as RectangleShape2D
+		rectangle.size = Vector2(110.0, 80.0)
+		shape.position = Vector2(0.0, -35.0)
+		add_child(door)
 	door.set("prompt_text", prompt_text)
 	door.set("enabled", enabled)
 	door.set("unlock_once_flag_id", unlock_once_flag_id)
@@ -3020,11 +3047,6 @@ func _spawn_exit_door(
 	door.set_meta("p5_1_target_scene", target_scene)
 	door.set_meta("p5_1_spawn_side", spawn_side)
 	door.set_meta("p5_1_enabled", enabled)
-	var shape := door.get_node("CollisionShape2D") as CollisionShape2D
-	var rectangle := shape.shape as RectangleShape2D
-	rectangle.size = Vector2(110.0, 80.0)
-	shape.position = Vector2(0.0, -35.0)
-	add_child(door)
 	var exit_kind := "locked" if not enabled else ("shortcut" if not unlock_once_flag_id.is_empty() else "exit")
 	debug_exit_markers.append({
 		"position": door.position,

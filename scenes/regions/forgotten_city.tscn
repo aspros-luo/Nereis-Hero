@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a3.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/world/world_item_pickup.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="6"]
 
 [node name="ForgottenCity" type="Node2D"]
 script = ExtResource("1")
@@ -32,3 +33,45 @@ position = Vector2(740, 282)
 pickup_id = "map_reward_third_street_survey"
 item_id = "third_street_survey"
 prompt_text = "E  拾取"
+
+; Editor-authored fixed exits. Runtime configures only destination/progression state.
+
+[node name="Exit_old_drain_exploration" parent="." instance=ExtResource("6")]
+position = Vector2(520, 540)
+visible = false
+enabled = false
+
+[node name="Exit_village" parent="." instance=ExtResource("6")]
+position = Vector2(520, 540)
+visible = false
+enabled = false
+
+[node name="Exit_ash_forest" parent="." instance=ExtResource("6")]
+position = Vector2(72, 410)
+visible = false
+enabled = false
+
+[node name="Exit_sewer_reservoir" parent="." instance=ExtResource("6")]
+position = Vector2(1600, 425)
+visible = false
+enabled = false
+
+[node name="Exit_old_battlefield" parent="." instance=ExtResource("6")]
+position = Vector2(2240, 410)
+visible = false
+enabled = false
+
+[node name="Exit_royal_outer_ring" parent="." instance=ExtResource("6")]
+position = Vector2(2040, 470)
+visible = false
+enabled = false
+
+[node name="Exit_silent_bell_room" parent="." instance=ExtResource("6")]
+position = Vector2(1870, 540)
+visible = false
+enabled = false
+
+[node name="Exit_monastery_tower" parent="." instance=ExtResource("6")]
+position = Vector2(1710, 540)
+visible = false
+enabled = false
