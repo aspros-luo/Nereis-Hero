@@ -42,8 +42,9 @@ The following runtime, route-data, and acceptance consumers were updated to the 
 - `scripts/core/world_state.gd` (region ID mapping and resume destinations)
 - `scripts/levels/greybox_world_region.gd` (doors, exits and route destinations)
 - `tools/validate_graybox_scene_wiring.py` (acceptance assertions)
-- `tools/world_map_topology.json` and other data contracts
-- Every other `.gd`, `.tscn`, `.tres`, `.json`, `.py`, and `project.godot` reference on this branch.
+- `tools/world_map_topology.json`, `tools/a2_room_connection_contract.json`, and `tools/world_graybox_acceptance_ledger.json`
+- `tools/p5_1_acceptance_harness.gd`, `tools/a1_scene_smoke_test.gd`, and the A1/A2/A8/route/connection static validators
+- `scripts/core/boot.gd`, `scripts/core/world_map_test_menu.gd`, `scripts/ui/map_test_panel.gd`, `scripts/ui/game_hud.gd`, A0/A1 auxiliary transitions, A2 runtime exits, demo fallback transitions, and serialized target-scene metadata in `scenes/mite_house.tscn` and `scenes/royal_tomb_boss.tscn`
 
 The path update covers the central runtime scene routing, world-state region mapping, boot/prologue/village/route transitions, A2 room exits, the contract-room scene map, world topology, acceptance harness, static wiring checks, A2 geometry contract, A8 spatial contract, and the world acceptance ledger. A local Godot import is still required to catch parser/resource errors.
 
@@ -68,12 +69,12 @@ The path update covers the central runtime scene routing, world-state region map
 
 ### 当前审计边界
 
-已更新集中式运行时路径映射、主要区域转场脚本、A2 独立房间出口、数据合同、静态校验器与接受度账本。迁移不改变场景内部节点树，也不涉及 A2/A5 房间合并。最后仍需在本地 Godot 4.6.1 中完成导入与实机转场验收。
+内容级检查覆盖了集中式运行时路径映射、主要区域转场脚本、A2 独立房间出口、相关验收脚本、拓扑/数据合同、接受度账本、14 个迁移后的入口场景、62 个房间场景，以及发现并修正的序章/村庄/Boss 场景序列化目标路径。该范围针对本次迁移的高风险消费者；并非对仓库每个无关资源文件逐字节扫描。迁移不改变场景内部节点树，也不涉及 A2/A5 房间合并。最后仍需在本地 Godot 4.6.1 中完成导入与实机转场验收。
 
 ### 后续验收
 
-1. 对分支运行旧入口路径残留扫描，排除迁移历史文档中的说明文字。
-2. 执行可用的静态校验；Godot 4.6.1 场景导入与实机转场仍需本地运行确认。
+1. 在本地运行静态校验与 Godot 4.6.1 项目导入，确认脚本解析、资源依赖和场景加载均通过。
+2. 实机验收 C01 序章链、C02/C03/C04、C13/C14 以及 A0/A1 返回与读档路径。
 3. 将辅助场景（序章到达场景、A1 辅助场景、C24、OB01、A5 组装场景及悬崖/研究场景）按实际职责单独归档，不与正式区域入口混为一类。
 
 A2 的六个运行时房间、A5 的 22 个旧房间以及现有节点树均保持原样；目录整理不授权删减房间，也不以脚本动态创建节点替代编辑器中可见的场景节点。
@@ -95,7 +96,7 @@ A2 的六个运行时房间、A5 的 22 个旧房间以及现有节点树均保�
 - 正式区域入口只迁移到 `scenes/regions/`；其内部房间仍按实际使用体系保留在对应房间目录。
 - `scenes/boot.tscn`、`project.godot` 的主启动入口与 Autoload 位置保持稳定。
 - A1 辅助场景、C24 排水探索、OB01 Boss、A5 组装场景、悬崖探索、古代研究实验室必须先判定调用方与职责，再归档；不能将它们误当成 A0–A13 入口。
-- 目录树核对已覆盖 590 个符合脚本/场景/资源/配置/文档扩展名的文件条目（递归 Git tree 未截断）；这只是文件清单核对，**不是**全部文件内容的引用扫描。逐文件引用核验仍未完成，故不据此宣称旧路径零残留。
+- 目录树核对已覆盖 590 个符合脚本/场景/资源/配置/文档扩展名的文件条目（递归 Git tree 未截断）。针对本次迁移的高风险运行时、合同、验收与房间场景已完成内容级核对；不将其夸大为对仓库所有无关资源的逐字节扫描。
 
 ### 本轮迁移结果
 
