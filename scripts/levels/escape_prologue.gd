@@ -111,7 +111,8 @@ func _spawn_single_progress_barrier(gate_x: float) -> void:
 	if gate == null:
 		push_error("[NEREIS][PROLOGUE] Missing authored progress barrier: " + gate_name)
 		return
-	gate.position = Vector2(gate_x, 420.0)
+	# Fixed barrier coordinates are authored in escape_prologue.tscn; runtime only toggles state.
+	# 固定障碍的位置由场景节点定义，运行时只切换可见性与碰撞状态。
 	gate.visible = true
 	var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
 	collision.disabled = false

@@ -226,3 +226,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Updated the rest-point validator to check the single-scene A5 contract rather than requiring the removed R12 hub.
 - A5's room files and room-streaming contract are retained as inactive source material for now because the legacy `scenes/world/world.tscn` streaming path and its validators still reference them. They are not instantiated by `old_battlefield.tscn`. Remove those orphaned files only after that separate legacy entry path is retired; otherwise opening it would fail to load rooms.
 - Static source review only; no Godot editor/runtime acceptance was run.
+
+
+### A0 fixed progress-barrier position is scene-owned — 2026-10-27
+
+- Removed the runtime assignment that moved `ProgressBarrier_Left/Right` to hard-coded coordinates.
+- The barrier nodes and their collision shapes remain authored in `scenes/regions/escape_prologue.tscn`; encounter logic only toggles visibility and collision enabled state.
+- Static source inspection confirms the selected barrier is still resolved by its authored node name. Godot editor/runtime acceptance remains pending.
