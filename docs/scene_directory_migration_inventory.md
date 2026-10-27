@@ -79,3 +79,31 @@ The first reference scan found direct consumers in the files above. It is not ye
 5. 将辅助场景（序章到达场景、A1 辅助场景、C24、OB01、A5 组装场景及悬崖/研究场景）按实际职责单独归档，不与正式区域入口混为一类。
 
 A2 的六个运行时房间、A5 的 22 个旧房间以及现有节点树均保持原样；目录整理不授权删减房间，也不以脚本动态创建节点替代编辑器中可见的场景节点。
+
+## 第二轮目录盘点（2026-10-27）
+
+### 当前目录中发现的并行房间/区域实现
+
+递归目录树中同时存在以下文件族，迁移前需要确认它们的用途与引用关系，不能仅凭文件名判断为冗余：
+
+- A2：`scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn` 至 `a2_r06_room.tscn`，以及 `scenes/rooms/a2_bell_tomb.tscn`、`a2_mist_forest.tscn`、`a2_pilgrim_highroad.tscn` 等旧/独立房间场景。
+- A5：`scenes/a5_rooms/a5_r01.tscn` 至 `a5_r22.tscn`、`scenes/rooms/a5/a5_room_01.tscn` 与 `a5_room_02.tscn`、`scenes/rooms/world_a5_r01.tscn` 至 `world_a5_r03.tscn`，并有 `scenes/a5_assembled_region.tscn`、`resources/rooms/a5_room_01.tres` 和 `a5_room_02.tres`。
+- A0 及其他区域还存在 `scenes/rooms/world_a0_*.tscn`、`world_a4_*.tscn` 至 `world_a13_*.tscn` 等通用命名房间族。
+
+以上只是目录层面的并存事实，不足以证明这些场景重复或可删除。后续需对每组检查 `PackedScene` 实例引用、RoomData/房间图合同、运行时加载脚本和验收脚本，再决定只归档、不迁移，或迁移到统一子目录。**本次不删除、不合并、不重命名这些房间文件。**
+
+### 目录迁移安全边界
+
+- 正式区域入口只迁移到 `scenes/regions/`；其内部房间仍按实际使用体系保留在对应房间目录。
+- `scenes/boot.tscn`、`project.godot` 的主启动入口与 Autoload 位置保持稳定。
+- A1 辅助场景、C24 排水探索、OB01 Boss、A5 组装场景、悬崖探索、古代研究实验室必须先判定调用方与职责，再归档；不能将它们误当成 A0–A13 入口。
+- 目录树核对已覆盖 590 个符合脚本/场景/资源/配置/文档扩展名的文件条目（递归 Git tree 未截断）；这只是文件清单核对，**不是**全部文件内容的引用扫描。逐文件引用核验仍未完成，故不据此宣称旧路径零残留。
+
+### 当前剩余工作量更新
+
+1. 对 14 个正式入口及辅助场景的实际引用做完整内容级扫描，并建立逐文件命中表。
+2. 依据命中表更新运行时脚本、场景资源引用、拓扑数据和验收断言。
+3. 分批移动场景并检查旧路径残留。
+4. 本地 Godot 4.6.1 导入和转场验收。
+
+A2 六个运行时房间与 A5 22 个旧房间必须保留；整理目录不等于删减内容。
