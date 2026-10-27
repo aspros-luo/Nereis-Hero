@@ -18,4 +18,4 @@ Scene path moves must update every `res://` reference in `.tscn`, `.tres`, `.gd`
 
 ## Current migration status
 
-The folders below establish the target taxonomy. Existing root-level scenes remain at their current paths until a complete reference inventory can be applied atomically; this avoids breaking scene loading during a partial move.
+The first migration batch moved four standalone demo scenes into `demos/`. Their node trees and attached script paths were preserved. Primary and hidden region entry scenes remain at their existing paths until their full reference sets are updated atomically. A2's six runtime rooms and all 22 legacy A5 room scenes remain untouched.
