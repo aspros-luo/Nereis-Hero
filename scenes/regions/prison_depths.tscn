@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a7.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="5"]
 
 [node name="PrisonDepths" type="Node2D"]
 script = ExtResource("1")
@@ -25,3 +26,19 @@ source_id = "anomaly_prisoner_register"
 display_name = "无名者名册"
 description = "账册分为姓名、判决与转送三栏。\n\n转送一栏写得满满当当，处决一栏却几乎空白。\n\n所有目的地都被写成了“观测区”。"
 resonance_target = 52
+
+; Editor-authored fixed exits. Runtime configures only destination/progression state.
+[node name="Exit_monastery_tower" parent="." instance=ExtResource("5")]
+position = Vector2(72, 540)
+visible = false
+enabled = false
+
+[node name="Exit_royal_tomb" parent="." instance=ExtResource("5")]
+position = Vector2(2528, 360)
+visible = false
+enabled = false
+
+[node name="Exit_sewer_reservoir" parent="." instance=ExtResource("5")]
+position = Vector2(520, 540)
+visible = false
+enabled = false
