@@ -52,5 +52,5 @@ prompt_text = "E  返回旧王墓主路"
 metadata/p5_1_exit_contract = true
 metadata/p5_1_target_location = "royal_tomb"
 metadata/p5_1_target_region = "A8"
-metadata/p5_1_target_scene = "res://scenes/royal_tomb.tscn"
+metadata/p5_1_target_scene = "res://scenes/regions/royal_tomb.tscn"
 metadata/p5_1_spawn_side = "boss_return"

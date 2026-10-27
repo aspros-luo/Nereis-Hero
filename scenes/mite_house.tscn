@@ -59,7 +59,7 @@ display_name = "THE BED"
 [node name="VillageExit" parent="." instance=ExtResource("5")]
 position = Vector2(170, 520)
 metadata/p5_1_exit_contract = true
-metadata/p5_1_target_scene = "res://scenes/village_hub.tscn"
+metadata/p5_1_target_scene = "res://scenes/regions/village_hub.tscn"
 metadata/p5_1_target_region = "A1"
 metadata/p5_1_spawn_side = "mite_house_return"
 
