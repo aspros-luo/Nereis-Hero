@@ -210,3 +210,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Added `RegionRestPoint_A5` as a direct `RestPoint` instance in `scenes/regions/old_battlefield.tscn`, at the existing contract-derived R12 hub coordinate (17740, 2700).
 - The shared controller now validates the authored rest point against the R12 hub and fails loudly if the node is missing or misplaced; it no longer instantiates or repositions the fixed A5 rest point.
 - Static check: A5 room contract still contains 22 rooms; the rest node is a scene instance, and the controller contains no `REST_POINT_SCENE.instantiate()` in the rest-point method. Godot import/runtime validation remains pending.
+
+
+### A5 legacy scene path redirected to the authored production region
+
+- `scenes/a5_assembled_region.tscn` previously declared `use_a5_room_assembly = true` on a root-only scene with no 22 room children, which conflicts with the controller's new authored-child contract.
+- Kept the legacy resource path for compatibility, but converted it to an inherited instance of `scenes/regions/old_battlefield.tscn`. Opening either path now exposes the same authored room tree rather than a second incomplete assembly root.
+- This avoids deleting a potentially referenced scene while removing its contradictory root-only implementation. Static source validation only; local Godot import remains pending.

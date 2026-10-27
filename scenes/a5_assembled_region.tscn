@@ -1,13 +1,7 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/regions/old_battlefield.tscn" id="1"]
 
-[node name="A5AssembledRegion" type="Node2D"]
-script = ExtResource("1")
-region_id = "A5"
-location_id = "old_battlefield"
-region_title = "旧战场与边境堡垒"
-map_width = 25600.0
-floor_y = 3600.0
-room_height = 3600.0
-use_a5_room_assembly = true
+[node name="A5AssembledRegion" instance=ExtResource("1")]
+
+[editable path="."]
