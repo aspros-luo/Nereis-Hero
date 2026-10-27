@@ -203,3 +203,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - `scripts/levels/a2_authored_terrain.gd` referenced six legacy A2 room paths that no longer exist in the current tree and could instantiate fixed room geometry under a region parent.
 - The file now contains no stale `preload()` references, no fixed-position mutations, and no `PackedScene.instantiate()` / `add_child()` terrain assembly. Calling its former `configure_platforms()` entry point fails loudly instead of generating geometry.
 - The six current runtime room scenes remain untouched. This is a source-level safety guard, not a claim that the retired script has been removed from every external caller; reference tracing and Godot import validation remain pending.
+
+
+### A5 rest point migrated to the editor-authored scene tree
+
+- Added `RegionRestPoint_A5` as a direct `RestPoint` instance in `scenes/regions/old_battlefield.tscn`, at the existing contract-derived R12 hub coordinate (17740, 2700).
+- The shared controller now validates the authored rest point against the R12 hub and fails loudly if the node is missing or misplaced; it no longer instantiates or repositions the fixed A5 rest point.
+- Static check: A5 room contract still contains 22 rooms; the rest node is a scene instance, and the controller contains no `REST_POINT_SCENE.instantiate()` in the rest-point method. Godot import/runtime validation remains pending.

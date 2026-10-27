@@ -1792,61 +1792,25 @@ func _register_authored_platform(rect: Rect2) -> void:
 	platforms.append(rect)
 
 func _spawn_region_rest_point() -> void:
-	# Authored region scenes own fixed rest-point nodes; never duplicate them at runtime.
-	# 固定地形区域的休息点由 .tscn 场景树拥有，禁止运行时重复生成。
+	# Fixed region rest points are authored in their .tscn scene trees.
+	# 固定休息点由对应区域 .tscn 预置，运行时不得生成或移动。
 	if get_node_or_null("AuthoredTerrain") != null:
 		return
-	var rest_x := -1.0
-	var rest_y := floor_y
-	var rest_name := "歇脚圣龛"
-	match region_id:
-		"A2":
-			rest_x = 1150.0
-			rest_name = "旧朝圣圣龛"
-		"A3":
-			rest_x = 1470.0
-			rest_name = "废街圣龛"
-		"A4":
-			rest_x = 2050.0
-			rest_name = "水库祭坛"
-		"A5":
-			if use_a5_room_assembly:
-				var hub := _get_a5_assembled_room("A5-R12")
-				if hub != null:
-					rest_x = hub.position.x + 1100.0
-					rest_y = hub.position.y + float(hub.get("floor_y"))
-			else:
-				rest_x = 3000.0
-			rest_name = "战场纪念碑"
-		"A6":
-			rest_x = 1300.0
-			rest_name = "回廊歇脚处"
-		"A7":
-			rest_x = 1320.0
-			rest_name = "囚徒长椅"
-		"A8":
-			rest_x = 1150.0
-			rest_name = "王室墓碑"
-		"A9":
-			rest_x = 1100.0
-			rest_name = "外环圣龛"
-		"A10":
-			rest_x = 1200.0
-			rest_name = "礼拜堂歇脚处"
-		"A11":
-			rest_x = 1050.0
-			rest_name = "观测室歇脚处"
-		"A12":
-			rest_x = 1360.0
-			rest_name = "王座区圣龛"
-		_:
+	if region_id == "A5" and use_a5_room_assembly:
+		var authored_rest := get_node_or_null("RegionRestPoint_A5") as Node2D
+		if authored_rest == null:
+			push_error("[NEREIS][A5_ASSEMBLY][AUTHORED_REST_MISSING] expected RegionRestPoint_A5")
 			return
-	var rest := REST_POINT_SCENE.instantiate() as Node2D
-	rest.name = "RegionRestPoint_%s" % region_id
-	rest.position = Vector2(rest_x, rest_y)
-	rest.set("rest_id", "rest_%s" % region_id)
-	rest.set("display_name", rest_name)
-	add_child(rest)
+		var hub := _get_a5_assembled_room("A5-R12")
+		if hub == null:
+			push_error("[NEREIS][A5_ASSEMBLY][AUTHORED_REST_HUB_MISSING] A5-R12")
+			return
+		var expected_position := hub.position + Vector2(1100.0, float(hub.get("floor_y")))
+		if authored_rest.position.distance_to(expected_position) > 1.0:
+			push_error("[NEREIS][A5_ASSEMBLY][REST_POSITION_MISMATCH] authored=%s expected=%s" % [str(authored_rest.position), str(expected_position)])
+		return
+	push_error("[NEREIS][MAP][AUTHORED_REST_MISSING] region=%s" % region_id)
+
 func _spawn_region_sources() -> void:
 	match region_id:
 		"A2":
