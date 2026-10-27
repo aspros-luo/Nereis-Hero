@@ -108,6 +108,7 @@ func _ready() -> void:
 	print("[NEREIS][MAP][SPAWN] region=%s location=%s side=%s x=%.1f y=%.1f resume_side=%s" % [region_id, location_id, spawn_side, hero.position.x, hero.position.y, WorldState.resume_spawn_side])
 	_spawn_ui()
 	_spawn_region_sources()
+	_bind_authored_region_sources()
 	_spawn_region_item_pickups()
 	_spawn_region_exits()
 	_register_debug_locked_route_hints()
@@ -849,13 +850,7 @@ func _spawn_region_item_pickups() -> void:
 					"node_name": "CharredChurchSeal",
 					"position": Vector2(1750.0, floor_y - 40.0)
 				})
-		"A3":
-			placements.append({
-				"pickup_id": "map_reward_third_street_survey",
-				"item_id": "third_street_survey",
-				"node_name": "ThirdStreetSurvey",
-				"position": Vector2(740.0, 282.0)
-			})
+
 		"A6":
 			if "defeated_A6_BellWarden_01" in WorldState.achievement_flags:
 				placements.append({
@@ -1886,14 +1881,7 @@ func _spawn_region_sources() -> void:
 				"你轻敲旧里程碑，回应却从身后的道路传来。\n\n石头仍然温热，仿佛有人刚刚离开。",
 				18
 			)
-		"A3":
-			_spawn_source(
-				Vector2(900, floor_y - 18.0),
-				"anomaly_erased_street_sign",
-				"第三街",
-				"路牌列出了三条街道，如今只剩两条。\n\n原本指向第三条街的地方布满刮痕。",
-				28
-			)
+
 		"A4":
 			_spawn_source(
 				Vector2(850, floor_y - 18.0),
@@ -2061,6 +2049,20 @@ func _spawn_region_sources() -> void:
 				"活石上的凹槽容不下一个人的身体，形状却精细得绝非天然形成。\n\n墙壁围绕凹槽收缩了一次，随后缓缓松弛。",
 				0
 			)
+
+func _bind_authored_region_sources() -> void:
+	# Fixed anomaly clues are scene-authored; runtime only wires their state callbacks.
+	# 固定异常线索由场景预置；运行时只绑定状态回调，不创建或移动线索节点。
+	for child in get_children():
+		if not child is Node2D or not child.has_signal("activated"):
+			continue
+		if not child.get("source_id") is String:
+			continue
+		var source_id := str(child.get("source_id"))
+		var ability_id := str(child.get("unlock_ability_id"))
+		var callback := Callable(self, "_on_source_activated").bind(source_id, ability_id)
+		if not child.activated.is_connected(callback):
+			child.activated.connect(callback)
 
 func _spawn_source(
 	source_position: Vector2,

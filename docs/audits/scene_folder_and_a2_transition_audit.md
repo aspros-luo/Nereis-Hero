@@ -135,3 +135,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - `_spawn_drop_transition()` no longer changes the authored trigger position, collision size, collision layer/mask, or monitoring flag. It validates those scene-authored properties against the route contract and only binds the transition callback.
 - Mismatches now produce explicit `EXIT_POSITION_MISMATCH`, `DROP_POSITION_MISMATCH`, `DROP_SIZE_MISMATCH`, or `DROP_MONITOR_CONTRACT` errors instead of silently correcting scene layout at runtime.
 - This is source-level validation only; the local Godot editor/runtime still needs to confirm the authored R01 scaled marker conversion and both drop areas behave as expected.
+
+
+### A3 fixed clue and exploration pickup moved into the scene tree
+
+- `scenes/regions/forgotten_city.tscn` now contains editor-visible instances for the fixed `anomaly_erased_street_sign` clue and `third_street_survey` pickup, including their saved positions and IDs.
+- Removed the A3 branches that created these objects at hard-coded runtime coordinates.
+- Added callback binding for scene-authored resonance sources; this binds progression behavior only and does not instantiate or reposition clue nodes.
+- Static check: both nodes exist as direct scene children with the expected properties; the A3 spawn branches are absent. Godot import and interaction acceptance are still pending.
