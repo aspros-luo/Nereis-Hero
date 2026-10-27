@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a13.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="3"]
 
 [node name="TerminalAnomaly" type="Node2D"]
 script = ExtResource("1")
@@ -12,3 +13,19 @@ map_width = 2600.0
 floor_y = 540.0
 
 [node name="AuthoredTerrain" parent="." instance=ExtResource("2")]
+
+; The selected ending route activates exactly one authored terminal exit.
+[node name="Exit_church_final_demo" parent="." instance=ExtResource("3")]
+position = Vector2(2510, 540)
+visible = false
+enabled = false
+
+[node name="Exit_ending_paradise_demo" parent="." instance=ExtResource("3")]
+position = Vector2(2510, 540)
+visible = false
+enabled = false
+
+[node name="Exit_ending_fire_demo" parent="." instance=ExtResource("3")]
+position = Vector2(2510, 540)
+visible = false
+enabled = false

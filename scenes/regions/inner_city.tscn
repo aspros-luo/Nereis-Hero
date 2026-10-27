@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a12.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="5"]
 
 [node name="InnerCity" type="Node2D"]
 script = ExtResource("1")
@@ -25,3 +26,24 @@ source_id = "anomaly_kings_unopened_letter"
 display_name = "国王未曾拆开的信"
 description = "这封信从未寄出。\n\n国王直言教会的实验，并请求读信者即使埋葬真相，也要保全王国。\n\n他的签名沉稳，封印却颤抖不止。"
 resonance_target = 74
+
+; Editor-authored fixed exits; runtime configures progression and destination only.
+[node name="Exit_grand_cathedral" parent="." instance=ExtResource("5")]
+position = Vector2(72, 540)
+visible = false
+enabled = false
+
+[node name="Exit_royal_outer_ring" parent="." instance=ExtResource("5")]
+position = Vector2(520, 540)
+visible = false
+enabled = false
+
+[node name="Exit_mirror_street" parent="." instance=ExtResource("5")]
+position = Vector2(2250, 540)
+visible = false
+enabled = false
+
+[node name="Exit_terminal_anomaly" parent="." instance=ExtResource("5")]
+position = Vector2(2130, 360)
+visible = false
+enabled = false
