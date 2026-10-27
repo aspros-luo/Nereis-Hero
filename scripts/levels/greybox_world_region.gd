@@ -1896,38 +1896,10 @@ func _spawn_region_sources() -> void:
 
 
 
-		"H01":
-			_spawn_source(
-				Vector2(1600, floor_y - 18.0),
-				"hidden_well_no_water",
-				"井中无水",
-				"石头是湿的，下面却没有水。\n\n潮气闻起来像是雨落在地底深处。",
-				0
-			)
-		"H02":
-			_spawn_source(
-				Vector2(1650, floor_y - 18.0),
-				"hidden_bell_after_sound",
-				"声音之后的钟",
-				"钟声停止之后，钟舌才开始摆动。\n\n金属冰冷，周围的空气却温热。",
-				0
-			)
-		"H03":
-			_spawn_source(
-				Vector2(2020, floor_y - 18.0),
-				"hidden_third_street_numbers",
-				"编号跳过了三",
-				"每一道门都按顺序编号，直到第三道。\n\n没有缺失的号码；墙体被刻意切削过，只为让编号看起来顺理成章。",
-				0
-			)
-		"H04":
-			_spawn_source(
-				Vector2(1740, floor_y - 18.0),
-				"hidden_stair_reflection",
-				"向下攀升的阶梯",
-				"石阶向下延伸，倒影中的阶梯却向上攀升。\n\n抵达平台时，两种景象同时停下，仿佛在聆听。",
-				0
-			)
+
+
+
+
 		"H05":
 			_spawn_source(
 				Vector2(1960, floor_y - 18.0),

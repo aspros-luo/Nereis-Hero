@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_h03.tscn" id="2"]
 
 [node name="ErasedThirdStreet" type="Node2D"]
@@ -11,3 +12,10 @@ region_title = "THE STREET THE CITY REMOVED"
 map_width = 2400.0
 
 [node name="AuthoredTerrain" parent="." instance=ExtResource("2")]
+
+[node name="Anomaly_hidden_third_street_numbers" parent="." instance=ExtResource("3")]
+position = Vector2(2020, 522)
+source_id = "hidden_third_street_numbers"
+display_name = "编号跳过了三"
+description = "每一道门都按顺序编号，直到第三道。\n\n没有缺失的号码；墙体被刻意切削过，只为让编号看起来顺理成章。"
+resonance_target = 0

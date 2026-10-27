@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_h02.tscn" id="2"]
 
 [node name="HiddenBellChamber" type="Node2D"]
@@ -11,3 +12,10 @@ region_title = "THE BELL BEFORE THE SOUND"
 map_width = 1900.0
 
 [node name="AuthoredTerrain" parent="." instance=ExtResource("2")]
+
+[node name="Anomaly_hidden_bell_after_sound" parent="." instance=ExtResource("3")]
+position = Vector2(1650, 522)
+source_id = "hidden_bell_after_sound"
+display_name = "声音之后的钟"
+description = "钟声停止之后，钟舌才开始摆动。\n\n金属冰冷，周围的空气却温热。"
+resonance_target = 0

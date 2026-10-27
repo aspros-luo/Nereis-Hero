@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_h01.tscn" id="2"]
 
 [node name="HiddenWell" type="Node2D"]
@@ -11,3 +12,10 @@ region_title = "THE WELL BELOW THE WELL"
 map_width = 1800.0
 
 [node name="AuthoredTerrain" parent="." instance=ExtResource("2")]
+
+[node name="Anomaly_hidden_well_no_water" parent="." instance=ExtResource("3")]
+position = Vector2(1600, 522)
+source_id = "hidden_well_no_water"
+display_name = "井中无水"
+description = "石头是湿的，下面却没有水。\n\n潮气闻起来像是雨落在地底深处。"
+resonance_target = 0

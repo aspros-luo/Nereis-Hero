@@ -174,3 +174,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Removed the old runtime placement calculation from the region source table.
 - The A5 assembled-region setup now binds authored clue callbacks after Hero/UI creation. This preserves the clue's ability to find the sibling Hero while leaving its position authored in the scene.
 - Static validation only; the saved coordinate and interaction must still be checked in Godot.
+
+
+### H01–H04 fixed clues moved into their hidden-region scenes
+
+- Added the first four hidden-region clue nodes to their terrain-owning `.tscn` files and removed their runtime spawn branches.
+- Their saved IDs, descriptions, resonance targets and authored positions are preserved.
+- Static source checks only; Godot editor import and progression interaction remain pending.

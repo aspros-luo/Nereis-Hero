@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_h04.tscn" id="2"]
 
 [node name="ReflectedStairwell" type="Node2D"]
@@ -11,3 +12,10 @@ region_title = "THE STAIRS BEHIND THE WATER"
 map_width = 2000.0
 
 [node name="AuthoredTerrain" parent="." instance=ExtResource("2")]
+
+[node name="Anomaly_hidden_stair_reflection" parent="." instance=ExtResource("3")]
+position = Vector2(1740, 522)
+source_id = "hidden_stair_reflection"
+display_name = "向下攀升的阶梯"
+description = "石阶向下延伸，倒影中的阶梯却向上攀升。\n\n抵达平台时，两种景象同时停下，仿佛在聆听。"
+resonance_target = 0
