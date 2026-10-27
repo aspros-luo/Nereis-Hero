@@ -2831,16 +2831,24 @@ func _on_local_resonance_route_opened(route_id: String) -> void:
 	print("[NEREIS][MAP][LOCAL_ROUTE] opened id=%s" % route_id)
 
 func _spawn_h02_gate(x: float, y: float = -1.0) -> void:
-	var gate := RESONANCE_SECRET_GATE_SCENE.instantiate() as Node2D
-	gate.name = "HiddenBellChamberGate"
-	gate.position = Vector2(x, floor_y if y < 0.0 else y)
-	gate.secret_id = "H02"
-	gate.target_scene_path = "res://scenes/hidden_regions/hidden_bell_chamber.tscn"
-	gate.target_location_id = "hidden_bell_chamber"
-	gate.target_spawn_side = "west"
-	gate.required_resonance = 18
-	gate.opened.connect(_on_optional_hidden_gate_opened)
-	add_child(gate)
+	# H02's gate and fixed bell motif are authored in A2-R04. Runtime only validates
+	# the anchor, configures destination state, and binds the opened callback.
+	var gate := get_node_or_null("HiddenBellChamberGate") as Node2D
+	if gate == null:
+		push_error("[NEREIS][A2][ROOM][AUTHORED_GATE_MISSING] H02")
+		return
+	var expected_position := Vector2(x, floor_y if y < 0.0 else y)
+	if gate.position.distance_to(expected_position) > 1.0:
+		push_error("[NEREIS][A2][ROOM][GATE_POSITION_MISMATCH] H02 authored=%s expected=%s" % [str(gate.position), str(expected_position)])
+		return
+	gate.set("secret_id", "H02")
+	gate.set("target_scene_path", "res://scenes/hidden_regions/hidden_bell_chamber.tscn")
+	gate.set("target_location_id", "hidden_bell_chamber")
+	gate.set("target_spawn_side", "west")
+	gate.set("required_resonance", 18)
+	var callback := Callable(self, "_on_optional_hidden_gate_opened")
+	if not gate.opened.is_connected(callback):
+		gate.opened.connect(callback)
 	debug_exit_markers.append({"position": gate.position, "label": "H02 倒响钟室", "kind": "secret", "condition": "灵视／进度条件"})
 
 func _spawn_h03_gate(x: float) -> void:

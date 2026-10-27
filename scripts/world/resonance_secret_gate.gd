@@ -68,12 +68,14 @@ func _process(delta: float) -> void:
     queue_redraw()
 
 func _sync_authored_visuals() -> void:
-    if secret_id != "H01" or not has_node("AuthoredVisual"):
+    if not has_node("AuthoredVisual"):
         return
-    var revealed_state := get_node("AuthoredVisual/RevealedState") as Node2D
-    var opened_state := get_node("AuthoredVisual/OpenedState") as Node2D
-    revealed_state.visible = revealed and not opened_permanently
-    opened_state.visible = opened_permanently
+    var revealed_state := get_node_or_null("AuthoredVisual/RevealedState") as Node2D
+    var opened_state := get_node_or_null("AuthoredVisual/OpenedState") as Node2D
+    if revealed_state != null:
+        revealed_state.visible = revealed and not opened_permanently
+    if opened_state != null:
+        opened_state.visible = opened_permanently
     var prompt := get_node_or_null("PromptLabel") as Label
     if prompt != null:
         prompt.visible = hero_nearby and not WorldState.input_locked and INTERACTION_FOCUS_SCRIPT.is_focused(self) and (opened_permanently or revealed)
@@ -82,7 +84,6 @@ func _sync_authored_visuals() -> void:
     if status != null:
         status.visible = hero_nearby and not WorldState.input_locked and not opened_permanently and secret_id in WorldState.discovered_hidden_regions
         status.text = NereisLocalization.translate_text("已发现 · 再按 E 开启")
-
 
 func _is_debug_override_active() -> bool:
     return allow_debug_override and WorldState.debug_ability_override_active
@@ -193,35 +194,31 @@ func _unhandled_input(event: InputEvent) -> void:
             return
 
 func _draw() -> void:
-    # H01 is fully represented by authored scene nodes. Other gate motifs remain available to legacy non-A1 scenes.
-    if secret_id == "H01" and has_node("AuthoredVisual"):
-        return
-    # Draw the anomaly using the motif of its parent region. A mirror-street entrance
-    # must never look like another well just because both gates share this component.
-    # 根据入口类型绘制对应的异常意象，避免镜街入口也呈现为一口井。
-    match secret_id:
-        "H01":
-            _draw_well_marker()
-        "H02":
-            _draw_early_bell_marker()
-        "H03":
-            _draw_erased_street_marker()
-        "H04":
-            _draw_reflected_stairs_marker()
-        "H05":
-            _draw_silent_window_marker()
-        "H06":
-            _draw_erased_royal_name_marker()
-        "H07":
-            _draw_mirror_street_marker()
-        "C15":
-            _draw_erased_royal_name_marker()
-        "C19":
-            _draw_silent_chapel_marker()
-        "H08":
-            _draw_breathing_wall_marker()
-        _:
-            _draw_generic_anomaly_marker()
+    # Authored gate motifs live in scene nodes. Keep procedural motifs only for legacy gates.
+    if not has_node("AuthoredVisual"):
+        match secret_id:
+            "H01":
+                _draw_well_marker()
+            "H02":
+                _draw_early_bell_marker()
+            "H03":
+                _draw_erased_street_marker()
+            "H04":
+                _draw_reflected_stairs_marker()
+            "H05":
+                _draw_silent_window_marker()
+            "H06":
+                _draw_erased_royal_name_marker()
+            "H07":
+                _draw_mirror_street_marker()
+            "C15":
+                _draw_erased_royal_name_marker()
+            "C19":
+                _draw_silent_chapel_marker()
+            "H08":
+                _draw_breathing_wall_marker()
+            _:
+                _draw_generic_anomaly_marker()
 
     if hero_nearby and not WorldState.input_locked and INTERACTION_FOCUS_SCRIPT.is_focused(self):
         var prompt := "E  Descend" if opened_permanently else "E  Resonate"

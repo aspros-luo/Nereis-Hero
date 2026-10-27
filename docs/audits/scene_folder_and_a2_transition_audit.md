@@ -258,3 +258,12 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - R06 now owns the canopy waymarker fragment as a visible scene instance.
 - `a2_room_runtime.gd` no longer creates these fixed clues/rewards at runtime; it binds authored clue callbacks and reports missing expected nodes. Pickup collection/persistence remains delegated to the existing pickup component.
 - Static text checks are not a substitute for Godot 4.6.1 import/parser/runtime acceptance.
+
+
+### A2 H02 gate migrated to an authored scene instance — 2026-10-27
+
+- Added `HiddenBellChamberGate` as an editor-visible instance in `a2_r04_room.tscn`, anchored to the existing `H02Gate` marker.
+- Authored the bell body, clapper, resonance arcs and opened descent marks as `Line2D` scene children. The gate script toggles reveal/open groups and no longer procedurally draws the H02 motif.
+- Replaced runtime gate instantiation and position assignment with validation/configuration of the existing scene instance.
+- Other legacy hidden-gate motifs still use procedural rendering and are outside this A0–A2 pass.
+- Static source checks only; Godot 4.6.1 import, scene-tree validation, and interaction acceptance remain pending.

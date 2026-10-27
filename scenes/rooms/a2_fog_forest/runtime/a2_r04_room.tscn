@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource path="res://scripts/levels/a2_room_runtime.gd" type="Script" id="room_script"]
 [ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="door_scene"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
 [ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="narrative_scene"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_secret_gate.tscn" id="secret_gate_scene"]
 
 [sub_resource type="RectangleShape2D" id="terrain_GroundShape1"]
 size = Vector2(1280, 24)
@@ -184,3 +185,59 @@ position = Vector2(80, 300)
 [node name="Door_ExitToR06" parent="." instance=ExtResource("door_scene")]
 position = Vector2(940, 520)
 
+
+[node name="HiddenBellChamberGate" parent="." instance=ExtResource("secret_gate_scene")]
+position = Vector2(150, 520)
+secret_id = "H02"
+target_scene_path = "res://scenes/hidden_regions/hidden_bell_chamber.tscn"
+target_location_id = "hidden_bell_chamber"
+target_spawn_side = "west"
+required_resonance = 18
+
+[node name="AuthoredVisual" type="Node2D" parent="HiddenBellChamberGate"]
+
+[node name="BellOutline" type="Line2D" parent="HiddenBellChamberGate/AuthoredVisual"]
+points = PackedVector2Array(-25, -12, -22, -25, -12, -34, 0, -38, 12, -34, 22, -25, 25, -12)
+width = 3.0
+default_color = Color(0.384314, 0.333333, 0.407843, 1)
+
+[node name="BellSides" type="Line2D" parent="HiddenBellChamberGate/AuthoredVisual"]
+points = PackedVector2Array(-25, -12, -25, 16, -34, 16, 34, 16, 25, 16, 25, -12)
+width = 3.0
+default_color = Color(0.384314, 0.333333, 0.407843, 1)
+
+[node name="Clapper" type="Line2D" parent="HiddenBellChamberGate/AuthoredVisual"]
+points = PackedVector2Array(0, -45, 0, -6)
+width = 2.0
+default_color = Color(0.513726, 0.447059, 0.54902, 1)
+
+[node name="RevealedState" type="Node2D" parent="HiddenBellChamberGate/AuthoredVisual"]
+visible = false
+
+[node name="SoundArcUpper" type="Line2D" parent="HiddenBellChamberGate/AuthoredVisual/RevealedState"]
+points = PackedVector2Array(-38, -21, -32, -29, -23, -34)
+width = 2.0
+default_color = Color(0.611765, 0.878431, 0.807843, 1)
+
+[node name="SoundArcLower" type="Line2D" parent="HiddenBellChamberGate/AuthoredVisual/RevealedState"]
+points = PackedVector2Array(-48, -27, -41, -38, -31, -44)
+width = 2.0
+default_color = Color(0.611765, 0.878431, 0.807843, 1)
+
+[node name="SoundArcFar" type="Line2D" parent="HiddenBellChamberGate/AuthoredVisual/RevealedState"]
+points = PackedVector2Array(-58, -33, -50, -46, -40, -53)
+width = 2.0
+default_color = Color(0.611765, 0.878431, 0.807843, 1)
+
+[node name="OpenedState" type="Node2D" parent="HiddenBellChamberGate/AuthoredVisual"]
+visible = false
+
+[node name="DescentLeft" type="Line2D" parent="HiddenBellChamberGate/AuthoredVisual/OpenedState"]
+points = PackedVector2Array(-14, -1, -32, 45)
+width = 3.0
+default_color = Color(0.839216, 0.815686, 0.737255, 1)
+
+[node name="DescentRight" type="Line2D" parent="HiddenBellChamberGate/AuthoredVisual/OpenedState"]
+points = PackedVector2Array(14, -1, 32, 45)
+width = 3.0
+default_color = Color(0.839216, 0.815686, 0.737255, 1)
