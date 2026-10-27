@@ -132,7 +132,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if WorldState.debug_map_test_mode and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F6:
 		get_viewport().set_input_as_handled()
-		get_tree().change_scene_to_file("res://scenes/world_map_test_menu.tscn")
+		get_tree().change_scene_to_file("res://scenes/debug/world_map_test_menu.tscn")
 
 func _process(delta: float) -> void:
 	a5_internal_transition_cooldown = maxf(0.0, a5_internal_transition_cooldown - delta)

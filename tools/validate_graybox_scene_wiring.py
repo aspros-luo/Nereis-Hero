@@ -80,7 +80,7 @@ ART_ASSETS = [
 
 REQUIRED_ENTRY_SCENES = [
     "scenes/boot.tscn",
-    "scenes/world_map_test_menu.tscn",
+    "scenes/debug/world_map_test_menu.tscn",
     "scenes/escape_prologue.tscn",
     "scenes/village_hub.tscn",
 ]
@@ -513,7 +513,7 @@ def main() -> int:
     require(world_state, "pending_region_spawn_side = \"west\"\n    resume_spawn_side = \"west\"", "WorldState new-game reset", errors)
     boot_script = read("scripts/core/boot.gd", errors)
     require(boot_script, "WorldState.pending_region_spawn_side = WorldState.resume_spawn_side", "Continue spawn restore", errors)
-    require(boot_script, "res://scenes/world_map_test_menu.tscn", "Boot macro-map acceptance entry", errors)
+    require(boot_script, "res://scenes/debug/world_map_test_menu.tscn", "Boot macro-map acceptance entry", errors)
     map_test_script = read("scripts/core/world_map_test_menu.gd", errors)
     require(map_test_script, "WorldState.begin_natural_test_session()", "Macro-map visit tracking", errors)
     require(map_test_script, "WorldState.finish_natural_test_session()", "Whole-map coverage summary", errors)

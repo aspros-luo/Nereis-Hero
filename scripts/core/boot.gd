@@ -59,7 +59,7 @@ func _continue_game() -> void:
 
 func _open_map_test() -> void:
 	WorldState.debug_map_test_mode = true
-	get_tree().change_scene_to_file("res://scenes/world_map_test_menu.tscn")
+	get_tree().change_scene_to_file("res://scenes/debug/world_map_test_menu.tscn")
 
 
 func _confirm_new_game() -> void:
