@@ -306,15 +306,15 @@ func _unhandled_input(event: InputEvent) -> void:
 			_mark_input_handled()
 			match endgame_scene:
 				"烈火天罚":
-					get_tree().change_scene_to_file("res://scenes/ending_fire_demo.tscn")
+					get_tree().change_scene_to_file("res://scenes/demos/ending_fire_demo.tscn")
 				"永恒乐园":
-					get_tree().change_scene_to_file("res://scenes/ending_paradise_demo.tscn")
+					get_tree().change_scene_to_file("res://scenes/demos/ending_paradise_demo.tscn")
 				_:
 					get_tree().change_scene_to_file("res://scenes/church_final_demo.tscn")
 		elif event.keycode == KEY_F2:
 			_mark_input_handled()
 			print("[NEREIS][DEBUG] Opening Eternal Paradise theater")
-			get_tree().change_scene_to_file("res://scenes/ending_paradise_demo.tscn")
+			get_tree().change_scene_to_file("res://scenes/demos/ending_paradise_demo.tscn")
 		elif event.keycode == KEY_F4:
 			_mark_input_handled()
 			print("[NEREIS][DEBUG] Opening ancient research theater")
@@ -326,7 +326,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.keycode == KEY_F8:
 			_mark_input_handled()
 			print("[NEREIS][DEBUG] Opening director ending theater")
-			get_tree().change_scene_to_file("res://scenes/ending_fire_demo.tscn")
+			get_tree().change_scene_to_file("res://scenes/demos/ending_fire_demo.tscn")
 		elif event.keycode == KEY_F7:
 			_mark_input_handled()
 			print("[NEREIS][DEBUG] Opening church final boss theater")

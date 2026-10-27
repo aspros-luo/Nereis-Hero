@@ -1216,9 +1216,9 @@ func get_resume_scene_path() -> String:
 		"church_final_demo":
 			return "res://scenes/church_final_demo.tscn"
 		"ending_paradise_demo":
-			return "res://scenes/ending_paradise_demo.tscn"
+			return "res://scenes/demos/ending_paradise_demo.tscn"
 		"ending_fire_demo":
-			return "res://scenes/ending_fire_demo.tscn"
+			return "res://scenes/demos/ending_fire_demo.tscn"
 		"hidden_bell_chamber":
 			return "res://scenes/hidden_bell_chamber.tscn"
 		"erased_third_street":

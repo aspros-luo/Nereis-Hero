@@ -4,7 +4,7 @@ This directory separates scene ownership from scene count. A region entry scene 
 
 ## Categories
 
-- `regions/`: primary A0–A13 region entry scenes.
+- `regions/`: primary A0–A13 campaign region entry scenes.
 - `hidden_regions/`: optional H01–H08/H09 region entry scenes.
 - `rooms/`: internal room scenes grouped by their owning region. Keep A2 R01–R06 here; do not merge them just to reduce scene count.
 - `terrain/`: reusable authored terrain scene resources.
@@ -18,4 +18,4 @@ Scene path moves must update every `res://` reference in `.tscn`, `.tres`, `.gd`
 
 ## Current migration status
 
-The first migration batch moved four standalone demo scenes into `demos/`. Their node trees and attached script paths were preserved. Primary and hidden region entry scenes remain at their existing paths until their full reference sets are updated atomically. A2's six runtime rooms and all 22 legacy A5 room scenes remain untouched.
+Two migration batches have moved six standalone demos and the two ending demonstration scenes into `demos/`. Their authored node trees and attached script paths are preserved; route and save/resume references were updated for the ending scenes. Primary and hidden region entry scenes remain at their existing paths pending a complete reference inventory. A2's six runtime rooms and all 22 legacy A5 room scenes remain untouched.
