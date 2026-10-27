@@ -96,9 +96,8 @@ func _ready() -> void:
 		# 主线内城入口来自大圣堂；持久记录该事实，供 H07 的镜街侧门判断是否允许回程。
 		WorldState.record_achievement("reached_A12_via_A10")
 
-	# Configure authored ledges before creating the floor so A2's pit ledges remain in the
-	# shared platform list used by the renderer; _configure_platforms() clears that list.
-	# 先登记平台，再建立地面：_configure_platforms() 会清空绘制列表，顺序错误会让坑底碰撞存在但平台不绘制。
+	# Configure legacy procedural platforms before the floor; authored A2 room scenes bypass this path.
+	# 旧区域的程序化平台先于地面登记；A2 手工房间场景不会进入这条路径。
 	_configure_platforms()
 	_create_floor()
 	_create_boundaries()

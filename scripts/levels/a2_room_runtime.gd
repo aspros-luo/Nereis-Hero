@@ -76,7 +76,7 @@ func _ready() -> void:
 
 ## Temporary on-screen room marker for manual map acceptance.
 ## 实机验收临时标识：始终显示当前 A2 房间编号与场景名称。
-func _spawn_room_debug_label() -> void:
+func _configure_room_debug_label() -> void:
 	# The debug overlay is a scene-authored child so room trees stay visible in the editor.
 	# 调试标记由房间场景预置；代码只更新当前房间文字。
 	var layer := get_node_or_null("RoomDebugOverlay") as CanvasLayer
