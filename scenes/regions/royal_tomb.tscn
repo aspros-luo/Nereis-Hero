@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a8.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
 
 [node name="RoyalTomb" type="Node2D"]
 script = ExtResource("1")
@@ -17,3 +18,11 @@ map_width = 2600.0
 position = Vector2(1150, 540)
 rest_id = "rest_A8"
 display_name = "王室墓碑"
+
+[node name="Anomaly_anomaly_erased_royal_name" parent="." instance=ExtResource("4")]
+position = Vector2(1530, 522)
+source_id = "anomaly_erased_royal_name"
+display_name = "石碑上被刮去的名字"
+description = "铭文并未磨损。\n\n凿痕是在石碑封存之后才留下的。"
+resonance_target = 55
+ancient_exposure_floor = 2

@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a4.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
 
 [node name="SewerReservoir" type="Node2D"]
 script = ExtResource("1")
@@ -17,3 +18,11 @@ map_width = 2600.0
 position = Vector2(2050, 540)
 rest_id = "rest_A4"
 display_name = "水库祭坛"
+
+[node name="Anomaly_anomaly_old_stone_layer" parent="." instance=ExtResource("4")]
+position = Vector2(850, 522)
+source_id = "anomaly_old_stone_layer"
+display_name = "管道下的石头"
+description = "管道被固定在另一种工艺切削的石层上。\n\n铺设管道的工人并不是这座大厅的建造者。"
+resonance_target = 36
+ancient_exposure_floor = 1

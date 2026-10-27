@@ -143,3 +143,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Removed the A3 branches that created these objects at hard-coded runtime coordinates.
 - Added callback binding for scene-authored resonance sources; this binds progression behavior only and does not instantiate or reposition clue nodes.
 - Static check: both nodes exist as direct scene children with the expected properties; the A3 spawn branches are absent. Godot import and interaction acceptance are still pending.
+
+
+### A4, A6 and A8 fixed anomaly clues moved into authored scenes
+
+- Added the fixed resonance clue instances to `sewer_reservoir.tscn`, `monastery_tower.tscn`, and `royal_tomb.tscn`, preserving their IDs, positions, resonance targets, and ancient-exposure thresholds.
+- Removed the matching region-specific clue creation branches from `greybox_world_region.gd`. The shared authored-source callback binder connects them to progression handling.
+- Static checks confirm each source is represented in its region scene and no longer spawned by its former region branch. Godot editor import and interaction acceptance remain pending.

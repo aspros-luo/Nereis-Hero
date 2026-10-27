@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource path="res://scripts/levels/greybox_world_region.gd" type="Script" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/terrain/terrain_a6.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/world/resonance_source_clue.tscn" id="4"]
 
 [node name="MonasteryTower" type="Node2D"]
 script = ExtResource("1")
@@ -17,3 +18,11 @@ map_width = 2600.0
 position = Vector2(1300, 540)
 rest_id = "rest_A6"
 display_name = "回廊歇脚处"
+
+[node name="Anomaly_anomaly_silent_bell_window" parent="." instance=ExtResource("4")]
+position = Vector2(1125, 278)
+source_id = "anomaly_silent_bell_window"
+display_name = "无声之窗"
+description = "钟塔窗外没有景色。\n\n它的影子却落在一面并不存在的墙上。"
+resonance_target = 42
+ancient_exposure_floor = 1

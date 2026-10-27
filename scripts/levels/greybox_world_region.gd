@@ -1882,18 +1882,7 @@ func _spawn_region_sources() -> void:
 				18
 			)
 
-		"A4":
-			_spawn_source(
-				Vector2(850, floor_y - 18.0),
-				"anomaly_old_stone_layer",
-				"管道下的石头",
-				"管道被固定在另一种工艺切削的石层上。\n\n铺设管道的工人并不是这座大厅的建造者。",
-				36,
-				0,
-				0,
-				"",
-				1
-			)
+
 
 		"A5":
 			var source_position := Vector2(1100.0, floor_y - 18.0)
@@ -1908,18 +1897,7 @@ func _spawn_region_sources() -> void:
 				"战场报告的日期比战役晚了三天。\n\n尸体早已被摆成面向堡垒的姿势，仿佛有人专为目击者修整过现场。\n\n最后一行命令幸存者将这场屠杀称为信仰的奇迹。",
 				46
 			)
-		"A6":
-			_spawn_source(
-				Vector2(1125, 278),
-				"anomaly_silent_bell_window",
-				"无声之窗",
-				"钟塔窗外没有景色。\n\n它的影子却落在一面并不存在的墙上。",
-				42,
-				0,
-				0,
-				"",
-				1
-			)
+
 		"A7":
 			_spawn_source(
 				Vector2(1070, floor_y - 18.0),
@@ -1928,18 +1906,7 @@ func _spawn_region_sources() -> void:
 				"账册分为姓名、判决与转送三栏。\n\n转送一栏写得满满当当，处决一栏却几乎空白。\n\n所有目的地都被写成了“观测区”。",
 				52
 			)
-		"A8":
-			_spawn_source(
-				Vector2(1530, floor_y - 18.0),
-				"anomaly_erased_royal_name",
-				"石碑上被刮去的名字",
-				"铭文并未磨损。\n\n凿痕是在石碑封存之后才留下的。",
-				55,
-				0,
-				0,
-				"",
-				2
-			)
+
 
 		"A9":
 			_spawn_source(
