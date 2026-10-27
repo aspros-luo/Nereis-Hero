@@ -127,3 +127,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - `_spawn_drop_transition()` now reports `AUTHORED_DROP_MISSING` and returns if the fixed drop trigger is absent; it no longer instantiates a transition node.
 - This intentionally fails loudly for an incomplete room scene rather than hiding an editor-authoring defect with runtime node creation.
 - The six production room scenes were previously statically checked to contain every door/marker and the R01/R03 drop triggers; this pass changes only the missing-node behavior. Local Godot import and runtime acceptance remain pending.
+
+
+### A2 fixed door and drop geometry made read-only at runtime
+
+- `_spawn_exit_door_at_marker()` no longer moves an authored door to the marker. It validates that the saved scene position and transformed marker agree, then applies destination and progression properties only.
+- `_spawn_drop_transition()` no longer changes the authored trigger position, collision size, collision layer/mask, or monitoring flag. It validates those scene-authored properties against the route contract and only binds the transition callback.
+- Mismatches now produce explicit `EXIT_POSITION_MISMATCH`, `DROP_POSITION_MISMATCH`, `DROP_SIZE_MISMATCH`, or `DROP_MONITOR_CONTRACT` errors instead of silently correcting scene layout at runtime.
+- This is source-level validation only; the local Godot editor/runtime still needs to confirm the authored R01 scaled marker conversion and both drop areas behave as expected.

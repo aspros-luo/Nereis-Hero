@@ -194,9 +194,11 @@ func _spawn_exit_door_at_marker(
 		push_error("[NEREIS][A2][ROOM][AUTHORED_EXIT_MISSING] room=%s expected=Door_%s" % [room_id, marker_name])
 		return
 
-	# Fixed exits are instances in the .tscn scene tree. Runtime only applies their
-	# destination and progression contract; it does not create duplicate Area2D nodes.
-	authored_door.position = marker_position
+	# Fixed exit placement belongs to the scene. Runtime validates the authored anchor,
+	# then applies only destination and progression state.
+	if authored_door.position.distance_to(marker_position) > 1.0:
+		push_error("[NEREIS][A2][ROOM][EXIT_POSITION_MISMATCH] room=%s door=%s authored=%s marker=%s" % [room_id, authored_door.name, str(authored_door.position), str(marker_position)])
+		return
 	authored_door.set("prompt_text", prompt_text)
 	authored_door.set("enabled", enabled)
 	authored_door.set("unlock_once_flag_id", unlock_once_flag_id)
@@ -333,24 +335,26 @@ func _spawn_drop_transition(
 	target_spawn_side: String
 ) -> void:
 	var target_scene := _scene_path_for_room(target_room_id)
-	# Fixed A2 drop areas are authored in the room .tscn files so their collision
-	# extents can be inspected and adjusted in the Godot editor. Keep a fallback for
-	# transitional/test rooms that do not yet contain an authored Area2D.
+	# The trigger and its collision geometry are authored in the room .tscn.
+	# Runtime validates that editor-authored geometry still matches the route contract.
 	var area := get_node_or_null(transition_name) as Area2D
 	if area == null:
 		push_error("[NEREIS][A2][ROOM][AUTHORED_DROP_MISSING] room=%s expected=%s" % [room_id, transition_name])
 		return
-	area.position = Vector2(x, y)
-	area.collision_layer = 0
-	area.collision_mask = 1
-	area.monitoring = true
-	var shape := area.get_node("CollisionShape2D") as CollisionShape2D
-	var rectangle := shape.shape as RectangleShape2D
-	if rectangle == null:
+	if area.position.distance_to(Vector2(x, y)) > 1.0:
+		push_error("[NEREIS][A2][ROOM][DROP_POSITION_MISMATCH] room=%s area=%s authored=%s expected=%s" % [room_id, transition_name, str(area.position), str(Vector2(x, y))])
+		return
+	var shape := area.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if shape == null or not (shape.shape is RectangleShape2D):
 		push_error("[NEREIS][A2][ROOM][DROP_SHAPE_INVALID] room=%s area=%s" % [room_id, transition_name])
 		return
-	rectangle.size = Vector2(width, height)
-	shape.position = Vector2.ZERO
+	var rectangle := shape.shape as RectangleShape2D
+	if not is_equal_approx(rectangle.size.x, width) or not is_equal_approx(rectangle.size.y, height):
+		push_error("[NEREIS][A2][ROOM][DROP_SIZE_MISMATCH] room=%s area=%s authored=%s expected=%s" % [room_id, transition_name, str(rectangle.size), str(Vector2(width, height))])
+		return
+	if area.collision_layer != 0 or area.collision_mask != 1 or not area.monitoring:
+		push_error("[NEREIS][A2][ROOM][DROP_MONITOR_CONTRACT] room=%s area=%s" % [room_id, transition_name])
+		return
 	var callback := _on_drop_transition_body_entered.bind(target_scene, target_spawn_side)
 	if not area.body_entered.is_connected(callback):
 		area.body_entered.connect(callback)
