@@ -6,7 +6,6 @@ var hero: CharacterBody2D
 var camera: Camera2D
 var narrative: CanvasLayer
 var hud: CanvasLayer
-var checkpoint: Area2D
 var mite: Node2D
 var narrative_audio: Node
 var mite_house_door: Area2D
@@ -31,19 +30,25 @@ func _ready() -> void:
 	world_event_director = $WorldEventDirector
 	world_event_director.setup(WorldState, self)
 	print("[NEREIS][VILLAGE] Entered Village Hub route=%s spawn_side=%s" % [WorldState.selected_route, spawn_side])
-	WorldState.set_checkpoint(Vector2(360, 520))
-	# Each village return route uses a safe landing zone clear of unrelated interaction prompts.
-	# 村庄各条回程路线使用独立安全落点，避免刚切图就显示无关的 E 交互提示。
-	# Spawn after the watergate outside the well gate, tavern, and restoration-camp interaction radii.
-	var spawn_x := 2420.0 if spawn_side == "backhill_return" else (1850.0 if spawn_side in ["well_exit", "cliff_cave_return"] else (350.0 if spawn_side == "city_cut_return" else (2630.0 if spawn_side == "north_gate" else (530.0 if spawn_side == "mite_house_return" else 260.0))))
+	var checkpoint_node := get_node_or_null("VillageCheckpoint") as Node2D
+	if checkpoint_node == null:
+		push_error("[NEREIS][A1][VILLAGE][AUTHORED_CHECKPOINT_MISSING]")
+	else:
+		WorldState.set_checkpoint(checkpoint_node.global_position)
+	# Entry anchors are authored Marker2D nodes; runtime selects one by incoming route.
+	# 入口落点由场景中的 Marker2D 维护；运行时只按回程方向选择锚点。
 	hero = $Hero
 	camera = $Hero/HeroCamera
 	camera.limit_left = 0
 	camera.limit_top = 0
 	camera.limit_right = 3000
 	camera.limit_bottom = 720
-	hero.position = Vector2(spawn_x, floor_y)
-	checkpoint = $VillageCheckpoint
+	var spawn_marker_name := _spawn_marker_name_for_side(spawn_side)
+	var spawn_marker := get_node_or_null("SpawnMarkers/" + spawn_marker_name) as Marker2D
+	if spawn_marker == null:
+		push_error("[NEREIS][A1][VILLAGE][SPAWN_MARKER_MISSING] side=%s marker=%s" % [spawn_side, spawn_marker_name])
+	else:
+		hero.position = spawn_marker.position
 	mite = $Mite
 	mite_house_door = $MiteHouseDoor
 	_configure_static_village_nodes()
@@ -59,6 +64,22 @@ func _ready() -> void:
 	_spawn_progression_npcs()
 	# The newly revealed cave is presented by the changed world geometry and its entrance prompt, not a forced exposition panel.
 	_refresh_world_visual_states()
+
+func _spawn_marker_name_for_side(spawn_side: String) -> String:
+	match spawn_side:
+		"backhill_return":
+			return "BackhillReturn"
+		"well_exit", "cliff_cave_return":
+			return "WellSideReturn"
+		"city_cut_return":
+			return "CityCutReturn"
+		"north_gate":
+			return "NorthGateEntry"
+		"mite_house_return":
+			return "MiteHouseReturn"
+		_:
+			return "VillageStart"
+
 
 func _configure_static_village_nodes() -> void:
 	var mite_missed := WorldState.mite_connection_missed

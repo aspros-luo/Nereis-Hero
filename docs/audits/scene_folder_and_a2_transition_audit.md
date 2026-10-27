@@ -333,3 +333,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Checked eight priority scripts for referenced resource paths; no missing paths remain. Fixed three stale paths earlier in this audit: A0 debug menu, A1 H01 hidden well, and A1 H09 cliff-cave scene.
 - A1.1 Narrative/HUD and A2 room debug overlays are now editor-visible scene instances; scripts configure them instead of instantiating them.
 - Static acceptance is complete for resource accounting, resource existence, explicit collision-shape assignments, and authored A2 exit/drop anchors. Godot 4.6.1 import/parser/playable acceptance is not complete because this environment has no Godot executable; combat, deaths, saves, and traversal still require local runtime confirmation.
+
+
+### A1 spawn and checkpoint positions are scene-owned — 2026-10-27
+
+- Added six named Marker2D entry anchors to the village scene for the default start, north gate, backhill return, well/cliff-cave return, drainage return, and Mite-house return. village_hub.gd selects an authored marker by incoming spawn side instead of embedding x coordinates.
+- Village checkpoint initialization now reads the authored VillageCheckpoint node's global position instead of duplicating (360, 520) in code.
+- Added EntryCliffReturn to the backhill scene and switched the cliff-return spawn to that marker. Removed the redundant hard-coded Hero reposition from the cliff scene script; its default start remains authored on the Hero node.
+- Static scene/resource checks follow; local runtime validation remains pending.

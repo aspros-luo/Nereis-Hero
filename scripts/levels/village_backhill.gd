@@ -16,7 +16,11 @@ func _ready() -> void:
 	var spawn_side := WorldState.pending_region_spawn_side
 	WorldState.pending_region_spawn_side = "west"
 	if spawn_side == "cliff_return":
-		hero.position = Vector2(1150, 540)
+		var return_marker := get_node_or_null("EntryCliffReturn") as Marker2D
+		if return_marker == null:
+			push_error("[NEREIS][A1][BACKHILL][SPAWN_MARKER_MISSING] EntryCliffReturn")
+		else:
+			hero.position = return_marker.position
 	world_event_director.setup(WorldState, self)
 	WorldState.set_location("village_backhill")
 	world_event_director.dispatch("region_entered", {"region": "A1", "location": "village_backhill"})

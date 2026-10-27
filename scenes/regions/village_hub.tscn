@@ -646,6 +646,26 @@ position = Vector2(-10, 90)
 polygon = PackedVector2Array(0, 0, 20, 0, 20, 70, 0, 70)
 color = Color(0.07, 0.06, 0.08, 1)
 
+[node name="SpawnMarkers" type="Node2D" parent="."]
+
+[node name="VillageStart" type="Marker2D" parent="SpawnMarkers"]
+position = Vector2(260, 520)
+
+[node name="CityCutReturn" type="Marker2D" parent="SpawnMarkers"]
+position = Vector2(350, 520)
+
+[node name="MiteHouseReturn" type="Marker2D" parent="SpawnMarkers"]
+position = Vector2(530, 520)
+
+[node name="WellSideReturn" type="Marker2D" parent="SpawnMarkers"]
+position = Vector2(1850, 520)
+
+[node name="BackhillReturn" type="Marker2D" parent="SpawnMarkers"]
+position = Vector2(2420, 520)
+
+[node name="NorthGateEntry" type="Marker2D" parent="SpawnMarkers"]
+position = Vector2(2630, 520)
+
 [node name="Hero" parent="." instance=ExtResource("5")]
 position = Vector2(260, 520)
 

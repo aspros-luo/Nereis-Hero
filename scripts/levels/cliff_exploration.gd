@@ -14,7 +14,6 @@ func _ready() -> void:
 	get_tree().paused = false
 	WorldState.input_locked = false
 	WorldState.pending_region_spawn_side = "west"
-	hero.position = Vector2(240, 540)
 	WorldState.set_location("cliff_exploration")
 	backhill_return_door.interacted.connect(_on_backhill_return_interacted)
 	for poi_name in ["ObservationPOI", "WeatheredInscriptionPOI", "CollapsedLookoutPOI"]:
