@@ -48,6 +48,14 @@ The following runtime, route-data, and acceptance consumers were updated to the 
 
 The path update covers the central runtime scene routing, world-state region mapping, boot/prologue/village/route transitions, A2 room exits, the contract-room scene map, world topology, acceptance harness, static wiring checks, A2 geometry contract, A8 spatial contract, and the world acceptance ledger. A local Godot import is still required to catch parser/resource errors.
 
+## Static migration check
+
+- Git tree: all 14 A0–A13 entry scenes exist under `scenes/regions/`; none of the 14 old root-level entry paths remain.
+- Content-level checks found no stale entry paths in the central runtime routing/state files, updated route scripts, topology and acceptance contracts, A1/A2/A8 validators, all 14 migrated entry scenes, and all 62 room scenes.
+- Serialized target-scene metadata in `scenes/mite_house.tscn` and `scenes/royal_tomb_boss.tscn` was also updated.
+- Preservation check: all six A2 runtime rooms and all 22 legacy A5 room scenes remain present.
+- Limitation: GitHub-only checks cannot run Godot import/parser/runtime tests. Local editor and traversal acceptance remains outstanding.
+
 ## Non-negotiable preservation
 
 - Keep A2 R01–R06 as six separate authored room scenes.
