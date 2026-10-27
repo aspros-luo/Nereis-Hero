@@ -830,7 +830,7 @@ def main() -> int:
     if 2840.0 - 2630.0 <= 110.0:
         errors.append("C02: A2 return spawn overlaps the North Gate POI interaction radius.")
     require(village_route_script, 'if "village_defense_survived" in WorldState.achievement_flags:', "C02 defense flag gates A2 entry", errors)
-    require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/village_defense_demo.tscn")', "C02 first North Gate interaction starts defense", errors)
+    require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/demos/village_defense_demo.tscn")', "C02 first North Gate interaction starts defense", errors)
     require(village_route_script, 'WorldState.pending_region_spawn_side = "west"', "C02 A1-to-A2 spawn side", errors)
     require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/ash_forest.tscn")', "C02 A1-to-A2 transition", errors)
     require(region_script, '"res://scenes/village_hub.tscn", "north_gate"', "C02 A2-to-A1 reverse transition", errors)

@@ -280,7 +280,7 @@ func _enter_village_location(location_id: String) -> void:
 		else:
 			WorldState.set_location("village")
 			print("[NEREIS][VILLAGE] Triggering village defense chapter")
-			SceneTransition.fade_to_scene("res://scenes/village_defense_demo.tscn")
+			SceneTransition.fade_to_scene("res://scenes/demos/village_defense_demo.tscn")
 	elif location_id == "city_cut":
 		if "village_defense_survived" in WorldState.achievement_flags:
 			WorldState.pending_region_spawn_side = "village_entry"
@@ -322,7 +322,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.keycode == KEY_F5:
 			_mark_input_handled()
 			print("[NEREIS][DEBUG] Opening village defense theater")
-			get_tree().change_scene_to_file("res://scenes/village_defense_demo.tscn")
+			get_tree().change_scene_to_file("res://scenes/demos/village_defense_demo.tscn")
 		elif event.keycode == KEY_F8:
 			_mark_input_handled()
 			print("[NEREIS][DEBUG] Opening director ending theater")
