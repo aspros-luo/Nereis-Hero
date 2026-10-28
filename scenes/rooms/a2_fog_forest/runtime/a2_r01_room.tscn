@@ -54,11 +54,6 @@ position = Vector2(0, 700)
 color = Color(0.19, 0.23, 0.18, 1)
 polygon = PackedVector2Array(0, 0, 650, -38, 650, 35, 0, 72)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/MainPath_West"]
-position = Vector2(325, 18)
-shape = SubResource("BoundaryShape")
-disabled = true
-
 [node name="MainPathCollision" type="CollisionPolygon2D" parent="Terrain/MainPath_West"]
 polygon = PackedVector2Array(0, 0, 650, -38, 650, 42, 0, 78)
 
