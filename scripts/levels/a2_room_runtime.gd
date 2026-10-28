@@ -173,7 +173,9 @@ func _room_marker_position(marker_name: String) -> Vector2:
 
 func _spawn_position_for_side(side: String) -> Vector2:
 	if side == "a2_checkpoint":
-		return WorldState.checkpoint_position
+		# Checkpoints are persisted in global coordinates; room roots may be scaled/offset.
+		# 检查点以全局坐标保存；独立房间根节点可能有缩放与偏移，必须转换回本地坐标。
+		return to_local(WorldState.checkpoint_position)
 	var marker_name := "EntryWest"
 	match room_id:
 		"A2-R01":

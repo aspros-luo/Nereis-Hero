@@ -424,3 +424,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - A source audit found `greybox_world_region.gd::_spawn_hero()` connected `_on_hero_defeated`, but the shared script no longer defined that method. This left a missing callback reference and meant the intended default death-recovery delegation was not explicit.
 - Restored the base callback. It synchronously clears `hero.defer_death_recovery` so Hero's existing fade/checkpoint recovery runs for ordinary regions. A2's override retains cross-room checkpoint transitions and re-arms deferred recovery on each defeat before deciding whether to change rooms or delegate to Hero.
 - Static call-site review only; Godot 4.6.1 parser/runtime validation is required to confirm signal binding, same-room respawn, cross-room respawn, and repeated deaths.
+
+
+### A2 transformed-room checkpoint coordinate correction — 2026-10-28
+
+- Checkpoint positions are saved from `hero.global_position`, but `a2_checkpoint` previously returned that global coordinate directly to `_spawn_hero()`, which assigns `hero.position` in the target room's local space.
+- R04/R05/R06 use transformed scene roots, so a cross-room death recovery could land at an offset position. The checkpoint spawn now converts the persisted global point through the target room root's `to_local()` before assigning local Hero position.
+- Source-level coordinate-contract correction only; test repeated death recovery from transformed R04/R05/R06 rooms in Godot 4.6.1.
