@@ -2912,6 +2912,44 @@ func _spawn_exit_door(
 	queue_redraw()
 	door.interacted.connect(_on_exit_interacted.bind(target_location, target_scene, spawn_side))
 
+
+func _atmosphere_color() -> Color:
+	match region_id:
+		"A0":
+			return Color(0.20, 0.22, 0.25, 1.0)
+		"A1":
+			return Color(0.42, 0.48, 0.38, 1.0)
+		"A2":
+			return Color(0.16, 0.28, 0.23, 1.0)
+		"A3":
+			return Color(0.35, 0.38, 0.43, 1.0)
+		"A4":
+			return Color(0.16, 0.30, 0.34, 1.0)
+		"A5":
+			return Color(0.38, 0.25, 0.20, 1.0)
+		"A6", "A8", "A9":
+			return Color(0.29, 0.25, 0.34, 1.0)
+		"A7":
+			return Color(0.24, 0.25, 0.28, 1.0)
+		"A10", "A12":
+			return Color(0.36, 0.33, 0.28, 1.0)
+		"A11", "A13":
+			return Color(0.20, 0.17, 0.28, 1.0)
+		_:
+			return Color(0.25, 0.29, 0.30, 1.0)
+
+
+func _on_exit_interacted(target_location: String, target_scene: String, spawn_side: String) -> void:
+	if target_scene.is_empty() or not ResourceLoader.exists(target_scene):
+		push_error("[NEREIS][EXIT][TARGET_SCENE_MISSING] location=%s scene=%s" % [target_location, target_scene])
+		return
+	WorldState.pending_region_spawn_side = spawn_side
+	WorldState.set_location(target_location)
+	if _region_id_for_location(target_location) == "A2":
+		WorldState.current_a2_room_scene_path = target_scene
+	SceneTransition.fade_to_scene(target_scene)
+
+
 # World map visuals are authored as nodes in .tscn scenes.
 # Keep this method intentionally empty; only genuinely state-driven special effects belong in scripts.
 func _draw() -> void:
