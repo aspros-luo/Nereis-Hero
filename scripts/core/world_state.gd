@@ -1212,7 +1212,7 @@ func get_resume_scene_path() -> String:
 		"terminal_anomaly":
 			return "res://scenes/regions/terminal_anomaly.tscn"
 		"cliff_cave_experiment":
-			return "res://scenes/cliff_cave_experiment.tscn"
+			return "res://scenes/demos/cliff_cave_experiment.tscn"
 		"church_final_demo":
 			return "res://scenes/demos/church_final_demo.tscn"
 		"ending_paradise_demo":

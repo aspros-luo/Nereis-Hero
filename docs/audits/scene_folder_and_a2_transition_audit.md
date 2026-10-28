@@ -379,3 +379,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - A full resource-string pass across the 13 A0/A1/A2 priority scenes found one stale runtime destination property in `village_hub.tscn`: `ResonanceWellGate.target_scene_path` still pointed to the removed `scenes/hidden_well.tscn` path despite the earlier path correction in the shared script.
 - Corrected the authored instance property to `res://scenes/hidden_regions/hidden_well.tscn`, confirmed that target exists in the branch tree.
 - All 13 priority scenes currently have consistent `load_steps` counts and every explicit CollisionShape2D has an assigned shape resource. This remains source-level validation, not Godot import/runtime validation.
+
+
+### A1 H09 location-to-scene fallback correction — 2026-10-28
+
+- The priority-script resource scan found one remaining stale destination in `WorldState`'s location-to-scene mapping: `cliff_cave_experiment` still resolved to `res://scenes/cliff_cave_experiment.tscn`.
+- Corrected it to the existing `res://scenes/demos/cliff_cave_experiment.tscn`, matching the A1 village route and preventing fallback-based scene resolution from selecting a missing resource.
+- This path check is static; H09 entry/return and saved-location resolution remain part of runtime acceptance.
