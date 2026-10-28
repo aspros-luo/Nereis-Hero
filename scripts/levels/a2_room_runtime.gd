@@ -96,7 +96,7 @@ func _validate_authored_room_structure() -> bool:
 			push_error("[NEREIS][A2][ROOM][AUTHORED_BOUNDARY_SHAPE_MISSING] room=%s node=%s" % [room_id, boundary_name])
 			return false
 	for marker_name in _required_spawn_markers_for_room():
-		if get_node_or_null("Terrain/RoomMarkers/" + marker_name) is not Marker2D:
+		if not (get_node_or_null("Terrain/RoomMarkers/" + marker_name) is Marker2D):
 			push_error("[NEREIS][A2][ROOM][SPAWN_MARKER_MISSING] room=%s marker=%s" % [room_id, marker_name])
 			return false
 	if room_id == "A2-R04":
