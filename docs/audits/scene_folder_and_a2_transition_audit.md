@@ -400,3 +400,9 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Replaced the hard-coded camera right limit of 1500 with `CameraBounds/RightEdge` in `prologue_exterior.tscn`.
 - The forced-loss encounter still blocks bypassing the executioner and transitions after the existing story timeout; this change only makes the fixed world/camera bounds editable in the scene tree.
 - Static check only; local runtime and cliff/boss encounter acceptance remain pending.
+
+
+### A0 exterior obsolete constants removed — 2026-10-28
+
+- Follow-up inspection found the previous marker migration had left three now-unused constants (`CLIFF_X`, `CLIFF_APPROACH_LIMIT`, and `LEVEL_WIDTH`) in `prologue_exterior.gd`.
+- Removed them; cliff clamp and camera right edge now use the scene-authored Marker2D nodes exclusively.

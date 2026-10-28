@@ -1,9 +1,6 @@
 extends Node2D
 
 
-const CLIFF_X := 1120.0
-const LEVEL_WIDTH := 1500.0
-const CLIFF_APPROACH_LIMIT := CLIFF_X - 26.0
 const FORCED_DEFEAT_SECONDS := 12.0
 @onready var hero: CharacterBody2D = $Hero
 @onready var boss: CharacterBody2D = $A0_ChurchExecutioner
