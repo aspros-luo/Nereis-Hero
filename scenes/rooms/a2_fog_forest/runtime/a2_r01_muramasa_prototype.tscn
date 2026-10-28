@@ -1,0 +1,186 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/a2_room_runtime.gd" id="runtime_script"]
+[ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="door_scene"]
+[ext_resource type="PackedScene" path="res://scenes/ui/room_debug_overlay.tscn" id="debug_overlay_scene"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="hero_scene"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud_scene"]
+[ext_resource type="PackedScene" path="res://scenes/core/narrative_manager.tscn" id="narrative_scene"]
+
+[sub_resource type="RectangleShape2D" id="BoundaryShape"]
+size = Vector2(32, 1200)
+
+[sub_resource type="RectangleShape2D" id="DropR01ToR04Shape"]
+size = Vector2(32, 120)
+
+[node name="A2R01MuramasaPrototype" type="Node2D"]
+script = ExtResource("runtime_script")
+region_id = "A2"
+location_id = "ash_forest"
+region_title = "林间遗迹 · 横向探索原型"
+map_width = 1800.0
+floor_y = 700.0
+room_height = 1150.0
+room_id = "A2-R01"
+enable_region_encounters = false
+
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="FarBackground" type="Polygon2D" parent="Terrain"]
+z_index = -30
+color = Color(0.025, 0.055, 0.05, 1)
+polygon = PackedVector2Array(0, 0, 1800, 0, 1800, 1150, 0, 1150)
+
+[node name="DistantForest" type="Polygon2D" parent="Terrain"]
+z_index = -20
+color = Color(0.075, 0.14, 0.105, 1)
+polygon = PackedVector2Array(0, 510, 130, 300, 250, 430, 390, 245, 520, 390, 660, 280, 800, 430, 940, 255, 1080, 400, 1220, 260, 1360, 420, 1510, 290, 1660, 410, 1800, 300, 1800, 850, 0, 850)
+
+[node name="RuinsSilhouette" type="Polygon2D" parent="Terrain"]
+z_index = -15
+color = Color(0.11, 0.16, 0.12, 1)
+polygon = PackedVector2Array(1120, 510, 1140, 370, 1180, 370, 1200, 490, 1260, 490, 1280, 330, 1320, 330, 1340, 500, 1410, 500, 1430, 390, 1470, 390, 1490, 510, 1580, 510, 1600, 430, 1640, 430, 1660, 520, 1800, 520, 1800, 700, 1120, 700)
+
+[node name="MistBand" type="Polygon2D" parent="Terrain"]
+z_index = -5
+color = Color(0.47, 0.63, 0.53, 0.10)
+polygon = PackedVector2Array(0, 570, 300, 545, 600, 575, 900, 540, 1200, 570, 1500, 535, 1800, 560, 1800, 650, 1500, 675, 1200, 650, 900, 675, 600, 650, 300, 675, 0, 650)
+
+; One continuous, editor-visible main route. Keep collision simple and readable.
+[node name="MainRoute" type="StaticBody2D" parent="Terrain"]
+position = Vector2(0, 700)
+
+[node name="GroundVisual" type="Polygon2D" parent="Terrain/MainRoute"]
+color = Color(0.19, 0.23, 0.17, 1)
+polygon = PackedVector2Array(0, 0, 1800, 0, 1800, 120, 0, 120)
+
+[node name="GroundCollision" type="CollisionPolygon2D" parent="Terrain/MainRoute"]
+polygon = PackedVector2Array(0, 0, 1800, 0, 1800, 120, 0, 120)
+
+[node name="GroundEdge" type="Line2D" parent="Terrain/MainRoute"]
+points = PackedVector2Array(0, 0, 400, -3, 820, 2, 1200, -2, 1500, 1, 1800, 0)
+width = 5.0
+default_color = Color(0.55, 0.62, 0.43, 1)
+
+; Optional raised path: separate one-way bodies let Down + Jump drop one platform at a time.
+[node name="UpperBranch_West" type="StaticBody2D" parent="Terrain"]
+position = Vector2(420, 570)
+
+[node name="Visual" type="Polygon2D" parent="Terrain/UpperBranch_West"]
+color = Color(0.17, 0.24, 0.15, 1)
+polygon = PackedVector2Array(0, 0, 260, -8, 300, 12, 290, 34, 10, 38)
+
+[node name="Collision" type="CollisionPolygon2D" parent="Terrain/UpperBranch_West"]
+one_way_collision = true
+polygon = PackedVector2Array(0, 0, 260, -8, 300, 12, 290, 34, 10, 38)
+
+[node name="UpperBranch_East" type="StaticBody2D" parent="Terrain"]
+position = Vector2(800, 455)
+
+[node name="Visual" type="Polygon2D" parent="Terrain/UpperBranch_East"]
+color = Color(0.17, 0.24, 0.15, 1)
+polygon = PackedVector2Array(0, 0, 290, 0, 310, 20, 300, 38, 10, 38)
+
+[node name="Collision" type="CollisionPolygon2D" parent="Terrain/UpperBranch_East"]
+one_way_collision = true
+polygon = PackedVector2Array(0, 0, 290, 0, 310, 20, 300, 38, 10, 38)
+
+[node name="CanopyShelf" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1180, 355)
+
+[node name="Visual" type="Polygon2D" parent="Terrain/CanopyShelf"]
+color = Color(0.18, 0.25, 0.15, 1)
+polygon = PackedVector2Array(0, 0, 460, 0, 460, 28, 0, 28)
+
+[node name="Collision" type="CollisionPolygon2D" parent="Terrain/CanopyShelf"]
+one_way_collision = true
+polygon = PackedVector2Array(0, 0, 460, 0, 460, 28, 0, 28)
+
+[node name="CentralTree" type="Polygon2D" parent="Terrain"]
+z_index = 1
+color = Color(0.055, 0.105, 0.075, 0.92)
+polygon = PackedVector2Array(690, 420, 740, 230, 780, 190, 820, 220, 850, 420, 820, 460, 790, 360, 760, 465, 720, 460)
+
+[node name="ForegroundRoots" type="Polygon2D" parent="Terrain"]
+z_index = 5
+color = Color(0.045, 0.085, 0.06, 0.88)
+polygon = PackedVector2Array(0, 1150, 0, 1040, 70, 1075, 130, 1010, 185, 1080, 245, 1035, 300, 1150)
+
+[node name="RoomMarkers" type="Node2D" parent="Terrain"]
+
+[node name="EntryWest" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(120, 700)
+
+[node name="EntryCanopyReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(1510, 355)
+
+[node name="EntryTombReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(1640, 700)
+
+[node name="ExitVillage" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(80, 700)
+
+[node name="ExitBellTomb" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(1640, 700)
+
+[node name="ExitCanopy" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(1510, 355)
+
+[node name="DropToR04" type="Marker2D" parent="Terrain/RoomMarkers"]
+position = Vector2(1300, 860)
+
+[node name="FootingDesignMarkers" type="Node2D" parent="Terrain"]
+
+[node name="Footing_01_MainRoute" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
+position = Vector2(600, 700)
+
+[node name="Footing_02_UpperBranch" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
+position = Vector2(950, 455)
+
+[node name="Footing_03_Canopy" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
+position = Vector2(1400, 355)
+
+[node name="Footing_04_Waterfall" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
+position = Vector2(1300, 860)
+
+[node name="Footing_05_EastExit" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
+position = Vector2(1640, 700)
+
+[node name="RegionBoundary_0" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RegionBoundary_0"]
+position = Vector2(-20, 575)
+shape = SubResource("BoundaryShape")
+
+[node name="RegionBoundary_1" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RegionBoundary_1"]
+position = Vector2(1820, 575)
+shape = SubResource("BoundaryShape")
+
+[node name="Hero" parent="." instance=ExtResource("hero_scene")]
+position = Vector2(120, 700)
+
+[node name="Narrative" parent="." instance=ExtResource("narrative_scene")]
+
+[node name="HUD" parent="." instance=ExtResource("hud_scene")]
+
+[node name="Drop_R01_to_R04" type="Area2D" parent="."]
+position = Vector2(1300, 860)
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Drop_R01_to_R04"]
+shape = SubResource("DropR01ToR04Shape")
+
+[node name="Door_ExitVillage" parent="." instance=ExtResource("door_scene")]
+position = Vector2(80, 700)
+
+[node name="Door_ExitBellTomb" parent="." instance=ExtResource("door_scene")]
+position = Vector2(1640, 700)
+
+[node name="Door_ExitCanopy" parent="." instance=ExtResource("door_scene")]
+position = Vector2(1510, 355)
+
+[node name="RoomDebugOverlay" parent="." instance=ExtResource("debug_overlay_scene")]
