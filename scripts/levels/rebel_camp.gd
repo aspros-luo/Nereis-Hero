@@ -24,26 +24,26 @@ func _ready() -> void:
 	)
 
 func _spawn_npcs() -> void:
-    _spawn_npc(
-        Vector2(780, 520),
-        "restoration_captain",
-        "RESTORATION CAPTAIN",
-        "The captain studies your church-marked blade.\n\n\"We are not here because we are righteous.\"\n\n\"We are here because the throne is ours.\"\n\nThere is no pride in the last sentence."
-    )
+	_spawn_npc(
+		Vector2(780, 520),
+		"restoration_captain",
+		"RESTORATION CAPTAIN",
+		"The captain studies your church-marked blade.\n\n\"We are not here because we are righteous.\"\n\n\"We are here because the throne is ours.\"\n\nThere is no pride in the last sentence."
+	)
 
-    _spawn_npc(
-        Vector2(1120, 520),
-        "rebel_quartermaster",
-        "QUARTERMASTER",
-        "The quartermaster counts bandages twice.\n\n\"If the Kingdom returns, food still has to be bought.\"\n\n\"People forget that when they start talking about crowns.\""
-    )
+	_spawn_npc(
+		Vector2(1120, 520),
+		"rebel_quartermaster",
+		"QUARTERMASTER",
+		"The quartermaster counts bandages twice.\n\n\"If the Kingdom returns, food still has to be bought.\"\n\n\"People forget that when they start talking about crowns.\""
+	)
 
-    _spawn_npc(
-        Vector2(1450, 520),
-        "royal_survivor",
-        "ROYAL SURVIVOR",
-        "The old soldier never looks toward the campfire.\n\n\"The Church taught us obedience.\"\n\n\"The rebels will teach us loyalty.\"\n\nHe spits into the dirt."
-    )
+	_spawn_npc(
+		Vector2(1450, 520),
+		"royal_survivor",
+		"ROYAL SURVIVOR",
+		"The old soldier never looks toward the campfire.\n\n\"The Church taught us obedience.\"\n\n\"The rebels will teach us loyalty.\"\n\nHe spits into the dirt."
+	)
 
 func _spawn_npc(position: Vector2, npc_id: String, display_name: String, dialogue: String) -> void:
 	var npc := ROUTE_NPC_SCENE.instantiate() as Node2D
@@ -57,23 +57,23 @@ func _spawn_npc(position: Vector2, npc_id: String, display_name: String, dialogu
 
 
 func _on_npc_interacted(npc: Node) -> void:
-    narrative.show_message(npc.display_name, npc.dialogue, 7.0)
+	narrative.show_message(npc.display_name, npc.dialogue, 7.0)
 
 func _on_clue_examined(clue: Node) -> void:
-    if clue.clue_id == "rebel_dead_letter":
-        WorldState.record_hidden_artifact_source("rebel_dead_letter")
-    narrative.show_message(clue.display_name, clue.description, 7.0)
+	if clue.clue_id == "rebel_dead_letter":
+		WorldState.record_hidden_artifact_source("rebel_dead_letter")
+	narrative.show_message(clue.display_name, clue.description, 7.0)
 
 func _on_exit_reached() -> void:
-    narrative.show_message("BACK TO THE ROAD", "The camp keeps breathing behind you.", 3.0)
-    await narrative.message_finished
-    SceneTransition.fade_to_scene("res://scenes/regions/village_hub.tscn")
+	narrative.show_message("BACK TO THE ROAD", "The camp keeps breathing behind you.", 3.0)
+	await narrative.message_finished
+	SceneTransition.fade_to_scene("res://scenes/regions/village_hub.tscn")
 
 
 
 
 func _unhandled_input(event: InputEvent) -> void:
-    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
-        WorldState.delete_save()
-        get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
-        get_viewport().set_input_as_handled()
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
+		WorldState.delete_save()
+		get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
+		get_viewport().set_input_as_handled()
