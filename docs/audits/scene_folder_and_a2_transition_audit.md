@@ -386,3 +386,9 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - The priority-script resource scan found one remaining stale destination in `WorldState`'s location-to-scene mapping: `cliff_cave_experiment` still resolved to `res://scenes/cliff_cave_experiment.tscn`.
 - Corrected it to the existing `res://scenes/demos/cliff_cave_experiment.tscn`, matching the A1 village route and preventing fallback-based scene resolution from selecting a missing resource.
 - This path check is static; H09 entry/return and saved-location resolution remain part of runtime acceptance.
+
+
+### A0 barrier state selection no longer uses stale coordinates — 2026-10-28
+
+- The runtime previously passed x=1320/2000 only to choose a barrier node, even though the node positions were already authored in the scene. Replaced those numeric selectors with explicit node names and removed the unused redraw call.
+- The barrier routine now only toggles the named scene-authored barrier's visibility and collision state; no fixed barrier coordinate remains in the script.

@@ -22,7 +22,6 @@ func _ready() -> void:
 	# Editor preview must never mutate save/world state.
 	if Engine.is_editor_hint():
 		_sync_exit_gate_visual()
-		queue_redraw()
 		return
 	if WorldState.prologue_complete:
 		get_tree().change_scene_to_file("res://scenes/regions/village_hub.tscn")
@@ -59,7 +58,7 @@ func _process(_delta: float) -> void:
 	if ambush_phase == 1 and not right_gate_closed:
 		var doorway_warden := get_node_or_null("Warden_Right") as CharacterBody2D
 		if is_instance_valid(doorway_warden) and is_instance_valid(right_gate_closure_threshold) and doorway_warden.global_position.x <= right_gate_closure_threshold.global_position.x:
-			_spawn_single_progress_barrier(2000.0)
+			_spawn_single_progress_barrier("ProgressBarrier_Right")
 			right_gate_closed = true
 	if first_combat_prompt_shown or wardens_defeated > 0 or not is_instance_valid(hero) or wardens.is_empty():
 		return
@@ -117,11 +116,10 @@ func _spawn_progress_barriers() -> void:
 		gate.visible = false
 		var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
 		collision.disabled = true
-	_spawn_single_progress_barrier(1320.0)
+	_spawn_single_progress_barrier("ProgressBarrier_Left")
 
 
-func _spawn_single_progress_barrier(gate_x: float) -> void:
-	var gate_name := "ProgressBarrier_Left" if gate_x < 1600.0 else "ProgressBarrier_Right"
+func _spawn_single_progress_barrier(gate_name: String) -> void:
 	var gate := get_node_or_null(gate_name) as StaticBody2D
 	if gate == null:
 		push_error("[NEREIS][PROLOGUE] Missing authored progress barrier: " + gate_name)
