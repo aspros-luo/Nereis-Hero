@@ -148,6 +148,9 @@ var debug_mode_enabled := true
 var dodge_requested := false
 var quick_dash_requested := false
 var jump_requested := false
+var drop_through_requested := false
+var drop_through_body: PhysicsBody2D
+var drop_through_time_remaining := 0.0
 var hero_system: Node
 signal defeated
 signal attack_started(combo_step: int)
@@ -220,7 +223,11 @@ func _input(event: InputEvent) -> void:
 				dodge_requested = true
 		elif event.keycode == KEY_SPACE or event.keycode == KEY_UP:
 			if state not in [CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.HURT, CombatState.DEAD]:
-				jump_requested = true
+				if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
+					drop_through_requested = true
+					jump_requested = false
+				else:
+					jump_requested = true
 		elif event.keycode == KEY_X:
 			if state not in [CombatState.ATTACK, CombatState.DODGE, CombatState.QUICK_DASH, CombatState.GRAPPLE, CombatState.WALL_CLIMB, CombatState.HURT, CombatState.DEAD] and attack_time <= 0.0 and dodge_time <= 0.0:
 				quick_dash_requested = true
@@ -279,6 +286,7 @@ func _physics_process(delta: float) -> void:
 	if state == CombatState.DEAD:
 		return
 
+	_update_drop_through_timer(delta)
 	_update_camera_shake(delta)
 	hit_confirm_time = max(0.0, hit_confirm_time - delta)
 	eldritch_cooldown_remaining = maxf(0.0, eldritch_cooldown_remaining - delta)
@@ -497,6 +505,11 @@ func _physics_process(delta: float) -> void:
 		var friction := 1250.0 if attack_time > 0.0 else 2200.0
 		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 
+	if drop_through_requested:
+		drop_through_requested = false
+		if is_on_floor() and attack_time <= 0.0 and dodge_time <= 0.0:
+			_drop_through_current_platform()
+
 	var can_ground_or_coyote_jump := coyote_time > 0.0
 	var can_unlocked_double_jump := (debug_ability_override or WorldState.is_ability_unlocked("double_jump")) and air_jumps_used < MAX_EXTRA_AIR_JUMPS and not can_ground_or_coyote_jump
 	wall_climb_active = false
@@ -568,6 +581,34 @@ func _physics_process(delta: float) -> void:
 		_set_state(CombatState.IDLE)
 
 	queue_redraw()
+
+func _drop_through_current_platform() -> void:
+	# Down + jump drops through only the authored body currently supporting the Hero.
+	# 下+跳跃只穿过当前承托主角的场景地形节点，不会关闭整层碰撞。
+	var floor_collision := get_last_slide_collision()
+	if floor_collision == null:
+		return
+	var collider := floor_collision.get_collider()
+	if not (collider is PhysicsBody2D):
+		return
+	drop_through_body = collider as PhysicsBody2D
+	add_collision_exception_with(drop_through_body)
+	drop_through_time_remaining = 0.22
+	jump_buffer = 0.0
+	jump_requested = false
+	coyote_time = 0.0
+	velocity.y = maxf(velocity.y, 120.0)
+	_log("MOVEMENT", "Drop-through platform: %s" % drop_through_body.name)
+
+
+func _update_drop_through_timer(delta: float) -> void:
+	if drop_through_time_remaining <= 0.0:
+		return
+	drop_through_time_remaining = maxf(0.0, drop_through_time_remaining - delta)
+	if drop_through_time_remaining <= 0.0 and is_instance_valid(drop_through_body):
+		remove_collision_exception_with(drop_through_body)
+		drop_through_body = null
+
 
 func _update_jump_buffer(delta: float) -> void:
 	if jump_requested or Input.is_action_just_pressed("ui_accept"):
