@@ -11,7 +11,7 @@
 size = Vector2(32, 1200)
 
 [sub_resource type="RectangleShape2D" id="DropR01ToR04Shape"]
-size = Vector2(180, 180)
+size = Vector2(32, 120)
 
 [node name="A2R01Room" type="Node2D"]
 script = ExtResource("runtime_script")
@@ -154,7 +154,7 @@ width = 4.0
 default_color = Color(0.68, 0.8, 0.72, 0.55)
 
 [node name="LowerBranch_West" type="StaticBody2D" parent="Terrain"]
-position = Vector2(560, 690)
+position = Vector2(500, 735)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/LowerBranch_West"]
 color = Color(0.17, 0.2, 0.16, 1)
@@ -219,7 +219,7 @@ position = Vector2(1640, 500)
 position = Vector2(80, 700)
 
 [node name="ExitBellTomb" type="Marker2D" parent="Terrain/RoomMarkers"]
-position = Vector2(1620, 500)
+position = Vector2(1640, 500)
 
 [node name="ExitCanopy" type="Marker2D" parent="Terrain/RoomMarkers"]
 position = Vector2(1510, 290)
@@ -230,7 +230,7 @@ position = Vector2(1300, 860)
 [node name="FootingDesignMarkers" type="Node2D" parent="Terrain"]
 
 [node name="Footing_01_MainFork" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
-position = Vector2(560, 690)
+position = Vector2(500, 735)
 
 [node name="Footing_02_Canopy" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
 position = Vector2(1450, 290)
@@ -242,7 +242,7 @@ position = Vector2(800, 180)
 position = Vector2(1050, 830)
 
 [node name="Footing_05_EastExit" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
-position = Vector2(1620, 500)
+position = Vector2(1640, 500)
 
 [node name="RegionBoundary_0" type="StaticBody2D" parent="."]
 
@@ -276,7 +276,7 @@ shape = SubResource("DropR01ToR04Shape")
 position = Vector2(80, 700)
 
 [node name="Door_ExitBellTomb" parent="." instance=ExtResource("door_scene")]
-position = Vector2(1620, 500)
+position = Vector2(1640, 500)
 
 [node name="Door_ExitCanopy" parent="." instance=ExtResource("door_scene")]
 position = Vector2(1510, 290)
