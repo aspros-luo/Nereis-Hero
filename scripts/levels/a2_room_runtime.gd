@@ -301,8 +301,8 @@ func _spawn_drop_transition_at_marker(
 	if marker_position.x < 0.0 or marker_position.y < 0.0:
 		push_error("[NEREIS][A2][ROOM][DROP_ANCHOR_INVALID] room=%s marker=%s" % [room_id, marker_name])
 		return
-	var source_short := room_id.replace("A2-", "R")
-	var target_short := target_room_id.replace("A2-", "R")
+	var source_short := room_id.replace("A2-", "")
+	var target_short := target_room_id.replace("A2-", "")
 	_spawn_drop_transition(
 		"Drop_%s_to_%s" % [source_short, target_short],
 		marker_position.x,
