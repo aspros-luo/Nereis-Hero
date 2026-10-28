@@ -11,7 +11,7 @@
 size = Vector2(32, 1200)
 
 [sub_resource type="RectangleShape2D" id="DropR01ToR04Shape"]
-size = Vector2(32, 120)
+size = Vector2(180, 180)
 
 [node name="A2R01Room" type="Node2D"]
 script = ExtResource("runtime_script")
@@ -77,36 +77,12 @@ position = Vector2(1080, 500)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/MainPath_EastShelf"]
 color = Color(0.21, 0.26, 0.19, 1)
-polygon = PackedVector2Array(0, 0, 210, 8, 430, -12, 540, -5, 540, 66, 0, 72)
+polygon = PackedVector2Array(0, 0, 210, 8, 600, -12, 650, -5, 650, 66, 0, 72)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Terrain/MainPath_EastShelf"]
 polygon = PackedVector2Array(0, 0, 210, 8, 430, -12, 540, -5, 540, 66, 0, 72)
 
-; Climbable exposed roots and trunks lead from the middle shelf to the ruin/canopy entrance.
-[node name="TreeTrunkStep_01" type="StaticBody2D" parent="Terrain"]
-position = Vector2(900, 470)
-[node name="VisualMass" type="Polygon2D" parent="Terrain/TreeTrunkStep_01"]
-color = Color(0.13, 0.19, 0.12, 1)
-polygon = PackedVector2Array(0, 0, 95, -8, 110, 25, 15, 36)
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Terrain/TreeTrunkStep_01"]
-polygon = PackedVector2Array(0, 0, 95, -8, 110, 25, 15, 36)
-
-[node name="TreeTrunkStep_02" type="StaticBody2D" parent="Terrain"]
-position = Vector2(1010, 400)
-[node name="VisualMass" type="Polygon2D" parent="Terrain/TreeTrunkStep_02"]
-color = Color(0.14, 0.2, 0.12, 1)
-polygon = PackedVector2Array(0, 0, 100, -6, 110, 25, 10, 32)
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Terrain/TreeTrunkStep_02"]
-polygon = PackedVector2Array(0, 0, 100, -6, 110, 25, 10, 32)
-
-[node name="TreeTrunkStep_03" type="StaticBody2D" parent="Terrain"]
-position = Vector2(1110, 325)
-[node name="VisualMass" type="Polygon2D" parent="Terrain/TreeTrunkStep_03"]
-color = Color(0.15, 0.21, 0.13, 1)
-polygon = PackedVector2Array(0, 0, 100, -6, 110, 25, 10, 32)
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Terrain/TreeTrunkStep_03"]
-polygon = PackedVector2Array(0, 0, 100, -6, 110, 25, 10, 32)
-
+; The canopy route uses a small number of deliberate branch ledges, not a ladder of redundant trunk platforms.
 [node name="CanopyBranch_West" type="StaticBody2D" parent="Terrain"]
 position = Vector2(820, 510)
 
@@ -178,11 +154,11 @@ width = 4.0
 default_color = Color(0.68, 0.8, 0.72, 0.55)
 
 [node name="LowerBranch_West" type="StaticBody2D" parent="Terrain"]
-position = Vector2(650, 662)
+position = Vector2(560, 690)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/LowerBranch_West"]
 color = Color(0.17, 0.2, 0.16, 1)
-polygon = PackedVector2Array(0, 0, 170, 90, 290, 110, 290, 150, 170, 130, 0, 55)
+polygon = PackedVector2Array(0, 0, 170, 95, 350, 125, 350, 165, 170, 135, 0, 55)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Terrain/LowerBranch_West"]
 polygon = PackedVector2Array(0, 0, 170, 90, 290, 110, 290, 150, 170, 130, 0, 55)
@@ -198,7 +174,7 @@ polygon = PackedVector2Array(0, 0, 240, 0, 240, 42, 0, 42)
 polygon = PackedVector2Array(0, 0, 240, 0, 240, 42, 0, 42)
 
 [node name="LowerBranch_ReturnStep" type="StaticBody2D" parent="Terrain"]
-position = Vector2(1140, 850)
+position = Vector2(1160, 850)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/LowerBranch_ReturnStep"]
 color = Color(0.18, 0.24, 0.17, 1)
@@ -237,7 +213,7 @@ position = Vector2(120, 700)
 position = Vector2(1510, 290)
 
 [node name="EntryTombReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
-position = Vector2(1620, 500)
+position = Vector2(1640, 500)
 
 [node name="ExitVillage" type="Marker2D" parent="Terrain/RoomMarkers"]
 position = Vector2(80, 700)
@@ -249,12 +225,12 @@ position = Vector2(1620, 500)
 position = Vector2(1510, 290)
 
 [node name="DropToR04" type="Marker2D" parent="Terrain/RoomMarkers"]
-position = Vector2(1300, 900)
+position = Vector2(1300, 860)
 
 [node name="FootingDesignMarkers" type="Node2D" parent="Terrain"]
 
 [node name="Footing_01_MainFork" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
-position = Vector2(650, 662)
+position = Vector2(560, 690)
 
 [node name="Footing_02_Canopy" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
 position = Vector2(1450, 290)
@@ -288,7 +264,7 @@ position = Vector2(120, 700)
 [node name="HUD" parent="." instance=ExtResource("hud_scene")]
 
 [node name="Drop_R01_to_R04" type="Area2D" parent="."]
-position = Vector2(810, 800)
+position = Vector2(1300, 860)
 collision_layer = 0
 collision_mask = 1
 monitoring = true
