@@ -96,6 +96,64 @@ polygon = PackedVector2Array(0, 0, 460, 0, 460, 28, 0, 28)
 one_way_collision = true
 polygon = PackedVector2Array(0, 0, 460, 0, 460, 28, 0, 28)
 
+
+; Climbable root staircase: each rise is kept below the Hero's approximate jump apex.
+; Every tread is its own one-way body so Down + Jump can drop through it independently.
+[node name="CanopyRootStep_01" type="StaticBody2D" parent="Terrain"]
+position = Vector2(260, 620)
+
+[node name="Visual" type="Polygon2D" parent="Terrain/CanopyRootStep_01"]
+color = Color(0.20, 0.28, 0.17, 1)
+polygon = PackedVector2Array(0, 0, 155, -3, 165, 12, 155, 25, 8, 27)
+
+[node name="Collision" type="CollisionPolygon2D" parent="Terrain/CanopyRootStep_01"]
+one_way_collision = true
+polygon = PackedVector2Array(0, 0, 155, -3, 165, 12, 155, 25, 8, 27)
+
+[node name="CanopyRootStep_02" type="StaticBody2D" parent="Terrain"]
+position = Vector2(400, 555)
+
+[node name="Visual" type="Polygon2D" parent="Terrain/CanopyRootStep_02"]
+color = Color(0.20, 0.28, 0.17, 1)
+polygon = PackedVector2Array(0, 0, 155, -3, 165, 12, 155, 25, 8, 27)
+
+[node name="Collision" type="CollisionPolygon2D" parent="Terrain/CanopyRootStep_02"]
+one_way_collision = true
+polygon = PackedVector2Array(0, 0, 155, -3, 165, 12, 155, 25, 8, 27)
+
+[node name="CanopyRootStep_03" type="StaticBody2D" parent="Terrain"]
+position = Vector2(540, 490)
+
+[node name="Visual" type="Polygon2D" parent="Terrain/CanopyRootStep_03"]
+color = Color(0.20, 0.28, 0.17, 1)
+polygon = PackedVector2Array(0, 0, 155, -3, 165, 12, 155, 25, 8, 27)
+
+[node name="Collision" type="CollisionPolygon2D" parent="Terrain/CanopyRootStep_03"]
+one_way_collision = true
+polygon = PackedVector2Array(0, 0, 155, -3, 165, 12, 155, 25, 8, 27)
+
+[node name="CanopyRootStep_04" type="StaticBody2D" parent="Terrain"]
+position = Vector2(680, 425)
+
+[node name="Visual" type="Polygon2D" parent="Terrain/CanopyRootStep_04"]
+color = Color(0.20, 0.28, 0.17, 1)
+polygon = PackedVector2Array(0, 0, 155, -3, 165, 12, 155, 25, 8, 27)
+
+[node name="Collision" type="CollisionPolygon2D" parent="Terrain/CanopyRootStep_04"]
+one_way_collision = true
+polygon = PackedVector2Array(0, 0, 155, -3, 165, 12, 155, 25, 8, 27)
+
+[node name="CanopyRootStep_05" type="StaticBody2D" parent="Terrain"]
+position = Vector2(820, 360)
+
+[node name="Visual" type="Polygon2D" parent="Terrain/CanopyRootStep_05"]
+color = Color(0.20, 0.28, 0.17, 1)
+polygon = PackedVector2Array(0, 0, 155, -3, 165, 12, 155, 25, 8, 27)
+
+[node name="Collision" type="CollisionPolygon2D" parent="Terrain/CanopyRootStep_05"]
+one_way_collision = true
+polygon = PackedVector2Array(0, 0, 155, -3, 165, 12, 155, 25, 8, 27)
+
 [node name="CentralTree" type="Polygon2D" parent="Terrain"]
 z_index = 1
 color = Color(0.055, 0.105, 0.075, 0.92)
