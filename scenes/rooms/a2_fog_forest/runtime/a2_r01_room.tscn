@@ -154,7 +154,7 @@ width = 4.0
 default_color = Color(0.68, 0.8, 0.72, 0.55)
 
 [node name="LowerBranch_West" type="StaticBody2D" parent="Terrain"]
-position = Vector2(500, 735)
+position = Vector2(560, 730)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/LowerBranch_West"]
 color = Color(0.17, 0.2, 0.16, 1)
