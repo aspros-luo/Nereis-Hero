@@ -7,7 +7,6 @@ const SURGERY_FLOOR_STRIP = preload("res://assets/art/backdrops/surgery_floor_st
 const SURGERY_FOREGROUND_PROPS = preload("res://assets/art/backdrops/surgery_foreground_props.svg")
 
 const FLOOR_Y := 540.0
-const LEVEL_WIDTH := 2200.0
 var hero: CharacterBody2D
 var hud: CanvasLayer
 var wardens: Array[CharacterBody2D] = []
@@ -49,7 +48,6 @@ func _ready() -> void:
 	clue.examined.connect(_on_clue_examined.bind(clue))
 	hud.bind_hero(hero)
 	hud.set_story_mode("A0｜教会手术所", "查看手术托盘和周边物品，寻找离开的路。")
-	queue_redraw()
 
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
@@ -78,11 +76,21 @@ func _start_exit_ambush() -> void:
 	# Wave 1: the left warden walks in from the left; the second enters from the doorway.
 	# 第一波只出现两名地面守卫，先给玩家时间读懂战斗节奏。
 	ambush_phase = 1
-	_spawn_warden(Vector2(1425.0, FLOOR_Y), "Warden_Left")
-	_spawn_warden(Vector2(2075.0, FLOOR_Y), "Warden_Right")
+	_spawn_warden_from_marker("WardenLeft", "Warden_Left")
+	_spawn_warden_from_marker("WardenRight", "Warden_Right")
 	if is_instance_valid(hud):
 		hud.set_story_mode("A0｜教会手术所", "左侧传来沉重的脚步声，出口处的守卫也逼了进来！先解决他们。")
 	print("[NEREIS][PROLOGUE] Exit ambush wave 1 started")
+
+
+func _spawn_warden_from_marker(marker_name: String, enemy_name: String) -> void:
+	# Enemy actors are dynamic, but their fixed spawn anchors belong to the editable scene.
+	# 敌人本身动态生成；固定出场锚点由场景节点维护。
+	var marker := get_node_or_null("AmbushSpawnMarkers/" + marker_name) as Marker2D
+	if marker == null:
+		push_error("[NEREIS][PROLOGUE][SPAWN_MARKER_MISSING] marker=%s" % marker_name)
+		return
+	_spawn_warden(to_local(marker.global_position), enemy_name)
 
 
 func _spawn_warden(spawn_position: Vector2, enemy_name: String) -> void:
@@ -126,7 +134,6 @@ func _open_progress_barrier(index: int) -> void:
 		gate.visible = false
 		var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
 		collision.disabled = true
-	queue_redraw()
 
 
 func _on_clue_examined(clue: Node) -> void:
@@ -157,7 +164,6 @@ func _on_hero_defeated() -> void:
 		exit_area.enabled = false
 	if is_instance_valid(hud):
 		hud.set_story_mode("A0｜教会手术所", "你在检查点恢复了意识。重新接近出口时，守卫会再次出现。")
-	queue_redraw()
 
 
 func _on_warden_defeated() -> void:
@@ -166,7 +172,7 @@ func _on_warden_defeated() -> void:
 		# Wave 2 only begins after both ground wardens are defeated.
 		# 第二波必须等两名地面守卫全部倒下后才触发。
 		ambush_phase = 2
-		_spawn_warden(Vector2(1480.0, 95.0), "Warden_Drop")
+		_spawn_warden_from_marker("WardenDrop", "Warden_Drop")
 		if is_instance_valid(hud):
 			hud.set_story_mode("A0｜教会手术所", "上方传来金属断裂声……第三名守卫从左侧高处坠落！")
 		return
@@ -191,7 +197,6 @@ func _open_exit() -> void:
 	if is_instance_valid(hud):
 		hud.set_story_mode("A0｜教会手术所", "出口已打开。前往右侧出口按 E，离开手术所。")
 	print("[NEREIS][PROLOGUE] Escape route opened")
-	queue_redraw()
 
 
 func _on_exit_interacted() -> void:
@@ -259,66 +264,3 @@ func _sync_exit_gate_visual() -> void:
 		opened.visible = exit_open
 	if label != null:
 		label.visible = exit_open
-
-
-func _draw() -> void:
-	# Static backdrop, floor strip and illustrated props are authored as TextureRect nodes in escape_prologue.tscn.
-	# Only state-dependent shutters and small foreground marks remain in this draw pass.
-	# Traversal platform visuals are children of the StaticBody2D nodes in the scene tree.
-	# The editor and runtime now share the same visible platform geometry.
-
-	if Engine.is_editor_hint():
-		_draw_editor_layout_overlay()
-
-
-func _editor_safe_text(fallback_text: String) -> String:
-	if Engine.is_editor_hint():
-		return fallback_text
-	return NereisLocalization.translate_text(fallback_text)
-
-
-## Editor-only collision and interaction guides for checking the fixed A0 layout.
-## These outlines are guides, not extra physics bodies.
-
-func _draw_editor_layout_overlay() -> void:
-	var collision_color := Color("#4bd4ff", 0.88)
-	var focus_color := Color("#ffd166", 0.72)
-	var anchor_color := Color("#ff6b6b", 0.95)
-
-	# Floor and world boundaries.
-	draw_rect(Rect2(0.0, FLOOR_Y, LEVEL_WIDTH, 40.0), Color(collision_color, 0.10), false, 2.0)
-	draw_rect(Rect2(-40.0, 0.0, 40.0, 720.0), collision_color, false, 2.0)
-	draw_rect(Rect2(LEVEL_WIDTH, 0.0, 40.0, 720.0), collision_color, false, 2.0)
-
-	# Surgery table collision: center (280, 500), 180 x 12.
-	draw_rect(Rect2(190.0, 494.0, 180.0, 12.0), collision_color, false, 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(190.0, 486.0), "手术台碰撞 180×12", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, collision_color)
-
-
-	# Hero spawn/checkpoint and rest point are intentionally separated for a clean opening silhouette.
-	draw_circle(Vector2(420.0, FLOOR_Y), 6.0, anchor_color)
-	draw_line(Vector2(420.0, FLOOR_Y - 48.0), Vector2(420.0, FLOOR_Y), anchor_color, 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(430.0, FLOOR_Y - 34.0), "Hero / 初始检查点 (420, 540)", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, anchor_color)
-	draw_circle(Vector2(540.0, FLOOR_Y), 6.0, focus_color)
-	# Rest eligibility uses independent horizontal/vertical thresholds, not a radial distance.
-	draw_rect(Rect2(450.0, FLOOR_Y - 32.0, 180.0, 64.0), Color(focus_color, 0.42), false, 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(545.0, FLOOR_Y + 18.0), "休整点 (540, 540)：横向90 / 高差32 / 必须落地", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, focus_color)
-
-	# Clue and pickups use distance-based interaction, not physical Area2D shapes.
-	draw_circle(Vector2(620.0, 520.0), 5.0, focus_color)
-	draw_circle(Vector2(620.0, 520.0), 120.0, Color(focus_color, 0.40), false, 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(625.0, 508.0), "调查点：手术托盘 (620, 520) / 半径120", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, focus_color)
-
-	draw_circle(Vector2(320.0, 482.0), 5.0, Color("#a7f3d0"))
-	draw_circle(Vector2(320.0, 482.0), 100.0, Color("#a7f3d0", 0.42), false, 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(325.0, 470.0), "绷带 (320, 482) / 半径100；置于手术台上", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#a7f3d0"))
-
-	draw_circle(Vector2(880.0, 393.0), 5.0, Color("#a7f3d0"))
-	draw_circle(Vector2(810.0, 393.0), 100.0, Color("#a7f3d0", 0.42), false, 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(815.0, 381.0), "手术记录 (880, 393) / 半径100；置于维护平台", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#a7f3d0"))
-
-	# Exit trigger area: center (2040, 470), 110 x 140.
-	draw_rect(Rect2(1985.0, 400.0, 110.0, 140.0), Color("#ff9f43", 0.12), true)
-	draw_rect(Rect2(1985.0, 400.0, 110.0, 140.0), Color("#ff9f43", 0.95), false, 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(1980.0, 390.0), "出口交互区 110×140", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("#ff9f43"))
-

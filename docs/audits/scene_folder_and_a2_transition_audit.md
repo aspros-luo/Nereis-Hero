@@ -348,3 +348,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Replaced the duplicated hard-coded A0 checkpoint coordinate with the authored Hero node's global position, keeping the initial spawn and checkpoint aligned when the scene is edited.
 - Removed the unused village floor_y export after village spawn heights became scene-authored Marker2D positions.
 - Static source check only; local death/continue behavior still needs Godot runtime acceptance.
+
+
+### A0 enemy spawn anchors are scene-authored — 2026-10-28
+
+- Added visible `Marker2D` anchors `AmbushSpawnMarkers/WardenLeft`, `WardenRight`, and `WardenDrop` to `escape_prologue.tscn`.
+- The encounter still instantiates wardens dynamically, but now resolves their fixed spawn positions from the scene instead of hard-coded Vector2 coordinates in the script.
+- Removed the obsolete editor-only `_draw_editor_layout_overlay()` that drew a second, hard-coded guide over geometry already represented by real scene nodes, along with its unused `LEVEL_WIDTH` constant and redraw calls.
+- Static source/scene review only; Godot 4.6.1 parsing and the full ambush/death retry sequence still require runtime acceptance.

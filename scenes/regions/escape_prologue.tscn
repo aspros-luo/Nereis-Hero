@@ -186,6 +186,17 @@ one_way_collision = true
 [node name="Hero" parent="." instance=ExtResource("2")]
 position = Vector2(420, 540)
 
+[node name="AmbushSpawnMarkers" type="Node2D" parent="."]
+
+[node name="WardenLeft" type="Marker2D" parent="AmbushSpawnMarkers"]
+position = Vector2(1425, 540)
+
+[node name="WardenRight" type="Marker2D" parent="AmbushSpawnMarkers"]
+position = Vector2(2075, 540)
+
+[node name="WardenDrop" type="Marker2D" parent="AmbushSpawnMarkers"]
+position = Vector2(1480, 95)
+
 [node name="SurgicalMark" type="Node2D" parent="."]
 position = Vector2(620, 520)
 script = ExtResource("3")
