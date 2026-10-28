@@ -364,3 +364,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Removed A2's call into the legacy boundary synthesizer. Missing boundaries now fail with a clear authored-node error instead of silently creating duplicate or code-generated walls.
 - Replaced the inherited UI fallback factory with a room-local binder: A2 now binds the authored `Narrative` and `HUD` instances and configures story text without runtime instantiation.
 - Existing six room scenes were source-inspected for these authored nodes. Godot 4.6.1 parse/import/runtime acceptance remains pending.
+
+
+### A0 ambush trigger and closure threshold are scene-authored — 2026-10-28
+
+- Added a fixed `ExitAmbushTrigger` Area2D with an authored CollisionShape2D; the encounter starts from its `body_entered` signal instead of a hard-coded `Hero.x >= 1710` check.
+- Added `AmbushSpawnMarkers/RightGateClosureThreshold`; the right-side gate closure now reads the threshold from the scene rather than embedding x=1960 in the script.
+- Removed unused backdrop texture preloads and the now-unused floor/layout-width constants from `escape_prologue.gd`; those textures are already referenced by the scene tree.
+- Static check only. The Area2D collision mask/trigger timing and full three-warden retry loop still require Godot 4.6.1 runtime validation.

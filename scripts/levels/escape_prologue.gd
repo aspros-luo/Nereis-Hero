@@ -2,15 +2,13 @@
 extends Node2D
 
 const WARDEN_SCENE: PackedScene = preload("res://scenes/enemies/experiment_warden.tscn")
-const SURGERY_BACKDROP = preload("res://assets/art/backdrops/surgery_ward_backdrop.svg")
-const SURGERY_FLOOR_STRIP = preload("res://assets/art/backdrops/surgery_floor_strip.svg")
-const SURGERY_FOREGROUND_PROPS = preload("res://assets/art/backdrops/surgery_foreground_props.svg")
 
-const FLOOR_Y := 540.0
 var hero: CharacterBody2D
 var hud: CanvasLayer
 var wardens: Array[CharacterBody2D] = []
 var exit_area: Area2D
+var ambush_trigger: Area2D
+var right_gate_closure_threshold: Marker2D
 var exit_open := false
 var wardens_defeated := 0
 var first_combat_prompt_shown := false
@@ -33,6 +31,12 @@ func _ready() -> void:
 	hero = $Hero
 	hud = $HUD
 	exit_area = $VillageRoadExit
+	ambush_trigger = $ExitAmbushTrigger
+	right_gate_closure_threshold = $AmbushSpawnMarkers/RightGateClosureThreshold
+	if ambush_trigger == null or right_gate_closure_threshold == null:
+		push_error("[NEREIS][PROLOGUE][AUTHORED_TRIGGER_MISSING] exit ambush trigger or right-gate threshold")
+		return
+	ambush_trigger.body_entered.connect(_on_ambush_trigger_body_entered)
 	progress_barriers = [$ProgressBarrier_Left as StaticBody2D, $ProgressBarrier_Right as StaticBody2D]
 	for gate in progress_barriers:
 		gate.visible = false
@@ -52,11 +56,9 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
-	if not ambush_started and is_instance_valid(hero) and hero.global_position.x >= 1710.0:
-		_start_exit_ambush()
 	if ambush_phase == 1 and not right_gate_closed:
 		var doorway_warden := get_node_or_null("Warden_Right") as CharacterBody2D
-		if is_instance_valid(doorway_warden) and doorway_warden.global_position.x <= 1960.0:
+		if is_instance_valid(doorway_warden) and is_instance_valid(right_gate_closure_threshold) and doorway_warden.global_position.x <= right_gate_closure_threshold.global_position.x:
 			_spawn_single_progress_barrier(2000.0)
 			right_gate_closed = true
 	if first_combat_prompt_shown or wardens_defeated > 0 or not is_instance_valid(hero) or wardens.is_empty():
@@ -66,6 +68,11 @@ func _process(_delta: float) -> void:
 		first_combat_prompt_shown = true
 		if is_instance_valid(hud):
 			hud.set_story_mode("A0｜教会手术所", "伏击开始！留意两侧来敌与上方坠落的守卫，利用攻击前摇进行闪避。")
+
+
+func _on_ambush_trigger_body_entered(body: Node2D) -> void:
+	if body == hero and not ambush_started:
+		_start_exit_ambush()
 
 
 func _start_exit_ambush() -> void:
