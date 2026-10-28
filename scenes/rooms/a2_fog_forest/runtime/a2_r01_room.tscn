@@ -82,7 +82,7 @@ position = Vector2(1080, 500)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/MainPath_EastShelf"]
 color = Color(0.21, 0.26, 0.19, 1)
-polygon = PackedVector2Array(0, 0, 210, 8, 330, -12, 440, -5, 440, 66, 0, 72)
+polygon = PackedVector2Array(0, 0, 210, 8, 430, -12, 540, -5, 540, 66, 0, 72)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Terrain/MainPath_EastShelf"]
 polygon = PackedVector2Array(0, 0, 210, 8, 330, -12, 440, -5, 440, 66, 0, 72)
