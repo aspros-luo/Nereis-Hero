@@ -567,8 +567,8 @@ func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 			return
 		hero.name = "Hero"
 		add_child(hero)
-	# The region controller owns the single delayed checkpoint recovery; prevent Hero.gd from running a second fade/teleport in parallel.
-	# 死亡后的延迟复位由区域控制器统一负责；禁止 Hero.gd 再并行执行第二套淡出/传送。
+	# A specialized room may override _on_hero_defeated; the default handler delegates to Hero's built-in fade/checkpoint recovery.
+	# 特殊房间可覆写死亡处理；默认处理器交由 Hero 自带的黑屏与检查点恢复流程。
 	hero.defer_death_recovery = true
 	hero.position = Vector2(spawn_x, floor_y if spawn_y < 0.0 else spawn_y)
 	if not hero.defeated.is_connected(_on_hero_defeated):
@@ -593,6 +593,13 @@ func _spawn_hero(spawn_x: float, spawn_y: float = -1.0) -> void:
 		camera.limit_top = 0
 		camera.limit_right = int(map_width)
 		camera.limit_bottom = int(room_height) if region_id == "A5" and not room_id.is_empty() else (1200 if region_id == "A2" else 720)
+
+func _on_hero_defeated() -> void:
+	# This signal fires before Hero checks defer_death_recovery. Let the default Hero path run unless a subclass owns the transition.
+	# 该信号在 Hero 检查 defer_death_recovery 前同步触发；默认交还 Hero 自带流程，特殊子类可接管转场。
+	if is_instance_valid(hero):
+		hero.defer_death_recovery = false
+
 
 func _spawn_ui() -> void:
 	narrative = get_node_or_null("Narrative") as CanvasLayer

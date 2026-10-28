@@ -417,3 +417,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 
 
 - Follow-up hardening: the R04 preflight also requires both the H02 Marker2D and the authored `HiddenBellChamberGate` instance, so a missing hidden-gate anchor cannot partially initialize the room and skip its normal exits.
+
+
+### Shared region death callback restored and A2 recovery ownership clarified — 2026-10-28
+
+- A source audit found `greybox_world_region.gd::_spawn_hero()` connected `_on_hero_defeated`, but the shared script no longer defined that method. This left a missing callback reference and meant the intended default death-recovery delegation was not explicit.
+- Restored the base callback. It synchronously clears `hero.defer_death_recovery` so Hero's existing fade/checkpoint recovery runs for ordinary regions. A2's override retains cross-room checkpoint transitions and re-arms deferred recovery on each defeat before deciding whether to change rooms or delegate to Hero.
+- Static call-site review only; Godot 4.6.1 parser/runtime validation is required to confirm signal binding, same-room respawn, cross-room respawn, and repeated deaths.

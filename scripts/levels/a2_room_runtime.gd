@@ -407,6 +407,10 @@ func _on_drop_transition_body_entered(body: Node2D, target_scene: String, target
 
 
 func _on_hero_defeated() -> void:
+	# Re-arm deferred recovery for each death; cross-room checkpoint transitions own the fade, same-room deaths delegate to Hero.
+	# 每次死亡先重新启用延迟恢复；跨房间由本控制器转场，同房间则交还 Hero 自带重生。
+	if is_instance_valid(hero):
+		hero.defer_death_recovery = true
 	if respawning:
 		return
 	if ROOM_SCENE_PATHS.has(WorldState.checkpoint_room_id) and WorldState.checkpoint_room_id != room_id:
