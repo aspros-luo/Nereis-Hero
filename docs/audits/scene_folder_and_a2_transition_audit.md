@@ -372,3 +372,10 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Added `AmbushSpawnMarkers/RightGateClosureThreshold`; the right-side gate closure now reads the threshold from the scene rather than embedding x=1960 in the script.
 - Removed unused backdrop texture preloads and the now-unused floor/layout-width constants from `escape_prologue.gd`; those textures are already referenced by the scene tree.
 - Static check only. The Area2D collision mask/trigger timing and full three-warden retry loop still require Godot 4.6.1 runtime validation.
+
+
+### A1 H01 route resource recheck — 2026-10-28
+
+- A full resource-string pass across the 13 A0/A1/A2 priority scenes found one stale runtime destination property in `village_hub.tscn`: `ResonanceWellGate.target_scene_path` still pointed to the removed `scenes/hidden_well.tscn` path despite the earlier path correction in the shared script.
+- Corrected the authored instance property to `res://scenes/hidden_regions/hidden_well.tscn`, confirmed that target exists in the branch tree.
+- All 13 priority scenes currently have consistent `load_steps` counts and every explicit CollisionShape2D has an assigned shape resource. This remains source-level validation, not Godot import/runtime validation.
