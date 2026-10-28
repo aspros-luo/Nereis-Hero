@@ -406,3 +406,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 
 - Follow-up inspection found the previous marker migration had left three now-unused constants (`CLIFF_X`, `CLIFF_APPROACH_LIMIT`, and `LEVEL_WIDTH`) in `prologue_exterior.gd`.
 - Removed them; cliff clamp and camera right edge now use the scene-authored Marker2D nodes exclusively.
+
+
+### A2 spawn anchors now fail closed instead of using fallback coordinates — 2026-10-28
+
+- Added a per-room required entry-marker contract for R01–R06 and validate all entry/return Marker2D nodes before changing runtime state.
+- Removed generic fallback coordinates from `_room_marker_position()`. A missing marker now returns an invalid sentinel after a clear error; the room refuses to spawn the Hero at a guessed location.
+- H02 gate setup now also stops if its authored anchor is missing. Door/drop anchors already fail with explicit contract errors.
+- Source-level verification confirmed every required entry marker exists in the six room scenes; Godot runtime behavior remains untested here.

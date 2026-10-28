@@ -56,6 +56,9 @@ func _ready() -> void:
 	# Room boundaries are authored in every R01–R06 scene; never synthesize fallback walls here.
 	_spawn_region_ambience()
 	var spawn_position := _spawn_position_for_side(spawn_side)
+	if spawn_position.x < 0.0 or spawn_position.y < 0.0:
+		push_error("[NEREIS][A2][ROOM][SPAWN_ANCHOR_INVALID] room=%s side=%s" % [room_id, spawn_side])
+		return
 	_spawn_hero(spawn_position.x, spawn_position.y)
 	if camera != null:
 		camera.limit_left = 0
@@ -92,7 +95,28 @@ func _validate_authored_room_structure() -> bool:
 		if collision == null or collision.shape == null:
 			push_error("[NEREIS][A2][ROOM][AUTHORED_BOUNDARY_SHAPE_MISSING] room=%s node=%s" % [room_id, boundary_name])
 			return false
+	for marker_name in _required_spawn_markers_for_room():
+		if get_node_or_null("Terrain/RoomMarkers/" + marker_name) is not Marker2D:
+			push_error("[NEREIS][A2][ROOM][SPAWN_MARKER_MISSING] room=%s marker=%s" % [room_id, marker_name])
+			return false
 	return true
+
+
+func _required_spawn_markers_for_room() -> Array[String]:
+	match room_id:
+		"A2-R01":
+			return ["EntryWest", "EntryCanopyReturn", "EntryTombReturn"]
+		"A2-R02":
+			return ["EntryWest", "EntryFromR01", "EntryHighReturn"]
+		"A2-R03":
+			return ["EntryWest", "EntryFromR01", "EntryCryptReturn", "EntryHighroadShortcut"]
+		"A2-R04":
+			return ["EntryDefault", "EntryTombDrop", "EntryTombDropR01", "EntryH02Return", "EntryRavineReturn"]
+		"A2-R05":
+			return ["EntryDefault", "EntryFromR02", "EntryUpperShortcut", "EntryRavineReturn", "EntryC04Return"]
+		"A2-R06":
+			return ["EntryDefault", "EntryHigh", "EntryLow", "EntryC03Return", "EntryRavineReturn"]
+	return []
 
 
 func _configure_authored_ui() -> void:
@@ -132,16 +156,13 @@ func _room_id_for_scene_path(scene_path: String) -> String:
 	return ""
 
 
-func _room_marker_position(marker_name: String, fallback: Vector2 = Vector2.ZERO) -> Vector2:
+func _room_marker_position(marker_name: String) -> Vector2:
 	var marker := get_node_or_null("Terrain/RoomMarkers/" + marker_name) as Marker2D
 	if marker == null:
 		push_error("[NEREIS][A2][ROOM][MARKER_MISSING] room=%s marker=%s" % [room_id, marker_name])
-		return fallback
-	# Room art scenes may use a root scale while their runtime wrapper remains unscaled.
-	# Convert the marker's transformed world position back into the runtime's local space
-	# so spawn points, doors and drop triggers stay aligned with the visible/colliding scene.
+		return Vector2(-1.0, -1.0)
+	# Convert transformed marker coordinates back to this room root's local space.
 	return to_local(marker.global_position)
-
 
 func _spawn_position_for_side(side: String) -> Vector2:
 	if side == "a2_checkpoint":
@@ -210,7 +231,7 @@ func _spawn_position_for_side(side: String) -> Vector2:
 					marker_name = "EntryRavineReturn"
 				_:
 					marker_name = "EntryDefault"
-	return _room_marker_position(marker_name, Vector2(220.0, floor_y))
+	return _room_marker_position(marker_name)
 
 
 func _spawn_exit_door_at_marker(
@@ -223,7 +244,7 @@ func _spawn_exit_door_at_marker(
 	unlock_once_flag_id: String = "",
 	opened_prompt_text: String = ""
 ) -> void:
-	var marker_position := _room_marker_position(marker_name, Vector2(-1.0, -1.0))
+	var marker_position := _room_marker_position(marker_name)
 	if marker_position.x < 0.0 or marker_position.y < 0.0:
 		push_error("[NEREIS][A2][ROOM][EXIT_ANCHOR_INVALID] room=%s marker=%s" % [room_id, marker_name])
 		return
@@ -267,7 +288,7 @@ func _spawn_drop_transition_at_marker(
 	target_room_id: String,
 	target_spawn_side: String
 ) -> void:
-	var marker_position := _room_marker_position(marker_name, Vector2(-1.0, -1.0))
+	var marker_position := _room_marker_position(marker_name)
 	if marker_position.x < 0.0 or marker_position.y < 0.0:
 		push_error("[NEREIS][A2][ROOM][DROP_ANCHOR_INVALID] room=%s marker=%s" % [room_id, marker_name])
 		return
@@ -317,7 +338,9 @@ func _spawn_room_exits() -> void:
 			_spawn_exit_door_at_marker("ExitToR05", "E  进入旧朝圣高路捷径", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_upper_shortcut")
 			_spawn_drop_transition_at_marker("DropToR04", 150.0, 220.0, "A2-R04", "a2_r04_tomb_drop")
 		"A2-R04":
-			var h02_position := _room_marker_position("H02Gate", Vector2(90.0, floor_y))
+			var h02_position := _room_marker_position("H02Gate")
+			if h02_position.x < 0.0 or h02_position.y < 0.0:
+				return
 			_spawn_h02_gate(h02_position.x, h02_position.y)
 			_spawn_exit_door_at_marker("ExitToR03", "E  沿回程石沿返回钟墓上环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_crypt_return")
 			_spawn_exit_door_at_marker("ExitToR06", "E  深入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_low_entry")
