@@ -356,3 +356,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - The encounter still instantiates wardens dynamically, but now resolves their fixed spawn positions from the scene instead of hard-coded Vector2 coordinates in the script.
 - Removed the obsolete editor-only `_draw_editor_layout_overlay()` that drew a second, hard-coded guide over geometry already represented by real scene nodes, along with its unused `LEVEL_WIDTH` constant and redraw calls.
 - Static source/scene review only; Godot 4.6.1 parsing and the full ambush/death retry sequence still require runtime acceptance.
+
+
+### A2 strict authored-node preflight — 2026-10-28
+
+- Added a startup preflight for each A2 room requiring scene-authored `Hero`, `Narrative`, `HUD`, `RoomDebugOverlay`, and both boundary bodies with assigned collision shapes.
+- Removed A2's call into the legacy boundary synthesizer. Missing boundaries now fail with a clear authored-node error instead of silently creating duplicate or code-generated walls.
+- Replaced the inherited UI fallback factory with a room-local binder: A2 now binds the authored `Narrative` and `HUD` instances and configures story text without runtime instantiation.
+- Existing six room scenes were source-inspected for these authored nodes. Godot 4.6.1 parse/import/runtime acceptance remains pending.

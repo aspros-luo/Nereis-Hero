@@ -41,6 +41,8 @@ func _ready() -> void:
 	if not ROOM_SCENE_PATHS.has(room_id):
 		push_error("[NEREIS][A2][ROOM][FAIL] unknown room_id=%s" % room_id)
 		return
+	if not _validate_authored_room_structure():
+		return
 
 	WorldState.prepare_scene_runtime()
 	WorldState.load_room_state()
@@ -51,7 +53,7 @@ func _ready() -> void:
 	WorldState.pending_region_spawn_side = "west"
 
 	# The playable R01 scene owns terrain, markers, Hero, HUD and boundaries as editor-visible nodes; no A2 region-wide floor is generated.
-	_create_boundaries()
+	# Room boundaries are authored in every R01–R06 scene; never synthesize fallback walls here.
 	_spawn_region_ambience()
 	var spawn_position := _spawn_position_for_side(spawn_side)
 	_spawn_hero(spawn_position.x, spawn_position.y)
@@ -60,7 +62,7 @@ func _ready() -> void:
 		camera.limit_top = 0
 		camera.limit_right = int(map_width)
 		camera.limit_bottom = int(room_height)
-	_spawn_ui()
+	_configure_authored_ui()
 	_configure_room_debug_label()
 
 	_spawn_room_content()
@@ -72,6 +74,37 @@ func _ready() -> void:
 	print("[NEREIS][A2][ROOM] loaded=%s size=%.0fx%.0f spawn=%s at=(%.1f,%.1f)" % [
 		room_id, map_width, room_height, spawn_side, hero.position.x, hero.position.y
 	])
+
+
+func _validate_authored_room_structure() -> bool:
+	# A2 is assembled from editor-authored room scenes; missing fixed nodes must fail loudly.
+	# A2 由编辑器场景节点构成；固定节点缺失时必须报错，不得用运行时兜底掩盖。
+	for node_name in ["Hero", "Narrative", "HUD", "RoomDebugOverlay"]:
+		if get_node_or_null(node_name) == null:
+			push_error("[NEREIS][A2][ROOM][AUTHORED_NODE_MISSING] room=%s node=%s" % [room_id, node_name])
+			return false
+	for boundary_name in ["RegionBoundary_0", "RegionBoundary_1"]:
+		var boundary := get_node_or_null(boundary_name) as StaticBody2D
+		if boundary == null:
+			push_error("[NEREIS][A2][ROOM][AUTHORED_BOUNDARY_MISSING] room=%s node=%s" % [room_id, boundary_name])
+			return false
+		var collision := boundary.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if collision == null or collision.shape == null:
+			push_error("[NEREIS][A2][ROOM][AUTHORED_BOUNDARY_SHAPE_MISSING] room=%s node=%s" % [room_id, boundary_name])
+			return false
+	return true
+
+
+func _configure_authored_ui() -> void:
+	# Fixed UI layers are scene instances in all six room trees; only bind and configure them.
+	# 六个房间均预置固定 UI 层；运行时只绑定 Hero 并设置文本。
+	narrative = get_node_or_null("Narrative") as CanvasLayer
+	hud = get_node_or_null("HUD") as CanvasLayer
+	if narrative == null or hud == null:
+		push_error("[NEREIS][A2][ROOM][AUTHORED_UI_MISSING] room=%s" % room_id)
+		return
+	hud.bind_hero(hero)
+	hud.set_story_mode(_localized_region_title(), _get_objective_text())
 
 
 ## Temporary on-screen room marker for manual map acceptance.
