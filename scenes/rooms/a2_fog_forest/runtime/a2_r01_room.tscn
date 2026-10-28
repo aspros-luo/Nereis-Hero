@@ -149,7 +149,7 @@ polygon = PackedVector2Array(0, 0, 550, 0, 550, 34, 0, 34)
 
 ; Raised central ruin: an isolated silhouette makes the depth visible without requiring 3D.
 [node name="CentralRuinIsland" type="Polygon2D" parent="Terrain"]
-position = Vector2(1180, 205)
+position = Vector2(1180, 285)
 z_index = -1
 color = Color(0.13, 0.18, 0.15, 1)
 polygon = PackedVector2Array(0, 35, 25, 0, 300, 0, 330, 35, 315, 75, 15, 75)
@@ -246,7 +246,7 @@ position = Vector2(80, 700)
 position = Vector2(1620, 500)
 
 [node name="ExitCanopy" type="Marker2D" parent="Terrain/RoomMarkers"]
-position = Vector2(1510, 220)
+position = Vector2(1510, 290)
 
 [node name="DropToR04" type="Marker2D" parent="Terrain/RoomMarkers"]
 position = Vector2(1300, 900)
@@ -303,6 +303,6 @@ position = Vector2(80, 700)
 position = Vector2(1620, 500)
 
 [node name="Door_ExitCanopy" parent="." instance=ExtResource("door_scene")]
-position = Vector2(1510, 220)
+position = Vector2(1510, 290)
 
 [node name="RoomDebugOverlay" parent="." instance=ExtResource("debug_overlay_scene")]
