@@ -52,22 +52,22 @@ position = Vector2(0, 700)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/MainPath_West"]
 color = Color(0.19, 0.23, 0.18, 1)
-polygon = PackedVector2Array(0, 0, 650, -38, 650, 35, 0, 72)
+polygon = PackedVector2Array(0, 0, 560, -34, 560, 38, 0, 72)
 
 [node name="MainPathCollision" type="CollisionPolygon2D" parent="Terrain/MainPath_West"]
-polygon = PackedVector2Array(0, 0, 650, -38, 650, 42, 0, 78)
+polygon = PackedVector2Array(0, 0, 560, -34, 560, 42, 0, 78)
 
 [node name="MainPathEdge" type="Line2D" parent="Terrain/MainPath_West"]
-points = PackedVector2Array(0, 0, 180, -10, 360, -22, 520, -30, 650, -38)
+points = PackedVector2Array(0, 0, 180, -10, 360, -22, 500, -30, 560, -34)
 width = 5.0
 default_color = Color(0.55, 0.61, 0.43, 1)
 
 [node name="Fork_MainRise" type="StaticBody2D" parent="Terrain"]
-position = Vector2(650, 662)
+position = Vector2(560, 666)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/Fork_MainRise"]
 color = Color(0.2, 0.25, 0.19, 1)
-polygon = PackedVector2Array(0, 0, 270, -125, 430, -160, 430, -82, 270, -70, 0, 55)
+polygon = PackedVector2Array(0, 0, 270, -125, 520, -166, 520, -82, 270, -70, 0, 55)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Terrain/Fork_MainRise"]
 polygon = PackedVector2Array(0, 0, 270, -125, 430, -160, 430, -82, 270, -70, 0, 55)
@@ -80,7 +80,32 @@ color = Color(0.21, 0.26, 0.19, 1)
 polygon = PackedVector2Array(0, 0, 210, 8, 430, -12, 540, -5, 540, 66, 0, 72)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Terrain/MainPath_EastShelf"]
-polygon = PackedVector2Array(0, 0, 210, 8, 330, -12, 440, -5, 440, 66, 0, 72)
+polygon = PackedVector2Array(0, 0, 210, 8, 430, -12, 540, -5, 540, 66, 0, 72)
+
+; Climbable exposed roots and trunks lead from the middle shelf to the ruin/canopy entrance.
+[node name="TreeTrunkStep_01" type="StaticBody2D" parent="Terrain"]
+position = Vector2(900, 470)
+[node name="VisualMass" type="Polygon2D" parent="Terrain/TreeTrunkStep_01"]
+color = Color(0.13, 0.19, 0.12, 1)
+polygon = PackedVector2Array(0, 0, 95, -8, 110, 25, 15, 36)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Terrain/TreeTrunkStep_01"]
+polygon = PackedVector2Array(0, 0, 95, -8, 110, 25, 15, 36)
+
+[node name="TreeTrunkStep_02" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1010, 400)
+[node name="VisualMass" type="Polygon2D" parent="Terrain/TreeTrunkStep_02"]
+color = Color(0.14, 0.2, 0.12, 1)
+polygon = PackedVector2Array(0, 0, 100, -6, 110, 25, 10, 32)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Terrain/TreeTrunkStep_02"]
+polygon = PackedVector2Array(0, 0, 100, -6, 110, 25, 10, 32)
+
+[node name="TreeTrunkStep_03" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1110, 325)
+[node name="VisualMass" type="Polygon2D" parent="Terrain/TreeTrunkStep_03"]
+color = Color(0.15, 0.21, 0.13, 1)
+polygon = PackedVector2Array(0, 0, 100, -6, 110, 25, 10, 32)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Terrain/TreeTrunkStep_03"]
+polygon = PackedVector2Array(0, 0, 100, -6, 110, 25, 10, 32)
 
 [node name="CanopyBranch_West" type="StaticBody2D" parent="Terrain"]
 position = Vector2(820, 510)
@@ -124,13 +149,13 @@ polygon = PackedVector2Array(0, 0, 550, 0, 550, 34, 0, 34)
 
 ; Raised central ruin: an isolated silhouette makes the depth visible without requiring 3D.
 [node name="CentralRuinIsland" type="Polygon2D" parent="Terrain"]
-position = Vector2(650, 180)
+position = Vector2(1180, 205)
 z_index = -1
 color = Color(0.13, 0.18, 0.15, 1)
 polygon = PackedVector2Array(0, 35, 25, 0, 300, 0, 330, 35, 315, 75, 15, 75)
 
 [node name="RuinTopEdge" type="Line2D" parent="Terrain"]
-position = Vector2(650, 180)
+position = Vector2(1180, 205)
 points = PackedVector2Array(25, 0, 300, 0, 330, 35)
 width = 4.0
 default_color = Color(0.46, 0.53, 0.39, 1)
@@ -144,11 +169,11 @@ polygon = PackedVector2Array(900, 650, 1020, 620, 1170, 690, 1350, 730, 1540, 73
 [node name="WaterfallStream" type="Polygon2D" parent="Terrain"]
 z_index = -2
 color = Color(0.36, 0.58, 0.55, 0.58)
-polygon = PackedVector2Array(1260, 570, 1305, 570, 1325, 790, 1290, 850, 1270, 780)
+polygon = PackedVector2Array(1260, 570, 1305, 570, 1325, 790, 1290, 900, 1270, 780)
 
 [node name="WaterfallHighlight" type="Line2D" parent="Terrain"]
 z_index = -1
-points = PackedVector2Array(1280, 590, 1290, 680, 1310, 770)
+points = PackedVector2Array(1280, 590, 1290, 680, 1310, 820)
 width = 4.0
 default_color = Color(0.68, 0.8, 0.72, 0.55)
 
@@ -163,7 +188,7 @@ polygon = PackedVector2Array(0, 0, 170, 90, 290, 110, 290, 150, 170, 130, 0, 55)
 polygon = PackedVector2Array(0, 0, 170, 90, 290, 110, 290, 150, 170, 130, 0, 55)
 
 [node name="LowerBranch_PoolShelf" type="StaticBody2D" parent="Terrain"]
-position = Vector2(940, 830)
+position = Vector2(900, 900)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/LowerBranch_PoolShelf"]
 color = Color(0.16, 0.22, 0.19, 1)
@@ -173,7 +198,7 @@ polygon = PackedVector2Array(0, 0, 240, 0, 240, 42, 0, 42)
 polygon = PackedVector2Array(0, 0, 240, 0, 240, 42, 0, 42)
 
 [node name="LowerBranch_ReturnStep" type="StaticBody2D" parent="Terrain"]
-position = Vector2(1120, 760)
+position = Vector2(1140, 850)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/LowerBranch_ReturnStep"]
 color = Color(0.18, 0.24, 0.17, 1)
@@ -187,6 +212,11 @@ polygon = PackedVector2Array(0, 0, 140, 0, 140, 30, 0, 30)
 z_index = 5
 color = Color(0.07, 0.13, 0.09, 0.88)
 polygon = PackedVector2Array(0, 1100, 0, 1010, 55, 1045, 100, 970, 142, 1040, 190, 995, 230, 1100)
+
+[node name="WaterfallDropConcealment" type="Polygon2D" parent="Terrain"]
+z_index = 3
+color = Color(0.055, 0.105, 0.09, 0.96)
+polygon = PackedVector2Array(1210, 865, 1250, 840, 1280, 860, 1315, 845, 1350, 870, 1390, 850, 1430, 880, 1430, 915, 1210, 915)
 
 [node name="ForegroundRoots_East" type="Polygon2D" parent="Terrain"]
 z_index = 5
@@ -204,7 +234,7 @@ polygon = PackedVector2Array(500, 160, 580, 95, 680, 120, 760, 65, 860, 105, 950
 position = Vector2(120, 700)
 
 [node name="EntryCanopyReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
-position = Vector2(1630, 290)
+position = Vector2(1510, 290)
 
 [node name="EntryTombReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
 position = Vector2(1620, 500)
@@ -216,10 +246,10 @@ position = Vector2(80, 700)
 position = Vector2(1620, 500)
 
 [node name="ExitCanopy" type="Marker2D" parent="Terrain/RoomMarkers"]
-position = Vector2(1630, 220)
+position = Vector2(1510, 220)
 
 [node name="DropToR04" type="Marker2D" parent="Terrain/RoomMarkers"]
-position = Vector2(810, 800)
+position = Vector2(1300, 900)
 
 [node name="FootingDesignMarkers" type="Node2D" parent="Terrain"]
 
@@ -273,6 +303,6 @@ position = Vector2(80, 700)
 position = Vector2(1620, 500)
 
 [node name="Door_ExitCanopy" parent="." instance=ExtResource("door_scene")]
-position = Vector2(1630, 220)
+position = Vector2(1510, 220)
 
 [node name="RoomDebugOverlay" parent="." instance=ExtResource("debug_overlay_scene")]
