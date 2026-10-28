@@ -392,3 +392,11 @@ These conclusions come from the branch tree and targeted source/scene inspection
 
 - The runtime previously passed x=1320/2000 only to choose a barrier node, even though the node positions were already authored in the scene. Replaced those numeric selectors with explicit node names and removed the unused redraw call.
 - The barrier routine now only toggles the named scene-authored barrier's visibility and collision state; no fixed barrier coordinate remains in the script.
+
+
+### A0 exterior fixed bounds moved into scene markers — 2026-10-28
+
+- Replaced the hard-coded cliff approach limit (derived from x=1120) with the authored `CliffApproachLimit` Marker2D at x=1094.
+- Replaced the hard-coded camera right limit of 1500 with `CameraBounds/RightEdge` in `prologue_exterior.tscn`.
+- The forced-loss encounter still blocks bypassing the executioner and transitions after the existing story timeout; this change only makes the fixed world/camera bounds editable in the scene tree.
+- Static check only; local runtime and cliff/boss encounter acceptance remain pending.

@@ -9,6 +9,8 @@ const FORCED_DEFEAT_SECONDS := 12.0
 @onready var boss: CharacterBody2D = $A0_ChurchExecutioner
 @onready var narrative: CanvasLayer = $NarrativeManager
 @onready var hud: CanvasLayer = $HUD
+var cliff_approach_limit: Marker2D
+var camera_right_limit: Marker2D
 var ending_started := false
 var boss_encounter_started := false
 var boss_encounter_elapsed := 0.0
@@ -19,6 +21,11 @@ func _ready() -> void:
 	set_meta("p5_1_target_region", "A0_TRANSITION")
 	set_meta("p5_1_target_scene", "res://scenes/mite_house.tscn")
 	set_meta("p5_1_spawn_side", "west")
+	cliff_approach_limit = get_node_or_null("CliffApproachLimit") as Marker2D
+	camera_right_limit = get_node_or_null("CameraBounds/RightEdge") as Marker2D
+	if cliff_approach_limit == null or camera_right_limit == null:
+		push_error("[NEREIS][PROLOGUE_EXTERIOR][AUTHORED_BOUND_MARKER_MISSING]")
+		return
 	WorldState.current_location = "church_escape_exterior"
 	WorldState.record_natural_test_region("A0", "church_escape_exterior")
 	hero.set("defer_death_recovery", true)
@@ -27,7 +34,7 @@ func _ready() -> void:
 	camera.position_smoothing_speed = 5.0
 	camera.limit_left = 0
 	camera.limit_top = 0
-	camera.limit_right = LEVEL_WIDTH
+	camera.limit_right = int(camera_right_limit.global_position.x)
 	camera.limit_bottom = 720
 	hero.defeated.connect(func() -> void:
 		if not ending_started:
@@ -44,8 +51,8 @@ func _physics_process(delta: float) -> void:
 
 	# The cliff is a forced-loss boundary, not an alternate way to skip the executioner.
 	# 悬崖是必败演出的边界，不是绕过出口执行者的捷径。
-	if is_instance_valid(boss) and hero.global_position.x > CLIFF_APPROACH_LIMIT:
-		hero.global_position.x = CLIFF_APPROACH_LIMIT
+	if is_instance_valid(boss) and hero.global_position.x > cliff_approach_limit.global_position.x:
+		hero.global_position.x = cliff_approach_limit.global_position.x
 		hero.velocity.x = minf(hero.velocity.x, 0.0)
 
 	if not boss_encounter_started and is_instance_valid(boss):
