@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/a2_room_runtime.gd" id="runtime_script"]
 [ext_resource type="PackedScene" path="res://scenes/world/interaction_door.tscn" id="door_scene"]
@@ -88,7 +88,7 @@ polygon = PackedVector2Array(0, 0, 210, 8, 330, -12, 440, -5, 440, 66, 0, 72)
 polygon = PackedVector2Array(0, 0, 210, 8, 330, -12, 440, -5, 440, 66, 0, 72)
 
 [node name="CanopyBranch_West" type="StaticBody2D" parent="Terrain"]
-position = Vector2(560, 340)
+position = Vector2(820, 510)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/CanopyBranch_West"]
 color = Color(0.16, 0.23, 0.15, 1)
@@ -98,7 +98,7 @@ polygon = PackedVector2Array(0, 0, 240, 0, 260, 18, 250, 48, 15, 48)
 polygon = PackedVector2Array(0, 0, 240, 0, 260, 18, 250, 48, 15, 48)
 
 [node name="CanopyBranch_StepA" type="StaticBody2D" parent="Terrain"]
-position = Vector2(820, 360)
+position = Vector2(1010, 440)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/CanopyBranch_StepA"]
 color = Color(0.17, 0.25, 0.16, 1)
@@ -108,7 +108,7 @@ polygon = PackedVector2Array(0, 0, 120, 0, 120, 28, 0, 28)
 polygon = PackedVector2Array(0, 0, 120, 0, 120, 28, 0, 28)
 
 [node name="CanopyBranch_StepB" type="StaticBody2D" parent="Terrain"]
-position = Vector2(980, 300)
+position = Vector2(1160, 370)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/CanopyBranch_StepB"]
 color = Color(0.17, 0.25, 0.16, 1)
@@ -118,7 +118,7 @@ polygon = PackedVector2Array(0, 0, 120, 0, 120, 28, 0, 28)
 polygon = PackedVector2Array(0, 0, 120, 0, 120, 28, 0, 28)
 
 [node name="CanopyBranch_East" type="StaticBody2D" parent="Terrain"]
-position = Vector2(1100, 220)
+position = Vector2(1300, 290)
 
 [node name="VisualMass" type="Polygon2D" parent="Terrain/CanopyBranch_East"]
 color = Color(0.18, 0.26, 0.16, 1)
@@ -209,7 +209,7 @@ polygon = PackedVector2Array(500, 160, 580, 95, 680, 120, 760, 65, 860, 105, 950
 position = Vector2(120, 700)
 
 [node name="EntryCanopyReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
-position = Vector2(1630, 220)
+position = Vector2(1630, 290)
 
 [node name="EntryTombReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
 position = Vector2(1620, 500)
@@ -232,7 +232,7 @@ position = Vector2(810, 800)
 position = Vector2(650, 662)
 
 [node name="Footing_02_Canopy" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
-position = Vector2(1250, 220)
+position = Vector2(1450, 290)
 
 [node name="Footing_03_CentralRuin" type="Marker2D" parent="Terrain/FootingDesignMarkers"]
 position = Vector2(800, 180)
