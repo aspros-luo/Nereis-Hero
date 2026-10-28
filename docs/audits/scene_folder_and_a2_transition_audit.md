@@ -414,3 +414,6 @@ These conclusions come from the branch tree and targeted source/scene inspection
 - Removed generic fallback coordinates from `_room_marker_position()`. A missing marker now returns an invalid sentinel after a clear error; the room refuses to spawn the Hero at a guessed location.
 - H02 gate setup now also stops if its authored anchor is missing. Door/drop anchors already fail with explicit contract errors.
 - Source-level verification confirmed every required entry marker exists in the six room scenes; Godot runtime behavior remains untested here.
+
+
+- Follow-up hardening: the R04 preflight also requires both the H02 Marker2D and the authored `HiddenBellChamberGate` instance, so a missing hidden-gate anchor cannot partially initialize the room and skip its normal exits.

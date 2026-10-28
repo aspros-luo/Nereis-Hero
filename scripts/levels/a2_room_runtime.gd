@@ -99,6 +99,13 @@ func _validate_authored_room_structure() -> bool:
 		if get_node_or_null("Terrain/RoomMarkers/" + marker_name) is not Marker2D:
 			push_error("[NEREIS][A2][ROOM][SPAWN_MARKER_MISSING] room=%s marker=%s" % [room_id, marker_name])
 			return false
+	if room_id == "A2-R04":
+		if not (get_node_or_null("Terrain/RoomMarkers/H02Gate") is Marker2D):
+			push_error("[NEREIS][A2][ROOM][H02_MARKER_MISSING]")
+			return false
+		if get_node_or_null("HiddenBellChamberGate") == null:
+			push_error("[NEREIS][A2][ROOM][AUTHORED_GATE_MISSING] H02")
+			return false
 	return true
 
 
