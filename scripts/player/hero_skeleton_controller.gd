@@ -425,7 +425,7 @@ func _apply_pose() -> void:
 	var run_phase := _stride_phase
 	var run_cycle := sin(run_phase)
 	var opposite_cycle := sin(run_phase + PI)
-	var run_bounce := absf(sin(run_phase * 2.0)) * 1.5
+	var run_bounce := absf(sin(run_phase * 2.0)) * 3.0
 	match current_pose:
 		PoseState.IDLE:
 			if animate_idle:
@@ -445,22 +445,33 @@ func _apply_pose() -> void:
 				foot_left_bone.rotation = -leg_left_bone.rotation * 0.4 - knee_left_bone.rotation * 0.25
 				foot_right_bone.rotation = -leg_right_bone.rotation * 0.4 - knee_right_bone.rotation * 0.25
 		PoseState.RUN:
-			# Keep the hip swing narrow; the separated knee/calf chains provide stride without legs crossing.
-			var stride_amplitude := lerpf(0.12, 0.34, stride_ratio)
+			# Human gait: hips lead the stride, arms counter-swing, knees fold during recovery,
+			# and feet lift then extend toward a planted landing instead of rotating like pendulums.
+			var stride_amplitude := lerpf(0.18, 0.58, stride_ratio)
 			var swing := run_cycle * stride_amplitude * _stride_weight if animate_run else 0.0
-			var knee_amplitude := lerpf(0.16, 0.42, stride_ratio)
-			var left_knee := maxf(0.0, opposite_cycle) * knee_amplitude * _stride_weight
-			var right_knee := maxf(0.0, run_cycle) * knee_amplitude * _stride_weight
+			var knee_amplitude := lerpf(0.24, 0.78, stride_ratio)
+			var left_lift := maxf(0.0, opposite_cycle)
+			var right_lift := maxf(0.0, run_cycle)
+			var left_knee := left_lift * knee_amplitude * _stride_weight
+			var right_knee := right_lift * knee_amplitude * _stride_weight
+			var planted_weight := 1.0 - maxf(left_lift, right_lift) * 0.72
 			root_bone.position.y -= run_bounce * stride_ratio * _stride_weight
-			body_bone.rotation = lerpf(0.0, (-0.025 - absf(run_cycle) * 0.025 - 0.04) * stride_ratio, _stride_weight)
-			arm_left_bone.rotation = lerpf(-0.08, swing * 0.72 + 0.025 * stride_ratio, _stride_weight)
-			arm_right_bone.rotation = lerpf(0.12, -swing * 0.72 - 0.08 * stride_ratio, _stride_weight)
+			root_bone.position.x += run_cycle * 1.2 * stride_ratio * _stride_weight
+			body_bone.rotation = lerpf(0.0, (-0.10 - absf(run_cycle) * 0.035) * stride_ratio, _stride_weight)
+			head_bone.rotation = -body_bone.rotation * 0.38
+			arm_left_bone.rotation = lerpf(-0.08, -swing * 0.92 + 0.08 * stride_ratio, _stride_weight)
+			arm_right_bone.rotation = lerpf(0.12, swing * 0.92 - 0.12 * stride_ratio, _stride_weight)
 			leg_left_bone.rotation = -swing
 			leg_right_bone.rotation = swing
 			knee_left_bone.rotation = left_knee
 			knee_right_bone.rotation = right_knee
-			foot_left_bone.rotation = -leg_left_bone.rotation * 0.55 - knee_left_bone.rotation * 0.4
-			foot_right_bone.rotation = -leg_right_bone.rotation * 0.55 - knee_right_bone.rotation * 0.4
+			# Bend the knee and raise the foot on recovery; flatten it as the leg reaches forward.
+			knee_left_bone.position.y -= left_lift * 2.8 * _stride_weight
+			knee_right_bone.position.y -= right_lift * 2.8 * _stride_weight
+			foot_left_bone.rotation = -leg_left_bone.rotation * 0.42 - knee_left_bone.rotation * 0.62 + left_lift * 0.18
+			foot_right_bone.rotation = -leg_right_bone.rotation * 0.42 - knee_right_bone.rotation * 0.62 + right_lift * 0.18
+			# Slight hip compression on the support leg gives the body weight rather than a constant bounce.
+			root_bone.position.y += (1.0 - planted_weight) * 1.2
 		PoseState.JUMP:
 			# Arms lead the launch; legs tuck progressively less as upward velocity fades.
 			var launch := clampf((-_vertical_velocity - 160.0) / 360.0, 0.0, 1.0)
@@ -529,24 +540,42 @@ func _apply_pose() -> void:
 				body_bone.rotation = lerpf(strike_body, 0.0, recover)
 				arm_right_bone.rotation = lerpf(strike_arm, 0.12, recover)
 				arm_left_bone.rotation = lerpf(-0.32, -0.08, recover)
-			leg_left_bone.rotation = -0.22 - (1.0 - smoothstep(0.62, 1.0, phase)) * 0.08
-			leg_right_bone.rotation = 0.18 + smoothstep(0.62, 1.0, phase) * 0.04
-			knee_left_bone.rotation = 0.16
-			knee_right_bone.rotation = 0.08
+			var load_weight := 1.0 - smoothstep(0.0, 0.42, phase)
+			var follow_through := smoothstep(0.38, 0.72, phase)
+			var recovery := smoothstep(0.72, 1.0, phase)
+			# Shift the hips into the cut, then let the shoulders and weapon over-travel before recovery.
+			root_bone.position.x += (load_weight * -2.5 + follow_through * 3.8 - recovery * 1.3) * stride_ratio
+			root_bone.position.y += load_weight * 1.0 + follow_through * 1.4
+			head_bone.rotation = -body_bone.rotation * 0.32
+			leg_left_bone.rotation = -0.30 + follow_through * 0.14 + recovery * 0.16
+			leg_right_bone.rotation = 0.26 - follow_through * 0.10 - recovery * 0.16
+			knee_left_bone.rotation = 0.24 - follow_through * 0.12
+			knee_right_bone.rotation = 0.12 + follow_through * 0.16
+			foot_left_bone.rotation = -leg_left_bone.rotation * 0.45 - knee_left_bone.rotation * 0.3
+			foot_right_bone.rotation = -leg_right_bone.rotation * 0.45 - knee_right_bone.rotation * 0.3
 			_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(38, -5)])
 		PoseState.ATTACK_SHORT:
 			# Compact wrist-led slashes: faster extension, little torso travel, immediate recoil.
 			var duration := maxf(0.01, _action_elapsed + _action_remaining)
 			var phase := clampf(_action_elapsed / duration, 0.0, 1.0)
 			var strike := sin(clampf(phase / 0.72, 0.0, 1.0) * PI)
-			body_bone.rotation = -0.08 - strike * 0.18
-			arm_right_bone.rotation = lerpf(-0.22, 0.86, smoothstep(0.05, 0.32, phase))
-			arm_right_bone.rotation = lerpf(arm_right_bone.rotation, -0.12, smoothstep(0.52, 1.0, phase))
-			arm_left_bone.rotation = 0.08 + strike * 0.18
-			leg_left_bone.rotation = -0.08
-			leg_right_bone.rotation = 0.12
-			knee_left_bone.rotation = 0.08
-			knee_right_bone.rotation = 0.04
+			var load := 1.0 - smoothstep(0.0, 0.24, phase)
+			var extension := smoothstep(0.12, 0.38, phase)
+			var recoil := smoothstep(0.48, 0.78, phase)
+			body_bone.rotation = -0.10 - load * 0.12 - strike * 0.16 + recoil * 0.13
+			head_bone.rotation = -body_bone.rotation * 0.28
+			arm_right_bone.rotation = lerpf(-0.42, 0.98, extension)
+			arm_right_bone.rotation = lerpf(arm_right_bone.rotation, -0.18, recoil)
+			arm_left_bone.rotation = lerpf(0.18, -0.24, extension) + recoil * 0.16
+			# The lead leg braces at impact; the rear leg releases during the follow-through.
+			root_bone.position.x += extension * 1.8 - recoil * 1.2
+			root_bone.position.y += load * 0.8 + strike * 0.6
+			leg_left_bone.rotation = -0.18 + recoil * 0.12
+			leg_right_bone.rotation = 0.18 - recoil * 0.08
+			knee_left_bone.rotation = 0.18 + strike * 0.12
+			knee_right_bone.rotation = 0.08 + recoil * 0.08
+			foot_left_bone.rotation = -leg_left_bone.rotation * 0.4
+			foot_right_bone.rotation = -leg_right_bone.rotation * 0.4
 			_sword_line.points = PackedVector2Array([Vector2.ZERO, Vector2(19, -2)])
 		PoseState.WEAPON_TECHNIQUE:
 			var duration := maxf(0.01, _action_elapsed + _action_remaining)
