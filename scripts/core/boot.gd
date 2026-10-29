@@ -97,6 +97,20 @@ func _confirm_new_game() -> void:
 
 
 func _start_new_game() -> void:
-	WorldState.start_new_game()
+	if not WorldState.start_new_game():
+		match str(WorldState.language):
+			"zh_tw":
+				status_label.text = "無法建立新存檔，請檢查存檔目錄權限。"
+			"en":
+				status_label.text = "Could not create a new save. Check save-directory permissions."
+			"ja":
+				status_label.text = "新しいセーブを作成できません。保存先の権限を確認してください。"
+			_:
+				status_label.text = "无法创建新存档，请检查存档目录权限。"
+		return
+	var change_error := get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
+	if change_error != OK:
+		status_label.text = "无法载入序章场景，请检查资源文件。"
+		push_error("[NEREIS][MENU] New-game scene load failed; error=%d" % change_error)
+		return
 	print("[NEREIS][MENU] New game started")
-	get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
