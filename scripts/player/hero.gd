@@ -1129,7 +1129,7 @@ func get_visual_state_name() -> String:
 		CombatState.IDLE:
 			return "idle"
 		CombatState.MOVE:
-			return "run"
+			return "run" if movement_hold_time >= RUN_HOLD_THRESHOLD else "walk"
 		CombatState.JUMP:
 			return "jump"
 		CombatState.FALL:
