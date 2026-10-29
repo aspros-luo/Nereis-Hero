@@ -644,7 +644,7 @@ func save_game() -> void:
 	print("[NEREIS][SAVE] Game saved atomically")
 
 func has_valid_save() -> bool:
-	return save_load_status == "valid"
+	return save_load_status == "valid" and ResourceLoader.exists(get_resume_scene_path())
 
 func load_game() -> void:
 	save_load_status = "missing"
