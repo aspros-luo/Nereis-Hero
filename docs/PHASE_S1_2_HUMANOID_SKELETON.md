@@ -1,35 +1,63 @@
-# Phase S1.2 - Humanoid Skeleton Base Integration
+# Phase S1.2 — Skeleton2D 火柴人主角与动作系统
 
-## Status
+## 当前目标
 
-In progress.
+暂不进行角色美术定稿。主角使用清晰、轻量的火柴人骨架验证动作、战斗判定与手感；确认玩法稳定后再替换外观。不得把“外观暂时简陋”当作阻止玩法开发的理由。
 
-## Goal
+## 当前架构（按仓库现状记录）
 
-Replace fragile procedural character rendering with a reusable Skeleton2D based visual pipeline.
+- 正式玩法控制器：`scripts/player/hero.gd`。负责移动、跳跃、攻击、闪避、体力、受击、死亡和战斗状态。
+- 正式骨架场景：`scenes/player/hero_skeleton.tscn`。
+- 正式骨架表现脚本：`scripts/player/hero_skeleton_controller.gd`。读取 Hero 提供的视觉状态快照，驱动骨骼姿势；表现层不得自行决定伤害、碰撞或体力。
+- 接入方式：`hero.gd` 通过 `get_visual_context()` 将玩法状态传给骨架表现层。开发版可用 F8 切换骨架表现，方便回退比较。
+- 独立动作/战斗试验场：`scenes/characters/stickman_combat_test.tscn`，控制器为 `scripts/characters/stickman_skeleton_controller.gd`。这是隔离测试原型，不应另行发展成第二套正式主角控制器。
 
-## Architecture
+## 开发原则
 
-Gameplay remains separated from visual presentation:
+1. **先玩法，后美术。** 火柴人仅用于辨识动作轮廓，不做中国剑客服饰、材质、特效或精细模型。
+2. **单一玩法真相。** 移动、跳跃、伤害、无敌帧、体力与死亡以 `hero.gd` 为准；骨架脚本只表现状态。
+3. **不再并行堆叠控制器。** 独立 stickman 测试场用于复现与验证动作问题；通过验收的机制再整合进正式 Hero，不把测试控制器直接替代正式控制器。
+4. **动画与判定分离但同步。** 攻击前摇、有效帧、收招由玩法控制器决定；骨架动画必须对齐这些时段，不能通过动画脚本直接造成伤害。
+5. **优先保证基本动作闭环。** 待机、移动、起跳、下落、落地、普通攻击、受击、闪避、死亡；再完善输入缓冲、连击衔接与专属技能。
+6. **不以静态检查冒充实机验收。** 每个动作里程碑先做脚本/场景静态检查，再在 Godot 4.6.1 中运行测试场与实际地图。未运行的项目明确标记为“待本地实机验收”。
 
-- Character gameplay scripts own movement, combat, stamina and damage.
-- HumanoidSkeletonBase owns reusable humanoid visual state and attachment points.
-- Hero, important NPCs, elite humanoid enemies and bosses can reuse the same foundation.
+## 已知现状与待完成工作
 
-## Current Progress
+- 正式 Hero 已包含移动、跳跃、攻击、闪避/冲刺、抓钩、墙面移动、受击、死亡、体力等玩法状态；不要重复实现这些系统。
+- 正式骨架控制器已有待机、跑动、跳跃、下落、落地、长剑攻击、短刃攻击、战技、闪避、冲刺、抓钩、攀墙、受击和死亡姿势入口。
+- 目前不能仅凭脚本存在就认定动作效果正确。需要优先检查骨架在实际运行时的姿势轮廓、面向翻转、脚部落地、攻击起落帧和受击/死亡优先级。
+- 独立 stickman 原型已具有 AnimationPlayer 动画库、长剑/短刃连击、闪避、体力和受击测试入口；它是诊断工具，不代表所有动作已通过验收。
 
-Completed:
+## 下一步实施顺序
 
-- HumanoidSkeletonBase foundation.
-- Animation state entry points.
-- WeaponSocket and EffectSocket preparation.
+### S1.2-A：基础动作验收与修正
 
-Next:
+1. 检查正式 Hero 与 Skeleton2D 的状态映射，确认状态变化能触发对应姿势。
+2. 逐一验证待机/跑动、跳跃/下落/落地、攻击、闪避、受击和死亡；重点查找姿势残留、方向错误、脚底漂浮、骨骼翻转及状态切换冲突。
+3. 修复已定位的问题，不重写已验证的移动与战斗系统。
+4. 补充可重复的静态检查，记录尚需本地运行确认的项目。
 
-- Hero scene Skeleton2D integration.
-- AnimationPlayer connection.
-- Weapon attachment validation.
+### S1.2-B：战斗手感
 
-## Migration Reason
+1. 校准攻击前摇、命中有效帧、收招和视觉动作。
+2. 验证连击输入缓冲及体力不足时的行为。
+3. 明确闪避的移动距离、无敌窗口与恢复时间，避免与快速冲刺混为一谈。
+4. 通过独立测试场验证命中去重、受击中断与死亡状态，再整合回正式 Hero。
 
-The previous procedural polygon rendering approach caused runtime triangulation failures in Godot. The new Skeleton2D pipeline improves stability and prepares future character reuse.
+### S1.2-C：地图实机验收
+
+在 A0、A1、已冻结的 A2 R01 原型中验证移动、跳跃、落地、战斗、死亡与重生。不得为动作测试擅自修改或扩展冻结的 A2 R01 地形。
+
+## 验收清单
+
+- [ ] Godot 4.6.1 无脚本解析错误、缺失节点或动画轨道路径错误。
+- [ ] 所有基本姿势能正确播放，并能从动作状态恢复。
+- [ ] 面向左/右时姿势与攻击方向一致。
+- [ ] 攻击有效帧与实际判定一致，单次攻击不会对同一目标重复结算。
+- [ ] 受击和死亡能正确中断不允许继续的动作。
+- [ ] 骨架表现不会改变玩法碰撞、伤害、体力或场景状态。
+- [ ] 静态验证结果与本地实机验收结果分开记录。
+
+## 迁移原因
+
+此前的角色表现尝试出现过不稳定问题，因此本阶段以可观察、可复现的火柴人骨架为基础，优先验证动作和玩法状态的一致性。暂不追求角色美术完成度。
