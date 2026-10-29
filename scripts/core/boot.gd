@@ -94,6 +94,6 @@ func _confirm_new_game() -> void:
 
 
 func _start_new_game() -> void:
-	WorldState.delete_save()
+	WorldState.start_new_game()
 	print("[NEREIS][MENU] New game started")
 	get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
