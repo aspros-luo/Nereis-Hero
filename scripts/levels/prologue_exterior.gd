@@ -23,7 +23,7 @@ func _ready() -> void:
 	if cliff_approach_limit == null or camera_right_limit == null:
 		push_error("[NEREIS][PROLOGUE_EXTERIOR][AUTHORED_BOUND_MARKER_MISSING]")
 		return
-	WorldState.current_location = "church_escape_exterior"
+	WorldState.set_location("church_escape_exterior")
 	WorldState.record_natural_test_region("A0", "church_escape_exterior")
 	hero.set("defer_death_recovery", true)
 	var camera := hero.get_node("HeroCamera") as Camera2D
@@ -83,9 +83,8 @@ func _begin_rescue_transition(reason: String) -> void:
 	# A0's one-time arrival is intentionally quiet: wake in Mite's house.
 	# This is a story arrival, not the village's reusable checkpoint or return spawn.
 	WorldState.mark_prologue_complete()
-	WorldState.current_location = "mite_house"
 	WorldState.pending_region_spawn_side = "west"
-	WorldState.save_game()
+	WorldState.set_location("mite_house")
 	SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")
 
 func _show_pursuers() -> void:
