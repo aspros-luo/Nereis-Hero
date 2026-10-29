@@ -315,3 +315,21 @@ A0 序章内部、洞外山路及初次抵达 Mite 住所的部分场景边界�
 
 复核新增的启动顺序断言时发现函数边界匹配字符串的转义层级不正确，已修正为按 Python 换行符定位下一个函数定义。该修正只调整验证器，不代表验证器已在本地执行。
 - 提交：`ce1afc4c8f25a4e58d6b7bb7c7b01ffd57bb717f`
+
+
+## 13. 修复 A1 两个侧区域的 Continue 场景映射（2026-10-29）
+
+### 审计发现
+
+`village_hub.gd` 会将 `current_location` 保存为 `village_backhill` 或 `old_drain_exploration`，但 `get_resume_scene_path()` 原先没有这两个分支。Continue 会落入默认回退路径（通常是序章），而不是回到对应场景。这是已确认的 A1 继续游戏路由缺陷。
+
+### 本轮修改
+
+- 为 `village_backhill` 增加 `res://scenes/village_backhill.tscn` 映射。
+- 为 `old_drain_exploration` 增加 `res://scenes/old_drain_exploration.tscn` 映射。
+- 在静态验证器中增加两项映射合同。
+- 提交：`2c9e4041005893e73ae2995d305d3a90d6ebe20d`（映射）；`60351ec3a8514f109802233e17a84fd7dca8136b`（静态合同）。
+
+### 验证状态
+
+源码映射已检查，但尚未执行静态验证器或 Godot 实机测试。下一步需要审计所有 `set_location()` 的调用值与 `get_resume_scene_path()` 的分支是否一一对应，避免只修复已发现的两个位置。
