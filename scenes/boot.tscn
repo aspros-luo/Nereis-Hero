@@ -43,7 +43,7 @@ horizontal_alignment = 1
 offset_left = 390.0
 offset_top = 285.0
 offset_right = 890.0
-offset_bottom = 620.0
+offset_bottom = 655.0
 mouse_filter = 1
 color = Color(0.0666667, 0.0627451, 0.0941176, 0.94)
 
@@ -69,25 +69,32 @@ offset_bottom = 186.0
 theme_override_font_sizes/font_size = 17
 text = "宏观地图验收 / World Map Test"
 
+[node name="SettingsButton" type="Button" parent="TitlePanel"]
+offset_left = 90.0
+offset_top = 194.0
+offset_right = 410.0
+offset_bottom = 240.0
+text = "设置 / Settings"
+
 [node name="LanguageLabel" type="Label" parent="TitlePanel"]
 offset_left = 90.0
-offset_top = 198.0
+offset_top = 246.0
 offset_right = 410.0
-offset_bottom = 220.0
+offset_bottom = 268.0
 theme_override_colors/font_color = Color(0.560784, 0.521569, 0.52549, 1)
 theme_override_font_sizes/font_size = 14
 
 [node name="LanguageOption" type="OptionButton" parent="TitlePanel"]
 offset_left = 90.0
-offset_top = 221.0
+offset_top = 269.0
 offset_right = 410.0
-offset_bottom = 263.0
+offset_bottom = 311.0
 
 [node name="StatusLabel" type="Label" parent="TitlePanel"]
 offset_left = 90.0
-offset_top = 272.0
+offset_top = 318.0
 offset_right = 410.0
-offset_bottom = 298.0
+offset_bottom = 344.0
 theme_override_colors/font_color = Color(0.458824, 0.427451, 0.447059, 1)
 theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
