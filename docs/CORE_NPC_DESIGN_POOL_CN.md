@@ -561,6 +561,8 @@ Avoid hard-coding narrative logic into individual scene scripts when a data-driv
 
 ## 12. 世界线索与小人物叙事文档
 
+- **世界观事实、已确认/待定状态、冲突登记与持续变更日志**：见 [世界观总档案](WORLD_BUILDING_BIBLE_CN.md)。
+
 核心 NPC 的行动、物品交互与人物知识范围，需遵循统一的世界级线索与小人物叙事规则：
 
 - 详见 [世界线索与小人物叙事基线](WORLD_NARRATIVE_CLUE_LEDGER_CN.md)。
