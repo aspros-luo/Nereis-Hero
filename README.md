@@ -410,3 +410,19 @@ The title menu now includes **World Map Test / 宏观地图验收**. It opens a 
 ### World-map terminal layer update (2026-10-12)
 
 The A13 terminal anomaly is now represented by `scenes/terminal_anomaly.tscn` rather than remaining a topology-only node. The A12 main route and the gated A11/H08 deep-dream routes converge on A13, which delegates the final choice to the existing ending evaluator. Save/resume mapping and static wiring contracts were updated. This is source-level integration only; Godot traversal and ending transitions remain unverified.
+
+
+## Current milestone handoff (2026-10-29)
+
+**Start new work here:** [`docs/MILESTONE_HANDOFF_2026-10-29_CN.md`](docs/MILESTONE_HANDOFF_2026-10-29_CN.md)
+
+This is the current handoff for confirmed world/map/narrative decisions and the next milestone. Read it together with [project documentation governance](docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md), [development working charter](docs/DEVELOPMENT_WORKING_CHARTER_CN_EN.md), [development status](docs/DEVELOPMENT_STATUS.md), and the relevant region baseline before changing code or scenes.
+
+### Narrative source-of-truth map
+
+- World facts / canon boundaries: [`WORLD_BUILDING_BIBLE_CN.md`](docs/WORLD_BUILDING_BIBLE_CN.md)
+- Fragmentary clues and small-person storytelling: [`WORLD_NARRATIVE_CLUE_LEDGER_CN.md`](docs/WORLD_NARRATIVE_CLUE_LEDGER_CN.md)
+- Narrative presentation audit and migration status: [`NARRATIVE_PRESENTATION_AUDIT_AND_MIGRATION_CN.md`](docs/NARRATIVE_PRESENTATION_AUDIT_AND_MIGRATION_CN.md)
+- Ending conditions and state contract: [`ENDING_CONDITION_DESIGN_CN.md`](docs/ENDING_CONDITION_DESIGN_CN.md)
+
+Older story/director drafts and map-phase documents remain historical references until their source references and implementation dependencies have been audited. They must not override the latest user-confirmed decisions or the handoff above.
