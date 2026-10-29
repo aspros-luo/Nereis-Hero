@@ -4,6 +4,7 @@ extends Node
 @onready var continue_button: Button = $TitlePanel/ContinueButton
 @onready var new_game_button: Button = $TitlePanel/NewGameButton
 @onready var map_test_button: Button = $TitlePanel/MapTestButton
+@onready var settings_button: Button = $TitlePanel/SettingsButton
 @onready var language_label: Label = $TitlePanel/LanguageLabel
 @onready var language_option: OptionButton = $TitlePanel/LanguageOption
 @onready var status_label: Label = $TitlePanel/StatusLabel
@@ -20,6 +21,7 @@ func _ready() -> void:
 	continue_button.pressed.connect(_continue_game)
 	new_game_button.pressed.connect(_confirm_new_game)
 	map_test_button.pressed.connect(_open_map_test)
+	settings_button.pressed.connect(_open_settings)
 	language_option.item_selected.connect(_on_language_selected)
 	confirm_dialog.confirmed.connect(_start_new_game)
 
@@ -60,6 +62,10 @@ func _continue_game() -> void:
 func _open_map_test() -> void:
 	WorldState.debug_map_test_mode = true
 	get_tree().change_scene_to_file("res://scenes/debug/world_map_test_menu.tscn")
+
+
+func _open_settings() -> void:
+	get_tree().change_scene_to_file("res://scenes/ui/settings_menu.tscn")
 
 
 func _confirm_new_game() -> void:
