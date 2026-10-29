@@ -7,6 +7,7 @@ class_name HeroSkeletonController
 
 enum PoseState {
 	IDLE,
+	WALK,
 	RUN,
 	JUMP,
 	FALL,
@@ -61,6 +62,7 @@ var _pose_time: float = 0.0
 var _context_driven: bool = false
 var _vertical_velocity: float = 0.0
 var _horizontal_speed: float = 0.0
+var _movement_mode: String = "idle"
 var _stride_phase: float = 0.0
 var _stride_weight: float = 0.0
 var _grounded: bool = true
@@ -112,8 +114,9 @@ func _process(delta: float) -> void:
 	var stride_ratio := clampf(absf(_horizontal_speed) / 260.0, 0.0, 1.0)
 	_stride_weight = move_toward(_stride_weight, 1.0 if stride_ratio > 0.05 else 0.0, delta * 8.0)
 	if stride_ratio > 0.05:
-		# A gentle walk uses short, slow steps; sustained input naturally grows into a run.
-		_stride_phase += delta * lerpf(4.2, 11.5, stride_ratio)
+		# Walking and running have distinct cadence; run cadence ramps up only after the hold threshold.
+		var cadence := 4.8 if _movement_mode == "walk" else 10.8
+		_stride_phase += delta * lerpf(3.6, cadence, stride_ratio)
 
 	_landing_time = maxf(0.0, _landing_time - delta)
 	if not _presentation_action_name.is_empty():
@@ -155,6 +158,8 @@ func apply_visual_context(context: Dictionary) -> void:
 	var state_name := str(context.get("state", "idle"))
 	var next_pose := PoseState.IDLE
 	match state_name:
+		"walk":
+			next_pose = PoseState.WALK
 		"run":
 			next_pose = PoseState.RUN
 		"jump":
@@ -179,6 +184,7 @@ func apply_visual_context(context: Dictionary) -> void:
 			next_pose = PoseState.WALL_CLIMB
 		_:
 			next_pose = PoseState.IDLE
+	_movement_mode = str(context.get("movement_mode", "idle"))
 	var action_kind := str(context.get("action_kind", "none"))
 	if next_pose in [PoseState.ATTACK_LONG, PoseState.ATTACK_SHORT] and action_kind in ["judgment_slash", "crescent_combo", "eldritch_echo", "iaijutsu"]:
 		next_pose = PoseState.WEAPON_TECHNIQUE
@@ -444,23 +450,24 @@ func _apply_pose() -> void:
 				knee_right_bone.rotation = maxf(0.0, run_cycle) * 0.20 * settle
 				foot_left_bone.rotation = -leg_left_bone.rotation * 0.4 - knee_left_bone.rotation * 0.25
 				foot_right_bone.rotation = -leg_right_bone.rotation * 0.4 - knee_right_bone.rotation * 0.25
-		PoseState.RUN:
-			# Human gait: hips lead the stride, arms counter-swing, knees fold during recovery,
-			# and feet lift then extend toward a planted landing instead of rotating like pendulums.
-			var stride_amplitude := lerpf(0.18, 0.58, stride_ratio)
+		PoseState.WALK, PoseState.RUN:
+			# Walking keeps the torso upright and the steps compact; running adds stronger drive and lift.
+			var is_running := current_pose == PoseState.RUN
+			var gait_weight := 1.0 if is_running else 0.52
+			var stride_amplitude := lerpf(0.12, 0.58 if is_running else 0.30, stride_ratio) * gait_weight
 			var swing := run_cycle * stride_amplitude * _stride_weight if animate_run else 0.0
-			var knee_amplitude := lerpf(0.24, 0.78, stride_ratio)
+			var knee_amplitude := lerpf(0.16, 0.78 if is_running else 0.34, stride_ratio) * gait_weight
 			var left_lift := maxf(0.0, opposite_cycle)
 			var right_lift := maxf(0.0, run_cycle)
 			var left_knee := left_lift * knee_amplitude * _stride_weight
 			var right_knee := right_lift * knee_amplitude * _stride_weight
 			var planted_weight := 1.0 - maxf(left_lift, right_lift) * 0.72
-			root_bone.position.y -= run_bounce * stride_ratio * _stride_weight
-			root_bone.position.x += run_cycle * 1.2 * stride_ratio * _stride_weight
-			body_bone.rotation = lerpf(0.0, (-0.10 - absf(run_cycle) * 0.035) * stride_ratio, _stride_weight)
+			root_bone.position.y -= run_bounce * stride_ratio * _stride_weight * gait_weight
+			root_bone.position.x += run_cycle * (1.2 if is_running else 0.35) * stride_ratio * _stride_weight
+			body_bone.rotation = lerpf(0.0, (-0.10 - absf(run_cycle) * 0.035) * stride_ratio * gait_weight, _stride_weight)
 			head_bone.rotation = -body_bone.rotation * 0.38
-			arm_left_bone.rotation = lerpf(-0.08, -swing * 0.92 + 0.08 * stride_ratio, _stride_weight)
-			arm_right_bone.rotation = lerpf(0.12, swing * 0.92 - 0.12 * stride_ratio, _stride_weight)
+			arm_left_bone.rotation = lerpf(-0.04, -swing * (0.92 if is_running else 0.72) + 0.08 * stride_ratio * gait_weight, _stride_weight)
+			arm_right_bone.rotation = lerpf(0.06, swing * (0.92 if is_running else 0.72) - 0.12 * stride_ratio * gait_weight, _stride_weight)
 			leg_left_bone.rotation = -swing
 			leg_right_bone.rotation = swing
 			knee_left_bone.rotation = left_knee
