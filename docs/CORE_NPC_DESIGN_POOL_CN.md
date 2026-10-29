@@ -555,3 +555,14 @@ Once the core pool is approved, implementation can introduce:
 - relationship flags where genuinely required
 
 Avoid hard-coding narrative logic into individual scene scripts when a data-driven state model can represent it cleanly.
+
+
+---
+
+## 12. 世界线索与小人物叙事文档
+
+核心 NPC 的行动、物品交互与人物知识范围，需遵循统一的世界级线索与小人物叙事规则：
+
+- 详见 [世界线索与小人物叙事基线](WORLD_NARRATIVE_CLUE_LEDGER_CN.md)。
+- 角色设计仍以本文件为准；世界观边界、三结局区别、线索知识权限与物品设计流程以该基线为准。
+- 不得为了让 NPC 提供剧情线索而擅自增加其并不知道的世界真相。
