@@ -789,7 +789,7 @@ def main() -> int:
     require(prologue_exterior_script, "const FORCED_DEFEAT_SECONDS := 12.0", "A0 exterior forced-loss timeout", errors)
     require(prologue_exterior_script, 'boss.set("damage_immune", true)', "A0 executioner cannot be defeated before rescue", errors)
     require(prologue_exterior_script, "WorldState.mark_prologue_complete()", "A0 prologue completion is committed before transition", errors)
-    require(prologue_exterior_script, 'WorldState.current_location = "mite_house"', "A0 first arrival resumes in Mite's house", errors)
+    require(prologue_exterior_script, 'WorldState.set_location("mite_house")', "A0 first arrival persists Mite's house resume location", errors)
     require(prologue_exterior_script, 'SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")', "A0 uses fade transition directly to Mite's house", errors)
     if "prologue_cliff_fall_rescue_pending" in prologue_exterior_script:
         errors.append("A0 first-arrival narrative: redundant rescue-narrative flag must not be written.")
