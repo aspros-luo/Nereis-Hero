@@ -98,15 +98,36 @@ func collect_room_item(item_id: String) -> void:
 	save_room_state()
 
 func save_room_state() -> void:
-	var file := FileAccess.open(ROOM_SAVE_PATH, FileAccess.WRITE)
+	var temp_path := ROOM_SAVE_PATH + ".tmp"
+	var backup_path := ROOM_SAVE_PATH + ".bak"
+	var file := FileAccess.open(temp_path, FileAccess.WRITE)
 	if file == null:
-		push_warning("无法写入房间探索存档")
+		push_error("[NEREIS][SAVE][ERROR] Could not open temporary room-state save")
 		return
 	file.store_string(JSON.stringify({
+		"room_state_version": 1,
 		"explored_room_ids": explored_room_ids,
 		"opened_shortcut_ids": opened_shortcut_ids,
 		"collected_item_ids": collected_room_item_ids
 	}, "\t"))
+	file.flush()
+	file.close()
+
+	var room_absolute := ProjectSettings.globalize_path(ROOM_SAVE_PATH)
+	var temp_absolute := ProjectSettings.globalize_path(temp_path)
+	var backup_absolute := ProjectSettings.globalize_path(backup_path)
+	if FileAccess.file_exists(ROOM_SAVE_PATH):
+		if FileAccess.file_exists(backup_path):
+			DirAccess.remove_absolute(backup_absolute)
+		var backup_error := DirAccess.rename_absolute(room_absolute, backup_absolute)
+		if backup_error != OK:
+			push_error("[NEREIS][SAVE][ERROR] Could not preserve previous room-state save; error=%d" % backup_error)
+			return
+	var replace_error := DirAccess.rename_absolute(temp_absolute, room_absolute)
+	if replace_error != OK:
+		if FileAccess.file_exists(backup_path) and not FileAccess.file_exists(ROOM_SAVE_PATH):
+			DirAccess.rename_absolute(backup_absolute, room_absolute)
+		push_error("[NEREIS][SAVE][ERROR] Could not commit room-state save; error=%d" % replace_error)
 
 func load_room_state() -> void:
 	if not FileAccess.file_exists(ROOM_SAVE_PATH):
@@ -115,19 +136,30 @@ func load_room_state() -> void:
 	if file == null:
 		return
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
 	if not parsed is Dictionary:
-		push_warning("房间探索存档格式无效")
+		push_error("[NEREIS][SAVE][ERROR] Room-state save is invalid; original file preserved")
 		return
 	var data: Dictionary = parsed
+	for key in ["explored_room_ids", "opened_shortcut_ids", "collected_item_ids"]:
+		if data.has(key) and not data[key] is Array:
+			push_error("[NEREIS][SAVE][ERROR] Room-state field has invalid type: " + key)
+			return
 	explored_room_ids.clear()
 	for value: Variant in data.get("explored_room_ids", []):
-		explored_room_ids.append(str(value))
+		var room_id := str(value).strip_edges()
+		if not room_id.is_empty() and room_id not in explored_room_ids:
+			explored_room_ids.append(room_id)
 	opened_shortcut_ids.clear()
 	for value: Variant in data.get("opened_shortcut_ids", []):
-		opened_shortcut_ids.append(str(value))
+		var shortcut_id := str(value).strip_edges()
+		if not shortcut_id.is_empty() and shortcut_id not in opened_shortcut_ids:
+			opened_shortcut_ids.append(shortcut_id)
 	collected_room_item_ids.clear()
 	for value: Variant in data.get("collected_item_ids", []):
-		collected_room_item_ids.append(str(value))
+		var item_id := str(value).strip_edges()
+		if not item_id.is_empty() and item_id not in collected_room_item_ids:
+			collected_room_item_ids.append(item_id)
 var input_locked := false
 # Menu lock disables Hero input while the world and all gameplay timers keep running.
 var menu_input_locked := false
@@ -1000,6 +1032,14 @@ func mark_prologue_complete() -> void:
 	prologue_complete = true
 	print("[NEREIS][STORY] Prologue complete; Hero reached the village")
 	save_game()
+
+func start_new_game() -> void:
+	# Explicit player intent exits test mode before clearing the campaign state.
+	debug_map_test_mode = false
+	debug_natural_test_active = false
+	reset()
+	save_game()
+	print("[NEREIS][SAVE] New campaign initialized")
 
 func delete_save() -> void:
 	if debug_map_test_mode:
