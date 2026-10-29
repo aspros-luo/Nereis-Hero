@@ -46,10 +46,6 @@ A2 restart development log:
 
 `docs/DEVELOPMENT_LOG/A2_RESTART_AND_CLEANUP_2026-10-24_CN.md`
 
-Project documentation governance and task-start contract:
-
-`docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md`
-
 ## A0 prologue refinement
 
 - `docs/A0_PROLOGUE_REFINEMENT_V1_CN.md` — current A0 experience goals, first-round changes, unresolved work, and local acceptance checklist.
