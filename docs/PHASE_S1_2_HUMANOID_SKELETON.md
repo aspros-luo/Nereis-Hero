@@ -64,3 +64,10 @@
 ## 迁移原因
 
 此前的角色表现尝试出现过不稳定问题，因此本阶段以可观察、可复现的火柴人骨架为基础，优先验证动作和玩法状态的一致性。暂不追求角色美术完成度。
+
+
+## 走路状态枚举修复（2026-10-29）
+
+- 修复 `HeroSkeletonController.PoseState.WALK` 被引用但未在 `PoseState` 枚举中声明的问题。
+- 已在 `scripts/player/hero_skeleton_controller.gd` 的 `IDLE` 与 `RUN` 之间补入 `WALK`，使 `apply_visual_context()`、落地恢复与 `_apply_pose()` 中的 WALK 分支拥有对应枚举成员。
+- 提交仅修复状态枚举定义；尚未运行 Godot 解析或实机动画测试，需在本地重新导入项目并验证脚本解析。
