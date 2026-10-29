@@ -1294,6 +1294,10 @@ func get_resume_scene_path() -> String:
 			return "res://scenes/prologue_exterior.tscn"
 		"village":
 			return "res://scenes/regions/village_hub.tscn"
+		"village_backhill":
+			return "res://scenes/village_backhill.tscn"
+		"old_drain_exploration":
+			return "res://scenes/old_drain_exploration.tscn"
 		"mite_house":
 			return "res://scenes/mite_house.tscn"
 		"ash_forest":
