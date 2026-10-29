@@ -408,6 +408,11 @@ The title menu now includes **World Map Test / 宏观地图验收**. It opens a 
 The A13 terminal anomaly is now represented by `scenes/terminal_anomaly.tscn` rather than remaining a topology-only node. The A12 main route and the gated A11/H08 deep-dream routes converge on A13, which delegates the final choice to the existing ending evaluator. Save/resume mapping and static wiring contracts were updated. This is source-level integration only; Godot traversal and ending transitions remain unverified.
 
 
+
+Documentation cleanup and safe-retirement audit (2026-10-29):
+
+`docs/DOCUMENTATION_CLEANUP_AUDIT_2026-10-29_CN.md`
+
 ## Current milestone handoff (2026-10-29)
 
 **Start new work here:** [`docs/MILESTONE_HANDOFF_2026-10-29_CN.md`](docs/MILESTONE_HANDOFF_2026-10-29_CN.md)
