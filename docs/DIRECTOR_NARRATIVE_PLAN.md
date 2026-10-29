@@ -581,3 +581,10 @@ The final Mite scene dialogue / animation language.
 
 Everything else can be developed around these anchors without locking them prematurely.
 
+
+
+## Current authority notice — 2026-10-29
+
+This file is retained as a historical director-planning draft, not a binding act-by-act script. The current user-confirmed narrative rules are in [the 2026-10-29 milestone handoff](./MILESTONE_HANDOFF_2026-10-29_CN.md), [the worldbuilding bible](./WORLD_BUILDING_BIBLE_CN.md), and [the clue ledger](./WORLD_NARRATIVE_CLUE_LEDGER_CN.md).
+
+Any proposed act structure, romance dependency, explicit reveal, or explanatory scene in this draft remains subordinate to the current open-exploration direction. Do not use this draft to reintroduce automatic story panels or force every regional story into the protagonist's central plot. It is retained pending reference audit rather than deleted without evidence.
