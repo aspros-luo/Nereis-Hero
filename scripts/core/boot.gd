@@ -76,7 +76,10 @@ func _continue_game() -> void:
 	var next_scene := WorldState.get_resume_scene_path()
 	WorldState.pending_region_spawn_side = WorldState.resume_spawn_side
 	print("[NEREIS][BOOT] Continue scene=%s spawn_side=%s" % [next_scene, WorldState.pending_region_spawn_side])
-	get_tree().change_scene_to_file(next_scene)
+	var change_error := get_tree().change_scene_to_file(next_scene)
+	if change_error != OK:
+		status_label.text = "无法载入存档对应的场景，请检查资源文件。"
+		push_error("[NEREIS][BOOT] Continue scene load failed path=%s error=%d" % [next_scene, change_error])
 
 
 func _open_map_test() -> void:
