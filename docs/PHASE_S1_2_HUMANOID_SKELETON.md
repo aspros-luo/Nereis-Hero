@@ -20,15 +20,20 @@ Gameplay remains separated from visual presentation:
 
 Completed:
 
-- HumanoidSkeletonBase foundation.
-- Animation state entry points.
-- WeaponSocket and EffectSocket preparation.
+- Hero's production visual uses the authored `Skeleton2D` hierarchy in `scenes/player/hero_skeleton.tscn`.
+- Gameplay state remains owned by `scripts/player/hero.gd`; the skeleton controller consumes its visual context.
+- Running gait revised with stronger hip swing, counter-swinging arms, knee recovery, foot lift/plant, torso lean and head counter-balance.
+- Long and short attacks revised to include weight shift, bracing legs, anticipation/recoil and follow-through.
+- The independent stickman combat test remains a diagnostic sandbox, not a second gameplay controller.
 
-Next:
+Still to verify in Godot 4.6.1:
 
-- Hero scene Skeleton2D integration.
-- AnimationPlayer connection.
-- Weapon attachment validation.
+- Tune stride and attack timing against the actual in-game scale and frame rate.
+- Confirm the new gait reads as a human walk/run rather than a mechanical cycle.
+- Confirm long/short attack follow-through reads clearly at gameplay camera zoom.
+- Decide whether any animation should migrate to AnimationPlayer after the visual pass; do not add a second source of truth for gameplay state.
+
+Validation note: these changes have been committed to the feature branch, but no local Godot runtime test was performed by the assistant. In-game feel still requires user-side playtesting.
 
 ## Migration Reason
 
