@@ -41,7 +41,7 @@ func _ready() -> void:
 		gate.visible = false
 		var collision := gate.get_node("CollisionShape2D") as CollisionShape2D
 		collision.disabled = true
-	WorldState.current_location = "church_escape"
+	WorldState.set_location("church_escape")
 	WorldState.record_natural_test_region("A0", "church_escape")
 	WorldState.set_checkpoint(hero.global_position)
 
@@ -208,8 +208,8 @@ func _on_exit_interacted() -> void:
 	if not exit_open or WorldState.input_locked:
 		return
 	WorldState.input_locked = true
-	WorldState.current_location = "church_escape_exterior"
 	WorldState.pending_region_spawn_side = "west"
+	WorldState.set_location("church_escape_exterior")
 	print("[NEREIS][PROLOGUE] Leaving surgery interior for the exterior mountain path")
 	SceneTransition.fade_to_scene("res://scenes/prologue_exterior.tscn")
 
