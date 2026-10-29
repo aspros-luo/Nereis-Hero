@@ -964,6 +964,13 @@ func reset() -> void:
 	debug_natural_test_visited_regions.clear()
 	_last_natural_test_scene_path = ""
 	debug_ability_override_active = false
+	# A new run must not inherit persistent room exploration from the previous run.
+	# 新游戏必须清除独立房间存档，避免旧捷径、探索记录和拾取状态污染新周目。
+	explored_room_ids.clear()
+	opened_shortcut_ids.clear()
+	collected_room_item_ids.clear()
+	save_room_state()
+	current_a2_room_scene_path = "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"
 	hero_memory = 0
 	hero_humanity = 100
 	first_memory_unlocked = false
