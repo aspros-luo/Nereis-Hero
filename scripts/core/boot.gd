@@ -15,6 +15,10 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().paused = false
 
+	var saved_settings := ConfigFile.new()
+	if saved_settings.load("user://nereis_hero_settings.cfg") == OK:
+		WorldState.set_language(str(saved_settings.get_value("general", "language", WorldState.language)))
+
 	for language in NereisLocalization.LANGUAGES:
 		language_option.add_item(NereisLocalization.language_name(language))
 
