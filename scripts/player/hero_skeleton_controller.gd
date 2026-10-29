@@ -115,6 +115,8 @@ func apply_visual_context(context: Dictionary) -> void:
 	var state_name := str(context.get("state", "idle"))
 	var next_pose := PoseState.IDLE
 	match state_name:
+		"walk":
+			next_pose = PoseState.WALK
 		"run":
 			next_pose = PoseState.RUN
 		"jump":
@@ -142,7 +144,7 @@ func apply_visual_context(context: Dictionary) -> void:
 	var action_kind := str(context.get("action_kind", "none"))
 	if next_pose in [PoseState.ATTACK_LONG, PoseState.ATTACK_SHORT] and action_kind in ["judgment_slash", "crescent_combo", "eldritch_echo", "iaijutsu"]:
 		next_pose = PoseState.WEAPON_TECHNIQUE
-	if _landing_time > 0.0 and next_pose in [PoseState.IDLE, PoseState.RUN]:
+	if _landing_time > 0.0 and next_pose in [PoseState.IDLE, PoseState.WALK, PoseState.RUN]:
 		next_pose = PoseState.LAND
 	set_pose(next_pose, int(context.get("combo_step", 1)), float(context.get("facing", 1.0)))
 
@@ -310,8 +312,26 @@ func _apply_pose() -> void:
 				arm_left_bone.rotation = -0.12 - breath * 0.045
 				leg_left_bone.rotation = sin(animation_time * 1.6) * 0.045
 				leg_right_bone.rotation = -sin(animation_time * 1.6) * 0.045
+		PoseState.WALK:
+			# Short, upright steps; the gait is slower and less compressed than the run.
+			var walk_phase := animation_time * 5.0
+			var walk_cycle := sin(walk_phase)
+			var walk_opposite := sin(walk_phase + PI)
+			var swing := walk_cycle * 0.24 if animate_run else 0.0
+			var left_knee := maxf(0.0, walk_opposite) * 0.22
+			var right_knee := maxf(0.0, walk_cycle) * 0.22
+			root_bone.position.y -= absf(sin(walk_phase * 2.0)) * 0.55
+			body_bone.rotation = -0.025 - absf(walk_cycle) * 0.012
+			arm_left_bone.rotation = -swing * 0.72 + 0.035
+			arm_right_bone.rotation = swing * 0.72 - 0.08
+			leg_left_bone.rotation = -swing
+			leg_right_bone.rotation = swing
+			knee_left_bone.rotation = left_knee
+			knee_right_bone.rotation = right_knee
+			foot_left_bone.rotation = -leg_left_bone.rotation * 0.35 - knee_left_bone.rotation * 0.25
+			foot_right_bone.rotation = -leg_right_bone.rotation * 0.35 - knee_right_bone.rotation * 0.25
 		PoseState.RUN:
-			# Keep the hip swing narrow; the separated knee/calf chains provide stride without legs crossing.
+			# Stronger stride, knee recovery and forward lean distinguish a sustained run.
 			var swing := run_cycle * 0.62 if animate_run else 0.0
 			var left_knee := maxf(0.0, opposite_cycle) * 0.62
 			var right_knee := maxf(0.0, run_cycle) * 0.62
