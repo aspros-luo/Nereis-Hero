@@ -462,3 +462,22 @@ python3 tools/audit_scene_authorship.py --json reports/scene_authorship_audit.js
 - 宏观地图验收菜单的 A5 入口已切换至 `scenes/world/world.tscn`，确保玩家从菜单进入的是使用上述显式节点的 RoomContainer 房间流，而不是旧版总图装配。旧版 `old_battlefield.tscn` / `a5_assembled_region.tscn` 仍需完成全仓引用闭包审计，暂不删除。
 - [x] 源码级检查：22 个房间均有合同连接节点占位，脚本不再在该函数中创建连接节点。
 - [ ] Godot 4.6.1 场景解析、连接触发、捷径开启与跨房间回程：BLOCKED（本轮未在本地引擎运行）。
+
+## 14. 继续审计记录（2026-10-29，map 分支）
+
+### A2 独立房间运行时复核
+
+复核文件：`scripts/levels/a2_room_runtime.gd`、`scenes/regions/village_hub.tscn`、`scripts/levels/village_hub.gd` 与 `docs/maps/A2_DESIGN_BASELINE_CN.md`。
+
+- A2 运行时会验证固定 Hero、Narrative、HUD、RoomDebugOverlay、边界碰撞和 Marker2D 存在；缺失时报告错误，不会生成替代地形或边界。
+- 固定出口通过 `Door_<MarkerName>` 查找场景内已存在的 Area2D，并核对其位置是否与 Marker2D 一致；代码仅设置目标、出生侧、提示和解锁状态，再连接交互信号。
+- R01/R03 下坠转场同样查找场景中预置的 Area2D 与 CollisionShape2D，并校验位置、尺寸、碰撞层和监测状态；运行时不会创建新的落差碰撞区域。
+- 固定线索与奖励要求预置节点存在；缺失时报告错误，不按坐标动态补建。
+- 因此，本次源码复核未发现 `a2_room_runtime.gd` 通过运行时代码生成 A2 常驻地形、固定出口或固定奖励的证据。此结论只针对该脚本中已检查的路径，不等于 A2 六个场景全部符合节点树要求。
+- A1 的 `village_hub.tscn` 已包含实体地形、Hero、HUD、POI 与门等显式节点；`village_hub.gd` 仍会按剧情状态生成部分 progression NPC，下一轮需要逐个区分“可预置并按状态启用的常驻角色”与“确实只在事件发生时出现的瞬时实例”，不可直接一刀切删除。
+
+### 当前处理决定
+
+- 不修改冻结的 A2 R01 地形原型，不调整六个房间的地形坐标。
+- 下一批继续审计 A1 progression NPC 与 A0 伏击守卫的节点所有权；若角色属于固定场景结构，优先迁移为 `.tscn` 中可见的预置实例并由状态控制显隐/启用。
+- 本次是远程源码阅读与静态判断；没有运行 Python 审计工具或 Godot 4.6.1。场景解析、碰撞、转场、死亡恢复与 Continue 仍为 BLOCKED。
