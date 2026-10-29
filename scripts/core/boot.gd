@@ -60,7 +60,6 @@ func _on_language_selected(index: int) -> void:
 func _continue_game() -> void:
 	if not FileAccess.file_exists("user://nereis_hero_save.json"):
 		status_label.text = NereisLocalization.t("menu.no_save")
-		get_tree().change_scene_to_file("res://scenes/regions/escape_prologue.tscn")
 		return
 
 	var next_scene := WorldState.get_resume_scene_path()
