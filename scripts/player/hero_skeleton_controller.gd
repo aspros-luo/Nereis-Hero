@@ -7,6 +7,7 @@ class_name HeroSkeletonController
 
 enum PoseState {
 	IDLE,
+	WALK,
 	RUN,
 	JUMP,
 	FALL,
