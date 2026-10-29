@@ -88,7 +88,7 @@ const ECHO_DURATION := 0.42
 const ECHO_RANGE := 185.0
 const ECHO_STAGGER_DURATION := 0.32
 
-enum CombatState { IDLE, MOVE, JUMP, FALL, ATTACK, DODGE, QUICK_DASH, GRAPPLE, WALL_CLIMB, HURT, DEAD }
+enum CombatState { IDLE, MOVE, RUN, JUMP, FALL, ATTACK, DODGE, QUICK_DASH, GRAPPLE, WALL_CLIMB, HURT, DEAD }
 
 var health := 100
 ## When true, the current level owns death resolution (e.g. a bespoke prologue ending).
@@ -516,7 +516,7 @@ func _physics_process(delta: float) -> void:
 			if not is_on_floor():
 				_set_state(CombatState.JUMP if velocity.y < 0.0 else CombatState.FALL)
 			elif abs(velocity.x) > 10.0:
-				_set_state(CombatState.MOVE)
+				_set_state(CombatState.RUN if movement_hold_time >= RUN_HOLD_THRESHOLD else CombatState.MOVE)
 			else:
 				_set_state(CombatState.IDLE)
 		queue_redraw()
@@ -622,7 +622,7 @@ func _physics_process(delta: float) -> void:
 	elif attack_time > 0.0:
 		_set_state(CombatState.ATTACK)
 	elif abs(velocity.x) > 10.0:
-		_set_state(CombatState.MOVE)
+		_set_state(CombatState.RUN if movement_hold_time >= RUN_HOLD_THRESHOLD else CombatState.MOVE)
 	else:
 		_set_state(CombatState.IDLE)
 
@@ -1129,7 +1129,9 @@ func get_visual_state_name() -> String:
 		CombatState.IDLE:
 			return "idle"
 		CombatState.MOVE:
-			return "run" if movement_hold_time >= RUN_HOLD_THRESHOLD else "walk"
+			return "walk"
+		CombatState.RUN:
+			return "run"
 		CombatState.JUMP:
 			return "jump"
 		CombatState.FALL:
@@ -1481,7 +1483,7 @@ func _draw() -> void:
 		_draw_skeleton_mode_overlay()
 		return
 	var idle_bob: float = sin(animation_time * 7.0) * 1.5 if state == CombatState.IDLE else 0.0
-	var run_step: float = sin(animation_time * 11.0) * 2.5 if state == CombatState.MOVE else 0.0
+	var run_step: float = sin(animation_time * (11.0 if state == CombatState.RUN else 5.0)) * (2.5 if state == CombatState.RUN else 0.8) if state in [CombatState.MOVE, CombatState.RUN] else 0.0
 	var dodging := state == CombatState.DODGE
 	var crouch: float = 10.0 if dodging else 0.0
 	var lean: float = 8.0 if attack_time > 0.0 and attack_windup <= 0.0 else 0.0
@@ -1510,7 +1512,7 @@ func _draw() -> void:
 
 	# Torn split-cloak tails give the knight a stronger silhouette without changing collision.
 	# 破损分叉披风强化骑士轮廓；仅为绘制层，不改变碰撞。
-	var cloak_sway := sin(animation_time * (13.0 if state == CombatState.MOVE else 5.0)) * (5.0 if state == CombatState.MOVE else 2.0)
+	var cloak_sway := sin(animation_time * (13.0 if state == CombatState.RUN else (7.0 if state == CombatState.MOVE else 5.0))) * (5.0 if state == CombatState.RUN else (3.0 if state == CombatState.MOVE else 2.0))
 	draw_colored_polygon(PackedVector2Array([
 		Vector2(-18, -27 + bob), Vector2(-8, -20 + bob),
 		Vector2(-13 - cloak_sway, 4 + run_step), Vector2(-22 - cloak_sway, 16 + run_step),
