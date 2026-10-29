@@ -3,6 +3,10 @@ extends Node
 signal hidden_resistance_awakened_event
 
 const SAVE_PATH := "user://nereis_hero_save.json"
+const SAVE_TEMP_PATH := "user://nereis_hero_save.json.tmp"
+const SAVE_BACKUP_PATH := "user://nereis_hero_save.json.bak"
+const SAVE_FORMAT_VERSION := 1
+var save_load_status := "not_loaded"
 const SETTINGS_PATH := "user://nereis_hero_settings.cfg"
 const WITCH_TIME_OVERLAY_SCENE: PackedScene = preload("res://scenes/effects/witch_time_overlay.tscn")
 const ITEM_CATALOG_SCRIPT: Script = preload("res://scripts/core/item_catalog.gd")
@@ -512,6 +516,7 @@ func save_game() -> void:
 	if debug_map_test_mode:
 		return
 	var data := {
+		"save_format_version": SAVE_FORMAT_VERSION,
 		"hero_memory": hero_memory,
 		"hero_humanity": hero_humanity,
 		"first_memory_unlocked": first_memory_unlocked,
@@ -574,28 +579,66 @@ func save_game() -> void:
 		"prologue_complete": prologue_complete
 	}
 
-	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	var file := FileAccess.open(SAVE_TEMP_PATH, FileAccess.WRITE)
 	if file == null:
-		print("[NEREIS][SAVE][ERROR] Could not open save file")
+		save_load_status = "write_failed"
+		push_error("[NEREIS][SAVE][ERROR] Could not open temporary save file")
+		return
+	file.store_string(JSON.stringify(data, "\t"))
+	file.flush()
+	file.close()
+
+	var temp_absolute := ProjectSettings.globalize_path(SAVE_TEMP_PATH)
+	var save_absolute := ProjectSettings.globalize_path(SAVE_PATH)
+	var backup_absolute := ProjectSettings.globalize_path(SAVE_BACKUP_PATH)
+	if FileAccess.file_exists(SAVE_PATH):
+		if FileAccess.file_exists(SAVE_BACKUP_PATH):
+			DirAccess.remove_absolute(SAVE_BACKUP_PATH)
+		var backup_error := DirAccess.rename_absolute(save_absolute, backup_absolute)
+		if backup_error != OK:
+			save_load_status = "write_failed"
+			push_error("[NEREIS][SAVE][ERROR] Could not preserve previous save; error=%d" % backup_error)
+			return
+
+	var replace_error := DirAccess.rename_absolute(temp_absolute, save_absolute)
+	if replace_error != OK:
+		if FileAccess.file_exists(SAVE_BACKUP_PATH) and not FileAccess.file_exists(SAVE_PATH):
+			DirAccess.rename_absolute(backup_absolute, save_absolute)
+		save_load_status = "write_failed"
+		push_error("[NEREIS][SAVE][ERROR] Could not commit new save; error=%d" % replace_error)
 		return
 
-	file.store_string(JSON.stringify(data))
-	print("[NEREIS][SAVE] Game saved")
+	save_load_status = "valid"
+	print("[NEREIS][SAVE] Game saved atomically")
+
+func has_valid_save() -> bool:
+	return save_load_status == "valid"
 
 func load_game() -> void:
+	save_load_status = "missing"
 	if not FileAccess.file_exists(SAVE_PATH):
 		print("[NEREIS][SAVE] No save file; starting new run")
 		return
 
 	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
 	if file == null:
-		print("[NEREIS][SAVE][ERROR] Could not open save file")
+		save_load_status = "read_failed"
+		push_error("[NEREIS][SAVE][ERROR] Could not open save file")
 		return
 
-	var parsed = JSON.parse_string(file.get_as_text())
-	if typeof(parsed) != TYPE_DICTIONARY:
-		print("[NEREIS][SAVE][ERROR] Save payload is invalid")
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
+	if not parsed is Dictionary or not parsed.has("current_location") or not parsed.has("hero_memory"):
+		save_load_status = "invalid"
+		push_error("[NEREIS][SAVE][ERROR] Save payload is invalid or missing required fields; original file preserved")
 		return
+	var location_value: Variant = parsed.get("current_location")
+	var memory_value: Variant = parsed.get("hero_memory")
+	if not (location_value is String) or not (memory_value is int or memory_value is float):
+		save_load_status = "invalid"
+		push_error("[NEREIS][SAVE][ERROR] Save payload has invalid core field types; original file preserved")
+		return
+	save_load_status = "valid"
 
 	hero_memory = int(parsed.get("hero_memory", 0))
 	hero_humanity = int(parsed.get("hero_humanity", 100))
