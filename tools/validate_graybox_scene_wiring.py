@@ -470,6 +470,14 @@ def main() -> int:
 
     world_state = read("scripts/core/world_state.gd", errors)
     require(world_state, "var debug_ability_override_active := false", "WorldState", errors)
+    require(world_state, "func load_room_state() -> void:", "Room-state persistence loader", errors)
+    world_ready_start = world_state.find("func _ready() -> void:")
+    world_ready_end = world_state.find("\\nfunc ", world_ready_start + 1)
+    world_ready_block = world_state[world_ready_start:world_ready_end] if world_ready_start >= 0 and world_ready_end > world_ready_start else ""
+    if not ("load_game()" in world_ready_block and "load_room_state()" in world_ready_block):
+        errors.append("WorldState startup must restore both campaign save and room-state save.")
+    elif world_ready_block.find("load_room_state()") < world_ready_block.find("load_game()"):
+        errors.append("Room-state loading must occur after campaign save initialization.")
     require(world_state, '"resume_spawn_side": resume_spawn_side', "WorldState save payload", errors)
     require(world_state, 'resume_spawn_side = str(parsed.get("resume_spawn_side", "west"))', "WorldState save migration", errors)
     require(world_state, '"res://scenes/regions/terminal_anomaly.tscn": "A13"', "Natural map test A13 tracking", errors)
