@@ -3,6 +3,7 @@ extends Node
 signal hidden_resistance_awakened_event
 
 const SAVE_PATH := "user://nereis_hero_save.json"
+const SETTINGS_PATH := "user://nereis_hero_settings.cfg"
 const WITCH_TIME_OVERLAY_SCENE: PackedScene = preload("res://scenes/effects/witch_time_overlay.tscn")
 const ITEM_CATALOG_SCRIPT: Script = preload("res://scripts/core/item_catalog.gd")
 
@@ -499,8 +500,13 @@ func set_language(language_id: String) -> void:
 	if language_id not in ["zh_cn", "zh_tw", "en", "ja"]:
 		return
 	language = language_id
+	var settings := ConfigFile.new()
+	settings.load(SETTINGS_PATH)
+	settings.set_value("general", "language", language)
+	var error := settings.save(SETTINGS_PATH)
+	if error != OK:
+		push_warning("[NEREIS][SETTINGS] Could not save language setting; error=%d" % error)
 	print("[NEREIS][SYSTEM] Language=%s" % language)
-	save_game()
 
 func save_game() -> void:
 	if debug_map_test_mode:
