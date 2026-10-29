@@ -9,14 +9,14 @@ const LABELS := {
 	"ja": {"title":"設定", "master":"マスター音量", "fullscreen":"全画面表示", "language":"言語", "back":"タイトルへ戻る", "volume":"音量", "saved":"設定を保存しました"}
 }
 
-@onready var title_label: Label = $Panel/Title
-@onready var master_label: Label = $Panel/MasterLabel
-@onready var master_slider: HSlider = $Panel/MasterSlider
-@onready var fullscreen_check: CheckButton = $Panel/FullscreenCheck
-@onready var language_label: Label = $Panel/LanguageLabel
-@onready var language_option: OptionButton = $Panel/LanguageOption
-@onready var status_label: Label = $Panel/StatusLabel
-@onready var back_button: Button = $Panel/BackButton
+@onready var title_label: Label = $Panel/Layout/Title
+@onready var master_label: Label = $Panel/Layout/MasterLabel
+@onready var master_slider: HSlider = $Panel/Layout/MasterSlider
+@onready var fullscreen_check: CheckButton = $Panel/Layout/FullscreenCheck
+@onready var language_label: Label = $Panel/Layout/LanguageLabel
+@onready var language_option: OptionButton = $Panel/Layout/LanguageOption
+@onready var status_label: Label = $Panel/Layout/StatusLabel
+@onready var back_button: Button = $Panel/Layout/BackButton
 
 var settings := ConfigFile.new()
 
