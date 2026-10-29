@@ -37,6 +37,7 @@ func _load_settings() -> void:
 	if error == OK:
 		volume = clampf(float(settings.get_value("audio", "master_volume", 1.0)), 0.0, 1.0)
 		fullscreen = bool(settings.get_value("display", "fullscreen", false))
+		WorldState.set_language(str(settings.get_value("general", "language", WorldState.language)))
 	master_slider.set_value_no_signal(volume)
 	fullscreen_check.set_pressed_no_signal(fullscreen)
 	language_option.select(NereisLocalization.language_index(str(WorldState.language)))
@@ -46,6 +47,7 @@ func _load_settings() -> void:
 func _save_settings() -> void:
 	settings.set_value("audio", "master_volume", master_slider.value)
 	settings.set_value("display", "fullscreen", fullscreen_check.button_pressed)
+	settings.set_value("general", "language", WorldState.language)
 	var error := settings.save(SETTINGS_PATH)
 	status_label.text = _label("saved") if error == OK else "Settings save failed (%s)" % error
 
