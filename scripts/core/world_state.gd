@@ -593,7 +593,7 @@ func save_game() -> void:
 	var backup_absolute := ProjectSettings.globalize_path(SAVE_BACKUP_PATH)
 	if FileAccess.file_exists(SAVE_PATH):
 		if FileAccess.file_exists(SAVE_BACKUP_PATH):
-			DirAccess.remove_absolute(SAVE_BACKUP_PATH)
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_BACKUP_PATH))
 		var backup_error := DirAccess.rename_absolute(save_absolute, backup_absolute)
 		if backup_error != OK:
 			save_load_status = "write_failed"
@@ -631,6 +631,11 @@ func load_game() -> void:
 	if not parsed is Dictionary or not parsed.has("current_location") or not parsed.has("hero_memory"):
 		save_load_status = "invalid"
 		push_error("[NEREIS][SAVE][ERROR] Save payload is invalid or missing required fields; original file preserved")
+		return
+	var format_version := int(parsed.get("save_format_version", 0))
+	if format_version > SAVE_FORMAT_VERSION:
+		save_load_status = "unsupported_version"
+		push_error("[NEREIS][SAVE][ERROR] Save format %d is newer than supported format %d; original file preserved" % [format_version, SAVE_FORMAT_VERSION])
 		return
 	var location_value: Variant = parsed.get("current_location")
 	var memory_value: Variant = parsed.get("hero_memory")
