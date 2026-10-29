@@ -298,27 +298,27 @@ func _apply_pose() -> void:
 	var run_phase := animation_time * 11.5
 	var run_cycle := sin(run_phase)
 	var opposite_cycle := sin(run_phase + PI)
-	var run_bounce := absf(sin(run_phase * 2.0)) * 1.5
+	var run_bounce := absf(sin(run_phase * 2.0)) * 3.2
 	match current_pose:
 		PoseState.IDLE:
 			if animate_idle:
 				var breath := sin(animation_time * 2.4)
-				root_bone.position.y -= absf(breath) * 0.35
-				body_bone.rotation = breath * 0.035
-				head_bone.rotation = sin(animation_time * 2.4 + 0.55) * 0.025
-				arm_right_bone.rotation = 0.12 + breath * 0.025
-				arm_left_bone.rotation = -0.08 - breath * 0.02
-				leg_left_bone.rotation = sin(animation_time * 1.6) * 0.018
-				leg_right_bone.rotation = -sin(animation_time * 1.6) * 0.018
+				root_bone.position.y -= absf(breath) * 1.1
+				body_bone.rotation = breath * 0.075
+				head_bone.rotation = sin(animation_time * 2.4 + 0.55) * 0.05
+				arm_right_bone.rotation = 0.16 + breath * 0.055
+				arm_left_bone.rotation = -0.12 - breath * 0.045
+				leg_left_bone.rotation = sin(animation_time * 1.6) * 0.045
+				leg_right_bone.rotation = -sin(animation_time * 1.6) * 0.045
 		PoseState.RUN:
 			# Keep the hip swing narrow; the separated knee/calf chains provide stride without legs crossing.
-			var swing := run_cycle * 0.34 if animate_run else 0.0
-			var left_knee := maxf(0.0, opposite_cycle) * 0.42
-			var right_knee := maxf(0.0, run_cycle) * 0.42
+			var swing := run_cycle * 0.62 if animate_run else 0.0
+			var left_knee := maxf(0.0, opposite_cycle) * 0.62
+			var right_knee := maxf(0.0, run_cycle) * 0.62
 			root_bone.position.y -= run_bounce
-			body_bone.rotation = -0.09 - absf(run_cycle) * 0.025
-			arm_left_bone.rotation = swing * 0.72 + 0.05
-			arm_right_bone.rotation = -swing * 0.72 - 0.16
+			body_bone.rotation = -0.12 - absf(run_cycle) * 0.05
+			arm_left_bone.rotation = swing * 0.95 + 0.08
+			arm_right_bone.rotation = -swing * 0.95 - 0.20
 			leg_left_bone.rotation = -swing
 			leg_right_bone.rotation = swing
 			knee_left_bone.rotation = left_knee
