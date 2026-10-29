@@ -212,6 +212,9 @@ func _ready() -> void:
 		print("[NEREIS][P5.1] Isolated acceptance mode: save load/write disabled.")
 	else:
 		load_game()
+		# Room exploration is a separate persistent store and must be restored on boot.
+		# 房间探索状态独立存储，启动时必须与主周目存档一并恢复。
+		load_room_state()
 		_migrate_third_cord_anchor()
 
 # Normalize legacy ending-anchor saves after load. Older builds stored relic aliases
