@@ -97,13 +97,13 @@ func collect_room_item(item_id: String) -> void:
 	collected_room_item_ids.append(item_id)
 	save_room_state()
 
-func save_room_state() -> void:
+func save_room_state() -> bool:
 	var temp_path := ROOM_SAVE_PATH + ".tmp"
 	var backup_path := ROOM_SAVE_PATH + ".bak"
 	var file := FileAccess.open(temp_path, FileAccess.WRITE)
 	if file == null:
 		push_error("[NEREIS][SAVE][ERROR] Could not open temporary room-state save")
-		return
+		return false
 	file.store_string(JSON.stringify({
 		"room_state_version": 1,
 		"explored_room_ids": explored_room_ids,
@@ -122,12 +122,14 @@ func save_room_state() -> void:
 		var backup_error := DirAccess.rename_absolute(room_absolute, backup_absolute)
 		if backup_error != OK:
 			push_error("[NEREIS][SAVE][ERROR] Could not preserve previous room-state save; error=%d" % backup_error)
-			return
+			return false
 	var replace_error := DirAccess.rename_absolute(temp_absolute, room_absolute)
 	if replace_error != OK:
 		if FileAccess.file_exists(backup_path) and not FileAccess.file_exists(ROOM_SAVE_PATH):
 			DirAccess.rename_absolute(backup_absolute, room_absolute)
 		push_error("[NEREIS][SAVE][ERROR] Could not commit room-state save; error=%d" % replace_error)
+		return false
+	return true
 
 func load_room_state() -> void:
 	if not FileAccess.file_exists(ROOM_SAVE_PATH):
@@ -544,9 +546,9 @@ func set_language(language_id: String) -> void:
 		push_warning("[NEREIS][SETTINGS] Could not save language setting; error=%d" % error)
 	print("[NEREIS][SYSTEM] Language=%s" % language)
 
-func save_game() -> void:
+func save_game() -> bool:
 	if debug_map_test_mode:
-		return
+		return false
 	var data := {
 		"save_format_version": SAVE_FORMAT_VERSION,
 		"hero_memory": hero_memory,
@@ -615,7 +617,7 @@ func save_game() -> void:
 	if file == null:
 		save_load_status = "write_failed"
 		push_error("[NEREIS][SAVE][ERROR] Could not open temporary save file")
-		return
+		return false
 	file.store_string(JSON.stringify(data, "\t"))
 	file.flush()
 	file.close()
@@ -630,7 +632,7 @@ func save_game() -> void:
 		if backup_error != OK:
 			save_load_status = "write_failed"
 			push_error("[NEREIS][SAVE][ERROR] Could not preserve previous save; error=%d" % backup_error)
-			return
+			return false
 
 	var replace_error := DirAccess.rename_absolute(temp_absolute, save_absolute)
 	if replace_error != OK:
@@ -638,10 +640,11 @@ func save_game() -> void:
 			DirAccess.rename_absolute(backup_absolute, save_absolute)
 		save_load_status = "write_failed"
 		push_error("[NEREIS][SAVE][ERROR] Could not commit new save; error=%d" % replace_error)
-		return
+		return false
 
 	save_load_status = "valid"
 	print("[NEREIS][SAVE] Game saved atomically")
+	return true
 
 func has_valid_save() -> bool:
 	return save_load_status == "valid" and ResourceLoader.exists(get_resume_scene_path())
@@ -1033,13 +1036,22 @@ func mark_prologue_complete() -> void:
 	print("[NEREIS][STORY] Prologue complete; Hero reached the village")
 	save_game()
 
-func start_new_game() -> void:
+func start_new_game() -> bool:
 	# Explicit player intent exits test mode before clearing the campaign state.
 	debug_map_test_mode = false
 	debug_natural_test_active = false
 	reset()
-	save_game()
+	# Do not enter A0 unless both persistent stores accepted the fresh state.
+	# reset() clears room arrays in memory; persist them here so failure is visible.
+	if not save_room_state():
+		save_load_status = "write_failed"
+		push_error("[NEREIS][SAVE][ERROR] New game aborted: room-state reset could not be saved")
+		return false
+	if not save_game():
+		push_error("[NEREIS][SAVE][ERROR] New game aborted: campaign save could not be saved")
+		return false
 	print("[NEREIS][SAVE] New campaign initialized")
+	return true
 
 func delete_save() -> void:
 	if debug_map_test_mode:
@@ -1063,7 +1075,6 @@ func reset() -> void:
 	explored_room_ids.clear()
 	opened_shortcut_ids.clear()
 	collected_room_item_ids.clear()
-	save_room_state()
 	current_a2_room_scene_path = "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"
 	hero_memory = 0
 	hero_humanity = 100
