@@ -18,6 +18,8 @@ var skeleton_visual: Node2D
 var skeleton_visual_enabled := false
 
 const SPEED := 260.0
+const WALK_SPEED := 118.0
+const RUN_HOLD_THRESHOLD := 0.22
 const ATTACK_MOVE_SPEED := 92.0
 const JUMP_VELOCITY := -520.0
 const GRAVITY := 1400.0
@@ -82,12 +84,13 @@ const ECHO_DURATION := 0.42
 const ECHO_RANGE := 185.0
 const ECHO_STAGGER_DURATION := 0.32
 
-enum CombatState { IDLE, MOVE, JUMP, FALL, ATTACK, DODGE, QUICK_DASH, GRAPPLE, WALL_CLIMB, HURT, DEAD }
+enum CombatState { IDLE, MOVE, RUN, JUMP, FALL, ATTACK, DODGE, QUICK_DASH, GRAPPLE, WALL_CLIMB, HURT, DEAD }
 
 var health := 100
 ## When true, the current level owns death resolution (e.g. a bespoke prologue ending).
 var defer_death_recovery := false
 var facing := 1.0
+var movement_hold_time := 0.0
 var attack_time := 0.0
 var attack_windup := 0.0
 var attack_hit_registered := false
@@ -467,7 +470,7 @@ func _physics_process(delta: float) -> void:
 			if not is_on_floor():
 				_set_state(CombatState.JUMP if velocity.y < 0.0 else CombatState.FALL)
 			elif abs(velocity.x) > 10.0:
-				_set_state(CombatState.MOVE)
+				_set_state(CombatState.RUN if movement_hold_time >= RUN_HOLD_THRESHOLD else CombatState.MOVE)
 			else:
 				_set_state(CombatState.IDLE)
 		queue_redraw()
@@ -499,9 +502,11 @@ func _physics_process(delta: float) -> void:
 
 	if direction != 0.0:
 		facing = sign(direction)
-		var move_speed := ATTACK_MOVE_SPEED if attack_time > 0.0 else SPEED
+		movement_hold_time += delta
+		var move_speed := ATTACK_MOVE_SPEED if attack_time > 0.0 else (SPEED if movement_hold_time >= RUN_HOLD_THRESHOLD else WALK_SPEED)
 		velocity.x = move_toward(velocity.x, direction * move_speed, 2200.0 * delta)
 	else:
+		movement_hold_time = 0.0
 		var friction := 1250.0 if attack_time > 0.0 else 2200.0
 		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 
@@ -576,7 +581,7 @@ func _physics_process(delta: float) -> void:
 	elif attack_time > 0.0:
 		_set_state(CombatState.ATTACK)
 	elif abs(velocity.x) > 10.0:
-		_set_state(CombatState.MOVE)
+		_set_state(CombatState.RUN if movement_hold_time >= RUN_HOLD_THRESHOLD else CombatState.MOVE)
 	else:
 		_set_state(CombatState.IDLE)
 
@@ -1107,6 +1112,8 @@ func get_visual_state_name() -> String:
 		CombatState.IDLE:
 			return "idle"
 		CombatState.MOVE:
+			return "walk"
+		CombatState.RUN:
 			return "run"
 		CombatState.JUMP:
 			return "jump"
@@ -1143,6 +1150,8 @@ func get_visual_context() -> Dictionary:
 		"action_kind": active_action_kind,
 		"action_elapsed": action_elapsed,
 		"vertical_velocity": velocity.y,
+		"horizontal_speed": velocity.x,
+		"movement_mode": "run" if state == CombatState.RUN else ("walk" if state == CombatState.MOVE else "idle"),
 		"grounded": is_on_floor(),
 		"attack_time_remaining": attack_time,
 		"attack_windup_remaining": attack_windup,
