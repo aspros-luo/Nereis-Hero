@@ -22,7 +22,8 @@ Completed:
 
 - Hero's production visual uses the authored `Skeleton2D` hierarchy in `scenes/player/hero_skeleton.tscn`.
 - Gameplay state remains owned by `scripts/player/hero.gd`; the skeleton controller consumes its visual context.
-- Running gait revised with stronger hip swing, counter-swinging arms, knee recovery, foot lift/plant, torso lean and head counter-balance.
+- Walking and running now have separate visual states: brief directional input selects a compact upright walk; holding direction past the existing 0.22-second threshold selects a stronger run gait.
+- Running gait uses stronger hip swing, counter-swinging arms, knee recovery, foot lift/plant, torso lean and head counter-balance.
 - Long and short attacks revised to include weight shift, bracing legs, anticipation/recoil and follow-through.
 - The independent stickman combat test remains a diagnostic sandbox, not a second gameplay controller.
 
