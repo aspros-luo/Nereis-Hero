@@ -113,3 +113,8 @@ Current active development phase. Do not expand game systems until the core comb
 3. Add authored audio/music assets only after the interaction sound baseline is stable.
 4. Replace the strongest remaining procedural placeholders with authored visual assets.
 5. Re-run the full acceptance route before moving to larger world content.
+
+
+## 2026-10-29 milestone authority
+
+The phase lists above contain legacy prototype/combat-demo acceptance tasks and must not be treated as the current production priority when they conflict with [the current milestone handoff](./MILESTONE_HANDOFF_2026-10-29_CN.md). The next milestone begins with a vertical slice: New Game, Save/Continue/load recovery, blockers in the basic flow, then playable exploration from A0 to A1 to A2. A0/A1/A2 have priority; do not expand unrelated systems before this route is stable. This is a priority clarification only; it does not claim those runtime tasks have passed acceptance.
