@@ -288,3 +288,24 @@
 - **CONFIRMED → IMPLEMENTED_UNVERIFIED：** 已确认缺少启动调用，源码修复已提交。
 - **未宣称通过：** 尚未执行 Python 静态验证器或 Godot 4.6.1 实机验证。
 - 下一步继续检查房间状态损坏时的安全降级、双存档写入部分失败，以及 A0/A1/A2 的场景入口与恢复出生点。
+
+
+## 12. A0 序章场景边界保存位置（2026-10-29）
+
+### 审计发现
+
+A0 序章内部、洞外山路及初次抵达 Mite 住所的部分场景边界曾直接赋值 `current_location`，没有统一通过 `WorldState.set_location()` 持久化。若游戏在转场后异常退出，主存档可能仍指向上一个位置，导致继续游戏重播序章或恢复到错误场景。
+
+### 本轮修改
+
+- A0 序章场景初始化改为通过 `set_location("church_escape")` 保存当前位置。
+- 离开手术所时先设置进入侧，再调用 `set_location("church_escape_exterior")`，使场景与出生侧一并写入主存档。
+- 洞外山路初始化通过 `set_location("church_escape_exterior")` 持久化当前位置。
+- 首次抵达 Mite 住所时，在设置 `pending_region_spawn_side` 后调用 `set_location("mite_house")`，统一位置保存入口。
+- 更新静态验证器中对应的 A0 首次抵达合同。
+- 提交：`796d3f6e4b9e659231bf02311e59e6caac5ff71e`、`4e9851bbe7ff918c94adac984229e86259cd4c14`、`ef7ac6aefc71fe0f9af0432f8071d87e7eb7172e`。
+
+### 风险与验证状态
+
+- 这减少了场景边界未保存的位置不一致，但也意味着进入序章场景时会立即写入当前进度；必须通过实机检查确认这与新游戏和死亡恢复预期一致。
+- 仍未运行静态验证器或 Godot 运行测试；源码变更状态为 `IMPLEMENTED_UNVERIFIED`。
