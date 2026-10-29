@@ -18,6 +18,12 @@ func _ready() -> void:
 	var saved_settings := ConfigFile.new()
 	if saved_settings.load("user://nereis_hero_settings.cfg") == OK:
 		WorldState.set_language(str(saved_settings.get_value("general", "language", WorldState.language)))
+		var master_volume := clampf(float(saved_settings.get_value("audio", "master_volume", 1.0)), 0.0, 1.0)
+		var master_bus := AudioServer.get_bus_index("Master")
+		if master_bus >= 0:
+			AudioServer.set_bus_volume_linear(master_bus, master_volume)
+		var fullscreen := bool(saved_settings.get_value("display", "fullscreen", false))
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if fullscreen else DisplayServer.WINDOW_MODE_WINDOWED)
 
 	for language in NereisLocalization.LANGUAGES:
 		language_option.add_item(NereisLocalization.language_name(language))
