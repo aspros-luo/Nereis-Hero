@@ -58,8 +58,19 @@ func _on_language_selected(index: int) -> void:
 
 
 func _continue_game() -> void:
-	if not FileAccess.file_exists("user://nereis_hero_save.json"):
-		status_label.text = NereisLocalization.t("menu.no_save")
+	if not WorldState.has_valid_save():
+		if WorldState.save_load_status == "missing":
+			status_label.text = NereisLocalization.t("menu.no_save")
+		else:
+			match str(WorldState.language):
+				"zh_tw":
+					status_label.text = "存檔無法讀取，原始檔案已保留"
+				"en":
+					status_label.text = "Save unavailable. The original file was preserved."
+				"ja":
+					status_label.text = "セーブデータを読み込めません。元のファイルは保持されています。"
+				_:
+					status_label.text = "存档无法读取，原始文件已保留"
 		return
 
 	var next_scene := WorldState.get_resume_scene_path()
