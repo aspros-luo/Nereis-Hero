@@ -58,6 +58,13 @@ Project documentation governance and task-start contract:
 
 - `docs/ITEM_COLLECTION_AND_LORE_SYSTEM_V1_CN.md` — item categories, save/read-state contract, and the explicit decision to exclude crafting materials and crafting loops.
 
+## Worldbuilding and narrative canon
+
+- `docs/WORLD_BUILDING_BIBLE_CN.md` — living worldbuilding authority: confirmed canon, candidates, unresolved questions, document conflicts, and dated change log. Update this whenever worldbuilding is clarified.
+- `docs/WORLD_NARRATIVE_CLUE_LEDGER_CN.md` — clue structure and small-person storytelling method.
+- `docs/CORE_NPC_DESIGN_POOL_CN.md` — core NPC design pool and character knowledge boundaries.
+- `docs/ENDING_CONDITION_DESIGN_CN.md` — authoritative ending-condition design contract.
+
 ## Current narrative foundation
 
 Canonical story memory:
