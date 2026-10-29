@@ -188,7 +188,7 @@ func apply_visual_context(context: Dictionary) -> void:
 	var action_kind := str(context.get("action_kind", "none"))
 	if next_pose in [PoseState.ATTACK_LONG, PoseState.ATTACK_SHORT] and action_kind in ["judgment_slash", "crescent_combo", "eldritch_echo", "iaijutsu"]:
 		next_pose = PoseState.WEAPON_TECHNIQUE
-	if _landing_time > 0.0 and next_pose in [PoseState.IDLE, PoseState.RUN]:
+	if _landing_time > 0.0 and next_pose in [PoseState.IDLE, PoseState.WALK, PoseState.RUN]:
 		next_pose = PoseState.LAND
 	_base_pose = next_pose
 	combo_step = clampi(int(context.get("combo_step", 1)), 1, 3)
