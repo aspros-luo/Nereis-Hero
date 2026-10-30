@@ -1,6 +1,22 @@
 extends RefCounted
 
 const ITEMS: Dictionary = {
+    "protagonist_long_sword": {
+        "item_id": "protagonist_long_sword",
+        "display_name": "长剑",
+        "category": "weapon",
+        "description": "一柄还算顺手的长剑，剑锋上还有未干涸的血渍，剑柄上有个相当模糊的符号，被随意的扔在地上。",
+        "stackable": false,
+        "max_stack": 1
+    },
+    "protagonist_short_blade": {
+        "item_id": "protagonist_short_blade",
+        "display_name": "短刃",
+        "category": "weapon",
+        "description": "一柄短刃。",
+        "stackable": false,
+        "max_stack": 1
+    },
     "church_bandage": {
         "item_id": "church_bandage",
         "display_name": "染血的绷带",
