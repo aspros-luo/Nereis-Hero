@@ -322,3 +322,11 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - 修复 S02 伏击守卫 AI 目标查找错误：守卫实例位于 `Wardens` 子节点，旧相对路径 `../Hero` 指向错误位置；Hero 已加入 `player` 组，守卫改用玩家组查找目标。
 - 变更分支：`feature/story-map-progression`。代码与审计文档已提交。
 - **验收状态：BLOCKED（等待本地 Godot 4.6.1 验证）**。远程静态检查不等于场景解析、碰撞或战斗运行时通过。需按 A0 审计文档逐项测试新游戏、S01→S02、伏击 AI、死亡重试与出口解锁。
+
+
+## 2026-10-30 — A0 S02→洞外加载问题追加修复（待本地复测）
+
+- 用户实机日志确认：S01→S02、三名伏击守卫战斗、闪避无敌帧、伏击清除与出口解锁均正常。
+- 洞外场景转场仍返回 `ERR_CANT_OPEN (19)`。远程静态检查未发现该场景直接/二级资源路径缺失。
+- 修复 `scenes/prologue_exterior.tscn` 中 14 处 `PackedVector2Array(Vector2(...), ...)` 序列化为扁平坐标序列的格式问题。
+- 验收状态：A0 前半流程实机通过；洞外加载修复待本地重新导入及复测，不标记为完整通过。
