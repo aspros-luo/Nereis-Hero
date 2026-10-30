@@ -1296,6 +1296,7 @@ func record_natural_test_region(region_id: String, location_id: String = "") -> 
 func _record_natural_test_scene(scene_path: String) -> void:
 	var region_by_scene := {
 		"res://scenes/regions/escape_prologue.tscn": "A0",
+		"res://scenes/regions/a0_s02_escape.tscn": "A0",
 		"res://scenes/regions/village_hub.tscn": "A1",
 		"res://scenes/regions/ash_forest.tscn": "A2",
 		"res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn": "A2",
@@ -1347,6 +1348,8 @@ func get_resume_scene_path() -> String:
 	match current_location:
 		"church_escape":
 			return "res://scenes/regions/escape_prologue.tscn"
+		"church_escape_s02":
+			return "res://scenes/regions/a0_s02_escape.tscn"
 		"church_escape_exterior":
 			return "res://scenes/prologue_exterior.tscn"
 		"village":
