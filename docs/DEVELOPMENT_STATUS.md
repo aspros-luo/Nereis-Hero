@@ -1,3 +1,10 @@
+## 2026-10-30 — A1.1 后山门交互空引用修复
+
+- 定位到 `scenes/village_backhill.tscn` 的 `FutureA2RoadDoor`：该节点挂载 `interaction_door.gd`，但缺少脚本要求的 `Prompt/PromptLabel` 子树。即使门设置为 `enabled = false`，其 `_ready()` 仍会执行节点查找，因此进入后山时触发空实例赋值错误。
+- 在 `FutureA2RoadDoor` 下补齐场景实例 `Prompt`，复用已有 `scenes/world/interaction_prompt.tscn`；不改变门的禁用状态、碰撞体、路线或 A1→A2 连接。
+- 同时将门脚本的提示节点查找改为 `get_node_or_null()`，缺失时输出包含节点路径的明确错误；门的碰撞信号仍会正常连接，避免提示节点缺失直接中断门初始化。
+- **验证状态：** 已完成远程源码修改与目标节点/脚本合同静态核对；尚未执行本地 Godot 4.6.1 场景导入与 Continue→后山实机回归。需确认进入后山不再报错、悬崖入口 E 交互正常、雾林入口仍保持封闭。
+
 # Nereis Hero — Development Status
 
 ## Hero skeletal locomotion stabilization — 2026-10-30
