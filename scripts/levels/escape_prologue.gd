@@ -4,7 +4,6 @@ extends Node2D
 var hero: CharacterBody2D
 var hud: CanvasLayer
 var exit_door: Area2D
-var sword_event_completed := false
 
 func _ready() -> void:
     if Engine.is_editor_hint():
@@ -30,7 +29,6 @@ func _ready() -> void:
     hud.set_story_mode("A0｜教会手术所", "查看手术托盘和周边物品，寻找离开的路。")
     if WorldState.has_long_sword:
         $LongSwordVisual.visible = false
-        sword_event_completed = true
 
 func _on_clue_examined(clue: Node) -> void:
     WorldState.mark_ancient_residue_awakened()
@@ -43,7 +41,6 @@ func _on_s01_exit_interacted() -> void:
         if not WorldState.acquire_long_sword_and_equip():
             hud.call("show_item_acquisition_error", "长剑")
             return
-        sword_event_completed = true
         $LongSwordVisual.visible = false
         if hud.has_method("show_pickup_notification"):
             hud.call("show_pickup_notification", "长剑", 1)
