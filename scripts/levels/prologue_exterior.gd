@@ -1,7 +1,7 @@
 extends Node2D
 
 
-const FORCED_DEFEAT_SECONDS := 12.0
+const ENCOUNTER_ESCAPE_SECONDS := 12.0
 @onready var hero: CharacterBody2D = $Hero
 @onready var boss: CharacterBody2D = $A0_ChurchExecutioner
 @onready var narrative: CanvasLayer = $NarrativeManager
@@ -26,6 +26,8 @@ func _ready() -> void:
 	WorldState.set_location("church_escape_exterior")
 	WorldState.record_natural_test_region("A0", "church_escape_exterior")
 	hero.set("defer_death_recovery", true)
+	hud.bind_hero(hero)
+	hud.bind_boss(boss)
 	var camera := hero.get_node("HeroCamera") as Camera2D
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 5.0
@@ -38,16 +40,13 @@ func _ready() -> void:
 			AchievementManager.unlock("prologue_knight_defeat")
 			call_deferred("_begin_rescue_transition", "defeated")
 	)
-	boss.defeated.connect(func() -> void:
-		if not ending_started:
-			call_deferred("_begin_rescue_transition", "defeated")
-	)
+	boss.scripted_revival_triggered.connect(_on_executioner_revived)
 func _physics_process(delta: float) -> void:
 	if ending_started or not is_instance_valid(hero):
 		return
 
-	# The cliff is a forced-loss boundary, not an alternate way to skip the executioner.
-	# 悬崖是必败演出的边界，不是绕过出口执行者的捷径。
+	# Keep the cliff approach closed until the executioner encounter resolves.
+	# 在执行者遭遇结束前，阻止玩家直接越过战场。
 	if is_instance_valid(boss) and hero.global_position.x > cliff_approach_limit.global_position.x:
 		hero.global_position.x = cliff_approach_limit.global_position.x
 		hero.velocity.x = minf(hero.velocity.x, 0.0)
@@ -59,29 +58,54 @@ func _physics_process(delta: float) -> void:
 			if is_instance_valid(hud):
 				hud.set_story_mode("A0｜洞外山路", "挡路者没有退让。观察他的动作，寻找离开的机会。")
 
-	# Mandatory-loss story gate: combat remains interactive, but cannot skip the authored defeat and rescue.
+	# The pursuers close in after the encounter window if the scripted revival has not occurred.
 	if boss_encounter_started:
 		boss_encounter_elapsed += delta
-		if boss_encounter_elapsed >= FORCED_DEFEAT_SECONDS:
-			call_deferred("_begin_rescue_transition", "defeated")
+		if boss_encounter_elapsed >= ENCOUNTER_ESCAPE_SECONDS:
+			call_deferred("_begin_cliff_escape")
 
 
 
 
-func _begin_rescue_transition(reason: String) -> void:
+func _on_executioner_revived() -> void:
+	if ending_started:
+		return
+	_show_pursuers()
+	for pursuer in $Pursuers.get_children():
+		if pursuer.has_method("play_healing"):
+			pursuer.call("play_healing")
+	call_deferred("_begin_cliff_escape")
+
+func _begin_cliff_escape() -> void:
 	if ending_started:
 		return
 	ending_started = true
 	WorldState.input_locked = true
 	_clear_interaction_focus()
+	_show_pursuers()
+	if is_instance_valid(hero):
+		hero.set_physics_process(false)
+		var leap_target_x := minf(hero.global_position.x + 360.0, camera_right_limit.global_position.x - 24.0)
+		var leap := create_tween()
+		leap.set_parallel(true)
+		leap.tween_property(hero, "global_position:x", leap_target_x, 0.72).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		leap.tween_property(hero, "global_position:y", hero.global_position.y - 150.0, 0.34).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		leap.chain().tween_property(hero, "global_position:y", 780.0, 0.48).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		leap.tween_callback(_complete_prologue_transition)
+	else:
+		_complete_prologue_transition()
+
+func _begin_rescue_transition(_reason: String) -> void:
+	if ending_started:
+		return
+	ending_started = true
+	WorldState.input_locked = true
+	_clear_interaction_focus()
+	_complete_prologue_transition()
+
+func _complete_prologue_transition() -> void:
 	if is_instance_valid(boss):
 		boss.queue_free()
-	_show_pursuers()
-
-	# Keep the story progression deterministic while the full cliff/fall animation is deferred.
-	# A short fade-to-black replaces the unfinished retreat/fall animation; it must not block map development.
-	# A0's one-time arrival is intentionally quiet: wake in Mite's house.
-	# This is a story arrival, not the village's reusable checkpoint or return spawn.
 	WorldState.mark_prologue_complete()
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.set_location("mite_house")
