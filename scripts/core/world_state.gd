@@ -746,7 +746,7 @@ func load_game() -> void:
 	current_weapon_style = str(parsed.get("current_weapon_style", "long_sword"))
 	if current_weapon_style not in ["long_sword", "short_blade"]:
 		current_weapon_style = "long_sword"
-	var has_weapon_ownership_data := parsed.has("has_long_sword") or parsed.has("has_short_blade")
+	var has_weapon_ownership_data: bool = bool(parsed.has("has_long_sword")) or bool(parsed.has("has_short_blade"))
 	has_long_sword = bool(parsed.get("has_long_sword", false))
 	has_short_blade = bool(parsed.get("has_short_blade", false))
 	# Legacy saves predate explicit ownership. Preserve any previously playable weapon
