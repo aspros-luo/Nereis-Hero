@@ -1,5 +1,13 @@
 # Nereis Hero — Development Status
 
+## Hero skeletal locomotion stabilization — 2026-10-30
+
+- Fixed `scripts/player/hero_skeleton_controller.gd`: `RootBone` is now documented and enforced as a fixed visual anchor. Idle breathing, walk gait, run gait, jump anticipation, and landing compression no longer translate the entire skeleton vertically.
+- Walk/run readability remains in limb articulation and torso rotation; jump/fall world-space vertical travel remains owned by `CharacterBody2D` physics. Landing compression remains expressed through body/limb poses.
+- No Hero movement constants, collision shapes, attack hitboxes, jump physics, or combat timings were changed.
+- Static source check after the edit: no remaining writes to `root_bone.position.y` in the skeleton controller. This is not a Godot parser/runtime test; local playback is still required to confirm perceived stability and ensure no animation state regressions.
+- Next: continue A1 visual/world-design audit from the existing village layout and current authored scene/script contracts. Preserve the confirmed village layout (A1 hub, A1.1 church/tavern/backhill; backhill cliff exploration remains a separate scene; its second branch remains reserved) and do not change A1→A2 until A2 room-runtime/connection contracts are ready.
+
 Date: 2026-10-24
 
 ## Current A2 terrain design continuation — 2026-10-24
