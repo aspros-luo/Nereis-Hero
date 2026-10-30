@@ -17,8 +17,11 @@ func _ready() -> void:
     exit_door = $S01ExitDoor
     WorldState.set_location("church_escape_s01")
     WorldState.record_natural_test_region("A0", "church_escape_s01")
-    if not WorldState.checkpoint_active or WorldState.checkpoint_room_id != "a0_s01_surgery":
+    if not WorldState.checkpoint_active:
         WorldState.set_checkpoint(hero.global_position, "a0_s01_surgery")
+    var left_boundary_gate := $ProgressBarrier_Left as StaticBody2D
+    left_boundary_gate.visible = true
+    (left_boundary_gate.get_node("CollisionShape2D") as CollisionShape2D).disabled = false
     hero.defeated.connect(_on_hero_defeated)
     exit_door.interacted.connect(_on_s01_exit_interacted)
     var clue := $SurgicalMark
