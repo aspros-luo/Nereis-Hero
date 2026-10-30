@@ -8,8 +8,10 @@ var max_health := 240
 @export var boss_display_name := "灰烬骑士"
 var phase := 1
 @export var persist_global_boss_defeat := true
-# Prologue-only executioner cannot be defeated; ordinary bosses remain damageable by default.
+@export var scripted_revival := false
 var damage_immune := false
+var revival_time := 0.0
+@export var show_name_overhead := true
 ## Per-instance damage scaling; lower values make a boss more resilient without making it invulnerable.
 var damage_taken_multiplier := 1.0
 var is_defeated := false
@@ -25,6 +27,7 @@ var attack_hitbox: Area2D
 var animation_time := 0.0
 var attack_effect_time := 0.0
 signal defeated
+signal scripted_revival_triggered
 signal phase_changed(phase: int)
 signal attack_telegraphed
 
@@ -47,6 +50,7 @@ func _process(delta: float) -> void:
         return
     animation_time += delta
     attack_effect_time = maxf(0.0, attack_effect_time - delta)
+    revival_time = maxf(0.0, revival_time - delta)
     queue_redraw()
 
 func _physics_process(delta: float) -> void:
@@ -131,8 +135,22 @@ func receive_damage(amount: int, source: Node = null) -> void:
     var source_name: String = source.name if source else "Unknown"
     _log("BOSS", "%s -> Ashen Knight damage=%d (raw=%d) hp=%d" % [source_name, scaled_damage, amount, health])
     if health <= 0:
-        is_defeated = true
         _spawn_death_burst()
+        if scripted_revival:
+            health = max_health
+            is_defeated = false
+            phase = 2
+            phase_two = true
+            revival_time = 2.4
+            stun_time = 1.35
+            attack_cooldown = 1.1
+            windup = 0.0
+            attack_released = true
+            _log("BOSS", "Executioner restored by church pursuers; hp=%d" % health)
+            scripted_revival_triggered.emit()
+            queue_redraw()
+            return
+        is_defeated = true
         _log("BOSS", "Ashen Knight defeated")
         if persist_global_boss_defeat:
             WorldState.mark_boss_defeated()
@@ -190,10 +208,16 @@ func _draw() -> void:
         var slash_color := Color(1.0, 0.88, 0.72, slash_alpha)
         draw_line(Vector2(facing * 24.0, -70.0), Vector2(facing * 118.0, -8.0), slash_color, 11.0)
         draw_line(Vector2(facing * 36.0, -80.0), Vector2(facing * 132.0, -18.0), Color(1.0, 0.45, 0.43, slash_alpha * 0.9), 4.0)
-    var label := boss_display_name
-    if not damage_immune:
-        label = "%s %d/%d" % [boss_display_name, max(0, health), max_health]
-    draw_string(ThemeDB.fallback_font, Vector2(-86, -94), NereisLocalization.translate_text(label), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
+    if revival_time > 0.0:
+        var glow_alpha := clampf(revival_time / 2.4, 0.0, 1.0)
+        var glow_color := Color(0.78, 0.86, 1.0, glow_alpha * 0.72)
+        var pulse_radius := 42.0 + sin(animation_time * 9.0) * 5.0
+        draw_arc(Vector2(0, -36), pulse_radius, 0.0, TAU, 48, glow_color, 5.0)
+        draw_colored_polygon(PackedVector2Array([
+            Vector2(-13, -170), Vector2(13, -170), Vector2(28, 4), Vector2(-28, 4)
+        ]), Color(0.72, 0.82, 1.0, glow_alpha * 0.18))
+    if show_name_overhead:
+        draw_string(ThemeDB.fallback_font, Vector2(-86, -94), NereisLocalization.translate_text(boss_display_name), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#d6c7b2"))
 
 func _move_and_slide_scaled() -> void:
     # CharacterBody2D.move_and_slide() uses engine physics delta; scale velocity during the actual move.
