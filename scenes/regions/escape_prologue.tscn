@@ -246,7 +246,7 @@ prompt_text = "E  打开出口"
 enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="S01ExitDoor"]
-position = Vector2(0, -70)
+position = Vector2(0, -35)
 shape = SubResource("RectangleShape2D_exit")
 
 [node name="Prompt" parent="S01ExitDoor" instance=ExtResource("9")]
