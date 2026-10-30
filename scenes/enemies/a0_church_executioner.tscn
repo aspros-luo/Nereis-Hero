@@ -14,9 +14,9 @@ script = ExtResource("1")
 boss_display_name = "???"
 scripted_revival = true
 show_name_overhead = false
-health = 900
-max_health = 900
-damage_taken_multiplier = 0.42
+health = 360
+max_health = 360
+damage_taken_multiplier = 1.0
 persist_global_boss_defeat = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
