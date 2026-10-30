@@ -446,3 +446,10 @@ func _update_boss_bar() -> void:
     boss_bar.color = Color("#c34f5b") if phase >= 2 else Color("#9e5961")
     boss_panel.visible = true
     boss_bar.size.x = 468.0 * ratio
+
+
+func show_pickup_notification(item_name: String, quantity: int = 1) -> void:
+    _show_banner("获得  %s ×%d" % [item_name, quantity], 1.8)
+
+func show_item_acquisition_error(item_name: String) -> void:
+    _show_banner("%s保存失败，请重试" % item_name, 2.0)
