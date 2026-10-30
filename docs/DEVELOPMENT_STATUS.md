@@ -330,3 +330,13 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - 洞外场景转场仍返回 `ERR_CANT_OPEN (19)`。远程静态检查未发现该场景直接/二级资源路径缺失。
 - 修复 `scenes/prologue_exterior.tscn` 中 14 处 `PackedVector2Array(Vector2(...), ...)` 序列化为扁平坐标序列的格式问题。
 - 验收状态：A0 前半流程实机通过；洞外加载修复待本地重新导入及复测，不标记为完整通过。
+
+
+## A0 洞外执行者战斗与 HUD 修复 — 2026-10-30
+
+- 修复洞外场景未调用 HUD 的 Hero / Boss 绑定，主角受伤后生命 UI 现在读取当前 Hero；Boss 遭遇开始时才显示 Boss HUD。
+- Boss HUD 已移至屏幕底部中央，初次名称显示为“???”，不再在执行者头顶重复显示名称。
+- 执行者现可正常受伤（360 HP，伤害倍率 1.0）。血量归零后进入 1.6 秒倒地 / 追兵治疗阶段，Boss 血条先降至空，再恢复满值；随后触发主角跃向右侧悬崖并黑屏转场至 A1。
+- 玩家在 Boss 战中先战败时，仍由 A0 关卡直接执行黑屏转场，不进入普通检查点复活。
+- 已移除旧版 12 秒强制败北计时；战斗以玩家或 Boss 的血量结果推进。
+- **验证状态：** GitHub 源码与信号连接已静态复核；尚未由本地 Godot 4.6.1 实机验证受击碰撞、血量 UI、Boss 倒地治疗、跃崖 Tween 与 A1 转场。不得视为运行时 PASS。
