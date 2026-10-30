@@ -125,24 +125,24 @@ z_index = -100
 [node name="CaveMouthVisual" type="Polygon2D" parent="."]
 position = Vector2(35, 300)
 polygon = PackedVector2Array(Vector2(0, 240), Vector2(0, 45), Vector2(28, 8), Vector2(72, 0), Vector2(118, 8), Vector2(160, 45), Vector2(185, 240))
-color = Color("#090c12")
+color = Color(0.035294, 0.047059, 0.070588, 1)
 z_index = -5
 
 [node name="CaveArchVisual" type="Line2D" parent="."]
 points = PackedVector2Array(Vector2(35, 360), Vector2(42, 320), Vector2(62, 286), Vector2(92, 256), Vector2(127, 245), Vector2(162, 256), Vector2(192, 286), Vector2(212, 320), Vector2(219, 360))
 width = 12.0
-default_color = Color("#59606c")
+default_color = Color(0.34902, 0.376471, 0.423529, 1)
 z_index = -4
 
 [node name="MountainPathVisual" type="Line2D" parent="."]
 points = PackedVector2Array(Vector2(250, 500), Vector2(520, 478), Vector2(740, 505), Vector2(1108, 485))
 width = 3.0
-default_color = Color("#5b606b")
+default_color = Color(0.356863, 0.376471, 0.419608, 1)
 z_index = 2
 
 [node name="RiverDepthVisual" type="Polygon2D" parent="."]
 polygon = PackedVector2Array(Vector2(1120, 558), Vector2(1500, 558), Vector2(1500, 790), Vector2(1120, 790))
-color = Color("#0b121c")
+color = Color(0.043137, 0.070588, 0.109804, 1)
 z_index = -2
 
 [node name="RiverRipple1140" type="Line2D" parent="."]
@@ -195,20 +195,20 @@ z_index = -1
 
 [node name="CliffRubbleVisual" type="Polygon2D" parent="."]
 polygon = PackedVector2Array(Vector2(1034, 534), Vector2(1048, 488), Vector2(1074, 508), Vector2(1098, 472), Vector2(1116, 532))
-color = Color("#3a3b43")
+color = Color(0.227451, 0.231373, 0.262745, 1)
 z_index = 3
 
 [node name="CliffEdgeVisual" type="Line2D" parent="."]
 points = PackedVector2Array(Vector2(1030, 532), Vector2(1112, 532))
 width = 3.0
-default_color = Color("#72717b")
+default_color = Color(0.447059, 0.443137, 0.482353, 1)
 z_index = 4
 
 [node name="CaveExitLabel" type="Label" parent="."]
 position = Vector2(55, 245)
 size = Vector2(150, 28)
 text = "山洞出口"
-theme_override_colors/font_color = Color("#9a9aa8")
+theme_override_colors/font_color = Color(0.603922, 0.603922, 0.658824, 1)
 theme_override_font_sizes/font_size = 17
 z_index = 5
 
@@ -216,6 +216,6 @@ z_index = 5
 position = Vector2(565, 250)
 size = Vector2(280, 32)
 text = "通往河谷的山路"
-theme_override_colors/font_color = Color("#a7a6b0")
+theme_override_colors/font_color = Color(0.654902, 0.65098, 0.690196, 1)
 theme_override_font_sizes/font_size = 20
 z_index = 5
