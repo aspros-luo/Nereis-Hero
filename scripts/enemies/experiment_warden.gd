@@ -62,7 +62,7 @@ func _physics_process(delta: float) -> void:
     else:
         velocity.y = 0.0
 
-    var hero := get_node_or_null("../Hero") as CharacterBody2D
+    var hero := get_tree().get_first_node_in_group("player") as CharacterBody2D
     if not is_instance_valid(hero):
         velocity.x = move_toward(velocity.x, 0.0, 900.0 * delta)
         _move_and_slide_scaled()
