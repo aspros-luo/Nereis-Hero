@@ -66,7 +66,7 @@ func _on_hero_defeated() -> void:
 	# Keep the defeat tableau visible long enough for the achievement toast and story beat.
 	# 保留战败现场，让玩家看清追兵并有时间看到成就提示。
 	await get_tree().create_timer(3.2).timeout
-	_begin_rescue_transition("defeated")
+	_complete_prologue_transition()
 
 func _on_executioner_revival_started() -> void:
 	if ending_started:
