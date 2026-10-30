@@ -187,28 +187,6 @@ one_way_collision = true
 [node name="Hero" parent="." instance=ExtResource("2")]
 position = Vector2(420, 540)
 
-[node name="AmbushSpawnMarkers" type="Node2D" parent="."]
-
-[node name="WardenLeft" type="Marker2D" parent="AmbushSpawnMarkers"]
-position = Vector2(1425, 540)
-
-[node name="WardenRight" type="Marker2D" parent="AmbushSpawnMarkers"]
-position = Vector2(2075, 540)
-
-[node name="WardenDrop" type="Marker2D" parent="AmbushSpawnMarkers"]
-position = Vector2(1480, 95)
-
-[node name="RightGateClosureThreshold" type="Marker2D" parent="AmbushSpawnMarkers"]
-position = Vector2(1960, 540)
-
-[node name="ExitAmbushTrigger" type="Area2D" parent="."]
-position = Vector2(1728, 360)
-collision_layer = 0
-collision_mask = 1
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitAmbushTrigger"]
-shape = SubResource("RectangleShape2D_ambush_trigger")
-
 [node name="SurgicalMark" type="Node2D" parent="."]
 position = Vector2(620, 520)
 script = ExtResource("3")
@@ -284,52 +262,8 @@ metadata/p5_1_target_scene = "res://scenes/prologue_exterior.tscn"
 metadata/p5_1_target_region = "A0_TRANSITION"
 metadata/p5_1_spawn_side = "west"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="VillageRoadExit"]
-position = Vector2(0, -70)
-shape = SubResource("RectangleShape2D_exit")
-
-[node name="Prompt" parent="VillageRoadExit" instance=ExtResource("9")]
-
 [node name="ProgressBarrier_Left" parent="." instance=ExtResource("11")]
 position = Vector2(1320, 420)
 visible = false
 
-[node name="ProgressBarrier_Right" parent="." instance=ExtResource("11")]
-position = Vector2(2000, 420)
-visible = false
-
 [node name="HUD" parent="." instance=ExtResource("7")]
-
-[node name="ExitGateVisual" type="Node2D" parent="."]
-position = Vector2(2000, 300)
-z_index = 5
-
-[node name="ClosedGate" type="Polygon2D" parent="ExitGateVisual"]
-polygon = PackedVector2Array(Vector2(0, 0), Vector2(90, 0), Vector2(90, 220), Vector2(0, 220))
-color = Color("#18151b")
-
-[node name="LeftBar" type="Line2D" parent="ExitGateVisual"]
-position = Vector2(10, 20)
-points = PackedVector2Array(Vector2(0, 0), Vector2(0, 180))
-width = 5.0
-default_color = Color("#5d4c55")
-
-[node name="RightBar" type="Line2D" parent="ExitGateVisual"]
-position = Vector2(80, 20)
-points = PackedVector2Array(Vector2(0, 0), Vector2(0, 180))
-width = 5.0
-default_color = Color("#5d4c55")
-
-[node name="OpenedGate" type="Polygon2D" parent="ExitGateVisual"]
-visible = false
-polygon = PackedVector2Array(Vector2(0, 0), Vector2(90, 0), Vector2(90, 220), Vector2(0, 220))
-color = Color("#33232a")
-
-[node name="OpenedLabel" type="Label" parent="ExitGateVisual"]
-visible = false
-offset_left = -5.0
-offset_top = -25.0
-offset_right = 110.0
-offset_bottom = 0.0
-text = "开启"
-theme_override_colors/font_color = Color("#d6c7b2")
