@@ -62,7 +62,11 @@ func _load_from_world_state() -> void:
     technique_variants = WorldState.technique_variants.duplicate(true)
 
 func switch_weapon() -> void:
-    current_weapon = WeaponStyle.SHORT_BLADE if current_weapon == WeaponStyle.LONG_SWORD else WeaponStyle.LONG_SWORD
+    var target_style := "short_blade" if current_weapon == WeaponStyle.LONG_SWORD else "long_sword"
+    if not WorldState.owns_weapon(target_style):
+        print("[NEREIS][WEAPON] Cannot switch: %s is not unlocked" % target_style)
+        return
+    current_weapon = WeaponStyle.SHORT_BLADE if target_style == "short_blade" else WeaponStyle.LONG_SWORD
     WorldState.current_weapon_style = WEAPON_NAMES[current_weapon]
     WorldState.save_game()
 
