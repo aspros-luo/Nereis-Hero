@@ -920,8 +920,11 @@ func acquire_long_sword_and_equip() -> bool:
 	# One authoritative, idempotent transition used by the S01 escape-door event.
 	if has_long_sword:
 		if current_weapon_style != "long_sword" and not has_short_blade:
+			var previous_style := current_weapon_style
 			current_weapon_style = "long_sword"
-			return save_game()
+			if not save_game():
+				current_weapon_style = previous_style
+				return false
 		return true
 	var definition: Dictionary = ITEM_CATALOG_SCRIPT.get_definition("protagonist_long_sword")
 	if definition.is_empty():
@@ -932,7 +935,10 @@ func acquire_long_sword_and_equip() -> bool:
 	has_long_sword = true
 	current_weapon_style = "long_sword"
 	if not save_game():
-		# Keep the in-memory state coherent; the caller must not proceed to S02 on save failure.
+		# Roll back the in-memory grant so a retry cannot bypass the failed persistence check.
+		has_long_sword = false
+		current_weapon_style = "long_sword"
+		inventory_items.erase("protagonist_long_sword")
 		return false
 	print("[NEREIS][WEAPON] Protagonist long sword acquired and equipped")
 	return true
