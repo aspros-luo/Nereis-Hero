@@ -175,6 +175,8 @@ enabled = false
 position = Vector2(0, -69)
 shape = SubResource("CliffExplorationDoorShape")
 
+[node name="Prompt" parent="FutureA2RoadDoor" instance=ExtResource("7")]
+
 [node name="FutureA2RoadBlocker" type="StaticBody2D" parent="."]
 position = Vector2(1760, 520)
 
