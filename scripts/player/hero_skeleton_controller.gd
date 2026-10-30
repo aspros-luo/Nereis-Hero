@@ -301,12 +301,10 @@ func _apply_pose() -> void:
 	var run_phase := animation_time * 11.5
 	var run_cycle := sin(run_phase)
 	var opposite_cycle := sin(run_phase + PI)
-	var run_bounce := absf(sin(run_phase * 2.0)) * 3.2
 	match current_pose:
 		PoseState.IDLE:
 			if animate_idle:
 				var breath := sin(animation_time * 2.4)
-				root_bone.position.y -= absf(breath) * 1.1
 				body_bone.rotation = breath * 0.075
 				head_bone.rotation = sin(animation_time * 2.4 + 0.55) * 0.05
 				arm_right_bone.rotation = 0.16 + breath * 0.055
@@ -321,7 +319,6 @@ func _apply_pose() -> void:
 			var swing := walk_cycle * 0.24 if animate_run else 0.0
 			var left_knee := maxf(0.0, walk_opposite) * 0.22
 			var right_knee := maxf(0.0, walk_cycle) * 0.22
-			root_bone.position.y -= absf(sin(walk_phase * 2.0)) * 0.55
 			body_bone.rotation = -0.025 - absf(walk_cycle) * 0.012
 			arm_left_bone.rotation = -swing * 0.72 + 0.035
 			arm_right_bone.rotation = swing * 0.72 - 0.08
@@ -336,7 +333,6 @@ func _apply_pose() -> void:
 			var swing := run_cycle * 0.62 if animate_run else 0.0
 			var left_knee := maxf(0.0, opposite_cycle) * 0.62
 			var right_knee := maxf(0.0, run_cycle) * 0.62
-			root_bone.position.y -= run_bounce
 			body_bone.rotation = -0.12 - absf(run_cycle) * 0.05
 			arm_left_bone.rotation = swing * 0.95 + 0.08
 			arm_right_bone.rotation = -swing * 0.95 - 0.20
@@ -349,7 +345,6 @@ func _apply_pose() -> void:
 		PoseState.JUMP:
 			# Arms lead the launch; legs tuck progressively less as upward velocity fades.
 			var launch := clampf((-_vertical_velocity - 160.0) / 360.0, 0.0, 1.0)
-			root_bone.position.y -= launch * 1.4
 			body_bone.rotation = -0.12 - launch * 0.08
 			head_bone.rotation = -0.08
 			arm_left_bone.rotation = -0.65 - launch * 0.35
@@ -377,7 +372,6 @@ func _apply_pose() -> void:
 			# Brief impact compression and recovery; no gameplay or collision timing is changed.
 			var land := clampf(_landing_time / 0.12, 0.0, 1.0)
 			var impact := sin((1.0 - land) * PI) if land > 0.0 else 0.0
-			root_bone.position.y += impact * 2.0
 			body_bone.rotation = impact * 0.12
 			head_bone.rotation = impact * -0.08
 			arm_left_bone.rotation = -0.25 - impact * 0.12
