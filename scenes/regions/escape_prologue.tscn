@@ -30,8 +30,6 @@ size = Vector2(180, 12)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(110, 140)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ambush_trigger"]
-size = Vector2(2, 720)
 
 [node name="EscapePrologue" type="Node2D"]
 script = ExtResource("1")
@@ -241,7 +239,42 @@ display_name = "破损的凳子"
 
 [node name="RestVisual" parent="RestPoint" instance=ExtResource("8")]
 
-[node name="VillageRoadExit" type="Area2D" parent="."]
+
+[node name="LongSwordVisual" type="Node2D" parent="."]
+position = Vector2(1125, 530)
+z_index = 4
+
+[node name="Blade" type="Polygon2D" parent="LongSwordVisual"]
+position = Vector2(0, -8)
+polygon = PackedVector2Array(-3, -3, 3, -3, 2, -48, 0, -58, -2, -48)
+color = Color("#b8b8ad")
+
+[node name="Guard" type="Polygon2D" parent="LongSwordVisual"]
+polygon = PackedVector2Array(-12, -5, 12, -5, 12, 0, -12, 0)
+color = Color("#78634c")
+
+[node name="Grip" type="Polygon2D" parent="LongSwordVisual"]
+polygon = PackedVector2Array(-3, 0, 3, 0, 3, 20, -3, 20)
+color = Color("#44343a")
+
+[node name="Pommel" type="Polygon2D" parent="LongSwordVisual"]
+position = Vector2(0, 21)
+polygon = PackedVector2Array(-5, -3, 5, -3, 5, 3, -5, 3)
+color = Color("#9c805b")
+
+[node name="S01ExitDoor" type="Area2D" parent="."]
+position = Vector2(1240, 540)
+script = ExtResource("6")
+prompt_text = "E  打开出口"
+enabled = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="S01ExitDoor"]
+position = Vector2(0, -70)
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="Prompt" parent="S01ExitDoor" instance=ExtResource("9")]
+
+\n[node name="VillageRoadExit" type="Area2D" parent="."]
 position = Vector2(2040, 540)
 script = ExtResource("6")
 prompt_text = "E  逃离"
