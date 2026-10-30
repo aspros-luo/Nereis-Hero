@@ -20,9 +20,12 @@ func _ready() -> void:
     set_meta("interaction_priority", 100)
     if not unlock_once_flag_id.is_empty() and unlock_once_flag_id in WorldState.achievement_flags and not opened_prompt_text.is_empty():
         prompt_text = opened_prompt_text
-    prompt_label = get_node("Prompt/PromptLabel") as Label
-    prompt_label.text = NereisLocalization.translate_text(prompt_text)
-    prompt_label.visible = false
+    prompt_label = get_node_or_null("Prompt/PromptLabel") as Label
+    if prompt_label == null:
+        push_error("[NEREIS][DOOR] Missing Prompt/PromptLabel on %s" % get_path())
+    else:
+        prompt_label.text = NereisLocalization.translate_text(prompt_text)
+        prompt_label.visible = false
     body_entered.connect(_on_body_entered)
     body_exited.connect(_on_body_exited)
 
