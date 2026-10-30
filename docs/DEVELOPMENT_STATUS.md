@@ -313,3 +313,12 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - Confirmed P1 prologue / village-defense / C02 source contracts and P2 Boss entry / death reset / victory / return / Continue wiring.
 - **Verification boundary:** These are remote source and topology cross-checks, not execution of the Python validators. Godot 4.6.1 parsing, collision, combat, save/Continue, and continuous natural-exploration acceptance remain pending. No GitHub Actions were triggered.
 
+
+
+## 2026-10-30 — A0 场景加载与伏击 AI 修复（待本地验收）
+
+- 修复 S01 `escape_prologue.tscn`、洞外 `prologue_exterior.tscn` 以及 A0 R01–R03 场景中的颜色序列化写法；R01/R02/R03 分别规范化 18/22/28 处颜色值。
+- 复核 S01、S02、洞外、A0 R01–R03、伏击敌人及相关子场景的直接外部资源路径，当前分支文件树中未发现缺失路径。
+- 修复 S02 伏击守卫 AI 目标查找错误：守卫实例位于 `Wardens` 子节点，旧相对路径 `../Hero` 指向错误位置；Hero 已加入 `player` 组，守卫改用玩家组查找目标。
+- 变更分支：`feature/story-map-progression`。代码与审计文档已提交。
+- **验收状态：BLOCKED（等待本地 Godot 4.6.1 验证）**。远程静态检查不等于场景解析、碰撞或战斗运行时通过。需按 A0 审计文档逐项测试新游戏、S01→S02、伏击 AI、死亡重试与出口解锁。
