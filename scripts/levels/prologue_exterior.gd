@@ -31,11 +31,7 @@ func _ready() -> void:
 	camera.limit_top = 0
 	camera.limit_right = int(camera_right_limit.global_position.x)
 	camera.limit_bottom = 720
-	hero.defeated.connect(func() -> void:
-		if not ending_started:
-			AchievementManager.unlock("prologue_knight_defeat")
-			call_deferred("_begin_rescue_transition", "defeated")
-	)
+	hero.defeated.connect(_on_hero_defeated)
 	boss.scripted_revival_started.connect(_on_executioner_revival_started)
 	boss.scripted_revival_completed.connect(_on_executioner_revived)
 func _physics_process(delta: float) -> void:
@@ -58,6 +54,19 @@ func _physics_process(delta: float) -> void:
 
 
 
+
+func _on_hero_defeated() -> void:
+	if ending_started:
+		return
+	ending_started = true
+	WorldState.input_locked = true
+	_clear_interaction_focus()
+	AchievementManager.unlock("prologue_knight_defeat")
+	_show_pursuers()
+	# Keep the defeat tableau visible long enough for the achievement toast and story beat.
+	# 保留战败现场，让玩家看清追兵并有时间看到成就提示。
+	await get_tree().create_timer(3.2).timeout
+	_begin_rescue_transition("defeated")
 
 func _on_executioner_revival_started() -> void:
 	if ending_started:
