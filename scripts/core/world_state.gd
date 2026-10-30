@@ -921,8 +921,8 @@ func acquire_long_sword_and_equip() -> bool:
 	if has_long_sword:
 		if current_weapon_style != "long_sword" and not has_short_blade:
 			current_weapon_style = "long_sword"
-			save_game()
-		return false
+			return save_game()
+		return true
 	var definition: Dictionary = ITEM_CATALOG_SCRIPT.get_definition("protagonist_long_sword")
 	if definition.is_empty():
 		push_error("[NEREIS][WEAPON] Long-sword item definition is missing")
@@ -1347,6 +1347,8 @@ func mark_route_complete() -> void:
 func get_resume_scene_path() -> String:
 	match current_location:
 		"church_escape":
+			return "res://scenes/regions/escape_prologue.tscn"
+		"church_escape_s01":
 			return "res://scenes/regions/escape_prologue.tscn"
 		"church_escape_s02":
 			return "res://scenes/regions/a0_s02_escape.tscn"
