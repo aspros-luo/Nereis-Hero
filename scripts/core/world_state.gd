@@ -48,6 +48,8 @@ var ancient_exposure := 0
 var outer_exposure := 0
 var abnormal_load := 0.0
 var current_weapon_style := "long_sword"
+var has_long_sword := false
+var has_short_blade := false
 var learned_techniques: Array[String] = []
 var technique_variants: Dictionary = {}
 var resonance_sources: Array[String] = []
@@ -588,6 +590,8 @@ func save_game() -> bool:
 		"outer_exposure": outer_exposure,
 		"abnormal_load": abnormal_load,
 		"current_weapon_style": current_weapon_style,
+		"has_long_sword": has_long_sword,
+		"has_short_blade": has_short_blade,
 		"learned_techniques": learned_techniques,
 		"technique_variants": technique_variants,
 		"resonance_sources": resonance_sources,
@@ -742,6 +746,18 @@ func load_game() -> void:
 	current_weapon_style = str(parsed.get("current_weapon_style", "long_sword"))
 	if current_weapon_style not in ["long_sword", "short_blade"]:
 		current_weapon_style = "long_sword"
+	var has_weapon_ownership_data := parsed.has("has_long_sword") or parsed.has("has_short_blade")
+	has_long_sword = bool(parsed.get("has_long_sword", false))
+	has_short_blade = bool(parsed.get("has_short_blade", false))
+	# Legacy saves predate explicit ownership. Preserve any previously playable weapon
+	# and never strand a player who already reached the village or equipped the short blade.
+	if not has_weapon_ownership_data:
+		has_long_sword = current_weapon_style == "long_sword" or current_weapon_style == "short_blade" or bool(parsed.get("prologue_complete", false))
+		has_short_blade = current_weapon_style == "short_blade"
+	if current_weapon_style == "short_blade" and not has_short_blade:
+		current_weapon_style = "long_sword"
+	if current_weapon_style == "long_sword" and not has_long_sword and has_short_blade:
+		current_weapon_style = "short_blade"
 	learned_techniques.clear()
 	var saved_techniques = parsed.get("learned_techniques", [])
 	if saved_techniques is Array:
@@ -899,6 +915,45 @@ func record_world_item_pickup(pickup_id: String, item_id: String, amount: int = 
 	collected_world_item_ids.append(normalized_pickup_id)
 	save_game()
 	return true
+
+func acquire_long_sword_and_equip() -> bool:
+	# One authoritative, idempotent transition used by the S01 escape-door event.
+	if has_long_sword:
+		if current_weapon_style != "long_sword" and not has_short_blade:
+			current_weapon_style = "long_sword"
+			save_game()
+		return false
+	var definition: Dictionary = ITEM_CATALOG_SCRIPT.get_definition("protagonist_long_sword")
+	if definition.is_empty():
+		push_error("[NEREIS][WEAPON] Long-sword item definition is missing")
+		return false
+	if not add_inventory_item("protagonist_long_sword", 1, false):
+		return false
+	has_long_sword = true
+	current_weapon_style = "long_sword"
+	if not save_game():
+		# Keep the in-memory state coherent; the caller must not proceed to S02 on save failure.
+		return false
+	print("[NEREIS][WEAPON] Protagonist long sword acquired and equipped")
+	return true
+
+func unlock_short_blade_and_equip() -> bool:
+	if has_short_blade:
+		return false
+	if not add_inventory_item("protagonist_short_blade", 1, false):
+		return false
+	has_short_blade = true
+	current_weapon_style = "short_blade"
+	if not save_game():
+		return false
+	print("[NEREIS][WEAPON] Short blade unlocked and equipped")
+	return true
+
+func owns_weapon(style: String) -> bool:
+	match style:
+		"long_sword": return has_long_sword
+		"short_blade": return has_short_blade
+		_: return false
 
 func mark_item_read(item_id: String) -> void:
 	var normalized_id := item_id.strip_edges()
@@ -1110,6 +1165,8 @@ func reset() -> void:
 	outer_exposure = 0
 	abnormal_load = 0.0
 	current_weapon_style = "long_sword"
+	has_long_sword = false
+	has_short_blade = false
 	learned_techniques.clear()
 	technique_variants.clear()
 	resonance_sources.clear()
