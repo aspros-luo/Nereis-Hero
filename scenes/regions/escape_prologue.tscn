@@ -224,20 +224,20 @@ z_index = 4
 [node name="Blade" type="Polygon2D" parent="LongSwordVisual"]
 position = Vector2(0, -8)
 polygon = PackedVector2Array(-3, -3, 3, -3, 2, -48, 0, -58, -2, -48)
-color = Color("#b8b8ad")
+color = Color(0.721569, 0.721569, 0.678431, 1)
 
 [node name="Guard" type="Polygon2D" parent="LongSwordVisual"]
 polygon = PackedVector2Array(-12, -5, 12, -5, 12, 0, -12, 0)
-color = Color("#78634c")
+color = Color(0.470588, 0.388235, 0.298039, 1)
 
 [node name="Grip" type="Polygon2D" parent="LongSwordVisual"]
 polygon = PackedVector2Array(-3, 0, 3, 0, 3, 20, -3, 20)
-color = Color("#44343a")
+color = Color(0.266667, 0.203922, 0.227451, 1)
 
 [node name="Pommel" type="Polygon2D" parent="LongSwordVisual"]
 position = Vector2(0, 21)
 polygon = PackedVector2Array(-5, -3, 5, -3, 5, 3, -5, 3)
-color = Color("#9c805b")
+color = Color(0.611765, 0.501961, 0.356863, 1)
 
 [node name="S01ExitDoor" type="Area2D" parent="."]
 position = Vector2(1240, 540)
