@@ -52,10 +52,14 @@ func _process(_delta: float) -> void:
 
 func _on_ambush_trigger_body_entered(body: Node2D) -> void:
 	if body == hero and not ambush_started:
-		_start_ambush()
+		# body_entered runs while the physics server is flushing queries.
+		# Defer the whole setup so adding Areas / changing collision shapes is safe.
+		ambush_started = true
+		_start_ambush.call_deferred()
 
 func _start_ambush() -> void:
-	ambush_started = true
+	if not is_inside_tree() or not is_instance_valid(hero):
+		return
 	ambush_phase = 1
 	_show_barrier("ProgressBarrier_Left")
 	_spawn_warden("WardenLeft", "Warden_Left")
@@ -84,19 +88,19 @@ func _show_barrier(gate_name: String) -> void:
 		push_error("[NEREIS][A0][S02] Missing authored barrier: " + gate_name)
 		return
 	gate.visible = true
-	(gate.get_node("CollisionShape2D") as CollisionShape2D).disabled = false
+	(gate.get_node("CollisionShape2D") as CollisionShape2D).set_deferred("disabled", false)
 
 func _hide_barriers() -> void:
 	for gate in progress_barriers:
 		if is_instance_valid(gate):
 			gate.visible = false
-			(gate.get_node("CollisionShape2D") as CollisionShape2D).disabled = true
+			(gate.get_node("CollisionShape2D") as CollisionShape2D).set_deferred("disabled", true)
 
 func _on_warden_defeated() -> void:
 	wardens_defeated += 1
 	if ambush_phase == 1 and wardens_defeated >= 2:
 		ambush_phase = 2
-		_spawn_warden("WardenDrop", "Warden_Drop")
+		_spawn_warden.call_deferred("WardenDrop", "Warden_Drop")
 		hud.set_story_mode("A0｜洞穴逃亡", "上方传来金属断裂声……第三名守卫从高处坠落！")
 		return
 	if ambush_phase == 2 and wardens_defeated >= 3:
