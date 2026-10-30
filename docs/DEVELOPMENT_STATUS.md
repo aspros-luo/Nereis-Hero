@@ -355,3 +355,14 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - 第三名坠落守卫的生成改为延迟调用；进度闸门碰撞形状的启停统一使用 `set_deferred`。
 - 远程源码复核确认以上四处时序调整均已写入 `feature/story-map-progression`。
 - **验收状态：待本地 Godot 4.6.1 复测。** 尚未声称运行时错误已消失；需确认两波守卫、闸门和清场解锁行为未回归。
+
+
+## 2026-10-30 — A0 S02 分层美术升级（待本地验收）
+
+- 新增洞穴背景、岩层地面、前景碎石/铁构件三张 SVG：
+  - `assets/art/backdrops/a0_s02_cavern_backdrop.svg`
+  - `assets/art/backdrops/a0_s02_cavern_floor.svg`
+  - `assets/art/backdrops/a0_s02_cavern_foreground.svg`
+- S02 场景新增/替换为可见 TextureRect 视觉节点，形成远景石拱与冷光洞口、中景旧教会管线/铁笼、地面裂纹和两侧前景碎石层次；不使用运行时 `_draw()` 绘制。
+- 保留原有战斗平台、地面与边界碰撞、伏击触发器、守卫出生 Marker、闸门及出口交互节点。本轮不改变地图尺寸、敌人波次、AI、碰撞和战斗数值。
+- **验证状态：仅完成远程源码写入与引用检查；未执行本地 Godot 4.6.1 导入或运行。** 下一步需本地检查 SVG 导入、相机裁切、前景遮挡和战斗可读性，再按截图反馈微调。
