@@ -170,3 +170,41 @@
 4. 将左侧预制闸门改为可见实体墙落下动画，并将碰撞启用时机与落地帧同步。
 5. 再处理洞外执行者可受伤、追兵治疗、主动跳崖与 A1 转场。
 6. 最后实施统一拾取/成就通知和全局成就迁移；每个阶段同步静态检查与本地 Godot 4.6.1 验收清单。
+
+
+## 9. 武器获得与 A1 北门推进链追踪（2026-10-30）
+
+### 9.1 当前实现的真实入口
+
+- 玩家按 **Q** 切换武器，入口在 `scripts/player/hero.gd::_input()`；该入口调用 `HeroSystem.switch_weapon()`。
+- `scripts/player/hero_system.gd::switch_weapon()` 当前只在 `LONG_SWORD` 与 `SHORT_BLADE` 之间切换，并将结果写入 `WorldState.current_weapon_style` 后立即保存；没有检查短刃是否获得，也没有检查任何 A1 事件/交易条件。
+- `HeroSystem._load_from_world_state()` 仅根据 `current_weapon_style` 恢复当前装备，不存在武器拥有权状态。
+- `WorldState` 当前有 `inventory_items`、`upgrade_materials` 和 `unlocked_abilities`，但没有 `has_long_sword` / `has_short_blade` 这样的武器拥有权字段。
+- 新档重置会将 `current_weapon_style` 设为 `long_sword`；旧档缺省也回落为 `long_sword`。这只是默认装备样式，不是“已在 A0 找回长剑”的事实。
+- 普通物品库存接口可以保存物品数量，但不能把“库存中有一把短刃”自动等同于武器系统已授权切换；两者需要一个明确、单一的武器解锁合同。
+
+### 9.2 当前北门与盗贼流程的差异
+
+- `scripts/levels/village_hub.gd::_enter_village_location("north_gate")` 当前在未记录 `village_defense_survived` 时进入 `scenes/demos/village_defense_demo.tscn`；完成后才允许从北门进入 A2。
+- 当前北门 POI 与 A2 房间出口合同围绕 `village_defense_survived`，并不是新版叙事要求的“击败盗贼 → 北门开放 → 获得报酬”。
+- `scenes/rooms/a1_north_gate_highroad.tscn` 当前是标记为 `A1-R03` 的通用房间场景，包含地形、C02/C24 等出口和主角/HUD；没有盗贼、奖励物品或金正交易节点。
+- `scripts/enemies/bandit_raider.gd` 是通用强盗敌人逻辑（90 HP、105 移动速度、14 点攻击伤害）；当前场景树检索未发现独立盗贼遭遇场景或该脚本的场景实例引用。不能把通用敌人脚本视为已完成的北门事件。
+- `docs/PROTAGONIST_OPENING_NARRATIVE_V1_CN.md` 与 `docs/CORE_CHARACTER_ARCS_V1_CN.md` 明确写出金正以 Boss 材料交换短刃；`docs/A1_VILLAGE_DESIGN_BASELINE_AUDIT_CN.md` 同时提醒“旅行商人”是否为金正尚未确认。不能直接把现有 `traveling_merchant` NPC 改名成金正或把两者合并。
+- 因此需要保留现有“村庄防卫战”作为一个独立的现有系统合同，先确认其是否仍要保留以及与新版盗贼事件的关系；不可直接用盗贼事件覆盖它，也不可让两场事件重复占用同一北门门槛。
+
+### 9.3 新旧存档兼容规则（实现前合同）
+
+1. 增加明确的武器拥有权状态，至少能分别表达“长剑已找回”和“短刃已获得”；当前装备样式只允许在拥有的武器之间切换。
+2. 新档：初始不拥有长剑；S01 的长剑拾取成功后才将长剑拥有权设为 true，并装备长剑。
+3. 新档在未完成金正交易前，Q 输入不能切换到短刃；应给出简短、非叙事性的操作反馈，不能静默无响应。
+4. 金正交易必须以实际持有的指定北门报酬/Boss 材料为前置；交易成功时一次性扣除材料、设置短刃拥有权、保持/切换当前武器的规则明确且只执行一次。
+5. 旧档兼容：若旧档当前装备样式为 `short_blade`，迁移时必须推断并保留短刃拥有权，不能把已解锁玩家锁回长剑；若旧档为 `long_sword`，不得仅凭默认值推断其是否完成 S01 拾取，应结合 `prologue_complete`、已存在的库存/进度事实制定保守迁移。
+6. 任何迁移必须保留已有物品、能力、存档位置、检查点和 A1 防卫进度；不要为了新字段重置整个存档。
+
+### 9.4 下一阶段的具体实施顺序
+
+1. 先查明 `village_defense_demo.tscn` 的战斗与返回合同、`village_defense_survived` 的所有读写位置，以及新版盗贼事件的地图位置；裁定两种事件的并存方式，不覆盖现有北门逻辑。
+2. 确认“报酬”物品 ID、数量、掉落来源和是否可重复获得；再确认金正的实际场景/交互落点，保持旅行商人身份开放。
+3. 增加武器拥有权状态与旧档迁移，再改 Q 切换入口；先补静态验证，随后做新档/旧档读档回归。
+4. 完成上述合同后，再将 S01 长剑拾取与 S02 场景拆分接入同一武器/存档状态系统。
+
