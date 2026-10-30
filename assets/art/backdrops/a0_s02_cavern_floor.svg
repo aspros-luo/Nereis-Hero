@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="180" viewBox="0 0 1800 180">
+<defs>
+ <linearGradient id="stone" x2="0" y2="1"><stop stop-color="#65505a"/><stop offset=".12" stop-color="#39313b"/><stop offset="1" stop-color="#171923"/></linearGradient>
+ <pattern id="cracks" width="230" height="120" patternUnits="userSpaceOnUse"><path d="M20 0l18 22 -10 19 28 20 -8 25M130 0l-12 28 18 18 -22 24 9 28M190 15l-18 22 9 16 -15 27" fill="none" stroke="#0e131c" stroke-width="4"/><path d="M0 40l65 -5 32 8 55 -12 78 9M0 100l45 -7 44 10 55 -8 86 6" fill="none" stroke="#a48b91" stroke-opacity=".2" stroke-width="3"/></pattern>
+</defs>
+<rect width="1800" height="180" fill="url(#stone)"/>
+<path d="M0 0Q210 10 410 2T810 5T1200 0T1800 4V18Q1500 10 1200 17T600 14T0 20Z" fill="#9b7c84" opacity=".55"/>
+<path d="M0 19H1800" stroke="#c3a6a9" stroke-opacity=".32" stroke-width="3"/>
+<rect y="18" width="1800" height="162" fill="url(#cracks)"/>
+<g fill="#0c111a" opacity=".55"><path d="M0 72l90 -8 30 13 -65 9 -55 -3ZM420 128l80 -15 48 12 -72 18 -54 -5ZM980 83l68 -12 45 9 -60 16 -53 -4ZM1510 135l100 -18 38 13 -78 19 -60 -5Z"/></g>
+<g fill="#b58c91" opacity=".18"><path d="M160 25l90 -3 -30 7 -70 2ZM730 32l110 -5 -40 8 -85 1ZM1320 24l120 -4 -55 8 -90 0Z"/></g>
+</svg>
