@@ -27,7 +27,6 @@ func _ready() -> void:
 	WorldState.record_natural_test_region("A0", "church_escape_exterior")
 	hero.set("defer_death_recovery", true)
 	hud.bind_hero(hero)
-	hud.bind_boss(boss)
 	var camera := hero.get_node("HeroCamera") as Camera2D
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 5.0
@@ -56,6 +55,7 @@ func _physics_process(delta: float) -> void:
 			boss_encounter_started = true
 			boss_encounter_elapsed = 0.0
 			if is_instance_valid(hud):
+				hud.bind_boss(boss)
 				hud.set_story_mode("A0｜洞外山路", "挡路者没有退让。观察他的动作，寻找离开的机会。")
 
 	# The pursuers close in after the encounter window if the scripted revival has not occurred.
