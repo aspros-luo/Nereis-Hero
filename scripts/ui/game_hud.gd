@@ -425,7 +425,7 @@ func _update_status_bars() -> void:
 func _update_boss_bar() -> void:
 	# Boss visibility belongs to the bound encounter instance, not the legacy global combat-demo flag.
 	# Boss 血条由当前绑定的遭遇实例决定，不能被旧战斗演示的全局旗标误隐藏。
-	if not boss or not is_instance_valid(boss) or boss.is_queued_for_deletion() or int(boss.get("health")) <= 0:
+	if not boss or not is_instance_valid(boss) or boss.is_queued_for_deletion():
 		boss_panel.visible = false
 		return
 
