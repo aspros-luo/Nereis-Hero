@@ -1,7 +1,5 @@
 extends Node2D
 
-
-const ENCOUNTER_ESCAPE_SECONDS := 12.0
 @onready var hero: CharacterBody2D = $Hero
 @onready var boss: CharacterBody2D = $A0_ChurchExecutioner
 @onready var narrative: CanvasLayer = $NarrativeManager
@@ -10,7 +8,6 @@ var cliff_approach_limit: Marker2D
 var camera_right_limit: Marker2D
 var ending_started := false
 var boss_encounter_started := false
-var boss_encounter_elapsed := 0.0
 
 func _ready() -> void:
 	set_meta("p5_1_exit_contract", true)
@@ -39,7 +36,8 @@ func _ready() -> void:
 			AchievementManager.unlock("prologue_knight_defeat")
 			call_deferred("_begin_rescue_transition", "defeated")
 	)
-	boss.scripted_revival_triggered.connect(_on_executioner_revived)
+	boss.scripted_revival_started.connect(_on_executioner_revival_started)
+	boss.scripted_revival_completed.connect(_on_executioner_revived)
 func _physics_process(delta: float) -> void:
 	if ending_started or not is_instance_valid(hero):
 		return
@@ -53,28 +51,25 @@ func _physics_process(delta: float) -> void:
 	if not boss_encounter_started and is_instance_valid(boss):
 		if hero.global_position.distance_to(boss.global_position) <= 245.0:
 			boss_encounter_started = true
-			boss_encounter_elapsed = 0.0
 			if is_instance_valid(hud):
 				hud.bind_boss(boss)
 				hud.set_story_mode("A0｜洞外山路", "挡路者没有退让。观察他的动作，寻找离开的机会。")
 
-	# The pursuers close in after the encounter window if the scripted revival has not occurred.
-	if boss_encounter_started:
-		boss_encounter_elapsed += delta
-		if boss_encounter_elapsed >= ENCOUNTER_ESCAPE_SECONDS:
-			call_deferred("_begin_cliff_escape")
 
 
 
 
-func _on_executioner_revived() -> void:
+func _on_executioner_revival_started() -> void:
 	if ending_started:
 		return
 	_show_pursuers()
 	for pursuer in $Pursuers.get_children():
 		if pursuer.has_method("play_healing"):
 			pursuer.call("play_healing")
-	call_deferred("_begin_cliff_escape")
+
+func _on_executioner_revived() -> void:
+	if not ending_started:
+		call_deferred("_begin_cliff_escape")
 
 func _begin_cliff_escape() -> void:
 	if ending_started:
