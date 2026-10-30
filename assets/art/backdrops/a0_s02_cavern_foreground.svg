@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="720" viewBox="0 0 1800 720">
+<defs>
+ <linearGradient id="rock" x2="0" y2="1"><stop stop-color="#302a35"/><stop offset="1" stop-color="#10151e"/></linearGradient>
+ <linearGradient id="iron" x2="0" y2="1"><stop stop-color="#83717b"/><stop offset=".4" stop-color="#38333e"/><stop offset="1" stop-color="#171b25"/></linearGradient>
+ <filter id="shade"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<!-- low edge rubble, kept below combat silhouettes -->
+<ellipse cx="100" cy="682" rx="190" ry="38" fill="#080c13" opacity=".75" filter="url(#shade)"/>
+<path d="M0 665L0 612 38 595 72 620 110 580 148 610 180 594 225 640 260 720H0Z" fill="url(#rock)"/>
+<path d="M0 635l38 -23 34 8 38 -40 38 26 25 -10 48 43M15 663l58 -18 40 12 50 -22 55 26" fill="none" stroke="#80717b" stroke-opacity=".45" stroke-width="5"/>
+<ellipse cx="1700" cy="684" rx="220" ry="40" fill="#080c13" opacity=".7" filter="url(#shade)"/>
+<path d="M1510 720l35 -70 38 -25 40 23 28 -48 44 26 37 -39 45 48 23 -10v95Z" fill="url(#rock)"/>
+<path d="M1535 680l48 -27 39 9 36 -33 42 25 45 -24 42 33" fill="none" stroke="#88737d" stroke-opacity=".4" stroke-width="5"/>
+<!-- foreground broken iron brackets at far sides -->
+<g fill="none" stroke="url(#iron)" stroke-width="12" opacity=".85"><path d="M35 0V245L78 280M55 0V220L98 255"/><path d="M1765 0V215L1720 250M1745 0V195L1700 230"/></g>
+<g fill="#26232d" stroke="#88717c" stroke-opacity=".5" stroke-width="4"><path d="M18 235l80 18 -8 20 -80 -18Z"/><path d="M1702 205l80 -18 5 21 -80 20Z"/></g>
+<!-- sparse chains on the extreme edges -->
+<g fill="none" stroke="#81727b" stroke-width="4" opacity=".55"><path d="M115 0v70l-8 8 16 8 -16 8 16 8 -8 8v95"/><path d="M1685 0v65l-8 8 16 8 -16 8 16 8 -8 8v90"/></g>
+<!-- scattered foreground stones -->
+<g fill="#171b25" stroke="#6e606b" stroke-opacity=".45" stroke-width="3"><path d="M260 690l28 -20 36 8 18 22Z"/><path d="M1420 700l35 -28 42 10 16 18Z"/></g>
+</svg>
