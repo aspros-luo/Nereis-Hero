@@ -49,7 +49,7 @@ A2 restart development log:
 ## A0 prologue refinement
 
 - `docs/A0_PROLOGUE_REFINEMENT_V1_CN.md` — current A0 experience goals, first-round changes, unresolved work, and local acceptance checklist.
-- `docs/A0_MAP_NARRATIVE_REDESIGN_BASELINE_CN.md` — 2026-10-30 approved A0 redesign: two-scene cave structure, executioner/healing transition, shared item/achievement notification, and global achievement persistence audit.
+- `docs/A0_MAP_NARRATIVE_REDESIGN_BASELINE_CN.md` — 2026-10-30 approved A0 redesign: two-scene cave structure, automatic discovery/acquisition/equipping of the protagonist’s longsword when opening the S01 surgical-room exit (no unarmed combat system), executioner/healing transition, shared item/achievement notification, and global achievement persistence audit.
 
 ## Item collection and lore system
 
