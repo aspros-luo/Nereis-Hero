@@ -186,9 +186,9 @@
 ### 9.2 当前北门与盗贼流程的差异
 
 - `scripts/levels/village_hub.gd::_enter_village_location("north_gate")` 当前在未记录 `village_defense_survived` 时进入 `scenes/demos/village_defense_demo.tscn`；完成后才允许从北门进入 A2。
-- 当前北门 POI 与 A2 房间出口合同围绕 `village_defense_survived`，并不是新版叙事要求的“击败盗贼 → 北门开放 → 获得报酬”。
-- `scenes/rooms/a1_north_gate_highroad.tscn` 当前是标记为 `A1-R03` 的通用房间场景，包含地形、C02/C24 等出口和主角/HUD；没有盗贼、奖励物品或金正交易节点。
-- `scripts/enemies/bandit_raider.gd` 是通用强盗敌人逻辑（90 HP、105 移动速度、14 点攻击伤害）；当前场景树检索未发现独立盗贼遭遇场景或该脚本的场景实例引用。不能把通用敌人脚本视为已完成的北门事件。
+- 当前北门 POI 与 A2 房间出口合同围绕 `village_defense_survived`，并不是新版叙事要求的“击败盗贼 → 北门开放 → 获得报酬”。现有 `village_defense_demo.gd` 是另一场村庄保卫战：两波共七名敌人（四名强盗、三名教会审判者），胜利只记录 `village_defense_survived` 并返回村庄，没有报酬发放或 Boss 材料掉落。
+- `scenes/rooms/a1_north_gate_highroad.tscn` 当前是标记为 `A1-R03` 的通用房间场景，包含地形、C02/C24 等出口和主角/HUD；没有盗贼、奖励物品或金正交易节点。现有 `village_defense_demo.tscn` 则以脚本 `_draw()` 绘制整片战场背景和房屋轮廓，且敌人由脚本动态生成；它不能直接作为用户要求的场景节点化北门盗贼战场模板。
+- `scripts/enemies/bandit_raider.gd` 是通用强盗敌人逻辑（90 HP、105 移动速度、14 点攻击伤害）；它被现有村庄防卫战动态实例化，但当前场景树检索未发现独立盗贼遭遇场景或新版北门事件引用。不能把通用敌人脚本视为已完成的北门事件。
 - `docs/PROTAGONIST_OPENING_NARRATIVE_V1_CN.md` 与 `docs/CORE_CHARACTER_ARCS_V1_CN.md` 明确写出金正以 Boss 材料交换短刃；`docs/A1_VILLAGE_DESIGN_BASELINE_AUDIT_CN.md` 同时提醒“旅行商人”是否为金正尚未确认。不能直接把现有 `traveling_merchant` NPC 改名成金正或把两者合并。
 - 因此需要保留现有“村庄防卫战”作为一个独立的现有系统合同，先确认其是否仍要保留以及与新版盗贼事件的关系；不可直接用盗贼事件覆盖它，也不可让两场事件重复占用同一北门门槛。
 
