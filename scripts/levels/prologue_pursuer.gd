@@ -7,6 +7,11 @@ extends Node2D
 @export var lantern := false
 var reveal := 0.0
 var animation_time := 0.0
+var healing_time := 0.0
+
+func play_healing() -> void:
+	healing_time = 2.4
+	queue_redraw()
 
 func _ready() -> void:
 	z_index = 4
@@ -16,10 +21,16 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	animation_time += delta
 	reveal = minf(1.0, reveal + delta * 2.8)
+	healing_time = maxf(0.0, healing_time - delta)
 	queue_redraw()
 
 func _draw() -> void:
 	var alpha := smoothstep(0.0, 1.0, reveal)
+	if healing_time > 0.0:
+		var heal_alpha := clampf(healing_time / 2.4, 0.0, 1.0)
+		var pulse := 1.0 + sin(animation_time * 11.0) * 0.18
+		draw_circle(Vector2(0, -52), 26.0 * pulse, Color(0.76, 0.86, 1.0, heal_alpha * 0.10))
+		draw_arc(Vector2(0, -52), 30.0 * pulse, 0.0, TAU, 32, Color(0.78, 0.88, 1.0, heal_alpha * 0.8), 3.0)
 	var sway := sin(animation_time * 2.2 + float(variant)) * 1.5
 	var cloth := Color("#171821", alpha)
 	var edge := Color("#47404a", alpha)
