@@ -11,6 +11,8 @@ var phase := 1
 @export var scripted_revival := false
 var damage_immune := false
 var revival_time := 0.0
+var revival_delay := 0.0
+var scripted_revival_pending := false
 @export var show_name_overhead := true
 ## Per-instance damage scaling; lower values make a boss more resilient without making it invulnerable.
 var damage_taken_multiplier := 1.0
@@ -27,7 +29,8 @@ var attack_hitbox: Area2D
 var animation_time := 0.0
 var attack_effect_time := 0.0
 signal defeated
-signal scripted_revival_triggered
+signal scripted_revival_started
+signal scripted_revival_completed
 signal phase_changed(phase: int)
 signal attack_telegraphed
 
@@ -56,6 +59,23 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
     delta *= WorldState.get_combat_enemy_time_scale()
     if WorldState.input_locked:
+        return
+    if scripted_revival_pending:
+        revival_delay = maxf(0.0, revival_delay - delta)
+        if revival_delay <= 0.0:
+            health = max_health
+            is_defeated = false
+            scripted_revival_pending = false
+            phase = 2
+            phase_two = true
+            revival_time = 2.4
+            stun_time = 1.35
+            attack_cooldown = 1.1
+            _log("BOSS", "Executioner restored by church pursuers; hp=%d" % health)
+            scripted_revival_completed.emit()
+        queue_redraw()
+        return
+    if is_defeated:
         return
     attack_cooldown = max(0.0, attack_cooldown - delta)
     hit_flash = max(0.0, hit_flash - delta)
@@ -135,21 +155,21 @@ func receive_damage(amount: int, source: Node = null) -> void:
     var source_name: String = source.name if source else "Unknown"
     _log("BOSS", "%s -> Ashen Knight damage=%d (raw=%d) hp=%d" % [source_name, scaled_damage, amount, health])
     if health <= 0:
-        _spawn_death_burst()
         if scripted_revival:
-            health = max_health
-            is_defeated = false
-            phase = 2
-            phase_two = true
-            revival_time = 2.4
-            stun_time = 1.35
-            attack_cooldown = 1.1
+            is_defeated = true
+            scripted_revival_pending = true
+            revival_delay = 1.6
+            revival_time = 1.6
+            hit_flash = 0.35
             windup = 0.0
             attack_released = true
-            _log("BOSS", "Executioner restored by church pursuers; hp=%d" % health)
-            scripted_revival_triggered.emit()
+            if is_instance_valid(attack_hitbox):
+                attack_hitbox.deactivate()
+            _log("BOSS", "Executioner down; church pursuers begin restoration")
+            scripted_revival_started.emit()
             queue_redraw()
             return
+        _spawn_death_burst()
         is_defeated = true
         _log("BOSS", "Ashen Knight defeated")
         if persist_global_boss_defeat:
