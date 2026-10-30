@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/escape_prologue.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/world/rest_point_visual.tscn" id="8"]
 [ext_resource type="PackedScene" path="res://scenes/world/interaction_prompt.tscn" id="9"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/experiment_warden.tscn" id="10"]
 [ext_resource type="PackedScene" path="res://scenes/rooms/prologue_progress_barrier.tscn" id="11"]
 [ext_resource type="Texture2D" path="res://assets/art/backdrops/surgery_ward_backdrop.svg" id="12"]
 [ext_resource type="Texture2D" path="res://assets/art/backdrops/surgery_floor_strip.svg" id="13"]
@@ -251,16 +250,6 @@ position = Vector2(0, -70)
 shape = SubResource("RectangleShape2D_exit")
 
 [node name="Prompt" parent="S01ExitDoor" instance=ExtResource("9")]
-
-\n[node name="VillageRoadExit" type="Area2D" parent="."]
-position = Vector2(2040, 540)
-script = ExtResource("6")
-prompt_text = "E  逃离"
-enabled = false
-metadata/p5_1_exit_contract = true
-metadata/p5_1_target_scene = "res://scenes/prologue_exterior.tscn"
-metadata/p5_1_target_region = "A0_TRANSITION"
-metadata/p5_1_spawn_side = "west"
 
 [node name="ProgressBarrier_Left" parent="." instance=ExtResource("11")]
 position = Vector2(1320, 420)
