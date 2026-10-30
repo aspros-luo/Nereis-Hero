@@ -154,26 +154,26 @@ visible = false
 
 [node name="BossPanel" type="ColorRect" parent="."]
 offset_left = 390.0
-offset_top = 24.0
+offset_top = 622.0
 offset_right = 890.0
-offset_bottom = 78.0
+offset_bottom = 690.0
 color = Color(0.039216, 0.035294, 0.05098, 0.88)
 mouse_filter = 2
 visible = false
 
 [node name="BossTitle" type="Label" parent="BossPanel"]
 offset_left = 16.0
-offset_top = 7.0
+offset_top = 5.0
 offset_right = 484.0
-offset_bottom = 27.0
+offset_bottom = 29.0
 theme_override_font_sizes/font_size = 15
 text = "灰烬骑士"
 
 [node name="BossBar" type="ColorRect" parent="BossPanel"]
 offset_left = 16.0
-offset_top = 31.0
+offset_top = 38.0
 offset_right = 484.0
-offset_bottom = 41.0
+offset_bottom = 50.0
 color = Color(0.619608, 0.34902, 0.380392, 1)
 mouse_filter = 2
 
