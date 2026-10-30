@@ -298,6 +298,9 @@ func _add_circle(parent: Node2D, radius: float, width: float, color: Color) -> L
 
 func _apply_pose() -> void:
 	_reset_pose()
+	# RootBone is a fixed visual anchor. Locomotion is expressed by limb/body poses only;
+	# vertical travel belongs exclusively to CharacterBody2D physics, never the skeleton.
+	# RootBone 是固定视觉锚点；移动只通过四肢/躯干姿态表现，垂直位移只由 CharacterBody2D 物理负责。
 	var run_phase := animation_time * 11.5
 	var run_cycle := sin(run_phase)
 	var opposite_cycle := sin(run_phase + PI)
