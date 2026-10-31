@@ -1,3 +1,10 @@
+## 2026-10-31 — 悬崖探索区 Hero 组件缺失修复
+
+- 根因：`scenes/cliff_exploration.tscn` 直接创建 `CharacterBody2D` 并挂载 `hero.gd`，只配置了碰撞体与摄像机，没有实例化标准主角所需的 `HeroSystem`、`AttackHitbox`、`Hurtbox`。因此进入 `/root/CliffExploration/Hero` 时，`hero.gd` 的初始化在组件查找和 `AttackHitbox.setup()` 处报错。
+- 修复：悬崖场景改为实例化 `res://scenes/player/hero.tscn`，保留原出生位置；移除重复的内联碰撞体/摄像机定义及专用胶囊子资源，统一使用标准 Hero 场景组件。
+- 设计影响：不改变悬崖地图、出生点、门、路线或战斗参数；这是主角场景组装方式统一，不是玩法设计变更。
+- 验证状态：已完成远程源码结构修改；尚未在本地 Godot 4.6.1 导入/运行。需实测进入悬崖探索区、Hero 正常初始化、移动/攻击/受击、返回后山及再次进入。
+ 
 ## 2026-10-30 — A1.1 后山门交互空引用修复
 
 - 定位到 `scenes/village_backhill.tscn` 的 `FutureA2RoadDoor`：该节点挂载 `interaction_door.gd`，但缺少脚本要求的 `Prompt/PromptLabel` 子树。即使门设置为 `enabled = false`，其 `_ready()` 仍会执行节点查找，因此进入后山时触发空实例赋值错误。
