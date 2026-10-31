@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/cliff_exploration.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/player/hero.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/world/interaction_door.gd" id="3"]
 [ext_resource type="Script" path="res://scripts/world/village_poi.gd" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/world/village_poi_visual.tscn" id="5"]
@@ -10,10 +10,6 @@
 
 [sub_resource type="RectangleShape2D" id="GroundShape"]
 size = Vector2(2400, 40)
-
-[sub_resource type="CapsuleShape2D" id="HeroCapsule"]
-radius = 18.0
-height = 48.0
 
 [sub_resource type="RectangleShape2D" id="GateTriggerShape"]
 size = Vector2(100, 138)
@@ -43,21 +39,8 @@ position = Vector2(0, 540)
 position = Vector2(1200, 20)
 shape = SubResource("GroundShape")
 
-[node name="Hero" type="CharacterBody2D" parent="."]
+[node name="Hero" parent="." instance=ExtResource("2")]
 position = Vector2(240, 540)
-script = ExtResource("2")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hero"]
-position = Vector2(0, -24)
-shape = SubResource("HeroCapsule")
-
-[node name="HeroCamera" type="Camera2D" parent="Hero"]
-position_smoothing_enabled = true
-position_smoothing_speed = 6.0
-limit_left = 0
-limit_top = 0
-limit_right = 2400
-limit_bottom = 720
 
 [node name="ObservationRuin" type="Polygon2D" parent="."]
 position = Vector2(570, 540)
