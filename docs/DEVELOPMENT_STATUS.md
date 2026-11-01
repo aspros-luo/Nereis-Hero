@@ -443,3 +443,12 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - A1 其他 NPC 暂时保留旧单段对白，避免迁移不完整导致交互中断。蜜忒尚未接入，下一步先审计她的专属关系/地点互动模型，再复用基础设施。
 - **本轮源码已提交 GitHub；未执行 Godot 4.6.1 导入/解析/运行测试。** 本地必须验证 Autoload 解析、A1 守门人四段新对白与重复对白、R01/旧排水/悬崖反馈条件、死亡/Continue 后已读状态。
 - 设计与实现记录：`docs/A1_NPC_DIALOGUE_PROGRESS_DESIGN_CN.md` 第 12 节。
+
+
+## 2026-11-01 — 蜜忒错过会面 / 空椅子触发审计
+
+- WorldState.mark_mite_connection_missed() 当前只定义了状态写入与存档，没有在已审计的场景/事件脚本中找到调用点；village_hub.gd 仅根据该 flag 显示 MiteAbsence 并隐藏正常蜜忒节点。
+- mite_connection_missed 因而目前没有可证实的游戏内触发路径；空椅子反馈不能视为已接通。
+- mite_house.gd 的休息分支会在关系互动数少于 4 时显示“NOT YET”，但它不写入错过状态，也不等同于错过会面事件。
+- 裁定：暂不新增基于时间、离开村庄或进入教会的自动错过判定。现有设计资料没有明确指出哪一个玩家行为构成不可逆错过；擅自选择会改变蜜忒关系窗口与可恢复性。
+- 验证状态：已静态检查 WorldState 状态定义/存档恢复、村庄空椅子节点接线、蜜忒互动选择与住所休息分支；尚未执行 Godot 4.6.1 解析或实机测试。下一步需先从现有叙事设计中确认错过窗口的确切触发事件，再接入单一真实事件源。
