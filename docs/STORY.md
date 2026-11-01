@@ -1,72 +1,71 @@
-# Nereis Hero — Story Foundation
+# Nereis Hero — Story Foundation（权威剧情基线）
 
-> **结局条件权威规则已更新：** 以 [结局条件设计基准 V2](./ENDING_CONDITION_DESIGN_CN.md) 为准。本文后续旧版阈值仅保留为历史原型记录；结局必须核对实际探索路径、关键道具取得 / 持有 / 使用状态和特殊事件记录。蜜忒关系仅在其实际开放道具 / 剧情的链路中间接影响结局，身体结合不是结局条件。
+> 状态：持续迭代中的权威摘要。发生冲突时，以用户最新明确确认的剧情决策为准；详细历史与变更记录见 DEVELOPER_STORY_MEMORY.md。
+> 结局条件的玩法判定规则仍以 ENDING_CONDITION_DESIGN_CN.md 为准。该文件定义玩家行为、道具、探索和事件如何构成条件；本文定义结局背后的世界观因果。两者不可混为一谈。
 
-> Canonical developer memory: [DEVELOPER_STORY_MEMORY.md](./DEVELOPER_STORY_MEMORY.md)  
-> Shared-world canon: [CROSS_GAME_STORY_CANON_CN.md](./CROSS_GAME_STORY_CANON_CN.md) / [CROSS_GAME_STORY_CANON_EN.md](./CROSS_GAME_STORY_CANON_EN.md)
+## 1. 故事核心
 
-## Core premise
+主角是一名失去记忆的王国骑士。教会曾研究沉睡的古神，并利用古神遗留物进行实验；主角体内因此留下部分古神力量。主角逃离教会实验后被偏远村庄救下，并在那里与蜜忒相识。
 
-A wounded Kingdom knight escapes Church experimentation with his memories destroyed. A remote village rescues him, and there he meets **Mite**. Mite's early innocence is genuine; she does not consciously understand the Outer-God influence connected to her. Hero does not knowingly learn Mite's true identity during the RPG main story.
+故事通过环境、物品、NPC 对话、玩家探索与世界状态变化呈现，不使用全知旁白或长篇自动解释。
 
-The Church studied a sleeping ancient god and used traces of its body to manufacture counterfeit “faith power”. The experiments left ancient-god residue inside Hero. The Church treats people as expendable research material; the Kingdom's political institutions are compromised in different ways.
+## 2. 蜜忒：身份与真实状态
 
-## Revised catalyst
+- 蜜忒是**普通人类**，不是外神化身，也不是从一开始就拥有神性。
+- 外神选中蜜忒作为地面代理人，试图通过精神影响使她组织邪教并完成仪式。
+- 蜜忒对此完全不自知。她天然、纯洁，无法理解或执行外神希望她完成的组织与仪式工作。
+- 蜜忒身上散发一种无形气味 / 影响。村民受到影响后，在暗中自行组织邪教、尝试举行仪式；不是蜜忒主动招募或领导他们。
+- 村民对蜜忒的保护与执念可能来自这种影响，并可表现为本能、信仰或扭曲的依附；具体个体仍可有不同动机。
+- 蜜忒前期的纯真、善意、好奇与情感都是真实的。她不是从游戏开场就在伪装、策划或有意识地诱导主角。
+- 只有在游戏后期，玩家深入探究古神秘密与外神仪式，并逐渐接近宇宙结局时，蜜忒的意识才开始逐步外神化。不可把后期状态倒推成她前期早已知情。
 
-Hero's ancient-god residue, growing Resonance, and the Outer-God trace connected to Mite can interact. Physical intimacy is one possible emotional and narrative catalyst, and may change Mite's personal scenes and the influence she experiences. **It is not a required event for any ending and is not read by the ending evaluator.**
+## 3. 蜜忒的角色设计目标
 
-The Outer God does not depend on one romantic event or one vessel. It can answer a sufficiently strong Resonance signal, exploit accumulated exposure, and continue searching for another vessel if one attempt fails. Mite's early affection is not a planned deception.
+蜜忒同时是：
+1. 世界秘密的见证者 / 关联者：重大事件围绕她发生，但她本人并不理解其全貌；
+2. 主角命运的关联者：她与主角的关系会改变情感体验、剧情场景及部分内容的可获得路径；
+3. 拥有自身状态的独立人物：她不是只在玩家交互时才存在的任务发放器，她可以受到世界事件影响并发生变化。
 
-## Ending evaluation contract (V2 authority: see ENDING_CONDITION_DESIGN_CN.md)
+本项目不存在 NPC 好感度数值系统。不得用好感度条、恋爱分数或单一互动次数代替人物关系。蜜忒关系通过具体经历、对话、共同事件、错过、物品与玩家行为记录表达。玩家喜欢蜜忒应源于她作为人物本身的塑造（外观、动作、声音、日常、情感与剧情），而不是因为她是隐藏结局钥匙或系统奖励。
 
-The following earlier prototype-threshold description is superseded by the V2 condition baseline. Do not treat the thresholds below as final ending rules.
-
-The ending is chosen from the Hero's accumulated **Resonance, truth-anchor items, and exploration record**. Relationship scenes remain meaningful story content, but never gate the three endings. Prototype thresholds live in scripts/core/ending_evaluator.gd:
-
-- **凡人之墓 / Mortal's Grave** — the combined Resonance and exploration evidence for a cosmic ending is missing. Hero defeats the Church's leadership and the King, helping the Restoration Army remove the Church's immediate control. The victory is real, but the restored order gradually reproduces the corruption it replaced.
-- **永恒乐园 / Eternal Paradise** — Resonance reaches the cosmic threshold and exploration exposes Hero to an Outer-God trace, but he has not assembled enough truth anchors and explored enough hidden regions to preserve his individuality. The Outer God turns him into a vessel and draws the world into an eternal dream. A physical relationship with Mite is not required.
-- **烈火天罚 / Blazing Judgment** — Resonance reaches the cosmic threshold, Hero finds at least three truth-anchor sources, and explores at least two hidden regions. The assembled anchor preserves enough agency to resist the Outer God's completion. Resistance still comes at a catastrophic cost.
-
-### Legacy prototype thresholds (not authoritative)
-
-- Cosmic Resonance threshold: 68.
-- Eternal Paradise: Resonance >= 68, the Observer Reaction source is recorded, and at least one hidden region is entered, unless Blazing Judgment requirements are met.
-- Blazing Judgment: Resonance >= 68, at least 3 unique truth-anchor sources, and at least 2 hidden regions entered.
-- Mortal's Grave: all other combinations.
-
-These are gameplay tuning values, not immutable metaphysical laws.
-
-## Final confrontations
+## 4. 外神、古神与结局的世界观因果
 
 ### 凡人之墓
-1. Hero confronts the Church's highest authority.
-2. The Pope / High Priest transforms through ancient-god power.
-3. The King enters the battlefield, believing terrible compromises are necessary to preserve the Kingdom.
-4. Hero defeats them; the Restoration Army takes control.
-5. The epilogue reveals corruption slowly returning under a new name.
+玩家可能沿凡人道路推进，未能发现或理解蜜忒与外神仪式的深层联系，甚至可能逐渐忽略她、错过相关经历。该结局聚焦人类政治与凡人命运：主角击败教会最高权威与国王，帮助复国军获得胜利；但新秩序最终可能重复旧有权力结构的腐化。蜜忒相关的具体结局演出须依据玩家实际经历，不得假定所有玩家都与她建立同样关系。
 
 ### 永恒乐园
-Hero's Resonance becomes a beacon. Without enough evidence to preserve his selfhood, he becomes a vessel. The Church and King become temporary obstacles swallowed by the Outer God's eternal dream. Mite's role depends on the relationship scenes actually experienced; the ending must not assume physical union occurred.
+玩家探究古神秘密与外神仪式后，主角吸收了部分古神力量。外神通过逐渐外神化的蜜忒，进一步神格化主角，并借助主角自身力量发动类似《EVA》人类补完 / 世界冲击的事件。所有人的无知肉体消失，意识被外神眷养在它的乐园——这颗星球之中。这里不是普通意义上的幸福天堂，而是个体肉身与分离状态消失后形成的外神乐园。
 
 ### 烈火天罚
-The multi-part truth anchor preserves Hero's agency long enough to resist the Outer God's completion. The Church's authority falls, Outer-God-influenced cultists overwhelm the city, and the final confrontation with Mite is a tragic set-piece rather than a conventional boss loop. Physical intimacy is not a prerequisite.
+玩家探究真相并抵达抵抗路线。星球本身具有意识；它借助主角的力量发动最终大爆炸，以终止外神降临仪式。结果不是常规意义上的胜利或净化：古神、外神、邪教组织、蜜忒与主角都将不复存在。星球的反抗以彻底毁灭作为代价。
 
-## Cross-game cycle
+## 5. 关系与结局条件：必须区分
 
-The RPG's Mortal's Grave ending is not the world's final answer. After the Church is removed, the Restoration Army gradually becomes another corrupt institution. In **Nereis-Lullaby**, told primarily through Mite's perspective, players can witness Hero's later compromises, his fall into the new order, and the way he abandons Mite or leaves her behind. Mite may understand only fragments. The Outer God is indifferent to human political cycles and continues looking for another vessel.
+- 蜜忒关系不是好感度，也不是直接结局开关。
+- 玩家可以喜欢蜜忒，却仍然为了世界选择烈火天罚；也可能在知道真相后仍选择与她一起走向永恒乐园。
+- 与蜜忒相关的互动可以改变个人剧情、线索、道具或特殊事件的可获得路径；若其影响结局，只能通过实际取得的道具、完成的事件和探索事实间接体现。
+- 身体结合不应被自动视为所有结局的必要条件。其具体叙事位置与是否触发特定桥接效应，须遵循最新剧情设计记录，不得从旧草案擅自恢复为硬性门槛。
+- 结局判定的条件类别、道具取得 / 持有 / 使用区分、探索与事件记录，以 ENDING_CONDITION_DESIGN_CN.md 为准；当前旧 evaluator 与完整设计仍有实现差距，不能宣称已经全部实现。
 
-This continues rather than retcons the RPG's victory: Hero can win the battle and still fail to break the cycle.
+## 6. 叙事表现原则
 
-## Narrative rules
+- 先让玩家喜欢蜜忒作为一个人，再让玩家逐步理解她与世界的关系。
+- 前期的蜜忒必须是真实、自然、无自知的普通人类，不提前表现成有意识的邪教领袖或外神代言人。
+- 通过村民异常行为、气味相关线索、仪式遗迹、互相矛盾的记录和环境变化，逐步让玩家拼出真相。
+- 重要状态变化可以通过场景、音乐、动作、位置、物品和 NPC 行为反馈，而不是任务日志式通知。
+- 音乐变化应像《黑暗之魂3》祭祀场在交付防火女眼睛后的变化一样，成为世界状态改变的感知反馈；具体触发节点与曲目仍待单独设计。
+- 不把三个结局简化成善恶路线；它们分别体现凡人秩序、外神乐园与星球反抗的不同宇宙结果。
+- 不要让蜜忒长篇解释自己的身份；玩家应通过证据形成、修正自己的理论。
 
-- Mite's early innocence is genuine.
-- Hero does not knowingly identify Mite as an Outer-God proxy during the RPG main story.
-- Relationship content changes scenes and emotional meaning; it does not decide the ending.
-- Resonance reveals evidence but does not guarantee understanding.
-- Hidden sources should initially appear unrelated and later form a larger explanation.
-- No ending is a clean happy ending.
+## 7. 明确尚未定稿的内容
 
+以下不得擅自补写成既定事实：
+- 蜜忒无形气味的具体生理 / 超自然机制、传播范围与强度；
+- 村民中知情者、受影响者、主动参与者的比例及各自动机；
+- 蜜忒意识外神化的具体阶段、触发事件与可见征兆；
+- 星球意识的来源、人格 / 意志表现及其与古神的关系；
+- 永恒乐园中意识被眷养的具体体验与规则；
+- 烈火天罚大爆炸的具体过程、主角如何成为媒介，以及所有实体消失后的宇宙状态；
+- 音乐变化、蜜忒具体动作、地点与隐藏事件的详细排布。
 
-## Ending-condition revision note
-
-The earlier simplified evaluator was useful for prototype ending verification, but did not encode the complete route/item/event chain. The authoritative design now requires real exploration records, distinct item acquired / held / used states, and explicit special-event completion. Relationship interactions can unlock a required item path but are not themselves ending criteria. See [ENDING_CONDITION_DESIGN_CN.md](./ENDING_CONDITION_DESIGN_CN.md).
+以上内容必须通过后续设计讨论逐项确定，不能仅因旧代码或旧文档曾经出现就视为已确认。
