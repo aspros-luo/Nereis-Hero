@@ -19,6 +19,14 @@ func _mark_input_handled() -> void:
 
 func _ready() -> void:
 	continue_button.pressed.connect(_finish_message)
+	# Keep the authored game scene visible behind a restrained dialogue overlay.
+	panel.color = Color(0.012, 0.012, 0.016, 0.42)
+	# Standard dialogue is text-only; speaker names are intentionally hidden.
+	title_label.visible = false
+	body_label.add_theme_font_size_override("font_size", 18)
+	body_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	body_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	body_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 func _process(delta: float) -> void:
 	if not panel.visible:
 		return
@@ -80,6 +88,7 @@ func play_first_memory() -> void:
 
 func show_message(title: String, message: String, duration: float = 4.0) -> void:
 	NereisInteractionFocus.clear_all(get_tree())
+	title_label.visible = false
 	if panel.visible:
 		_finish_message()
 	title_label.text = NereisLocalization.translate_text(title)
@@ -98,6 +107,7 @@ func show_message(title: String, message: String, duration: float = 4.0) -> void
 
 func show_caption(title: String, message: String, duration: float = 2.5) -> void:
 	NereisInteractionFocus.clear_all(get_tree())
+	title_label.visible = false
 	get_tree().paused = false
 	WorldState.input_locked = false
 	paused_for_narrative = false
