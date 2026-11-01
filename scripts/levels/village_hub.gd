@@ -253,6 +253,12 @@ func _on_village_npc_interacted(npc: Node) -> void:
 	var npc_id := String(npc.npc_id)
 	var entry := DialogueProgression.get_next_dialogue(npc_id)
 	if entry.is_empty():
+		# NPCs not yet migrated retain their existing single-line dialogue behavior.
+		narrative.show_message(npc.display_name, npc.dialogue, 6.0)
+		await narrative.message_finished
+		if world_event_director != null:
+			world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": npc_id, "npc_id": npc_id})
+			refresh_progression_content()
 		return
 	var dialogue_id := String(entry.get("id", ""))
 	var title := String(entry.get("title", npc.display_name))
