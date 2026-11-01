@@ -408,3 +408,14 @@ When a future implementation reaches a truly unresolved core story decision, sto
 - 设计文档：`docs/A1_NPC_DIALOGUE_PROGRESS_DESIGN_CN.md` 第 10 节。
 - **本次仅提交设计文档；没有修改游戏代码、场景、对白运行逻辑或存档结构。** 未执行静态验证器或 Godot 4.6.1 运行测试。
 - 下一步：审计蜜忒现有关系/地点互动/空椅子/共鸣合同，之后再梳理其他 A1 NPC；角色设计完成前不实现通用对话系统。
+
+
+## 2026-11-01 — NPC 通用对话进度框架与守门人首个接入（待 Godot 验证）
+
+- 新增 `scripts/core/dialogue_progression_manager.gd`，并在 `project.godot` 注册 `DialogueProgression` Autoload。
+- 对话选择支持稳定 NPC/dialogue ID、条件、优先级和固定顺序；已读记录复用现有 `WorldState.read_dialogue_ids`，未新增存档字段或修改 SAVE_FORMAT_VERSION。
+- A1 守门人已接入初见、三条路线线索、重复对白；雾林读取 `A2-R01` 实际房间探索事实，排水读取旧场景已有首次进入事实，悬崖场景实际进入时记录独立探索事实。
+- 钟墓内部与飞龙证据反馈保留独立触发接口；在真实事件来源未确认前不伪造触发。
+- A1 其他 NPC 暂时保留旧单段对白，避免迁移不完整导致交互中断。蜜忒尚未接入，下一步先审计她的专属关系/地点互动模型，再复用基础设施。
+- **本轮源码已提交 GitHub；未执行 Godot 4.6.1 导入/解析/运行测试。** 本地必须验证 Autoload 解析、A1 守门人四段新对白与重复对白、R01/旧排水/悬崖反馈条件、死亡/Continue 后已读状态。
+- 设计与实现记录：`docs/A1_NPC_DIALOGUE_PROGRESS_DESIGN_CN.md` 第 12 节。
