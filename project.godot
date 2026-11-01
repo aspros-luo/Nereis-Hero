@@ -5,6 +5,7 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 
 [autoload]
 WorldState="*res://scripts/core/world_state.gd"
+DialogueProgression="*res://scripts/core/dialogue_progression_manager.gd"
 AchievementManager="*res://scripts/core/achievement_manager.gd"
 SceneTransition="*res://scenes/world/scene_transition.tscn"
 
