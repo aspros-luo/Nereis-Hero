@@ -1,470 +1,88 @@
-## 2026-11-01 — 守门人进度条件静态复核
+# Nereis Hero — 当前开发状态
 
-- `A2-R01` 条件与 `scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn` 的 `room_id` 一致；`scripts/levels/a2_room_runtime.gd` 在房间初始化时调用 `WorldState.mark_room_explored(room_id)`，可作为实际进入记录。
-- `old_drain_first_visit_seen` 在 `scripts/levels/old_drain_exploration.gd` 首次进入时记录，不是仅靠近入口触发。
-- `a1_gatekeeper_backhill_cliff_entered` 在 `scripts/levels/cliff_exploration.gd` 场景 `_ready()` 记录，符合实际进入悬崖探索区的语义。
-- `a1_gatekeeper_bell_tomb_evidence` 与 `a1_gatekeeper_dragon_evidence` 当前未找到真实触发源；因此两条守门人后续反馈继续保持锁定，不伪造探索事实。待钟墓证据物件与飞龙线索实际落地后再接事件。
-- 以上为源码静态核对，不代表 Godot 运行时通过。
+> 当前工作分支：feature/story-map-progression
+> 最近整理：2026-11-01
+> 本文件只回答“现在是什么状态、接下来做什么”。历史过程不在这里逐条累积；剧情权威见 WORLD_BUILDING_BIBLE_CN.md，玩法条件见 ENDING_CONDITION_DESIGN_CN.md，地图目标见各区域设计基线。
+> 本状态来自最近已记录的远程源码静态审计；未在本轮重新运行 Godot。没有明确标注“实机通过”的项目，不得视为实机验收完成。
 
-## 2026-11-01 — 蜜忒互动进度提交时机修正
+## 1. 当前工作重点
 
-- `scripts/npc/mite.gd` 不再在按下交互键时立即写入 `mite_interactions_seen`；只发出待展示互动事件。
-- `scripts/levels/village_hub.gd` 与 `scripts/levels/mite_house.gd` 在对白的 `message_finished` 信号后调用 `WorldState.record_mite_interaction()`。因此初遇、共餐、挽留、归来及共鸣互动只有完整播放后才推进关系节奏。
-- 蜜忒仍保留专属关系状态机、地点节奏、空椅子错过反馈与共鸣阶段，不迁移为普通 NPC 的线性对白集合。
-- 正方：避免跳过/中断对白仍推进关系进度，且复用现有 `WorldState` 持久化接口。
-- 反方/风险：若某个蜜忒场景未连接 `message_finished` 处理器，互动将不会提交；当前核对到的村庄与蜜忒住所均有连接，仍需实机验证切场景中断行为。
-- **验证状态：** 远程源码与调用点静态核对完成；尚未执行 Godot 4.6.1 解析/运行测试。需测试村庄初遇、进入住所、共餐/挽留/归来、对白中断后重试及存档读档。
+1. 完成 A0、A1、A2 的代码 / 场景审计，优先保证序章、村庄和雾林主线稳定。
+2. 确保所有固定地图地形均由编辑器可见、可编辑的场景节点构成；禁止运行时生成固定地形或用 _draw() 充当地形主体。
+3. 整理 NPC 对话与剧情状态，但必须先确认剧情设定；不得把旧代码和旧草案当作用户批准的正史。
+4. Hero 动画系统保持独立分支 feature/hero-animation-system，不与地图 / 剧情分支混写。
 
-## 2026-11-01 — 对话 UI 透明化与纯文字呈现
+## 2. 区域与地图状态
 
-- `scripts/core/narrative_manager.gd`：普通对白与短字幕隐藏标题/说话者名称，仅显示正文；正文默认字号调整为 18，采用左对齐与垂直居中，并启用智能自动换行。
-- 对话面板改为低不透明度深色底（alpha 0.42），让游戏场景保持可见；未新增图片资源，也未把对白文本写入纹理。
-- 未改动对白进度选择、已读记录、输入锁定、暂停/恢复及交互信号。
-- **验证状态：** 已完成远程脚本修改；尚未执行 Godot 4.6.1 导入、解析或实机截图验收。需要本地确认透明度、字号与不同分辨率下的排版；若正文仍保留原标题预留的垂直空隙，再按实际场景控件布局微调。
+### A0 — 序章
 
-## 2026-10-31 — 悬崖探索区 Hero 组件缺失修复
+- 当前启动入口：res://scenes/boot.tscn；新游戏进入教会逃脱序章。
+- 现有序章包含教会实验区、敌人遭遇、线索、检查点和死亡恢复等实现。
+- 近期已记录的历史验证：P5.1 harness PASS=193 / FAIL=0（历史记录，非本轮重跑）。
+- 待办：继续核对序章场景结构、存档新游戏初始化、死亡 / Continue 恢复和剧情状态；最近曾出现新游戏加载失败，需以当前日志和源码重新定位，不能沿用旧 PASS 结论。
 
-- 根因：`scenes/cliff_exploration.tscn` 直接创建 `CharacterBody2D` 并挂载 `hero.gd`，只配置了碰撞体与摄像机，没有实例化标准主角所需的 `HeroSystem`、`AttackHitbox`、`Hurtbox`。因此进入 `/root/CliffExploration/Hero` 时，`hero.gd` 的初始化在组件查找和 `AttackHitbox.setup()` 处报错。
-- 修复：悬崖场景改为实例化 `res://scenes/player/hero.tscn`，保留原出生位置；移除重复的内联碰撞体/摄像机定义及专用胶囊子资源，统一使用标准 Hero 场景组件。
-- 设计影响：不改变悬崖地图、出生点、门、路线或战斗参数；这是主角场景组装方式统一，不是玩法设计变更。
-- 验证状态：已完成远程源码结构修改；尚未在本地 Godot 4.6.1 导入/运行。需实测进入悬崖探索区、Hero 正常初始化、移动/攻击/受击、返回后山及再次进入。
- 
-## 2026-10-30 — A1.1 后山门交互空引用修复
+### A1 — 村庄与后山
 
-- 定位到 `scenes/village_backhill.tscn` 的 `FutureA2RoadDoor`：该节点挂载 `interaction_door.gd`，但缺少脚本要求的 `Prompt/PromptLabel` 子树。即使门设置为 `enabled = false`，其 `_ready()` 仍会执行节点查找，因此进入后山时触发空实例赋值错误。
-- 在 `FutureA2RoadDoor` 下补齐场景实例 `Prompt`，复用已有 `scenes/world/interaction_prompt.tscn`；不改变门的禁用状态、碰撞体、路线或 A1→A2 连接。
-- 同时将门脚本的提示节点查找改为 `get_node_or_null()`，缺失时输出包含节点路径的明确错误；门的碰撞信号仍会正常连接，避免提示节点缺失直接中断门初始化。
-- **验证状态：** 已完成远程源码修改与目标节点/脚本合同静态核对；尚未执行本地 Godot 4.6.1 场景导入与 Continue→后山实机回归。需确认进入后山不再报错、悬崖入口 E 交互正常、雾林入口仍保持封闭。
+- 村庄主场景及教堂 / 酒馆 / 后山悬崖分层场景已存在。
+- A1 后山悬崖场景已改用标准 scenes/player/hero.tscn；后山未来雾林道路仍按设计保持封闭，悬崖探索为独立场景，另一分支保留。
+- 守门人已接入通用对话进度框架；雾林、旧下水道和后山反馈分别依赖真实探索事实。
+- 钟墓证据与飞龙证据目前未找到真实触发源，相关后续反馈保持锁定。
+- 蜜忒空椅子 / 错过会面状态目前没有已证实的真实触发调用；不得擅自添加“离村即错过”等条件。
+- 待办：本地实机检查 Hero 初始化、门交互、守门人对白进度、蜜忒互动完成后提交及中断对白后的重试 / 存档恢复。
 
-# Nereis Hero — Development Status
+### A2 — 雾林与钟墓
 
-## Hero skeletal locomotion stabilization — 2026-10-30
+- 区域设计目标为 R01–R06 六个房间，R01 为林间岔路；R01 的地面主路、树冠上行与钟墓方向必须有明确空间意义。
+- 已有六个房间场景与共享房间运行时相关实现，但历史审计记录指出 scenes/ash_forest.tscn 仍把房间组装成连续大地图，A1 北门曾指向该场景。该连接状态需要在本轮代码复核中再次确认。
+- A2-R01 实际进入记录由 a2_room_runtime.gd 写入；R01 探索条件可用于守门人反馈。
+- 待办：逐房间核对设计基线与 .tscn 实际节点、碰撞、入口出口、回程、跨区 C03/C04/H02、存档和死亡恢复；静态几何通过不等于可玩或实机通过。
 
-- Fixed `scripts/player/hero_skeleton_controller.gd`: `RootBone` is now documented and enforced as a fixed visual anchor. Idle breathing, walk gait, run gait, jump anticipation, and landing compression no longer translate the entire skeleton vertically.
-- Walk/run readability remains in limb articulation and torso rotation; jump/fall world-space vertical travel remains owned by `CharacterBody2D` physics. Landing compression remains expressed through body/limb poses.
-- No Hero movement constants, collision shapes, attack hitboxes, jump physics, or combat timings were changed.
-- Static source check after the edit: no remaining writes to `root_bone.position.y` in the skeleton controller. This is not a Godot parser/runtime test; local playback is still required to confirm perceived stability and ensure no animation state regressions.
-- Next: continue A1 visual/world-design audit from the existing village layout and current authored scene/script contracts. Preserve the confirmed village layout (A1 hub, A1.1 church/tavern/backhill; backhill cliff exploration remains a separate scene; its second branch remains reserved) and do not change A1→A2 until A2 room-runtime/connection contracts are ready.
+### A3 及以后
 
-Date: 2026-10-24
+- A3 / A4 设计完成前，不重启旧版 A5 的 22 房间方案；A5 暂按一个主场景处理。
+- 不提前扩建未设计区域，不以旧灰盒场景数量作为完成度。
 
-## Current A2 terrain design continuation — 2026-10-24
+## 3. 系统与剧情实现状态
 
-- Added version-controlled SVG engineering blueprints for R04 Crypt Landing, R05 Old Pilgrim Highroad, and R06 Eastern Ravine under docs/maps/. They use existing room-local platform positions as a starting coordinate reference and overlay intended route links.
-- These drawings are design drafts only: dashed arrows are planned routes, not proof that exits/transitions exist or are playable. Godot scene geometry and room runtime still need to be reconciled with them.
-- Next step: expand/revise R04-R06 geometry where needed, author explicit editor-visible entry/exit markers, then implement and validate the shared room runtime. No A1 route switch has been made.
+- DialogueProgression 通用对话进度管理器已接入守门人；其他 NPC 是否迁移必须基于角色设计完成度，不做机械批量迁移。
+- 蜜忒使用独立关系 / 地点互动机制，不设置 NPC 好感度数值。互动记录改为对白完成后提交；场景中断与存档恢复仍待 Godot 实机测试。
+- 对话 UI 已改为隐藏说话者标题、纯文字、低不透明度背景和较小字号；布局仍待本地视觉验收。
+- 蜜忒的最新身份、邪教起源与结局世界观以 WORLD_BUILDING_BIBLE_CN.md 为准。旧实现中的关系次数、身体结合、外神控制阶段等字段不自动构成正史，也不自动构成最终结局条件。
+- 结局判定规则以 ENDING_CONDITION_DESIGN_CN.md 为准；世界观解释与程序 evaluator 的实际实现必须分开核验。
 
-## Current A2 restart status — 2026-10-24
+## 4. 最近已记录的静态审计结果
 
-- Current design authority: docs/maps/A2_DESIGN_BASELINE_CN.md.
-- Six A2 terrain scenes exist, but scenes/ash_forest.tscn still assembles them as one continuous map; A1 North Gate still routes to ash_forest.tscn.
-- Geometry audit found the existing local scene coordinates do not yet match the coordinate extents recorded in the available Canva R01–R03 designs. Do not switch A1 to a terrain-only room scene before the shared room runtime and connection contract exist.
-- Canva region overview, R01, R02, and a candidate R03 design are located. Creating separate R04–R06 Canva designs was blocked by quota_exceeded; no retry was made.
-- Documentation governance and first-round cleanup are recorded in docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md and docs/REPOSITORY_CLEANUP_AUDIT_2026-10-24_CN.md.
-- A new structural validator, tools/validate_a2_room_scene_geometry.py, replaces the obsolete validator that parsed the retired procedural A2 platform branch. It has not been run locally; Godot runtime acceptance remains pending.
-- Next A2 milestone: reconcile six room-local geometry and explicit entry/exit positions, then implement the shared room runtime while preserving C03/C04/H02, save/resume, checkpoints, and death recovery.
+- 守门人：R01、旧下水道、后山探索条件分别有实际记录调用；钟墓 / 飞龙证据暂缺真实触发源。
+- 蜜忒错过会面：状态字段与村庄显示分支存在，但未发现真实写入调用。
+- 蜜忒互动提交：村庄与住所对白结束后提交互动状态；中断对白的信号语义未实测。
+- A1 悬崖 Hero：场景结构已改为实例化标准 Hero 场景；未实机回归。
+- 对话 UI：远程脚本结构已修改；未实机截图验收。
 
-## Current direction
+以上均为已记录的静态结果，不能替代当前分支重新执行的检查。
 
-The project is now in the first **narrative production pass**, not merely a combat prototype.
+## 5. 最高优先级待办
 
-Default startup:
+1. A0 新游戏加载失败复核：读取用户最新 Godot 日志，检查新游戏初始化、存档原子写入 / 读取、初始场景选择；先定位再修复。
+2. A0/A1/A2 场景审计：逐项确认固定地形是否场景节点化，清理代码生成地图与无意义地形。
+3. A1 实机回归：Hero 进入悬崖、门交互、守门人进度、蜜忒对白中断与存档恢复。
+4. A2 房间合同复核：六房间空间连接、入口出口、落差路线、跨区边与死亡 / 检查点恢复。
+5. 叙事实现清理：对照最新权威剧情，找出把旧假设写死在脚本 / 对话 / 条件中的地方；发现冲突先停该剧情层，不擅自改写故事。
 
-`res://scenes/boot.tscn`
+## 6. 验证状态定义
 
-Boot resolves to:
+每项工作必须明确区分：
+- 文档核对：文档内容 / 链接已检查。
+- 源码静态检查：调用关系、节点路径、资源引用等已检查。
+- 验证器执行：记录实际执行的命令与输出。
+- Godot headless：记录引擎版本、命令和结果。
+- 本地实机验收：记录实际场景、操作路径和观察结果。
 
-- Church escape on a fresh run
-- persisted narrative location after the prologue is complete
+没有执行的步骤一律标记“未验证”。历史 PASS 数字不能作为当前分支通过的证据。
 
-## Implemented production content
+## 7. 工作规则
 
-### Opening
-
-- Church surgical ward
-- 3 Experiment Wardens
-- surgical residue clue
-- checkpoint / death reset
-- playable escape to village
-
-### Village
-
-- Village Hub
-- Mite first meeting
-- place-based relationship rhythm
-- Mite House chapter
-- private-house union trigger after relationship progression
-- Tavern Mite interactions
-- missed-connection empty-chair scene
-- Restoration Camp
-- North Gate / Village Defense
-- Church / Tavern investigation routes
-- Graveyard + Bell Keeper side story
-- Ancient Research Ward
-
-### Hidden resistance
-
-Four canonical source arcs currently exist as implementation placeholders:
-
-1. Ancient Research Ward
-2. Graveyard Bell story
-3. Restoration Order
-4. Route Memory Echo
-
-Three of four awaken the hidden resistance anchor.
-
-The UI never tells the player that this is a true-ending requirement.
-
-## Mite progression
-
-Relationship facts:
-
-- first meeting
-- meal
-- stay a while
-- return
-- post-resonance dialogue stages
-
-After physical union:
-
-- ancient-god residue awakens
-- Outer-God resonance begins
-- Mite control stage progresses 0 → 3
-- subtle visual changes appear before any explicit monster transformation
-
-Physical union in normal flow is triggered after the relationship has developed and the player rests at the Tavern.
-
-The presentation is non-explicit and relies on fade-to-black and aftermath.
-
-## Three ending theaters
-
-### F1 — Candidate-driven
-
-Uses the ending evaluator.
-
-- no union → 凡人之墓 theater
-- union + no resistance → 永恒乐园 theater
-- union + hidden resistance → 烈火天罚 theater
-
-### F2 — 永恒乐园
-
-Prototype now includes:
-
-- transformed High Priest
-- transformed King
-- union with Mite
-- dream/paradise visual transition
-- final state where no one is lonely / separate
-
-### F4 — Ancient Research Ward
-
-Prototype includes:
-
-- research husk
-- black vial
-- sealed hair
-- vessel ledger
-- hidden ancient-god evidence
-
-### F5 — Village Defense
-
-Prototype includes:
-
-- Bandits
-- Church Inquisitors
-- two attack waves
-- Hero protecting the village
-- defeat retry loop
-
-### F6 — Mite Resonance
-
-Isolated relationship/resonance prototype.
-
-### F7 — Church Final Boss
-
-Prototype includes:
-
-- High Priest human phase
-- High Priest ancient-god phase with area-burst attack
-- King intervention
-- King phase-two heavy charge
-- post-victory epilogue showing the next corrupt order beginning
-
-### F8 — 烈火天罚
-
-Prototype includes:
-
-- 100 nonblocking one-hit cultists
-- 60-second true no-input waiting window for Mite
-- corrupted lullaby
-- Mite final encounter
-- true 60-second no-input waiting condition
-- Mite throws herself onto Hero's weapon
-- restrained camera impact at the self-sacrifice
-- city-scale detonation
-- heavy camera impact
-
-### F9
-
-Deletes save data and starts the playable prologue.
-
-## Debug shortcut matrix
-
-From Village Hub:
-
-- F1 — Candidate endgame
-- F2 — Eternal Paradise
-- F3 — Debug HUD
-- F4 — Ancient Research Ward
-- F5 — Village Defense
-- F6 — Mite Resonance
-- F7 — Church Final Boss
-- F8 — 烈火天罚
-- F9 — Reset
-
-## Runtime limitation
-
-The current maintainer environment has no Godot 4.6 executable.
-
-Therefore:
-
-- source structure is checked
-- GitHub state is checked
-- quote/string boundaries are checked
-- major script structures are checked
-
-But actual frame-level Godot runtime acceptance is still pending local execution.
-
-## Important rule
-
-Do not trigger GitHub Actions.
-
-Do not replace the narrative canon with temporary prototype assumptions.
-
-When a future implementation reaches a truly unresolved core story decision, stop that specific story layer and ask the director. Otherwise keep developing autonomously.
-
-
-## Interaction / flow stabilization
-
-- Unified nearest-interaction focus across Mite, NPCs, clues, doors, exits and rest points.
-- Village house entry is now explicit **E** interaction; touching the door no longer transitions scenes.
-- Route and interior doors are explicit **E** interactions.
-- Completed routes can be replayed instead of auto-returning to the Village Hub.
-- Narrative-to-scene transitions now wait on the narrative completion signal instead of a paused SceneTree timer.
-- Route exits validate the memory echo belonging to the active route.
-
-## Latest polish
-
-- Shared Boss HUD now reads per-Boss max health, display name and phase.
-- Village has subtle procedural firefly ambience.
-- After Outer-God resonance, a subset of fireflies becomes synchronized and colder in tone.
-- The final Mite waiting scene has 15s / 35s / 50s micro-movements before the 60s decision.
-- The final Mite lunge has restrained camera impact; city detonation uses a much heavier impact.
-
-
-## Map production continuation — 2026-10-11
-
-### Completed in this continuation
-
-- Audited the existing A3 local Resonance Sight bridge against the Hero → WorldState → `resonance_hidden_targets` refresh path. The bridge already receives state changes through `WorldState.refresh_resonance_reveals()`; no duplicate runtime mechanism was added.
-- Strengthened `tools/validate_graybox_scene_wiring.py` so future edits must preserve the A3 route ID, resonance threshold (28), bridge coordinates, persistent open-state restoration, collision lifecycle, shared E-focus interaction, and the WorldState reveal dispatch.
-- The validator source was re-fetched after its commit and the newly added assertions were checked against the current A3 route and WorldState source text. This is a contract-presence audit only; the Python validator itself was not executed in a local checkout.
-
-### Still outstanding
-- Re-audited regional death checkpoints: `_spawn_hero()` already stores the current region spawn as the checkpoint. The continuation now strengthens the static regression contract and avoids adding a duplicate save call; runtime respawn still needs Godot verification.
-
-- Godot 4.6.x runtime acceptance remains pending because no Godot executable is available in the maintainer environment.
-- The updated Python validators have not yet been run against a local working tree in this continuation.
-- The A0–A12 / H01–H08 platform routes, C01–C24 transitions, save/continue spawn restoration, interaction arbitration, death recovery, and all ending handoffs still need runtime traversal. Do not describe them as runtime-passed.
-- Continue by auditing the highest-risk unresolved map contracts and, where practical, improve static tooling before expanding further graybox geometry. Preserve the DS1-style interconnected box-world and Resonance Sight's ability to reveal routes within familiar regions.
-
-### Verification boundary
-
-- **Confirmed:** latest development branch source was fetched; validator assertions were committed; the current checked source strings satisfy the added local-route contracts.
-- **Not confirmed:** execution of `python3 tools/validate_world_map_topology.py`, execution of `python3 tools/validate_graybox_scene_wiring.py`, Godot parser/import, collision behavior, player traversal, or frame-level scene changes.
-- **Workflow policy:** no GitHub Actions were triggered.
-
-## 2026-10-11 — Local Resonance route contract hardening
-
-### 中文
-
-- 加强 `tools/validate_graybox_scene_wiring.py`：现在会将 `greybox_world_region.gd` 中实际构造的局部鸣响路线 ID 与 `tools/world_map_topology.json` 完整比对，检查重复、缺失和多余 ID。
-- 每条路线还会核对运行时 `match region_id` 分支与拓扑声明的 `region_id`，避免路线参数正确、却被错误地图构造的情况。
-- 每条路线的交互提示、叙事标题和叙事正文都要求具有简体中文、繁体中文、日语非空译文；英文继续作为源文本与回退文本。
-- 已通过 GitHub 远程读取内容后进行独立字符串一致性核对：11 条拓扑路线与 11 条运行时路线 ID 一致，运行时分区与拓扑声明一致，交互提示译文完整。
-- **验证边界：** 以上是远程源码内容的一致性核对，不代表在本地执行了 Python 校验器，也不代表 Godot 4.6.x 运行时、碰撞、输入或实际走图已通过。正式验收仍需运行校验器并进行实机回归。
-
-### English
-
-- Strengthened `tools/validate_graybox_scene_wiring.py` to compare the complete set of runtime local Resonance route IDs against `tools/world_map_topology.json`, catching duplicates, missing routes, and unexpected routes.
-- Each route is now checked against its enclosing runtime `match region_id` branch, so correct parameters cannot silently be attached to the wrong region.
-- Every route prompt, narrative title, and narrative body must provide non-empty Simplified Chinese, Traditional Chinese, and Japanese translations. English remains the source and fallback text.
-- A separate string-level audit of the remotely retrieved source confirmed that all 11 topology route IDs match the 11 runtime route IDs, region assignments agree, and route prompts have translations.
-- **Validation boundary:** This was a remote-source consistency audit only. The Python validator was not executed in a local checkout, and Godot 4.6.x runtime behavior, collisions, input, and traversal remain unverified. Acceptance still requires running the validator and performing runtime regression tests.
-
-## 2026-10-11 — Local bridge interaction focus correction
-
-### 中文
-
-- 静态复核局部鸣响桥时发现一个会影响实际交互的焦点问题：路线是以地图根节点坐标绘制的组合对象，根节点通常位于 `(0, 0))，但共享交互焦点此前按根节点原点计算距离。即使主角站在桥体锚点附近，附近门或 NPC 仍可能错误抢走 E 焦点。
-- 修复 `scripts/core/interaction_focus.gd`：支持可选的 `interaction_focus_position` 元数据；未提供元数据的既有交互对象仍使用原有全局位置，保持向后兼容。
-- 修复 `scripts/world/resonance_local_route.gd`：每帧将桥体中心的全局坐标登记为焦点位置，让共享仲裁按真正的桥体锚点计算距离。
-- 将上述合同加入 `tools/validate_graybox_scene_wiring.py`，并把桥中心焦点、附近交互竞争和语言切换列入 `docs/MAP_GATE_ACCEPTANCE_MATRIX_CN.md`。
-- 这是根据源码定位并修复的逻辑缺陷，尚未通过 Godot 4.6.x 实机确认；仍需验证 E 提示显示、按 E 固定桥体，以及与相邻门 / NPC 的焦点竞争。
-
-### English
-
-- Static review found an interaction-focus defect: a local Resonance route is a composite object drawn in map coordinates, while its root origin is usually `(0, 0)`. Shared focus arbitration used that root origin for distance ranking, so a nearby door or NPC could incorrectly win the E prompt even when the Hero stood by the bridge anchor.
-- Updated `scripts/core/interaction_focus.gd` to support optional `interaction_focus_position` metadata. Existing interactables without the metadata retain their previous global-position behavior.
-- Updated `scripts/world/resonance_local_route.gd` to publish the bridge center's global position as the focus point, so arbitration uses the actual interaction anchor.
-- Added static contracts for the anchor-aware focus logic and acceptance cases for bridge-center focus, nearby interactable competition, and language switching.
-- This is a source-level defect fix, not a Godot 4.6.x runtime pass. In-engine verification is still required for the prompt, E-key anchoring, and focus competition with nearby doors/NPCs.
-
-
-## Box-world structural re-audit — 2026-10-12
-
-- Fixed a structural bypass: shared graybox exit doors previously used a 138px-high interaction trigger that extended down to the continuous floor. The trigger is now 110×80 and vertically aligned near the doorway; this should make raised exits depend on reaching their ledge, pending Godot runtime confirmation.
-- Added a static regression contract for the trigger dimensions and alignment.
-- Reclassified H09 as a provisional map candidate separate from the canonical H01–H08 resonance-hidden network. H09 is not approved story canon and is not part of the 21-scene core map acceptance count.
-- Corrected stale validator contracts: the Hero spawn signature, C16 A3 anchor/return coordinates (2040/1960), and H05 return anchor (1870) now match the current scene code and topology manifest.
-- Checked the fetched topology manifest with a lightweight graph audit: 14 abstract primary nodes, 24 macro edges, 8 canonical hidden regions, 1 provisional region; the primary route is initially reachable, all declared nodes become reachable in the final abstract graph, and L01–L03 have closed paths with matching declared unlock requirements.
-- These are remote-source consistency checks, not execution of the repository Python validators or Godot runtime tests. No claim of in-engine traversal acceptance is made.
-
-### Still outstanding
-
-- Continue mapping every macro edge to its actual exit door, spawn side, height, and reverse-gate condition.
-- Reduce the remaining “continuous ground leads to the next boundary” feel without adding arbitrary collision obstacles; prioritize meaningful upper/lower routes and return shortcuts in A2–A4, then A5–A9.
-- Run both Python validators in a local checkout and complete Godot 4.6.x natural-exploration acceptance when an engine environment is available.
-
-- Second spatial pass: C09 (A5→A6) now leaves from the upper battlefield parapet; C17 (A9→A10) now uses a two-step upper roof approach. F10 route hints, topology anchors, and static regression contracts were updated together. Runtime reachability is still unverified.
-
-- H09 provisional loot is now decoupled from ending progression. New pickups only record `provisional_h09_relic_collected`; legacy `third_umbilical_cord` source entries from this candidate route are removed during load and the correction is saved. The third-cord motif remains undecided story material, not a finalized H09 requirement.
-
-## 2026-10-15 — P1–P4 full-map continuation and A8 Boss
-
-### Implemented / static contracts updated
-
-- Added the independent optional A8 Boss arena: `scenes/royal_tomb_boss.tscn` and `scripts/levels/royal_tomb_boss.gd`.
-- The A8 entrance uses its own persistent flag `defeated_royal_tomb_guardian`; it does not change C13/C14/C07/C15 or the ending evaluator. The C14 route to A9 remains available whether the Boss is fought or not.
-- Boss death resets the arena encounter at the local checkpoint. Victory records the dedicated flag and opens the return door; returning to A8 uses the `boss_return` spawn at x=1700, between the x=1540 arena entrance and x=1870 H06 gate.
-- Continue can resume `royal_tomb_boss`. The shared Ashen Knight script now supports a display name, phase property, visual theme and opt-out from the legacy global `boss_defeated` flag; the Boss HUD follows the currently bound encounter instance.
-- Added B01–B08 runtime acceptance cases to `docs/MAP_GATE_ACCEPTANCE_MATRIX_CN.md` and the P1–P4 execution ledger at `docs/P1_P2_P3_P4_FULL_MAP_EXECUTION_CN.md`.
-- Fixed the static map validator's region-exit extraction: it previously searched for eight literal spaces although the GDScript `match` blocks use tabs. The new whitespace-agnostic extractor covers the actual A2–A12 and H01–H08 exit blocks. Updated stale C08/C13 prompt assertions to match the authored door text.
-
-### Remote source cross-check
-
-- Confirmed inventory: 14 formal regions, 24 C-edges, 3 macro loops, 8 formal hidden regions, 6 macro regions, 76 subregions, 71 intra-region edges, and 8 elevator contracts.
-- Confirmed final abstract topology reachability from A0 to all A0–A13 regions.
-- Confirmed runtime hidden-gate IDs H01–H08 match topology; all 11 local Resonance route IDs match between topology and runtime.
-- Confirmed P1 prologue / village-defense / C02 source contracts and P2 Boss entry / death reset / victory / return / Continue wiring.
-- **Verification boundary:** These are remote source and topology cross-checks, not execution of the Python validators. Godot 4.6.1 parsing, collision, combat, save/Continue, and continuous natural-exploration acceptance remain pending. No GitHub Actions were triggered.
-
-
-
-## 2026-10-30 — A0 场景加载与伏击 AI 修复（待本地验收）
-
-- 修复 S01 `escape_prologue.tscn`、洞外 `prologue_exterior.tscn` 以及 A0 R01–R03 场景中的颜色序列化写法；R01/R02/R03 分别规范化 18/22/28 处颜色值。
-- 复核 S01、S02、洞外、A0 R01–R03、伏击敌人及相关子场景的直接外部资源路径，当前分支文件树中未发现缺失路径。
-- 修复 S02 伏击守卫 AI 目标查找错误：守卫实例位于 `Wardens` 子节点，旧相对路径 `../Hero` 指向错误位置；Hero 已加入 `player` 组，守卫改用玩家组查找目标。
-- 变更分支：`feature/story-map-progression`。代码与审计文档已提交。
-- **验收状态：BLOCKED（等待本地 Godot 4.6.1 验证）**。远程静态检查不等于场景解析、碰撞或战斗运行时通过。需按 A0 审计文档逐项测试新游戏、S01→S02、伏击 AI、死亡重试与出口解锁。
-
-
-## 2026-10-30 — A0 S02→洞外加载问题追加修复（待本地复测）
-
-- 用户实机日志确认：S01→S02、三名伏击守卫战斗、闪避无敌帧、伏击清除与出口解锁均正常。
-- 洞外场景转场仍返回 `ERR_CANT_OPEN (19)`。远程静态检查未发现该场景直接/二级资源路径缺失。
-- 修复 `scenes/prologue_exterior.tscn` 中 14 处 `PackedVector2Array(Vector2(...), ...)` 序列化为扁平坐标序列的格式问题。
-- 验收状态：A0 前半流程实机通过；洞外加载修复待本地重新导入及复测，不标记为完整通过。
-
-
-## A0 洞外执行者战斗与 HUD 修复 — 2026-10-30
-
-- 修复洞外场景未调用 HUD 的 Hero / Boss 绑定，主角受伤后生命 UI 现在读取当前 Hero；Boss 遭遇开始时才显示 Boss HUD。
-- Boss HUD 已移至屏幕底部中央，初次名称显示为“???”，不再在执行者头顶重复显示名称。
-- 执行者现可正常受伤（360 HP，伤害倍率 1.0）。血量归零后进入 1.6 秒倒地 / 追兵治疗阶段，Boss 血条先降至空，再恢复满值；随后触发主角跃向右侧悬崖并黑屏转场至 A1。
-- 玩家在 Boss 战中先战败时，仍由 A0 关卡直接执行黑屏转场，不进入普通检查点复活。
-- 已移除旧版 12 秒强制败北计时；战斗以玩家或 Boss 的血量结果推进。
-- **验证状态：** GitHub 源码与信号连接已静态复核；尚未由本地 Godot 4.6.1 实机验证受击碰撞、血量 UI、Boss 倒地治疗、跃崖 Tween 与 A1 转场。不得视为运行时 PASS。
-
-
-## A0 战败演出节奏修正 — 2026-10-30
-
-- 主角在洞外被执行者击败时，不再立即切换 A1。
-- 战败后锁定输入、显现教会追兵、解锁“教会执行者”成就，并保留战败现场 3.2 秒，再进入 A1 黑屏转场。
-- 该停留时间是首轮调校值；待本地验收成就提示是否能完整显示，再决定是否延长或缩短。
-
-
-## 2026-10-30 — S02 伏击物理查询时序修正
-
-- 修复用户实机日志中的 `flushing_queries` 错误：伏击触发回调不再直接生成敌人，而是延迟启动整套伏击初始化。
-- 第三名坠落守卫的生成改为延迟调用；进度闸门碰撞形状的启停统一使用 `set_deferred`。
-- 远程源码复核确认以上四处时序调整均已写入 `feature/story-map-progression`。
-- **验收状态：待本地 Godot 4.6.1 复测。** 尚未声称运行时错误已消失；需确认两波守卫、闸门和清场解锁行为未回归。
-
-
-## 2026-10-30 — A0 S02 分层美术升级（待本地验收）
-
-- 新增洞穴背景、岩层地面、前景碎石/铁构件三张 SVG：
-  - `assets/art/backdrops/a0_s02_cavern_backdrop.svg`
-  - `assets/art/backdrops/a0_s02_cavern_floor.svg`
-  - `assets/art/backdrops/a0_s02_cavern_foreground.svg`
-- S02 场景新增/替换为可见 TextureRect 视觉节点，形成远景石拱与冷光洞口、中景旧教会管线/铁笼、地面裂纹和两侧前景碎石层次；不使用运行时 `_draw()` 绘制。
-- 保留原有战斗平台、地面与边界碰撞、伏击触发器、守卫出生 Marker、闸门及出口交互节点。本轮不改变地图尺寸、敌人波次、AI、碰撞和战斗数值。
-- **验证状态：仅完成远程源码写入与引用检查；未执行本地 Godot 4.6.1 导入或运行。** 下一步需本地检查 SVG 导入、相机裁切、前景遮挡和战斗可读性，再按截图反馈微调。
-
-
-## 2026-11-01 — A1 NPC 对话进度设计基线建立
-
-- 新增 `docs/A1_NPC_DIALOGUE_PROGRESS_DESIGN_CN.md`，记录当前已确认的 A1 叙事分工、守门人三条周边线索、普通 NPC 的初见/新内容/耗尽/重复/事件反馈阶段，以及蜜忒独立关系模型的保护边界。
-- 源码静态阅读确认：`route_npc.gd` 当前只有单段 dialogue；`world_event_director.gd` 支持条件变体和事件 flag，但变体生成时只解析成单段对白；`village_hub.gd` 通过状态刷新替换基础 NPC 单段对白；这些尚不等于完整的“新对白耗尽后进入重复对白”机制。
-- `mite.gd` 使用专属互动 ID 和 WorldState 关系记录，按地点限制互动并维护共鸣阶段；不得直接替换为普通 NPC 对话序列。需继续审计存档兼容和地点互动节奏。
-- 守门人三条线索方向已按用户确认记录：雾林古老钟墓、战争时期堵塞且年久失修的右侧下水道、童年曾在后山看见飞龙（个人记忆/传闻，真假未定）。全部通过普通交谈提供，不设置任务接受流程。
-- **本轮仅新增设计文档，未修改代码、场景、对白、WorldState 或存档格式。** 未执行静态验证器与 Godot 4.6.1 运行验收。
-- 下一步：继续逐个完成守门人和蜜忒的设计卡，再梳理老婆婆、铁匠、旅行商人、酒馆值夜人及墓地相关人物；设计稳定后再实现通用对话进度基础设施。
-
-
-## 2026-11-01 — A1 守门人角色与对白设计完成（未实现）
-
-- 完成守门人角色卡、初见与三条路线线索对白、阶段耗尽后的短重复对白，以及雾林/钟墓、旧下水道、后山/飞龙的独立探索反馈草案。
-- 静态核对当前 A1 场景：守门人 x=2740，北门 POI x=2840；北门目标为 A2 R01，右侧排水探索目标为 `old_drain_exploration`，两条路线当前均受 `village_defense_survived` 状态约束；后山与悬崖探索为分层场景。
-- 核对 WorldState 已有 `explored_room_ids` / `mark_room_explored()` 持久化机制；但尚未证明所有目标场景都写入了准确 room ID，因此未将旧灰盒 flag 当作实际探索证据。
-- 设计文档：`docs/A1_NPC_DIALOGUE_PROGRESS_DESIGN_CN.md` 第 10 节。
-- **本次仅提交设计文档；没有修改游戏代码、场景、对白运行逻辑或存档结构。** 未执行静态验证器或 Godot 4.6.1 运行测试。
-- 下一步：审计蜜忒现有关系/地点互动/空椅子/共鸣合同，之后再梳理其他 A1 NPC；角色设计完成前不实现通用对话系统。
-
-
-## 2026-11-01 — NPC 通用对话进度框架与守门人首个接入（待 Godot 验证）
-
-- 新增 `scripts/core/dialogue_progression_manager.gd`，并在 `project.godot` 注册 `DialogueProgression` Autoload。
-- 对话选择支持稳定 NPC/dialogue ID、条件、优先级和固定顺序；已读记录复用现有 `WorldState.read_dialogue_ids`，未新增存档字段或修改 SAVE_FORMAT_VERSION。
-- A1 守门人已接入初见、三条路线线索、重复对白；雾林读取 `A2-R01` 实际房间探索事实，排水读取旧场景已有首次进入事实，悬崖场景实际进入时记录独立探索事实。
-- 钟墓内部与飞龙证据反馈保留独立触发接口；在真实事件来源未确认前不伪造触发。
-- A1 其他 NPC 暂时保留旧单段对白，避免迁移不完整导致交互中断。蜜忒尚未接入，下一步先审计她的专属关系/地点互动模型，再复用基础设施。
-- **本轮源码已提交 GitHub；未执行 Godot 4.6.1 导入/解析/运行测试。** 本地必须验证 Autoload 解析、A1 守门人四段新对白与重复对白、R01/旧排水/悬崖反馈条件、死亡/Continue 后已读状态。
-- 设计与实现记录：`docs/A1_NPC_DIALOGUE_PROGRESS_DESIGN_CN.md` 第 12 节。
-
-
-## 2026-11-01 — 蜜忒错过会面 / 空椅子触发审计
-
-- WorldState.mark_mite_connection_missed() 当前只定义了状态写入与存档，没有在已审计的场景/事件脚本中找到调用点；village_hub.gd 仅根据该 flag 显示 MiteAbsence 并隐藏正常蜜忒节点。
-- mite_connection_missed 因而目前没有可证实的游戏内触发路径；空椅子反馈不能视为已接通。
-- mite_house.gd 的休息分支会在关系互动数少于 4 时显示“NOT YET”，但它不写入错过状态，也不等同于错过会面事件。
-- 裁定：暂不新增基于时间、离开村庄或进入教会的自动错过判定。现有设计资料没有明确指出哪一个玩家行为构成不可逆错过；擅自选择会改变蜜忒关系窗口与可恢复性。
-- 验证状态：已静态检查 WorldState 状态定义/存档恢复、村庄空椅子节点接线、蜜忒互动选择与住所休息分支；尚未执行 Godot 4.6.1 解析或实机测试。下一步需先从现有叙事设计中确认错过窗口的确切触发事件，再接入单一真实事件源。
-
-
-## 2026-11-01 — 蜜忒权威剧情设定统一（文档迭代）
-
-- 用户重新确认：蜜忒是普通人类，被外神选为地面代理人，但本人完全不自知；她天然纯洁，无法按外神意图组织邪教或仪式。
-- 蜜忒散发无形气味 / 影响，村民受到影响后暗中自行组织邪教并尝试仪式；不得再写成蜜忒主动招募、领导或策划邪教。
-- 蜜忒前期纯真与情感真实；只有在后期玩家探究古神秘密、外神仪式并逐步接近宇宙结局时，她的意识才逐渐外神化。
-- 永恒乐园：主角探究古神秘密后吸收部分古神力量；外神通过蜜忒逐渐外神化进一步神格化主角，借主角力量发动类似《EVA》世界冲击的事件，肉体消失，意识被眷养于外神在这颗星球上的乐园。
-- 烈火天罚：星球本身具有意识，借主角力量发动大爆炸终止外神降临仪式；古神、外神、邪教组织、蜜忒与主角均不复存在。
-- 不设置 NPC 好感度系统。蜜忒的角色价值来自人物塑造本身；关系事件可以影响剧情内容与道具路径，但不是数值条或直接结局开关。
-- **本次文档迭代：** 重写 STORY.md 为权威剧情摘要；在 DEVELOPER_STORY_MEMORY.md 追加 2026-11-01 高优先级覆盖，保留历史记录但明确冲突时以新设定为准；重写 CROSS_GAME_STORY_CANON_CN.md 统一跨作品设定。
-- **明确保留的开放项：** 无形气味机制、村民受影响差异、蜜忒外神化阶段、星球意识来源、永恒乐园意识状态、烈火天罚爆炸机制及音乐 / 场景表现，均未擅自定稿。
-- **与玩法判定的边界：** ENDING_CONDITION_DESIGN_CN.md 仍是结局探索 / 道具 / 事件条件的权威合同；本次只统一世界观因果，不代表结局判定器已完成实现。
-- **正方：** 将最新确认内容写入现有权威文件，避免继续分叉出多份互相冲突的设定。
-- **反方 / 风险：** 历史文档中仍保留早期“蜜忒主动引导村庄”“身体结合是仪式桥梁”等旧段落；虽已在开发者记忆末尾添加高优先级覆盖，但后续仍需逐段标记 SUPERSEDED，避免读者只读旧章节时误判。
-- **验证状态：** GitHub 远程文档更新已提交；未运行 Godot（本次为纯剧情文档任务，无代码 / 场景变更）。后续需做一次全仓库叙事文档冲突扫描，并把早期冲突段落显式标记为历史 / 已被替代。
+- 修改前先读 README 导航、文档治理合同、开发条约和本文件，再读相关区域设计基线 / 源码 / 验收合同。
+- 直接使用既有 feature/story-map-progression；不修改 main，不新建分支，不触发 GitHub Actions。
+- 设计变更先更新现有权威设计文件，再修改实现；实现完成后同步更新本状态和对应验收合同。
+- 不新增重复的“阶段总结 / 交接 / 设定补丁”文件；优先更新既有权威文档。
+- 重要架构变更记录正方、反方、裁定与验收条件。
