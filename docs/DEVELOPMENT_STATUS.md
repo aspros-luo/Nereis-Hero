@@ -1,3 +1,11 @@
+## 2026-11-01 — 守门人进度条件静态复核
+
+- `A2-R01` 条件与 `scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn` 的 `room_id` 一致；`scripts/levels/a2_room_runtime.gd` 在房间初始化时调用 `WorldState.mark_room_explored(room_id)`，可作为实际进入记录。
+- `old_drain_first_visit_seen` 在 `scripts/levels/old_drain_exploration.gd` 首次进入时记录，不是仅靠近入口触发。
+- `a1_gatekeeper_backhill_cliff_entered` 在 `scripts/levels/cliff_exploration.gd` 场景 `_ready()` 记录，符合实际进入悬崖探索区的语义。
+- `a1_gatekeeper_bell_tomb_evidence` 与 `a1_gatekeeper_dragon_evidence` 当前未找到真实触发源；因此两条守门人后续反馈继续保持锁定，不伪造探索事实。待钟墓证据物件与飞龙线索实际落地后再接事件。
+- 以上为源码静态核对，不代表 Godot 运行时通过。
+
 ## 2026-11-01 — 蜜忒互动进度提交时机修正
 
 - `scripts/npc/mite.gd` 不再在按下交互键时立即写入 `mite_interactions_seen`；只发出待展示互动事件。
