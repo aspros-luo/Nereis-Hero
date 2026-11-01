@@ -41,7 +41,7 @@ const DIALOGUE_SETS: Dictionary = {
 				"id": "GK_FOREST_ENTERED",
 				"priority": 80,
 				"order": 10,
-				"conditions": [{ "type": "achievement", "value": "a1_gatekeeper_forest_entered" }],
+				"conditions": [{ "type": "room_explored", "value": "A2-R01" }],
 				"title": "守门人",
 				"text": "“你去过北边了？那片林子比我记得的还要静。”"
 			},
@@ -57,7 +57,7 @@ const DIALOGUE_SETS: Dictionary = {
 				"id": "GK_DRAIN_ENTERED",
 				"priority": 80,
 				"order": 20,
-				"conditions": [{ "type": "achievement", "value": "a1_gatekeeper_drain_entered" }],
+				"conditions": [{ "type": "achievement", "value": "old_drain_first_visit_seen" }],
 				"title": "守门人",
 				"text": "“你真进了那条旧排水道？我还以为它早就彻底塌了。里面的路还能走到哪儿，我就不知道了。”"
 			},
@@ -141,6 +141,9 @@ func _conditions_met(conditions: Array) -> bool:
 					return false
 			"location":
 				if WorldState.current_location != String(condition.get("value", "")):
+					return false
+			"room_explored":
+				if not WorldState.is_room_explored(String(condition.get("value", ""))):
 					return false
 			_:
 				push_warning("[DialogueProgression] Unknown condition type: %s" % String(condition.get("type", "")))
