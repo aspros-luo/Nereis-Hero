@@ -78,8 +78,8 @@ func _unhandled_input(event: InputEvent) -> void:
             return
 
         var payload := _payload_for(interaction_id)
-        if not WorldState.record_mite_interaction(interaction_id):
-            return
+        # Relationship progress is committed by the scene owner only after the
+        # complete dialogue presentation signal has fired.
         interacted.emit(interaction_id, str(payload.get("title", "MITE")), str(payload.get("message", "")))
         var viewport := get_viewport()
         if viewport:
