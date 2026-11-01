@@ -66,6 +66,8 @@ const ABILITY_IDS := ["iaijutsu_basic", "double_jump", "quick_dash", "witch_time
 const ABILITY_SOURCE_TYPES := ["story", "exploration", "achievement", "resonance", "material"]
 var unlocked_abilities: Dictionary = {}
 var achievement_flags: Array[String] = []
+# Completed dialogue IDs are independent from world-event facts.
+var read_dialogue_ids: Array[String] = []
 var upgrade_materials: Dictionary = {}
 # Inventory contains owned item counts; collected pickup IDs prevent one-time world objects from respawning.
 var inventory_items: Dictionary = {}
@@ -600,6 +602,7 @@ func save_game() -> bool:
 		"entered_hidden_regions": entered_hidden_regions,
 		"unlocked_abilities": unlocked_abilities,
 		"achievement_flags": achievement_flags,
+		"read_dialogue_ids": read_dialogue_ids,
 		"upgrade_materials": upgrade_materials,
 		"inventory_items": inventory_items,
 		"read_item_ids": read_item_ids,
@@ -774,6 +777,7 @@ func load_game() -> void:
 			if str(ability_id) in ABILITY_IDS and saved_abilities[ability_id] is Dictionary:
 				unlocked_abilities[str(ability_id)] = saved_abilities[ability_id].duplicate(true)
 	achievement_flags.clear()
+	_restore_string_ids(read_dialogue_ids, parsed.get("read_dialogue_ids", []))
 	var saved_achievements = parsed.get("achievement_flags", [])
 	if saved_achievements is Array:
 		for achievement_id in saved_achievements:
@@ -881,6 +885,17 @@ func unlock_ability(ability_id: String, source_type: String, source_id: String) 
 	print("[NEREIS][PROGRESSION] Ability unlocked id=%s source=%s:%s" % [ability_id, source_type, source_id])
 	save_game()
 	return true
+
+
+func has_read_dialogue(dialogue_id: String) -> bool:
+	return dialogue_id in read_dialogue_ids
+
+func mark_dialogue_read(dialogue_id: String) -> bool:
+	var normalized_id := dialogue_id.strip_edges()
+	if normalized_id.is_empty() or normalized_id in read_dialogue_ids:
+		return false
+	read_dialogue_ids.append(normalized_id)
+	return save_game()
 
 func record_achievement(achievement_id: String) -> bool:
 	var normalized_id := achievement_id.strip_edges()
@@ -1182,6 +1197,7 @@ func reset() -> void:
 	pending_region_spawn_side = "west"
 	unlocked_abilities.clear()
 	achievement_flags.clear()
+	read_dialogue_ids.clear()
 	upgrade_materials.clear()
 	inventory_items.clear()
 	read_item_ids.clear()
