@@ -155,10 +155,13 @@ func _on_mite_absence_interacted() -> void:
 	narrative.show_message("空椅子", "杯子仍然温热。\n\n你确信自己没有把它留在这里。", 5.0)
 
 
-func _on_mite_interacted(_interaction_id: String, title: String, message: String) -> void:
+func _on_mite_interacted(interaction_id: String, title: String, message: String) -> void:
 	narrative.show_message(title, message, 7.0)
 	if narrative_audio and narrative_audio.has_method("play_lullaby"):
 		narrative_audio.play_lullaby()
+	await narrative.message_finished
+	# Do not advance Mite's relationship cadence if the dialogue was interrupted.
+	WorldState.record_mite_interaction(interaction_id)
 	if WorldState.current_location != "village":
 		WorldState.current_location = "village"
 		WorldState.save_game()
