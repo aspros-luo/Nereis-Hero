@@ -185,6 +185,11 @@ func _spawn_progression_npcs() -> void:
 func _refresh_baseline_npc_dialogue(npc: Node) -> void:
 	if not is_instance_valid(npc):
 		return
+	if String(npc.npc_id) == "village_gatekeeper":
+		# Gatekeeper progression is selected by DialogueProgression; this fallback
+		# keeps the authored NPC interactable while legacy dialogue remains unused.
+		npc.dialogue = "“路我能说的就这些。真要走，自己多留神。”"
+		return
 	match String(npc.npc_id):
 		"village_gatekeeper":
 			if "village_defense_survived" in WorldState.achievement_flags and WorldState.selected_route == "church":
@@ -245,10 +250,21 @@ func _refresh_tavern_poi_dialogue() -> void:
 func _on_village_npc_interacted(npc: Node) -> void:
 	if narrative == null or not is_instance_valid(npc):
 		return
-	narrative.show_message(npc.display_name, npc.dialogue, 6.0)
+	var npc_id := String(npc.npc_id)
+	var entry := DialogueProgression.get_next_dialogue(npc_id)
+	if entry.is_empty():
+		return
+	var dialogue_id := String(entry.get("id", ""))
+	var title := String(entry.get("title", npc.display_name))
+	var message := String(entry.get("text", npc.dialogue))
+	if message.is_empty():
+		return
+	narrative.show_message(title, message, 6.0)
 	await narrative.message_finished
+	# Mark only after the complete presentation signal. Interrupted scenes do not consume the line.
+	DialogueProgression.mark_dialogue_completed(npc_id, dialogue_id)
 	if world_event_director != null:
-		world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": String(npc.npc_id), "npc_id": String(npc.npc_id)})
+		world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": npc_id, "npc_id": npc_id})
 		refresh_progression_content()
 
 
