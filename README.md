@@ -1,430 +1,72 @@
 # Nereis Hero
 
-A 2D Soulslike action RPG in the Nereis / 蜜忒之歌 universe.
+2D Soulslike 动作探索 RPG，属于 Nereis /《蜜忒之歌》世界。
 
-## Current playable direction
+## 项目入口
 
-Development has moved beyond the original Core Combat Demo into the first narrative production pass.
+- Godot 启动场景：`res://scenes/boot.tscn`
+- 新游戏序章：`res://scenes/escape_prologue.tscn`
+- 引擎：Godot 4.6.x / GDScript / GL Compatibility
+- 当前工作分支：`feature/story-map-progression`
+- Hero 骨骼动画独立分支：`feature/hero-animation-system`
 
-The current default flow is:
+## 开始任何开发任务前
 
-**Church surgical ward → escape → remote village → Mite → Church / village investigation**
+按以下顺序阅读，不需要先通读所有历史文档：
 
-Godot project startup scene (boot / save-resume routing):
+1. [项目文档治理合同](docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md) — 文档权威层级、任务启动、清理和验收规则。
+2. [开发协作条约](docs/DEVELOPMENT_WORKING_CHARTER_CN_EN.md) — 工程与叙事硬约束。
+3. [当前开发状态](docs/DEVELOPMENT_STATUS.md) — 当前进度、阻塞项与最近验证结果。
+4. [当前里程碑交接](docs/MILESTONE_HANDOFF_2026-10-29_CN.md) — 最近一次跨任务交接；若状态文件已有更新，以状态文件为准。
+5. 按本次任务读取对应的权威设计基线、场景、脚本和验收合同。
 
-`res://scenes/boot.tscn`
+## 权威设计文档
 
-New-run opening scene:
+### 世界观与叙事
 
-`res://scenes/escape_prologue.tscn`
+- [世界观总档案](docs/WORLD_BUILDING_BIBLE_CN.md) — 世界事实、人物知识边界、已确认 / 候选 / 待定设定；世界观设定的主要权威来源。
+- [剧情基础摘要](docs/STORY.md) — 主线与结局的精简摘要，便于快速恢复上下文；详细裁定以世界观总档案和专门合同为准。
+- [开发者剧情记忆](docs/DEVELOPER_STORY_MEMORY.md) — 仅用于追溯历史讨论与决策来源，不作为独立于现行设定的第二套正史。
+- [跨作品剧情基准](docs/CROSS_GAME_STORY_CANON_CN.md) — 仅记录 Hero 与 Lullaby 必须一致的共同设定。
+- [结局条件设计合同](docs/ENDING_CONDITION_DESIGN_CN.md) — 结局所需探索事实、道具状态和特殊事件；程序实现状态以开发状态和源码审计为准。
+- [世界叙事线索台账](docs/WORLD_NARRATIVE_CLUE_LEDGER_CN.md) — 线索分布、知识权限与证据链。
+- [核心人物设计池](docs/CORE_NPC_DESIGN_POOL_CN.md) — 人物候选与设计边界；候选内容不自动成为正史。
 
-The original combat demo remains available at:
+### 地图与场景
 
-`res://scenes/combat_demo.tscn`
+- [世界地图总规划](docs/WORLD_MAP_MASTER_PLAN_CN.md)
+- [世界网络拓扑](docs/WORLD_NETWORK_TOPOLOGY_CN.md)
+- [完整世界地图图集](docs/COMPLETE_WORLD_MAP_ATLAS_CN.md)
+- [互联箱庭设计原则](docs/INTERCONNECTED_BOX_WORLD_DESIGN_CN.md)
+- [A2 雾林与钟墓设计基线](docs/maps/A2_DESIGN_BASELINE_CN.md)
 
-Development working charter (Chinese / English):
+地图设计文件中的草案、旧版灰盒记录和静态验证报告不能替代当前区域设计基线，也不能证明 Godot 实机验收通过。
 
-`docs/DEVELOPMENT_WORKING_CHARTER_CN_EN.md`
+### 工程规则
 
-Project documentation governance:
+- [项目文档治理合同](docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md)
+- [开发协作条约](docs/DEVELOPMENT_WORKING_CHARTER_CN_EN.md)
+- [当前开发状态](docs/DEVELOPMENT_STATUS.md)
 
-`docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md`
+## 核心工程约束
 
-Current A2 terrain design baseline:
+- 地形、固定房间结构必须由 Godot 场景中可见、可编辑的节点构成；不允许运行时代码生成固定地图地形。
+- 代码可以改变已存在场景节点的状态，例如开门、移动预制机关或播放动画。
+- 叙事优先通过环境、可检查物品、NPC 对话和玩家行为后的世界变化呈现；不使用全知旁白解释剧情。
+- 不设置 NPC 好感度数值系统。
+- 不修改 `main`，不擅自创建分支，不主动触发 GitHub Actions。
+- 文档更新优先迭代既有权威文件；只有职责确实独立时才新增文档。
 
-`docs/maps/A2_DESIGN_BASELINE_CN.md`
+## 验证原则
 
-A2 scene geometry audit:
+必须区分：
+- 文档 / 源码静态检查；
+- 验证脚本实际执行；
+- Godot 4.6.x headless 导入 / 解析；
+- 本地实机玩法与视觉验收。
 
-`docs/maps/A2_SCENE_GEOMETRY_AUDIT_2026-10-24_CN.md`
+提交代码或文档不等于运行通过。未执行的验证必须明确标记为未验证。
 
-Repository cleanup audit:
+## 历史资料
 
-`docs/REPOSITORY_CLEANUP_AUDIT_2026-10-24_CN.md`
-
-A2 restart development log:
-
-`docs/DEVELOPMENT_LOG/A2_RESTART_AND_CLEANUP_2026-10-24_CN.md`
-
-## A0 prologue refinement
-
-- `docs/A0_PROLOGUE_REFINEMENT_V1_CN.md` — current A0 experience goals, first-round changes, unresolved work, and local acceptance checklist.
-- `docs/A0_MAP_NARRATIVE_REDESIGN_BASELINE_CN.md` — 2026-10-30 approved A0 redesign: two-scene cave structure, automatic discovery/acquisition/equipping of the protagonist’s longsword when opening the S01 surgical-room exit (no unarmed combat system), executioner/healing transition, shared item/achievement notification, and global achievement persistence audit.
-
-## Item collection and lore system
-
-- `docs/ITEM_COLLECTION_AND_LORE_SYSTEM_V1_CN.md` — item categories, save/read-state contract, and the explicit decision to exclude crafting materials and crafting loops.
-
-## Worldbuilding and narrative canon
-
-- `docs/WORLD_BUILDING_BIBLE_CN.md` — living worldbuilding authority: confirmed canon, candidates, unresolved questions, document conflicts, and dated change log. Update this whenever worldbuilding is clarified.
-- `docs/WORLD_NARRATIVE_CLUE_LEDGER_CN.md` — clue structure and small-person storytelling method.
-- `docs/CORE_NPC_DESIGN_POOL_CN.md` — core NPC design pool and character knowledge boundaries.
-- `docs/ENDING_CONDITION_DESIGN_CN.md` — authoritative ending-condition design contract.
-
-## Current narrative foundation
-
-Canonical story memory:
-
-`docs/DEVELOPER_STORY_MEMORY.md`
-
-Latest narrative design documents (Chinese; current opening / character-arc direction):
-
-- `docs/PROTAGONIST_OPENING_NARRATIVE_V1_CN.md` — amnesiac opening, forest Boss, pilgrim knight, Jinzheng's short-blade trade, fever/dreams, elderly woman's exploration leads.
-- `docs/CORE_CHARACTER_ARCS_V1_CN.md` — independent arcs for the protagonist, Mite, Jinzheng, pilgrim knight, blacksmith, elderly woman, rest/guidance NPC, hunter candidate, and Restoration Army soldier.
-- `docs/OPENING_STORY_MAP_INTEGRATION_V1_CN.md` — first-pass audit aligning the new opening with A0–A3, C01/C02/C24, and unresolved scene/trigger conflicts.
-- `docs/A1_VILLAGE_DESIGN_BASELINE_AUDIT_CN.md` — rebuilt A1 village baseline, NPC ledger, A1–A13 information responsibilities, code mismatch audit, and unresolved design gates.
-- `docs/NARRATIVE_PRESENTATION_AUDIT_AND_MIGRATION_CN.md` — project-wide rule against explanatory narration, first-pass source audit, and migration plan to environment, items/equipment, NPC dialogue, and world-state changes.
-- `docs/ENDING_CONDITION_DESIGN_CN.md` — **authoritative V2 ending rules** based on actual exploration paths, key-item acquisition/possession/use, and completed special events; explicitly records the legacy evaluator gaps.
-
-World map master plan (Chinese draft):
-
-`docs/WORLD_MAP_MASTER_PLAN_CN.md`
-
-Phase I level topology (Chinese draft):
-
-`docs/LEVEL_TOPOLOGY_PHASE_1_CN.md`
-
-Full world network topology (Chinese draft):
-
-`docs/WORLD_NETWORK_TOPOLOGY_CN.md`
-
-Complete world map atlas (Chinese draft):
-
-`docs/COMPLETE_WORLD_MAP_ATLAS_CN.md`
-
-Macro world-map brain map (Chinese / English):
-
-- `docs/WORLD_MAP_BRAINMAP_CN.md`
-- `docs/WORLD_MAP_BRAINMAP_EN.md`
-
-Second-round macro spatial layout and C01–C24 connection audit (Chinese / English; design review, not runtime acceptance):
-
-- `docs/WORLD_MAP_SPATIAL_REVIEW_CN.md`
-- `docs/WORLD_MAP_SPATIAL_REVIEW_EN.md`
-
-Interconnected box-world design principles (Chinese; authoritative map-design constraints):
-
-`docs/INTERCONNECTED_BOX_WORLD_DESIGN_CN.md`
-
-Box-world structural re-audit (Chinese, 2026-10-12):
-
-`docs/BOX_WORLD_REAUDIT_2026-10-12_CN.md`
-
-Box-world structure re-audit and current spatial fixes (Chinese):
-
-`docs/BOX_WORLD_STRUCTURE_REAUDIT_CN.md`
-
-Map-first content completion roadmap (Chinese):
-
-`docs/MAP_CONTENT_COMPLETION_ROADMAP_CN.md`
-
-P1–P4 full-map execution tracker (early mainline → full mainline → hidden routes → full-map acceptance):
-
-`docs/P1_P2_P3_P4_FULL_MAP_EXECUTION_CN.md`
-
-Macro-map and A8 Boss implementation audit (static contracts + complete Godot acceptance checklist):
-
-`docs/MACRO_MAP_A8_AUDIT_AND_RUNTIME_ACCEPTANCE_CN.md`
-
-Map-first content completion roadmap (English):
-
-`docs/MAP_CONTENT_COMPLETION_ROADMAP_EN.md`
-
-Map–narrative integration pass 1 (Chinese / English; region evidence chains, spatial-story intent, and next acceptance priorities):
-
-`docs/MAP_STORY_INTEGRATION_PASS_1_CN_EN.md`
-
-M1 box-world route implementation log (Chinese; code committed, Godot runtime acceptance pending):
-
-`docs/M1_BOX_WORLD_IMPLEMENTATION_LOG_CN.md`
-
-A3 Forgotten City layered spatial design (Chinese; geometry and route wiring implemented, runtime acceptance pending):
-
-`docs/MAP_DESIGN_A3_FORGOTTEN_CITY_CN.md`
-
-World map atlas diagram (SVG):
-
-`docs/assets/COMPLETE_WORLD_MAP_ATLAS.svg`
-
-Map validation and resonance hidden areas overview (Chinese):
-
-`docs/MAP_TOPOLOGY_VALIDATION_AND_HIDDEN_AREAS_CN.md`
-
-Detailed static world map validation report (Chinese):
-
-`docs/WORLD_MAP_VALIDATION_REPORT_CN.md`
-
-Playable macro-map rollback baseline (2026-10-12):
-
-- `docs/MILESTONE_MACRO_MAP_PLAYABLE_2026-10-12_CN.md`
-- `docs/MILESTONE_MACRO_MAP_PLAYABLE_2026-10-12_EN.md`
-
-Macro-map visual polish phase 1 (implemented procedural silhouette and ground-detail layers; runtime visual acceptance pending):
-
-- `docs/MAP_VISUAL_POLISH_PHASE_1_CN.md`
-- `docs/MAP_VISUAL_POLISH_PHASE_1_EN.md`
-
-First integrated art pass (CN/EN; original SVG biome backdrops and textured ground committed; Godot runtime acceptance pending):
-
-`docs/ART_ASSET_INTEGRATION_PHASE_1_CN_EN.md`
-
-Temporary external art source catalog (CN/EN; source links and region mapping recorded, binary assets not yet imported):
-
-- `docs/TEMP_EXTERNAL_ART_CATALOG_CN_EN.md`
-- `tools/temp_external_art_sources.json`
-
-Machine-readable world map topology:
-
-`tools/world_map_topology.json`
-
-Repeatable static topology validator:
-
-`python3 tools/validate_world_map_topology.py`
-
-Spatial route spawn/elevation contract validator:
-
-`python3 tools/validate_spatial_route_contracts.py`
-
-Spatial route contract audit and local runtime checklist (Chinese / English):
-
-`docs/SPATIAL_ROUTE_CONTRACT_AUDIT_PASS_1_CN_EN.md`
-
-Connection wiring audit pass 1 (Chinese / English; validator initialization defect fixed, full execution pending):
-
-`docs/CONNECTION_WIRING_AUDIT_PASS_1_CN_EN.md`
-
-A2–A4 / H01 first-loop graybox notes and runtime acceptance checklist (Chinese):
-
-`docs/GRAYBOX_A2_A4_IMPLEMENTATION_CN.md`
-
-A5–A8 main-route graybox extension notes (Chinese):
-
-`docs/GRAYBOX_A5_A8_IMPLEMENTATION_CN.md`
-
-A9–A12 main route and H07 Mirror Street graybox notes (Chinese):
-
-`docs/GRAYBOX_A9_A12_IMPLEMENTATION_CN.md`
-
-Graybox scene wiring static checker:
-
-`tools/validate_graybox_scene_wiring.py`
-
-Resonance / hidden regions design — 8 optional subareas (Chinese):
-
-`docs/RESONANCE_HIDDEN_REGIONS_CN.md`
-
-Hidden map network diagram (SVG):
-
-`docs/assets/RESONANCE_HIDDEN_AREAS.svg`
-
-Director plan:
-
-`docs/DIRECTOR_NARRATIVE_PLAN.md`
-
-Short story foundation:
-
-`docs/STORY.md`
-
-The three canonical endings are:
-
-- **凡人之墓**
-- **永恒乐园**
-- **烈火天罚**
-
-The Hero / Mite relationship is a central emotional axis.
-
-Mite is genuinely pure and initially unaware of the Outer God's larger reality.
-
-Hero never knowingly learns her true identity during the main story.
-
-The Church's ancient-god experimentation leaves residue inside Hero.
-
-Much later, Hero and Mite's physical relationship becomes the bridge between the ancient-god residue and the Outer-God influence.
-
-## Current implemented production work
-
-### Opening
-
-- Playable Church surgical ward escape
-- Three Experiment Wardens
-- Surgical residue clue
-- Prologue checkpoint
-- Transition into the village
-
-### Village / Mite
-
-- Playable Village Hub
-- First Mite meeting
-- Mite interaction progression
-- Hidden relationship facts instead of a visible romance meter
-- Rushed mainline progression can cause the Mite connection to be missed
-- Missed connection returns as a quiet empty-chair scene
-- Procedural lullaby motif tied to the village
-
-### Hidden investigation
-
-- Persistent hidden artifact evidence state
-- The hidden resistance anchor is assembled from multiple independent story sources. H09's provisional relic is not wired into ending progression; its final role remains undecided.
-- Ancient research ward
-- Graveyard bell story
-- Restoration order
-- Route memory echo
-- Evidence is not exposed as a "true ending checklist"
-
-### World-map graybox — connected main-route slice
-
-- A2–A12 have programmatic graybox scenes; H01 Well Below the Well and H07 Mirror Street have dedicated hidden-region scenes.
-- A11 Deep Research Depths and H08 Primordial Hollow have now been added using the shared graybox controller, with distinct environmental landmarks and scene-resume mappings.
-- R01–R08 are connected as one-time anomaly investigations. R01 unlocks the existing Resonance Sight ability; R04–R06 use minimum exposure floors to avoid permanently locking optional content.
-- H01 has persistent discovered / opened / entered states shared by its village and A4 entrances; the A4 return hatch is a one-time unlock.
-- After the village defense, A1 has two main exploration directions: A2 through the old pilgrim road, or A3 through the old drainage passage. A3 returns to A1 and also connects to A2, A4, and A5.
-- A2 now has an optional canopy platform route; A3 has an optional rooftop loop plus a local Resonance Sight bridge that can be permanently anchored in the same map; A4 has a raised pipe-walk route alongside the ground path.
-- A5–A8 now have distinct optional upper routes: battlefield parapet, monastery side balcony, prison maintenance catwalk, and royal-tomb gallery.
-- A9–A12 now have optional upper traversal routes: outer-ring rooftops, cathedral choir gallery, research observation bridge, and inner-city crown wall.
-- H01–H08 have distinct upper/returning route motifs. H09 is a provisional candidate and is excluded from the canonical map count until the structure review decides whether to keep it.
-- A5, A7, A10, and A12 now have persistent environmental evidence sources covering the battlefield's rewritten history, prisoner transfers, the church's double-sealed relic, and the king's knowledge of church experiments.
-- H01–H08 contain unique one-time environmental evidence sources. H09's conditional boss-and-relic route is provisional and not part of the canonical hidden-area set; clues do not grant free resonance or ancient/outer-god exposure.
-- A1 now includes a 17-segment optional rooftop traversal line and a village-hearth rest point; A0's surgical ward now has a six-platform maintenance catwalk that does not bypass the warden lock.
-- A2–A12 each have a region-specific rest point; canonical hidden regions H01–H08 intentionally do not grant free rest points. H09 is provisional. These are graybox code additions, not yet runtime-verified.
-- H07 requires Resonance Sight, resonance ≥ 68, outer exposure ≥ 12, the outer-god story flag, and the R07 evidence source. Its A12 shortcut stays locked until the player reaches the Inner City and opens the far-side gate.
-- A11 can be reached from A8 through C15 (Royal Tomb maintenance shaft) or A10 through C19 (Silent Chapel). Each path has its own persistent gate ID while both record entry to A11. R08 raises resonance to 78 and adds the planned outer exposure.
-- H08 requires resonance ≥ 78, ancient exposure ≥ 2, outer exposure ≥ 18, the outer-god story flag, and three prior anomaly sources. A12 routes through the shared ending evaluator; H08 offers an optional deep-dream exit only after the physical-union story state.
-- H09 Cave Beneath the Cliff, its mad cleric, specimen, and candidate relic remain a provisional implementation pending map review; the relic does not affect ending eligibility and none of these details are locked story requirements. Recent platform and A3 route edits are code-wired but still require Godot 4.6.x runtime acceptance. A13 has a dedicated standalone scene (`scenes/terminal_anomaly.tscn`) and acts as the ending-convergence layer rather than an ordinary exploration region.
-
-Implementation notes and acceptance checklists:
-
-`docs/GRAYBOX_A2_A4_IMPLEMENTATION_CN.md`
-
-`docs/GRAYBOX_A5_A8_IMPLEMENTATION_CN.md`
-
-`docs/GRAYBOX_A9_A12_IMPLEMENTATION_CN.md`
-
-`docs/GRAYBOX_A11_H08_IMPLEMENTATION_CN.md`
-
-### Combat
-
-- Weighty 2D action foundation
-- Three-step attack rhythm
-- Dodge / invulnerability
-- Stamina
-- Hit-stagger
-- Hitstop feedback
-- Cultist / Pale Hound pressure patterns
-- Two-phase Ashen Knight
-- Procedural combat audio
-
-### Director test theaters
-
-**F7 — Church Final Boss Theater**
-
-High Priest human phase → ancient-god phase → King.
-
-**F8 — 烈火天罚 Theater**
-
-100 cultists → Mite → waiting / self-sacrifice → city detonation.
-
-The 100 cultist count is intentionally a spectacle. Future crowdfunding can optionally turn the crowd into supporter cameos.
-
-### Debug
-
-- F1 — candidate-driven endgame theater
-- F2 — Eternal Paradise Theater
-- F3 — debug overlay
-- F4 — Ancient Research Ward
-- F5 — Village Defense Theater
-- F6 — Mite Resonance Theater
-- F7 — Church Final Boss Theater
-- F8 — 烈火天罚 Theater
-- F9 — clean reset
-
-## Narrative style
-
-The game favors discovery rather than exposition.
-
-The main references are:
-
-- Dark Souls
-- Bloodborne
-- Blasphemous 2
-- The Song of Saya
-- Neon Genesis Evangelion
-- Biblical Eden imagery
-- Lovecraftian cosmic horror
-
-These are reference influences, not content to copy.
-
-The intended narrative language is:
-
-**items as evidence + environment as narrative + NPCs as biased witnesses + contradictory memories + recurring symbols + emotional subtext**
-
-## 地图测试与中文版文字对齐
-
-地图实机验收入口（中文完整用例、F10 调试面板、存档保护说明）：
-
-- [地图测试模式与完整验收用例](docs/MAP_TEST_MODE_AND_ACCEPTANCE_CN.md)
-
-当前地图测试面板支持 A0–A12 中已实现的场景、正式隐藏区域 H01–H08，以及临时候选 H09 的独立调试传送，并提供灵视条件和全地图连通测试预设。**请先进入已有存档，再按 F10 开启地图测试模式；不要按 F9 或开始新游戏。** 测试模式会暂停正式存档写入，结束时可选择重新读取磁盘存档。
-
-H09 崖下实验窟目前包含条件回访与实体遗物拾取，但仍是临时候选，不计入正式地图验收，也不代表其具体剧情已确定。中文界面的地图测试面板与调试 HUD 已开始对齐；完整游戏仍需逐场景审查所有玩家可见文本，未完成审查前不宣称全项目中文化已完成。
-
-## Save / Resume
-
-The default startup goes through:
-
-`res://scenes/boot.tscn`
-
-A completed prologue resumes from the last persisted story location. F9 clears the run and starts the prologue again.
-
-## Engine
-
-Godot 4.6.x / GDScript / GL Compatibility.
-
-## Runtime verification
-
-The maintainer environment does not contain a Godot executable, so interactive frame-level runtime acceptance must still be performed locally with Godot 4.6.x.
-
-Repository structure and source changes are continuously checked.
-
-## Branch
-
-Development happens on:
-
-`development`
-
-Do not add or trigger GitHub Actions for this project.
-
-## Production rule
-
-When implementation reaches a major unresolved story decision — especially Hero/Mite history, the four hidden resistance side stories, the final antagonist's political motive, the Outer God's identity, or the exact ending condition — stop coding that story layer and return to story design.
-
-For ordinary gameplay, combat, UI, effects, technical systems and presentation, development can proceed autonomously.
-
-### Macro-map acceptance mode (2026-10-12)
-
-The title menu now includes **World Map Test / 宏观地图验收**. It opens a session-only selector for A0–A13 and H01–H08, primes route flags for direct traversal, and supports F6 to return to the selector. Save writes are disabled in acceptance mode. See [Chinese guide](docs/MACRO_MAP_ACCEPTANCE_GUIDE_CN.md) and [English guide](docs/MACRO_MAP_ACCEPTANCE_GUIDE_EN.md). This is a test harness, not a claim of Godot runtime validation.
-
-### World-map terminal layer update (2026-10-12)
-
-The A13 terminal anomaly is now represented by `scenes/terminal_anomaly.tscn` rather than remaining a topology-only node. The A12 main route and the gated A11/H08 deep-dream routes converge on A13, which delegates the final choice to the existing ending evaluator. Save/resume mapping and static wiring contracts were updated. This is source-level integration only; Godot traversal and ending transitions remain unverified.
-
-
-
-Documentation cleanup and safe-retirement audit (2026-10-29):
-
-`docs/DOCUMENTATION_CLEANUP_AUDIT_2026-10-29_CN.md`
-
-## Current milestone handoff (2026-10-29)
-
-**Start new work here:** [`docs/MILESTONE_HANDOFF_2026-10-29_CN.md`](docs/MILESTONE_HANDOFF_2026-10-29_CN.md)
-
-This is the current handoff for confirmed world/map/narrative decisions and the next milestone. Read it together with [project documentation governance](docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md), [development working charter](docs/DEVELOPMENT_WORKING_CHARTER_CN_EN.md), [development status](docs/DEVELOPMENT_STATUS.md), and the relevant region baseline before changing code or scenes.
-
-### Narrative source-of-truth map
-
-- World facts / canon boundaries: [`WORLD_BUILDING_BIBLE_CN.md`](docs/WORLD_BUILDING_BIBLE_CN.md)
-- Fragmentary clues and small-person storytelling: [`WORLD_NARRATIVE_CLUE_LEDGER_CN.md`](docs/WORLD_NARRATIVE_CLUE_LEDGER_CN.md)
-- Narrative presentation audit and migration status: [`NARRATIVE_PRESENTATION_AUDIT_AND_MIGRATION_CN.md`](docs/NARRATIVE_PRESENTATION_AUDIT_AND_MIGRATION_CN.md)
-- Ending conditions and state contract: [`ENDING_CONDITION_DESIGN_CN.md`](docs/ENDING_CONDITION_DESIGN_CN.md)
-
-Older story/director drafts and map-phase documents remain historical references until their source references and implementation dependencies have been audited. They must not override the latest user-confirmed decisions or the handoff above.
+旧版设计、阶段性日志、已废止方案和历史审计保留在对应目录中，仅用于追溯。它们不得覆盖用户最新确认的设定或当前权威设计合同。具体文件的合并、退役与删除，按文档治理合同先审计依赖再执行。
