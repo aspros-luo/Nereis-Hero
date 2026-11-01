@@ -67,10 +67,13 @@ func _complete_union() -> void:
 	await narrative.message_finished
 	WorldState.input_locked = false
 
-func _on_mite_interacted(_interaction_id: String, title: String, message: String) -> void:
+func _on_mite_interacted(interaction_id: String, title: String, message: String) -> void:
 	narrative.show_message(title, message, 7.0)
 	if narrative_audio and narrative_audio.has_method("play_lullaby"):
 		narrative_audio.play_lullaby()
+	await narrative.message_finished
+	# Commit the relationship beat only after the complete dialogue presentation.
+	WorldState.record_mite_interaction(interaction_id)
 
 
 
