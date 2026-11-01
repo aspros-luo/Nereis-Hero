@@ -15,6 +15,7 @@ func _ready() -> void:
 	WorldState.input_locked = false
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.set_location("cliff_exploration")
+	WorldState.record_achievement("a1_gatekeeper_backhill_cliff_entered")
 	backhill_return_door.interacted.connect(_on_backhill_return_interacted)
 	for poi_name in ["ObservationPOI", "WeatheredInscriptionPOI", "CollapsedLookoutPOI"]:
 		var poi: Node = get_node(poi_name)
