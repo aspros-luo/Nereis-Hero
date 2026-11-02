@@ -1,6 +1,6 @@
 # Map-First Content Completion Roadmap
 
-> Status: implementation roadmap and static source contract. The map is designed as a Dark Souls 1-style interconnected box world, with the early branching structure of a hub that opens multiple directions. This is not a linear chapter sequence.
+> **Historical implementation roadmap / not the current project-status authority.** This document preserves an earlier map-first plan and static source contract. Any legacy A2→A5/C04 route or old stage sequencing is superseded by later regional decisions. Use `DEVELOPMENT_STATUS.md` for current priorities and active regional baselines for current routes.
 >
 > **Important:** topology consistency and source-level geometry checks are not Godot runtime acceptance. Collision, jumps, interaction focus, scene transitions, saves, death recovery, and real shortcut value must still be tested in Godot 4.6.x.
 
