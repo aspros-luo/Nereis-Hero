@@ -340,3 +340,35 @@
 - `maps/A2_DESIGN_BASELINE_CN.md`：将 R01–R06 当前房间职责与后续历史实现快照分开；历史 C04 门位、回程出生点和静态断言被明确标记为旧实现证据 / 待清理技术债，不再是有效设计合同。
 - 仍未修改拓扑 JSON、运行时脚本、场景、验证器或存档字段。必须继续查明 C04 在这些层面的实际依赖，再执行安全移除。
 - 这轮没有执行本地 Godot 验收；A2 六房间本地清单仍是待用户执行的验收步骤，而不是通过报告。
+
+
+## 15. 第十一轮整理记录 — 2026-11-02（C04 全链路依赖审计：确认存在实现残留）
+
+### 审计范围与证据
+
+本轮直接读取 feature/story-map-progression 当前 Git Tree（654 个文件，tree 未截断），并读取拓扑、A2 连接合同、房间图、A2 runtime、共享区域脚本、场景节点与验证器。确认如下：
+
+1. **宏观拓扑仍把 C04 定义为 A2→A5 双向捷径**：tools/world_map_topology.json 中 C04 仍是 shortcut，由 A5 远端开启；tools/validate_world_map_topology.py 不仅要求 C04 存在，还硬编码其子区域、路线层、两端锚点和回程出生点。
+2. **A2 房间连接合同仍包含 C04**：tools/a2_room_connection_contract.json 仍将 R05→A5 定义为 requires_achievement；文档注释仍声称 C03/C04/H02 均已静态核对。
+3. **房间级探索图仍包含 C04**：tools/room_exploration_world_graph.json 仍将 A2-R03 → A5-R02 作为远端解锁捷径；tools/validate_room_exploration_world_graph.py 还要求房间级 C-edge 集合与宏观 C01–C24 完全一致。
+4. **A2 runtime 仍保留 C04 门与出生点**：scripts/levels/a2_room_runtime.gd 要求 R05 存在 EntryC04Return，把 a2_r05_c04_return 映射到该 Marker2D，并在 reached_A5_and_opened_old_pilgrim_highroad flag 存在时创建 ExitToA5。
+5. **共享旧区域脚本仍保留 C04 坐标分支**：scripts/levels/greybox_world_region.gd 的 A2/A5 出生点和回程处理仍有 old_pilgrim_highroad 特例；A2 旧装配路径还有两个以该 flag 为条件、目标为 R05 的旧出口分支。该脚本同时承担多个区域通用出生点逻辑，不能不加区分地删除同名 A5 出生侧。
+6. **场景和 A2 几何验证器仍把旧出口视为必需节点**：R05 runtime scene 存在 EntryC04Return；tools/validate_a2_room_scene_geometry.py 的 R05 Marker 清单、C04 出口源码断言和回程映射断言均要求 C04 存在。
+7. **当前拓扑状态并非运行时验证通过**：宏观拓扑标记为 design_baseline_not_runtime_verified；A2 room connection contract 标记 room_runtime_marker_driven_pending_godot_acceptance。静态合同不能证明门可玩或碰撞正确。
+
+### 当前结论
+
+- “A2 不再直连 A5”目前只是已裁定的设计目标，**不是已完成的代码事实**。
+- 本轮没有发现 scripts/core/world_state.gd 中有 C04 专属存档字段；但这不等于存档无依赖，通用 pending_region_spawn_side、current_a2_room_scene_path、区域 ID 和 flag 仍需沿调用链检查。
+- 不能只删宏观 JSON 的 C04：房间图验证器会因 C-edge 集合不一致失败；不能只删 runtime 出口：几何验证器仍要求 Marker2D；不能只删 Marker：共享区域脚本与出生点兼容逻辑仍会引用旧 spawn side。
+- R05 的旧朝圣高路地形、物品与环境线索仍可能有独立探索价值；撤销跨区 C04 不等于删除 R05 房间或旧朝圣路遗迹。
+
+### 后续必须按序完成
+
+1. 先确定 A2→A3→A5 的唯一有效主线在宏观拓扑和房间图中的正确表达，并复核 C-edge 数量、连通性、隐藏区与回程约束。
+2. 区分 old_pilgrim_highroad 在 A5 内部出生 / 路线语义与已撤销的 A2↔A5 跨区语义；不能误删 A5 自身入口。
+3. 同步更新宏观 JSON、房间图、A2 room contract、A2 runtime、共享脚本兼容分支、R05 scene Marker2D 与两个验证器。
+4. 沿 WorldState 的区域、出生侧、检查点、Continue、死亡恢复流程核对旧 flag / spawn side 是否可能残留；必要时为旧存档提供安全回退，而不是把玩家送到无效 Marker。
+5. 运行所有相关 Python 静态验证器，再用 Godot 4.6.1 验证 A1→A2、A2 六房间回环、A2→A3→A5、死亡、Continue 和旧存档恢复。
+
+**本轮只完成依赖审计与文档记录，没有删除 C04 或修改运行时代码；不报告为修复完成。**
