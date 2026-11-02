@@ -9,6 +9,8 @@
 > This document supersedes version 0.1 of `BOX_WORLD_COMPLETE_DESIGN_EN.md` as the construction authority. The earlier document remains historical context, not the final spatial ruling.  
 > Goal: do not rename a left-to-right chain of levels as a box-world. Build a 2D interconnected world where players climb, descend, loop back into old areas, and re-enter familiar places from different elevations.
 
+> **Authority update (2026-11-02):** This is an earlier spatial-design proposal from the `development` workstream, not the current standalone source of truth. Current region IDs, C01–C24 links, M1–M6 grouping, 78 subregions, 73 intra-region links, and 8 lifts are represented in `tools/world_map_topology.json`; current narrative geography is indexed by `WORLD_REGION_ATLAS_EN.md` / `WORLD_REGION_ATLAS_CN.md`, and room-level construction must follow the active regional baseline. The principles below remain reference material only where they do not conflict with current user decisions or data. JSON and documents do not prove runtime implementation.
+
 ## 1. Final ruling: replace flat routing with a multi-layer network
 
 The previous design's weakness was not region count. Its critical flaw was an overly dominant progression chain, with vertical routes treated as local decoration. Even with shortcuts listed, a player who mostly walks right along one ground lane is still playing a linear level sequence.
