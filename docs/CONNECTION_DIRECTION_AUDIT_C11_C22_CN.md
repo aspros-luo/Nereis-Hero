@@ -1,5 +1,7 @@
 # Connection direction audit — C11/C13/C14/C15/C19/C21/C22
 
+> **Historical source audit snapshot (development branch).** Current route IDs and directions must be checked against the active topology and regional baselines. The old source review is not a current runtime acceptance result.
+
 > Branch: `development`  
 > Scope: source-level review of connection topology, scene transitions, secret-gate persistence, and terminal direction.  
 > Status: source contracts reviewed; Godot runtime acceptance remains pending.
