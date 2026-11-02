@@ -1,5 +1,7 @@
 # World Map Brain Map and Spatial Relationships (Macro Draft)
 
+> **Outdated English translation / not the active route contract.** The current Chinese brain map contains later route rulings, including removal of the direct A2→A5/C04 connection. Use `WORLD_MAP_BRAINMAP_CN.md` and active regional baselines for current decisions. This English copy is retained for historical reference until fully synchronized.
+
 > **Status: Macro-structure review draft v1.** This document defines the world's spatial skeleton. It is not a player map, room plan, or proof of implementation. Directions are relative; relationship between routes matters more than exact scale. No specific ability, quest, enemy, or reward is locked at this stage.
 
 ## 1. Design intent
