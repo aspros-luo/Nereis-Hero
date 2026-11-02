@@ -306,3 +306,29 @@
 - 已读取本轮明确列出的治理、状态、世界观、NPC、A0、A1、A2、地图与灰盒文档正文 / 摘要。
 - 已修改治理合同与世界观总档案；未修改游戏代码、场景、拓扑数据或存档。
 - 未运行 Markdown lint、链接检查脚本、Godot 或游戏测试。
+
+## 13. 第九轮整理记录 — 2026-11-02（世界地图总纲与场景盘点族群）
+
+### 本轮正文级修订
+
+- `COMPLETE_WORLD_MAP_ATLAS_CN.md`：将文件职责降为全世界区划 / 地点职责提案，不再冒充当前施工合同；正文 A2、A3、A5 连接说明、路线表和 A5 旧朝圣路说明均明确 A2 不直连 A5，必须经 A3。旧 C04 仅保留为待审计冲突，不作为有效路线。
+- `WORLD_REGION_ATLAS_CN.md`：从“当前地图总纲”调整为地理 / 剧情地点索引；明确 A2→A3→A5 路线裁定，并指向脑图与当前区域基线。
+- `WORLD_MAP_SCENE_INVENTORY_CN.md`：标为旧场景盘点快照；其 39 场景计数、A2 单场景 `ash_forest.tscn` 描述均不可用于当前场景决策。当前 A2 已按 R01–R06 独立房间设计。
+- `WORLD_MAP_SCENE_DECOMPOSITION_AND_GRAYBOX_BASELINE_CN.md`：标为历史拆分 / 灰盒快照；强调固定地形必须由编辑器可见 `.tscn` 节点构成，不得把旧生成方案当作当前合同。
+- 复核 `WORLD_MAP_BRAINMAP_CN.md`：该文件已明确 A2 不直连 A5，并把拓扑 JSON 中 C04 的保留状态列为待代码、场景、验证器和存档依赖审计事项；本轮未重复改写。
+- 复核 `INTERCONNECTED_BOX_WORLD_DESIGN_CN.md`、`BOX_WORLD_HIERARCHY_CN.md`：前者保留全局箱庭原则但其中若干旧连接仍是设计候选，不能等同实现；后者已声明 M1–M6 以 JSON 为准，并明确静态拓扑不证明 Godot 实装。
+- 复核 `BOX_WORLD_REAUDIT_2026-10-12_CN.md`、`BOX_WORLD_STRUCTURE_REAUDIT_CN.md`、`BOX_WORLD_SPATIAL_ACCEPTANCE_MATRIX_CN.md`、`BOX_WORLD_TOPOLOGY_ACCEPTANCE_CN.md`、`WORLD_MAP_VALIDATION_REPORT_CN.md`：均已标记历史审计 / 验收快照；其旧 C04 通过记录不得作为当前路线依据。
+
+### 本轮未完成事项与边界
+
+- 本轮未修改 `tools/world_map_topology.json`、任何 GDScript、`.tscn`、验证器或存档字段；旧 C04 仍是设计—实现冲突，不能宣称已经从游戏中移除。
+- 未执行 Godot、Python 验证器或实机跑图；本轮只做远程文档正文修订与静态阅读。
+- 本轮未删除历史文件。场景清单、灰盒审计和验收记录仍有追溯价值；删除前仍需完成全仓引用审计。
+- 文档清理仍未达到“185 份 Markdown 全文逐篇审定 + 全仓依赖扫描”完成标准；NPC 正式设计启动门槛继续保持关闭。
+
+### 下一批工作
+
+1. 完成 A0–A2 区域文档与旧地图方案的正文冲突审查，确认 A2 R01–R06 的当前场景入口、出口与旧 `ash_forest.tscn` 引用边界。
+2. 完成 NPC / 叙事文档族群正文审查，尤其核对蜜忒、守门人、朝圣骑士与普通 NPC 的事件条件、知识边界及未验证代码状态。
+3. 获取可用的全仓文件引用证据，执行 Markdown 相对链接与 GDScript / 场景 / 验证器 / JSON 路径依赖扫描；在证据完整前不删除文件。
+4. 最后重新核对 README、治理合同、开发状态和 NPC 启动门槛，再决定是否开放 NPC 设计。
