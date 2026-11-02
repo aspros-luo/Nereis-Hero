@@ -1,5 +1,7 @@
 # 环境氛围美术第二轮 / Environmental Atmosphere Art Pass 2
 
+> **历史环境表现层实施记录（development 分支）。** 本文所述背景绘制和环境层接入状态需按当前场景资源重新核对；不得据此改变固定地形节点化要求，也不代表当前视觉验收通过。
+
 **Branch / 分支:** `development`  
 **Implementation commit / 实现提交:** `9e1c347032734a8bdaa3bf8c5cf7d83f30f11a9a`
 
