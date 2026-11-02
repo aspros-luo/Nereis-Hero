@@ -1,10 +1,6 @@
 # Nereis Hero 世界地图总纲（中文）
 
-> 版本：World Map Draft 0.2  
-> 状态：设计草案，待与制作人确认；不是已锁定的剧情正史。  
-> 适用分支：development  
-> 设计约束：本阶段只新增设计文档，不修改已冻结的玩法基线、脚本或场景。  
-> 关联文档：[开发者剧情记忆](./DEVELOPER_STORY_MEMORY.md)、[导演叙事规划](./DIRECTOR_NARRATIVE_PLAN.md)、[故事基础](./STORY.md)。
+> **档案状态：早期宏观提案 / 非当前施工基线。** 本文保留最初的区域规模与地理构想，不能覆盖当前用户确认的区域连接、现行世界地图区划、箱庭原则或 A0/A1/A2 区域设计基线。文中 12–15 区域、A0–A7 编排及旧连接仅供追溯，不作为实现合同。当前地图判断须结合 COMPLETE_WORLD_MAP_ATLAS_CN.md、INTERCONNECTED_BOX_WORLD_DESIGN_CN.md、WORLD_MAP_BRAINMAP_CN.md、当前区域基线与 tools/world_map_topology.json；源码和场景仍须独立核验。原始分支标记 development 是历史元数据，不表示本文在当前分支具有更高权威。
 
 ## 1. 设计目标
 
