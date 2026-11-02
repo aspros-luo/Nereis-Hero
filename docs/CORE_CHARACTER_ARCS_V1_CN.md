@@ -2,7 +2,7 @@
 
 > 状态：核心人物方向已整理；各人物具体结局与交汇事件仍开放。  
 > 适用项目：Nereis-Hero。本文优先记录人物独立生活与动机，不是任务清单或对白台本。  
-> 叙事基准：[DEVELOPER_STORY_MEMORY.md](./DEVELOPER_STORY_MEMORY.md)、[CROSS_GAME_STORY_CANON_CN.md](./CROSS_GAME_STORY_CANON_CN.md)、[PROTAGONIST_OPENING_NARRATIVE_V1_CN.md](./PROTAGONIST_OPENING_NARRATIVE_V1_CN.md)。
+> 权威依据：人物世界事实以 [WORLD_BUILDING_BIBLE_CN.md](./WORLD_BUILDING_BIBLE_CN.md) 为准；跨作品共同事实以 [CROSS_GAME_STORY_CANON_CN.md](./CROSS_GAME_STORY_CANON_CN.md) 为准；主角开局流程以 [PROTAGONIST_OPENING_NARRATIVE_V1_CN.md](./PROTAGONIST_OPENING_NARRATIVE_V1_CN.md) 为准。本文只描述人物弧线方向，不覆盖正史，也不等于最终 NPC 事件或对白合同。
 
 ## 1. 设计原则
 
