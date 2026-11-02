@@ -1,6 +1,8 @@
 # 箱庭地图结构复核记录（2026-10-12）
 
-> 分支：development  
+**历史空间审计档案 / 已被后续路线决策部分替代。** 本文大量记录 C04（A2↔A5）旧朝圣高路的设计、实现和静态验收；该连接已被后续 A2→A3→A5 路线决定撤销。本文保留旧实现证据，不得再作为当前 C04 有效性的依据。当前路线设计以 `WORLD_MAP_BRAINMAP_CN.md`、`WORLD_BUILDING_BIBLE_CN.md` 与 `maps/A2_DESIGN_BASELINE_CN.md` 为准；当前代码仍有 C04 残留，见 `DEVELOPMENT_STATUS.md`。
+
+> 分支：development（历史元数据）
 > 状态：第一轮结构复核与一项空间交互修正已提交；全图结构尚未验收  
 > 验证边界：远程源码静态审查；未运行 Godot 4.6.x，不代表实机通过
 
