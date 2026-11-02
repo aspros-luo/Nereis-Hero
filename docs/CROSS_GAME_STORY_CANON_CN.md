@@ -2,7 +2,7 @@
 
 > 状态：跨作品叙事基准 / 2026-11-01 迭代
 > 适用项目：Nereis-Hero（动作探索 RPG）、Nereis-Lullaby（以蜜忒为主视角的小说式游戏）
-> 本文只记录跨作品共同设定；蜜忒身份与结局世界观的详细权威摘要见 STORY.md 和 DEVELOPER_STORY_MEMORY.md。
+> 本文只记录跨作品共同设定；Hero 世界观与蜜忒身份的详细权威来源见 WORLD_BUILDING_BIBLE_CN.md，快速摘要见 STORY.md。DEVELOPER_STORY_MEMORY.md 仅为历史讨论档案，不作为现行正史入口。
 
 ## 1. 两种玩法讲述同一个世界
 
