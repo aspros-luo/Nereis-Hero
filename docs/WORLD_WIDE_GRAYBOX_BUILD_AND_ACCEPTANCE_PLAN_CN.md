@@ -1,5 +1,7 @@
 # 全世界区域灰盒施工与验收总表
 
+> **历史全图灰盒施工总表 / 非当前路线合同。** 本表仍保留 C04（A2↔A5）旧朝圣高路及旧 `ash_forest.tscn` 组织方式；A2→A5 直连已被后续路线决定撤销，固定地形也必须由编辑器可见 `.tscn` 节点构成。当前任务优先级以 `DEVELOPMENT_STATUS.md` 为准，区域目标以当前区域基线为准。
+
 > 分支：`feature/story-map-progression`  
 > 状态：全区域执行基线；不是完成证明。所有运行时状态初始为“未实机验收”。  
 > 机器可读源：`tools/world_map_topology.json`、`tools/world_graybox_acceptance_ledger.json`。
