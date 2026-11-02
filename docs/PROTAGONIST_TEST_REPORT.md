@@ -1,5 +1,7 @@
 # 主角系统静态检查报告 / Protagonist Static Review Report
 
+> **历史静态检查快照（feature/protagonist-system，2026-10-09）。** 本报告不代表当前动画分支的测试结果；不得将旧静态检查描述为当前 Godot 实机通过。当前主角动画与骨骼实现以 `feature/hero-animation-system` 的源码和最新验收记录为准。
+
 日期 / Date: 2026-10-09
 分支 / Branch: `feature/protagonist-system`
 
