@@ -1,8 +1,6 @@
 # Nereis-Hero 正式地图设计基线 / Official Map Design Baseline
 
-> Branch: `development`  
-> Source of truth: `tools/world_map_topology.json`  
-> Status: design alignment in progress; Godot runtime acceptance is still required.  
+> **档案状态：早期拓扑转译 / 非当前独立施工基线。** 当前结构化设计数据仍为 `tools/world_map_topology.json`；宏观地理索引见 `WORLD_REGION_ATLAS_CN.md`，具体区域与房间施工以当前区域基线为准。本文原始分支 `development` 为历史元数据，所有旧坐标与连接必须复核后方可采用。Godot 实机验收仍需单独执行。  
 > 本文只把拓扑数据转译为可读的地图布局与验收约束；不代表所有路线已通过引擎实测。
 
 ## 1. Map reading rules / 地图阅读规则
