@@ -1,5 +1,7 @@
 # Spatial Route Contract Audit — Pass 1 / 空间路线合同审计（第一轮）
 
+> **Historical spatial-route audit (development branch).** Its elevated-route and drainage contracts must be rechecked against current regional baselines and topology before use. No runtime acceptance is implied.
+
 > Branch: `development`  
 > Scope: high-value elevated transitions and the post-defense drainage shortcut.  
 > Status: source/topology cross-reference only. Godot runtime acceptance remains pending.
