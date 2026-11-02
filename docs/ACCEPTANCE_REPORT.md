@@ -1,5 +1,7 @@
 # Nereis Hero — Development Acceptance Report
 
+> **历史里程碑验收快照（2026-10-07）。** 本报告记录早期 narrative production pass，不代表当前分支状态。其关于蜜忒错过会面、身体结合、100 名教徒和旧结局阈值的描述均为旧原型，不得作为当前正史或验收合同。当前状态以 `DEVELOPMENT_STATUS.md`、`WORLD_BUILDING_BIBLE_CN.md` 和 `ENDING_CONDITION_DESIGN_CN.md` 为准。
+
 Date: 2026-10-07
 
 ## Current milestone
