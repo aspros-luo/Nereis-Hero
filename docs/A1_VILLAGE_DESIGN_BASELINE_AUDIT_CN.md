@@ -1,5 +1,7 @@
 # A1 边境村庄：设计基线重建与代码审计（V1.0）
 
+> **历史设计 / 静态审计快照。** 本文引用的开发者记忆、导演规划和早期路线资料不是当前正史入口。当前人物事实以 `WORLD_BUILDING_BIBLE_CN.md` 为准，A1 村庄与 NPC 方向以 `A1_VILLAGE_STORY_AND_NPC_REDESIGN_V1_CN.md` 为准，当前行为以最新源码与 `DEVELOPMENT_STATUS.md` 为准。
+
 > 项目：Nereis-Hero  
 > 目标分支：`feature/story-map-progression`  
 > 状态：**设计基线已重建；代码差异已静态审计；尚未进入 A1 行为重构，也未做 Godot 运行时验收。**  
