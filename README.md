@@ -17,8 +17,7 @@
 1. [项目文档治理合同](docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md) — 文档权威层级、任务启动、清理和验收规则。
 2. [开发协作条约](docs/DEVELOPMENT_WORKING_CHARTER_CN_EN.md) — 工程与叙事硬约束。
 3. [当前开发状态](docs/DEVELOPMENT_STATUS.md) — 当前进度、阻塞项与最近验证结果。
-4. [当前里程碑交接](docs/MILESTONE_HANDOFF_2026-10-29_CN.md) — 最近一次跨任务交接；若状态文件已有更新，以状态文件为准。
-5. 按本次任务读取对应的权威设计基线、场景、脚本和验收合同。
+4. 按本次任务读取对应的权威设计基线、场景、脚本和验收合同；历史交接、开发日志和旧审计默认不作为启动必读。
 
 ## 权威设计文档
 
@@ -26,7 +25,7 @@
 
 - [世界观总档案](docs/WORLD_BUILDING_BIBLE_CN.md) — 世界事实、人物知识边界、已确认 / 候选 / 待定设定；世界观设定的主要权威来源。
 - [剧情基础摘要](docs/STORY.md) — 主线与结局的精简摘要，便于快速恢复上下文；详细裁定以世界观总档案和专门合同为准。
-- [开发者剧情记忆](docs/DEVELOPER_STORY_MEMORY.md) — 仅用于追溯历史讨论与决策来源，不作为独立于现行设定的第二套正史。
+- [开发者剧情记忆](docs/DEVELOPER_STORY_MEMORY.md) — 大型历史讨论档案；仅在追溯明确决策来源时检索，不作为日常启动必读。
 - [跨作品剧情基准](docs/CROSS_GAME_STORY_CANON_CN.md) — 仅记录 Hero 与 Lullaby 必须一致的共同设定。
 - [结局条件设计合同](docs/ENDING_CONDITION_DESIGN_CN.md) — 结局所需探索事实、道具状态和特殊事件；程序实现状态以开发状态和源码审计为准。
 - [世界叙事线索台账](docs/WORLD_NARRATIVE_CLUE_LEDGER_CN.md) — 线索分布、知识权限与证据链。
@@ -42,11 +41,17 @@
 
 地图设计文件中的草案、旧版灰盒记录和静态验证报告不能替代当前区域设计基线，也不能证明 Godot 实机验收通过。
 
-### 工程规则
+### 人物与开局设计
 
-- [项目文档治理合同](docs/PROJECT_DOCUMENTATION_GOVERNANCE_CN.md)
-- [开发协作条约](docs/DEVELOPMENT_WORKING_CHARTER_CN_EN.md)
-- [当前开发状态](docs/DEVELOPMENT_STATUS.md)
+- [核心人物设计池](docs/CORE_NPC_DESIGN_POOL_CN.md) — 候选人物资料池，不自动成为正史。
+- [核心人物独立人物弧线](docs/CORE_CHARACTER_ARCS_V1_CN.md) — 人物动机与独立生活方向；具体人物事实以世界观总档案为准。
+- [主角开局叙事骨架](docs/PROTAGONIST_OPENING_NARRATIVE_V1_CN.md) — A0 开局流程基线；具体场景实现以源码和验收合同为准。
+
+### 文档使用边界
+
+- `DEVELOPER_STORY_MEMORY.md`、历史交接、旧版地图提案和开发日志均为追溯资料，不列入每次任务的默认阅读清单。
+- `DIRECTOR_NARRATIVE_PLAN.md` 是候选导演结构，不是世界观正史；与用户确认设定冲突时以世界观总档案为准。
+- `WORLD_MAP_MASTER_PLAN_CN.md`、`WORLD_NETWORK_TOPOLOGY_CN.md` 等早期地图草案不自动覆盖完整地图区划、箱庭原则和当前区域基线；冲突项以本次任务对应的当前区域基线及已确认路线裁定为准。
 
 ## 核心工程约束
 
