@@ -1,5 +1,7 @@
 # 美术资源接入阶段 1 / Art Asset Integration — Phase 1
 
+> **历史美术接入记录（development 分支）。** 本文记录当时素材接入和程序化占位替换状态；当前资产状态以仓库实际资源、`ASSET_CREDITS.md` 和当前场景引用为准。
+
 **分支 / Branch:** `development`  
 **目标 / Goal:** Make the playable world read as a dark-fantasy game at first launch, without changing map logic.
 
