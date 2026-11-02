@@ -1,6 +1,6 @@
 # 最终箱式世界地图设计 v1.0（垂直互联版）
 
-> 分层细化补充：请同时参阅 [大区域—小区域—连接与升降机设计](BOX_WORLD_HIERARCHY_CN.md)。机器可读清单位于 `tools/world_map_topology.json` 的 `macro_regions`、`subregions`、`intra_region_connections` 与 `elevators`。
+> **历史空间提案 / 非当前独立施工权威。** 本文原始来自 development 分支，虽然标题为“最终”，但后续已形成新的路线裁定、宏观脑图与当前区域基线。当前区域 ID / C01–C24 连接 / M1–M6 分组以 `tools/world_map_topology.json` 为结构化设计数据；宏观路线以 `WORLD_MAP_BRAINMAP_CN.md` 与 `WORLD_REGION_ATLAS_CN.md` 为索引；房间施工以当前区域基线为准。本文仅保留不冲突的箱庭空间原则，旧区域分组、连接和坐标不得直接采用。静态数据不证明 Godot 实装或实机验收。
 
 
 > 项目：Nereis-Hero  
