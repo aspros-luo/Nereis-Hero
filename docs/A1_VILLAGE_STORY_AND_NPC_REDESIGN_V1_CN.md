@@ -2,7 +2,9 @@
 
 > 项目：Nereis-Hero  
 > 分支：`feature/story-map-progression`  
-> 状态：第一版设计提案，普通玩法结构可继续实现；涉及核心秘密、关键人物命运与结局条件的内容明确保留，不在本文定稿。  
+> **文档职责：A1 村庄空间、常驻角色阵容与普通事件体验提案；不是全游戏 NPC 总纲，也不是最终对白脚本。**  
+> 世界观与人物事实以 [WORLD_BUILDING_BIBLE_CN.md](./WORLD_BUILDING_BIBLE_CN.md) 为准；全局人物方向以 [CORE_CHARACTER_ARCS_V1_CN.md](./CORE_CHARACTER_ARCS_V1_CN.md) 为参考；A1 对话阶段和触发规则以 [A1_NPC_DIALOGUE_PROGRESS_DESIGN_CN.md](./A1_NPC_DIALOGUE_PROGRESS_DESIGN_CN.md) 为准。候选人物不得因列入本提案自动成为正史。  
+> 状态：第一版设计提案；普通玩法结构可继续实现，涉及核心秘密、关键人物命运与结局条件的内容不在本文定稿。  
 > 目标：把 A1 从“静态 POI 展示区”改成可自由探索、能反复回访、会回应玩家行动的边境聚落。
 
 ## 0. 设计结论
