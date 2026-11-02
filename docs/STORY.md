@@ -1,6 +1,6 @@
 # Nereis Hero — Story Foundation（权威剧情基线）
 
-> 状态：持续迭代中的权威摘要。发生冲突时，以用户最新明确确认的剧情决策为准；详细历史与变更记录见 DEVELOPER_STORY_MEMORY.md。
+> 状态：持续迭代中的剧情快速摘要。发生冲突时，以用户最新明确确认的剧情决策为准；世界观详细权威来源为 WORLD_BUILDING_BIBLE_CN.md。DEVELOPER_STORY_MEMORY.md 仅在追溯历史讨论时查阅，不作为日常开发依据。
 > 结局条件的玩法判定规则仍以 ENDING_CONDITION_DESIGN_CN.md 为准。该文件定义玩家行为、道具、探索和事件如何构成条件；本文定义结局背后的世界观因果。两者不可混为一谈。
 
 ## 1. 故事核心
