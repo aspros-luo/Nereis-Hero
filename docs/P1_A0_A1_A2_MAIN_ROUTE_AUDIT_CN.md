@@ -1,6 +1,6 @@
 # P1：A0 → A1 → A2 主线接线审计
 
-> 分支：`development`  
+**历史主线静态审计快照（development 分支）。** 当前 A0/A1/A2 目标和实现状态以当前区域基线、`DEVELOPMENT_STATUS.md` 与源码为准；本文不代表当前运行时验收。
 > 范围：正常新游戏流程，不包含 Debug 地图测试。  
 > 证据来源：`scripts/levels/escape_prologue.gd`、`scripts/levels/village_hub.gd`、`scripts/levels/village_defense_demo.gd`、`scripts/levels/greybox_world_region.gd`、`scripts/world/village_poi.gd`。  
 > 状态：静态源码核对；未宣称 Godot 4.6.1 实机验收通过。
