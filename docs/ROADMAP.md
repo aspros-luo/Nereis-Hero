@@ -8,6 +8,8 @@
 
 # Roadmap
 
+> **历史原型路线图 / 非当前任务优先级来源。** 本文仍保留 Core Combat Demo 与旧阶段清单；当前任务顺序以 `DEVELOPMENT_STATUS.md` 为准。2026-10-29 的旧里程碑交接链接仅为历史快照，不再是默认启动必读。
+
 ## Phase 001 — Vertical Slice Foundation
 
 - [x] Repository created
