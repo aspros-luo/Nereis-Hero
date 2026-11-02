@@ -126,10 +126,15 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, f"Expected 14 primary regions, found {len(region_ids)}.")
     if len(hidden) != 8:
         fail(errors, f"Expected 8 hidden regions, found {len(hidden)}.")
-    if len(connections) != 24:
-        fail(errors, f"Expected 24 macro connections, found {len(connections)}.")
+    if len(connections) != 23:
+        fail(errors, f"Expected 23 active macro connections (C04 retired), found {len(connections)}.")
 
     edge_ids = [edge.get("id", "") for edge in connections]
+    if "C04" in edge_ids:
+        fail(errors, "C04 is retired and must not appear in active macro connections.")
+    retired_ids = {item.get("id") for item in data.get("retired_connections", [])}
+    if "C04" not in retired_ids:
+        fail(errors, "C04 retirement record is missing.")
     if len(edge_ids) != len(set(edge_ids)):
         fail(errors, "Duplicate connection IDs.")
 
@@ -284,7 +289,6 @@ def validate(data: dict[str, Any]) -> list[str]:
     # 对高架、落差、竖井和独立排水路线设置语义锚点，避免后续误改成普通地面门。
     expected_layer_pairs = {
         "C03": ("A2-S07", "A3-S04"),
-        "C04": ("A2-S05", "A5-S03"),
         "C05": ("A3-S05", "A4-S01"),
         "C06": ("A4-S06", "A1-S04"),
         "C10": ("A6-S05", "A3-S06"),
@@ -376,18 +380,9 @@ def validate(data: dict[str, Any]) -> list[str]:
     h08_exit = h08.get("secondary_exit", {}) if h08 else {}
     if h08_exit.get("to") != "A13" or h08_exit.get("unlock_condition") != "ending_candidate_is_not_human_grave_based_on_resonance_truth_anchors_and_exploration":
         fail(errors, "H08 must converge on A13 only when the shared ending evaluator selects a non-human-grave candidate.")
-    c04 = next((edge for edge in connections if edge.get("id") == "C04"), None)
-    c04_spatial = c04.get("spatial_contract", {}) if c04 else {}
-    if c04_spatial.get("route_layer") != "old_pilgrim_canopy_highroad":
-        fail(errors, "C04 must remain an elevated old-pilgrim canopy shortcut.")
-    if c04_spatial.get("from_region_anchor") != {"region": "A2", "x": 1880, "y_offset": -115}:
-        fail(errors, "C04 A2 return door must align with the old-pilgrim canopy ledge.")
-    if c04_spatial.get("to_region_anchor") != {"region": "A5", "x": 520, "y_offset": -140, "spawn_side": "old_pilgrim_highroad"}:
-        fail(errors, "C04 A5 door must remain on the upper battlement approach.")
-    if c04_spatial.get("return_spawn") != {"region": "A2", "x": 1750, "y_offset": -140, "spawn_side": "old_pilgrim_highroad"}:
-        fail(errors, "C04 A2 arrival must land on the canopy approach platform.")
-    if c04_spatial.get("from_region_spawn") != {"region": "A5", "x": 650, "y_offset": -85, "spawn_side": "old_pilgrim_highroad"}:
-        fail(errors, "C04 A5 arrival must land on the battlement approach platform.")
+    retired_ids = {item.get("id") for item in data.get("retired_connections", [])}
+    if "C04" not in retired_ids:
+        fail(errors, "C04 must be documented as retired, not as an active spatial connection.")
 
     c03 = next((edge for edge in connections if edge.get("id") == "C03"), None)
     c03_spatial = c03.get("spatial_contract", {}) if c03 else {}

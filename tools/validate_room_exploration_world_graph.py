@@ -37,7 +37,9 @@ def main() -> int:
 
     macro_ids = {edge["id"] for edge in macro.get("connections", [])}
     room_macro_ids = {edge["id"] for edge in connections if edge.get("id", "").startswith("C")}
-    expected_macro_ids = {f"C{i:02d}" for i in range(1, 25)}
+    expected_macro_ids = {f"C{i:02d}" for i in range(1, 25) if i != 4}
+    if "C04" in room_macro_ids or any(edge.get("id") == "C04" for edge in macro.get("connections", [])):
+        errors.append("C04 is retired and must not appear in active room or macro graph edges")
     if room_macro_ids != expected_macro_ids:
         errors.append(f"macro connection mapping mismatch: missing={sorted(expected_macro_ids-room_macro_ids)}, extra={sorted(room_macro_ids-expected_macro_ids)}")
     if macro_ids != expected_macro_ids:

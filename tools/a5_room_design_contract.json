@@ -13,20 +13,6 @@
   "macro_region": "M1",
   "cross_region_connections": [
     {
-      "id": "C04",
-      "from": "A2",
-      "to": "A5",
-      "kind": "shortcut",
-      "initial_access": "blocked",
-      "final_direction": "both",
-      "unlock_condition": "reached_A5_and_opened_old_pilgrim_highroad",
-      "opens_from": "A5",
-      "room_binding": {
-        "a5_room": "A5-R16",
-        "a5_exit": "old_pilgrim_highroad_winch_gate"
-      }
-    },
-    {
       "id": "C08",
       "from": "A3",
       "to": "A5",
@@ -318,8 +304,8 @@
         2
       ],
       "subregion": "A5-S05",
-      "role": "remote_shortcut",
-      "play_hook": "上升到机关层后横向进入操作区，仍可退回主塔",
+      "role": "optional_vertical_challenge",
+      "play_hook": "上升到机关层后横向进入操作区，仍可退回主塔；机关不再开启跨区域通路。",
       "scene_path": "res://scenes/a5_rooms/a5_r16.tscn",
       "terrain_geometry": {
         "platform_count": 21,
@@ -548,7 +534,7 @@
       "travel": "both",
       "initial_state": "open",
       "unlock_condition": "",
-      "design_note": "主路直通C09，不能把可选C04绞盘变成主线瓶颈"
+      "design_note": "主路直通C09；A5-R16的可选机关支路仅服务A5内部探索，不构成跨区域捷径。"
     },
     {
       "id": "A5-I14",
@@ -714,15 +700,13 @@
   ],
   "design_notes": [
     "本文件为A5试点设计合同，不替换tools/world_map_topology.json。",
-    "C04/C08/C09的世界拓扑端点、类型和解锁语义以原始world_map_topology.json为准。",
     "现有能力门条件是占位引用；实施前必须映射到项目内真实能力ID/状态标志。",
     "房间尺寸按1280x720逻辑视口倍数表示，Tile尺寸待确认。",
-    "A5-R16的绞盘用于从A5侧开启C04；开启前高路必须物理阻挡或单向。",
     "A5-SC01/SC02/LIFT01为区域内部新增设计，不属于跨区拓扑修改。",
-    "落地版：C09主路从A5-R15直达A5-R20；C04从A5-R15分支进入A5-R16，不能成为离开A5的必经节点。",
     "运行时地图扩展到5600px并加密实体平台；仍需本地Godot运行验证跳跃可达性、相机边界、碰撞和出口触发。",
     "埋旗共鸣桥保留原脚本契约，不得用SC01物理回环替代。",
-    "每个A5房间均已生成独立.tscn，可从Godot编辑器直接打开验收；独立测试模式仅加载该房间的地面、平台、主角、HUD与环境节点，不生成跨区出口或遭遇战。"
+    "每个A5房间均已生成独立.tscn，可从Godot编辑器直接打开验收；独立测试模式仅加载该房间的地面、平台、主角、HUD与环境节点，不生成跨区出口或遭遇战。",
+    "A5-R16保留为区域内部的高风险机关支路，不再设置旧朝圣高路跨区出口或解锁条件。"
   ],
   "terrain_design": {
     "visual_mode": "shape_based_graybox",
@@ -734,5 +718,14 @@
     "expected_floor_gap_count": 18,
     "static_geometry_review": "room differentiation pass 3: all 22 rooms have authored role-specific platform silhouettes; rerun static and runtime acceptance before marking complete",
     "godot_runtime_test": "not_run"
-  }
+  },
+  "retired_cross_region_connections": [
+    {
+      "id": "C04",
+      "from": "A2",
+      "to": "A5",
+      "status": "retired",
+      "note": "A5-R16 remains an internal optional challenge room; the winch no longer controls an A2 route."
+    }
+  ]
 }

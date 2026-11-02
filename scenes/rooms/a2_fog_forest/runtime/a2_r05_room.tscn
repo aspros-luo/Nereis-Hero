@@ -126,9 +126,6 @@ position = Vector2(370, 240)
 [node name="EntryRavineReturn" type="Marker2D" parent="Terrain/RoomMarkers"]
 position = Vector2(650, 400)
 
-[node name="EntryC04Return" type="Marker2D" parent="Terrain/RoomMarkers"]
-position = Vector2(560, 400)
-
 [node name="ExitToR02" type="Marker2D" parent="Terrain/RoomMarkers"]
 position = Vector2(60, 400)
 
@@ -137,9 +134,6 @@ position = Vector2(370, 240)
 
 [node name="ExitToR06" type="Marker2D" parent="Terrain/RoomMarkers"]
 position = Vector2(950, 400)
-
-[node name="ExitToA5" type="Marker2D" parent="Terrain/RoomMarkers"]
-position = Vector2(1200, 400)
 
 [node name="RegionBoundary_0" type="StaticBody2D" parent="."]
 
@@ -174,10 +168,6 @@ position = Vector2(370, 240)
 
 [node name="Door_ExitToR06" parent="." instance=ExtResource("door_scene")]
 position = Vector2(950, 400)
-
-[node name="Door_ExitToA5" parent="." instance=ExtResource("door_scene")]
-position = Vector2(1200, 400)
-enabled = false
 
 
 [node name="Anomaly_anomaly_old_pilgrim_echo" parent="." instance=ExtResource("source_scene")]

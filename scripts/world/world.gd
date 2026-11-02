@@ -98,7 +98,7 @@ func _load_a5_contract() -> bool:
 	if not macro_bindings is Array:
 		push_error("World: A5 合同缺少 macro_bindings 数组")
 		return false
-	var required_macro_rooms := {"C08": "A5-R01", "C04": "A5-R16", "C09": "A5-R20"}
+	var required_macro_rooms := {"C08": "A5-R01", "C09": "A5-R20"}
 	var found_macro_ids: Dictionary = {}
 	for binding: Variant in macro_bindings:
 		if not binding is Dictionary:

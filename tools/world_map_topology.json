@@ -2,7 +2,7 @@
   "schema_version": 1,
   "title": "Nereis Hero World Topology",
   "status": "design_baseline_not_runtime_verified",
-  "validation_note": "This data validates abstract region connectivity only. Godot graybox movement, collisions, doors, save/resume, death recovery, and runtime transitions require in-engine acceptance. Hierarchical macro-region/subregion/connection/elevator contracts are design data and are not evidence of runtime implementation. Optional encounter OB01 is described in optional_encounters and is not counted as a C-edge because it is a side encounter rather than a new world-map region.",
+  "validation_note": "This data validates abstract region connectivity only. Godot graybox movement, collisions, doors, save/resume, death recovery, and runtime transitions require in-engine acceptance. C04 is retired and excluded from the 23 active macro connections. Hierarchical macro-region/subregion/connection/elevator contracts are design data and are not evidence of runtime implementation. Optional encounter OB01 is described in optional_encounters and is not counted as a C-edge because it is a side encounter rather than a new world-map region.",
   "regions": [
     {
       "id": "A0",
@@ -244,50 +244,6 @@
         "to_subregion": "A3-S04",
         "route_form": "树冠栈道→城区屋顶连廊",
         "readability_contract": "双向高位连接；返回点必须保留树冠高度",
-        "status": "design_contract_not_runtime_verified"
-      }
-    },
-    {
-      "id": "C04",
-      "from": "A2",
-      "to": "A5",
-      "kind": "shortcut",
-      "initial_access": "blocked",
-      "final_direction": "both",
-      "unlock_condition": "reached_A5_and_opened_old_pilgrim_highroad",
-      "opens_from": "A5",
-      "spatial_contract": {
-        "route_layer": "old_pilgrim_canopy_highroad",
-        "from_region_anchor": {
-          "region": "A2",
-          "x": 1880,
-          "y_offset": -115
-        },
-        "to_region_anchor": {
-          "region": "A5",
-          "x": 520,
-          "y_offset": -140,
-          "spawn_side": "old_pilgrim_highroad"
-        },
-        "return_spawn": {
-          "region": "A2",
-          "x": 1750,
-          "y_offset": -140,
-          "spawn_side": "old_pilgrim_highroad"
-        },
-        "from_region_spawn": {
-          "region": "A5",
-          "x": 650,
-          "y_offset": -85,
-          "spawn_side": "old_pilgrim_highroad"
-        },
-        "intent": "C04 reconnects A2's canopy approach to A5's upper battlement. Both doors and arrival spawns must stay on their supporting ledges, not the continuous ground floor."
-      },
-      "layer_contract": {
-        "from_subregion": "A2-S05",
-        "to_subregion": "A5-S03",
-        "route_form": "旧朝圣高路→堡垒城墙",
-        "readability_contract": "远端开启的高架捷径，不能退化成地面门",
         "status": "design_contract_not_runtime_verified"
       }
     },
@@ -1792,12 +1748,6 @@
         "reason": "主线跨区连接必须是高路，不得作为纯地面边界切换"
       },
       {
-        "connection": "C04",
-        "from": "A2.pilgrim_high_road",
-        "to": "A5.fortress_wall",
-        "reason": "后期开启的高架捷径"
-      },
-      {
         "connection": "C05",
         "from": "A3.raised_pipewalk",
         "to": "A4.upper_inspection_gallery",
@@ -2132,13 +2082,14 @@
       "parent_region": "A2",
       "name": "旧朝圣高路",
       "layer": "upper",
-      "role": "C04远端捷径",
+      "role": "A2内部探索与旧朝圣遗迹",
       "design_contract": {
-        "purpose": "C04的A2侧高位接近段；抵达A5并从远端开启后形成双向捷径",
+        "purpose": "保留旧朝圣道路作为A2内部探索与环境叙事区域，不承担跨区域连接。",
         "required_readability": [
-          "首次经过时能辨认道路延伸但不能提前通过锁定门",
-          "开启后双向门与出生点都在受支撑的平台上",
-          "不与H02的隐藏探索出口重复"
+          "能辨认古老道路曾向远方延伸",
+          "道路断裂、风化与遗迹构成独立探索目标",
+          "与树冠路线和东部沟壑形成可读的高度关系",
+          "不设置通往A5的跨区门或解锁机关"
         ],
         "status": "design_contract_not_runtime_verified"
       }
@@ -2292,7 +2243,7 @@
       "parent_region": "A5",
       "name": "堡垒城墙",
       "layer": "upper",
-      "role": "C09与C04连接点"
+      "role": "C09主线高位连接点"
     },
     {
       "id": "A5-S04",
@@ -2306,7 +2257,7 @@
       "parent_region": "A5",
       "name": "断桥绞盘",
       "layer": "upper",
-      "role": "开启A2高路回环"
+      "role": "高风险侧向机关支路与环境地标"
     },
     {
       "id": "A6-S01",
@@ -2717,7 +2668,7 @@
       "travel": "both",
       "initial_state": "open",
       "unlock_condition": "",
-      "design_note": "树冠栈道延伸至旧朝圣高路接近段；不等于C04已解锁，C04仍由A5远端开启。"
+      "design_note": "树冠栈道延伸至旧朝圣道路遗迹；该段仅作为A2内部探索连接，不通往A5。"
     },
     {
       "id": "SC011",
@@ -3943,7 +3894,7 @@
   "a2_spatial_acceptance_contract": {
     "status": "terrain_layout_reworked_code_committed_runtime_unverified",
     "decision_basis": {
-      "D1": "C04 owns the A2-A5 highroad shortcut. H02 defaults to return-to-A2 only; a second A5 exit is deferred unless independently justified.",
+      "D1": "C04已退役。A2-S05保留为A2内部旧朝圣道路探索区；H02仅返回A2，不增加A5出口。",
       "D2": "At least one grounded viewpoint should visually relate the canopy route to the ground bell-grave. This is a spatial readability requirement, not a new lore reveal.",
       "D3": "S02/S03 ordinary bell-grave exploration has no extra resonance gate. Existing H02 conditions remain separate.",
       "D4": "No new resident NPC is added during topology pass."
@@ -4002,8 +3953,8 @@
         "travel": "both",
         "initial_state": "open",
         "acceptance": [
-          "S05可作为C04的A2侧接近段",
-          "C04仍保持初始锁定"
+          "S05作为A2内部旧朝圣道路探索段，保持与相邻房间的内部路线连接",
+          "不生成A5跨区出口、门锁或远端解锁状态"
         ]
       },
       {
@@ -4038,17 +3989,6 @@
         "acceptance": [
           "双端门与出生点均落在受支撑高位平台",
           "从A3返回A2仍在树冠层"
-        ]
-      },
-      {
-        "id": "C04",
-        "from": "A2-S05",
-        "to": "A5-S03",
-        "travel": "both_after_A5_unlock",
-        "acceptance": [
-          "A5侧首次开启后A2侧门持久开放",
-          "两端出生点都在高位承托平台",
-          "不得与H02出口重复承担同一连接"
         ]
       },
       {
@@ -4088,31 +4028,17 @@
         "mechanism": "C03 two-way canopy connection",
         "purpose": "A2/A3之间的高位往返",
         "state": "existing_topology_contract_not_runtime_verified"
-      },
-      {
-        "id": "L-A2-03",
-        "path": [
-          "A2-S05",
-          "A5-S03",
-          "A5",
-          "A2-S05"
-        ],
-        "mechanism": "C04 opened from A5",
-        "purpose": "中后期高路捷径",
-        "state": "existing_topology_contract_not_runtime_verified"
       }
     ],
     "runtime_acceptance_checks": [
       "Godot内逐个检查SC007-SC011的真实入口、出口、碰撞、落差和回返可达性",
       "从A1进入A2、从A2返回A1，出生点始终对应地面主路",
       "通过C03往返A3时保持树冠高度，不掉到地面层",
-      "C04未开启时不可穿过；从A5开启后重进A2仍保持开放",
       "未解锁SC011时主路依然连通；解锁后从两端都能使用回环",
       "H02可选、可返回A2，不阻断C03，也不要求新增NPC或新剧情",
       "检验A2目标提示是否与无旁白探索方向冲突；本轮不修改核心秘密或新增叙事事实",
       "核对 SC011 与 SC068 是否描述重复/冲突的 S01↔S04 连接；当前拓扑包含 SC068 升降机合同，但 elevators 数组为空。",
-      "新增 A2-LA/A2-LB/A2-LC 均须实机逐段走通；若只能按坐标图推断可达，不得标记为真实回环。",
-      "分别从每条回环的两个方向进入，检查是否需要精确到像素的跳跃、是否有无法回返的落差、是否会误触 C03/C04/H02。"
+      "新增 A2-LA/A2-LB/A2-LC 均须实机逐段走通；若只能按坐标图推断可达，不得标记为真实回环。"
     ],
     "known_gaps": [
       "SC011 的旧 opened_forest_rope_bridge 在灰盒控制器中没有运行时引用；已改为候选复用现有局部共鸣路线，但桥体端点是否连接 S02↔S04 尚未证明。",
@@ -4151,15 +4077,10 @@
         "details": "Initialization now calls _configure_platforms before _create_floor, so pit ledges appended by _add_platform remain in the shared platform array used by the renderer."
       },
       {
-        "id": "C04_A2_spawn_static_review",
-        "status": "static_source_review",
-        "details": "A2 spawn x=1750,y=400 is already supported by existing platform Rect2(1740,400,110,18); redundant lower platform was removed in commit e1b723f. Door/trigger remains engine-unverified."
-      },
-      {
         "id": "A2_landmark_terrain_rework_2026_10_21",
         "status": "code_committed_runtime_unverified",
         "source": "scripts/levels/greybox_world_region.gd",
-        "details": "Reorganized A2 into forest-entry climb, Bell Grave gallery, broad canopy landings, pilgrim-bridge approach, exposed tower ribs, and east-ravine upper/lower approaches. Added landmark silhouettes. Restored support shelves for C03 anchor x=3400/y=380, C03 return x=3220/y=400, and C04 return x=1750/y=400. Requires Godot runtime route/jump/transition acceptance."
+        "details": "Reorganized A2 into forest-entry climb, Bell Grave gallery, broad canopy landings, pilgrim-bridge approach, exposed tower ribs, and east-ravine upper/lower approaches. Added landmark silhouettes. Restored support shelves for C03 anchor x=3400/y=380, C03 return x=3220/y=400, and 旧朝圣遗迹内部平台. Requires Godot runtime route/jump/transition acceptance."
       },
       {
         "id": "A2_vertical_interlock_pass_2026_10_21",
@@ -4231,18 +4152,6 @@
         "mechanism": "C03 two-way canopy connection",
         "purpose": "A2/A3之间的高位往返",
         "state": "existing_topology_contract_not_runtime_verified"
-      },
-      {
-        "id": "L-A2-03",
-        "path": [
-          "A2-S05",
-          "A5-S03",
-          "A5",
-          "A2-S05"
-        ],
-        "mechanism": "C04 opened from A5",
-        "purpose": "中后期高路捷径",
-        "state": "existing_topology_contract_not_runtime_verified"
       }
     ],
     "vertical_map_contract": {
@@ -4266,7 +4175,7 @@
             270,
             535
           ],
-          "purpose": "interwoven main route, C04 shelf, and route merges"
+          "purpose": "交织的主路、旧朝圣遗迹平台与路线汇合"
         },
         {
           "id": "forest_floor",
@@ -4526,13 +4435,6 @@
         "unlock_condition": ""
       },
       {
-        "id": "C04",
-        "from": "A2",
-        "to": "A5",
-        "kind": "shortcut",
-        "unlock_condition": "reached_A5_and_opened_old_pilgrim_highroad"
-      },
-      {
         "id": "C05",
         "from": "A3",
         "to": "A4",
@@ -4736,5 +4638,16 @@
       "All C01-C24 connections are drawn as world links; unlock conditions affect availability in game, not whether the layout can show the potential route.",
       "The SVG companion is shown in the debug world-map acceptance menu; it is not yet a player-facing map UI."
     ]
-  }
+  },
+  "retired_connections": [
+    {
+      "id": "C04",
+      "from": "A2",
+      "to": "A5",
+      "status": "retired",
+      "retired_at": "2026-11-02",
+      "reason": "The A2-to-A5 old-pilgrim shortcut is removed from active world connectivity; A2-S05 remains an internal exploration area.",
+      "preserved_area": "A2-S05"
+    }
+  ]
 }

@@ -342,16 +342,6 @@ func _spawn_y_for_side(side: String) -> float:
 		# R04's authored CryptLanding top is at world y=1035.
 		# R04 的 CryptLanding 实体平台顶面位于世界坐标 y=1035。
 		return 1035.0
-	# C04 must return to the actual old-pilgrim upper route on both sides.
-	# C04 双向回程都必须落在旧朝圣高路的实际上层平台。
-	if region_id == "A2" and side == "old_pilgrim_highroad":
-		# C04 arrives on R05's eastern upper platform at world y=440.
-		# C04 回到 R05 东端高位平台，世界坐标 y=440。
-		return floor_y - 210.0
-	if region_id == "A5" and side == "old_pilgrim_highroad":
-		# C04 lands on the elevated winch platform, not the trench floor.
-		# C04落在高位绞盘平台，而不是战壕地面。
-		return floor_y - 250.0
 	if region_id == "A6" and side == "bell_drop":
 		return floor_y - 90.0
 	if region_id == "A9" and side == "old_lift":
@@ -450,14 +440,6 @@ func _spawn_x_for_side(side: String) -> float:
 		return map_width - 360.0
 	if region_id == "H06" and side == "royal_transport_entry":
 		return map_width - 360.0
-	if region_id == "A2" and side == "old_pilgrim_highroad":
-		# C04 returns to R05's eastern landing and remains outside the exit trigger.
-		# C04 回到 R05 东端落脚面，并与出口触发区保持净距。
-		return 1980.0
-	if region_id == "A5" and side == "old_pilgrim_highroad":
-		# C04 optional winch branch is at x=3900; arrive on its supported upper landing.
-		# C04可选绞盘支路位于x=3900；从A2返回时落在有承托的高台。
-		return 3820.0
 	if region_id == "A2" and side == "bell_gate":
 		# Leave the H02 entrance's interaction radius after returning from the hidden chamber.
 		# 从倒响钟室返回时，出生点应离入口足够远，避免一落地就抢占 E 交互。
@@ -1395,7 +1377,7 @@ func _a5_connection_locked_prompt(edge_id: String, kind: String) -> String:
 
 func _a5_assembled_spawn_for_side(side: String, entry_room: Node2D) -> Vector2:
 	# Cross-region doors must land on the matching room's supported ledge, not always
-	# at R01. These are the assembled equivalents of the legacy C08/C09/C04 spawns.
+	# at R01. These are the assembled equivalents of the active C08/C09 spawns.
 	# 跨区回程必须落到对应房间的实体平台，不能无论从哪侧进入都送回 R01。
 	var fallback := entry_room.position + Vector2(96.0, maxf(540.0, float(entry_room.get("room_height")) - 180.0) - 96.0)
 	match side:
@@ -1407,10 +1389,6 @@ func _a5_assembled_spawn_for_side(side: String, entry_room: Node2D) -> Vector2:
 			var exit_room := _get_a5_assembled_room("A5-R20")
 			if exit_room != null:
 				return exit_room.position + Vector2(500.0, 365.0)
-		"old_pilgrim_highroad":
-			var winch_room := _get_a5_assembled_room("A5-R16")
-			if winch_room != null:
-				return winch_room.position + Vector2(820.0, 575.0)
 		"bell_gate", "bell_tower_return":
 			var hidden_room := _get_a5_assembled_room("A5-R14")
 			if hidden_room != null:
@@ -2060,14 +2038,6 @@ func _spawn_region_exits() -> void:
 							"res://scenes/hidden_regions/hidden_bell_chamber.tscn", "bell_tower_entry",
 							true, "opened_old_bell_tower_connection", "E  进入倒响钟室", hidden_room.position.y + 620.0
 						)
-				var winch_room := _get_a5_assembled_room("A5-R16")
-				if winch_room != null:
-					_spawn_exit_door(
-						winch_room.position.x + 980.0, "E  打开旧朝圣高路", "ash_forest",
-						"res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn", "a2_r05_c04_return",
-						true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",
-						winch_room.position.y + 610.0
-					)
 			else:
 				_spawn_exit_door(
 					180.0, "E  沿残墙高路返回被遗忘的城区", "forgotten_city",
@@ -2084,12 +2054,6 @@ func _spawn_region_exits() -> void:
 						"res://scenes/hidden_regions/hidden_bell_chamber.tscn", "bell_tower_entry",
 						true, "opened_old_bell_tower_connection", "E  进入倒响钟室"
 					)
-				_spawn_exit_door(
-					3900.0, "E  打开旧朝圣高路", "ash_forest",
-					"res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn", "a2_r05_c04_return",
-					true, "reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回",
-					floor_y - 140.0
-				)
 		"A6":
 			_spawn_exit_door(
 				72.0, "E  返回边境战场", "old_battlefield",

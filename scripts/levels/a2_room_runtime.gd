@@ -120,7 +120,7 @@ func _required_spawn_markers_for_room() -> Array[String]:
 		"A2-R04":
 			return ["EntryDefault", "EntryTombDrop", "EntryTombDropR01", "EntryH02Return", "EntryRavineReturn"]
 		"A2-R05":
-			return ["EntryDefault", "EntryFromR02", "EntryUpperShortcut", "EntryRavineReturn", "EntryC04Return"]
+			return ["EntryDefault", "EntryFromR02", "EntryUpperShortcut", "EntryRavineReturn"]
 		"A2-R06":
 			return ["EntryDefault", "EntryHigh", "EntryLow", "EntryC03Return", "EntryRavineReturn"]
 	return []
@@ -224,8 +224,6 @@ func _spawn_position_for_side(side: String) -> Vector2:
 					marker_name = "EntryUpperShortcut"
 				"a2_r05_ravine_return":
 					marker_name = "EntryRavineReturn"
-				"a2_r05_c04_return":
-					marker_name = "EntryC04Return"
 				_:
 					marker_name = "EntryDefault"
 		"A2-R06":
@@ -357,8 +355,6 @@ func _spawn_room_exits() -> void:
 			_spawn_exit_door_at_marker("ExitToR02", "E  返回树冠断桥", "ash_forest", _scene_path_for_room("A2-R02"), "a2_r02_high_return")
 			_spawn_exit_door_at_marker("ExitToR03", "E  返回钟墓高环", "ash_forest", _scene_path_for_room("A2-R03"), "a2_r03_highroad_shortcut")
 			_spawn_exit_door_at_marker("ExitToR06", "E  进入东侧裂谷", "ash_forest", _scene_path_for_room("A2-R06"), "a2_r06_high_entry")
-			if "reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags:
-				_spawn_exit_door_at_marker("ExitToA5", "E  返回边境战场", "old_battlefield", "res://scenes/regions/old_battlefield.tscn", "old_pilgrim_highroad")
 		"A2-R06":
 			_spawn_exit_door_at_marker("ExitToR05", "E  返回旧朝圣高路", "ash_forest", _scene_path_for_room("A2-R05"), "a2_r05_ravine_return")
 			_spawn_exit_door_at_marker("ExitToR04", "E  返回钟墓坑底", "ash_forest", _scene_path_for_room("A2-R04"), "a2_r04_ravine_return")

@@ -578,7 +578,7 @@ def main() -> int:
         sc010.get("from") == "A2-S04" and sc010.get("to") == "A2-S05"
         and sc010.get("travel") == "both" and sc010.get("initial_state") == "open"
         and sc010.get("unlock_condition") == "",
-        "A2 SC010: the canopy-to-old-pilgrim approach must remain open, independently of C04's lock.",
+        "A2 SC010: the canopy-to-old-pilgrim approach must remain open, without any cross-region lock.",
     )
     require(
         errors,
@@ -763,7 +763,6 @@ def main() -> int:
     a2_supported_arrivals = [
         ("C03 A2 east return", 3220.0, 510.0),
         ("C03 A2 exit", 3400.0, 490.0),
-        ("C04 A2 old pilgrim return", 1750.0, 510.0),
     ]
     for label, spawn_x, spawn_y in a2_supported_arrivals:
         supported = any(
@@ -771,33 +770,6 @@ def main() -> int:
             for left, platform_y, width, _height in platform_rects.get("A2", [])
         )
         require(errors, supported, f"{label}: expected support platform at x={spawn_x:g}, y={spawn_y:g}.")
-    c04_edge = edges.get("C04", {})
-    c04 = c04_edge.get("spatial_contract", {})
-    c04_return = c04.get("return_spawn", {})
-    c04_from = c04.get("from_region_anchor", {})
-    c04_to = c04.get("to_region_anchor", {})
-    require(
-        errors,
-        c04_edge.get("initial_access") == "blocked"
-        and c04_edge.get("opens_from") == "A5"
-        and c04_edge.get("unlock_condition") == "reached_A5_and_opened_old_pilgrim_highroad"
-        and c04_from.get("region") == "A2" and c04_from.get("x") == 1880
-        and c04_to.get("region") == "A5" and c04_to.get("x") == 520
-        and c04_return.get("region") == "A2" and c04_return.get("x") == 1750
-        and has_side_return(x_body, "A2", "old_pilgrim_highroad", "1750.0")
-        and has_side_return(y_body, "A2", "old_pilgrim_highroad", "floor_y - 140.0"),
-        "A2 C04: keep the A5-side unlock and supported A2 upper-route return spawn synchronized.",
-    )
-    require(
-        errors,
-        any(
-            left <= 650.0 <= left + width and abs(platform_y - 455.0) <= 1.0
-            for left, platform_y, width, _height in platform_rects.get("A5", [])
-        )
-        and has_side_return(x_body, "A5", "old_pilgrim_highroad", "650.0")
-        and has_side_return(y_body, "A5", "old_pilgrim_highroad", "floor_y - 85.0"),
-        "A2 C04: A5-side return spawn must remain on its authored upper platform.",
-    )
 
     if errors:
         for error in errors:
@@ -806,7 +778,7 @@ def main() -> int:
         return 1
 
     print("Spatial route contract check passed.")
-    print("Checked A2 subregions, SC007-SC011, pit/canopy/H02/C03/C04 plus C03/C05/C07/C08/C10/C12/C13/C16/C17/C18/C22/C23/C24 route and spawn contracts.")
+    print("Checked A2 subregions, SC007-SC011, pit/canopy/H02/C03 plus C03/C05/C07/C08/C10/C12/C13/C16/C17/C18/C22/C23/C24 route and spawn contracts.")
     print("Checked arrival clearance, platform support, rest-point safety, and death-recovery focus reset.")
     print("Note: run the Godot project for collision, jump reachability, and transition acceptance.")
     return 0

@@ -3,7 +3,7 @@
   "title": "Nereis Hero — Full World Room Spatial Contracts",
   "status": "full_world_design_contract_not_runtime_verified",
   "branch": "feature/story-map-progression",
-  "scope": "All A0-A13 and H01-H08 room IDs; coordinates are construction specifications pending Godot traversal acceptance.",
+  "scope": "A0-A13 and H01-H08 high-level spatial contracts. A2's physical six-room scene paths, dimensions, markers, and active connections are authoritative in tools/a2_room_connection_contract.json; the three A2 entries below are historical macro-room abstractions only.",
   "coordinate_convention": "rect=[x,y,width,height], origin top-left; spawn/exit/landmark at=[x,y]",
   "rooms": [
     {
@@ -1183,16 +1183,6 @@
       ],
       "exits": [
         {
-          "id": "C03",
-          "target": "A3-R01",
-          "at": [
-            2150,
-            1100
-          ],
-          "kind": "main_east_pass",
-          "condition": "none"
-        },
-        {
           "id": "I-A2-01",
           "target": "A2-R02",
           "at": [
@@ -1248,7 +1238,8 @@
       "route_contracts": [
         "Use root arches and floor-height changes to create a winding path; the player should not see both exits as adjacent door markers.",
         "The upper route should be visible from below but require a climb around the root mass."
-      ]
+      ],
+      "superseded_by": "tools/a2_room_connection_contract.json"
     },
     {
       "room_id": "A2-R02",
@@ -1385,17 +1376,6 @@
           "kind": "internal",
           "condition": "none",
           "direction": "both"
-        },
-        {
-          "id": "C03",
-          "target": "A3-R01",
-          "at": [
-            575,
-            525
-          ],
-          "kind": "main",
-          "condition": "none",
-          "direction": "both"
         }
       ],
       "landmarks": [
@@ -1421,11 +1401,12 @@
       "route_contracts": [
         "The bell mechanism visually links the upper and lower chamber levels; the route bends around it.",
         "H02 remains optional and returns to A2; it must not become a required C02/C03 gate."
-      ]
+      ],
+      "superseded_by": "tools/a2_room_connection_contract.json"
     },
     {
       "room_id": "A2-R03",
-      "title": "旧朝圣高路",
+      "title": "旧朝圣道路遗迹（历史抽象节点）",
       "size": [
         1900,
         1050
@@ -1518,26 +1499,6 @@
           "condition": "none"
         },
         {
-          "id": "C02",
-          "target": "A1-R03",
-          "at": [
-            1740,
-            360
-          ],
-          "kind": "north_gate_return",
-          "condition": "village_defense_survived"
-        },
-        {
-          "id": "C04",
-          "target": "A5-R02",
-          "at": [
-            1880,
-            360
-          ],
-          "kind": "old_pilgrim_highroad",
-          "condition": "reached_A5_and_opened_old_pilgrim_highroad"
-        },
-        {
           "id": "I06",
           "target": "A2-R02",
           "at": [
@@ -1557,7 +1518,7 @@
             250
           ],
           "visibility": "visible_from_upper_road",
-          "purpose": "show_C04_destination_before_unlock"
+          "purpose": "保留旧朝圣道路作为A2内部探索地标，不再展示或暗示A5可达出口"
         },
         {
           "id": "village_roofline",
@@ -1570,9 +1531,10 @@
         }
       ],
       "route_contracts": [
-        "C04 should be a route opened from the far side or by progress; before opening, the destination is visible but not traversable.",
-        "The return route to A1 must remain distinct from the C04 path."
-      ]
+        "此三节点地图是早期抽象空间草图，不是当前六个物理房间的逐房间合同。",
+        "旧朝圣道路遗迹仅作为A2内部探索意象；不再设置通往A5的跨区门。"
+      ],
+      "superseded_by": "tools/a2_room_connection_contract.json"
     },
     {
       "room_id": "A3-R01",
@@ -3059,17 +3021,6 @@
           ],
           "kind": "internal",
           "condition": "none",
-          "direction": "both"
-        },
-        {
-          "id": "C04",
-          "target": "A2-R03",
-          "at": [
-            1100,
-            416
-          ],
-          "kind": "shortcut",
-          "condition": "reached_A5_and_opened_old_pilgrim_highroad",
           "direction": "both"
         }
       ],
@@ -9377,5 +9328,12 @@
     "These contracts are not evidence of implemented scenes or runtime success."
   ],
   "room_count": 50,
-  "connection_count": 67
+  "connection_count": 144,
+  "retired_connections": [
+    {
+      "id": "C04",
+      "status": "retired",
+      "note": "No A2-R03 to A5-R02 exit or reverse spawn remains."
+    }
+  ]
 }

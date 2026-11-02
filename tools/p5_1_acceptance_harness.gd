@@ -141,7 +141,6 @@ func _prime_acceptance_state() -> void:
 		"reached_A10_via_A9",
 		"reached_A12_via_A10",
 		"reached_A12_via_A10_then_opened_inner_city_side_gate",
-		"reached_A5_and_opened_old_pilgrim_highroad",
 		"reached_A7_then_opened_supply_tunnel",
 		"reached_A8_via_A7_then_opened_royal_tomb_gate",
 		"reached_A9_then_opened_royal_drain_from_outer_ring",

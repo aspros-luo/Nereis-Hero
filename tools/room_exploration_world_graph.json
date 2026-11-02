@@ -265,13 +265,13 @@
     {
       "id": "A2-R03",
       "region": "A2",
-      "name": "朝圣高路",
+      "name": "旧朝圣道路遗迹",
       "role": "landmark",
       "shape": "tall",
       "layer": "lower",
-      "purpose": "区域深层或高位出口；容纳回环、落差或后期开启的捷径",
+      "purpose": "A2内部旧道路遗迹与高位观察区域；保留探索价值，不承担通往A5的跨区域捷径。",
       "features": [
-        "shortcut_or_drop",
+        "visible_goal",
         "return_route"
       ]
     },
@@ -1125,16 +1125,6 @@
       "status": "design_contract"
     },
     {
-      "id": "C04",
-      "from": "A2-R03",
-      "to": "A5-R02",
-      "kind": "shortcut",
-      "direction": "both",
-      "gate": "reached_A5_and_opened_old_pilgrim_highroad",
-      "route_form": "remote unlock changes return route",
-      "status": "design_contract"
-    },
-    {
       "id": "C05",
       "from": "A3-R03",
       "to": "A4-R01",
@@ -1515,5 +1505,15 @@
       "visible but gated landmark"
     ],
     "note": "Graph contract only. It does not assert that room scenes, collision, movement, transitions, art, or runtime progression are implemented."
-  }
+  },
+  "retired_connections": [
+    {
+      "id": "C04",
+      "status": "retired",
+      "note": "Removed from active room and macro graph; the old-pilgrim landmark remains reachable through the A2 internal graph."
+    }
+  ],
+  "notes": [
+    "This is a coarse design graph, not the physical six-room A2 runtime contract. The physical C03 exit is A2-R06 and is defined in tools/a2_room_connection_contract.json."
+  ]
 }

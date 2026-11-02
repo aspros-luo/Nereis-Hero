@@ -434,7 +434,6 @@ func _test_assembled_region(connections: Array) -> void:
 	var incoming_spawn_specs := [
 		{"side": "city_highroad", "room": "A5_R01", "local": Vector2(330.0, 410.0), "id": "C08"},
 		{"side": "monastery_return", "room": "A5_R20", "local": Vector2(500.0, 365.0), "id": "C09"},
-		{"side": "old_pilgrim_highroad", "room": "A5_R16", "local": Vector2(820.0, 575.0), "id": "C04"},
 		{"side": "bell_gate", "room": "A5_R14", "local": Vector2(900.0, 430.0), "id": "H02"}
 	]
 	var incoming_spawn_errors := 0
@@ -448,7 +447,7 @@ func _test_assembled_region(connections: Array) -> void:
 		elif spawn_result != spawn_room.position + spawn_spec["local"]:
 			incoming_spawn_errors += 1
 	_record(incoming_spawn_errors == 0, "ASSEMBLY/CROSS_REGION_SPAWN_MATRIX",
-		"incorrect C04/C08/C09/H02 incoming spawn anchors=%d" % incoming_spawn_errors)
+		"incorrect C08/C09/H02 incoming spawn anchors=%d" % incoming_spawn_errors)
 
 	if hero != null:
 		var camera := hero.get_node_or_null("HeroCamera") as Camera2D
@@ -492,7 +491,6 @@ func _test_assembled_region(connections: Array) -> void:
 	for binding in [
 		{"door": "Exit_forgotten_city", "room": "A5_R01", "x": 180.0, "y": 410.0, "id": "C08"},
 		{"door": "Exit_monastery_tower", "room": "A5_R20", "x": 1200.0, "y": 410.0, "id": "C09"},
-		{"door": "Exit_ash_forest", "room": "A5_R16", "x": 980.0, "y": 610.0, "id": "C04"}
 	]:
 		var room := instance.get_node_or_null(str(binding["room"])) as Node2D
 		var door := instance.get_node_or_null(str(binding["door"])) as Node2D

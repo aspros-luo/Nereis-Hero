@@ -140,7 +140,6 @@ def main():
     bindings = {b.get("id"): b for b in assembly.get("macro_bindings", [])}
     for cid, expected_room, expected_exit in [
         ("C08", "A5-R01", "west_high_parapet"),
-        ("C04", "A5-R16", "old_pilgrim_highroad_winch_gate"),
         ("C09", "A5-R20", "east_upper_parapet"),
     ]:
         b = bindings.get(cid)
@@ -148,7 +147,7 @@ def main():
             errors.append(f"{cid} macro binding mismatch")
     topology_edges = {e.get("id"): e for e in topology.get("connections", [])}
     design_edges = {e.get("id"): e for e in design.get("cross_region_connections", [])}
-    for cid in ("C04", "C08", "C09"):
+    for cid in ("C08", "C09"):
         top = topology_edges.get(cid)
         local = design_edges.get(cid)
         if not top or not local:
@@ -173,8 +172,8 @@ def main():
         print(f"A5 ROOM ASSEMBLY CONTRACT: FAIL | errors={len(errors)}")
         return 1
     print("A5 ROOM ASSEMBLY CONTRACT: PASS")
-    print(f"  rooms={len(known)} connections={len(edges)} macro_bindings=3")
-    print("  world topology C04/C08/C09 preserved; resonance bridge contract preserved")
+    print(f"  rooms={len(known)} connections={len(edges)} macro_bindings=2")
+    print("  world topology C08/C09 preserved; C04 retired; resonance bridge contract preserved")
     print("  runtime wiring and scene paths checked; Godot runtime and room-to-room transition playability still require testing")
     return 0
 

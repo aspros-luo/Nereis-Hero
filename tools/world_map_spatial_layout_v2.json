@@ -305,14 +305,6 @@
       "design_intent": "林地与城区交界"
     },
     {
-      "id": "C04",
-      "from": "A2",
-      "to": "A5",
-      "kind": "shortcut",
-      "unlock": "remote_unlock",
-      "design_intent": "旧朝圣高路，远端开启后缩短回程"
-    },
-    {
       "id": "C05",
       "from": "A3",
       "to": "A4",
@@ -566,6 +558,13 @@
         "A13"
       ],
       "purpose": "optional deep-truth route; optional branch ending path, not counted as a closed loop"
+    }
+  ],
+  "retired_connections": [
+    {
+      "id": "C04",
+      "status": "retired",
+      "note": "Omitted from the active spatial layout."
     }
   ]
 }

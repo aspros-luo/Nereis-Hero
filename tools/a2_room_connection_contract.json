@@ -4,25 +4,25 @@
   "status": "room_runtime_marker_driven_pending_godot_acceptance",
   "source_of_truth": "docs/maps/A2_DESIGN_BASELINE_CN.md",
   "notes": [
-    "Each terrain .tscn is an editor-visible authored room; its runtime wrapper lives under scenes/rooms/a2_fog_forest/runtime/.",
+    "Each runtime .tscn owns its editor-visible Terrain, collision bodies, and room markers directly; no separate terrain scene or code-generated map is used.",
     "scenes/regions/ash_forest.tscn is the A2 region entry scene to the R01 runtime scene. A1 north gate routes directly to R01.",
     "R01->R04 drop trigger uses the narrow shaft Marker2D (672,780), width 48 and height 120 so a committed fall enters R04 while a clean jump can cross; R03->R04 uses Marker2D (425,675), width 150 and height 220. H02 is placed on the R04 crypt landing (90,380) and returns to R04 EntryH02Return (350,380).",
-    "C03 (R06/A3), C04 (R05/A5) and H02 (R04/H02) forward and return destinations were statically checked against the owning room runtime and Marker2D spawn anchors; still pending Godot 4.6.1 playtesting.",
+    "C03 (R06/A3) and H02 (R04/H02) forward and return destinations were statically checked against the owning room runtime and Marker2D spawn anchors; still pending Godot 4.6.1 playtesting.",
     "A2 room transitions preserve a valid A2 checkpoint; incoming spawn side is saved before the transient side is reset. Death recovery accepts only the six known A2 room IDs.",
-    "Cross-region returns are room-specific: the active C03/C04/H02 route definitions directly target R06/EntryC03Return, R05/EntryC04Return, and R04/EntryH02Return. The shared exit handler also maps legacy generic ash_forest return sides east/old_pilgrim_highroad/bell_gate to those same runtime rooms rather than falling back to R01.",
+    "Cross-region returns are room-specific: the active C03/H02 route definitions directly target R06/EntryC03Return and R04/EntryH02Return. R05 remains an internal A2 room and has no cross-region return marker.",
     "All connection status values remain implemented_pending_godot_playtest until the user verifies physical collision and scene transitions in Godot 4.6.1.",
     "A2 side boundary walls now scale to each room's room_height (-100px to room_height+100px); the A5 assembled-region wall sizing remains unchanged."
   ],
   "rooms": [
     {
       "id": "A2-R01",
-      "scene_path": "res://scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn",
+      "scene_path": "res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn",
       "design_role": "entry_crossroads",
       "bounds": {
-        "width": 1792,
-        "height": 1200
+        "width": 1800,
+        "height": 1150
       },
-      "floor_y": 640,
+      "floor_y": 700,
       "entries": [
         "west",
         "east",
@@ -33,13 +33,13 @@
     },
     {
       "id": "A2-R02",
-      "scene_path": "res://scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn",
+      "scene_path": "res://scenes/rooms/a2_fog_forest/runtime/a2_r02_room.tscn",
       "design_role": "canopy_bridge",
       "bounds": {
         "width": 1620,
-        "height": 960
+        "height": 1000
       },
-      "floor_y": 860,
+      "floor_y": 600,
       "entries": [
         "west",
         "east",
@@ -50,13 +50,13 @@
     },
     {
       "id": "A2-R03",
-      "scene_path": "res://scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn",
+      "scene_path": "res://scenes/rooms/a2_fog_forest/runtime/a2_r03_room.tscn",
       "design_role": "bell_tomb_upper_ring",
       "bounds": {
         "width": 1280,
-        "height": 820
+        "height": 1000
       },
-      "floor_y": 560,
+      "floor_y": 600,
       "entries": [
         "west",
         "east",
@@ -67,13 +67,13 @@
     },
     {
       "id": "A2-R04",
-      "scene_path": "res://scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn",
+      "scene_path": "res://scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn",
       "design_role": "crypt_landing_and_return_shelves",
       "bounds": {
-        "width": 520,
-        "height": 560
+        "width": 1144,
+        "height": 1100
       },
-      "floor_y": 380,
+      "floor_y": 520,
       "entries": [
         "west",
         "east",
@@ -84,13 +84,13 @@
     },
     {
       "id": "A2-R05",
-      "scene_path": "res://scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn",
-      "design_role": "highroad_and_C04_endpoint",
+      "scene_path": "res://scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn",
+      "design_role": "old_pilgrim_highroad_exploration",
       "bounds": {
-        "width": 760,
-        "height": 720
+        "width": 1292,
+        "height": 1000
       },
-      "floor_y": 380,
+      "floor_y": 400,
       "entries": [
         "west",
         "east",
@@ -101,13 +101,13 @@
     },
     {
       "id": "A2-R06",
-      "scene_path": "res://scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn",
+      "scene_path": "res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn",
       "design_role": "eastern_ravine_and_C03_endpoint",
       "bounds": {
         "width": 1280,
-        "height": 900
+        "height": 1100
       },
-      "floor_y": 485,
+      "floor_y": 320,
       "entries": [
         "west",
         "east",
@@ -231,18 +231,6 @@
       "status": "implemented_pending_godot_playtest"
     },
     {
-      "id": "A2-R05-C04",
-      "from": "A2-R05",
-      "to": "A5",
-      "from_exit": "ExitToA5",
-      "to_entry": "EntryC04Return",
-      "travel": "both",
-      "kind": "region_exit",
-      "initial_state": "requires_achievement",
-      "status": "implemented_pending_godot_playtest",
-      "unlock_condition": "reached_A5_and_opened_old_pilgrim_highroad"
-    },
-    {
       "id": "A2-R04-H02",
       "from": "A2-R04",
       "to": "H02",
@@ -252,6 +240,15 @@
       "kind": "hidden",
       "initial_state": "locked",
       "status": "implemented_pending_godot_playtest"
+    }
+  ],
+  "retired_connections": [
+    {
+      "id": "C04",
+      "status": "retired",
+      "from": "A2-R05",
+      "to": "A5",
+      "note": "No region exit or cross-region spawn remains. R05 is retained as an internal A2 exploration room."
     }
   ]
 }

@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 REGIONS = {
-    "A2": ("scenes/regions/ash_forest.tscn", "ash_forest", "THE OLD PILGRIM ROAD"),
+    "A2": ("scenes/regions/ash_forest.tscn", "ash_forest", "林间遗迹"),
     "A3": ("scenes/regions/forgotten_city.tscn", "forgotten_city", "THE FORGOTTEN CITY"),
     "A4": ("scenes/regions/sewer_reservoir.tscn", "sewer_reservoir", "THE SEDIMENT HALL"),
     "A5": ("scenes/regions/old_battlefield.tscn", "old_battlefield", "THE BORDER BATTLEFIELD"),
@@ -138,7 +138,6 @@ def main() -> int:
     require(region_script, "func _refresh_a6_bell_shortcut() -> void:", "scripts/levels/greybox_world_region.gd", errors)
     # These route flags must correspond to actual scene transitions, not diagram-only edges.
     # 这些路线状态必须对应真实场景转场，不能只存在于地图连线中。
-    require(region_script, '"reached_A5_and_opened_old_pilgrim_highroad"', "C04 persistent cross-region shortcut", errors)
     require(region_script, '"opened_watergate_and_village_well_exit"', "C06 one-way watergate return shortcut", errors)
     require(region_script, '"opened_bell_tower_drop"', "C10 opened bell-tower drop and return door", errors)
     require(region_script, '"opened_old_drainage_link_from_A4"', "C24 persistent old-drain exploration loop", errors)
@@ -561,79 +560,45 @@ def main() -> int:
 
     for _region_id, (scene_path, location_id, title) in REGIONS.items():
         scene = read(scene_path, errors)
-        require(scene, 'path="res://scripts/levels/greybox_world_region.gd"', scene_path, errors)
-        require(scene, f'region_id = "{_region_id}"', scene_path, errors)
-        require(scene, f'location_id = "{location_id}"', scene_path, errors)
-        require(scene, f'region_title = "{title}"', scene_path, errors)
+        if _region_id == "A2":
+            require(scene, 'path="res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"', "A2 R01 compatibility entry", errors)
+            require(scene, '[node name="AshForest" instance=ExtResource("1")]', "A2 region aliases the authored R01 room", errors)
+        else:
+            require(scene, 'path="res://scripts/levels/greybox_world_region.gd"', scene_path, errors)
+            require(scene, f'region_id = "{_region_id}"', scene_path, errors)
+            require(scene, f'location_id = "{location_id}"', scene_path, errors)
+            require(scene, f'region_title = "{title}"', scene_path, errors)
         require(world_state, f'"{location_id}":', "WorldState resume mapping", errors)
         require(world_state, f'res://{scene_path}', "WorldState resume mapping", errors)
 
-    # A2's authored terrain is a child component so shared transitions, save state, and UI remain owned by the region controller.
-    # A2 自定义地形以子组件方式接入，跨区、存档与 UI 仍由公共区域控制器负责。
+    # A2 terrain, collision and markers are authored directly in the six runtime .tscn files.
+    # A2 的地形、碰撞和标记直接保存在六个 runtime .tscn 场景中，不由代码生成。
     a2_scene = read("scenes/regions/ash_forest.tscn", errors)
-    require(a2_scene, 'path="res://scripts/levels/a2_authored_terrain.gd"', "A2 authored terrain resource", errors)
-    require(a2_scene, '[node name="A2AuthoredTerrain" type="Node" parent="."]', "A2 authored terrain node", errors)
-    require(a2_scene, 'script = ExtResource("2")', "A2 authored terrain attachment", errors)
-    a2_terrain = read("scripts/levels/a2_authored_terrain.gd", errors)
-    for contract in (
-        "func _apply_authored_terrain() -> void:",
-        "const A2_ROOM_SCENES: Array[PackedScene] = [",
-        "func configure_platforms(region: Node) -> void:",
-        "region.call(\"_register_authored_platform\", rect)",
-        "rest.position = Vector2(1150.0, float(region.get(\"floor_y\")))",
-        "bell.position = Vector2(735.0, 322.0)",
-    ):
-        require(a2_terrain, contract, "A2 authored terrain contract", errors)
-    require(region_script, 'authored_terrain.call("create_floor", self)', "A2 floor creation delegated to authored terrain", errors)
-    require(region_script, 'if region_id == "A2":\n\t\t\tcontinue', "A2 visible platforms owned by room nodes", errors)
-    require(region_script, "func _register_authored_platform(rect: Rect2) -> void:", "A2 room platform registry", errors)
-    require(region_script, "hero.defer_death_recovery = true", "single owner for delayed checkpoint recovery", errors)
-    require(region_script, "await get_tree().create_timer(0.75).timeout", "death recovery delay remains explicit", errors)
-    require(region_script, "hero.global_position = WorldState.checkpoint_position", "checkpoint recovery uses saved world position", errors)
-    for contract in (
-        "func create_floor(region: Node) -> void:",
-        'var map_width := float(region.get("map_width"))',
-        'region.call("_add_ground_segment", "GreyboxGround_West", 0.0, 860.0)',
-        'region.call("_add_ground_segment", "GreyboxGround_Middle", 1060.0, 1360.0)',
-        'region.call("_add_ground_segment", "GreyboxGround_East", 2660.0, map_width - 2660.0)',
-    ):
-        require(a2_terrain, contract, "A2 floor collision contract", errors)
-    require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(860.0, 810.0, 200.0, 180.0), false)', "A2 crypt floor rendering", errors)
-    for contract in (
-        '[node name="CryptReturnShelfWest" type="StaticBody2D" parent="."]',
-        'position = Vector2(860, 775)',
-        'size = Vector2(60, 18)',
-        '[node name="CryptReturnShelfEast" type="StaticBody2D" parent="."]',
-        'position = Vector2(1000, 775)',
-        'shape = SubResource("Rect_006")',
-    ):
-        require(crypt_landing_scene, contract, "A2 crypt landing drop-through gap and return shelves", errors)
-    crypt_landing_scene = read("scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn", errors)
-    for room_path in (
-        "scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn",
-        "scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn",
-        "scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn",
-        "scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn",
-        "scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn",
-        "scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn",
-    ):
-        require(a2_terrain, room_path, "A2 six-room scene assembly", errors)
-        room_scene_text = read(room_path, errors)
-        require(room_scene_text, '[node name="StoneUpperFace" type="Polygon2D"', "A2 node-authored platform face", errors)
-        require(room_scene_text, '[node name="StoneTopEdge" type="Line2D"', "A2 node-authored platform edge", errors)
-    for contract in (
-        '[node name="CryptLanding" type="StaticBody2D" parent="."]',
-        'size = Vector2(200, 40)',
-        'position = Vector2(100, 20)',
-        'shape = SubResource("Rect_001")',
-    ):
-        require(crypt_landing_scene, contract, "A2-R04 crypt landing collision scene", errors)
-    require(region_script, 'draw_texture_rect(STONE_FLOOR_STRIP, Rect2(2660.0, floor_y, map_width - 2660.0, 180.0), false)', "A2 eastern ravine rendering", errors)
-    a2_r06_scene = read("scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn", errors)
-    require(a2_r06_scene, 'position = Vector2(3335, 490)', "A2 C03 remote canopy landing", errors)
-    a2_r05_scene = read("scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn", errors)
-    require(a2_r05_scene, 'position = Vector2(1740, 510)', "A2 C04 highroad landing", errors)
-
+    require(a2_scene, 'path="res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn"', "A2 region entry scene", errors)
+    a2_contract_path = ROOT / "tools/a2_room_connection_contract.json"
+    try:
+        a2_contract = json.loads(a2_contract_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        errors.append(f"A2 room connection contract cannot be loaded: {exc}")
+        a2_contract = {}
+    if any(edge.get("id") == "C04" for edge in a2_contract.get("connections", [])):
+        errors.append("A2 room contract still contains retired C04")
+    for room in a2_contract.get("rooms", []):
+        room_path = str(room.get("runtime_scene_path", "")).replace("res://", "")
+        room_text = read(room_path, errors)
+        require(room_text, '[node name="Terrain" type="Node2D" parent="."]', f"{room.get('id')} editor-authored Terrain node", errors)
+        require(room_text, f'room_id = "{room.get("id")}"', f"{room.get('id')} runtime identity", errors)
+        require(room_text, 'path="res://scripts/levels/a2_room_runtime.gd"', f"{room.get('id')} shared room runtime", errors)
+    a2_runtime = read("scripts/levels/a2_room_runtime.gd", errors)
+    for token in ("ExitToA3", "ExitToR05", "ExitToR06", "H02Gate"):
+        require(a2_runtime, token, f"A2 active route {token}", errors)
+    for retired_token in ("reached_A5_and_opened_old_pilgrim_highroad", "ExitToA5", "EntryC04Return", "a2_r05_c04_return"):
+        if retired_token in a2_runtime:
+            errors.append(f"A2 runtime retains retired C04 token {retired_token}")
+    a2_r05_scene = read("scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn", errors)
+    for retired_node in ('name="EntryC04Return"', 'name="ExitToA5"', 'name="Door_ExitToA5"'):
+        if retired_node in a2_r05_scene:
+            errors.append(f"A2 R05 scene retains retired node {retired_node}")
     # Optional boss encounters are not C-edges, but still require a traceable entry, victory, death-reset, and return contract.
     # 可选 Boss 遭遇不计入跨区 C 边，但入口、胜利、死亡重置和回程必须可追踪。
     encounter_contracts = topology.get("optional_encounters", [])
@@ -848,8 +813,8 @@ def main() -> int:
     # C03 must remain a genuinely supported two-way canopy route between A2 and A3.
     require(region_script, '3400.0, "E  沿树冠高路进入被遗忘的城区"', "C03 A2 eastern canopy door anchor", errors)
     require(region_script, '"res://scenes/regions/forgotten_city.tscn", "city_canopy_entry",\n\t\t\t\ttrue, "", "", floor_y - 160.0', "C03 A2 door transition and elevation", errors)
-    a2_r06_scene = read("scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn", errors)
-    require(a2_r06_scene, 'position = Vector2(3335, 490)', "C03 A2 exit support platform", errors)
+    a2_r06_scene = read("scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn", errors)
+    require(a2_r06_scene, 'position = Vector2(1150, 320)', "C03 A2 authored R06 exit marker", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return X mapping branch", errors)
     require(region_script, "return 3220.0", "C03 A2 return X landing", errors)
     require(region_script, 'if region_id == "A2" and side == "east":', "C03 A2 return height mapping branch", errors)
@@ -879,7 +844,7 @@ def main() -> int:
     require(region_script, 'if region_id == "A3" and side == "village_city_cut":', "C24 A3 arrival spawn branch", errors)
     require(region_script, "return 700.0", "C24 A3 arrival spawn x=700", errors)
     require(region_script, '520.0, "E  经旧排水道返回"', "A3 return-to-village exit at x=520", errors)
-    a2_r01_scene = read("scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn", errors)
+    a2_r01_scene = read("scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn", errors)
     require(a2_r01_scene, 'position = Vector2(770, 345)', "A2 forest canopy route", errors)
     require(region_script, "_add_platform(Rect2(450, 400, 110, 18))", "A3 rooftop loop", errors)
     require(region_script, "_add_platform(Rect2(1650, 310, 130, 18))", "A4 pipe-walk route", errors)
@@ -966,31 +931,31 @@ def main() -> int:
                 if region_id == "A2":
                     platforms = []
                     a2_room_paths = (
-                        "scenes/rooms/a2_fog_forest/a2_r01_forest_crossroads.tscn",
-                        "scenes/rooms/a2_fog_forest/a2_r02_canopy_bridge.tscn",
-                        "scenes/rooms/a2_fog_forest/a2_r03_bell_tomb_gallery.tscn",
-                        "scenes/rooms/a2_fog_forest/a2_r04_crypt_landing.tscn",
-                        "scenes/rooms/a2_fog_forest/a2_r05_old_pilgrim_highroad.tscn",
-                        "scenes/rooms/a2_fog_forest/a2_r06_eastern_ravine.tscn",
+                        "scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn",
+                        "scenes/rooms/a2_fog_forest/runtime/a2_r02_room.tscn",
+                        "scenes/rooms/a2_fog_forest/runtime/a2_r03_room.tscn",
+                        "scenes/rooms/a2_fog_forest/runtime/a2_r04_room.tscn",
+                        "scenes/rooms/a2_fog_forest/runtime/a2_r05_room.tscn",
+                        "scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn",
                     )
                     for room_path in a2_room_paths:
                         room_text = read(room_path, errors)
                         shape_sizes = {
                             shape_id: (float(width), float(height))
                             for shape_id, width, height in re.findall(
-                                r'\[sub_resource type="RectangleShape2D" id="(Rect_\d+)"\]\s*size = Vector2\(([0-9.]+),\s*([0-9.]+)\)',
+                                r'\[sub_resource type="RectangleShape2D" id="([A-Za-z0-9_]+)"\]\s*size = Vector2\(([0-9.]+),\s*([0-9.]+)\)',
                                 room_text,
                             )
                         }
                         body_matches = list(re.finditer(
-                            r'\[node name="[^"]+" type="StaticBody2D" parent="\."\]\s*position = Vector2\(([0-9.]+),\s*([0-9.]+)\)',
+                            r'\[node name="[^"]+" type="StaticBody2D" parent="Terrain"\]\s*position = Vector2\(([0-9.]+),\s*([0-9.]+)\)',
                             room_text,
                         ))
                         for body_index, body_match in enumerate(body_matches):
                             body_end = body_matches[body_index + 1].start() if body_index + 1 < len(body_matches) else len(room_text)
                             body_block = room_text[body_match.end():body_end]
-                            shape_match = re.search(r'shape = SubResource\("(Rect_\d+)"\)', body_block)
-                            if shape_match is None or "one_way_collision = true" not in body_block:
+                            shape_match = re.search(r'shape = SubResource\("([A-Za-z0-9_]+)"\)', body_block)
+                            if shape_match is None:
                                 continue
                             shape_size = shape_sizes.get(shape_match.group(1))
                             if shape_size is None:
@@ -1157,9 +1122,6 @@ def main() -> int:
         '"anomaly_silent_bell_window"',
         '"anomaly_erased_royal_name"',
         'opened_sewer_inspection_hatch_from_A4',
-        'reached_A5_and_opened_old_pilgrim_highroad',
-        'E  打开旧朝圣高路',
-        'E  返回边境战场',
         'opened_bell_tower_drop',
         'E  返回修道院落差口',
         'reached_A7_then_opened_supply_tunnel',
@@ -1224,18 +1186,6 @@ def main() -> int:
     # 胜利回程点必须同时避开 Boss 入口与相邻 H06 的交互焦点。
     if min(abs(1700.0 - 1540.0), abs(1870.0 - 1700.0)) < 130.0:
         errors.append("A8 Boss return spawn is too close to the arena entrance or H06 gate.")
-
-    # Catch accidental line-join syntax defects in spawn mapping and ensure C04 is wired on both ends.
-    # 检查出生点映射中意外粘连的语法错误，并确保 C04 两端都接线。
-    if 'return 850.0    if region_id' in region_script:
-        fail(errors, "Graybox spawn mapping: C04 A5 spawn branch is concatenated with the next if statement.")
-    for contract in [
-        '"E  打开旧朝圣高路"',
-        '"E  返回边境战场"',
-        '"reached_A5_and_opened_old_pilgrim_highroad" in WorldState.achievement_flags',
-        '"reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回"',
-    ]:
-        require(region_script, contract, "C04 old pilgrim highroad", errors)
 
     # C05 is recorded only by traversing from A3; merely loading/entering A4 from another branch must not fake it.
     # C05 只能由 A3 实际进入 A4 时记录；从其他支路进入或读档不能伪造这条路线。
@@ -1405,19 +1355,8 @@ def main() -> int:
         if re.search(branch_pattern, region_script) is None:
             errors.append(f"{label}: missing branch mapping {region_id}/{side} -> {expected_x}.")
 
-    # C04 is a paired upper-route shortcut: both door heights, platform support, and arrival elevations must remain aligned.
-    # C04 是双侧高路捷径：两侧门高、承托平台与到达高度必须保持一致。
+    # Keep the independent A4 sewer and royal-drain return anchors.
     for contract in (
-        '1880.0, "E  返回边境战场", "old_battlefield"',
-        '"res://scenes/regions/old_battlefield.tscn", "old_pilgrim_highroad",',
-        '520.0, "E  打开旧朝圣高路", "ash_forest"',
-        '"reached_A5_and_opened_old_pilgrim_highroad", "E  沿旧朝圣高路返回"',
-        'if region_id == "A2" and side == "old_pilgrim_highroad":',
-        'if region_id == "A5" and side == "old_pilgrim_highroad":',
-        'return floor_y - 140.0',
-        'return floor_y - 85.0',
-        '_add_platform(Rect2(420, 420, 120, 18))',
-        '_add_platform(Rect2(560, 455, 160, 18))',
         'if region_id == "A4" and side == "prison_tunnel":',
         'return 960.0',
         'if region_id == "A4" and side == "royal_drain":',
@@ -1426,8 +1365,7 @@ def main() -> int:
         '_add_platform(Rect2(620, 390, 180, 18))',
         '740.0, "E  打开王城排水门"',
     ):
-        require(region_script, contract, "C04 paired canopy route", errors)
-
+        require(region_script, contract, "A4 elevated return route", errors)
     # C17 and C20 are the intended public route through the cathedral; C18 must remain a later shortcut.
     # C17/C20 是经过大圣堂的公开主线；C18 只能作为抵达内城后的后期开启捷径。
     a9_route_block = _region_exit_block("A9")
@@ -1714,8 +1652,6 @@ def main() -> int:
         ('if region_id == "A3" and side == "sewer":', "return 1380.0"),
         ('if region_id == "A3" and side == "village_city_cut":', "return 700.0"),
         ('if region_id == "A2" and side == "bell_gate":', "return map_width - 450.0"),
-        ('if region_id == "A2" and side == "old_pilgrim_highroad":', "return 1750.0"),
-        ('if region_id == "A5" and side == "old_pilgrim_highroad":', "return 650.0"),
         ('if region_id == "A3" and side == "bell_drop":', "return 1600.0"),
         ('if region_id == "A3" and side == "old_lift":', "return 1960.0"),
         ('if region_id == "A6" and side == "bell_drop":', "return 2100.0"),
