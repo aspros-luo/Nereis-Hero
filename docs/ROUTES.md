@@ -4,7 +4,7 @@
 
 > The Church / Lullaby split is an interpretation layer, not the three-ending selector.
 >
-> The canonical ending contract is documented in STORY.md and CROSS_GAME_STORY_CANON_CN.md.
+> Canonical ending world logic is summarized in STORY.md and WORLD_BUILDING_BIBLE_CN.md; gameplay conditions and evaluator mapping belong exclusively to ENDING_CONDITION_DESIGN_CN.md. This file preserves an older route prototype and does not authorize new ending gates.
 
 ## Current implementation foundation
 
