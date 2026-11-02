@@ -1,5 +1,7 @@
 # Macro-Map Visual Polish — Phase 1
 
+> **Historical presentation implementation note.** Native drawing described here is not an approved way to author fixed terrain. Fixed terrain must be authored as visible, editable scene nodes; decorative/background drawing must not replace collision terrain. Retained only as a record of an earlier visual pass.
+
 ## Goal
 
 Give A0, A2–A13, and H01–H08 readable environmental depth; A1 Village retains its existing houses, drain, rooftop route, and fireflies as a separate art pass while preserving box-world topology, platform collision, exits, Resonance conditions, and story state. This pass uses native Godot drawing rather than new textures or plugins, keeping iteration fast and avoiding missing-resource risk.
