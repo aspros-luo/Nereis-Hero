@@ -1,5 +1,7 @@
 # Box-World Map Structure and Acceptance
 
+> **Historical playtest diagnosis and route proposal (2026-10-11).** The old A2→A3 canopy exit, world-map overlay, F10 navigation and graybox descriptions are not current implementation facts. Current map principles and routes are governed by the active Chinese brain map and regional baselines.
+
 ## Current assessment
 
 During a simple playtest on 2026-10-11, holding Right continuously was enough to reach the “A Grave for Mortals” ending. This is not a testing mistake; it reveals a real graybox presentation issue. Most main-route exits sit on the right edge, and most regions use a single horizontal ground plane. A loop existing in the topology does not automatically make the world feel interconnected during play.
