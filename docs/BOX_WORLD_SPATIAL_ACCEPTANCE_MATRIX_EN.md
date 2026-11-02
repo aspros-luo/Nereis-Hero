@@ -1,5 +1,7 @@
 # Box-World Spatial Acceptance Matrix and Cross-Project Narrative Constraints
 
+> **Historical acceptance-plan snapshot (2026-10-12).** This document reflects the then-current development topology and graybox implementation. Legacy routes such as A2→A5/C04 are not current acceptance targets. Use active regional baselines and `DEVELOPMENT_STATUS.md` for current routing. Checklist items have not been re-run and do not represent current passes.
+
 > Date: 2026-10-12  
 > Status: Working checklist; not a runtime pass report  
 > Branch: development  
