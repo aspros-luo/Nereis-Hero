@@ -1,5 +1,7 @@
 # Connection Wiring Audit — Pass 1 / 地图连接接线审计（第一轮）
 
+> **Historical connection-wiring audit (development branch).** This pass records the earlier C01–C24 source-checker baseline. It is not a current branch status or runtime acceptance report.
+
 > Branch: `development`  
 > Scope: static checker reliability and the C01–C24 wiring-audit baseline.  
 > Status: source review and patch committed; full local execution and Godot runtime acceptance remain pending.
