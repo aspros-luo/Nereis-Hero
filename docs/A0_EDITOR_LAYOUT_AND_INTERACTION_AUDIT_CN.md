@@ -1,5 +1,7 @@
 # A0 编辑器布局与交互距离审计
 
+> **历史审计快照 / 不代表当前场景结构。** 本文描述的“场景根节点为空、脚本动态创建完整关卡、编辑器预览辅助线”等事实是旧实现快照。当前固定地形节点化要求优先；实施前必须重新检查当前 `.tscn` 和脚本，不能按本文旧坐标直接施工。A0 当前目标以 `A0_MAP_NARRATIVE_REDESIGN_BASELINE_CN.md` 为准。
+
 ## 目的
 
 A0 的固定场景目前主要由 `scripts/levels/escape_prologue.gd` 在运行时创建，因此原始 `scenes/escape_prologue.tscn` 只有根节点，Godot 2D 编辑器里看不到完整关卡。脚本已增加安全的编辑器预览和碰撞/交互范围参考线，编辑器预览不会创建 Hero、敌人、HUD，也不会修改 WorldState。
