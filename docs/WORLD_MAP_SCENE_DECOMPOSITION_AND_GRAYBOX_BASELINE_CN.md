@@ -1,7 +1,7 @@
 # 世界地图场景拆分与灰盒执行基线（2026-10-21）
 
 > 分支：`feature/story-map-progression`
-> **早期场景拆分 / 灰盒执行基线（2026-10-21）。** 本文的旧路线、灰盒生成方式和前置文件状态需按当前区域基线复核；固定地形必须由编辑器可见节点构成。当前施工优先级以 `DEVELOPMENT_STATUS.md` 为准。
+> **历史场景拆分 / 灰盒执行快照（2026-10-21），不是当前施工合同。** 本文的场景拆分建议、旧路线、灰盒生成方式、数量和前置文件状态均需重新核对；尤其 A2 已改为 R01–R06 独立房间，旧单场景装配方案不得照搬。固定地形必须由 `.tscn` 中编辑器可见节点构成，禁止运行时生成固定地形或用 `_draw()` 绘制地图。当前施工优先级以 `DEVELOPMENT_STATUS.md` 和当前区域基线为准。
 > 前置文件：`tools/world_map_topology.json`、`docs/COMPLETE_WORLD_MAP_ATLAS_CN.md`、`docs/INTERCONNECTED_BOX_WORLD_DESIGN_CN.md`、`docs/MAP_CONTENT_COMPLETION_ROADMAP_CN.md`。
 > 当前阶段：先完成世界拓扑与场景拆分审计，再制作/修正灰盒；敌人、NPC、收集品与战斗填充后置。
 
