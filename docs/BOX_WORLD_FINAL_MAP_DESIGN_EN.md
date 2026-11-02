@@ -1,5 +1,7 @@
 # Final Box-World Map Design v1.0 — Vertically Interconnected World
 
+> **Historical spatial proposal / not the current standalone construction authority.** This English document was drafted for the development branch and still describes earlier region grouping and route assumptions. Current route decisions are in `WORLD_MAP_BRAINMAP_CN.md`; current structured IDs and connections are in `tools/world_map_topology.json`; current room construction follows active regional baselines. Do not treat the title “Final” or the old branch label as current authority.
+
 > Hierarchical expansion: also see [Macro Regions, Subregions, Connections and Lifts](BOX_WORLD_HIERARCHY_EN.md). Machine-readable contracts are in `macro_regions`, `subregions`, `intra_region_connections`, and `elevators` in `tools/world_map_topology.json`.
 
 
