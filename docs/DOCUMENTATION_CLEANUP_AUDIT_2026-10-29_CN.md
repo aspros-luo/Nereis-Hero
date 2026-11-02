@@ -372,3 +372,25 @@
 5. 运行所有相关 Python 静态验证器，再用 Godot 4.6.1 验证 A1→A2、A2 六房间回环、A2→A3→A5、死亡、Continue 和旧存档恢复。
 
 **本轮只完成依赖审计与文档记录，没有删除 C04 或修改运行时代码；不报告为修复完成。**
+
+
+## 16. 第十二轮整理记录 — 2026-11-02（A0–A2 与 NPC 设计入口交叉审查）
+
+### 本轮复核结果
+
+- A0 当前设计权威入口为 A0_MAP_NARRATIVE_REDESIGN_BASELINE_CN.md；A0_PROLOGUE_REFINEMENT_V1_CN.md 已明确降为早期体验提案，避免旧的执行者免疫 / 强制倒计时方案覆盖后续确认。A0 基线顶部仍保留 2026-10-30 的“尚未实施重构”状态声明，和后续源码演进可能不一致；需与当前场景 / 脚本逐项核对后更新，暂不凭文档日期推断实现状态。
+- A1 村庄提案、NPC 对话进度设计、核心 NPC 候选池、人物弧线和 Hub 验收合同的职责边界总体明确：世界事实归世界观总档案；候选池不自动成为正史；A1 提案不是最终对白；对话进度文档负责机制与知识权限；Hub 合同负责空间与玩法验收。
+- A1_NPC_DIALOGUE_PROGRESS_DESIGN_CN.md 明确普通 NPC 使用轻量通用对话进度，蜜忒保留专属互动模型；探索反馈必须由玩家真实进入场景 / 取得证据触发。GK_FOREST_ENTERED、GK_BELL_TOMB_EVIDENCE、GK_DRAIN_ENTERED、GK_BACKHILL_ENTERED、GK_DRAGON_EVIDENCE 等仍是建议命名，不是已存在的 WorldState 字段或已实现 flag，不能写入对白条件后假装已接线。
+- 蜜忒空椅子：状态写入函数与显示分支存在，但真实触发源仍未找到；不得以离村、进入教堂或时间流逝擅自补触发。
+- 蜜忒关系互动：对白完整结束后才提交互动状态；中断对白、死亡、Continue 和存档恢复的运行时行为仍未实测。
+- A1_VILLAGE_STORY_AND_NPC_REDESIGN_V1_CN.md 仍是第一版提案。初次进入不生成复国军营地、教堂初期空置、朝圣骑士进度型来访而非初始常驻等空间约束已写明；其具体出场事件和知识边界仍待正式人物设计确认。
+- A1_NPC_EVENT_REDESIGN_PREP_CN.md、A1_VILLAGE_DESIGN_BASELINE_AUDIT_CN.md、A1_OLD_DRAIN_SYNC_AUDIT.md、A1_BACK_MOUNTAIN_IMPLEMENTATION_AUDIT.md 与 P1_A0_A1_A2_MAIN_ROUTE_AUDIT_CN.md 均标明历史快照或静态审计，不应作为当前实现事实；后山旧多峰攀登设计 / 拓扑草案也已明确不是当前批准路线。
+- ENDING_CONDITION_DESIGN_CN.md 明确旧 evaluator 条件与新规则存在缺口；关键道具 ID、事件写入点和存档映射尚未完成。NPC 设计不能提前把未定义的道具、身体结合或旧关系阈值当作结局开关。
+
+### 需要继续修订 / 核验
+
+1. A0_MAP_NARRATIVE_REDESIGN_BASELINE_CN.md 顶部状态需要按当前分支源码核对，明确哪些目标已实现、哪些只完成静态接线、哪些尚未实机验收。
+2. A1 NPC 对话文档第 10 节的守门人建议 flag 必须保持“候选标识”标签；正式设计前要逐项确认真实事件来源，尤其钟墓内部证据和飞龙证据不能由区域进入替代。
+3. A1 村庄提案中“已初步修复 / 已接入”的源码状态描述需要与当前分支重新比对，避免将旧快照当成现状。
+4. 对核心 NPC 候选池与人物弧线执行人物级事实对照，逐个标注已确认、候选、未定；不得以标题或人物候选名单推断作者已批准完整阵容。
+5. 本轮没有运行 Godot 或 Python 验证器；没有更改场景、脚本、存档或结局 evaluator。
