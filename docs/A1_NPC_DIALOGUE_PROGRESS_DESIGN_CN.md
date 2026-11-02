@@ -1,7 +1,9 @@
 # A1 NPC 对话进度与角色叙事设计基线（草案）
 
 > 分支：`feature/story-map-progression`
-> 状态：设计草案 / 待继续角色逐一梳理；本文件不授权直接重写 NPC、改变人物命运或实现新系统。
+> **文档职责：A1 NPC 对话阶段、事件触发、知识权限和对白交付规则；不负责决定世界观正史或全游戏人物阵容。**  
+> 权威依据：人物身份与世界事实以 [WORLD_BUILDING_BIBLE_CN.md](./WORLD_BUILDING_BIBLE_CN.md) 为准；A1 常驻阵容与村庄事件方向参考 [A1_VILLAGE_STORY_AND_NPC_REDESIGN_V1_CN.md](./A1_VILLAGE_STORY_AND_NPC_REDESIGN_V1_CN.md)；全局人物弧线参考 [CORE_CHARACTER_ARCS_V1_CN.md](./CORE_CHARACTER_ARCS_V1_CN.md)。  
+> 状态：机制与守门人首轮设计记录；后续 NPC 必须逐个设计，不得把本文的阶段框架直接复制成所有角色的对白模板；本文件不授权改变人物命运或实现未经批准的新系统。
 > 设计参考：Dark Souls 系列 NPC 对话阶段、重复对白、事件反馈与物品叙事；只借鉴机制，不复制原作文本、角色或世界观。
 
 ## 1. 本轮确认的 A1 核心定位
