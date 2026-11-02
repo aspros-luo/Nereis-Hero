@@ -1,5 +1,7 @@
 # Route / Interpretation Foundation
 
+> **历史路线原型记录 / 非当前结局合同。** 本文中的 Resonance 阈值、truth-anchor 数量、physical_union_complete 与三结局旧描述已被 `WORLD_BUILDING_BIBLE_CN.md` 和 `ENDING_CONDITION_DESIGN_CN.md` 替代。Church / Lullaby 路线若仍在当前游戏中使用，只能作为解释视角，不得作为结局判定依据；实施状态须回查当前源码。
+
 > The Church / Lullaby split is an interpretation layer, not the three-ending selector.
 >
 > The canonical ending contract is documented in STORY.md and CROSS_GAME_STORY_CANON_CN.md.
