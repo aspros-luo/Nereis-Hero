@@ -1,5 +1,7 @@
 # Nereis-Hero World Atlas: Macro Areas and Story Locations
 
+> **English reference copy; not fully synchronized with the current Chinese atlas.** For current regional geography, names, and route decisions, use `WORLD_REGION_ATLAS_CN.md` and `WORLD_MAP_BRAINMAP_CN.md`. Candidate locations in this translation are not automatically approved levels or NPC placements.
+
 > This is the current narrative map outline. It groups the world geographically and by faction first, then lists meaningful places within each area. It is not a player-facing map, and not every candidate needs to become a separate level. A0–A13 are existing greybox region IDs; the locations below are story-design names.
 
 ## Macro map brain map
