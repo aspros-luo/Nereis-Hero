@@ -1,5 +1,7 @@
 # Testing
 
+> **历史测试流程快照 / 需按当前项目状态复核。** 本文包含旧版“进入教会即错过蜜忒”、身体结合、100 名教徒、旧结局阈值等原型流程；这些内容已不构成当前设计合同。当前开发状态以 `DEVELOPMENT_STATUS.md` 为准，剧情与结局分别以 `WORLD_BUILDING_BIBLE_CN.md`、`ENDING_CONDITION_DESIGN_CN.md` 为准。本文中的步骤未经本轮重跑，不代表当前验收通过。
+
 ## Current Development Acceptance
 
 The project has moved beyond the original Core Combat Demo into the first narrative production pass.
