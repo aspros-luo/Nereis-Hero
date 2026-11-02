@@ -1,5 +1,7 @@
 # Map Story Skeleton & Ability-Gated Backtracking (v1)
 
+> **Candidate map / ability-gate proposal, not an approved ability list or active regional contract.** The grappling hook, hunter quest, ability progression, and proposed grapple points remain proposals unless explicitly approved by the user. Do not turn them into NPC canon, scene gates, or ending conditions.
+
 > This document translates the world atlas into buildable exploration beats. It is a narrative/level-design contract, **not proof that the maps, items, or mechanics are implemented in Godot**. The guiding triad is: **see it but cannot reach it yet; reach it but cannot understand it yet; understand it and then change it.**
 
 ## Rules
