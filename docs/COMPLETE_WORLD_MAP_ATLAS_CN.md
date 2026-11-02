@@ -1,11 +1,11 @@
 # Nereis Hero 完整世界地图区划提案（中文）
 
 > **版本：** Complete World Atlas Draft 1.0  
-> **分支：** development  
+> **分支：** `feature/story-map-progression`（原始草案来自 development）  
 > **用途：** 作为全游戏地图制作的统一区划基准；不是已实现的场景清单。
 > **地图设计最高原则：** [箱庭式互联世界地图设计原则](./INTERCONNECTED_BOX_WORLD_DESIGN_CN.md)。本文中的主线连线是可靠通路，不代表唯一线性路线；区域应通过多方向探索、垂直层叠、反向开门、地下交通与鸣响复用构成半开放世界。  
 > **规模目标：** 普通通关约 40 小时；真结局路线约 60 小时；全收集与深度探索约 80–120 小时。以上均为规划目标，需通过试玩数据校准。  
-> **关联文档：** [世界地图总纲](./WORLD_MAP_MASTER_PLAN_CN.md)、[第一阶段关卡拓扑](./LEVEL_TOPOLOGY_PHASE_1_CN.md)、[全游戏区域网络](./WORLD_NETWORK_TOPOLOGY_CN.md)。
+> **关联文档：** [互联箱庭原则](./INTERCONNECTED_BOX_WORLD_DESIGN_CN.md)、[当前世界拓扑数据](../tools/world_map_topology.json)、[世界区域图谱](./WORLD_REGION_ATLAS_CN.md)。早期总纲与网络草案仅作历史参考。
 
 ## 地图总图
 
