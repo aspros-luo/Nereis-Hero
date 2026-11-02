@@ -1,5 +1,7 @@
 # Macro Map Spatial Layout and Connection Audit (Round 2)
 
+> **Historical macro-spatial review (development branch).** This document still lists C04 (A2↔A5) as an active old-pilgrim shortcut, which conflicts with the later A2→A3→A5 route decision. Do not use it as a current route contract; consult the active Chinese brain map, world bible, and regional baselines.
+
 > Status: macro-structure review draft v2. This is a design-data audit, not Godot runtime acceptance. It stabilizes relative directions, vertical layers, hub responsibilities, and the design contract for C01–C24 before small-map and story work.
 
 ## 1. Decisions
