@@ -1,6 +1,6 @@
 # P0 地图总账与一致性审计
 
-> 分支：`development`  
+**历史 P0 地图总账快照（development 分支）。** 本文的区域、连接和实现结论必须与当前 `tools/world_map_topology.json`、区域设计基线及 `DEVELOPMENT_STATUS.md` 重新核对；旧 C04 等路线合同不再自动有效。
 > 基准：`tools/world_map_topology.json`  
 > 审计方式：拓扑数据、Godot GDScript、场景清单与静态验证器交叉核对。  
 > **验收边界：本文件不宣称已完成 Godot 实机验收。** 代码存在、拓扑可达与实际碰撞/跳跃/转场可玩是三种不同状态。
