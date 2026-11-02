@@ -2,7 +2,9 @@
 
 > 项目：Nereis-Hero  
 > 分支：`feature/story-map-progression`  
-> 状态：叙事硬规则已写入开发协作条约；已完成 A0→A1 初次抵达和 A1 自动提示的第一批低风险迁移；其余对白仍待台账化审计；未运行 Godot 运行时验收。  
+> **文档职责：叙事呈现规则与源码迁移审计记录，不是剧情正史、人物设定总纲或 NPC 对白脚本。**  
+> 状态：叙事硬规则已写入开发协作条约；本文记录若干轮源码静态审计与迁移历史，部分章节的实现状态和结论可能已被后续代码 / 设计更新覆盖。引用前必须回查当前源码与 DEVELOPMENT_STATUS.md。  
+> 世界观事实以 WORLD_BUILDING_BIBLE_CN.md 为准；结局条件以 ENDING_CONDITION_DESIGN_CN.md 为准；叙事呈现硬规则以 DEVELOPMENT_WORKING_CHARTER_CN_EN.md 为准。  
 > 核心约束：**剧情通过环境、物品 / 装备、NPC 对话和玩家行动后的世界变化表达，不用旁白替玩家解释。**
 
 ## 1. 规则边界
