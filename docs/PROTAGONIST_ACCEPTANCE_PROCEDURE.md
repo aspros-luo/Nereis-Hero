@@ -1,5 +1,7 @@
 # 主角系统验收流程 / Protagonist Acceptance Procedure
 
+> **历史主角系统验收流程（feature/protagonist-system 分支，2026-10-09）。** 当前主角动画与骨骼工作在 `feature/hero-animation-system` 独立推进；本文仅保留旧版能力 / 战斗验收步骤。使用前须核对当前动画分支和主角系统源码，不代表当前验收通过。
+
 日期 / Date: 2026-10-09
 分支 / Branch: `feature/protagonist-system`
 本轮范围 / Scope: 主角能力、战斗、Debug 独立测试、状态清理与存档隔离。
