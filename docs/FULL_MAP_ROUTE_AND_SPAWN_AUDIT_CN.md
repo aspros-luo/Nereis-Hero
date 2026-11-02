@@ -1,6 +1,6 @@
 # 全地图连接、出生点与恢复流程审计
 
-> 分支：`development`  
+**历史全图静态审计快照（development 分支）。** 本文记录当时拓扑与出生点合同；其中 C04、旧 H02 出口及旧地图路线不能覆盖当前用户决策和区域基线。当前设计—实现差异以 `DEVELOPMENT_STATUS.md` 为准；未重新执行的静态结果不代表当前通过。
 > 审计目标：一次性覆盖全地图，不按 A2→A3、A3→A5 等片段拆分验收。  
 > 证据：`tools/world_map_topology.json`、`tools/validate_graybox_scene_wiring.py`、`scripts/levels/greybox_world_region.gd`、序章/村庄/防卫脚本及存档、交互、休整点脚本。  
 > 结论口径：本报告记录的是拓扑数据与源码静态审计；不把源码存在或静态坐标正确等同于 Godot 实机通关。
