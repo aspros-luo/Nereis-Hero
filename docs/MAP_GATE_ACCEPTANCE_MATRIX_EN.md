@@ -72,7 +72,7 @@ For every gate, test the following round trip:
 - [x] Static topology contract defines main route, blocked edges, hidden-region thresholds, and source IDs.
 - [x] Existing static validators cover the main route, scene references, selected spawn mappings, and gate-state contracts.
 - [ ] Run M01–M05 in Godot 4.6.x.
-- [ ] Verify real collision, gate opening, and bidirectional traversal for C04–C23.
+- [ ] Verify real collision, gate opening, and bidirectional traversal for C05–C23; also confirm retired C04 is not spawned.
 - [ ] Verify reveal, two-step E interaction, persistence, and reload for H01–H08.
 - [ ] Verify all spawn points, death recovery, interaction focus, and legacy-save migration.
 
