@@ -1,5 +1,7 @@
 # Map Gate & Return Acceptance Matrix
 
+> **Historical static acceptance matrix; some contracts are retired.** The C04 A2↔A5 old-pilgrim shortcut and H02 remote A5 exit described below were superseded by later route decisions. A2 must reach A5 through A3; H02 retains only its return to A2 under the active A2 baseline. Recheck all remaining items against current topology and regional contracts; old unchecked results are not passes.
+
 > Status: static acceptance contract only. This is **not** a passing Godot 4.6.x runtime test.
 
 Use this matrix for repeatable traversal checks. After any map/gate fix, rerun the affected region, the main route, and save/resume checks. A static validator passing must never be interpreted as runtime acceptance.
@@ -18,7 +20,7 @@ Use this matrix for repeatable traversal checks. After any map/gate fix, rerun t
 
 | Connection | Opening side | Required condition | Regression focus |
 |---|---|---|---|
-| C04 A2 ↔ A5 | A5 | Reach A5 and open the old pilgrim highroad | The shortcut remains blocked from A2 before activation |
+| C04 A2 ↔ A5 | **Retired** | A2 reaches A5 through A3 | Do not implement or accept the old direct C04 link |
 | C05 A3 ↔ A4 | A4 | Open the inspection hatch from A4 | Initial A3-to-A4 access remains available; return works after opening |
 | C06 A4 ↔ A1 | A4 | Open the watergate and village-well exit | Must not open before first reaching A4 |
 | C07 A4 ↔ A8 | A8 | Reach A8 through A7, then open the royal tomb gate | Must not bypass the first A7 progression |
@@ -37,7 +39,7 @@ Every gate follows the same interaction contract: **no usable E prompt before re
 | Region | Parent | Minimum resonance | Exposure requirements | Required anomaly sources | Regression focus |
 |---|---|---:|---|---|---|
 | H01 Well Below the Well | A1 | 12 | None additional | None | A1 and A4 entrances share H01 state; A4 must not bypass first Sight discovery |
-| H02 Bell Before the Sound | A2 | 18 | None additional | None | Remote A5 exit cannot bypass progression before A5 is reached |
+| H02 Bell Before the Sound | A2 | 18 | None additional | None | Active contract retains only the return exit to A2; no remote A5 exit |
 | H03 Erased Third Street | A3 | 28 | None additional | None | Remote A9 exit requires A9 already reached |
 | H04 Stairs Behind the Water | A4 | 36 | Ancient ≥1 | None | Remote A8 exit requires A8 already reached |
 | H05 Silent Bell Room | A6 | 42 | Ancient ≥1 | None | A3 return shortcut follows the bell-tower-drop unlock state |
