@@ -4,7 +4,7 @@
 >
 > This is a director-level planning document. It organizes the confirmed canon into a playable dramatic structure without locking unresolved details prematurely.
 >
-> For hard canon, see [DEVELOPER_STORY_MEMORY.md](./DEVELOPER_STORY_MEMORY.md).
+> Canonical authority: [WORLD_BUILDING_BIBLE_CN.md](./WORLD_BUILDING_BIBLE_CN.md), [STORY.md](./STORY.md), and [ENDING_CONDITION_DESIGN_CN.md](./ENDING_CONDITION_DESIGN_CN.md). This plan is a proposed dramatic structure only; unresolved beats, intimacy mechanics, and ending staging remain proposals unless separately confirmed by the user. Do not use this file as a source of NPC facts or dialogue canon.
 
 ---
 
