@@ -1,5 +1,7 @@
 # A1 场景化改造验收清单 v0.2
 
+> **历史 A1 场景改造审计快照（基线 2026-10-23）。** 本文待办和完成标记未在本轮重新执行；当前 A1 设计以 `A1_VILLAGE_STORY_AND_NPC_REDESIGN_V1_CN.md`、当前场景和 `DEVELOPMENT_STATUS.md` 为准。
+
 - 分支：`feature/story-map-progression`
 - 基线审计：2026-10-23
 - 状态：A1.0 保留连续地面；按新决策拆分 A1.1 与独立的悬崖探索场景。新增场景源文件和路线合同已提交，但本次变更后的静态合同与 Godot 4.6.1 headless 烟测尚未执行，整体实机验收仍未完成。
