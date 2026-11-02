@@ -204,3 +204,30 @@
 - 本轮完成了重要入口、人物文档职责、A2 实机清单和地图层级的冲突修正；但不能宣称 185 份文件已逐篇审完或所有地图合同无冲突。
 - NPC 设计的**人物正史入口、全局人物弧线参考、A1 村庄提案和对话机制文档**现在已区分清楚。尚需处理的 C04 / 全局地图宏观冲突不会阻止先做不依赖这些路线的 A1 NPC 人物设计，但相关跨区事件必须保持未定。
 - 文档清理总任务仍进行中；下一轮应继续审查 A0/A1/A2 的实现审计、地图验收、灰盒历史和测试报告，并逐项核对引用后再决定退役。
+## 10. 第六轮整理记录 — 2026-11-02（A1 NPC 设计入口与旧地图合同清理）
+
+### A1 NPC 文档链核对
+
+- `WORLD_BUILDING_BIBLE_CN.md`：人物事实 / 知识边界 / 结局世界观权威来源。
+- `CORE_CHARACTER_ARCS_V1_CN.md`：人物独立动机与弧线参考，不等同于最终事件或对白。
+- `CORE_NPC_DESIGN_POOL_CN.md`：全游戏核心 NPC 候选池；已修正旧版把 Resonance 当结局选择器的错误描述。候选阵容不自动成为正史。
+- `A1_VILLAGE_STORY_AND_NPC_REDESIGN_V1_CN.md`：A1 常驻阵容、村庄空间、普通事件和出场层级提案；已修正旧版守门人 x=650 坐标，并将已确认的蜜忒 / 金正 / 朝圣骑士事实与未定命运分开。
+- `A1_NPC_DIALOGUE_PROGRESS_DESIGN_CN.md`：A1 对话阶段、知识权限、事件触发和守门人对白合同；明确第 12–15 节覆盖早期章节的旧执行顺序。
+- `A1_NPC_EVENT_REDESIGN_PREP_CN.md`：只保留为系统接口历史快照，不作为人物设定或对白来源。
+- `WORLD_NARRATIVE_CLUE_LEDGER_CN.md`：已纠正旧版烈火天罚的“杀死 100 名教徒 / 杀死蜜忒”流程与当前世界观冲突，并移除未经确认的“交付道具给蜜忒”硬步骤；世界观和结局玩法条件分别回归各自权威文件。
+
+### 当前 A1 源码结构静态抽查（仅文件读取，不是运行测试）
+
+- `scenes/regions/village_hub.tscn` 中存在 `village_gatekeeper`、`village_grandmother`、`village_blacksmith`、`traveling_merchant`；守门人节点位置为 `(2740, 520)`。
+- `scripts/levels/village_hub.gd` 中存在蜜忒对白结束后调用 `WorldState.record_mite_interaction()` 的流程；对白完成事件与关系状态提交点可追踪。
+- `scripts/core/world_event_director.gd` 中存在朝圣骑士 A1 manifest 条件，分别读取 `pilgrim_knight_a1_arrived` 与 `pilgrim_knight_at_tavern` 状态。
+- `scripts/core/dialogue_progression_manager.gd` 中存在 `village_gatekeeper` 的通用对话进度配置。
+- 本次只读取远程源码并核对文本 / 节点 ID；没有运行 Python 验证器、Godot headless 或本地实机。蜜忒错过会面触发源、朝圣骑士正式剧情节点和互动中断存档行为仍须后续核验。
+
+### NPC 设计启动门槛判定
+
+- **通过：** NPC 设计的权威资料职责已分离，世界观事实、全局人物弧线、候选池、A1 阵容提案和对话机制不再互相冒充。
+- **通过：** 已确认的人物事实与待定内容有清楚边界；蜜忒不使用好感度数值，关系不能直接作为结局开关；普通 NPC 不能获得全知知识。
+- **通过：** A1 当前角色节点、稳定 ID、守门人位置和朝圣骑士进度型生成入口已做远程源码静态抽查。
+- **限制：** NPC 设计不能依赖未经确认的 A2→A5 C04 旧路线；与 A2/A5 跨区事件相关的人物相遇、协同战斗或捷径对白必须等路线合同与实现统一后再定稿。
+- **限制：** 本轮没有完成全部 185 份 Markdown 正文逐篇审定，也没有删除任何文件；清理总任务继续进行。
