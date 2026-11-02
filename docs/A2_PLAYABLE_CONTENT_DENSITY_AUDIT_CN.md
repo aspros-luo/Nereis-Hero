@@ -1,6 +1,6 @@
 # A2 可玩内容密度审计（基线版）
 
-> **权威性说明（2026-10-24）：** 本文是历史方案/审计资料；若与当前 A2 房间架构或入口规则冲突，以 docs/maps/A2_DESIGN_BASELINE_CN.md 为准。本文中的旧实现描述不代表当前代码状态或实机验收通过。
+> **历史内容密度审计快照。** 当前 A2 房间与路线以 `docs/maps/A2_DESIGN_BASELINE_CN.md` 为准；本文旧 C04（A2↔A5）相关内容已被 A2→A3→A5 路线决定替代。静态审计结论不代表当前实现或实机验收通过。
 
 - 仓库：`aspros-luo/Nereis-Hero`
 - 审计分支：`feature/story-map-progression`
