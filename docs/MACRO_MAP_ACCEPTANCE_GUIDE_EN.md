@@ -1,5 +1,7 @@
 # Macro-Map Acceptance Guide
 
+> **Historical macro-map acceptance guide (development branch).** This guide depends on the old World Map Test launcher and old route wiring. Before using any step, verify the current test entry, topology, scenes, and save contracts. It is not the authority for current acceptance procedures.
+
 > Goal: test A0–A13 and H01–H08 directly in Godot, focusing on landings, cross-region connections, hidden-route returns, and actual traversal before investing in complex small-map narrative.
 
 ## Launch
