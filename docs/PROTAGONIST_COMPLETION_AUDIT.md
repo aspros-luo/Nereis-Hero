@@ -1,5 +1,7 @@
 # 主角系统完成审计 / Protagonist Completion Audit
 
+> **历史主角系统审计快照（feature/protagonist-system，2026-10-09）。** 本文的待办和状态不代表当前 `feature/hero-animation-system` 进度。仅用于追溯旧主角系统实现；当前状态须以动画分支源码和对应最新验收记录为准。
+
 日期：2026-10-09  
 分支：feature/protagonist-system
 
