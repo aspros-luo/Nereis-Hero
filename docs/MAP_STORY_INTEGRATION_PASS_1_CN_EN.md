@@ -1,5 +1,7 @@
 # 地图—剧情整合执行稿 / Map–Narrative Integration Pass 1
 
+> **Historical integration pass (development branch).** This document records an earlier map/narrative integration proposal and must not override the current world bible, current map topology, or regional baselines. No Godot runtime acceptance is implied.
+
 > Branch: `development`  
 > Scope: box-world traversal and environmental storytelling; art assets remain frozen.  
 > Verification boundary: design/code cross-reference only; no Godot 4.6.x runtime acceptance is claimed.
