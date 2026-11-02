@@ -1,6 +1,8 @@
 # Nereis Hero — Core NPC Design Pool v0.1
 
-> Status: DESIGN BASELINE / NOT YET FULLY CANONICAL
+> **文档职责：全游戏核心 NPC 候选池与人物设计工作法，不是已批准的完整阵容或最终人物设定。**
+>
+> 人物身份、知识边界与世界观事实以 [WORLD_BUILDING_BIBLE_CN.md](WORLD_BUILDING_BIBLE_CN.md) 为准；结局判定以 [ENDING_CONDITION_DESIGN_CN.md](ENDING_CONDITION_DESIGN_CN.md) 为准；人物弧线参考 [CORE_CHARACTER_ARCS_V1_CN.md](CORE_CHARACTER_ARCS_V1_CN.md)。本文件中任何旧结局条件、关系阈值、事件顺序和人物候选，均不得覆盖上述权威文件或用户最新确认。
 >
 > Purpose: establish the first layer of memorable NPCs before assigning exact dialogue, spawn states, regional placement, quests, enemy encounters, items, and scene implementation.
 >
@@ -156,7 +158,7 @@ Her absence is part of her characterization.
 
 Physical intimacy / relationship content is optional narrative content and does not directly determine the ending evaluator.
 
-Current ending selection remains based on Resonance, truth-anchor items, and exploration.
+**已废止旧表述：** 不得将 Resonance（共鸣数值）或抽象关系值当作结局选择器。当前结局依据玩家真实探索路径、关键道具取得 / 持有 / 使用状态及特殊事件完成记录，详见 [ENDING_CONDITION_DESIGN_CN.md](ENDING_CONDITION_DESIGN_CN.md)。蜜忒互动可能是取得特定道具或剧情的途径，但关系值本身不是结局开关。
 
 ---
 
@@ -538,9 +540,9 @@ These must be answered through design rather than assumption:
 
 ## 11. Implementation boundary
 
-This document is a design baseline.
+This document is a candidate design pool and character-work methodology, not an approved roster.
 
-**Do not yet add full NPC logic to gameplay scenes.**
+**Do not add full NPC logic to gameplay scenes solely because a character appears here.** Each character's canon facts, region placement, appearance timing, knowledge, event consequences, and dialogue must be individually reviewed against the current world bible and regional baseline before implementation.
 
 The appropriate next implementation step is to create the NPC data/registry structure only after the core pool is sufficiently settled.
 
