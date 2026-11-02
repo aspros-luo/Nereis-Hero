@@ -1,5 +1,7 @@
 # Nereis Cross-Game Story Canon
 
+> **Historical English reference (2026-10-11), not the current canon authority.** The current shared-story decisions were revised in `CROSS_GAME_STORY_CANON_CN.md` and `WORLD_BUILDING_BIBLE_CN.md` on 2026-11-01. This English copy has not been fully synchronized; do not use it to settle Mite's role, the cult's origin, or ending causality.
+
 > Status: Cross-game narrative baseline / 2026-10-11  
 > Projects: Nereis-Hero (action/exploration RPG) and Nereis-Lullaby (novel-style game primarily from Mite's perspective).
 
