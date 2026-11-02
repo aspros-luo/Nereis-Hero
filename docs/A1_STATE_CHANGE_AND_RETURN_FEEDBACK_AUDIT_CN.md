@@ -1,5 +1,7 @@
 # A1 地图分支：状态变化与回访反馈差异审计
 
+> **历史静态审计快照（2026-10-19）。** 本文记录当时的状态反馈调用和缺口；当前实现以最新源码和 `DEVELOPMENT_STATUS.md` 为准，剧情事实以 `WORLD_BUILDING_BIBLE_CN.md` 与 A1 当前设计为准。未重新执行的旧结论不代表当前通过。
+
 日期：2026-10-19  
 分支：`feature/story-map-progression`  
 范围：`village_hub.gd`、`greybox_world_region.gd`、`world_event_director.gd`、`WorldState` 与 A1 设计基线文档。
