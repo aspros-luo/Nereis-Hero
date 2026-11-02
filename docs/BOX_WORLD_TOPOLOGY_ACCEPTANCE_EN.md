@@ -1,5 +1,7 @@
 # Box-World Topology Acceptance and Gap Register
 
+> **Historical topology acceptance plan (2026-10-12).** Originally written for the development branch and the earlier region network, including the obsolete C04 route. Current routing and room construction are governed by the active regional baselines and `WORLD_MAP_BRAINMAP_CN.md`; do not use old checklist items as current acceptance contracts.
+
 > Date: 2026-10-12  
 > Status: Design-audit baseline; not accepted through Godot runtime testing  
 > Branch: development
