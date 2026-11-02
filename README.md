@@ -29,22 +29,24 @@
 - [跨作品剧情基准](docs/CROSS_GAME_STORY_CANON_CN.md) — 仅记录 Hero 与 Lullaby 必须一致的共同设定。
 - [结局条件设计合同](docs/ENDING_CONDITION_DESIGN_CN.md) — 结局所需探索事实、道具状态和特殊事件；程序实现状态以开发状态和源码审计为准。
 - [世界叙事线索台账](docs/WORLD_NARRATIVE_CLUE_LEDGER_CN.md) — 线索分布、知识权限与证据链。
-- [核心人物设计池](docs/CORE_NPC_DESIGN_POOL_CN.md) — 人物候选与设计边界；候选内容不自动成为正史。
+
 
 ### 地图与场景
 
-- [世界地图总规划](docs/WORLD_MAP_MASTER_PLAN_CN.md)
-- [世界网络拓扑](docs/WORLD_NETWORK_TOPOLOGY_CN.md)
-- [完整世界地图图集](docs/COMPLETE_WORLD_MAP_ATLAS_CN.md)
-- [互联箱庭设计原则](docs/INTERCONNECTED_BOX_WORLD_DESIGN_CN.md)
-- [A2 雾林与钟墓设计基线](docs/maps/A2_DESIGN_BASELINE_CN.md)
+- [互联箱庭设计原则](docs/INTERCONNECTED_BOX_WORLD_DESIGN_CN.md) — 全局空间设计原则；具体路线仍以用户最新确认和当前区域合同为准。
+- [世界地图总脑图](docs/WORLD_MAP_BRAINMAP_CN.md) — 宏观空间关系评审稿，不是可玩房间图或实现证明。
+- [完整世界地图区划](docs/COMPLETE_WORLD_MAP_ATLAS_CN.md) — 全局区划提案，需与当前拓扑数据及区域合同核对。
+- [世界区域图谱](docs/WORLD_REGION_ATLAS_CN.md) — 地理地点与区域职责索引，候选地点不自动成为独立关卡。
+- [A2 雾林与钟墓设计基线](docs/maps/A2_DESIGN_BASELINE_CN.md) — 当前 A2 房间目标与空间合同。
 
-地图设计文件中的草案、旧版灰盒记录和静态验证报告不能替代当前区域设计基线，也不能证明 Godot 实机验收通过。
+`WORLD_MAP_MASTER_PLAN_CN.md`、`WORLD_NETWORK_TOPOLOGY_CN.md`、`FORMAL_WORLD_MAP_DESIGN_BASELINE_CN.md` 及早期箱庭版本属于历史宏观提案或旧拓扑转译，不作为当前区域施工合同。地图设计文件中的草案、旧版灰盒记录和静态验证报告不能证明 Godot 实机验收通过。
 
 ### 人物与开局设计
 
-- [核心人物设计池](docs/CORE_NPC_DESIGN_POOL_CN.md) — 候选人物资料池，不自动成为正史。
+- [核心 NPC 候选池](docs/CORE_NPC_DESIGN_POOL_CN.md) — 全游戏候选人物和设计方法；不是已批准的最终阵容。
 - [核心人物独立人物弧线](docs/CORE_CHARACTER_ARCS_V1_CN.md) — 人物动机与独立生活方向；具体人物事实以世界观总档案为准。
+- [A1 村庄与 NPC 重设计](docs/A1_VILLAGE_STORY_AND_NPC_REDESIGN_V1_CN.md) — A1 常驻角色阵容、村庄空间和普通事件提案。
+- [A1 NPC 对话进度设计](docs/A1_NPC_DIALOGUE_PROGRESS_DESIGN_CN.md) — A1 对话阶段、触发条件和知识权限；守门人已有较完整首轮设计。
 - [主角开局叙事骨架](docs/PROTAGONIST_OPENING_NARRATIVE_V1_CN.md) — A0 开局流程基线；具体场景实现以源码和验收合同为准。
 
 ### 文档使用边界
