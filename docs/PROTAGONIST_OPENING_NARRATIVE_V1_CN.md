@@ -3,7 +3,7 @@
 > 状态：开局方向已冻结；具体台词、物品文本、Boss 身份、地图对应关系仍待设计。  
 > 适用项目：Nereis-Hero。  
 > 优先级说明：本文记录 2026-10-17 最新叙事讨论形成的开局方向。若旧文档对“玩家首先经历什么”有不同安排，以本文作为后续开局设计的当前基准；既有教会实验、王国、古神与三结局设定不因此自动删除。  
-> 相关基准：[DEVELOPER_STORY_MEMORY.md](./DEVELOPER_STORY_MEMORY.md)、[CROSS_GAME_STORY_CANON_CN.md](./CROSS_GAME_STORY_CANON_CN.md)、[STORY.md](./STORY.md)。
+> 权威依据：[WORLD_BUILDING_BIBLE_CN.md](./WORLD_BUILDING_BIBLE_CN.md) 负责世界观正史，[STORY.md](./STORY.md) 负责剧情摘要，[CROSS_GAME_STORY_CANON_CN.md](./CROSS_GAME_STORY_CANON_CN.md) 负责跨作品共同事实。历史讨论档案 DEVELOPER_STORY_MEMORY.md 仅用于追溯，不作为本文件的直接裁定来源。
 
 ## 1. 设计目标
 
