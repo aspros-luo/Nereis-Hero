@@ -1,5 +1,7 @@
 # Box-World Developer Bible
 
+> **Historical production specification (development branch).** Its region grouping, route contracts, and implementation status may conflict with the current feature branch. Use `BOX_WORLD_DEVELOPER_BIBLE_CN.md` only for non-conflicting spatial principles, `tools/world_map_topology.json` for structured IDs, and active regional baselines for room construction.
+
 > Status: production specification / actively being completed  
 > Target branch: `development`  
 > This is an internal development reference, not a player-facing map guide. A design described only in documentation must never be reported as implemented.
