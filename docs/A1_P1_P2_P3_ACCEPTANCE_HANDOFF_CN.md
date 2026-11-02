@@ -1,5 +1,7 @@
 # A1 P1/P2 实现交付与 P3 验收单
 
+> **历史交付快照。** 本文记录当时的 A1 P1/P2 交付与 P3 待验收事项；当前设计目标以 `A1_VILLAGE_STORY_AND_NPC_REDESIGN_V1_CN.md` 为准，当前实现状态以 `DEVELOPMENT_STATUS.md` 和最新源码为准。未重新执行的旧勾选项不得视为当前通过。
+
 分支：`feature/story-map-progression`  
 用途：把 A1 村庄交付到可由作者完整验收的状态。静态合同通过不等于 Godot 实机通过。
 
