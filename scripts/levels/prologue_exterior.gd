@@ -8,6 +8,10 @@ var cliff_approach_limit: Marker2D
 var camera_right_limit: Marker2D
 var ending_started := false
 var boss_encounter_started := false
+var encounter_elapsed := 0.0
+var revival_started := false
+var hero_defeat_pending := false
+var dragon_sequence_started := false
 
 func _ready() -> void:
 	set_meta("p5_1_exit_contract", true)
@@ -34,6 +38,7 @@ func _ready() -> void:
 	hero.defeated.connect(_on_hero_defeated)
 	boss.scripted_revival_started.connect(_on_executioner_revival_started)
 	boss.scripted_revival_completed.connect(_on_executioner_revived)
+	boss.phase_changed.connect(_on_executioner_phase_changed)
 func _physics_process(delta: float) -> void:
 	if ending_started or not is_instance_valid(hero):
 		return
@@ -51,53 +56,119 @@ func _physics_process(delta: float) -> void:
 				hud.bind_boss(boss)
 				hud.set_story_mode("A0｜洞外山路", "挡路者没有退让。观察他的动作，寻找离开的机会。")
 
+	if boss_encounter_started and not revival_started:
+		encounter_elapsed += delta
+		# A player who chooses not to attack still reaches the same authored story beat.
+		if encounter_elapsed >= 30.0 and is_instance_valid(boss):
+			boss.begin_scripted_revival()
+
 
 
 
 
 func _on_hero_defeated() -> void:
-	if ending_started:
+	if hero_defeat_pending or dragon_sequence_started:
 		return
+	hero_defeat_pending = true
 	ending_started = true
 	WorldState.input_locked = true
 	_clear_interaction_focus()
 	AchievementManager.unlock("prologue_knight_defeat")
 	_show_pursuers()
-	# Keep the defeat tableau visible long enough for the achievement toast and story beat.
-	# 保留战败现场，让玩家看清追兵并有时间看到成就提示。
+	# Preserve the existing achievement/defeat tableau before the dragon event.
 	await get_tree().create_timer(3.2).timeout
-	_complete_prologue_transition()
+	_begin_dragon_attack()
 
 func _on_executioner_revival_started() -> void:
-	if ending_started:
+	if dragon_sequence_started:
 		return
+	revival_started = true
 	_show_pursuers()
 	for pursuer in $Pursuers.get_children():
 		if pursuer.has_method("play_healing"):
 			pursuer.call("play_healing")
 
-func _on_executioner_revived() -> void:
-	if not ending_started:
-		call_deferred("_begin_cliff_escape")
+func _on_executioner_phase_changed(phase: int) -> void:
+	if phase >= 2 and not revival_started and not ending_started and is_instance_valid(boss):
+		boss.begin_scripted_revival()
 
-func _begin_cliff_escape() -> void:
-	if ending_started:
+func _on_executioner_revived() -> void:
+	if not hero_defeat_pending and not dragon_sequence_started:
+		call_deferred("_begin_dragon_attack")
+
+func _begin_dragon_attack() -> void:
+	if dragon_sequence_started:
 		return
+	dragon_sequence_started = true
 	ending_started = true
 	WorldState.input_locked = true
 	_clear_interaction_focus()
 	_show_pursuers()
+
+	if is_instance_valid(boss):
+		boss.damage_immune = true
+		boss.set_process(false)
+		boss.set_physics_process(false)
 	if is_instance_valid(hero):
 		hero.set_physics_process(false)
-		var leap_target_x := minf(hero.global_position.x + 360.0, camera_right_limit.global_position.x - 24.0)
-		var leap := create_tween()
-		leap.set_parallel(true)
-		leap.tween_property(hero, "global_position:x", leap_target_x, 0.72).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		leap.tween_property(hero, "global_position:y", hero.global_position.y - 150.0, 0.34).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		leap.chain().tween_property(hero, "global_position:y", 780.0, 0.48).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		leap.tween_callback(_complete_prologue_transition)
-	else:
-		_complete_prologue_transition()
+		hero.velocity = Vector2.ZERO
+		var camera := hero.get_node_or_null("HeroCamera") as Camera2D
+		if camera:
+			camera.position_smoothing_enabled = false
+			camera.limit_bottom = 1120
+
+	var dragon := $DragonPass as Node2D
+	dragon.visible = true
+	var flight := create_tween()
+	flight.set_parallel(true)
+	flight.tween_property(dragon, "position:x", 1680.0, 2.1).set_trans(Tween.TRANS_LINEAR)
+	flight.tween_property(dragon, "position:y", 110.0, 2.1).set_trans(Tween.TRANS_SINE)
+
+	var left_wing := $DragonPass/LeftWing as Polygon2D
+	var right_wing := $DragonPass/RightWing as Polygon2D
+	var left_flap := create_tween().set_loops(4)
+	left_flap.tween_property(left_wing, "rotation", 0.38, 0.24)
+	left_flap.tween_property(left_wing, "rotation", -0.32, 0.24)
+	var right_flap := create_tween().set_loops(4)
+	right_flap.tween_property(right_wing, "rotation", -0.34, 0.24)
+	right_flap.tween_property(right_wing, "rotation", 0.30, 0.24)
+
+	# The dragon crosses the valley; it never targets the hero or the executioner.
+	await get_tree().create_timer(0.72).timeout
+	_collapse_mountain_road()
+
+	await get_tree().create_timer(0.28).timeout
+	if is_instance_valid(hero):
+		var fall := create_tween()
+		fall.set_parallel(true)
+		fall.tween_property(hero, "global_position:x", hero.global_position.x + 24.0, 1.05)
+		fall.tween_property(hero, "global_position:y", hero.global_position.y + 470.0, 1.05).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		await fall.finished
+
+	_complete_prologue_transition()
+
+func _collapse_mountain_road() -> void:
+	var road := $MountainPathGround as StaticBody2D
+	var collision := road.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision:
+		collision.set_deferred("disabled", true)
+	var rubble := $ImpactRubbleVisual as Node2D
+	rubble.visible = true
+	var rubble_tween := create_tween()
+	rubble_tween.set_parallel(true)
+	rubble_tween.tween_property(rubble, "position:y", rubble.position.y + 54.0, 0.65).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	rubble_tween.tween_property(rubble, "modulate:a", 0.0, 0.8)
+	var road_tween := create_tween()
+	road_tween.set_parallel(true)
+	road_tween.tween_property(road, "position:y", road.position.y + 190.0, 0.92).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	road_tween.tween_property(road, "rotation", 0.13, 0.92).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	if is_instance_valid(hero):
+		var camera := hero.get_node_or_null("HeroCamera") as Camera2D
+		if camera:
+			var shake := create_tween()
+			shake.tween_property(camera, "offset", Vector2(10, -7), 0.06)
+			shake.tween_property(camera, "offset", Vector2(-8, 6), 0.06)
+			shake.tween_property(camera, "offset", Vector2.ZERO, 0.12)
 
 func _begin_rescue_transition(_reason: String) -> void:
 	if ending_started:
