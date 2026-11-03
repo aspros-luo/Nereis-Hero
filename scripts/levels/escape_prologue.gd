@@ -1,6 +1,8 @@
 @tool
 extends Node2D
 
+const S01_WORLD_WIDTH := 1400
+
 var hero: CharacterBody2D
 var hud: CanvasLayer
 var exit_door: Area2D
@@ -12,6 +14,12 @@ func _ready() -> void:
 		get_tree().change_scene_to_file("res://scenes/regions/village_hub.tscn")
 		return
 	hero = $Hero
+	var hero_camera := hero.get_node_or_null("HeroCamera") as Camera2D
+	if hero_camera != null:
+		hero_camera.limit_left = 0
+		hero_camera.limit_top = 0
+		hero_camera.limit_right = S01_WORLD_WIDTH
+		hero_camera.limit_bottom = 720
 	hud = $HUD
 	exit_door = $S01ExitDoor
 	WorldState.set_location("church_escape_s01")
