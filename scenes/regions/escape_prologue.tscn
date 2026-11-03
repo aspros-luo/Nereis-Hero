@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" path="res://assets/art/backdrops/surgery_foreground_props.svg" id="14"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
-size = Vector2(2200, 40)
+size = Vector2(1400, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_boundary"]
 size = Vector2(40, 720)
@@ -32,7 +32,7 @@ script = ExtResource("1")
 
 [node name="BackdropVisual" type="TextureRect" parent="."]
 z_index = -100
-offset_right = 2200.0
+offset_right = 1400.0
 offset_bottom = 720.0
 mouse_filter = 2
 texture = ExtResource("12")
@@ -42,7 +42,7 @@ stretch_mode = 1
 [node name="FloorStripVisual" type="TextureRect" parent="."]
 position = Vector2(0, 540)
 z_index = -90
-offset_right = 2200.0
+offset_right = 1400.0
 offset_bottom = 180.0
 mouse_filter = 2
 texture = ExtResource("13")
@@ -51,7 +51,7 @@ stretch_mode = 1
 
 [node name="ForegroundPropsVisual" type="TextureRect" parent="."]
 z_index = -80
-offset_right = 2200.0
+offset_right = 1400.0
 offset_bottom = 720.0
 mouse_filter = 2
 texture = ExtResource("14")
@@ -61,7 +61,7 @@ stretch_mode = 1
 [node name="SurgeryFloor" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SurgeryFloor"]
-position = Vector2(1100, 560)
+position = Vector2(700, 560)
 shape = SubResource("RectangleShape2D_floor")
 
 [node name="LeftBoundary" type="StaticBody2D" parent="."]
@@ -73,7 +73,7 @@ shape = SubResource("RectangleShape2D_boundary")
 [node name="RightBoundary" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightBoundary"]
-position = Vector2(2220, 360)
+position = Vector2(1420, 360)
 shape = SubResource("RectangleShape2D_boundary")
 
 [node name="BrokenSurgeryTable" type="StaticBody2D" parent="."]
