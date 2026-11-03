@@ -9,6 +9,14 @@ var reveal := 0.0
 var animation_time := 0.0
 var healing_time := 0.0
 
+func begin_cave_blockade() -> void:
+	# Reveal the silhouettes emerging from the cave behind the hero.
+	reveal = 0.0
+	var final_position := position
+	position.x -= 58.0
+	var entrance_tween := create_tween()
+	entrance_tween.tween_property(self, "position", final_position, 0.72).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
 func play_healing() -> void:
 	healing_time = 2.4
 	queue_redraw()
