@@ -70,8 +70,8 @@ func _physics_process(delta: float) -> void:
             phase = 2
             phase_two = true
             revival_time = 2.4
-            stun_time = 1.35
-            attack_cooldown = 1.1
+            stun_time = 0.65
+            attack_cooldown = 0.45
             _log("BOSS", "Executioner restored by church pursuers; hp=%d" % health)
             scripted_revival_completed.emit()
         queue_redraw()
