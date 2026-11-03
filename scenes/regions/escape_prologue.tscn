@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/escape_prologue.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player/hero.tscn" id="2"]
@@ -16,9 +16,6 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(2200, 40)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
-size = Vector2(120, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_boundary"]
 size = Vector2(40, 720)
@@ -85,104 +82,6 @@ position = Vector2(280, 500)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BrokenSurgeryTable"]
 shape = SubResource("RectangleShape2D_table")
 
-[node name="PrologueTraversalRoute" type="Node2D" parent="."]
-
-[node name="Platform01" type="StaticBody2D" parent="PrologueTraversalRoute"]
-position = Vector2(360, 460)
-
-[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform01"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
-color = Color(0.25, 0.2, 0.24, 1)
-
-[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform01"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
-color = Color(0.58, 0.47, 0.5, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform01"]
-position = Vector2(60, 8)
-shape = SubResource("RectangleShape2D_platform")
-one_way_collision = true
-
-[node name="Platform02" type="StaticBody2D" parent="PrologueTraversalRoute"]
-position = Vector2(520, 430)
-
-[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform02"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
-color = Color(0.25, 0.2, 0.24, 1)
-
-[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform02"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
-color = Color(0.58, 0.47, 0.5, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform02"]
-position = Vector2(60, 8)
-shape = SubResource("RectangleShape2D_platform")
-one_way_collision = true
-
-[node name="Platform03" type="StaticBody2D" parent="PrologueTraversalRoute"]
-position = Vector2(680, 400)
-
-[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform03"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
-color = Color(0.25, 0.2, 0.24, 1)
-
-[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform03"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
-color = Color(0.58, 0.47, 0.5, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform03"]
-position = Vector2(60, 8)
-shape = SubResource("RectangleShape2D_platform")
-one_way_collision = true
-
-[node name="Platform04" type="StaticBody2D" parent="PrologueTraversalRoute"]
-position = Vector2(840, 400)
-
-[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform04"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
-color = Color(0.25, 0.2, 0.24, 1)
-
-[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform04"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
-color = Color(0.58, 0.47, 0.5, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform04"]
-position = Vector2(60, 8)
-shape = SubResource("RectangleShape2D_platform")
-one_way_collision = true
-
-[node name="Platform05" type="StaticBody2D" parent="PrologueTraversalRoute"]
-position = Vector2(1000, 430)
-
-[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform05"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
-color = Color(0.25, 0.2, 0.24, 1)
-
-[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform05"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
-color = Color(0.58, 0.47, 0.5, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform05"]
-position = Vector2(60, 8)
-shape = SubResource("RectangleShape2D_platform")
-one_way_collision = true
-
-[node name="Platform06" type="StaticBody2D" parent="PrologueTraversalRoute"]
-position = Vector2(1160, 460)
-
-[node name="PlatformVisual" type="Polygon2D" parent="PrologueTraversalRoute/Platform06"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 16, 0, 16)
-color = Color(0.25, 0.2, 0.24, 1)
-
-[node name="PlatformTop" type="Polygon2D" parent="PrologueTraversalRoute/Platform06"]
-polygon = PackedVector2Array(0, 0, 120, 0, 120, 3, 0, 3)
-color = Color(0.58, 0.47, 0.5, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PrologueTraversalRoute/Platform06"]
-position = Vector2(60, 8)
-shape = SubResource("RectangleShape2D_platform")
-one_way_collision = true
-
 [node name="Hero" parent="." instance=ExtResource("2")]
 position = Vector2(420, 540)
 
@@ -202,7 +101,7 @@ item_id = "church_bandage"
 amount = 1
 
 [node name="SurgeryRecordPickup" type="Node2D" parent="."]
-position = Vector2(880, 393)
+position = Vector2(880, 520)
 script = ExtResource("4")
 pickup_id = "a0_surgery_record_pickup"
 item_id = "surgery_record_fragment"
