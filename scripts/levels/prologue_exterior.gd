@@ -12,6 +12,7 @@ var encounter_elapsed := 0.0
 var revival_started := false
 var hero_defeat_pending := false
 var dragon_sequence_started := false
+var pursuers_revealed := false
 
 func _ready() -> void:
 	set_meta("p5_1_exit_contract", true)
@@ -129,14 +130,14 @@ func _begin_dragon_attack() -> void:
 		var camera := hero.get_node_or_null("HeroCamera") as Camera2D
 		if camera:
 			camera.position_smoothing_enabled = false
-			camera.limit_bottom = 1120
+			camera.limit_bottom = 1600
 
 	var dragon := $DragonPass as Node2D
 	dragon.visible = true
 	var flight := create_tween()
-	flight.tween_property(dragon, "position", Vector2(820, 115), 1.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	flight.tween_property(dragon, "position", Vector2(1040, 430), 0.4).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	flight.tween_property(dragon, "position", Vector2(1680, 150), 0.7).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	flight.tween_property(dragon, "position", Vector2(900, 115), 1.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	flight.tween_property(dragon, "position", Vector2(1380, 430), 0.4).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	flight.tween_property(dragon, "position", Vector2(1880, 170), 0.7).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	var dive_tilt := create_tween()
 	dive_tilt.tween_property(dragon, "rotation", 0.12, 1.25)
 	dive_tilt.tween_property(dragon, "rotation", 0.38, 0.4)
@@ -159,10 +160,13 @@ func _begin_dragon_attack() -> void:
 	if is_instance_valid(hero):
 		var fall := create_tween()
 		fall.set_parallel(true)
-		fall.tween_property(hero, "global_position:x", hero.global_position.x + 24.0, 1.05)
-		fall.tween_property(hero, "global_position:y", hero.global_position.y + 470.0, 1.05).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		fall.tween_property(hero, "global_position:x", hero.global_position.x + 42.0, 2.35)
+		fall.tween_property(hero, "global_position:y", hero.global_position.y + 820.0, 2.35).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		fall.tween_property(hero, "rotation", 0.16, 2.35).set_trans(Tween.TRANS_SINE)
 		await fall.finished
 
+	# Hold the deep-gorge view briefly so the fall reads as an event, not a scene cut.
+	await get_tree().create_timer(1.35).timeout
 	_complete_prologue_transition()
 
 func _collapse_mountain_road() -> void:
@@ -170,23 +174,52 @@ func _collapse_mountain_road() -> void:
 	var collision := road.get_node_or_null("CollisionShape2D") as CollisionShape2D
 	if collision:
 		collision.set_deferred("disabled", true)
+
+	# A pre-authored fracture rig breaks apart at the dragon's cliff impact point.
+	var fracture := $CliffFractureVisual as Node2D
+	fracture.visible = true
+	var dust := $CliffFractureVisual/DustBurst as Polygon2D
+	dust.scale = Vector2(0.55, 0.55)
+	var dust_tween := create_tween()
+	dust_tween.set_parallel(true)
+	dust_tween.tween_property(dust, "scale", Vector2(1.8, 1.45), 0.9).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	dust_tween.tween_property(dust, "modulate:a", 0.0, 1.0)
+
+	var shard_targets := [
+		["Shard01", Vector2(-168, 92), -0.72],
+		["Shard02", Vector2(-42, 148), 0.48],
+		["Shard03", Vector2(126, 88), 0.82],
+		["Shard04", Vector2(-208, 178), -0.42],
+		["Shard05", Vector2(8, 212), 0.66],
+		["Shard06", Vector2(190, 164), 1.05]
+	]
+	for target in shard_targets:
+		var shard := fracture.get_node(String(target[0])) as Polygon2D
+		var shard_tween := create_tween()
+		shard_tween.set_parallel(true)
+		shard_tween.tween_property(shard, "position", target[1], 1.05).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		shard_tween.tween_property(shard, "rotation", float(target[2]), 1.05)
+		shard_tween.tween_property(shard, "modulate:a", 0.0, 1.1)
+
 	var rubble := $ImpactRubbleVisual as Node2D
 	rubble.visible = true
 	var rubble_tween := create_tween()
 	rubble_tween.set_parallel(true)
-	rubble_tween.tween_property(rubble, "position:y", rubble.position.y + 54.0, 0.65).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	rubble_tween.tween_property(rubble, "modulate:a", 0.0, 0.8)
+	rubble_tween.tween_property(rubble, "position:y", rubble.position.y + 112.0, 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	rubble_tween.tween_property(rubble, "modulate:a", 0.0, 1.25)
+
 	var road_tween := create_tween()
 	road_tween.set_parallel(true)
-	road_tween.tween_property(road, "position:y", road.position.y + 190.0, 0.92).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	road_tween.tween_property(road, "rotation", 0.13, 0.92).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	road_tween.tween_property(road, "position:y", road.position.y + 230.0, 1.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	road_tween.tween_property(road, "rotation", 0.18, 1.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	if is_instance_valid(hero):
 		var camera := hero.get_node_or_null("HeroCamera") as Camera2D
 		if camera:
 			var shake := create_tween()
-			shake.tween_property(camera, "offset", Vector2(10, -7), 0.06)
-			shake.tween_property(camera, "offset", Vector2(-8, 6), 0.06)
-			shake.tween_property(camera, "offset", Vector2.ZERO, 0.12)
+			shake.tween_property(camera, "offset", Vector2(14, -10), 0.07)
+			shake.tween_property(camera, "offset", Vector2(-11, 8), 0.07)
+			shake.tween_property(camera, "offset", Vector2(7, -5), 0.07)
+			shake.tween_property(camera, "offset", Vector2.ZERO, 0.18)
 
 func _complete_prologue_transition() -> void:
 	if is_instance_valid(boss):
@@ -194,10 +227,16 @@ func _complete_prologue_transition() -> void:
 	WorldState.mark_prologue_complete()
 	WorldState.pending_region_spawn_side = "west"
 	WorldState.set_location("mite_house")
-	SceneTransition.fade_to_scene("res://scenes/mite_house.tscn")
+	SceneTransition.fade_to_scene("res://scenes/mite_house.tscn", 0.85, 1.15, 1.1)
 
 func _show_pursuers() -> void:
+	if pursuers_revealed:
+		return
+	pursuers_revealed = true
 	$Pursuers.visible = true
+	for pursuer in $Pursuers.get_children():
+		if pursuer.has_method("begin_cave_blockade"):
+			pursuer.call("begin_cave_blockade")
 func _clear_interaction_focus() -> void:
 	NereisInteractionFocus.clear_all(get_tree())
 
