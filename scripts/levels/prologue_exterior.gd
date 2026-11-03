@@ -188,14 +188,6 @@ func _collapse_mountain_road() -> void:
 			shake.tween_property(camera, "offset", Vector2(-8, 6), 0.06)
 			shake.tween_property(camera, "offset", Vector2.ZERO, 0.12)
 
-func _begin_rescue_transition(_reason: String) -> void:
-	if ending_started:
-		return
-	ending_started = true
-	WorldState.input_locked = true
-	_clear_interaction_focus()
-	_complete_prologue_transition()
-
 func _complete_prologue_transition() -> void:
 	if is_instance_valid(boss):
 		boss.queue_free()
