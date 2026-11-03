@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="720" viewBox="0 0 1500 720">
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="1600" viewBox="0 0 1700 1600">
 <defs>
   <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#111722"/><stop offset=".55" stop-color="#242934"/><stop offset="1" stop-color="#51404a"/></linearGradient>
   <linearGradient id="ridge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#3b414c"/><stop offset="1" stop-color="#202832"/></linearGradient>
@@ -25,4 +25,20 @@
 <path d="M0 580Q240 550 450 585T850 575T1200 590T1500 572" fill="none" stroke="#81919b" stroke-opacity=".08" stroke-width="13"/>
 <path d="M0 620Q250 590 500 624T1000 615T1500 618" fill="none" stroke="#a9a7ad" stroke-opacity=".06" stroke-width="22"/>
 <rect width="1500" height="720" fill="url(#grain)"/>
+<!-- Deep gorge revealed during the extended fall. -->
+<linearGradient id="deepGorge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#111b26"/><stop offset=".45" stop-color="#080f18"/><stop offset="1" stop-color="#02050a"/></linearGradient>
+<rect x="0" y="720" width="1700" height="880" fill="url(#deepGorge)"/>
+<path d="M0 690L0 850 85 915 112 1010 178 1078 202 1195 286 1280 312 1410 390 1600H0Z" fill="#171e29"/>
+<path d="M1700 690L1700 850 1618 910 1580 1002 1515 1075 1490 1190 1412 1270 1382 1405 1300 1600H1700Z" fill="#151c27"/>
+<path d="M0 820L90 880 135 972 205 1030M1700 820L1608 878 1560 970 1495 1032" fill="none" stroke="#59606b" stroke-opacity=".22" stroke-width="12"/>
+<path d="M0 1100L120 1140 180 1220 260 1260M1700 1090L1580 1140 1510 1220 1430 1265" fill="none" stroke="#68717b" stroke-opacity=".14" stroke-width="8"/>
+<path d="M0 1450Q250 1390 480 1460T920 1440T1320 1460T1700 1410" fill="none" stroke="#a4a5a9" stroke-opacity=".08" stroke-width="28"/>
+<path d="M0 1540Q250 1490 500 1545T1000 1520T1400 1540T1700 1500" fill="none" stroke="#9aa5ad" stroke-opacity=".06" stroke-width="18"/>
+<g fill="#080d14" opacity=".75">
+ <path d="M75 890L125 930 160 1020 118 1060 70 1010Z"/>
+ <path d="M1570 930L1630 890 1660 1000 1600 1055Z"/>
+ <path d="M270 1240L330 1280 360 1380 300 1420 250 1330Z"/>
+ <path d="M1360 1260L1425 1220 1460 1340 1400 1400Z"/>
+</g>
+
 </svg>
