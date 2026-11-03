@@ -16,15 +16,16 @@
  <path d="M175 90Q175 65 200 65H315Q340 65 340 90V335H175Z"/>
  <path d="M505 130Q505 105 530 105H650Q675 105 675 130V345H505Z"/>
  <path d="M850 85Q850 60 875 60H995Q1020 60 1020 85V340H850Z"/>
- <path d="M1185 150Q1185 115 1220 115H1320Q1355 115 1355 150V510H1185Z"/>
+ <path d="M1195 150Q1195 115 1225 115H1255Q1285 115 1285 150V510H1195Z"/>
  <path d="M1525 90Q1525 65 1550 65H1670Q1695 65 1695 90V340H1525Z"/>
  <path d="M1855 125Q1855 100 1880 100H2000Q2025 100 2025 125V350H1855Z"/>
 </g>
 <g fill="url(#glass)" stroke="#9bb7bf" stroke-opacity=".55" stroke-width="3">
- <rect x="190" y="90" width="135" height="225" rx="12"/><rect x="520" y="130" width="140" height="190" rx="12"/><rect x="865" y="85" width="140" height="235" rx="12"/><rect x="1200" y="145" width="140" height="365" rx="4" fill="#25232c" stroke="#9a858f" stroke-width="5"/><rect x="1540" y="90" width="140" height="225" rx="12"/><rect x="1870" y="125" width="140" height="195" rx="12"/>
+ <rect x="190" y="90" width="135" height="225" rx="12"/><rect x="520" y="130" width="140" height="190" rx="12"/><rect x="865" y="85" width="140" height="235" rx="12"/><rect x="1205" y="145" width="70" height="365" rx="4" fill="#25232c" stroke="#9a858f" stroke-width="5"/><rect x="1540" y="90" width="140" height="225" rx="12"/><rect x="1870" y="125" width="140" height="195" rx="12"/>
 </g>
-<g fill="none" stroke="#a8c6c9" stroke-opacity=".5" stroke-width="3"><path d="M215 105V290M545 145V295M890 100V295M1212 158V495M1328 158V495M1565 105V290M1895 140V295"/></g>
-<g fill="#b06c7c" opacity=".26"><ellipse cx="260" cy="270" rx="40" ry="18"/><ellipse cx="590" cy="275" rx="38" ry="15"/><ellipse cx="935" cy="270" rx="42" ry="20"/><ellipse cx="1270" cy="188" rx="12" ry="7"/><ellipse cx="1610" cy="270" rx="42" ry="18"/><ellipse cx="1940" cy="285" rx="40" ry="17"/></g>
+<g stroke="#bba6ad" stroke-width="3" fill="none"><path d="M1240 155V500" stroke="#17171f" stroke-opacity=".9"/><path d="M1259 320V347" stroke="#b8a6a8" stroke-width="5"/><circle cx="1259" cy="334" r="4" fill="#b8a6a8" stroke="none"/><path d="M1210 170H1270M1210 485H1270" stroke="#75616c" stroke-opacity=".7"/></g>
+<g fill="none" stroke="#a8c6c9" stroke-opacity=".5" stroke-width="3"><path d="M215 105V290M545 145V295M890 100V295M1212 158V495M1268 158V495M1565 105V290M1895 140V295"/></g>
+<g fill="#b06c7c" opacity=".26"><ellipse cx="260" cy="270" rx="40" ry="18"/><ellipse cx="590" cy="275" rx="38" ry="15"/><ellipse cx="935" cy="270" rx="42" ry="20"/><ellipse cx="1240" cy="188" rx="12" ry="7"/><ellipse cx="1610" cy="270" rx="42" ry="18"/><ellipse cx="1940" cy="285" rx="40" ry="17"/></g>
 <g stroke="#a69aa5" stroke-width="4" fill="none"><path d="M255 0V68M590 0V108M935 0V58M1270 0V98"/></g>
 <g fill="#b6d2d1" opacity=".25"><path d="M215 0H305L390 510H130Z"/><path d="M550 0H630L720 510H470Z"/><path d="M895 0H975L1065 510H815Z"/></g>
 <g fill="url(#metal)" stroke="#8a7b89" stroke-width="5">
