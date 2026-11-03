@@ -6,8 +6,9 @@
   <linearGradient id="gorge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#202a35"/><stop offset="1" stop-color="#090e16"/></linearGradient>
   <radialGradient id="moon"><stop stop-color="#c4b9ac" stop-opacity=".14"/><stop offset="1" stop-color="#c4b9ac" stop-opacity="0"/></radialGradient>
   <pattern id="grain" width="31" height="29" patternUnits="userSpaceOnUse"><circle cx="4" cy="9" r="1" fill="#d2c1b4" opacity=".12"/><circle cx="22" cy="19" r=".8" fill="#d2c1b4" opacity=".1"/></pattern>
+  <linearGradient id="deepGorge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#111b26"/><stop offset=".45" stop-color="#080f18"/><stop offset="1" stop-color="#02050a"/></linearGradient>
 </defs>
-<rect width="1500" height="720" fill="url(#sky)"/>
+<rect width="1700" height="720" fill="url(#sky)"/>
 <circle cx="1090" cy="160" r="205" fill="url(#moon)"/>
 <circle cx="1090" cy="160" r="76" fill="none" stroke="#b8b3ae" stroke-opacity=".11" stroke-width="2"/>
 <path d="M0 385L100 302 176 350 282 220 372 330 480 260 590 365 690 245 790 350 890 270 1010 360 1110 232 1215 335 1310 255 1500 355V565H0Z" fill="#333b47" opacity=".9"/>
@@ -24,9 +25,9 @@
 <path d="M0 548Q170 526 320 548T650 544T980 550T1280 540T1500 545" fill="none" stroke="#b7a6a4" stroke-opacity=".12" stroke-width="4"/>
 <path d="M0 580Q240 550 450 585T850 575T1200 590T1500 572" fill="none" stroke="#81919b" stroke-opacity=".08" stroke-width="13"/>
 <path d="M0 620Q250 590 500 624T1000 615T1500 618" fill="none" stroke="#a9a7ad" stroke-opacity=".06" stroke-width="22"/>
-<rect width="1500" height="720" fill="url(#grain)"/>
+<rect width="1700" height="720" fill="url(#grain)"/>
 <!-- Deep gorge revealed during the extended fall. -->
-<linearGradient id="deepGorge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#111b26"/><stop offset=".45" stop-color="#080f18"/><stop offset="1" stop-color="#02050a"/></linearGradient>
+
 <rect x="0" y="720" width="1700" height="880" fill="url(#deepGorge)"/>
 <path d="M0 690L0 850 85 915 112 1010 178 1078 202 1195 286 1280 312 1410 390 1600H0Z" fill="#171e29"/>
 <path d="M1700 690L1700 850 1618 910 1580 1002 1515 1075 1490 1190 1412 1270 1382 1405 1300 1600H1700Z" fill="#151c27"/>
