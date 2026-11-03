@@ -66,6 +66,7 @@ func _physics_process(delta: float) -> void:
             health = max_health
             is_defeated = false
             scripted_revival_pending = false
+            damage_immune = false
             phase = 2
             phase_two = true
             revival_time = 2.4
@@ -157,6 +158,7 @@ func receive_damage(amount: int, source: Node = null) -> void:
     if health <= 0:
         if scripted_revival:
             is_defeated = true
+            damage_immune = true
             scripted_revival_pending = true
             revival_delay = 1.6
             revival_time = 1.6
@@ -176,6 +178,22 @@ func receive_damage(amount: int, source: Node = null) -> void:
             WorldState.mark_boss_defeated()
         defeated.emit()
         queue_free()
+
+func begin_scripted_revival() -> void:
+    if not scripted_revival or is_defeated or scripted_revival_pending or health <= 0:
+        return
+    is_defeated = true
+    damage_immune = true
+    scripted_revival_pending = true
+    revival_delay = 1.6
+    revival_time = 1.6
+    windup = 0.0
+    attack_released = true
+    if is_instance_valid(attack_hitbox):
+        attack_hitbox.deactivate()
+    _log("BOSS", "Church pursuers intervene; scripted restoration begins")
+    scripted_revival_started.emit()
+    queue_redraw()
 
 func take_damage(amount: int) -> void:
     receive_damage(amount, null)
