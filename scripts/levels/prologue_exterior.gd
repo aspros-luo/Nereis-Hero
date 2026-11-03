@@ -134,9 +134,13 @@ func _begin_dragon_attack() -> void:
 	var dragon := $DragonPass as Node2D
 	dragon.visible = true
 	var flight := create_tween()
-	flight.set_parallel(true)
-	flight.tween_property(dragon, "position:x", 1680.0, 2.1).set_trans(Tween.TRANS_LINEAR)
-	flight.tween_property(dragon, "position:y", 110.0, 2.1).set_trans(Tween.TRANS_SINE)
+	flight.tween_property(dragon, "position", Vector2(820, 115), 1.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	flight.tween_property(dragon, "position", Vector2(1040, 430), 0.4).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	flight.tween_property(dragon, "position", Vector2(1680, 150), 0.7).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	var dive_tilt := create_tween()
+	dive_tilt.tween_property(dragon, "rotation", 0.12, 1.25)
+	dive_tilt.tween_property(dragon, "rotation", 0.38, 0.4)
+	dive_tilt.tween_property(dragon, "rotation", 0.0, 0.7)
 
 	var left_wing := $DragonPass/LeftWing as Polygon2D
 	var right_wing := $DragonPass/RightWing as Polygon2D
@@ -148,7 +152,7 @@ func _begin_dragon_attack() -> void:
 	right_flap.tween_property(right_wing, "rotation", 0.30, 0.24)
 
 	# The dragon crosses the valley; it never targets the hero or the executioner.
-	await get_tree().create_timer(1.35).timeout
+	await get_tree().create_timer(1.65).timeout
 	_collapse_mountain_road()
 
 	await get_tree().create_timer(0.28).timeout
