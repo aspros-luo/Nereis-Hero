@@ -36,10 +36,10 @@ func _ready() -> void:
 	camera.limit_right = int(camera_right_limit.global_position.x)
 	camera.limit_bottom = 720
 	hero.defeated.connect(_on_hero_defeated)
-	boss.scripted_revival_started.connect(_on_executioner_revival_started)
-	boss.scripted_revival_completed.connect(_on_executioner_revived)
-	boss.phase_changed.connect(_on_executioner_phase_changed)
-	boss.defeated.connect(_on_executioner_defeated)
+	boss.connect("scripted_revival_started", Callable(self, "_on_executioner_revival_started"))
+	boss.connect("scripted_revival_completed", Callable(self, "_on_executioner_revived"))
+	boss.connect("phase_changed", Callable(self, "_on_executioner_phase_changed"))
+	boss.connect("defeated", Callable(self, "_on_executioner_defeated"))
 func _physics_process(delta: float) -> void:
 	if ending_started or not is_instance_valid(hero):
 		return
@@ -61,7 +61,7 @@ func _physics_process(delta: float) -> void:
 		encounter_elapsed += delta
 		# A player who chooses not to attack still reaches the same authored story beat.
 		if encounter_elapsed >= 30.0 and is_instance_valid(boss):
-			boss.begin_scripted_revival()
+			boss.call("begin_scripted_revival")
 
 
 
@@ -98,7 +98,7 @@ func _on_executioner_revived() -> void:
 		return
 	# The executioner gets one brief return to combat; the dragon interrupts that renewed fight.
 	if is_instance_valid(boss):
-		boss.scripted_revival = false
+		boss.set("scripted_revival", false)
 	call_deferred("_begin_post_revival_battle")
 
 func _begin_post_revival_battle() -> void:
@@ -120,7 +120,7 @@ func _begin_dragon_attack() -> void:
 	_show_pursuers()
 
 	if is_instance_valid(boss):
-		boss.damage_immune = true
+		boss.set("damage_immune", true)
 		boss.set_process(false)
 		boss.set_physics_process(false)
 	if is_instance_valid(hero):
