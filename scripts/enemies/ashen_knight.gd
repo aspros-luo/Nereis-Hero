@@ -90,6 +90,9 @@ func _physics_process(delta: float) -> void:
         windup = 0.0
         _log("BOSS", "Ashen Knight entered Phase 2")
         phase_changed.emit(2)
+        if is_defeated or scripted_revival_pending:
+            queue_redraw()
+            return
         queue_redraw()
 
     if stun_time > 0.0:
