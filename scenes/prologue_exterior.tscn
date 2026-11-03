@@ -235,6 +235,11 @@ points = PackedVector2Array(111, -33, 128, -50, 122, -29)
 width = 4.0
 default_color = Color(0.035294, 0.043137, 0.062745, 1)
 
+[node name="Claw" type="Line2D" parent="DragonPass"]
+points = PackedVector2Array(58, -2, 72, 25, 86, 53, 96, 82)
+width = 7.0
+default_color = Color(0.035294, 0.043137, 0.062745, 1)
+
 [node name="ImpactRubbleVisual" type="Node2D" parent="."]
 visible = false
 position = Vector2(1000, 492)
