@@ -39,6 +39,7 @@ func _ready() -> void:
 	boss.scripted_revival_started.connect(_on_executioner_revival_started)
 	boss.scripted_revival_completed.connect(_on_executioner_revived)
 	boss.phase_changed.connect(_on_executioner_phase_changed)
+	boss.defeated.connect(_on_executioner_defeated)
 func _physics_process(delta: float) -> void:
 	if ending_started or not is_instance_valid(hero):
 		return
@@ -93,6 +94,19 @@ func _on_executioner_phase_changed(phase: int) -> void:
 		boss.begin_scripted_revival()
 
 func _on_executioner_revived() -> void:
+	if hero_defeat_pending or dragon_sequence_started:
+		return
+	# The executioner gets one brief return to combat; the dragon interrupts that renewed fight.
+	if is_instance_valid(boss):
+		boss.scripted_revival = false
+	call_deferred("_begin_post_revival_battle")
+
+func _begin_post_revival_battle() -> void:
+	await get_tree().create_timer(2.4).timeout
+	if not hero_defeat_pending and not dragon_sequence_started:
+		_begin_dragon_attack()
+
+func _on_executioner_defeated() -> void:
 	if not hero_defeat_pending and not dragon_sequence_started:
 		call_deferred("_begin_dragon_attack")
 
@@ -134,7 +148,7 @@ func _begin_dragon_attack() -> void:
 	right_flap.tween_property(right_wing, "rotation", 0.30, 0.24)
 
 	# The dragon crosses the valley; it never targets the hero or the executioner.
-	await get_tree().create_timer(0.72).timeout
+	await get_tree().create_timer(1.35).timeout
 	_collapse_mountain_road()
 
 	await get_tree().create_timer(0.28).timeout
