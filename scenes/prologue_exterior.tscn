@@ -204,6 +204,59 @@ width = 3.0
 default_color = Color(0.447059, 0.443137, 0.482353, 1)
 z_index = 4
 
+[node name="DragonPass" type="Node2D" parent="."]
+visible = false
+position = Vector2(-480, 170)
+scale = Vector2(1.25, 1.25)
+z_index = -80
+
+[node name="LeftWing" type="Polygon2D" parent="DragonPass"]
+polygon = PackedVector2Array(0, 0, -34, -82, -148, -166, -111, -66, -58, -16)
+color = Color(0.035294, 0.043137, 0.062745, 0.96)
+
+[node name="RightWing" type="Polygon2D" parent="DragonPass"]
+polygon = PackedVector2Array(0, 0, 38, -84, 154, -158, 118, -62, 62, -12)
+color = Color(0.035294, 0.043137, 0.062745, 0.96)
+
+[node name="Body" type="Polygon2D" parent="DragonPass"]
+polygon = PackedVector2Array(-82, -12, -55, -34, -12, -31, 34, -18, 83, -2, 48, 19, -18, 21, -62, 12)
+color = Color(0.035294, 0.043137, 0.062745, 1)
+
+[node name="NeckAndHead" type="Polygon2D" parent="DragonPass"]
+polygon = PackedVector2Array(38, -18, 74, -42, 112, -38, 132, -23, 96, -16, 62, -5)
+color = Color(0.035294, 0.043137, 0.062745, 1)
+
+[node name="Tail" type="Polygon2D" parent="DragonPass"]
+polygon = PackedVector2Array(-68, 3, -122, 18, -191, 8, -148, 0, -105, -11)
+color = Color(0.035294, 0.043137, 0.062745, 1)
+
+[node name="Horn" type="Line2D" parent="DragonPass"]
+points = PackedVector2Array(111, -33, 128, -50, 122, -29)
+width = 4.0
+default_color = Color(0.035294, 0.043137, 0.062745, 1)
+
+[node name="ImpactRubbleVisual" type="Node2D" parent="."]
+visible = false
+position = Vector2(1000, 492)
+z_index = 6
+
+[node name="Rock01" type="Polygon2D" parent="ImpactRubbleVisual"]
+polygon = PackedVector2Array(-74, 12, -48, -22, -19, -8, -30, 24)
+color = Color(0.254902, 0.25098, 0.286275, 1)
+
+[node name="Rock02" type="Polygon2D" parent="ImpactRubbleVisual"]
+polygon = PackedVector2Array(-12, 18, 10, -31, 38, -4, 27, 28)
+color = Color(0.180392, 0.184314, 0.219608, 1)
+
+[node name="Rock03" type="Polygon2D" parent="ImpactRubbleVisual"]
+polygon = PackedVector2Array(40, 15, 65, -12, 88, 8, 72, 25)
+color = Color(0.305882, 0.286275, 0.313725, 1)
+
+[node name="DustTrail" type="Line2D" parent="ImpactRubbleVisual"]
+points = PackedVector2Array(-110, 8, -45, -4, 18, 4, 112, -8)
+width = 22.0
+default_color = Color(0.439216, 0.415686, 0.403922, 0.46)
+
 [node name="CaveExitLabel" type="Label" parent="."]
 position = Vector2(55, 245)
 size = Vector2(150, 28)
