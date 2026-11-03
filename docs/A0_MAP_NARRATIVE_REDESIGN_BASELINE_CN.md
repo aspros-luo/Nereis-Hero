@@ -61,7 +61,7 @@
 - `scripts/enemies/ashen_knight.gd` 保留 HP 归零触发的追兵复原，并新增 `begin_scripted_revival()`，供第二阶段门槛和无伤害等待分支共用。追兵介入时停用攻击判定、暂时免疫伤害；复原完成后回满生命并解除保护，短暂恢复战斗后不再触发第二轮复原。
 - `scripts/levels/prologue_exterior.gd` 在玩家接近执行者后开始遭遇计时；执行者 HP 归零、降至 50% 进入第二阶段，或遭遇持续 30 秒仍未触发前两者，都会汇入同一追兵治疗流程。
 - `scripts/levels/prologue_pursuer.gd` 仍是仅用于演出的追兵剪影；`play_healing()` 提供治疗光效，实际恢复由执行者脚本完成。
-- `scenes/prologue_exterior.tscn` 新增场景内可见的 `DragonPass` 多边形剪影节点，以及预置的 `ImpactRubbleVisual` 碎石节点；它们不是运行时生成的地图地形。飞龙通过场景节点动画掠过山谷。
+- `scenes/prologue_exterior.tscn` 新增场景内可见的 `DragonPass` 多边形剪影节点（含翼、身体、尾部与爪部），以及预置的 `ImpactRubbleVisual` 碎石节点；它们不是运行时生成的地图地形。飞龙先横越山谷，再低空俯冲擦过崖壁，随后飞离。
 - 结尾脚本禁用既有山路碰撞并驱动山路节点下沉/倾斜，显示碎石后将主角向下坠落，再调用既有转场进入 `mite_house.tscn`。旧的主动跳崖 tween 已移除。治疗完成后保留约 2.4 秒的恢复战斗窗口；若执行者在窗口内再次被击败，也会触发同一飞龙事件。
 - 玩家战败仍解锁原有 `prologue_knight_defeat` 成就，并保留 3.2 秒提示时间；随后进入同一飞龙坍塌流程。
 - 当前仅完成远程源码静态核对；飞龙剪影属于原型几何，不代表最终美术。未在 Godot 4.6.1 解析场景、播放动画或实机验收；Boss HUD 位置、相机跟随、坠落镜头与转场节奏仍待本地观察。
