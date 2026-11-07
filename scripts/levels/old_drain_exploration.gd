@@ -65,11 +65,9 @@ func _ready() -> void:
 		(reservoir_door.get_node("CollisionShape2D") as CollisionShape2D).disabled = true
 		gate_blocker.disabled = false
 	var gate_open := CONNECTION_FLAG in WorldState.achievement_flags
-	$SealedGateVisual.visible = not gate_open
-	$SealedGateLabel.visible = not gate_open
-	$OpenGateLeftPost.visible = gate_open
-	$OpenGateRightPost.visible = gate_open
-	$OpenGateLabel.visible = gate_open
+	# Toggle the authored visual groups; child node names remain local to each group.
+	$GateVisualClosed.visible = not gate_open
+	$GateVisualOpen.visible = gate_open
 	_spawn_rat(900.0)
 	_spawn_rat(1100.0)
 	hud.bind_hero(hero)
