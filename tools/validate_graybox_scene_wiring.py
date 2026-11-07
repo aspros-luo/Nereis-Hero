@@ -1866,6 +1866,9 @@ def main() -> int:
     old_drain_scene = read("scenes/old_drain_exploration.tscn", errors)
     event_director = read("scripts/core/world_event_director.gd", errors)
     interior_scene = read("scripts/levels/interior_scene.gd", errors)
+    interior_base_scene = read("scenes/locations/interior_base.tscn", errors)
+    graveyard_scene = read("scenes/village_graveyard.tscn", errors)
+    mite_house_scene = read("scenes/mite_house.tscn", errors)
 
     require(village_hub, 'WorldState.set_location("village")', "A1 persists village location for Continue", errors)
     require(village_hub, 'var spawn_side := WorldState.pending_region_spawn_side', "A1 captures incoming spawn side", errors)
@@ -1893,6 +1896,13 @@ def main() -> int:
     require(village_scene, 'interaction_range = 50.0', "A1 north-gate interaction remains reachable from the safe side of its barrier", errors)
     require(village_scene, '[node name="CityCutPOI" type="Node2D" parent="."]', "A1 old-drain entrance is an authored POI", errors)
     require(village_scene, '[node name="WorldEventDirector" type="Node" parent="."]', "A1 event director is an authored scene node", errors)
+    require(interior_base_scene, '[node name="Ground" type="StaticBody2D" parent="."]', "A1 tavern/church shared ground is authored in the base scene", errors)
+    require(interior_base_scene, '[node name="TavernArchitecture" type="Node2D" parent="."]', "A1 tavern architecture is authored", errors)
+    require(interior_base_scene, '[node name="ChurchArchitecture" type="Node2D" parent="."]', "A1 church architecture is authored", errors)
+    require(graveyard_scene, '[node name="Ground" type="StaticBody2D" parent="."]', "A1 graveyard ground is authored", errors)
+    require(mite_house_scene, '[node name="Ground" type="StaticBody2D" parent="."]', "A1 Mite-house ground is authored", errors)
+    if "draw_rect(" in interior_scene or "StaticBody2D.new()" in interior_scene or "CollisionShape2D.new()" in interior_scene:
+        errors.append("A1 shared interiors must not generate fixed terrain or collision in code.")
 
     # A1.1 preserves its two separate directions: cliff exploration and the future A2 road.
     require(backhill_script, 'WorldState.set_location("village_backhill")', "A1.1 Continue location mapping", errors)
