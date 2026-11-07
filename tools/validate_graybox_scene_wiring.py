@@ -43,7 +43,6 @@ REQUIRED_FILES = [
     "scenes/royal_tomb_boss.tscn",
     "scripts/levels/escape_prologue.gd",
     "scripts/levels/village_hub.gd",
-    "scripts/levels/village_defense_demo.gd",
     "scripts/world/resonance_source_clue.gd",
     "scripts/world/resonance_secret_gate.gd",
     "scripts/world/interaction_door.gd",
@@ -783,17 +782,6 @@ def main() -> int:
     world_state_script = read("scripts/core/world_state.gd", errors)
     require(world_state_script, 'return "res://scenes/mite_house.tscn"', "Continue can resume the one-time A0 arrival scene", errors)
 
-    defense_route_script = read("scripts/levels/village_defense_demo.gd", errors)
-    require(defense_route_script, 'if defeated == 3 and stage == 1:', "A1 defense first wave completion", errors)
-    require(defense_route_script, 'elif defeated == 7 and stage == 2:', "A1 defense second wave completion", errors)
-    require(defense_route_script, 'WorldState.record_achievement("village_defense_survived")', "A1 defense victory persists progression flag", errors)
-    require(defense_route_script, 'SceneTransition.fade_to_scene("res://scenes/regions/village_hub.tscn")', "A1 defense victory returns to village", errors)
-    require(defense_route_script, 'defeated = 0', "A1 defense retry resets wave counter", errors)
-    require(defense_route_script, "hero.defer_death_recovery = true", "A1 defense uses its authored Hero lifecycle", errors)
-    require(defense_route_script, "hero.global_position = Vector2(420.0, FLOOR_Y)", "A1 defeat returns to its local start point", errors)
-    require(defense_route_script, "hero.restore_full()", "A1 defeat restores combat state", errors)
-    require(defense_route_script, '_begin_attack()', "A1 defense retry restarts encounter", errors)
-
     village_route_script = read("scripts/levels/village_hub.gd", errors)
     village_poi_script = read("scripts/world/village_poi.gd", errors)
     require(village_route_script, 'if location_id == "north_gate":', "C02 A1 north-gate route", errors)
@@ -804,10 +792,10 @@ def main() -> int:
     # a transition loop or an immediate repeated interaction after returning.
     if 2840.0 - 2630.0 <= 110.0:
         errors.append("C02: A2 return spawn overlaps the North Gate POI interaction radius.")
-    require(village_route_script, 'if "village_defense_survived" in WorldState.achievement_flags:', "C02 defense flag gates A2 entry", errors)
-    require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/demos/village_defense_demo.tscn")', "C02 first North Gate interaction starts defense", errors)
-    require(village_route_script, 'WorldState.pending_region_spawn_side = "west"', "C02 A1-to-A2 spawn side", errors)
-    require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/regions/ash_forest.tscn")', "C02 A1-to-A2 transition", errors)
+    require(village_route_script, 'if "guide_defeated" not in WorldState.achievement_flags:', "C02 north gate remains locked until the Guide is defeated", errors)
+    require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn")', "C02 A1-to-A2 transition enters authored R01", errors)
+    if "village_defense_survived" in village_route_script or "village_defense_demo.tscn" in village_route_script:
+        errors.append("A1 main route must not depend on the retired village-defense chapter.")
     require(region_script, '"res://scenes/regions/village_hub.tscn", "north_gate"', "C02 A2-to-A1 reverse transition", errors)
 
     # C03 must remain a genuinely supported two-way canopy route between A2 and A3.
@@ -829,7 +817,7 @@ def main() -> int:
     require(village_route_script, '350.0 if spawn_side == "city_cut_return"', "C24 village return spawn x=350", errors)
     require(village_route_script, "func _spawn_village_rest_point() -> void:", "A1 hearth rest point", errors)
     require(village_route_script, 'rest.rest_id = "rest_A1_village_hearth"', "A1 rest point persistence ID", errors)
-    require(village_route_script, '"village_defense_survived" in WorldState.achievement_flags', "A1 drainage gate", errors)
+    require(village_route_script, 'city_cut.display_name = "旧排水通道"', "A1 old-drain entrance is available independently of the Guide gate", errors)
     old_drain_route_script = read("scripts/levels/old_drain_exploration.gd", errors)
     require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/old_drain_exploration.tscn")', "C24 A1 enters the shared old-drain exploration segment", errors)
     # C24 intentionally uses a two-scene route: village -> old drain -> A3.
@@ -1197,16 +1185,16 @@ def main() -> int:
     if 'WorldState.record_achievement("reached_A4_via_A3")' in ready_block:
         fail(errors, "C05 route flag must not be recorded unconditionally on A4 scene entry.")
 
-    # C24 must be gated on the city side too, matching the village's defense requirement.
-    # C24 城区侧也必须受村庄防卫标记约束，与村庄入口条件一致。
+    # C24 is phased: the A3 return door remains safe until A4 opens the shared segment.
+    # C24 分阶段开放：A4 闸门开启前 A3 保留单向回村出口。
     a3_exit_block = _region_exit_block("A3")
     if not a3_exit_block:
         fail(errors, "C24 route audit: cannot isolate A3 exit block.")
     else:
-        require(a3_exit_block, 'if "village_defense_survived" in WorldState.achievement_flags:', "C24 city-side defense gate", errors)
-        require(a3_exit_block, '"E  经旧排水道返回"', "C24 city-side return door", errors)
-        if a3_exit_block.find('"E  经旧排水道返回"') < a3_exit_block.find('if "village_defense_survived" in WorldState.achievement_flags:'):
-            fail(errors, "C24 A3 return door must remain inside the village-defense condition.")
+        require(a3_exit_block, 'if "opened_old_drainage_link_from_A4" in WorldState.achievement_flags:', "C24 A4-side gate controls the full drainage loop", errors)
+        require(a3_exit_block, '"E  经旧排水道返回"', "C24 retains the one-way village return before the A4 gate opens", errors)
+        if "village_defense_survived" in a3_exit_block:
+            fail(errors, "C24 A3 exit must not depend on the retired village-defense flag.")
 
     # Locate the exit mapping before any public or hidden route audit uses it.
     # 在公开路线与隐藏路线审计使用前，先定位出口映射函数。
@@ -1876,136 +1864,78 @@ def main() -> int:
     require(ending_evaluator, 'REQUIRED_ARTIFACT_PIECES: int = 3', "Ending candidate uses truth-anchor threshold", errors)
     require(ending_evaluator, 'REQUIRED_HIDDEN_REGIONS_FOR_FIRE: int = 2', "Ending candidate uses actual hidden-region exploration", errors)
 
+    # A1 validation follows the current authored scenes and source contracts, not the retired procedural graybox checks.
     village_hub = read("scripts/levels/village_hub.gd", errors)
-    village_poi = read("scripts/world/village_poi.gd", errors)
-    interior_scene = read("scripts/levels/interior_scene.gd", errors)
-    require(village_hub, "守门人打量着你", "A1 gatekeeper has neutral dialogue before route selection", errors)
-    require(village_hub, 'WorldState.set_location("village")', "A1 persists village location for Continue", errors)
-    require(village_hub, 'npc.position = Vector2(2740, 520)', "A1 gatekeeper is stationed beside the north gate, away from the hearth and Mite", errors)
-    require(village_hub, '守门人看了看你身上的教堂印记', "A1 gatekeeper route dialogue is localized to Chinese", errors)
+    village_scene = read("scenes/regions/village_hub.tscn", errors)
+    backhill_script = read("scripts/levels/village_backhill.gd", errors)
+    backhill_scene = read("scenes/village_backhill.tscn", errors)
+    old_drain_script = read("scripts/levels/old_drain_exploration.gd", errors)
+    old_drain_scene = read("scenes/old_drain_exploration.tscn", errors)
     event_director = read("scripts/core/world_event_director.gd", errors)
-    require(village_hub, 'const WORLD_EVENT_DIRECTOR_SCRIPT = preload("res://scripts/core/world_event_director.gd")', "A1 hub wires the shared progression event director", errors)
-    require(village_hub, 'world_event_director.dispatch("region_entered"', "A1 dispatches a region-entry event after hub setup", errors)
-    require(village_hub, 'world_event_director.dispatch("interaction"', "A1 dispatches POI interactions to the event director", errors)
-    require(village_hub, "func _spawn_progression_npcs() -> void:", "A1 has a separate progression-NPC spawn hook", errors)
-    require(village_hub, "world_event_director.spawn_npcs(self, ROUTE_NPC_SCRIPT", "A1 uses the data-driven NPC manifest", errors)
-    require(village_hub, "func refresh_progression_content() -> void:", "A1 can refresh progression content after state changes", errors)
-    require(village_hub, 'world_event_director.dispatch("interaction", {"region": "A1", "interaction_id": String(npc.npc_id)', "A1 NPC conversations dispatch progression events", errors)
-    require(village_hub, "refresh_progression_content()", "A1 refreshes progression NPCs after POI events", errors)
-    require(event_director, "var _managed_npcs: Array[Node] = []", "Progression refresh tracks only director-managed NPCs", errors)
-    require(event_director, "_managed_npcs.clear()", "Progression refresh removes stale managed NPC entries", errors)
-    require(event_director, "const NPC_DEFINITIONS: Array[Dictionary]", "Progression NPCs are data-driven", errors)
-    require(event_director, '"A1_tavern_sound_notice"', "A1 tavern visit has a persistent first-visit event", errors)
-    require(village_hub, '"village_grandmother"', "A1 replaces the amnesiac youth with an ordinary grandmother NPC", errors)
-    require(village_hub, "camera.limit_right = 3000", "A1 camera follows the expanded 3000px hub", errors)
-    require(village_hub, "var floor_segments: Array[Vector2] = [", "A1 ground collision uses segmented spans around traversable shafts", errors)
-    require(village_hub, "rectangle.size = Vector2(segment.y, 40.0)", "A1 ground collision builds each segment at its declared width", errors)
-    require(village_hub, "right_shape.position = Vector2(3020, 360)", "A1 right boundary matches the expanded hub width", errors)
-    require(village_hub, "Rect2(2760, 340, 110, 16)", "A1 rooftop route reaches the expanded eastern district", errors)
-    if 'npc_id = "amnesiac_youth"' in village_hub:
-        errors.append("A1 retired amnesiac youth must not be spawned; use the grandmother role instead.")
-    require(village_poi, "@export_range(40.0, 140.0, 5.0) var interaction_range: float = 110.0", "A1 POI interaction radii can be tuned per location to avoid overlapping prompts", errors)
-    require(village_hub, "grandmother.interaction_range = 60.0", "A1 grandmother focus radius is reduced near neighboring POIs", errors)
-    require(village_hub, "blacksmith.interaction_range = 45.0", "A1 blacksmith focus radius is tuned for the workshop district", errors)
-    require(village_hub, "merchant.interaction_range = 60.0", "A1 traveling merchant focus radius is tuned for the market district", errors)
-    require(village_hub, '"village_blacksmith"', "A1 blacksmith is registered as a functional NPC", errors)
-    require(village_hub, 'blacksmith.cloth_color = Color("#594038")', "A1 blacksmith has a distinct visual palette", errors)
-    require(village_hub, 'grandmother.cloth_color = Color("#65594a")', "A1 grandmother has a distinct visual palette", errors)
-    require(village_hub, 'NereisLocalization.translate_text("铁匠铺")', "A1 blacksmith has a distinct workshop visual landmark", errors)
-    require(village_hub, 'NereisLocalization.translate_text("行商摊位")', "A1 merchant has a recognizable stall without a crafting system", errors)
-    require(village_hub, 'NereisLocalization.translate_text("老屋")', "A1 grandmother has a recognizable village-home anchor", errors)
-    require(village_hub, 'blacksmith.dialogue = "铁匠把锤子搁在砧边', "A1 blacksmith dialogue responds to village-defense state", errors)
-    require(village_hub, 'grandmother.dialogue = "老婆婆把门边的灯芯拨亮了一些', "A1 grandmother dialogue responds to village-defense state", errors)
-    require(village_hub, '"traveling_merchant"', "A1 traveling merchant has a stable functional NPC ID", errors)
-    require(event_director, '{"type": "flag", "value": "pilgrim_knight_a1_arrived"}', "Pilgrim Knight is gated behind an explicit story arrival flag", errors)
-    require(event_director, '{"type": "flag", "value": "pilgrim_knight_at_tavern"}', "Pilgrim Knight tavern placement uses an explicit state flag", errors)
-    require(event_director, '{"type": "flag_absent", "value": "pilgrim_knight_at_tavern"}', "Pilgrim Knight church placement excludes the tavern placement state", errors)
-    require(event_director, '{"type": "location", "value": "tavern"}', "Pilgrim Knight tavern placement is location-gated", errors)
-    require(event_director, '{"type": "location", "value": "church"}', "Pilgrim Knight church placement is location-gated", errors)
-    require(interior_scene, 'narrative.show_message("教堂", "旧木椅整齐地排在空旷的长厅里。', "Church interior remains empty and quiet until a story arrival", errors)
-    require(interior_scene, 'npc.display_name = "酒馆值夜人"', "Tavern keeper uses localized Chinese dialogue/name", errors)
-    require(interior_scene, '"A1_tavern_sound_noticed" in WorldState.achievement_flags and "village_defense_survived" in WorldState.achievement_flags', "Tavern keeper prioritizes the combined state over single-state dialogue", errors)
-    require(village_hub, '"restoration_camp_established" in WorldState.achievement_flags', "A1 Restoration Army camp only appears after its explicit story-arrival flag", errors)
-    require(village_hub, 'if "restoration_camp_established" in WorldState.achievement_flags:\n\t\tdraw_rect(Rect2(1945, 360, 90, 160)', "A1 Restoration Army camp visuals are also hidden before the story-arrival flag", errors)
-    require(village_hub, 'church.display_name = "教堂"', "A1 religious POI is named 教堂", errors)
-    require(village_hub, 'church.dialogue = "教堂的大门没有上锁。里面空荡而安静', "A1 church is initially presented as empty and quiet", errors)
-    require(event_director, "func _resolve_dialogue(definition: Dictionary) -> String:", "Progression NPC dialogue supports state-specific variants", errors)
-    require(event_director, '"dialogue_variants"', "Progression NPCs can switch dialogue by state", errors)
-    require(event_director, '"location":', "World events can check current location facts", errors)
-    require(event_director, "const EVENT_DEFINITIONS: Array[Dictionary]", "World events are data-driven", errors)
-    require(event_director, "func dispatch(trigger: String, context: Dictionary = {}) -> Array[String]:", "World event trigger entry point", errors)
-    require(event_director, "func _conditions_met(conditions: Array) -> bool:", "World events support condition lists", errors)
-    require(event_director, '"flag_absent"', "World events can require a flag to be absent", errors)
-    require(event_director, '"item_count_at_least"', "World events can require item counts", errors)
-    require(event_director, '"world_event_fired:" + event_id', "One-shot world events persist their fired marker", errors)
-    require(event_director, "event_triggered.emit(event_id, payload)", "World event director emits an event signal for listeners", errors)
-    require(village_hub, 'rest.rest_id = "rest_A1_village_hearth"', "A1 hearth rest point has a stable save ID", errors)
-    require(village_hub, 'north_gate.position = Vector2(2840, 520)', "A1 north gate is placed at the expanded east end of the village", errors)
-    require(village_hub, 'city_cut.position = Vector2(100, 520)', "A1 drainage shortcut is placed at the west end", errors)
-    require(village_hub, 'func _create_village_rooftop_route() -> void:', "A1 optional rooftop exploration route exists", errors)
-    require(village_hub, 'mite_house_door.position = Vector2(455, 520)', "A1 Mite house door interaction anchor", errors)
-    route_npc_script = read("scripts/npc/route_npc.gd", errors)
-    require(route_npc_script, "@export var cloth_color: Color = Color(\"#49424a\")", "Reusable NPC presentation supports per-role clothing colors", errors)
-    require(route_npc_script, '@export_range(40.0, 140.0, 5.0) var interaction_range: float = 100.0', "NPC interaction range is configurable per scene", errors)
-    require(village_hub, 'npc.interaction_range = 40.0', "A1 gatekeeper uses a reduced local focus radius", errors)
-    require(village_hub, 'grandmother.interaction_range = 60.0', "A1 grandmother uses a reduced local focus radius", errors)
-    require(village_hub, 'blacksmith.interaction_range = 45.0', "A1 blacksmith uses a reduced local focus radius", errors)
-    require(village_hub, 'merchant.interaction_range = 60.0', "A1 merchant uses a reduced local focus radius", errors)
-    mite_script = read("scripts/npc/mite.gd", errors)
-    require(mite_script, 'const VILLAGE_HOUSE_DOOR_POSITION := Vector2(455, 520)', "A1 Mite interaction excludes the house-door focus zone", errors)
-    require(mite_script, 'const VILLAGE_HOUSE_DOOR_EXCLUSION_RANGE := 105.0', "A1 house-door exclusion radius prevents competing E prompts", errors)
-    require(mite_script, 'not _blocked_by_village_house_door(hero)', "A1 Mite prompt is suppressed beside the house door", errors)
-    require(mite_script, 'INTERACTION_FOCUS_SCRIPT.is_focused(self)', "A1 Mite only draws and accepts input when it owns interaction focus", errors)
-    require(village_poi_script, 'INTERACTION_FOCUS_SCRIPT.is_focused(self)', "A1 POIs only draw and accept input when focused", errors)
-    if "mark_mite_connection_missed()" in village_hub:
-        errors.append("A1 church exploration must not irreversibly mark the Mite connection missed.")
+    interior_scene = read("scripts/levels/interior_scene.gd", errors)
 
-    pickup_script = read("scripts/world/world_item_pickup.gd", errors)
-    require(pickup_script, 'panel.call("show_pickup"', "Item pickup shows acquisition feedback without displaying lore as already read", errors)
-    if "WorldState.mark_item_read(item_id)" in pickup_script:
-        errors.append("Picking up an item must not automatically mark its description as read.")
+    require(village_hub, 'WorldState.set_location("village")', "A1 persists village location for Continue", errors)
+    require(village_hub, 'var spawn_side := WorldState.pending_region_spawn_side', "A1 captures incoming spawn side", errors)
+    require(village_hub, 'if "guide_defeated" not in WorldState.achievement_flags:', "A1 north gate remains locked until the Guide is defeated", errors)
+    require(village_hub, 'SceneTransition.fade_to_scene("res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn")', "A1 north gate enters authored A2 R01 after the Guide gate", errors)
+    require(village_hub, 'SceneTransition.fade_to_scene("res://scenes/old_drain_exploration.tscn")', "A1 can enter the short old-drain exploration segment", errors)
+    require(village_hub, 'city_cut.display_name = "旧排水通道"', "A1 old-drain entrance is independent of the Guide gate", errors)
+    require(village_hub, '"restoration_camp_established" in WorldState.achievement_flags', "A1 Restoration Army camp uses its independent story-arrival flag", errors)
+    require(village_hub, 'north_gate.display_name = "旧朝圣路" if guide_defeated else "北门"', "A1 north-gate label reflects the Guide gate state", errors)
+    if "village_defense_survived" in village_hub or "village_defense_demo.tscn" in village_hub:
+        errors.append("A1 village hub still references the retired village-defense flow.")
+    if "func _draw()" in village_hub or "draw_rect(" in village_hub or "draw_colored_polygon(" in village_hub:
+        errors.append("A1 fixed village terrain must remain authored in the scene, not drawn by the hub script.")
 
-    inventory_script = read("scripts/ui/inventory_overlay.gd", errors)
-    require(inventory_script, "WorldState.mark_item_read(item_id)", "Explicit inventory item selection records reading state", errors)
-    if "_select_item(str(item_ids[0]))" in inventory_script:
-        errors.append("Opening inventory must not silently mark the first item as read.")
+    # The main hub's terrain, POIs, and spawn anchors must be visible editor nodes.
+    require(village_scene, '[node name="Terrain" type="Node2D" parent="."]', "A1 terrain is authored in the scene", errors)
+    require(village_scene, '[node name="GroundMain" type="StaticBody2D" parent="Terrain"]', "A1 main ground collision is authored", errors)
+    require(village_scene, '[node name="SpawnMarkers" type="Node2D" parent="."]', "A1 spawn markers are authored", errors)
+    require(village_scene, '[node name="NorthGateEntry" type="Marker2D" parent="SpawnMarkers"]', "A1 north-gate return marker is authored", errors)
+    require(village_scene, '[node name="NorthGatePOI" type="Node2D" parent="."]', "A1 north gate is an authored POI", errors)
+    require(village_scene, '[node name="CityCutPOI" type="Node2D" parent="."]', "A1 old-drain entrance is an authored POI", errors)
+    require(village_scene, '[node name="WorldEventDirector" type="Node" parent="."]', "A1 event director is an authored scene node", errors)
 
+    # A1.1 preserves its two separate directions: cliff exploration and the future A2 road.
+    require(backhill_script, 'WorldState.set_location("village_backhill")', "A1.1 Continue location mapping", errors)
+    require(backhill_script, 'SceneTransition.fade_to_scene(CLIFF_EXPLORATION_SCENE)', "A1.1 cliff route is wired", errors)
+    require(backhill_scene, '[node name="CliffExplorationDoor" type="Area2D" parent="."]', "A1.1 cliff entrance is authored", errors)
+    require(backhill_scene, '[node name="FutureA2RoadBlocker" type="StaticBody2D" parent="."]', "A1.1 future A2 branch remains physically blocked", errors)
 
-    require(village_hub, "_spawn_resonance_well_gate()", "Village hub", errors)
-    require(village_hub, "resonance_well_gate.opened.connect(_on_resonance_well_opened)", "Village hub", errors)
-    require(village_hub, 'resonance_well_gate.secret_id = "H01"', "Village hidden gate ID", errors)
-    require(village_hub, 'resonance_well_gate.required_resonance = 12', "Village hidden gate threshold", errors)
-    require(village_hub, 'resonance_well_gate.target_location_id = "hidden_well"', "Village hidden gate destination", errors)
-    require(village_hub, 'var spawn_x := 1850.0 if spawn_side in ["well_exit", "cliff_cave_return"]', "Village watergate return spawn spacing", errors)
+    # Save the incoming side before clearing the one-shot transition value, or Continue will lose the route.
+    backhill_save = backhill_script.find('WorldState.set_location("village_backhill")')
+    backhill_clear = backhill_script.find('WorldState.pending_region_spawn_side = "west"')
+    if backhill_save < 0 or backhill_clear < 0 or backhill_save > backhill_clear:
+        errors.append("A1.1 resume spawn-side save order must save the incoming side before clearing it.")
+    old_drain_save = old_drain_script.find('WorldState.set_location("old_drain_exploration")')
+    old_drain_clear = old_drain_script.find('WorldState.pending_region_spawn_side = "west"')
+    if old_drain_save < 0 or old_drain_clear < 0 or old_drain_save > old_drain_clear:
+        errors.append("A1 old-drain resume spawn-side save order must save the incoming side before clearing it.")
     village_spawn_capture = village_hub.find("var spawn_side := WorldState.pending_region_spawn_side")
     village_location_save = village_hub.find('WorldState.set_location("village")', village_spawn_capture)
     village_spawn_clear = village_hub.find('WorldState.pending_region_spawn_side = "west"', village_spawn_capture)
-    if not (
-        village_spawn_capture >= 0
-        and village_location_save > village_spawn_capture
-        and village_spawn_clear > village_location_save
-    ):
-        errors.append("Village resume spawn-side save order: capture incoming side, save destination, then clear one-shot side.")
-    require(village_hub, '2630.0 if spawn_side == "north_gate"', "Village north-gate return spawn", errors)
-    require(village_hub, '350.0 if spawn_side == "city_cut_return"', "Village old-drain return spawn", errors)
-    require(village_hub, '1850.0 if spawn_side in ["well_exit", "cliff_cave_return"]', "Village lower east return spawn", errors)
-    require(village_hub, '530.0 if spawn_side == "mite_house_return"', "Village house return spawn", errors)
-    require(region_spawn_script, '"res://scenes/regions/village_hub.tscn", "north_gate"', "A2 village return side", errors)
-    require(region_spawn_script, '"res://scenes/regions/village_hub.tscn", "city_cut_return"', "A3 old-drain return side", errors)
-    require(region_spawn_script, '"res://scenes/regions/village_hub.tscn", "well_exit"', "Watergate return side", errors)
-    require(village_hub, 'WorldState.set_checkpoint(Vector2(360, 520))', "A1 checkpoint is restored on entering the hub", errors)
-    require(village_hub, '"village_defense_survived"', "Village old-road unlock", errors)
-    require(village_hub, 'res://scenes/regions/ash_forest.tscn', "Village old-road route", errors)
-    require(village_hub, 'if "village_defense_survived" in WorldState.achievement_flags:', "A1 north gate and old drain share the village-defense progression flag", errors)
-    require(village_hub, 'draw_rect(Rect2(2818, 385, 50, 12)', "A1 north gate has a visible blocked state before village defense", errors)
-    require(village_hub, 'draw_line(Vector2(2818, 360), Vector2(2794, 405)', "A1 north gate visibly opens after village defense", errors)
-    require(village_hub, '守门人朝北门点了点头', "A1 gatekeeper reacts to village-defense progress", errors)
-    rest_point_script = read("scripts/world/rest_point.gd", errors)
-    require(rest_point_script, 'body.is_on_floor()', "A1 rest point rejects airborne use", errors)
-    require(rest_point_script, 'WorldState.save_game()', "A1 rest point saves after restoring the Hero", errors)
+    if not (village_spawn_capture >= 0 and village_location_save > village_spawn_capture and village_spawn_clear > village_location_save):
+        errors.append("A1 village resume spawn-side order must capture, save, then clear the one-shot side.")
 
-    defense = read("scripts/levels/village_defense_demo.gd", errors)
-    require(defense, 'WorldState.record_achievement("village_defense_survived")', "Village defense", errors)
+    # The old-drain segment is safe to visit early; only its A4-side deep gate opens the C24 loop.
+    require(old_drain_script, 'const CONNECTION_FLAG := "opened_old_drainage_link_from_A4"', "A1 old-drain deep gate uses the A4-side unlock fact", errors)
+    require(old_drain_script, 'WorldState.pending_region_spawn_side = "village_entry"', "A1 old-drain entry spawn is explicit", errors)
+    require(old_drain_script, 'const VILLAGE_SCENE := "res://scenes/regions/village_hub.tscn"', "A1 old-drain return target is explicit", errors)
+    require(old_drain_script, 'SceneTransition.fade_to_scene(VILLAGE_SCENE)', "A1 old-drain can return to the village", errors)
+    require(old_drain_scene, '[node name="SealedOldDrainGate" type="StaticBody2D" parent="."]', "A1 old-drain deeper gate is authored and physically sealed", errors)
+    require(old_drain_scene, '[node name="VillageReturnDoor" type="Area2D" parent="."]', "A1 old-drain has a safe return door", errors)
+    if "village_defense_survived" in old_drain_script:
+        errors.append("A1 old-drain entry must not depend on the retired village-defense flag.")
+
+    # C02 is gated by the Guide; C24 becomes a full loop only after the A4-side gate opens.
+    require(event_director, '"guide_defeated"', "A1 progression dialogue recognizes the Guide gate", errors)
+    require(interior_scene, '"guide_defeated" in WorldState.achievement_flags', "A1 tavern dialogue responds to the Guide gate rather than village defense", errors)
+    if "village_defense_survived" in event_director or "village_defense_survived" in interior_scene:
+        errors.append("A1 NPC dialogue still depends on the retired village-defense state.")
+
+    # Mite's missed-meeting state must remain dormant until its actual story trigger is designed.
+    if "mark_mite_connection_missed()" in village_hub or "mark_mite_connection_missed()" in backhill_script or "mark_mite_connection_missed()" in interior_scene:
+        errors.append("A1 must not invent a Mite missed-meeting trigger from ordinary village exploration.")
 
     # Keep the hidden-region design table and its actual gate constructors in sync.
     # 将隐藏区域设计表与运行时入口构造函数逐项对齐，避免门槛、来源或落点悄悄漂移。
