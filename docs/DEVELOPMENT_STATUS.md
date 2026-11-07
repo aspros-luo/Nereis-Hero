@@ -33,6 +33,7 @@
 - 旧排水入口现在可从 A1 首次进入短段探索并安全返回；深处闸门仍由 A4 侧 opened_old_drainage_link_from_A4 控制，A3 侧在该状态成立前保留单向回村出口。C24 完整回环只在 A4 侧开启后成立。
 - village_backhill.gd 与 old_drain_exploration.gd 已修正 Continue 出生侧保存顺序：先持久化进入侧，再清除一次性转场值。该修复尚未经过 Godot 4.6.1 实机验证。
 - cliff_exploration 已补入 WorldState.get_resume_scene_path()，Continue 不再回退到序章默认场景；旧排水场景的闭合 / 开放门视觉路径也已对齐实际 .tscn 节点名。
+- 酒馆 / 教堂室内退出原先指向不存在的 scenes/village_hub.tscn；现改为返回 A1.1 village_backhill.tscn，并按 church_return / tavern_return 落到场景内独立 Marker2D。
 - 后山悬崖的 H09CaveDoor 仍指向 scenes/demos/cliff_cave_experiment.tscn；H09 不在已确认的 H01–H08 隐藏区域编号内，需在正式接入前明确它是本地区域还是测试入口。
 - A1 主村庄场景中的北门、旧排水 POI、检查点、炉火、NPC 与 H01 井门均有场景节点；北门新增场景化 StaticBody2D 碰撞障碍，并与 guide_defeated 同步开闭。A1.1 后山的悬崖门与未来雾林阻挡也由场景节点维护。
 - **A1-S03 屋顶木栈道尚未完成。** 当前主村庄场景只有建筑屋顶装饰，没有与拓扑 A1-S03 / SC004 / SC005 对应的连续可站立碰撞平台；不得将装饰屋顶视为可玩路线。
