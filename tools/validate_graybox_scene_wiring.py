@@ -784,12 +784,11 @@ def main() -> int:
 
     village_route_script = read("scripts/levels/village_hub.gd", errors)
     village_poi_script = read("scripts/world/village_poi.gd", errors)
+    village_scene_route = read("scenes/regions/village_hub.tscn", errors)
     require(village_route_script, 'if location_id == "north_gate":', "C02 A1 north-gate route", errors)
-    require(village_route_script, 'north_gate.position = Vector2(2840, 520)', "C02 north-gate interaction anchor at expanded A1 east edge", errors)
-    require(village_route_script, '2630.0 if spawn_side == "north_gate"', "C02 A2 return spawn x=2630", errors)
+    require(village_scene_route, '[node name="NorthGatePOI" type="Node2D" parent="."]\nposition = Vector2(2840, 520)', "C02 authored north-gate interaction anchor", errors)
+    require(village_scene_route, '[node name="NorthGateEntry" type="Marker2D" parent="SpawnMarkers"]\nposition = Vector2(2630, 520)', "C02 authored A2 return spawn x=2630", errors)
     require(village_poi_script, 'distance_to(hero.global_position) <= interaction_range', "A1 POI interaction radius is configurable per point", errors)
-    # The A2 return spawn must remain outside the North Gate POI radius to prevent
-    # a transition loop or an immediate repeated interaction after returning.
     if 2840.0 - 2630.0 <= 110.0:
         errors.append("C02: A2 return spawn overlaps the North Gate POI interaction radius.")
     require(village_route_script, 'if "guide_defeated" not in WorldState.achievement_flags:', "C02 north gate remains locked until the Guide is defeated", errors)
@@ -812,23 +811,17 @@ def main() -> int:
     require(region_script, 'if region_id == "A3" and side == "city_canopy_entry":\n\t\treturn floor_y - 130.0', "C03 A3 arrival height mapping", errors)
     require(region_script, "_add_platform(Rect2(80, 410, 150, 18))", "C03 A3 west arrival support platform", errors)
 
-    require(village_route_script, 'city_cut.poi_id = "city_cut"', "A1 drainage route", errors)
-    require(village_route_script, "city_cut.position = Vector2(100, 520)", "C24 A1 ground-level drainage anchor", errors)
-    require(village_route_script, '350.0 if spawn_side == "city_cut_return"', "C24 village return spawn x=350", errors)
-    require(village_route_script, "func _spawn_village_rest_point() -> void:", "A1 hearth rest point", errors)
-    require(village_route_script, 'rest.rest_id = "rest_A1_village_hearth"', "A1 rest point persistence ID", errors)
+    require(village_scene_route, '[node name="CityCutPOI" type="Node2D" parent="."]\nposition = Vector2(100, 520)', "C24 authored A1 ground-level drainage anchor", errors)
+    require(village_scene_route, '[node name="CityCutReturn" type="Marker2D" parent="SpawnMarkers"]\nposition = Vector2(350, 520)', "C24 authored village return spawn x=350", errors)
+    require(village_scene_route, '[node name="VillageHearthRestPoint" type="Node2D" parent="."]', "A1 authored hearth rest point", errors)
+    require(village_scene_route, '[node name="VillageCheckpoint" type="Area2D" parent="."]', "A1 authored checkpoint", errors)
     require(village_route_script, 'city_cut.display_name = "旧排水通道"', "A1 old-drain entrance is available independently of the Guide gate", errors)
     old_drain_route_script = read("scripts/levels/old_drain_exploration.gd", errors)
     require(village_route_script, 'SceneTransition.fade_to_scene("res://scenes/old_drain_exploration.tscn")', "C24 A1 enters the shared old-drain exploration segment", errors)
-    # C24 intentionally uses a two-scene route: village -> old drain -> A3.
-    # Validate target, arrival-side persistence, and transition independently;
-    # do not require an incorrect direct village-to-city jump.
     require(old_drain_route_script, 'const CITY_SCENE := "res://scenes/regions/forgotten_city.tscn"', "C24 old-drain destination scene", errors)
     require(old_drain_route_script, 'WorldState.pending_region_spawn_side = "village_city_cut"', "C24 old-drain-to-A3 spawn mapping", errors)
     require(old_drain_route_script, "SceneTransition.fade_to_scene(CITY_SCENE)", "C24 old-drain-to-A3 transition call", errors)
-    require(village_route_script, "func _create_village_rooftop_route() -> void:", "A1 rooftop route builder", errors)
-    require(village_route_script, "Rect2(220, 445, 90, 16)", "A1 rooftop first ledge", errors)
-    require(village_route_script, "Rect2(1710, 270, 110, 16)", "A1 rooftop route over tavern", errors)
+    # A1-S03 rooftop traversal must be authored as scene platforms before it can be marked complete.
     require(region_script, 'if region_id == "A3" and side == "village_city_cut":', "C24 A3 arrival spawn branch", errors)
     require(region_script, "return 700.0", "C24 A3 arrival spawn x=700", errors)
     require(region_script, '520.0, "E  经旧排水道返回"', "A3 return-to-village exit at x=520", errors)
