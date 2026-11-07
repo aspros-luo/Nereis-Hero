@@ -126,23 +126,24 @@ func _configure_static_village_nodes() -> void:
 
 
 func _refresh_world_visual_states() -> void:
-	var defense_survived := "village_defense_survived" in WorldState.achievement_flags
+	var guide_defeated := "guide_defeated" in WorldState.achievement_flags
 	var camp_established := "restoration_camp_established" in WorldState.achievement_flags
-	$DrainEntranceVisual/RubbleState.visible = not defense_survived
-	$NorthGateVisual/BlockedState.visible = not defense_survived
-	$NorthGateVisual/RepairedState.visible = defense_survived
+	# The short old-drain section is available for exploration; its deeper gate
+	# remains sealed until the A4-side connection is opened.
+	$DrainEntranceVisual/RubbleState.visible = false
+	$NorthGateVisual/BlockedState.visible = not guide_defeated
+	$NorthGateVisual/RepairedState.visible = false
 	$CampVisual.visible = camp_established
 	$CampLabel.visible = camp_established
 	$RestorationCampPOI.visible = camp_established
 	$RestorationCampPOI.process_mode = Node.PROCESS_MODE_INHERIT if camp_established else Node.PROCESS_MODE_DISABLED
 	var north_gate: Node2D = $NorthGatePOI
-	north_gate.display_name = "旧朝圣路" if defense_survived else "北门"
-	north_gate.dialogue = "大门已经修复，门后的旧路仍然存在。\n\n石头从森林深处传来钟声。" if defense_survived else "新鲜的斧痕划伤了大门。\n\n门外的道路安静得反常。\n\n远处传来金属碰撞声。"
+	north_gate.display_name = "旧朝圣路" if guide_defeated else "北门"
+	north_gate.dialogue = "门闩已经卸下，旧路通向雾林。" if guide_defeated else "门闩仍然落着。守门人没有解释，只说北边的事尚未了结。"
 	$NorthGateLabel.text = NereisLocalization.translate_text(north_gate.display_name)
 	var city_cut: Node2D = $CityCutPOI
-	city_cut.display_name = "旧排水通道" if defense_survived else "封闭的排水通道"
-	city_cut.dialogue = "旧排水道从城墙下方延伸。\n\n石阶通向更深处，远处似乎有水声；但里面的闸门看起来早已锈死。" if defense_survived else "倒塌的横梁与新鲜碎石封住了通道。有人最近才堵上这里。\n\n裂缝另一侧的石头比村庄古老得多。"
-
+	city_cut.display_name = "旧排水通道"
+	city_cut.dialogue = "入口下方的石阶仍可通行。更深处传来水声；尽头的闸门似乎只能从另一侧开启。"
 
 func _configure_baseline_npcs() -> void:
 	for node_name in ["Gatekeeper", "Grandmother", "BlacksmithNPC", "TravelingMerchant"]:
@@ -194,29 +195,10 @@ func _refresh_baseline_npc_dialogue(npc: Node) -> void:
 		npc.dialogue = "“路我能说的就这些。真要走，自己多留神。”"
 		return
 	match String(npc.npc_id):
-		"village_gatekeeper":
-			if "village_defense_survived" in WorldState.achievement_flags and WorldState.selected_route == "church":
-				npc.dialogue = "守门人看了看你身上的教堂印记，又朝已经恢复通行的北门望去。\n\n“路是重新打开了。但他们说过的话，我还没打算忘。”"
-			elif "village_defense_survived" in WorldState.achievement_flags and WorldState.selected_route == "lullaby":
-				npc.dialogue = "守门人听见风里传来的旋律，手却没有再去掩酒馆的门。\n\n“北门暂时守住了。那首歌的事，还是别在街上唱。”"
-			elif "village_defense_survived" in WorldState.achievement_flags:
-				npc.dialogue = "守门人朝北门点了点头，神情仍然疲惫。\n\n“路重新通了。可别把能走过去，当成那边已经安全。”"
-			elif WorldState.selected_route == "church":
-				npc.dialogue = "守门人看了看你身上的教堂印记，神情变得警惕。\n\n“他们说你不会再回来。现在却又把你送回来了？”"
-			elif WorldState.selected_route == "lullaby":
-				npc.dialogue = "风里传来一段模糊的摇篮曲，守门人随即把酒馆的门掩上了一半。\n\n“别在这里唱那首歌。除非你想让整座村庄都回想起来。”"
-			else:
-				npc.dialogue = "守门人打量着你，又看了看北门的方向。\n\n“刚回来？村里有些路白天也不好走。先四处看看，别急着往外闯。”"
 		"village_grandmother":
-			if "village_defense_survived" in WorldState.achievement_flags:
-				npc.dialogue = "老婆婆把门边的灯芯拨亮了一些。\n\n“路总算安静了些。人受了惊，得先吃口热的、睡一觉，别急着把自己逼得太紧。”"
-			else:
-				npc.dialogue = "老婆婆坐在屋檐下理着旧布。\n\n“外头风大，进村就先歇歇。村里人各有各的烦心事，别什么都往自己身上揽。”"
+			npc.dialogue = "老婆婆坐在屋檐下理着旧布。\n\n“外头风大，进村就先歇歇。村里人各有各的烦心事，别什么都往自己身上揽。”"
 		"village_blacksmith":
-			if "village_defense_survived" in WorldState.achievement_flags:
-				npc.dialogue = "铁匠把锤子搁在砧边，检查着刚换上的门钉。\n\n“北门暂时撑得住。等我把手头这批活做完，再看看你的兵器。”"
-			else:
-				npc.dialogue = "铁匠正把一块发红的铁料翻了个面。\n\n“想修兵器就先让我看看。至于那扇北门——它比一把钝剑更急着修。”"
+			npc.dialogue = "铁匠正把一块发红的铁料翻了个面。\n\n“想修兵器就先让我看看。手艺活急不得。”"
 		"traveling_merchant":
 			if WorldState.get_humanity_state() == "hollow":
 				npc.dialogue = "商人收起了笑容，悄悄把货箱往身边拉近。\n\n“今天先不谈价。你看起来比路上的风雨更难应付。”"
@@ -224,8 +206,6 @@ func _refresh_baseline_npc_dialogue(npc: Node) -> void:
 				npc.dialogue = "商人注意到你靴边的旧灰，没追问你在城墙下看见了什么。\n\n“旧城区的路不适合闭着眼走。记住自己从哪一侧进来，比记住传闻更有用。”"
 			elif "graybox_intro_ash_forest" in WorldState.achievement_flags:
 				npc.dialogue = "商人把一枚磨损的路标放回箱中。\n\n“北边的旧路能走，不代表每条岔路都值得追。回来时，先记清楚自己看见了什么。”"
-			elif "village_defense_survived" in WorldState.achievement_flags:
-				npc.dialogue = "商人重新整理着货物。\n\n“北门恢复通行后，来往的人会多起来。真要买东西，先想清楚下一段路缺什么。”"
 			else:
 				npc.dialogue = "商人把银币在指间转了一圈，打量着你的行囊。\n\n“我从外面来，也会往外面去。要问路况可以，传闻就得自己掂量。”"
 
@@ -316,23 +296,17 @@ func _enter_village_location(location_id: String) -> void:
 		print("[NEREIS][VILLAGE] Entering Restoration Camp")
 		SceneTransition.fade_to_scene("res://scenes/rebel_camp.tscn")
 	elif location_id == "north_gate":
-		if "village_defense_survived" in WorldState.achievement_flags:
-			WorldState.pending_region_spawn_side = "west"
-			WorldState.set_location("ash_forest")
-			print("[NEREIS][MAP] Entering A2: Old Pilgrim Road")
-			SceneTransition.fade_to_scene("res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn")
-		else:
-			WorldState.set_location("village")
-			print("[NEREIS][VILLAGE] Triggering village defense chapter")
-			SceneTransition.fade_to_scene("res://scenes/demos/village_defense_demo.tscn")
+		if "guide_defeated" not in WorldState.achievement_flags:
+			return
+		WorldState.pending_region_spawn_side = "west"
+		WorldState.set_location("ash_forest")
+		print("[NEREIS][MAP] Entering A2: Old Pilgrim Road")
+		SceneTransition.fade_to_scene("res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn")
 	elif location_id == "city_cut":
-		if "village_defense_survived" in WorldState.achievement_flags:
-			WorldState.pending_region_spawn_side = "village_entry"
-			WorldState.set_location("old_drain_exploration")
-			print("[NEREIS][MAP] Entering the first old-drain exploration segment")
-			SceneTransition.fade_to_scene("res://scenes/old_drain_exploration.tscn")
-		else:
-			print("[NEREIS][MAP] Old drainage passage remains sealed until the village attack is survived")
+		WorldState.pending_region_spawn_side = "village_entry"
+		WorldState.set_location("old_drain_exploration")
+		print("[NEREIS][MAP] Entering the first old-drain exploration segment")
+		SceneTransition.fade_to_scene("res://scenes/old_drain_exploration.tscn")
 	elif location_id == "graveyard":
 		WorldState.set_location("graveyard")
 		print("[NEREIS][VILLAGE] Entering Village Graveyard")
@@ -363,10 +337,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			_mark_input_handled()
 			print("[NEREIS][DEBUG] Opening ancient research theater")
 			get_tree().change_scene_to_file("res://scenes/ancient_research_lab.tscn")
-		elif event.keycode == KEY_F5:
-			_mark_input_handled()
-			print("[NEREIS][DEBUG] Opening village defense theater")
-			get_tree().change_scene_to_file("res://scenes/demos/village_defense_demo.tscn")
 		elif event.keycode == KEY_F8:
 			_mark_input_handled()
 			print("[NEREIS][DEBUG] Opening director ending theater")
