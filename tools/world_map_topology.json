@@ -1811,7 +1811,7 @@
         "connection": "C24",
         "from": "A1.village_lane",
         "to": "A3.ground_street",
-        "reason": "村庄防卫事件后开放的低位旧排水通道；提供第二条进城路线，不承担屋顶高路功能"
+        "reason": "初次进入 A1 可探索低位旧排水短段并安全返回；A4 侧闸门开启后才形成完整 A1-A3 连接；不承担屋顶高路功能"
       }
     ],
     "target_loops": [
