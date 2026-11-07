@@ -28,6 +28,9 @@ script = ExtResource("5")
 
 [node name="Hero" parent="." instance=ExtResource("3")]
 position = Vector2(260, 540)
+[node name="EntryFromVillage" type="Marker2D" parent="."]
+position = Vector2(260, 540)
+
 [node name="EntryCliffReturn" type="Marker2D" parent="."]
 position = Vector2(1150, 540)
 
