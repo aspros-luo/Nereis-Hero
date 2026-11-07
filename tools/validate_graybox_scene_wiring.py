@@ -1909,6 +1909,10 @@ def main() -> int:
     require(backhill_script, 'SceneTransition.fade_to_scene(CLIFF_EXPLORATION_SCENE)', "A1.1 cliff route is wired", errors)
     require(backhill_scene, '[node name="CliffExplorationDoor" type="Area2D" parent="."]', "A1.1 cliff entrance is authored", errors)
     require(backhill_scene, '[node name="FutureA2RoadBlocker" type="StaticBody2D" parent="."]', "A1.1 future A2 branch remains physically blocked", errors)
+    require(backhill_scene, '[node name="ChurchReturn" type="Marker2D" parent="."]', "A1.1 church interior return marker is authored", errors)
+    require(backhill_scene, '[node name="TavernReturn" type="Marker2D" parent="."]', "A1.1 tavern interior return marker is authored", errors)
+    require(backhill_script, '"church_return":', "A1.1 resolves church return spawn side", errors)
+    require(backhill_script, '"tavern_return":', "A1.1 resolves tavern return spawn side", errors)
     cliff_script = read("scripts/levels/cliff_exploration.gd", errors)
     cliff_scene = read("scenes/cliff_exploration.tscn", errors)
     require(world_state_script, 'return "res://scenes/cliff_exploration.tscn"', "Continue can resume A1 cliff exploration", errors)
@@ -1950,6 +1954,11 @@ def main() -> int:
     # C02 is gated by the Guide; C24 becomes a full loop only after the A4-side gate opens.
     require(event_director, '"guide_defeated"', "A1 progression dialogue recognizes the Guide gate", errors)
     require(interior_scene, '"guide_defeated" in WorldState.achievement_flags', "A1 tavern dialogue responds to the Guide gate rather than village defense", errors)
+    require(interior_scene, 'WorldState.pending_region_spawn_side = "church_return"', "A1 church exit preserves its backhill return side", errors)
+    require(interior_scene, 'WorldState.pending_region_spawn_side = "tavern_return"', "A1 tavern exit preserves its backhill return side", errors)
+    require(interior_scene, 'SceneTransition.fade_to_scene("res://scenes/village_backhill.tscn")', "A1 interiors return to the A1.1 backhill scene", errors)
+    if "res://scenes/village_hub.tscn" in interior_scene:
+        errors.append("A1 interior exit must not target the missing legacy village_hub.tscn path.")
     if "village_defense_survived" in event_director or "village_defense_survived" in interior_scene:
         errors.append("A1 NPC dialogue still depends on the retired village-defense state.")
 
