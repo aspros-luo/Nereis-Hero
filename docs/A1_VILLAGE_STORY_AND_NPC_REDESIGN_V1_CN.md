@@ -197,7 +197,6 @@ A1 不是强制任务大厅。玩家第一次进入后即可自由探索地面�
 | `guide_defeated` | 导则事件完成 | 北门门闩解除，开放 A2 | 导则事件实际写入该 flag | 持久状态 |
 | `old_drain_first_visit_seen` | 首次进入旧排水探索段 | 播放一次入口观察反馈 | 实际进入 `old_drain_exploration` | 持久状态 |
 | `opened_old_drainage_link_from_A4` | 玩家从 A4 侧开启深处闸门 | C24 旧排水回环连通 A1 与 A3 | A4 侧实体机关与通路状态 | 持久状态 |
-| `A1_grandmother_defense_reaction` | `village_defense_survived` 成立后回村或再次交谈 | 老婆婆回应村庄重新安静下来的变化 | 不揭示核心秘密 | 持久状态 |
 | `A1_merchant_route_tip_01` | 旅行商人按剧情再次到访，且玩家实际进入过对应区域路线 | 旅行商人提供与该路线有关的有限提示 | 实际进入记录 + 本次到访状态 | 可重复查看，不重复发奖 |
 | `A1_tavern_sound_notice` | 首次调查酒馆 | 一次短暂声音 / 门内反应 | 已调查酒馆 | 首次反馈一次，之后可重看 |
 | `A1_cliff_cave_return_reaction` | 现有 `returned_to_village_after_mad_cleric` | 崖洞入口出现，少数居民可出现警觉变化 | 现有事件 flag | 持久状态，不强制演出 |
