@@ -191,8 +191,8 @@ A1 是可反复返回的生活、休整与信息枢纽，不是任务大厅或�
 以下结论来自当前分支源码静态阅读：
 
 - `scenes/village_hub.tscn` 中守门人位置为 x=2740，北门 POI 为 x=2840；守门人和北门 POI 是两个独立交互对象。
-- `scripts/levels/village_hub.gd` 将北门路线目标指向 `res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn`；当前只有在 `village_defense_survived` 后才进入该场景。
-- 同一脚本将右侧排水入口指向 `res://scenes/old_drain_exploration.tscn`，但在 `village_defense_survived` 前保持封闭。因此守门人可以在初始交谈中说“战争时堵塞、废弃”，不能说玩家此刻已经能进去。
+- `scripts/levels/village_hub.gd` 将北门路线目标指向 `res://scenes/rooms/a2_fog_forest/runtime/a2_r01_room.tscn`；现在由 `guide_defeated` 控制北门，不再启动村庄防卫战。导则事件本身的身份与触发源仍待独立设计。
+- 同一脚本将西侧旧排水入口指向 `res://scenes/old_drain_exploration.tscn`，初次进入 A1 即可探索短段并安全返回；深处闸门仍由 A4 侧的 `opened_old_drainage_link_from_A4` 控制。因此守门人不能再把入口描述成因村庄防卫战而封闭。
 - A1.1 后山是独立场景，悬崖探索又是独立场景。进入 A1.1 不等于实际探索悬崖，更不等于看见飞龙。
 - `WorldState` 已有独立的 `explored_room_ids` 与 `mark_room_explored()` 持久化机制；它比旧的 `graybox_intro_ash_forest` 更适合作为实际房间探索证据。但当前尚未确认 R01 / 钟墓 / 后山场景运行时是否已统一写入对应 room ID，因此本节只规定触发语义，不擅自指定未核实的 ID。
 - 当前 `route_npc.gd` 只有单个 `dialogue` 字符串；`village_hub.gd` 的常驻 NPC 刷新逻辑会覆盖守门人的单段对白。故上述脚本是内容设计，不代表游戏中已能逐段播放。
@@ -249,7 +249,7 @@ A1 是可反复返回的生活、休整与信息枢纽，不是任务大厅或�
 - 下水道反馈读取旧排水场景首次进入时已存在的 `old_drain_first_visit_seen` 事实。
 - 后山悬崖反馈在 `cliff_exploration.gd` 场景 `_ready()` 实际运行时记录 `a1_gatekeeper_backhill_cliff_entered`。
 - 钟墓证据与飞龙证据保留独立 flag 接口；当前没有擅自创造钟墓内部或飞龙目击事件。只有未来相应场景真实记录这些事实后，反馈才会解锁。
-- 守门人原有基于路线/防御状态的单段对白被通用序列替代；北门 POI、守门人场景节点和交互位置均未改动。
+- 守门人原有单段对白已被通用序列替代；北门 POI、守门人场景节点和交互位置均未改动。北门解锁读取 `guide_defeated`，不再读取旧防卫状态。
 
 ### 12.3 正反方裁定与当前限制
 
