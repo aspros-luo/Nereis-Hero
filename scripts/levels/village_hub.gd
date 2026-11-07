@@ -130,9 +130,7 @@ func _refresh_world_visual_states() -> void:
 	var camp_established := "restoration_camp_established" in WorldState.achievement_flags
 	# The short old-drain section is available for exploration; its deeper gate
 	# remains sealed until the A4-side connection is opened.
-	$DrainEntranceVisual/RubbleState.visible = false
 	$NorthGateVisual/BlockedState.visible = not guide_defeated
-	$NorthGateVisual/RepairedState.visible = false
 	$CampVisual.visible = camp_established
 	$CampLabel.visible = camp_established
 	$RestorationCampPOI.visible = camp_established
