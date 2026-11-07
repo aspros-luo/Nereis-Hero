@@ -196,13 +196,17 @@ func _on_npc_interacted(npc: Node) -> void:
     narrative.show_message(npc.display_name, npc.dialogue, 6.0)
 
 func _on_exit_reached() -> void:
-    WorldState.set_location("village")
-    narrative.show_message("BACK TO THE VILLAGE", "The village waits outside.", 3.0)
+    if location_id == "church":
+        WorldState.pending_region_spawn_side = "church_return"
+    else:
+        WorldState.pending_region_spawn_side = "tavern_return"
+    WorldState.set_location("village_backhill")
+    narrative.show_message("BACK TO THE BACKHILL", "The village road waits outside.", 3.0)
     await narrative.message_finished
-    _return_to_village()
+    _return_to_backhill()
 
-func _return_to_village() -> void:
-    SceneTransition.fade_to_scene("res://scenes/village_hub.tscn")
+func _return_to_backhill() -> void:
+    SceneTransition.fade_to_scene("res://scenes/village_backhill.tscn")
 
 
 
