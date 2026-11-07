@@ -23,8 +23,9 @@ var respawning := false
 func _ready() -> void:
 	WorldState.prepare_scene_runtime()
 	entry_side = WorldState.pending_region_spawn_side
-	WorldState.pending_region_spawn_side = "west"
+	# Save the actual incoming side for Continue before clearing the one-shot value.
 	WorldState.set_location("old_drain_exploration")
+	WorldState.pending_region_spawn_side = "west"
 	hero.position = Vector2(_spawn_x_for_side(entry_side), _spawn_y_for_side(entry_side))
 	var camera := hero.get_node("HeroCamera") as Camera2D
 	camera.position_smoothing_enabled = true
