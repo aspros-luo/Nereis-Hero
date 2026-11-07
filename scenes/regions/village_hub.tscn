@@ -326,26 +326,6 @@ polygon = PackedVector2Array(0,0, 12,1, 9,50, 0,43, -3,20)
 color = Color(0.364706, 0.34902, 0.392157, 1)
 z_index = -3
 
-[node name="RubbleState" type="Node2D" parent="DrainEntranceVisual"]
-
-[node name="Rubble01" type="Polygon2D" parent="DrainEntranceVisual/RubbleState"]
-position = Vector2(-42, -45)
-polygon = PackedVector2Array(0,0, 22,-7, 31,15, 14,29, -1,16)
-color = Color(0.317647, 0.254902, 0.286275, 1)
-z_index = -2
-
-[node name="Rubble02" type="Polygon2D" parent="DrainEntranceVisual/RubbleState"]
-position = Vector2(-10, -33)
-polygon = PackedVector2Array(0,0, 18,5, 28,30, 4,48, -10,27)
-color = Color(0.317647, 0.254902, 0.286275, 1)
-z_index = -2
-
-[node name="Rubble03" type="Polygon2D" parent="DrainEntranceVisual/RubbleState"]
-position = Vector2(17, -40)
-polygon = PackedVector2Array(0,0, 14,8, 17,36, -2,45, -8,18)
-color = Color(0.47451, 0.396078, 0.415686, 1)
-z_index = -2
-
 [node name="RegionTitle" type="Label" parent="."]
 offset_right = 320.0
 offset_bottom = 52.0
@@ -460,43 +440,6 @@ position = Vector2(-22, -90)
 polygon = PackedVector2Array(0,0, 44,0, 44,12, 0,12)
 color = Color(0.47451, 0.396078, 0.415686, 1)
 z_index = 0
-
-[node name="RepairedState" type="Node2D" parent="NorthGateVisual"]
-visible = false
-
-[node name="BraceLeft" type="Line2D" parent="NorthGateVisual/RepairedState"]
-points = PackedVector2Array(-22, -160, -46, -115)
-width = 6.0
-default_color = Color(0.47451, 0.396078, 0.415686, 1)
-
-[node name="BraceRight" type="Line2D" parent="NorthGateVisual/RepairedState"]
-points = PackedVector2Array(28, -160, 50, -115)
-width = 6.0
-default_color = Color(0.47451, 0.396078, 0.415686, 1)
-
-[node name="NailLeftA" type="Polygon2D" parent="NorthGateVisual/RepairedState"]
-position = Vector2(-30, -146)
-polygon = PackedVector2Array(3.00, 0.00, 2.12, 2.12, 0.00, 3.00, -2.12, 2.12, -3.00, 0.00, -2.12, -2.12, -0.00, -3.00, 2.12, -2.12)
-color = Color(0.819608, 0.690196, 0.541176, 1)
-z_index = 1
-
-[node name="NailLeftB" type="Polygon2D" parent="NorthGateVisual/RepairedState"]
-position = Vector2(-20, -132)
-polygon = PackedVector2Array(3.00, 0.00, 2.12, 2.12, 0.00, 3.00, -2.12, 2.12, -3.00, 0.00, -2.12, -2.12, -0.00, -3.00, 2.12, -2.12)
-color = Color(0.819608, 0.690196, 0.541176, 1)
-z_index = 1
-
-[node name="NailRightA" type="Polygon2D" parent="NorthGateVisual/RepairedState"]
-position = Vector2(27, -132)
-polygon = PackedVector2Array(3.00, 0.00, 2.12, 2.12, 0.00, 3.00, -2.12, 2.12, -3.00, 0.00, -2.12, -2.12, -0.00, -3.00, 2.12, -2.12)
-color = Color(0.819608, 0.690196, 0.541176, 1)
-z_index = 1
-
-[node name="NailRightB" type="Polygon2D" parent="NorthGateVisual/RepairedState"]
-position = Vector2(37, -146)
-polygon = PackedVector2Array(3.00, 0.00, 2.12, 2.12, 0.00, 3.00, -2.12, 2.12, -3.00, 0.00, -2.12, -2.12, -0.00, -3.00, 2.12, -2.12)
-color = Color(0.819608, 0.690196, 0.541176, 1)
-z_index = 1
 
 [node name="NorthGateLabel" type="Label" parent="."]
 offset_right = 110.0
