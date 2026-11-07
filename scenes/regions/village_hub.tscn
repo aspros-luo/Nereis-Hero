@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3]
+[gd_scene load_steps=29 format=3]
 
 [ext_resource path="res://scripts/levels/village_hub.gd" type="Script" id="1"]
 [ext_resource path="res://scripts/world/village_poi.gd" type="Script" id="2"]
@@ -27,6 +27,9 @@
 
 [sub_resource type="RectangleShape2D" id="GroundMain"]
 size = Vector2(3000, 40)
+
+[sub_resource type="RectangleShape2D" id="NorthGateBarrierShape"]
+size = Vector2(60, 190)
 
 [sub_resource type="RectangleShape2D" id="Boundary"]
 size = Vector2(40, 720)
@@ -473,6 +476,12 @@ position = Vector2(3020, 360)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/EastBoundary"]
 shape = SubResource("Boundary")
+
+[node name="NorthGateBarrier" type="StaticBody2D" parent="Terrain"]
+position = Vector2(2860, 425)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/NorthGateBarrier"]
+shape = SubResource("NorthGateBarrierShape")
 
 [node name="BackhillEntrance" type="Node2D" parent="."]
 position = Vector2(2120, 520)
