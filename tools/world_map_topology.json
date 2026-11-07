@@ -16,7 +16,7 @@
       "spatial_layers": [
         {
           "id": "old_drainage_threshold",
-          "purpose": "C24 phased old-drain exploration: A1 entry opens after village defense; the A3 link opens from A4",
+          "purpose": "C24 phased old-drain exploration: the A1 entrance is available for a short first-visit exploration; the full A1-A3 loop opens from A4",
           "anchors": [
             {
               "id": "C24",
@@ -192,14 +192,14 @@
       "kind": "main",
       "initial_access": "both",
       "final_direction": "both",
-      "unlock_condition": "village_defense_survived",
+      "unlock_condition": "guide_defeated",
       "opens_from": "A1",
       "progression_gate": {
         "interaction_id": "north_gate",
-        "before_unlock": "enter_village_defense_demo_and_return_to_A1",
+        "before_unlock": "defeat_guide",
         "after_unlock": "enter_A2_from_A1",
         "reverse_route": "A2_to_A1_remains_available",
-        "note": "initial_access describes macro graph connectivity; the A1-side first-entry interaction launches the defense chapter before the route is unlocked."
+        "note": "The A1 north gate remains closed until the Guide is defeated. The Guide encounter source is tracked separately from this gate contract."
       },
       "layer_contract": {
         "from_subregion": "A1-S01",
@@ -903,8 +903,8 @@
       "kind": "shortcut",
       "initial_access": "blocked",
       "final_direction": "both",
-      "unlock_condition": "village_defense_survived",
-      "opens_from": "A1",
+      "unlock_condition": "opened_old_drainage_link_from_A4",
+      "opens_from": "A4",
       "spatial_contract": {
         "route_layer": "old_drainage_passage",
         "from_region_anchor": {
@@ -924,7 +924,7 @@
           "reservoir_return_spawn_side": "reservoir_link",
           "a3_link_unlock_flag": "opened_old_drainage_link_from_A4"
         },
-        "intent": "C24 is phased: after village defense, A1 enters a short old-drain exploration segment with low-threat rats and a physically blocked gate. The A4-side gate later opens the persistent connection to A3 through this segment; until then A3 keeps its original return-to-village behavior. This remains separate from the A2 forest/bell-tomb route.",
+        "intent": "C24 is phased: A1 can enter the short old-drain exploration segment from the first visit and return safely to the village. The A3-side exit remains a one-way return to A1 until the A4-side gate opens; after opened_old_drainage_link_from_A4, the shared segment forms the persistent A1-A3-A4 drainage loop. This remains separate from the A2 forest/bell-tomb route.",
         "to_region_spawn": {
           "region": "A3",
           "x": 700,
@@ -948,7 +948,7 @@
         "from_subregion": "A1-S01",
         "to_subregion": "A3-S03",
         "route_form": "村庄旧排水口→向下探索短段→（A4 侧开启后）城区旧排水回环",
-        "readability_contract": "村庄防卫后开放短段探索；A4 侧闸门开启后才与 A3 连通，独立于屋顶与高架路线",
+        "readability_contract": "初次进入 A1 即可探索旧排水短段并安全返回；A4 侧闸门开启后才形成 A1—旧排水段—A3 的双向回环，独立于屋顶与高架路线",
         "status": "design_contract_not_runtime_verified"
       }
     }
@@ -967,7 +967,7 @@
       "requires": [
         "opened_sewer_inspection_hatch_from_A4",
         "opened_watergate_and_village_well_exit",
-        "village_defense_survived"
+        "guide_defeated"
       ]
     },
     {
@@ -3776,22 +3776,6 @@
       "narrative_result": "Resonance reveals evidence; physical space and story reasoning still govern access."
     },
     {
-      "id": "EG03",
-      "name": "村口事件开启旧路",
-      "status": "design_contract_not_runtime_verified",
-      "first_visit_region": "A1",
-      "trigger": "resolve_village_defense_sidequest",
-      "required_ability": null,
-      "visible_blocker": "damaged_walkway_or_barred_defense_gate",
-      "destination": "A3_non_main_route",
-      "reward": [
-        "safe_resupply_point",
-        "npc_state_change",
-        "shortcut"
-      ],
-      "narrative_result": "The raid leaves conflicting Church and bandit traces without revealing the full conspiracy."
-    },
-    {
       "id": "EG04",
       "name": "城区地面屋顶地下三层回环",
       "status": "design_contract_not_runtime_verified",
@@ -4425,7 +4409,7 @@
         "from": "A1",
         "to": "A2",
         "kind": "main",
-        "unlock_condition": "village_defense_survived"
+        "unlock_condition": "guide_defeated"
       },
       {
         "id": "C03",
@@ -4572,7 +4556,7 @@
         "from": "A1",
         "to": "A3",
         "kind": "shortcut",
-        "unlock_condition": "village_defense_survived"
+        "unlock_condition": "opened_old_drainage_link_from_A4"
       }
     ],
     "hidden_links": [
