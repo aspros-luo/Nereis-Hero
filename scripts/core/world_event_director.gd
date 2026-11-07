@@ -20,7 +20,7 @@ const NPC_DEFINITIONS: Array[Dictionary] = [
 		"dialogue": "朝圣骑士站在光线照不到的地方，似乎在等一个不会准时到来的人。\n\n“这里还不是谈论那条路的时候。”",
 		"dialogue_variants": [
 			{
-				"conditions": [{"type": "flag", "value": "village_defense_survived"}],
+				"conditions": [{"type": "flag", "value": "guide_defeated"}],
 				"dialogue": "朝圣骑士没有立即看向你，只将目光停在门外的道路上。\n\n“路重新打开了。可通行，不代表值得前往。”"
 			}
 		]
@@ -37,7 +37,7 @@ const NPC_DEFINITIONS: Array[Dictionary] = [
 		"dialogue": "朝圣骑士站在光线照不到的地方，似乎在等一个不会准时到来的人。\n\n“这里还不是谈论那条路的时候。”",
 		"dialogue_variants": [
 			{
-				"conditions": [{"type": "flag", "value": "village_defense_survived"}],
+				"conditions": [{"type": "flag", "value": "guide_defeated"}],
 				"dialogue": "朝圣骑士没有立即看向你，只将目光停在门外的道路上。\n\n“路重新打开了。可通行，不代表值得前往。”"
 			}
 		]
