@@ -1908,19 +1908,18 @@ func _spawn_region_exits() -> void:
 			push_error("[NEREIS][A2][LEGACY_EXITS_DISABLED] Use the six authored A2 room scenes")
 			return
 		"A3":
-			# C24 enters the shared exploration segment only after the A4-side gate is opened.
-			# A4 侧闸门开启后，C24 才经共享探索段连通；此前仍保持原有村庄回程。
-			if "village_defense_survived" in WorldState.achievement_flags:
-				if "opened_old_drainage_link_from_A4" in WorldState.achievement_flags:
-					_spawn_exit_door(
-						520.0, "E  进入旧排水道回环", "old_drain_exploration",
-						"res://scenes/old_drain_exploration.tscn", "city_side_entry"
-					)
-				else:
-					_spawn_exit_door(
-						520.0, "E  经旧排水道返回", "village",
-						"res://scenes/regions/village_hub.tscn", "city_cut_return"
-					)
+			# Before A4 opens the deep gate, the old-drain exit remains a one-way return to A1.
+			# A4 侧闸门开启前，旧排水出口只提供返回 A1 的单向安全路线。
+			if "opened_old_drainage_link_from_A4" in WorldState.achievement_flags:
+				_spawn_exit_door(
+					520.0, "E  进入旧排水道回环", "old_drain_exploration",
+					"res://scenes/old_drain_exploration.tscn", "city_side_entry"
+				)
+			else:
+				_spawn_exit_door(
+					520.0, "E  经旧排水道返回", "village",
+					"res://scenes/regions/village_hub.tscn", "city_cut_return"
+				)
 			_spawn_exit_door(
 				72.0, "E  返回旧朝圣路", "ash_forest",
 				"res://scenes/rooms/a2_fog_forest/runtime/a2_r06_room.tscn", "a2_r06_c03_return",
