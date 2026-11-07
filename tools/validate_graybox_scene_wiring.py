@@ -1912,7 +1912,7 @@ def main() -> int:
 
     # The old-drain segment is safe to visit early; only its A4-side deep gate opens the C24 loop.
     require(old_drain_script, 'const CONNECTION_FLAG := "opened_old_drainage_link_from_A4"', "A1 old-drain deep gate uses the A4-side unlock fact", errors)
-    require(old_drain_script, 'WorldState.pending_region_spawn_side = "village_entry"', "A1 old-drain entry spawn is explicit", errors)
+    require(village_hub, 'WorldState.pending_region_spawn_side = "village_entry"', "A1 old-drain entry spawn is explicit", errors)
     require(old_drain_script, 'const VILLAGE_SCENE := "res://scenes/regions/village_hub.tscn"', "A1 old-drain return target is explicit", errors)
     require(old_drain_script, 'SceneTransition.fade_to_scene(VILLAGE_SCENE)', "A1 old-drain can return to the village", errors)
     require(old_drain_scene, '[node name="SealedOldDrainGate" type="StaticBody2D" parent="."]', "A1 old-drain deeper gate is authored and physically sealed", errors)
