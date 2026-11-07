@@ -1888,6 +1888,7 @@ def main() -> int:
     require(village_scene, '[node name="NorthGatePOI" type="Node2D" parent="."]', "A1 north gate is an authored POI", errors)
     require(village_scene, '[node name="NorthGateBarrier" type="StaticBody2D" parent="Terrain"]', "A1 north gate has an authored physical barrier", errors)
     require(village_scene, '[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/NorthGateBarrier"]', "A1 north-gate collision is authored in the scene", errors)
+    require(village_scene, 'size = Vector2(100, 190)', "A1 north-gate barrier covers the authored gate opening", errors)
     require(village_hub, '$Terrain/NorthGateBarrier/CollisionShape2D.set_deferred("disabled", guide_defeated)', "A1 north-gate collision opens only after the Guide gate", errors)
     require(village_scene, 'interaction_range = 50.0', "A1 north-gate interaction remains reachable from the safe side of its barrier", errors)
     require(village_scene, '[node name="CityCutPOI" type="Node2D" parent="."]', "A1 old-drain entrance is an authored POI", errors)
@@ -1926,6 +1927,12 @@ def main() -> int:
     require(old_drain_script, 'const VILLAGE_SCENE := "res://scenes/regions/village_hub.tscn"', "A1 old-drain return target is explicit", errors)
     require(old_drain_script, 'SceneTransition.fade_to_scene(VILLAGE_SCENE)', "A1 old-drain can return to the village", errors)
     require(old_drain_scene, '[node name="SealedOldDrainGate" type="StaticBody2D" parent="."]', "A1 old-drain deeper gate is authored and physically sealed", errors)
+    require(old_drain_scene, '[node name="GateVisualClosed" type="Node2D" parent="."]', "A1 old-drain closed gate visual group is authored", errors)
+    require(old_drain_scene, '[node name="GateVisualOpen" type="Node2D" parent="."]', "A1 old-drain open gate visual group is authored", errors)
+    require(old_drain_script, '$GateVisualClosed.visible = not gate_open', "A1 old-drain closed visual uses its authored group", errors)
+    require(old_drain_script, '$GateVisualOpen.visible = gate_open', "A1 old-drain open visual uses its authored group", errors)
+    if any(name in old_drain_script for name in ("SealedGateVisual", "SealedGateLabel", "OpenGateLeftPost", "OpenGateRightPost", "OpenGateLabel")):
+        errors.append("A1 old-drain script references obsolete gate visual node names.")
     require(old_drain_scene, '[node name="VillageReturnDoor" parent="." instance=', "A1 old-drain has a safe return door", errors)
     if "village_defense_survived" in old_drain_script:
         errors.append("A1 old-drain entry must not depend on the retired village-defense flag.")
