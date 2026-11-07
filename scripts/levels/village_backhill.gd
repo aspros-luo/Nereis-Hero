@@ -24,7 +24,6 @@ func _ready() -> void:
 		else:
 			hero.position = return_marker.position
 	world_event_director.setup(WorldState, self)
-	WorldState.set_location("village_backhill")
 	world_event_director.dispatch("region_entered", {"region": "A1", "location": "village_backhill"})
 	_configure_ui()
 	$ChurchPOI.interacted.connect(_on_poi_interacted.bind($ChurchPOI))
