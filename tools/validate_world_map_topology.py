@@ -363,10 +363,10 @@ def validate(data: dict[str, Any]) -> list[str]:
         fail(errors, "C13 reverse arrival must return to the upper prison ledge.")
     c02 = next((edge for edge in connections if edge.get("id") == "C02"), None)
     c02_gate = c02.get("progression_gate", {}) if c02 else {}
-    if not c02 or c02.get("from") != "A1" or c02.get("to") != "A2" or c02.get("unlock_condition") != "village_defense_survived" or c02.get("opens_from") != "A1":
-        fail(errors, "C02 must record the village-defense progression gate before the A1 north gate enters A2.")
-    if c02_gate.get("interaction_id") != "north_gate" or c02_gate.get("before_unlock") != "enter_village_defense_demo_and_return_to_A1" or c02_gate.get("after_unlock") != "enter_A2_from_A1":
-        fail(errors, "C02 progression_gate must describe the actual north-gate defense-then-entry flow.")
+    if not c02 or c02.get("from") != "A1" or c02.get("to") != "A2" or c02.get("unlock_condition") != "guide_defeated" or c02.get("opens_from") != "A1":
+        fail(errors, "C02 must keep the A1 north gate locked until the Guide is defeated.")
+    if c02_gate.get("interaction_id") != "north_gate" or c02_gate.get("before_unlock") != "defeat_guide" or c02_gate.get("after_unlock") != "enter_A2_from_A1":
+        fail(errors, "C02 progression_gate must describe the Guide defeat gate before A2 entry.")
     c21 = next((edge for edge in connections if edge.get("id") == "C21"), None)
     c22 = next((edge for edge in connections if edge.get("id") == "C22"), None)
     if not c21 or c21.get("to") != "A13" or c21.get("unlock_condition") != "ending_candidate_is_not_human_grave_based_on_resonance_truth_anchors_and_exploration":
@@ -470,11 +470,11 @@ def validate(data: dict[str, Any]) -> list[str]:
     if not (c23_spatial.get("return_spawn", {}).get("region") == "A4" and c23_spatial.get("return_spawn", {}).get("x") == 1540 and c23_spatial.get("return_spawn", {}).get("y_offset") == -120 and c23_spatial.get("return_spawn", {}).get("spawn_side") == "royal_drain"):
         fail(errors, "C23 return spawn must land on the supported lip, clear of the A4 door trigger.")
 
-    # C24 is the alternate A1-to-A3 route added after the village defense.
-    # C24 是村庄防卫后开放的 A1 → A3 替代路线。
+    # C24 is the phased A1-to-A3 old-drain loop, fully opened from A4.
+    # C24 是分阶段开放的 A1 → A3 旧排水回环，由 A4 侧闸门完成连通。
     c24 = next((edge for edge in connections if edge.get("id") == "C24"), None)
     if c24 is None:
-        fail(errors, "Missing C24: post-defense A1-to-A3 drainage route.")
+        fail(errors, "Missing C24: phased A1-to-A3 drainage route.")
     else:
         expected_c24 = {
             "from": "A1",
@@ -482,8 +482,8 @@ def validate(data: dict[str, Any]) -> list[str]:
             "kind": "shortcut",
             "initial_access": "blocked",
             "final_direction": "both",
-            "unlock_condition": "village_defense_survived",
-            "opens_from": "A1",
+            "unlock_condition": "opened_old_drainage_link_from_A4",
+            "opens_from": "A4",
         }
         for key, value in expected_c24.items():
             if c24.get(key) != value:
