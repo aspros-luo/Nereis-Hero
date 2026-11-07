@@ -17,10 +17,18 @@ func _ready() -> void:
 	# Persist the actual incoming side before clearing the one-shot transition value.
 	WorldState.set_location("village_backhill")
 	WorldState.pending_region_spawn_side = "west"
-	if spawn_side == "cliff_return":
-		var return_marker := get_node_or_null("EntryCliffReturn") as Marker2D
+	var return_marker_name := ""
+	match spawn_side:
+		"cliff_return":
+			return_marker_name = "EntryCliffReturn"
+		"church_return":
+			return_marker_name = "ChurchReturn"
+		"tavern_return":
+			return_marker_name = "TavernReturn"
+	if not return_marker_name.is_empty():
+		var return_marker := get_node_or_null(return_marker_name) as Marker2D
 		if return_marker == null:
-			push_error("[NEREIS][A1][BACKHILL][SPAWN_MARKER_MISSING] EntryCliffReturn")
+			push_error("[NEREIS][A1][BACKHILL][SPAWN_MARKER_MISSING] %s" % return_marker_name)
 		else:
 			hero.position = return_marker.position
 	world_event_director.setup(WorldState, self)
