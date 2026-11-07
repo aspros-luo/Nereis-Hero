@@ -131,6 +131,7 @@ func _refresh_world_visual_states() -> void:
 	# The short old-drain section is available for exploration; its deeper gate
 	# remains sealed until the A4-side connection is opened.
 	$NorthGateVisual/BlockedState.visible = not guide_defeated
+	$Terrain/NorthGateBarrier/CollisionShape2D.set_deferred("disabled", guide_defeated)
 	$CampVisual.visible = camp_established
 	$CampLabel.visible = camp_established
 	$RestorationCampPOI.visible = camp_established
