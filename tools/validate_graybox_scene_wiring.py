@@ -1957,6 +1957,7 @@ def main() -> int:
     require(interior_scene, 'WorldState.pending_region_spawn_side = "church_return"', "A1 church exit preserves its backhill return side", errors)
     require(interior_scene, 'WorldState.pending_region_spawn_side = "tavern_return"', "A1 tavern exit preserves its backhill return side", errors)
     require(interior_scene, 'SceneTransition.fade_to_scene("res://scenes/village_backhill.tscn")', "A1 interiors return to the A1.1 backhill scene", errors)
+    require(interior_scene, 'WorldState.set_location("village_backhill")', "A1 interior exit persists the A1.1 return location", errors)
     if "res://scenes/village_hub.tscn" in interior_scene:
         errors.append("A1 interior exit must not target the missing legacy village_hub.tscn path.")
     if "village_defense_survived" in event_director or "village_defense_survived" in interior_scene:
