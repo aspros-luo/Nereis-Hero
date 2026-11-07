@@ -1910,6 +1910,8 @@ def main() -> int:
     require(backhill_scene, '[node name="CliffExplorationDoor" type="Area2D" parent="."]', "A1.1 cliff entrance is authored", errors)
     require(backhill_scene, '[node name="FutureA2RoadBlocker" type="StaticBody2D" parent="."]', "A1.1 future A2 branch remains physically blocked", errors)
     require(backhill_scene, '[node name="ChurchReturn" type="Marker2D" parent="."]', "A1.1 church interior return marker is authored", errors)
+    require(backhill_scene, '[node name="EntryFromVillage" type="Marker2D" parent="."]', "A1.1 main-village entry marker is authored", errors)
+    require(backhill_script, '"backhill_return":', "A1.1 resolves the main-village entry spawn side", errors)
     require(backhill_scene, '[node name="TavernReturn" type="Marker2D" parent="."]', "A1.1 tavern interior return marker is authored", errors)
     require(backhill_script, '"church_return":', "A1.1 resolves church return spawn side", errors)
     require(backhill_script, '"tavern_return":', "A1.1 resolves tavern return spawn side", errors)
