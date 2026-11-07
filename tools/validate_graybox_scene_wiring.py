@@ -1886,6 +1886,10 @@ def main() -> int:
     require(village_scene, '[node name="SpawnMarkers" type="Node2D" parent="."]', "A1 spawn markers are authored", errors)
     require(village_scene, '[node name="NorthGateEntry" type="Marker2D" parent="SpawnMarkers"]', "A1 north-gate return marker is authored", errors)
     require(village_scene, '[node name="NorthGatePOI" type="Node2D" parent="."]', "A1 north gate is an authored POI", errors)
+    require(village_scene, '[node name="NorthGateBarrier" type="StaticBody2D" parent="Terrain"]', "A1 north gate has an authored physical barrier", errors)
+    require(village_scene, '[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/NorthGateBarrier"]', "A1 north-gate collision is authored in the scene", errors)
+    require(village_hub, '$Terrain/NorthGateBarrier/CollisionShape2D.set_deferred("disabled", guide_defeated)', "A1 north-gate collision opens only after the Guide gate", errors)
+    require(village_scene, 'interaction_range = 50.0', "A1 north-gate interaction remains reachable from the safe side of its barrier", errors)
     require(village_scene, '[node name="CityCutPOI" type="Node2D" parent="."]', "A1 old-drain entrance is an authored POI", errors)
     require(village_scene, '[node name="WorldEventDirector" type="Node" parent="."]', "A1 event director is an authored scene node", errors)
 
