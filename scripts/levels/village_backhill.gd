@@ -19,6 +19,8 @@ func _ready() -> void:
 	WorldState.pending_region_spawn_side = "west"
 	var return_marker_name := ""
 	match spawn_side:
+		"backhill_return":
+			return_marker_name = "EntryFromVillage"
 		"cliff_return":
 			return_marker_name = "EntryCliffReturn"
 		"church_return":
