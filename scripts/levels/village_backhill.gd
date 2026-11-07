@@ -14,6 +14,8 @@ func _ready() -> void:
 	get_tree().paused = false
 	WorldState.input_locked = false
 	var spawn_side := WorldState.pending_region_spawn_side
+	# Persist the actual incoming side before clearing the one-shot transition value.
+	WorldState.set_location("village_backhill")
 	WorldState.pending_region_spawn_side = "west"
 	if spawn_side == "cliff_return":
 		var return_marker := get_node_or_null("EntryCliffReturn") as Marker2D
