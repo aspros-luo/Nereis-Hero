@@ -61,12 +61,14 @@ func _spawn_npc() -> void:
 	tavern_keeper.set("cloth_color", Color("#69404a"))
 	tavern_keeper.set("npc_id", "tavern_keeper")
 	tavern_keeper.set("display_name", "酒馆值夜人")
-	if "A1_tavern_sound_noticed" in WorldState.achievement_flags and "village_defense_survived" in WorldState.achievement_flags:
-		tavern_keeper.set("dialogue", "值夜人看了看你，又瞥向已经安静下来的北门方向。\n\n“你听见过那声音，也看见过北门外的事。两件事不一定有关——至少我没打算替你把它们连起来。”")
-	elif "A1_tavern_sound_noticed" in WorldState.achievement_flags:
+	var guide_defeated := "guide_defeated" in WorldState.achievement_flags
+	var tavern_sound_noticed := "A1_tavern_sound_noticed" in WorldState.achievement_flags
+	if tavern_sound_noticed and guide_defeated:
+		tavern_keeper.set("dialogue", "值夜人看了看你，又瞥向已经打开的北门方向。\n\n“你听见过那声音，也看见那条路重新通了。两件事不一定有关——至少我没打算替你把它们连起来。”")
+	elif tavern_sound_noticed:
 		tavern_keeper.set("dialogue", "值夜人看了你一眼，又低头擦杯子。\n\n“你上次听见的声音？我没说那是歌。你自己确定就好。”")
-	elif "village_defense_survived" in WorldState.achievement_flags:
-		tavern_keeper.set("dialogue", "值夜人把杯子放回架上。\n\n“北门那边总算安静了些。今晚的灯会一直亮着，但我可不保证每个故事都是真的。”")
+	elif guide_defeated:
+		tavern_keeper.set("dialogue", "值夜人把杯子放回架上。\n\n“北门那边总算有了动静。今晚的灯会一直亮着，但我可不保证每个故事都是真的。”")
 	else:
 		tavern_keeper.set("dialogue", "值夜人把杯子擦干，朝门口点点头。\n\n“进来暖暖身子吧。村里白天说的话，到了夜里往往就不一样了。”")
 	tavern_keeper.interacted.connect(_on_npc_interacted.bind(tavern_keeper))
