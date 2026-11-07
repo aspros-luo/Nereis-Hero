@@ -1898,6 +1898,12 @@ def main() -> int:
     require(backhill_script, 'SceneTransition.fade_to_scene(CLIFF_EXPLORATION_SCENE)', "A1.1 cliff route is wired", errors)
     require(backhill_scene, '[node name="CliffExplorationDoor" type="Area2D" parent="."]', "A1.1 cliff entrance is authored", errors)
     require(backhill_scene, '[node name="FutureA2RoadBlocker" type="StaticBody2D" parent="."]', "A1.1 future A2 branch remains physically blocked", errors)
+    cliff_script = read("scripts/levels/cliff_exploration.gd", errors)
+    cliff_scene = read("scenes/cliff_exploration.tscn", errors)
+    require(world_state_script, 'return "res://scenes/cliff_exploration.tscn"', "Continue can resume A1 cliff exploration", errors)
+    require(cliff_script, 'WorldState.set_location("cliff_exploration")', "A1 cliff scene persists its location", errors)
+    require(cliff_script, 'WorldState.pending_region_spawn_side = "cliff_return"', "A1 cliff return preserves its A1.1 landing side", errors)
+    require(cliff_scene, '[node name="MainGround" type="StaticBody2D" parent="."]', "A1 cliff exploration ground is authored in the scene", errors)
 
     # Save the incoming side before clearing the one-shot transition value, or Continue will lose the route.
     backhill_save = backhill_script.find('WorldState.set_location("village_backhill")')
