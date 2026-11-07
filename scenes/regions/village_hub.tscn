@@ -29,7 +29,7 @@
 size = Vector2(3000, 40)
 
 [sub_resource type="RectangleShape2D" id="NorthGateBarrierShape"]
-size = Vector2(60, 190)
+size = Vector2(100, 190)
 
 [sub_resource type="RectangleShape2D" id="Boundary"]
 size = Vector2(40, 720)
@@ -715,7 +715,7 @@ position = Vector2(2840, 520)
 script = ExtResource("2")
 poi_id = "north_gate"
 display_name = "北门"
-interaction_range = 40.0
+interaction_range = 50.0
 
 [node name="CityCutPOI" type="Node2D" parent="."]
 position = Vector2(100, 520)
