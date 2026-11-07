@@ -1916,7 +1916,7 @@ def main() -> int:
     require(old_drain_script, 'const VILLAGE_SCENE := "res://scenes/regions/village_hub.tscn"', "A1 old-drain return target is explicit", errors)
     require(old_drain_script, 'SceneTransition.fade_to_scene(VILLAGE_SCENE)', "A1 old-drain can return to the village", errors)
     require(old_drain_scene, '[node name="SealedOldDrainGate" type="StaticBody2D" parent="."]', "A1 old-drain deeper gate is authored and physically sealed", errors)
-    require(old_drain_scene, '[node name="VillageReturnDoor" type="Area2D" parent="."]', "A1 old-drain has a safe return door", errors)
+    require(old_drain_scene, '[node name="VillageReturnDoor" parent="." instance=', "A1 old-drain has a safe return door", errors)
     if "village_defense_survived" in old_drain_script:
         errors.append("A1 old-drain entry must not depend on the retired village-defense flag.")
 
