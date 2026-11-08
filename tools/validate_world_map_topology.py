@@ -146,10 +146,10 @@ def validate(data: dict[str, Any]) -> list[str]:
     elevators = data.get("elevators", [])
     if len(macro_regions) != 6:
         fail(errors, f"Expected 6 narrative macro regions, found {len(macro_regions)}.")
-    if len(subregions) != 78:
-        fail(errors, f"Expected 78 subregions, found {len(subregions)}.")
-    if len(local_connections) != 73:
-        fail(errors, f"Expected 73 intra-region connections, found {len(local_connections)}.")
+    if len(subregions) != 77:
+        fail(errors, f"Expected 77 active subregions after retiring A1-S03, found {len(subregions)}.")
+    if len(local_connections) != 72:
+        fail(errors, f"Expected 72 active intra-region connections after retiring SC005, found {len(local_connections)}.")
     if len(elevators) != 8:
         fail(errors, f"Expected 8 elevator contracts, found {len(elevators)}.")
 
@@ -168,6 +168,11 @@ def validate(data: dict[str, Any]) -> list[str]:
     subregion_id_set = set(subregion_ids)
     if len(subregion_ids) != len(subregion_id_set):
         fail(errors, "Duplicate subregion IDs.")
+    retired_subregion_ids = {item.get("id") for item in data.get("retired_subregions", [])}
+    if "A1-S03" not in retired_subregion_ids:
+        fail(errors, "A1-S03 retirement record is missing.")
+    if "A1-S03" in subregion_id_set:
+        fail(errors, "A1-S03 must remain retired from active village topology.")
     for item in subregions:
         if item.get("parent_region") not in region_ids:
             fail(errors, f"{item.get('id')}: subregion references unknown parent {item.get('parent_region')!r}.")
@@ -177,6 +182,11 @@ def validate(data: dict[str, Any]) -> list[str]:
     local_ids = [item.get("id", "") for item in local_connections]
     if len(local_ids) != len(set(local_ids)):
         fail(errors, "Duplicate intra-region connection IDs.")
+    if "SC005" in local_ids:
+        fail(errors, "SC005 must remain retired with the A1 rooftop route.")
+    a1_well_link = next((edge for edge in local_connections if edge.get("id") == "SC004"), None)
+    if not a1_well_link or (a1_well_link.get("from"), a1_well_link.get("to")) != ("A1-S01", "A1-S04"):
+        fail(errors, "SC004 must connect the A1 main street directly to the ground-level well platform.")
     for edge in local_connections:
         source, target = edge.get("from"), edge.get("to")
         if source not in subregion_id_set or target not in subregion_id_set:
