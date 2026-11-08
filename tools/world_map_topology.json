@@ -1993,13 +1993,6 @@
       "role": "NPC与支路"
     },
     {
-      "id": "A1-S03",
-      "parent_region": "A1",
-      "name": "屋顶木栈道",
-      "layer": "upper",
-      "role": "可选屋顶探索路线；C24不经过此处"
-    },
-    {
       "id": "A1-S04",
       "parent_region": "A1",
       "name": "老井平台",
@@ -2602,22 +2595,12 @@
     {
       "id": "SC004",
       "from": "A1-S01",
-      "to": "A1-S03",
-      "kind": "walk",
-      "travel": "both",
-      "initial_state": "open",
-      "unlock_condition": "",
-      "design_note": ""
-    },
-    {
-      "id": "SC005",
-      "from": "A1-S03",
       "to": "A1-S04",
       "kind": "walk",
       "travel": "both",
       "initial_state": "open",
       "unlock_condition": "",
-      "design_note": ""
+      "design_note": "A1 主街沿地面直接通往老井平台；不再设置村庄屋顶木栈道。后山道路仍由主街东侧 BackhillEntrance 进入独立 A1.1 场景。"
     },
     {
       "id": "SC006",
@@ -4632,6 +4615,34 @@
       "retired_at": "2026-11-02",
       "reason": "The A2-to-A5 old-pilgrim shortcut is removed from active world connectivity; A2-S05 remains an internal exploration area.",
       "preserved_area": "A2-S05"
+    }
+  ],
+  "retired_subregions": [
+    {
+      "id": "A1-S03",
+      "parent_region": "A1",
+      "name": "屋顶木栈道",
+      "status": "temporarily_retired",
+      "retired_at": "2026-11-08",
+      "reason": "用户决定暂时取消村庄屋顶可玩路线；以地面环境调查和现有村庄 POI 交互丰富探索。此项不影响 A1.1 后山道路。"
+    }
+  ],
+  "retired_intra_region_connections": [
+    {
+      "id": "SC004_roof_legacy",
+      "from": "A1-S01",
+      "to": "A1-S03",
+      "status": "retired",
+      "retired_at": "2026-11-08",
+      "reason": "取消 A1 村庄屋顶木栈道；现有 SC004 改为主街至老井平台的地面连接。"
+    },
+    {
+      "id": "SC005_roof_legacy",
+      "from": "A1-S03",
+      "to": "A1-S04",
+      "status": "retired",
+      "retired_at": "2026-11-08",
+      "reason": "取消 A1 村庄屋顶木栈道；老井平台改由主街地面直接抵达。"
     }
   ]
 }
