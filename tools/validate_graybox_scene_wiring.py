@@ -1964,6 +1964,12 @@ def main() -> int:
         errors.append("A1 interior exit must not target the missing legacy village_hub.tscn path.")
     if "village_defense_survived" in event_director or "village_defense_survived" in interior_scene:
         errors.append("A1 NPC dialogue still depends on the retired village-defense state.")
+    require(interior_scene, "await narrative.message_finished", "A1 tavern Mite dialogue completion is awaited", errors)
+    require(interior_scene, "WorldState.record_mite_interaction(interaction_id)", "A1 tavern Mite interaction is persisted", errors)
+    mite_dialogue_wait = interior_scene.find("await narrative.message_finished", interior_scene.find("func _on_mite_interacted"))
+    mite_progress_commit = interior_scene.find("WorldState.record_mite_interaction(interaction_id)", interior_scene.find("func _on_mite_interacted"))
+    if mite_dialogue_wait < 0 or mite_progress_commit < 0 or mite_dialogue_wait > mite_progress_commit:
+        errors.append("A1 tavern Mite interaction must be committed only after its dialogue completes.")
 
     # Mite's missed-meeting state must remain dormant until its actual story trigger is designed.
     if "mark_mite_connection_missed()" in village_hub or "mark_mite_connection_missed()" in backhill_script or "mark_mite_connection_missed()" in interior_scene:
